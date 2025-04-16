@@ -66,15 +66,6 @@ class FavVideoCardH extends StatelessWidget {
                 return;
               }
               onViewFav?.call();
-              // Utils.toViewPage(
-              //   'bvid=$bvid&cid=${videoItem.cid}${epId?.isNotEmpty == true ? '&epId=$epId' : ''}',
-              //   arguments: {
-              //     'videoItem': videoItem,
-              //     'heroTag': Utils.makeHeroTag(id),
-              //     'videoType':
-              //         epId != null ? SearchType.media_bangumi : SearchType.video,
-              //   },
-              // );
             },
       onLongPress: isSort == true
           ? null
@@ -180,7 +171,7 @@ class FavVideoCardH extends StatelessWidget {
                 Text(
                   videoItem.owner.name!,
                   style: TextStyle(
-                    fontSize: Theme.of(context).textTheme.labelMedium!.fontSize,
+                    fontSize: 12,
                     color: Theme.of(context).colorScheme.outline,
                   ),
                 ),

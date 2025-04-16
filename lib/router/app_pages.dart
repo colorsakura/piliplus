@@ -1,6 +1,6 @@
 import 'package:PiliPlus/pages/fav/view.dart';
-import 'package:PiliPlus/pages/member/new/member_page.dart';
-import 'package:PiliPlus/pages/member/new/widget/edit_profile_page.dart';
+import 'package:PiliPlus/pages/member/member_page.dart';
+import 'package:PiliPlus/pages/member/widget/edit_profile_page.dart';
 import 'package:PiliPlus/pages/search_trending/view.dart';
 import 'package:PiliPlus/pages/setting/navigation_bar_set.dart';
 import 'package:PiliPlus/pages/setting/search_page.dart';
@@ -35,10 +35,8 @@ import '../pages/later/index.dart';
 import '../pages/live_room/view.dart';
 import '../pages/login/index.dart';
 import '../pages/media/index.dart';
-import '../pages/member_archive/index.dart';
 import '../pages/member_dynamics/index.dart';
 import '../pages/member_search/index.dart';
-import '../pages/member_seasons/index.dart';
 import '../pages/msg_feed_top/sys_msg/view.dart';
 import '../pages/search/index.dart';
 import '../pages/search_result/index.dart';
@@ -152,16 +150,10 @@ class Routes {
     // 用户动态
     CustomGetPage(
         name: '/memberDynamics', page: () => const MemberDynamicsPage()),
-    // 用户投稿
-    CustomGetPage(
-        name: '/memberArchive', page: () => const MemberArchivePage()),
     // 用户最近投币
     // CustomGetPage(name: '/memberCoin', page: () => const MemberCoinPage()),
     // 用户最近喜欢
     // CustomGetPage(name: '/memberLike', page: () => const MemberLikePage()),
-    // 用户专栏
-    CustomGetPage(
-        name: '/memberSeasons', page: () => const MemberSeasonsPage()),
     // 日志
     CustomGetPage(name: '/logs', page: () => const LogsPage()),
     // 订阅

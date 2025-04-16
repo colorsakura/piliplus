@@ -43,11 +43,7 @@ class _FavArticlePageState extends State<FavArticlePage>
   Widget _buildBody(LoadingState<List<dynamic>?> loadingState) {
     return switch (loadingState) {
       Loading() => SliverGrid(
-          gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-            mainAxisSpacing: 2,
-            maxCrossAxisExtent: Grid.mediumCardWidth * 2,
-            childAspectRatio: StyleString.aspectRatio * 2.2,
-          ),
+          gridDelegate: Grid.videoCardHDelegate(context),
           delegate: SliverChildBuilderDelegate(
             (context, index) {
               return const VideoCardHSkeleton();
@@ -62,11 +58,7 @@ class _FavArticlePageState extends State<FavArticlePage>
                 bottom: MediaQuery.paddingOf(context).bottom + 80,
               ),
               sliver: SliverGrid(
-                gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                  mainAxisSpacing: 2,
-                  maxCrossAxisExtent: Grid.mediumCardWidth * 2,
-                  childAspectRatio: StyleString.aspectRatio * 2.6,
-                ),
+                gridDelegate: Grid.videoCardHDelegate(context),
                 delegate: SliverChildBuilderDelegate(
                   (context, index) {
                     if (index == loadingState.response!.length - 1) {

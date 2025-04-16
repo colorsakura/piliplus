@@ -1,205 +1,150 @@
+import 'dart:math';
+
+import 'package:PiliPlus/http/loading_state.dart';
+import 'package:PiliPlus/http/member.dart';
+import 'package:PiliPlus/http/video.dart';
+import 'package:PiliPlus/models/space/data.dart';
+import 'package:PiliPlus/models/space/item.dart';
+import 'package:PiliPlus/models/space/tab2.dart';
+import 'package:PiliPlus/pages/common/common_data_controller.dart';
+import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
-import 'package:PiliPlus/http/member.dart';
-import 'package:PiliPlus/http/user.dart';
-import 'package:PiliPlus/http/video.dart';
-import 'package:PiliPlus/models/member/coin.dart';
-import 'package:PiliPlus/models/member/info.dart';
-import 'package:PiliPlus/utils/storage.dart';
+import 'package:intl/intl.dart';
 
-import '../video/detail/introduction/widgets/group_panel.dart';
+enum MemberTabType { none, home, dynamic, contribute, favorite, bangumi }
 
-class MemberController extends GetxController {
-  int? mid;
-  MemberController({this.mid});
-  Rx<MemberInfoModel> memberInfo = MemberInfoModel().obs;
-  late Map userStat;
-  RxString face = ''.obs;
-  String? heroTag;
-  late int ownerMid;
-  bool specialFollowed = false;
-  // 投稿列表
-  dynamic userInfo;
-  RxInt attribute = (-1).obs;
-  RxString attributeText = '关注'.obs;
-  RxList<MemberCoinsDataModel> recentCoinsList = <MemberCoinsDataModel>[].obs;
-  String? wwebid;
+extension MemberTabTypeExt on MemberTabType {
+  String get title => ['默认', '首页', '动态', '投稿', '收藏', '番剧'][index];
+}
+
+class MemberControllerNew extends CommonDataController<Data, dynamic>
+    with GetTickerProviderStateMixin {
+  MemberControllerNew({required this.mid});
+  int mid;
+  RxBool showUname = false.obs;
+  String? username;
+  int? ownerMid;
+  RxBool isFollow = false.obs;
+  RxInt relation = 1.obs;
+  TabController? tabController;
+  late List<Tab> tabs;
+  List<Tab2>? tab2;
+  RxInt contributeInitialIndex = 0.obs;
+  double top = 0;
+  bool? hasSeasonOrSeries;
+  final fromViewAid = Get.parameters['from_view_aid'];
 
   @override
-  void onInit() async {
+  void onInit() {
     super.onInit();
-    mid = mid ?? int.parse(Get.parameters['mid']!);
-    userInfo = GStorage.userInfo.get('userInfoCache');
-    ownerMid = userInfo != null ? userInfo.mid : -1;
-    try {
-      face.value = Get.arguments['face'] ?? '';
-      heroTag = Get.arguments['heroTag'] ?? '';
-    } catch (_) {}
-    relationSearch();
+    ownerMid = Accounts.main.mid;
+    queryData();
   }
 
-  // 获取用户信息
-  Future<Map<String, dynamic>> getInfo() {
-    return Future.wait([getMemberInfo(), getMemberStat(), getMemberView()])
-        .then((res) => res[0]);
-  }
+  dynamic live;
 
-  Future<Map<String, dynamic>> getMemberInfo() async {
-    wwebid ??= await Utils.getWwebid(mid);
-    await getMemberStat();
-    await getMemberView();
-    var res = await MemberHttp.memberInfo(mid: mid, wwebid: wwebid);
-    if (res['status']) {
-      memberInfo.value = res['data'];
-      face.value = res['data'].face;
-    }
-    return res;
-  }
+  int? silence;
+  String? endTime;
 
-  // 获取用户状态
-  Future<Map<String, dynamic>> getMemberStat() async {
-    var res = await MemberHttp.memberStat(mid: mid);
-    if (res['status']) {
-      userStat = res['data'];
-    }
-    return res;
-  }
+  late final implTabs = const [
+    'home',
+    'dynamic',
+    'contribute',
+    'favorite',
+    'bangumi',
+  ];
 
-  // 获取用户播放数 获赞数
-  Future<Map<String, dynamic>> getMemberView() async {
-    var res = await MemberHttp.memberView(mid: mid!);
-    if (res['status']) {
-      userStat.addAll(res['data']);
+  @override
+  bool customHandleResponse(bool isRefresh, Success<Data> response) {
+    Data data = response.response;
+    username = data.card?.name ?? '';
+    isFollow.value = data.card?.relation?.isFollow == 1;
+    relation.value = data.relSpecial == 1 ? 2 : data.relation ?? 1;
+    tab2 = data.tab2;
+    live = data.live;
+    silence = data.card?.silence;
+    if ((data.ugcSeason?.count != null && data.ugcSeason?.count != 0) ||
+        data.series?.item?.isNotEmpty == true) {
+      hasSeasonOrSeries = true;
     }
-    return res;
-  }
-
-  Future delayedUpdateRelation() async {
-    await Future.delayed(const Duration(milliseconds: 1000), () async {
-      SmartDialog.showToast('更新状态');
-      await relationSearch();
-      memberInfo.update((val) {});
-    });
-  }
-
-  // 关注/取关up
-  Future actionRelationMod(BuildContext context) async {
-    if (userInfo == null) {
-      SmartDialog.showToast('账号未登录');
-      return;
+    if (data.card?.endTime != null) {
+      if (data.card!.endTime == 0) {
+        endTime = ': 永久封禁';
+      } else if (data.card!.endTime! >
+          DateTime.now().millisecondsSinceEpoch ~/ 1000) {
+        endTime =
+            '：至 ${DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.fromMillisecondsSinceEpoch(data.card!.endTime! * 1000))}';
+      }
     }
-    if (memberInfo.value.mid == null) {
-      SmartDialog.showToast('尚未获取到用户信息');
-      return;
-    }
-    if (attribute.value == 128) {
-      blockUser(context);
-      return;
-    }
-    await showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: const Text('操作'),
-          actions: [
-            if (memberInfo.value.isFollowed!) ...[
-              TextButton(
-                onPressed: () async {
-                  final res = await MemberHttp.addUsers(
-                      mid, specialFollowed ? '0' : '-10');
-                  SmartDialog.showToast(res['msg']);
-                  if (res['status']) {
-                    specialFollowed = !specialFollowed;
-                  }
-                  Get.back();
-                },
-                child: Text(specialFollowed ? '移除特别关注' : '加入特别关注'),
-              ),
-              TextButton(
-                onPressed: () async {
-                  await Get.bottomSheet(
-                    GroupPanel(mid: mid),
-                    isScrollControlled: true,
-                    backgroundColor: Theme.of(context).colorScheme.surface,
-                  );
-                  Get.back();
-                },
-                child: const Text('设置分组'),
-              ),
-            ],
-            TextButton(
-              onPressed: () async {
-                var res = await VideoHttp.relationMod(
-                  mid: mid!,
-                  act: memberInfo.value.isFollowed! ? 2 : 1,
-                  reSrc: 11,
-                );
-                SmartDialog.showToast(res['status'] ? "操作成功" : res['msg']);
-                if (res['status']) {
-                  memberInfo.value.isFollowed = !memberInfo.value.isFollowed!;
-                }
-                Get.back();
-              },
-              child: Text(memberInfo.value.isFollowed! ? '取消关注' : '关注'),
-            ),
-            TextButton(
-              onPressed: () => Get.back(),
-              child: Text(
-                '取消',
-                style: TextStyle(color: Theme.of(context).colorScheme.outline),
-              ),
-            ),
-          ],
+    tab2?.retainWhere((item) => implTabs.contains(item.param));
+    if (tab2?.isNotEmpty == true) {
+      if (!data.tab!.toJson().values.contains(true) &&
+          tab2!.first.param == 'home') {
+        // remove empty home tab
+        tab2!.removeAt(0);
+      }
+      if (tab2!.isNotEmpty) {
+        int initialIndex = -1;
+        MemberTabType memberTab = GStorage.memberTab;
+        if (memberTab != MemberTabType.none) {
+          initialIndex = tab2!.indexWhere((item) {
+            return item.param == memberTab.name;
+          });
+        }
+        if (initialIndex == -1) {
+          if (data.defaultTab == 'video') {
+            data.defaultTab = 'contribute';
+          }
+          initialIndex = tab2!.indexWhere((item) {
+            return item.param == data.defaultTab;
+          });
+        }
+        tabs = tab2!.map((item) => Tab(text: item.title ?? '')).toList();
+        tabController = TabController(
+          vsync: this,
+          length: tabs.length,
+          initialIndex: max(0, initialIndex),
         );
-      },
-    );
-    await delayedUpdateRelation();
-  }
-
-  // 关系查询
-  Future relationSearch() async {
-    if (userInfo == null) return;
-    if (mid == ownerMid) return;
-    var res = await UserHttp.hasFollow(mid!);
-    if (res['status']) {
-      attribute.value = res['data']['attribute'];
-      switch (attribute.value) {
-        case 1:
-          attributeText.value = '悄悄关注';
-          memberInfo.value.isFollowed = true;
-          break;
-        case 2:
-          attributeText.value = '已关注';
-          memberInfo.value.isFollowed = true;
-          break;
-        case 6:
-          attributeText.value = '已互关';
-          memberInfo.value.isFollowed = true;
-          break;
-        case 128:
-          attributeText.value = '已拉黑';
-          memberInfo.value.isFollowed = false;
-          break;
-        default:
-          attributeText.value = '关注';
-          memberInfo.value.isFollowed = false;
       }
-      if (res['data']['special'] == 1) {
-        specialFollowed = true;
-        attributeText.value += ' 🔔';
-      } else {
-        specialFollowed = false;
-      }
-    } else {
-      SmartDialog.showToast(res['msg']);
     }
+    loadingState.value = response;
+    return true;
   }
 
-  // 拉黑用户
+  @override
+  bool handleError(String? errMsg) {
+    tab2 = [
+      Tab2(title: '动态', param: 'dynamic'),
+      Tab2(
+        title: '投稿',
+        param: 'contribute',
+        items: [Item(title: '视频', param: 'video')],
+      ),
+      Tab2(title: '收藏', param: 'favorite'),
+      Tab2(title: '追番', param: 'bangumi'),
+    ];
+    tabs = tab2!.map((item) => Tab(text: item.title)).toList();
+    tabController = TabController(
+      vsync: this,
+      length: tabs.length,
+    );
+    showUname.value = true;
+    username = errMsg;
+    loadingState.value = LoadingState.success(null);
+    return true;
+  }
+
+  @override
+  Future<LoadingState<Data>> customGetData() => MemberHttp.space(
+        mid: mid,
+        fromViewAid: fromViewAid,
+      );
+
   Future blockUser(BuildContext context) async {
-    if (userInfo == null) {
+    if (ownerMid == 0) {
       SmartDialog.showToast('账号未登录');
       return;
     }
@@ -208,10 +153,10 @@ class MemberController extends GetxController {
       builder: (context) {
         return AlertDialog(
           title: const Text('提示'),
-          content: Text(attribute.value != 128 ? '确定拉黑UP主?' : '从黑名单移除UP主'),
+          content: Text(relation.value != -1 ? '确定拉黑UP主?' : '从黑名单移除UP主'),
           actions: [
             TextButton(
-              onPressed: () => Get.back(),
+              onPressed: Get.back,
               child: Text(
                 '点错了',
                 style: TextStyle(color: Theme.of(context).colorScheme.outline),
@@ -220,18 +165,7 @@ class MemberController extends GetxController {
             TextButton(
               onPressed: () async {
                 Get.back();
-                var res = await VideoHttp.relationMod(
-                  mid: mid!,
-                  act: attribute.value != 128 ? 5 : 6,
-                  reSrc: 11,
-                );
-                if (res['status']) {
-                  attribute.value = attribute.value != 128 ? 128 : 0;
-                  attributeText.value = attribute.value == 128 ? '已拉黑' : '关注';
-                  memberInfo.value.isFollowed = false;
-                  relationSearch();
-                  memberInfo.update((val) {});
-                }
+                _onBlock();
               },
               child: const Text('确认'),
             )
@@ -242,41 +176,46 @@ class MemberController extends GetxController {
   }
 
   void shareUser() {
-    Utils.shareText(
-        '${memberInfo.value.name} - https://space.bilibili.com/$mid');
+    Utils.shareText('https://space.bilibili.com/$mid');
   }
 
-  // 请求专栏
-  Future getMemberSeasons() async {
-    if (userInfo == null) return;
-    var res = await MemberHttp.getMemberSeasons(mid, 1, 10);
-    if (!res['status']) {
-      SmartDialog.showToast("用户专栏请求异常：${res['msg']}");
+  void _onBlock() async {
+    dynamic res = await VideoHttp.relationMod(
+      mid: mid,
+      act: relation.value != -1 ? 5 : 6,
+      reSrc: 11,
+    );
+    if (res['status']) {
+      relation.value = relation.value != -1 ? -1 : 1;
+      isFollow.value = false;
     }
-    return res;
   }
 
-  // 请求投币视频
-  Future getRecentCoinVideo() async {
-    // if (userInfo == null) return;
-    // var res = await MemberHttp.getRecentCoinVideo(mid: mid!);
-    // recentCoinsList.value = res['data'];
-    // return res;
+  void onFollow(BuildContext context) async {
+    if (mid == ownerMid) {
+      Get.toNamed('/editProfile');
+    } else if (relation.value == -1) {
+      _onBlock();
+    } else {
+      if (ownerMid == null) {
+        SmartDialog.showToast('账号未登录');
+        return;
+      }
+      Utils.actionRelationMod(
+        context: context,
+        mid: mid,
+        isFollow: isFollow.value,
+        callback: (attribute) {
+          relation.value = attribute;
+          isFollow.value = attribute != 0;
+        },
+      );
+    }
   }
 
-  // 跳转查看动态
-  void pushDynamicsPage() => Get.toNamed('/memberDynamics?mid=$mid');
-
-  // 跳转查看投稿
-  void pushArchivesPage() async {
-    wwebid ??= await Utils.getWwebid(mid);
-    Get.toNamed('/memberArchive?mid=$mid&wwebid=$wwebid');
-  }
-
-  // 跳转查看专栏
-  void pushSeasonsPage() {}
-  // 跳转查看最近投币
-  void pushRecentCoinsPage() async {
-    if (recentCoinsList.isNotEmpty) {}
+  @override
+  void onClose() {
+    tabController?.dispose();
+    super.onClose();
   }
 }

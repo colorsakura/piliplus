@@ -89,13 +89,9 @@ class BangumiCardV extends StatelessWidget {
   Widget bagumiContent(context) {
     return Expanded(
       child: Padding(
-        // 多列
         padding: const EdgeInsets.fromLTRB(4, 5, 0, 3),
-        // 单列
-        // padding: const EdgeInsets.fromLTRB(14, 10, 4, 8),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          // mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
               bangumiItem.title,

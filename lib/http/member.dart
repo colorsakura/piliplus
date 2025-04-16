@@ -10,7 +10,7 @@ import 'package:PiliPlus/models/space_archive/data.dart' as space_archive;
 import 'package:PiliPlus/models/space_article/data.dart' as space_article;
 import 'package:PiliPlus/models/space/data.dart' as space_;
 import 'package:PiliPlus/models/space_fav/space_fav.dart';
-import 'package:PiliPlus/pages/member/new/content/member_contribute/member_contribute.dart'
+import 'package:PiliPlus/pages/member/content/member_contribute/member_contribute.dart'
     show ContributeType;
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:dio/dio.dart';

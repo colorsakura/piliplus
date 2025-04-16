@@ -62,11 +62,7 @@ class _LaterViewChildPageState extends State<LaterViewChildPage>
   Widget _buildBody(LoadingState<List<HotVideoItemModel>?> loadingState) {
     return switch (loadingState) {
       Loading() => SliverGrid(
-          gridDelegate: SliverGridDelegateWithExtentAndRatio(
-            mainAxisSpacing: 2,
-            maxCrossAxisExtent: Grid.mediumCardWidth * 2,
-            childAspectRatio: StyleString.aspectRatio * 2.2,
-          ),
+          gridDelegate: Grid.videoCardHDelegate(context),
           delegate: SliverChildBuilderDelegate(
             (context, index) {
               return const VideoCardHSkeleton();
@@ -76,11 +72,7 @@ class _LaterViewChildPageState extends State<LaterViewChildPage>
         ),
       Success() => loadingState.response?.isNotEmpty == true
           ? SliverGrid(
-              gridDelegate: SliverGridDelegateWithExtentAndRatio(
-                mainAxisSpacing: 2,
-                maxCrossAxisExtent: Grid.mediumCardWidth * 2,
-                childAspectRatio: StyleString.aspectRatio * 2.2,
-              ),
+              gridDelegate: Grid.videoCardHDelegate(context),
               delegate: SliverChildBuilderDelegate(
                 (context, index) {
                   if (index == loadingState.response!.length - 1) {

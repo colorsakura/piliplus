@@ -36,11 +36,7 @@ class _RelatedVideoPanelState extends State<RelatedVideoPanel>
   Widget _buildBody(LoadingState<List<HotVideoItemModel>?> loadingState) {
     return switch (loadingState) {
       Loading() => SliverGrid(
-          gridDelegate: SliverGridDelegateWithExtentAndRatio(
-            mainAxisSpacing: 2,
-            maxCrossAxisExtent: Grid.mediumCardWidth * 2,
-            childAspectRatio: StyleString.aspectRatio * 2.2,
-          ),
+          gridDelegate: Grid.videoCardHDelegate(context),
           delegate: SliverChildBuilderDelegate(
             (context, index) {
               return const VideoCardHSkeleton();
@@ -54,11 +50,7 @@ class _RelatedVideoPanelState extends State<RelatedVideoPanel>
                 bottom: MediaQuery.of(context).padding.bottom,
               ),
               sliver: SliverGrid(
-                gridDelegate: SliverGridDelegateWithExtentAndRatio(
-                  mainAxisSpacing: 2,
-                  maxCrossAxisExtent: Grid.mediumCardWidth * 2,
-                  childAspectRatio: StyleString.aspectRatio * 2.2,
-                ),
+                gridDelegate: Grid.videoCardHDelegate(context),
                 delegate: SliverChildBuilderDelegate((context, index) {
                   return VideoCardH(
                     videoItem: loadingState.response![index],

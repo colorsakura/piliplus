@@ -3,6 +3,7 @@ import 'package:PiliPlus/common/widgets/loading_widget.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/common/widgets/video_card_h.dart';
 import 'package:PiliPlus/http/loading_state.dart';
+import 'package:PiliPlus/models/member/archive.dart';
 import 'package:PiliPlus/pages/member_search/controller.dart';
 import 'package:PiliPlus/utils/grid.dart';
 import 'package:easy_debounce/easy_throttle.dart';
@@ -29,10 +30,11 @@ class _SearchArchiveState extends State<SearchArchive>
     return Obx(() => _buildBody(context, widget.ctr.archiveState.value));
   }
 
-  Widget _buildBody(BuildContext context, LoadingState loadingState) {
+  Widget _buildBody(
+      BuildContext context, LoadingState<List<VListItemModel>?> loadingState) {
     return switch (loadingState) {
       Loading() => loadingWidget,
-      Success() => (loadingState.response as List?)?.isNotEmpty == true
+      Success() => loadingState.response?.isNotEmpty == true
           ? refreshIndicator(
               onRefresh: () async {
                 await widget.ctr.refreshArchive();
@@ -46,24 +48,20 @@ class _SearchArchiveState extends State<SearchArchive>
                       bottom: MediaQuery.paddingOf(context).bottom + 80,
                     ),
                     sliver: SliverGrid(
-                      gridDelegate: SliverGridDelegateWithExtentAndRatio(
-                        mainAxisSpacing: 2,
-                        maxCrossAxisExtent: Grid.mediumCardWidth * 2,
-                        childAspectRatio: StyleString.aspectRatio * 2.2,
-                      ),
+                      gridDelegate: Grid.videoCardHDelegate(context),
                       delegate: SliverChildBuilderDelegate(
                         (context, index) {
-                          if (index == loadingState.response.length - 1) {
+                          if (index == loadingState.response!.length - 1) {
                             EasyThrottle.throttle('searchArchives',
                                 const Duration(milliseconds: 500), () {
                               widget.ctr.searchArchives(false);
                             });
                           }
                           return VideoCardH(
-                            videoItem: loadingState.response[index],
+                            videoItem: loadingState.response![index],
                           );
                         },
-                        childCount: loadingState.response.length,
+                        childCount: loadingState.response!.length,
                       ),
                     ),
                   ),

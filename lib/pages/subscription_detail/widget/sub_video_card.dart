@@ -75,15 +75,6 @@ class SubVideoCardH extends StatelessWidget {
                               bottom: 6.0,
                               type: 'gray',
                             ),
-                            // if (videoItem.ogv != null) ...[
-                            //   PBadge(
-                            //     text: videoItem.ogv['type_name'],
-                            //     top: 6.0,
-                            //     right: 6.0,
-                            //     bottom: null,
-                            //     left: null,
-                            //   ),
-                            // ],
                           ],
                         );
                       },
@@ -107,20 +98,23 @@ class SubVideoCardH extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                '${videoItem.title}',
-                textAlign: TextAlign.start,
-                style: const TextStyle(
-                  letterSpacing: 0.3,
+              Expanded(
+                child: Text(
+                  '${videoItem.title}',
+                  textAlign: TextAlign.start,
+                  style: const TextStyle(
+                    letterSpacing: 0.3,
+                  ),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
                 ),
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
               ),
-              const Spacer(),
               Text(
                 Utils.dateFormat(videoItem.pubtime),
                 style: TextStyle(
-                    fontSize: 11, color: Theme.of(context).colorScheme.outline),
+                  fontSize: 12,
+                  color: Theme.of(context).colorScheme.outline,
+                ),
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 2),

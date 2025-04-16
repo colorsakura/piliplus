@@ -3,7 +3,6 @@ import 'dart:math';
 import 'package:PiliPlus/common/widgets/custom_sliver_persistent_header_delegate.dart';
 import 'package:PiliPlus/common/widgets/http_error.dart';
 import 'package:PiliPlus/common/widgets/image_save.dart';
-import 'package:PiliPlus/common/widgets/loading_widget.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/pages/search/widgets/search_text.dart';
 import 'package:PiliPlus/pages/search_panel/controller.dart';
@@ -82,7 +81,6 @@ Widget searchArticlePanel(
         ),
       ),
       switch (loadingState) {
-        Loading() => errorWidget(),
         Success() => loadingState.response?.isNotEmpty == true
             ? SliverPadding(
                 padding: EdgeInsets.only(
@@ -90,11 +88,7 @@ Widget searchArticlePanel(
                       MediaQuery.of(context).padding.bottom,
                 ),
                 sliver: SliverGrid(
-                  gridDelegate: SliverGridDelegateWithExtentAndRatio(
-                    mainAxisSpacing: 2,
-                    maxCrossAxisExtent: Grid.mediumCardWidth * 2,
-                    childAspectRatio: StyleString.aspectRatio * 2.2,
-                  ),
+                  gridDelegate: Grid.videoCardHDelegate(context),
                   delegate: SliverChildBuilderDelegate(
                     (BuildContext context, int index) {
                       if (index == loadingState.response!.length - 1) {

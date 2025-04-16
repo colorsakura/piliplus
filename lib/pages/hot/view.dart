@@ -147,11 +147,7 @@ class _HotPageState extends CommonPageState<HotPage, HotController>
 
   Widget _buildSkeleton() {
     return SliverGrid(
-      gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-        mainAxisSpacing: 2,
-        maxCrossAxisExtent: Grid.mediumCardWidth * 2,
-        childAspectRatio: StyleString.aspectRatio * 2.2,
-      ),
+      gridDelegate: Grid.videoCardHDelegate(context),
       delegate: SliverChildBuilderDelegate(
         (context, index) {
           return const VideoCardHSkeleton();
@@ -166,11 +162,7 @@ class _HotPageState extends CommonPageState<HotPage, HotController>
       Loading() => _buildSkeleton(),
       Success() => loadingState.response?.isNotEmpty == true
           ? SliverGrid(
-              gridDelegate: SliverGridDelegateWithExtentAndRatio(
-                mainAxisSpacing: 2,
-                maxCrossAxisExtent: Grid.mediumCardWidth * 2,
-                childAspectRatio: StyleString.aspectRatio * 2.2,
-              ),
+              gridDelegate: Grid.videoCardHDelegate(context),
               delegate: SliverChildBuilderDelegate(
                 (context, index) {
                   if (index == loadingState.response!.length - 1) {

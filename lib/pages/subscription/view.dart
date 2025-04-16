@@ -1,4 +1,3 @@
-import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/common/skeleton/video_card_h.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/http/loading_state.dart';
@@ -45,11 +44,7 @@ class _SubPageState extends State<SubPage> {
   Widget _buildBody(LoadingState<List<SubFolderItemData>?> loadingState) {
     return switch (loadingState) {
       Loading() => SliverGrid(
-          gridDelegate: SliverGridDelegateWithExtentAndRatio(
-            mainAxisSpacing: 2,
-            maxCrossAxisExtent: Grid.mediumCardWidth * 2,
-            childAspectRatio: StyleString.aspectRatio * 2.2,
-          ),
+          gridDelegate: Grid.videoCardHDelegate(context),
           delegate: SliverChildBuilderDelegate(
             (context, index) => const VideoCardHSkeleton(),
             childCount: 10,
@@ -57,11 +52,7 @@ class _SubPageState extends State<SubPage> {
         ),
       Success() => loadingState.response?.isNotEmpty == true
           ? SliverGrid(
-              gridDelegate: SliverGridDelegateWithExtentAndRatio(
-                mainAxisSpacing: 2,
-                maxCrossAxisExtent: Grid.mediumCardWidth * 2,
-                childAspectRatio: StyleString.aspectRatio * 2.2,
-              ),
+              gridDelegate: Grid.videoCardHDelegate(context),
               delegate: SliverChildBuilderDelegate(
                 childCount: loadingState.response!.length,
                 (BuildContext context, int index) {

@@ -87,7 +87,6 @@ class HisListItem with MultiSelectData {
   int? kid;
   String? tagName;
   int? liveStatus;
-  dynamic isFullScreen;
 
   HisListItem.fromJson(Map<String, dynamic> json) {
     title = json['title'];

@@ -22,13 +22,15 @@ class MemberSearchController extends GetxController
   int archivePn = 1;
   RxInt archiveCount = (-1).obs;
   bool isEndArchive = false;
-  Rx<LoadingState> archiveState = LoadingState.loading().obs;
+  Rx<LoadingState<List<VListItemModel>?>> archiveState =
+      LoadingState<List<VListItemModel>?>.loading().obs;
 
   String offset = '';
   int dynamicPn = 1;
   RxInt dynamicCount = (-1).obs;
   bool isEndDynamic = false;
-  Rx<LoadingState> dynamicState = LoadingState.loading().obs;
+  Rx<LoadingState<List<DynamicItemModel>?>> dynamicState =
+      LoadingState<List<DynamicItemModel>?>.loading().obs;
 
   dynamic wwebid;
 

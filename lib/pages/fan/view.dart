@@ -59,7 +59,7 @@ class _FansPageState extends State<FansPage> {
               sliver: SliverGrid(
                 gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
                   maxCrossAxisExtent: Grid.smallCardWidth * 2,
-                  mainAxisExtent: 56,
+                  mainAxisExtent: 66,
                 ),
                 delegate: SliverChildBuilderDelegate(
                   (BuildContext context, int index) {

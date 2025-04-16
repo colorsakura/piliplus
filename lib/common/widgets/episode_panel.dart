@@ -468,10 +468,7 @@ class _EpisodePanelState extends CommonSlidePageState<EpisodePanel>
                           Utils.dateFormat(pubdate),
                           maxLines: 1,
                           style: TextStyle(
-                            fontSize: Theme.of(context)
-                                .textTheme
-                                .labelSmall!
-                                .fontSize,
+                            fontSize: 12,
                             height: 1,
                             color: Theme.of(context).colorScheme.outline,
                             overflow: TextOverflow.clip,

@@ -1,27 +1,20 @@
 import 'dart:math';
 
+import 'package:PiliPlus/common/constants.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'storage.dart';
 
 class Grid {
-  static double mediumCardWidth = GStorage.mediumCardWidth;
   static double smallCardWidth = GStorage.smallCardWidth;
-  //
-  // static double calculateActualWidth(BuildContext context, double maxCrossAxisExtent, double crossAxisSpacing, {double? screenWidthOffset}) {
-  //   double screenWidth = MediaQuery.of(context).size.width;
-  //   if (screenWidthOffset != null) {
-  //     screenWidth -= screenWidthOffset;
-  //   }
-  //   if (GStorage.setting.get(SettingBoxKey.useSideBar, defaultValue: false) as bool) {
-  //     screenWidth -= 55;
-  //   }
-  //   int columnCount = ((screenWidth - crossAxisSpacing) / (maxCrossAxisExtent + crossAxisSpacing)).ceil();
-  //   if (columnCount < 1){
-  //     columnCount = 1;
-  //   }
-  //   double columnWidth = (screenWidth - crossAxisSpacing) ~/ columnCount - crossAxisSpacing;
-  //   return columnWidth;
-  // }
+
+  static videoCardHDelegate(context, {double minHeight = 90}) =>
+      SliverGridDelegateWithExtentAndRatio(
+        mainAxisSpacing: 2,
+        maxCrossAxisExtent: Grid.smallCardWidth * 2,
+        childAspectRatio: StyleString.aspectRatio * 2.4,
+        minHeight: MediaQuery.textScalerOf(context).scale(minHeight),
+      );
 }
 
 class SliverGridDelegateWithExtentAndRatio extends SliverGridDelegate {
@@ -37,10 +30,14 @@ class SliverGridDelegateWithExtentAndRatio extends SliverGridDelegate {
     this.crossAxisSpacing = 0.0,
     this.childAspectRatio = 1.0,
     this.mainAxisExtent = 0.0,
+    this.minHeight = 0.0,
   })  : assert(maxCrossAxisExtent > 0),
         assert(mainAxisSpacing >= 0),
         assert(crossAxisSpacing >= 0),
-        assert(childAspectRatio > 0);
+        assert(childAspectRatio > 0),
+        assert(minHeight >= 0);
+
+  final double minHeight;
 
   /// The maximum extent of tiles in the cross axis.
   ///
@@ -91,8 +88,8 @@ class SliverGridDelegateWithExtentAndRatio extends SliverGridDelegate {
       constraints.crossAxisExtent - crossAxisSpacing * (crossAxisCount - 1),
     );
     final double childCrossAxisExtent = usableCrossAxisExtent / crossAxisCount;
-    final double childMainAxisExtent =
-        childCrossAxisExtent / childAspectRatio + mainAxisExtent;
+    final double childMainAxisExtent = max(
+        minHeight, childCrossAxisExtent / childAspectRatio + mainAxisExtent);
     return SliverGridRegularTileLayout(
       crossAxisCount: crossAxisCount,
       mainAxisStride: childMainAxisExtent + mainAxisSpacing,

@@ -17,7 +17,7 @@ import 'package:PiliPlus/models/user/danmaku_rule_adapter.dart';
 import 'package:PiliPlus/models/video/play/CDN.dart';
 import 'package:PiliPlus/models/video/play/quality.dart';
 import 'package:PiliPlus/models/video/play/subtitle.dart';
-import 'package:PiliPlus/pages/member/new/controller.dart' show MemberTabType;
+import 'package:PiliPlus/pages/member/controller.dart' show MemberTabType;
 import 'package:PiliPlus/pages/mine/index.dart';
 import 'package:PiliPlus/plugin/pl_player/models/bottom_progress_behavior.dart';
 import 'package:PiliPlus/plugin/pl_player/models/fullscreen_mode.dart';
@@ -122,9 +122,6 @@ class GStorage {
 
   static int get previewQ =>
       setting.get(SettingBoxKey.previewQuality, defaultValue: 100);
-
-  static double get mediumCardWidth =>
-      setting.get(SettingBoxKey.mediumCardWidth, defaultValue: 280.0);
 
   static double get smallCardWidth =>
       setting.get(SettingBoxKey.smallCardWidth, defaultValue: 240.0);
@@ -807,7 +804,6 @@ class SettingBoxKey {
       customColor = 'customColor', // 自定义主题色
       enableSingleRow = 'enableSingleRow', // 首页单列
       displayMode = 'displayMode',
-      mediumCardWidth = 'mediumCardWidth', // 首页列最大宽度（dp）
       smallCardWidth = 'smallCardWidth',
       videoPlayerRemoveSafeArea = 'videoPlayerRemoveSafeArea', // 视频播放器移除安全边距
       // videoPlayerShowStatusBarBackgroundColor =

@@ -56,12 +56,21 @@ class FavArticleItem extends StatelessWidget {
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          item['content'],
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
+                        Expanded(
+                          child: Text(
+                            item['content'],
+                            style: TextStyle(
+                              fontSize: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium!
+                                  .fontSize,
+                              height: 1.42,
+                              letterSpacing: 0.3,
+                            ),
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                          ),
                         ),
-                        const Spacer(),
                         Row(
                           children: [
                             StatView(
@@ -83,12 +92,15 @@ class FavArticleItem extends StatelessWidget {
                             ),
                           ],
                         ),
-                        const SizedBox(height: 4),
+                        const SizedBox(height: 3),
                         Text(
                           '${item['author']['name']} · ${item['pub_time']}',
+                          maxLines: 1,
                           style: TextStyle(
                             fontSize: 13,
+                            height: 1,
                             color: Theme.of(context).colorScheme.outline,
+                            overflow: TextOverflow.clip,
                           ),
                         ),
                       ],

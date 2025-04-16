@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/models/user/sub_detail.dart';
 import 'package:PiliPlus/utils/grid.dart';
 import 'package:easy_debounce/easy_throttle.dart';
@@ -227,13 +226,7 @@ class _SubDetailPageState extends State<SubDetailPage> {
                                     MediaQuery.paddingOf(context).bottom + 80,
                               ),
                               sliver: SliverGrid(
-                                gridDelegate:
-                                    SliverGridDelegateWithExtentAndRatio(
-                                  mainAxisSpacing: 2,
-                                  maxCrossAxisExtent: Grid.mediumCardWidth * 2,
-                                  childAspectRatio:
-                                      StyleString.aspectRatio * 2.2,
-                                ),
+                                gridDelegate: Grid.videoCardHDelegate(context),
                                 delegate: SliverChildBuilderDelegate(
                                   childCount: subList.length,
                                   (BuildContext context, int index) {
@@ -258,11 +251,7 @@ class _SubDetailPageState extends State<SubDetailPage> {
               } else {
                 // 骨架屏
                 return SliverGrid(
-                  gridDelegate: SliverGridDelegateWithExtentAndRatio(
-                    mainAxisSpacing: 2,
-                    maxCrossAxisExtent: Grid.mediumCardWidth * 2,
-                    childAspectRatio: StyleString.aspectRatio * 2.2,
-                  ),
+                  gridDelegate: Grid.videoCardHDelegate(context),
                   delegate: SliverChildBuilderDelegate(
                     (context, index) => const VideoCardHSkeleton(),
                     childCount: 10,

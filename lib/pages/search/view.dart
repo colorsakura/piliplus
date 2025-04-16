@@ -76,6 +76,7 @@ class _SearchPageState extends State<SearchPage> {
         ),
       ),
       body: SingleChildScrollView(
+        padding: MediaQuery.paddingOf(context).copyWith(top: 0),
         child: Column(
           children: [
             // 搜索建议
@@ -89,10 +90,16 @@ class _SearchPageState extends State<SearchPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   if (_searchController.enableHotKey)
-                    Expanded(child: hotSearch()),
+                    Expanded(
+                      child: Column(
+                        children: [
+                          hotSearch(),
+                          if (_searchController.enableSearchRcmd)
+                            hotSearch(false)
+                        ],
+                      ),
+                    ),
                   Expanded(child: _history()),
-                  if (_searchController.enableSearchRcmd)
-                    Expanded(child: hotSearch(false)),
                 ],
               ),
           ],
@@ -143,7 +150,7 @@ class _SearchPageState extends State<SearchPage> {
           .copyWith(height: 1, fontWeight: FontWeight.bold),
     );
     return Padding(
-      padding: const EdgeInsets.fromLTRB(10, 25, 4, 25),
+      padding: EdgeInsets.fromLTRB(10, isHot ? 25 : 4, 4, 25),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

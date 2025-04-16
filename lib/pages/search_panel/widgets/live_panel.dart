@@ -11,7 +11,6 @@ import '../../../utils/grid.dart';
 Widget searchLivePanel(
     BuildContext context, ctr, LoadingState<List<dynamic>?> loadingState) {
   return switch (loadingState) {
-    Loading() => loadingWidget,
     Success() => loadingState.response?.isNotEmpty == true
         ? GridView.builder(
             physics: const AlwaysScrollableScrollPhysics(),

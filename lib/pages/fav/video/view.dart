@@ -48,11 +48,7 @@ class _FavVideoPageState extends State<FavVideoPage>
   Widget _buildBody(LoadingState<List<FavFolderItemData>?> loadingState) {
     return switch (loadingState) {
       Loading() => SliverGrid(
-          gridDelegate: SliverGridDelegateWithExtentAndRatio(
-            mainAxisSpacing: 2,
-            maxCrossAxisExtent: Grid.mediumCardWidth * 2,
-            childAspectRatio: StyleString.aspectRatio * 2.2,
-          ),
+          gridDelegate: Grid.videoCardHDelegate(context),
           delegate: SliverChildBuilderDelegate(
             (BuildContext context, int index) {
               return const VideoCardHSkeleton();
@@ -67,11 +63,7 @@ class _FavVideoPageState extends State<FavVideoPage>
                 bottom: 80 + MediaQuery.paddingOf(context).bottom,
               ),
               sliver: SliverGrid(
-                gridDelegate: SliverGridDelegateWithExtentAndRatio(
-                  mainAxisSpacing: 2,
-                  maxCrossAxisExtent: Grid.mediumCardWidth * 2,
-                  childAspectRatio: StyleString.aspectRatio * 2.2,
-                ),
+                gridDelegate: Grid.videoCardHDelegate(context),
                 delegate: SliverChildBuilderDelegate(
                   childCount: loadingState.response!.length,
                   (BuildContext context, int index) {

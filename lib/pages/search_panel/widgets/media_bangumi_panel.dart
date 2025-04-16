@@ -13,7 +13,6 @@ Widget searchBangumiPanel(
     context, ctr, LoadingState<List<dynamic>?> loadingState) {
   late TextStyle style = TextStyle(fontSize: 13);
   return switch (loadingState) {
-    Loading() => loadingWidget,
     Success() => loadingState.response?.isNotEmpty == true
         ? CustomScrollView(
             controller: ctr.scrollController,
@@ -146,10 +145,10 @@ Widget searchBangumiPanel(
               ),
             ],
           )
-        : errorWidget(
+        : scrollErrorWidget(
             callback: ctr.onReload,
           ),
-    Error() => errorWidget(
+    Error() => scrollErrorWidget(
         errMsg: loadingState.errMsg,
         callback: ctr.onReload,
       ),

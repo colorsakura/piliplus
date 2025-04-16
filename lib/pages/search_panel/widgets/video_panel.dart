@@ -2,7 +2,6 @@ import 'dart:math';
 
 import 'package:PiliPlus/common/widgets/custom_sliver_persistent_header_delegate.dart';
 import 'package:PiliPlus/common/widgets/http_error.dart';
-import 'package:PiliPlus/common/widgets/loading_widget.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/pages/search/widgets/search_text.dart';
 import 'package:flutter/material.dart';
@@ -13,7 +12,6 @@ import 'package:PiliPlus/models/common/search_type.dart';
 import 'package:PiliPlus/pages/search_panel/index.dart';
 import 'package:intl/intl.dart';
 
-import '../../../common/constants.dart';
 import '../../../utils/grid.dart';
 
 Widget searchVideoPanel(
@@ -92,18 +90,13 @@ Widget searchVideoPanel(
         ),
       ),
       switch (loadingState) {
-        Loading() => errorWidget(),
         Success() => loadingState.response?.isNotEmpty == true
             ? SliverPadding(
                 padding: EdgeInsets.only(
                   bottom: MediaQuery.of(context).padding.bottom + 80,
                 ),
                 sliver: SliverGrid(
-                  gridDelegate: SliverGridDelegateWithExtentAndRatio(
-                    mainAxisSpacing: 2,
-                    maxCrossAxisExtent: Grid.mediumCardWidth * 2,
-                    childAspectRatio: StyleString.aspectRatio * 2.2,
-                  ),
+                  gridDelegate: Grid.videoCardHDelegate(context),
                   delegate: SliverChildBuilderDelegate(
                     (BuildContext context, int index) {
                       if (index == loadingState.response!.length - 1) {

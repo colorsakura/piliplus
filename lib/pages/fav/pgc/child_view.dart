@@ -1,4 +1,3 @@
-import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/common/skeleton/video_card_h.dart';
 import 'package:PiliPlus/common/widgets/dialog.dart';
 import 'package:PiliPlus/common/widgets/http_error.dart';
@@ -160,11 +159,7 @@ class _FavPgcChildPageState extends State<FavPgcChildPage>
   Widget _buildBody(LoadingState<List<BangumiListItemModel>?> loadingState) {
     return switch (loadingState) {
       Loading() => SliverGrid(
-          gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-            mainAxisSpacing: 2,
-            maxCrossAxisExtent: Grid.mediumCardWidth * 2,
-            childAspectRatio: StyleString.aspectRatio * 2.2,
-          ),
+          gridDelegate: Grid.videoCardHDelegate(context),
           delegate: SliverChildBuilderDelegate(
             (context, index) {
               return const VideoCardHSkeleton();
@@ -177,11 +172,7 @@ class _FavPgcChildPageState extends State<FavPgcChildPage>
               padding: EdgeInsets.only(
                   bottom: MediaQuery.paddingOf(context).bottom + 80),
               sliver: SliverGrid(
-                gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                  mainAxisSpacing: 2,
-                  maxCrossAxisExtent: Grid.mediumCardWidth * 2,
-                  childAspectRatio: StyleString.aspectRatio * 2.6,
-                ),
+                gridDelegate: Grid.videoCardHDelegate(context),
                 delegate: SliverChildBuilderDelegate(
                   (context, index) {
                     if (index == loadingState.response!.length - 1) {

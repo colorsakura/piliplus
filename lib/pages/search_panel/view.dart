@@ -67,19 +67,15 @@ class _SearchPanelState extends State<SearchPanel>
         physics: const AlwaysScrollableScrollPhysics(),
         slivers: [
           SliverGrid(
-            gridDelegate: SliverGridDelegateWithExtentAndRatio(
-              mainAxisSpacing: 2,
-              maxCrossAxisExtent: (widget.searchType == SearchType.video ||
-                          widget.searchType == SearchType.article
-                      ? Grid.mediumCardWidth
-                      : Grid.smallCardWidth) *
-                  2,
-              childAspectRatio: StyleString.aspectRatio *
-                  (widget.searchType == SearchType.media_bangumi ||
-                          widget.searchType == SearchType.media_ft
-                      ? 1.5
-                      : 2.2),
-            ),
+            gridDelegate: widget.searchType == SearchType.media_bangumi ||
+                    widget.searchType == SearchType.media_ft
+                ? SliverGridDelegateWithExtentAndRatio(
+                    mainAxisSpacing: 2,
+                    maxCrossAxisExtent: Grid.smallCardWidth * 2,
+                    childAspectRatio: StyleString.aspectRatio * 1.5,
+                    minHeight: MediaQuery.textScalerOf(context).scale(155),
+                  )
+                : Grid.videoCardHDelegate(context),
             delegate: SliverChildBuilderDelegate(
               (context, index) {
                 switch (widget.searchType) {

@@ -75,13 +75,9 @@ class BangumiCardVPgcIndex extends StatelessWidget {
   Widget bagumiContent(context) {
     return Expanded(
       child: Padding(
-        // 多列
         padding: const EdgeInsets.fromLTRB(4, 5, 0, 3),
-        // 单列
-        // padding: const EdgeInsets.fromLTRB(14, 10, 4, 8),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          // mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
               bangumiItem['title'],
@@ -102,15 +98,6 @@ class BangumiCardVPgcIndex extends StatelessWidget {
                   color: Theme.of(context).colorScheme.outline,
                 ),
               ),
-            // if (bangumiItem.progress != null)
-            //   Text(
-            //     bangumiItem.progress,
-            //     maxLines: 1,
-            //     style: TextStyle(
-            //       fontSize: Theme.of(context).textTheme.labelMedium!.fontSize,
-            //       color: Theme.of(context).colorScheme.outline,
-            //     ),
-            //   ),
           ],
         ),
       ),

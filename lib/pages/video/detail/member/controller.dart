@@ -4,7 +4,7 @@ import 'package:PiliPlus/models/member/info.dart';
 import 'package:PiliPlus/models/space_archive/data.dart';
 import 'package:PiliPlus/models/space_archive/item.dart';
 import 'package:PiliPlus/pages/common/common_data_controller.dart';
-import 'package:PiliPlus/pages/member/new/content/member_contribute/member_contribute.dart'
+import 'package:PiliPlus/pages/member/content/member_contribute/member_contribute.dart'
     show ContributeType;
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:get/get.dart';

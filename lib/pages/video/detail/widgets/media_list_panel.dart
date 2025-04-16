@@ -235,10 +235,7 @@ class _MediaListPanelState
                                   Text(
                                     item.upper!.name!,
                                     style: TextStyle(
-                                      fontSize: Theme.of(context)
-                                          .textTheme
-                                          .labelMedium!
-                                          .fontSize,
+                                      fontSize: 12,
                                       color:
                                           Theme.of(context).colorScheme.outline,
                                     ),

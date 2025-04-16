@@ -70,14 +70,21 @@ class FavNoteItem extends StatelessWidget {
                       item.summary ?? '',
                       maxLines: 1,
                       style: TextStyle(
+                        fontSize: 13,
+                        height: 1,
                         color: Theme.of(context).colorScheme.outline,
+                        overflow: TextOverflow.clip,
                       ),
                     ),
+                    const SizedBox(height: 3),
                     Text(
                       item.message ?? '',
                       maxLines: 1,
                       style: TextStyle(
+                        fontSize: 13,
+                        height: 1,
                         color: Theme.of(context).colorScheme.outline,
+                        overflow: TextOverflow.clip,
                       ),
                     ),
                   ],

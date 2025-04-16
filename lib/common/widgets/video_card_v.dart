@@ -94,10 +94,6 @@ class VideoCardV extends StatelessWidget {
       Semantics(
         label: Utils.videoItemSemantics(videoItem),
         excludeSemantics: true,
-        // customSemanticsActions: <CustomSemanticsAction, void Function()>{
-        //   for (var item in actions)
-        //     CustomSemanticsAction(label: item.title): item.onTap!,
-        // },
         child: Card(
           clipBehavior: Clip.hardEdge,
           margin: EdgeInsets.zero,
@@ -109,6 +105,7 @@ class VideoCardV extends StatelessWidget {
               cover: videoItem.pic,
             ),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 AspectRatio(
                   aspectRatio: StyleString.aspectRatio,
@@ -129,8 +126,6 @@ class VideoCardV extends StatelessWidget {
                             size: 'small',
                             type: 'gray',
                             text: Utils.timeFormat(videoItem.duration),
-                            // semanticsLabel:
-                            //     '时长${Utils.durationReadFormat(Utils.timeFormat(videoItem.duration))}',
                           )
                       ],
                     );
@@ -162,23 +157,17 @@ class VideoCardV extends StatelessWidget {
         padding: const EdgeInsets.fromLTRB(6, 5, 6, 5),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          // mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Row(
-              children: [
-                Expanded(
-                  child: Text("${videoItem.title}\n",
-                      // semanticsLabel: "${videoItem.title}",
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                        height: 1.38,
-                      )),
+            Expanded(
+              child: Text(
+                "${videoItem.title}\n",
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(
+                  height: 1.38,
                 ),
-              ],
+              ),
             ),
-            const Spacer(),
-            // const SizedBox(height: 2),
             videoStat(context),
             Row(
               children: [
@@ -224,7 +213,6 @@ class VideoCardV extends StatelessWidget {
                   flex: 1,
                   child: Text(
                     videoItem.owner.name.toString(),
-                    // semanticsLabel: "Up主：${videoItem.owner.name}",
                     maxLines: 1,
                     overflow: TextOverflow.clip,
                     style: TextStyle(
@@ -260,46 +248,32 @@ class VideoCardV extends StatelessWidget {
             theme: 'gray',
             value: videoItem.stat.danmuStr,
           ),
-        if (videoItem is RecVideoItemModel) ...<Widget>[
+        if (videoItem is RecVideoItemModel) ...[
           const Spacer(),
-          Expanded(
-              flex: 0,
-              child: Text.rich(
-                maxLines: 1,
-                TextSpan(
-                    style: TextStyle(
-                      fontSize:
-                          Theme.of(context).textTheme.labelSmall!.fontSize,
-                      color: Theme.of(context)
-                          .colorScheme
-                          .outline
-                          .withOpacity(0.8),
-                    ),
-                    text:
-                        Utils.formatTimestampToRelativeTime(videoItem.pubdate)),
-              )),
+          Text.rich(
+            maxLines: 1,
+            TextSpan(
+                style: TextStyle(
+                  fontSize: Theme.of(context).textTheme.labelSmall!.fontSize,
+                  color: Theme.of(context).colorScheme.outline.withOpacity(0.8),
+                ),
+                text: Utils.formatTimestampToRelativeTime(videoItem.pubdate)),
+          ),
           const SizedBox(width: 2),
-        ],
-        if (videoItem is RecVideoItemAppModel &&
+        ] else if (videoItem is RecVideoItemAppModel &&
             videoItem.desc != null &&
-            videoItem.desc!.contains(' · ')) ...<Widget>[
+            videoItem.desc!.contains(' · ')) ...[
           const Spacer(),
-          Expanded(
-              flex: 0,
-              child: Text.rich(
-                maxLines: 1,
-                TextSpan(
-                    style: TextStyle(
-                      fontSize:
-                          Theme.of(context).textTheme.labelSmall!.fontSize,
-                      color: Theme.of(context)
-                          .colorScheme
-                          .outline
-                          .withOpacity(0.8),
-                    ),
-                    text: Utils.shortenChineseDateString(
-                        videoItem.desc!.split(' · ').last)),
-              )),
+          Text.rich(
+            maxLines: 1,
+            TextSpan(
+                style: TextStyle(
+                  fontSize: Theme.of(context).textTheme.labelSmall!.fontSize,
+                  color: Theme.of(context).colorScheme.outline.withOpacity(0.8),
+                ),
+                text: Utils.shortenChineseDateString(
+                    videoItem.desc!.split(' · ').last)),
+          ),
           const SizedBox(width: 2),
         ]
       ],

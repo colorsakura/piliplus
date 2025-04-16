@@ -612,14 +612,13 @@ class _VideoInfoState extends State<VideoInfo> {
                   Stack(
                     children: [
                       Row(
-                        children: <Widget>[
+                        children: [
                           StatView(
                             context: context,
                             theme: 'gray',
                             value: Utils.numFormat(!widget.loadingStatus
                                 ? videoDetail.stat?.view ?? '-'
                                 : videoItem['stat']?.view ?? '-'),
-                            size: 'medium',
                             textColor: t.colorScheme.outline,
                           ),
                           const SizedBox(width: 10),
@@ -629,7 +628,6 @@ class _VideoInfoState extends State<VideoInfo> {
                             value: Utils.numFormat(!widget.loadingStatus
                                 ? videoDetail.stat?.danmaku ?? '-'
                                 : videoItem['stat']?.danmu ?? '-'),
-                            size: 'medium',
                             textColor: t.colorScheme.outline,
                           ),
                           const SizedBox(width: 10),

@@ -42,9 +42,6 @@ class VideoCardH extends StatelessWidget {
     final int aid = videoItem.aid!;
     final String bvid = videoItem.bvid!;
     String type = 'video';
-    // try {
-    //   type = videoItem.type;
-    // } catch (_) {}
     if (videoItem is SearchVideoItemModel) {
       var typeOrNull = (videoItem as SearchVideoItemModel).type;
       if (typeOrNull?.isNotEmpty == true) {
@@ -59,11 +56,6 @@ class VideoCardH extends StatelessWidget {
           Semantics(
             label: Utils.videoItemSemantics(videoItem),
             excludeSemantics: true,
-            // customSemanticsActions: <CustomSemanticsAction, void Function()>{
-            //   for (var item in actions)
-            //     CustomSemanticsAction(
-            //         label: item.title.isEmpty ? 'label' : item.title): item.onTap!,
-            // },
             child: InkWell(
               onLongPress: () {
                 if (onLongPress != null) {
@@ -181,10 +173,6 @@ class VideoCardH extends StatelessWidget {
                                   bottom: 6.0,
                                   type: 'primary',
                                 ),
-                              // if (videoItem.rcmdReason != null &&
-                              //     videoItem.rcmdReason.content != '')
-                              //   pBadge(videoItem.rcmdReason.content, context,
-                              //       6.0, 6.0, null, null),
                             ],
                           );
                         },
@@ -261,36 +249,15 @@ class VideoCardH extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
               ),
             ),
-          // const Spacer(),
-          // if (videoItem.rcmdReason != null &&
-          //     videoItem.rcmdReason.content != '')
-          //   Container(
-          //     padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 5),
-          //     decoration: BoxDecoration(
-          //       borderRadius: BorderRadius.circular(4),
-          //       border: Border.all(
-          //           color: Theme.of(context).colorScheme.surfaceTint),
-          //     ),
-          //     child: Text(
-          //       videoItem.rcmdReason.content,
-          //       style: TextStyle(
-          //           fontSize: 9,
-          //           color: Theme.of(context).colorScheme.surfaceTint),
-          //     ),
-          //   ),
-          // const SizedBox(height: 4),
           if (showOwner || showPubdate)
-            Expanded(
-              flex: 0,
-              child: Text(
-                "$pubdate ${showOwner ? videoItem.owner.name : ''}",
-                maxLines: 1,
-                style: TextStyle(
-                  fontSize: Theme.of(context).textTheme.labelSmall!.fontSize,
-                  height: 1,
-                  color: Theme.of(context).colorScheme.outline,
-                  overflow: TextOverflow.clip,
-                ),
+            Text(
+              "$pubdate ${showOwner ? videoItem.owner.name : ''}",
+              maxLines: 1,
+              style: TextStyle(
+                fontSize: 12,
+                height: 1,
+                color: Theme.of(context).colorScheme.outline,
+                overflow: TextOverflow.clip,
               ),
             ),
           const SizedBox(height: 3),

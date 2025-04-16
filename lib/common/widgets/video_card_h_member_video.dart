@@ -80,7 +80,6 @@ class VideoCardHMemberVideo extends StatelessWidget {
                             children: [
                               NetworkImgLayer(
                                 src: videoItem.cover,
-                                // videoItem.season?['cover'] ?? videoItem.cover,
                                 width: maxWidth,
                                 height: maxHeight,
                               ),
@@ -191,7 +190,6 @@ class VideoCardHMemberVideo extends StatelessWidget {
         children: [
           Expanded(
             child: Text(
-              // videoItem.season?['title'] ?? videoItem.title ?? '',
               videoItem.title,
               textAlign: TextAlign.start,
               style: TextStyle(
@@ -215,7 +213,7 @@ class VideoCardHMemberVideo extends StatelessWidget {
                 : videoItem.publishTimeText ?? '',
             maxLines: 1,
             style: TextStyle(
-              fontSize: Theme.of(context).textTheme.labelMedium!.fontSize,
+              fontSize: 12,
               height: 1,
               color: Theme.of(context).colorScheme.outline,
               overflow: TextOverflow.clip,
@@ -227,15 +225,12 @@ class VideoCardHMemberVideo extends StatelessWidget {
               StatView(
                 context: context,
                 theme: 'gray',
-                // view: videoItem.season?['view_content'] ??
-                //     videoItem.viewContent,
                 value: videoItem.stat.viewStr,
               ),
               const SizedBox(width: 8),
               StatDanMu(
                 context: context,
                 theme: 'gray',
-                // danmu: videoItem.season?['danmaku'] ?? videoItem.danmaku,
                 value: videoItem.stat.danmuStr,
               ),
             ],

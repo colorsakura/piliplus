@@ -5,7 +5,6 @@ abstract class _StatItemBase extends StatelessWidget {
   final BuildContext context;
   final Object value;
   final String? theme;
-  final String? size;
   final Color? textColor;
   final double iconSize;
 
@@ -13,7 +12,6 @@ abstract class _StatItemBase extends StatelessWidget {
     required this.context,
     required this.value,
     this.theme,
-    this.size,
     this.textColor,
     this.iconSize = 13,
   });
@@ -42,7 +40,7 @@ abstract class _StatItemBase extends StatelessWidget {
         const SizedBox(width: 2),
         Text(
           Utils.numFormat(value),
-          style: TextStyle(fontSize: size == 'medium' ? 12 : 11, color: color),
+          style: TextStyle(fontSize: 12, color: color),
           overflow: TextOverflow.clip,
           semanticsLabel: semanticsLabel,
         )
@@ -59,7 +57,6 @@ class StatView extends _StatItemBase {
     required super.value,
     this.goto,
     super.theme,
-    super.size,
     super.textColor,
   }) : super(iconSize: 13);
 
@@ -81,7 +78,6 @@ class StatDanMu extends _StatItemBase {
     required super.context,
     required super.value,
     super.theme,
-    super.size,
     super.textColor,
   }) : super(iconSize: 14);
 

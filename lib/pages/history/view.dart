@@ -251,11 +251,7 @@ class _HistoryPageState extends State<HistoryPage>
   Widget _buildBody(LoadingState<List<HisListItem>?> loadingState) {
     return switch (loadingState) {
       Loading() => SliverGrid(
-          gridDelegate: SliverGridDelegateWithExtentAndRatio(
-            mainAxisSpacing: 2,
-            maxCrossAxisExtent: Grid.mediumCardWidth * 2,
-            childAspectRatio: StyleString.aspectRatio * 2.2,
-          ),
+          gridDelegate: Grid.videoCardHDelegate(context),
           delegate: SliverChildBuilderDelegate(
             (context, index) {
               return const VideoCardHSkeleton();
@@ -270,11 +266,7 @@ class _HistoryPageState extends State<HistoryPage>
                 bottom: MediaQuery.of(context).padding.bottom + 80,
               ),
               sliver: SliverGrid(
-                gridDelegate: SliverGridDelegateWithExtentAndRatio(
-                  mainAxisSpacing: 2,
-                  maxCrossAxisExtent: Grid.mediumCardWidth * 2,
-                  childAspectRatio: StyleString.aspectRatio * 2.2,
-                ),
+                gridDelegate: Grid.videoCardHDelegate(context),
                 delegate: SliverChildBuilderDelegate(
                   (context, index) {
                     if (index == loadingState.response!.length - 1) {

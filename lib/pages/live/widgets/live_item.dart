@@ -142,19 +142,6 @@ class LiveCardV extends StatelessWidget {
           ),
         ],
       ),
-
-      // child: RichText(
-      //   maxLines: 1,
-      //   textAlign: TextAlign.justify,
-      //   softWrap: false,
-      //   text: TextSpan(
-      //     style: const TextStyle(fontSize: 11, color: Colors.white),
-      //     children: [
-      //       TextSpan(text: liveItem!.areaName!),
-      //       TextSpan(text: liveItem!.watchedShow!['text_small']),
-      //     ],
-      //   ),
-      // ),
     );
   }
 }

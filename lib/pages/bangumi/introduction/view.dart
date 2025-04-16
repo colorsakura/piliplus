@@ -341,7 +341,6 @@ class _BangumiInfoState extends State<BangumiInfo> {
                                       value: Utils.numFormat(!widget.isLoading
                                           ? widget.bangumiDetail!.stat!['views']
                                           : bangumiItem!.stat!['views']),
-                                      size: 'medium',
                                     ),
                                     const SizedBox(width: 6),
                                     StatDanMu(
@@ -351,7 +350,6 @@ class _BangumiInfoState extends State<BangumiInfo> {
                                           ? widget
                                               .bangumiDetail!.stat!['danmakus']
                                           : bangumiItem!.stat!['danmakus']),
-                                      size: 'medium',
                                     ),
                                     if (isLandscape) ...[
                                       const SizedBox(width: 6),
