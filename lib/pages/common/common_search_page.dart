@@ -45,7 +45,7 @@ abstract class CommonSearchPageState<S extends CommonSearchPage, R, T>
               },
             ),
           ),
-          onSubmitted: (value) => controller.onReload(),
+          onSubmitted: (value) => controller.onRefresh(),
         ),
       ),
       body: Obx(() => _buildBody(controller.loadingState.value)),

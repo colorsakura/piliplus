@@ -39,6 +39,7 @@ class _LaterSearchPageState
           sliver: SliverGrid(
             gridDelegate: Grid.videoCardHDelegate(context, minHeight: 110),
             delegate: SliverChildBuilderDelegate(
+              childCount: list.length,
               (context, index) {
                 if (index == list.length - 1) {
                   controller.onLoadMore();
