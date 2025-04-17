@@ -24,7 +24,7 @@ import 'package:PiliPlus/pages/setting/pages/logs.dart';
 
 import '../pages/about/index.dart';
 import '../pages/blacklist/view.dart';
-import '../pages/danmaku_block/index.dart';
+import '../pages/danmaku_block/view.dart';
 import '../pages/dynamics/detail/index.dart';
 import '../pages/dynamics/index.dart';
 import '../pages/fan/index.dart';

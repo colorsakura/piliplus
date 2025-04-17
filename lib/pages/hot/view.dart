@@ -37,6 +37,7 @@ class _HotPageState extends CommonPageState<HotPage, HotController>
   }) {
     return GestureDetector(
       onTap: onTap,
+      behavior: HitTestBehavior.opaque,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [

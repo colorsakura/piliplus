@@ -1,4 +1,5 @@
 import 'package:PiliPlus/common/widgets/image_save.dart';
+import 'package:PiliPlus/models/user/fav_folder.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:PiliPlus/common/constants.dart';
@@ -6,7 +7,7 @@ import 'package:PiliPlus/common/widgets/network_img_layer.dart';
 
 class FavItem extends StatelessWidget {
   final String heroTag;
-  final dynamic favFolderItem;
+  final FavFolderItemData favFolderItem;
   final VoidCallback? onTap;
   final VoidCallback? onLongPress;
 
@@ -40,14 +41,12 @@ class FavItem extends StatelessWidget {
               aspectRatio: StyleString.aspectRatio,
               child: LayoutBuilder(
                 builder: (context, boxConstraints) {
-                  double maxWidth = boxConstraints.maxWidth;
-                  double maxHeight = boxConstraints.maxHeight;
                   return Hero(
                     tag: heroTag,
                     child: NetworkImgLayer(
                       src: favFolderItem.cover,
-                      width: maxWidth,
-                      height: maxHeight,
+                      width: boxConstraints.maxWidth,
+                      height: boxConstraints.maxHeight,
                     ),
                   );
                 },

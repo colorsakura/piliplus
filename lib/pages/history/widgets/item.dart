@@ -2,7 +2,6 @@ import 'package:PiliPlus/common/widgets/image_save.dart';
 import 'package:PiliPlus/common/widgets/video_progress_indicator.dart';
 import 'package:PiliPlus/models/user/history.dart';
 import 'package:PiliPlus/pages/common/multi_select_controller.dart';
-import 'package:PiliPlus/pages/fav_search/controller.dart';
 import 'package:PiliPlus/pages/history/base_controller.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
@@ -41,11 +40,11 @@ class HistoryItem extends StatelessWidget {
     String bvid = videoItem.history.bvid ?? IdUtils.av2bv(aid);
     return InkWell(
       onTap: () async {
-        if ((ctr is MultiSelectController || ctr is HistoryBaseController) &&
-            ctr!.enableMultiSelect.value) {
-          feedBack();
-          onChoose?.call();
-          return;
+        if (ctr is MultiSelectController || ctr is HistoryBaseController) {
+          if (ctr.enableMultiSelect.value) {
+            onChoose?.call();
+            return;
+          }
         }
         if (videoItem.history.business?.contains('article') == true) {
           PageUtils.toDupNamed(
@@ -105,18 +104,18 @@ class HistoryItem extends StatelessWidget {
         }
       },
       onLongPress: () {
-        if (ctr is FavSearchController) {
-          imageSaveDialog(
-            context: context,
-            title: videoItem.title,
-            cover: videoItem.cover,
-          );
+        if (ctr is MultiSelectController || ctr is HistoryBaseController) {
+          if (!ctr.enableMultiSelect.value) {
+            ctr.enableMultiSelect.value = true;
+            onChoose?.call();
+          }
           return;
         }
-        if (!ctr!.enableMultiSelect.value) {
-          ctr!.enableMultiSelect.value = true;
-          onChoose?.call();
-        }
+        imageSaveDialog(
+          context: context,
+          title: videoItem.title,
+          cover: videoItem.cover,
+        );
       },
       child: Stack(
         children: [
