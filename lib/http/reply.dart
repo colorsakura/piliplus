@@ -234,7 +234,7 @@ class ReplyHttp {
         'pn': pageNum,
         'type': type,
         'sort': 1,
-        if (isLogin) 'csrf': await Request.getCsrf(),
+        if (isLogin) 'csrf': Accounts.main.csrf,
       },
       options: isLogin.not ? _options : null,
     );
@@ -342,7 +342,7 @@ class ReplyHttp {
         'oid': oid,
         'rpid': rpid,
         'action': action,
-        'csrf': await Request.getCsrf(),
+        'csrf': Accounts.main.csrf,
       },
       options: Options(
         contentType: Headers.formUrlEncodedContentType,
@@ -369,7 +369,7 @@ class ReplyHttp {
         'oid': oid,
         'rpid': rpid,
         'action': action,
-        'csrf': await Request.getCsrf(),
+        'csrf': Accounts.main.csrf,
       },
     );
     if (res.data['code'] == 0) {
@@ -406,7 +406,7 @@ class ReplyHttp {
         'type': type,
         'rpid': rpid,
         'action': isUpTop ? 0 : 1,
-        'csrf': await Request.getCsrf(),
+        'csrf': Accounts.main.csrf,
       },
       options: Options(
         contentType: Headers.formUrlEncodedContentType,

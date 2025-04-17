@@ -437,7 +437,7 @@ class AuthorPanel extends StatelessWidget {
                     final res = await Request().post(
                       '/x/dynamic/feed/dynamic_report/add',
                       queryParameters: {
-                        'csrf': await Request.getCsrf(),
+                        'csrf': Accounts.main.csrf,
                       },
                       data: {
                         "accused_uid": item.modules.moduleAuthor.mid,

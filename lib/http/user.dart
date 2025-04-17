@@ -1,6 +1,7 @@
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/video/later.dart';
 import 'package:PiliPlus/utils/global_data.dart';
+import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:PiliPlus/utils/wbi_sign.dart';
 import 'package:dio/dio.dart';
@@ -71,7 +72,7 @@ class UserHttp {
   }) async {
     Map<String, dynamic> data = {
       'sort': sort.join(','),
-      'csrf': await Request.getCsrf(),
+      'csrf': Accounts.main.csrf,
     };
     Utils.appSign(data);
     var res = await Request().post(
@@ -95,7 +96,7 @@ class UserHttp {
     Map<String, dynamic> data = {
       'media_id': mediaId,
       'sort': sort.join(','),
-      'csrf': await Request.getCsrf(),
+      'csrf': Accounts.main.csrf,
     };
     Utils.appSign(data);
     var res = await Request().post(
@@ -120,7 +121,7 @@ class UserHttp {
       data: {
         'media_id': mediaId,
         'platform': 'web',
-        'csrf': await Request.getCsrf(),
+        'csrf': Accounts.main.csrf,
       },
       options: Options(
         contentType: Headers.formUrlEncodedContentType,
@@ -140,7 +141,7 @@ class UserHttp {
         data: {
           'media_ids': mediaIds.join(','),
           'platform': 'web',
-          'csrf': await Request.getCsrf(),
+          'csrf': Accounts.main.csrf,
         },
         options: Options(
           contentType: Headers.formUrlEncodedContentType,
@@ -166,7 +167,7 @@ class UserHttp {
           'intro': intro,
           'privacy': privacy,
           'cover': cover.isNotEmpty ? Uri.encodeFull(cover) : cover,
-          'csrf': await Request.getCsrf(),
+          'csrf': Accounts.main.csrf,
           if (mediaId != null) 'media_id': mediaId,
         },
         options: Options(
@@ -284,7 +285,7 @@ class UserHttp {
       queryParameters: {
         'switch': switchStatus,
         'jsonp': 'jsonp',
-        'csrf': await Request.getCsrf(),
+        'csrf': Accounts.main.csrf,
       },
     );
     return res;
@@ -306,7 +307,7 @@ class UserHttp {
       Api.clearHistory,
       queryParameters: {
         'jsonp': 'jsonp',
-        'csrf': await Request.getCsrf(),
+        'csrf': Accounts.main.csrf,
       },
     );
     return res;
@@ -314,7 +315,7 @@ class UserHttp {
 
   // 稍后再看
   static Future toViewLater({String? bvid, dynamic aid}) async {
-    var data = {'csrf': await Request.getCsrf()};
+    var data = {'csrf': Accounts.main.csrf};
     if (bvid != null) {
       data['bvid'] = bvid;
     } else if (aid != null) {
@@ -334,7 +335,7 @@ class UserHttp {
   // 移除已观看
   static Future toViewDel({required List<int?> aids}) async {
     final Map<String, dynamic> params = {
-      'csrf': await Request.getCsrf(),
+      'csrf': Accounts.main.csrf,
       'resources': aids.join(',')
     };
     dynamic res = await Request().post(
@@ -374,7 +375,7 @@ class UserHttp {
       Api.toViewClear,
       queryParameters: {
         if (cleanType != null) 'clean_type': cleanType,
-        'csrf': await Request.getCsrf(),
+        'csrf': Accounts.main.csrf,
       },
     );
     if (res.data['code'] == 0) {
@@ -391,7 +392,7 @@ class UserHttp {
       data: {
         'kid': kidList.join(','),
         'jsonp': 'jsonp',
-        'csrf': await Request.getCsrf(),
+        'csrf': Accounts.main.csrf,
       },
       options: Options(
         contentType: Headers.formUrlEncodedContentType,
@@ -524,7 +525,7 @@ class UserHttp {
       Api.addFavArticle,
       data: {
         'id': id,
-        'csrf': await Request.getCsrf(),
+        'csrf': Accounts.main.csrf,
       },
       options: Options(
         contentType: Headers.formUrlEncodedContentType,
@@ -544,7 +545,7 @@ class UserHttp {
       Api.delFavArticle,
       data: {
         'id': id,
-        'csrf': await Request.getCsrf(),
+        'csrf': Accounts.main.csrf,
       },
       options: Options(
         contentType: Headers.formUrlEncodedContentType,
@@ -564,7 +565,7 @@ class UserHttp {
     var res = await Request().post(
       Api.communityAction,
       queryParameters: {
-        'csrf': await Request.getCsrf(),
+        'csrf': Accounts.main.csrf,
       },
       data: {
         "entity": {
@@ -609,7 +610,7 @@ class UserHttp {
         Api.unfavFolder,
         queryParameters: {
           'media_id': id,
-          'csrf': await Request.getCsrf(),
+          'csrf': Accounts.main.csrf,
         },
       );
     } else {
@@ -618,7 +619,7 @@ class UserHttp {
         queryParameters: {
           'platform': 'web',
           'season_id': id,
-          'csrf': await Request.getCsrf(),
+          'csrf': Accounts.main.csrf,
         },
       );
     }

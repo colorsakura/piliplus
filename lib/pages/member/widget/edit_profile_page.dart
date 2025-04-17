@@ -470,7 +470,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
               .post(
             '/x/member/web/face/update',
             queryParameters: {
-              'csrf': await Request.getCsrf(),
+              'csrf': Accounts.main.csrf,
             },
             data: FormData.fromMap({
               'dopost': 'save',

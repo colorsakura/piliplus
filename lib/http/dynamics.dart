@@ -67,7 +67,7 @@ class DynamicsHttp {
       queryParameters: {
         'dynamic_id': dynamicId,
         'up': up,
-        'csrf': await Request.getCsrf(),
+        'csrf': Accounts.main.csrf,
       },
     );
     if (res.data['code'] == 0) {
@@ -125,7 +125,7 @@ class DynamicsHttp {
     var res = await Request().post(
       Api.setTopDyn,
       queryParameters: {
-        'csrf': await Request.getCsrf(),
+        'csrf': Accounts.main.csrf,
       },
       data: {
         'dyn_str': dynamicId,

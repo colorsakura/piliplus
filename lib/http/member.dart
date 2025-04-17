@@ -42,7 +42,7 @@ class MemberHttp {
           'mid': mid,
           'reason': reason,
           if (reasonV2 != null) 'reason_v2': reasonV2,
-          'csrf': await Request.getCsrf(),
+          'csrf': Accounts.main.csrf,
         },
       ),
     );
@@ -476,7 +476,7 @@ class MemberHttp {
       isAdd ? Api.addSpecial : Api.delSpecial,
       data: {
         'fid': fid,
-        'csrf': await Request.getCsrf(),
+        'csrf': Accounts.main.csrf,
       },
       options: Options(
         contentType: Headers.formUrlEncodedContentType,
@@ -499,7 +499,7 @@ class MemberHttp {
       data: {
         'fids': fids,
         'tagids': tagids ?? '0',
-        'csrf': await Request.getCsrf(),
+        'csrf': Accounts.main.csrf,
         // 'cross_domain': true
       },
       options: Options(

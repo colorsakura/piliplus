@@ -61,11 +61,6 @@ class Request {
     }
   }
 
-  // 从cookie中获取 csrf token
-  static Future<String> getCsrf() async {
-    return Accounts.main.csrf;
-  }
-
   // static Future<void> buvidActive(Account account) async {
   //   // 这样线程不安全, 但仍按预期进行
   //   if (account.activited) return;

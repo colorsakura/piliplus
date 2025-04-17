@@ -6,6 +6,7 @@ import 'package:PiliPlus/models/msg/msgfeed_like_me.dart';
 import 'package:PiliPlus/models/msg/msgfeed_reply_me.dart';
 import 'package:PiliPlus/models/msg/msgfeed_sys_msg.dart';
 import 'package:PiliPlus/pages/dynamics/view.dart' show ReplyOption;
+import 'package:PiliPlus/utils/storage.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
@@ -85,7 +86,7 @@ class MsgHttp {
   }
 
   static Future msgSysUpdateCursor(int cursor) async {
-    String csrf = await Request.getCsrf();
+    String csrf = Accounts.main.csrf;
     var res = await Request().get(Api.msgSysUpdateCursor, queryParameters: {
       'csrf': csrf,
       'cursor': cursor,
@@ -125,7 +126,7 @@ class MsgHttp {
     ReplyOption? replyOption,
     int? privatePub,
   }) async {
-    String csrf = await Request.getCsrf();
+    String csrf = Accounts.main.csrf;
     var res = await Request().post(
       Api.createDynamic,
       queryParameters: {
@@ -204,7 +205,7 @@ class MsgHttp {
         'bucket': bucket,
         'file': await MultipartFile.fromFile(path),
         'dir': dir,
-        'csrf': await Request.getCsrf(),
+        'csrf': Accounts.main.csrf,
       }),
     );
     if (res.data['code'] == 0) {
@@ -231,7 +232,7 @@ class MsgHttp {
       'file_up': file,
       if (category != null) 'category': category,
       if (biz != null) 'biz': biz,
-      'csrf': await Request.getCsrf(),
+      'csrf': Accounts.main.csrf,
     };
     var res = await Request().post(
       Api.uploadBfs,
@@ -254,7 +255,7 @@ class MsgHttp {
   static Future createTextDynamic(
     dynamic content,
   ) async {
-    String csrf = await Request.getCsrf();
+    String csrf = Accounts.main.csrf;
     Map<String, dynamic> data = await WbiSign.makSign({
       'dynamic_id': 0,
       'type': 4,
@@ -280,7 +281,7 @@ class MsgHttp {
   static Future removeDynamic(
     dynamic dynamicId,
   ) async {
-    String csrf = await Request.getCsrf();
+    String csrf = Accounts.main.csrf;
     Map<String, dynamic> data = await WbiSign.makSign({
       'dynamic_id': dynamicId,
       'csrf_token': csrf,
@@ -303,7 +304,7 @@ class MsgHttp {
   static Future removeMsg(
     dynamic talkerId,
   ) async {
-    String csrf = await Request.getCsrf();
+    String csrf = Accounts.main.csrf;
     Map<String, dynamic> data = await WbiSign.makSign({
       'talker_id': talkerId,
       'session_type': 1,
@@ -327,7 +328,7 @@ class MsgHttp {
     int tp,
     dynamic id,
   ) async {
-    String csrf = await Request.getCsrf();
+    String csrf = Accounts.main.csrf;
     var res = await Request().post(
       Api.delMsgfeed,
       data: {
@@ -355,7 +356,7 @@ class MsgHttp {
   static Future delSysMsg(
     dynamic id,
   ) async {
-    String csrf = await Request.getCsrf();
+    String csrf = Accounts.main.csrf;
     var res = await Request().post(
       HttpString.messageBaseUrl + Api.delSysMsg,
       queryParameters: {
@@ -384,7 +385,7 @@ class MsgHttp {
     required dynamic talkerId,
     required int opType,
   }) async {
-    String csrf = await Request.getCsrf();
+    String csrf = Accounts.main.csrf;
     Map<String, dynamic> data = await WbiSign.makSign({
       'talker_id': talkerId,
       'session_type': 1,
@@ -485,7 +486,7 @@ class MsgHttp {
     int? talkerId,
     int? ackSeqno,
   }) async {
-    String csrf = await Request.getCsrf();
+    String csrf = Accounts.main.csrf;
     Map params = await WbiSign.makSign({
       'talker_id': talkerId,
       'session_type': 1,
@@ -519,7 +520,7 @@ class MsgHttp {
     int? msgType,
     dynamic content,
   }) async {
-    String csrf = await Request.getCsrf();
+    String csrf = Accounts.main.csrf;
     Map<String, dynamic> base = {
       'msg[sender_uid]': senderUid,
       'msg[receiver_id]': receiverId,

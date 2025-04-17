@@ -823,7 +823,7 @@ class VideoHttp {
     await Request().post(
       Api.roomEntryAction,
       queryParameters: {
-        'csrf': await Request.getCsrf(),
+        'csrf': Accounts.main.csrf,
       },
       data: {
         'room_id': roomId,

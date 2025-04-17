@@ -1,4 +1,5 @@
 import '../models/user/danmaku_block.dart';
+import '../utils/storage.dart';
 import 'index.dart';
 
 class DanmakuFilterHttp {
@@ -22,7 +23,7 @@ class DanmakuFilterHttp {
       Api.danmakuFilterDel,
       queryParameters: {
         'ids': ids,
-        'csrf': await Request.getCsrf(),
+        'csrf': Accounts.main.csrf,
       },
     );
     if (res.data['code'] == 0) {
@@ -45,7 +46,7 @@ class DanmakuFilterHttp {
       queryParameters: {
         'type': type,
         'filter': filter,
-        'csrf': await Request.getCsrf(),
+        'csrf': Accounts.main.csrf,
       },
     );
     if (res.data['code'] == 0) {

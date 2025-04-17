@@ -1,5 +1,6 @@
 import 'package:PiliPlus/grpc/dm/v1/dm.pb.dart';
 import 'package:PiliPlus/grpc/grpc_repo.dart';
+import 'package:PiliPlus/utils/storage.dart';
 import 'package:dio/dio.dart';
 import 'index.dart';
 
@@ -83,7 +84,7 @@ class DanmakuHttp {
       'rnd': DateTime.now().microsecondsSinceEpoch,
       'colorful': colorful == true ? 60001 : null,
       'checkbox_type': checkbox_type,
-      'csrf': await Request.getCsrf(),
+      'csrf': Accounts.main.csrf,
       // 'access_key': access_key,
     }..removeWhere((key, value) => value == null);
 

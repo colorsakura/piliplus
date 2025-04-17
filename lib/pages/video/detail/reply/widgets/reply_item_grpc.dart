@@ -1104,7 +1104,7 @@ class ReplyItemGrpc extends StatelessWidget {
                 '/x/v2/reply/report',
                 data: {
                   'add_blacklist': banUid,
-                  'csrf': await Request.getCsrf(),
+                  'csrf': Accounts.main.csrf,
                   'gaia_source': 'main_h5',
                   'oid': item.oid,
                   'platform': 'android',

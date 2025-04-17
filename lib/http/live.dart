@@ -4,6 +4,7 @@ import 'package:PiliPlus/models/live/danmu_info.dart';
 import 'package:PiliPlus/models/live/follow.dart';
 import 'package:PiliPlus/models/live/live_emoticons/data.dart';
 import 'package:PiliPlus/models/live/live_emoticons/datum.dart';
+import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/wbi_sign.dart';
 import 'package:dio/dio.dart';
 import '../models/live/item.dart';
@@ -42,7 +43,7 @@ class LiveHttp {
   }
 
   static Future sendLiveMsg({roomId, msg, dmType, emoticonOptions}) async {
-    dynamic csrf = await Request.getCsrf();
+    String csrf = Accounts.main.csrf;
     var res = await Request().post(
       Api.sendLiveMsg,
       data: FormData.fromMap({
