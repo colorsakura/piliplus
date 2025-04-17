@@ -312,15 +312,14 @@ class MsgHttp {
       'csrf_token': csrf,
       'csrf': csrf
     });
-    var res = await Request()
-        .post(HttpString.tUrl + Api.removeMsg, data: FormData.fromMap(data));
+    var res = await Request().post(
+      HttpString.tUrl + Api.removeMsg,
+      data: FormData.fromMap(data),
+    );
     if (res.data['code'] == 0) {
       return {'status': true};
     } else {
-      return {
-        'status': false,
-        'msg': res.data['message'],
-      };
+      return {'status': false, 'msg': res.data['message']};
     }
   }
 
@@ -381,10 +380,10 @@ class MsgHttp {
     }
   }
 
-  static Future setTop(
-    dynamic talkerId,
-    int opType,
-  ) async {
+  static Future setTop({
+    required dynamic talkerId,
+    required int opType,
+  }) async {
     String csrf = await Request.getCsrf();
     Map<String, dynamic> data = await WbiSign.makSign({
       'talker_id': talkerId,
@@ -408,32 +407,28 @@ class MsgHttp {
   }
 
   // 会话列表
-  static Future sessionList({int? endTs}) async {
-    Map<String, dynamic> params = {
+  static Future<LoadingState<List<SessionList>?>> sessionList(
+      {int? endTs}) async {
+    final params = await WbiSign.makSign({
       'session_type': 1,
       'group_fold': 1,
       'unfollow_fold': 0,
       'sort_rule': 2,
       'build': 0,
       'mobi_app': 'web',
-    };
-    if (endTs != null) {
-      params['end_ts'] = endTs;
-    }
-
-    Map signParams = await WbiSign.makSign(params);
-    var res = await Request().get(Api.sessionList, queryParameters: signParams);
+      if (endTs != null) 'end_ts': endTs,
+    });
+    var res = await Request().get(Api.sessionList, queryParameters: params);
     if (res.data['code'] == 0) {
       try {
-        return {
-          'status': true,
-          'data': SessionDataModel.fromJson(res.data['data']).sessionList,
-        };
+        return LoadingState.success(
+          SessionDataModel.fromJson(res.data['data']).sessionList,
+        );
       } catch (err) {
-        return {'status': false, 'msg': err.toString()};
+        return LoadingState.error(err.toString());
       }
     } else {
-      return {'status': false, 'msg': res.data['message']};
+      return LoadingState.error(res.data['message']);
     }
   }
 
