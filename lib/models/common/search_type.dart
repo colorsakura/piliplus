@@ -1,5 +1,6 @@
 // ignore_for_file: constant_identifier_names
 enum SearchType {
+  // all,
   // 视频：video
   video,
   // 番剧：media_bangumi,
@@ -23,7 +24,15 @@ enum SearchType {
 }
 
 extension SearchTypeExtension on SearchType {
-  String get label => ['视频', '番剧', '影视', '直播间', '用户', '专栏'][index];
+  String get label => [
+        // '综合',
+        '视频',
+        '番剧',
+        '影视',
+        '直播间',
+        '用户',
+        '专栏',
+      ][index];
 }
 
 // 搜索类型为视频、专栏及相簿时

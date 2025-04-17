@@ -1,9 +1,14 @@
 import 'package:PiliPlus/pages/search/controller.dart';
+import 'package:PiliPlus/pages/search_panel/article/view.dart';
+import 'package:PiliPlus/pages/search_panel/controller.dart';
+import 'package:PiliPlus/pages/search_panel/live/view.dart';
+import 'package:PiliPlus/pages/search_panel/pgc/view.dart';
+import 'package:PiliPlus/pages/search_panel/user/view.dart';
+import 'package:PiliPlus/pages/search_panel/video/view.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:PiliPlus/models/common/search_type.dart';
-import 'package:PiliPlus/pages/search_panel/index.dart';
 import 'controller.dart';
 import 'package:PiliPlus/common/widgets/scroll_physics.dart';
 
@@ -86,49 +91,54 @@ class _SearchResultPageState extends State<SearchResultPage>
       ),
       body: Column(
         children: [
-          SizedBox(
-            width: double.infinity,
-            child: TabBar(
-              overlayColor: WidgetStateProperty.all(Colors.transparent),
-              splashFactory: NoSplash.splashFactory,
-              padding: const EdgeInsets.only(top: 4, left: 8, right: 8),
-              controller: _tabController,
-              tabs: SearchType.values
-                  .map(
-                    (item) => Obx(
-                      () {
-                        int count = _searchResultController.count[item.index];
-                        return Tab(
-                            text:
-                                '${item.label}${count != -1 ? ' ${count > 99 ? '99+' : count}' : ''}');
-                      },
-                    ),
-                  )
-                  .toList(),
-              isScrollable: true,
-              indicatorWeight: 0,
-              indicatorPadding:
-                  const EdgeInsets.symmetric(horizontal: 3, vertical: 8),
-              indicator: BoxDecoration(
-                color: Theme.of(context).colorScheme.secondaryContainer,
-                borderRadius: const BorderRadius.all(Radius.circular(20)),
+          SafeArea(
+            top: false,
+            bottom: false,
+            child: SizedBox(
+              width: double.infinity,
+              child: TabBar(
+                overlayColor: WidgetStateProperty.all(Colors.transparent),
+                splashFactory: NoSplash.splashFactory,
+                padding: const EdgeInsets.only(top: 4, left: 8, right: 8),
+                controller: _tabController,
+                tabs: SearchType.values
+                    .map(
+                      (item) => Obx(
+                        () {
+                          int count = _searchResultController.count[item.index];
+                          return Tab(
+                              text:
+                                  '${item.label}${count != -1 ? ' ${count > 99 ? '99+' : count}' : ''}');
+                        },
+                      ),
+                    )
+                    .toList(),
+                isScrollable: true,
+                indicatorWeight: 0,
+                indicatorPadding:
+                    const EdgeInsets.symmetric(horizontal: 3, vertical: 8),
+                indicator: BoxDecoration(
+                  color: Theme.of(context).colorScheme.secondaryContainer,
+                  borderRadius: const BorderRadius.all(Radius.circular(20)),
+                ),
+                indicatorSize: TabBarIndicatorSize.tab,
+                labelColor: Theme.of(context).colorScheme.onSecondaryContainer,
+                labelStyle: TabBarTheme.of(context)
+                        .labelStyle
+                        ?.copyWith(fontSize: 13) ??
+                    const TextStyle(fontSize: 13),
+                dividerColor: Colors.transparent,
+                dividerHeight: 0,
+                unselectedLabelColor: Theme.of(context).colorScheme.outline,
+                tabAlignment: TabAlignment.start,
+                onTap: (index) {
+                  if (_tabController.indexIsChanging.not) {
+                    Get.find<SearchPanelController>(
+                            tag: SearchType.values[index].name + _tag)
+                        .animateToTop();
+                  }
+                },
               ),
-              indicatorSize: TabBarIndicatorSize.tab,
-              labelColor: Theme.of(context).colorScheme.onSecondaryContainer,
-              labelStyle:
-                  TabBarTheme.of(context).labelStyle?.copyWith(fontSize: 13) ??
-                      const TextStyle(fontSize: 13),
-              dividerColor: Colors.transparent,
-              dividerHeight: 0,
-              unselectedLabelColor: Theme.of(context).colorScheme.outline,
-              tabAlignment: TabAlignment.start,
-              onTap: (index) {
-                if (_tabController.indexIsChanging.not) {
-                  Get.find<SearchPanelController>(
-                          tag: SearchType.values[index].name + _tag)
-                      .animateToTop();
-                }
-              },
             ),
           ),
           Expanded(
@@ -138,11 +148,39 @@ class _SearchResultPageState extends State<SearchResultPage>
                 controller: _tabController,
                 children: SearchType.values
                     .map(
-                      (item) => SearchPanel(
-                        keyword: _searchResultController.keyword,
-                        searchType: item,
-                        tag: _tag,
-                      ),
+                      (item) => switch (item) {
+                        // SearchType.all => SearchVideoPanel(
+                        //     keyword: _searchResultController.keyword,
+                        //     tag: _tag,
+                        //   ),
+                        SearchType.video => SearchVideoPanel(
+                            tag: _tag,
+                            searchType: item,
+                            keyword: _searchResultController.keyword,
+                          ),
+                        SearchType.media_bangumi ||
+                        SearchType.media_ft =>
+                          SearchPgcPanel(
+                            tag: _tag,
+                            searchType: item,
+                            keyword: _searchResultController.keyword,
+                          ),
+                        SearchType.live_room => SearchLivePanel(
+                            tag: _tag,
+                            searchType: item,
+                            keyword: _searchResultController.keyword,
+                          ),
+                        SearchType.bili_user => SearchUserPanel(
+                            tag: _tag,
+                            searchType: item,
+                            keyword: _searchResultController.keyword,
+                          ),
+                        SearchType.article => SearchArticlePanel(
+                            tag: _tag,
+                            searchType: item,
+                            keyword: _searchResultController.keyword,
+                          ),
+                      },
                     )
                     .toList(),
               ),

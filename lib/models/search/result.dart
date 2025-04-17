@@ -4,9 +4,21 @@ import 'package:PiliPlus/utils/utils.dart';
 import '../model_owner.dart';
 import '../model_video.dart';
 
-class SearchVideoModel {
+abstract class SearchNumData<T> {
+  SearchNumData({
+    this.numResults,
+    this.list,
+  });
+
   int? numResults;
-  List<SearchVideoItemModel>? list;
+  List<T>? list;
+}
+
+class SearchVideoModel extends SearchNumData<SearchVideoItemModel> {
+  SearchVideoModel({
+    super.numResults,
+    super.list,
+  });
 
   SearchVideoModel.fromJson(Map<String, dynamic> json) {
     numResults = (json['numResults'] as num?)?.toInt();
@@ -88,14 +100,11 @@ class SearchOwner extends Owner {
   }
 }
 
-class SearchUserModel {
+class SearchUserModel extends SearchNumData<SearchUserItemModel> {
   SearchUserModel({
-    this.numResults,
-    this.list,
+    super.numResults,
+    super.list,
   });
-
-  int? numResults;
-  List<SearchUserItemModel>? list;
 
   SearchUserModel.fromJson(Map<String, dynamic> json) {
     numResults = (json['numResults'] as num?)?.toInt();
@@ -165,14 +174,11 @@ class SearchUserItemModel {
   }
 }
 
-class SearchLiveModel {
+class SearchLiveModel extends SearchNumData<SearchLiveItemModel> {
   SearchLiveModel({
-    this.numResults,
-    this.list,
+    super.numResults,
+    super.list,
   });
-
-  int? numResults;
-  List<SearchLiveItemModel>? list;
 
   SearchLiveModel.fromJson(Map<String, dynamic> json) {
     numResults = (json['numResults'] as num?)?.toInt();
@@ -246,14 +252,11 @@ class SearchLiveItemModel {
   }
 }
 
-class SearchMBangumiModel {
+class SearchMBangumiModel extends SearchNumData<SearchMBangumiItemModel> {
   SearchMBangumiModel({
-    this.numResults,
-    this.list,
+    super.numResults,
+    super.list,
   });
-
-  int? numResults;
-  List<SearchMBangumiItemModel>? list;
 
   SearchMBangumiModel.fromJson(Map<String, dynamic> json) {
     numResults = (json['numResults'] as num?)?.toInt();
@@ -348,14 +351,11 @@ class SearchMBangumiItemModel {
   }
 }
 
-class SearchArticleModel {
+class SearchArticleModel extends SearchNumData<SearchArticleItemModel> {
   SearchArticleModel({
-    this.numResults,
-    this.list,
+    super.numResults,
+    super.list,
   });
-
-  int? numResults;
-  List<SearchArticleItemModel>? list;
 
   SearchArticleModel.fromJson(Map<String, dynamic> json) {
     numResults = (json['numResults'] as num?)?.toInt();

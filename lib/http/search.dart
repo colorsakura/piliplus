@@ -43,7 +43,7 @@ class SearchHttp {
   }
 
   // 分类搜索
-  static Future<LoadingState> searchByType({
+  static Future<LoadingState<R>> searchByType<R>({
     required SearchType searchType,
     required String keyword,
     required page,
@@ -56,13 +56,11 @@ class SearchHttp {
     int? pubBegin,
     int? pubEnd,
   }) async {
-    var reqData = {
+    var params = {
       'search_type': searchType.name,
       'keyword': keyword,
-      // 'order_sort': 0,
-      // 'user_type': 0,
       'page': page,
-      if (order != null && order.isNotEmpty) 'order': order,
+      if (order?.isNotEmpty == true) 'order': order,
       if (duration != null) 'duration': duration,
       if (tids != null) 'tids': tids,
       if (orderSort != null) 'order_sort': orderSort,
@@ -71,7 +69,10 @@ class SearchHttp {
       if (pubBegin != null) 'pubtime_begin_s': pubBegin,
       if (pubEnd != null) 'pubtime_end_s': pubEnd,
     };
-    var res = await Request().get(Api.searchByType, queryParameters: reqData);
+    var res = await Request().get(
+      Api.searchByType,
+      queryParameters: params,
+    );
     if (res.data is! Map) {
       return LoadingState.error('没有相关数据');
     }
@@ -101,6 +102,8 @@ class SearchHttp {
           case SearchType.article:
             data = SearchArticleModel.fromJson(res.data['data']);
             break;
+          // case SearchType.all:
+          //   break;
         }
         return LoadingState.success(data);
       } catch (err) {
@@ -108,10 +111,52 @@ class SearchHttp {
         return LoadingState.error(err.toString());
       }
     } else {
-      return LoadingState.error(
-          res.data['data'] != null && res.data['data']['numPages'] == 0
-              ? '没有相关数据'
-              : res.data['message']);
+      return LoadingState.error(res.data['message'] ?? '没有相关数据');
+    }
+  }
+
+  static Future<LoadingState> searchAll({
+    required String keyword,
+    required page,
+    String? order,
+    int? duration,
+    int? tids,
+    int? orderSort,
+    int? userType,
+    int? categoryId,
+    int? pubBegin,
+    int? pubEnd,
+  }) async {
+    var params = {
+      'keyword': keyword,
+      'page': page,
+      if (order?.isNotEmpty == true) 'order': order,
+      if (duration != null) 'duration': duration,
+      if (tids != null) 'tids': tids,
+      if (orderSort != null) 'order_sort': orderSort,
+      if (userType != null) 'user_type': userType,
+      if (categoryId != null) 'category_id': categoryId,
+      if (pubBegin != null) 'pubtime_begin_s': pubBegin,
+      if (pubEnd != null) 'pubtime_end_s': pubEnd,
+    };
+    var res = await Request().get(
+      Api.searchByType,
+      queryParameters: params,
+    );
+    if (res.data is! Map) {
+      return LoadingState.error('没有相关数据');
+    }
+    if (res.data['code'] == 0) {
+      dynamic data;
+      try {
+        // TODO
+        return LoadingState.success(data);
+      } catch (err) {
+        debugPrint(err.toString());
+        return LoadingState.error(err.toString());
+      }
+    } else {
+      return LoadingState.error(res.data['message'] ?? '没有相关数据');
     }
   }
 

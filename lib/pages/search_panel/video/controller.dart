@@ -1,146 +1,114 @@
 import 'dart:math';
 
-import 'package:PiliPlus/common/widgets/custom_sliver_persistent_header_delegate.dart';
-import 'package:PiliPlus/common/widgets/http_error.dart';
 import 'package:PiliPlus/http/loading_state.dart';
+import 'package:PiliPlus/models/common/search_type.dart';
+import 'package:PiliPlus/models/search/result.dart';
 import 'package:PiliPlus/pages/search/widgets/search_text.dart';
+import 'package:PiliPlus/pages/search_panel/controller.dart';
+import 'package:PiliPlus/utils/app_scheme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
-import 'package:PiliPlus/common/widgets/video_card_h.dart';
-import 'package:PiliPlus/models/common/search_type.dart';
-import 'package:PiliPlus/pages/search_panel/index.dart';
 import 'package:intl/intl.dart';
 
-import '../../../utils/grid.dart';
+class SearchVideoController
+    extends SearchPanelController<SearchVideoModel, SearchVideoItemModel> {
+  SearchVideoController({
+    required super.keyword,
+    required super.searchType,
+    required super.tag,
+  });
 
-Widget searchVideoPanel(
-    BuildContext context,
-    SearchPanelController searchPanelCtr,
-    LoadingState<List<dynamic>?> loadingState) {
-  final controller = Get.put(VideoPanelController(), tag: searchPanelCtr.tag);
-  return CustomScrollView(
-    controller: searchPanelCtr.scrollController,
-    physics: const AlwaysScrollableScrollPhysics(),
-    slivers: [
-      SliverPersistentHeader(
-        pinned: false,
-        floating: true,
-        delegate: CustomSliverPersistentHeaderDelegate(
-          extent: 34,
-          bgColor: Theme.of(context).colorScheme.surface,
-          child: Container(
-            height: 34,
-            padding: const EdgeInsets.symmetric(horizontal: 12),
-            child: Row(
-              children: [
-                Expanded(
-                  child: SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Obx(
-                      () => Wrap(
-                        // spacing: ,
-                        children: [
-                          for (var i in controller.filterList) ...[
-                            SearchText(
-                              fontSize: 13,
-                              text: i['label'],
-                              bgColor: Colors.transparent,
-                              textColor:
-                                  controller.selectedType.value == i['type']
-                                      ? Theme.of(context).colorScheme.primary
-                                      : Theme.of(context).colorScheme.outline,
-                              onTap: (value) async {
-                                controller.selectedType.value = i['type'];
-                                searchPanelCtr.order.value =
-                                    i['type'].toString().split('.').last;
-                                SmartDialog.showLoading(msg: 'loading');
-                                await searchPanelCtr.onReload();
-                                SmartDialog.dismiss();
-                              },
-                            ),
-                          ]
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-                const VerticalDivider(indent: 7, endIndent: 8),
-                const SizedBox(width: 3),
-                SizedBox(
-                  width: 32,
-                  height: 32,
-                  child: IconButton(
-                    tooltip: '筛选',
-                    style: ButtonStyle(
-                      padding: WidgetStateProperty.all(EdgeInsets.zero),
-                    ),
-                    onPressed: () =>
-                        controller.onShowFilterDialog(context, searchPanelCtr),
-                    icon: Icon(
-                      Icons.filter_list_outlined,
-                      size: 18,
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-      switch (loadingState) {
-        Success() => loadingState.response?.isNotEmpty == true
-            ? SliverPadding(
-                padding: EdgeInsets.only(
-                  bottom: MediaQuery.of(context).padding.bottom + 80,
-                ),
-                sliver: SliverGrid(
-                  gridDelegate: Grid.videoCardHDelegate(context),
-                  delegate: SliverChildBuilderDelegate(
-                    (BuildContext context, int index) {
-                      if (index == loadingState.response!.length - 1) {
-                        searchPanelCtr.onLoadMore();
-                      }
-                      return VideoCardH(
-                        videoItem: loadingState.response![index],
-                        showPubdate: true,
-                      );
-                    },
-                    childCount: loadingState.response!.length,
-                  ),
-                ),
-              )
-            : HttpError(
-                callback: searchPanelCtr.onReload,
-              ),
-        Error() => HttpError(
-            errMsg: loadingState.errMsg,
-            callback: searchPanelCtr.onReload,
-          ),
-        _ => throw UnimplementedError(),
-      },
-    ],
-  );
-}
+  bool? hasJump2Video;
 
-class VideoPanelController extends GetxController {
-  RxList<Map> filterList = [{}].obs;
-  Rx<ArchiveFilterType> selectedType = ArchiveFilterType.values.first.obs;
-  List pubTimeFiltersList = [
+  @override
+  void onInit() {
+    super.onInit();
+    DateTime now = DateTime.now();
+    pubBeginDate = DateTime(
+      now.year,
+      now.month,
+      1,
+      0,
+      0,
+      0,
+    );
+    pubEndDate = DateTime(
+      now.year,
+      now.month,
+      now.day,
+      23,
+      59,
+      59,
+    );
+
+    jump2Video();
+  }
+
+  @override
+  List<SearchVideoItemModel>? getDataList(SearchVideoModel response) {
+    return response.list;
+  }
+
+  @override
+  bool customHandleResponse(
+      bool isRefresh, Success<SearchVideoModel> response) {
+    searchResultController?.count[searchType.index] =
+        response.response.numResults ?? 0;
+    if (searchType == SearchType.video && hasJump2Video != true && isRefresh) {
+      hasJump2Video = true;
+      onPushDetail(response.response.list);
+    }
+    return false;
+  }
+
+  void onPushDetail(resultList) async {
+    try {
+      int? aid = int.tryParse(keyword);
+      if (aid != null && resultList.first.aid == aid) {
+        PiliScheme.videoPush(aid, null, showDialog: false);
+      }
+    } catch (_) {}
+  }
+
+  void jump2Video() {
+    if (RegExp(r'^av\d+$', caseSensitive: false).hasMatch(keyword)) {
+      hasJump2Video = true;
+      PiliScheme.videoPush(
+        int.parse(keyword.substring(2)),
+        null,
+        showDialog: false,
+      );
+    } else if (RegExp(r'^bv[a-z\d]{10}$', caseSensitive: false)
+        .hasMatch(keyword)) {
+      hasJump2Video = true;
+      PiliScheme.videoPush(null, keyword, showDialog: false);
+    }
+  }
+
+  // sort
+  late final List<Map> filterList = ArchiveFilterType.values
+      .map((type) => {
+            'label': type.description,
+            'type': type,
+          })
+      .toList();
+  late final Rx<ArchiveFilterType> selectedType =
+      ArchiveFilterType.values.first.obs;
+  late final List pubTimeFiltersList = [
     {'label': '不限', 'value': 0},
     {'label': '最近一天', 'value': 1},
     {'label': '最近一周', 'value': 2},
     {'label': '最近半年', 'value': 3},
   ];
-  List timeFiltersList = [
+  late final List timeFiltersList = [
     {'label': '全部时长', 'value': 0},
     {'label': '0-10分钟', 'value': 1},
     {'label': '10-30分钟', 'value': 2},
     {'label': '30-60分钟', 'value': 3},
     {'label': '60分钟+', 'value': 4},
   ];
-  List zoneFiltersList = [
+  late final List zoneFiltersList = [
     {'label': '全部', 'value': 0},
     {'label': '动画', 'value': 1, 'tids': 1},
     {'label': '番剧', 'value': 2, 'tids': 13},
@@ -164,47 +132,15 @@ class VideoPanelController extends GetxController {
     {'label': '电影', 'value': 20, 'tids': 23},
     {'label': '电视', 'value': 21, 'tids': 11},
   ];
-  int currentPubTimeFilterval = 0;
-  late DateTime pubBegin;
-  late DateTime pubEnd;
-  bool customPubBegin = false;
-  bool customPubEnd = false;
-  int currentTimeFilterval = 0;
-  int currentZoneFilterval = 0;
+  int currentPubTimeFilter = 0;
+  late DateTime pubBeginDate;
+  late DateTime pubEndDate;
+  bool customPubBeginDate = false;
+  bool customPubEndDate = false;
+  int currentTimeFilter = 0;
+  int currentZoneFilter = 0;
 
-  @override
-  void onInit() {
-    DateTime now = DateTime.now();
-    pubBegin = DateTime(
-      now.year,
-      now.month,
-      1,
-      0,
-      0,
-      0,
-    );
-    pubEnd = DateTime(
-      now.year,
-      now.month,
-      now.day,
-      23,
-      59,
-      59,
-    );
-    List<Map<String, dynamic>> list = ArchiveFilterType.values
-        .map((type) => {
-              'label': type.description,
-              'type': type,
-            })
-        .toList();
-    filterList.value = list;
-    super.onInit();
-  }
-
-  onShowFilterDialog(
-    BuildContext context,
-    SearchPanelController searchPanelCtr,
-  ) {
+  onShowFilterDialog(BuildContext context) {
     showModalBottomSheet(
       context: context,
       useSafeArea: true,
@@ -218,43 +154,39 @@ class VideoPanelController extends GetxController {
         builder: (context, setState) {
           Widget dateWidget([bool isFirst = true]) {
             return SearchText(
-              text:
-                  DateFormat('yyyy-MM-dd').format(isFirst ? pubBegin : pubEnd),
+              text: DateFormat('yyyy-MM-dd')
+                  .format(isFirst ? pubBeginDate : pubEndDate),
               textAlign: TextAlign.center,
               onTap: (text) {
                 showDatePicker(
                   context: context,
-                  initialDate: isFirst ? pubBegin : pubEnd,
-                  firstDate: isFirst ? DateTime(2009, 6, 26) : pubBegin,
-                  lastDate: isFirst ? pubEnd : DateTime.now(),
+                  initialDate: isFirst ? pubBeginDate : pubEndDate,
+                  firstDate: isFirst ? DateTime(2009, 6, 26) : pubBeginDate,
+                  lastDate: isFirst ? pubEndDate : DateTime.now(),
                 ).then((selectedDate) async {
                   if (selectedDate != null) {
                     if (isFirst) {
-                      customPubBegin = true;
-                      pubBegin = selectedDate;
+                      customPubBeginDate = true;
+                      pubBeginDate = selectedDate;
                     } else {
-                      customPubEnd = true;
-                      pubEnd = selectedDate;
+                      customPubEndDate = true;
+                      pubEndDate = selectedDate;
                     }
-                    currentPubTimeFilterval = -1;
+                    currentPubTimeFilter = -1;
                     SmartDialog.dismiss();
-                    // SmartDialog.showToast("「${item['label']}」的筛选结果");
-                    SearchPanelController ctr = Get.find<SearchPanelController>(
-                      tag: searchPanelCtr.searchType.name + searchPanelCtr.tag,
-                    );
-                    ctr.pubBegin = DateTime(
-                          pubBegin.year,
-                          pubBegin.month,
-                          pubBegin.day,
+                    pubBegin = DateTime(
+                          pubBeginDate.year,
+                          pubBeginDate.month,
+                          pubBeginDate.day,
                           0,
                           0,
                           0,
                         ).millisecondsSinceEpoch ~/
                         1000;
-                    ctr.pubEnd = DateTime(
-                          pubEnd.year,
-                          pubEnd.month,
-                          pubEnd.day,
+                    pubEnd = DateTime(
+                          pubEndDate.year,
+                          pubEndDate.month,
+                          pubEndDate.day,
                           23,
                           59,
                           59,
@@ -262,17 +194,17 @@ class VideoPanelController extends GetxController {
                         1000;
                     setState(() {});
                     SmartDialog.showLoading(msg: 'loading');
-                    await ctr.onReload();
+                    await onReload();
                     SmartDialog.dismiss();
                   }
                 });
               },
-              bgColor: currentPubTimeFilterval == -1 &&
-                      (isFirst ? customPubBegin : customPubEnd)
+              bgColor: currentPubTimeFilter == -1 &&
+                      (isFirst ? customPubBeginDate : customPubEndDate)
                   ? Theme.of(context).colorScheme.secondaryContainer
                   : Theme.of(context).colorScheme.outline.withOpacity(0.1),
-              textColor: currentPubTimeFilterval == -1 &&
-                      (isFirst ? customPubBegin : customPubEnd)
+              textColor: currentPubTimeFilter == -1 &&
+                      (isFirst ? customPubBeginDate : customPubEndDate)
                   ? Theme.of(context).colorScheme.onSecondaryContainer
                   : Theme.of(context).colorScheme.outline.withOpacity(0.8),
             );
@@ -303,20 +235,15 @@ class VideoPanelController extends GetxController {
                             text: item['label'],
                             onTap: (text) async {
                               Get.back();
-                              currentPubTimeFilterval = item['value'];
+                              currentPubTimeFilter = item['value'];
                               SmartDialog.dismiss();
                               SmartDialog.showToast("「${item['label']}」的筛选结果");
-                              SearchPanelController ctr =
-                                  Get.find<SearchPanelController>(
-                                tag: searchPanelCtr.searchType.name +
-                                    searchPanelCtr.tag,
-                              );
                               DateTime now = DateTime.now();
                               if (item['value'] == 0) {
-                                ctr.pubBegin = null;
-                                ctr.pubEnd = null;
+                                pubBegin = null;
+                                pubEnd = null;
                               } else {
-                                ctr.pubBegin = DateTime(
+                                pubBegin = DateTime(
                                       now.year,
                                       now.month,
                                       now.day -
@@ -330,7 +257,7 @@ class VideoPanelController extends GetxController {
                                       0,
                                     ).millisecondsSinceEpoch ~/
                                     1000;
-                                ctr.pubEnd = DateTime(
+                                pubEnd = DateTime(
                                       now.year,
                                       now.month,
                                       now.day,
@@ -341,15 +268,15 @@ class VideoPanelController extends GetxController {
                                     1000;
                               }
                               SmartDialog.showLoading(msg: 'loading');
-                              await ctr.onReload();
+                              await onReload();
                               SmartDialog.dismiss();
                             },
-                            bgColor: item['value'] == currentPubTimeFilterval
+                            bgColor: item['value'] == currentPubTimeFilter
                                 ? Theme.of(context)
                                     .colorScheme
                                     .secondaryContainer
                                 : null,
-                            textColor: item['value'] == currentPubTimeFilterval
+                            textColor: item['value'] == currentPubTimeFilter
                                 ? Theme.of(context)
                                     .colorScheme
                                     .onSecondaryContainer
@@ -383,25 +310,20 @@ class VideoPanelController extends GetxController {
                             text: item['label'],
                             onTap: (text) async {
                               Get.back();
-                              currentTimeFilterval = item['value'];
+                              currentTimeFilter = item['value'];
                               SmartDialog.dismiss();
                               SmartDialog.showToast("「${item['label']}」的筛选结果");
-                              SearchPanelController ctr =
-                                  Get.find<SearchPanelController>(
-                                tag: searchPanelCtr.searchType.name +
-                                    searchPanelCtr.tag,
-                              );
-                              ctr.duration.value = item['value'];
+                              duration.value = item['value'];
                               SmartDialog.showLoading(msg: 'loading');
-                              await ctr.onReload();
+                              await onReload();
                               SmartDialog.dismiss();
                             },
-                            bgColor: item['value'] == currentTimeFilterval
+                            bgColor: item['value'] == currentTimeFilter
                                 ? Theme.of(context)
                                     .colorScheme
                                     .secondaryContainer
                                 : null,
-                            textColor: item['value'] == currentTimeFilterval
+                            textColor: item['value'] == currentTimeFilter
                                 ? Theme.of(context)
                                     .colorScheme
                                     .onSecondaryContainer
@@ -422,25 +344,20 @@ class VideoPanelController extends GetxController {
                             text: item['label'],
                             onTap: (text) async {
                               Get.back();
-                              currentZoneFilterval = item['value'];
+                              currentZoneFilter = item['value'];
                               SmartDialog.dismiss();
                               SmartDialog.showToast("「${item['label']}」的筛选结果");
-                              SearchPanelController ctr =
-                                  Get.find<SearchPanelController>(
-                                tag: searchPanelCtr.searchType.name +
-                                    searchPanelCtr.tag,
-                              );
-                              ctr.tids = item['tids'];
+                              tids = item['tids'];
                               SmartDialog.showLoading(msg: 'loading');
-                              await ctr.onReload();
+                              await onReload();
                               SmartDialog.dismiss();
                             },
-                            bgColor: item['value'] == currentZoneFilterval
+                            bgColor: item['value'] == currentZoneFilter
                                 ? Theme.of(context)
                                     .colorScheme
                                     .secondaryContainer
                                 : null,
-                            textColor: item['value'] == currentZoneFilterval
+                            textColor: item['value'] == currentZoneFilter
                                 ? Theme.of(context)
                                     .colorScheme
                                     .onSecondaryContainer
