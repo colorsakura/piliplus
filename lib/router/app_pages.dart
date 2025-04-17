@@ -1,4 +1,8 @@
 import 'package:PiliPlus/pages/fav/view.dart';
+import 'package:PiliPlus/pages/fav_search/view.dart';
+import 'package:PiliPlus/pages/follow_search/view.dart';
+import 'package:PiliPlus/pages/history_search/view.dart';
+import 'package:PiliPlus/pages/later_search/view.dart';
 import 'package:PiliPlus/pages/member/member_page.dart';
 import 'package:PiliPlus/pages/member/widget/edit_profile_page.dart';
 import 'package:PiliPlus/pages/search_trending/view.dart';
@@ -25,7 +29,6 @@ import '../pages/dynamics/detail/index.dart';
 import '../pages/dynamics/index.dart';
 import '../pages/fan/index.dart';
 import '../pages/fav_detail/index.dart';
-import '../pages/fav_search/index.dart';
 import '../pages/follow/index.dart';
 import '../pages/history/index.dart';
 import '../pages/home/index.dart';
@@ -132,6 +135,10 @@ class Routes {
     CustomGetPage(name: '/playSpeedSet', page: () => const PlaySpeedPage()),
     // 收藏搜索
     CustomGetPage(name: '/favSearch', page: () => const FavSearchPage()),
+    CustomGetPage(
+        name: '/historySearch', page: () => const HistorySearchPage()),
+    CustomGetPage(name: '/laterSearch', page: () => const LaterSearchPage()),
+    CustomGetPage(name: '/followSearch', page: () => const FollowSearchPage()),
     // 消息页面
     CustomGetPage(name: '/whisper', page: () => const WhisperPage()),
     // 私信详情

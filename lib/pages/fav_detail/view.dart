@@ -5,7 +5,6 @@ import 'package:PiliPlus/http/user.dart';
 import 'package:PiliPlus/models/user/fav_detail.dart';
 import 'package:PiliPlus/models/user/fav_folder.dart';
 import 'package:PiliPlus/pages/fav_detail/fav_sort_page.dart';
-import 'package:PiliPlus/pages/fav_search/view.dart' show SearchType;
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:PiliPlus/utils/request_utils.dart';
@@ -206,16 +205,11 @@ class _FavDetailPageState extends State<FavDetailPage> {
                                 'title': _favDetailController.item.value.title,
                                 'count':
                                     _favDetailController.item.value.mediaCount,
-                                'searchType': SearchType.fav,
                                 'isOwner': _favDetailController.isOwner.value,
                               },
                             ),
                             icon: const Icon(Icons.search_outlined),
                           ),
-                          //   IconButton(
-                          //     onPressed: () {},
-                          //     icon: const Icon(Icons.more_vert),
-                          //   ),
                           Obx(
                             () => _favDetailController.isOwner.value
                                 ? PopupMenuButton(

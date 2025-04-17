@@ -1,7 +1,6 @@
 import 'package:PiliPlus/common/widgets/scroll_physics.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/model_hot_video_item.dart';
-import 'package:PiliPlus/pages/fav_search/view.dart';
 import 'package:PiliPlus/pages/history/view.dart' show AppBarWidget;
 import 'package:PiliPlus/pages/later/base_controller.dart';
 import 'package:PiliPlus/pages/later/child_view.dart';
@@ -138,14 +137,13 @@ class _LaterPageState extends State<LaterPage>
             onPressed: () {
               final mid = Accounts.main.mid;
               Get.toNamed(
-                '/favSearch',
+                '/laterSearch',
                 arguments: {
                   'type': 0,
                   'mediaId': mid,
                   'mid': mid,
                   'title': '稍后再看',
                   'count': _baseCtr.counts[LaterViewType.all],
-                  'searchType': SearchType.later,
                 },
               );
             },

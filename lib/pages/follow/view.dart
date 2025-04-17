@@ -1,4 +1,3 @@
-import 'package:PiliPlus/pages/fav_search/view.dart' show SearchType;
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -38,10 +37,9 @@ class _FollowPageState extends State<FollowPage> {
         actions: [
           IconButton(
             onPressed: () => Get.toNamed(
-              '/favSearch',
+              '/followSearch',
               arguments: {
                 'mid': int.parse(mid),
-                'searchType': SearchType.follow,
               },
             ),
             icon: const Icon(Icons.search_outlined),

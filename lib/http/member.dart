@@ -671,7 +671,7 @@ class MemberHttp {
   }
 
   // 搜索follow
-  static Future<LoadingState> getfollowSearch({
+  static Future<LoadingState<FollowDataModel>> getfollowSearch({
     required int mid,
     required int ps,
     required int pn,

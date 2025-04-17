@@ -443,7 +443,7 @@ class UserHttp {
   // }
 
   // 搜索历史记录
-  static Future<LoadingState> searchHistory(
+  static Future<LoadingState<HistoryData>> searchHistory(
       {required int pn, required String keyword}) async {
     var res = await Request().get(
       Api.searchHistory,

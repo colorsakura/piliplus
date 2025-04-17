@@ -3,7 +3,6 @@ import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/common/widgets/scroll_physics.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/user/history.dart';
-import 'package:PiliPlus/pages/fav_search/view.dart' show SearchType;
 import 'package:PiliPlus/pages/history/base_controller.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:flutter/material.dart';
@@ -77,12 +76,7 @@ class _HistoryPageState extends State<HistoryPage>
                           actions: [
                             IconButton(
                               tooltip: '搜索',
-                              onPressed: () => Get.toNamed(
-                                '/favSearch',
-                                arguments: {
-                                  'searchType': SearchType.history,
-                                },
-                              ),
+                              onPressed: () => Get.toNamed('/historySearch'),
                               icon: const Icon(Icons.search_outlined),
                             ),
                             PopupMenuButton<String>(

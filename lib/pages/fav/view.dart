@@ -6,7 +6,6 @@ import 'package:PiliPlus/pages/fav/note/view.dart';
 import 'package:PiliPlus/pages/fav/pgc/view.dart';
 import 'package:PiliPlus/pages/fav/video/fav_folder_sort_page.dart';
 import 'package:PiliPlus/pages/fav/video/index.dart';
-import 'package:PiliPlus/pages/fav_search/view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -117,7 +116,6 @@ class _FavPageState extends State<FavPage> with SingleTickerProviderStateMixin {
                               'mediaId': item.id,
                               'title': item.title,
                               'count': item.mediaCount,
-                              'searchType': SearchType.fav,
                               'isOwner': true,
                             },
                           );
