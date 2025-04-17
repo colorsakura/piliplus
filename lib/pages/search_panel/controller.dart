@@ -2,6 +2,7 @@ import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/search/result.dart';
 import 'package:PiliPlus/pages/common/common_list_controller.dart';
 import 'package:PiliPlus/pages/search_result/controller.dart';
+import 'package:PiliPlus/utils/extension.dart';
 import 'package:get/get.dart';
 import 'package:PiliPlus/http/search.dart';
 import 'package:PiliPlus/models/common/search_type.dart';
@@ -33,7 +34,12 @@ class SearchPanelController<R extends SearchNumData<T>, T>
   void onInit() {
     super.onInit();
     try {
-      searchResultController = Get.find<SearchResultController>(tag: tag);
+      searchResultController = Get.find<SearchResultController>(tag: tag)
+        ..toTopIndex.listen((index) {
+          if (index == searchType.index) {
+            scrollController.animToTop();
+          }
+        });
     } catch (_) {}
     queryData();
   }
@@ -64,4 +70,10 @@ class SearchPanelController<R extends SearchNumData<T>, T>
         pubBegin: pubBegin,
         pubEnd: pubEnd,
       );
+
+  @override
+  Future onReload() {
+    scrollController.jumpToTop();
+    return super.onReload();
+  }
 }

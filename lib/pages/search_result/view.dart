@@ -1,6 +1,5 @@
 import 'package:PiliPlus/pages/search/controller.dart';
 import 'package:PiliPlus/pages/search_panel/article/view.dart';
-import 'package:PiliPlus/pages/search_panel/controller.dart';
 import 'package:PiliPlus/pages/search_panel/live/view.dart';
 import 'package:PiliPlus/pages/search_panel/pgc/view.dart';
 import 'package:PiliPlus/pages/search_panel/user/view.dart';
@@ -133,9 +132,11 @@ class _SearchResultPageState extends State<SearchResultPage>
                 tabAlignment: TabAlignment.start,
                 onTap: (index) {
                   if (_tabController.indexIsChanging.not) {
-                    Get.find<SearchPanelController>(
-                            tag: SearchType.values[index].name + _tag)
-                        .animateToTop();
+                    if (_searchResultController.toTopIndex.value == index) {
+                      _searchResultController.toTopIndex.refresh();
+                    } else {
+                      _searchResultController.toTopIndex.value = index;
+                    }
                   }
                 },
               ),

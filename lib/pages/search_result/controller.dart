@@ -6,4 +6,12 @@ class SearchResultController extends GetxController {
 
   RxList<int> count =
       List.generate(SearchType.values.length, (_) => -1).toList().obs;
+
+  RxInt toTopIndex = (-1).obs;
+
+  @override
+  void onClose() {
+    toTopIndex.close();
+    super.onClose();
+  }
 }

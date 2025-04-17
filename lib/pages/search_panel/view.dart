@@ -46,6 +46,7 @@ abstract class CommonSearchPanelState<
       child: SafeArea(
         bottom: false,
         child: CustomScrollView(
+          controller: controller.scrollController,
           physics: const AlwaysScrollableScrollPhysics(),
           slivers: [
             if (widget.hasHeader)
