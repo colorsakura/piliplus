@@ -9,8 +9,9 @@ class BlackListDataModel {
 
   BlackListDataModel.fromJson(Map<String, dynamic> json) {
     list = (json['list'] as List?)
-        ?.map<BlackListItem>((e) => BlackListItem.fromJson(e))
-        .toList();
+            ?.map<BlackListItem>((e) => BlackListItem.fromJson(e))
+            .toList() ??
+        <BlackListItem>[];
     total = json['total'];
   }
 }
