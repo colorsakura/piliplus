@@ -111,8 +111,6 @@ class _SendDanmakuPanelState extends CommonPublishPageState<SendDanmakuPanel> {
                         _showColorPicker();
                       },
                       child: Container(
-                        width: 40,
-                        height: 40,
                         decoration: BoxDecoration(
                           color: themeData.colorScheme.secondaryContainer,
                           borderRadius: BorderRadius.circular(8),
@@ -241,8 +239,6 @@ class _SendDanmakuPanelState extends CommonPublishPageState<SendDanmakuPanel> {
         _color.value = color;
       },
       child: Container(
-        width: 40,
-        height: 40,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8),
           border: _color.value != color
