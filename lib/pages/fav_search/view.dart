@@ -26,56 +26,50 @@ class _FavSearchPageState extends CommonSearchPageState<FavSearchPage,
 
   @override
   Widget buildList(List<FavDetailItemData> list) {
-    return CustomScrollView(
-      physics: const AlwaysScrollableScrollPhysics(),
-      controller: controller.scrollController,
-      slivers: [
-        SliverPadding(
-          padding: EdgeInsets.only(
-            bottom: MediaQuery.of(context).padding.bottom + 80,
-          ),
-          sliver: SliverGrid(
-            gridDelegate: Grid.videoCardHDelegate(context, minHeight: 110),
-            delegate: SliverChildBuilderDelegate(
-              childCount: list.length,
-              (context, index) {
-                if (index == list.length - 1) {
-                  controller.onLoadMore();
-                }
-                final item = list[index];
-                return FavVideoCardH(
-                  videoItem: item,
-                  onDelFav: controller.isOwner == true
-                      ? () {
-                          controller.onCancelFav(
-                            index,
-                            item.id!,
-                            item.type,
-                          );
-                        }
-                      : null,
-                  onViewFav: () {
-                    PageUtils.toVideoPage(
-                      'bvid=${item.bvid}&cid=${item.cid}',
-                      arguments: {
-                        'videoItem': item,
-                        'heroTag': Utils.makeHeroTag(item.bvid),
-                        'sourceType': 'fav',
-                        'mediaId': controller.mediaId,
-                        'oid': item.id,
-                        'favTitle': controller.title,
-                        'count': controller.count,
-                        'desc': true,
-                        'isContinuePlaying': true,
-                      },
-                    );
+    return SliverPadding(
+      padding: EdgeInsets.only(
+        bottom: MediaQuery.of(context).padding.bottom + 80,
+      ),
+      sliver: SliverGrid(
+        gridDelegate: Grid.videoCardHDelegate(context, minHeight: 110),
+        delegate: SliverChildBuilderDelegate(
+          childCount: list.length,
+          (context, index) {
+            if (index == list.length - 1) {
+              controller.onLoadMore();
+            }
+            final item = list[index];
+            return FavVideoCardH(
+              videoItem: item,
+              onDelFav: controller.isOwner == true
+                  ? () {
+                      controller.onCancelFav(
+                        index,
+                        item.id!,
+                        item.type,
+                      );
+                    }
+                  : null,
+              onViewFav: () {
+                PageUtils.toVideoPage(
+                  'bvid=${item.bvid}&cid=${item.cid}',
+                  arguments: {
+                    'videoItem': item,
+                    'heroTag': Utils.makeHeroTag(item.bvid),
+                    'sourceType': 'fav',
+                    'mediaId': controller.mediaId,
+                    'oid': item.id,
+                    'favTitle': controller.title,
+                    'count': controller.count,
+                    'desc': true,
+                    'isContinuePlaying': true,
                   },
                 );
               },
-            ),
-          ),
+            );
+          },
         ),
-      ],
+      ),
     );
   }
 }

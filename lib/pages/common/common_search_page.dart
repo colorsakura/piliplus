@@ -1,4 +1,4 @@
-import 'package:PiliPlus/common/widgets/loading_widget.dart';
+import 'package:PiliPlus/common/widgets/http_error.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/pages/common/common_search_controller.dart';
 import 'package:flutter/material.dart';
@@ -48,19 +48,25 @@ abstract class CommonSearchPageState<S extends CommonSearchPage, R, T>
           onSubmitted: (value) => controller.onRefresh(),
         ),
       ),
-      body: Obx(() => _buildBody(controller.loadingState.value)),
+      body: CustomScrollView(
+        physics: const AlwaysScrollableScrollPhysics(),
+        controller: controller.scrollController,
+        slivers: [
+          Obx(() => _buildBody(controller.loadingState.value)),
+        ],
+      ),
     );
   }
 
   Widget _buildBody(LoadingState<List<T>?> loadingState) {
     return switch (loadingState) {
-      Loading() => errorWidget(),
+      Loading() => HttpError(),
       Success() => loadingState.response?.isNotEmpty == true
           ? buildList(loadingState.response!)
-          : errorWidget(
+          : HttpError(
               callback: controller.onReload,
             ),
-      Error() => errorWidget(
+      Error() => HttpError(
           errMsg: loadingState.errMsg,
           callback: controller.onReload,
         ),
