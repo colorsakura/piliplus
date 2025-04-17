@@ -81,17 +81,10 @@ class _DynamicsTabPageState
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    // debugPrint(widget.dynamicsType + widget.mid.value.toString());
     return refreshIndicator(
-      // key:
-      //     ValueKey<String>(widget.dynamicsType + widget.mid.value.toString()),
       onRefresh: () async {
-        dynamicsWaterfallFlow = GStorage.setting
-            .get(SettingBoxKey.dynamicsWaterfallFlow, defaultValue: true);
-        await Future.wait([
-          controller.onRefresh(),
-          dynamicsController.queryFollowUp(),
-        ]);
+        dynamicsController.queryFollowUp();
+        await controller.onRefresh();
       },
       child: CustomScrollView(
         physics: const AlwaysScrollableScrollPhysics(),

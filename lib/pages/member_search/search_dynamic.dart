@@ -32,10 +32,11 @@ class _SearchDynamicState extends State<SearchDynamic>
     return Obx(() => _buildBody(context, widget.ctr.dynamicState.value));
   }
 
+  late final bool dynamicsWaterfallFlow = GStorage.setting
+      .get(SettingBoxKey.dynamicsWaterfallFlow, defaultValue: true);
+
   Widget _buildBody(BuildContext context,
       LoadingState<List<DynamicItemModel>?> loadingState) {
-    bool dynamicsWaterfallFlow = GStorage.setting
-        .get(SettingBoxKey.dynamicsWaterfallFlow, defaultValue: true);
     return switch (loadingState) {
       Loading() => loadingWidget,
       Success() => loadingState.response?.isNotEmpty == true
