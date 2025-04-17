@@ -1,4 +1,3 @@
-import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/common/widgets/icon_button.dart';
 import 'package:PiliPlus/common/widgets/video_card_h.dart';
 import 'package:PiliPlus/models/model_hot_video_item.dart';
@@ -62,59 +61,6 @@ class _LaterSearchPageState
                       },
                     );
                   },
-                ),
-                Positioned(
-                  top: 5,
-                  left: 12,
-                  bottom: 5,
-                  child: IgnorePointer(
-                    child: LayoutBuilder(
-                      builder: (context, constraints) => AnimatedOpacity(
-                        opacity: item.checked == true ? 1 : 0,
-                        duration: const Duration(milliseconds: 200),
-                        child: Container(
-                          alignment: Alignment.center,
-                          height: constraints.maxHeight,
-                          width:
-                              constraints.maxHeight * StyleString.aspectRatio,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: Colors.black.withOpacity(0.6),
-                          ),
-                          child: SizedBox(
-                            width: 34,
-                            height: 34,
-                            child: AnimatedScale(
-                              scale: item.checked == true ? 1 : 0,
-                              duration: const Duration(milliseconds: 250),
-                              curve: Curves.easeInOut,
-                              child: IconButton(
-                                tooltip: '取消选择',
-                                style: ButtonStyle(
-                                  padding:
-                                      WidgetStateProperty.all(EdgeInsets.zero),
-                                  backgroundColor:
-                                      WidgetStateProperty.resolveWith(
-                                    (states) {
-                                      return Theme.of(context)
-                                          .colorScheme
-                                          .surface
-                                          .withOpacity(0.8);
-                                    },
-                                  ),
-                                ),
-                                onPressed: null,
-                                icon: Icon(
-                                  Icons.done_all_outlined,
-                                  color: Theme.of(context).colorScheme.primary,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
                 ),
                 Positioned(
                   right: 12,
