@@ -1,5 +1,4 @@
 import 'package:PiliPlus/pages/search/controller.dart';
-import 'package:PiliPlus/pages/search_panel/all/view.dart';
 import 'package:PiliPlus/pages/search_panel/article/view.dart';
 import 'package:PiliPlus/pages/search_panel/live/view.dart';
 import 'package:PiliPlus/pages/search_panel/pgc/view.dart';
@@ -154,11 +153,11 @@ class _SearchResultPageState extends State<SearchResultPage>
                 children: SearchType.values
                     .map(
                       (item) => switch (item) {
-                        SearchType.all => SearchAllPanel(
-                            tag: _tag,
-                            searchType: item,
-                            keyword: _searchResultController.keyword,
-                          ),
+                        // SearchType.all => SearchAllPanel(
+                        //     tag: _tag,
+                        //     searchType: item,
+                        //     keyword: _searchResultController.keyword,
+                        //   ),
                         SearchType.video => SearchVideoPanel(
                             tag: _tag,
                             searchType: item,

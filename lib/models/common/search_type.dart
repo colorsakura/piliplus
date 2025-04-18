@@ -1,6 +1,6 @@
 // ignore_for_file: constant_identifier_names
 enum SearchType {
-  all,
+  // all,
   // 视频：video
   video,
   // 番剧：media_bangumi,
@@ -25,7 +25,7 @@ enum SearchType {
 
 extension SearchTypeExtension on SearchType {
   String get label => [
-        '综合',
+        // '综合',
         '视频',
         '番剧',
         '影视',

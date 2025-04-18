@@ -102,7 +102,7 @@ class SearchHttp {
           case SearchType.article:
             data = SearchArticleModel.fromJson(res.data['data']);
             break;
-          case SearchType.all:
+          default:
             break;
         }
         return LoadingState.success(data);
