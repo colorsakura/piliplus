@@ -64,6 +64,9 @@ class _PagesPanelState extends State<PagesPanel> {
   }
 
   void jumpToCurr() {
+    if (!_scrollController.hasClients || pages.isEmpty) {
+      return;
+    }
     const double itemWidth = 150; // 每个列表项的宽度
     final double targetOffset = (pageIndex * itemWidth - itemWidth / 2).clamp(
         _scrollController.position.minScrollExtent,

@@ -35,7 +35,7 @@ class LiveController
   late RxInt liveCount = 0.obs;
 
   Future fetchLiveFollowing([bool isRefresh = true]) async {
-    if (isRefresh.not && followEnd) {
+    if (!isLogin.value || (isRefresh.not && followEnd)) {
       return;
     }
     if (isRefresh) {
