@@ -86,7 +86,7 @@ class _WhisperPageState extends State<WhisperPage> {
 
   Widget get _buildTopItems => SliverToBoxAdapter(
         child: Padding(
-          padding: const EdgeInsets.only(left: 20, right: 20, bottom: 10),
+          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
           child: Row(
             children: List.generate(_whisperController.msgFeedTopItems.length,
                 (index) {
