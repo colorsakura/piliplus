@@ -57,6 +57,7 @@ class _SearchTrendingPageState extends State<SearchTrendingPage> {
 
   @override
   Widget build(BuildContext context) {
+    final removePadding = context.width > 640;
     return Scaffold(
       extendBody: true,
       extendBodyBehindAppBar: true,
@@ -102,22 +103,40 @@ class _SearchTrendingPageState extends State<SearchTrendingPage> {
           },
         ),
       ),
-      body: refreshIndicator(
-        onRefresh: () async {
-          await _controller.onRefresh();
-        },
-        child: CustomScrollView(
-          controller: _controller.scrollController,
-          slivers: [
-            SliverToBoxAdapter(
-              child: CachedNetworkImage(
-                fit: BoxFit.fitWidth,
-                imageUrl:
-                    'https://activity.hdslb.com/blackboard/activity59158/img/hot_banner.fbb081df.png',
+      body: MediaQuery.removePadding(
+        context: context,
+        removeLeft: removePadding,
+        removeRight: removePadding,
+        child: Center(
+          child: ConstrainedBox(
+            constraints: BoxConstraints(maxWidth: 640),
+            child: refreshIndicator(
+              onRefresh: () async {
+                await _controller.onRefresh();
+              },
+              child: CustomScrollView(
+                controller: _controller.scrollController,
+                slivers: [
+                  SliverToBoxAdapter(
+                    child: CachedNetworkImage(
+                      fit: BoxFit.fitWidth,
+                      fadeInDuration: const Duration(milliseconds: 120),
+                      fadeOutDuration: const Duration(milliseconds: 120),
+                      imageUrl:
+                          'https://activity.hdslb.com/blackboard/activity59158/img/hot_banner.fbb081df.png',
+                      placeholder: (context, url) {
+                        return AspectRatio(
+                          aspectRatio: 1125 / 528,
+                          child: Image.asset('assets/images/loading.png'),
+                        );
+                      },
+                    ),
+                  ),
+                  Obx(() => _buildBody(_controller.loadingState.value)),
+                ],
               ),
             ),
-            Obx(() => _buildBody(_controller.loadingState.value)),
-          ],
+          ),
         ),
       ),
     );
