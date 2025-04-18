@@ -35,13 +35,6 @@ class _SearchTrendingPageState extends State<SearchTrendingPage> {
   }
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    _offset = Get.width * 528 / 1125 - 56 - Get.mediaQuery.padding.top;
-    listener();
-  }
-
-  @override
   void dispose() {
     _controller.scrollController.removeListener(listener);
     super.dispose();
@@ -60,10 +53,12 @@ class _SearchTrendingPageState extends State<SearchTrendingPage> {
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, constraints) {
-      final width = constraints.maxWidth;
-      final maxWidth = constraints.maxWidth > constraints.maxHeight
-          ? min(640.0, width * 0.6)
-          : width;
+      final maxWidth = constraints.maxWidth;
+      final width = constraints.maxWidth > constraints.maxHeight
+          ? min(640.0, maxWidth * 0.6)
+          : maxWidth;
+      _offset = width * 528 / 1125 - 56 - Get.mediaQuery.padding.top;
+      listener();
       final removePadding = width > maxWidth;
       return Scaffold(
         extendBody: true,
@@ -111,8 +106,8 @@ class _SearchTrendingPageState extends State<SearchTrendingPage> {
           ),
         ),
         body: Center(
-          child: ConstrainedBox(
-            constraints: BoxConstraints(maxWidth: maxWidth),
+          child: SizedBox(
+            width: width,
             child: MediaQuery.removePadding(
               context: context,
               removeLeft: removePadding,
