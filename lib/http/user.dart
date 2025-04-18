@@ -484,23 +484,24 @@ class UserHttp {
     }
   }
 
-  static Future favSeasonList({
+  static Future<LoadingState<SubDetailModelData>> favSeasonList({
     required int id,
     required int pn,
     required int ps,
   }) async {
-    var res = await Request().get(Api.favSeasonList, queryParameters: {
-      'season_id': id,
-      'ps': ps,
-      'pn': pn,
-    });
+    var res = await Request().get(
+      Api.favSeasonList,
+      queryParameters: {
+        'season_id': id,
+        'ps': ps,
+        'pn': pn,
+      },
+    );
     if (res.data['code'] == 0) {
-      return {
-        'status': true,
-        'data': SubDetailModelData.fromJson(res.data['data'])
-      };
+      return LoadingState.success(
+          SubDetailModelData.fromJson(res.data['data']));
     } else {
-      return {'status': false, 'msg': res.data['message']};
+      return LoadingState.error(res.data['message']);
     }
   }
 
@@ -582,7 +583,7 @@ class UserHttp {
     }
   }
 
-  static Future favResourceList({
+  static Future<LoadingState<SubDetailModelData>> favResourceList({
     required int id,
     required int pn,
     required int ps,
@@ -593,12 +594,10 @@ class UserHttp {
       'pn': pn,
     });
     if (res.data['code'] == 0) {
-      return {
-        'status': true,
-        'data': SubDetailModelData.fromJson(res.data['data'])
-      };
+      return LoadingState.success(
+          SubDetailModelData.fromJson(res.data['data']));
     } else {
-      return {'status': false, 'msg': res.data['message']};
+      return LoadingState.error(res.data['message']);
     }
   }
 

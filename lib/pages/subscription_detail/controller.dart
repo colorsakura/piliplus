@@ -1,76 +1,70 @@
+import 'package:PiliPlus/http/loading_state.dart';
+import 'package:PiliPlus/pages/common/common_list_controller.dart';
 import 'package:get/get.dart';
 import 'package:PiliPlus/http/user.dart';
 
 import '../../models/user/sub_detail.dart';
 import '../../models/user/sub_folder.dart';
 
-class SubDetailController extends GetxController {
+class SubDetailController
+    extends CommonListController<SubDetailModelData, SubDetailMediaItem> {
   late SubFolderItemData item;
 
   late int id;
   late String heroTag;
-  int currentPage = 1;
-  bool isLoadingMore = false;
-  Rx<DetailInfo> subInfo = DetailInfo().obs;
-  RxList<SubDetailMediaItem> subList = <SubDetailMediaItem>[].obs;
-  RxString loadingText = '加载中...'.obs;
-  int mediaCount = 0;
+
+  RxInt mediaCount = 0.obs;
   RxInt playCount = 0.obs;
 
   @override
   void onInit() {
+    super.onInit();
     item = Get.arguments;
-    if (playCount.value == 0) playCount.value = item.viewCount!;
+    playCount.value = item.viewCount!;
     if (Get.parameters.keys.isNotEmpty) {
       id = int.parse(Get.parameters['id']!);
       heroTag = Get.parameters['heroTag']!;
     }
-    super.onInit();
+    queryData();
   }
 
-  Future<dynamic> queryUserSubFolderDetail({type = 'init'}) async {
-    if (type == 'onLoad' && subList.length >= mediaCount) {
-      loadingText.value = '没有更多了';
-      return;
+  @override
+  List<SubDetailMediaItem>? getDataList(SubDetailModelData response) {
+    return response.list;
+  }
+
+  @override
+  void checkIsEnd(int length) {
+    if (length >= mediaCount.value) {
+      isEnd = true;
     }
-    isLoadingMore = true;
-    late Map<String, dynamic> res;
+  }
+
+  @override
+  bool customHandleResponse(
+      bool isRefresh, Success<SubDetailModelData> response) {
+    mediaCount.value = response.response.info!.mediaCount!;
+    if (item.type == 11) {
+      playCount.value = response.response.info!.cntInfo!['play'];
+    }
+    return false;
+  }
+
+  @override
+  Future<LoadingState<SubDetailModelData>> customGetData() {
     if (item.type! == 11) {
-      res = await UserHttp.favResourceList(
+      return UserHttp.favResourceList(
         id: id,
         ps: 20,
         pn: currentPage,
       );
     } else {
-      res = await UserHttp.favSeasonList(
+      return UserHttp.favSeasonList(
         // item.type! == 21
         id: id,
         ps: 20,
         pn: currentPage,
       );
     }
-    if (res['status']) {
-      SubDetailModelData data = res['data'];
-      subInfo.value = data.info!;
-      if (currentPage == 1 && type == 'init') {
-        subList.value = data.list!;
-        mediaCount = data.info!.mediaCount!;
-        if (item.type == 11) {
-          playCount.value = data.info!.cntInfo!['play'];
-        }
-      } else if (type == 'onLoad') {
-        subList.addAll(data.list!);
-      }
-      if (subList.length >= mediaCount) {
-        loadingText.value = '没有更多了';
-      }
-      currentPage += 1;
-    }
-    isLoadingMore = false;
-    return res;
-  }
-
-  onLoad() {
-    queryUserSubFolderDetail(type: 'onLoad');
   }
 }
