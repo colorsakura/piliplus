@@ -6,7 +6,7 @@ import 'package:PiliPlus/utils/storage.dart';
 class RcmdController extends CommonListController {
   late bool enableSaveLastData = GStorage.setting
       .get(SettingBoxKey.enableSaveLastData, defaultValue: false);
-  late bool appRcmd = true;
+  final bool appRcmd = GStorage.appRcmd;
 
   int? lastRefreshAt;
   late bool savedRcmdTip = GStorage.savedRcmdTip;
@@ -14,8 +14,6 @@ class RcmdController extends CommonListController {
   @override
   void onInit() {
     super.onInit();
-    appRcmd = GStorage.appRcmd;
-
     currentPage = 0;
     queryData();
   }

@@ -1327,19 +1327,14 @@ List<SettingsModel> get videoSettings => [
 
 List<SettingsModel> get recommendSettings => [
       SettingsModel(
-          settingsType: SettingsType.sw1tch,
-          title: '首页使用app端推荐',
-          subtitle: '若web端推荐不太符合预期，可尝试切换至app端推荐',
-          leading: const Icon(Icons.model_training_outlined),
-          setKey: SettingBoxKey.appRcmd,
-          defaultVal: true,
-          onChanged: (value) {
-            try {
-              Get.find<RcmdController>().appRcmd = value;
-            } catch (e) {
-              debugPrint('$e');
-            }
-          }),
+        settingsType: SettingsType.sw1tch,
+        title: '首页使用app端推荐',
+        subtitle: '若web端推荐不太符合预期，可尝试切换至app端推荐',
+        leading: const Icon(Icons.model_training_outlined),
+        setKey: SettingBoxKey.appRcmd,
+        defaultVal: true,
+        needReboot: true,
+      ),
       SettingsModel(
         settingsType: SettingsType.sw1tch,
         title: '推荐动态',
