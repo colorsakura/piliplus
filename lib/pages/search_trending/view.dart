@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:PiliPlus/common/widgets/http_error.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/http/loading_state.dart';
@@ -57,89 +59,95 @@ class _SearchTrendingPageState extends State<SearchTrendingPage> {
 
   @override
   Widget build(BuildContext context) {
-    final removePadding = context.width > 640;
-    return Scaffold(
-      extendBody: true,
-      extendBodyBehindAppBar: true,
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(56),
-        child: Obx(
-          () {
-            final half = _scrollRatio.value >= 0.5;
-            return AppBar(
-              title: Opacity(
-                opacity: _scrollRatio.value,
-                child: Text(
-                  'B站热搜',
-                  style: TextStyle(
-                    color: half ? null : Colors.white,
+    return LayoutBuilder(builder: (context, constraints) {
+      final width = constraints.maxWidth;
+      final maxWidth = constraints.maxWidth > constraints.maxHeight
+          ? min(640.0, width * 0.6)
+          : width;
+      final removePadding = width > maxWidth;
+      return Scaffold(
+        extendBody: true,
+        extendBodyBehindAppBar: true,
+        appBar: PreferredSize(
+          preferredSize: Size.fromHeight(56),
+          child: Obx(
+            () {
+              final half = _scrollRatio.value >= 0.5;
+              return AppBar(
+                title: Opacity(
+                  opacity: _scrollRatio.value,
+                  child: Text(
+                    'B站热搜',
+                    style: TextStyle(
+                      color: half ? null : Colors.white,
+                    ),
                   ),
                 ),
-              ),
-              backgroundColor: Theme.of(context)
-                  .colorScheme
-                  .surface
-                  .withOpacity(_scrollRatio.value),
-              foregroundColor: half ? null : Colors.white,
-              systemOverlayStyle: half
-                  ? null
-                  : SystemUiOverlayStyle(
-                      statusBarBrightness: Brightness.dark,
-                      statusBarIconBrightness: Brightness.light,
-                    ),
-              bottom: _scrollRatio.value == 1
-                  ? PreferredSize(
-                      preferredSize: Size.fromHeight(1),
-                      child: Divider(
-                        height: 1,
-                        color: Theme.of(context)
-                            .colorScheme
-                            .outline
-                            .withOpacity(0.1),
+                backgroundColor: Theme.of(context)
+                    .colorScheme
+                    .surface
+                    .withOpacity(_scrollRatio.value),
+                foregroundColor: half ? null : Colors.white,
+                systemOverlayStyle: half
+                    ? null
+                    : SystemUiOverlayStyle(
+                        statusBarBrightness: Brightness.dark,
+                        statusBarIconBrightness: Brightness.light,
                       ),
-                    )
-                  : null,
-            );
-          },
+                bottom: _scrollRatio.value == 1
+                    ? PreferredSize(
+                        preferredSize: Size.fromHeight(1),
+                        child: Divider(
+                          height: 1,
+                          color: Theme.of(context)
+                              .colorScheme
+                              .outline
+                              .withOpacity(0.1),
+                        ),
+                      )
+                    : null,
+              );
+            },
+          ),
         ),
-      ),
-      body: MediaQuery.removePadding(
-        context: context,
-        removeLeft: removePadding,
-        removeRight: removePadding,
-        child: Center(
+        body: Center(
           child: ConstrainedBox(
-            constraints: BoxConstraints(maxWidth: 640),
-            child: refreshIndicator(
-              onRefresh: () async {
-                await _controller.onRefresh();
-              },
-              child: CustomScrollView(
-                controller: _controller.scrollController,
-                slivers: [
-                  SliverToBoxAdapter(
-                    child: CachedNetworkImage(
-                      fit: BoxFit.fitWidth,
-                      fadeInDuration: const Duration(milliseconds: 120),
-                      fadeOutDuration: const Duration(milliseconds: 120),
-                      imageUrl:
-                          'https://activity.hdslb.com/blackboard/activity59158/img/hot_banner.fbb081df.png',
-                      placeholder: (context, url) {
-                        return AspectRatio(
-                          aspectRatio: 1125 / 528,
-                          child: Image.asset('assets/images/loading.png'),
-                        );
-                      },
+            constraints: BoxConstraints(maxWidth: maxWidth),
+            child: MediaQuery.removePadding(
+              context: context,
+              removeLeft: removePadding,
+              removeRight: removePadding,
+              child: refreshIndicator(
+                onRefresh: () async {
+                  await _controller.onRefresh();
+                },
+                child: CustomScrollView(
+                  controller: _controller.scrollController,
+                  slivers: [
+                    SliverToBoxAdapter(
+                      child: CachedNetworkImage(
+                        fit: BoxFit.fitWidth,
+                        fadeInDuration: const Duration(milliseconds: 120),
+                        fadeOutDuration: const Duration(milliseconds: 120),
+                        imageUrl:
+                            'https://activity.hdslb.com/blackboard/activity59158/img/hot_banner.fbb081df.png',
+                        placeholder: (context, url) {
+                          return AspectRatio(
+                            aspectRatio: 1125 / 528,
+                            child: Image.asset('assets/images/loading.png'),
+                          );
+                        },
+                      ),
                     ),
-                  ),
-                  Obx(() => _buildBody(_controller.loadingState.value)),
-                ],
+                    Obx(() => _buildBody(_controller.loadingState.value)),
+                  ],
+                ),
               ),
             ),
           ),
         ),
-      ),
-    );
+      );
+    });
   }
 
   Widget _buildBody(LoadingState<List<SearchKeywordList>?> loadingState) {
