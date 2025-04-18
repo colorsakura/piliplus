@@ -60,7 +60,7 @@ class HotKeyword extends StatelessWidget {
                           Padding(
                             padding: const EdgeInsets.only(left: 4),
                             child: Image.asset(
-                              'assets/images/live/live_@28h.gif',
+                              'assets/images/live/live.gif',
                               width: 48,
                               height: 15,
                             ),

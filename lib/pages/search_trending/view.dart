@@ -203,7 +203,7 @@ class _SearchTrendingPageState extends State<SearchTrendingPage> {
                         ] else if (item.showLiveIcon == true) ...[
                           const SizedBox(width: 4),
                           Image.asset(
-                            'assets/images/live/live_@28h.gif',
+                            'assets/images/live/live.gif',
                             width: 51,
                             height: 16,
                           ),
