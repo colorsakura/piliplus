@@ -13,7 +13,6 @@ import '../../utils/storage.dart';
 
 class WhisperController
     extends CommonListController<List<SessionList>?, SessionList> {
-  late final bool disableLikeMsg;
   late final List msgFeedTopItems;
   late final RxList<int> unreadCounts;
 
@@ -22,7 +21,7 @@ class WhisperController
   @override
   void onInit() {
     super.onInit();
-    disableLikeMsg =
+    final disableLikeMsg =
         GStorage.setting.get(SettingBoxKey.disableLikeMsg, defaultValue: false);
     msgFeedTopItems = [
       {

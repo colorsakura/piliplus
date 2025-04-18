@@ -1,5 +1,7 @@
 import 'dart:async';
+import 'package:PiliPlus/common/widgets/loading_widget.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
+import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/http/msg.dart';
 import 'package:PiliPlus/models/msg/session.dart';
 import 'package:PiliPlus/pages/common/common_publish_page.dart';
@@ -45,11 +47,10 @@ class _WhisperDetailPageState
             height: 34,
             child: IconButton(
               tooltip: '返回',
-              style: ButtonStyle(
-                padding: WidgetStateProperty.all(EdgeInsets.zero),
-                backgroundColor: WidgetStateProperty.resolveWith((states) {
-                  return Theme.of(context).colorScheme.secondaryContainer;
-                }),
+              style: IconButton.styleFrom(
+                padding: EdgeInsets.zero,
+                backgroundColor:
+                    Theme.of(context).colorScheme.secondaryContainer,
               ),
               onPressed: Get.back,
               icon: Icon(
@@ -60,48 +61,49 @@ class _WhisperDetailPageState
             ),
           ),
         ),
-        title: SizedBox(
-          width: double.infinity,
-          height: 50,
+        title: GestureDetector(
+          onTap: () {
+            feedBack();
+            Get.toNamed(
+              '/member?mid=${_whisperDetailController.mid}',
+              arguments: {
+                'face': _whisperDetailController.face,
+              },
+            );
+          },
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              GestureDetector(
-                onTap: () {
-                  feedBack();
-                  Get.toNamed(
-                    '/member?mid=${_whisperDetailController.mid}',
-                    arguments: {
-                      'face': _whisperDetailController.face,
-                      'heroTag': null
-                    },
-                  );
-                },
-                child: Row(
-                  children: <Widget>[
-                    NetworkImgLayer(
-                      width: 34,
-                      height: 34,
-                      type: 'avatar',
-                      src: _whisperDetailController.face,
-                    ),
-                    const SizedBox(width: 6),
-                    Text(
-                      _whisperDetailController.name,
-                      style: Theme.of(context).textTheme.titleMedium,
-                    ),
-                  ],
+              NetworkImgLayer(
+                width: 34,
+                height: 34,
+                type: 'avatar',
+                src: _whisperDetailController.face,
+              ),
+              const SizedBox(width: 6),
+              Expanded(
+                child: Text(
+                  _whisperDetailController.name,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: Theme.of(context).textTheme.titleMedium,
                 ),
               ),
-              const SizedBox(width: 36, height: 36),
             ],
           ),
         ),
       ),
       body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Expanded(child: _buildList()),
+          Expanded(
+            child: Listener(
+              child: Obx(() =>
+                  _buildBody(_whisperDetailController.loadingState.value)),
+              onPointerDown: (event) {
+                // Hide panel when touch ListView.
+                hidePanel();
+              },
+            ),
+          ),
           _buildInputView(),
           buildPanelContainer(Theme.of(context).colorScheme.onInverseSurface),
         ],
@@ -109,82 +111,81 @@ class _WhisperDetailPageState
     );
   }
 
-  Widget _buildList() {
-    Widget resultWidget = Obx(
-      () {
-        List<MessageItem> messageList = _whisperDetailController.messageList;
-        if (messageList.isEmpty) {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        }
-        return refreshIndicator(
-          onRefresh: _whisperDetailController.querySessionMsg,
-          child: ListView.builder(
-            shrinkWrap: true,
-            reverse: true,
-            itemCount: messageList.length,
-            itemBuilder: (context, int index) {
-              return ChatItem(
-                item: messageList[index],
-                eInfos: _whisperDetailController.eInfos,
-                onLongPress: messageList[index].senderUid ==
-                        _whisperDetailController.ownerMid
-                    ? () {
-                        showDialog(
-                          context: context,
-                          builder: (context) {
-                            return AlertDialog(
-                              clipBehavior: Clip.hardEdge,
-                              contentPadding:
-                                  const EdgeInsets.fromLTRB(0, 12, 0, 12),
-                              content: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  ListTile(
-                                    onTap: () {
-                                      Get.back();
-                                      _whisperDetailController.sendMsg(
-                                        message: '${messageList[index].msgKey}',
-                                        onClearText: editController.clear,
-                                        msgType: 5,
-                                        index: index,
-                                      );
-                                    },
-                                    dense: true,
-                                    title: const Text('撤回',
-                                        style: TextStyle(fontSize: 14)),
+  Widget _buildBody(LoadingState<List<MessageItem>?> loadingState) {
+    return switch (loadingState) {
+      Loading() => loadingWidget,
+      Success() => loadingState.response?.isNotEmpty == true
+          ? refreshIndicator(
+              onRefresh: () async {
+                await _whisperDetailController.onRefresh();
+              },
+              child: ListView.builder(
+                shrinkWrap: true,
+                reverse: true,
+                itemCount: loadingState.response!.length,
+                padding: const EdgeInsets.only(bottom: 12),
+                itemBuilder: (context, int index) {
+                  final item = loadingState.response![index];
+                  return ChatItem(
+                    item: item,
+                    eInfos: _whisperDetailController.eInfos,
+                    onLongPress: item.senderUid ==
+                            _whisperDetailController.ownerMid
+                        ? () {
+                            showDialog(
+                              context: context,
+                              builder: (context) {
+                                return AlertDialog(
+                                  clipBehavior: Clip.hardEdge,
+                                  contentPadding:
+                                      const EdgeInsets.symmetric(vertical: 12),
+                                  content: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      ListTile(
+                                        onTap: () {
+                                          Get.back();
+                                          _whisperDetailController.sendMsg(
+                                            message: '${item.msgKey}',
+                                            onClearText: editController.clear,
+                                            msgType: 5,
+                                            index: index,
+                                          );
+                                        },
+                                        dense: true,
+                                        title: const Text(
+                                          '撤回',
+                                          style: TextStyle(fontSize: 14),
+                                        ),
+                                      ),
+                                      // ListTile(
+                                      //   onTap: () {
+                                      //     Get.back();
+                                      //   },
+                                      //   dense: true,
+                                      //   title: const Text('删除',
+                                      //       style: TextStyle(fontSize: 14)),
+                                      // ),
+                                    ],
                                   ),
-                                  // ListTile(
-                                  //   onTap: () {
-                                  //     Get.back();
-                                  //   },
-                                  //   dense: true,
-                                  //   title: const Text('删除',
-                                  //       style: TextStyle(fontSize: 14)),
-                                  // ),
-                                ],
-                              ),
+                                );
+                              },
                             );
-                          },
-                        );
-                      }
-                    : null,
-              );
-            },
-            padding: const EdgeInsets.only(bottom: 20),
-          ),
-        );
-      },
-    );
-    resultWidget = Listener(
-      child: resultWidget,
-      onPointerDown: (event) {
-        // Hide panel when touch ListView.
-        hidePanel();
-      },
-    );
-    return resultWidget;
+                          }
+                        : null,
+                  );
+                },
+              ),
+            )
+          : scrollErrorWidget(
+              callback: _whisperDetailController.onReload,
+            ),
+      Error() => scrollErrorWidget(
+          errMsg: loadingState.errMsg,
+          callback: _whisperDetailController.onReload,
+        ),
+      _ => throw UnimplementedError(),
+    };
   }
 
   Widget _buildInputView() {

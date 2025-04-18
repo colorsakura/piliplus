@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:PiliPlus/common/widgets/interactiveviewer_gallery/interactiveviewer_gallery.dart';
+import 'package:PiliPlus/models/msg/session.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/id_utils.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
@@ -41,13 +42,13 @@ enum MsgType {
 }
 
 class ChatItem extends StatelessWidget {
-  final dynamic item;
+  final MessageItem item;
   final List? eInfos;
   final VoidCallback? onLongPress;
 
   const ChatItem({
     super.key,
-    this.item,
+    required this.item,
     this.eInfos,
     this.onLongPress,
   }) : isOwner = onLongPress != null;
@@ -137,7 +138,7 @@ class ChatItem extends StatelessWidget {
     }
 
     Widget messageContent(BuildContext context) {
-      switch (MsgType.parse(item.msgType)) {
+      switch (MsgType.parse(item.msgType!)) {
         case MsgType.notify_msg:
           return SystemNotice(item: item);
         case MsgType.pic_card:
