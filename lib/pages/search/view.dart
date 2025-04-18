@@ -83,23 +83,25 @@ class _SearchPageState extends State<SearchPage> {
             if (_searchController.searchSuggestion) _searchSuggest(),
             if (context.orientation == Orientation.portrait) ...[
               if (_searchController.enableHotKey) hotSearch(),
-              _history(),
+              if (_searchController.recordSearchHistory.value) _history(),
               if (_searchController.enableSearchRcmd) hotSearch(false)
             ] else
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  if (_searchController.enableHotKey)
+                  if (_searchController.enableHotKey ||
+                      _searchController.enableSearchRcmd)
                     Expanded(
                       child: Column(
                         children: [
-                          hotSearch(),
+                          if (_searchController.enableHotKey) hotSearch(),
                           if (_searchController.enableSearchRcmd)
                             hotSearch(false)
                         ],
                       ),
                     ),
-                  Expanded(child: _history()),
+                  if (_searchController.recordSearchHistory.value)
+                    Expanded(child: _history()),
                 ],
               ),
           ],
