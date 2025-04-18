@@ -80,7 +80,7 @@ class WbiSign {
     }
     final resp = await Request().get(Api.userInfo);
 
-    if (resp.data['code'] == 0) {
+    try {
       final wbiUrls = resp.data['data']['wbi_img'];
 
       mixinKey = getMixinKey(
@@ -89,9 +89,11 @@ class WbiSign {
 
       localCache.put(LocalCacheKey.mixinKey, mixinKey);
       localCache.put(LocalCacheKey.timeStamp, nowDate.millisecondsSinceEpoch);
-    }
 
-    return mixinKey ?? '';
+      return mixinKey;
+    } catch (_) {
+      return '';
+    }
   }
 
   static Future<Map<String, dynamic>> makSign(
