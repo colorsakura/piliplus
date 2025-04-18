@@ -1,4 +1,5 @@
 import 'package:PiliPlus/pages/search/controller.dart';
+import 'package:PiliPlus/pages/search_panel/all/view.dart';
 import 'package:PiliPlus/pages/search_panel/article/view.dart';
 import 'package:PiliPlus/pages/search_panel/live/view.dart';
 import 'package:PiliPlus/pages/search_panel/pgc/view.dart';
@@ -23,6 +24,7 @@ class _SearchResultPageState extends State<SearchResultPage>
   late SearchResultController _searchResultController;
   late TabController _tabController;
   final String _tag = DateTime.now().millisecondsSinceEpoch.toString();
+  final bool? _isFromSearch = Get.arguments?['fromSearch'];
 
   @override
   void initState() {
@@ -34,7 +36,9 @@ class _SearchResultPageState extends State<SearchResultPage>
 
     _tabController = TabController(
       vsync: this,
-      initialIndex: Get.arguments is int ? Get.arguments : 0,
+      initialIndex: Get.arguments?['initIndex'] != null
+          ? (Get.arguments?['initIndex'] as int)
+          : 0,
       length: SearchType.values.length,
     );
 
@@ -68,7 +72,7 @@ class _SearchResultPageState extends State<SearchResultPage>
         ),
         title: GestureDetector(
           onTap: () {
-            if (Get.previousRoute.startsWith('/search?')) {
+            if (_isFromSearch == true) {
               Get.back();
             } else {
               Get.offNamed(
@@ -150,10 +154,11 @@ class _SearchResultPageState extends State<SearchResultPage>
                 children: SearchType.values
                     .map(
                       (item) => switch (item) {
-                        // SearchType.all => SearchVideoPanel(
-                        //     keyword: _searchResultController.keyword,
-                        //     tag: _tag,
-                        //   ),
+                        SearchType.all => SearchAllPanel(
+                            tag: _tag,
+                            searchType: item,
+                            keyword: _searchResultController.keyword,
+                          ),
                         SearchType.video => SearchVideoPanel(
                             tag: _tag,
                             searchType: item,

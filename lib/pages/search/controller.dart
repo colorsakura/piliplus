@@ -117,7 +117,10 @@ class SSearchController extends GetxController {
       parameters: {
         'keyword': controller.text,
       },
-      arguments: initIndex,
+      arguments: {
+        'initIndex': initIndex,
+        'fromSearch': true,
+      },
     );
     searchFocusNode.requestFocus();
   }

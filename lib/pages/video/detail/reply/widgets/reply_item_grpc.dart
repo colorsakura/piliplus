@@ -922,8 +922,10 @@ class ReplyItemGrpc extends StatelessWidget {
                         }
                       } else {
                         if (appUrlSchema.startsWith('bilibili://search')) {
-                          Get.toNamed('/searchResult',
-                              parameters: {'keyword': title});
+                          Get.toNamed(
+                            '/searchResult',
+                            parameters: {'keyword': title},
+                          );
                         } else {
                           PageUtils.handleWebview(matchStr);
                         }
@@ -947,8 +949,10 @@ class ReplyItemGrpc extends StatelessWidget {
                   ..onTap = () {
                     final String topic =
                         matchStr.substring(1, matchStr.length - 1);
-                    Get.toNamed('/searchResult',
-                        parameters: {'keyword': topic});
+                    Get.toNamed(
+                      '/searchResult',
+                      parameters: {'keyword': topic},
+                    );
                   },
               ),
             );

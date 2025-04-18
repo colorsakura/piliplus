@@ -102,8 +102,8 @@ class SearchHttp {
           case SearchType.article:
             data = SearchArticleModel.fromJson(res.data['data']);
             break;
-          // case SearchType.all:
-          //   break;
+          case SearchType.all:
+            break;
         }
         return LoadingState.success(data);
       } catch (err) {
@@ -115,7 +115,7 @@ class SearchHttp {
     }
   }
 
-  static Future<LoadingState> searchAll({
+  static Future<LoadingState<SearchAllModel>> searchAll({
     required String keyword,
     required page,
     String? order,
@@ -140,17 +140,15 @@ class SearchHttp {
       if (pubEnd != null) 'pubtime_end_s': pubEnd,
     };
     var res = await Request().get(
-      Api.searchByType,
+      Api.searchAll,
       queryParameters: params,
     );
     if (res.data is! Map) {
       return LoadingState.error('没有相关数据');
     }
     if (res.data['code'] == 0) {
-      dynamic data;
       try {
-        // TODO
-        return LoadingState.success(data);
+        return LoadingState.success(SearchAllModel.fromJson(res.data['data']));
       } catch (err) {
         debugPrint(err.toString());
         return LoadingState.error(err.toString());

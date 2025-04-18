@@ -788,10 +788,10 @@ class _VideoInfoState extends State<VideoInfo> {
                                   (item) => SearchText(
                                     fontSize: 13,
                                     text: item['tag_name'],
-                                    onTap: (_) => Get.toNamed('/searchResult',
-                                        parameters: {
-                                          'keyword': item['tag_name']
-                                        }),
+                                    onTap: (_) => Get.toNamed(
+                                      '/searchResult',
+                                      parameters: {'keyword': item['tag_name']},
+                                    ),
                                     onLongPress: (_) =>
                                         Utils.copyText(item['tag_name']),
                                   ),

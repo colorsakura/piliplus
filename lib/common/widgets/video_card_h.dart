@@ -6,6 +6,7 @@ import 'package:PiliPlus/models/search/result.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
+import 'package:get/get.dart';
 import '../../http/search.dart';
 import '../../utils/utils.dart';
 import '../constants.dart';
@@ -76,6 +77,17 @@ class VideoCardH extends StatelessWidget {
                 }
                 if (type == 'ketang') {
                   SmartDialog.showToast('课堂视频暂不支持播放');
+                  return;
+                } else if (type == 'live_room') {
+                  if (videoItem is SearchVideoItemModel) {
+                    int? roomId = (videoItem as SearchVideoItemModel).id;
+                    if (roomId != null) {
+                      Get.toNamed('/liveRoom?roomid=$roomId');
+                    }
+                  } else {
+                    SmartDialog.showToast(
+                        'err: live_room : ${videoItem.runtimeType}');
+                  }
                   return;
                 }
                 if ((videoItem is HotVideoItemModel) &&

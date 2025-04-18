@@ -14,6 +14,46 @@ abstract class SearchNumData<T> {
   List<T>? list;
 }
 
+class SearchAllModel extends SearchNumData {
+  SearchAllModel({
+    super.numResults,
+    super.list,
+  });
+
+  SearchAllModel.fromJson(Map<String, dynamic> json) {
+    numResults = (json['numResults'] as num?)?.toInt();
+    if ((json['result'] as List?)?.isNotEmpty == true) {
+      final isRefresh = json['page'] == 1;
+      list = [];
+      for (final item in json['result']) {
+        if ((item['data'] as List?)?.isNotEmpty == true) {
+          switch (item['result_type']) {
+            case 'media_bangumi' || 'media_bangumi':
+              if (isRefresh) {
+                list!.add((item['data'] as List)
+                    .map((e) => SearchMBangumiItemModel.fromJson(e))
+                    .toList());
+              }
+              break;
+            case 'bili_user':
+              if (isRefresh) {
+                list!.addAll((item['data'] as List)
+                    .map((e) => SearchUserItemModel.fromJson(e))
+                    .toList());
+              }
+              break;
+            case 'video':
+              list!.addAll((item['data'] as List)
+                  .map((e) => SearchVideoItemModel.fromJson(e))
+                  .toList());
+              break;
+          }
+        }
+      }
+    }
+  }
+}
+
 class SearchVideoModel extends SearchNumData<SearchVideoItemModel> {
   SearchVideoModel({
     super.numResults,
