@@ -5,7 +5,7 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 
 class DanmakuBlockController extends GetxController
-    with GetTickerProviderStateMixin {
+    with GetSingleTickerProviderStateMixin {
   final ruleTypes = RxMap<int, Map<int, String>>({0: {}, 1: {}, 2: {}});
   late TabController tabController;
 

@@ -8,7 +8,7 @@ import '../../http/reply.dart';
 
 class EmotePanelController
     extends CommonListController<List<Packages>?, Packages>
-    with GetTickerProviderStateMixin {
+    with GetSingleTickerProviderStateMixin {
   TabController? tabController;
 
   @override

@@ -5,6 +5,7 @@ import 'package:PiliPlus/models/common/tab_type.dart';
 import 'package:PiliPlus/models/model_hot_video_item.dart';
 import 'package:PiliPlus/pages/common/common_page.dart';
 import 'package:PiliPlus/pages/rank/view.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:PiliPlus/common/constants.dart';
@@ -41,7 +42,7 @@ class _HotPageState extends CommonPageState<HotPage, HotController>
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Image.network(width: 35, height: 35, iconUrl),
+          CachedNetworkImage(width: 35, height: 35, imageUrl: iconUrl),
           const SizedBox(height: 4),
           Text(
             title,

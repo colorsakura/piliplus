@@ -35,6 +35,17 @@ class _AboutPageState extends State<AboutPage> {
 
   late int _pressCount = 0;
 
+  late Color outline;
+  late TextStyle subTitleStyle;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    outline = Theme.of(context).colorScheme.outline;
+    subTitleStyle =
+        TextStyle(fontSize: 13, color: Theme.of(context).colorScheme.outline);
+  }
+
   @override
   void initState() {
     super.initState();
@@ -49,9 +60,6 @@ class _AboutPageState extends State<AboutPage> {
 
   @override
   Widget build(BuildContext context) {
-    final Color outline = Theme.of(context).colorScheme.outline;
-    TextStyle subTitleStyle =
-        TextStyle(fontSize: 13, color: Theme.of(context).colorScheme.outline);
     return Scaffold(
       appBar:
           widget.showAppBar == false ? null : AppBar(title: const Text('关于')),
@@ -90,27 +98,27 @@ class _AboutPageState extends State<AboutPage> {
             ),
           ),
           ListTile(
-            title: Text('PiliPlus',
-                textAlign: TextAlign.center,
-                style: Theme.of(context)
-                    .textTheme
-                    .titleMedium!
-                    .copyWith(height: 2)),
-            subtitle: Row(children: [
-              const Spacer(),
-              Text(
-                '使用Flutter开发的B站第三方客户端',
-                textAlign: TextAlign.center,
-                style: TextStyle(color: Theme.of(context).colorScheme.outline),
-                semanticsLabel: '与你一起，发现不一样的世界',
-              ),
-              const Icon(
-                Icons.accessibility_new,
-                semanticLabel: "无障碍适配",
-                size: 18,
-              ),
-              const Spacer(),
-            ]),
+            title: Text(
+              'PiliPlus',
+              textAlign: TextAlign.center,
+              style:
+                  Theme.of(context).textTheme.titleMedium!.copyWith(height: 2),
+            ),
+            subtitle: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  '使用Flutter开发的B站第三方客户端',
+                  style: TextStyle(color: outline),
+                  semanticsLabel: '与你一起，发现不一样的世界',
+                ),
+                const Icon(
+                  Icons.accessibility_new,
+                  semanticLabel: "无障碍适配",
+                  size: 18,
+                ),
+              ],
+            ),
           ),
           Obx(
             () => ListTile(
@@ -137,29 +145,6 @@ Commit Hash: ${BuildConfig.commitHash}''',
                 'https://github.com/bggRGjQaUbCoE/PiliPlus/commit/${BuildConfig.commitHash}'),
             onLongPress: () => Utils.copyText(BuildConfig.commitHash),
           ),
-          // Obx(
-          //   () => ListTile(
-          //     onTap: () => _aboutController.onUpdate(),
-          //     title: const Text('最新版本'),
-          //     leading: const Icon(Icons.flag_outlined),
-          //     trailing: Text(
-          //       _aboutController.isLoading.value
-          //           ? '正在获取'
-          //           : _aboutController.isUpdate.value
-          //               ? '有新版本  ❤️${_aboutController.remoteVersion.value}'
-          //               : '当前已是最新版',
-          //       style: subTitleStyle,
-          //     ),
-          //   ),
-          // ),
-          // ListTile(
-          //   onTap: () {},
-          //   title: const Text('更新日志'),
-          //   trailing: const Icon(
-          //     Icons.arrow_forward,
-          //     size: 16,
-          //   ),
-          // ),
           Divider(
             thickness: 1,
             height: 30,
@@ -303,10 +288,7 @@ Commit Hash: ${BuildConfig.commitHash}''',
                                   onPressed: Get.back,
                                   child: Text(
                                     '取消',
-                                    style: TextStyle(
-                                      color:
-                                          Theme.of(context).colorScheme.outline,
-                                    ),
+                                    style: TextStyle(color: outline),
                                   ),
                                 ),
                                 TextButton(
@@ -391,11 +373,7 @@ Commit Hash: ${BuildConfig.commitHash}''',
                                       onPressed: Get.back,
                                       child: Text(
                                         '取消',
-                                        style: TextStyle(
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .outline,
-                                        ),
+                                        style: TextStyle(color: outline),
                                       ),
                                     ),
                                     TextButton(
@@ -425,8 +403,8 @@ Commit Hash: ${BuildConfig.commitHash}''',
           ListTile(
             title: const Text('重置所有设置'),
             leading: const Icon(Icons.settings_backup_restore_outlined),
-            onTap: () async {
-              await showDialog(
+            onTap: () {
+              showDialog(
                 context: context,
                 builder: (context) {
                   return AlertDialog(
@@ -490,24 +468,8 @@ class AboutController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    // init();
-    // 获取当前版本
     getCurrentApp();
-    // 获取最新的版本
-    // getRemoteApp();
   }
-
-  // 获取设备信息
-  // Future init() async {
-  //   DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
-  //   if (Platform.isAndroid) {
-  //     AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
-  //     debugPrint(androidInfo.supportedAbis);
-  //   } else if (Platform.isIOS) {
-  //     IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
-  //     debugPrint(iosInfo);
-  //   }
-  // }
 
   // 获取当前版本
   Future getCurrentApp() async {
@@ -515,22 +477,4 @@ class AboutController extends GetxController {
     String buildNumber = currentInfo.buildNumber;
     currentVersion.value = "${currentInfo.version}+$buildNumber";
   }
-
-  // // 获取远程版本
-  // Future getRemoteApp() async {
-  //   var result = await Request().get(Api.latestApp, extra: {'ua': 'pc'});
-  //   if (result.data.isEmpty) {
-  //     SmartDialog.showToast('检查更新失败，github接口未返回数据，请检查网络');
-  //     return false;
-  //   } else if (result.data[0] == null) {
-  //     SmartDialog.showToast('检查更新失败，github接口返回如下内容：\n${result.data}');
-  //     return false;
-  //   }
-  //   data = LatestDataModel.fromJson(result.data[0]);
-  //   remoteAppInfo = data;
-  //   remoteVersion.value = data!.tagName!;
-  //   isUpdate.value =
-  //       Utils.needUpdate(currentVersion.value, remoteVersion.value);
-  //   isLoading.value = false;
-  // }
 }

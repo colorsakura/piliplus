@@ -41,7 +41,8 @@ class ActionItem extends StatefulWidget {
   State<ActionItem> createState() => ActionItemState();
 }
 
-class ActionItemState extends State<ActionItem> with TickerProviderStateMixin {
+class ActionItemState extends State<ActionItem>
+    with SingleTickerProviderStateMixin {
   AnimationController? controller;
   Animation<double>? _animation;
 

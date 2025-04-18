@@ -11,7 +11,7 @@ import 'package:get/get.dart';
 import '../../../../models/space/item.dart';
 
 class MemberContributeCtr extends CommonDataController
-    with GetTickerProviderStateMixin {
+    with GetSingleTickerProviderStateMixin {
   MemberContributeCtr({
     required this.heroTag,
     required this.initialIndex,

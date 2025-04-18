@@ -16,7 +16,7 @@ import '../../models/follow/result.dart';
 import '../common/common_controller.dart';
 
 class DynamicsController extends GetxController
-    with GetTickerProviderStateMixin, ScrollOrRefreshMixin {
+    with GetSingleTickerProviderStateMixin, ScrollOrRefreshMixin {
   @override
   final ScrollController scrollController = ScrollController();
   String? offset = '';

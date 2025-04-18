@@ -1,3 +1,5 @@
+import 'package:PiliPlus/models/common/rank_type.dart';
+import 'package:PiliPlus/pages/rank/zone/view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import './controller.dart';
@@ -10,18 +12,11 @@ class RankPage extends StatefulWidget {
 }
 
 class _RankPageState extends State<RankPage>
-    with AutomaticKeepAliveClientMixin, SingleTickerProviderStateMixin {
+    with AutomaticKeepAliveClientMixin {
   final RankController _rankController = Get.put(RankController());
 
   @override
   bool get wantKeepAlive => true;
-
-  @override
-  void initState() {
-    super.initState();
-    _rankController.tabController =
-        TabController(vsync: this, length: _rankController.tabs.length);
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,16 +31,16 @@ class _RankPageState extends State<RankPage>
             ),
             child: Column(
               children: List.generate(
-                _rankController.tabs.length,
+                tabsConfig.length,
                 (index) => Obx(
                   () => IntrinsicHeight(
                     child: InkWell(
                       onTap: () {
-                        _rankController.initialIndex.value = index;
+                        _rankController.tabIndex.value = index;
                         _rankController.tabController.animateTo(index);
                       },
                       child: ColoredBox(
-                        color: index == _rankController.initialIndex.value
+                        color: index == _rankController.tabIndex.value
                             ? Theme.of(context).colorScheme.onInverseSurface
                             : Theme.of(context).colorScheme.surface,
                         child: Row(
@@ -54,7 +49,7 @@ class _RankPageState extends State<RankPage>
                             Container(
                               height: double.infinity,
                               width: 3,
-                              color: index == _rankController.initialIndex.value
+                              color: index == _rankController.tabIndex.value
                                   ? Theme.of(context).colorScheme.primary
                                   : Colors.transparent,
                             ),
@@ -65,10 +60,10 @@ class _RankPageState extends State<RankPage>
                                 padding:
                                     const EdgeInsets.symmetric(vertical: 7),
                                 child: Text(
-                                  _rankController.tabs[index]['label'],
+                                  tabsConfig[index]['label'],
                                   style: TextStyle(
                                     color: index ==
-                                            _rankController.initialIndex.value
+                                            _rankController.tabIndex.value
                                         ? Theme.of(context).colorScheme.primary
                                         : Theme.of(context)
                                             .colorScheme
@@ -94,7 +89,8 @@ class _RankPageState extends State<RankPage>
           child: TabBarView(
             physics: const NeverScrollableScrollPhysics(),
             controller: _rankController.tabController,
-            children: _rankController.tabsPageList,
+            children:
+                tabsConfig.map((item) => ZonePage(rid: item['rid'])).toList(),
           ),
         ),
       ],

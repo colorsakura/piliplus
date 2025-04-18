@@ -7,7 +7,7 @@ import 'package:get/get.dart';
 
 class LiveEmotePanelController
     extends CommonListController<List<LiveEmoteDatum>?, LiveEmoteDatum>
-    with GetTickerProviderStateMixin {
+    with GetSingleTickerProviderStateMixin {
   LiveEmotePanelController(this.roomId);
   final int roomId;
   TabController? tabController;

@@ -11,18 +11,16 @@ import '../common/common_controller.dart';
 import '../mine/view.dart';
 
 class HomeController extends GetxController
-    with GetTickerProviderStateMixin, ScrollOrRefreshMixin {
-  late RxList tabs = [].obs;
-  late TabController tabController;
+    with GetSingleTickerProviderStateMixin, ScrollOrRefreshMixin {
+  late List tabs;
   late List tabsCtrList;
-  late List<Widget> tabsPageList;
+  late TabController tabController;
+
   RxBool isLogin = false.obs;
   RxString userFace = ''.obs;
-  dynamic userInfo;
+
   StreamController<bool>? searchBarStream;
   late bool hideSearchBar;
-  late List defaultTabs;
-  late List<String> tabbarSort;
   late bool useSideBar;
 
   late bool enableSearchWord;
@@ -45,23 +43,26 @@ class HomeController extends GetxController
   @override
   void onInit() {
     super.onInit();
-    userInfo = GStorage.userInfo.get('userInfoCache');
+    final userInfo = GStorage.userInfo.get('userInfoCache');
     isLogin.value = userInfo != null;
     userFace.value = userInfo != null ? userInfo.face : '';
+
     hideSearchBar =
         GStorage.setting.get(SettingBoxKey.hideSearchBar, defaultValue: true);
     if (hideSearchBar) {
       searchBarStream = StreamController<bool>.broadcast();
     }
+
     enableSearchWord = GStorage.setting
         .get(SettingBoxKey.enableSearchWord, defaultValue: true);
     if (enableSearchWord) {
       lateCheckSearchAt = DateTime.now().millisecondsSinceEpoch;
       querySearchDefault();
     }
+
     useSideBar =
         GStorage.setting.get(SettingBoxKey.useSideBar, defaultValue: false);
-    // 进行tabs配置
+
     setTabConfig();
   }
 
@@ -71,18 +72,17 @@ class HomeController extends GetxController
   }
 
   void setTabConfig() async {
-    defaultTabs = [...tabsConfig];
-    tabbarSort = GStorage.tabbarSort;
+    final defaultTabs = [...tabsConfig];
+    final tabbarSort = GStorage.tabbarSort;
     defaultTabs.retainWhere(
         (item) => tabbarSort.contains((item['type'] as TabType).name));
     defaultTabs.sort((a, b) => tabbarSort
         .indexOf((a['type'] as TabType).name)
         .compareTo(tabbarSort.indexOf((b['type'] as TabType).name)));
 
-    tabs.value = defaultTabs;
+    tabs = defaultTabs;
 
     tabsCtrList = tabs.map((e) => e['ctr']).toList();
-    tabsPageList = tabs.map<Widget>((e) => e['page']).toList();
 
     tabController = TabController(
       initialIndex: max(0, tabbarSort.indexOf(TabType.rcmd.name)),

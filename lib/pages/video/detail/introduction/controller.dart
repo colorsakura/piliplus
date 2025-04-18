@@ -32,8 +32,7 @@ import '../../../../http/search.dart';
 import '../../../../models/model_hot_video_item.dart';
 import '../related/index.dart';
 
-class VideoIntroController extends GetxController
-    with GetTickerProviderStateMixin {
+class VideoIntroController extends GetxController {
   // 视频bvid
   late String bvid;
 

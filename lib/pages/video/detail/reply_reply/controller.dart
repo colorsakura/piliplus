@@ -10,7 +10,7 @@ import 'package:PiliPlus/models/common/reply_type.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 class VideoReplyReplyController extends ReplyController
-    with GetTickerProviderStateMixin {
+    with GetSingleTickerProviderStateMixin {
   VideoReplyReplyController({
     required this.hasRoot,
     required this.id,

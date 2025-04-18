@@ -11,7 +11,7 @@ import 'package:get/get.dart';
 class BlackListController
     extends CommonListController<BlackListDataModel, BlackListItem> {
   int pageSize = 50;
-  RxInt total = 0.obs;
+  RxInt total = (-1).obs;
 
   @override
   void onInit() {

@@ -10,7 +10,7 @@ import 'package:PiliPlus/models/user/history.dart';
 import 'package:PiliPlus/utils/storage.dart';
 
 class HistoryController extends MultiSelectController<HistoryData, HisListItem>
-    with GetTickerProviderStateMixin {
+    with GetSingleTickerProviderStateMixin {
   HistoryController(this.type);
 
   late final baseCtr = Get.put(HistoryBaseController());

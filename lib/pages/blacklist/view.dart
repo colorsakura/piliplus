@@ -34,7 +34,8 @@ class _BlackListPageState extends State<BlackListPage> {
     return Scaffold(
       appBar: AppBar(
         title: Obx(
-          () => Text('黑名单管理: ${_blackListController.total.value}'),
+          () => Text(
+              '黑名单管理${_blackListController.total.value == -1 ? '' : ': ${_blackListController.total.value}'}'),
         ),
       ),
       body: refreshIndicator(

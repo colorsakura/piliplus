@@ -43,7 +43,6 @@ class _ZonePageState extends CommonPageState<ZonePage, ZoneController>
         controller: controller.scrollController,
         slivers: [
           SliverPadding(
-            // 单列布局 EdgeInsets.zero
             padding: EdgeInsets.only(
               top: StyleString.safeSpace - 5,
               bottom: MediaQuery.of(context).padding.bottom + 80,

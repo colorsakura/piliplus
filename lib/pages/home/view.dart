@@ -67,7 +67,8 @@ class _HomePageState extends State<HomePage>
           Expanded(
             child: tabBarView(
               controller: _homeController.tabController,
-              children: _homeController.tabsPageList,
+              children:
+                  _homeController.tabs.map<Widget>((e) => e['page']).toList(),
             ),
           ),
         ],

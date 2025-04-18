@@ -108,6 +108,7 @@ class MemberControllerNew extends CommonDataController<Data, dynamic>
           });
         }
         tabs = tab2!.map((item) => Tab(text: item.title ?? '')).toList();
+        tabController?.dispose();
         tabController = TabController(
           vsync: this,
           length: tabs.length,
@@ -132,6 +133,7 @@ class MemberControllerNew extends CommonDataController<Data, dynamic>
       Tab2(title: '追番', param: 'bangumi'),
     ];
     tabs = tab2!.map((item) => Tab(text: item.title)).toList();
+    tabController?.dispose();
     tabController = TabController(
       vsync: this,
       length: tabs.length,
