@@ -63,11 +63,15 @@ class MemberControllerNew extends CommonDataController<Data, dynamic>
   bool customHandleResponse(bool isRefresh, Success<Data> response) {
     Data data = response.response;
     username = data.card?.name ?? '';
-    relation.value = data.card?.relation?.isFollow == 1
-        ? data.relSpecial == 1
-            ? -10
-            : data.card?.relation?.status ?? 2
-        : 0;
+    if (data.relation == -1) {
+      relation.value = 128;
+    } else {
+      relation.value = data.card?.relation?.isFollow == 1
+          ? data.relSpecial == 1
+              ? -10
+              : data.card?.relation?.status ?? 2
+          : 0;
+    }
     tab2 = data.tab2;
     live = data.live;
     silence = data.card?.silence;
