@@ -45,61 +45,58 @@ class _MediaPageState extends CommonPageState<MediaPage, MediaController>
       appBar: AppBar(
         toolbarHeight: 30,
       ),
-      body: SingleChildScrollView(
-        physics: const AlwaysScrollableScrollPhysics(),
+      body: ListView(
         controller: controller.scrollController,
-        child: Column(
-          children: [
-            ListTile(
-                leading: null,
-                title: Padding(
-                  padding: const EdgeInsets.only(left: 20),
-                  child: Text(
-                    '媒体库',
-                    style: TextStyle(
-                      fontSize:
-                          Theme.of(context).textTheme.titleLarge!.fontSize,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-                trailing: IconButton(
-                  tooltip: '设置',
-                  onPressed: () {
-                    Get.toNamed('/setting');
-                  },
-                  icon: const Icon(
-                    Icons.settings_outlined,
-                    size: 20,
-                  ),
-                )),
-            for (var i in controller.list) ...[
-              ListTile(
-                onTap: () => i['onTap'](),
-                dense: true,
-                leading: Padding(
-                  padding: const EdgeInsets.only(left: 15),
-                  child: Icon(
-                    i['icon'],
-                    color: primary,
-                  ),
-                ),
-                contentPadding:
-                    const EdgeInsets.only(left: 15, top: 2, bottom: 2),
-                minLeadingWidth: 0,
-                title: Text(
-                  i['title'],
-                  style: const TextStyle(fontSize: 15),
+        physics: const AlwaysScrollableScrollPhysics(),
+        children: [
+          ListTile(
+            leading: null,
+            title: Padding(
+              padding: const EdgeInsets.only(left: 20),
+              child: Text(
+                '媒体库',
+                style: TextStyle(
+                  fontSize: Theme.of(context).textTheme.titleLarge!.fontSize,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
-            ],
-            Obx(
-              () => controller.loadingState.value is Loading
-                  ? const SizedBox.shrink()
-                  : favFolder(),
-            )
-          ],
-        ),
+            ),
+            trailing: IconButton(
+              tooltip: '设置',
+              onPressed: () {
+                Get.toNamed('/setting');
+              },
+              icon: const Icon(
+                Icons.settings_outlined,
+                size: 20,
+              ),
+            ),
+          ),
+          for (var item in controller.list)
+            ListTile(
+              onTap: item['onTap'],
+              dense: true,
+              leading: Padding(
+                padding: const EdgeInsets.only(left: 15),
+                child: Icon(
+                  item['icon'],
+                  color: primary,
+                ),
+              ),
+              contentPadding:
+                  const EdgeInsets.only(left: 15, top: 2, bottom: 2),
+              minLeadingWidth: 0,
+              title: Text(
+                item['title'],
+                style: const TextStyle(fontSize: 15),
+              ),
+            ),
+          Obx(
+            () => controller.loadingState.value is Loading
+                ? const SizedBox.shrink()
+                : favFolder(),
+          )
+        ],
       ),
     );
   }
@@ -118,7 +115,6 @@ class _MediaPageState extends CommonPageState<MediaPage, MediaController>
               controller.onRefresh();
             });
           },
-          leading: null,
           dense: true,
           title: Padding(
             padding: const EdgeInsets.only(left: 10),
@@ -143,11 +139,12 @@ class _MediaPageState extends CommonPageState<MediaPage, MediaController>
                         ),
                       ),
                     WidgetSpan(
-                        child: Icon(
-                      Icons.arrow_forward_ios,
-                      size: 18,
-                      color: Theme.of(context).colorScheme.primary,
-                    )),
+                      child: Icon(
+                        Icons.arrow_forward_ios,
+                        size: 18,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -156,21 +153,15 @@ class _MediaPageState extends CommonPageState<MediaPage, MediaController>
           trailing: IconButton(
             tooltip: '刷新',
             onPressed: controller.onRefresh,
-            icon: const Icon(
-              Icons.refresh,
-              size: 20,
-            ),
+            icon: const Icon(Icons.refresh, size: 20),
           ),
         ),
-        // const SizedBox(height: 10),
         SizedBox(
           width: double.infinity,
-          height: MediaQuery.textScalerOf(context).scale(200),
+          height: 200,
           child: Obx(() => _buildBody(controller.loadingState.value)),
         ),
-        SizedBox(
-          height: MediaQuery.paddingOf(context).bottom + 100,
-        ),
+        const SizedBox(height: 100),
       ],
     );
   }
@@ -251,7 +242,7 @@ class _MediaPageState extends CommonPageState<MediaPage, MediaController>
         ),
       );
     }
-    return const SizedBox();
+    return const SizedBox.shrink();
   }
 }
 
@@ -297,9 +288,9 @@ class FavFolderItem extends StatelessWidget {
                         .colorScheme
                         .onInverseSurface
                         .withOpacity(0.4),
-                    offset: const Offset(4, -12), // 阴影与容器的距离
-                    blurRadius: 0.0, // 高斯的标准偏差与盒子的形状卷积。
-                    spreadRadius: 0.0, // 在应用模糊之前，框应该膨胀的量。
+                    offset: const Offset(4, -12),
+                    blurRadius: 0.0,
+                    spreadRadius: 0.0,
                   ),
                 ],
               ),

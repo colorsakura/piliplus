@@ -24,7 +24,6 @@ class FavDetailController
 
   @override
   void onInit() {
-    // item = Get.arguments;
     if (Get.parameters.keys.isNotEmpty) {
       mediaId = int.parse(Get.parameters['mediaId']!);
       heroTag = Get.parameters['heroTag']!;

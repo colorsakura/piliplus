@@ -70,7 +70,6 @@ class _DanmakuBlockPageState extends State<DanmakuBlockPage> {
             TextField(
               controller: textController,
               autofocus: true,
-              //decoration: InputDecoration(hintText: hintText),
             )
           ]),
           actions: <Widget>[

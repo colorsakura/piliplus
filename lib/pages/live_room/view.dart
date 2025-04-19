@@ -126,7 +126,6 @@ class _LiveRoomPageState extends State<LiveRoomPage>
     ScreenBrightness().resetApplicationScreenBrightness();
     PlPlayerController.setPlayCallBack(null);
     _liveRoomController.msgStream?.close();
-    // floating?.dispose();
     plPlayerController.removeStatusLister(playerListener);
     plPlayerController.dispose();
     super.dispose();
@@ -423,17 +422,14 @@ class _LiveRoomPageState extends State<LiveRoomPage>
                         ),
                       ),
                     ),
-                    //刷新
                     IconButton(
                       tooltip: '刷新',
                       onPressed: () {
                         _futureBuilderFuture =
                             _liveRoomController.queryLiveInfo();
-                        // videoSourceInit();
                       },
                       icon: const Icon(Icons.refresh),
                     ),
-                    //内置浏览器打开
                     IconButton(
                         tooltip: '浏览器打开',
                         onPressed: () {

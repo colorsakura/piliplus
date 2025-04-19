@@ -53,7 +53,6 @@ class _VideoIntroPanelState extends State<VideoIntroPanel>
     with AutomaticKeepAliveClientMixin {
   late VideoIntroController videoIntroController;
 
-  // 添加页面缓存
   @override
   bool get wantKeepAlive => true;
 
@@ -240,7 +239,6 @@ class _VideoInfoState extends State<VideoInfo> {
       return;
     }
     feedBack();
-    // widget.showIntroDetail();
     videoIntroController.expandableCtr?.toggle();
   }
 
@@ -255,16 +253,8 @@ class _VideoInfoState extends State<VideoInfo> {
           _horizontalMemberPage) {
         widget.onShowMemberPage(mid);
       } else {
-        // memberHeroTag = Utils.makeHeroTag(mid);
-        // String face = !loadingStatus
-        //     ? videoDetail.owner!.face
-        //     : videoItem['owner'].face;
         Get.toNamed(
           '/member?mid=$mid&from_view_aid=${videoDetailCtr.oid.value}',
-          // arguments: {
-          //   'face': face,
-          //   'heroTag': memberHeroTag,
-          // },
         );
       }
     }
@@ -272,7 +262,7 @@ class _VideoInfoState extends State<VideoInfo> {
 
   @override
   Widget build(BuildContext context) {
-    final ThemeData t = Theme.of(context);
+    final ThemeData themeData = Theme.of(context);
     return SliverLayoutBuilder(
       builder: (BuildContext context, SliverConstraints constraints) {
         bool isHorizontal = context.orientation == Orientation.landscape &&
@@ -296,298 +286,271 @@ class _VideoInfoState extends State<VideoInfo> {
                     onTap: () {},
                     child: Row(
                       children: [
-                        Expanded(
-                          child: videoItem['staff'] == null
-                              ? Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
+                        if (videoItem['staff'] == null) ...[
+                          Expanded(
+                            child: Align(
+                              alignment: Alignment.centerLeft,
+                              child: GestureDetector(
+                                onTap: onPushMember,
+                                behavior: HitTestBehavior.opaque,
+                                child: Row(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
-                                    GestureDetector(
-                                      onTap: onPushMember,
-                                      behavior: HitTestBehavior.opaque,
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        mainAxisSize: MainAxisSize.min,
+                                    Obx(
+                                      () => Stack(
+                                        clipBehavior: Clip.none,
                                         children: [
-                                          Obx(
-                                            () => Stack(
-                                              clipBehavior: Clip.none,
-                                              children: [
-                                                NetworkImgLayer(
-                                                  type: 'avatar',
-                                                  src: videoIntroController
-                                                              .userStat
+                                          NetworkImgLayer(
+                                            type: 'avatar',
+                                            src: videoIntroController.userStat
+                                                    .value['card']?['face'] ??
+                                                '',
+                                            width: 35,
+                                            height: 35,
+                                            fadeInDuration: Duration.zero,
+                                            fadeOutDuration: Duration.zero,
+                                          ),
+                                          if ((videoIntroController.userStat
                                                               .value['card']
-                                                          ?['face'] ??
-                                                      '',
-                                                  width: 35,
-                                                  height: 35,
-                                                  fadeInDuration: Duration.zero,
-                                                  fadeOutDuration:
-                                                      Duration.zero,
+                                                          ?['official_verify']
+                                                      ?['type'] ??
+                                                  -1) !=
+                                              -1)
+                                            Positioned(
+                                              right: -2,
+                                              bottom: -2,
+                                              child: Container(
+                                                decoration: BoxDecoration(
+                                                  shape: BoxShape.circle,
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .surface,
                                                 ),
-                                                if ((videoIntroController
-                                                                    .userStat
-                                                                    .value['card']
-                                                                ?[
-                                                                'official_verify']
-                                                            ?['type'] ??
-                                                        -1) !=
-                                                    -1)
-                                                  Positioned(
-                                                    right: -2,
-                                                    bottom: -2,
-                                                    child: Container(
-                                                      decoration: BoxDecoration(
-                                                        shape: BoxShape.circle,
-                                                        color: Theme.of(context)
-                                                            .colorScheme
-                                                            .surface,
-                                                      ),
-                                                      child: Icon(
-                                                        Icons.offline_bolt,
-                                                        color: videoIntroController
-                                                                            .userStat
-                                                                            .value['card']
-                                                                        ?[
-                                                                        'official_verify']
-                                                                    ?['type'] ==
-                                                                0
-                                                            ? Colors.yellow
-                                                            : Colors
-                                                                .lightBlueAccent,
-                                                        size: 14,
-                                                      ),
-                                                    ),
-                                                  ),
-                                              ],
+                                                child: Icon(
+                                                  Icons.offline_bolt,
+                                                  color: videoIntroController
+                                                                      .userStat
+                                                                      .value['card']
+                                                                  ?[
+                                                                  'official_verify']
+                                                              ?['type'] ==
+                                                          0
+                                                      ? Colors.yellow
+                                                      : Colors.lightBlueAccent,
+                                                  size: 14,
+                                                ),
+                                              ),
                                             ),
-                                          ),
-                                          const SizedBox(width: 10),
-                                          Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Obx(
-                                                () => Text(
-                                                  videoIntroController.userStat
-                                                              .value['card']
-                                                          ?['name'] ??
-                                                      "",
-                                                  maxLines: 1,
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                  style: TextStyle(
-                                                    fontSize: 13,
-                                                    color: (videoIntroController
-                                                                            .userStat
-                                                                            .value['card']?['vip']
-                                                                        ?[
-                                                                        'status'] ??
-                                                                    -1) >
-                                                                0 &&
-                                                            videoIntroController
-                                                                        .userStat
-                                                                        .value['card']
-                                                                    ?[
-                                                                    'vip']?['type'] ==
-                                                                2
-                                                        ? context.vipColor
-                                                        : null,
-                                                  ),
-                                                ),
-                                              ),
-                                              const SizedBox(height: 0),
-                                              Obx(
-                                                () => Text(
-                                                  '${Utils.numFormat(videoIntroController.userStat.value['follower'])}粉丝    ${videoIntroController.userStat.value['archive_count'] != null ? '${Utils.numFormat(videoIntroController.userStat.value['archive_count'])}视频' : ''}',
-                                                  style: TextStyle(
-                                                    fontSize: 12,
-                                                    color:
-                                                        t.colorScheme.outline,
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
                                         ],
                                       ),
                                     ),
-                                    const Spacer(),
-                                    followButton(context, t),
-                                  ],
-                                )
-                              : SelfSizedHorizontalList(
-                                  gapSize: 25,
-                                  itemCount: videoItem['staff'].length,
-                                  childBuilder: (index) => GestureDetector(
-                                    behavior: HitTestBehavior.opaque,
-                                    onTap: () {
-                                      int? ownerMid = !widget.loadingStatus
-                                          ? videoDetail.owner?.mid
-                                          : videoItem['owner']?.mid;
-                                      if (videoItem['staff'][index].mid ==
-                                              ownerMid &&
-                                          context.orientation ==
-                                              Orientation.landscape &&
-                                          _horizontalMemberPage) {
-                                        widget.onShowMemberPage(ownerMid);
-                                      } else {
-                                        Get.toNamed(
-                                          '/member?mid=${videoItem['staff'][index].mid}&from_view_aid=${videoDetailCtr.oid.value}',
-                                          // arguments: {
-                                          // 'face':
-                                          //     videoItem['staff'][index].face,
-                                          // 'heroTag': Utils.makeHeroTag(
-                                          //     videoItem['staff'][index].mid),
-                                          // },
-                                        );
-                                      }
-                                    },
-                                    child: Row(
+                                    const SizedBox(width: 10),
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
-                                        Stack(
-                                          clipBehavior: Clip.none,
-                                          children: [
-                                            NetworkImgLayer(
-                                              type: 'avatar',
-                                              src: videoItem['staff'][index]
-                                                  .face,
-                                              width: 35,
-                                              height: 35,
-                                              fadeInDuration: Duration.zero,
-                                              fadeOutDuration: Duration.zero,
-                                            ),
-                                            if ((videoItem['staff'][index]
-                                                        .official?['type'] ??
-                                                    -1) !=
-                                                -1)
-                                              Positioned(
-                                                right: -2,
-                                                bottom: -2,
-                                                child: Container(
-                                                  decoration: BoxDecoration(
-                                                    shape: BoxShape.circle,
-                                                    color: Theme.of(context)
-                                                        .colorScheme
-                                                        .surface,
-                                                  ),
-                                                  child: Icon(
-                                                    Icons.offline_bolt,
-                                                    color: videoItem['staff']
-                                                                        [index]
-                                                                    .official?[
-                                                                'type'] ==
-                                                            0
-                                                        ? Colors.yellow
-                                                        : Colors
-                                                            .lightBlueAccent,
-                                                    size: 14,
-                                                  ),
-                                                ),
-                                              ),
-                                            Positioned(
-                                              top: 0,
-                                              right: -6,
-                                              child: Obx(() => videoIntroController
-                                                                  .staffRelations[
-                                                              'status'] ==
-                                                          true &&
+                                        Obx(
+                                          () => Text(
+                                            videoIntroController.userStat
+                                                    .value['card']?['name'] ??
+                                                "",
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: TextStyle(
+                                              fontSize: 13,
+                                              color: (videoIntroController.userStat
+                                                                          .value[
+                                                                      'card']?['vip']
+                                                                  ?['status'] ??
+                                                              -1) >
+                                                          0 &&
                                                       videoIntroController
-                                                                  .staffRelations[
-                                                              '${videoItem['staff'][index].mid}'] ==
-                                                          null
-                                                  ? Material(
-                                                      color: Colors.transparent,
-                                                      child: InkWell(
-                                                        customBorder:
-                                                            const CircleBorder(),
-                                                        onTap: () {
-                                                          RequestUtils
-                                                              .actionRelationMod(
-                                                            context: context,
-                                                            mid: videoItem[
-                                                                        'staff']
-                                                                    [index]
-                                                                .mid,
-                                                            isFollow: false,
-                                                            callback: (val) {
-                                                              videoIntroController
-                                                                      .staffRelations[
-                                                                  '${videoItem['staff'][index].mid}'] = true;
-                                                            },
-                                                          );
-                                                        },
-                                                        child: Ink(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .all(2),
-                                                          decoration:
-                                                              BoxDecoration(
-                                                            color: Theme.of(
-                                                                    context)
-                                                                .colorScheme
-                                                                .secondaryContainer,
-                                                            shape:
-                                                                BoxShape.circle,
-                                                          ),
-                                                          child: Icon(
-                                                            MdiIcons.plus,
-                                                            size: 16,
-                                                            color: Theme.of(
-                                                                    context)
-                                                                .colorScheme
-                                                                .onSecondaryContainer,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    )
-                                                  : const SizedBox.shrink()),
+                                                                  .userStat
+                                                                  .value['card']
+                                                              ?[
+                                                              'vip']?['type'] ==
+                                                          2
+                                                  ? context.vipColor
+                                                  : null,
                                             ),
-                                          ],
+                                          ),
                                         ),
-                                        const SizedBox(width: 8),
-                                        Column(
-                                          mainAxisSize: MainAxisSize.min,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              videoItem['staff'][index].name,
-                                              maxLines: 1,
-                                              overflow: TextOverflow.ellipsis,
-                                              style: TextStyle(
-                                                fontSize: 13,
-                                                color: videoItem['staff'][index]
-                                                                .vip
-                                                                .status >
-                                                            0 &&
-                                                        videoItem['staff']
-                                                                    [index]
-                                                                .vip
-                                                                .type ==
-                                                            2
-                                                    ? context.vipColor
-                                                    : null,
-                                              ),
+                                        const SizedBox(height: 0),
+                                        Obx(
+                                          () => Text(
+                                            '${Utils.numFormat(videoIntroController.userStat.value['follower'])}粉丝    ${videoIntroController.userStat.value['archive_count'] != null ? '${Utils.numFormat(videoIntroController.userStat.value['archive_count'])}视频' : ''}',
+                                            style: TextStyle(
+                                              fontSize: 12,
+                                              color:
+                                                  themeData.colorScheme.outline,
                                             ),
-                                            Text(
-                                              videoItem['staff'][index].title,
-                                              style: TextStyle(
-                                                fontSize: 12,
-                                                color: Theme.of(context)
-                                                    .colorScheme
-                                                    .outline,
-                                              ),
-                                            ),
-                                          ],
+                                          ),
                                         ),
                                       ],
                                     ),
-                                  ),
+                                  ],
                                 ),
-                        ),
+                              ),
+                            ),
+                          ),
+                          followButton(context, themeData),
+                        ] else
+                          Expanded(
+                            child: SelfSizedHorizontalList(
+                              gapSize: 25,
+                              itemCount: videoItem['staff'].length,
+                              childBuilder: (index) => GestureDetector(
+                                behavior: HitTestBehavior.opaque,
+                                onTap: () {
+                                  int? ownerMid = !widget.loadingStatus
+                                      ? videoDetail.owner?.mid
+                                      : videoItem['owner']?.mid;
+                                  if (videoItem['staff'][index].mid ==
+                                          ownerMid &&
+                                      context.orientation ==
+                                          Orientation.landscape &&
+                                      _horizontalMemberPage) {
+                                    widget.onShowMemberPage(ownerMid);
+                                  } else {
+                                    Get.toNamed(
+                                      '/member?mid=${videoItem['staff'][index].mid}&from_view_aid=${videoDetailCtr.oid.value}',
+                                    );
+                                  }
+                                },
+                                child: Row(
+                                  children: [
+                                    Stack(
+                                      clipBehavior: Clip.none,
+                                      children: [
+                                        NetworkImgLayer(
+                                          type: 'avatar',
+                                          src: videoItem['staff'][index].face,
+                                          width: 35,
+                                          height: 35,
+                                          fadeInDuration: Duration.zero,
+                                          fadeOutDuration: Duration.zero,
+                                        ),
+                                        if ((videoItem['staff'][index]
+                                                    .official?['type'] ??
+                                                -1) !=
+                                            -1)
+                                          Positioned(
+                                            right: -2,
+                                            bottom: -2,
+                                            child: Container(
+                                              decoration: BoxDecoration(
+                                                shape: BoxShape.circle,
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .surface,
+                                              ),
+                                              child: Icon(
+                                                Icons.offline_bolt,
+                                                color: videoItem['staff'][index]
+                                                                .official?[
+                                                            'type'] ==
+                                                        0
+                                                    ? Colors.yellow
+                                                    : Colors.lightBlueAccent,
+                                                size: 14,
+                                              ),
+                                            ),
+                                          ),
+                                        Positioned(
+                                          top: 0,
+                                          right: -6,
+                                          child: Obx(() => videoIntroController
+                                                              .staffRelations[
+                                                          'status'] ==
+                                                      true &&
+                                                  videoIntroController
+                                                              .staffRelations[
+                                                          '${videoItem['staff'][index].mid}'] ==
+                                                      null
+                                              ? Material(
+                                                  color: Colors.transparent,
+                                                  child: InkWell(
+                                                    customBorder:
+                                                        const CircleBorder(),
+                                                    onTap: () {
+                                                      RequestUtils
+                                                          .actionRelationMod(
+                                                        context: context,
+                                                        mid: videoItem['staff']
+                                                                [index]
+                                                            .mid,
+                                                        isFollow: false,
+                                                        callback: (val) {
+                                                          videoIntroController
+                                                                  .staffRelations[
+                                                              '${videoItem['staff'][index].mid}'] = true;
+                                                        },
+                                                      );
+                                                    },
+                                                    child: Ink(
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              2),
+                                                      decoration: BoxDecoration(
+                                                        color: Theme.of(context)
+                                                            .colorScheme
+                                                            .secondaryContainer,
+                                                        shape: BoxShape.circle,
+                                                      ),
+                                                      child: Icon(
+                                                        MdiIcons.plus,
+                                                        size: 16,
+                                                        color: Theme.of(context)
+                                                            .colorScheme
+                                                            .onSecondaryContainer,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                )
+                                              : const SizedBox.shrink()),
+                                        ),
+                                      ],
+                                    ),
+                                    const SizedBox(width: 8),
+                                    Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          videoItem['staff'][index].name,
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: TextStyle(
+                                            fontSize: 13,
+                                            color: videoItem['staff'][index]
+                                                            .vip
+                                                            .status >
+                                                        0 &&
+                                                    videoItem['staff'][index]
+                                                            .vip
+                                                            .type ==
+                                                        2
+                                                ? context.vipColor
+                                                : null,
+                                          ),
+                                        ),
+                                        Text(
+                                          videoItem['staff'][index].title,
+                                          style: TextStyle(
+                                            fontSize: 12,
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .outline,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
                         if (isHorizontal) ...[
                           const SizedBox(width: 10),
                           Expanded(
@@ -634,7 +597,7 @@ class _VideoInfoState extends State<VideoInfo> {
                             value: Utils.numFormat(!widget.loadingStatus
                                 ? videoDetail.stat?.view ?? '-'
                                 : videoItem['stat']?.view ?? '-'),
-                            textColor: t.colorScheme.outline,
+                            textColor: themeData.colorScheme.outline,
                           ),
                           const SizedBox(width: 10),
                           StatDanMu(
@@ -643,7 +606,7 @@ class _VideoInfoState extends State<VideoInfo> {
                             value: Utils.numFormat(!widget.loadingStatus
                                 ? videoDetail.stat?.danmaku ?? '-'
                                 : videoItem['stat']?.danmu ?? '-'),
-                            textColor: t.colorScheme.outline,
+                            textColor: themeData.colorScheme.outline,
                           ),
                           const SizedBox(width: 10),
                           Text(
@@ -654,7 +617,7 @@ class _VideoInfoState extends State<VideoInfo> {
                                 formatType: 'detail'),
                             style: TextStyle(
                               fontSize: 12,
-                              color: t.colorScheme.outline,
+                              color: themeData.colorScheme.outline,
                             ),
                           ),
                           if (MineController.anonymity.value) ...<Widget>[
@@ -662,7 +625,7 @@ class _VideoInfoState extends State<VideoInfo> {
                             Icon(
                               MdiIcons.incognito,
                               size: 15,
-                              color: t.colorScheme.outline,
+                              color: themeData.colorScheme.outline,
                               semanticLabel: '无痕',
                             ),
                           ],
@@ -673,7 +636,7 @@ class _VideoInfoState extends State<VideoInfo> {
                                 '${videoIntroController.total.value}人在看',
                                 style: TextStyle(
                                   fontSize: 12,
-                                  color: t.colorScheme.outline,
+                                  color: themeData.colorScheme.outline,
                                 ),
                               ),
                             ),
@@ -767,7 +730,6 @@ class _VideoInfoState extends State<VideoInfo> {
                           SelectableText.rich(
                             style: const TextStyle(
                               height: 1.4,
-                              // fontSize: 13,
                             ),
                             TextSpan(
                               children: [
@@ -829,16 +791,6 @@ class _VideoInfoState extends State<VideoInfo> {
                                 ),
                               ),
                   ),
-                  // 点赞收藏转发 布局样式1
-                  // SingleChildScrollView(
-                  //   padding: const EdgeInsets.only(top: 7, bottom: 7),
-                  //   scrollDirection: Axis.horizontal,
-                  //   child: actionRow(
-                  //     context,
-                  //     videoIntroController,
-                  //     videoDetailCtr,
-                  //   ),
-                  // ),
                   // 点赞收藏转发 布局样式2
                   if (!isHorizontal) ...[
                     const SizedBox(height: 8),
@@ -917,112 +869,108 @@ class _VideoInfoState extends State<VideoInfo> {
 
   Widget actionGrid(
       BuildContext context, VideoIntroController videoIntroController) {
-    return LayoutBuilder(
-        builder: (BuildContext context, BoxConstraints constraints) {
-      return Container(
-        margin: const EdgeInsets.only(top: 1),
-        height: 48,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: <Widget>[
-            Obx(
-              () => ActionItem(
-                icon: const Icon(FontAwesomeIcons.thumbsUp),
-                selectIcon: const Icon(FontAwesomeIcons.solidThumbsUp),
-                onTap: () => handleState(videoIntroController.actionLikeVideo),
-                onLongPress: () =>
-                    handleState(videoIntroController.actionOneThree),
-                selectStatus: videoIntroController.hasLike.value,
-                loadingStatus: widget.loadingStatus,
-                semanticsLabel: '点赞',
-                text: !widget.loadingStatus
-                    ? Utils.numFormat(videoDetail.stat!.like!)
-                    : '-',
-                needAnim: true,
-                hasTriple: videoIntroController.hasLike.value &&
-                    videoIntroController.hasCoin &&
-                    videoIntroController.hasFav.value,
-                callBack: (start) {
-                  if (start) {
-                    HapticFeedback.lightImpact();
-                    _coinKey.currentState?.controller?.forward();
-                    _favKey.currentState?.controller?.forward();
-                  } else {
-                    _coinKey.currentState?.controller?.reverse();
-                    _favKey.currentState?.controller?.reverse();
-                  }
-                },
-              ),
-            ),
-            Obx(
-              () => ActionItem(
-                icon: const Icon(FontAwesomeIcons.thumbsDown),
-                selectIcon: const Icon(FontAwesomeIcons.solidThumbsDown),
-                onTap: () =>
-                    handleState(videoIntroController.actionDislikeVideo),
-                selectStatus: videoIntroController.hasDislike.value,
-                loadingStatus: widget.loadingStatus,
-                semanticsLabel: '点踩',
-                text: "点踩",
-              ),
-            ),
-            Obx(
-              () => ActionItem(
-                key: _coinKey,
-                icon: const Icon(FontAwesomeIcons.b),
-                selectIcon: const Icon(FontAwesomeIcons.b),
-                onTap: () => handleState(videoIntroController.actionCoinVideo),
-                selectStatus: videoIntroController.hasCoin,
-                loadingStatus: widget.loadingStatus,
-                semanticsLabel: '投币',
-                text: !widget.loadingStatus
-                    ? Utils.numFormat(videoDetail.stat!.coin!)
-                    : '-',
-                needAnim: true,
-              ),
-            ),
-            Obx(
-              () => ActionItem(
-                key: _favKey,
-                icon: const Icon(FontAwesomeIcons.star),
-                selectIcon: const Icon(FontAwesomeIcons.solidStar),
-                onTap: () => videoIntroController.showFavBottomSheet(context),
-                onLongPress: () => videoIntroController
-                    .showFavBottomSheet(context, type: 'longPress'),
-                selectStatus: videoIntroController.hasFav.value,
-                loadingStatus: widget.loadingStatus,
-                semanticsLabel: '收藏',
-                text: !widget.loadingStatus
-                    ? Utils.numFormat(videoDetail.stat!.favorite!)
-                    : '-',
-                needAnim: true,
-              ),
-            ),
-            Obx(
-              () => ActionItem(
-                icon: const Icon(FontAwesomeIcons.clock),
-                selectIcon: const Icon(FontAwesomeIcons.solidClock),
-                onTap: () => handleState(videoIntroController.viewLater),
-                selectStatus: videoIntroController.hasLater.value,
-                loadingStatus: widget.loadingStatus,
-                semanticsLabel: '再看',
-                text: '再看',
-              ),
-            ),
-            ActionItem(
-              icon: const Icon(FontAwesomeIcons.shareFromSquare),
-              onTap: () => videoIntroController.actionShareVideo(context),
-              selectStatus: false,
+    return Container(
+      margin: const EdgeInsets.only(top: 1),
+      height: 48,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          Obx(
+            () => ActionItem(
+              icon: const Icon(FontAwesomeIcons.thumbsUp),
+              selectIcon: const Icon(FontAwesomeIcons.solidThumbsUp),
+              onTap: () => handleState(videoIntroController.actionLikeVideo),
+              onLongPress: () =>
+                  handleState(videoIntroController.actionOneThree),
+              selectStatus: videoIntroController.hasLike.value,
               loadingStatus: widget.loadingStatus,
-              semanticsLabel: '分享',
+              semanticsLabel: '点赞',
               text: !widget.loadingStatus
-                  ? Utils.numFormat(videoDetail.stat!.share!)
-                  : '分享',
+                  ? Utils.numFormat(videoDetail.stat!.like!)
+                  : '-',
+              needAnim: true,
+              hasTriple: videoIntroController.hasLike.value &&
+                  videoIntroController.hasCoin &&
+                  videoIntroController.hasFav.value,
+              callBack: (start) {
+                if (start) {
+                  HapticFeedback.lightImpact();
+                  _coinKey.currentState?.controller?.forward();
+                  _favKey.currentState?.controller?.forward();
+                } else {
+                  _coinKey.currentState?.controller?.reverse();
+                  _favKey.currentState?.controller?.reverse();
+                }
+              },
             ),
-          ],
-        ),
-      );
-    });
+          ),
+          Obx(
+            () => ActionItem(
+              icon: const Icon(FontAwesomeIcons.thumbsDown),
+              selectIcon: const Icon(FontAwesomeIcons.solidThumbsDown),
+              onTap: () => handleState(videoIntroController.actionDislikeVideo),
+              selectStatus: videoIntroController.hasDislike.value,
+              loadingStatus: widget.loadingStatus,
+              semanticsLabel: '点踩',
+              text: "点踩",
+            ),
+          ),
+          Obx(
+            () => ActionItem(
+              key: _coinKey,
+              icon: const Icon(FontAwesomeIcons.b),
+              selectIcon: const Icon(FontAwesomeIcons.b),
+              onTap: () => handleState(videoIntroController.actionCoinVideo),
+              selectStatus: videoIntroController.hasCoin,
+              loadingStatus: widget.loadingStatus,
+              semanticsLabel: '投币',
+              text: !widget.loadingStatus
+                  ? Utils.numFormat(videoDetail.stat!.coin!)
+                  : '-',
+              needAnim: true,
+            ),
+          ),
+          Obx(
+            () => ActionItem(
+              key: _favKey,
+              icon: const Icon(FontAwesomeIcons.star),
+              selectIcon: const Icon(FontAwesomeIcons.solidStar),
+              onTap: () => videoIntroController.showFavBottomSheet(context),
+              onLongPress: () => videoIntroController
+                  .showFavBottomSheet(context, type: 'longPress'),
+              selectStatus: videoIntroController.hasFav.value,
+              loadingStatus: widget.loadingStatus,
+              semanticsLabel: '收藏',
+              text: !widget.loadingStatus
+                  ? Utils.numFormat(videoDetail.stat!.favorite!)
+                  : '-',
+              needAnim: true,
+            ),
+          ),
+          Obx(
+            () => ActionItem(
+              icon: const Icon(FontAwesomeIcons.clock),
+              selectIcon: const Icon(FontAwesomeIcons.solidClock),
+              onTap: () => handleState(videoIntroController.viewLater),
+              selectStatus: videoIntroController.hasLater.value,
+              loadingStatus: widget.loadingStatus,
+              semanticsLabel: '再看',
+              text: '再看',
+            ),
+          ),
+          ActionItem(
+            icon: const Icon(FontAwesomeIcons.shareFromSquare),
+            onTap: () => videoIntroController.actionShareVideo(context),
+            selectStatus: false,
+            loadingStatus: widget.loadingStatus,
+            semanticsLabel: '分享',
+            text: !widget.loadingStatus
+                ? Utils.numFormat(videoDetail.stat!.share!)
+                : '分享',
+          ),
+        ],
+      ),
+    );
   }
 
   Widget actionRow(
@@ -1078,14 +1026,12 @@ class _VideoInfoState extends State<VideoInfo> {
       ),
       const SizedBox(width: 8),
       ActionRowItem(
-          icon: const Icon(FontAwesomeIcons.share),
-          onTap: () => videoIntroController.actionShareVideo(context),
-          selectStatus: false,
-          loadingStatus: widget.loadingStatus,
-          // text: !loadingStatus
-          //     ? videoDetail.stat!.share!.toString()
-          //     : '-',
-          text: '转发'),
+        icon: const Icon(FontAwesomeIcons.share),
+        onTap: () => videoIntroController.actionShareVideo(context),
+        selectStatus: false,
+        loadingStatus: widget.loadingStatus,
+        text: '转发',
+      ),
     ]);
   }
 
@@ -1110,7 +1056,6 @@ class _VideoInfoState extends State<VideoInfo> {
               String matchStr = match[0]!;
               if (RegExp(r'^av\d+$', caseSensitive: false).hasMatch(matchStr)) {
                 try {
-                  // validate
                   int aid = int.parse(matchStr.substring(2));
                   IdUtils.av2bv(aid);
                   spanChildren.add(
@@ -1130,7 +1075,6 @@ class _VideoInfoState extends State<VideoInfo> {
               } else if (RegExp(r'^bv[a-z\d]{10}$', caseSensitive: false)
                   .hasMatch(matchStr)) {
                 try {
-                  // validate
                   IdUtils.bv2av(matchStr);
                   spanChildren.add(
                     TextSpan(

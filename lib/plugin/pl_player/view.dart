@@ -1645,7 +1645,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
             ),
           ),
         ),
-        //
+
         Obx(() {
           if (plPlayerController.dataStatus.loading ||
               plPlayerController.isBuffering.value) {
@@ -1888,14 +1888,6 @@ Widget buildSeekPreviewWidget(PlPlayerController plPlayerController) {
               padding: EdgeInsets.only(left: left),
               child: UnconstrainedBox(
                 child: ClipRRect(
-                  // clipBehavior: Clip.antiAlias,
-                  // decoration: BoxDecoration(
-                  //   border: Border.all(
-                  //     color: Colors.white,
-                  //     strokeAlign: BorderSide.strokeAlignOutside,
-                  //   ),
-                  //   borderRadius: BorderRadius.circular(scale == 2.5 ? 6 : 10),
-                  // ),
                   borderRadius: BorderRadius.circular(scale == 2.5 ? 6 : 10),
                   child: Align(
                     widthFactor: 0.1,

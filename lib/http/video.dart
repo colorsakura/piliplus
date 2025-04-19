@@ -24,9 +24,6 @@ import 'api.dart';
 import 'init.dart';
 import 'login.dart';
 
-/// res.data['code'] == 0 请求正常返回结果
-/// res.data['data'] 为结果
-/// 返回{'status': bool, 'data': List}
 /// view层根据 status 判断渲染逻辑
 class VideoHttp {
   static bool enableRcmdDynamic =
@@ -374,28 +371,6 @@ class VideoHttp {
     }
   }
 
-  // 获取点赞状态
-  // static Future hasLikeVideo({required String bvid}) async {
-  //   var res =
-  //       await Request().get(Api.hasLikeVideo, queryParameters: {'bvid': bvid});
-  //   if (res.data['code'] == 0) {
-  //     return {'status': true, 'data': res.data['data']};
-  //   } else {
-  //     return {'status': false, 'msg': res.data['message']};
-  //   }
-  // }
-
-  // 获取投币状态
-  // static Future hasCoinVideo({required String bvid}) async {
-  //   var res =
-  //       await Request().get(Api.hasCoinVideo, queryParameters: {'bvid': bvid});
-  //   if (res.data['code'] == 0) {
-  //     return {'status': true, 'data': res.data['data']};
-  //   } else {
-  //     return {'status': false, 'msg': res.data['message']};
-  //   }
-  // }
-
   // 投币
   static Future coinVideo({
     required String bvid,
@@ -419,17 +394,6 @@ class VideoHttp {
       return {'status': false, 'msg': res.data['message']};
     }
   }
-
-  // 获取收藏状态
-  // static Future hasFavVideo({required int aid}) async {
-  //   var res =
-  //       await Request().get(Api.hasFavVideo, queryParameters: {'aid': aid});
-  //   if (res.data['code'] == 0) {
-  //     return {'status': true, 'data': res.data['data']};
-  //   } else {
-  //     return {'status': false, 'msg': res.data['message']};
-  //   }
-  // }
 
   // 一键三连 bangumi
   static Future triple({dynamic epId, required dynamic seasonId}) async {
@@ -492,11 +456,6 @@ class VideoHttp {
         'like': type ? '0' : '1',
       },
       options: Options(contentType: Headers.formUrlEncodedContentType),
-      // queryParameters: {
-      //   'bvid': bvid,
-      //   'like': type ? 1 : 2,
-      //   'csrf': Accounts.main.csrf,
-      // },
     );
     if (res.data['code'] == 0) {
       return {'status': true, 'data': res.data['data']};
@@ -541,7 +500,6 @@ class VideoHttp {
     var res = await Request().get(Api.feedDislike, queryParameters: {
       'goto': goto,
       'id': id,
-      // 'mid': mid,
       if (reasonId != null) 'reason_id': reasonId,
       if (feedbackId != null) 'feedback_id': feedbackId,
       'build': '1',
@@ -563,11 +521,9 @@ class VideoHttp {
     if (Accounts.get(AccountType.recommend).accessKey.isNullOrEmpty) {
       return {'status': false, 'msg': "请退出账号后重新登录"};
     }
-    // assert ((reasonId != null) ^ (feedbackId != null));
     var res = await Request().get(Api.feedDislikeCancel, queryParameters: {
       'goto': goto,
       'id': id,
-      // 'mid': mid,
       if (reasonId != null) 'reason_id': reasonId,
       if (feedbackId != null) 'feedback_id': feedbackId,
       'build': '1',
@@ -626,33 +582,6 @@ class VideoHttp {
       return {'status': false, 'msg': res.data['message']};
     }
   }
-
-  // （取消）收藏 bangumi
-  // static Future favBangumi({
-  //   required dynamic epId,
-  //   String? addIds,
-  //   String? delIds,
-  // }) async {
-  //   var res = await Request().post(
-  //     Api.favBangumi,
-  //     data: {
-  //       'resources': '$epId:24',
-  //       'add_media_ids': addIds ?? '',
-  //       'del_media_ids': delIds ?? '',
-  //       'csrf': Accounts.main.csrf,
-  //     },
-  //     options: Options(
-  //       headers: {
-  //         'Content-Type': Headers.formUrlEncodedContentType,
-  //       },
-  //     ),
-  //   );
-  //   if (res.data['code'] == 0) {
-  //     return {'status': true, 'data': res.data['data']};
-  //   } else {
-  //     return {'status': false, 'msg': res.data['message']};
-  //   }
-  // }
 
   static Future copyOrMoveFav({
     required bool isCopy,
@@ -853,7 +782,6 @@ class VideoHttp {
     subType,
   }) async {
     await Request().post(Api.heartBeat, queryParameters: {
-      // 'aid': aid,
       'bvid': bvid,
       'cid': cid,
       if (epid != null) 'epid': epid,
@@ -989,26 +917,10 @@ class VideoHttp {
     );
     if (res.data['code'] == 0) {
       dynamic data = res.data['data'];
-      /*
-      [
-        {
-          "id": 1430455228267894300,
-          "lan": "ai-zh",
-          "lan_doc": "中文（自动生成）",
-          "is_lock": false,
-          "subtitle_url": "//aisubtitle.hdslb.com/bfs/ai_subtitle/prod/15508958271448462983dacf99a49f40ccdf91a4df8d925e2b58?auth_key=1708941835-aaa0e44844594386ad356795733983a2-0-89af73c6aad5a1fca43b02113fa9d485",
-          "type": 1,
-          "id_str": "1430455228267894272",
-          "ai_type": 0,
-          "ai_status": 2
-        }
-      ]
-       */
       return {
         'status': true,
         'subtitles': data['subtitle']['subtitles'],
         'view_points': data['view_points'],
-        // 'last_play_time': data['last_play_time'],
         'last_play_cid': data['last_play_cid'],
         'interaction': data['interaction'],
       };

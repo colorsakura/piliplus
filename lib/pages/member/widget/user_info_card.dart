@@ -135,44 +135,19 @@ class UserInfoCard extends StatelessWidget {
                 ),
                 if (card.vip?.vipStatus == 1) ...[
                   const SizedBox(width: 8),
-                  Image.network(
-                    card.vip!.label!.image!.http2https,
+                  CachedNetworkImage(
+                    imageUrl: Utils.thumbnailImgUrl(
+                        card.vip!.label!.image!.http2https),
                     height: 20,
                   ),
                 ],
                 if (card.nameplate?.image?.isNotEmpty == true) ...[
                   const SizedBox(width: 8),
-                  Image.network(
-                    card.nameplate!.image!.http2https,
+                  CachedNetworkImage(
+                    imageUrl: Utils.thumbnailImgUrl(card.nameplate!.image!),
                     height: 20,
                   ),
                 ],
-                // GestureDetector(
-                //   onTap: () {
-                //     Utils.copyText(card.mid.toString());
-                //   },
-                //   child: Container(
-                //     padding:
-                //         const EdgeInsets.symmetric(horizontal: 8, vertical: 2.5),
-                //     decoration: BoxDecoration(
-                //       color: Theme.of(context).colorScheme.secondaryContainer,
-                //       borderRadius: const BorderRadius.all(Radius.circular(12)),
-                //     ),
-                //     child: Text(
-                //       'uid: ${card.mid}',
-                //       style: TextStyle(
-                //         height: 1,
-                //         fontSize: 12,
-                //         color: Theme.of(context).colorScheme.onSecondaryContainer,
-                //       ),
-                //       strutStyle: const StrutStyle(
-                //         height: 1,
-                //         leading: 0,
-                //         fontSize: 12,
-                //       ),
-                //     ),
-                //   ),
-                // ),
               ],
             ),
           ),

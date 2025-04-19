@@ -34,14 +34,15 @@ class MediaController
     {
       'icon': Icons.create_outlined,
       'title': '创作中心',
-      'onTap': () => Get.toNamed('/webview', parameters: {
-            'url': 'https://member.bilibili.com/platform/home',
-            'type': 'url',
-            'pageTitle': "创作中心（建议浏览器打开）",
-          }),
+      'onTap': () => Get.toNamed(
+            '/webview',
+            parameters: {
+              'url': 'https://member.bilibili.com/platform/home',
+            },
+          ),
     },
   ];
-  dynamic mid;
+  int? mid;
   RxInt count = (-1).obs;
 
   @override

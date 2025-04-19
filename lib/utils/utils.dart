@@ -147,14 +147,6 @@ class Utils {
     return base64Encoded;
   }
 
-  // static String genRandomString(int length) {
-  //   const characters = '0123456789abcdefghijklmnopqrstuvwxyz';
-  //   Random random = Random();
-  //   return List.generate(
-  //           length, (index) => characters[random.nextInt(characters.length)])
-  //       .join();
-  // }
-
   static String genTraceId() {
     String randomId = generateRandomString(32);
 

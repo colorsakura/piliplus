@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:PiliPlus/build_config.dart';
+import 'package:PiliPlus/common/widgets/dialog.dart';
 import 'package:PiliPlus/services/loggeer.dart';
 import 'package:PiliPlus/utils/accounts/account.dart';
 import 'package:PiliPlus/utils/login_utils.dart';
@@ -12,7 +13,6 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:PiliPlus/models/github/latest.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import '../../utils/cache_manage.dart';
@@ -28,10 +28,10 @@ class AboutPage extends StatefulWidget {
 }
 
 class _AboutPageState extends State<AboutPage> {
-  final AboutController _aboutController = Get.put(AboutController());
   final String _sourceCodeUrl = 'https://github.com/bggRGjQaUbCoE/PiliPlus';
-  final String _originSourceCodeUrl = 'https://github.com/guozhigq/pilipala';
-  final String _upstreamUrl = 'https://github.com/orz12/PiliPalaX';
+
+  RxString currentVersion = ''.obs;
+  RxString cacheSize = ''.obs;
 
   late int _pressCount = 0;
 
@@ -39,23 +39,28 @@ class _AboutPageState extends State<AboutPage> {
   late TextStyle subTitleStyle;
 
   @override
+  void initState() {
+    super.initState();
+    getCacheSize();
+    getCurrentApp();
+  }
+
+  Future getCacheSize() async {
+    cacheSize.value = await CacheManage().loadApplicationCache();
+  }
+
+  Future getCurrentApp() async {
+    var currentInfo = await PackageInfo.fromPlatform();
+    String buildNumber = currentInfo.buildNumber;
+    currentVersion.value = "${currentInfo.version}+$buildNumber";
+  }
+
+  @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     outline = Theme.of(context).colorScheme.outline;
     subTitleStyle =
         TextStyle(fontSize: 13, color: Theme.of(context).colorScheme.outline);
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    // 读取缓存占用
-    getCacheSize();
-  }
-
-  Future<void> getCacheSize() async {
-    final res = await CacheManage().loadApplicationCache();
-    _aboutController.cacheSize.value = res;
   }
 
   @override
@@ -123,12 +128,11 @@ class _AboutPageState extends State<AboutPage> {
           Obx(
             () => ListTile(
               onTap: () => Utils.checkUpdate(false),
-              onLongPress: () =>
-                  Utils.copyText(_aboutController.currentVersion.value),
+              onLongPress: () => Utils.copyText(currentVersion.value),
               title: const Text('当前版本'),
               leading: const Icon(Icons.commit_outlined),
               trailing: Text(
-                _aboutController.currentVersion.value,
+                currentVersion.value,
                 style: subTitleStyle,
               ),
             ),
@@ -156,24 +160,6 @@ Commit Hash: ${BuildConfig.commitHash}''',
             title: const Text('Source Code'),
             subtitle: Text(_sourceCodeUrl, style: subTitleStyle),
           ),
-          ListTile(
-            onTap: () => PageUtils.launchURL(_originSourceCodeUrl),
-            leading: const Icon(Icons.code),
-            title: const Text('Origin'),
-            subtitle: Text(
-              _originSourceCodeUrl,
-              style: subTitleStyle,
-            ),
-          ),
-          ListTile(
-            onTap: () => PageUtils.launchURL(_upstreamUrl),
-            leading: const Icon(Icons.code),
-            title: const Text('Upstream'),
-            subtitle: Text(
-              _upstreamUrl,
-              style: subTitleStyle,
-            ),
-          ),
           if (Platform.isAndroid)
             ListTile(
               onTap: () {
@@ -189,22 +175,7 @@ Commit Hash: ${BuildConfig.commitHash}''',
             ),
           ListTile(
             onTap: () {
-              showDialog(
-                context: context,
-                builder: (context) {
-                  return SimpleDialog(
-                    clipBehavior: Clip.hardEdge,
-                    title: const Text('问题反馈'),
-                    children: [
-                      ListTile(
-                        title: const Text('GitHub Issue'),
-                        onTap: () =>
-                            PageUtils.launchURL('$_sourceCodeUrl/issues'),
-                      ),
-                    ],
-                  );
-                },
-              );
+              PageUtils.launchURL('$_sourceCodeUrl/issues');
             },
             leading: const Icon(Icons.feedback_outlined),
             title: const Text('问题反馈'),
@@ -225,15 +196,30 @@ Commit Hash: ${BuildConfig.commitHash}''',
             trailing: Icon(Icons.arrow_forward, size: 16, color: outline),
           ),
           ListTile(
-            onTap: () async {
-              await CacheManage().clearCacheAll(context);
-              getCacheSize();
+            onTap: () {
+              showConfirmDialog(
+                context: context,
+                title: '提示',
+                content: '该操作将清除图片及网络请求缓存数据，确认清除？',
+                onConfirm: () async {
+                  SmartDialog.showLoading(msg: '正在清除...');
+                  try {
+                    await CacheManage.clearLibraryCache();
+                    SmartDialog.showToast('清除成功');
+                  } catch (err) {
+                    SmartDialog.showToast(err.toString());
+                  } finally {
+                    SmartDialog.dismiss();
+                  }
+                  getCacheSize();
+                },
+              );
             },
             leading: const Icon(Icons.delete_outline),
             title: const Text('清除缓存'),
             subtitle: Obx(
               () => Text(
-                '图片及网络缓存 ${_aboutController.cacheSize.value}',
+                '图片及网络缓存 ${cacheSize.value}',
                 style: subTitleStyle,
               ),
             ),
@@ -254,14 +240,6 @@ Commit Hash: ${BuildConfig.commitHash}''',
                         Get.back();
                         String res = jsonEncode(Accounts.account.toMap());
                         Utils.copyText(res);
-                        // if (context.mounted) {
-                        //   showDialog(
-                        //     context: context,
-                        //     builder: (context) => AlertDialog(
-                        //       content: SelectableText('$res'),
-                        //     ),
-                        //   );
-                        // }
                       },
                     ),
                     ListTile(
@@ -328,78 +306,79 @@ Commit Hash: ${BuildConfig.commitHash}''',
             },
           ),
           ListTile(
-              title: const Text('导入/导出设置'),
-              dense: false,
-              leading: const Icon(Icons.import_export_outlined),
-              onTap: () {
-                showDialog(
-                  context: context,
-                  builder: (context) {
-                    return SimpleDialog(
-                      clipBehavior: Clip.hardEdge,
-                      title: const Text('导入/导出设置'),
-                      children: [
-                        ListTile(
-                          title: const Text('导出设置至剪贴板'),
-                          onTap: () async {
-                            Get.back();
-                            String data = await GStorage.exportAllSettings();
-                            Utils.copyText(data);
-                          },
-                        ),
-                        ListTile(
-                          title: const Text('从剪贴板导入设置'),
-                          onTap: () async {
-                            Get.back();
-                            ClipboardData? data =
-                                await Clipboard.getData('text/plain');
-                            if (data == null ||
-                                data.text == null ||
-                                data.text!.isEmpty) {
-                              SmartDialog.showToast('剪贴板无数据');
-                              return;
-                            }
-                            if (!context.mounted) return;
-                            await showDialog(
-                              context: context,
-                              builder: (context) {
-                                return AlertDialog(
-                                  title: const Text('是否导入如下设置？'),
-                                  content: SingleChildScrollView(
-                                    child: Text(data.text!),
+            title: const Text('导入/导出设置'),
+            dense: false,
+            leading: const Icon(Icons.import_export_outlined),
+            onTap: () {
+              showDialog(
+                context: context,
+                builder: (context) {
+                  return SimpleDialog(
+                    clipBehavior: Clip.hardEdge,
+                    title: const Text('导入/导出设置'),
+                    children: [
+                      ListTile(
+                        title: const Text('导出设置至剪贴板'),
+                        onTap: () async {
+                          Get.back();
+                          String data = await GStorage.exportAllSettings();
+                          Utils.copyText(data);
+                        },
+                      ),
+                      ListTile(
+                        title: const Text('从剪贴板导入设置'),
+                        onTap: () async {
+                          Get.back();
+                          ClipboardData? data =
+                              await Clipboard.getData('text/plain');
+                          if (data == null ||
+                              data.text == null ||
+                              data.text!.isEmpty) {
+                            SmartDialog.showToast('剪贴板无数据');
+                            return;
+                          }
+                          if (!context.mounted) return;
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return AlertDialog(
+                                title: const Text('是否导入如下设置？'),
+                                content: SingleChildScrollView(
+                                  child: Text(data.text!),
+                                ),
+                                actions: [
+                                  TextButton(
+                                    onPressed: Get.back,
+                                    child: Text(
+                                      '取消',
+                                      style: TextStyle(color: outline),
+                                    ),
                                   ),
-                                  actions: [
-                                    TextButton(
-                                      onPressed: Get.back,
-                                      child: Text(
-                                        '取消',
-                                        style: TextStyle(color: outline),
-                                      ),
-                                    ),
-                                    TextButton(
-                                      onPressed: () async {
-                                        Get.back();
-                                        try {
-                                          await GStorage.importAllSettings(
-                                              data.text!);
-                                          SmartDialog.showToast('导入成功');
-                                        } catch (e) {
-                                          SmartDialog.showToast('导入失败：$e');
-                                        }
-                                      },
-                                      child: const Text('确定'),
-                                    ),
-                                  ],
-                                );
-                              },
-                            );
-                          },
-                        ),
-                      ],
-                    );
-                  },
-                );
-              }),
+                                  TextButton(
+                                    onPressed: () async {
+                                      Get.back();
+                                      try {
+                                        await GStorage.importAllSettings(
+                                            data.text!);
+                                        SmartDialog.showToast('导入成功');
+                                      } catch (e) {
+                                        SmartDialog.showToast('导入失败：$e');
+                                      }
+                                    },
+                                    child: const Text('确定'),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        },
+                      ),
+                    ],
+                  );
+                },
+              );
+            },
+          ),
           ListTile(
             title: const Text('重置所有设置'),
             leading: const Icon(Icons.settings_backup_restore_outlined),
@@ -449,32 +428,9 @@ Commit Hash: ${BuildConfig.commitHash}''',
               );
             },
           ),
-          SizedBox(height: MediaQuery.paddingOf(context).bottom + 80),
+          const SizedBox(height: 80),
         ],
       ),
     );
-  }
-}
-
-class AboutController extends GetxController {
-  RxString currentVersion = ''.obs;
-  RxString remoteVersion = ''.obs;
-  LatestDataModel? remoteAppInfo;
-  RxBool isUpdate = true.obs;
-  RxBool isLoading = true.obs;
-  LatestDataModel? data;
-  RxString cacheSize = ''.obs;
-
-  @override
-  void onInit() {
-    super.onInit();
-    getCurrentApp();
-  }
-
-  // 获取当前版本
-  Future getCurrentApp() async {
-    var currentInfo = await PackageInfo.fromPlatform();
-    String buildNumber = currentInfo.buildNumber;
-    currentVersion.value = "${currentInfo.version}+$buildNumber";
   }
 }

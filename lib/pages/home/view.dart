@@ -30,6 +30,7 @@ class _HomePageState extends State<HomePage>
   Widget build(BuildContext context) {
     super.build(context);
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(toolbarHeight: 0),
       body: Column(
         children: [

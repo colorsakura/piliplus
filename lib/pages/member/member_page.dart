@@ -128,7 +128,6 @@ class _MemberPageNewState extends State<MemberPageNew> {
           children: _userController.tab2!.map((item) {
             return switch (item.param!) {
               'home' => MemberHome(heroTag: _heroTag),
-              // 'dynamic' => MemberDynamic(mid: _mid ?? -1),
               'dynamic' => MemberDynamicsPage(mid: _mid),
               'contribute' => Obx(
                   () => MemberContribute(

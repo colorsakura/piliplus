@@ -70,7 +70,6 @@ class DynamicsController extends GetxController
   Future queryFollowing2() async {
     if (upData.value.upList != null &&
         upData.value.upList!.length >= allFollowedUpsTotal) {
-      // SmartDialog.showToast('没有更多了');
       return;
     }
     var res = await FollowHttp.followings(
@@ -187,7 +186,6 @@ class DynamicsController extends GetxController
     await controller.onRefresh();
   }
 
-  // 返回顶部并刷新
   @override
   void animateToTop() async {
     controller.animateToTop();

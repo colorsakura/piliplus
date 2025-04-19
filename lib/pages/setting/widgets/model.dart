@@ -131,10 +131,8 @@ List<SettingsModel> get styleSettings => [
           onChanged: (value) {
             if (value) {
               autoScreen();
-              // SmartDialog.showToast('已开启横屏适配');
             } else {
               AutoOrientation.portraitUpMode();
-              // SmartDialog.showToast('已关闭横屏适配');
             }
           }),
       SettingsModel(
@@ -536,6 +534,9 @@ List<SettingsModel> get styleSettings => [
             },
           );
           if (result != null) {
+            try {
+              Get.find<MineController>().themeType.value = result;
+            } catch (_) {}
             GStorage.setting.put(SettingBoxKey.themeMode, result.index);
             Get.put(ColorSelectController()).themeType.value = result;
             Get.changeThemeMode(result.toThemeMode);

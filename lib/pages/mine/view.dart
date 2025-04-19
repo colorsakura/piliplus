@@ -1,4 +1,3 @@
-import 'package:PiliPlus/utils/storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:PiliPlus/common/constants.dart';
@@ -17,7 +16,6 @@ class MinePage extends StatefulWidget {
 
 class _MinePageState extends State<MinePage> {
   final MineController _mineController = Get.put(MineController())
-    ..themeType.value = ThemeType.values[GStorage.themeTypeInt]
     ..queryUserInfo();
 
   Widget get _header => FittedBox(
@@ -40,8 +38,7 @@ class _MinePageState extends State<MinePage> {
               iconSize: 40.0,
               padding: const EdgeInsets.all(8),
               style: const ButtonStyle(
-                tapTargetSize:
-                    MaterialTapTargetSize.shrinkWrap, // the '2023' part
+                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
               ),
               tooltip: "${MineController.anonymity.value ? '退出' : '进入'}无痕模式",
               onPressed: () {
@@ -61,8 +58,7 @@ class _MinePageState extends State<MinePage> {
                   iconSize: 40.0,
                   padding: const EdgeInsets.all(8),
                   style: const ButtonStyle(
-                    tapTargetSize:
-                        MaterialTapTargetSize.shrinkWrap, // the '2023' part
+                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                   ),
                   tooltip: '切换至${_mineController.nextThemeType.description}主题',
                   onPressed: _mineController.onChangeTheme,
@@ -77,8 +73,7 @@ class _MinePageState extends State<MinePage> {
               iconSize: 40.0,
               padding: const EdgeInsets.all(8),
               style: const ButtonStyle(
-                tapTargetSize:
-                    MaterialTapTargetSize.shrinkWrap, // the '2023' part
+                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
               ),
               tooltip: '设置',
               onPressed: () => {

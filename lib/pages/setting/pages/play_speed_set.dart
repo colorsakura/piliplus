@@ -82,7 +82,6 @@ class _PlaySpeedPageState extends State<PlaySpeedPage> {
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              // const Text('输入你想要的视频倍速，例如：1.0'),
               const SizedBox(height: 12),
               TextField(
                 autofocus: true,

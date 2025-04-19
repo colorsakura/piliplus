@@ -8,6 +8,7 @@ import 'package:PiliPlus/pages/follow/index.dart';
 
 import 'follow_item.dart';
 
+// TODO: refactor
 class FollowList extends StatefulWidget {
   final FollowController ctr;
   const FollowList({

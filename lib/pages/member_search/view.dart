@@ -55,18 +55,22 @@ class _MemberSearchPageState extends State<MemberSearchPage> {
         () => _memberSearchCtr.hasData.value
             ? Column(
                 children: [
-                  Obx(
-                    () => TabBar(
-                      controller: _memberSearchCtr.tabController,
-                      tabs: [
-                        Tab(
-                            text:
-                                '视频 ${_memberSearchCtr.archiveCount.value != -1 ? '${_memberSearchCtr.archiveCount.value}' : ''}'),
-                        Tab(
-                            text:
-                                '动态 ${_memberSearchCtr.dynamicCount.value != -1 ? '${_memberSearchCtr.dynamicCount.value}' : ''}'),
-                      ],
-                    ),
+                  TabBar(
+                    controller: _memberSearchCtr.tabController,
+                    tabs: [
+                      Obx(
+                        () => Tab(
+                          text:
+                              '视频 ${_memberSearchCtr.archiveCount.value != -1 ? '${_memberSearchCtr.archiveCount.value}' : ''}',
+                        ),
+                      ),
+                      Obx(
+                        () => Tab(
+                          text:
+                              '动态 ${_memberSearchCtr.dynamicCount.value != -1 ? '${_memberSearchCtr.dynamicCount.value}' : ''}',
+                        ),
+                      ),
+                    ],
                   ),
                   Expanded(
                     child: tabBarView(

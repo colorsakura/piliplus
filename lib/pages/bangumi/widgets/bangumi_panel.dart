@@ -68,24 +68,8 @@ class _BangumiPanelState extends State<BangumiPanel> {
     super.dispose();
   }
 
-  // void changeFucCall(item, i) async {
-  //   if (item.badge != null && item.badge == '会员' && vipStatus != 1) {
-  //     SmartDialog.showToast('需要大会员');
-  //     return;
-  //   }
-  //   await widget.changeFuc!(
-  //     item.bvid,
-  //     item.cid,
-  //     item.aid,
-  //   );
-  //   currentIndex = i;
-  //   setState(() {});
-  //   scrollToIndex();
-  // }
-
   void scrollToIndex() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      // 在回调函数中获取更新后的状态
       listViewScrollCtr.animateTo(
         (currentIndex * 150.0).clamp(listViewScrollCtr.position.minScrollExtent,
             listViewScrollCtr.position.maxScrollExtent),
@@ -148,11 +132,12 @@ class _BangumiPanelState extends State<BangumiPanel> {
             scrollDirection: Axis.horizontal,
             itemCount: widget.pages.length,
             itemExtent: 150,
-            itemBuilder: (BuildContext context, int i) {
+            itemBuilder: (BuildContext context, int index) {
+              final item = widget.pages[index];
               return Container(
                 width: 150,
                 margin: EdgeInsets.only(
-                  right: i == widget.pages.length - 1 ? 0 : 10,
+                  right: index == widget.pages.length - 1 ? 0 : 10,
                 ),
                 child: Material(
                   color: Theme.of(context).colorScheme.onInverseSurface,
@@ -160,24 +145,19 @@ class _BangumiPanelState extends State<BangumiPanel> {
                   clipBehavior: Clip.hardEdge,
                   child: InkWell(
                     onTap: () {
-                      if (widget.pages[i].badge != null &&
-                          widget.pages[i].badge == '会员' &&
+                      if (item.badge != null &&
+                          item.badge == '会员' &&
                           vipStatus != 1) {
                         SmartDialog.showToast('需要大会员');
-                        // return;
                       }
                       widget.changeFuc(
-                        widget.pages[i].epId,
-                        widget.pages[i].bvid,
-                        widget.pages[i].cid,
-                        widget.pages[i].aid,
-                        widget.pages[i].cover,
+                        item.epId,
+                        item.bvid,
+                        item.cid,
+                        item.aid,
+                        item.cover,
                       );
-                      // currentIndex = i;
-                      // setState(() {});
-                      // scrollToIndex();
                     },
-                    //changeFucCall(widget.pages[i], i),
                     child: Padding(
                       padding: const EdgeInsets.symmetric(
                           vertical: 8, horizontal: 10),
@@ -186,7 +166,7 @@ class _BangumiPanelState extends State<BangumiPanel> {
                         children: <Widget>[
                           Row(
                             children: [
-                              if (i == currentIndex) ...<Widget>[
+                              if (index == currentIndex) ...<Widget>[
                                 Image.asset(
                                   'assets/images/live.png',
                                   color: Theme.of(context).colorScheme.primary,
@@ -197,32 +177,32 @@ class _BangumiPanelState extends State<BangumiPanel> {
                               ],
                               Expanded(
                                   child: Text(
-                                widget.pages[i].title ?? '第${i + 1}话',
-                                maxLines: (widget.pages[i].longTitle != null &&
-                                        widget.pages[i].longTitle != '')
+                                item.title ?? '第${index + 1}话',
+                                maxLines: (item.longTitle != null &&
+                                        item.longTitle != '')
                                     ? 1
                                     : 2,
                                 style: TextStyle(
                                     fontSize: 13,
-                                    color: i == currentIndex
+                                    color: index == currentIndex
                                         ? Theme.of(context).colorScheme.primary
                                         : Theme.of(context)
                                             .colorScheme
                                             .onSurface),
                               )),
                               const SizedBox(width: 2),
-                              if (widget.pages[i].badge != null) ...[
+                              if (item.badge != null) ...[
                                 const Spacer(),
-                                if (widget.pages[i].badge == '会员') ...[
+                                if (item.badge == '会员') ...[
                                   Image.asset(
                                     'assets/images/big-vip.png',
                                     height: 16,
                                     semanticLabel: "大会员",
                                   ),
                                 ],
-                                if (widget.pages[i].badge != '会员') ...[
+                                if (item.badge != '会员') ...[
                                   Text(
-                                    widget.pages[i].badge!,
+                                    item.badge!,
                                     style: TextStyle(
                                       fontSize: 11,
                                       color:
@@ -233,15 +213,15 @@ class _BangumiPanelState extends State<BangumiPanel> {
                               ]
                             ],
                           ),
-                          if (widget.pages[i].longTitle != null &&
-                              widget.pages[i].longTitle != '') ...[
+                          if (item.longTitle != null &&
+                              item.longTitle != '') ...[
                             const SizedBox(height: 3),
                             Text(
-                              widget.pages[i].longTitle!,
+                              item.longTitle!,
                               maxLines: 1,
                               style: TextStyle(
                                   fontSize: 13,
-                                  color: i == currentIndex
+                                  color: index == currentIndex
                                       ? Theme.of(context).colorScheme.primary
                                       : Theme.of(context)
                                           .colorScheme

@@ -1,5 +1,5 @@
 import 'package:PiliPlus/http/login.dart';
-import 'package:PiliPlus/pages/about/index.dart';
+import 'package:PiliPlus/pages/about/view.dart';
 import 'package:PiliPlus/pages/login/controller.dart';
 import 'package:PiliPlus/pages/setting/extra_setting.dart';
 import 'package:PiliPlus/pages/setting/play_setting.dart';

@@ -65,19 +65,12 @@ class ReplyItemGrpc extends StatelessWidget {
     return Material(
       color: Colors.transparent,
       child: InkWell(
-        // 点击整个评论区 评论详情/回复
         onTap: () {
           feedBack();
           replyReply?.call(replyItem, null);
         },
         onLongPress: () {
           feedBack();
-          // showDialog(
-          //   context: context,
-          //   builder: (context) => AlertDialog(
-          //     content: SelectableText(jsonEncode(replyItem.toProto3Json())),
-          //   ),
-          // );
           showModalBottomSheet(
             context: context,
             useSafeArea: true,
@@ -118,17 +111,6 @@ class ReplyItemGrpc extends StatelessWidget {
               Positioned(
                 top: 8,
                 right: 12,
-                // child: GestureDetector(
-                //   onTap: replyItem.member.garbCardJumpUrl.isNotEmpty
-                //       ? () {
-                //           Get.toNamed(
-                //             'webview',
-                //             parameters: {
-                //               'url': replyItem.member.garbCardJumpUrl
-                //             },
-                //           );
-                //         }
-                //       : null,
                 child: Stack(
                   alignment: Alignment.centerRight,
                   children: [
@@ -155,7 +137,6 @@ class ReplyItemGrpc extends StatelessWidget {
                   ],
                 ),
               ),
-              // ),
               SizedBox(
                 width: double.infinity,
                 child: _buildAuthorPanel(context),
@@ -214,7 +195,6 @@ class ReplyItemGrpc extends StatelessWidget {
             bottom: 0,
             child: Container(
               decoration: BoxDecoration(
-                //borderRadius: BorderRadius.circular(7),
                 shape: BoxShape.circle,
                 color: Theme.of(context).colorScheme.surface,
               ),
@@ -225,14 +205,12 @@ class ReplyItemGrpc extends StatelessWidget {
               ),
             ),
           ),
-        //https://www.bilibili.com/blackboard/activity-whPrHsYJ2.html
         if (replyItem.member.officialVerifyType == 0)
           Positioned(
             left: 0,
             bottom: 0,
             child: Container(
               decoration: BoxDecoration(
-                // borderRadius: BorderRadius.circular(8),
                 shape: BoxShape.circle,
                 color: Theme.of(context).colorScheme.surface,
               ),
@@ -250,7 +228,6 @@ class ReplyItemGrpc extends StatelessWidget {
             bottom: 0,
             child: Container(
               decoration: BoxDecoration(
-                // borderRadius: BorderRadius.circular(8),
                 shape: BoxShape.circle,
                 color: Theme.of(context).colorScheme.surface,
               ),
@@ -270,8 +247,7 @@ class ReplyItemGrpc extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
-        /// fix Stack内GestureDetector  onTap无效
+      children: [
         GestureDetector(
           behavior: HitTestBehavior.opaque,
           onTap: () {
@@ -281,7 +257,7 @@ class ReplyItemGrpc extends StatelessWidget {
           child: Row(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
+            children: [
               lfAvtar(context),
               const SizedBox(width: 12),
               Column(
@@ -415,9 +391,8 @@ class ReplyItemGrpc extends StatelessWidget {
         if (replyLevel != '') buttonAction(context, replyItem.replyControl),
         // 一楼的评论
         if (replyLevel == '1' &&
-            ( //replyItem.replyControl!.isShow! ||
-                replyItem.replies.isNotEmpty ||
-                    replyItem.replyControl.subReplyEntryText.isNotEmpty)) ...[
+            (replyItem.replies.isNotEmpty ||
+                replyItem.replyControl.subReplyEntryText.isNotEmpty)) ...[
           Padding(
             padding: const EdgeInsets.only(top: 5, bottom: 12),
             child: replyItemRow(
@@ -699,21 +674,14 @@ class ReplyItemGrpc extends StatelessWidget {
       final textSize = textPainter.size;
       final double maxHeight = textPainter.preferredLineHeight * 6;
       var position = textPainter.getPositionForOffset(
-        Offset(
-          textSize.width,
-          maxHeight, // textSize.height,
-        ),
+        Offset(textSize.width, maxHeight),
       );
-      // final endOffset = textPainter.getOffsetBefore(position.offset);
       message = message.substring(0, position.offset);
     }
-
-    // return TextSpan(text: message);
 
     // 投票
     if (content.hasVote()) {
       message.splitMapJoin(RegExp(r"\{vote:\d+?\}"), onMatch: (Match match) {
-        // String matchStr = match[0]!;
         spanChildren.add(
           TextSpan(
             text: '投票: ${content.vote.title}',
@@ -739,12 +707,6 @@ class ReplyItemGrpc extends StatelessWidget {
       message = message.replaceAll(RegExp(r"\{vote:\d+?\}"), "");
     }
     message = parse(message).body?.text ?? message;
-    // .replaceAll('&amp;', '&')
-    // .replaceAll('&lt;', '<')
-    // .replaceAll('&gt;', '>')
-    // .replaceAll('&quot;', '"')
-    // .replaceAll('&apos;', "'")
-    // .replaceAll('&nbsp;', ' ');
     // 构建正则表达式
     final List<String> specialTokens = [
       ...content.emote.keys,
@@ -770,12 +732,6 @@ class ReplyItemGrpc extends StatelessWidget {
       spanChildren.add(TextSpan(
         text: str,
       ));
-      // TextSpan(
-      //
-      //     text: str,
-      //     recognizer: TapGestureRecognizer()
-      //       ..onTap = () => replyReply
-      //           ?.call(replyItem.root == 0 ? replyItem : fReplyItem)))));
     }
 
     late final bool enableWordRe =
@@ -883,7 +839,7 @@ class ReplyItemGrpc extends StatelessWidget {
                 if (content.url[matchStr]?.hasPrefixIcon() == true) ...[
                   WidgetSpan(
                     child: Image.network(
-                      content.url[matchStr]!.prefixIcon.http2https,
+                      Utils.thumbnailImgUrl(content.url[matchStr]!.prefixIcon),
                       height: 19,
                       color: Theme.of(context).colorScheme.primary,
                     ),
@@ -998,7 +954,7 @@ class ReplyItemGrpc extends StatelessWidget {
               if (content.url[patternStr]?.hasPrefixIcon() == true) ...[
                 WidgetSpan(
                   child: Image.network(
-                    content.url[patternStr]!.prefixIcon.http2https,
+                    Utils.thumbnailImgUrl(content.url[patternStr]!.prefixIcon),
                     height: 19,
                     color: Theme.of(context).colorScheme.primary,
                   ),
@@ -1084,7 +1040,6 @@ class ReplyItemGrpc extends StatelessWidget {
         ),
       );
     }
-    // spanChildren.add(TextSpan(text: matchMember));
     return TextSpan(children: spanChildren);
   }
 

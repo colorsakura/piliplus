@@ -176,11 +176,6 @@ class VideoIntroController extends GetxController {
           lastPlayCid.value == 0) {
         lastPlayCid.value = videoDetail.value.pages!.first.cid!;
       }
-      // Get.find<VideoDetailController>(tag: heroTag).tabs.value = [
-      //   '简介',
-      //   '评论 ${result['data']!.stat!.reply}'
-      // ];
-      // 获取到粉丝数再返回
       queryUserStat();
     } else {
       SmartDialog.showToast(
@@ -274,12 +269,10 @@ class VideoIntroController extends GetxController {
       return;
     }
     if (videoDetail.value.stat?.like == null) {
-      // not init
       return;
     }
     var result = await VideoHttp.likeVideo(bvid: bvid, type: !hasLike.value);
     if (result['status']) {
-      // hasLike.value = result["data"] == 1 ? true : false;
       if (!hasLike.value) {
         SmartDialog.showToast(result['data']['toast']);
         hasLike.value = true;
@@ -303,7 +296,6 @@ class VideoIntroController extends GetxController {
     var result =
         await VideoHttp.dislikeVideo(bvid: bvid, type: !hasDislike.value);
     if (result['status']) {
-      // hasLike.value = result["data"] == 1 ? true : false;
       if (!hasDislike.value) {
         SmartDialog.showToast('点踩成功');
         hasDislike.value = true;
@@ -312,7 +304,6 @@ class VideoIntroController extends GetxController {
         SmartDialog.showToast('取消踩');
         hasDislike.value = false;
       }
-      // hasDislike.refresh();
     } else {
       SmartDialog.showToast(result['msg']);
     }
@@ -435,8 +426,6 @@ class VideoIntroController extends GetxController {
       Get.back();
       hasFav.value =
           addMediaIdsNew.isNotEmpty || favIds?.length != delMediaIdsNew.length;
-      // 重新获取收藏状态
-      // await queryHasFavVideo();
       SmartDialog.showToast('操作成功');
     } else {
       SmartDialog.showToast(result['msg']);
@@ -581,14 +570,6 @@ class VideoIntroController extends GetxController {
         },
       );
     }
-
-    // MemberController _ = Get.put<MemberController>(MemberController(mid: mid),
-    //     tag: mid.toString());
-    // await _.getInfo();
-    // if (context.mounted) await _.actionRelationMod(context);
-    // followStatus['attribute'] = _.attribute.value;
-    // followStatus.refresh();
-    // Get.delete<MemberController>(tag: mid.toString());
   }
 
   // 修改分P或番剧分集
@@ -678,10 +659,6 @@ class VideoIntroController extends GetxController {
       bvid: bvid,
       cid: lastPlayCid.value,
     );
-    // dynamic result = await GrpcRepo.playerOnline(
-    //   aid: IdUtils.bv2av(bvid),
-    //   cid: lastPlayCid.value,
-    // );
     if (result['status']) {
       total.value = result['data'];
     }

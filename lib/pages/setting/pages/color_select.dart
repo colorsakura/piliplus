@@ -1,6 +1,7 @@
 import 'package:PiliPlus/models/common/nav_bar_config.dart';
 import 'package:PiliPlus/models/common/theme_type.dart';
 import 'package:PiliPlus/pages/home/index.dart';
+import 'package:PiliPlus/pages/mine/controller.dart';
 import 'package:PiliPlus/pages/setting/widgets/select_dialog.dart';
 import 'package:flex_seed_scheme/flex_seed_scheme.dart';
 import 'package:flutter/material.dart';
@@ -67,6 +68,9 @@ class _ColorSelectPageState extends State<ColorSelectPage> {
                 },
               );
               if (result != null) {
+                try {
+                  Get.find<MineController>().themeType.value = result;
+                } catch (_) {}
                 ctr.themeType.value = result;
                 GStorage.setting.put(SettingBoxKey.themeMode, result.index);
                 Get.changeThemeMode(result.toThemeMode);

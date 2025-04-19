@@ -1,3 +1,4 @@
+import 'package:PiliPlus/pages/about/view.dart';
 import 'package:PiliPlus/pages/fav/view.dart';
 import 'package:PiliPlus/pages/fav_search/view.dart';
 import 'package:PiliPlus/pages/follow_search/view.dart';
@@ -22,7 +23,6 @@ import 'package:PiliPlus/pages/msg_feed_top/reply_me/view.dart';
 import 'package:PiliPlus/pages/msg_feed_top/like_me/view.dart';
 import 'package:PiliPlus/pages/setting/pages/logs.dart';
 
-import '../pages/about/index.dart';
 import '../pages/blacklist/view.dart';
 import '../pages/danmaku_block/view.dart';
 import '../pages/dynamics/detail/index.dart';
@@ -100,9 +100,6 @@ class Routes {
     // 用户中心
     CustomGetPage(name: '/member', page: () => const MemberPageNew()),
     CustomGetPage(name: '/memberSearch', page: () => const MemberSearchPage()),
-    // 二级回复
-    // CustomGetPage(
-    //     name: '/replyReply', page: () => const VideoReplyReplyPanel()),
     // 推荐流设置
     CustomGetPage(
         name: '/recommendSetting', page: () => const RecommendSetting()),
@@ -157,10 +154,6 @@ class Routes {
     // 用户动态
     CustomGetPage(
         name: '/memberDynamics', page: () => const MemberDynamicsPage()),
-    // 用户最近投币
-    // CustomGetPage(name: '/memberCoin', page: () => const MemberCoinPage()),
-    // 用户最近喜欢
-    // CustomGetPage(name: '/memberLike', page: () => const MemberLikePage()),
     // 日志
     CustomGetPage(name: '/logs', page: () => const LogsPage()),
     // 订阅

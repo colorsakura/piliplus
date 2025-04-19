@@ -44,10 +44,6 @@ class GStorage {
   static late final Box<dynamic> setting;
   static late final Box<dynamic> video;
 
-  // static bool get isLogin => userInfo.get('userInfoCache') != null;
-
-  // static get ownerMid => userInfo.get('userInfoCache')?.mid;
-
   static List<double> get speedList => List<double>.from(
         video.get(
           VideoBoxKey.speedsList,
@@ -642,7 +638,6 @@ class SettingBoxKey {
       // ignore: constant_identifier_names
       CDNService = 'CDNService',
       disableAudioCDN = 'disableAudioCDN',
-      // enableCDN = 'enableCDN',
       autoPiP = 'autoPiP',
       pipNoDanmaku = 'pipNoDanmaku',
       enableAutoLongPressSpeed = 'enableAutoLongPressSpeed',
@@ -669,7 +664,6 @@ class SettingBoxKey {
       minLikeRatioForRecommend = 'minLikeRatioForRecommend',
       exemptFilterForFollowed = 'exemptFilterForFollowed',
       banWordForRecommend = 'banWordForRecommend',
-      //filterUnfollowedRatio = 'filterUnfollowedRatio',
       applyFilterToRelatedVideos = 'applyFilterToRelatedVideos',
 
       /// 其他
@@ -806,8 +800,6 @@ class SettingBoxKey {
       displayMode = 'displayMode',
       smallCardWidth = 'smallCardWidth',
       videoPlayerRemoveSafeArea = 'videoPlayerRemoveSafeArea', // 视频播放器移除安全边距
-      // videoPlayerShowStatusBarBackgroundColor =
-      //     'videoPlayerShowStatusBarBackgroundColor', // 播放页状态栏显示为背景色
       dynamicsWaterfallFlow = 'dynamicsWaterfallFlow', // 动态瀑布流
       upPanelPosition = 'upPanelPosition', // up主面板位置
       dynamicsShowAllFollowedUp = 'dynamicsShowAllFollowedUp', // 动态显示全部关注up
@@ -818,7 +810,6 @@ class SettingBoxKey {
       tabbarSort = 'tabbarSort', // 首页tabbar
       dynamicBadgeMode = 'dynamicBadgeMode',
       msgBadgeMode = 'msgBadgeMode',
-      // msgUnReadType = 'msgUnReadType',
       msgUnReadTypeV2 = 'msgUnReadTypeV2',
       hiddenSettingUnlocked = 'hiddenSettingUnlocked',
       enableGradientBg = 'enableGradientBg',

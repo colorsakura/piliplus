@@ -6,6 +6,7 @@ import 'widgets/follow_list.dart';
 import 'widgets/owner_follow_list.dart';
 import 'package:PiliPlus/common/widgets/scroll_physics.dart';
 
+// TODO: refactor
 class FollowPage extends StatefulWidget {
   const FollowPage({super.key});
 

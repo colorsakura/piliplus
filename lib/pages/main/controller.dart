@@ -97,17 +97,24 @@ class MainController extends GetxController {
       if ((shouldCheckPM.not && res.firstOrNull?['status'] == true) ||
           (shouldCheckPM && res.getOrNull(1)?['status'] == true)) {
         int index = shouldCheckPM.not ? 0 : 1;
-        if (msgUnReadTypes.contains(MsgUnReadType.reply)) {
-          count += (res[index]['data']['reply'] as int?) ?? 0;
-        }
-        if (msgUnReadTypes.contains(MsgUnReadType.at)) {
-          count += (res[index]['data']['at'] as int?) ?? 0;
-        }
-        if (msgUnReadTypes.contains(MsgUnReadType.like)) {
-          count += (res[index]['data']['like'] as int?) ?? 0;
-        }
-        if (msgUnReadTypes.contains(MsgUnReadType.sysMsg)) {
-          count += (res[index]['data']['sys_msg'] as int?) ?? 0;
+        dynamic data = res[index]['data'];
+        for (final item in msgUnReadTypes) {
+          switch (item) {
+            case MsgUnReadType.pm:
+              break;
+            case MsgUnReadType.reply:
+              count += (data['reply'] as int?) ?? 0;
+              break;
+            case MsgUnReadType.at:
+              count += (data['at'] as int?) ?? 0;
+              break;
+            case MsgUnReadType.like:
+              count += (data['like'] as int?) ?? 0;
+              break;
+            case MsgUnReadType.sysMsg:
+              count += (data['sys_msg'] as int?) ?? 0;
+              break;
+          }
         }
       }
       count = count == 0
@@ -176,7 +183,7 @@ class MainController extends GetxController {
 
   void setCount([int count = 0]) async {
     if (dynIndex == -1 || navigationBars[dynIndex]['count'] == count) return;
-    navigationBars[dynIndex]['count'] = count; // 修改 count 属性为新的值
+    navigationBars[dynIndex]['count'] = count;
     navigationBars.refresh();
   }
 

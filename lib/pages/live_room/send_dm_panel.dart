@@ -230,13 +230,6 @@ class _ReplyPageState extends CommonPublishPageState<LiveSendDmPanel> {
       Get.back();
       liveRoomController.savedDanmaku = null;
       SmartDialog.showToast('发送成功');
-      // liveRoomController.plPlayerController.danmakuController?.addDanmaku(
-      //   DanmakuContentItem(
-      //     emoticonUnique ?? message,
-      //     type: DanmakuItemType.scroll,
-      //     selfSend: true,
-      //   ),
-      // );
     } else {
       SmartDialog.showToast(res['msg']);
     }

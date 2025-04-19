@@ -154,8 +154,6 @@ class MineController extends GetxController {
                 ],
               ),
             ),
-            // duration: const Duration(seconds: 2),
-            // showCloseIcon: true,
           );
         },
       ).then((res) {
@@ -200,6 +198,9 @@ class MineController extends GetxController {
 
   onChangeTheme() {
     themeType.value = nextThemeType;
+    try {
+      Get.find<MineController>().themeType.value = themeType.value;
+    } catch (_) {}
     setting.put(SettingBoxKey.themeMode, themeType.value.code);
     Get.changeThemeMode(themeType.value.toThemeMode);
   }

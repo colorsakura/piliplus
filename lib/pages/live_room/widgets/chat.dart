@@ -65,7 +65,6 @@ class LiveRoomChat extends StatelessWidget {
                                 );
                               } catch (err) {
                                 debugPrint(err.toString());
-                                // SmartDialog.showToast(err.toString());
                               }
                             },
                         ),

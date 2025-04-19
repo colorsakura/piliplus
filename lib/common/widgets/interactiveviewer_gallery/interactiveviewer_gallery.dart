@@ -458,23 +458,6 @@ class _InteractiveviewerGalleryState extends State<InteractiveviewerGallery>
                   imageUrl: Utils.thumbnailImgUrl(widget.sources[index].url),
                 );
               },
-              // fit: BoxFit.contain,
-              // progressIndicatorBuilder: (context, url, progress) {
-              //   return Center(
-              //     child: SizedBox(
-              //       width: 150.0,
-              //       child:
-              //           LinearProgressIndicator(value: progress.progress ?? 0),
-              //     ),
-              //   );
-              // },
-              // errorListener: (value) {
-              //   WidgetsBinding.instance.addPostFrameCallback((_) {
-              //     setState(() {
-              //       _thumbList[index] = false;
-              //     });
-              //   });
-              // },
             ),
           SourceType.livePhoto => Obx(() => currentIndex.value == index
               ? IgnorePointer(

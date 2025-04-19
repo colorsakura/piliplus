@@ -1,5 +1,4 @@
 enum PlaySpeed {
-  // pointTwoFive,
   pointFive,
   pointSevenFive,
 
@@ -14,7 +13,6 @@ enum PlaySpeed {
 
 extension PlaySpeedExtension on PlaySpeed {
   static final List<String> _descList = [
-    // '0.25',
     '0.5',
     '0.75',
     '正常',
@@ -27,7 +25,6 @@ extension PlaySpeedExtension on PlaySpeed {
   String get description => _descList[index];
 
   static final List<double> _valueList = [
-    // 0.25,
     0.5,
     0.75,
     1.0,

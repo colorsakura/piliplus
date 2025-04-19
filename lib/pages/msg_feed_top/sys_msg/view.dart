@@ -159,7 +159,6 @@ class _SysMsgPageState extends State<SysMsgPage> {
         } else if (matchStr.startsWith('【')) {
           try {
             bool isBV = match[3]?.startsWith('BV') == true;
-            // validate
             if (isBV) {
               IdUtils.bv2av(match[3]!);
             } else {

@@ -50,9 +50,7 @@ class BottomControl extends StatelessWidget implements PreferredSizeWidget {
               return Padding(
                 padding: const EdgeInsets.only(left: 10, right: 10, bottom: 7),
                 child: Semantics(
-                  // label: '${(value / max * 100).round()}%',
                   value: '${(value / max * 100).round()}%',
-                  // enabled: false,
                   child: Stack(
                     clipBehavior: Clip.none,
                     alignment: Alignment.bottomCenter,
