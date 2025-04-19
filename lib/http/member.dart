@@ -281,18 +281,29 @@ class MemberHttp {
     String token = '',
     dynamic wwebid,
   }) async {
-    space(mid: mid);
+    String dmImgStr = Utils.base64EncodeRandomString(16, 64);
+    String dmCoverImgStr = Utils.base64EncodeRandomString(32, 128);
     Map params = await WbiSign.makSign({
       'mid': mid,
       'token': token,
       'platform': 'web',
       'web_location': 1550101,
       'w_webid': wwebid,
+      'dm_img_list': '[]',
+      'dm_img_str': dmImgStr,
+      'dm_cover_img_str': dmCoverImgStr,
+      'dm_img_inter': '{"ds":[],"wh":[0,0,0],"of":[0,0,0]}',
     });
     var res = await Request().get(
       Api.memberInfo,
       queryParameters: params,
-      extra: {'ua': 'pc'},
+      options: Options(
+        headers: {
+          'origin': 'https://space.bilibili.com',
+          'referer': 'https://space.bilibili.com/$mid/dynamic',
+          'user-agent': Request.headerUa(type: 'pc'),
+        },
+      ),
     );
     if (res.data['code'] == 0) {
       return {
