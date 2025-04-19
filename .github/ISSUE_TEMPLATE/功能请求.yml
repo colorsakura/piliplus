@@ -9,7 +9,15 @@ body:
     attributes:
       label: 检查清单
       options:
-        - label: 之前没有人提交过类似或相同的功能请求。
+        - label: 之前没有人提交过类似或相同的功能请求。1
+          required: true
+        - label: 之前没有人提交过类似或相同的功能请求。2
+          required: true
+        - label: 之前没有人提交过类似或相同的功能请求。3
+          required: true
+        - label: 之前没有人提交过类似或相同的功能请求。4
+          required: true
+        - label: 之前没有人提交过类似或相同的功能请求。5
           required: true
         - label: 正在使用最新版本。
           required: true
