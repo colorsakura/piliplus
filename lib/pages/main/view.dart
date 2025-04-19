@@ -220,6 +220,7 @@ class _MainAppState extends State<MainApp>
                                       context: context,
                                       removeRight: true,
                                       child: NavigationDrawer(
+                                        backgroundColor: Colors.transparent,
                                         tilePadding: const EdgeInsets.symmetric(
                                             vertical: 5, horizontal: 12),
                                         indicatorShape: RoundedRectangleBorder(
