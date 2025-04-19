@@ -82,8 +82,8 @@ class _SearchTrendingPageState extends State<SearchTrendingPage> {
                     .colorScheme
                     .surface
                     .withOpacity(_scrollRatio.value),
-                foregroundColor: half ? null : Colors.white,
-                systemOverlayStyle: half
+                foregroundColor: removePadding || half ? null : Colors.white,
+                systemOverlayStyle: removePadding || half
                     ? null
                     : SystemUiOverlayStyle(
                         statusBarBrightness: Brightness.dark,
