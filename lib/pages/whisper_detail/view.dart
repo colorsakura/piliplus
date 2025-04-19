@@ -63,13 +63,15 @@ class _WhisperDetailPageState
         ),
         title: GestureDetector(
           onTap: () {
-            feedBack();
-            Get.toNamed(
-              '/member?mid=${_whisperDetailController.mid}',
-              arguments: {
-                'face': _whisperDetailController.face,
-              },
-            );
+            if (_whisperDetailController.mid != null) {
+              feedBack();
+              Get.toNamed(
+                '/member?mid=${_whisperDetailController.mid}',
+                arguments: {
+                  'face': _whisperDetailController.face,
+                },
+              );
+            }
           },
           child: Row(
             children: [

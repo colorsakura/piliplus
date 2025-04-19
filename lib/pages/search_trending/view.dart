@@ -59,7 +59,7 @@ class _SearchTrendingPageState extends State<SearchTrendingPage> {
           : maxWidth;
       _offset = width * 528 / 1125 - 56 - Get.mediaQuery.padding.top;
       listener();
-      final removePadding = width > maxWidth;
+      final removePadding = maxWidth > width;
       return Scaffold(
         extendBody: true,
         extendBodyBehindAppBar: true,
