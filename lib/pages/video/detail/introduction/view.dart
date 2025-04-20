@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:PiliPlus/common/widgets/avatar.dart';
 import 'package:PiliPlus/common/widgets/self_sized_horizontal_list.dart';
 import 'package:PiliPlus/pages/search/widgets/search_text.dart';
 import 'package:PiliPlus/utils/app_scheme.dart';
@@ -312,25 +311,57 @@ class _VideoInfoState extends State<VideoInfo> {
                                         mainAxisSize: MainAxisSize.min,
                                         children: [
                                           Obx(
-                                            () => Avatar(
-                                              avatar: videoIntroController
-                                                      .userStat
-                                                      .value['card']?['face'] ??
-                                                  '',
-                                              size: 35,
-                                              isVip: (videoIntroController
+                                            () => Stack(
+                                              clipBehavior: Clip.none,
+                                              children: [
+                                                NetworkImgLayer(
+                                                  type: 'avatar',
+                                                  src: videoIntroController
                                                               .userStat
                                                               .value['card']
-                                                          ?['vip']?['status'] ??
-                                                      -1) >
-                                                  0,
-                                              officialType: videoIntroController
-                                                      .userStat.value['card']
-                                                  ?['official_verify']?['type'],
-                                              garbPendantImage:
-                                                  videoIntroController.userStat
-                                                          .value['card']
-                                                      ?['pendant']?['image'],
+                                                          ?['face'] ??
+                                                      '',
+                                                  width: 35,
+                                                  height: 35,
+                                                  fadeInDuration: Duration.zero,
+                                                  fadeOutDuration:
+                                                      Duration.zero,
+                                                ),
+                                                if ((videoIntroController
+                                                                    .userStat
+                                                                    .value['card']
+                                                                ?[
+                                                                'official_verify']
+                                                            ?['type'] ??
+                                                        -1) !=
+                                                    -1)
+                                                  Positioned(
+                                                    right: -2,
+                                                    bottom: -2,
+                                                    child: Container(
+                                                      decoration: BoxDecoration(
+                                                        shape: BoxShape.circle,
+                                                        color: Theme.of(context)
+                                                            .colorScheme
+                                                            .surface,
+                                                      ),
+                                                      child: Icon(
+                                                        Icons.offline_bolt,
+                                                        color: videoIntroController
+                                                                            .userStat
+                                                                            .value['card']
+                                                                        ?[
+                                                                        'official_verify']
+                                                                    ?['type'] ==
+                                                                0
+                                                            ? Colors.yellow
+                                                            : Colors
+                                                                .lightBlueAccent,
+                                                        size: 14,
+                                                      ),
+                                                    ),
+                                                  ),
+                                              ],
                                             ),
                                           ),
                                           const SizedBox(width: 10),

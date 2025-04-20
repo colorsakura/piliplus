@@ -1,6 +1,5 @@
 import 'dart:math';
 
-import 'package:PiliPlus/common/widgets/avatar.dart';
 import 'package:PiliPlus/common/widgets/report.dart';
 import 'package:PiliPlus/common/widgets/save_panel.dart';
 import 'package:PiliPlus/http/index.dart';
@@ -13,6 +12,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
+import 'package:PiliPlus/common/widgets/network_img_layer.dart';
 import 'package:PiliPlus/http/user.dart';
 import 'package:PiliPlus/utils/feed_back.dart';
 import 'package:PiliPlus/utils/utils.dart';
@@ -38,29 +38,15 @@ class AuthorPanel extends StatelessWidget {
     this.onSetTop,
   });
 
-  Widget _buildAvatar() => Avatar(
-        avatar: item.modules.moduleAuthor.face,
-        size: 34,
-        isVip: (item.modules.moduleAuthor?.vip?['status'] ?? 0) > 0,
-        officialType: null, // 已被注释
-        garbPendantImage: item.modules.moduleAuthor?.pendant?['image'],
-        onTap: (item.modules.moduleAuthor.type == 'AUTHOR_TYPE_PGC' ||
-                item.modules.moduleAuthor.type == 'AUTHOR_TYPE_UGC_SEASON')
-            ? null // 番剧
-            : () {
-                feedBack();
-                Get.toNamed(
-                  '/member?mid=${item.modules.moduleAuthor.mid}',
-                  arguments: {
-                    'face': item.modules.moduleAuthor.face,
-                  },
-                );
-              },
+  Widget _buildAvatar(double size) => NetworkImgLayer(
+        width: size,
+        height: size,
+        type: 'avatar',
+        src: item.modules.moduleAuthor.face,
       );
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     String? pubTime = item.modules.moduleAuthor.pubTs != null
         ? isSave
             ? DateTime.fromMillisecondsSinceEpoch(
@@ -77,7 +63,31 @@ class AuthorPanel extends StatelessWidget {
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              _buildAvatar(),
+              GestureDetector(
+                onTap: () {
+                  // 番剧
+                  if (item.modules.moduleAuthor.type == 'AUTHOR_TYPE_PGC' ||
+                      item.modules.moduleAuthor.type ==
+                          'AUTHOR_TYPE_UGC_SEASON') {
+                    return;
+                  }
+                  feedBack();
+                  Get.toNamed(
+                    '/member?mid=${item.modules.moduleAuthor.mid}',
+                    arguments: {
+                      'face': item.modules.moduleAuthor.face,
+                    },
+                  );
+                },
+                child: (item.modules.moduleAuthor?.pendant?['image'] as String?)
+                            ?.isNotEmpty ==
+                        true
+                    ? Padding(
+                        padding: const EdgeInsets.all(3),
+                        child: _buildAvatar(34),
+                      )
+                    : _buildAvatar(40),
+              ),
               const SizedBox(width: 10),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -90,16 +100,18 @@ class AuthorPanel extends StatelessWidget {
                               item.modules.moduleAuthor!.vip['status'] > 0 &&
                               item.modules.moduleAuthor!.vip['type'] == 2
                           ? context.vipColor
-                          : theme.colorScheme.onSurface,
-                      fontSize: theme.textTheme.titleSmall!.fontSize,
+                          : Theme.of(context).colorScheme.onSurface,
+                      fontSize:
+                          Theme.of(context).textTheme.titleSmall!.fontSize,
                     ),
                   ),
                   if (pubTime != null)
                     Text(
                       '$pubTime${item.modules.moduleAuthor.pubAction != null ? ' ${item.modules.moduleAuthor.pubAction}' : ''}',
                       style: TextStyle(
-                        color: theme.colorScheme.outline,
-                        fontSize: theme.textTheme.labelSmall!.fontSize,
+                        color: Theme.of(context).colorScheme.outline,
+                        fontSize:
+                            Theme.of(context).textTheme.labelSmall!.fontSize,
                       ),
                     ),
                 ],
@@ -121,7 +133,7 @@ class AuthorPanel extends StatelessWidget {
                             const BorderRadius.all(Radius.circular(4)),
                         border: Border.all(
                           width: 1.25,
-                          color: theme.colorScheme.primary,
+                          color: Theme.of(context).colorScheme.primary,
                         ),
                       ),
                       child: Text(
@@ -129,7 +141,7 @@ class AuthorPanel extends StatelessWidget {
                         style: TextStyle(
                           height: 1,
                           fontSize: 12,
-                          color: theme.colorScheme.primary,
+                          color: Theme.of(context).colorScheme.primary,
                         ),
                         strutStyle: const StrutStyle(
                           leading: 0,
