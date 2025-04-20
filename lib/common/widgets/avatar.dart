@@ -48,7 +48,7 @@ class Avatar extends StatelessWidget {
                 onTap: onTap,
                 child: _buildAvatar(colorScheme),
               ),
-        if (showDynDecorate && !garbPendantImage.isNullOrEmpty)
+        if (!garbPendantImage.isNullOrEmpty)
           Positioned(
             top: -size * 0.375, // -(size * 1.75 - size) / 2
             child: IgnorePointer(
