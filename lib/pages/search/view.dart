@@ -21,7 +21,7 @@ class SearchPage extends StatefulWidget {
 class _SearchPageState extends State<SearchPage> {
   final _tag = Utils.generateRandomString(6);
   late final SSearchController _searchController = Get.put(
-    SSearchController(_tag),
+    SSearchController(),
     tag: _tag,
   );
 
@@ -67,6 +67,7 @@ class _SearchPageState extends State<SearchPage> {
           controller: _searchController.controller,
           textInputAction: TextInputAction.search,
           onChanged: _searchController.onChange,
+          // textAlignVertical: TextAlignVertical.center,
           decoration: InputDecoration(
             hintText: _searchController.hintText,
             border: InputBorder.none,

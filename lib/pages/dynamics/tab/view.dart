@@ -144,7 +144,10 @@ class _DynamicsTabPageState
               sliver: dynamicsWaterfallFlow
                   ? SliverWaterfallFlow.extent(
                       maxCrossAxisExtent: Grid.smallCardWidth * 2,
+                      //cacheExtent: 0.0,
                       crossAxisSpacing: StyleString.cardSpace / 2,
+                      // mainAxisSpacing: StyleString.cardSpace / 2,
+
                       lastChildLayoutTypeBuilder: (index) {
                         if (index == loadingState.response!.length - 1) {
                           controller.onLoadMore();
@@ -160,6 +163,7 @@ class _DynamicsTabPageState
                             DynamicPanel(
                               item: i,
                               onRemove: controller.onRemove,
+                              // onSetTop: controller.onSetTop,
                             ),
                         ] else ...[
                           for (var i in loadingState.response!)
@@ -168,6 +172,7 @@ class _DynamicsTabPageState
                               DynamicPanel(
                                 item: i,
                                 onRemove: controller.onRemove,
+                                // onSetTop: controller.onSetTop,
                               ),
                         ]
                       ],
@@ -193,6 +198,7 @@ class _DynamicsTabPageState
                                   return DynamicPanel(
                                     item: item,
                                     onRemove: controller.onRemove,
+                                    // onSetTop: controller.onSetTop,
                                   );
                                 }
                                 return const SizedBox.shrink();

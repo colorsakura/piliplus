@@ -24,7 +24,6 @@ class _SearchResultPageState extends State<SearchResultPage>
   late TabController _tabController;
   final String _tag = DateTime.now().millisecondsSinceEpoch.toString();
   final bool? _isFromSearch = Get.arguments?['fromSearch'];
-  SSearchController? sSearchController;
 
   @override
   void initState() {
@@ -36,21 +35,21 @@ class _SearchResultPageState extends State<SearchResultPage>
 
     _tabController = TabController(
       vsync: this,
-      initialIndex: Get.arguments?['initIndex'] ?? 0,
+      initialIndex: Get.arguments?['initIndex'] != null
+          ? (Get.arguments?['initIndex'] as int)
+          : 0,
       length: SearchType.values.length,
     );
 
-    if (_isFromSearch == true) {
-      try {
-        sSearchController =
-            Get.find<SSearchController>(tag: Get.parameters['tag']);
-      } catch (_) {}
+    if (Get.arguments is int) {
       _tabController.addListener(listener);
     }
   }
 
   void listener() {
-    sSearchController?.initIndex = _tabController.index;
+    if (Get.isRegistered<SSearchController>()) {
+      Get.find<SSearchController>().initIndex = _tabController.index;
+    }
   }
 
   @override

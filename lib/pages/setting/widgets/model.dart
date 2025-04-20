@@ -131,8 +131,10 @@ List<SettingsModel> get styleSettings => [
           onChanged: (value) {
             if (value) {
               autoScreen();
+              // SmartDialog.showToast('已开启横屏适配');
             } else {
               AutoOrientation.portraitUpMode();
+              // SmartDialog.showToast('已关闭横屏适配');
             }
           }),
       SettingsModel(

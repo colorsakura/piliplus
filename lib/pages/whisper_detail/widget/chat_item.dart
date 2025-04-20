@@ -397,9 +397,10 @@ class ChatItem extends StatelessWidget {
             onTap: () async {
               Get.toNamed('/htmlRender', parameters: {
                 'url': "https://www.bilibili.com/read/cv${content['rid']}/",
+                // 'url': url.startsWith('//') ? url.split('//').last : url,
                 'title': content['title'] ?? "",
                 'id': "cv${content['rid']}",
-                'dynamicType': "read"
+                'dynamicType': "read" //content['template_id'] ?? "",
               });
             },
             child: Column(

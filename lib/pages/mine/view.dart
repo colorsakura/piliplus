@@ -40,7 +40,8 @@ class _MinePageState extends State<MinePage> {
               iconSize: 40.0,
               padding: const EdgeInsets.all(8),
               style: const ButtonStyle(
-                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                tapTargetSize:
+                    MaterialTapTargetSize.shrinkWrap, // the '2023' part
               ),
               tooltip: "${MineController.anonymity.value ? '退出' : '进入'}无痕模式",
               onPressed: () {
@@ -60,7 +61,8 @@ class _MinePageState extends State<MinePage> {
                   iconSize: 40.0,
                   padding: const EdgeInsets.all(8),
                   style: const ButtonStyle(
-                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    tapTargetSize:
+                        MaterialTapTargetSize.shrinkWrap, // the '2023' part
                   ),
                   tooltip: '切换至${_mineController.nextThemeType.description}主题',
                   onPressed: _mineController.onChangeTheme,
@@ -75,7 +77,8 @@ class _MinePageState extends State<MinePage> {
               iconSize: 40.0,
               padding: const EdgeInsets.all(8),
               style: const ButtonStyle(
-                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                tapTargetSize:
+                    MaterialTapTargetSize.shrinkWrap, // the '2023' part
               ),
               tooltip: '设置',
               onPressed: () => {

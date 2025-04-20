@@ -66,6 +66,7 @@ Widget content(bool isSave, BuildContext context, item, source, callback) {
             item.modules.moduleDynamic.major.opus.pics.isNotEmpty)
           Text.rich(
             picsNodes(),
+            // semanticsLabel: '动态图片',
           ),
       ],
     ),

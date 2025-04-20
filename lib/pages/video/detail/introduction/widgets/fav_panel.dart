@@ -147,6 +147,7 @@ class _FavPanelState extends State<FavPanel> {
                     );
                   }
                 } else {
+                  // 骨架屏
                   return const Center(
                     child: CircularProgressIndicator(),
                   );

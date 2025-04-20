@@ -79,6 +79,24 @@ class DownloadUtils {
     PermissionStatus status = await Permission.photos.status;
     if (status == PermissionStatus.denied ||
         status == PermissionStatus.permanentlyDenied) {
+      // SmartDialog.show(
+      //   useSystem: true,
+      //   animationType: SmartAnimationType.centerFade_otherSlide,
+      //   builder: (BuildContext context) {
+      //     return AlertDialog(
+      //       title: const Text('提示'),
+      //       content: const Text('相册权限未授权'),
+      //       actions: [
+      //         TextButton(
+      //           onPressed: () async {
+      //             openAppSettings();
+      //           },
+      //           child: const Text('去授权'),
+      //         )
+      //       ],
+      //     );
+      //   },
+      // );
       return false;
     } else {
       return true;

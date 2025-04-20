@@ -36,7 +36,15 @@ Widget htmlRender({
             if (isMall) {
               return const SizedBox.shrink();
             }
-
+            // bool inTable =
+            //     extensionContext.element!.previousElementSibling == null ||
+            //         extensionContext.element!.nextElementSibling == null;
+            // imgUrl = Utils().imageUrl(imgUrl!);
+            // return CachedNetworkImage(
+            //   imageUrl: imgUrl,
+            //   width: isEmote ? 22 : null,
+            //   height: isEmote ? 22 : null,
+            // );
             String? clazz = attributes['class'];
             String? height = RegExp(r'max-height:(\d+)px')
                 .firstMatch('${attributes['style']}')
@@ -81,6 +89,7 @@ Widget htmlRender({
         lineHeight: LineHeight.percent(160),
         letterSpacing: 0.3,
       ),
+      // 'br': Style(margin: Margins.zero, padding: HtmlPaddings.zero),
       'body': Style(margin: Margins.zero, padding: HtmlPaddings.zero),
       'a': Style(
         color: Theme.of(context).colorScheme.primary,
@@ -91,6 +100,7 @@ Widget htmlRender({
       ),
       'p': Style(
         margin: Margins.only(bottom: 4),
+        // margin: Margins.zero,
       ),
       'span': Style(
         fontSize: FontSize.large,
@@ -118,6 +128,7 @@ Widget htmlRender({
       'figcaption': Style(
         fontSize: FontSize.large,
         textAlign: TextAlign.center,
+        // margin: Margins.only(top: 4),
       ),
       'strong': Style(fontWeight: FontWeight.bold),
       'figure': Style(

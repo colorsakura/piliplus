@@ -3,11 +3,13 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 class BackwardSeekIndicator extends StatefulWidget {
+  // final void Function(Duration) onChanged;
   final ValueChanged<Duration> onSubmitted;
   final int duration;
 
   const BackwardSeekIndicator({
     super.key,
+    // required this.onChanged,
     required this.onSubmitted,
     required this.duration,
   });
@@ -41,6 +43,8 @@ class BackwardSeekIndicatorState extends State<BackwardSeekIndicator> {
     timer = Timer(const Duration(milliseconds: 400), () {
       widget.onSubmitted.call(duration);
     });
+    // widget.onChanged.call(value);
+    // 重复点击 快退秒数累加10
     setState(() {
       duration += Duration(seconds: widget.duration);
     });

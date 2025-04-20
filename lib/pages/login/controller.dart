@@ -628,9 +628,11 @@ class LoginPageController extends GetxController
           break;
         default:
           SmartDialog.showToast(res['msg']);
+          // login failed
           break;
       }
     }
+    // });
   }
 
   bool isGeeArgumentValid(String? geeGt, String? geeChallenge) {
@@ -642,7 +644,11 @@ class LoginPageController extends GetxController
   Future<void> setAccount(Map tokenInfo, List cookieInfo) async {
     final account = LoginAccount(BiliCookieJar.fromList(cookieInfo),
         tokenInfo['access_token'], tokenInfo['refresh_token']);
-    await Future.wait([account.onChange(), AnonymousAccount().delete()]);
+    await Future.wait([
+      account.onChange(),
+      AnonymousAccount().delete()
+      // .then((_) => Request.buvidActive(AnonymousAccount()))
+    ]);
     Accounts.accountMode.updateAll((_, a) => a == account ? account : a);
     if (Accounts.main.isLogin) {
       SmartDialog.showToast('登录成功');

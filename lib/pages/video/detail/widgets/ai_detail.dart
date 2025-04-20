@@ -45,9 +45,11 @@ class _AiDetailState extends CommonCollapseSlidePageState<AiDetail> {
             spanChildren.add(
               TextSpan(
                 text: match.group(0),
-                style: TextStyle(color: Theme.of(context).colorScheme.primary),
+                style: TextStyle(
+                    color: Theme.of(context).colorScheme.primary), // 设置颜色为蓝色
                 recognizer: TapGestureRecognizer()
                   ..onTap = () {
+                    // 处理点击事件
                     try {
                       PageUtils.handleWebview(match.group(0)!);
                     } catch (err) {

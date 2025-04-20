@@ -102,6 +102,7 @@ class VideoDetailController extends GetxController
 
   Box get setting => GStorage.setting;
 
+  // late bool enableCDN;
   int? cacheVideoQa;
   late String cacheDecode;
   late String cacheSecondDecode;
@@ -284,9 +285,13 @@ class VideoDetailController extends GetxController
     }
     danmakuCid.value = cid.value;
 
+    ///
     if (Platform.isAndroid) {
       floating = Floating();
     }
+
+    // CDN优化
+    // enableCDN = setting.get(SettingBoxKey.enableCDN, defaultValue: true);
 
     // 预设的解码格式
     cacheDecode = setting.get(SettingBoxKey.defaultDecode,
@@ -998,6 +1003,7 @@ class VideoDetailController extends GetxController
   }
 
   /// 更新画质、音质
+  /// TODO 继续进度播放
   updatePlayer() {
     isShowCover.value = false;
     playedTime = plPlayerController.position.value;
@@ -1274,6 +1280,9 @@ class VideoDetailController extends GetxController
           orElse: () => videosList.first);
       setVideoHeight();
 
+      // videoUrl = enableCDN
+      //     ? VideoUtils.getCdnUrl(firstVideo)
+      //     : (firstVideo.backupUrl ?? firstVideo.baseUrl!);
       videoUrl = VideoUtils.getCdnUrl(firstVideo);
 
       /// 优先顺序 设置中指定质量 -> 当前可选的最高质量
@@ -1299,6 +1308,9 @@ class VideoDetailController extends GetxController
         }
         firstAudio = audiosList.firstWhere((e) => e.id == closestNumber,
             orElse: () => audiosList.first);
+        // audioUrl = enableCDN
+        //     ? VideoUtils.getCdnUrl(firstAudio)
+        //     : (firstAudio.backupUrl ?? firstAudio.baseUrl!);
         audioUrl = VideoUtils.getCdnUrl(firstAudio);
         if (firstAudio.id != null) {
           currentAudioQa = AudioQualityCode.fromCode(firstAudio.id!)!;
@@ -1458,6 +1470,9 @@ class VideoDetailController extends GetxController
 
   Future _querySubtitles() async {
     var res = await VideoHttp.subtitlesJson(bvid: bvid, cid: cid.value);
+    // if (!res["status"]) {
+    //   SmartDialog.showToast('查询字幕错误，${res["msg"]}');
+    // }
     if (res['status']) {
       // interactive video
       if (graphVersion == null) {

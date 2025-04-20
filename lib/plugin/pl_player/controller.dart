@@ -1074,7 +1074,20 @@ class PlPlayerController {
     _playbackSpeed.value = speed;
   }
 
+  /// 设置倍速
+  // Future<void> togglePlaybackSpeed() async {
+  //   List<double> allowedSpeeds =
+  //       PlaySpeed.values.map<double>((e) => e.value).toList();
+  //   int index = allowedSpeeds.indexOf(_playbackSpeed.value);
+  //   if (index < allowedSpeeds.length - 1) {
+  //     setPlaybackSpeed(allowedSpeeds[index + 1]);
+  //   } else {
+  //     setPlaybackSpeed(allowedSpeeds[0]);
+  //   }
+  // }
+
   /// 播放视频
+  /// TODO  _duration.value丢失
   Future<void> play({bool repeat = false, bool hideControls = true}) async {
     if (_playerCount.value == 0) return;
     // 播放时自动隐藏控制条
@@ -1091,6 +1104,14 @@ class PlPlayerController {
     // screenManager.setOverlays(false);
 
     audioSessionHandler.setActive(true);
+
+    // Future.delayed(const Duration(milliseconds: 100), () {
+    //   getCurrentVolume();
+    //   if (setting.get(SettingBoxKey.enableAutoBrightness, defaultValue: true)
+    //       as bool) {
+    //     getCurrentBrightness();
+    //   }
+    // });
   }
 
   /// 暂停播放
@@ -1225,6 +1246,46 @@ class PlPlayerController {
     _videoFitDesc.value = videoFitType[value.index]['desc'];
     setVideoFit();
     getPlayerKey?.call().currentState?.update(fit: value);
+    // showDialog(
+    //   context: Get.context!,
+    //   builder: (context) {
+    //     return AlertDialog(
+    //       title: const Text('视频尺寸'),
+    //       content: StatefulBuilder(builder: (context, StateSetter setState) {
+    //         return Wrap(
+    //           alignment: WrapAlignment.start,
+    //           spacing: 8,
+    //           runSpacing: 2,
+    //           children: [
+    //             for (var i in videoFitType) ...[
+    //               if (_videoFit.value == i['attr']) ...[
+    //                 FilledButton(
+    //                   onPressed: () async {
+    //                     _videoFit.value = i['attr'];
+    //                     _videoFitDesc.value = i['desc'];
+    //                     setVideoFit();
+    //                     Get.back();
+    //                   },
+    //                   child: Text(i['desc']),
+    //                 ),
+    //               ] else ...[
+    //                 FilledButton.tonal(
+    //                   onPressed: () async {
+    //                     _videoFit.value = i['attr'];
+    //                     _videoFitDesc.value = i['desc'];
+    //                     setVideoFit();
+    //                     Get.back();
+    //                   },
+    //                   child: Text(i['desc']),
+    //                 ),
+    //               ]
+    //             ]
+    //           ],
+    //         );
+    //       }),
+    //     );
+    //   },
+    // );
   }
 
   /// 缓存fit

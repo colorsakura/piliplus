@@ -60,6 +60,7 @@ class VideoCustomActions {
           Icon(MdiIcons.accountCircleOutline, size: 16),
           () async {
             Get.toNamed('/member?mid=${videoItem.owner.mid}', arguments: {
+              // 'face': videoItem.owner.face,
               'heroTag': '${videoItem.owner.mid}',
             });
           },
@@ -144,6 +145,8 @@ class VideoCustomActions {
                             onPressed: () async {
                               SmartDialog.showLoading(msg: '正在提交');
                               var res = await VideoHttp.feedDislikeCancel(
+                                // reasonId: r?.id,
+                                // feedbackId: f?.id,
                                 id: v.param!,
                                 goto: v.goto!,
                               );

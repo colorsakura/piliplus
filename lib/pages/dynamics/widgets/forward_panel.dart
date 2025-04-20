@@ -106,6 +106,22 @@ Widget forWard(bool isSave, item, BuildContext context, source, callback,
               ],
             ),
             const SizedBox(height: 2),
+
+            /// fix #话题跟content重复
+            // if (item.modules.moduleDynamic.topic != null) ...[
+            //   Padding(
+            //     padding: floor == 2
+            //         ? EdgeInsets.zero
+            //         : const EdgeInsets.only(left: 12, right: 12),
+            //     child: GestureDetector(
+            //       child: Text(
+            //         '#${item.modules.moduleDynamic.topic.name}',
+            //         style: authorStyle,
+            //       ),
+            //     ),
+            //   ),
+            // ],
+
             if (richNodes != null)
               Text.rich(
                 richNodes,
@@ -124,7 +140,10 @@ Widget forWard(bool isSave, item, BuildContext context, source, callback,
             if (hasPics) ...[
               Text.rich(
                 picsNodes(item.modules.moduleDynamic.major.opus.pics, callback),
+                // semanticsLabel: '动态图片',
               ),
+              // if (item.modules.moduleDynamic.additional != null)
+              //   const SizedBox(height: 4),
             ],
             const SizedBox(height: 4),
           ],
@@ -187,6 +206,11 @@ Widget forWard(bool isSave, item, BuildContext context, source, callback,
                 : const SizedBox.shrink(),
         _ => const SizedBox.shrink(),
       };
+    // return Container(
+    //     padding:
+    //         const EdgeInsets.only(left: 10, top: 12, right: 10, bottom: 10),
+    //     color: Theme.of(context).dividerColor.withOpacity(0.08),
+    //     child: articlePanel(item, context, floor: floor));
     // 转发
     case 'DYNAMIC_TYPE_FORWARD':
       return InkWell(

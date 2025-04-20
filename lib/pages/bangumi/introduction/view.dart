@@ -394,6 +394,16 @@ class _BangumiInfoState extends State<BangumiInfo> {
                     ],
                   ),
                   const SizedBox(height: 6),
+                  // 点赞收藏转发 布局样式1
+                  // SingleChildScrollView(
+                  //   padding: const EdgeInsets.only(top: 7, bottom: 7),
+                  //   scrollDirection: Axis.horizontal,
+                  //   child: actionRow(
+                  //     context,
+                  //     bangumiIntroController,
+                  //     videoDetailCtr,
+                  //   ),
+                  // ),
                   // 点赞收藏转发 布局样式2
                   actionGrid(context, bangumiIntroController),
                   // 番剧分p

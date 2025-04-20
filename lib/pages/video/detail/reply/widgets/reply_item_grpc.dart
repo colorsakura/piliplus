@@ -73,6 +73,12 @@ class ReplyItemGrpc extends StatelessWidget {
         },
         onLongPress: () {
           feedBack();
+          // showDialog(
+          //   context: context,
+          //   builder: (context) => AlertDialog(
+          //     content: SelectableText(jsonEncode(replyItem.toProto3Json())),
+          //   ),
+          // );
           showModalBottomSheet(
             context: context,
             useSafeArea: true,
@@ -113,6 +119,17 @@ class ReplyItemGrpc extends StatelessWidget {
               Positioned(
                 top: 8,
                 right: 12,
+                // child: GestureDetector(
+                //   onTap: replyItem.member.garbCardJumpUrl.isNotEmpty
+                //       ? () {
+                //           Get.toNamed(
+                //             'webview',
+                //             parameters: {
+                //               'url': replyItem.member.garbCardJumpUrl
+                //             },
+                //           );
+                //         }
+                //       : null,
                 child: Stack(
                   alignment: Alignment.centerRight,
                   children: [
@@ -139,6 +156,7 @@ class ReplyItemGrpc extends StatelessWidget {
                   ],
                 ),
               ),
+              // ),
               SizedBox(
                 width: double.infinity,
                 child: _buildAuthorPanel(context),
@@ -175,11 +193,12 @@ class ReplyItemGrpc extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
-      children: [
+      children: <Widget>[
+        /// fix Stack内GestureDetector  onTap无效
         Row(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
+          children: <Widget>[
             lfAvtar(),
             const SizedBox(width: 12),
             Column(
@@ -312,8 +331,9 @@ class ReplyItemGrpc extends StatelessWidget {
         if (replyLevel != '') buttonAction(context, replyItem.replyControl),
         // 一楼的评论
         if (replyLevel == '1' &&
-            (replyItem.replies.isNotEmpty ||
-                replyItem.replyControl.subReplyEntryText.isNotEmpty)) ...[
+            ( //replyItem.replyControl!.isShow! ||
+                replyItem.replies.isNotEmpty ||
+                    replyItem.replyControl.subReplyEntryText.isNotEmpty)) ...[
           Padding(
             padding: const EdgeInsets.only(top: 5, bottom: 12),
             child: replyItemRow(
@@ -597,15 +617,19 @@ class ReplyItemGrpc extends StatelessWidget {
       var position = textPainter.getPositionForOffset(
         Offset(
           textSize.width,
-          maxHeight,
+          maxHeight, // textSize.height,
         ),
       );
+      // final endOffset = textPainter.getOffsetBefore(position.offset);
       message = message.substring(0, position.offset);
     }
+
+    // return TextSpan(text: message);
 
     // 投票
     if (content.hasVote()) {
       message.splitMapJoin(RegExp(r"\{vote:\d+?\}"), onMatch: (Match match) {
+        // String matchStr = match[0]!;
         spanChildren.add(
           TextSpan(
             text: '投票: ${content.vote.title}',
@@ -631,7 +655,12 @@ class ReplyItemGrpc extends StatelessWidget {
       message = message.replaceAll(RegExp(r"\{vote:\d+?\}"), "");
     }
     message = parse(message).body?.text ?? message;
-
+    // .replaceAll('&amp;', '&')
+    // .replaceAll('&lt;', '<')
+    // .replaceAll('&gt;', '>')
+    // .replaceAll('&quot;', '"')
+    // .replaceAll('&apos;', "'")
+    // .replaceAll('&nbsp;', ' ');
     // 构建正则表达式
     final List<String> specialTokens = [
       ...content.emote.keys,
@@ -657,6 +686,12 @@ class ReplyItemGrpc extends StatelessWidget {
       spanChildren.add(TextSpan(
         text: str,
       ));
+      // TextSpan(
+      //
+      //     text: str,
+      //     recognizer: TapGestureRecognizer()
+      //       ..onTap = () => replyReply
+      //           ?.call(replyItem.root == 0 ? replyItem : fReplyItem)))));
     }
 
     late final bool enableWordRe =
@@ -965,6 +1000,7 @@ class ReplyItemGrpc extends StatelessWidget {
         ),
       );
     }
+    // spanChildren.add(TextSpan(text: matchMember));
     return TextSpan(children: spanChildren);
   }
 

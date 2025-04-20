@@ -55,12 +55,16 @@ Widget videoSeasonWidget(source, item, context, type, {floor = 1}) {
       double width = box.maxWidth;
       return Stack(
         children: [
+          // Hero(
+          //   tag: content.bvid,
+          //   child:
           NetworkImgLayer(
             width: width,
             height: width / StyleString.aspectRatio,
             src: content.cover,
             semanticsLabel: content.title,
           ),
+          // ),
           if (content?.badge?['text'] != null)
             PBadge(
               text: content.badge['text'],
@@ -157,6 +161,22 @@ Widget videoSeasonWidget(source, item, context, type, {floor = 1}) {
         ),
         const SizedBox(height: 6),
       ],
+      // const SizedBox(height: 4),
+      /// fix #话题跟content重复
+      // if (item.modules.moduleDynamic.topic != null) ...[
+      //   Padding(
+      //     padding: floor == 2
+      //         ? EdgeInsets.zero
+      //         : const EdgeInsets.only(left: 12, right: 12),
+      //     child: GestureDetector(
+      //       child: Text(
+      //         '#${item.modules.moduleDynamic.topic.name}',
+      //         style: authorStyle,
+      //       ),
+      //     ),
+      //   ),
+      //   const SizedBox(height: 6),
+      // ],
       if (floor == 2 && item.modules.moduleDynamic.desc != null) ...[
         if (richNodes != null) Text.rich(richNodes),
         const SizedBox(height: 6),

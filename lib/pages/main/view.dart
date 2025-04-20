@@ -36,7 +36,7 @@ class _MainAppState extends State<MainApp>
   late final _homeController = Get.put(HomeController());
   late final _dynamicController = Get.put(DynamicsController());
 
-  late int _lastSelectTime = 0;
+  late int _lastSelectTime = 0; //上次点击时间
   late bool enableMYBar;
   late bool useSideBar;
 
@@ -192,7 +192,7 @@ class _MainAppState extends State<MainApp>
         value: SystemUiOverlayStyle(
           systemNavigationBarColor: Colors.transparent,
           systemNavigationBarIconBrightness:
-              Theme.of(context).brightness.reverse,
+              Theme.of(context).brightness.reverse, // 设置虚拟按键图标颜色
         ),
         child: Scaffold(
           resizeToAvoidBottomInset: false,
@@ -412,6 +412,11 @@ class _MainAppState extends State<MainApp>
                   ? Text(count.toString())
                   : null,
               padding: const EdgeInsets.fromLTRB(6, 0, 6, 0),
+              // isLabelVisible:
+              //     _mainController.dynamicBadgeType != DynamicBadgeMode.hidden &&
+              //         count > 0,
+              // backgroundColor: Theme.of(context).colorScheme.primary,
+              // textColor: Theme.of(context).colorScheme.onInverseSurface,
               child: icon,
             )
           : icon;

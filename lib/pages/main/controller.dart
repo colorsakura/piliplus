@@ -176,7 +176,7 @@ class MainController extends GetxController {
 
   void setCount([int count = 0]) async {
     if (dynIndex == -1 || navigationBars[dynIndex]['count'] == count) return;
-    navigationBars[dynIndex]['count'] = count;
+    navigationBars[dynIndex]['count'] = count; // 修改 count 属性为新的值
     navigationBars.refresh();
   }
 

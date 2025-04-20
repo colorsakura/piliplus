@@ -77,6 +77,8 @@ class PlayOrPauseButtonState extends State<PlayOrPauseButton>
             player.playOrPause();
           }
         },
+        // iconSize: widget.iconSize ?? _theme(context).buttonBarButtonSize,
+        // color: widget.iconColor ?? _theme(context).buttonBarButtonColor,
         child: Center(
           child: AnimatedIcon(
             semanticLabel:
@@ -87,6 +89,8 @@ class PlayOrPauseButtonState extends State<PlayOrPauseButton>
             icon: AnimatedIcons.play_pause,
             color: Colors.white,
             size: 20,
+            // size: widget.iconSize ?? _theme(context).buttonBarButtonSize,
+            // color: widget.iconColor ?? _theme(context).buttonBarButtonColor,
           ),
         ),
       ),

@@ -62,4 +62,7 @@ class FavDetailItemData extends BaseVideoItemModel with MultiSelectData {
 
   static final _digitRegExp = RegExp(r'\d+');
   String resolveEpId(String url) => _digitRegExp.firstMatch(url)!.group(0)!;
+
+  // @override
+  // bool isFollowed;
 }

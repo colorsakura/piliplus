@@ -45,6 +45,7 @@ class VideoCardV extends StatelessWidget {
         PageUtils.toVideoPage(
           'bvid=$bvid&cid=$cid',
           arguments: {
+            // 'videoItem': videoItem,
             'pic': videoItem.pic,
             'heroTag': heroTag,
           },
@@ -57,6 +58,7 @@ class VideoCardV extends StatelessWidget {
           String uri = videoItem.uri!;
           String id = '';
           if (uri.startsWith('bilibili://article/')) {
+            // https://www.bilibili.com/read/cv27063554
             dynamicType = 'read';
             RegExp regex = RegExp(r'\d+');
             Match match = regex.firstMatch(uri)!;

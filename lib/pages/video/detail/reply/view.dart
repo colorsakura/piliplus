@@ -50,6 +50,7 @@ class _VideoReplyPanelState extends State<VideoReplyPanel>
 
   String get heroTag => widget.heroTag;
 
+  // 添加页面缓存
   @override
   bool get wantKeepAlive => true;
 

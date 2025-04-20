@@ -9,9 +9,6 @@ import 'package:PiliPlus/utils/storage.dart';
 import 'package:get/get_rx/src/rx_workers/utils/debouncer.dart';
 
 class SSearchController extends GetxController {
-  SSearchController(this.tag);
-  final String tag;
-
   final searchFocusNode = FocusNode();
   final controller = TextEditingController();
 
@@ -118,7 +115,6 @@ class SSearchController extends GetxController {
     await Get.toNamed(
       '/searchResult',
       parameters: {
-        'tag': tag,
         'keyword': controller.text,
       },
       arguments: {

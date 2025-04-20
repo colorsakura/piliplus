@@ -61,6 +61,9 @@ class _SeasonPanelState extends State<SeasonPanel> {
     }
 
     /// 取对应 season_id 的 episodes
+    // episodes = widget.ugcSeason.sections!
+    //     .firstWhere((e) => e.seasonId == widget.ugcSeason.id)
+    //     .episodes;
     currentIndex.value = episodes.indexWhere(
         (EpisodeItem e) => e.cid == _videoDetailController.seasonCid);
     _listener = _videoDetailController.cid.listen((int cid) {
@@ -82,6 +85,17 @@ class _SeasonPanelState extends State<SeasonPanel> {
     _listener?.cancel();
     super.dispose();
   }
+
+  // void changeFucCall(item, int i) async {
+  //   await widget.changeFuc!(
+  //     IdUtils.av2bv(item.aid),
+  //     item.cid,
+  //     item.aid,
+  //   );
+  //   currentIndex = i;
+  //   Get.back();
+  //   setState(() {});
+  // }
 
   @override
   Widget build(BuildContext context) {

@@ -154,6 +154,8 @@ class MineController extends GetxController {
                 ],
               ),
             ),
+            // duration: const Duration(seconds: 2),
+            // showCloseIcon: true,
           );
         },
       ).then((res) {

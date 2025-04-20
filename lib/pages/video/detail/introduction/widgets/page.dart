@@ -67,14 +67,15 @@ class _PagesPanelState extends State<PagesPanel> {
     if (!_scrollController.hasClients || pages.isEmpty) {
       return;
     }
-    const double itemWidth = 150;
+    const double itemWidth = 150; // 每个列表项的宽度
     final double targetOffset = (pageIndex * itemWidth - itemWidth / 2).clamp(
         _scrollController.position.minScrollExtent,
         _scrollController.position.maxScrollExtent);
+    // 滑动至目标位置
     _scrollController.animateTo(
       targetOffset,
-      duration: const Duration(milliseconds: 300),
-      curve: Curves.easeInOut,
+      duration: const Duration(milliseconds: 300), // 滑动动画持续时间
+      curve: Curves.easeInOut, // 滑动动画曲线
     );
   }
 

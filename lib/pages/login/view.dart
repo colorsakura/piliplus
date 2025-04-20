@@ -22,6 +22,7 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final LoginPageController _loginPageCtr = Get.put(LoginPageController());
+  // late Future<Map<String, dynamic>> codeFuture;
   // 二维码生成时间
   bool showPassword = false;
   GlobalKey globalKey = GlobalKey();
@@ -40,6 +41,7 @@ class _LoginPageState extends State<LoginPage> {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            // const SizedBox(width: 20),
             TextButton.icon(
               onPressed: _loginPageCtr.refreshQRCode,
               icon: const Icon(Icons.refresh),
@@ -62,6 +64,7 @@ class _LoginPageState extends State<LoginPage> {
                   Uint8List.fromList(pngBytes),
                   fileName: picName,
                   extension: 'png',
+                  // 保存到 PiliPlus文件夹
                   androidRelativePath: "Pictures/PiliPlus",
                   skipIfExists: false,
                 );
@@ -105,6 +108,20 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
             );
+            // return QrImageView(
+            //   backgroundColor: Colors.white,
+            //   eyeStyle: QrEyeStyle(
+            //     eyeShape: QrEyeShape.square,
+            //     color: Colors.black87,
+            //   ),
+            //   dataModuleStyle: QrDataModuleStyle(
+            //     dataModuleShape: QrDataModuleShape.square,
+            //     color: Colors.black87,
+            //   ),
+            //   data: _loginPageCtr.codeInfo.value['data']!['url']!,
+            //   size: 200,
+            //   semanticsLabel: '二维码',
+            // );
           }),
         ),
         const SizedBox(height: 10),
@@ -115,6 +132,10 @@ class _LoginPageState extends State<LoginPage> {
             )),
         Obx(() => GestureDetector(
               onTap: () {
+                //以外部方式打开此链接
+                // launchUrlString(
+                //     _loginPageCtr.codeInfo.value['data']?['url'] ?? "",
+                //     mode: LaunchMode.externalApplication);
                 // 复制到剪贴板
                 Utils.copyText(
                     _loginPageCtr.codeInfo.value['data']?['url'] ?? '',
@@ -366,6 +387,7 @@ class _LoginPageState extends State<LoginPage> {
                           });
                         },
                         value: item,
+                        // height: menuItemHeight,
                         child: Row(children: [
                           Text(item['cname']),
                           const Spacer(),
@@ -378,7 +400,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   const SizedBox(width: 6),
                   SizedBox(
-                    height: 24,
+                    height: 24, // 这里设置固定高度
                     child: VerticalDivider(
                       color: Theme.of(context)
                           .colorScheme

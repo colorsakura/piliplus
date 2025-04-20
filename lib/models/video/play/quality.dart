@@ -59,6 +59,7 @@ extension VideoQualityDesc on VideoQuality {
   String get description => _descList[index];
 }
 
+///
 enum AudioQuality { k64, k132, k192, dolby, hiRes }
 
 extension AudioQualityCode on AudioQuality {

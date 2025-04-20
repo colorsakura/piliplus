@@ -131,6 +131,31 @@ class HeaderControlState extends State<HeaderControl> {
             padding: EdgeInsets.zero,
             children: [
               const SizedBox(height: 14),
+              // ListTile(
+              //   onTap: () {},
+              //   dense: true,
+              //   enabled: false,
+              //   leading:
+              //       const Icon(Icons.network_cell_outlined, size: 20),
+              //   title: Text('省流模式', style: titleStyle),
+              //   subtitle: Text('低画质 ｜ 减少视频缓存', style: subTitleStyle),
+              //   trailing: Transform.scale(
+              //     scale: 0.75,
+              //     child: Switch(
+              //       thumbIcon: WidgetStateProperty.resolveWith<Icon?>(
+              //           (Set<WidgetState> states) {
+              //         if (states.isNotEmpty &&
+              //             states.first == WidgetState.selected) {
+              //           return const Icon(Icons.done);
+              //         }
+              //         return null; // All other states will use the default thumbIcon.
+              //       }),
+              //       value: false,
+              //       onChanged: (value) => {},
+              //     ),
+              //   ),
+              // ),
+              // if (videoDetailCtr.userInfo != null)
               ListTile(
                 dense: true,
                 onTap: () {
@@ -339,6 +364,7 @@ class HeaderControlState extends State<HeaderControl> {
                   };
                 },
               ),
+
               ListTile(
                 dense: true,
                 onTap: () => {Get.back(), showSetVideoQa()},
@@ -1227,6 +1253,7 @@ class HeaderControlState extends State<HeaderControl> {
                       min: 0,
                       max: 1,
                       value: subtitleBgOpaticy,
+                      // label: '${(subtitleBgOpaticy * 100).toInt()}%',
                       onChanged: (double val) {
                         updateOpacity(val.toPrecision(2));
                       },
@@ -1264,6 +1291,13 @@ class HeaderControlState extends State<HeaderControl> {
       {'value': 6, 'label': '彩色'},
     ];
     final List blockTypes = widget.controller.blockTypes;
+    // 显示区域
+    // final List<Map<String, dynamic>> showAreas = [
+    //   {'value': 0.25, 'label': '1/4屏'},
+    //   {'value': 0.5, 'label': '半屏'},
+    //   {'value': 0.75, 'label': '3/4屏'},
+    //   {'value': 1.0, 'label': '满屏'},
+    // ];
     // 智能云屏蔽
     int danmakuWeight = widget.controller.danmakuWeight;
     // 显示区域
@@ -1780,6 +1814,7 @@ class HeaderControlState extends State<HeaderControl> {
                       min: 1.0,
                       max: 3.0,
                       value: danmakuLineHeight,
+                      // label: '$danmakuLineHeight',
                       onChanged: (double val) {
                         updateLineHeight(val.toPrecision(1));
                       },
@@ -2017,6 +2052,14 @@ class HeaderControlState extends State<HeaderControl> {
                     return SizedBox.shrink();
                   },
                 ),
+                // ComBtn(
+                //   icon: const Icon(
+                //     FontAwesomeIcons.cropSimple,
+                //     size: 15,
+                //     color: Colors.white,
+                //   ),
+                //   fuc: () => _.screenshot(),
+                // ),
                 if (videoDetailCtr.enableSponsorBlock == true)
                   SizedBox(
                     width: 42,
@@ -2096,6 +2139,9 @@ class HeaderControlState extends State<HeaderControl> {
                             !plPlayerController.isOpenDanmu.value;
                         setting.put(SettingBoxKey.enableShowDanmaku,
                             plPlayerController.isOpenDanmu.value);
+                        // SmartDialog.showToast(
+                        //     "已${plPlayerController.isOpenDanmu.value ? '开启' : '关闭'}弹幕",
+                        //     displayTime: const Duration(seconds: 1));
                       },
                       icon: Icon(
                         plPlayerController.isOpenDanmu.value
@@ -2125,6 +2171,9 @@ class HeaderControlState extends State<HeaderControl> {
                               SettingBoxKey.enableBackgroundPlay,
                               defaultValue: true);
                           if (!enableBackgroundPlay && mounted) {
+                            // SmartDialog.showToast('建议开启【后台播放】功能\n避免画中画没有暂停按钮');
+                            // await Future.delayed(const Duration(seconds: 2), () {
+                            // });
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
                                 content: Column(
@@ -2162,6 +2211,7 @@ class HeaderControlState extends State<HeaderControl> {
                                             plPlayerController
                                                 .setBackgroundPlay(true);
                                             SmartDialog.showToast("请重新载入本页面刷新");
+                                            // Get.back();
                                           },
                                           child: const Text('启用后台音频服务')),
                                       const SizedBox(width: 10),
@@ -2460,6 +2510,9 @@ class HeaderControlState extends State<HeaderControl> {
 
   @override
   Widget build(BuildContext context) {
+    // final bool isLandscape =
+    //     MediaQuery.of(context).orientation == Orientation.landscape;
+
     return plPlayerController.showFSActionItem
         ? Obx(() => _buildHeader(true))
         : _buildHeader(false);

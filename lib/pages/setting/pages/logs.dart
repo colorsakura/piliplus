@@ -63,7 +63,7 @@ class _LogsPageState extends State<LogsPage> {
             if (l.startsWith("Crash occurred on")) {
               try {
                 date = DateTime.parse(
-                  l.split("Crash occurred on")[1].trim(),
+                  l.split("Crash occurred on")[1].trim(), //.split('.')[0],
                 );
               } catch (e) {
                 debugPrint(e.toString());
@@ -111,6 +111,7 @@ class _LogsPageState extends State<LogsPage> {
         actions: [
           PopupMenuButton<String>(
             onSelected: (String type) {
+              // 处理菜单项选择的逻辑
               switch (type) {
                 case 'copy':
                   copyLogs();

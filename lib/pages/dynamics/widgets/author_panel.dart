@@ -84,6 +84,7 @@ class AuthorPanel extends StatelessWidget {
                 children: [
                   Text(
                     item.modules.moduleAuthor.name,
+                    // semanticsLabel: "UP主：${item.modules.moduleAuthor.name}",
                     style: TextStyle(
                       color: item.modules.moduleAuthor!.vip != null &&
                               item.modules.moduleAuthor!.vip['status'] > 0 &&
@@ -144,6 +145,20 @@ class AuthorPanel extends StatelessWidget {
                   ? Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
+                        // GestureDetector(
+                        //   onTap:
+                        //       item.modules.moduleAuthor.decorate['jump_url'] != null
+                        //           ? () {
+                        //               Get.toNamed(
+                        //                 '/webview',
+                        //                 parameters: {
+                        //                   'url':
+                        //                       '${item.modules.moduleAuthor.decorate['jump_url']}'
+                        //                 },
+                        //               );
+                        //             }
+                        //           : null,
+                        //   child:
                         Stack(
                           clipBehavior: Clip.none,
                           alignment: Alignment.centerRight,
@@ -183,6 +198,7 @@ class AuthorPanel extends StatelessWidget {
                               ),
                           ],
                         ),
+                        // ),
                         _moreWidget(context),
                       ],
                     )
@@ -266,6 +282,7 @@ class AuthorPanel extends StatelessWidget {
                 }
               },
               minLeadingWidth: 0,
+              // dense: true,
               leading: const Icon(Icons.watch_later_outlined, size: 19),
               title: Text(
                 '稍后再看',

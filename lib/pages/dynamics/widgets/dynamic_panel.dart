@@ -29,6 +29,9 @@ class DynamicPanel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      // padding: source == 'detail'
+      //     ? const EdgeInsets.only(bottom: 12)
+      //     : EdgeInsets.zero,
       decoration: isSave ||
               (source == 'detail' &&
                   Get.context!.orientation == Orientation.landscape)
@@ -43,7 +46,11 @@ class DynamicPanel extends StatelessWidget {
             ),
       child: Material(
         elevation: 0,
+        // clipBehavior: Clip.hardEdge,
         color: Colors.transparent,
+        // shape: RoundedRectangleBorder(
+        //   borderRadius: BorderRadius.circular(5),
+        // ),
         child: InkWell(
           onTap: source == 'detail' &&
                   [

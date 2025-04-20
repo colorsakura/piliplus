@@ -16,6 +16,7 @@ class PlayUrlModel {
     this.seekType,
     this.dash,
     this.supportFormats,
+    // this.highFormat,
     this.lastPlayTime,
     this.lastPlayCid,
   });
@@ -35,6 +36,7 @@ class PlayUrlModel {
   Dash? dash;
   List<Durl>? durl;
   List<FormatItem>? supportFormats;
+  // String? highFormat;
   int? lastPlayTime;
   int? lastPlayCid;
 
@@ -173,9 +175,8 @@ class VideoItem {
     baseUrl = json['baseUrl'];
     var backupUrls = json['backupUrl']?.toList() ?? [];
     backupUrl = backupUrls.isNotEmpty
-        ? backupUrls.firstWhere((i) => !_isMCDNorPCDN(i),
-            orElse: () => backupUrls.first)
-        : '';
+      ? backupUrls.firstWhere((i) => !_isMCDNorPCDN(i), orElse: () => backupUrls.first)
+      : '';
     bandWidth = json['bandWidth'];
     mimeType = json['mime_type'];
     codecs = json['codecs'];
@@ -247,9 +248,8 @@ class AudioItem {
     baseUrl = json['baseUrl'];
     var backupUrls = json['backupUrl']?.toList() ?? [];
     backupUrl = backupUrls.isNotEmpty
-        ? backupUrls.firstWhere((i) => !_isMCDNorPCDN(i),
-            orElse: () => backupUrls.first)
-        : '';
+      ? backupUrls.firstWhere((i) => !_isMCDNorPCDN(i), orElse: () => backupUrls.first)
+      : '';
     bandWidth = json['bandWidth'];
     mimeType = json['mime_type'];
     codecs = json['codecs'];
