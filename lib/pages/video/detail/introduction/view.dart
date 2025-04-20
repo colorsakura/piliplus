@@ -335,7 +335,7 @@ class _VideoInfoState extends State<VideoInfo> {
                                                                   'official_verify']
                                                               ?['type'] ==
                                                           0
-                                                      ? Colors.yellow
+                                                      ? const Color(0xFFFFCC00)
                                                       : Colors.lightBlueAccent,
                                                   size: 14,
                                                 ),
@@ -450,7 +450,7 @@ class _VideoInfoState extends State<VideoInfo> {
                                                                 .official?[
                                                             'type'] ==
                                                         0
-                                                    ? Colors.yellow
+                                                    ? const Color(0xFFFFCC00)
                                                     : Colors.lightBlueAccent,
                                                 size: 14,
                                               ),

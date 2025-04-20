@@ -53,7 +53,7 @@ class FollowItem extends StatelessWidget {
                 child: Icon(
                   Icons.offline_bolt,
                   color: item.officialVerify?['type'] == 0
-                      ? Colors.yellow
+                      ? const Color(0xFFFFCC00)
                       : Colors.lightBlueAccent,
                   size: 14,
                 ),

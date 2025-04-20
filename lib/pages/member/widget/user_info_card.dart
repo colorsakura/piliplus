@@ -109,47 +109,49 @@ class UserInfoCard extends StatelessWidget {
   _buildLeft(BuildContext context) => [
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: FittedBox(
-            child: Row(
-              children: [
-                GestureDetector(
-                  onTap: () => Utils.copyText(card.name ?? ''),
-                  child: Text(
-                    card.name ?? '',
-                    style: TextStyle(
-                      height: 1,
-                      fontSize: 17,
-                      fontWeight: FontWeight.bold,
-                      color: (card.vip?.vipStatus ?? -1) > 0 &&
-                              card.vip?.vipType == 2
-                          ? context.vipColor
-                          : null,
-                    ),
+          child: Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            crossAxisAlignment: WrapCrossAlignment.center,
+            children: [
+              GestureDetector(
+                onTap: () => Utils.copyText(card.name!),
+                child: Text(
+                  card.name!,
+                  style: TextStyle(
+                    height: 1,
+                    fontSize: 17,
+                    fontWeight: FontWeight.bold,
+                    color: (card.vip?.vipStatus ?? -1) > 0 &&
+                            card.vip?.vipType == 2
+                        ? context.vipColor
+                        : null,
                   ),
                 ),
-                const SizedBox(width: 8),
-                Image.asset(
-                  'assets/images/lv/lv${card.levelInfo?.identity == 2 ? '6_s' : card.levelInfo?.currentLevel}.png',
-                  height: 11,
-                  semanticLabel: '等级${card.levelInfo?.currentLevel}',
+              ),
+              Image.asset(
+                'assets/images/lv/lv${card.levelInfo?.identity == 2 ? '6_s' : card.levelInfo?.currentLevel}.png',
+                height: 11,
+                semanticLabel: '等级${card.levelInfo?.currentLevel}',
+              ),
+              if (card.vip?.vipStatus == 1)
+                CachedNetworkImage(
+                  imageUrl:
+                      Utils.thumbnailImgUrl(card.vip!.label!.image!.http2https),
+                  height: 20,
+                  placeholder: (context, url) {
+                    return const SizedBox.shrink();
+                  },
                 ),
-                if (card.vip?.vipStatus == 1) ...[
-                  const SizedBox(width: 8),
-                  CachedNetworkImage(
-                    imageUrl: Utils.thumbnailImgUrl(
-                        card.vip!.label!.image!.http2https),
-                    height: 20,
-                  ),
-                ],
-                if (card.nameplate?.image?.isNotEmpty == true) ...[
-                  const SizedBox(width: 8),
-                  CachedNetworkImage(
-                    imageUrl: Utils.thumbnailImgUrl(card.nameplate!.image!),
-                    height: 20,
-                  ),
-                ],
-              ],
-            ),
+              if (card.nameplate?.image?.isNotEmpty == true)
+                CachedNetworkImage(
+                  imageUrl: Utils.thumbnailImgUrl(card.nameplate!.image!),
+                  height: 20,
+                  placeholder: (context, url) {
+                    return const SizedBox.shrink();
+                  },
+                ),
+            ],
           ),
         ),
         if (card.officialVerify?.desc?.isNotEmpty == true)

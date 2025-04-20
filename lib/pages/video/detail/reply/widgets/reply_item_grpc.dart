@@ -216,7 +216,7 @@ class ReplyItemGrpc extends StatelessWidget {
               ),
               child: const Icon(
                 Icons.offline_bolt,
-                color: Colors.yellow,
+                color: Color(0xFFFFCC00),
                 size: 14,
                 semanticLabel: "认证个人",
               ),
@@ -838,10 +838,14 @@ class ReplyItemGrpc extends StatelessWidget {
               [
                 if (content.url[matchStr]?.hasPrefixIcon() == true) ...[
                   WidgetSpan(
-                    child: Image.network(
-                      Utils.thumbnailImgUrl(content.url[matchStr]!.prefixIcon),
+                    child: CachedNetworkImage(
+                      imageUrl: Utils.thumbnailImgUrl(
+                          content.url[matchStr]!.prefixIcon),
                       height: 19,
                       color: Theme.of(context).colorScheme.primary,
+                      placeholder: (context, url) {
+                        return const SizedBox.shrink();
+                      },
                     ),
                   )
                 ],
@@ -953,10 +957,14 @@ class ReplyItemGrpc extends StatelessWidget {
             [
               if (content.url[patternStr]?.hasPrefixIcon() == true) ...[
                 WidgetSpan(
-                  child: Image.network(
-                    Utils.thumbnailImgUrl(content.url[patternStr]!.prefixIcon),
+                  child: CachedNetworkImage(
+                    imageUrl: Utils.thumbnailImgUrl(
+                        content.url[patternStr]!.prefixIcon),
                     height: 19,
                     color: Theme.of(context).colorScheme.primary,
+                    placeholder: (context, url) {
+                      return const SizedBox.shrink();
+                    },
                   ),
                 )
               ],
