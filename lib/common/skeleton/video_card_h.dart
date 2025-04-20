@@ -7,6 +7,7 @@ class VideoCardHSkeleton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final color = Theme.of(context).colorScheme.onInverseSurface;
     return Skeleton(
       child: Padding(
         padding: const EdgeInsets.symmetric(
@@ -23,7 +24,7 @@ class VideoCardHSkeleton extends StatelessWidget {
                 builder: (context, boxConstraints) {
                   return Container(
                     decoration: BoxDecoration(
-                      color: Theme.of(context).colorScheme.onInverseSurface,
+                      color: color,
                       borderRadius: StyleString.mdRadius,
                     ),
                   );
@@ -37,19 +38,19 @@ class VideoCardHSkeleton extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
-                      color: Theme.of(context).colorScheme.onInverseSurface,
+                      color: color,
                       width: 200,
                       height: 11,
                       margin: const EdgeInsets.only(bottom: 5),
                     ),
                     Container(
-                      color: Theme.of(context).colorScheme.onInverseSurface,
+                      color: color,
                       width: 150,
                       height: 13,
                     ),
                     const Spacer(),
                     Container(
-                      color: Theme.of(context).colorScheme.onInverseSurface,
+                      color: color,
                       width: 100,
                       height: 13,
                       margin: const EdgeInsets.only(bottom: 5),
@@ -57,13 +58,13 @@ class VideoCardHSkeleton extends StatelessWidget {
                     Row(
                       children: [
                         Container(
-                          color: Theme.of(context).colorScheme.onInverseSurface,
+                          color: color,
                           width: 40,
                           height: 13,
                           margin: const EdgeInsets.only(right: 8),
                         ),
                         Container(
-                          color: Theme.of(context).colorScheme.onInverseSurface,
+                          color: color,
                           width: 40,
                           height: 13,
                         ),

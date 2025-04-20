@@ -1,5 +1,6 @@
+import 'package:PiliPlus/common/skeleton/msg_feed_top.dart';
 import 'package:PiliPlus/common/widgets/dialog.dart';
-import 'package:PiliPlus/common/widgets/loading_widget.dart';
+import 'package:PiliPlus/common/widgets/http_error.dart';
 import 'package:PiliPlus/common/widgets/pair.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/http/loading_state.dart';
@@ -32,22 +33,36 @@ class _LikeMePageState extends State<LikeMePage> {
         onRefresh: () async {
           await _likeMeController.onRefresh();
         },
-        child: Obx(() => _buildBody(_likeMeController.loadingState.value)),
+        child: CustomScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          slivers: [
+            SliverPadding(
+              padding: EdgeInsets.only(
+                  bottom: MediaQuery.paddingOf(context).bottom + 80),
+              sliver:
+                  Obx(() => _buildBody(_likeMeController.loadingState.value)),
+            ),
+          ],
+        ),
       ),
     );
   }
 
   Widget _buildBody(LoadingState loadingState) {
     return switch (loadingState) {
-      Loading() => loadingWidget,
+      Loading() => SliverList.builder(
+          itemCount: 12,
+          itemBuilder: (context, index) {
+            return const MsgFeedTopSkeleton();
+          },
+        ),
       Success() => () {
           Pair<List<LikeMeItems>, List<LikeMeItems>> pair =
               loadingState.response;
           List<LikeMeItems> latest = pair.first;
           List<LikeMeItems> total = pair.second;
           if (latest.isNotEmpty || total.isNotEmpty) {
-            return CustomScrollView(
-              physics: const AlwaysScrollableScrollPhysics(),
+            return SliverMainAxisGroup(
               slivers: [
                 if (latest.isNotEmpty) ...[
                   _buildHeader('最新'),
@@ -99,17 +114,12 @@ class _LikeMePageState extends State<LikeMePage> {
                     },
                   ),
                 ],
-                SliverToBoxAdapter(
-                  child: SizedBox(
-                    height: MediaQuery.paddingOf(context).bottom + 80,
-                  ),
-                ),
               ],
             );
           }
-          return scrollErrorWidget(callback: _likeMeController.onReload);
+          return HttpError(callback: _likeMeController.onReload);
         }(),
-      Error() => scrollErrorWidget(
+      Error() => HttpError(
           errMsg: loadingState.errMsg,
           callback: _likeMeController.onReload,
         ),
@@ -118,14 +128,18 @@ class _LikeMePageState extends State<LikeMePage> {
   }
 
   Widget _buildHeader(String title) {
-    return SliverToBoxAdapter(
-      child: Padding(
-        padding: const EdgeInsets.only(left: 16),
-        child: Text(
-          title,
-          style: Theme.of(context).textTheme.labelLarge!.copyWith(
-                color: Theme.of(context).colorScheme.secondary,
-              ),
+    return SliverSafeArea(
+      top: false,
+      bottom: false,
+      sliver: SliverToBoxAdapter(
+        child: Padding(
+          padding: const EdgeInsets.only(left: 16),
+          child: Text(
+            title,
+            style: Theme.of(context).textTheme.labelLarge!.copyWith(
+                  color: Theme.of(context).colorScheme.secondary,
+                ),
+          ),
         ),
       ),
     );

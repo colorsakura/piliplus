@@ -7,6 +7,7 @@ class VideoCardVSkeleton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final color = Theme.of(context).colorScheme.onInverseSurface;
     return Skeleton(
       child: Column(
         children: [
@@ -16,7 +17,7 @@ class VideoCardVSkeleton extends StatelessWidget {
               builder: (context, boxConstraints) {
                 return Container(
                   decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.onInverseSurface,
+                    color: color,
                     borderRadius: StyleString.mdRadius,
                   ),
                 );
@@ -37,24 +38,24 @@ class VideoCardVSkeleton extends StatelessWidget {
                   width: 200,
                   height: 13,
                   margin: const EdgeInsets.only(bottom: 5),
-                  color: Theme.of(context).colorScheme.onInverseSurface,
+                  color: color,
                 ),
                 Container(
                   width: 150,
                   height: 13,
                   margin: const EdgeInsets.only(bottom: 12),
-                  color: Theme.of(context).colorScheme.onInverseSurface,
+                  color: color,
                 ),
                 Container(
                   width: 110,
                   height: 13,
                   margin: const EdgeInsets.only(bottom: 5),
-                  color: Theme.of(context).colorScheme.onInverseSurface,
+                  color: color,
                 ),
                 Container(
                   width: 75,
                   height: 13,
-                  color: Theme.of(context).colorScheme.onInverseSurface,
+                  color: color,
                 ),
               ],
             ),

@@ -58,7 +58,8 @@ class _MemberBangumiState extends State<MemberBangumi>
                       right: StyleString.safeSpace,
                       top: StyleString.safeSpace,
                       bottom: StyleString.safeSpace +
-                          MediaQuery.of(context).padding.bottom,
+                          MediaQuery.of(context).padding.bottom +
+                          80,
                     ),
                     sliver: SliverGrid(
                       gridDelegate: SliverGridDelegateWithExtentAndRatio(

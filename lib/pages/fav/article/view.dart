@@ -34,7 +34,14 @@ class _FavArticlePageState extends State<FavArticlePage>
       },
       child: CustomScrollView(
         slivers: [
-          Obx(() => _buildBody(_favArticleController.loadingState.value)),
+          SliverPadding(
+            padding: EdgeInsets.only(
+              top: StyleString.safeSpace - 5,
+              bottom: MediaQuery.paddingOf(context).bottom + 80,
+            ),
+            sliver:
+                Obx(() => _buildBody(_favArticleController.loadingState.value)),
+          ),
         ],
       ),
     );
@@ -52,35 +59,29 @@ class _FavArticlePageState extends State<FavArticlePage>
           ),
         ),
       Success() => loadingState.response?.isNotEmpty == true
-          ? SliverPadding(
-              padding: EdgeInsets.only(
-                top: StyleString.safeSpace - 5,
-                bottom: MediaQuery.paddingOf(context).bottom + 80,
-              ),
-              sliver: SliverGrid(
-                gridDelegate: Grid.videoCardHDelegate(context),
-                delegate: SliverChildBuilderDelegate(
-                  (context, index) {
-                    if (index == loadingState.response!.length - 1) {
-                      _favArticleController.onLoadMore();
-                    }
-                    return FavArticleItem(
-                      item: loadingState.response![index],
-                      onDelete: () {
-                        showConfirmDialog(
-                            context: context,
-                            title: '确定取消收藏？',
-                            onConfirm: () {
-                              _favArticleController.onRemove(
-                                index,
-                                loadingState.response![index]['opus_id'],
-                              );
-                            });
-                      },
-                    );
-                  },
-                  childCount: loadingState.response!.length,
-                ),
+          ? SliverGrid(
+              gridDelegate: Grid.videoCardHDelegate(context),
+              delegate: SliverChildBuilderDelegate(
+                (context, index) {
+                  if (index == loadingState.response!.length - 1) {
+                    _favArticleController.onLoadMore();
+                  }
+                  return FavArticleItem(
+                    item: loadingState.response![index],
+                    onDelete: () {
+                      showConfirmDialog(
+                          context: context,
+                          title: '确定取消收藏？',
+                          onConfirm: () {
+                            _favArticleController.onRemove(
+                              index,
+                              loadingState.response![index]['opus_id'],
+                            );
+                          });
+                    },
+                  );
+                },
+                childCount: loadingState.response!.length,
               ),
             )
           : HttpError(callback: _favArticleController.onReload),

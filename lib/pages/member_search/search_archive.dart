@@ -1,5 +1,6 @@
 import 'package:PiliPlus/common/constants.dart';
-import 'package:PiliPlus/common/widgets/loading_widget.dart';
+import 'package:PiliPlus/common/skeleton/video_card_h.dart';
+import 'package:PiliPlus/common/widgets/http_error.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/common/widgets/video_card_h.dart';
 import 'package:PiliPlus/http/loading_state.dart';
@@ -27,54 +28,64 @@ class _SearchArchiveState extends State<SearchArchive>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return Obx(() => _buildBody(context, widget.ctr.archiveState.value));
+    return refreshIndicator(
+      onRefresh: () async {
+        await widget.ctr.refreshArchive();
+      },
+      child: CustomScrollView(
+        physics: const AlwaysScrollableScrollPhysics(),
+        slivers: [
+          SliverPadding(
+            padding: EdgeInsets.only(
+              top: StyleString.safeSpace - 5,
+              bottom: MediaQuery.paddingOf(context).bottom + 80,
+            ),
+            sliver:
+                Obx(() => _buildBody(context, widget.ctr.archiveState.value)),
+          )
+        ],
+      ),
+    );
   }
 
   Widget _buildBody(
       BuildContext context, LoadingState<List<VListItemModel>?> loadingState) {
     return switch (loadingState) {
-      Loading() => loadingWidget,
+      Loading() => SliverGrid(
+          gridDelegate: Grid.videoCardHDelegate(context),
+          delegate: SliverChildBuilderDelegate(
+            (context, index) {
+              return const VideoCardHSkeleton();
+            },
+            childCount: 10,
+          ),
+        ),
       Success() => loadingState.response?.isNotEmpty == true
-          ? refreshIndicator(
-              onRefresh: () async {
-                await widget.ctr.refreshArchive();
-              },
-              child: CustomScrollView(
-                physics: const AlwaysScrollableScrollPhysics(),
-                slivers: [
-                  SliverPadding(
-                    padding: EdgeInsets.only(
-                      top: StyleString.safeSpace - 5,
-                      bottom: MediaQuery.paddingOf(context).bottom + 80,
-                    ),
-                    sliver: SliverGrid(
-                      gridDelegate: Grid.videoCardHDelegate(context),
-                      delegate: SliverChildBuilderDelegate(
-                        (context, index) {
-                          if (index == loadingState.response!.length - 1) {
-                            EasyThrottle.throttle('searchArchives',
-                                const Duration(milliseconds: 500), () {
-                              widget.ctr.searchArchives(false);
-                            });
-                          }
-                          return VideoCardH(
-                            videoItem: loadingState.response![index],
-                          );
-                        },
-                        childCount: loadingState.response!.length,
-                      ),
-                    ),
-                  ),
-                ],
+          ? SliverGrid(
+              gridDelegate: Grid.videoCardHDelegate(context),
+              delegate: SliverChildBuilderDelegate(
+                (context, index) {
+                  if (index == loadingState.response!.length - 1) {
+                    EasyThrottle.throttle(
+                        'searchArchives', const Duration(milliseconds: 500),
+                        () {
+                      widget.ctr.searchArchives(false);
+                    });
+                  }
+                  return VideoCardH(
+                    videoItem: loadingState.response![index],
+                  );
+                },
+                childCount: loadingState.response!.length,
               ),
             )
-          : errorWidget(
+          : HttpError(
               callback: () {
                 widget.ctr.archiveState.value = LoadingState.loading();
                 widget.ctr.refreshArchive();
               },
             ),
-      Error() => errorWidget(
+      Error() => HttpError(
           errMsg: loadingState.errMsg,
           callback: () {
             widget.ctr.archiveState.value = LoadingState.loading();

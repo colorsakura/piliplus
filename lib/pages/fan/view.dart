@@ -1,3 +1,4 @@
+import 'package:PiliPlus/common/skeleton/msg_feed_top.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/fans/result.dart';
@@ -51,7 +52,18 @@ class _FansPageState extends State<FansPage> {
 
   Widget _buildBody(LoadingState<List<FansItemModel>?> loadingState) {
     return switch (loadingState) {
-      Loading() => HttpError(),
+      Loading() => SliverGrid(
+          gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+            maxCrossAxisExtent: Grid.smallCardWidth * 2,
+            mainAxisExtent: 66,
+          ),
+          delegate: SliverChildBuilderDelegate(
+            (context, index) {
+              return const MsgFeedTopSkeleton();
+            },
+            childCount: 16,
+          ),
+        ),
       Success() => loadingState.response?.isNotEmpty == true
           ? SliverPadding(
               padding: EdgeInsets.only(

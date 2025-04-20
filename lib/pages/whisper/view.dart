@@ -1,3 +1,4 @@
+import 'package:PiliPlus/common/skeleton/whisper_item.dart';
 import 'package:PiliPlus/common/widgets/http_error.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/http/loading_state.dart';
@@ -44,7 +45,12 @@ class _WhisperPageState extends State<WhisperPage> {
 
   Widget _buildBody(LoadingState<List<SessionList>?> loadingState) {
     return switch (loadingState) {
-      Loading() => const SliverToBoxAdapter(),
+      Loading() => SliverList.builder(
+          itemCount: 12,
+          itemBuilder: (context, index) {
+            return const WhisperItemSkeleton();
+          },
+        ),
       Success() => loadingState.response?.isNotEmpty == true
           ? SliverPadding(
               padding: EdgeInsets.only(
@@ -85,58 +91,58 @@ class _WhisperPageState extends State<WhisperPage> {
   }
 
   Widget get _buildTopItems => SliverToBoxAdapter(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-          child: Row(
-            children: List.generate(_whisperController.msgFeedTopItems.length,
-                (index) {
-              return Expanded(
-                child: GestureDetector(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Obx(
-                        () => Badge(
-                          isLabelVisible:
-                              _whisperController.unreadCounts[index] > 0,
-                          label: Text(
-                              " ${_whisperController.unreadCounts[index]} "),
-                          alignment: Alignment.topRight,
-                          child: CircleAvatar(
-                            radius: 22,
-                            backgroundColor:
-                                Theme.of(context).colorScheme.onInverseSurface,
-                            child: Icon(
-                              _whisperController.msgFeedTopItems[index]['icon'],
-                              size: 20,
-                              color: Theme.of(context).colorScheme.primary,
-                            ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children:
+              List.generate(_whisperController.msgFeedTopItems.length, (index) {
+            return GestureDetector(
+              behavior: HitTestBehavior.opaque,
+              child: Padding(
+                padding: const EdgeInsets.all(10),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Obx(
+                      () => Badge(
+                        isLabelVisible:
+                            _whisperController.unreadCounts[index] > 0,
+                        label:
+                            Text(" ${_whisperController.unreadCounts[index]} "),
+                        alignment: Alignment.topRight,
+                        child: CircleAvatar(
+                          radius: 22,
+                          backgroundColor:
+                              Theme.of(context).colorScheme.onInverseSurface,
+                          child: Icon(
+                            _whisperController.msgFeedTopItems[index]['icon'],
+                            size: 20,
+                            color: Theme.of(context).colorScheme.primary,
                           ),
                         ),
                       ),
-                      const SizedBox(height: 6),
-                      Text(
-                        _whisperController.msgFeedTopItems[index]['name'],
-                        style: const TextStyle(fontSize: 13),
-                      ),
-                    ],
-                  ),
-                  onTap: () {
-                    if (!_whisperController.msgFeedTopItems[index]['enabled']) {
-                      SmartDialog.showToast('已禁用');
-                      return;
-                    }
-                    _whisperController.unreadCounts[index] = 0;
-                    Get.toNamed(
-                      _whisperController.msgFeedTopItems[index]['route'],
-                    );
-                  },
+                    ),
+                    const SizedBox(height: 6),
+                    Text(
+                      _whisperController.msgFeedTopItems[index]['name'],
+                      style: const TextStyle(fontSize: 13),
+                    ),
+                  ],
                 ),
-              );
-            }).toList(),
-          ),
+              ),
+              onTap: () {
+                if (!_whisperController.msgFeedTopItems[index]['enabled']) {
+                  SmartDialog.showToast('已禁用');
+                  return;
+                }
+                _whisperController.unreadCounts[index] = 0;
+                Get.toNamed(
+                  _whisperController.msgFeedTopItems[index]['route'],
+                );
+              },
+            );
+          }).toList(),
         ),
       );
 }

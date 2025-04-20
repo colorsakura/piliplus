@@ -28,7 +28,8 @@ class _RelatedVideoPanelState extends State<RelatedVideoPanel>
   Widget build(BuildContext context) {
     super.build(context);
     return SliverPadding(
-      padding: const EdgeInsets.only(top: StyleString.safeSpace - 5),
+      padding:
+          const EdgeInsets.only(top: StyleString.safeSpace - 5, bottom: 80),
       sliver: Obx(() => _buildBody(_relatedController.loadingState.value)),
     );
   }
@@ -45,17 +46,14 @@ class _RelatedVideoPanelState extends State<RelatedVideoPanel>
           ),
         ),
       Success() => loadingState.response?.isNotEmpty == true
-          ? SliverPadding(
-              padding: const EdgeInsets.only(bottom: 80),
-              sliver: SliverGrid(
-                gridDelegate: Grid.videoCardHDelegate(context),
-                delegate: SliverChildBuilderDelegate((context, index) {
-                  return VideoCardH(
-                    videoItem: loadingState.response![index],
-                    showPubdate: true,
-                  );
-                }, childCount: loadingState.response!.length),
-              ),
+          ? SliverGrid(
+              gridDelegate: Grid.videoCardHDelegate(context),
+              delegate: SliverChildBuilderDelegate((context, index) {
+                return VideoCardH(
+                  videoItem: loadingState.response![index],
+                  showPubdate: true,
+                );
+              }, childCount: loadingState.response!.length),
             )
           : const SliverToBoxAdapter(),
       Error() => HttpError(

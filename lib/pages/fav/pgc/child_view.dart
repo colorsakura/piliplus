@@ -1,4 +1,4 @@
-import 'package:PiliPlus/common/skeleton/video_card_h.dart';
+import 'package:PiliPlus/common/skeleton/fav_pgc_item.dart';
 import 'package:PiliPlus/common/widgets/dialog.dart';
 import 'package:PiliPlus/common/widgets/http_error.dart';
 import 'package:PiliPlus/common/widgets/icon_button.dart';
@@ -162,7 +162,7 @@ class _FavPgcChildPageState extends State<FavPgcChildPage>
           gridDelegate: Grid.videoCardHDelegate(context),
           delegate: SliverChildBuilderDelegate(
             (context, index) {
-              return const VideoCardHSkeleton();
+              return const FavPgcItemSkeleton();
             },
             childCount: 10,
           ),

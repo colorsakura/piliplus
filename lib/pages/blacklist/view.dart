@@ -1,4 +1,5 @@
-import 'package:PiliPlus/common/widgets/loading_widget.dart';
+import 'package:PiliPlus/common/skeleton/msg_feed_top.dart';
+import 'package:PiliPlus/common/widgets/http_error.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/user/black.dart';
@@ -40,18 +41,27 @@ class _BlackListPageState extends State<BlackListPage> {
       ),
       body: refreshIndicator(
         onRefresh: () async => await _blackListController.onRefresh(),
-        child: Obx(() => _buildBody(_blackListController.loadingState.value)),
+        child: CustomScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          controller: _blackListController.scrollController,
+          slivers: [
+            Obx(() => _buildBody(_blackListController.loadingState.value))
+          ],
+        ),
       ),
     );
   }
 
   Widget _buildBody(LoadingState<List<BlackListItem>?> loadingState) {
     return switch (loadingState) {
-      Loading() => loadingWidget,
+      Loading() => SliverList.builder(
+          itemCount: 12,
+          itemBuilder: (context, index) {
+            return const MsgFeedTopSkeleton();
+          },
+        ),
       Success() => loadingState.response?.isNotEmpty == true
-          ? ListView.builder(
-              physics: const AlwaysScrollableScrollPhysics(),
-              controller: _blackListController.scrollController,
+          ? SliverList.builder(
               itemCount: loadingState.response!.length,
               itemBuilder: (BuildContext context, int index) {
                 if (index == loadingState.response!.length - 1) {
@@ -94,10 +104,10 @@ class _BlackListPageState extends State<BlackListPage> {
                 );
               },
             )
-          : errorWidget(
+          : HttpError(
               callback: _blackListController.onReload,
             ),
-      Error() => errorWidget(
+      Error() => HttpError(
           errMsg: loadingState.errMsg,
           callback: _blackListController.onReload,
         ),

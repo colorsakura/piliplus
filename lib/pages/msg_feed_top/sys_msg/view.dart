@@ -1,7 +1,8 @@
 import 'dart:convert';
 
+import 'package:PiliPlus/common/skeleton/msg_feed_sys_msg_.dart';
 import 'package:PiliPlus/common/widgets/dialog.dart';
-import 'package:PiliPlus/common/widgets/loading_widget.dart';
+import 'package:PiliPlus/common/widgets/http_error.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/msg/msgfeed_sys_msg.dart';
@@ -36,25 +37,36 @@ class _SysMsgPageState extends State<SysMsgPage> {
         onRefresh: () async {
           await _sysMsgController.onRefresh();
         },
-        child: Obx(() => _buildBody(_sysMsgController.loadingState.value)),
+        child: CustomScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          slivers: [
+            SliverPadding(
+              padding: EdgeInsets.only(
+                  bottom: MediaQuery.paddingOf(context).bottom + 80),
+              sliver:
+                  Obx(() => _buildBody(_sysMsgController.loadingState.value)),
+            ),
+          ],
+        ),
       ),
     );
   }
 
   Widget _buildBody(LoadingState<List<SystemNotifyList>?> loadingState) {
     return switch (loadingState) {
-      Loading() => loadingWidget,
+      Loading() => SliverList.builder(
+          itemCount: 12,
+          itemBuilder: (context, index) {
+            return const MsgFeedSysMsgSkeleton();
+          },
+        ),
       Success() => loadingState.response?.isNotEmpty == true
-          ? ListView.separated(
+          ? SliverList.separated(
               itemCount: loadingState.response!.length,
-              physics: const AlwaysScrollableScrollPhysics(),
-              padding: EdgeInsets.only(
-                  bottom: MediaQuery.paddingOf(context).bottom + 80),
               itemBuilder: (context, int index) {
                 if (index == loadingState.response!.length - 1) {
                   _sysMsgController.onLoadMore();
                 }
-
                 final item = loadingState.response![index];
                 String? content = item.content;
                 if (content != null) {
@@ -124,8 +136,8 @@ class _SysMsgPageState extends State<SysMsgPage> {
                 );
               },
             )
-          : scrollErrorWidget(callback: _sysMsgController.onReload),
-      Error() => scrollErrorWidget(
+          : HttpError(callback: _sysMsgController.onReload),
+      Error() => HttpError(
           errMsg: loadingState.errMsg,
           callback: _sysMsgController.onReload,
         ),

@@ -1,5 +1,6 @@
+import 'package:PiliPlus/common/skeleton/msg_feed_top.dart';
 import 'package:PiliPlus/common/widgets/dialog.dart';
-import 'package:PiliPlus/common/widgets/loading_widget.dart';
+import 'package:PiliPlus/common/widgets/http_error.dart';
 import 'package:PiliPlus/common/widgets/network_img_layer.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/http/loading_state.dart';
@@ -31,20 +32,31 @@ class _AtMePageState extends State<AtMePage> {
         onRefresh: () async {
           await _atMeController.onRefresh();
         },
-        child: Obx(() => _buildBody(_atMeController.loadingState.value)),
+        child: CustomScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          slivers: [
+            SliverPadding(
+              padding: EdgeInsets.only(
+                  bottom: MediaQuery.paddingOf(context).bottom + 80),
+              sliver: Obx(() => _buildBody(_atMeController.loadingState.value)),
+            ),
+          ],
+        ),
       ),
     );
   }
 
   Widget _buildBody(LoadingState<List<AtMeItems>?> loadingState) {
     return switch (loadingState) {
-      Loading() => loadingWidget,
+      Loading() => SliverList.builder(
+          itemCount: 12,
+          itemBuilder: (context, index) {
+            return const MsgFeedTopSkeleton();
+          },
+        ),
       Success() => loadingState.response?.isNotEmpty == true
-          ? ListView.separated(
+          ? SliverList.separated(
               itemCount: loadingState.response!.length,
-              physics: const AlwaysScrollableScrollPhysics(),
-              padding: EdgeInsets.only(
-                  bottom: MediaQuery.paddingOf(context).bottom + 80),
               itemBuilder: (context, int index) {
                 if (index == loadingState.response!.length - 1) {
                   _atMeController.onLoadMore();
@@ -145,8 +157,8 @@ class _AtMePageState extends State<AtMePage> {
                 );
               },
             )
-          : scrollErrorWidget(callback: _atMeController.onReload),
-      Error() => scrollErrorWidget(
+          : HttpError(callback: _atMeController.onReload),
+      Error() => HttpError(
           errMsg: loadingState.errMsg,
           callback: _atMeController.onReload,
         ),

@@ -6,6 +6,7 @@ class DynamicCardSkeleton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final color = Theme.of(context).colorScheme.onInverseSurface;
     return Skeleton(
       child: Container(
         padding: const EdgeInsets.only(left: 12, right: 12, top: 12),
@@ -25,7 +26,7 @@ class DynamicCardSkeleton extends StatelessWidget {
                   width: 40,
                   height: 40,
                   decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.onInverseSurface,
+                    color: color,
                     borderRadius: BorderRadius.circular(20),
                   ),
                 ),
@@ -34,13 +35,13 @@ class DynamicCardSkeleton extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
-                      color: Theme.of(context).colorScheme.onInverseSurface,
+                      color: color,
                       width: 100,
                       height: 13,
                       margin: const EdgeInsets.only(bottom: 5),
                     ),
                     Container(
-                      color: Theme.of(context).colorScheme.onInverseSurface,
+                      color: color,
                       width: 50,
                       height: 11,
                     ),
@@ -55,31 +56,31 @@ class DynamicCardSkeleton extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
-                    color: Theme.of(context).colorScheme.onInverseSurface,
+                    color: color,
                     width: double.infinity,
                     height: 13,
                     margin: const EdgeInsets.only(bottom: 7),
                   ),
                   Container(
-                    color: Theme.of(context).colorScheme.onInverseSurface,
+                    color: color,
                     width: double.infinity,
                     height: 13,
                     margin: const EdgeInsets.only(bottom: 7),
                   ),
                   Container(
-                    color: Theme.of(context).colorScheme.onInverseSurface,
+                    color: color,
                     width: 300,
                     height: 13,
                     margin: const EdgeInsets.only(bottom: 7),
                   ),
                   Container(
-                    color: Theme.of(context).colorScheme.onInverseSurface,
+                    color: color,
                     width: 250,
                     height: 13,
                     margin: const EdgeInsets.only(bottom: 7),
                   ),
                   Container(
-                    color: Theme.of(context).colorScheme.onInverseSurface,
+                    color: color,
                     width: 100,
                     height: 13,
                     margin: const EdgeInsets.only(bottom: 7),

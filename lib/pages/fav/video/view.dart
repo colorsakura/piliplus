@@ -37,8 +37,14 @@ class _FavVideoPageState extends State<FavVideoPage>
         controller: _favController.scrollController,
         physics: const AlwaysScrollableScrollPhysics(),
         slivers: [
-          Obx(
-            () => _buildBody(_favController.loadingState.value),
+          SliverPadding(
+            padding: EdgeInsets.only(
+              top: StyleString.safeSpace - 5,
+              bottom: 80 + MediaQuery.paddingOf(context).bottom,
+            ),
+            sliver: Obx(
+              () => _buildBody(_favController.loadingState.value),
+            ),
           ),
         ],
       ),
@@ -57,44 +63,38 @@ class _FavVideoPageState extends State<FavVideoPage>
           ),
         ),
       Success() => loadingState.response?.isNotEmpty == true
-          ? SliverPadding(
-              padding: EdgeInsets.only(
-                top: StyleString.safeSpace - 5,
-                bottom: 80 + MediaQuery.paddingOf(context).bottom,
-              ),
-              sliver: SliverGrid(
-                gridDelegate: Grid.videoCardHDelegate(context),
-                delegate: SliverChildBuilderDelegate(
-                  childCount: loadingState.response!.length,
-                  (BuildContext context, int index) {
-                    if (index == loadingState.response!.length - 1) {
-                      _favController.onLoadMore();
-                    }
-                    final item = loadingState.response![index];
-                    String heroTag = Utils.makeHeroTag(item.fid);
-                    return FavItem(
-                      heroTag: heroTag,
-                      favFolderItem: item,
-                      onTap: () async {
-                        dynamic res = await Get.toNamed(
-                          '/favDetail',
-                          arguments: item,
-                          parameters: {
-                            'heroTag': heroTag,
-                            'mediaId': item.id.toString(),
-                          },
-                        );
-                        if (res == true) {
-                          List<FavFolderItemData> list =
-                              (_favController.loadingState.value as Success)
-                                  .response;
-                          list.removeAt(index);
-                          _favController.loadingState.refresh();
-                        }
-                      },
-                    );
-                  },
-                ),
+          ? SliverGrid(
+              gridDelegate: Grid.videoCardHDelegate(context),
+              delegate: SliverChildBuilderDelegate(
+                childCount: loadingState.response!.length,
+                (BuildContext context, int index) {
+                  if (index == loadingState.response!.length - 1) {
+                    _favController.onLoadMore();
+                  }
+                  final item = loadingState.response![index];
+                  String heroTag = Utils.makeHeroTag(item.fid);
+                  return FavItem(
+                    heroTag: heroTag,
+                    favFolderItem: item,
+                    onTap: () async {
+                      dynamic res = await Get.toNamed(
+                        '/favDetail',
+                        arguments: item,
+                        parameters: {
+                          'heroTag': heroTag,
+                          'mediaId': item.id.toString(),
+                        },
+                      );
+                      if (res == true) {
+                        List<FavFolderItemData> list =
+                            (_favController.loadingState.value as Success)
+                                .response;
+                        list.removeAt(index);
+                        _favController.loadingState.refresh();
+                      }
+                    },
+                  );
+                },
               ),
             )
           : HttpError(

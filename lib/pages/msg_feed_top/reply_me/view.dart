@@ -1,5 +1,6 @@
+import 'package:PiliPlus/common/skeleton/msg_feed_top.dart';
 import 'package:PiliPlus/common/widgets/dialog.dart';
-import 'package:PiliPlus/common/widgets/loading_widget.dart';
+import 'package:PiliPlus/common/widgets/http_error.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/msg/msgfeed_reply_me.dart';
@@ -29,20 +30,32 @@ class _ReplyMePageState extends State<ReplyMePage> {
         onRefresh: () async {
           await _replyMeController.onRefresh();
         },
-        child: Obx(() => _buildBody(_replyMeController.loadingState.value)),
+        child: CustomScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          slivers: [
+            SliverPadding(
+              padding: EdgeInsets.only(
+                  bottom: MediaQuery.paddingOf(context).bottom + 80),
+              sliver:
+                  Obx(() => _buildBody(_replyMeController.loadingState.value)),
+            ),
+          ],
+        ),
       ),
     );
   }
 
   Widget _buildBody(LoadingState<List<ReplyMeItems>?> loadingState) {
     return switch (loadingState) {
-      Loading() => loadingWidget,
+      Loading() => SliverList.builder(
+          itemCount: 12,
+          itemBuilder: (context, index) {
+            return const MsgFeedTopSkeleton();
+          },
+        ),
       Success() => loadingState.response?.isNotEmpty == true
-          ? ListView.separated(
+          ? SliverList.separated(
               itemCount: loadingState.response!.length,
-              physics: const AlwaysScrollableScrollPhysics(),
-              padding: EdgeInsets.only(
-                  bottom: MediaQuery.paddingOf(context).bottom + 80),
               itemBuilder: (context, int index) {
                 if (index == loadingState.response!.length - 1) {
                   _replyMeController.onLoadMore();
@@ -165,8 +178,8 @@ class _ReplyMePageState extends State<ReplyMePage> {
                 );
               },
             )
-          : scrollErrorWidget(callback: _replyMeController.onReload),
-      Error() => scrollErrorWidget(
+          : HttpError(callback: _replyMeController.onReload),
+      Error() => HttpError(
           errMsg: loadingState.errMsg,
           callback: _replyMeController.onReload,
         ),
