@@ -1,6 +1,7 @@
 import 'package:PiliPlus/common/widgets/image_save.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
+import 'package:PiliPlus/utils/utils.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -106,7 +107,8 @@ class DynamicPanel extends StatelessWidget {
                         child: CachedNetworkImage(
                           width: 60,
                           height: 60,
-                          imageUrl: item.modules.moduleAuthor.pendant['image'],
+                          imageUrl: Utils.thumbnailImgUrl(
+                              item.modules.moduleAuthor.pendant['image']),
                         ),
                       ),
                     ),

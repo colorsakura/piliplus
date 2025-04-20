@@ -116,7 +116,7 @@ class ReplyItemGrpc extends StatelessWidget {
                   children: [
                     CachedNetworkImage(
                       height: 38,
-                      imageUrl: replyItem.member.garbCardImage,
+                      imageUrl: replyItem.member.garbCardImage.http2https,
                     ),
                     if (replyItem.member.hasGarbCardNumber())
                       Text(
@@ -178,7 +178,8 @@ class ReplyItemGrpc extends StatelessWidget {
               child: CachedNetworkImage(
                 width: 52,
                 height: 52,
-                imageUrl: replyItem.member.garbPendantImage,
+                imageUrl:
+                    Utils.thumbnailImgUrl(replyItem.member.garbPendantImage),
               ),
             ),
           ),

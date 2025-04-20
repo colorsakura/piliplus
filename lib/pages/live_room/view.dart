@@ -6,7 +6,6 @@ import 'package:PiliPlus/pages/live_room/send_dm_panel.dart';
 import 'package:PiliPlus/pages/live_room/widgets/chat.dart';
 import 'package:PiliPlus/pages/live_room/widgets/header_control.dart';
 import 'package:PiliPlus/services/service_locator.dart';
-import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -229,8 +228,9 @@ class _LiveRoomPageState extends State<LiveRoomPage>
                               fit: BoxFit.cover,
                               width: Get.width,
                               height: Get.height,
-                              imageUrl: _liveRoomController.roomInfoH5.value
-                                  .roomInfo!.appBackground!.http2https,
+                              imageUrl: Utils.thumbnailImgUrl(
+                                  _liveRoomController.roomInfoH5.value.roomInfo!
+                                      .appBackground!),
                             )
                           : Image.asset(
                               'assets/images/live/default_bg.webp',

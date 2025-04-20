@@ -162,8 +162,9 @@ class AuthorPanel extends StatelessWidget {
                           children: [
                             CachedNetworkImage(
                               height: 32,
-                              imageUrl: item
-                                  .modules.moduleAuthor.decorate['card_url'],
+                              imageUrl: (item.modules.moduleAuthor
+                                      .decorate['card_url'] as String)
+                                  .http2https,
                             ),
                             if ((item.modules.moduleAuthor.decorate?['fan']
                                         ?['num_str'] as String?)

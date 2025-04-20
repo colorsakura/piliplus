@@ -1,5 +1,6 @@
 import 'package:PiliPlus/models/search/search_trending/trending_list.dart';
 import 'package:PiliPlus/utils/extension.dart';
+import 'package:PiliPlus/utils/utils.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
@@ -52,7 +53,7 @@ class HotKeyword extends StatelessWidget {
                           Padding(
                             padding: const EdgeInsets.only(left: 4),
                             child: CachedNetworkImage(
-                              imageUrl: i.icon!.http2https,
+                              imageUrl: Utils.thumbnailImgUrl(i.icon!),
                               height: 15,
                             ),
                           )

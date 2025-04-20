@@ -86,7 +86,7 @@ class UserInfoCard extends StatelessWidget {
           );
         },
         child: CachedNetworkImage(
-          imageUrl: imgUrl?.http2https ?? '',
+          imageUrl: Utils.thumbnailImgUrl(imgUrl),
           width: double.infinity,
           height: 135,
           imageBuilder: (context, imageProvider) => Container(
@@ -176,7 +176,8 @@ class UserInfoCard extends StatelessWidget {
                         child: CachedNetworkImage(
                           width: 18,
                           height: 18,
-                          imageUrl: card.officialVerify!.icon!.http2https,
+                          imageUrl:
+                              Utils.thumbnailImgUrl(card.officialVerify!.icon!),
                         ),
                       ),
                     ),
@@ -412,7 +413,7 @@ class UserInfoCard extends StatelessWidget {
           ),
           child: card.officialVerify?.icon?.isNotEmpty == true
               ? CachedNetworkImage(
-                  imageUrl: card.officialVerify!.icon!.http2https,
+                  imageUrl: Utils.thumbnailImgUrl(card.officialVerify!.icon!),
                   width: 22,
                   height: 22,
                 )
@@ -478,7 +479,7 @@ class UserInfoCard extends StatelessWidget {
                     child: CachedNetworkImage(
                       width: 140,
                       height: 140,
-                      imageUrl: card.pendant!.image!,
+                      imageUrl: Utils.thumbnailImgUrl(card.pendant!.image!),
                     ),
                   ),
                 ),
@@ -543,13 +544,13 @@ class UserInfoCard extends StatelessWidget {
               children: [
                 if (isDark && card.prInfo?.iconNight?.isNotEmpty == true) ...[
                   CachedNetworkImage(
-                    imageUrl: card.prInfo!.iconNight!,
+                    imageUrl: Utils.thumbnailImgUrl(card.prInfo!.iconNight!),
                     height: 20,
                   ),
                   const SizedBox(width: 16),
                 ] else if (card.prInfo?.icon?.isNotEmpty == true) ...[
                   CachedNetworkImage(
-                    imageUrl: card.prInfo!.icon!,
+                    imageUrl: Utils.thumbnailImgUrl(card.prInfo!.icon!),
                     height: 20,
                   ),
                   const SizedBox(width: 16),
@@ -636,7 +637,8 @@ class UserInfoCard extends StatelessWidget {
                             child: CachedNetworkImage(
                               width: 140,
                               height: 140,
-                              imageUrl: card.pendant!.image!,
+                              imageUrl:
+                                  Utils.thumbnailImgUrl(card.pendant!.image!),
                             ),
                           ),
                         ),

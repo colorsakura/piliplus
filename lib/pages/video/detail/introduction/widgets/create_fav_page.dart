@@ -1,7 +1,6 @@
 import 'package:PiliPlus/common/widgets/http_error.dart';
 import 'package:PiliPlus/http/msg.dart';
 import 'package:PiliPlus/http/user.dart';
-import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_debounce/easy_throttle.dart';
@@ -237,7 +236,7 @@ class _CreateFavPageState extends State<CreateFavPage> {
                             return ClipRRect(
                               borderRadius: BorderRadius.circular(6),
                               child: CachedNetworkImage(
-                                imageUrl: _cover!.http2https,
+                                imageUrl: Utils.thumbnailImgUrl(_cover!),
                                 height: constraints.maxHeight,
                                 width: constraints.maxHeight * 16 / 9,
                                 fit: BoxFit.cover,

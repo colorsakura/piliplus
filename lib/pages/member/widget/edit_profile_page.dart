@@ -100,7 +100,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                   child: ClipOval(
                     child: CachedNetworkImage(
                       imageUrl:
-                          (loadingState.response['face'] as String).http2https,
+                          Utils.thumbnailImgUrl(loadingState.response['face']),
                     ),
                   ),
                 ),
