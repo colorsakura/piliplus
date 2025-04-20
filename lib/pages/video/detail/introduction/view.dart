@@ -855,7 +855,7 @@ class _VideoInfoState extends State<VideoInfo> {
             switch (attr) {
               1 => '悄悄关注',
               2 => '已关注',
-              6 => '已互关',
+              4 || 6 => '已互关',
               128 => '已拉黑',
               -10 => '特别关注',
               _ => '关注'
