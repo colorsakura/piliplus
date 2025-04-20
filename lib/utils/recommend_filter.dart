@@ -4,7 +4,6 @@ import 'package:hive/hive.dart';
 import 'storage.dart';
 
 class RecommendFilter {
-  // static late int filterUnfollowedRatio;
   static late int minDurationForRcmd;
   static late int minPlayForRcmd;
   static late int minLikeRatioForRecommend;
@@ -20,8 +19,6 @@ class RecommendFilter {
   static Box get setting => GStorage.setting;
 
   static void update() {
-    // filterUnfollowedRatio =
-    //     setting.get(SettingBoxKey.filterUnfollowedRatio, defaultValue: 0);
     minDurationForRcmd =
         setting.get(SettingBoxKey.minDurationForRcmd, defaultValue: 0);
     minPlayForRcmd = setting.get(SettingBoxKey.minPlayForRcmd, defaultValue: 0);

@@ -155,32 +155,6 @@ class UserInfoCard extends StatelessWidget {
                     height: 20,
                   ),
                 ],
-                // GestureDetector(
-                //   onTap: () {
-                //     Utils.copyText(card.mid.toString());
-                //   },
-                //   child: Container(
-                //     padding:
-                //         const EdgeInsets.symmetric(horizontal: 8, vertical: 2.5),
-                //     decoration: BoxDecoration(
-                //       color: Theme.of(context).colorScheme.secondaryContainer,
-                //       borderRadius: const BorderRadius.all(Radius.circular(12)),
-                //     ),
-                //     child: Text(
-                //       'uid: ${card.mid}',
-                //       style: TextStyle(
-                //         height: 1,
-                //         fontSize: 12,
-                //         color: Theme.of(context).colorScheme.onSecondaryContainer,
-                //       ),
-                //       strutStyle: const StrutStyle(
-                //         height: 1,
-                //         leading: 0,
-                //         fontSize: 12,
-                //       ),
-                //     ),
-                //   ),
-                // ),
               ],
             ),
           ),
@@ -407,17 +381,18 @@ class UserInfoCard extends StatelessWidget {
                             ),
                           ),
                         TextSpan(
-                            text: isOwner
-                                ? '编辑资料'
-                                : switch (relation) {
-                                    0 => '关注',
-                                    1 => '悄悄关注',
-                                    2 => '已关注',
-                                    4 || 6 => '已互关',
-                                    128 => '移除黑名单',
-                                    -10 => '特别关注', // 该状态码并不是官方状态码
-                                    _ => relation.toString(),
-                                  }),
+                          text: isOwner
+                              ? '编辑资料'
+                              : switch (relation) {
+                                  0 => '关注',
+                                  1 => '悄悄关注',
+                                  2 => '已关注',
+                                  4 || 6 => '已互关',
+                                  128 => '移除黑名单',
+                                  -10 => '特别关注', // 该状态码并不是官方状态码
+                                  _ => relation.toString(),
+                                },
+                        ),
                       ],
                     ),
                   ),

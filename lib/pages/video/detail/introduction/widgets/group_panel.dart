@@ -152,7 +152,6 @@ class _GroupPanelState extends State<GroupPanel> {
                     );
                   }
                 } else {
-                  // 骨架屏
                   return const Center(
                     child: CircularProgressIndicator(),
                   );

@@ -133,7 +133,7 @@ class _SetSwitchItemState extends State<SetSwitchItem> {
           : null,
       leading: widget.leading,
       trailing: Transform.scale(
-        alignment: Alignment.centerRight, // 缩放Switch的大小后保持右侧对齐, 避免右侧空隙过大
+        alignment: Alignment.centerRight,
         scale: 0.8,
         child: Switch(
           thumbIcon:
@@ -141,7 +141,7 @@ class _SetSwitchItemState extends State<SetSwitchItem> {
             if (states.isNotEmpty && states.first == WidgetState.selected) {
               return const Icon(Icons.done);
             }
-            return null; // All other states will use the default thumbIcon.
+            return null;
           }),
           value: val,
           onChanged: switchChange,

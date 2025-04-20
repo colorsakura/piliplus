@@ -254,14 +254,6 @@ Commit Hash: ${BuildConfig.commitHash}''',
                         Get.back();
                         String res = jsonEncode(Accounts.account.toMap());
                         Utils.copyText(res);
-                        // if (context.mounted) {
-                        //   showDialog(
-                        //     context: context,
-                        //     builder: (context) => AlertDialog(
-                        //       content: SelectableText('$res'),
-                        //     ),
-                        //   );
-                        // }
                       },
                     ),
                     ListTile(

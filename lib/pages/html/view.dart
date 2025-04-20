@@ -127,16 +127,6 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
   }
 
   void listener() {
-    // 标题
-    // if (scrollController.offset > 55 && !_visibleTitle) {
-    //   _visibleTitle = true;
-    //   titleStreamC.add(true);
-    // } else if (scrollController.offset <= 55 && _visibleTitle) {
-    //   _visibleTitle = false;
-    //   titleStreamC.add(false);
-    // }
-
-    // fab按钮
     final ScrollDirection direction1 =
         _htmlRenderCtr.scrollController.positions.first.userScrollDirection;
     late final ScrollDirection direction2 =

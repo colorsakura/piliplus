@@ -6,9 +6,6 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:webdav_client/webdav_client.dart' as webdav;
 
 class WebDav {
-  late String _webDavUri;
-  late String _webDavUsername;
-  late String _webDavPassword;
   late String _webdavDirectory;
 
   webdav.Client? _client;
@@ -18,9 +15,9 @@ class WebDav {
   factory WebDav() => _instance;
 
   Future<Pair<bool, String?>> init() async {
-    _webDavUri = GStorage.webdavUri;
-    _webDavUsername = GStorage.webdavUsername;
-    _webDavPassword = GStorage.webdavPassword;
+    final webDavUri = GStorage.webdavUri;
+    final webDavUsername = GStorage.webdavUsername;
+    final webDavPassword = GStorage.webdavPassword;
     _webdavDirectory = GStorage.webdavDirectory;
     if (_webdavDirectory.endsWith('/').not) {
       _webdavDirectory += '/';
@@ -30,9 +27,9 @@ class WebDav {
     try {
       _client = null;
       final client = webdav.newClient(
-        _webDavUri,
-        user: _webDavUsername,
-        password: _webDavPassword,
+        webDavUri,
+        user: webDavUsername,
+        password: webDavPassword,
       )
         ..setHeaders({'accept-charset': 'utf-8'})
         ..setConnectTimeout(4000)

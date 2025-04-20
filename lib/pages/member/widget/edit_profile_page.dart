@@ -189,15 +189,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 onTap: () =>
                     Utils.copyText(loadingState.response['mid'].toString()),
               ),
-              // _divider,
-              // _item(
-              //   title: '二维码名片',
-              //   widget: Icon(
-              //     Icons.qr_code,
-              //     color: Theme.of(context).colorScheme.outline,
-              //   ),
-              //   onTap: () {},
-              // ),
               _divider1,
               _item(
                 title: '哔哩哔哩认证',

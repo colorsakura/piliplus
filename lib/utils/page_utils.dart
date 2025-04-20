@@ -160,8 +160,7 @@ class PageUtils {
                         contentPadding: const EdgeInsets.only(),
                         title: const Text("额外等待视频播放完毕", style: titleStyle),
                         trailing: Transform.scale(
-                          alignment: Alignment
-                              .centerRight, // 缩放Switch的大小后保持右侧对齐, 避免右侧空隙过大
+                          alignment: Alignment.centerRight,
                           scale: 0.8,
                           child: Switch(
                             thumbIcon: WidgetStateProperty.resolveWith<Icon?>(
@@ -189,18 +188,15 @@ class PageUtils {
                           onTap: () {
                             shutdownTimerService.exitApp = false;
                             setState(() {});
-                            // Get.back();
                           },
                           text: " 暂停视频 ",
                           selectStatus: !shutdownTimerService.exitApp,
                         ),
                         const Spacer(),
-                        // const SizedBox(width: 10),
                         ActionRowLineItem(
                           onTap: () {
                             shutdownTimerService.exitApp = true;
                             setState(() {});
-                            // Get.back();
                           },
                           text: " 退出APP ",
                           selectStatus: shutdownTimerService.exitApp,

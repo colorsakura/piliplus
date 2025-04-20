@@ -23,7 +23,6 @@ class ZanButtonGrpc extends StatefulWidget {
 class _ZanButtonGrpcState extends State<ZanButtonGrpc> {
   Future onHateReply() async {
     feedBack();
-    // SmartDialog.showLoading(msg: 'piliplus ...');
     final int oid = widget.replyItem.oid.toInt();
     final int rpid = widget.replyItem.id.toInt();
     // 1 已点赞 2 不喜欢 0 未操作
@@ -46,7 +45,6 @@ class _ZanButtonGrpcState extends State<ZanButtonGrpc> {
         }
         widget.replyItem.replyControl.action = $fixnum.Int64(2);
       } else {
-        // replyItem.like = replyItem.like! - 1;
         widget.replyItem.replyControl.action = $fixnum.Int64(0);
       }
       setState(() {});
@@ -58,7 +56,6 @@ class _ZanButtonGrpcState extends State<ZanButtonGrpc> {
   // 评论点赞
   Future onLikeReply() async {
     feedBack();
-    // SmartDialog.showLoading(msg: 'piliplus ...');
     final int oid = widget.replyItem.oid.toInt();
     final int rpid = widget.replyItem.id.toInt();
     // 1 已点赞 2 不喜欢 0 未操作
@@ -70,7 +67,6 @@ class _ZanButtonGrpcState extends State<ZanButtonGrpc> {
       rpid: rpid,
       action: action,
     );
-    // SmartDialog.dismiss();
     if (res['status']) {
       SmartDialog.showToast(
           widget.replyItem.replyControl.action.toInt() != 1 ? '点赞成功' : '取消赞');

@@ -160,14 +160,6 @@ class _WhisperDetailPageState
                                           style: TextStyle(fontSize: 14),
                                         ),
                                       ),
-                                      // ListTile(
-                                      //   onTap: () {
-                                      //     Get.back();
-                                      //   },
-                                      //   dense: true,
-                                      //   title: const Text('删除',
-                                      //       style: TextStyle(fontSize: 14)),
-                                      // ),
                                     ],
                                   ),
                                 );

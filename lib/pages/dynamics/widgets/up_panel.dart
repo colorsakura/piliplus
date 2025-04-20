@@ -109,36 +109,14 @@ class _UpPanelState extends State<UpPanel> {
           feedBack();
           if (data.type == 'up') {
             widget.dynamicsController.currentMid = data.mid;
-            // dynamicsController.mid.value = data.mid;
             widget.dynamicsController
               ..upInfo.value = data
               ..onSelectUp(data.mid);
-            // int liveLen = liveList.length;
-            // int upLen = upList.length;
-            // double itemWidth = contentWidth + itemPadding.horizontal;
-            // double screenWidth = MediaQuery.sizeOf(context).width;
-            // double moveDistance = 0.0;
-            // if (itemWidth * (upList.length + liveList.length) <= screenWidth) {
-            // } else if ((upLen - i - 0.5) * itemWidth > screenWidth / 2) {
-            //   moveDistance =
-            //       (i + liveLen + 0.5) * itemWidth + 46 - screenWidth / 2;
-            // } else {
-            //   moveDistance = (upLen + liveLen) * itemWidth + 46 - screenWidth;
-            // }
+
             data.hasUpdate = false;
-            // scrollController.animateTo(
-            //   moveDistance,
-            //   duration: const Duration(milliseconds: 500),
-            //   curve: Curves.easeInOut,
-            // );
+
             setState(() {});
           } else if (data.type == 'live') {
-            // LiveItemModel liveItem = LiveItemModel.fromJson({
-            //   'title': data.title,
-            //   'uname': data.uname,
-            //   'face': data.face,
-            //   'roomid': data.roomId,
-            // });
             Get.toNamed('/liveRoom?roomid=${data.roomId}');
           }
         },
@@ -223,29 +201,6 @@ class _UpPanelState extends State<UpPanel> {
     );
   }
 }
-
-// class _SliverHeaderDelegate extends SliverPersistentHeaderDelegate {
-//   _SliverHeaderDelegate({required this.height, required this.child});
-
-//   final double height;
-//   final Widget child;
-
-//   @override
-//   Widget build(
-//       BuildContext context, double shrinkOffset, bool overlapsContent) {
-//     return child;
-//   }
-
-//   @override
-//   double get maxExtent => height;
-
-//   @override
-//   double get minExtent => height;
-
-//   @override
-//   bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) =>
-//       true;
-// }
 
 class UpPanelSkeleton extends StatelessWidget {
   const UpPanelSkeleton({super.key});

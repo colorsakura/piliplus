@@ -100,9 +100,6 @@ class Routes {
     // 用户中心
     CustomGetPage(name: '/member', page: () => const MemberPageNew()),
     CustomGetPage(name: '/memberSearch', page: () => const MemberSearchPage()),
-    // 二级回复
-    // CustomGetPage(
-    //     name: '/replyReply', page: () => const VideoReplyReplyPanel()),
     // 推荐流设置
     CustomGetPage(
         name: '/recommendSetting', page: () => const RecommendSetting()),
@@ -157,10 +154,6 @@ class Routes {
     // 用户动态
     CustomGetPage(
         name: '/memberDynamics', page: () => const MemberDynamicsPage()),
-    // 用户最近投币
-    // CustomGetPage(name: '/memberCoin', page: () => const MemberCoinPage()),
-    // 用户最近喜欢
-    // CustomGetPage(name: '/memberLike', page: () => const MemberLikePage()),
     // 日志
     CustomGetPage(name: '/logs', page: () => const LogsPage()),
     // 订阅

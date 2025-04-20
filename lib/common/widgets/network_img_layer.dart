@@ -106,7 +106,6 @@ class NetworkImgLayer extends StatelessWidget {
                 width: width,
                 height: height,
                 cacheWidth: width.cacheSize(context),
-                // cacheHeight: height.cacheSize(context),
               ),
             ),
     );

@@ -1,4 +1,3 @@
-import 'package:PiliPlus/build_config.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/http/user.dart';
 import 'package:PiliPlus/models/user/fav_detail.dart';
@@ -126,20 +125,13 @@ class _FavSortPageState extends State<FavSortPage> {
       ),
       children: sortList
           .map(
-            (item) => Stack(
+            (item) => SizedBox(
               key: Key(item.id.toString()),
-              children: [
-                FavVideoCardH(
-                  isSort: true,
-                  videoItem: item,
-                ),
-                if (BuildConfig.isDebug)
-                  Positioned(
-                    top: 35,
-                    right: 10,
-                    child: Text(item.id.toString()),
-                  )
-              ],
+              height: 98,
+              child: FavVideoCardH(
+                isSort: true,
+                videoItem: item,
+              ),
             ),
           )
           .toList(),

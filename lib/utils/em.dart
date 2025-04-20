@@ -30,15 +30,5 @@ class Em {
 
   static String decodeHtmlEntities(String title) {
     return parse(title).body?.text ?? title;
-    // return title
-    //     .replaceAll('&lt;', '<')
-    //     .replaceAll('&gt;', '>')
-    //     .replaceAll('&#34;', '"')
-    //     .replaceAll('&#39;', "'")
-    //     .replaceAll('&quot;', '"')
-    //     .replaceAll('&apos;', "'")
-    //     .replaceAll('&nbsp;', " ")
-    //     .replaceAll('&amp;', "&")
-    //     .replaceAll('&#x27;', "'");
   }
 }

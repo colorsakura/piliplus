@@ -150,11 +150,9 @@ class ActionItemState extends State<ActionItem>
           onTapDown: (details) => _isThumbsUp ? _startLongPress() : null,
           onTapUp: (details) => _isThumbsUp ? _cancelLongPress() : null,
           onTapCancel: () => _isThumbsUp ? _cancelLongPress(true) : null,
-          // borderRadius: StyleString.mdRadius,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // const SizedBox(height: 2),
               Stack(
                 alignment: Alignment.center,
                 children: [
@@ -231,7 +229,6 @@ class _ArcPainter extends CustomPainter {
     );
 
     const startAngle = -pi / 2;
-    // const sweepAngle = -2 * pi;
 
     canvas.drawArc(rect, startAngle, sweepAngle, false, paint);
   }

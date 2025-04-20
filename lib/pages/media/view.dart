@@ -297,9 +297,9 @@ class FavFolderItem extends StatelessWidget {
                         .colorScheme
                         .onInverseSurface
                         .withOpacity(0.4),
-                    offset: const Offset(4, -12), // 阴影与容器的距离
-                    blurRadius: 0.0, // 高斯的标准偏差与盒子的形状卷积。
-                    spreadRadius: 0.0, // 在应用模糊之前，框应该膨胀的量。
+                    offset: const Offset(4, -12),
+                    blurRadius: 0.0,
+                    spreadRadius: 0.0,
                   ),
                 ],
               ),

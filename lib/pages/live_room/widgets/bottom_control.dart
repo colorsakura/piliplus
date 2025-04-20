@@ -46,38 +46,7 @@ class BottomControl extends StatelessWidget implements PreferredSizeWidget {
             ),
             onTap: onRefresh,
           ),
-          //   // ComBtn(
-          //   icon: const Icon(
-          //     Icons.subtitles_outlined,
-          //     size: 18,
-          //     color: Colors.white,
-          //   ),
-          //   fuc: () => Get.back(),
-          // ),
           const Spacer(),
-          // ComBtn(
-          //   icon: const Icon(
-          //     Icons.hd_outlined,
-          //     size: 18,
-          //     color: Colors.white,
-          //   ),
-          //   fuc: () => {},
-          // ),
-          // const SizedBox(width: 4),
-          // Obx(
-          //   () => ComBtn(
-          //     icon: Icon(
-          //       widget.liveRoomCtr!.volumeOff.value
-          //           ? Icons.volume_off_outlined
-          //           : Icons.volume_up_outlined,
-          //       size: 18,
-          //       color: Colors.white,
-          //     ),
-          //     fuc: () => {},
-          //   ),
-          // ),
-          // const SizedBox(width: 4),
-
           Obx(
             () => IconButton(
               onPressed: () {
@@ -175,21 +144,3 @@ class BottomControl extends StatelessWidget implements PreferredSizeWidget {
     );
   }
 }
-
-// class MSliderTrackShape extends RoundedRectSliderTrackShape {
-//   @override
-//   Rect getPreferredRect({
-//     required RenderBox parentBox,
-//     Offset offset = Offset.zero,
-//     SliderThemeData? sliderTheme,
-//     bool isEnabled = false,
-//     bool isDiscrete = false,
-//   }) {
-//     const double trackHeight = 3;
-//     final double trackLeft = offset.dx;
-//     final double trackTop =
-//         offset.dy + (parentBox.size.height - trackHeight) / 2 + 4;
-//     final double trackWidth = parentBox.size.width;
-//     return Rect.fromLTWH(trackLeft, trackTop, trackWidth, trackHeight);
-//   }
-// }

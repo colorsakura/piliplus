@@ -31,7 +31,6 @@ import '../../../utils/grid.dart';
 import '../widgets/dynamic_panel.dart';
 
 class DynamicDetailPage extends StatefulWidget {
-  // const DynamicDetailPage({super.key});
   const DynamicDetailPage({super.key});
 
   @override
@@ -43,7 +42,6 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
   late DynamicDetailController _dynamicDetailController;
   AnimationController? _fabAnimationCtr;
   final RxBool _visibleTitle = false.obs;
-  // String? action;
   // 回复类型
   late int replyType;
   bool _isFabVisible = true;
@@ -124,8 +122,6 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
     Map args = Get.arguments;
     // 楼层
     int floor = args['floor'];
-    // 从action栏点击进入
-    // action = args.containsKey('action') ? args['action'] : null;
     // 评论类型
     int commentType = args['item'].basic!['comment_type'] ?? 11;
     replyType = (commentType == 0) ? 11 : commentType;

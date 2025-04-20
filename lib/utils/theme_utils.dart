@@ -81,9 +81,6 @@ class ThemeUtils {
                 : null,
         shadowColor: Colors.transparent,
       ),
-      // dialogTheme: DialogTheme(
-      //   surfaceTintColor: isDark ? colorScheme.onSurfaceVariant : null,
-      // ),
       progressIndicatorTheme: ProgressIndicatorThemeData(
         refreshBackgroundColor: colorScheme.onSecondary,
       ),
