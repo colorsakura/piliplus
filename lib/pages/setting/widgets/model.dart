@@ -35,6 +35,7 @@ import 'package:PiliPlus/plugin/pl_player/models/bottom_progress_behavior.dart';
 import 'package:PiliPlus/plugin/pl_player/models/fullscreen_mode.dart';
 import 'package:PiliPlus/plugin/pl_player/utils/fullscreen.dart';
 import 'package:PiliPlus/utils/accounts/account_manager/account_mgr.dart';
+import 'package:PiliPlus/utils/cache_manage.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/feed_back.dart';
 import 'package:PiliPlus/utils/global_data.dart';
@@ -2464,7 +2465,56 @@ List<SettingsModel> get extraSettings => [
         subtitle: '每次启动时清除缓存',
         leading: const Icon(Icons.auto_delete_outlined),
         setKey: SettingBoxKey.autoClearCache,
-        defaultVal: true,
+        defaultVal: false,
+      ),
+      SettingsModel(
+        settingsType: SettingsType.normal,
+        title: '最大缓存大小',
+        getSubtitle: () {
+          final num = GStorage.maxCacheSize;
+          return '当前最大缓存大小: 「${num == 0 ? '无限' : CacheManage.formatSize(GStorage.maxCacheSize)}」';
+        },
+        onTap: (setState) {
+          showDialog(
+            context: Get.context!,
+            builder: (context) {
+              String valueStr = '';
+              return AlertDialog(
+                title: const Text('最大缓存大小'),
+                content: TextField(
+                  autofocus: true,
+                  onChanged: (value) => valueStr = value,
+                  keyboardType: TextInputType.number,
+                  inputFormatters: [
+                    FilteringTextInputFormatter.allow(RegExp(r'[\d\.]+')),
+                  ],
+                  decoration: InputDecoration(suffixText: 'MB'),
+                ),
+                actions: [
+                  TextButton(
+                    onPressed: Get.back,
+                    child: Text(
+                      '取消',
+                      style: TextStyle(
+                          color: Theme.of(context).colorScheme.outline),
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: () async {
+                      Get.back();
+                      num value = num.tryParse(valueStr) ?? 0;
+                      await GStorage.setting
+                          .put(SettingBoxKey.maxCacheSize, value * 1024 * 1024);
+                      setState();
+                    },
+                    child: const Text('确定'),
+                  ),
+                ],
+              );
+            },
+          );
+        },
+        leading: const Icon(Icons.delete_outlined),
       ),
       SettingsModel(
         settingsType: SettingsType.sw1tch,

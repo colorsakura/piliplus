@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:PiliPlus/utils/extension.dart';
 import 'package:path_provider/path_provider.dart';
 
 class CacheManage {
@@ -10,7 +11,7 @@ class CacheManage {
   factory CacheManage() => cacheManage;
 
   // 获取缓存目录
-  Future<String> loadApplicationCache() async {
+  Future<double> loadApplicationCache() async {
     /// clear all of image in memory
     // clearMemoryImageCache();
     /// get ImageCache
@@ -41,7 +42,7 @@ class CacheManage {
       cacheSize += value;
     }
 
-    return formatSize(cacheSize);
+    return cacheSize;
   }
 
   // 循环计算文件的大小（递归）
@@ -62,15 +63,15 @@ class CacheManage {
   }
 
   // 缓存大小格式转换
-  static String formatSize(double value) {
-    List<String> unitArr = ['B', 'K', 'M', 'G'];
+  static String formatSize(num value) {
+    List<String> unitArr = const ['B', 'K', 'M', 'G', 'T', 'P'];
     int index = 0;
-    while (value > 1024) {
+    while (value >= 1024) {
       index++;
       value = value / 1024;
     }
     String size = value.toStringAsFixed(2);
-    return size + unitArr[index];
+    return size + unitArr.getOrElse(index, orElse: () => '');
   }
 
   /// 清除 Documents 目录下的 DioCache.db

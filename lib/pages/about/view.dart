@@ -46,7 +46,8 @@ class _AboutPageState extends State<AboutPage> {
   }
 
   Future getCacheSize() async {
-    cacheSize.value = await CacheManage().loadApplicationCache();
+    cacheSize.value =
+        CacheManage.formatSize(await CacheManage().loadApplicationCache());
   }
 
   Future getCurrentApp() async {

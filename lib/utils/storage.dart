@@ -468,6 +468,9 @@ class GStorage {
       SettingBoxKey.pageTransition,
       defaultValue: Transition.native.index)];
 
+  static num get maxCacheSize => GStorage.setting
+      .get(SettingBoxKey.maxCacheSize, defaultValue: pow(1024, 3));
+
   static List<double> get dynamicDetailRatio => List<double>.from(setting
       .get(SettingBoxKey.dynamicDetailRatio, defaultValue: [60.0, 40.0]));
 
@@ -669,6 +672,7 @@ class SettingBoxKey {
       /// 其他
       autoUpdate = 'autoUpdate',
       autoClearCache = 'autoClearCache',
+      maxCacheSize = 'maxCacheSize',
       defaultShowComment = 'defaultShowComment',
       replySortType = 'replySortType',
       defaultDynamicType = 'defaultDynamicType',

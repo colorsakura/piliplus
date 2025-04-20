@@ -45,6 +45,10 @@ extension ListExt<T> on List<T>? {
     return this![index];
   }
 
+  T getOrElse(int index, {required T Function() orElse}) {
+    return getOrNull(index) ?? orElse();
+  }
+
   bool eq(List<T>? other) {
     if (this == null) {
       return other == null;

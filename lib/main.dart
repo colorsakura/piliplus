@@ -31,8 +31,16 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   MediaKit.ensureInitialized();
   await GStorage.init();
-  if (GStorage.setting.get(SettingBoxKey.autoClearCache, defaultValue: true)) {
+  if (GStorage.setting.get(SettingBoxKey.autoClearCache, defaultValue: false)) {
     await CacheManage.clearLibraryCache();
+  } else {
+    final num maxCacheSize = GStorage.maxCacheSize;
+    if (maxCacheSize != 0) {
+      final double currCache = await CacheManage().loadApplicationCache();
+      if (currCache >= maxCacheSize) {
+        await CacheManage.clearLibraryCache();
+      }
+    }
   }
   if (GStorage.setting
       .get(SettingBoxKey.horizontalScreen, defaultValue: false)) {
