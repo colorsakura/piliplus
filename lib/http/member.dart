@@ -470,8 +470,8 @@ class MemberHttp {
     if (res.data['code'] == 0) {
       return {
         'status': true,
-        'data': res.data['data']
-            .map<MemberTagItemModel>((e) => MemberTagItemModel.fromJson(e))
+        'data': (res.data['data'] as List?)
+            ?.map<MemberTagItemModel>((e) => MemberTagItemModel.fromJson(e))
             .toList()
       };
     } else {
@@ -525,28 +525,27 @@ class MemberHttp {
   }
 
   // 获取某分组下的up
-  static Future followUpGroup(
+  static Future<LoadingState<List<FollowItemModel>?>> followUpGroup(
     int? mid,
     int? tagid,
     int? pn,
     int? ps,
   ) async {
-    var res = await Request().get(Api.followUpGroup, queryParameters: {
-      'mid': mid,
-      'tagid': tagid,
-      'pn': pn,
-      'ps': ps,
-    });
+    var res = await Request().get(
+      Api.followUpGroup,
+      queryParameters: {
+        'mid': mid,
+        'tagid': tagid,
+        'pn': pn,
+        'ps': ps,
+      },
+    );
     if (res.data['code'] == 0) {
-      // FollowItemModel
-      return {
-        'status': true,
-        'data': res.data['data']
-            .map<FollowItemModel>((e) => FollowItemModel.fromJson(e))
-            .toList()
-      };
+      return LoadingState.success((res.data['data'] as List?)
+          ?.map<FollowItemModel>((e) => FollowItemModel.fromJson(e))
+          .toList());
     } else {
-      return {'status': false, 'msg': res.data['message']};
+      return LoadingState.error(res.data['message']);
     }
   }
 

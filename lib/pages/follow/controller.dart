@@ -1,83 +1,52 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
-import 'package:get/get.dart';
-import 'package:PiliPlus/http/follow.dart';
+import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/http/member.dart';
-import 'package:PiliPlus/models/follow/result.dart';
 import 'package:PiliPlus/models/member/tags.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:PiliPlus/utils/storage.dart';
 
-/// 查看自己的关注时，可以查看分类
-/// 查看其他人的关注时，只可以看全部
 class FollowController extends GetxController
     with GetSingleTickerProviderStateMixin {
-  int pn = 1;
-  int ps = 20;
-  int total = 0;
-  RxList<FollowItemModel> followList = <FollowItemModel>[].obs;
-  late int? mid;
-  late String? name;
-  dynamic userInfo;
-  RxString loadingText = '加载中...'.obs;
-  RxBool isOwner = false.obs;
-  late List<MemberTagItemModel> followTags;
-  late TabController tabController;
+  late int mid;
+  String? name;
+  late bool isOwner;
+
+  late final Rx<LoadingState<List<MemberTagItemModel>?>> followState =
+      LoadingState<List<MemberTagItemModel>?>.loading().obs;
+  TabController? tabController;
 
   @override
   void onInit() {
     super.onInit();
-    userInfo = GStorage.userInfo.get('userInfoCache');
+    int ownerMid = Accounts.main.mid;
     mid = Get.parameters['mid'] != null
         ? int.parse(Get.parameters['mid']!)
-        : userInfo?.mid;
-    isOwner.value = mid == userInfo?.mid;
-    name = Get.parameters['name'] ?? userInfo?.uname;
+        : ownerMid;
+    isOwner = ownerMid == mid;
+    name =
+        Get.parameters['name'] ?? GStorage.userInfo.get('userInfoCache')?.uname;
+    if (isOwner) {
+      queryFollowUpTags();
+    }
   }
 
-  Future queryFollowings(type) async {
-    if (type == 'init') {
-      pn = 1;
-      loadingText.value == '加载中...';
-    }
-    if (loadingText.value == '没有更多了') {
-      return;
-    }
-    var res = await FollowHttp.followings(
-      vmid: mid,
-      pn: pn,
-      ps: ps,
-      orderType: 'attention',
-    );
+  Future queryFollowUpTags() async {
+    var res = await MemberHttp.followUpTags();
     if (res['status']) {
-      if (type == 'init') {
-        followList.value = res['data'].list;
-        total = res['data'].total;
-      } else if (type == 'onLoad') {
-        followList.addAll(res['data'].list);
-      }
-      if ((pn == 1 && total < ps) || res['data'].list.isEmpty) {
-        loadingText.value = '没有更多了';
-      }
-      pn += 1;
+      tabController = TabController(
+        initialIndex: 0,
+        length: res['data'].length,
+        vsync: this,
+      );
+      followState.value = LoadingState.success(res['data']);
     } else {
-      SmartDialog.showToast(res['msg']);
+      followState.value = LoadingState.error(res['msg']);
     }
-    return res;
   }
 
-  // 当查看当前用户的关注时，请求关注分组
-  Future followUpTags() async {
-    if (userInfo != null && mid == userInfo.mid) {
-      var res = await MemberHttp.followUpTags();
-      if (res['status']) {
-        followTags = res['data'];
-        tabController = TabController(
-          initialIndex: 0,
-          length: res['data'].length,
-          vsync: this,
-        );
-      }
-      return res;
-    }
+  @override
+  void onClose() {
+    tabController?.dispose();
+    super.onClose();
   }
 }
