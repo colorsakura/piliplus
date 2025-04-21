@@ -88,6 +88,7 @@ class _LiveEmotePanelState extends State<LiveEmotePanel>
                                   child: Padding(
                                     padding: const EdgeInsets.all(6),
                                     child: NetworkImgLayer(
+                                      boxFit: BoxFit.contain,
                                       src: item.emoticons![index].url!,
                                       width: widthFac * 38,
                                       height: heightFac * 38,
