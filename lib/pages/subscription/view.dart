@@ -23,19 +23,23 @@ class _SubPageState extends State<SubPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('我的订阅')),
-      body: refreshIndicator(
-        onRefresh: () async {
-          await _subController.onRefresh();
-        },
-        child: CustomScrollView(
-          slivers: [
-            Obx(() => _buildBody(_subController.loadingState.value)),
-            SliverToBoxAdapter(
-              child: SizedBox(
-                height: MediaQuery.of(context).padding.bottom + 80,
+      body: SafeArea(
+        top: false,
+        bottom: false,
+        child: refreshIndicator(
+          onRefresh: () async {
+            await _subController.onRefresh();
+          },
+          child: CustomScrollView(
+            slivers: [
+              Obx(() => _buildBody(_subController.loadingState.value)),
+              SliverToBoxAdapter(
+                child: SizedBox(
+                  height: MediaQuery.of(context).padding.bottom + 80,
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

@@ -43,10 +43,10 @@ class DynamicSliverAppBar extends StatefulWidget {
     this.forceMaterialTransparency = false,
     this.clipBehavior,
     this.appBarClipper,
-    this.hasTabBar = false,
+    this.callback,
   });
 
-  final bool hasTabBar;
+  final ValueChanged<double>? callback;
   final Widget? flexibleSpace;
   final Widget? leading;
   final bool automaticallyImplyLeading;
@@ -113,6 +113,7 @@ class _DynamicSliverAppBarState extends State<DynamicSliverAppBar> {
         _height = (_childKey.currentContext!.findRenderObject()! as RenderBox)
             .size
             .height;
+        widget.callback?.call(_height);
       });
     });
   }
@@ -166,7 +167,7 @@ class _DynamicSliverAppBarState extends State<DynamicSliverAppBar> {
       onStretchTrigger: widget.onStretchTrigger,
       shape: widget.shape,
       toolbarHeight: widget.toolbarHeight,
-      expandedHeight: _height + (widget.hasTabBar ? 48 : 0),
+      expandedHeight: _height,
       leadingWidth: widget.leadingWidth,
       toolbarTextStyle: widget.toolbarTextStyle,
       titleTextStyle: widget.titleTextStyle,

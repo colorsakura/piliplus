@@ -103,7 +103,7 @@ class _SubDetailPageState extends State<SubDetailPage> {
 
   Widget get _buildCount => SliverToBoxAdapter(
         child: Padding(
-          padding: const EdgeInsets.only(top: 15, bottom: 8, left: 14),
+          padding: const EdgeInsets.only(top: 12, bottom: 8, left: 14),
           child: Obx(
             () => Text(
               '共${_subDetailController.mediaCount}条视频',
@@ -118,7 +118,7 @@ class _SubDetailPageState extends State<SubDetailPage> {
       );
 
   Widget get _buildAppBar => SliverAppBar(
-        expandedHeight: 215 - MediaQuery.paddingOf(context).bottom,
+        expandedHeight: 210 - MediaQuery.paddingOf(context).top,
         pinned: true,
         title: Obx(
           () {
@@ -158,7 +158,7 @@ class _SubDetailPageState extends State<SubDetailPage> {
               top: kTextTabBarHeight + MediaQuery.of(context).padding.top + 15,
               left: 12,
               right: 12,
-              bottom: 20,
+              bottom: 12,
             ),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,

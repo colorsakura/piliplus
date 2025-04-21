@@ -144,62 +144,79 @@ class _LogsPageState extends State<LogsPage> {
         ],
       ),
       body: logsContent.isNotEmpty
-          ? ListView.builder(
-              itemCount: logsContent.length,
-              itemBuilder: (context, index) {
-                final log = logsContent[index];
-                if (log['date'] is DateTime) {
-                  latestLog ??= log['date'];
-                }
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Row(
+          ? SafeArea(
+              bottom: false,
+              child: ListView.separated(
+                itemCount: logsContent.length,
+                itemBuilder: (context, index) {
+                  final log = logsContent[index];
+                  if (log['date'] is DateTime) {
+                    latestLog ??= log['date'];
+                  }
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
                       children: [
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            log['date'].toString(),
-                            style: Theme.of(context).textTheme.titleMedium,
+                        Row(
+                          children: [
+                            Text(
+                              log['date'].toString(),
+                              style: TextStyle(
+                                fontSize: Theme.of(context)
+                                    .textTheme
+                                    .titleMedium!
+                                    .fontSize,
+                              ),
+                            ),
+                            const SizedBox(width: 10),
+                            TextButton.icon(
+                              style: TextButton.styleFrom(
+                                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                visualDensity:
+                                    VisualDensity(horizontal: -2, vertical: -2),
+                              ),
+                              onPressed: () async {
+                                await Utils.copyText('```\n${log['body']}\n```',
+                                    needToast: false);
+                                if (context.mounted) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text(
+                                        '已将 ${log['date'].toString()} 复制至剪贴板',
+                                      ),
+                                    ),
+                                  );
+                                }
+                              },
+                              icon: const Icon(Icons.copy_outlined, size: 16),
+                              label: const Text('复制'),
+                            )
+                          ],
+                        ),
+                        const SizedBox(height: 5),
+                        Card(
+                          elevation: 1,
+                          margin: EdgeInsets.zero,
+                          child: Container(
+                            width: double.infinity,
+                            padding: const EdgeInsets.all(12.0),
+                            child: SelectableText(log['body']),
                           ),
                         ),
-                        TextButton.icon(
-                          onPressed: () async {
-                            await Utils.copyText('```\n${log['body']}\n```',
-                                needToast: false);
-                            if (context.mounted) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text(
-                                    '已将 ${log['date'].toString()} 复制至剪贴板',
-                                  ),
-                                ),
-                              );
-                            }
-                          },
-                          icon: const Icon(Icons.copy_outlined, size: 16),
-                          label: const Text('复制'),
-                        )
                       ],
                     ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Card(
-                        elevation: 1,
-                        clipBehavior: Clip.antiAliasWithSaveLayer,
-                        child: Padding(
-                          padding: const EdgeInsets.all(12.0),
-                          child: SelectableText(log['body']),
-                        ),
-                      ),
-                    ),
-                    const Divider(indent: 12, endIndent: 12),
-                  ],
-                );
-              },
+                  );
+                },
+                separatorBuilder: (context, index) => const Divider(
+                  indent: 12,
+                  endIndent: 12,
+                  height: 24,
+                ),
+              ),
             )
-          : errorWidget(),
+          : scrollErrorWidget(),
     );
   }
 }

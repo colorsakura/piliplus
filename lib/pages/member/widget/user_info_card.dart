@@ -118,6 +118,12 @@ class UserInfoCard extends StatelessWidget {
                 onTap: () => Utils.copyText(card.name!),
                 child: Text(
                   card.name!,
+                  strutStyle: StrutStyle(
+                    height: 1,
+                    leading: 0,
+                    fontSize: 17,
+                    fontWeight: FontWeight.bold,
+                  ),
                   style: TextStyle(
                     height: 1,
                     fontSize: 17,
@@ -136,8 +142,7 @@ class UserInfoCard extends StatelessWidget {
               ),
               if (card.vip?.vipStatus == 1)
                 CachedNetworkImage(
-                  imageUrl:
-                      Utils.thumbnailImgUrl(card.vip!.label!.image!.http2https),
+                  imageUrl: Utils.thumbnailImgUrl(card.vip!.label!.image!, 80),
                   height: 20,
                   placeholder: (context, url) {
                     return const SizedBox.shrink();
@@ -612,7 +617,10 @@ class UserInfoCard extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _buildHeader(context),
+          // _buildHeader(context),
+          SizedBox(
+            height: Get.mediaQuery.padding.bottom + 56,
+          ),
           SafeArea(
             top: false,
             bottom: false,

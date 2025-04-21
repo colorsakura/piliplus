@@ -94,21 +94,25 @@ class _WhisperDetailPageState
           ),
         ),
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: Listener(
-              child: Obx(() =>
-                  _buildBody(_whisperDetailController.loadingState.value)),
-              onPointerDown: (event) {
-                // Hide panel when touch ListView.
-                hidePanel();
-              },
+      body: SafeArea(
+        top: false,
+        bottom: false,
+        child: Column(
+          children: [
+            Expanded(
+              child: Listener(
+                child: Obx(() =>
+                    _buildBody(_whisperDetailController.loadingState.value)),
+                onPointerDown: (event) {
+                  // Hide panel when touch ListView.
+                  hidePanel();
+                },
+              ),
             ),
-          ),
-          _buildInputView(),
-          buildPanelContainer(Theme.of(context).colorScheme.onInverseSurface),
-        ],
+            _buildInputView(),
+            buildPanelContainer(Theme.of(context).colorScheme.onInverseSurface),
+          ],
+        ),
       ),
     );
   }

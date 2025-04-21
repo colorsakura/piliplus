@@ -39,18 +39,22 @@ class _MemberLikePageState extends State<MemberLikePage> {
       appBar: AppBar(
         title: Text('${widget.mid == _ownerMid ? '我' : '${widget.name}'}的推荐'),
       ),
-      body: CustomScrollView(
-        slivers: [
-          SliverPadding(
-            padding: EdgeInsets.only(
-              top: StyleString.safeSpace - 5,
-              left: StyleString.safeSpace,
-              right: StyleString.safeSpace,
-              bottom: MediaQuery.paddingOf(context).bottom + 80,
+      body: SafeArea(
+        top: false,
+        bottom: false,
+        child: CustomScrollView(
+          slivers: [
+            SliverPadding(
+              padding: EdgeInsets.only(
+                top: StyleString.safeSpace - 5,
+                left: StyleString.safeSpace,
+                right: StyleString.safeSpace,
+                bottom: MediaQuery.paddingOf(context).bottom + 80,
+              ),
+              sliver: Obx(() => _buildBody(_ctr.loadingState.value)),
             ),
-            sliver: Obx(() => _buildBody(_ctr.loadingState.value)),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

@@ -87,7 +87,11 @@ class _FavFolderSortPageState extends State<FavFolderSortPage> {
           const SizedBox(width: 16),
         ],
       ),
-      body: _buildBody,
+      body: SafeArea(
+        top: false,
+        bottom: false,
+        child: _buildBody,
+      ),
     );
   }
 

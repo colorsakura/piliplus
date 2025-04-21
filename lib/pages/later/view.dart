@@ -88,24 +88,28 @@ class _LaterPageState extends State<LaterPage>
           ),
           body: Column(
             children: [
-              TabBar(
-                isScrollable: true,
-                controller: _tabController,
-                tabAlignment: TabAlignment.start,
-                tabs: LaterViewType.values.map((item) {
-                  final count = _baseCtr.counts[item];
-                  return Tab(
-                      text: '${item.title}${count != -1 ? '($count)' : ''}');
-                }).toList(),
-                onTap: (_) {
-                  if (_tabController.indexIsChanging.not) {
-                    currCtr().scrollController.animToTop();
-                  } else {
-                    if (_baseCtr.enableMultiSelect.value) {
-                      currCtr(_tabController.previousIndex).handleSelect();
+              SafeArea(
+                top: false,
+                bottom: false,
+                child: TabBar(
+                  isScrollable: true,
+                  controller: _tabController,
+                  tabAlignment: TabAlignment.start,
+                  tabs: LaterViewType.values.map((item) {
+                    final count = _baseCtr.counts[item];
+                    return Tab(
+                        text: '${item.title}${count != -1 ? '($count)' : ''}');
+                  }).toList(),
+                  onTap: (_) {
+                    if (_tabController.indexIsChanging.not) {
+                      currCtr().scrollController.animToTop();
+                    } else {
+                      if (_baseCtr.enableMultiSelect.value) {
+                        currCtr(_tabController.previousIndex).handleSelect();
+                      }
                     }
-                  }
-                },
+                  },
+                ),
               ),
               Expanded(
                 child: TabBarView(
@@ -113,8 +117,13 @@ class _LaterPageState extends State<LaterPage>
                       ? const NeverScrollableScrollPhysics()
                       : const CustomTabBarViewScrollPhysics(),
                   controller: _tabController,
-                  children:
-                      LaterViewType.values.map((item) => item.page).toList(),
+                  children: LaterViewType.values
+                      .map((item) => SafeArea(
+                            top: false,
+                            bottom: false,
+                            child: item.page,
+                          ))
+                      .toList(),
                 ),
               ),
             ],

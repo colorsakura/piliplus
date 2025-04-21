@@ -121,24 +121,35 @@ class _SettingPageState extends State<SettingPage> {
           : Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Expanded(flex: 40, child: _buildList),
+                Expanded(
+                  flex: 4,
+                  child: MediaQuery.removePadding(
+                    context: context,
+                    removeRight: true,
+                    child: _buildList,
+                  ),
+                ),
                 VerticalDivider(
                   width: 1,
                   color: Theme.of(context).colorScheme.outline.withOpacity(0.1),
                 ),
                 Expanded(
-                  flex: 60,
-                  child: switch (_type) {
-                    'privacySetting' => PrivacySetting(showAppBar: false),
-                    'recommendSetting' => RecommendSetting(showAppBar: false),
-                    'videoSetting' => VideoSetting(showAppBar: false),
-                    'playSetting' => PlaySetting(showAppBar: false),
-                    'styleSetting' => StyleSetting(showAppBar: false),
-                    'extraSetting' => ExtraSetting(showAppBar: false),
-                    'webdavSetting' => WebDavSettingPage(showAppBar: false),
-                    'about' => AboutPage(showAppBar: false),
-                    _ => const SizedBox.shrink(),
-                  },
+                  flex: 6,
+                  child: MediaQuery.removePadding(
+                    context: context,
+                    removeLeft: true,
+                    child: switch (_type) {
+                      'privacySetting' => PrivacySetting(showAppBar: false),
+                      'recommendSetting' => RecommendSetting(showAppBar: false),
+                      'videoSetting' => VideoSetting(showAppBar: false),
+                      'playSetting' => PlaySetting(showAppBar: false),
+                      'styleSetting' => StyleSetting(showAppBar: false),
+                      'extraSetting' => ExtraSetting(showAppBar: false),
+                      'webdavSetting' => WebDavSettingPage(showAppBar: false),
+                      'about' => AboutPage(showAppBar: false),
+                      _ => const SizedBox.shrink(),
+                    },
+                  ),
                 )
               ],
             ),

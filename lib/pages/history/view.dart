@@ -182,26 +182,30 @@ class _HistoryPageState extends State<HistoryPage>
                       ? Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            TabBar(
-                              controller: _historyController.tabController,
-                              onTap: (index) {
-                                if (_historyController
-                                    .tabController!.indexIsChanging.not) {
-                                  currCtr().scrollController.animToTop();
-                                } else {
-                                  if (enableMultiSelect) {
-                                    currCtr(_historyController
-                                            .tabController!.previousIndex)
-                                        .handleSelect();
+                            SafeArea(
+                              top: false,
+                              bottom: false,
+                              child: TabBar(
+                                controller: _historyController.tabController,
+                                onTap: (index) {
+                                  if (_historyController
+                                      .tabController!.indexIsChanging.not) {
+                                    currCtr().scrollController.animToTop();
+                                  } else {
+                                    if (enableMultiSelect) {
+                                      currCtr(_historyController
+                                              .tabController!.previousIndex)
+                                          .handleSelect();
+                                    }
                                   }
-                                }
-                              },
-                              tabs: [
-                                Tab(text: '全部'),
-                                ..._historyController.tabs.map(
-                                  (item) => Tab(text: item.name),
-                                ),
-                              ],
+                                },
+                                tabs: [
+                                  Tab(text: '全部'),
+                                  ..._historyController.tabs.map(
+                                    (item) => Tab(text: item.name),
+                                  ),
+                                ],
+                              ),
                             ),
                             Expanded(
                               child: Material(
@@ -229,16 +233,20 @@ class _HistoryPageState extends State<HistoryPage>
           );
   }
 
-  Widget get _buildPage => refreshIndicator(
-        onRefresh: () async {
-          await _historyController.onRefresh();
-        },
-        child: CustomScrollView(
-          physics: const AlwaysScrollableScrollPhysics(),
-          controller: _historyController.scrollController,
-          slivers: [
-            Obx(() => _buildBody(_historyController.loadingState.value)),
-          ],
+  Widget get _buildPage => SafeArea(
+        top: false,
+        bottom: false,
+        child: refreshIndicator(
+          onRefresh: () async {
+            await _historyController.onRefresh();
+          },
+          child: CustomScrollView(
+            physics: const AlwaysScrollableScrollPhysics(),
+            controller: _historyController.scrollController,
+            slivers: [
+              Obx(() => _buildBody(_historyController.loadingState.value)),
+            ],
+          ),
         ),
       );
 

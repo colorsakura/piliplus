@@ -6,6 +6,7 @@ import 'package:PiliPlus/pages/live_room/send_dm_panel.dart';
 import 'package:PiliPlus/pages/live_room/widgets/chat.dart';
 import 'package:PiliPlus/pages/live_room/widgets/header_control.dart';
 import 'package:PiliPlus/services/service_locator.dart';
+import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -203,7 +204,7 @@ class _LiveRoomPageState extends State<LiveRoomPage>
               ),
             );
           } else {
-            return const SizedBox();
+            return const SizedBox.shrink();
           }
         },
       ),
@@ -228,9 +229,8 @@ class _LiveRoomPageState extends State<LiveRoomPage>
                               fit: BoxFit.cover,
                               width: Get.width,
                               height: Get.height,
-                              imageUrl: Utils.thumbnailImgUrl(
-                                  _liveRoomController.roomInfoH5.value.roomInfo!
-                                      .appBackground!),
+                              imageUrl: _liveRoomController.roomInfoH5.value
+                                  .roomInfo!.appBackground!.http2https,
                             )
                           : Image.asset(
                               'assets/images/live/default_bg.webp',
@@ -239,25 +239,31 @@ class _LiveRoomPageState extends State<LiveRoomPage>
                     ),
                   ),
           ),
-          isPortrait
-              ? Obx(
-                  () {
-                    if (_liveRoomController.isPortrait.value) {
-                      if (padding == null) {
-                        final padding = MediaQuery.paddingOf(context);
-                        this.padding = padding.bottom + padding.top;
+          SafeArea(
+            top: false,
+            left: !isFullScreen,
+            right: !isFullScreen,
+            bottom: false,
+            child: isPortrait
+                ? Obx(
+                    () {
+                      if (_liveRoomController.isPortrait.value) {
+                        if (padding == null) {
+                          final padding = MediaQuery.paddingOf(context);
+                          this.padding = padding.bottom + padding.top;
+                        }
+                        return _buildPP;
                       }
-                      return _buildPP;
-                    }
-                    return _buildPH;
-                  },
-                )
-              : Column(
-                  children: [
-                    Obx(() => _buildAppBar),
-                    _buildBodyH,
-                  ],
-                ),
+                      return _buildPH;
+                    },
+                  )
+                : Column(
+                    children: [
+                      Obx(() => _buildAppBar),
+                      _buildBodyH,
+                    ],
+                  ),
+          ),
         ],
       ),
     );
@@ -458,10 +464,13 @@ class _LiveRoomPageState extends State<LiveRoomPage>
         children: [
           Obx(
             () => Container(
+              margin:
+                  EdgeInsets.only(bottom: MediaQuery.paddingOf(context).bottom),
               color: isFullScreen ? Colors.black : null,
               width: isFullScreen ? Get.size.width : videoWidth,
               height: isFullScreen ? Get.size.height : Get.size.width * 9 / 16,
               child: MediaQuery.removePadding(
+                removeTop: true,
                 removeRight: true,
                 context: context,
                 child: videoPlayerPanel(fill: Colors.transparent),
@@ -469,13 +478,9 @@ class _LiveRoomPageState extends State<LiveRoomPage>
             ),
           ),
           Expanded(
-            child: SafeArea(
-              left: false,
-              top: false,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: _buildBottomWidget,
-              ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: _buildBottomWidget,
             ),
           ),
         ],

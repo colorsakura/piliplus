@@ -51,30 +51,33 @@ class _PgcIndexPageState extends State<PgcIndexPage>
           int count = (data.order?.isNotEmpty == true ? 1 : 0) +
               (data.filter?.length ?? 0);
           if (count == 0) return const SizedBox.shrink();
-          return CustomScrollView(
-            slivers: [
-              if (widget.indexType != null)
-                SliverToBoxAdapter(child: const SizedBox(height: 12)),
-              SliverToBoxAdapter(
-                child: AnimatedSize(
-                  curve: Curves.easeInOut,
-                  alignment: Alignment.topCenter,
-                  duration: const Duration(milliseconds: 200),
-                  child: count > 5
-                      ? Obx(() => _buildSortWidget(count, data))
-                      : _buildSortWidget(count, data),
+          return SafeArea(
+            bottom: false,
+            child: CustomScrollView(
+              slivers: [
+                if (widget.indexType != null)
+                  SliverToBoxAdapter(child: const SizedBox(height: 12)),
+                SliverToBoxAdapter(
+                  child: AnimatedSize(
+                    curve: Curves.easeInOut,
+                    alignment: Alignment.topCenter,
+                    duration: const Duration(milliseconds: 200),
+                    child: count > 5
+                        ? Obx(() => _buildSortWidget(count, data))
+                        : _buildSortWidget(count, data),
+                  ),
                 ),
-              ),
-              SliverPadding(
-                padding: EdgeInsets.only(
-                  left: StyleString.safeSpace,
-                  right: StyleString.safeSpace,
-                  top: 12,
-                  bottom: MediaQuery.paddingOf(context).bottom + 80,
+                SliverPadding(
+                  padding: EdgeInsets.only(
+                    left: StyleString.safeSpace,
+                    right: StyleString.safeSpace,
+                    top: 12,
+                    bottom: MediaQuery.paddingOf(context).bottom + 80,
+                  ),
+                  sliver: Obx(() => _buildList(_ctr.loadingState.value)),
                 ),
-                sliver: Obx(() => _buildList(_ctr.loadingState.value)),
-              ),
-            ],
+              ],
+            ),
           );
         }),
       Error() => scrollErrorWidget(

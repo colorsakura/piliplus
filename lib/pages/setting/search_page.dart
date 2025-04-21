@@ -75,24 +75,27 @@ class _SettingsSearchPageState extends State<SettingsSearchPage> {
           ),
         ),
       ),
-      body: Obx(
-        () => _list.isEmpty
-            ? CustomScrollView(
-                slivers: [HttpError()],
-              )
-            : CustomScrollView(
-                slivers: [
-                  SliverWaterfallFlow.extent(
-                    maxCrossAxisExtent: Grid.smallCardWidth * 2,
-                    children: [
-                      ..._list.map((item) => item.widget),
-                      SizedBox(
-                        height: MediaQuery.paddingOf(context).bottom + 80,
+      body: SafeArea(
+        bottom: false,
+        child: CustomScrollView(
+          slivers: [
+            Obx(
+              () => _list.isEmpty
+                  ? HttpError()
+                  : SliverPadding(
+                      padding: EdgeInsets.only(
+                        bottom: MediaQuery.paddingOf(context).bottom + 80,
                       ),
-                    ],
-                  ),
-                ],
-              ),
+                      sliver: SliverWaterfallFlow.extent(
+                        maxCrossAxisExtent: Grid.smallCardWidth * 2,
+                        children: [
+                          ..._list.map((item) => item.widget),
+                        ],
+                      ),
+                    ),
+            ),
+          ],
+        ),
       ),
     );
   }

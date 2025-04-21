@@ -37,14 +37,17 @@ class _FansPageState extends State<FansPage> {
           _fansController.isOwner.value ? '我的粉丝' : '${_fansController.name}的粉丝',
         ),
       ),
-      body: refreshIndicator(
-        onRefresh: () async => await _fansController.onRefresh(),
-        child: CustomScrollView(
-          physics: const AlwaysScrollableScrollPhysics(),
-          controller: _fansController.scrollController,
-          slivers: [
-            Obx(() => _buildBody(_fansController.loadingState.value)),
-          ],
+      body: SafeArea(
+        bottom: false,
+        child: refreshIndicator(
+          onRefresh: () async => await _fansController.onRefresh(),
+          child: CustomScrollView(
+            physics: const AlwaysScrollableScrollPhysics(),
+            controller: _fansController.scrollController,
+            slivers: [
+              Obx(() => _buildBody(_fansController.loadingState.value)),
+            ],
+          ),
         ),
       ),
     );

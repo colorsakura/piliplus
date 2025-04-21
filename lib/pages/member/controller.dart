@@ -33,7 +33,6 @@ class MemberControllerNew extends CommonDataController<Data, dynamic>
   late List<Tab> tabs;
   List<Tab2>? tab2;
   RxInt contributeInitialIndex = 0.obs;
-  double top = 0;
   bool? hasSeasonOrSeries;
   final fromViewAid = Get.parameters['from_view_aid'];
 

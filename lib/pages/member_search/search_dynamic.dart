@@ -30,21 +30,25 @@ class _SearchDynamicState extends State<SearchDynamic>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return refreshIndicator(
-      onRefresh: () async {
-        await widget.ctr.refreshDynamic();
-      },
-      child: CustomScrollView(
-        physics: const AlwaysScrollableScrollPhysics(),
-        slivers: [
-          SliverPadding(
-            padding: EdgeInsets.only(
-              bottom: MediaQuery.paddingOf(context).bottom + 80,
-            ),
-            sliver:
-                Obx(() => _buildBody(context, widget.ctr.dynamicState.value)),
-          )
-        ],
+    return SafeArea(
+      top: false,
+      bottom: false,
+      child: refreshIndicator(
+        onRefresh: () async {
+          await widget.ctr.refreshDynamic();
+        },
+        child: CustomScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          slivers: [
+            SliverPadding(
+              padding: EdgeInsets.only(
+                bottom: MediaQuery.paddingOf(context).bottom + 80,
+              ),
+              sliver:
+                  Obx(() => _buildBody(context, widget.ctr.dynamicState.value)),
+            )
+          ],
+        ),
       ),
     );
   }

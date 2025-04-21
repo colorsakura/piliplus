@@ -337,239 +337,292 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
           const SizedBox(width: 6)
         ],
       ),
-      body: Stack(
-        children: [
-          OrientationBuilder(
-            builder: (context, orientation) {
-              double padding = max(context.width / 2 - Grid.smallCardWidth, 0);
-              return Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Expanded(
-                    flex: _ratio[0].toInt(),
-                    child: CustomScrollView(
-                      controller: _htmlRenderCtr.scrollController,
-                      physics: const AlwaysScrollableScrollPhysics(),
-                      slivers: [
-                        SliverPadding(
-                          padding: orientation == Orientation.portrait
-                              ? EdgeInsets.symmetric(horizontal: padding)
-                              : EdgeInsets.only(left: padding / 4),
-                          sliver: SliverToBoxAdapter(
-                            child: Obx(
-                              () => _htmlRenderCtr.loaded.value
-                                  ? _buildHeader
-                                  : const SizedBox(),
-                            ),
-                          ),
-                        ),
-                        SliverPadding(
-                          padding: orientation == Orientation.portrait
-                              ? EdgeInsets.symmetric(horizontal: padding)
-                              : EdgeInsets.only(
-                                  left: padding / 4,
-                                  bottom:
-                                      MediaQuery.paddingOf(context).bottom + 80,
-                                ),
-                          sliver: _buildContent,
-                        ),
-                        if (orientation == Orientation.portrait) ...[
-                          SliverPadding(
-                            padding: EdgeInsets.symmetric(horizontal: padding),
-                            sliver: SliverToBoxAdapter(
-                              child: Divider(
-                                thickness: 8,
-                                color: Theme.of(context)
-                                    .dividerColor
-                                    .withOpacity(0.05),
-                              ),
-                            ),
-                          ),
-                          SliverPadding(
-                            padding: EdgeInsets.symmetric(horizontal: padding),
-                            sliver: SliverToBoxAdapter(child: replyHeader()),
-                          ),
-                          SliverPadding(
-                            padding: EdgeInsets.symmetric(horizontal: padding),
-                            sliver: Obx(
-                              () =>
-                                  replyList(_htmlRenderCtr.loadingState.value),
-                            ),
-                          ),
-                        ],
-                      ],
-                    ),
-                  ),
-                  if (orientation == Orientation.landscape) ...[
-                    VerticalDivider(
-                      thickness: 8,
-                      color: Theme.of(context).dividerColor.withOpacity(0.05),
-                    ),
+      body: SafeArea(
+        top: false,
+        bottom: false,
+        child: Stack(
+          children: [
+            OrientationBuilder(
+              builder: (context, orientation) {
+                double padding =
+                    max(context.width / 2 - Grid.smallCardWidth, 0);
+                return Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
                     Expanded(
-                      flex: _ratio[1].toInt(),
-                      child: Scaffold(
-                        key: _key,
-                        backgroundColor: Colors.transparent,
-                        body: refreshIndicator(
-                          onRefresh: () async {
-                            await _htmlRenderCtr.onRefresh();
-                          },
-                          child: CustomScrollView(
-                            controller: _htmlRenderCtr.scrollController,
-                            physics: const AlwaysScrollableScrollPhysics(),
-                            slivers: [
-                              SliverPadding(
-                                padding: EdgeInsets.only(right: padding / 4),
-                                sliver: SliverToBoxAdapter(
-                                  child: replyHeader(),
+                      flex: _ratio[0].toInt(),
+                      child: CustomScrollView(
+                        controller: _htmlRenderCtr.scrollController,
+                        physics: const AlwaysScrollableScrollPhysics(),
+                        slivers: [
+                          SliverPadding(
+                            padding: orientation == Orientation.portrait
+                                ? EdgeInsets.symmetric(horizontal: padding)
+                                : EdgeInsets.only(left: padding / 4),
+                            sliver: SliverToBoxAdapter(
+                              child: Obx(
+                                () => _htmlRenderCtr.loaded.value
+                                    ? _buildHeader
+                                    : const SizedBox(),
+                              ),
+                            ),
+                          ),
+                          SliverPadding(
+                            padding: orientation == Orientation.portrait
+                                ? EdgeInsets.symmetric(horizontal: padding)
+                                : EdgeInsets.only(
+                                    left: padding / 4,
+                                    bottom:
+                                        MediaQuery.paddingOf(context).bottom +
+                                            80,
+                                  ),
+                            sliver: _buildContent,
+                          ),
+                          if (orientation == Orientation.portrait) ...[
+                            SliverPadding(
+                              padding:
+                                  EdgeInsets.symmetric(horizontal: padding),
+                              sliver: SliverToBoxAdapter(
+                                child: Divider(
+                                  thickness: 8,
+                                  color: Theme.of(context)
+                                      .dividerColor
+                                      .withOpacity(0.05),
                                 ),
                               ),
-                              SliverPadding(
-                                padding: EdgeInsets.only(right: padding / 4),
-                                sliver: Obx(
-                                  () => replyList(
-                                      _htmlRenderCtr.loadingState.value),
-                                ),
+                            ),
+                            SliverPadding(
+                              padding:
+                                  EdgeInsets.symmetric(horizontal: padding),
+                              sliver: SliverToBoxAdapter(child: replyHeader()),
+                            ),
+                            SliverPadding(
+                              padding:
+                                  EdgeInsets.symmetric(horizontal: padding),
+                              sliver: Obx(
+                                () => replyList(
+                                    _htmlRenderCtr.loadingState.value),
                               ),
-                            ],
+                            ),
+                          ],
+                        ],
+                      ),
+                    ),
+                    if (orientation == Orientation.landscape) ...[
+                      VerticalDivider(
+                        thickness: 8,
+                        color: Theme.of(context).dividerColor.withOpacity(0.05),
+                      ),
+                      Expanded(
+                        flex: _ratio[1].toInt(),
+                        child: Scaffold(
+                          key: _key,
+                          backgroundColor: Colors.transparent,
+                          body: refreshIndicator(
+                            onRefresh: () async {
+                              await _htmlRenderCtr.onRefresh();
+                            },
+                            child: CustomScrollView(
+                              controller: _htmlRenderCtr.scrollController,
+                              physics: const AlwaysScrollableScrollPhysics(),
+                              slivers: [
+                                SliverPadding(
+                                  padding: EdgeInsets.only(right: padding / 4),
+                                  sliver: SliverToBoxAdapter(
+                                    child: replyHeader(),
+                                  ),
+                                ),
+                                SliverPadding(
+                                  padding: EdgeInsets.only(right: padding / 4),
+                                  sliver: Obx(
+                                    () => replyList(
+                                        _htmlRenderCtr.loadingState.value),
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ),
-                    ),
+                    ],
                   ],
-                ],
-              );
-            },
-          ),
-          Positioned(
-            left: 0,
-            right: 0,
-            bottom: 0,
-            child: SlideTransition(
-              position: Tween<Offset>(
-                begin: const Offset(0, 1),
-                end: const Offset(0, 0),
-              ).animate(CurvedAnimation(
-                parent: fabAnimationCtr,
-                curve: Curves.easeInOut,
-              )),
-              child: Builder(
-                builder: (context) {
-                  Widget button() => FloatingActionButton(
-                        heroTag: null,
-                        onPressed: () {
-                          feedBack();
-                          _htmlRenderCtr.onReply(
-                            context,
-                            oid: _htmlRenderCtr.oid.value,
-                            replyType: ReplyType.values[type],
-                          );
-                        },
-                        tooltip: '评论动态',
-                        child: const Icon(Icons.reply),
-                      );
-                  return _htmlRenderCtr.showDynActionBar.not
-                      ? Align(
-                          alignment: Alignment.bottomRight,
-                          child: Padding(
-                            padding: EdgeInsets.only(
-                              right: 14,
-                              bottom:
-                                  MediaQuery.of(context).padding.bottom + 14,
-                            ),
-                            child: button(),
-                          ),
-                        )
-                      : Obx(
-                          () => Column(
-                            mainAxisSize: MainAxisSize.min,
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: [
-                              Padding(
-                                padding: EdgeInsets.only(
-                                  right: 14,
-                                  bottom: 14 +
-                                      (_htmlRenderCtr.item.value.idStr != null
-                                          ? 0
-                                          : MediaQuery.of(context)
-                                              .padding
-                                              .bottom),
-                                ),
-                                child: button(),
+                );
+              },
+            ),
+            Positioned(
+              left: 0,
+              right: 0,
+              bottom: 0,
+              child: SlideTransition(
+                position: Tween<Offset>(
+                  begin: const Offset(0, 1),
+                  end: const Offset(0, 0),
+                ).animate(CurvedAnimation(
+                  parent: fabAnimationCtr,
+                  curve: Curves.easeInOut,
+                )),
+                child: Builder(
+                  builder: (context) {
+                    Widget button() => FloatingActionButton(
+                          heroTag: null,
+                          onPressed: () {
+                            feedBack();
+                            _htmlRenderCtr.onReply(
+                              context,
+                              oid: _htmlRenderCtr.oid.value,
+                              replyType: ReplyType.values[type],
+                            );
+                          },
+                          tooltip: '评论动态',
+                          child: const Icon(Icons.reply),
+                        );
+                    return _htmlRenderCtr.showDynActionBar.not
+                        ? Align(
+                            alignment: Alignment.bottomRight,
+                            child: Padding(
+                              padding: EdgeInsets.only(
+                                right: 14,
+                                bottom:
+                                    MediaQuery.of(context).padding.bottom + 14,
                               ),
-                              _htmlRenderCtr.item.value.idStr != null
-                                  ? Container(
-                                      decoration: BoxDecoration(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .surface,
-                                        border: Border(
-                                          top: BorderSide(
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .outline
-                                                .withOpacity(0.08),
+                              child: button(),
+                            ),
+                          )
+                        : Obx(
+                            () => Column(
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                Padding(
+                                  padding: EdgeInsets.only(
+                                    right: 14,
+                                    bottom: 14 +
+                                        (_htmlRenderCtr.item.value.idStr != null
+                                            ? 0
+                                            : MediaQuery.of(context)
+                                                .padding
+                                                .bottom),
+                                  ),
+                                  child: button(),
+                                ),
+                                _htmlRenderCtr.item.value.idStr != null
+                                    ? Container(
+                                        decoration: BoxDecoration(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .surface,
+                                          border: Border(
+                                            top: BorderSide(
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .outline
+                                                  .withOpacity(0.08),
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                      padding: EdgeInsets.only(
-                                          bottom: MediaQuery.paddingOf(context)
-                                              .bottom),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceAround,
-                                        children: [
-                                          Expanded(
-                                            child: Builder(
-                                              builder: (btnContext) =>
-                                                  TextButton.icon(
-                                                onPressed: () {
-                                                  showModalBottomSheet(
-                                                    context: context,
-                                                    isScrollControlled: true,
-                                                    useSafeArea: true,
-                                                    builder: (context) =>
-                                                        RepostPanel(
-                                                      item: _htmlRenderCtr
-                                                          .item.value,
-                                                      callback: () {
-                                                        int count = int.tryParse(
-                                                                _htmlRenderCtr
-                                                                        .item
-                                                                        .value
-                                                                        .modules
-                                                                        ?.moduleStat
-                                                                        ?.forward
-                                                                        ?.count ??
-                                                                    '0') ??
-                                                            0;
-                                                        _htmlRenderCtr
+                                        padding: EdgeInsets.only(
+                                            bottom:
+                                                MediaQuery.paddingOf(context)
+                                                    .bottom),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceAround,
+                                          children: [
+                                            Expanded(
+                                              child: Builder(
+                                                builder: (btnContext) =>
+                                                    TextButton.icon(
+                                                  onPressed: () {
+                                                    showModalBottomSheet(
+                                                      context: context,
+                                                      isScrollControlled: true,
+                                                      useSafeArea: true,
+                                                      builder: (context) =>
+                                                          RepostPanel(
+                                                        item: _htmlRenderCtr
+                                                            .item.value,
+                                                        callback: () {
+                                                          int count = int.tryParse(
+                                                                  _htmlRenderCtr
+                                                                          .item
+                                                                          .value
+                                                                          .modules
+                                                                          ?.moduleStat
+                                                                          ?.forward
+                                                                          ?.count ??
+                                                                      '0') ??
+                                                              0;
+                                                          _htmlRenderCtr
+                                                                  .item
+                                                                  .value
+                                                                  .modules
+                                                                  ?.moduleStat
+                                                                  ?.forward!
+                                                                  .count =
+                                                              (count + 1)
+                                                                  .toString();
+                                                          if (btnContext
+                                                              .mounted) {
+                                                            (btnContext
+                                                                    as Element?)
+                                                                ?.markNeedsBuild();
+                                                          }
+                                                        },
+                                                      ),
+                                                    );
+                                                  },
+                                                  icon: Icon(
+                                                    FontAwesomeIcons
+                                                        .shareFromSquare,
+                                                    size: 16,
+                                                    color: Theme.of(context)
+                                                        .colorScheme
+                                                        .outline,
+                                                    semanticLabel: "转发",
+                                                  ),
+                                                  style: TextButton.styleFrom(
+                                                    padding: const EdgeInsets
+                                                        .fromLTRB(15, 0, 15, 0),
+                                                    foregroundColor:
+                                                        Theme.of(context)
+                                                            .colorScheme
+                                                            .outline,
+                                                  ),
+                                                  label: Text(
+                                                    _htmlRenderCtr
                                                                 .item
                                                                 .value
                                                                 .modules
                                                                 ?.moduleStat
                                                                 ?.forward!
-                                                                .count =
-                                                            (count + 1)
-                                                                .toString();
-                                                        if (btnContext
-                                                            .mounted) {
-                                                          (btnContext
-                                                                  as Element?)
-                                                              ?.markNeedsBuild();
-                                                        }
-                                                      },
-                                                    ),
-                                                  );
+                                                                .count !=
+                                                            null
+                                                        ? Utils.numFormat(
+                                                            _htmlRenderCtr
+                                                                .item
+                                                                .value
+                                                                .modules
+                                                                ?.moduleStat
+                                                                ?.forward!
+                                                                .count)
+                                                        : '转发',
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                            Expanded(
+                                              child: TextButton.icon(
+                                                onPressed: () {
+                                                  Utils.shareText(
+                                                      '${HttpString.dynamicShareBaseUrl}/${_htmlRenderCtr.item.value.idStr}');
                                                 },
                                                 icon: Icon(
-                                                  FontAwesomeIcons
-                                                      .shareFromSquare,
+                                                  FontAwesomeIcons.shareNodes,
                                                   size: 16,
                                                   color: Theme.of(context)
                                                       .colorScheme
                                                       .outline,
-                                                  semanticLabel: "转发",
+                                                  semanticLabel: "分享",
                                                 ),
                                                 style: TextButton.styleFrom(
                                                   padding:
@@ -580,178 +633,134 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
                                                           .colorScheme
                                                           .outline,
                                                 ),
-                                                label: Text(
-                                                  _htmlRenderCtr
-                                                              .item
-                                                              .value
-                                                              .modules
-                                                              ?.moduleStat
-                                                              ?.forward!
-                                                              .count !=
-                                                          null
-                                                      ? Utils.numFormat(
-                                                          _htmlRenderCtr
-                                                              .item
-                                                              .value
-                                                              .modules
-                                                              ?.moduleStat
-                                                              ?.forward!
-                                                              .count)
-                                                      : '转发',
-                                                ),
+                                                label: const Text('分享'),
                                               ),
                                             ),
-                                          ),
-                                          Expanded(
-                                            child: TextButton.icon(
-                                              onPressed: () {
-                                                Utils.shareText(
-                                                    '${HttpString.dynamicShareBaseUrl}/${_htmlRenderCtr.item.value.idStr}');
-                                              },
-                                              icon: Icon(
-                                                FontAwesomeIcons.shareNodes,
-                                                size: 16,
-                                                color: Theme.of(context)
-                                                    .colorScheme
-                                                    .outline,
-                                                semanticLabel: "分享",
-                                              ),
-                                              style: TextButton.styleFrom(
-                                                padding:
-                                                    const EdgeInsets.fromLTRB(
-                                                        15, 0, 15, 0),
-                                                foregroundColor:
-                                                    Theme.of(context)
-                                                        .colorScheme
-                                                        .outline,
-                                              ),
-                                              label: const Text('分享'),
-                                            ),
-                                          ),
-                                          Expanded(
-                                            child: Builder(
-                                              builder: (context) =>
-                                                  TextButton.icon(
-                                                onPressed: () =>
-                                                    RequestUtils.onLikeDynamic(
-                                                  _htmlRenderCtr.item.value,
-                                                  () {
-                                                    if (context.mounted) {
-                                                      (context as Element?)
-                                                          ?.markNeedsBuild();
-                                                    }
-                                                  },
-                                                ),
-                                                icon: Icon(
-                                                  _htmlRenderCtr
-                                                              .item
-                                                              .value
-                                                              .modules
-                                                              ?.moduleStat
-                                                              ?.like
-                                                              ?.status ==
-                                                          true
-                                                      ? FontAwesomeIcons
-                                                          .solidThumbsUp
-                                                      : FontAwesomeIcons
-                                                          .thumbsUp,
-                                                  size: 16,
-                                                  color: _htmlRenderCtr
-                                                              .item
-                                                              .value
-                                                              .modules
-                                                              ?.moduleStat
-                                                              ?.like
-                                                              ?.status ==
-                                                          true
-                                                      ? Theme.of(context)
-                                                          .colorScheme
-                                                          .primary
-                                                      : Theme.of(context)
-                                                          .colorScheme
-                                                          .outline,
-                                                  semanticLabel: _htmlRenderCtr
-                                                              .item
-                                                              .value
-                                                              .modules
-                                                              ?.moduleStat
-                                                              ?.like
-                                                              ?.status ==
-                                                          true
-                                                      ? "已赞"
-                                                      : "点赞",
-                                                ),
-                                                style: TextButton.styleFrom(
-                                                  padding:
-                                                      const EdgeInsets.fromLTRB(
-                                                          15, 0, 15, 0),
-                                                  foregroundColor:
-                                                      Theme.of(context)
-                                                          .colorScheme
-                                                          .outline,
-                                                ),
-                                                label: AnimatedSwitcher(
-                                                  duration: const Duration(
-                                                      milliseconds: 400),
-                                                  transitionBuilder:
-                                                      (Widget child,
-                                                          Animation<double>
-                                                              animation) {
-                                                    return ScaleTransition(
-                                                        scale: animation,
-                                                        child: child);
-                                                  },
-                                                  child: Text(
+                                            Expanded(
+                                              child: Builder(
+                                                builder: (context) =>
+                                                    TextButton.icon(
+                                                  onPressed: () => RequestUtils
+                                                      .onLikeDynamic(
+                                                    _htmlRenderCtr.item.value,
+                                                    () {
+                                                      if (context.mounted) {
+                                                        (context as Element?)
+                                                            ?.markNeedsBuild();
+                                                      }
+                                                    },
+                                                  ),
+                                                  icon: Icon(
                                                     _htmlRenderCtr
                                                                 .item
                                                                 .value
                                                                 .modules
                                                                 ?.moduleStat
                                                                 ?.like
-                                                                ?.count !=
-                                                            null
-                                                        ? Utils.numFormat(
-                                                            _htmlRenderCtr
+                                                                ?.status ==
+                                                            true
+                                                        ? FontAwesomeIcons
+                                                            .solidThumbsUp
+                                                        : FontAwesomeIcons
+                                                            .thumbsUp,
+                                                    size: 16,
+                                                    color: _htmlRenderCtr
                                                                 .item
                                                                 .value
-                                                                .modules!
-                                                                .moduleStat!
-                                                                .like!
-                                                                .count)
-                                                        : '点赞',
-                                                    style: TextStyle(
-                                                      color: _htmlRenderCtr
+                                                                .modules
+                                                                ?.moduleStat
+                                                                ?.like
+                                                                ?.status ==
+                                                            true
+                                                        ? Theme.of(context)
+                                                            .colorScheme
+                                                            .primary
+                                                        : Theme.of(context)
+                                                            .colorScheme
+                                                            .outline,
+                                                    semanticLabel:
+                                                        _htmlRenderCtr
+                                                                    .item
+                                                                    .value
+                                                                    .modules
+                                                                    ?.moduleStat
+                                                                    ?.like
+                                                                    ?.status ==
+                                                                true
+                                                            ? "已赞"
+                                                            : "点赞",
+                                                  ),
+                                                  style: TextButton.styleFrom(
+                                                    padding: const EdgeInsets
+                                                        .fromLTRB(15, 0, 15, 0),
+                                                    foregroundColor:
+                                                        Theme.of(context)
+                                                            .colorScheme
+                                                            .outline,
+                                                  ),
+                                                  label: AnimatedSwitcher(
+                                                    duration: const Duration(
+                                                        milliseconds: 400),
+                                                    transitionBuilder:
+                                                        (Widget child,
+                                                            Animation<double>
+                                                                animation) {
+                                                      return ScaleTransition(
+                                                          scale: animation,
+                                                          child: child);
+                                                    },
+                                                    child: Text(
+                                                      _htmlRenderCtr
                                                                   .item
                                                                   .value
                                                                   .modules
                                                                   ?.moduleStat
                                                                   ?.like
-                                                                  ?.status ==
-                                                              true
-                                                          ? Theme.of(context)
-                                                              .colorScheme
-                                                              .primary
-                                                          : Theme.of(context)
-                                                              .colorScheme
-                                                              .outline,
+                                                                  ?.count !=
+                                                              null
+                                                          ? Utils.numFormat(
+                                                              _htmlRenderCtr
+                                                                  .item
+                                                                  .value
+                                                                  .modules!
+                                                                  .moduleStat!
+                                                                  .like!
+                                                                  .count)
+                                                          : '点赞',
+                                                      style: TextStyle(
+                                                        color: _htmlRenderCtr
+                                                                    .item
+                                                                    .value
+                                                                    .modules
+                                                                    ?.moduleStat
+                                                                    ?.like
+                                                                    ?.status ==
+                                                                true
+                                                            ? Theme.of(context)
+                                                                .colorScheme
+                                                                .primary
+                                                            : Theme.of(context)
+                                                                .colorScheme
+                                                                .outline,
+                                                      ),
                                                     ),
                                                   ),
                                                 ),
                                               ),
                                             ),
-                                          ),
-                                        ],
-                                      ),
-                                    )
-                                  : const SizedBox.shrink(),
-                            ],
-                          ),
-                        );
-                },
+                                          ],
+                                        ),
+                                      )
+                                    : const SizedBox.shrink(),
+                              ],
+                            ),
+                          );
+                  },
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

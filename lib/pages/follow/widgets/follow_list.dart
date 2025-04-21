@@ -92,12 +92,12 @@ class _FollowListState extends State<FollowList> {
                           }
                         },
                       )
-                    : errorWidget(
+                    : scrollErrorWidget(
                         callback: () => widget.ctr.queryFollowings('init'),
                       ),
               );
             } else {
-              return errorWidget(
+              return scrollErrorWidget(
                 errMsg: data['msg'],
                 callback: () => widget.ctr.queryFollowings('init'),
               );

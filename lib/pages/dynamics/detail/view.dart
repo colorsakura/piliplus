@@ -103,10 +103,6 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
     super.initState();
     // floor 1原创 2转发
     init();
-    // if (action == 'comment') {
-    //   _visibleTitle = true;
-    //   _titleStreamC.add(true);
-    // }
 
     _fabAnimationCtr = AnimationController(
       vsync: this,
@@ -340,14 +336,18 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
               ]
             : null,
       ),
-      body: context.orientation == Orientation.portrait
-          ? refreshIndicator(
-              onRefresh: () async {
-                await _dynamicDetailController.onRefresh();
-              },
-              child: _buildBody(context.orientation),
-            )
-          : _buildBody(context.orientation),
+      body: SafeArea(
+        top: false,
+        bottom: false,
+        child: context.orientation == Orientation.portrait
+            ? refreshIndicator(
+                onRefresh: () async {
+                  await _dynamicDetailController.onRefresh();
+                },
+                child: _buildBody(context.orientation),
+              )
+            : _buildBody(context.orientation),
+      ),
     );
   }
 

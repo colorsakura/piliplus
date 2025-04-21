@@ -107,12 +107,12 @@ class _OwnerFollowListState extends State<OwnerFollowList>
                           );
                         },
                       )
-                    : errorWidget(
+                    : scrollErrorWidget(
                         callback: () => widget.ctr.queryFollowings('init'),
                       ),
               );
             } else {
-              return errorWidget(
+              return scrollErrorWidget(
                 errMsg: data['msg'],
                 callback: () => widget.ctr.queryFollowings('init'),
               );

@@ -31,11 +31,7 @@ class _WhisperPageState extends State<WhisperPage> {
         child: CustomScrollView(
           physics: const AlwaysScrollableScrollPhysics(),
           slivers: [
-            SliverSafeArea(
-              top: false,
-              bottom: false,
-              sliver: _buildTopItems,
-            ),
+            _buildTopItems,
             Obx(() => _buildBody(_whisperController.loadingState.value)),
           ],
         ),
@@ -90,59 +86,63 @@ class _WhisperPageState extends State<WhisperPage> {
     };
   }
 
-  Widget get _buildTopItems => SliverToBoxAdapter(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children:
-              List.generate(_whisperController.msgFeedTopItems.length, (index) {
-            return GestureDetector(
-              behavior: HitTestBehavior.opaque,
-              child: Padding(
-                padding: const EdgeInsets.all(10),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Obx(
-                      () => Badge(
-                        isLabelVisible:
-                            _whisperController.unreadCounts[index] > 0,
-                        label:
-                            Text(" ${_whisperController.unreadCounts[index]} "),
-                        alignment: Alignment.topRight,
-                        child: CircleAvatar(
-                          radius: 22,
-                          backgroundColor:
-                              Theme.of(context).colorScheme.onInverseSurface,
-                          child: Icon(
-                            _whisperController.msgFeedTopItems[index]['icon'],
-                            size: 20,
-                            color: Theme.of(context).colorScheme.primary,
+  Widget get _buildTopItems => SliverSafeArea(
+        top: false,
+        bottom: false,
+        sliver: SliverToBoxAdapter(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: List.generate(_whisperController.msgFeedTopItems.length,
+                (index) {
+              return GestureDetector(
+                behavior: HitTestBehavior.opaque,
+                child: Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Obx(
+                        () => Badge(
+                          isLabelVisible:
+                              _whisperController.unreadCounts[index] > 0,
+                          label: Text(
+                              " ${_whisperController.unreadCounts[index]} "),
+                          alignment: Alignment.topRight,
+                          child: CircleAvatar(
+                            radius: 22,
+                            backgroundColor:
+                                Theme.of(context).colorScheme.onInverseSurface,
+                            child: Icon(
+                              _whisperController.msgFeedTopItems[index]['icon'],
+                              size: 20,
+                              color: Theme.of(context).colorScheme.primary,
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                    const SizedBox(height: 6),
-                    Text(
-                      _whisperController.msgFeedTopItems[index]['name'],
-                      style: const TextStyle(fontSize: 13),
-                    ),
-                  ],
+                      const SizedBox(height: 6),
+                      Text(
+                        _whisperController.msgFeedTopItems[index]['name'],
+                        style: const TextStyle(fontSize: 13),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              onTap: () {
-                if (!_whisperController.msgFeedTopItems[index]['enabled']) {
-                  SmartDialog.showToast('已禁用');
-                  return;
-                }
-                _whisperController.unreadCounts[index] = 0;
-                Get.toNamed(
-                  _whisperController.msgFeedTopItems[index]['route'],
-                );
-              },
-            );
-          }).toList(),
+                onTap: () {
+                  if (!_whisperController.msgFeedTopItems[index]['enabled']) {
+                    SmartDialog.showToast('已禁用');
+                    return;
+                  }
+                  _whisperController.unreadCounts[index] = 0;
+                  Get.toNamed(
+                    _whisperController.msgFeedTopItems[index]['route'],
+                  );
+                },
+              );
+            }).toList(),
+          ),
         ),
       );
 }

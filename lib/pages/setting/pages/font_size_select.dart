@@ -48,58 +48,55 @@ class _FontSizeSelectPageState extends State<FontSizeSelectPage> {
           const SizedBox(width: 12)
         ],
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: Center(
-              child: Text(
-                '当前字体大小:${currentSize == 1.0 ? '默认' : currentSize}',
-                style: TextStyle(fontSize: 14 * currentSize),
+      body: SafeArea(
+        child: Column(
+          children: [
+            Expanded(
+              child: Center(
+                child: Text(
+                  '当前字体大小:${currentSize == 1.0 ? '默认' : currentSize}',
+                  style: TextStyle(fontSize: 14 * currentSize),
+                ),
               ),
             ),
-          ),
-          Container(
-            width: double.infinity,
-            padding: EdgeInsets.only(
-              left: 20,
-              right: 20,
-              top: 20,
-              bottom: MediaQuery.of(context).padding.bottom + 20,
-            ),
-            decoration: BoxDecoration(
-              border: Border(
-                  top: BorderSide(
-                      color: Theme.of(context)
-                          .colorScheme
-                          .primary
-                          .withOpacity(0.3))),
-              color: Theme.of(context).colorScheme.surface,
-            ),
-            child: Row(
-              children: [
-                const Text('小'),
-                Expanded(
-                  child: Slider(
-                    min: minSize,
-                    value: currentSize,
-                    max: maxSize,
-                    divisions: list.length - 1,
-                    secondaryTrackValue: 1,
-                    onChanged: (double val) {
-                      currentSize = val.toPrecision(2);
-                      setState(() {});
-                    },
+            Container(
+              width: double.infinity,
+              padding: EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                border: Border(
+                    top: BorderSide(
+                        color: Theme.of(context)
+                            .colorScheme
+                            .primary
+                            .withOpacity(0.3))),
+                color: Theme.of(context).colorScheme.surface,
+              ),
+              child: Row(
+                children: [
+                  const Text('小'),
+                  Expanded(
+                    child: Slider(
+                      min: minSize,
+                      value: currentSize,
+                      max: maxSize,
+                      divisions: list.length - 1,
+                      secondaryTrackValue: 1,
+                      onChanged: (double val) {
+                        currentSize = val.toPrecision(2);
+                        setState(() {});
+                      },
+                    ),
                   ),
-                ),
-                const SizedBox(width: 5),
-                const Text(
-                  '大',
-                  style: TextStyle(fontSize: 20),
-                ),
-              ],
-            ),
-          )
-        ],
+                  const SizedBox(width: 5),
+                  const Text(
+                    '大',
+                    style: TextStyle(fontSize: 20),
+                  ),
+                ],
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

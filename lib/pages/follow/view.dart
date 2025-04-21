@@ -76,15 +76,19 @@ class _FollowPageState extends State<FollowPage> {
                     if (data['status']) {
                       return Column(
                         children: [
-                          TabBar(
-                            controller: _followController.tabController,
-                            isScrollable: true,
-                            tabAlignment: TabAlignment.start,
-                            tabs: [
-                              for (var i in data['data']) ...[
-                                Tab(text: i.name),
-                              ]
-                            ],
+                          SafeArea(
+                            top: false,
+                            bottom: false,
+                            child: TabBar(
+                              controller: _followController.tabController,
+                              isScrollable: true,
+                              tabAlignment: TabAlignment.start,
+                              tabs: [
+                                for (var i in data['data']) ...[
+                                  Tab(text: i.name),
+                                ]
+                              ],
+                            ),
                           ),
                           Expanded(
                             child: Material(

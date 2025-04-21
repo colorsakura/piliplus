@@ -48,12 +48,16 @@ abstract class CommonSearchPageState<S extends CommonSearchPage, R, T>
           onSubmitted: (value) => controller.onRefresh(),
         ),
       ),
-      body: CustomScrollView(
-        physics: const AlwaysScrollableScrollPhysics(),
-        controller: controller.scrollController,
-        slivers: [
-          Obx(() => _buildBody(controller.loadingState.value)),
-        ],
+      body: SafeArea(
+        top: false,
+        bottom: false,
+        child: CustomScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          controller: controller.scrollController,
+          slivers: [
+            Obx(() => _buildBody(controller.loadingState.value)),
+          ],
+        ),
       ),
     );
   }

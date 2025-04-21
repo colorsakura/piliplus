@@ -210,9 +210,9 @@ class _PlaySpeedPageState extends State<PlaySpeedPage> {
           const SizedBox(width: 16),
         ],
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+      body: SafeArea(
+        bottom: false,
+        child: ListView(
           children: [
             Padding(
               padding:

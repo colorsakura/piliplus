@@ -173,6 +173,7 @@ class _MainAppState extends State<MainApp>
 
   @override
   Widget build(BuildContext context) {
+    final bool isPortrait = context.orientation == Orientation.portrait;
     return PopScope(
       canPop: false,
       onPopInvokedWithResult: (bool didPop, Object? result) async {
@@ -200,8 +201,7 @@ class _MainAppState extends State<MainApp>
           body: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              if (useSideBar ||
-                  context.orientation == Orientation.landscape) ...[
+              if (useSideBar || !isPortrait) ...[
                 Obx(
                   () => _mainController.navigationBars.length > 1
                       ? context.isTablet
@@ -298,26 +298,28 @@ class _MainAppState extends State<MainApp>
                 ),
               ],
               Expanded(
-                child: _mainController.mainTabBarView
-                    ? CustomTabBarView(
-                        scrollDirection:
-                            context.orientation == Orientation.portrait
-                                ? Axis.horizontal
-                                : Axis.vertical,
-                        physics: const NeverScrollableScrollPhysics(),
-                        controller: _mainController.controller,
-                        children: _mainController.pages,
-                      )
-                    : PageView(
-                        physics: const NeverScrollableScrollPhysics(),
-                        controller: _mainController.controller,
-                        children: _mainController.pages,
-                      ),
+                child: SafeArea(
+                  top: false,
+                  bottom: false,
+                  left: isPortrait,
+                  child: _mainController.mainTabBarView
+                      ? CustomTabBarView(
+                          scrollDirection:
+                              isPortrait ? Axis.horizontal : Axis.vertical,
+                          physics: const NeverScrollableScrollPhysics(),
+                          controller: _mainController.controller,
+                          children: _mainController.pages,
+                        )
+                      : PageView(
+                          physics: const NeverScrollableScrollPhysics(),
+                          controller: _mainController.controller,
+                          children: _mainController.pages,
+                        ),
+                ),
               ),
             ],
           ),
-          bottomNavigationBar: useSideBar ||
-                  context.orientation == Orientation.landscape
+          bottomNavigationBar: useSideBar || !isPortrait
               ? null
               : StreamBuilder(
                   stream: _mainController.hideTabBar

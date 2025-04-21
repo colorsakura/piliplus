@@ -40,63 +40,67 @@ class _MediaPageState extends CommonPageState<MediaPage, MediaController>
   Widget build(BuildContext context) {
     super.build(context);
     Color primary = Theme.of(context).colorScheme.primary;
-    return Scaffold(
-      backgroundColor: Colors.transparent,
-      appBar: AppBar(
-        toolbarHeight: 30,
-      ),
-      body: ListView(
-        controller: controller.scrollController,
-        physics: const AlwaysScrollableScrollPhysics(),
-        children: [
-          ListTile(
-            leading: null,
-            title: Padding(
-              padding: const EdgeInsets.only(left: 20),
-              child: Text(
-                '媒体库',
-                style: TextStyle(
-                  fontSize: Theme.of(context).textTheme.titleLarge!.fontSize,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-            trailing: IconButton(
-              tooltip: '设置',
-              onPressed: () {
-                Get.toNamed('/setting');
-              },
-              icon: const Icon(
-                Icons.settings_outlined,
-                size: 20,
-              ),
-            ),
-          ),
-          for (var item in controller.list)
+    return MediaQuery.removePadding(
+      context: context,
+      removeLeft: context.orientation == Orientation.landscape,
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        appBar: AppBar(
+          toolbarHeight: 30,
+        ),
+        body: ListView(
+          controller: controller.scrollController,
+          physics: const AlwaysScrollableScrollPhysics(),
+          children: [
             ListTile(
-              onTap: item['onTap'],
-              dense: true,
-              leading: Padding(
-                padding: const EdgeInsets.only(left: 15),
-                child: Icon(
-                  item['icon'],
-                  color: primary,
+              leading: null,
+              title: Padding(
+                padding: const EdgeInsets.only(left: 20),
+                child: Text(
+                  '媒体库',
+                  style: TextStyle(
+                    fontSize: Theme.of(context).textTheme.titleLarge!.fontSize,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
-              contentPadding:
-                  const EdgeInsets.only(left: 15, top: 2, bottom: 2),
-              minLeadingWidth: 0,
-              title: Text(
-                item['title'],
-                style: const TextStyle(fontSize: 15),
+              trailing: IconButton(
+                tooltip: '设置',
+                onPressed: () {
+                  Get.toNamed('/setting');
+                },
+                icon: const Icon(
+                  Icons.settings_outlined,
+                  size: 20,
+                ),
               ),
             ),
-          Obx(
-            () => controller.loadingState.value is Loading
-                ? const SizedBox.shrink()
-                : favFolder(),
-          )
-        ],
+            for (var item in controller.list)
+              ListTile(
+                onTap: item['onTap'],
+                dense: true,
+                leading: Padding(
+                  padding: const EdgeInsets.only(left: 15),
+                  child: Icon(
+                    item['icon'],
+                    color: primary,
+                  ),
+                ),
+                contentPadding:
+                    const EdgeInsets.only(left: 15, top: 2, bottom: 2),
+                minLeadingWidth: 0,
+                title: Text(
+                  item['title'],
+                  style: const TextStyle(fontSize: 15),
+                ),
+              ),
+            Obx(
+              () => controller.loadingState.value is Loading
+                  ? const SizedBox.shrink()
+                  : favFolder(),
+            )
+          ],
+        ),
       ),
     );
   }
