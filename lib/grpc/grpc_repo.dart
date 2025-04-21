@@ -225,16 +225,38 @@ class GrpcRepo {
     required int rpid,
     required CursorReq cursor,
     DetailListScene scene = DetailListScene.REPLY,
+    required int page,
   }) async {
     return await _request(
         GrpcUrl.detailList,
         DetailListReq(
-            oid: Int64(oid),
-            type: Int64(type),
-            root: Int64(root),
-            rpid: Int64(rpid),
-            cursor: cursor,
-            scene: scene),
+          oid: Int64(oid),
+          type: Int64(type),
+          root: Int64(root),
+          rpid: Int64(rpid),
+          // cursor: cursor,
+          scene: Int64(scene.value),
+          mode: Int64(cursor.mode.value),
+          pagination: FeedPagination(
+            offset: page == 1
+                ? null
+                : jsonEncode(
+                    cursor.mode == Mode.MAIN_LIST_TIME
+                        ? {
+                            // time
+                            "type": 3,
+                            "direction": 1,
+                            "Data": {"cursor": cursor.next.toInt()}
+                          }
+                        : {
+                            // hot
+                            "type": 1,
+                            "direction": 1,
+                            "data": {"pn": page}
+                          },
+                  ),
+          ),
+        ),
         DetailListReply.fromBuffer);
   }
 

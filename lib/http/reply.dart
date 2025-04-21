@@ -268,6 +268,7 @@ class ReplyHttp {
     required int rpid,
     required CursorReq cursor,
     required bool antiGoodsReply,
+    required int page,
   }) async {
     dynamic res = await GrpcRepo.detailList(
       type: type,
@@ -275,6 +276,7 @@ class ReplyHttp {
       root: root,
       rpid: rpid,
       cursor: cursor,
+      page: page,
     );
     if (res['status']) {
       DetailListReply detailListReply = res['data'];

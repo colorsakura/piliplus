@@ -127,6 +127,7 @@ class VideoReplyReplyController extends ReplyController
             mode: mode.value,
           ),
           antiGoodsReply: antiGoodsReply,
+          page: currentPage,
         );
 
   @override
