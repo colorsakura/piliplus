@@ -79,6 +79,7 @@ class _EmotePanelState extends State<EmotePanel>
                                             semanticsLabel:
                                                 e.emote![index].text!,
                                             type: 'emote',
+                                            boxFit: BoxFit.contain,
                                           ),
                                   ),
                                 ),
