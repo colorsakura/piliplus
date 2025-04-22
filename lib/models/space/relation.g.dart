@@ -9,9 +9,11 @@ part of 'relation.dart';
 Relation _$RelationFromJson(Map<String, dynamic> json) => Relation(
       status: (json['status'] as num?)?.toInt(),
       isFollow: (json['is_follow'] as num?)?.toInt(),
+      isFollowed: (json['is_followed'] as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$RelationToJson(Relation instance) => <String, dynamic>{
       'status': instance.status,
       'is_follow': instance.isFollow,
+      'is_followed': instance.isFollowed,
     };

@@ -25,31 +25,22 @@ class MemberControllerNew extends CommonDataController<Data, dynamic>
     with GetTickerProviderStateMixin {
   MemberControllerNew({required this.mid});
   int mid;
-  RxBool showUname = false.obs;
-  String? username;
   int? ownerMid;
-  RxInt relation = 0.obs;
-  TabController? tabController;
-  late List<Tab> tabs;
-  List<Tab2>? tab2;
-  RxInt contributeInitialIndex = 0.obs;
-  bool? hasSeasonOrSeries;
-  final fromViewAid = Get.parameters['from_view_aid'];
-
-  bool get isFollow => relation.value != 0 && relation.value != 128;
-
-  @override
-  void onInit() {
-    super.onInit();
-    ownerMid = Accounts.main.mid;
-    queryData();
-  }
+  String? username;
+  RxBool showUname = false.obs;
 
   dynamic live;
-
   int? silence;
   String? endTime;
 
+  int? isFollowed; // 被关注
+  RxInt relation = 0.obs;
+  bool get isFollow => relation.value != 0 && relation.value != 128;
+
+  List<Tab2>? tab2;
+  late List<Tab> tabs;
+  TabController? tabController;
+  RxInt contributeInitialIndex = 0.obs;
   late final implTabs = const [
     'home',
     'dynamic',
@@ -58,10 +49,22 @@ class MemberControllerNew extends CommonDataController<Data, dynamic>
     'bangumi',
   ];
 
+  bool? hasSeasonOrSeries;
+
+  final fromViewAid = Get.parameters['from_view_aid'];
+
+  @override
+  void onInit() {
+    super.onInit();
+    ownerMid = Accounts.main.mid;
+    queryData();
+  }
+
   @override
   bool customHandleResponse(bool isRefresh, Success<Data> response) {
     Data data = response.response;
     username = data.card?.name ?? '';
+    isFollowed = data.card?.relation?.isFollowed;
     if (data.relation == -1) {
       relation.value = 128;
     } else {
@@ -69,7 +72,7 @@ class MemberControllerNew extends CommonDataController<Data, dynamic>
           ? data.relSpecial == 1
               ? -10
               : data.card?.relation?.status ?? 2
-          : 0;
+          : data.card?.relation?.status ?? 0;
     }
     tab2 = data.tab2;
     live = data.live;
@@ -225,5 +228,22 @@ class MemberControllerNew extends CommonDataController<Data, dynamic>
   void onClose() {
     tabController?.dispose();
     super.onClose();
+  }
+
+  Future onRemoveFan() async {
+    final res = await VideoHttp.relationMod(
+      mid: mid,
+      act: 7,
+      reSrc: 11,
+    );
+    if (res['status']) {
+      isFollowed = null;
+      if (relation.value == 4) {
+        relation.value = 2;
+      }
+      SmartDialog.showToast('移除成功');
+    } else {
+      SmartDialog.showToast(res['msg']);
+    }
   }
 }

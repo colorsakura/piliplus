@@ -84,7 +84,8 @@ class _MemberPageNewState extends State<MemberPageNew> {
           PopupMenuButton(
             icon: const Icon(Icons.more_vert),
             itemBuilder: (BuildContext context) => <PopupMenuEntry>[
-              if (_userController.ownerMid != _mid) ...[
+              if (_userController.ownerMid != 0 &&
+                  _userController.ownerMid != _mid) ...[
                 PopupMenuItem(
                   onTap: () => _userController.blockUser(context),
                   child: Row(
@@ -97,7 +98,19 @@ class _MemberPageNewState extends State<MemberPageNew> {
                           : '移除黑名单'),
                     ],
                   ),
-                )
+                ),
+                if (_userController.isFollowed == 1)
+                  PopupMenuItem(
+                    onTap: _userController.onRemoveFan,
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: const [
+                        Icon(Icons.remove_circle_outline_outlined, size: 19),
+                        SizedBox(width: 10),
+                        Text('移除粉丝'),
+                      ],
+                    ),
+                  ),
               ],
               PopupMenuItem(
                 onTap: () => _userController.shareUser(),
