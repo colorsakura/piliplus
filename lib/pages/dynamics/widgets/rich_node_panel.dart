@@ -257,6 +257,7 @@ InlineSpan? richNode(item, BuildContext context) {
           );
         } else if (i.type == 'RICH_TEXT_NODE_TYPE_VIEW_PICTURE') {
           if (i.pics?.isNotEmpty == true) {
+            spanChildren.add(TextSpan(text: '\n'));
             spanChildren.add(
               WidgetSpan(
                 child: LayoutBuilder(

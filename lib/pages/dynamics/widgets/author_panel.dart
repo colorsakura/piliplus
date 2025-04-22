@@ -240,6 +240,17 @@ class AuthorPanel extends StatelessWidget {
         _ => null,
       };
     } catch (_) {}
+    if (bvid == null && item.orig != null) {
+      try {
+        bvid = switch (item.orig.type) {
+          'DYNAMIC_TYPE_AV' =>
+            item.orig.modules.moduleDynamic.major.archive.bvid,
+          'DYNAMIC_TYPE_UGC_SEASON' =>
+            item.orig.modules.moduleDynamic.major.ugcSeason.bvid,
+          _ => null,
+        };
+      } catch (_) {}
+    }
     return Padding(
       padding: EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom),
       child: Column(
