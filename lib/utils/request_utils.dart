@@ -81,7 +81,7 @@ class RequestUtils {
                       );
                       if (res['status']) {
                         SmartDialog.showToast('$text成功');
-                        callback?.call(-10);
+                        callback?.call(isSpecialFollowed ? 2 : -10);
                       } else {
                         SmartDialog.showToast(res['msg']);
                       }
@@ -125,7 +125,7 @@ class RequestUtils {
                       );
                       followStatus!['tag'] = result;
                       if (result != null) {
-                        callback?.call(2);
+                        callback?.call(result.contains(-10) ? -10 : 2);
                       }
                     },
                     title: const Text(
