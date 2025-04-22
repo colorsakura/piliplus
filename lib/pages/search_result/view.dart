@@ -92,12 +92,12 @@ class _SearchResultPageState extends State<SearchResultPage>
           ),
         ),
       ),
-      body: Column(
-        children: [
-          SafeArea(
-            top: false,
-            bottom: false,
-            child: SizedBox(
+      body: SafeArea(
+        top: false,
+        bottom: false,
+        child: Column(
+          children: [
+            SizedBox(
               width: double.infinity,
               child: TabBar(
                 overlayColor: WidgetStateProperty.all(Colors.transparent),
@@ -145,54 +145,54 @@ class _SearchResultPageState extends State<SearchResultPage>
                 },
               ),
             ),
-          ),
-          Expanded(
-            child: Material(
-              color: Colors.transparent,
-              child: tabBarView(
-                controller: _tabController,
-                children: SearchType.values
-                    .map(
-                      (item) => switch (item) {
-                        // SearchType.all => SearchAllPanel(
-                        //     tag: _tag,
-                        //     searchType: item,
-                        //     keyword: _searchResultController.keyword,
-                        //   ),
-                        SearchType.video => SearchVideoPanel(
-                            tag: _tag,
-                            searchType: item,
-                            keyword: _searchResultController.keyword,
-                          ),
-                        SearchType.media_bangumi ||
-                        SearchType.media_ft =>
-                          SearchPgcPanel(
-                            tag: _tag,
-                            searchType: item,
-                            keyword: _searchResultController.keyword,
-                          ),
-                        SearchType.live_room => SearchLivePanel(
-                            tag: _tag,
-                            searchType: item,
-                            keyword: _searchResultController.keyword,
-                          ),
-                        SearchType.bili_user => SearchUserPanel(
-                            tag: _tag,
-                            searchType: item,
-                            keyword: _searchResultController.keyword,
-                          ),
-                        SearchType.article => SearchArticlePanel(
-                            tag: _tag,
-                            searchType: item,
-                            keyword: _searchResultController.keyword,
-                          ),
-                      },
-                    )
-                    .toList(),
+            Expanded(
+              child: Material(
+                color: Colors.transparent,
+                child: tabBarView(
+                  controller: _tabController,
+                  children: SearchType.values
+                      .map(
+                        (item) => switch (item) {
+                          // SearchType.all => SearchAllPanel(
+                          //     tag: _tag,
+                          //     searchType: item,
+                          //     keyword: _searchResultController.keyword,
+                          //   ),
+                          SearchType.video => SearchVideoPanel(
+                              tag: _tag,
+                              searchType: item,
+                              keyword: _searchResultController.keyword,
+                            ),
+                          SearchType.media_bangumi ||
+                          SearchType.media_ft =>
+                            SearchPgcPanel(
+                              tag: _tag,
+                              searchType: item,
+                              keyword: _searchResultController.keyword,
+                            ),
+                          SearchType.live_room => SearchLivePanel(
+                              tag: _tag,
+                              searchType: item,
+                              keyword: _searchResultController.keyword,
+                            ),
+                          SearchType.bili_user => SearchUserPanel(
+                              tag: _tag,
+                              searchType: item,
+                              keyword: _searchResultController.keyword,
+                            ),
+                          SearchType.article => SearchArticlePanel(
+                              tag: _tag,
+                              searchType: item,
+                              keyword: _searchResultController.keyword,
+                            ),
+                        },
+                      )
+                      .toList(),
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

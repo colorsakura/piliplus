@@ -53,12 +53,12 @@ class _MemberSearchPageState extends State<MemberSearchPage> {
       ),
       body: Obx(
         () => _memberSearchCtr.hasData.value
-            ? Column(
-                children: [
-                  SafeArea(
-                    top: false,
-                    bottom: false,
-                    child: TabBar(
+            ? SafeArea(
+                top: false,
+                bottom: false,
+                child: Column(
+                  children: [
+                    TabBar(
                       controller: _memberSearchCtr.tabController,
                       tabs: [
                         Obx(
@@ -75,17 +75,17 @@ class _MemberSearchPageState extends State<MemberSearchPage> {
                         ),
                       ],
                     ),
-                  ),
-                  Expanded(
-                    child: tabBarView(
-                      controller: _memberSearchCtr.tabController,
-                      children: [
-                        SearchArchive(ctr: _memberSearchCtr),
-                        SearchDynamic(ctr: _memberSearchCtr),
-                      ],
+                    Expanded(
+                      child: tabBarView(
+                        controller: _memberSearchCtr.tabController,
+                        children: [
+                          SearchArchive(ctr: _memberSearchCtr),
+                          SearchDynamic(ctr: _memberSearchCtr),
+                        ],
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               )
             : FractionallySizedBox(
                 heightFactor: 0.5,

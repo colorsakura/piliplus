@@ -134,56 +134,59 @@ class _DynamicsPageState extends State<DynamicsPage>
   Widget build(BuildContext context) {
     super.build(context);
     return Scaffold(
-        resizeToAvoidBottomInset: false,
-        appBar: AppBar(
-          leading: upPanelPosition == UpPanelPosition.rightDrawer
-              ? _createDynamicBtn(false)
-              : null,
-          leadingWidth: 50,
-          toolbarHeight: 50,
-          title: SizedBox(
-            height: 50,
-            child: TabBar(
-              controller: _dynamicsController.tabController,
-              isScrollable: true,
-              dividerColor: Colors.transparent,
-              dividerHeight: 0,
-              tabAlignment: TabAlignment.center,
-              indicatorColor: Theme.of(context).colorScheme.primary,
-              labelColor: Theme.of(context).colorScheme.primary,
-              unselectedLabelColor: Theme.of(context).colorScheme.onSurface,
-              labelStyle:
-                  TabBarTheme.of(context).labelStyle?.copyWith(fontSize: 13) ??
-                      const TextStyle(fontSize: 13),
-              tabs:
-                  DynamicsType.values.map((e) => Tab(text: e.labels)).toList(),
-              onTap: (index) {
-                if (!_dynamicsController.tabController.indexIsChanging) {
-                  _dynamicsController.animateToTop();
-                }
-              },
-            ),
+      resizeToAvoidBottomInset: false,
+      appBar: AppBar(
+        leading: upPanelPosition == UpPanelPosition.rightDrawer
+            ? _createDynamicBtn(false)
+            : null,
+        leadingWidth: 50,
+        toolbarHeight: 50,
+        title: SizedBox(
+          height: 50,
+          child: TabBar(
+            controller: _dynamicsController.tabController,
+            isScrollable: true,
+            dividerColor: Colors.transparent,
+            dividerHeight: 0,
+            tabAlignment: TabAlignment.center,
+            indicatorColor: Theme.of(context).colorScheme.primary,
+            labelColor: Theme.of(context).colorScheme.primary,
+            unselectedLabelColor: Theme.of(context).colorScheme.onSurface,
+            labelStyle:
+                TabBarTheme.of(context).labelStyle?.copyWith(fontSize: 13) ??
+                    const TextStyle(fontSize: 13),
+            tabs: DynamicsType.values.map((e) => Tab(text: e.labels)).toList(),
+            onTap: (index) {
+              if (!_dynamicsController.tabController.indexIsChanging) {
+                _dynamicsController.animateToTop();
+              }
+            },
           ),
-          actions: upPanelPosition == UpPanelPosition.rightDrawer
-              ? null
-              : [_createDynamicBtn()],
         ),
-        drawer: upPanelPosition == UpPanelPosition.leftDrawer
-            ? SafeArea(child: upPanelPart())
-            : null,
-        drawerEnableOpenDragGesture: true,
-        endDrawer: upPanelPosition == UpPanelPosition.rightDrawer
-            ? SafeArea(child: upPanelPart())
-            : null,
-        endDrawerEnableOpenDragGesture: true,
-        body: Row(children: [
+        actions: upPanelPosition == UpPanelPosition.rightDrawer
+            ? null
+            : [_createDynamicBtn()],
+      ),
+      drawer: upPanelPosition == UpPanelPosition.leftDrawer
+          ? SafeArea(child: upPanelPart())
+          : null,
+      drawerEnableOpenDragGesture: true,
+      endDrawer: upPanelPosition == UpPanelPosition.rightDrawer
+          ? SafeArea(child: upPanelPart())
+          : null,
+      endDrawerEnableOpenDragGesture: true,
+      body: Row(
+        children: [
           if (upPanelPosition == UpPanelPosition.leftFixed) upPanelPart(),
           Expanded(
-              child: tabBarView(
-            controller: _dynamicsController.tabController,
-            children: _dynamicsController.tabsPageList,
-          )),
+            child: tabBarView(
+              controller: _dynamicsController.tabController,
+              children: _dynamicsController.tabsPageList,
+            ),
+          ),
           if (upPanelPosition == UpPanelPosition.rightFixed) upPanelPart(),
-        ]));
+        ],
+      ),
+    );
   }
 }

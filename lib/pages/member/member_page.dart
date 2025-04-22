@@ -173,12 +173,16 @@ class _MemberPageNewState extends State<MemberPageNew> {
                       ];
                     },
                     body: _userController.tab2?.isNotEmpty == true
-                        ? Column(
-                            children: [
-                              if ((_userController.tab2?.length ?? 0) > 1)
-                                _buildTab,
-                              Expanded(child: _buildBody),
-                            ],
+                        ? SafeArea(
+                            top: false,
+                            bottom: false,
+                            child: Column(
+                              children: [
+                                if ((_userController.tab2?.length ?? 0) > 1)
+                                  _buildTab,
+                                Expanded(child: _buildBody),
+                              ],
+                            ),
                           )
                         : Center(child: const Text('EMPTY')),
                   );
@@ -193,49 +197,41 @@ class _MemberPageNewState extends State<MemberPageNew> {
 
   Widget get _buildTab => Material(
         color: Theme.of(context).colorScheme.surface,
-        child: SafeArea(
-          top: false,
-          bottom: false,
-          child: TabBar(
-            controller: _userController.tabController,
-            tabs: _userController.tabs,
-            onTap: (value) {
-              if (_userController.tabController?.indexIsChanging == false) {
-                _key.currentState?.outerController.animToTop();
-              }
-            },
-          ),
+        child: TabBar(
+          controller: _userController.tabController,
+          tabs: _userController.tabs,
+          onTap: (value) {
+            if (_userController.tabController?.indexIsChanging == false) {
+              _key.currentState?.outerController.animToTop();
+            }
+          },
         ),
       );
 
-  Widget get _buildBody => SafeArea(
-        top: false,
-        bottom: false,
-        child: tabBarView(
-          controller: _userController.tabController,
-          children: _userController.tab2!.map((item) {
-            return switch (item.param!) {
-              'home' => MemberHome(heroTag: _heroTag),
-              'dynamic' => MemberDynamicsPage(mid: _mid),
-              'contribute' => Obx(
-                  () => MemberContribute(
-                    heroTag: _heroTag,
-                    initialIndex: _userController.contributeInitialIndex.value,
-                    mid: _mid,
-                  ),
-                ),
-              'bangumi' => MemberBangumi(
+  Widget get _buildBody => tabBarView(
+        controller: _userController.tabController,
+        children: _userController.tab2!.map((item) {
+          return switch (item.param!) {
+            'home' => MemberHome(heroTag: _heroTag),
+            'dynamic' => MemberDynamicsPage(mid: _mid),
+            'contribute' => Obx(
+                () => MemberContribute(
                   heroTag: _heroTag,
+                  initialIndex: _userController.contributeInitialIndex.value,
                   mid: _mid,
                 ),
-              'favorite' => MemberFavorite(
-                  heroTag: _heroTag,
-                  mid: _mid,
-                ),
-              _ => Center(child: Text(item.title ?? '')),
-            };
-          }).toList(),
-        ),
+              ),
+            'bangumi' => MemberBangumi(
+                heroTag: _heroTag,
+                mid: _mid,
+              ),
+            'favorite' => MemberFavorite(
+                heroTag: _heroTag,
+                mid: _mid,
+              ),
+            _ => Center(child: Text(item.title ?? '')),
+          };
+        }).toList(),
       );
 
   Widget _buildAppBar({bool isV = true}) {

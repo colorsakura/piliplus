@@ -179,13 +179,13 @@ class _HistoryPageState extends State<HistoryPage>
                       ),
                 body: Obx(
                   () => _historyController.tabs.isNotEmpty
-                      ? Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            SafeArea(
-                              top: false,
-                              bottom: false,
-                              child: TabBar(
+                      ? SafeArea(
+                          top: false,
+                          bottom: false,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              TabBar(
                                 controller: _historyController.tabController,
                                 onTap: (index) {
                                   if (_historyController
@@ -206,47 +206,48 @@ class _HistoryPageState extends State<HistoryPage>
                                   ),
                                 ],
                               ),
-                            ),
-                            Expanded(
-                              child: Material(
-                                color: Colors.transparent,
-                                child: TabBarView(
-                                  physics: enableMultiSelect
-                                      ? const NeverScrollableScrollPhysics()
-                                      : const CustomTabBarViewScrollPhysics(),
-                                  controller: _historyController.tabController,
-                                  children: [
-                                    _buildPage,
-                                    ..._historyController.tabs.map(
-                                      (item) => HistoryPage(type: item.type),
-                                    ),
-                                  ],
+                              Expanded(
+                                child: Material(
+                                  color: Colors.transparent,
+                                  child: TabBarView(
+                                    physics: enableMultiSelect
+                                        ? const NeverScrollableScrollPhysics()
+                                        : const CustomTabBarViewScrollPhysics(),
+                                    controller:
+                                        _historyController.tabController,
+                                    children: [
+                                      _buildPage,
+                                      ..._historyController.tabs.map(
+                                        (item) => HistoryPage(type: item.type),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         )
-                      : _buildPage,
+                      : SafeArea(
+                          top: false,
+                          bottom: false,
+                          child: _buildPage,
+                        ),
                 ),
               ),
             ),
           );
   }
 
-  Widget get _buildPage => SafeArea(
-        top: false,
-        bottom: false,
-        child: refreshIndicator(
-          onRefresh: () async {
-            await _historyController.onRefresh();
-          },
-          child: CustomScrollView(
-            physics: const AlwaysScrollableScrollPhysics(),
-            controller: _historyController.scrollController,
-            slivers: [
-              Obx(() => _buildBody(_historyController.loadingState.value)),
-            ],
-          ),
+  Widget get _buildPage => refreshIndicator(
+        onRefresh: () async {
+          await _historyController.onRefresh();
+        },
+        child: CustomScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          controller: _historyController.scrollController,
+          slivers: [
+            Obx(() => _buildBody(_historyController.loadingState.value)),
+          ],
         ),
       );
 

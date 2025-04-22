@@ -45,17 +45,14 @@ abstract class CommonSearchPanelState<
       onRefresh: () async {
         await controller.onRefresh();
       },
-      child: SafeArea(
-        bottom: false,
-        child: CustomScrollView(
-          controller: controller.scrollController,
-          physics: const AlwaysScrollableScrollPhysics(),
-          slivers: [
-            if (widget.hasHeader)
-              Obx(() => buildHeader(controller.loadingState.value)),
-            Obx(() => _buildBody(controller.loadingState.value)),
-          ],
-        ),
+      child: CustomScrollView(
+        controller: controller.scrollController,
+        physics: const AlwaysScrollableScrollPhysics(),
+        slivers: [
+          if (widget.hasHeader)
+            Obx(() => buildHeader(controller.loadingState.value)),
+          Obx(() => _buildBody(controller.loadingState.value)),
+        ],
       ),
     );
   }
