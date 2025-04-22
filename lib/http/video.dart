@@ -717,17 +717,22 @@ class VideoHttp {
       {required int mid, required int act, required int reSrc}) async {
     var res = await Request().post(
       Api.relationMod,
+      queryParameters: {
+        'statistics': '{"appId":100,"platform":5}',
+        'x-bili-device-req-json':
+            '{"platform":"web","device":"pc","spmid":"333.1387"}',
+      },
       data: {
         'fid': mid,
         'act': act,
         're_src': reSrc,
         'gaia_source': 'web_main',
-        'spmid': '333.999.0.0',
-        'extend_content': {
+        'spmid': '333.1387',
+        'extend_content': jsonEncode({
           "entity": "user",
           "entity_id": mid,
           'fp': Request.headerUa(type: 'pc'),
-        },
+        }),
         'csrf': Accounts.main.csrf,
       },
       options: Options(
