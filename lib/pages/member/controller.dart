@@ -72,7 +72,7 @@ class MemberControllerNew extends CommonDataController<Data, dynamic>
           ? data.relSpecial == 1
               ? -10
               : data.card?.relation?.status ?? 2
-          : data.card?.relation?.status ?? 0;
+          : 0;
     }
     tab2 = data.tab2;
     live = data.live;
