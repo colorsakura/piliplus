@@ -99,13 +99,22 @@ class WhisperSessionItem extends StatelessWidget {
                 type: 'avatar',
                 src: item.accountInfo?.face ?? "",
               );
-          return item.unreadCount != null && item.unreadCount! > 0
-              ? Badge(
-                  label: Text(" ${item.unreadCount} "),
-                  alignment: Alignment.topRight,
-                  child: buildAvatar(),
-                )
-              : buildAvatar();
+          return GestureDetector(
+            onTap: item.accountInfo?.mid != null
+                ? () {
+                    Get.toNamed(
+                      '/member?mid=${item.accountInfo!.mid}',
+                    );
+                  }
+                : null,
+            child: item.unreadCount != null && item.unreadCount! > 0
+                ? Badge(
+                    label: Text(" ${item.unreadCount} "),
+                    alignment: Alignment.topRight,
+                    child: buildAvatar(),
+                  )
+                : buildAvatar(),
+          );
         },
       ),
       title: Text(item.accountInfo?.name ?? ""),
