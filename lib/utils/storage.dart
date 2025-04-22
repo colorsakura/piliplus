@@ -471,6 +471,9 @@ class GStorage {
   static num get maxCacheSize => GStorage.setting
       .get(SettingBoxKey.maxCacheSize, defaultValue: pow(1024, 3));
 
+  static bool get optTabletNav =>
+      GStorage.setting.get(SettingBoxKey.optTabletNav, defaultValue: true);
+
   static List<double> get dynamicDetailRatio => List<double>.from(setting
       .get(SettingBoxKey.dynamicDetailRatio, defaultValue: [60.0, 40.0]));
 
@@ -758,6 +761,7 @@ class SettingBoxKey {
       navSearchStreamDebounce = 'navSearchStreamDebounce',
       showPgcTimeline = 'showPgcTimeline',
       pageTransition = 'pageTransition',
+      optTabletNav = 'optTabletNav',
 
       // WebDAV
       webdavUri = 'webdavUri',

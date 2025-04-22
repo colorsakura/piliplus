@@ -205,6 +205,14 @@ List<SettingsModel> get styleSettings => [
       ),
       SettingsModel(
         settingsType: SettingsType.sw1tch,
+        title: '优化平板导航栏',
+        leading: Icon(MdiIcons.soundbar),
+        setKey: SettingBoxKey.optTabletNav,
+        defaultVal: true,
+        needReboot: true,
+      ),
+      SettingsModel(
+        settingsType: SettingsType.sw1tch,
         title: 'MD3样式底栏',
         subtitle: 'Material You设计规范底栏，关闭可变窄',
         leading: const Icon(Icons.design_services_outlined),

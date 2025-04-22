@@ -204,7 +204,7 @@ class _MainAppState extends State<MainApp>
               if (useSideBar || !isPortrait) ...[
                 Obx(
                   () => _mainController.navigationBars.length > 1
-                      ? context.isTablet
+                      ? context.isTablet && GStorage.optTabletNav
                           ? Column(
                               children: [
                                 SizedBox(
