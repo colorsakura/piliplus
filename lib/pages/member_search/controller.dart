@@ -3,6 +3,7 @@ import 'package:PiliPlus/models/dynamics/result.dart';
 import 'package:PiliPlus/models/member/archive.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/request_utils.dart';
+import 'package:PiliPlus/utils/storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:PiliPlus/http/member.dart';
@@ -39,9 +40,11 @@ class MemberSearchController extends GetxController
     super.onInit();
     mid = int.parse(Get.parameters['mid']!);
     uname.value = Get.parameters['uname']!;
-    RequestUtils.getWwebid(mid).then((res) {
-      wwebid = res;
-    });
+    if (!Accounts.main.isLogin) {
+      RequestUtils.getWwebid(mid).then((res) {
+        wwebid = res;
+      });
+    }
   }
 
   // 清空搜索
