@@ -84,7 +84,7 @@ class PlPlayerController {
   final RxString _direction = 'horizontal'.obs;
 
   final Rx<BoxFit> _videoFit = Rx(videoFitType[1]['attr']);
-  final RxString _videoFitDesc = videoFitType[1]['desc'].obs;
+  final RxString _videoFitDesc = RxString(videoFitType[1]['desc']);
   late StreamSubscription<DataStatus> _dataListenerForVideoFit;
   late StreamSubscription<DataStatus> _dataListenerForEnterFullscreen;
 
