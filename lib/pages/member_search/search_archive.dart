@@ -80,14 +80,14 @@ class _SearchArchiveState extends State<SearchArchive>
               ),
             )
           : HttpError(
-              callback: () {
+              onReload: () {
                 widget.ctr.archiveState.value = LoadingState.loading();
                 widget.ctr.refreshArchive();
               },
             ),
       Error() => HttpError(
           errMsg: loadingState.errMsg,
-          callback: () {
+          onReload: () {
             widget.ctr.archiveState.value = LoadingState.loading();
             widget.ctr.refreshArchive();
           },

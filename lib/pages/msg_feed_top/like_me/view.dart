@@ -117,11 +117,11 @@ class _LikeMePageState extends State<LikeMePage> {
               ],
             );
           }
-          return HttpError(callback: _likeMeController.onReload);
+          return HttpError(onReload: _likeMeController.onReload);
         }(),
       Error() => HttpError(
           errMsg: loadingState.errMsg,
-          callback: _likeMeController.onReload,
+          onReload: _likeMeController.onReload,
         ),
       LoadingState() => throw UnimplementedError(),
     };

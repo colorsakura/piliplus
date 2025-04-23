@@ -82,7 +82,7 @@ class _PgcIndexPageState extends State<PgcIndexPage>
         }),
       Error() => scrollErrorWidget(
           errMsg: loadingState.errMsg,
-          callback: () {
+          onReload: () {
             _ctr.conditionState.value = LoadingState.loading();
             _ctr.getPgcIndexCondition();
           },
@@ -233,10 +233,10 @@ class _PgcIndexPageState extends State<PgcIndexPage>
                 childCount: loadingState.response!.length,
               ),
             )
-          : HttpError(callback: _ctr.onReload),
+          : HttpError(onReload: _ctr.onReload),
       Error() => HttpError(
           errMsg: loadingState.errMsg,
-          callback: _ctr.onReload,
+          onReload: _ctr.onReload,
         ),
       LoadingState() => throw UnimplementedError(),
     };

@@ -66,11 +66,11 @@ class _MemberArticleState extends State<MemberArticle>
               ),
             )
           : scrollErrorWidget(
-              callback: _controller.onReload,
+              onReload: _controller.onReload,
             ),
       Error() => scrollErrorWidget(
           errMsg: loadingState.errMsg,
-          callback: _controller.onReload,
+          onReload: _controller.onReload,
         ),
       LoadingState() => throw UnimplementedError(),
     };

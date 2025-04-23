@@ -867,11 +867,11 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
               },
             )
           : HttpError(
-              callback: _htmlRenderCtr.onReload,
+              onReload: _htmlRenderCtr.onReload,
             ),
       Error() => HttpError(
           errMsg: loadingState.errMsg,
-          callback: _htmlRenderCtr.onReload,
+          onReload: _htmlRenderCtr.onReload,
         ),
       LoadingState() => throw UnimplementedError(),
     };

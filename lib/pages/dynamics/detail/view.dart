@@ -841,11 +841,11 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
               ),
             )
           : HttpError(
-              callback: _dynamicDetailController.onReload,
+              onReload: _dynamicDetailController.onReload,
             ),
       Error() => HttpError(
           errMsg: loadingState.errMsg,
-          callback: _dynamicDetailController.onReload,
+          onReload: _dynamicDetailController.onReload,
         ),
       LoadingState() => throw UnimplementedError(),
     };

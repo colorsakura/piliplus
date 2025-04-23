@@ -91,11 +91,11 @@ class _SubDetailPageState extends State<SubDetailPage> {
               ),
             )
           : HttpError(
-              callback: _subDetailController.onReload,
+              onReload: _subDetailController.onReload,
             ),
       Error() => HttpError(
           errMsg: loadingState.errMsg,
-          callback: _subDetailController.onReload,
+          onReload: _subDetailController.onReload,
         ),
       _ => throw UnimplementedError(),
     };

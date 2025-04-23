@@ -223,11 +223,11 @@ class _SearchTrendingPageState extends State<SearchTrendingPage> {
               ),
             )
           : HttpError(
-              callback: _controller.onReload,
+              onReload: _controller.onReload,
             ),
       Error() => HttpError(
           errMsg: loadingState.errMsg,
-          callback: _controller.onReload,
+          onReload: _controller.onReload,
         ),
       _ => throw UnimplementedError(),
     };

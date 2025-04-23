@@ -92,13 +92,13 @@ class _SeasonSeriesPageState extends State<SeasonSeriesPage>
               ],
             )
           : scrollErrorWidget(
-              callback: () {
+              onReload: () {
                 _controller.onReload();
               },
             ),
       Error() => scrollErrorWidget(
           errMsg: loadingState.errMsg,
-          callback: () {
+          onReload: () {
             _controller.onReload();
           },
         ),

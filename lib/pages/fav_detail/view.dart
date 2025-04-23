@@ -582,11 +582,11 @@ class _FavDetailPageState extends State<FavDetailPage> {
               ),
             )
           : HttpError(
-              callback: _favDetailController.onReload,
+              onReload: _favDetailController.onReload,
             ),
       Error() => HttpError(
           errMsg: loadingState.errMsg,
-          callback: _favDetailController.onReload,
+          onReload: _favDetailController.onReload,
         ),
       LoadingState() => throw UnimplementedError(),
     };

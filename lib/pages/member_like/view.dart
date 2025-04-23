@@ -88,10 +88,10 @@ class _MemberLikePageState extends State<MemberLikePage> {
                 return MemberCoinsItem(coinItem: loadingState.response![index]);
               },
             )
-          : HttpError(callback: _ctr.onReload),
+          : HttpError(onReload: _ctr.onReload),
       Error() => HttpError(
           errMsg: loadingState.errMsg,
-          callback: _ctr.onReload,
+          onReload: _ctr.onReload,
         ),
       LoadingState() => throw UnimplementedError(),
     };

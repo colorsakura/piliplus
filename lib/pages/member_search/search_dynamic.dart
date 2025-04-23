@@ -141,14 +141,14 @@ class _SearchDynamicState extends State<SearchDynamic>
                   ],
                 )
           : HttpError(
-              callback: () {
+              onReload: () {
                 widget.ctr.dynamicState.value = LoadingState.loading();
                 widget.ctr.refreshDynamic();
               },
             ),
       Error() => HttpError(
           errMsg: loadingState.errMsg,
-          callback: () {
+          onReload: () {
             widget.ctr.dynamicState.value = LoadingState.loading();
             widget.ctr.refreshDynamic();
           },

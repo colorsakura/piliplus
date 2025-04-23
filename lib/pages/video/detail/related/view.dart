@@ -58,7 +58,7 @@ class _RelatedVideoPanelState extends State<RelatedVideoPanel>
           : const SliverToBoxAdapter(),
       Error() => HttpError(
           errMsg: loadingState.errMsg,
-          callback: _relatedController.onReload,
+          onReload: _relatedController.onReload,
         ),
       LoadingState() => throw UnimplementedError(),
     };

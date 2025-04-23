@@ -190,7 +190,7 @@ class _NoteListPageState extends CommonSlidePageState<NoteListPage> {
         slivers: [
           HttpError(
             errMsg: errMsg,
-            callback: _controller.onReload,
+            onReload: _controller.onReload,
           )
         ],
       );

@@ -96,7 +96,7 @@ class _GroupPanelState extends State<GroupPanel> {
                   if (snapshot.data is! Map) {
                     return HttpError(
                       isSliver: false,
-                      callback: () => setState(() {
+                      onReload: () => setState(() {
                         _futureBuilderFuture = MemberHttp.followUpTags();
                       }),
                     );
@@ -146,7 +146,7 @@ class _GroupPanelState extends State<GroupPanel> {
                       slivers: [
                         HttpError(
                           errMsg: data['msg'],
-                          callback: () => setState(() {}),
+                          onReload: () => setState(() {}),
                         ),
                       ],
                     );

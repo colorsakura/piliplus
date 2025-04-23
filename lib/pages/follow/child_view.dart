@@ -102,11 +102,11 @@ class _FollowChildPageState extends State<FollowChildPage>
               },
             )
           : HttpError(
-              callback: _followController.onReload,
+              onReload: _followController.onReload,
             ),
       Error() => HttpError(
           errMsg: loadingState.errMsg,
-          callback: _followController.onReload,
+          onReload: _followController.onReload,
         ),
       _ => throw UnimplementedError(),
     };

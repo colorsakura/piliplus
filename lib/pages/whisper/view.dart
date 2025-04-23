@@ -76,11 +76,11 @@ class _WhisperPageState extends State<WhisperPage> {
               ),
             )
           : HttpError(
-              callback: _whisperController.onReload,
+              onReload: _whisperController.onReload,
             ),
       Error() => HttpError(
           errMsg: loadingState.errMsg,
-          callback: _whisperController.onReload,
+          onReload: _whisperController.onReload,
         ),
       _ => throw UnimplementedError(),
     };

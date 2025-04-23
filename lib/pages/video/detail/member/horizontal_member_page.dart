@@ -111,7 +111,7 @@ class _HorizontalMemberPageState extends State<HorizontalMemberPage> {
         ),
       Error() => scrollErrorWidget(
           errMsg: userState.errMsg,
-          callback: () {
+          onReload: () {
             _controller.userState.value = LoadingState.loading();
             _controller.getUserInfo();
           },
@@ -228,7 +228,7 @@ class _HorizontalMemberPageState extends State<HorizontalMemberPage> {
         ),
       Error() => scrollErrorWidget(
           errMsg: loadingState.errMsg,
-          callback: _controller.onReload,
+          onReload: _controller.onReload,
         ),
       LoadingState() => throw UnimplementedError(),
     };

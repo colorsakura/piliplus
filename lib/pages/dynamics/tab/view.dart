@@ -206,11 +206,11 @@ class _DynamicsTabPageState
                     ),
             )
           : HttpError(
-              callback: controller.onReload,
+              onReload: controller.onReload,
             ),
       Error() => HttpError(
           errMsg: loadingState.errMsg,
-          callback: controller.onReload,
+          onReload: controller.onReload,
         ),
       LoadingState() => throw UnimplementedError(),
     };

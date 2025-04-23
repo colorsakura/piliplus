@@ -84,10 +84,10 @@ class _FavArticlePageState extends State<FavArticlePage>
                 childCount: loadingState.response!.length,
               ),
             )
-          : HttpError(callback: _favArticleController.onReload),
+          : HttpError(onReload: _favArticleController.onReload),
       Error() => HttpError(
           errMsg: loadingState.errMsg,
-          callback: _favArticleController.onReload,
+          onReload: _favArticleController.onReload,
         ),
       LoadingState() => throw UnimplementedError(),
     };

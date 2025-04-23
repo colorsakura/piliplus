@@ -136,10 +136,10 @@ class _SysMsgPageState extends State<SysMsgPage> {
                 );
               },
             )
-          : HttpError(callback: _sysMsgController.onReload),
+          : HttpError(onReload: _sysMsgController.onReload),
       Error() => HttpError(
           errMsg: loadingState.errMsg,
-          callback: _sysMsgController.onReload,
+          onReload: _sysMsgController.onReload,
         ),
       LoadingState() => throw UnimplementedError(),
     };

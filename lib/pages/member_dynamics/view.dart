@@ -159,11 +159,11 @@ class _MemberDynamicsPageState extends State<MemberDynamicsPage>
                     ),
             )
           : HttpError(
-              callback: _memberDynamicController.onReload,
+              onReload: _memberDynamicController.onReload,
             ),
       Error() => HttpError(
           errMsg: loadingState.errMsg,
-          callback: _memberDynamicController.onReload,
+          onReload: _memberDynamicController.onReload,
         ),
       LoadingState() => throw UnimplementedError(),
     };

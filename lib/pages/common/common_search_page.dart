@@ -68,11 +68,11 @@ abstract class CommonSearchPageState<S extends CommonSearchPage, R, T>
       Success() => loadingState.response?.isNotEmpty == true
           ? buildList(loadingState.response!)
           : HttpError(
-              callback: controller.onReload,
+              onReload: controller.onReload,
             ),
       Error() => HttpError(
           errMsg: loadingState.errMsg,
-          callback: controller.onReload,
+          onReload: controller.onReload,
         ),
       _ => throw UnimplementedError(),
     };

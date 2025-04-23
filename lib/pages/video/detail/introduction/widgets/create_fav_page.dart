@@ -102,7 +102,7 @@ class _CreateFavPageState extends State<CreateFavPage> {
                         slivers: [
                           HttpError(
                             errMsg: _errMsg,
-                            callback: _getFolderInfo,
+                            onReload: _getFolderInfo,
                           ),
                         ],
                       ),

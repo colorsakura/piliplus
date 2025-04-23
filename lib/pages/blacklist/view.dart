@@ -105,11 +105,11 @@ class _BlackListPageState extends State<BlackListPage> {
               },
             )
           : HttpError(
-              callback: _blackListController.onReload,
+              onReload: _blackListController.onReload,
             ),
       Error() => HttpError(
           errMsg: loadingState.errMsg,
-          callback: _blackListController.onReload,
+          onReload: _blackListController.onReload,
         ),
       LoadingState() => throw UnimplementedError(),
     };

@@ -86,7 +86,7 @@ class _FavPanelState extends State<FavPanel> {
                   if (snapshot.data is! Map) {
                     return HttpError(
                       isSliver: false,
-                      callback: () => setState(() {
+                      onReload: () => setState(() {
                         _futureBuilderFuture = widget.ctr.queryVideoInFolder();
                       }),
                     );
@@ -138,7 +138,7 @@ class _FavPanelState extends State<FavPanel> {
                       slivers: [
                         HttpError(
                           errMsg: data['msg'],
-                          callback: () => setState(() {
+                          onReload: () => setState(() {
                             _futureBuilderFuture =
                                 widget.ctr.queryVideoInFolder();
                           }),

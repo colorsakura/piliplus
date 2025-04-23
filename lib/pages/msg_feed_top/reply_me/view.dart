@@ -178,10 +178,10 @@ class _ReplyMePageState extends State<ReplyMePage> {
                 );
               },
             )
-          : HttpError(callback: _replyMeController.onReload),
+          : HttpError(onReload: _replyMeController.onReload),
       Error() => HttpError(
           errMsg: loadingState.errMsg,
-          callback: _replyMeController.onReload,
+          onReload: _replyMeController.onReload,
         ),
       LoadingState() => throw UnimplementedError(),
     };

@@ -197,11 +197,11 @@ class _LaterViewChildPageState extends State<LaterViewChildPage>
               ),
             )
           : HttpError(
-              callback: _laterController.onReload,
+              onReload: _laterController.onReload,
             ),
       Error() => HttpError(
           errMsg: loadingState.errMsg,
-          callback: _laterController.onReload,
+          onReload: _laterController.onReload,
         ),
       LoadingState() => throw UnimplementedError(),
     };

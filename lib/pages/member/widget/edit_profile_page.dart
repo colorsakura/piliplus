@@ -202,7 +202,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
         ),
       Error() => errorWidget(
           errMsg: loadingState.errMsg,
-          callback: _getInfo,
+          onReload: _getInfo,
         ),
       LoadingState() => throw UnimplementedError(),
     };

@@ -71,11 +71,11 @@ class _SubPageState extends State<SubPage> {
               ),
             )
           : HttpError(
-              callback: _subController.onReload,
+              onReload: _subController.onReload,
             ),
       Error() => HttpError(
           errMsg: loadingState.errMsg,
-          callback: _subController.onReload,
+          onReload: _subController.onReload,
         ),
       LoadingState() => throw UnimplementedError(),
     };

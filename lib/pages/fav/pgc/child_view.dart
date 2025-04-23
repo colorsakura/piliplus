@@ -212,10 +212,10 @@ class _FavPgcChildPageState extends State<FavPgcChildPage>
                 ),
               ),
             )
-          : HttpError(callback: _favPgcController.onReload),
+          : HttpError(onReload: _favPgcController.onReload),
       Error() => HttpError(
           errMsg: loadingState.errMsg,
-          callback: _favPgcController.onReload,
+          onReload: _favPgcController.onReload,
         ),
       LoadingState() => throw UnimplementedError(),
     };

@@ -111,10 +111,10 @@ class _LivePageState extends CommonPageState<LivePage, LiveController>
                 childCount: loadingState.response!.length,
               ),
             )
-          : scrollErrorWidget(callback: controller.onReload),
+          : scrollErrorWidget(onReload: controller.onReload),
       Error() => HttpError(
           errMsg: loadingState.errMsg,
-          callback: controller.onReload,
+          onReload: controller.onReload,
         ),
       _ => throw UnimplementedError(),
     };
@@ -321,7 +321,7 @@ class _LivePageState extends CommonPageState<LivePage, LiveController>
         ),
       Error() => HttpError(
           errMsg: loadingState.errMsg,
-          callback: () {
+          onReload: () {
             controller
               ..followListState.value = LoadingState.loading()
               ..fetchLiveFollowing();

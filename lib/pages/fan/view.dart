@@ -129,11 +129,11 @@ class _FansPageState extends State<FansPage> {
               ),
             )
           : HttpError(
-              callback: _fansController.onReload,
+              onReload: _fansController.onReload,
             ),
       Error() => HttpError(
           errMsg: loadingState.errMsg,
-          callback: _fansController.onReload,
+          onReload: _fansController.onReload,
         ),
       LoadingState() => throw UnimplementedError(),
     };

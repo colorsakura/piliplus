@@ -98,11 +98,11 @@ class _FavVideoPageState extends State<FavVideoPage>
               ),
             )
           : HttpError(
-              callback: _favController.onReload,
+              onReload: _favController.onReload,
             ),
       Error() => HttpError(
           errMsg: loadingState.errMsg,
-          callback: _favController.onReload,
+          onReload: _favController.onReload,
         ),
       LoadingState() => throw UnimplementedError(),
     };

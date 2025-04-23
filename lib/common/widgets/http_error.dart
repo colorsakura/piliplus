@@ -5,17 +5,15 @@ class HttpError extends StatelessWidget {
   const HttpError({
     this.isSliver = true,
     this.errMsg,
-    this.callback,
+    this.onReload,
     this.btnText,
-    this.extraWidget,
     super.key,
   });
 
   final bool isSliver;
   final String? errMsg;
-  final Function()? callback;
+  final VoidCallback? onReload;
   final String? btnText;
-  final Widget? extraWidget;
 
   @override
   Widget build(BuildContext context) {
@@ -46,15 +44,9 @@ class HttpError extends StatelessWidget {
               style: Theme.of(context).textTheme.titleSmall,
             ),
           ),
-          if (extraWidget != null) ...[
-            const SizedBox(height: 10),
-            extraWidget!,
-            const SizedBox(height: 5),
-          ],
-          if (callback != null) ...[
-            if (extraWidget == null) const SizedBox(height: 20),
+          if (onReload != null)
             FilledButton.tonal(
-              onPressed: callback,
+              onPressed: onReload,
               style: ButtonStyle(
                 backgroundColor: WidgetStateProperty.resolveWith((states) {
                   return Theme.of(context).colorScheme.primary.withAlpha(20);
@@ -65,7 +57,6 @@ class HttpError extends StatelessWidget {
                 style: TextStyle(color: Theme.of(context).colorScheme.primary),
               ),
             ),
-          ],
           SizedBox(height: 40 + MediaQuery.paddingOf(context).bottom),
         ],
       );

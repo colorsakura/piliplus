@@ -82,10 +82,10 @@ class _ZonePageState extends CommonPageState<ZonePage, ZoneController>
                 childCount: loadingState.response!.length,
               ),
             )
-          : HttpError(callback: controller.onReload),
+          : HttpError(onReload: controller.onReload),
       Error() => HttpError(
           errMsg: loadingState.errMsg,
-          callback: controller.onReload,
+          onReload: controller.onReload,
         ),
       _ => throw UnimplementedError(),
     };

@@ -264,11 +264,11 @@ class _VideoReplyPanelState extends State<VideoReplyPanel>
             )
           : HttpError(
               errMsg: '还没有评论',
-              callback: _videoReplyController.onReload,
+              onReload: _videoReplyController.onReload,
             ),
       Error() => HttpError(
           errMsg: loadingState.errMsg,
-          callback: _videoReplyController.onReload,
+          onReload: _videoReplyController.onReload,
         ),
       LoadingState() => throw UnimplementedError(),
     };

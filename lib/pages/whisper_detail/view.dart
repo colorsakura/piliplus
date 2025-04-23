@@ -181,11 +181,11 @@ class _WhisperDetailPageState
               ),
             )
           : scrollErrorWidget(
-              callback: _whisperDetailController.onReload,
+              onReload: _whisperDetailController.onReload,
             ),
       Error() => scrollErrorWidget(
           errMsg: loadingState.errMsg,
-          callback: _whisperDetailController.onReload,
+          onReload: _whisperDetailController.onReload,
         ),
       _ => throw UnimplementedError(),
     };

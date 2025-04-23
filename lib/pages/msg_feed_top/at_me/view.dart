@@ -157,10 +157,10 @@ class _AtMePageState extends State<AtMePage> {
                 );
               },
             )
-          : HttpError(callback: _atMeController.onReload),
+          : HttpError(onReload: _atMeController.onReload),
       Error() => HttpError(
           errMsg: loadingState.errMsg,
-          callback: _atMeController.onReload,
+          onReload: _atMeController.onReload,
         ),
       LoadingState() => throw UnimplementedError(),
     };

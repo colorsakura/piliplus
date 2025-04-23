@@ -135,10 +135,10 @@ class _RcmdPageState extends CommonPageState<RcmdPage, RcmdController>
                     : loadingState.response!.length,
               ),
             )
-          : HttpError(callback: controller.onReload),
+          : HttpError(onReload: controller.onReload),
       Error() => HttpError(
           errMsg: loadingState.errMsg,
-          callback: controller.onReload,
+          onReload: controller.onReload,
         ),
       LoadingState() => throw UnimplementedError(),
     };

@@ -445,7 +445,7 @@ class _VideoReplyReplyPanelState
         }(),
       Error() => errorWidget(
           errMsg: loadingState.errMsg,
-          callback: _videoReplyReplyController.onReload,
+          onReload: _videoReplyReplyController.onReload,
         ),
       LoadingState() => throw UnimplementedError(),
     };

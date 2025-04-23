@@ -166,10 +166,10 @@ class _FavNoteChildPageState extends State<FavNoteChildPage>
                 ),
               ),
             )
-          : HttpError(callback: _favNoteController.onReload),
+          : HttpError(onReload: _favNoteController.onReload),
       Error() => HttpError(
           errMsg: loadingState.errMsg,
-          callback: _favNoteController.onReload,
+          onReload: _favNoteController.onReload,
         ),
       LoadingState() => throw UnimplementedError(),
     };

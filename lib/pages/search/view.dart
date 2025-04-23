@@ -360,7 +360,7 @@ class _SearchPageState extends State<SearchPage> {
           : const SizedBox.shrink(),
       Error() => errorWidget(
           errMsg: loadingState.errMsg,
-          callback: isHot
+          onReload: isHot
               ? _searchController.queryHotSearchList
               : _searchController.queryRecommendList,
         ),

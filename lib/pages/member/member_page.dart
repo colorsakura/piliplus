@@ -264,7 +264,7 @@ class _MemberPageNewState extends State<MemberPageNew> {
   Widget _errorWidget(msg) {
     return errorWidget(
       errMsg: msg,
-      callback: _userController.onReload,
+      onReload: _userController.onReload,
     );
   }
 

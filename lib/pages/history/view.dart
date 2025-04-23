@@ -289,11 +289,11 @@ class _HistoryPageState extends State<HistoryPage>
               ),
             )
           : HttpError(
-              callback: _historyController.onReload,
+              onReload: _historyController.onReload,
             ),
       Error() => HttpError(
           errMsg: loadingState.errMsg,
-          callback: _historyController.onReload,
+          onReload: _historyController.onReload,
         ),
       LoadingState() => throw UnimplementedError(),
     };
