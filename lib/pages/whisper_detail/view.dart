@@ -130,7 +130,12 @@ class _WhisperDetailPageState
                 reverse: true,
                 itemCount: loadingState.response!.length,
                 padding: const EdgeInsets.only(bottom: 12),
+                physics: const AlwaysScrollableScrollPhysics(),
+                controller: _whisperDetailController.scrollController,
                 itemBuilder: (context, int index) {
+                  if (index == loadingState.response!.length - 1) {
+                    _whisperDetailController.onLoadMore();
+                  }
                   final item = loadingState.response![index];
                   return ChatItem(
                     item: item,

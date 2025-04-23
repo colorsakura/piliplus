@@ -372,8 +372,7 @@ class MemberHttp {
       queryParameters: params,
       options: Options(headers: {
         HttpHeaders.userAgentHeader: Request.headerUa(type: 'pc'),
-        HttpHeaders.refererHeader:
-            '${HttpString.spaceBaseUrl}/$mid/search?keyword=$keyword',
+        HttpHeaders.refererHeader: '${HttpString.spaceBaseUrl}/$mid',
         'origin': HttpString.spaceBaseUrl,
       }),
     );

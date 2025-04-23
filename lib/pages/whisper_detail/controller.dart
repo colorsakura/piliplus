@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/pages/common/common_list_controller.dart';
+import 'package:PiliPlus/utils/extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
@@ -18,6 +19,8 @@ class WhisperDetailController
   late String name;
   late String face;
   String? mid;
+
+  int? msgSeqno;
 
   //表情转换图片规则
   List<dynamic>? eInfos;
@@ -38,7 +41,8 @@ class WhisperDetailController
       bool isRefresh, Success<SessionMsgDataModel> response) {
     List<MessageItem>? messageList = response.response.messages;
     if (messageList?.isNotEmpty == true) {
-      if (messageList!.length == 1 &&
+      msgSeqno = messageList!.last.msgSeqno;
+      if (messageList.length == 1 &&
           messageList.last.msgType == 18 &&
           messageList.last.msgSource == 18) {
         // debugPrint(messageList.last);
@@ -103,7 +107,7 @@ class WhisperDetailController
         loadingState.refresh();
         SmartDialog.showToast('撤回成功');
       } else {
-        queryData();
+        onRefresh();
         onClearText();
         SmartDialog.showToast('发送成功');
       }
@@ -114,10 +118,24 @@ class WhisperDetailController
 
   @override
   List<MessageItem>? getDataList(SessionMsgDataModel response) {
+    if (response.hasMore == 0) {
+      isEnd = true;
+    }
     return response.messages;
   }
 
   @override
+  Future<void> onRefresh() {
+    msgSeqno = null;
+    scrollController.jumpToTop();
+    return super.onRefresh();
+  }
+
+  @override
   Future<LoadingState<SessionMsgDataModel>> customGetData() =>
-      MsgHttp.sessionMsg(talkerId: talkerId);
+      MsgHttp.sessionMsg(
+        talkerId: talkerId,
+        beginSeqno: msgSeqno != null ? 0 : null,
+        endSeqno: msgSeqno,
+      );
 }

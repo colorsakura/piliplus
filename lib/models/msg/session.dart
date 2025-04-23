@@ -170,8 +170,8 @@ class SessionMsgDataModel {
 
   List<MessageItem>? messages;
   int? hasMore;
-  int? minSeqno;
-  int? maxSeqno;
+  num? minSeqno;
+  num? maxSeqno;
   List<dynamic>? eInfos;
 
   SessionMsgDataModel.fromJson(Map<String, dynamic> json) {

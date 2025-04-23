@@ -455,8 +455,11 @@ class MsgHttp {
     }
   }
 
-  static Future<LoadingState<SessionMsgDataModel>> sessionMsg(
-      {int? talkerId}) async {
+  static Future<LoadingState<SessionMsgDataModel>> sessionMsg({
+    int? talkerId,
+    beginSeqno,
+    endSeqno,
+  }) async {
     Map params = await WbiSign.makSign({
       'talker_id': talkerId,
       'session_type': 1,
@@ -464,6 +467,8 @@ class MsgHttp {
       'sender_device_id': 1,
       'build': 0,
       'mobi_app': 'web',
+      if (beginSeqno != null) 'begin_seqno': beginSeqno,
+      if (endSeqno != null) 'end_seqno': endSeqno,
     });
     var res = await Request().get(Api.sessionMsg, queryParameters: params);
     if (res.data['code'] == 0) {
