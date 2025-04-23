@@ -470,8 +470,8 @@ class MemberHttp {
     if (res.data['code'] == 0) {
       return {
         'status': true,
-        'data': (res.data['data'] as List?)
-            ?.map<MemberTagItemModel>((e) => MemberTagItemModel.fromJson(e))
+        'data': res.data['data']
+            .map<MemberTagItemModel>((e) => MemberTagItemModel.fromJson(e))
             .toList()
       };
     } else {
@@ -525,7 +525,7 @@ class MemberHttp {
   }
 
   // 获取某分组下的up
-  static Future<LoadingState<List<FollowItemModel>?>> followUpGroup(
+  static Future<LoadingState<FollowDataModel>> followUpGroup(
     int? mid,
     int? tagid,
     int? pn,
@@ -541,11 +541,79 @@ class MemberHttp {
       },
     );
     if (res.data['code'] == 0) {
-      return LoadingState.success((res.data['data'] as List?)
-          ?.map<FollowItemModel>((e) => FollowItemModel.fromJson(e))
-          .toList());
+      return LoadingState.success(FollowDataModel(
+          list: (res.data['data'] as List?)
+              ?.map<FollowItemModel>((e) => FollowItemModel.fromJson(e))
+              .toList()));
     } else {
       return LoadingState.error(res.data['message']);
+    }
+  }
+
+  static Future createFollowTag(tagName) async {
+    var res = await Request().post(
+      Api.createFollowTag,
+      queryParameters: {
+        'x-bili-device-req-json':
+            '{"platform":"web","device":"pc","spmid":"333.1387"}',
+      },
+      data: {
+        'tag': tagName,
+        'csrf': Accounts.main.csrf,
+      },
+      options: Options(
+        contentType: Headers.formUrlEncodedContentType,
+      ),
+    );
+    if (res.data['code'] == 0) {
+      return {'status': true};
+    } else {
+      return {'status': false, 'msg': res.data['message']};
+    }
+  }
+
+  static Future updateFollowTag(tagid, name) async {
+    var res = await Request().post(
+      Api.updateFollowTag,
+      queryParameters: {
+        'x-bili-device-req-json':
+            '{"platform":"web","device":"pc","spmid":"333.1387"}',
+      },
+      data: {
+        'tagid': tagid,
+        'name': name,
+        'csrf': Accounts.main.csrf,
+      },
+      options: Options(
+        contentType: Headers.formUrlEncodedContentType,
+      ),
+    );
+    if (res.data['code'] == 0) {
+      return {'status': true};
+    } else {
+      return {'status': false, 'msg': res.data['message']};
+    }
+  }
+
+  static Future delFollowTag(tagid) async {
+    var res = await Request().post(
+      Api.delFollowTag,
+      queryParameters: {
+        'x-bili-device-req-json':
+            '{"platform":"web","device":"pc","spmid":"333.1387"}',
+      },
+      data: {
+        'tagid': tagid,
+        'csrf': Accounts.main.csrf,
+      },
+      options: Options(
+        contentType: Headers.formUrlEncodedContentType,
+      ),
+    );
+    if (res.data['code'] == 0) {
+      return {'status': true};
+    } else {
+      return {'status': false, 'msg': res.data['message']};
     }
   }
 

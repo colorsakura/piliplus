@@ -2,17 +2,17 @@ import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/http/member.dart';
 import 'package:PiliPlus/models/member/tags.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 import 'package:PiliPlus/utils/storage.dart';
 
-class FollowController extends GetxController
-    with GetSingleTickerProviderStateMixin {
+class FollowController extends GetxController with GetTickerProviderStateMixin {
   late int mid;
   String? name;
   late bool isOwner;
 
-  late final Rx<LoadingState<List<MemberTagItemModel>?>> followState =
-      LoadingState<List<MemberTagItemModel>?>.loading().obs;
+  late final Rx<LoadingState> followState = LoadingState.loading().obs;
+  late final RxList<MemberTagItemModel> tabs = <MemberTagItemModel>[].obs;
   TabController? tabController;
 
   @override
@@ -33,12 +33,20 @@ class FollowController extends GetxController
   Future queryFollowUpTags() async {
     var res = await MemberHttp.followUpTags();
     if (res['status']) {
+      tabs.clear();
+      tabs.addAll(res['data']);
+      tabs.insert(0, MemberTagItemModel(name: '全部关注'));
+      int initialIndex = 0;
+      if (tabController != null) {
+        initialIndex = tabController!.index.clamp(0, tabs.length - 1);
+        tabController!.dispose();
+      }
       tabController = TabController(
-        initialIndex: 0,
-        length: res['data'].length,
+        initialIndex: initialIndex,
+        length: tabs.length,
         vsync: this,
       );
-      followState.value = LoadingState.success(res['data']);
+      followState.value = LoadingState.success(tabs.hashCode);
     } else {
       followState.value = LoadingState.error(res['msg']);
     }
@@ -48,5 +56,38 @@ class FollowController extends GetxController
   void onClose() {
     tabController?.dispose();
     super.onClose();
+  }
+
+  Future onCreateTag(String tagName) async {
+    final res = await MemberHttp.createFollowTag(tagName);
+    if (res['status']) {
+      followState.value = LoadingState.loading();
+      queryFollowUpTags();
+      SmartDialog.showToast('创建成功');
+    } else {
+      SmartDialog.showToast(res['msg']);
+    }
+  }
+
+  Future onUpdateTag(int index, tagid, String tagName) async {
+    final res = await MemberHttp.updateFollowTag(tagid, tagName);
+    if (res['status']) {
+      tabs[index].name = tagName;
+      tabs.refresh();
+      SmartDialog.showToast('修改成功');
+    } else {
+      SmartDialog.showToast(res['msg']);
+    }
+  }
+
+  Future onDelTag(tagid) async {
+    final res = await MemberHttp.delFollowTag(tagid);
+    if (res['status']) {
+      followState.value = LoadingState.loading();
+      queryFollowUpTags();
+      SmartDialog.showToast('删除成功');
+    } else {
+      SmartDialog.showToast(res['msg']);
+    }
   }
 }

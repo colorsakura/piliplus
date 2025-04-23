@@ -1,3 +1,4 @@
+import 'package:PiliPlus/common/widgets/dialog.dart';
 import 'package:PiliPlus/common/widgets/loading_widget.dart';
 import 'package:PiliPlus/common/widgets/scroll_physics.dart';
 import 'package:PiliPlus/http/loading_state.dart';
@@ -5,6 +6,7 @@ import 'package:PiliPlus/models/member/tags.dart';
 import 'package:PiliPlus/pages/follow/child_view.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'controller.dart';
 
@@ -16,8 +18,10 @@ class FollowPage extends StatefulWidget {
 }
 
 class _FollowPageState extends State<FollowPage> {
-  final FollowController _followController =
-      Get.put(FollowController(), tag: Utils.generateRandomString(8));
+  final FollowController _followController = Get.put(
+    FollowController(),
+    tag: Utils.generateRandomString(8),
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -28,6 +32,11 @@ class _FollowPageState extends State<FollowPage> {
         ),
         actions: _followController.isOwner
             ? [
+                IconButton(
+                  onPressed: _onCreateTag,
+                  icon: const Icon(Icons.add),
+                  tooltip: '新建分组',
+                ),
                 IconButton(
                   onPressed: () => Get.toNamed(
                     '/followSearch',
@@ -60,50 +69,171 @@ class _FollowPageState extends State<FollowPage> {
       ),
       body: _followController.isOwner
           ? Obx(() => _buildBody(_followController.followState.value))
-          : FollowChildPage(mid: _followController.mid),
+          : FollowChildPage(
+              controller: _followController, mid: _followController.mid),
     );
   }
 
-  Widget _buildBody(LoadingState<List<MemberTagItemModel>?> loadingState) {
+  bool _isCustomTag(tagid) {
+    return tagid != null && tagid != 0 && tagid != -10 && tagid != -2;
+  }
+
+  Widget _buildBody(LoadingState loadingState) {
     return switch (loadingState) {
       Loading() => loadingWidget,
-      Success() => loadingState.response?.isNotEmpty == true
-          ? Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SafeArea(
-                  top: false,
-                  bottom: false,
-                  child: TabBar(
-                    isScrollable: true,
-                    tabAlignment: TabAlignment.start,
-                    controller: _followController.tabController,
-                    tabs: loadingState.response!
-                        .map((item) => Tab(text: item.name))
-                        .toList(),
-                  ),
+      Success() => Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SafeArea(
+              top: false,
+              bottom: false,
+              child: TabBar(
+                isScrollable: true,
+                tabAlignment: TabAlignment.start,
+                controller: _followController.tabController,
+                tabs: List.generate(_followController.tabs.length, (index) {
+                  return Obx(() {
+                    final item = _followController.tabs[index];
+                    int? count = item.count;
+                    if (_isCustomTag(item.tagid)) {
+                      return GestureDetector(
+                        onLongPress: () {
+                          _onHandleTag(index, item);
+                        },
+                        child: Tab(
+                          child: Row(
+                            children: [
+                              Text(
+                                '${item.name}${count != null ? '($count)' : ''} ',
+                              ),
+                              Icon(Icons.menu, size: 18),
+                            ],
+                          ),
+                        ),
+                      );
+                    }
+                    return Tab(
+                        text: '${item.name}${count != null ? '($count)' : ''}');
+                  });
+                }).toList(),
+                onTap: (value) {
+                  if (!_followController.tabController!.indexIsChanging) {
+                    final item = _followController.tabs[value];
+                    if (_isCustomTag(item.tagid)) {
+                      _onHandleTag(value, item);
+                    }
+                  }
+                },
+              ),
+            ),
+            Expanded(
+              child: Material(
+                color: Colors.transparent,
+                child: tabBarView(
+                  controller: _followController.tabController,
+                  children: _followController.tabs
+                      .map(
+                        (item) => FollowChildPage(
+                          controller: _followController,
+                          mid: _followController.mid,
+                          tagid: item.tagid,
+                        ),
+                      )
+                      .toList(),
                 ),
-                Expanded(
-                  child: Material(
-                    color: Colors.transparent,
-                    child: tabBarView(
-                      controller: _followController.tabController,
-                      children: loadingState.response!
-                          .map(
-                            (item) => FollowChildPage(
-                              mid: _followController.mid,
-                              tagid: item.tagid,
-                            ),
-                          )
-                          .toList(),
-                    ),
-                  ),
-                ),
-              ],
-            )
-          : FollowChildPage(mid: _followController.mid),
-      Error() => FollowChildPage(mid: _followController.mid),
+              ),
+            ),
+          ],
+        ),
+      Error() => FollowChildPage(
+          controller: _followController, mid: _followController.mid),
       _ => throw UnimplementedError(),
     };
+  }
+
+  void _onHandleTag(int index, MemberTagItemModel item) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          clipBehavior: Clip.hardEdge,
+          contentPadding: const EdgeInsets.symmetric(vertical: 12),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ListTile(
+                onTap: () {
+                  Get.back();
+                  String tagName = item.name!;
+                  showConfirmDialog(
+                    context: context,
+                    title: '编辑分组名称',
+                    content: TextFormField(
+                      autofocus: true,
+                      initialValue: tagName,
+                      onChanged: (value) => tagName = value,
+                      inputFormatters: [
+                        LengthLimitingTextInputFormatter(16),
+                      ],
+                      decoration:
+                          const InputDecoration(border: OutlineInputBorder()),
+                    ),
+                    onConfirm: () {
+                      if (tagName.isNotEmpty) {
+                        _followController.onUpdateTag(
+                            index, item.tagid, tagName);
+                      }
+                    },
+                  );
+                },
+                dense: true,
+                title: const Text(
+                  '修改名称',
+                  style: TextStyle(fontSize: 14),
+                ),
+              ),
+              ListTile(
+                onTap: () {
+                  Get.back();
+                  showConfirmDialog(
+                    context: context,
+                    title: '删除分组',
+                    content: '删除后，该分组下的用户依旧保留？',
+                    onConfirm: () {
+                      _followController.onDelTag(item.tagid);
+                    },
+                  );
+                },
+                dense: true,
+                title: const Text(
+                  '删除分组',
+                  style: TextStyle(fontSize: 14),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  void _onCreateTag() {
+    String tagName = '';
+    showConfirmDialog(
+      context: context,
+      title: '新建分组',
+      content: TextFormField(
+        autofocus: true,
+        initialValue: tagName,
+        onChanged: (value) => tagName = value,
+        inputFormatters: [
+          LengthLimitingTextInputFormatter(16),
+        ],
+        decoration: const InputDecoration(border: OutlineInputBorder()),
+      ),
+      onConfirm: () {
+        _followController.onCreateTag(tagName);
+      },
+    );
   }
 }

@@ -4,8 +4,12 @@ import '../models/follow/result.dart';
 import 'index.dart';
 
 class FollowHttp {
-  static Future followings(
-      {int? vmid, int? pn, int? ps, String? orderType}) async {
+  static Future followings({
+    int? vmid,
+    int? pn,
+    int? ps,
+    String orderType = '',
+  }) async {
     var res = await Request().get(Api.followings, queryParameters: {
       'vmid': vmid,
       'pn': pn,
@@ -23,8 +27,12 @@ class FollowHttp {
     }
   }
 
-  static Future<LoadingState<List<FollowItemModel>?>> followingsNew(
-      {int? vmid, int? pn, int? ps, String? orderType}) async {
+  static Future<LoadingState<FollowDataModel>> followingsNew({
+    int? vmid,
+    int? pn,
+    int? ps,
+    String orderType = '', // ''=>最近关注，'attention'=>最常访问
+  }) async {
     var res = await Request().get(Api.followings, queryParameters: {
       'vmid': vmid,
       'pn': pn,
@@ -35,7 +43,8 @@ class FollowHttp {
 
     if (res.data['code'] == 0) {
       return LoadingState.success(
-          FollowDataModel.fromJson(res.data['data']).list);
+        FollowDataModel.fromJson(res.data['data']),
+      );
     } else {
       return LoadingState.error(res.data['message']);
     }

@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 void showConfirmDialog({
   required BuildContext context,
   required String title,
-  String? content,
+  dynamic content,
   required VoidCallback onConfirm,
 }) {
   showDialog(
@@ -12,7 +12,11 @@ void showConfirmDialog({
     builder: (context) {
       return AlertDialog(
         title: Text(title),
-        content: content == null ? null : Text(content),
+        content: content is String
+            ? Text(content)
+            : content is Widget
+                ? content
+                : null,
         actions: [
           TextButton(
             onPressed: Get.back,
