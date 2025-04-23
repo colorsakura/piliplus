@@ -496,7 +496,7 @@ class UserHttp {
   }
 
   static Future addFavArticle({
-    required int id,
+    required dynamic id,
   }) async {
     var res = await Request().post(
       Api.addFavArticle,
@@ -516,7 +516,7 @@ class UserHttp {
   }
 
   static Future delFavArticle({
-    required int id,
+    required dynamic id,
   }) async {
     var res = await Request().post(
       Api.delFavArticle,

@@ -773,4 +773,6 @@ class Api {
 
   static const String searchRecommend =
       '${HttpString.appBaseUrl}/x/v2/search/recommend';
+
+  static const String articleInfo = '/x/article/viewinfo';
 }

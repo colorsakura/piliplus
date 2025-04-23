@@ -792,9 +792,9 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
                     _dynamicDetailController.onLoadMore();
                     return Container(
                       alignment: Alignment.center,
-                      padding: EdgeInsets.only(
+                      margin: EdgeInsets.only(
                           bottom: MediaQuery.of(context).padding.bottom),
-                      height: MediaQuery.of(context).padding.bottom + 100,
+                      height: 125,
                       child: Text(
                         _dynamicDetailController.isEnd.not
                             ? '加载中...'

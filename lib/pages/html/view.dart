@@ -636,6 +636,46 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
                                                 label: const Text('分享'),
                                               ),
                                             ),
+                                            if (_htmlRenderCtr
+                                                .favStat['status'])
+                                              Expanded(
+                                                child: TextButton.icon(
+                                                  onPressed: () {
+                                                    _htmlRenderCtr.onFav();
+                                                  },
+                                                  icon: Icon(
+                                                    _htmlRenderCtr.favStat[
+                                                                'isFav'] ==
+                                                            true
+                                                        ? FontAwesomeIcons
+                                                            .solidStar
+                                                        : FontAwesomeIcons.star,
+                                                    size: 16,
+                                                    color:
+                                                        _htmlRenderCtr.favStat[
+                                                                    'isFav'] ==
+                                                                true
+                                                            ? Theme.of(context)
+                                                                .colorScheme
+                                                                .primary
+                                                            : Theme.of(context)
+                                                                .colorScheme
+                                                                .outline,
+                                                    semanticLabel: "收藏",
+                                                  ),
+                                                  style: TextButton.styleFrom(
+                                                    padding: const EdgeInsets
+                                                        .fromLTRB(15, 0, 15, 0),
+                                                    foregroundColor:
+                                                        Theme.of(context)
+                                                            .colorScheme
+                                                            .outline,
+                                                  ),
+                                                  label: Text(_htmlRenderCtr
+                                                      .favStat['favNum']
+                                                      .toString()),
+                                                ),
+                                              ),
                                             Expanded(
                                               child: Builder(
                                                 builder: (context) =>
@@ -781,9 +821,9 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
                   _htmlRenderCtr.onLoadMore();
                   return Container(
                     alignment: Alignment.center,
-                    padding: EdgeInsets.only(
+                    margin: EdgeInsets.only(
                         bottom: MediaQuery.of(context).padding.bottom),
-                    height: MediaQuery.of(context).padding.bottom + 100,
+                    height: 125,
                     child: Text(
                       _htmlRenderCtr.isEnd.not
                           ? '加载中...'

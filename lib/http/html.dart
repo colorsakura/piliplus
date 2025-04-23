@@ -72,14 +72,18 @@ class HtmlHttp {
       // List imgList = opusDetail.querySelectorAll('bili-album__preview__picture__img');
 
       dynamic mid;
+      Map? favorite;
       try {
         final regex = RegExp(r'window\.__INITIAL_STATE__\s*=\s*(\{.*?\});');
         final match = regex.firstMatch(response.data);
         if (match != null) {
           final json = jsonDecode(match.group(1)!);
           mid = json['detail']['basic']['uid'];
+          favorite = json['detail']['modules'].last['module_stat']['favorite'];
         }
-      } catch (_) {}
+      } catch (e) {
+        debugPrint('req html: $e');
+      }
 
       return {
         'status': true,
@@ -90,6 +94,7 @@ class HtmlHttp {
         'content': (test ?? '') + opusContent,
         'commentType': int.parse(comment[1]),
         'commentId': int.parse(comment[2]),
+        'favorite': favorite,
       };
     } catch (err) {
       debugPrint('err: $err');

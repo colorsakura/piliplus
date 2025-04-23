@@ -1,6 +1,7 @@
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/utils/accounts/account.dart';
 import 'package:PiliPlus/utils/storage.dart';
+import 'package:PiliPlus/utils/wbi_sign.dart';
 import 'package:dio/dio.dart';
 
 import '../models/dynamics/result.dart';
@@ -133,6 +134,25 @@ class DynamicsHttp {
     );
     if (res.data['code'] == 0) {
       return {'status': true};
+    } else {
+      return {'status': false, 'msg': res.data['message']};
+    }
+  }
+
+  static Future articleInfo({
+    required dynamic cvId,
+  }) async {
+    var res = await Request().get(
+      Api.articleInfo,
+      queryParameters: await WbiSign.makSign({
+        'id': cvId,
+        'mobi_app': 'pc',
+        'from': 'web',
+        'gaia_source': 'main_web',
+      }),
+    );
+    if (res.data['code'] == 0) {
+      return {'status': true, 'data': res.data['data']};
     } else {
       return {'status': false, 'msg': res.data['message']};
     }
