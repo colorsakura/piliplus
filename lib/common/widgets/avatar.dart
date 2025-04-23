@@ -37,7 +37,7 @@ class Avatar extends StatelessWidget {
                     : _BadgeType.none,
         badgeSize = badgeSize ?? size / 3;
 
-  static final showDynDecorate = GStorage.showDynDecorate;
+  static bool showDynDecorate = GStorage.showDynDecorate;
 
   @override
   Widget build(BuildContext context) {

@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:math';
 
+import 'package:PiliPlus/common/widgets/avatar.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart'
     show kDragContainerExtentPercentage, displacement;
 import 'package:PiliPlus/http/reply.dart';
@@ -14,7 +15,6 @@ import 'package:PiliPlus/models/common/reply_sort_type.dart';
 import 'package:PiliPlus/models/common/super_resolution_type.dart';
 import 'package:PiliPlus/models/common/theme_type.dart';
 import 'package:PiliPlus/models/common/up_panel_position.dart';
-import 'package:PiliPlus/models/dynamics/result.dart';
 import 'package:PiliPlus/models/live/quality.dart';
 import 'package:PiliPlus/models/video/play/CDN.dart';
 import 'package:PiliPlus/models/video/play/quality.dart';
@@ -2031,7 +2031,7 @@ List<SettingsModel> get extraSettings => [
         leading: Icon(MdiIcons.stickerCircleOutline),
         setKey: SettingBoxKey.showDynDecorate,
         defaultVal: true,
-        onChanged: (value) => ModuleAuthorModel.showDynDecorate = value,
+        onChanged: (value) => Avatar.showDynDecorate = value,
       ),
       SettingsModel(
         settingsType: SettingsType.sw1tch,

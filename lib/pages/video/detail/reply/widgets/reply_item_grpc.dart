@@ -8,7 +8,6 @@ import 'package:PiliPlus/common/widgets/report.dart';
 import 'package:PiliPlus/grpc/app/main/community/reply/v1/reply.pb.dart';
 import 'package:PiliPlus/http/init.dart';
 import 'package:PiliPlus/http/video.dart';
-import 'package:PiliPlus/models/dynamics/result.dart';
 import 'package:PiliPlus/common/widgets/save_panel.dart';
 import 'package:PiliPlus/pages/video/detail/reply/widgets/zan_grpc.dart';
 import 'package:PiliPlus/utils/extension.dart';
@@ -104,8 +103,7 @@ class ReplyItemGrpc extends StatelessWidget {
   Widget _buildContent(context) {
     return Column(
       children: [
-        if (ModuleAuthorModel.showDynDecorate &&
-            replyItem.member.hasGarbCardImage())
+        if (Avatar.showDynDecorate && replyItem.member.hasGarbCardImage())
           Stack(
             clipBehavior: Clip.none,
             children: [

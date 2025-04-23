@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:PiliPlus/utils/storage.dart';
+import 'package:PiliPlus/common/widgets/avatar.dart';
 
 class DynamicsDataModel {
   DynamicsDataModel({
@@ -137,13 +137,11 @@ class ModuleAuthorModel {
     pubTs = json['pub_ts'] == 0 ? null : json['pub_ts'];
     type = json['type'];
     vip = json['vip'];
-    if (showDynDecorate) {
+    if (Avatar.showDynDecorate) {
       decorate = json['decorate'];
       pendant = json['pendant'];
     }
   }
-
-  static bool showDynDecorate = GStorage.showDynDecorate;
 }
 
 // 单个动态详情 - 动态信息
