@@ -80,7 +80,7 @@ class _LoginPageState extends State<LoginPage> {
         RepaintBoundary(
           key: globalKey,
           child: Obx(() {
-            if (_loginPageCtr.codeInfo.value['data']?['url'] == null) {
+            if (_loginPageCtr.codeInfo['data']?['url'] == null) {
               return Container(
                 height: 200,
                 width: 200,
@@ -96,7 +96,7 @@ class _LoginPageState extends State<LoginPage> {
               color: Colors.white,
               padding: const EdgeInsets.all(8),
               child: PrettyQrView.data(
-                data: _loginPageCtr.codeInfo.value['data']!['url']!,
+                data: _loginPageCtr.codeInfo['data']!['url']!,
                 decoration: PrettyQrDecoration(
                   shape: PrettyQrRoundedSymbol(
                     color: Colors.black87,
@@ -116,14 +116,13 @@ class _LoginPageState extends State<LoginPage> {
         Obx(() => GestureDetector(
               onTap: () {
                 // 复制到剪贴板
-                Utils.copyText(
-                    _loginPageCtr.codeInfo.value['data']?['url'] ?? '',
+                Utils.copyText(_loginPageCtr.codeInfo['data']?['url'] ?? '',
                     toastText: '已复制到剪贴板，可粘贴至已登录的app私信处发送，然后点击已发送的链接打开');
               },
               child: Padding(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-                child: Text(_loginPageCtr.codeInfo.value['data']?['url'] ?? "",
+                child: Text(_loginPageCtr.codeInfo['data']?['url'] ?? "",
                     style: Theme.of(context).textTheme.labelSmall!.copyWith(
                         color: Theme.of(context)
                             .colorScheme

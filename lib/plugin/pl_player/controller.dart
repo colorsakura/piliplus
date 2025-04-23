@@ -63,40 +63,40 @@ class PlPlayerController {
   final Rx<Duration> _buffered = Rx(Duration.zero);
   final RxInt bufferedSeconds = 0.obs;
 
-  final Rx<int> _playerCount = Rx(0);
+  final RxInt _playerCount = 0.obs;
 
   late double lastPlaybackSpeed = 1.0;
-  final Rx<double> _playbackSpeed = 1.0.obs;
-  final Rx<double> _longPressSpeed = 2.0.obs;
-  final Rx<double> _currentVolume = 1.0.obs;
-  final Rx<double> _currentBrightness = (-1.0).obs;
+  final RxDouble _playbackSpeed = 1.0.obs;
+  final RxDouble _longPressSpeed = 2.0.obs;
+  final RxDouble _currentVolume = 1.0.obs;
+  final RxDouble _currentBrightness = (-1.0).obs;
 
-  final Rx<bool> _mute = false.obs;
-  final Rx<bool> _showControls = false.obs;
-  final Rx<bool> _showVolumeStatus = false.obs;
-  final Rx<bool> _showBrightnessStatus = false.obs;
-  final Rx<bool> _longPressStatus = false.obs;
-  final Rx<bool> _controlsLock = false.obs;
-  final Rx<bool> _isFullScreen = false.obs;
+  final RxBool _mute = false.obs;
+  final RxBool _showControls = false.obs;
+  final RxBool _showVolumeStatus = false.obs;
+  final RxBool _showBrightnessStatus = false.obs;
+  final RxBool _longPressStatus = false.obs;
+  final RxBool _controlsLock = false.obs;
+  final RxBool _isFullScreen = false.obs;
   // 默认投稿视频格式
-  static Rx<String> _videoType = 'archive'.obs;
+  static RxString _videoType = 'archive'.obs;
 
-  final Rx<String> _direction = 'horizontal'.obs;
+  final RxString _direction = 'horizontal'.obs;
 
   final Rx<BoxFit> _videoFit = Rx(videoFitType[1]['attr']);
-  final Rx<String> _videoFitDesc = Rx(videoFitType[1]['desc']);
+  final RxString _videoFitDesc = videoFitType[1]['desc'].obs;
   late StreamSubscription<DataStatus> _dataListenerForVideoFit;
   late StreamSubscription<DataStatus> _dataListenerForEnterFullscreen;
 
   /// 后台播放
-  late final Rx<bool> _continuePlayInBackground = false.obs;
+  late final RxBool _continuePlayInBackground = false.obs;
 
-  late final Rx<bool> _flipX = false.obs;
+  late final RxBool _flipX = false.obs;
 
-  late final Rx<bool> _flipY = false.obs;
+  late final RxBool _flipY = false.obs;
 
   ///
-  final Rx<bool> _isSliderMoving = false.obs;
+  final RxBool _isSliderMoving = false.obs;
   PlaylistMode _looping = PlaylistMode.none;
   bool _autoPlay = false;
   final bool _listenersInitialized = false;
@@ -165,7 +165,7 @@ class PlPlayerController {
   Stream<Duration> get onBufferedChanged => _buffered.stream;
 
   // 视频静音
-  Rx<bool> get mute => _mute;
+  RxBool get mute => _mute;
   Stream<bool> get onMuteChanged => _mute.stream;
 
   /// [videoPlayerController] instance of Player
@@ -174,7 +174,7 @@ class PlPlayerController {
   /// [videoController] instance of Player
   VideoController? get videoController => _videoController;
 
-  Rx<bool> get isSliderMoving => _isSliderMoving;
+  RxBool get isSliderMoving => _isSliderMoving;
 
   /// 进度条位置及监听
   Rx<Duration> get sliderPosition => _sliderPosition;
@@ -184,24 +184,24 @@ class PlPlayerController {
   // Stream<Duration> get onSliderPositionChanged => _sliderPosition.stream;
 
   /// 是否展示控制条及监听
-  Rx<bool> get showControls => _showControls;
+  RxBool get showControls => _showControls;
   Stream<bool> get onShowControlsChanged => _showControls.stream;
 
   /// 音量控制条展示/隐藏
-  Rx<bool> get showVolumeStatus => _showVolumeStatus;
+  RxBool get showVolumeStatus => _showVolumeStatus;
   Stream<bool> get onShowVolumeStatusChanged => _showVolumeStatus.stream;
 
   /// 亮度控制条展示/隐藏
-  Rx<bool> get showBrightnessStatus => _showBrightnessStatus;
+  RxBool get showBrightnessStatus => _showBrightnessStatus;
   Stream<bool> get onShowBrightnessStatusChanged =>
       _showBrightnessStatus.stream;
 
   /// 音量控制条
-  Rx<double> get volume => _currentVolume;
+  RxDouble get volume => _currentVolume;
   Stream<double> get onVolumeChanged => _currentVolume.stream;
 
   /// 亮度控制条
-  Rx<double> get brightness => _currentBrightness;
+  RxDouble get brightness => _currentBrightness;
   Stream<double> get onBrightnessChanged => _currentBrightness.stream;
 
   /// 是否循环
@@ -212,40 +212,40 @@ class PlPlayerController {
 
   /// 视频比例
   Rx<BoxFit> get videoFit => _videoFit;
-  Rx<String> get videoFitDEsc => _videoFitDesc;
+  RxString get videoFitDEsc => _videoFitDesc;
 
   /// 后台播放
-  Rx<bool> get continuePlayInBackground => _continuePlayInBackground;
+  RxBool get continuePlayInBackground => _continuePlayInBackground;
 
   /// 听视频
-  late final Rx<bool> onlyPlayAudio = false.obs;
+  late final RxBool onlyPlayAudio = false.obs;
 
   /// 镜像
-  Rx<bool> get flipX => _flipX;
+  RxBool get flipX => _flipX;
 
-  Rx<bool> get flipY => _flipY;
+  RxBool get flipY => _flipY;
 
   /// 是否长按倍速
-  Rx<bool> get longPressStatus => _longPressStatus;
+  RxBool get longPressStatus => _longPressStatus;
 
-  Rx<bool> isBuffering = true.obs;
+  RxBool isBuffering = true.obs;
 
   /// 屏幕锁 为true时，关闭控制栏
-  Rx<bool> get controlsLock => _controlsLock;
+  RxBool get controlsLock => _controlsLock;
 
   /// 全屏状态
-  Rx<bool> get isFullScreen => _isFullScreen;
+  RxBool get isFullScreen => _isFullScreen;
 
   /// 全屏方向
-  Rx<String> get direction => _direction;
+  RxString get direction => _direction;
 
-  Rx<int> get playerCount => _playerCount;
+  RxInt get playerCount => _playerCount;
 
   ///
-  Rx<String> get videoType => _videoType;
+  RxString get videoType => _videoType;
 
   /// 弹幕开关
-  Rx<bool> isOpenDanmu = false.obs;
+  RxBool isOpenDanmu = false.obs;
 
   late final showFSActionItem = GStorage.showFSActionItem;
   late final enableShrinkVideoSize = GStorage.enableShrinkVideoSize;

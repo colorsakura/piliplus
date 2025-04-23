@@ -23,7 +23,7 @@ class LoginPageController extends GetxController
   final TextEditingController smsCodeTextController = TextEditingController();
   final TextEditingController cookieTextController = TextEditingController();
 
-  Rx<Map<String, dynamic>> codeInfo = Rx<Map<String, dynamic>>({});
+  RxMap<String, dynamic> codeInfo = RxMap<String, dynamic>({});
 
   late TabController tabController;
 
@@ -31,7 +31,7 @@ class LoginPageController extends GetxController
 
   CaptchaDataModel captchaData = CaptchaDataModel();
   RxInt qrCodeLeftTime = 180.obs;
-  Rx<String> statusQRCode = ''.obs;
+  RxString statusQRCode = ''.obs;
 
   Map<String, dynamic> selectedCountryCodeId =
       Constants.internationalDialingPrefix.first;
@@ -68,8 +68,7 @@ class LoginPageController extends GetxController
     LoginHttp.getHDcode().then((res) {
       if (res['status']) {
         qrCodeTimer?.cancel();
-        codeInfo.value = res;
-        codeInfo.refresh();
+        codeInfo.addAll(res);
         qrCodeTimer = Timer.periodic(const Duration(milliseconds: 1000), (t) {
           qrCodeLeftTime.value = 180 - t.tick;
           if (qrCodeLeftTime <= 0) {
@@ -79,8 +78,7 @@ class LoginPageController extends GetxController
             return;
           }
 
-          LoginHttp.codePoll(codeInfo.value['data']['auth_code'])
-              .then((value) async {
+          LoginHttp.codePoll(codeInfo['data']['auth_code']).then((value) async {
             if (value['status']) {
               t.cancel();
               statusQRCode.value = '扫码成功';

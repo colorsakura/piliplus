@@ -52,11 +52,11 @@ class HtmlRenderController extends ReplyController<MainListReply> {
         });
         DynamicsHttp.articleInfo(cvId: id.substring(2)).then((res) {
           if (res['status']) {
-            favStat.value = {
+            favStat.addAll({
               'status': true,
               'isFav': res['data']?['favorite'] ?? false,
               'favNum': res['data']?['stats']?['favorite'] ?? 0,
-            };
+            });
           }
         });
       } else {
@@ -85,11 +85,11 @@ class HtmlRenderController extends ReplyController<MainListReply> {
       if (res != null) {
         type = res['commentType'];
         if (res['favorite'] != null) {
-          favStat.value = {
+          favStat.addAll({
             'status': true,
             'isFav': res['favorite']['status'] ?? false,
             'favNum': res['favorite']['count'] ?? 0,
-          };
+          });
         }
       }
     } else {
