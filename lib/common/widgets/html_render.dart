@@ -16,7 +16,8 @@ Widget htmlRender({
   Function(List<String>, int)? callback,
 }) {
   debugPrint('htmlRender');
-  return Html(
+  return SelectionArea(
+      child: Html(
     data: htmlContent,
     onLinkTap: (String? url, Map<String, String> buildContext, attributes) {},
     extensions: [
@@ -123,5 +124,5 @@ Widget htmlRender({
         margin: Margins.zero,
       ),
     },
-  );
+  ));
 }
