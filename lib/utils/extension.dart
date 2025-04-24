@@ -91,6 +91,7 @@ extension BuildContextExt on BuildContext {
     required List<SourceModel> imgList,
     ValueChanged<int>? onDismissed,
   }) {
+    bool isMemberPage = Get.currentRoute.startsWith('/member?');
     Navigator.of(this).push(
       HeroDialogRoute(
         builder: (context) => InteractiveviewerGallery(
@@ -98,6 +99,7 @@ extension BuildContextExt on BuildContext {
           initIndex: initialPage ?? 0,
           onPageChanged: (int pageIndex) {},
           onDismissed: onDismissed,
+          setStatusBar: !isMemberPage,
         ),
       ),
     );

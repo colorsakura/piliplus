@@ -67,14 +67,14 @@ class _SearchTrendingPageState extends State<SearchTrendingPage> {
           preferredSize: Size.fromHeight(56),
           child: Obx(
             () {
-              final half = _scrollRatio.value >= 0.5;
+              final flag = removePadding || _scrollRatio.value >= 0.5;
               return AppBar(
                 title: Opacity(
                   opacity: _scrollRatio.value,
                   child: Text(
                     'B站热搜',
                     style: TextStyle(
-                      color: half ? null : Colors.white,
+                      color: flag ? null : Colors.white,
                     ),
                   ),
                 ),
@@ -82,8 +82,8 @@ class _SearchTrendingPageState extends State<SearchTrendingPage> {
                     .colorScheme
                     .surface
                     .withOpacity(_scrollRatio.value),
-                foregroundColor: removePadding || half ? null : Colors.white,
-                systemOverlayStyle: removePadding || half
+                foregroundColor: flag ? null : Colors.white,
+                systemOverlayStyle: flag
                     ? null
                     : SystemUiOverlayStyle(
                         statusBarBrightness: Brightness.dark,
