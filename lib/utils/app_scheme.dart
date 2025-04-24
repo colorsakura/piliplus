@@ -133,16 +133,20 @@ class PiliScheme {
                         ),
                       ],
                     ),
-                    body: VideoReplyReplyPanel(
-                      oid: int.parse(oid),
-                      rpid: rpid,
-                      source: 'routePush',
-                      replyType: ReplyType.video,
-                      firstFloor: null,
-                      id: queryParameters['comment_secondary_id'] != null
-                          ? int.tryParse(
-                              queryParameters['comment_secondary_id']!)
-                          : null,
+                    body: SafeArea(
+                      top: false,
+                      bottom: false,
+                      child: VideoReplyReplyPanel(
+                        oid: int.parse(oid),
+                        rpid: rpid,
+                        source: 'routePush',
+                        replyType: ReplyType.video,
+                        firstFloor: null,
+                        id: queryParameters['comment_secondary_id'] != null
+                            ? int.tryParse(
+                                queryParameters['comment_secondary_id']!)
+                            : null,
+                      ),
                     ),
                   ),
                 );
@@ -285,13 +289,17 @@ class PiliScheme {
                       ),
                     ],
                   ),
-                  body: VideoReplyReplyPanel(
-                    oid: oid,
-                    rpid: rootId,
-                    id: rpId,
-                    source: 'routePush',
-                    replyType: ReplyType.values[type],
-                    firstFloor: null,
+                  body: SafeArea(
+                    top: false,
+                    bottom: false,
+                    child: VideoReplyReplyPanel(
+                      oid: oid,
+                      rpid: rootId,
+                      id: rpId,
+                      source: 'routePush',
+                      replyType: ReplyType.values[type],
+                      firstFloor: null,
+                    ),
                   ),
                 ),
               );
@@ -331,12 +339,16 @@ class PiliScheme {
                       ),
                     ],
                   ),
-                  body: VideoReplyReplyPanel(
-                    oid: oid,
-                    rpid: rpId,
-                    source: 'routePush',
-                    replyType: ReplyType.values[type],
-                    firstFloor: null,
+                  body: SafeArea(
+                    top: false,
+                    bottom: false,
+                    child: VideoReplyReplyPanel(
+                      oid: oid,
+                      rpid: rpId,
+                      source: 'routePush',
+                      replyType: ReplyType.values[type],
+                      firstFloor: null,
+                    ),
                   ),
                 ),
               );
@@ -393,18 +405,22 @@ class PiliScheme {
                           ),
                         ],
                       ),
-                      body: VideoReplyReplyPanel(
-                        oid: oid ?? int.parse(dynId),
-                        rpid: rpid,
-                        source: 'routePush',
-                        replyType: businessId != null
-                            ? ReplyType.values[businessId]
-                            : ReplyType.dynamics,
-                        firstFloor: null,
-                        id: queryParameters['comment_secondary_id'] != null
-                            ? int.tryParse(
-                                queryParameters['comment_secondary_id']!)
-                            : null,
+                      body: SafeArea(
+                        top: false,
+                        bottom: false,
+                        child: VideoReplyReplyPanel(
+                          oid: oid ?? int.parse(dynId),
+                          rpid: rpid,
+                          source: 'routePush',
+                          replyType: businessId != null
+                              ? ReplyType.values[businessId]
+                              : ReplyType.dynamics,
+                          firstFloor: null,
+                          id: queryParameters['comment_secondary_id'] != null
+                              ? int.tryParse(
+                                  queryParameters['comment_secondary_id']!)
+                              : null,
+                        ),
                       ),
                     ),
                   );

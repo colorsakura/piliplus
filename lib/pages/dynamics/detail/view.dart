@@ -170,14 +170,18 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
               titleSpacing: automaticallyImplyLeading ? null : 12,
               automaticallyImplyLeading: automaticallyImplyLeading,
             ),
-            body: VideoReplyReplyPanel(
-              id: id,
-              oid: oid,
-              rpid: rpid,
-              source: 'dynamic',
-              replyType: ReplyType.values[replyType],
-              firstFloor: replyItem,
-              onDispose: onDispose,
+            body: SafeArea(
+              top: false,
+              bottom: false,
+              child: VideoReplyReplyPanel(
+                id: id,
+                oid: oid,
+                rpid: rpid,
+                source: 'dynamic',
+                replyType: ReplyType.values[replyType],
+                firstFloor: replyItem,
+                onDispose: onDispose,
+              ),
             ),
           );
       if (this.context.orientation == Orientation.portrait) {

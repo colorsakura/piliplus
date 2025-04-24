@@ -54,11 +54,13 @@ class _SysMsgPageState extends State<SysMsgPage> {
 
   Widget _buildBody(LoadingState<List<SystemNotifyList>?> loadingState) {
     return switch (loadingState) {
-      Loading() => SliverList.builder(
-          itemCount: 12,
-          itemBuilder: (context, index) {
-            return const MsgFeedSysMsgSkeleton();
-          },
+      Loading() => SliverSafeArea(
+          sliver: SliverList.builder(
+            itemCount: 12,
+            itemBuilder: (context, index) {
+              return const MsgFeedSysMsgSkeleton();
+            },
+          ),
         ),
       Success() => loadingState.response?.isNotEmpty == true
           ? SliverList.separated(

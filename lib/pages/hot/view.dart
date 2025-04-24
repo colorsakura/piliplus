@@ -92,7 +92,11 @@ class _HotPageState extends CommonPageState<HotPage, HotController>
                                   Get.to(
                                     Scaffold(
                                       appBar: AppBar(title: const Text('排行榜')),
-                                      body: RankPage(),
+                                      body: SafeArea(
+                                        top: false,
+                                        bottom: false,
+                                        child: RankPage(),
+                                      ),
                                     ),
                                   );
                                 }

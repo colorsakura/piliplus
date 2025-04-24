@@ -277,12 +277,14 @@ class _LivePageState extends CommonPageState<LivePage, LiveController>
             () => Text('${controller.liveCount.value}人正在直播'),
           ),
         ),
-        body: CustomScrollView(
-          slivers: [
-            Obx(
-              () => _buildFollowListBody(controller.followListState.value),
-            ),
-          ],
+        body: SafeArea(
+          top: false,
+          bottom: false,
+          child: CustomScrollView(
+            slivers: [
+              Obx(() => _buildFollowListBody(controller.followListState.value)),
+            ],
+          ),
         ),
       );
 
