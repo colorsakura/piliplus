@@ -73,15 +73,13 @@ class FavArticleItem extends StatelessWidget {
                         ),
                         Row(
                           children: [
-                            StatView(
-                              context: context,
-                              value: item['stat']['view'] == ''
-                                  ? 0
-                                  : item['stat']['view'],
-                              goto: 'picture',
-                              textColor: Theme.of(context).colorScheme.outline,
-                            ),
-                            const SizedBox(width: 16),
+                            // StatView(
+                            //   context: context,
+                            //   value: item['stat']['view'],
+                            //   goto: 'picture',
+                            //   textColor: Theme.of(context).colorScheme.outline,
+                            // ),
+                            // const SizedBox(width: 16),
                             StatView(
                               context: context,
                               goto: 'like',

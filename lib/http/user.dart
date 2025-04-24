@@ -489,7 +489,7 @@ class UserHttp {
       'page': page,
     });
     if (res.data['code'] == 0) {
-      return LoadingState.success(res.data['data']?['items']);
+      return LoadingState.success(res.data['data']);
     } else {
       return LoadingState.error(res.data['message']);
     }

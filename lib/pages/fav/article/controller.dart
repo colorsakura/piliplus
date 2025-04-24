@@ -11,6 +11,19 @@ class FavArticleController extends CommonListController {
   }
 
   @override
+  List? getDataList(response) {
+    return response?['items'];
+  }
+
+  @override
+  bool customHandleResponse(bool isRefresh, Success response) {
+    if (response.response?['has_more'] == false) {
+      isEnd = true;
+    }
+    return false;
+  }
+
+  @override
   Future<LoadingState> customGetData() =>
       UserHttp.favArticle(page: currentPage);
 
