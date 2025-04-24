@@ -504,12 +504,16 @@ class MemberHttp {
   }
 
   // 设置分组
-  static Future addUsers(int? fids, String? tagids) async {
+  static Future addUsers(List<int?> fids, List<int?> tagids) async {
     var res = await Request().post(
       Api.addUsers,
+      queryParameters: {
+        'x-bili-device-req-json':
+            '{"platform":"web","device":"pc","spmid":"333.1387"}'
+      },
       data: {
-        'fids': fids,
-        'tagids': tagids ?? '0',
+        'fids': fids.join(','),
+        'tagids': tagids.join(','),
         'csrf': Accounts.main.csrf,
         // 'cross_domain': true
       },

@@ -50,21 +50,19 @@ class _GroupPanelState extends State<GroupPanel> {
     // 是否有选中的 有选中的带id，没选使用默认0
     final bool anyHasChecked =
         tagsList.any((MemberTagItemModel e) => e.checked == true);
-    late String tagids;
-    List<int>? tagidList;
+    late List<int> tagidList;
     if (anyHasChecked) {
       final List<MemberTagItemModel> checkedList =
           tagsList.where((MemberTagItemModel e) => e.checked == true).toList();
       tagidList = checkedList.map<int>((e) => e.tagid!).toList();
-      tagids = tagidList.join(',');
     } else {
-      tagids = '0';
+      tagidList = [0];
     }
     // 保存
-    final res = await MemberHttp.addUsers(widget.mid, tagids);
+    final res = await MemberHttp.addUsers([widget.mid], tagidList);
     SmartDialog.showToast(res['msg']);
     if (res['status']) {
-      Get.back(result: tagidList ?? []);
+      Get.back(result: tagidList);
     }
   }
 
