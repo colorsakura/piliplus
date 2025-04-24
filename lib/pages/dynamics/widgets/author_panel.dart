@@ -218,15 +218,18 @@ class AuthorPanel extends StatelessWidget {
 
   void morePanel(BuildContext context) {
     String? bvid;
-    getBvid(String? type, dynamic major) => switch (type) {
-          'DYNAMIC_TYPE_AV' => major?.archive?.bvid,
-          'DYNAMIC_TYPE_UGC_SEASON' => major?.ugcSeason?.bvid,
-          _ => null,
-        };
-    bvid = getBvid(item.type, item.modules?.moduleDynamic?.major);
-    if (bvid == null && item.orig != null) {
-      bvid = getBvid(item.type, item.orig?.modules?.moduleDynamic?.major);
-    }
+    try {
+      getBvid(String? type, dynamic major) => switch (type) {
+            'DYNAMIC_TYPE_AV' => major?.archive?.bvid,
+            'DYNAMIC_TYPE_UGC_SEASON' => major?.ugcSeason?.bvid,
+            _ => null,
+          };
+      bvid = getBvid(item.type, item.modules?.moduleDynamic?.major);
+      if (bvid == null && item.orig != null) {
+        bvid =
+            getBvid(item.orig.type, item.orig?.modules?.moduleDynamic?.major);
+      }
+    } catch (_) {}
 
     showModalBottomSheet(
       context: context,
