@@ -370,7 +370,7 @@ class _LiveRoomPageState extends State<LiveRoomPage>
           future: _futureBuilder,
           builder: (context, snapshot) {
             if (snapshot.data == null) {
-              return const SizedBox();
+              return const SizedBox.shrink();
             }
             Map data = snapshot.data as Map;
             if (data['status']) {
@@ -449,7 +449,7 @@ class _LiveRoomPageState extends State<LiveRoomPage>
                 ),
               );
             } else {
-              return const SizedBox();
+              return const SizedBox.shrink();
             }
           },
         ),

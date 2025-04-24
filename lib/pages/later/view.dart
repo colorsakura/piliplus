@@ -84,7 +84,7 @@ class _LaterPageState extends State<LaterPage>
                     label: const Text('播放全部'),
                     icon: const Icon(Icons.playlist_play),
                   )
-                : const SizedBox(),
+                : const SizedBox.shrink(),
           ),
           body: SafeArea(
             top: false,

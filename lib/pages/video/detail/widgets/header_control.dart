@@ -782,7 +782,7 @@ class HeaderControlState extends State<HeaderControl> {
                                   Icons.done,
                                   color: Theme.of(context).colorScheme.primary,
                                 )
-                              : const SizedBox(),
+                              : const SizedBox.shrink(),
                         ),
                       ]
                     ],
@@ -858,7 +858,7 @@ class HeaderControlState extends State<HeaderControl> {
                                   Icons.done,
                                   color: Theme.of(context).colorScheme.primary,
                                 )
-                              : const SizedBox(),
+                              : const SizedBox.shrink(),
                         ),
                       ]
                     ],
@@ -1832,7 +1832,7 @@ class HeaderControlState extends State<HeaderControl> {
                                   Icons.done,
                                   color: Theme.of(context).colorScheme.primary,
                                 )
-                              : const SizedBox(),
+                              : const SizedBox.shrink(),
                         )
                       ],
                     ],
@@ -2014,7 +2014,7 @@ class HeaderControlState extends State<HeaderControl> {
                     }
                     clock?.cancel();
                     clock = null;
-                    return SizedBox.shrink();
+                    return const SizedBox.shrink();
                   },
                 ),
                 if (videoDetailCtr.enableSponsorBlock == true)

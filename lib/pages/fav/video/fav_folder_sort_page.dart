@@ -112,7 +112,7 @@ class _FavFolderSortPageState extends State<FavFolderSortPage> {
   }
 
   Widget get _buildBody {
-    return ReorderableListView(
+    return ReorderableListView.builder(
       key: _key,
       scrollController: _scrollController,
       onReorder: onReorder,
@@ -120,26 +120,24 @@ class _FavFolderSortPageState extends State<FavFolderSortPage> {
       footer: SizedBox(
         height: MediaQuery.of(context).padding.bottom + 80,
       ),
-      children: List.generate(
-        sortList.length,
-        (index) {
-          final item = sortList[index];
-          final key = item.id.toString();
-          return SizedBox(
-            key: Key(key),
-            height: 98,
-            child: FavItem(
-              heroTag: key,
-              favFolderItem: item,
-              onLongPress: index == 0
-                  ? () {
-                      SmartDialog.showToast('默认收藏夹不支持排序');
-                    }
-                  : null,
-            ),
-          );
-        },
-      ),
+      itemCount: sortList.length,
+      itemBuilder: (context, index) {
+        final item = sortList[index];
+        final key = item.id.toString();
+        return SizedBox(
+          key: Key(key),
+          height: 98,
+          child: FavItem(
+            heroTag: key,
+            favFolderItem: item,
+            onLongPress: index == 0
+                ? () {
+                    SmartDialog.showToast('默认收藏夹不支持排序');
+                  }
+                : null,
+          ),
+        );
+      },
     );
   }
 }

@@ -119,7 +119,7 @@ class _FavSortPageState extends State<FavSortPage> {
   }
 
   Widget get _buildBody {
-    return ReorderableListView(
+    return ReorderableListView.builder(
       key: _key,
       scrollController: _scrollController,
       onReorder: onReorder,
@@ -127,18 +127,18 @@ class _FavSortPageState extends State<FavSortPage> {
       footer: SizedBox(
         height: MediaQuery.of(context).padding.bottom + 80,
       ),
-      children: sortList
-          .map(
-            (item) => SizedBox(
-              key: Key(item.id.toString()),
-              height: 98,
-              child: FavVideoCardH(
-                isSort: true,
-                videoItem: item,
-              ),
-            ),
-          )
-          .toList(),
+      itemCount: sortList.length,
+      itemBuilder: (context, index) {
+        final item = sortList[index];
+        return SizedBox(
+          key: Key(item.id.toString()),
+          height: 98,
+          child: FavVideoCardH(
+            isSort: true,
+            videoItem: item,
+          ),
+        );
+      },
     );
   }
 }

@@ -391,13 +391,11 @@ class _VideoReplyReplyPanelState
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             slivers: [
-              SliverList(
-                delegate: SliverChildBuilderDelegate(
-                  (BuildContext context, int index) {
-                    return const VideoReplySkeleton();
-                  },
-                  childCount: 8,
-                ),
+              SliverList.builder(
+                itemBuilder: (context, index) {
+                  return const VideoReplySkeleton();
+                },
+                itemCount: 8,
               )
             ],
           ),

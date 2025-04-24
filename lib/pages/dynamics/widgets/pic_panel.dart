@@ -6,7 +6,7 @@ Widget picWidget(item, context, callback) {
       item.modules.moduleDynamic.major.type == 'MAJOR_TYPE_OPUS') {
     /// fix 图片跟rich_node_panel重复
     // pictures = item.modules.moduleDynamic.major.opus.pics;
-    return const SizedBox();
+    return const SizedBox.shrink();
   }
   return LayoutBuilder(
     builder: (context, constraints) => imageView(

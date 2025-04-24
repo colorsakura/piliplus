@@ -1226,7 +1226,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
 
   Widget get childWhenEnabled => Obx(
         () => !videoDetailController.autoPlay.value
-            ? const SizedBox()
+            ? const SizedBox.shrink()
             : PLVideoPlayer(
                 key: Key(heroTag),
                 plPlayerController: plPlayerController!,

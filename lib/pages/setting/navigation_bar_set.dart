@@ -71,7 +71,6 @@ class _NavigationbarSetPageState extends State<NavigationBarSetPage> {
       ),
       body: ReorderableListView(
         onReorder: onReorder,
-        physics: const NeverScrollableScrollPhysics(),
         footer: SizedBox(
           height: MediaQuery.of(context).padding.bottom + 30,
         ),

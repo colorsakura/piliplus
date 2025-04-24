@@ -134,17 +134,17 @@ Widget addWidget(item, context, type, {floor = 1}) {
                     ),
                   ),
                 )
-              : const SizedBox()
-          : const SizedBox();
+              : const SizedBox.shrink()
+          : const SizedBox.shrink();
     case 'ADDITIONAL_TYPE_GOODS':
       // 商品
-      return const SizedBox();
+      return const SizedBox.shrink();
     case 'ADDITIONAL_TYPE_MATCH':
-      return const SizedBox();
+      return const SizedBox.shrink();
     case 'ADDITIONAL_TYPE_COMMON':
-      return const SizedBox();
+      return const SizedBox.shrink();
     case 'ADDITIONAL_TYPE_VOTE':
-      return const SizedBox();
+      return const SizedBox.shrink();
     default:
       return const Text('11');
   }

@@ -83,7 +83,6 @@ class _TabbarSetPageState extends State<TabbarSetPage> {
       ),
       body: ReorderableListView(
         onReorder: onReorder,
-        physics: const NeverScrollableScrollPhysics(),
         footer: SizedBox(
           height: MediaQuery.of(context).padding.bottom + 30,
           child: const Align(

@@ -86,7 +86,7 @@ class _SeasonPanelState extends State<SeasonPanel> {
   @override
   Widget build(BuildContext context) {
     if (episodes.isEmpty) {
-      return const SizedBox();
+      return const SizedBox.shrink();
     }
     return Builder(builder: (BuildContext context) {
       return Container(

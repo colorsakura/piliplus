@@ -37,11 +37,12 @@ class HttpError extends StatelessWidget {
           ),
           const SizedBox(height: 30),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 5),
             child: SelectableText(
               errMsg ?? '没有数据',
               textAlign: TextAlign.center,
               style: Theme.of(context).textTheme.titleSmall,
+              scrollPhysics: const NeverScrollableScrollPhysics(),
             ),
           ),
           if (onReload != null)

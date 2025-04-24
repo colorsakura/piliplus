@@ -70,36 +70,37 @@ class _UpPanelState extends State<UpPanel> {
           ),
         ),
         const SliverToBoxAdapter(child: SizedBox(height: 10)),
-        SliverList(
-          delegate: SliverChildListDelegate(
-            [
-              if (widget.dynamicsController.showLiveItems &&
-                  liveList.isNotEmpty) ...[
-                for (int i = 0; i < liveList.length; i++) ...[
-                  upItemBuild(liveList[i], i)
-                ],
-              ],
-              upItemBuild(UpItem(face: '', uname: '全部动态', mid: -1), 0),
-              upItemBuild(
-                UpItem(
-                  uname: '我',
-                  face: widget.dynamicsController.face,
-                  mid: widget.dynamicsController.ownerMid,
-                ),
-                1,
-              ),
-              for (int i = 0; i < upList.length; i++) ...[
-                upItemBuild(upList[i], i + 2)
-              ],
-            ],
+        if (widget.dynamicsController.showLiveItems && liveList.isNotEmpty)
+          SliverList.builder(
+            itemCount: liveList.length,
+            itemBuilder: (context, index) {
+              return upItemBuild(liveList[index]);
+            },
           ),
+        SliverToBoxAdapter(
+          child: upItemBuild(UpItem(face: '', uname: '全部动态', mid: -1)),
+        ),
+        SliverToBoxAdapter(
+          child: upItemBuild(
+            UpItem(
+              uname: '我',
+              face: widget.dynamicsController.face,
+              mid: widget.dynamicsController.ownerMid,
+            ),
+          ),
+        ),
+        SliverList.builder(
+          itemCount: upList.length,
+          itemBuilder: (context, index) {
+            return upItemBuild(upList[index]);
+          },
         ),
         const SliverToBoxAdapter(child: SizedBox(height: 200)),
       ],
     );
   }
 
-  Widget upItemBuild(data, i) {
+  Widget upItemBuild(data) {
     bool isCurrent = widget.dynamicsController.currentMid == data.mid ||
         widget.dynamicsController.currentMid == -1;
     return SizedBox(

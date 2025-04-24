@@ -780,69 +780,65 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
 
   Widget replyList(LoadingState<List<ReplyInfo>?> loadingState) {
     return switch (loadingState) {
-      Loading() => SliverList(
-          delegate: SliverChildBuilderDelegate(
-            (context, index) {
-              return const VideoReplySkeleton();
-            },
-            childCount: 8,
-          ),
+      Loading() => SliverList.builder(
+          itemBuilder: (context, index) {
+            return const VideoReplySkeleton();
+          },
+          itemCount: 8,
         ),
       Success() => loadingState.response?.isNotEmpty == true
-          ? SliverList(
-              delegate: SliverChildBuilderDelegate(
-                (context, index) {
-                  if (index == loadingState.response!.length) {
-                    _dynamicDetailController.onLoadMore();
-                    return Container(
-                      alignment: Alignment.center,
-                      margin: EdgeInsets.only(
-                          bottom: MediaQuery.of(context).padding.bottom),
-                      height: 125,
-                      child: Text(
-                        _dynamicDetailController.isEnd.not
-                            ? '加载中...'
-                            : loadingState.response!.isEmpty
-                                ? '还没有评论'
-                                : '没有更多了',
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: Theme.of(context).colorScheme.outline,
-                        ),
+          ? SliverList.builder(
+              itemBuilder: (context, index) {
+                if (index == loadingState.response!.length) {
+                  _dynamicDetailController.onLoadMore();
+                  return Container(
+                    alignment: Alignment.center,
+                    margin: EdgeInsets.only(
+                        bottom: MediaQuery.of(context).padding.bottom),
+                    height: 125,
+                    child: Text(
+                      _dynamicDetailController.isEnd.not
+                          ? '加载中...'
+                          : loadingState.response!.isEmpty
+                              ? '还没有评论'
+                              : '没有更多了',
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: Theme.of(context).colorScheme.outline,
                       ),
-                    );
-                  } else {
-                    return ReplyItemGrpc(
-                      replyItem: loadingState.response![index],
-                      replyLevel: '1',
-                      replyReply: (replyItem, id) =>
-                          replyReply(context, replyItem, id),
-                      onReply: () {
-                        _dynamicDetailController.onReply(
-                          context,
-                          replyItem: loadingState.response![index],
-                          index: index,
-                        );
-                      },
-                      onDelete: (subIndex) =>
-                          _dynamicDetailController.onRemove(index, subIndex),
-                      upMid: _dynamicDetailController.upMid,
-                      callback: _getImageCallback,
-                      onCheckReply: (item) =>
-                          _dynamicDetailController.onCheckReply(context, item),
-                      onToggleTop: (isUpTop, rpid) =>
-                          _dynamicDetailController.onToggleTop(
-                        index,
-                        _dynamicDetailController.oid,
-                        _dynamicDetailController.type,
-                        isUpTop,
-                        rpid,
-                      ),
-                    );
-                  }
-                },
-                childCount: loadingState.response!.length + 1,
-              ),
+                    ),
+                  );
+                } else {
+                  return ReplyItemGrpc(
+                    replyItem: loadingState.response![index],
+                    replyLevel: '1',
+                    replyReply: (replyItem, id) =>
+                        replyReply(context, replyItem, id),
+                    onReply: () {
+                      _dynamicDetailController.onReply(
+                        context,
+                        replyItem: loadingState.response![index],
+                        index: index,
+                      );
+                    },
+                    onDelete: (subIndex) =>
+                        _dynamicDetailController.onRemove(index, subIndex),
+                    upMid: _dynamicDetailController.upMid,
+                    callback: _getImageCallback,
+                    onCheckReply: (item) =>
+                        _dynamicDetailController.onCheckReply(context, item),
+                    onToggleTop: (isUpTop, rpid) =>
+                        _dynamicDetailController.onToggleTop(
+                      index,
+                      _dynamicDetailController.oid,
+                      _dynamicDetailController.type,
+                      isUpTop,
+                      rpid,
+                    ),
+                  );
+                }
+              },
+              itemCount: loadingState.response!.length + 1,
             )
           : HttpError(
               onReload: _dynamicDetailController.onReload,

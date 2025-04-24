@@ -135,13 +135,11 @@ class _NoteListPageState extends CommonSlidePageState<NoteListPage> {
       Loading() => CustomScrollView(
           physics: const NeverScrollableScrollPhysics(),
           slivers: [
-            SliverList(
-              delegate: SliverChildBuilderDelegate(
-                (BuildContext context, int index) {
-                  return const VideoReplySkeleton();
-                },
-                childCount: 8,
-              ),
+            SliverList.builder(
+              itemBuilder: (context, index) {
+                return const VideoReplySkeleton();
+              },
+              itemCount: 8,
             )
           ],
         ),

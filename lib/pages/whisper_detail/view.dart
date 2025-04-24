@@ -130,7 +130,9 @@ class _WhisperDetailPageState
                 reverse: true,
                 itemCount: loadingState.response!.length,
                 padding: const EdgeInsets.only(bottom: 12),
-                physics: const AlwaysScrollableScrollPhysics(),
+                physics: const AlwaysScrollableScrollPhysics(
+                  parent: ClampingScrollPhysics(),
+                ),
                 controller: _whisperDetailController.scrollController,
                 itemBuilder: (context, int index) {
                   if (index == loadingState.response!.length - 1) {

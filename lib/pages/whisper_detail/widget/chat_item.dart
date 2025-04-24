@@ -458,7 +458,7 @@ class ChatItem extends StatelessWidget {
     return isSystem
         ? messageContent(context)
         : isRevoke
-            ? const SizedBox()
+            ? const SizedBox.shrink()
             : GestureDetector(
                 onLongPress: () {
                   Feedback.forLongPress(context);

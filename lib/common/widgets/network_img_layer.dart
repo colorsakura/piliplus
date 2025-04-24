@@ -97,7 +97,7 @@ class NetworkImgLayer extends StatelessWidget {
               ),
       ),
       child: type == 'bg'
-          ? const SizedBox()
+          ? const SizedBox.shrink()
           : Center(
               child: Image.asset(
                 type == 'avatar'

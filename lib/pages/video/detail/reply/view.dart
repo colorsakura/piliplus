@@ -196,71 +196,67 @@ class _VideoReplyPanelState extends State<VideoReplyPanel>
 
   Widget _buildBody(LoadingState loadingState) {
     return switch (loadingState) {
-      Loading() => SliverList(
-          delegate: SliverChildBuilderDelegate(
-            (BuildContext context, index) {
-              return const VideoReplySkeleton();
-            },
-            childCount: 5,
-          ),
+      Loading() => SliverList.builder(
+          itemBuilder: (BuildContext context, index) {
+            return const VideoReplySkeleton();
+          },
+          itemCount: 5,
         ),
       Success() => loadingState.response?.isNotEmpty == true
-          ? SliverList(
-              delegate: SliverChildBuilderDelegate(
-                (BuildContext context, index) {
-                  double bottom = MediaQuery.of(context).padding.bottom;
-                  if (index == loadingState.response.length) {
-                    _videoReplyController.onLoadMore();
-                    return Container(
-                      alignment: Alignment.center,
-                      padding: EdgeInsets.only(bottom: bottom),
-                      height: bottom + 100,
-                      child: Text(
-                        _videoReplyController.isEnd.not
-                            ? '加载中...'
-                            : loadingState.response.isEmpty
-                                ? '还没有评论'
-                                : '没有更多了',
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: Theme.of(context).colorScheme.outline,
-                        ),
+          ? SliverList.builder(
+              itemBuilder: (context, index) {
+                double bottom = MediaQuery.of(context).padding.bottom;
+                if (index == loadingState.response.length) {
+                  _videoReplyController.onLoadMore();
+                  return Container(
+                    alignment: Alignment.center,
+                    padding: EdgeInsets.only(bottom: bottom),
+                    height: bottom + 100,
+                    child: Text(
+                      _videoReplyController.isEnd.not
+                          ? '加载中...'
+                          : loadingState.response.isEmpty
+                              ? '还没有评论'
+                              : '没有更多了',
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: Theme.of(context).colorScheme.outline,
                       ),
-                    );
-                  } else {
-                    return ReplyItemGrpc(
-                      replyItem: loadingState.response[index],
-                      replyLevel: widget.replyLevel,
-                      replyReply: widget.replyReply,
-                      onReply: () {
-                        _videoReplyController.onReply(
-                          context,
-                          replyItem: loadingState.response[index],
-                          index: index,
-                        );
-                      },
-                      onDelete: (subIndex) =>
-                          _videoReplyController.onRemove(index, subIndex),
-                      upMid: _videoReplyController.upMid,
-                      getTag: () => heroTag,
-                      onViewImage: widget.onViewImage,
-                      onDismissed: widget.onDismissed,
-                      callback: widget.callback,
-                      onCheckReply: (item) =>
-                          _videoReplyController.onCheckReply(context, item),
-                      onToggleTop: (isUpTop, rpid) =>
-                          _videoReplyController.onToggleTop(
-                        index,
-                        _videoReplyController.aid,
-                        ReplyType.video.index,
-                        isUpTop,
-                        rpid,
-                      ),
-                    );
-                  }
-                },
-                childCount: loadingState.response.length + 1,
-              ),
+                    ),
+                  );
+                } else {
+                  return ReplyItemGrpc(
+                    replyItem: loadingState.response[index],
+                    replyLevel: widget.replyLevel,
+                    replyReply: widget.replyReply,
+                    onReply: () {
+                      _videoReplyController.onReply(
+                        context,
+                        replyItem: loadingState.response[index],
+                        index: index,
+                      );
+                    },
+                    onDelete: (subIndex) =>
+                        _videoReplyController.onRemove(index, subIndex),
+                    upMid: _videoReplyController.upMid,
+                    getTag: () => heroTag,
+                    onViewImage: widget.onViewImage,
+                    onDismissed: widget.onDismissed,
+                    callback: widget.callback,
+                    onCheckReply: (item) =>
+                        _videoReplyController.onCheckReply(context, item),
+                    onToggleTop: (isUpTop, rpid) =>
+                        _videoReplyController.onToggleTop(
+                      index,
+                      _videoReplyController.aid,
+                      ReplyType.video.index,
+                      isUpTop,
+                      rpid,
+                    ),
+                  );
+                }
+              },
+              itemCount: loadingState.response.length + 1,
             )
           : HttpError(
               errMsg: '还没有评论',

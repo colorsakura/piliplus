@@ -1270,24 +1270,6 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
           ),
         ),
 
-        // Obx(() {
-        //   if (_.buffered.value == Duration.zero) {
-        //     return Positioned.fill(
-        //       child: Container(
-        //         color: Colors.black,
-        //         child: Center(
-        //           child: Image.asset(
-        //             'assets/images/loading.gif',
-        //             height: 25,
-        //           ),
-        //         ),
-        //       ),
-        //     );
-        //   } else {
-        //     return Container();
-        //   }
-        // }),
-
         // 头部、底部控制条
         Obx(
           () => Positioned.fill(
