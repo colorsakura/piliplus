@@ -444,6 +444,7 @@ class VideoIntroController extends GetxController {
               mainAxisSize: MainAxisSize.min,
               children: [
                 ListTile(
+                  dense: true,
                   title: const Text(
                     '复制链接',
                     style: TextStyle(fontSize: 14),
@@ -454,6 +455,7 @@ class VideoIntroController extends GetxController {
                   },
                 ),
                 ListTile(
+                  dense: true,
                   title: const Text(
                     '其它app打开',
                     style: TextStyle(fontSize: 14),
@@ -464,6 +466,7 @@ class VideoIntroController extends GetxController {
                   },
                 ),
                 ListTile(
+                  dense: true,
                   title: const Text(
                     '分享视频',
                     style: TextStyle(fontSize: 14),
@@ -476,6 +479,7 @@ class VideoIntroController extends GetxController {
                   },
                 ),
                 ListTile(
+                  dense: true,
                   title: const Text(
                     '分享至动态',
                     style: TextStyle(fontSize: 14),
@@ -494,6 +498,28 @@ class VideoIntroController extends GetxController {
                         uname: videoDetail.value.owner?.name,
                       ),
                     );
+                  },
+                ),
+                ListTile(
+                  dense: true,
+                  title: const Text(
+                    '分享至消息',
+                    style: TextStyle(fontSize: 14),
+                  ),
+                  onTap: () {
+                    Get.back();
+                    try {
+                      PageUtils.pmShareVideo(
+                        author: videoDetail.value.owner!.name!,
+                        id: videoDetail.value.aid!,
+                        source: 5,
+                        cover: videoDetail.value.pic!,
+                        title: videoDetail.value.title!,
+                        bvid: videoDetail.value.bvid!,
+                      );
+                    } catch (e) {
+                      SmartDialog.showToast(e.toString());
+                    }
                   },
                 ),
               ],

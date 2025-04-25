@@ -265,6 +265,7 @@ class BangumiIntroController
               mainAxisSize: MainAxisSize.min,
               children: [
                 ListTile(
+                  dense: true,
                   title: const Text(
                     '复制链接',
                     style: TextStyle(fontSize: 14),
@@ -275,6 +276,7 @@ class BangumiIntroController
                   },
                 ),
                 ListTile(
+                  dense: true,
                   title: const Text(
                     '其它app打开',
                     style: TextStyle(fontSize: 14),
@@ -285,6 +287,7 @@ class BangumiIntroController
                   },
                 ),
                 ListTile(
+                  dense: true,
                   title: const Text(
                     '分享视频',
                     style: TextStyle(fontSize: 14),
@@ -295,6 +298,7 @@ class BangumiIntroController
                   },
                 ),
                 ListTile(
+                  dense: true,
                   title: const Text(
                     '分享至动态',
                     style: TextStyle(fontSize: 14),
@@ -332,6 +336,29 @@ class BangumiIntroController
                         uname: '',
                       ),
                     );
+                  },
+                ),
+                ListTile(
+                  dense: true,
+                  title: const Text(
+                    '分享至消息',
+                    style: TextStyle(fontSize: 14),
+                  ),
+                  onTap: () {
+                    Get.back();
+                    try {
+                      EpisodeItem item = bangumiItem!.episodes!
+                          .firstWhere((item) => item.epId == epId);
+                      PageUtils.pmShareVideo(
+                        id: epId!,
+                        source: 16,
+                        cover: item.cover!,
+                        title: '${bangumiItem!.title!} ${item.showTitle}',
+                        url: item.shareUrl,
+                      );
+                    } catch (e) {
+                      SmartDialog.showToast(e.toString());
+                    }
                   },
                 ),
               ],

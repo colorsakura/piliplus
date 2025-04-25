@@ -8,7 +8,9 @@ import 'package:get/get.dart';
 import 'controller.dart';
 
 class FollowSearchPage extends CommonSearchPage {
-  const FollowSearchPage({super.key});
+  const FollowSearchPage({super.key, this.mid});
+
+  final int? mid;
 
   @override
   State<FollowSearchPage> createState() => _FollowSearchPageState();
@@ -17,8 +19,8 @@ class FollowSearchPage extends CommonSearchPage {
 class _FollowSearchPageState extends CommonSearchPageState<FollowSearchPage,
     FollowDataModel, FollowItemModel> {
   @override
-  final FollowSearchController controller = Get.put(
-    FollowSearchController(),
+  late final FollowSearchController controller = Get.put(
+    FollowSearchController(widget.mid ?? Get.arguments['mid']),
     tag: Utils.generateRandomString(8),
   );
 
@@ -34,7 +36,14 @@ class _FollowSearchPageState extends CommonSearchPageState<FollowSearchPage,
           if (index == list.length - 1) {
             controller.onLoadMore();
           }
-          return FollowItem(item: list[index]);
+          return FollowItem(
+            item: list[index],
+            onSelect: widget.mid != null
+                ? (userModel) {
+                    Get.back(result: userModel);
+                  }
+                : null,
+          );
         }),
       ),
     );

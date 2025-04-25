@@ -91,6 +91,15 @@ class ThemeUtils {
           fontWeight: fontWeight,
         ),
       ),
+      bottomSheetTheme: BottomSheetThemeData(
+        backgroundColor: colorScheme.surface,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(18),
+            topRight: Radius.circular(18),
+          ),
+        ),
+      ),
     );
     if (isDark && GStorage.isPureBlackTheme) {
       themeData = darkenTheme(themeData);

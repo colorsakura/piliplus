@@ -1,3 +1,4 @@
+import 'package:PiliPlus/pages/video/detail/share/view.dart' show UserModel;
 import 'package:PiliPlus/utils/request_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -10,12 +11,14 @@ class FollowItem extends StatelessWidget {
   final FollowItemModel item;
   final bool? isOwner;
   final ValueChanged? callback;
+  final ValueChanged<UserModel>? onSelect;
 
   const FollowItem({
     super.key,
     required this.item,
     this.callback,
     this.isOwner,
+    this.onSelect,
   });
 
   @override
@@ -23,9 +26,19 @@ class FollowItem extends StatelessWidget {
     String heroTag = Utils.makeHeroTag(item.mid);
     return ListTile(
       onTap: () {
-        feedBack();
-        Get.toNamed('/member?mid=${item.mid}',
-            arguments: {'face': item.face, 'heroTag': heroTag});
+        if (onSelect != null) {
+          onSelect!.call(
+            UserModel(
+              mid: item.mid!,
+              name: item.uname!,
+              avatar: item.face!,
+            ),
+          );
+        } else {
+          feedBack();
+          Get.toNamed('/member?mid=${item.mid}',
+              arguments: {'face': item.face, 'heroTag': heroTag});
+        }
       },
       leading: Stack(
         clipBehavior: Clip.none,

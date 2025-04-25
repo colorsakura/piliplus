@@ -2288,7 +2288,6 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
   void onShowMemberPage(mid) {
     videoDetailController.childKey.currentState?.showBottomSheet(
       shape: const RoundedRectangleBorder(),
-      backgroundColor: themeData.colorScheme.surface,
       (context) {
         return HorizontalMemberPage(
           mid: mid,

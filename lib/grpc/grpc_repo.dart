@@ -10,6 +10,8 @@ import 'package:PiliPlus/grpc/app/show/popular/v1/popular.pb.dart';
 import 'package:PiliPlus/grpc/device/device.pb.dart';
 import 'package:PiliPlus/grpc/dm/v1/dm.pb.dart';
 import 'package:PiliPlus/grpc/fawkes/fawkes.pb.dart';
+import 'package:PiliPlus/grpc/im/interfaces/v1/im.pb.dart';
+import 'package:PiliPlus/grpc/im/type/im.pb.dart';
 import 'package:PiliPlus/grpc/locale/locale.pb.dart';
 import 'package:PiliPlus/grpc/metadata/metadata.pb.dart';
 import 'package:PiliPlus/grpc/network/network.pb.dart' as network;
@@ -23,6 +25,7 @@ import 'package:archive/archive.dart';
 import 'package:dio/dio.dart';
 import 'package:fixnum/src/int64.dart';
 import 'package:protobuf/protobuf.dart' show GeneratedMessage;
+import 'package:uuid/uuid.dart';
 
 class GrpcUrl {
   static const playerOnline =
@@ -37,6 +40,8 @@ class GrpcUrl {
   static const dynSpace = '/bilibili.app.dynamic.v2.Dynamic/DynSpace';
   static const dynRed = '/bilibili.app.dynamic.v1.Dynamic/DynRed';
   static const dmSegMobile = '/bilibili.community.service.dm.v1.DM/DmSegMobile';
+  static const sendMsg = '/bilibili.im.interface.v1.ImInterface/SendMsg';
+  static const shareList = '/bilibili.im.interface.v1.ImInterface/ShareList';
 }
 
 class GrpcRepo {
@@ -305,5 +310,40 @@ class GrpcRepo {
         DmSegMobileReq(
             oid: Int64(cid), segmentIndex: Int64(segmentIndex), type: type),
         DmSegMobileReply.fromBuffer);
+  }
+
+  static Future sendMsg({
+    required int senderUid,
+    required int receiverId,
+    int receiverType = 1,
+    required String content,
+    MsgType msgType = MsgType.EN_MSG_TYPE_TEXT,
+  }) async {
+    final devId = Uuid().v4();
+    return await _request(
+      GrpcUrl.sendMsg,
+      ReqSendMsg(
+        msg: Msg(
+          senderUid: Int64(senderUid),
+          receiverType: RecverType.EN_RECVER_TYPE_PEER,
+          receiverId: Int64(receiverId),
+          msgType: msgType,
+          content: content,
+          timestamp: Int64(DateTime.now().millisecondsSinceEpoch ~/ 1000),
+          msgStatus: 0,
+          newFaceVersion: 1,
+        ),
+        devId: devId,
+      ),
+      RspSendMsg.fromBuffer,
+    );
+  }
+
+  static Future shareList({int size = 10}) async {
+    return await _request(
+      GrpcUrl.shareList,
+      ReqShareList(size: size),
+      RspShareList.fromBuffer,
+    );
   }
 }

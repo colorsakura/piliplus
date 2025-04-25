@@ -523,16 +523,19 @@ class MsgHttp {
     dynamic content,
   }) async {
     String csrf = Accounts.main.csrf;
+    final devId = getDevId();
     Map<String, dynamic> base = {
-      'msg[sender_uid]': senderUid,
-      'msg[receiver_id]': receiverId,
-      'msg[receiver_type]': receiverType ?? 1,
-      'msg[msg_type]': msgType ?? 1,
-      'msg[msg_status]': 0,
-      'msg[dev_id]': getDevId(),
-      'msg[timestamp]': DateTime.now().millisecondsSinceEpoch ~/ 1000,
-      'msg[new_face_version]': 1,
-      'msg[content]': content,
+      'msg': {
+        'sender_uid': senderUid,
+        'receiver_id': receiverId,
+        'receiver_type': receiverType ?? 1,
+        'msg_type': msgType ?? 1,
+        'msg_status': 0,
+        'dev_id': devId,
+        'timestamp': DateTime.now().millisecondsSinceEpoch ~/ 1000,
+        'new_face_version': 1,
+        'content': content,
+      },
       'from_firework': 0,
       'build': 0,
       'mobi_app': 'web',
@@ -540,15 +543,20 @@ class MsgHttp {
       'csrf': csrf,
     };
     Map<String, dynamic> params = await WbiSign.makSign(base);
-    var res = await Request().post(Api.sendMsg,
-        queryParameters: <String, dynamic>{
-          'w_sender_uid': params['msg[sender_uid]'],
-          'w_receiver_id': params['msg[receiver_id]'],
-          'w_dev_id': params['msg[dev_id]'],
-          'w_rid': params['w_rid'],
-          'wts': params['wts'],
-        },
-        data: FormData.fromMap(base));
+    var res = await Request().post(
+      Api.sendMsg,
+      queryParameters: <String, dynamic>{
+        'w_sender_uid': senderUid,
+        'w_receiver_id': receiverId,
+        'w_dev_id': devId,
+        'w_rid': params['w_rid'],
+        'wts': params['wts'],
+      },
+      data: base,
+      options: Options(
+        contentType: Headers.formUrlEncodedContentType,
+      ),
+    );
     if (res.data['code'] == 0) {
       return {
         'status': true,

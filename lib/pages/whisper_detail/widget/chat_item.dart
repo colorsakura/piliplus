@@ -181,27 +181,38 @@ class ChatItem extends StatelessWidget {
             children: [
               GestureDetector(
                 onTap: () async {
-                  dynamic aid = content['id'];
-                  if (aid is String) {
-                    aid = int.tryParse(aid);
-                  }
-                  dynamic bvid = content["bvid"];
-                  if (aid == null && bvid == null) {
-                    SmartDialog.showToast('null');
+                  if (content['source'] == 16) {
+                    PageUtils.viewBangumi(epId: content['id']);
                     return;
                   }
-                  bvid ??= IdUtils.av2bv(aid);
-                  SmartDialog.showLoading();
-                  final int cid = await SearchHttp.ab2c(bvid: bvid);
-                  SmartDialog.dismiss<dynamic>().then(
-                    (e) => PageUtils.toVideoPage(
-                      'bvid=$bvid&cid=$cid',
-                      arguments: <String, String?>{
-                        'pic': content['thumb'],
-                        'heroTag': Utils.makeHeroTag(bvid),
-                      },
-                    ),
-                  );
+
+                  if (content['source'] == 5) {
+                    dynamic aid = content['id'];
+                    if (aid is String) {
+                      aid = int.tryParse(aid);
+                    }
+                    dynamic bvid = content["bvid"];
+                    if (aid == null && bvid == null) {
+                      SmartDialog.showToast('null');
+                      return;
+                    }
+                    bvid ??= IdUtils.av2bv(aid);
+                    SmartDialog.showLoading();
+                    final int cid = await SearchHttp.ab2c(bvid: bvid);
+                    SmartDialog.dismiss<dynamic>().then(
+                      (e) => PageUtils.toVideoPage(
+                        'bvid=$bvid&cid=$cid',
+                        arguments: <String, String?>{
+                          'pic': content['thumb'],
+                          'heroTag': Utils.makeHeroTag(bvid),
+                        },
+                      ),
+                    );
+                    return;
+                  }
+
+                  SmartDialog.showToast(
+                      'unsupported source type: ${content['source']}');
                 },
                 child: NetworkImgLayer(
                   width: 220,

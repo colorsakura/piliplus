@@ -146,7 +146,6 @@ class SearchVideoController
       useSafeArea: true,
       isScrollControlled: true,
       clipBehavior: Clip.hardEdge,
-      backgroundColor: Theme.of(context).colorScheme.surface,
       constraints: BoxConstraints(
         maxWidth: min(640, min(Get.width, Get.height)),
       ),

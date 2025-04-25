@@ -273,7 +273,7 @@ class _WhisperDetailPageState
                       );
                       if (pickedFile != null) {
                         SmartDialog.showLoading(msg: '正在上传图片');
-                        dynamic result = await MsgHttp.uploadBfs(
+                        final result = await MsgHttp.uploadBfs(
                           path: pickedFile.path,
                           biz: 'im',
                         );
@@ -281,8 +281,8 @@ class _WhisperDetailPageState
                           String mimeType = lookupMimeType(pickedFile.path)
                                   ?.split('/')
                                   .getOrNull(1) ??
-                              'png';
-                          dynamic picMsg = {
+                              'jpg';
+                          Map picMsg = {
                             'url': result['data']['image_url'],
                             'height': result['data']['image_height'],
                             'width': result['data']['image_width'],

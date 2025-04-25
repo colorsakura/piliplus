@@ -71,7 +71,7 @@ class WhisperDetailController
 
   Future sendMsg({
     required String message,
-    dynamic picMsg,
+    Map? picMsg,
     required VoidCallback onClearText,
     int? msgType,
     int? index,
@@ -95,8 +95,11 @@ class WhisperDetailController
     var result = await MsgHttp.sendMsg(
       senderUid: ownerMid,
       receiverId: int.parse(mid!),
-      content:
-          msgType == 5 ? message : jsonEncode(picMsg ?? {"content": message}),
+      content: msgType == 5
+          ? message
+          : jsonEncode(
+              picMsg ?? {"content": message},
+            ),
       msgType: msgType ?? (picMsg != null ? 2 : 1),
     );
     SmartDialog.dismiss();

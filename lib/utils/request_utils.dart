@@ -1,10 +1,14 @@
+import 'dart:convert';
 import 'dart:math';
 
 import 'package:PiliPlus/common/widgets/radio_widget.dart';
 import 'package:PiliPlus/grpc/app/main/community/reply/v1/reply.pb.dart';
+import 'package:PiliPlus/grpc/grpc_repo.dart';
+import 'package:PiliPlus/grpc/im/type/im.pbenum.dart';
 import 'package:PiliPlus/http/dynamics.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/http/member.dart';
+import 'package:PiliPlus/http/msg.dart';
 import 'package:PiliPlus/http/user.dart';
 import 'package:PiliPlus/http/video.dart';
 import 'package:PiliPlus/models/dynamics/result.dart';
@@ -21,6 +25,82 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 
 class RequestUtils {
+  // 1：小视频（已弃用）
+  // 2：相簿
+  // 3：纯文字
+  // 4：直播（此类型不常用，见分享其他内容消息）
+  // 5：视频
+  // 6：专栏
+  // 7：番剧（id 为 season_id）
+  // 8：音乐
+  // 9：国产动画（id 为 AV 号）
+  // 10：图片
+  // 11：动态
+  // 16：番剧（id 为 epid）
+  // 17：番剧
+  // https://github.com/SocialSisterYi/bilibili-API-collect/tree/master/docs/message/private_msg_content.md
+  static Future pmShareVideo({
+    required int receiverId,
+    String? author,
+    required int id,
+    required int source,
+    required String cover,
+    required String title,
+    String? bvid,
+    String? url,
+    int? authorId,
+    String? sourceDesc,
+    String? message,
+    ValueChanged<bool>? callback,
+  }) async {
+    SmartDialog.showLoading();
+
+    final ownerMid = Accounts.main.mid;
+    final videoRes = await GrpcRepo.sendMsg(
+      senderUid: ownerMid,
+      receiverId: receiverId,
+      content: jsonEncode(
+        {
+          if (author != null) "author": author,
+          "headline": title,
+          "id": id,
+          "source": source,
+          "thumb": cover,
+          "title": title,
+          if (bvid != null) "bvid": bvid,
+          // pgc
+          if (url != null) "url": url,
+          if (authorId != null) "author_id": authorId,
+          if (sourceDesc != null) "source_desc": sourceDesc,
+        },
+      ),
+      msgType: MsgType.EN_MSG_TYPE_SHARE_V2,
+    );
+
+    if (videoRes['status']) {
+      if (message?.isNotEmpty == true) {
+        var textRes = await MsgHttp.sendMsg(
+          senderUid: ownerMid,
+          receiverId: receiverId,
+          content: jsonEncode({"content": message}),
+          msgType: 1,
+        );
+        Get.back();
+        if (textRes['status']) {
+          SmartDialog.showToast('分享成功');
+        } else {
+          SmartDialog.showToast('视频分享成功，但消息分享失败: ${textRes['msg']}');
+        }
+      } else {
+        Get.back();
+        SmartDialog.showToast('分享成功');
+      }
+    } else {
+      SmartDialog.showToast('分享失败: ${videoRes['msg']}');
+    }
+    SmartDialog.dismiss();
+  }
+
   static Future actionRelationMod({
     required BuildContext context,
     required dynamic mid,
@@ -92,7 +172,6 @@ class RequestUtils {
                         context: context,
                         useSafeArea: true,
                         isScrollControlled: true,
-                        backgroundColor: Theme.of(context).colorScheme.surface,
                         sheetAnimationStyle: AnimationStyle(curve: Curves.ease),
                         constraints: BoxConstraints(
                           maxWidth: min(640, min(Get.width, Get.height)),

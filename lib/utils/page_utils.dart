@@ -1,14 +1,17 @@
 import 'dart:math';
 
 import 'package:PiliPlus/common/widgets/interactiveviewer_gallery/interactiveviewer_gallery.dart';
+import 'package:PiliPlus/grpc/grpc_repo.dart';
 import 'package:PiliPlus/http/dynamics.dart';
 import 'package:PiliPlus/http/search.dart';
 import 'package:PiliPlus/models/bangumi/info.dart';
 import 'package:PiliPlus/models/common/search_type.dart';
 import 'package:PiliPlus/models/dynamics/result.dart';
 import 'package:PiliPlus/models/live/item.dart';
+import 'package:PiliPlus/pages/video/detail/contact/view.dart';
 import 'package:PiliPlus/pages/video/detail/introduction/widgets/fav_panel.dart';
 import 'package:PiliPlus/pages/video/detail/introduction/widgets/menu_row.dart';
+import 'package:PiliPlus/pages/video/detail/share/view.dart';
 import 'package:PiliPlus/services/shutdown_timer_service.dart';
 import 'package:PiliPlus/utils/app_scheme.dart';
 import 'package:PiliPlus/utils/extension.dart';
@@ -25,6 +28,60 @@ import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class PageUtils {
+  static void pmShareVideo({
+    String? author,
+    required int id,
+    required int source,
+    required String cover,
+    required String title,
+    String? bvid,
+    String? url,
+    int? authorId,
+    String? sourceDesc,
+  }) async {
+    List<UserModel> userList = <UserModel>[];
+
+    final shareListRes = await GrpcRepo.shareList(size: 3);
+    if (shareListRes['status'] && shareListRes['data'].sessionList.isNotEmpty) {
+      userList.addAll(shareListRes['data']
+          .sessionList
+          .map<UserModel>((item) => UserModel(
+                mid: item.talkerId.toInt(),
+                name: item.talkerUname,
+                avatar: item.talkerIcon,
+              ))
+          .toList());
+    } else {
+      UserModel? userModel = await Get.dialog(
+        const ContactPage(),
+        useSafeArea: false,
+        transitionDuration: const Duration(milliseconds: 120),
+      );
+      if (userModel != null) {
+        userList.add(userModel);
+      }
+    }
+
+    showModalBottomSheet(
+      context: Get.context!,
+      builder: (context) => ShareVideoPanel(
+        author: author,
+        id: id,
+        source: source,
+        cover: cover,
+        title: title,
+        bvid: bvid,
+        url: url,
+        authorId: authorId,
+        sourceDesc: sourceDesc,
+        userList: userList,
+      ),
+      useSafeArea: true,
+      enableDrag: false,
+      isScrollControlled: true,
+    );
+  }
+
   static void scheduleExit(BuildContext context, isFullScreen,
       [bool isLive = false]) {
     if (!context.mounted) {
@@ -255,7 +312,6 @@ class PageUtils {
       context: context,
       useSafeArea: true,
       isScrollControlled: true,
-      backgroundColor: Theme.of(context).colorScheme.surface,
       sheetAnimationStyle: AnimationStyle(curve: Curves.ease),
       constraints: BoxConstraints(
         maxWidth: min(640, min(Get.width, Get.height)),

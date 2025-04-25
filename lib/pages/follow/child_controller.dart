@@ -16,7 +16,7 @@ extension OrderTypeExt on OrderType {
 class FollowChildController
     extends CommonListController<FollowDataModel, FollowItemModel> {
   FollowChildController(this.controller, this.mid, this.tagid);
-  final FollowController controller;
+  final FollowController? controller;
   final int? tagid;
   final int mid;
 
@@ -35,15 +35,17 @@ class FollowChildController
 
   @override
   bool customHandleResponse(bool isRefresh, Success<FollowDataModel> response) {
-    try {
-      if (controller.isOwner &&
-          tagid == null &&
-          isRefresh &&
-          controller.followState.value is Success) {
-        controller.tabs[0].count = response.response.total;
-        controller.tabs.refresh();
-      }
-    } catch (_) {}
+    if (controller != null) {
+      try {
+        if (controller!.isOwner &&
+            tagid == null &&
+            isRefresh &&
+            controller!.followState.value is Success) {
+          controller!.tabs[0].count = response.response.total;
+          controller!.tabs.refresh();
+        }
+      } catch (_) {}
+    }
     return false;
   }
 

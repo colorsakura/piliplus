@@ -6,6 +6,7 @@ import 'package:PiliPlus/models/follow/result.dart';
 import 'package:PiliPlus/pages/follow/child_controller.dart';
 import 'package:PiliPlus/pages/follow/controller.dart';
 import 'package:PiliPlus/pages/follow/widgets/follow_item.dart';
+import 'package:PiliPlus/pages/video/detail/share/view.dart' show UserModel;
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -13,14 +14,16 @@ import 'package:get/get.dart';
 class FollowChildPage extends StatefulWidget {
   const FollowChildPage({
     super.key,
-    required this.controller,
+    this.controller,
     required this.mid,
     this.tagid,
+    this.onSelect,
   });
 
-  final FollowController controller;
+  final FollowController? controller;
   final int mid;
   final int? tagid;
+  final ValueChanged<UserModel>? onSelect;
 
   @override
   State<FollowChildPage> createState() => _FollowChildPageState();
@@ -35,7 +38,8 @@ class _FollowChildPageState extends State<FollowChildPage>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    if (widget.controller.isOwner && widget.tagid == null) {
+    if (widget.onSelect != null ||
+        (widget.controller?.isOwner == true && widget.tagid == null)) {
       return Scaffold(
         backgroundColor: Colors.transparent,
         body: _child,
@@ -90,7 +94,8 @@ class _FollowChildPageState extends State<FollowChildPage>
                 }
                 return FollowItem(
                   item: loadingState.response![index],
-                  isOwner: widget.controller.isOwner,
+                  isOwner: widget.controller?.isOwner,
+                  onSelect: widget.onSelect,
                   callback: (attr) {
                     List<FollowItemModel> list =
                         (_followController.loadingState.value as Success)
@@ -113,5 +118,6 @@ class _FollowChildPageState extends State<FollowChildPage>
   }
 
   @override
-  bool get wantKeepAlive => widget.controller.tabController != null;
+  bool get wantKeepAlive =>
+      widget.onSelect != null || widget.controller?.tabController != null;
 }

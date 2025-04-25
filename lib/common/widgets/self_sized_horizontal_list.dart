@@ -3,10 +3,11 @@ import 'package:flutter/material.dart';
 /// https://stackoverflow.com/a/76605401
 
 class SelfSizedHorizontalList extends StatefulWidget {
-  final Widget Function(int) childBuilder;
+  final Widget Function(int index) childBuilder;
   final int itemCount;
   final double gapSize;
   final EdgeInsetsGeometry? padding;
+  final ScrollController? controller;
 
   const SelfSizedHorizontalList({
     super.key,
@@ -14,6 +15,7 @@ class SelfSizedHorizontalList extends StatefulWidget {
     required this.itemCount,
     this.gapSize = 5,
     this.padding,
+    this.controller,
   });
 
   @override
@@ -50,6 +52,7 @@ class _SelfSizedHorizontalListState extends State<SelfSizedHorizontalList> {
     return SizedBox(
       height: height,
       child: ListView.separated(
+        controller: widget.controller,
         padding: widget.padding,
         scrollDirection: Axis.horizontal,
         itemCount: widget.itemCount,
