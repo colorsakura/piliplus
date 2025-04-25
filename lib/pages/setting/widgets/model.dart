@@ -1478,13 +1478,15 @@ List<SettingsModel> get privacySettings => [
             builder: (context) {
               return AlertDialog(
                 title: const Text('查看详情'),
-                content: Text(AccountManager.apiTypeSet[AccountType.heartbeat]!
-                    .join('\n')),
+                content: SingleChildScrollView(
+                  child: Text(
+                    AccountManager.apiTypeSet[AccountType.heartbeat]!
+                        .join('\n'),
+                  ),
+                ),
                 actions: [
                   TextButton(
-                    onPressed: () async {
-                      Get.back();
-                    },
+                    onPressed: Get.back,
                     child: const Text('确认'),
                   )
                 ],
