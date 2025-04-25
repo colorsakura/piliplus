@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:PiliPlus/http/dynamics.dart';
 import 'package:PiliPlus/models/common/reply_type.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
@@ -437,22 +436,7 @@ class PiliScheme {
           case 'album':
             String? rid = uriDigitRegExp.firstMatch(path)?.group(1);
             if (rid != null) {
-              SmartDialog.showLoading();
-              dynamic res = await DynamicsHttp.dynamicDetail(rid: rid, type: 2);
-              SmartDialog.dismiss();
-              if (res['status']) {
-                PageUtils.toDupNamed(
-                  '/dynamicDetail',
-                  arguments: {
-                    'item': res['data'],
-                    'floor': 1,
-                    'action': 'detail'
-                  },
-                  off: off,
-                );
-              } else {
-                SmartDialog.showToast(res['msg']);
-              }
+              PageUtils.pushDynFromId(rid: rid, off: off);
               return true;
             }
             return false;
@@ -708,7 +692,7 @@ class PiliScheme {
   static Future<bool> _onPushDynDetail(path, off) async {
     String? id = uriDigitRegExp.firstMatch(path)?.group(1);
     if (id != null) {
-      PageUtils.pushDynFromId(id, off: off);
+      PageUtils.pushDynFromId(id: id, off: off);
       return true;
     }
     return false;

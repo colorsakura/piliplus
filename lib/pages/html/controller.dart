@@ -83,7 +83,9 @@ class HtmlRenderController extends ReplyController<MainListReply> {
     if (dynamicType == 'opus' || dynamicType == 'picture') {
       res = await HtmlHttp.reqHtml(id, dynamicType);
       if (res != null) {
-        type = res['commentType'];
+        if (res['commentType'] is int) {
+          type = res['commentType'];
+        }
         if (res['favorite'] != null) {
           favStat.addAll({
             'status': true,

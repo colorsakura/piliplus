@@ -24,9 +24,10 @@ class HtmlHttp {
     }
     try {
       if (response.data.contains('Redirecting to')) {
-        String? cvid = RegExp(r'cv\d+').firstMatch(response.data)?.group(0);
-        if (cvid != null) {
-          return await reqReadHtml(cvid, dynamicType, false);
+        RegExpMatch? cvid =
+            RegExp(r'/([a-zA-Z]+)/(cv\d+)').firstMatch(response.data);
+        if (cvid?.group(2) != null) {
+          return await reqReadHtml(cvid?.group(2), cvid?.group(1), false);
         }
 
         RegExp regex = RegExp(r'//([\w\.]+)/(\w+)/(\w+)');
@@ -185,6 +186,7 @@ class HtmlHttp {
         'updateTime': '',
         'content': opusContent,
         'isJsonContent': isJsonContent,
+        'commentType': 12,
         'commentId': int.parse(number),
       };
     } catch (e) {

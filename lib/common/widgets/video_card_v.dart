@@ -67,7 +67,7 @@ class VideoCardV extends StatelessWidget {
           if (uri.startsWith('http')) {
             String id = Uri.parse(uri).path.split('/')[1];
             if (isStringNumeric(id)) {
-              PageUtils.pushDynFromId(id);
+              PageUtils.pushDynFromId(id: id);
               return;
             }
           }

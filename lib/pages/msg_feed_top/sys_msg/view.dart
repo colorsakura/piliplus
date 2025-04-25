@@ -211,7 +211,7 @@ class _SysMsgPageState extends State<SysMsgPage> {
                 recognizer: TapGestureRecognizer()
                   ..onTap = () {
                     try {
-                      PageUtils.pushDynFromId(match[4]);
+                      PageUtils.pushDynFromId(id: match[4]);
                     } catch (err) {
                       SmartDialog.showToast(err.toString());
                     }

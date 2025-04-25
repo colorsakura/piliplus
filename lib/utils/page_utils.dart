@@ -271,9 +271,13 @@ class PageUtils {
     );
   }
 
-  static Future pushDynFromId(id, {bool off = false}) async {
+  static Future pushDynFromId({id, rid, bool off = false}) async {
     SmartDialog.showLoading();
-    dynamic res = await DynamicsHttp.dynamicDetail(id: id);
+    dynamic res = await DynamicsHttp.dynamicDetail(
+      id: id,
+      rid: rid,
+      type: rid != null ? 2 : null,
+    );
     SmartDialog.dismiss();
     if (res['status']) {
       DynamicItemModel data = res['data'];

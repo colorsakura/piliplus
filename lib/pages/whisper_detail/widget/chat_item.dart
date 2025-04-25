@@ -176,44 +176,86 @@ class ChatItem extends StatelessWidget {
             ),
           );
         case MsgType.share_v2:
+          String? type;
+          GestureTapCallback onTap;
+          switch (content['source']) {
+            // album
+            case 2:
+              type = '相簿';
+              onTap = () {
+                PageUtils.pushDynFromId(rid: content['id']);
+              };
+              break;
+
+            // video
+            case 5:
+              type = '视频';
+              onTap = () async {
+                dynamic aid = content['id'];
+                if (aid is String) {
+                  aid = int.tryParse(aid);
+                }
+                dynamic bvid = content["bvid"];
+                if (aid == null && bvid == null) {
+                  SmartDialog.showToast('null');
+                }
+                bvid ??= IdUtils.av2bv(aid);
+                SmartDialog.showLoading();
+                final int cid = await SearchHttp.ab2c(bvid: bvid);
+                SmartDialog.dismiss<dynamic>().then(
+                  (e) => PageUtils.toVideoPage(
+                    'bvid=$bvid&cid=$cid',
+                    arguments: <String, String?>{
+                      'pic': content['thumb'],
+                      'heroTag': Utils.makeHeroTag(bvid),
+                    },
+                  ),
+                );
+              };
+              break;
+
+            // article
+            case 6:
+              type = '专栏';
+              onTap = () {
+                Get.toNamed(
+                  '/htmlRender',
+                  parameters: {
+                    'url': 'www.bilibili.com/opus/cv${content['id']}',
+                    'title': '',
+                    'id': 'cv${content['id']}',
+                    'dynamicType': 'read'
+                  },
+                );
+              };
+              break;
+
+            // dynamic
+            case 11:
+              type = '动态';
+              onTap = () {
+                PageUtils.pushDynFromId(id: content['id']);
+              };
+              break;
+
+            // pgc
+            case 16:
+              onTap = () {
+                PageUtils.viewBangumi(epId: content['id']);
+              };
+              break;
+
+            default:
+              onTap = () {
+                SmartDialog.showToast(
+                    'unsupported source type: ${content['source']}');
+              };
+          }
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               GestureDetector(
-                onTap: () async {
-                  if (content['source'] == 16) {
-                    PageUtils.viewBangumi(epId: content['id']);
-                    return;
-                  }
-
-                  if (content['source'] == 5) {
-                    dynamic aid = content['id'];
-                    if (aid is String) {
-                      aid = int.tryParse(aid);
-                    }
-                    dynamic bvid = content["bvid"];
-                    if (aid == null && bvid == null) {
-                      SmartDialog.showToast('null');
-                      return;
-                    }
-                    bvid ??= IdUtils.av2bv(aid);
-                    SmartDialog.showLoading();
-                    final int cid = await SearchHttp.ab2c(bvid: bvid);
-                    SmartDialog.dismiss<dynamic>().then(
-                      (e) => PageUtils.toVideoPage(
-                        'bvid=$bvid&cid=$cid',
-                        arguments: <String, String?>{
-                          'pic': content['thumb'],
-                          'heroTag': Utils.makeHeroTag(bvid),
-                        },
-                      ),
-                    );
-                    return;
-                  }
-
-                  SmartDialog.showToast(
-                      'unsupported source type: ${content['source']}');
-                },
+                onTap: onTap,
                 child: NetworkImgLayer(
                   width: 220,
                   height: 220 * 9 / 16,
@@ -230,16 +272,31 @@ class ChatItem extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              const SizedBox(height: 1),
-              Text(
-                content['author'] ?? "",
-                style: TextStyle(
-                  letterSpacing: 0.6,
-                  height: 1.5,
-                  color: textColor().withOpacity(0.6),
-                  fontSize: 12,
+              if (content['source'] == 6 &&
+                  (content['headline'] as String?)?.isNotEmpty == true) ...[
+                const SizedBox(height: 1),
+                Text(
+                  content['headline'],
+                  style: TextStyle(
+                    letterSpacing: 0.6,
+                    height: 1.5,
+                    color: textColor(),
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-              ),
+              ],
+              if (content['author'] != null) ...[
+                const SizedBox(height: 1),
+                Text(
+                  '${content['author']}${type != null ? ' · $type' : ''}',
+                  style: TextStyle(
+                    letterSpacing: 0.6,
+                    height: 1.5,
+                    color: textColor().withOpacity(0.6),
+                    fontSize: 12,
+                  ),
+                ),
+              ],
             ],
           );
         case MsgType.archive_card:
@@ -451,6 +508,56 @@ class ChatItem extends StatelessWidget {
               ],
             ),
           );
+        case MsgType.common_share:
+          if (content['source'] == '直播') {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    Get.toNamed('/liveRoom?roomid=${content['sourceID']}');
+                  },
+                  child: NetworkImgLayer(
+                    width: 220,
+                    height: 220 * 9 / 16,
+                    src: content['cover'],
+                  ),
+                ),
+                const SizedBox(height: 6),
+                Text(
+                  content['title'] ?? "",
+                  style: TextStyle(
+                    letterSpacing: 0.6,
+                    height: 1.5,
+                    color: textColor(),
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 1),
+                Text(
+                  '${content['author']} · 直播',
+                  style: TextStyle(
+                    letterSpacing: 0.6,
+                    height: 1.5,
+                    color: textColor().withOpacity(0.6),
+                    fontSize: 12,
+                  ),
+                ),
+              ],
+            );
+          } else {
+            return Text(
+              content != null && content != ''
+                  ? (content['content'] ?? content.toString())
+                  : '不支持的消息类型',
+              style: TextStyle(
+                letterSpacing: 0.6,
+                height: 1.5,
+                color: textColor(),
+                fontWeight: FontWeight.bold,
+              ),
+            );
+          }
         default:
           return Text(
             content != null && content != ''
