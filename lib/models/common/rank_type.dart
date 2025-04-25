@@ -1,163 +1,91 @@
-enum RandType {
-  all,
-  bangumi,
-  creation,
-  animation,
-  music,
-  dance,
-  game,
-  knowledge,
-  technology,
-  sport,
-  car,
-  life,
-  food,
-  animal,
-  madness,
-  fashion,
-  entertainment,
-  film,
-  documentary,
-  movie,
-  teleplay,
-  show,
-}
-
-extension RankTypeDesc on RandType {
-  String get description => const [
-        '全站',
-        '番剧',
-        '国创',
-        '动画',
-        '音乐',
-        '舞蹈',
-        '游戏',
-        '知识',
-        '科技',
-        '运动',
-        '汽车',
-        '美食',
-        '动物',
-        '鬼畜',
-        '时尚',
-        '娱乐',
-        '影视',
-        '纪录',
-        '电影',
-        '剧集',
-        '综艺',
-      ][index];
-}
-
 const List tabsConfig = [
   {
     'rid': 0,
     'label': '全站',
-    'type': RandType.all,
   },
   {
     'season_type': 1,
     'label': '番剧',
-    'type': RandType.bangumi,
   },
   {
     // 'rid': 168,
     'season_type': 4,
     'label': '国创',
-    'type': RandType.creation,
   },
   {
     'rid': 1005, //1,
     'label': '动画',
-    'type': RandType.animation,
   },
   {
     'rid': 1003, // 3,
     'label': '音乐',
-    'type': RandType.music,
   },
   {
     'rid': 1004, // 129,
     'label': '舞蹈',
-    'type': RandType.dance,
   },
   {
     'rid': 1008, // 4,
     'label': '游戏',
-    'type': RandType.game,
   },
   {
     'rid': 1010, // 36,
     'label': '知识',
-    'type': RandType.knowledge,
   },
   {
     'rid': 1012, // 188,
     'label': '科技',
-    'type': RandType.technology,
   },
   {
     'rid': 1018, //234,
     'label': '运动',
-    'type': RandType.sport,
   },
   {
     'rid': 1013, // 223,
     'label': '汽车',
-    'type': RandType.car,
   },
   {
     'rid': 1020, // 211,
     'label': '美食',
-    'type': RandType.food,
   },
   {
     'rid': 1024, //217,
     'label': '动物',
-    'type': RandType.animal,
   },
   {
     'rid': 1007, // 119,
     'label': '鬼畜',
-    'type': RandType.madness,
   },
   {
     'rid': 1014, // 155,
     'label': '时尚',
-    'type': RandType.fashion,
   },
   {
     'rid': 1002, // 5,
     'label': '娱乐',
-    'type': RandType.entertainment,
   },
   {
     'rid': 1001, // 181,
     'label': '影视',
-    'type': RandType.film,
   },
   {
     // 'rid': 177,
     'season_type': 3,
     'label': '纪录',
-    'type': RandType.documentary,
   },
   {
     // 'rid': 23,
     'season_type': 2,
     'label': '电影',
-    'type': RandType.movie,
   },
   {
     // 'rid': 11,
     'season_type': 5,
     'label': '剧集',
-    'type': RandType.teleplay,
   },
   {
     // 'rid': 11,
     'season_type': 7,
     'label': '综艺',
-    'type': RandType.show,
   },
 ];
