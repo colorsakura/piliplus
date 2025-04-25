@@ -1,12 +1,12 @@
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/http/video.dart';
-import 'package:PiliPlus/models/model_hot_video_item.dart';
 import 'package:PiliPlus/pages/common/common_list_controller.dart';
 
-class ZoneController
-    extends CommonListController<List<HotVideoItemModel>, HotVideoItemModel> {
-  ZoneController({required this.zoneID});
-  int zoneID;
+class ZoneController extends CommonListController {
+  ZoneController({this.rid, this.seasonType});
+
+  int? rid;
+  int? seasonType;
 
   @override
   void onInit() {
@@ -15,6 +15,13 @@ class ZoneController
   }
 
   @override
-  Future<LoadingState<List<HotVideoItemModel>>> customGetData() =>
-      VideoHttp.getRankVideoList(zoneID);
+  Future<LoadingState> customGetData() {
+    if (rid != null) {
+      return VideoHttp.getRankVideoList(rid!);
+    }
+    if (seasonType == 1) {
+      return VideoHttp.pgcRankList(seasonType: seasonType!);
+    }
+    return VideoHttp.pgcSeasonRankList(seasonType: seasonType!);
+  }
 }

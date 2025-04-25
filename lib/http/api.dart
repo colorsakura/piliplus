@@ -691,6 +691,10 @@ class Api {
   /// 排行榜
   static const String getRankApi = "/x/web-interface/ranking/v2";
 
+  static const String pgcRank = "/pgc/web/rank/list";
+
+  static const String pgcSeasonRank = "/pgc/season/rank/web/list";
+
   /// 取消订阅-合集
   static const String unfavSeason = '/x/v3/fav/season/unfav';
 

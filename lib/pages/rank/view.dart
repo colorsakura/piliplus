@@ -89,8 +89,12 @@ class _RankPageState extends State<RankPage>
           child: TabBarView(
             physics: const NeverScrollableScrollPhysics(),
             controller: _rankController.tabController,
-            children:
-                tabsConfig.map((item) => ZonePage(rid: item['rid'])).toList(),
+            children: tabsConfig
+                .map((item) => ZonePage(
+                      rid: item['rid'],
+                      seasonType: item['season_type'],
+                    ))
+                .toList(),
           ),
         ),
       ],

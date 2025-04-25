@@ -65,6 +65,7 @@ class StatView extends _StatItemBase {
         'picture' => Icons.remove_red_eye_outlined,
         'like' => Icons.thumb_up_outlined,
         'reply' => Icons.comment_outlined,
+        'follow' => Icons.favorite_border,
         _ => Icons.play_circle_outlined,
       };
 

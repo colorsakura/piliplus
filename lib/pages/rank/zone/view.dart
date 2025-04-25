@@ -2,6 +2,7 @@ import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/model_hot_video_item.dart';
 import 'package:PiliPlus/pages/common/common_page.dart';
+import 'package:PiliPlus/pages/rank/zone/widget/pgc_rank_item.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:PiliPlus/common/constants.dart';
@@ -13,9 +14,10 @@ import 'package:PiliPlus/pages/rank/zone/index.dart';
 import '../../../utils/grid.dart';
 
 class ZonePage extends CommonPage {
-  const ZonePage({super.key, required this.rid});
+  const ZonePage({super.key, this.rid, this.seasonType});
 
-  final int rid;
+  final int? rid;
+  final int? seasonType;
 
   @override
   State<ZonePage> createState() => _ZonePageState();
@@ -25,8 +27,8 @@ class _ZonePageState extends CommonPageState<ZonePage, ZoneController>
     with AutomaticKeepAliveClientMixin {
   @override
   late ZoneController controller = Get.put(
-    ZoneController(zoneID: widget.rid),
-    tag: widget.rid.toString(),
+    ZoneController(rid: widget.rid, seasonType: widget.seasonType),
+    tag: '${widget.rid}${widget.seasonType}',
   );
 
   @override
@@ -66,7 +68,7 @@ class _ZonePageState extends CommonPageState<ZonePage, ZoneController>
     );
   }
 
-  Widget _buildBody(LoadingState<List<HotVideoItemModel>?> loadingState) {
+  Widget _buildBody(LoadingState<List<dynamic>?> loadingState) {
     return switch (loadingState) {
       Loading() => _buildSkeleton(),
       Success() => loadingState.response?.isNotEmpty == true
@@ -74,10 +76,14 @@ class _ZonePageState extends CommonPageState<ZonePage, ZoneController>
               gridDelegate: Grid.videoCardHDelegate(context),
               delegate: SliverChildBuilderDelegate(
                 (context, index) {
-                  return VideoCardH(
-                    videoItem: loadingState.response![index],
-                    showPubdate: true,
-                  );
+                  final item = loadingState.response![index];
+                  if (item is HotVideoItemModel) {
+                    return VideoCardH(
+                      videoItem: item,
+                      showPubdate: true,
+                    );
+                  }
+                  return PgcRankItem(item: item);
                 },
                 childCount: loadingState.response!.length,
               ),

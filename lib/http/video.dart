@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:PiliPlus/grpc/app/card/v1/card.pb.dart' as card;
 import 'package:PiliPlus/grpc/grpc_repo.dart';
 import 'package:PiliPlus/http/loading_state.dart';
+import 'package:PiliPlus/models/bangumi/pgc_rank/pgc_rank_item_model.dart';
 import 'package:PiliPlus/models/member/article.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:dio/dio.dart';
@@ -966,8 +967,13 @@ class VideoHttp {
   // 视频排行
   static Future<LoadingState<List<HotVideoItemModel>>> getRankVideoList(
       int rid) async {
-    var rankApi = "${Api.getRankApi}?rid=$rid&type=all";
-    var res = await Request().get(rankApi);
+    var res = await Request().get(
+      Api.getRankApi,
+      queryParameters: await WbiSign.makSign({
+        'rid': rid,
+        'type': 'all',
+      }),
+    );
     if (res.data['code'] == 0) {
       List<HotVideoItemModel> list = <HotVideoItemModel>[];
       Set<int> blackMids = GStorage.blackMids;
@@ -985,6 +991,44 @@ class VideoHttp {
         }
       }
       return LoadingState.success(list);
+    } else {
+      return LoadingState.error(res.data['message']);
+    }
+  }
+
+  // pgc 排行
+  static Future<LoadingState> pgcRankList(
+      {int day = 3, required int seasonType}) async {
+    var res = await Request().get(
+      Api.pgcRank,
+      queryParameters: await WbiSign.makSign({
+        'day': day,
+        'season_type': seasonType,
+      }),
+    );
+    if (res.data['code'] == 0) {
+      return LoadingState.success((res.data['result']?['list'] as List?)
+          ?.map((e) => PgcRankItemModel.fromJson(e))
+          .toList());
+    } else {
+      return LoadingState.error(res.data['message']);
+    }
+  }
+
+  // pgc season 排行
+  static Future<LoadingState> pgcSeasonRankList(
+      {int day = 3, required int seasonType}) async {
+    var res = await Request().get(
+      Api.pgcSeasonRank,
+      queryParameters: await WbiSign.makSign({
+        'day': day,
+        'season_type': seasonType,
+      }),
+    );
+    if (res.data['code'] == 0) {
+      return LoadingState.success((res.data['data']?['list'] as List?)
+          ?.map((e) => PgcRankItemModel.fromJson(e))
+          .toList());
     } else {
       return LoadingState.error(res.data['message']);
     }

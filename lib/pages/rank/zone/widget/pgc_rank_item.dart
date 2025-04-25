@@ -1,0 +1,98 @@
+import 'package:PiliPlus/common/constants.dart';
+import 'package:PiliPlus/common/widgets/image_save.dart';
+import 'package:PiliPlus/common/widgets/network_img_layer.dart';
+import 'package:PiliPlus/common/widgets/stat/stat.dart';
+import 'package:PiliPlus/models/bangumi/pgc_rank/pgc_rank_item_model.dart';
+import 'package:PiliPlus/utils/app_scheme.dart';
+import 'package:flutter/material.dart';
+
+class PgcRankItem extends StatelessWidget {
+  const PgcRankItem({super.key, required this.item});
+
+  final PgcRankItemModel item;
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: () {
+          if (item.url != null) {
+            PiliScheme.routePushFromUrl(item.url!);
+          }
+        },
+        onLongPress: () {
+          imageSaveDialog(
+            context: context,
+            title: item.title,
+            cover: item.cover,
+          );
+        },
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: StyleString.safeSpace,
+            vertical: 5,
+          ),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              AspectRatio(
+                aspectRatio: 3 / 4,
+                child: LayoutBuilder(
+                  builder: (context, constraints) {
+                    return NetworkImgLayer(
+                      radius: 6,
+                      width: constraints.maxWidth,
+                      height: constraints.maxHeight,
+                      src: item.cover,
+                    );
+                  },
+                ),
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      child: Text(item.title!),
+                    ),
+                    if (item.newEp?.indexShow?.isNotEmpty == true) ...[
+                      Text(
+                        item.newEp!.indexShow!,
+                        maxLines: 1,
+                        style: TextStyle(
+                          fontSize: 12,
+                          height: 1,
+                          color: Theme.of(context).colorScheme.outline,
+                          overflow: TextOverflow.clip,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                    ],
+                    Row(
+                      children: [
+                        StatView(
+                          context: context,
+                          theme: 'gray',
+                          value: item.stat!.view!,
+                        ),
+                        const SizedBox(width: 8),
+                        StatView(
+                          context: context,
+                          theme: 'gray',
+                          goto: 'follow',
+                          value: item.stat!.follow!,
+                        ),
+                      ],
+                    )
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
