@@ -279,7 +279,6 @@ class MemberHttp {
   static Future memberInfo({
     int? mid,
     String token = '',
-    dynamic wwebid,
   }) async {
     String dmImgStr = Utils.base64EncodeRandomString(16, 64);
     String dmCoverImgStr = Utils.base64EncodeRandomString(32, 128);
@@ -288,7 +287,6 @@ class MemberHttp {
       'token': token,
       'platform': 'web',
       'web_location': 1550101,
-      'w_webid': wwebid,
       'dm_img_list': '[]',
       'dm_img_str': dmImgStr,
       'dm_cover_img_str': dmCoverImgStr,
@@ -347,7 +345,6 @@ class MemberHttp {
     String? keyword,
     String order = 'pubdate',
     bool orderAvoided = true,
-    String? wwebid,
   }) async {
     String dmImgStr = Utils.base64EncodeRandomString(16, 64);
     String dmCoverImgStr = Utils.base64EncodeRandomString(32, 128);
@@ -365,7 +362,6 @@ class MemberHttp {
       'dm_img_str': dmImgStr,
       'dm_cover_img_str': dmCoverImgStr,
       'dm_img_inter': '{"ds":[],"wh":[0,0,0],"of":[0,0,0]}',
-      if (wwebid != null) 'w_webid': wwebid,
     });
     var res = await Request().get(
       Api.memberArchive,

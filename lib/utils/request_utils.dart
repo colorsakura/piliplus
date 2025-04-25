@@ -1,11 +1,8 @@
-import 'dart:convert';
 import 'dart:math';
 
 import 'package:PiliPlus/common/widgets/radio_widget.dart';
 import 'package:PiliPlus/grpc/app/main/community/reply/v1/reply.pb.dart';
-import 'package:PiliPlus/http/constants.dart';
 import 'package:PiliPlus/http/dynamics.dart';
-import 'package:PiliPlus/http/init.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/http/member.dart';
 import 'package:PiliPlus/http/user.dart';
@@ -16,16 +13,12 @@ import 'package:PiliPlus/pages/common/multi_select_controller.dart';
 import 'package:PiliPlus/pages/dynamics/tab/controller.dart';
 import 'package:PiliPlus/pages/later/controller.dart';
 import 'package:PiliPlus/pages/video/detail/introduction/widgets/group_panel.dart';
-import 'package:PiliPlus/utils/accounts/account.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/feed_back.dart';
 import 'package:PiliPlus/utils/storage.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
-import 'package:html/dom.dart' as dom;
-import 'package:html/parser.dart' as html_parser;
 
 class RequestUtils {
   static Future actionRelationMod({
@@ -183,24 +176,24 @@ class RequestUtils {
       );
   }
 
-  static Future<dynamic> getWwebid(mid) async {
-    try {
-      dynamic response = await Request().get(
-        '${HttpString.spaceBaseUrl}/$mid/dynamic',
-        options: Options(
-          extra: {'account': AnonymousAccount()},
-        ),
-      );
-      dom.Document document = html_parser.parse(response.data);
-      dom.Element? scriptElement =
-          document.querySelector('script#__RENDER_DATA__');
-      return jsonDecode(
-          Uri.decodeComponent(scriptElement?.text ?? ''))['access_id'];
-    } catch (e) {
-      debugPrint('failed to get wwebid: $e');
-      return null;
-    }
-  }
+  // static Future<dynamic> getWwebid(mid) async {
+  //   try {
+  //     dynamic response = await Request().get(
+  //       '${HttpString.spaceBaseUrl}/$mid/dynamic',
+  //       options: Options(
+  //         extra: {'account': AnonymousAccount()},
+  //       ),
+  //     );
+  //     dom.Document document = html_parser.parse(response.data);
+  //     dom.Element? scriptElement =
+  //         document.querySelector('script#__RENDER_DATA__');
+  //     return jsonDecode(
+  //         Uri.decodeComponent(scriptElement?.text ?? ''))['access_id'];
+  //   } catch (e) {
+  //     debugPrint('failed to get wwebid: $e');
+  //     return null;
+  //   }
+  // }
 
   static Future insertCreatedDyn(result) async {
     try {

@@ -6,14 +6,12 @@ import 'package:PiliPlus/models/space_archive/item.dart';
 import 'package:PiliPlus/pages/common/common_data_controller.dart';
 import 'package:PiliPlus/pages/member/content/member_contribute/member_contribute.dart'
     show ContributeType;
-import 'package:PiliPlus/utils/request_utils.dart';
 import 'package:get/get.dart';
 
 class HorizontalMemberPageController extends CommonDataController {
   HorizontalMemberPageController({this.mid, required this.lastAid});
 
   dynamic mid;
-  dynamic wwebid;
 
   Rx<LoadingState<MemberInfoModel>> userState =
       LoadingState<MemberInfoModel>.loading().obs;
@@ -28,8 +26,7 @@ class HorizontalMemberPageController extends CommonDataController {
   }
 
   Future getUserInfo() async {
-    wwebid ??= await RequestUtils.getWwebid(mid);
-    dynamic res = await MemberHttp.memberInfo(mid: mid, wwebid: wwebid);
+    dynamic res = await MemberHttp.memberInfo(mid: mid);
     if (res['status']) {
       userState.value = LoadingState.success(res['data']);
       getMemberStat();

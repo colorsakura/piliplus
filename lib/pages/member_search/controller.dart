@@ -2,8 +2,6 @@ import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/dynamics/result.dart';
 import 'package:PiliPlus/models/member/archive.dart';
 import 'package:PiliPlus/utils/extension.dart';
-import 'package:PiliPlus/utils/request_utils.dart';
-import 'package:PiliPlus/utils/storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:PiliPlus/http/member.dart';
@@ -33,18 +31,11 @@ class MemberSearchController extends GetxController
   Rx<LoadingState<List<DynamicItemModel>?>> dynamicState =
       LoadingState<List<DynamicItemModel>?>.loading().obs;
 
-  dynamic wwebid;
-
   @override
   void onInit() {
     super.onInit();
     mid = int.parse(Get.parameters['mid']!);
     uname.value = Get.parameters['uname']!;
-    if (!Accounts.main.isLogin) {
-      RequestUtils.getWwebid(mid).then((res) {
-        wwebid = res;
-      });
-    }
   }
 
   // 清空搜索
@@ -136,7 +127,6 @@ class MemberSearchController extends GetxController
       pn: archivePn,
       keyword: textEditingController.text,
       order: 'pubdate',
-      wwebid: wwebid,
     );
     if (res['status']) {
       MemberArchiveDataModel data = res['data'];
