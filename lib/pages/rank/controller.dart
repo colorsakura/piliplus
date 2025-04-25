@@ -11,8 +11,12 @@ class RankController extends GetxController
   RxInt tabIndex = 0.obs;
   late TabController tabController;
 
-  ZoneController get controller => Get.find<ZoneController>(
-      tag: tabsConfig[tabController.index]['rid'].toString());
+  ZoneController get controller {
+    final item = tabsConfig[tabController.index];
+    return Get.find<ZoneController>(
+        tag: '${item['rid']}${item['season_type']}');
+  }
+
   @override
   ScrollController get scrollController => controller.scrollController;
 

@@ -36,8 +36,12 @@ class _RankPageState extends State<RankPage>
                   () => IntrinsicHeight(
                     child: InkWell(
                       onTap: () {
-                        _rankController.tabIndex.value = index;
-                        _rankController.tabController.animateTo(index);
+                        if (_rankController.tabIndex.value != index) {
+                          _rankController.tabIndex.value = index;
+                          _rankController.tabController.animateTo(index);
+                        } else {
+                          _rankController.animateToTop();
+                        }
                       },
                       child: ColoredBox(
                         color: index == _rankController.tabIndex.value
