@@ -7,8 +7,16 @@ class Paragraph {
   ParagraphText? text;
   Pic? pic;
   Line? line;
+  LinkCard? linkCard;
 
-  Paragraph({this.align, this.paraType, this.text, this.pic, this.line});
+  Paragraph({
+    this.align,
+    this.paraType,
+    this.text,
+    this.pic,
+    this.line,
+    this.linkCard,
+  });
 
   factory Paragraph.fromJson(Map<String, dynamic> json) => Paragraph(
         align: json['align'] as int?,
@@ -20,6 +28,9 @@ class Paragraph {
             ? null
             : Pic.fromJson(json['pic'] as Map<String, dynamic>),
         line: json['line'] == null ? null : Line.fromJson(json['line']),
+        linkCard: json['link_card'] == null
+            ? null
+            : LinkCard.fromJson(json['link_card']),
       );
 
   Map<String, dynamic> toJson() => {
@@ -28,6 +39,56 @@ class Paragraph {
         'text': text?.toJson(),
         'pic': pic?.toJson(),
       };
+}
+
+class Ugc {
+  String? cover;
+  String? descSecond;
+  String? duration;
+  String? headText;
+  String? idStr;
+  String? jumpUrl;
+  bool? multiLine;
+  String? title;
+
+  Ugc.fromJson(Map<String, dynamic> json) {
+    cover = json['cover'];
+    descSecond = json['desc_second'];
+    duration = json['duration'];
+    headText = json['head_text'];
+    idStr = json['id_str'];
+    jumpUrl = json['jump_url'];
+    multiLine = json['multi_line'];
+    title = json['title'];
+  }
+}
+
+class Card {
+  Card({
+    this.oid,
+    this.type,
+    this.ugc,
+  });
+  String? oid;
+  String? type;
+  Ugc? ugc;
+
+  Card.fromJson(Map<String, dynamic> json) {
+    oid = json['oid'];
+    type = json['type'];
+    ugc = json['ugc'] == null ? null : Ugc.fromJson(json['ugc']);
+  }
+}
+
+class LinkCard {
+  LinkCard({
+    this.card,
+  });
+  Card? card;
+
+  LinkCard.fromJson(Map<String, dynamic> json) {
+    card = json['card'] == null ? null : Card.fromJson(json['card']);
+  }
 }
 
 class Line {
