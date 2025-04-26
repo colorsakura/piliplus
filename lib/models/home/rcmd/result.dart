@@ -29,7 +29,9 @@ class RecVideoItemAppModel extends BaseRecVideoItemModel {
     //duration = json['cover_right_text'];
     title = json['title'];
     owner = RcmdOwner.fromJson(json);
-    rcmdReason = json['bottom_rcmd_reason'] ?? json['top_rcmd_reason'];
+    rcmdReason = json['rcmd_reason'];
+    //     json['bottom_rcmd_reason'] ??
+    //     json['top_rcmd_reason'];
     if (rcmdReason != null && rcmdReason!.contains('赞')) {
       // 有时能在推荐原因里获得点赞数
       (stat as RcmdStat).like = Utils.parseNum(rcmdReason!);

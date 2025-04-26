@@ -1405,7 +1405,7 @@ List<SettingsModel> get recommendSettings => [
       ),
       _getBanwordModel(
         context: Get.context!,
-        title: '热门/分区: 视频分区关键词过滤',
+        title: 'App推荐/热门/排行榜: 视频分区关键词过滤',
         key: SettingBoxKey.banWordForZone,
         callback: (value) {
           VideoHttp.zoneRegExp = value;

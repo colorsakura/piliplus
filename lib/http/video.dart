@@ -69,7 +69,7 @@ class VideoHttp {
   // 添加额外的loginState变量模拟未登录状态
   static Future<LoadingState> rcmdVideoListApp({required int freshIdx}) async {
     Map<String, String> data = {
-      'build': '1462100',
+      'build': '2001100',
       'c_locale': 'zh_CN',
       'channel': 'yingyongbao',
       'column': '4',
@@ -126,11 +126,11 @@ class VideoHttp {
             i['ad_info'] == null &&
             (!enableRcmdDynamic ? i['card_goto'] != 'picture' : true) &&
             (i['args'] != null && !blackMids.contains(i['args']['up_id']))) {
-          // if (zoneRegExp.pattern.isNotEmpty &&
-          //     i['args']?['rname'] != null &&
-          //     zoneRegExp.hasMatch(i['args']['rname'])) {
-          //   continue;
-          // }
+          if (zoneRegExp.pattern.isNotEmpty &&
+              i['args']?['tname'] != null &&
+              zoneRegExp.hasMatch(i['args']['tname'])) {
+            continue;
+          }
           RecVideoItemAppModel videoItem = RecVideoItemAppModel.fromJson(i);
           if (!RecommendFilter.filter(videoItem)) {
             list.add(videoItem);
