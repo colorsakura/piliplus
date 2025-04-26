@@ -349,12 +349,27 @@ class BangumiIntroController
                     try {
                       EpisodeItem item = bangumiItem!.episodes!
                           .firstWhere((item) => item.epId == epId);
-                      PageUtils.pmShareVideo(
-                        id: epId!,
-                        source: 16,
-                        cover: item.cover!,
-                        title: '${bangumiItem!.title!} ${item.showTitle}',
-                        url: item.shareUrl,
+                      final title = '${bangumiItem!.title!} ${item.showTitle}';
+                      PageUtils.pmShare(
+                        content: {
+                          "id": epId!.toString(),
+                          "title": title,
+                          "url": item.shareUrl,
+                          "headline": title,
+                          "source": 16,
+                          "extra": {},
+                          "thumb": item.cover,
+                          "source_desc": switch (bangumiItem!.type) {
+                            1 => '番剧',
+                            2 => '电影',
+                            3 => '纪录片',
+                            4 => '国创',
+                            5 => '电视剧',
+                            6 => '漫画',
+                            7 => '综艺',
+                            _ => null,
+                          }
+                        },
                       );
                     } catch (e) {
                       SmartDialog.showToast(e.toString());

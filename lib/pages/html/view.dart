@@ -17,6 +17,7 @@ import 'package:PiliPlus/utils/utils.dart';
 import 'package:easy_debounce/easy_throttle.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:PiliPlus/common/skeleton/video_reply.dart';
@@ -633,6 +634,40 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
                   ],
                 ),
               ),
+              if (_htmlRenderCtr.dynamicType == 'read' &&
+                  _htmlRenderCtr.favStat['status'])
+                PopupMenuItem(
+                  onTap: () {
+                    try {
+                      PageUtils.pmShare(
+                        content: {
+                          "id": _htmlRenderCtr.id.substring(2),
+                          "title": "- 哔哩哔哩专栏",
+                          "headline": _htmlRenderCtr.favStat['data']['title'],
+                          "source": 6,
+                          "thumb": (_htmlRenderCtr.favStat['data']
+                                      ['origin_image_urls'] as List?)
+                                  ?.firstOrNull ??
+                              '',
+                          "author": _htmlRenderCtr.favStat['data']
+                              ['author_name'],
+                          "author_id":
+                              _htmlRenderCtr.favStat['data']['mid'].toString(),
+                        },
+                      );
+                    } catch (e) {
+                      SmartDialog.showToast(e.toString());
+                    }
+                  },
+                  child: const Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(Icons.forward_to_inbox, size: 19),
+                      SizedBox(width: 10),
+                      Text('分享至动态'),
+                    ],
+                  ),
+                ),
             ],
           ),
           const SizedBox(width: 6)

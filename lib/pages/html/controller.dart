@@ -56,6 +56,7 @@ class HtmlRenderController extends ReplyController<MainListReply> {
               'status': true,
               'isFav': res['data']?['favorite'] ?? false,
               'favNum': res['data']?['stats']?['favorite'] ?? 0,
+              'data': res['data'],
             });
           }
         });

@@ -5,6 +5,7 @@ import 'package:PiliPlus/common/widgets/report.dart';
 import 'package:PiliPlus/common/widgets/save_panel.dart';
 import 'package:PiliPlus/http/video.dart';
 import 'package:PiliPlus/utils/extension.dart';
+import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:PiliPlus/utils/request_utils.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -285,6 +286,16 @@ class AuthorPanel extends StatelessWidget {
                   ),
                 ),
               ListTile(
+                onTap: () {
+                  Get.back();
+                  SavePanel.toSavePanel(item: item);
+                },
+                minLeadingWidth: 0,
+                leading: const Icon(Icons.save_alt, size: 19),
+                title: Text('保存动态',
+                    style: Theme.of(context).textTheme.titleSmall!),
+              ),
+              ListTile(
                 title: Text(
                   '分享动态',
                   style: Theme.of(context).textTheme.titleSmall,
@@ -297,16 +308,52 @@ class AuthorPanel extends StatelessWidget {
                 },
                 minLeadingWidth: 0,
               ),
-              ListTile(
-                onTap: () {
-                  Get.back();
-                  SavePanel.toSavePanel(item: item);
-                },
-                minLeadingWidth: 0,
-                leading: const Icon(Icons.save_alt, size: 19),
-                title: Text('保存动态',
-                    style: Theme.of(context).textTheme.titleSmall!),
-              ),
+              if (item.basic['comment_type'] == 17 ||
+                  item.basic['comment_type'] == 11)
+                ListTile(
+                  title: Text(
+                    '分享至消息',
+                    style: Theme.of(context).textTheme.titleSmall,
+                  ),
+                  leading: const Icon(Icons.forward_to_inbox, size: 19),
+                  onTap: () {
+                    Get.back();
+                    try {
+                      bool isDyn = item.basic['comment_type'] == 17;
+                      String id = isDyn ? item.idStr : item.basic['rid_str'];
+                      int source = isDyn ? 11 : 2;
+                      String title;
+                      if (item.modules.moduleDynamic.desc != null) {
+                        title = item.modules.moduleDynamic.desc.text;
+                      } else if (item.modules.moduleDynamic.major != null) {
+                        title =
+                            item.modules.moduleDynamic.major.opus.summary.text;
+                      } else {
+                        throw UnsupportedError(
+                            'error getting title: {"type": ${item.basic['comment_type']}, "id": $id}');
+                      }
+                      String thumb = isDyn
+                          ? item.modules.moduleAuthor.face
+                          : item
+                              .modules.moduleDynamic.major.opus.pics.first.url;
+                      PageUtils.pmShare(
+                        content: {
+                          "id": id,
+                          "title": title,
+                          "headline": "",
+                          "source": source,
+                          "extra": {},
+                          "thumb": thumb,
+                          "author": item.modules.moduleAuthor.name,
+                          "author_id": item.modules.moduleAuthor.mid.toString()
+                        },
+                      );
+                    } catch (e) {
+                      SmartDialog.showToast(e.toString());
+                    }
+                  },
+                  minLeadingWidth: 0,
+                ),
               ListTile(
                 title: Text(
                   '临时屏蔽：${item.modules?.moduleAuthor?.name}',
@@ -317,9 +364,9 @@ class AuthorPanel extends StatelessWidget {
                   Get.back();
                   Get.find<DynamicsController>()
                       .tempBannedList
-                      .add(item.modules!.moduleAuthor!.mid!);
+                      .add(item.modules.moduleAuthor.mid);
                   SmartDialog.showToast(
-                      '已临时屏蔽${item.modules?.moduleAuthor?.name}(${item.modules!.moduleAuthor!.mid})，重启恢复');
+                      '已临时屏蔽${item.modules?.moduleAuthor?.name}(${item.modules.moduleAuthor.mid})，重启恢复');
                 },
                 minLeadingWidth: 0,
               ),

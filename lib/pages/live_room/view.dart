@@ -18,7 +18,6 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 import 'package:PiliPlus/common/widgets/network_img_layer.dart';
 import 'package:PiliPlus/plugin/pl_player/index.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:screen_brightness/screen_brightness.dart';
 
 import '../../utils/storage.dart';
@@ -416,35 +415,6 @@ class _LiveRoomPageState extends State<LiveRoomPage>
                           ),
                       ],
                     ),
-                    const Spacer(),
-                    Obx(
-                      () => IconButton(
-                        onPressed: plPlayerController.setOnlyPlayAudio,
-                        icon: Icon(
-                          plPlayerController.onlyPlayAudio.value
-                              ? MdiIcons.musicCircle
-                              : MdiIcons.musicCircleOutline,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                    IconButton(
-                      tooltip: '刷新',
-                      onPressed: () {
-                        _futureBuilderFuture =
-                            _liveRoomController.queryLiveInfo();
-                      },
-                      icon: const Icon(Icons.refresh),
-                    ),
-                    IconButton(
-                        tooltip: '浏览器打开',
-                        onPressed: () {
-                          PageUtils.inAppWebview(
-                            'https://live.bilibili.com/h5/${_liveRoomController.roomId}',
-                            off: true,
-                          );
-                        },
-                        icon: const Icon(Icons.open_in_browser)),
                   ],
                 ),
               );
@@ -453,6 +423,71 @@ class _LiveRoomPageState extends State<LiveRoomPage>
             }
           },
         ),
+        actions: [
+          IconButton(
+            tooltip: '刷新',
+            onPressed: () {
+              _futureBuilderFuture = _liveRoomController.queryLiveInfo();
+            },
+            icon: const Icon(Icons.refresh),
+          ),
+          PopupMenuButton(
+            icon: const Icon(Icons.more_vert, size: 19),
+            itemBuilder: (BuildContext context) => <PopupMenuEntry>[
+              PopupMenuItem(
+                onTap: () {
+                  PageUtils.inAppWebview(
+                    'https://live.bilibili.com/h5/${_liveRoomController.roomId}',
+                    off: true,
+                  );
+                },
+                child: const Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(Icons.open_in_browser, size: 19),
+                    SizedBox(width: 10),
+                    Text('浏览器打开'),
+                  ],
+                ),
+              ),
+              PopupMenuItem(
+                onTap: () {
+                  try {
+                    PageUtils.pmShare(
+                      content: {
+                        "cover": _liveRoomController
+                            .roomInfoH5.value.roomInfo!.cover!,
+                        "sourceID": _liveRoomController.roomId.toString(),
+                        "title": _liveRoomController
+                            .roomInfoH5.value.roomInfo!.title!,
+                        "url":
+                            "https://live.bilibili.com/${_liveRoomController.roomId}",
+                        "authorID": _liveRoomController
+                            .roomInfoH5.value.roomInfo!.uid
+                            .toString(),
+                        "source": "直播",
+                        "desc": _liveRoomController
+                            .roomInfoH5.value.roomInfo!.title!,
+                        "author": _liveRoomController
+                            .roomInfoH5.value.anchorInfo!.baseInfo!.uname,
+                      },
+                    );
+                  } catch (e) {
+                    SmartDialog.showToast(e.toString());
+                  }
+                },
+                child: const Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(Icons.forward_to_inbox, size: 19),
+                    SizedBox(width: 10),
+                    Text('分享至消息'),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ],
       );
 
   Widget get _buildBodyH {

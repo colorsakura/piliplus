@@ -509,13 +509,16 @@ class VideoIntroController extends GetxController {
                   onTap: () {
                     Get.back();
                     try {
-                      PageUtils.pmShareVideo(
-                        author: videoDetail.value.owner!.name!,
-                        id: videoDetail.value.aid!,
-                        source: 5,
-                        cover: videoDetail.value.pic!,
-                        title: videoDetail.value.title!,
-                        bvid: videoDetail.value.bvid!,
+                      PageUtils.pmShare(
+                        content: {
+                          "id": videoDetail.value.aid!.toString(),
+                          "title": videoDetail.value.title!,
+                          "headline": videoDetail.value.title!,
+                          "source": 5,
+                          "thumb": videoDetail.value.pic!,
+                          "author": videoDetail.value.owner!.name!,
+                          "author_id": videoDetail.value.owner!.mid!.toString(),
+                        },
                       );
                     } catch (e) {
                       SmartDialog.showToast(e.toString());

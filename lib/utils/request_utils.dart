@@ -39,17 +39,9 @@ class RequestUtils {
   // 16：番剧（id 为 epid）
   // 17：番剧
   // https://github.com/SocialSisterYi/bilibili-API-collect/tree/master/docs/message/private_msg_content.md
-  static Future pmShareVideo({
+  static Future pmShare({
     required int receiverId,
-    String? author,
-    required int id,
-    required int source,
-    required String cover,
-    required String title,
-    String? bvid,
-    String? url,
-    int? authorId,
-    String? sourceDesc,
+    required Map content,
     String? message,
     ValueChanged<bool>? callback,
   }) async {
@@ -59,22 +51,10 @@ class RequestUtils {
     final videoRes = await GrpcRepo.sendMsg(
       senderUid: ownerMid,
       receiverId: receiverId,
-      content: jsonEncode(
-        {
-          if (author != null) "author": author,
-          "headline": title,
-          "id": id,
-          "source": source,
-          "thumb": cover,
-          "title": title,
-          if (bvid != null) "bvid": bvid,
-          // pgc
-          if (url != null) "url": url,
-          if (authorId != null) "author_id": authorId,
-          if (sourceDesc != null) "source_desc": sourceDesc,
-        },
-      ),
-      msgType: MsgType.EN_MSG_TYPE_SHARE_V2,
+      content: jsonEncode(content),
+      msgType: content['source'] is String
+          ? MsgType.EN_MSG_TYPE_COMMON_SHARE_CARD
+          : MsgType.EN_MSG_TYPE_SHARE_V2,
     );
 
     if (videoRes['status']) {

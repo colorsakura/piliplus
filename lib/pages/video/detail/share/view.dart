@@ -34,37 +34,21 @@ class UserModel {
   int get hashCode => mid.hashCode;
 }
 
-class ShareVideoPanel extends StatefulWidget {
-  const ShareVideoPanel({
+class SharePanel extends StatefulWidget {
+  const SharePanel({
     super.key,
-    this.author,
-    required this.id,
-    required this.source,
-    required this.cover,
-    required this.title,
-    this.bvid,
-    this.url,
-    this.authorId,
-    this.sourceDesc,
+    required this.content,
     this.userList,
   });
 
-  final String? author;
-  final int id;
-  final int source;
-  final String cover;
-  final String title;
-  final String? bvid;
-  final String? url;
-  final int? authorId;
-  final String? sourceDesc;
+  final Map content;
   final List<UserModel>? userList;
 
   @override
-  State<ShareVideoPanel> createState() => _ShareVideoPanelState();
+  State<SharePanel> createState() => _SharePanelState();
 }
 
-class _ShareVideoPanelState extends State<ShareVideoPanel> {
+class _SharePanelState extends State<SharePanel> {
   int _selectedIndex = -1;
   final List<UserModel> _userList = <UserModel>[];
   final ScrollController _scrollController = ScrollController();
@@ -245,17 +229,9 @@ class _ShareVideoPanelState extends State<ShareVideoPanel> {
                     SmartDialog.showToast('请选择分享的用户');
                     return;
                   }
-                  RequestUtils.pmShareVideo(
+                  RequestUtils.pmShare(
                     receiverId: _userList[_selectedIndex].mid,
-                    author: widget.author,
-                    id: widget.id,
-                    source: widget.source,
-                    cover: widget.cover,
-                    title: widget.title,
-                    bvid: widget.bvid,
-                    url: widget.url,
-                    authorId: widget.authorId,
-                    sourceDesc: widget.sourceDesc,
+                    content: widget.content,
                     message: _controller.text,
                   );
                 },

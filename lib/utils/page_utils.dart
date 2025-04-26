@@ -28,17 +28,9 @@ import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class PageUtils {
-  static void pmShareVideo({
-    String? author,
-    required int id,
-    required int source,
-    required String cover,
-    required String title,
-    String? bvid,
-    String? url,
-    int? authorId,
-    String? sourceDesc,
-  }) async {
+  static void pmShare({required Map content}) async {
+    // debugPrint(content.toString());
+
     List<UserModel> userList = <UserModel>[];
 
     final shareListRes = await GrpcRepo.shareList(size: 3);
@@ -64,16 +56,8 @@ class PageUtils {
 
     showModalBottomSheet(
       context: Get.context!,
-      builder: (context) => ShareVideoPanel(
-        author: author,
-        id: id,
-        source: source,
-        cover: cover,
-        title: title,
-        bvid: bvid,
-        url: url,
-        authorId: authorId,
-        sourceDesc: sourceDesc,
+      builder: (context) => SharePanel(
+        content: content,
         userList: userList,
       ),
       useSafeArea: true,
