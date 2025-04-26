@@ -23,6 +23,13 @@ body:
           required: true
 
   - type: textarea
+    id: version
+    attributes:
+      label: 版本号
+    validations:
+      required: true
+
+  - type: textarea
     id: bug
     attributes:
       label: 问题描述
