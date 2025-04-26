@@ -1,4 +1,6 @@
 import 'package:PiliPlus/http/loading_state.dart';
+import 'package:PiliPlus/models/dynamics/article_view/data.dart';
+import 'package:PiliPlus/models/dynamics/opus_detail/data.dart';
 import 'package:PiliPlus/utils/accounts/account.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/wbi_sign.dart';
@@ -153,6 +155,40 @@ class DynamicsHttp {
     );
     if (res.data['code'] == 0) {
       return {'status': true, 'data': res.data['data']};
+    } else {
+      return {'status': false, 'msg': res.data['message']};
+    }
+  }
+
+  static Future articleView({
+    required dynamic cvId,
+  }) async {
+    var res = await Request().get(
+      Api.articleView,
+      queryParameters: await WbiSign.makSign({
+        'id': cvId,
+        'gaia_source': 'main_web',
+      }),
+    );
+    if (res.data['code'] == 0) {
+      return {'status': true, 'data': ArticleData.fromJson(res.data['data'])};
+    } else {
+      return {'status': false, 'msg': res.data['message']};
+    }
+  }
+
+  static Future opusDetail({
+    required dynamic opusId,
+  }) async {
+    var res = await Request().get(
+      Api.opusDetail,
+      queryParameters: await WbiSign.makSign({
+        'id': opusId,
+        'features': 'htmlNewStyle',
+      }),
+    );
+    if (res.data['code'] == 0) {
+      return {'status': true, 'data': OpusData.fromJson(res.data['data'])};
     } else {
       return {'status': false, 'msg': res.data['message']};
     }

@@ -1,10 +1,11 @@
 import 'dart:math';
 
-import 'package:PiliPlus/common/widgets/article_content.dart';
+import 'package:PiliPlus/common/widgets/network_img_layer.dart';
+import 'package:PiliPlus/pages/article/widgets/opus_content.dart';
+import 'package:PiliPlus/pages/article/widgets/html_render.dart';
 import 'package:PiliPlus/common/widgets/http_error.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/grpc/app/main/community/reply/v1/reply.pb.dart';
-import 'package:PiliPlus/http/constants.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/common/reply_sort_type.dart';
 import 'package:PiliPlus/pages/dynamics/repost_dyn_panel.dart';
@@ -21,8 +22,6 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:PiliPlus/common/skeleton/video_reply.dart';
-import 'package:PiliPlus/common/widgets/html_render.dart';
-import 'package:PiliPlus/common/widgets/network_img_layer.dart';
 import 'package:PiliPlus/models/common/reply_type.dart';
 import 'package:PiliPlus/pages/video/detail/reply_reply/index.dart';
 import 'package:PiliPlus/utils/feed_back.dart';
@@ -31,24 +30,19 @@ import 'package:html/parser.dart' as parser;
 import '../../utils/grid.dart';
 import 'controller.dart';
 
-class HtmlRenderPage extends StatefulWidget {
-  const HtmlRenderPage({super.key});
+class ArticlePage extends StatefulWidget {
+  const ArticlePage({super.key});
 
   @override
-  State<HtmlRenderPage> createState() => _HtmlRenderPageState();
+  State<ArticlePage> createState() => _ArticlePageState();
 }
 
-class _HtmlRenderPageState extends State<HtmlRenderPage>
+class _ArticlePageState extends State<ArticlePage>
     with TickerProviderStateMixin {
-  late final HtmlRenderController _htmlRenderCtr = Get.put(
-    HtmlRenderController(),
-    tag: Utils.makeHeroTag(id),
+  final ArticleController _articleCtr = Get.put(
+    ArticleController(),
+    tag: Utils.generateRandomString(8),
   );
-  late String title;
-  late String id;
-  late String url;
-  late String dynamicType;
-  late int type;
   bool _isFabVisible = true;
   bool? _imageStatus;
   late AnimationController fabAnimationCtr;
@@ -57,7 +51,7 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
 
   bool get _horizontalPreview =>
       context.orientation == Orientation.landscape &&
-      _htmlRenderCtr.horizontalPreview;
+      _articleCtr.horizontalPreview;
 
   late final _key = GlobalKey<ScaffoldState>();
 
@@ -104,35 +98,39 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
   @override
   void initState() {
     super.initState();
-    title = Get.parameters['title']!;
-    id = Get.parameters['id']!;
-    url = Get.parameters['url']!;
-    dynamicType = Get.parameters['dynamicType']!;
-    type = dynamicType == 'picture' ? 11 : 12;
     fabAnimationCtr = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 300),
     );
     fabAnimationCtr.forward();
-    scrollListener();
+    _articleCtr.scrollController.addListener(listener);
   }
 
   @override
   void dispose() {
     fabAnimationCtr.dispose();
-    _htmlRenderCtr.scrollController.removeListener(listener);
+    _articleCtr.scrollController.removeListener(listener);
     super.dispose();
   }
 
-  void scrollListener() {
-    _htmlRenderCtr.scrollController.addListener(listener);
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (_articleCtr.scrollController.hasClients) {
+        _articleCtr.showTitle.value =
+            _articleCtr.scrollController.positions.last.pixels >= 45;
+      }
+    });
   }
 
   void listener() {
+    _articleCtr.showTitle.value =
+        _articleCtr.scrollController.positions.last.pixels >= 45;
     final ScrollDirection direction1 =
-        _htmlRenderCtr.scrollController.positions.first.userScrollDirection;
+        _articleCtr.scrollController.positions.first.userScrollDirection;
     late final ScrollDirection direction2 =
-        _htmlRenderCtr.scrollController.positions.last.userScrollDirection;
+        _articleCtr.scrollController.positions.last.userScrollDirection;
     if (direction1 == ScrollDirection.forward ||
         direction2 == ScrollDirection.forward) {
       _showFab();
@@ -178,7 +176,7 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
                 oid: oid,
                 rpid: rpid,
                 source: 'dynamic',
-                replyType: ReplyType.values[type],
+                replyType: ReplyType.values[_articleCtr.commentType],
                 firstFloor: replyItem,
                 onDispose: onDispose,
               ),
@@ -189,7 +187,7 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
           replyReplyPage,
           routeName: 'htmlRender-Copy',
           arguments: {
-            'id': _htmlRenderCtr.id,
+            'id': _articleCtr.id,
           },
         );
       } else {
@@ -219,7 +217,7 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
             replyReplyPage,
             routeName: 'htmlRender-Copy',
             arguments: {
-              'id': _htmlRenderCtr.id,
+              'id': _articleCtr.id,
             },
           );
         }
@@ -248,10 +246,9 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
                     return Padding(
                       padding: EdgeInsets.symmetric(horizontal: padding),
                       child: CustomScrollView(
-                        controller: _htmlRenderCtr.scrollController,
+                        controller: _articleCtr.scrollController,
                         physics: const AlwaysScrollableScrollPhysics(),
                         slivers: [
-                          _buildHeader,
                           _buildContent(maxWidth),
                           SliverToBoxAdapter(
                             child: Divider(
@@ -262,8 +259,8 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
                             ),
                           ),
                           _buildReplyHeader,
-                          Obx(() => _buildReplyList(
-                              _htmlRenderCtr.loadingState.value)),
+                          Obx(() =>
+                              _buildReplyList(_articleCtr.loadingState.value)),
                         ],
                       ),
                     );
@@ -279,13 +276,9 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
                             final maxWidth =
                                 constraints.maxWidth - padding / 4 - 24;
                             return CustomScrollView(
-                              controller: _htmlRenderCtr.scrollController,
+                              controller: _articleCtr.scrollController,
                               physics: const AlwaysScrollableScrollPhysics(),
                               slivers: [
-                                SliverPadding(
-                                  padding: EdgeInsets.only(left: padding / 4),
-                                  sliver: _buildHeader,
-                                ),
                                 SliverPadding(
                                   padding: EdgeInsets.only(
                                     left: padding / 4,
@@ -311,17 +304,17 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
                           backgroundColor: Colors.transparent,
                           body: refreshIndicator(
                             onRefresh: () async {
-                              await _htmlRenderCtr.onRefresh();
+                              await _articleCtr.onRefresh();
                             },
                             child: Padding(
                               padding: EdgeInsets.only(right: padding / 4),
                               child: CustomScrollView(
-                                controller: _htmlRenderCtr.scrollController,
+                                controller: _articleCtr.scrollController,
                                 physics: const AlwaysScrollableScrollPhysics(),
                                 slivers: [
                                   _buildReplyHeader,
                                   Obx(() => _buildReplyList(
-                                      _htmlRenderCtr.loadingState.value)),
+                                      _articleCtr.loadingState.value)),
                                 ],
                               ),
                             ),
@@ -344,29 +337,95 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
         sliver: Obx(
           () {
-            if (_htmlRenderCtr.loaded.value) {
-              if (_htmlRenderCtr.response['isJsonContent'] == true) {
-                return articleContent(
+            if (_articleCtr.isLoaded.value) {
+              if (_articleCtr.type == 'read') {
+                var res = parser.parse(_articleCtr.articleData.content);
+                return SliverMainAxisGroup(
+                  slivers: [
+                    if (_articleCtr.articleData.title != null)
+                      SliverToBoxAdapter(
+                        child: Text(
+                          _articleCtr.articleData.title!,
+                          style: TextStyle(
+                            fontSize: 17,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    SliverToBoxAdapter(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 10),
+                        child: GestureDetector(
+                          onTap: () {
+                            Get.toNamed(
+                                '/member?mid=${_articleCtr.articleData.author?.mid}');
+                          },
+                          child: Row(
+                            children: [
+                              NetworkImgLayer(
+                                width: 40,
+                                height: 40,
+                                type: 'avatar',
+                                src: _articleCtr.articleData.author?.face,
+                              ),
+                              const SizedBox(width: 10),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    _articleCtr.articleData.author?.name ?? "",
+                                    style: TextStyle(
+                                      fontSize: Theme.of(context)
+                                          .textTheme
+                                          .titleSmall!
+                                          .fontSize,
+                                    ),
+                                  ),
+                                  if (_articleCtr.articleData.publishTime !=
+                                      null)
+                                    Text(
+                                      Utils.dateFormat(
+                                          _articleCtr.articleData.publishTime),
+                                      style: TextStyle(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .outline,
+                                        fontSize: Theme.of(context)
+                                            .textTheme
+                                            .labelSmall!
+                                            .fontSize,
+                                      ),
+                                    ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                    SliverList.separated(
+                      itemCount: res.body!.children.length,
+                      itemBuilder: (context, index) {
+                        return htmlRender(
+                          context: context,
+                          element: res.body!.children[index],
+                          maxWidth: maxWidth,
+                          callback: _getImageCallback,
+                        );
+                      },
+                      separatorBuilder: (context, index) =>
+                          const SizedBox(height: 10),
+                    ),
+                  ],
+                );
+              } else {
+                return opusContent(
                   context: context,
-                  list: _htmlRenderCtr.response['content'],
+                  modules: _articleCtr.opusData.item?.modules,
                   callback: _getImageCallback,
                   maxWidth: maxWidth,
                 );
               }
-
-              // html
-              var res = parser.parse(_htmlRenderCtr.response['content']);
-              return SliverList.builder(
-                itemCount: res.body!.children.length,
-                itemBuilder: (context, index) {
-                  return htmlRender(
-                    context: context,
-                    element: res.body!.children[index],
-                    maxWidth: maxWidth,
-                    callback: _getImageCallback,
-                  );
-                },
-              );
             }
 
             return const SliverToBoxAdapter();
@@ -387,14 +446,14 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
               itemCount: loadingState.response!.length + 1,
               itemBuilder: (context, index) {
                 if (index == loadingState.response!.length) {
-                  _htmlRenderCtr.onLoadMore();
+                  _articleCtr.onLoadMore();
                   return Container(
                     alignment: Alignment.center,
                     margin: EdgeInsets.only(
                         bottom: MediaQuery.of(context).padding.bottom),
                     height: 125,
                     child: Text(
-                      _htmlRenderCtr.isEnd.not
+                      _articleCtr.isEnd.not
                           ? '加载中...'
                           : loadingState.response!.isEmpty
                               ? '还没有评论'
@@ -412,22 +471,22 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
                     replyReply: (replyItem, id) =>
                         replyReply(context, replyItem, id),
                     onReply: () {
-                      _htmlRenderCtr.onReply(
+                      _articleCtr.onReply(
                         context,
                         replyItem: loadingState.response![index],
                         index: index,
                       );
                     },
                     onDelete: (subIndex) =>
-                        _htmlRenderCtr.onRemove(index, subIndex),
-                    upMid: _htmlRenderCtr.upMid,
+                        _articleCtr.onRemove(index, subIndex),
+                    upMid: _articleCtr.upMid,
                     callback: _getImageCallback,
                     onCheckReply: (item) =>
-                        _htmlRenderCtr.onCheckReply(context, item),
-                    onToggleTop: (isUpTop, rpid) => _htmlRenderCtr.onToggleTop(
+                        _articleCtr.onCheckReply(context, item),
+                    onToggleTop: (isUpTop, rpid) => _articleCtr.onToggleTop(
                       index,
-                      _htmlRenderCtr.oid,
-                      _htmlRenderCtr.type,
+                      _articleCtr.commentId,
+                      _articleCtr.commentType,
                       isUpTop,
                       rpid,
                     ),
@@ -436,11 +495,11 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
               },
             )
           : HttpError(
-              onReload: _htmlRenderCtr.onReload,
+              onReload: _articleCtr.onReload,
             ),
       Error() => HttpError(
           errMsg: loadingState.errMsg,
-          onReload: _htmlRenderCtr.onReload,
+          onReload: _articleCtr.onReload,
         ),
       LoadingState() => throw UnimplementedError(),
     };
@@ -458,11 +517,11 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
             SizedBox(
               height: 35,
               child: TextButton.icon(
-                onPressed: () => _htmlRenderCtr.queryBySort(),
+                onPressed: () => _articleCtr.queryBySort(),
                 icon: const Icon(Icons.sort, size: 16),
                 label: Obx(
                   () => Text(
-                    _htmlRenderCtr.sortType.value.label,
+                    _articleCtr.sortType.value.label,
                     style: const TextStyle(fontSize: 13),
                   ),
                 ),
@@ -474,61 +533,17 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
     );
   }
 
-  Widget get _buildHeader => SliverToBoxAdapter(
-        child: Obx(
-          () => _htmlRenderCtr.loaded.value
-              ? Padding(
-                  padding: const EdgeInsets.fromLTRB(12, 12, 12, 8),
-                  child: GestureDetector(
-                    onTap: () {
-                      if (_htmlRenderCtr.mid != null) {
-                        Get.toNamed('/member?mid=${_htmlRenderCtr.mid}');
-                      }
-                    },
-                    child: Row(
-                      children: [
-                        NetworkImgLayer(
-                          width: 40,
-                          height: 40,
-                          type: 'avatar',
-                          src: _htmlRenderCtr.response['avatar']!,
-                        ),
-                        const SizedBox(width: 10),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              _htmlRenderCtr.response['uname'],
-                              style: TextStyle(
-                                fontSize: Theme.of(context)
-                                    .textTheme
-                                    .titleSmall!
-                                    .fontSize,
-                              ),
-                            ),
-                            Text(
-                              _htmlRenderCtr.response['updateTime'],
-                              style: TextStyle(
-                                color: Theme.of(context).colorScheme.outline,
-                                fontSize: Theme.of(context)
-                                    .textTheme
-                                    .labelSmall!
-                                    .fontSize,
-                              ),
-                            ),
-                          ],
-                        ),
-                        const Spacer(),
-                      ],
-                    ),
-                  ),
-                )
-              : const SizedBox.shrink(),
-        ),
-      );
-
   PreferredSizeWidget get _buildAppBar => AppBar(
-        title: Text(title),
+        title: Obx(() {
+          if (_articleCtr.isLoaded.value && _articleCtr.showTitle.value) {
+            return Text(_articleCtr.type == 'read'
+                ? _articleCtr.articleData.title ?? ''
+                : _articleCtr.opusData.item?.modules?.firstOrNull?.moduleTitle
+                        ?.text ??
+                    '');
+          }
+          return const SizedBox.shrink();
+        }),
         actions: [
           const SizedBox(width: 4),
           if (context.orientation == Orientation.landscape)
@@ -577,8 +592,7 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
           IconButton(
             tooltip: '浏览器打开',
             onPressed: () {
-              PageUtils.inAppWebview(
-                  url.startsWith('http') ? url : 'https:$url');
+              PageUtils.inAppWebview(_articleCtr.url);
             },
             icon: const Icon(Icons.open_in_browser_outlined, size: 19),
           ),
@@ -586,34 +600,7 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
             icon: const Icon(Icons.more_vert, size: 19),
             itemBuilder: (BuildContext context) => <PopupMenuEntry>[
               PopupMenuItem(
-                onTap: () => {
-                  _htmlRenderCtr.reqHtml(),
-                },
-                child: const Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(Icons.refresh, size: 19),
-                    SizedBox(width: 10),
-                    Text('刷新'),
-                  ],
-                ),
-              ),
-              PopupMenuItem(
-                onTap: () {
-                  PageUtils.inAppWebview(
-                      url.startsWith('http') ? url : 'https:$url');
-                },
-                child: const Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(Icons.open_in_new, size: 19),
-                    SizedBox(width: 10),
-                    Text('浏览器打开'),
-                  ],
-                ),
-              ),
-              PopupMenuItem(
-                onTap: () => Utils.copyText(url),
+                onTap: () => Utils.copyText(_articleCtr.url),
                 child: const Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -624,7 +611,7 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
                 ),
               ),
               PopupMenuItem(
-                onTap: () => Utils.shareText(url),
+                onTap: () => Utils.shareText(_articleCtr.url),
                 child: const Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -634,25 +621,23 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
                   ],
                 ),
               ),
-              if (_htmlRenderCtr.dynamicType == 'read' &&
-                  _htmlRenderCtr.favStat['status'])
+              if (_articleCtr.type == 'read' && _articleCtr.favStat['status'])
                 PopupMenuItem(
                   onTap: () {
                     try {
                       PageUtils.pmShare(
                         content: {
-                          "id": _htmlRenderCtr.id.substring(2),
+                          "id": _articleCtr.id,
                           "title": "- 哔哩哔哩专栏",
-                          "headline": _htmlRenderCtr.favStat['data']['title'],
+                          "headline": _articleCtr.favStat['data']['title'],
                           "source": 6,
-                          "thumb": (_htmlRenderCtr.favStat['data']
+                          "thumb": (_articleCtr.favStat['data']
                                       ['origin_image_urls'] as List?)
                                   ?.firstOrNull ??
                               '',
-                          "author": _htmlRenderCtr.favStat['data']
-                              ['author_name'],
+                          "author": _articleCtr.favStat['data']['author_name'],
                           "author_id":
-                              _htmlRenderCtr.favStat['data']['mid'].toString(),
+                              _articleCtr.favStat['data']['mid'].toString(),
                         },
                       );
                     } catch (e) {
@@ -692,16 +677,16 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
                     heroTag: null,
                     onPressed: () {
                       feedBack();
-                      _htmlRenderCtr.onReply(
+                      _articleCtr.onReply(
                         context,
-                        oid: _htmlRenderCtr.oid.value,
-                        replyType: ReplyType.values[type],
+                        oid: _articleCtr.commentId,
+                        replyType: ReplyType.values[_articleCtr.commentType],
                       );
                     },
                     tooltip: '评论动态',
                     child: const Icon(Icons.reply),
                   );
-              return _htmlRenderCtr.showDynActionBar.not
+              return _articleCtr.showDynActionBar.not
                   ? Align(
                       alignment: Alignment.bottomRight,
                       child: Padding(
@@ -721,13 +706,13 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
                             padding: EdgeInsets.only(
                               right: 14,
                               bottom: 14 +
-                                  (_htmlRenderCtr.item.value.idStr != null
+                                  (_articleCtr.favStat['status']
                                       ? 0
                                       : MediaQuery.of(context).padding.bottom),
                             ),
                             child: button(),
                           ),
-                          _htmlRenderCtr.item.value.idStr != null
+                          _articleCtr.favStat['status']
                               ? Container(
                                   decoration: BoxDecoration(
                                     color:
@@ -759,11 +744,10 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
                                                 useSafeArea: true,
                                                 builder: (context) =>
                                                     RepostPanel(
-                                                  item:
-                                                      _htmlRenderCtr.item.value,
+                                                  item: _articleCtr.item.value,
                                                   callback: () {
                                                     int count = int.tryParse(
-                                                            _htmlRenderCtr
+                                                            _articleCtr
                                                                     .item
                                                                     .value
                                                                     .modules
@@ -772,7 +756,7 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
                                                                     ?.count ??
                                                                 '0') ??
                                                         0;
-                                                    _htmlRenderCtr
+                                                    _articleCtr
                                                             .item
                                                             .value
                                                             .modules
@@ -805,7 +789,7 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
                                                   .outline,
                                             ),
                                             label: Text(
-                                              _htmlRenderCtr
+                                              _articleCtr
                                                           .item
                                                           .value
                                                           .modules
@@ -813,14 +797,13 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
                                                           ?.forward!
                                                           .count !=
                                                       null
-                                                  ? Utils.numFormat(
-                                                      _htmlRenderCtr
-                                                          .item
-                                                          .value
-                                                          .modules
-                                                          ?.moduleStat
-                                                          ?.forward!
-                                                          .count)
+                                                  ? Utils.numFormat(_articleCtr
+                                                      .item
+                                                      .value
+                                                      .modules
+                                                      ?.moduleStat
+                                                      ?.forward!
+                                                      .count)
                                                   : '转发',
                                             ),
                                           ),
@@ -829,8 +812,7 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
                                       Expanded(
                                         child: TextButton.icon(
                                           onPressed: () {
-                                            Utils.shareText(
-                                                '${HttpString.dynamicShareBaseUrl}/${_htmlRenderCtr.item.value.idStr}');
+                                            Utils.shareText(_articleCtr.url);
                                           },
                                           icon: Icon(
                                             FontAwesomeIcons.shareNodes,
@@ -850,19 +832,19 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
                                           label: const Text('分享'),
                                         ),
                                       ),
-                                      if (_htmlRenderCtr.favStat['status'])
+                                      if (_articleCtr.favStat['status'])
                                         Expanded(
                                           child: TextButton.icon(
                                             onPressed: () {
-                                              _htmlRenderCtr.onFav();
+                                              _articleCtr.onFav();
                                             },
                                             icon: Icon(
-                                              _htmlRenderCtr.favStat['isFav'] ==
+                                              _articleCtr.favStat['isFav'] ==
                                                       true
                                                   ? FontAwesomeIcons.solidStar
                                                   : FontAwesomeIcons.star,
                                               size: 16,
-                                              color: _htmlRenderCtr
+                                              color: _articleCtr
                                                           .favStat['isFav'] ==
                                                       true
                                                   ? Theme.of(context)
@@ -881,7 +863,7 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
                                                   .colorScheme
                                                   .outline,
                                             ),
-                                            label: Text(_htmlRenderCtr
+                                            label: Text(_articleCtr
                                                 .favStat['favNum']
                                                 .toString()),
                                           ),
@@ -891,7 +873,7 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
                                           builder: (context) => TextButton.icon(
                                             onPressed: () =>
                                                 RequestUtils.onLikeDynamic(
-                                              _htmlRenderCtr.item.value,
+                                              _articleCtr.item.value,
                                               () {
                                                 if (context.mounted) {
                                                   (context as Element?)
@@ -900,7 +882,7 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
                                               },
                                             ),
                                             icon: Icon(
-                                              _htmlRenderCtr
+                                              _articleCtr
                                                           .item
                                                           .value
                                                           .modules
@@ -912,7 +894,7 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
                                                       .solidThumbsUp
                                                   : FontAwesomeIcons.thumbsUp,
                                               size: 16,
-                                              color: _htmlRenderCtr
+                                              color: _articleCtr
                                                           .item
                                                           .value
                                                           .modules
@@ -926,7 +908,7 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
                                                   : Theme.of(context)
                                                       .colorScheme
                                                       .outline,
-                                              semanticLabel: _htmlRenderCtr
+                                              semanticLabel: _articleCtr
                                                           .item
                                                           .value
                                                           .modules
@@ -955,7 +937,7 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
                                                     child: child);
                                               },
                                               child: Text(
-                                                _htmlRenderCtr
+                                                _articleCtr
                                                             .item
                                                             .value
                                                             .modules
@@ -964,7 +946,7 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
                                                             ?.count !=
                                                         null
                                                     ? Utils.numFormat(
-                                                        _htmlRenderCtr
+                                                        _articleCtr
                                                             .item
                                                             .value
                                                             .modules!
@@ -973,7 +955,7 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
                                                             .count)
                                                     : '点赞',
                                                 style: TextStyle(
-                                                  color: _htmlRenderCtr
+                                                  color: _articleCtr
                                                               .item
                                                               .value
                                                               .modules
