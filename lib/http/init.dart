@@ -211,7 +211,7 @@ class Request {
         data: {
           'message': await AccountManager.dioError(e)
         }, // 将自定义 Map 数据赋值给 Response 的 data 属性
-        statusCode: -1,
+        statusCode: e.response?.statusCode ?? -1,
         requestOptions: RequestOptions(),
       );
       return errResponse;
@@ -240,7 +240,7 @@ class Request {
         data: {
           'message': await AccountManager.dioError(e)
         }, // 将自定义 Map 数据赋值给 Response 的 data 属性
-        statusCode: -1,
+        statusCode: e.response?.statusCode ?? -1,
         requestOptions: RequestOptions(),
       );
       return errResponse;
@@ -269,7 +269,7 @@ class Request {
         data: {
           'message': await AccountManager.dioError(e),
         },
-        statusCode: -1,
+        statusCode: e.response?.statusCode ?? -1,
         requestOptions: RequestOptions(),
       );
     }

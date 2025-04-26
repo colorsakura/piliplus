@@ -383,14 +383,12 @@ class _PostPanelState extends CommonCollapseSlidePageState<PostPanel> {
                             Get.back();
                             Request().post(
                               '${GStorage.blockServer}/api/skipSegments',
-                              queryParameters: {
+                              data: {
                                 'videoID': videoDetailController.bvid,
                                 'cid': videoDetailController.cid.value,
                                 'userID': GStorage.blockUserID,
                                 'userAgent': Constants.userAgent,
                                 'videoDuration': videoDuration,
-                              },
-                              data: {
                                 'segments': list!
                                     .map(
                                       (item) => {
