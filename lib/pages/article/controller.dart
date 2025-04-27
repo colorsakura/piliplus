@@ -8,7 +8,6 @@ import 'package:PiliPlus/models/dynamics/article_content_model.dart'
 import 'package:PiliPlus/models/dynamics/result.dart';
 import 'package:PiliPlus/models/model_owner.dart';
 import 'package:PiliPlus/models/space_article/item.dart';
-import 'package:PiliPlus/models/space_article/stats.dart';
 import 'package:PiliPlus/pages/common/reply_controller.dart';
 import 'package:PiliPlus/pages/mine/controller.dart';
 import 'package:PiliPlus/utils/storage.dart';
@@ -88,23 +87,24 @@ class ArticleController extends ReplyController<MainListReply> {
   Future<bool> queryOpus(opusId) async {
     final res = await DynamicsHttp.opusDetail(opusId: opusId);
     if (res is Success) {
-      opusData = (res as Success<DynamicItemModel>).response;
+      final opusData = (res as Success<DynamicItemModel>).response;
       //fallback
-      if (opusData?.fallback?.id != null) {
-        id = opusData!.fallback!.id!;
+      if (opusData.fallback?.id != null) {
+        id = opusData.fallback!.id!;
         type = 'read';
         setUrl();
         _queryContent();
         return false;
       }
-      commentType = opusData!.basic!.commentType!;
-      commentId = int.parse(opusData!.basic!.commentIdStr!);
-      if (showDynActionBar && opusData!.modules.moduleStat != null) {
-        stats.value = opusData!.modules.moduleStat!;
+      this.opusData = opusData;
+      commentType = opusData.basic!.commentType!;
+      commentId = int.parse(opusData.basic!.commentIdStr!);
+      if (showDynActionBar && opusData.modules.moduleStat != null) {
+        stats.value = opusData.modules.moduleStat;
       }
       summary
-        ..author ??= opusData!.modules.moduleAuthor
-        ..title ??= opusData!.modules.moduleTag?.text;
+        ..author ??= opusData.modules.moduleAuthor
+        ..title ??= opusData.modules.moduleTag?.text;
       return true;
     }
     return false;
@@ -119,28 +119,42 @@ class ArticleController extends ReplyController<MainListReply> {
         ..title ??= articleData!.title
         ..cover ??= articleData!.originImageUrls?.firstOrNull;
 
-      if (showDynActionBar && opusData?.modules.moduleStat == null) {
-        final dynId = articleData!.dynIdStr;
-        if (dynId != null) {
-          _queryReadAsDyn(dynId);
-        } else {
-          debugPrint('cvid2opus failed: $id');
-        }
-        _statsToModuleStat(articleData!.stats!);
+      if (showDynActionBar) {
+        _queryReadAsDyn(articleData!.dynIdStr);
+        _getArticleInfo();
       }
       return true;
     }
     return false;
   }
 
-  _queryReadAsDyn(id) async {
-    // 仅用于获取moduleStat
+  // data for forward
+  Future _queryReadAsDyn(id) async {
+    if (opusData != null) {
+      return;
+    }
     final res = await DynamicsHttp.dynamicDetail(id: id);
     if (res['status']) {
-      opusData = res['data'] as DynamicItemModel;
-      if (opusData!.modules.moduleStat != null) {
-        stats.value = opusData!.modules.moduleStat!;
-      }
+      opusData = res['data'];
+    }
+  }
+
+  // stats
+  Future _getArticleInfo() async {
+    final res = await DynamicsHttp.articleInfo(cvId: id);
+    if (res['status']) {
+      stats.value = ModuleStatModel(
+        comment: DynamicStat(count: res['data']?['stats']?['reply']),
+        forward: DynamicStat(count: res['data']?['stats']?['share']),
+        like: DynamicStat(
+          count: res['data']?['stats']?['like'],
+          status: res['data']?['like'] == 1,
+        ),
+        favorite: DynamicStat(
+          count: res['data']?['stats']?['reply'],
+          status: res['data']?['favorite'],
+        ),
+      );
     }
   }
 
@@ -201,21 +215,24 @@ class ArticleController extends ReplyController<MainListReply> {
     }
   }
 
-  void _statsToModuleStat(Stats dynStats) {
-    if (stats.value == null) {
-      stats.value = ModuleStatModel(
-        comment: _setCount(dynStats.reply),
-        forward: _setCount(dynStats.dyn),
-        like: _setCount(dynStats.like),
-        favorite: _setCount(dynStats.favorite),
-      );
+  Future onLike(VoidCallback callback) async {
+    bool isLike = stats.value?.like?.status == true;
+    final res = await DynamicsHttp.likeDynamic(
+        dynamicId: opusData?.idStr, up: isLike ? 2 : 1);
+    if (res['status']) {
+      stats.value?.like?.status = !isLike;
+      int count = stats.value?.like?.count ?? 0;
+      if (isLike) {
+        stats.value?.like?.count = count - 1;
+      } else {
+        stats.value?.like?.count = count + 1;
+      }
+      stats.refresh();
+      SmartDialog.showToast(!isLike ? '点赞成功' : '取消赞');
     } else {
-      // 动态类无收藏数据
-      stats.value!.favorite ??= _setCount(dynStats.favorite);
+      SmartDialog.showToast(res['msg']);
     }
   }
-
-  DynamicStat _setCount(int? count) => DynamicStat(count: count);
 }
 
 class Summary {

@@ -13,7 +13,6 @@ import 'package:PiliPlus/pages/dynamics/repost_dyn_panel.dart';
 import 'package:PiliPlus/pages/video/detail/reply/widgets/reply_item_grpc.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
-import 'package:PiliPlus/utils/request_utils.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:easy_debounce/easy_throttle.dart';
@@ -601,17 +600,6 @@ class _ArticlePageState extends State<ArticlePage>
             icon: const Icon(Icons.more_vert, size: 19),
             itemBuilder: (BuildContext context) => <PopupMenuEntry>[
               PopupMenuItem(
-                onTap: () => Utils.copyText(_articleCtr.url),
-                child: const Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(Icons.copy_rounded, size: 19),
-                    SizedBox(width: 10),
-                    Text('复制链接'),
-                  ],
-                ),
-              ),
-              PopupMenuItem(
                 onTap: () => Utils.shareText(_articleCtr.url),
                 child: const Row(
                   mainAxisSize: MainAxisSize.min,
@@ -622,8 +610,18 @@ class _ArticlePageState extends State<ArticlePage>
                   ],
                 ),
               ),
-              if (_articleCtr.commentType == 12 &&
-                  _articleCtr.stats.value != null)
+              PopupMenuItem(
+                onTap: () => Utils.copyText(_articleCtr.url),
+                child: const Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(Icons.copy_rounded, size: 19),
+                    SizedBox(width: 10),
+                    Text('复制链接'),
+                  ],
+                ),
+              ),
+              if (_articleCtr.type == 'read' && _articleCtr.stats.value != null)
                 PopupMenuItem(
                   onTap: () {
                     try {
@@ -828,16 +826,16 @@ class _ArticlePageState extends State<ArticlePage>
                                       Expanded(
                                         child: Builder(
                                           builder: (context) => TextButton.icon(
-                                            onPressed: () =>
-                                                RequestUtils.onLikeDynamic(
-                                              _articleCtr.opusData!,
-                                              () {
-                                                if (context.mounted) {
-                                                  (context as Element?)
-                                                      ?.markNeedsBuild();
-                                                }
-                                              },
-                                            ),
+                                            onPressed: () {
+                                              _articleCtr.onLike(
+                                                () {
+                                                  if (context.mounted) {
+                                                    (context as Element?)
+                                                        ?.markNeedsBuild();
+                                                  }
+                                                },
+                                              );
+                                            },
                                             icon: Icon(
                                               _articleCtr.stats.value?.like
                                                           ?.status ==

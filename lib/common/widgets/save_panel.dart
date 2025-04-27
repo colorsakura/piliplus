@@ -166,7 +166,7 @@ class _SavePanelState extends State<SavePanel> {
         case 'DYNAMIC_TYPE_AV':
           viewType = '观看';
           itemType = '视频';
-          uri = 'bilibili://video/${item.basic!['comment_id_str']}';
+          uri = 'bilibili://video/${item.basic.commentIdStr}';
           break;
 
         case 'DYNAMIC_TYPE_ARTICLE':

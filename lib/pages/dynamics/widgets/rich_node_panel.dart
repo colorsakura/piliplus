@@ -126,7 +126,7 @@ InlineSpan? richNode(item, BuildContext context) {
               child: GestureDetector(
                 onTap: () {
                   try {
-                    String dynamicId = item.basic['comment_id_str'];
+                    String dynamicId = item.basic.commentIdStr;
                     Get.toNamed(
                       '/webview',
                       parameters: {
