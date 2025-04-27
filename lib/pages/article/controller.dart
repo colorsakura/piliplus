@@ -3,14 +3,17 @@ import 'package:PiliPlus/http/dynamics.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/http/user.dart';
 import 'package:PiliPlus/http/video.dart';
-import 'package:PiliPlus/models/dynamics/article_view/data.dart';
-import 'package:PiliPlus/models/dynamics/opus_detail/data.dart';
-import 'package:PiliPlus/models/dynamics/opus_detail/favorite.dart';
+import 'package:PiliPlus/models/dynamics/article_content_model.dart'
+    show ArticleContentModel;
 import 'package:PiliPlus/models/dynamics/result.dart';
+import 'package:PiliPlus/models/model_owner.dart';
+import 'package:PiliPlus/models/space_article/item.dart';
+import 'package:PiliPlus/models/space_article/stats.dart';
 import 'package:PiliPlus/pages/common/reply_controller.dart';
 import 'package:PiliPlus/pages/mine/controller.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/url_utils.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 import 'package:PiliPlus/http/reply.dart';
@@ -20,9 +23,10 @@ class ArticleController extends ReplyController<MainListReply> {
   late String id;
   late String type;
 
-  late final String url;
+  late String url;
   late int commentType;
-  dynamic commentId;
+  late int commentId;
+  final summary = Summary();
 
   RxBool showTitle = false.obs;
 
@@ -30,20 +34,28 @@ class ArticleController extends ReplyController<MainListReply> {
   late final showDynActionBar = GStorage.showDynActionBar;
 
   @override
-  dynamic get sourceId => id;
+  dynamic get sourceId => commentType == 12 ? 'cv$commentId' : id;
 
-  RxBool isLoaded = false.obs;
-  late ArticleData articleData;
-  late OpusData opusData;
+  final RxBool isLoaded = false.obs;
+  DynamicItemModel? opusData; // 采用opus信息作为动态信息, 标题信息从summary获取
+  Item? articleData;
+  final Rx<ModuleStatModel?> stats = Rx<ModuleStatModel?>(null);
 
-  late final Rx<DynamicItemModel> item = DynamicItemModel().obs;
-  late final RxMap favStat = <dynamic, dynamic>{'status': false}.obs;
+  List<ArticleContentModel>? get opus =>
+      opusData?.modules.moduleContent ?? articleData?.opus?.content;
 
   @override
   void onInit() {
     super.onInit();
     id = Get.parameters['id']!;
     type = Get.parameters['type']!;
+
+    if (Get.arguments?['item'] is DynamicItemModel) {
+      opusData = Get.arguments['item'];
+      if (opusData!.modules.moduleStat != null) {
+        stats.value = opusData!.modules.moduleStat!;
+      }
+    }
 
     // to opus
     if (type == 'read') {
@@ -60,101 +72,92 @@ class ArticleController extends ReplyController<MainListReply> {
     }
   }
 
-  init() {
+  setUrl() {
     url = type == 'read'
         ? 'https://www.bilibili.com/read/cv$id'
         : 'https://www.bilibili.com/opus/$id';
+  }
+
+  init() {
+    setUrl();
     commentType = type == 'picture' ? 11 : 12;
 
-    if (Get.arguments?['item'] is DynamicItemModel) {
-      item.value = Get.arguments['item'];
-    }
-
-    _queryDynItem();
     _queryContent();
   }
 
-  _queryDynItem() async {
-    if (showDynActionBar) {
-      if (type == 'read') {
-        if (item.value.idStr == null) {
-          UrlUtils.parseRedirectUrl('https://www.bilibili.com/read/cv$id/')
-              .then((url) {
-            if (url != null) {
-              _queryDyn(url.split('/').last);
-            }
-          });
-        }
-        _queryInfo();
-      } else {
-        _queryDyn(id);
+  Future<bool> queryOpus(opusId) async {
+    final res = await DynamicsHttp.opusDetail(opusId: opusId);
+    if (res is Success) {
+      opusData = (res as Success<DynamicItemModel>).response;
+      //fallback
+      if (opusData?.fallback?.id != null) {
+        id = opusData!.fallback!.id!;
+        type = 'read';
+        setUrl();
+        _queryContent();
+        return false;
       }
+      commentType = opusData!.basic!.commentType!;
+      commentId = int.parse(opusData!.basic!.commentIdStr!);
+      if (showDynActionBar && opusData!.modules.moduleStat != null) {
+        stats.value = opusData!.modules.moduleStat!;
+      }
+      summary
+        ..author ??= opusData!.modules.moduleAuthor
+        ..title ??= opusData!.modules.moduleTag?.text;
+      return true;
     }
+    return false;
   }
 
-  _queryInfo() {
-    DynamicsHttp.articleInfo(cvId: id).then((res) {
-      if (res['status']) {
-        favStat.addAll({
-          'status': true,
-          'isFav': res['data']?['favorite'] ?? false,
-          'favNum': res['data']?['stats']?['favorite'] ?? 0,
-          'data': res['data'],
-        });
-      }
-    });
-  }
+  Future<bool> queryRead(cvid) async {
+    final res = await DynamicsHttp.articleView(cvId: cvid);
+    if (res is Success) {
+      articleData = (res as Success<Item>).response;
+      summary
+        ..author ??= articleData!.author
+        ..title ??= articleData!.title
+        ..cover ??= articleData!.originImageUrls?.firstOrNull;
 
-  _queryDyn(id) {
-    if (item.value.idStr != null) {
-      return;
-    }
-    DynamicsHttp.dynamicDetail(id: id).then((res) {
-      if (res['status']) {
-        item.value = res['data'];
-      }
-    });
-  }
-
-  Future _queryContent() async {
-    final res = type == 'read'
-        ? await DynamicsHttp.articleView(cvId: id)
-        : await DynamicsHttp.opusDetail(opusId: id);
-    if (res['status']) {
-      if (type == 'read') {
-        articleData = res['data'];
-        commentId = int.parse(id);
-      } else {
-        opusData = res['data'];
-        // fallback
-        if (opusData.fallback?.id != null) {
-          id = opusData.fallback!.id!;
-          type = 'read';
-          commentType = 12;
-          _queryInfo();
-          _queryContent();
-          return;
+      if (showDynActionBar && opusData?.modules.moduleStat == null) {
+        final dynId = articleData!.dynIdStr;
+        if (dynId != null) {
+          _queryReadAsDyn(dynId);
         } else {
-          commentType = opusData.item?.basic?.commentType ??
-              (type == 'picture' ? 11 : 12);
-          commentId = int.parse(opusData.item!.basic!.commentIdStr!);
-          Favorite? favorite =
-              opusData.item?.modules?.lastOrNull?.moduleStat?.favorite;
-          favStat.addAll({
-            'status': true,
-            'isFav': favorite?.status ?? false,
-            'favNum': favorite?.count ?? 0,
-          });
+          debugPrint('cvid2opus failed: $id');
         }
+        _statsToModuleStat(articleData!.stats!);
       }
+      return true;
+    }
+    return false;
+  }
 
-      isLoaded.value = true;
+  _queryReadAsDyn(id) async {
+    // 仅用于获取moduleStat
+    final res = await DynamicsHttp.dynamicDetail(id: id);
+    if (res['status']) {
+      opusData = res['data'] as DynamicItemModel;
+      if (opusData!.modules.moduleStat != null) {
+        stats.value = opusData!.modules.moduleStat!;
+      }
+    }
+  }
 
+  // 请求动态内容
+  Future _queryContent() async {
+    if (type != 'read') {
+      isLoaded.value = await queryOpus(id);
+    } else {
+      commentId = int.parse(id);
+      commentType = 12;
+      isLoaded.value = await queryRead(commentId);
+    }
+    if (isLoaded.value) {
+      queryData();
       if (isLogin && !MineController.anonymity.value) {
         VideoHttp.historyReport(aid: commentId, type: 5);
       }
-
-      queryData();
     }
   }
 
@@ -177,22 +180,48 @@ class ArticleController extends ReplyController<MainListReply> {
   }
 
   Future onFav() async {
-    bool isFav = favStat['isFav'] == true;
+    bool isFav = stats.value?.favorite?.status == true;
     final res = type == 'read'
         ? isFav
-            ? await UserHttp.delFavArticle(id: id)
-            : await UserHttp.addFavArticle(id: id)
+            ? await UserHttp.delFavArticle(id: commentId)
+            : await UserHttp.addFavArticle(id: commentId)
         : await UserHttp.communityAction(opusId: id, action: isFav ? 4 : 3);
     if (res['status']) {
-      favStat['isFav'] = !isFav;
+      stats.value?.favorite?.status = !isFav;
+      var count = stats.value?.favorite?.count ?? 0;
       if (isFav) {
-        favStat['favNum'] -= 1;
+        stats.value?.favorite?.count = count - 1;
       } else {
-        favStat['favNum'] += 1;
+        stats.value?.favorite?.count = count + 1;
       }
+      stats.refresh();
       SmartDialog.showToast('${isFav ? '取消' : ''}收藏成功');
     } else {
       SmartDialog.showToast(res['msg']);
     }
   }
+
+  void _statsToModuleStat(Stats dynStats) {
+    if (stats.value == null) {
+      stats.value = ModuleStatModel(
+        comment: _setCount(dynStats.reply),
+        forward: _setCount(dynStats.dyn),
+        like: _setCount(dynStats.like),
+        favorite: _setCount(dynStats.favorite),
+      );
+    } else {
+      // 动态类无收藏数据
+      stats.value!.favorite ??= _setCount(dynStats.favorite);
+    }
+  }
+
+  DynamicStat _setCount(int? count) => DynamicStat(count: count);
+}
+
+class Summary {
+  Owner? author;
+  String? title;
+  String? cover;
+
+  Summary({this.author, this.title, this.cover});
 }

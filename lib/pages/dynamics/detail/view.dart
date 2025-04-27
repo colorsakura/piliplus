@@ -118,14 +118,15 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
     // 楼层
     int floor = args['floor'];
     // 评论类型
-    int commentType = args['item'].basic!['comment_type'] ?? 11;
+    final item = args['item'] as DynamicItemModel;
+    int commentType = item.basic?.commentType ?? 11;
     replyType = (commentType == 0) ? 11 : commentType;
 
     if (floor == 1) {
-      oid = int.parse(args['item'].basic!['comment_id_str']);
+      oid = int.parse(item.basic!.commentIdStr!);
     } else {
       try {
-        ModuleDynamicModel moduleDynamic = args['item'].modules.moduleDynamic;
+        final moduleDynamic = item.modules.moduleDynamic!;
         String majorType = moduleDynamic.major!.type!;
 
         if (majorType == 'MAJOR_TYPE_OPUS') {
@@ -528,32 +529,31 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
                                                 item: _dynamicDetailController
                                                     .item,
                                                 callback: () {
-                                                  int count = int.tryParse(
-                                                          _dynamicDetailController
-                                                                  .item
-                                                                  .modules
-                                                                  ?.moduleStat
-                                                                  ?.forward
-                                                                  ?.count ??
-                                                              '0') ??
-                                                      0;
+                                                  int count =
+                                                      _dynamicDetailController
+                                                              .item
+                                                              .modules
+                                                              .moduleStat
+                                                              ?.forward
+                                                              ?.count ??
+                                                          0;
                                                   _dynamicDetailController
                                                           .item
                                                           .modules
-                                                          ?.moduleStat ??=
+                                                          .moduleStat ??=
                                                       ModuleStatModel();
                                                   _dynamicDetailController
-                                                      .item
-                                                      .modules!
-                                                      .moduleStat
-                                                      ?.forward ??= ForWard();
-                                                  _dynamicDetailController
                                                           .item
-                                                          .modules!
-                                                          .moduleStat!
-                                                          .forward!
-                                                          .count =
-                                                      (count + 1).toString();
+                                                          .modules
+                                                          .moduleStat
+                                                          ?.forward ??=
+                                                      DynamicStat();
+                                                  _dynamicDetailController
+                                                      .item
+                                                      .modules
+                                                      .moduleStat!
+                                                      .forward!
+                                                      .count = count + 1;
                                                   if (btnContext.mounted) {
                                                     (btnContext as Element?)
                                                         ?.markNeedsBuild();
@@ -581,14 +581,14 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
                                             _dynamicDetailController
                                                         .item
                                                         .modules
-                                                        ?.moduleStat
+                                                        .moduleStat
                                                         ?.forward
                                                         ?.count !=
                                                     null
                                                 ? Utils.numFormat(
                                                     _dynamicDetailController
                                                         .item
-                                                        .modules!
+                                                        .modules
                                                         .moduleStat!
                                                         .forward!
                                                         .count)
@@ -638,7 +638,7 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
                                             _dynamicDetailController
                                                         .item
                                                         .modules
-                                                        ?.moduleStat
+                                                        .moduleStat
                                                         ?.like
                                                         ?.status ==
                                                     true
@@ -648,7 +648,7 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
                                             color: _dynamicDetailController
                                                         .item
                                                         .modules
-                                                        ?.moduleStat
+                                                        .moduleStat
                                                         ?.like
                                                         ?.status ==
                                                     true
@@ -662,7 +662,7 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
                                                 _dynamicDetailController
                                                             .item
                                                             .modules
-                                                            ?.moduleStat
+                                                            .moduleStat
                                                             ?.like
                                                             ?.status ==
                                                         true
@@ -689,14 +689,14 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
                                               _dynamicDetailController
                                                           .item
                                                           .modules
-                                                          ?.moduleStat
+                                                          .moduleStat
                                                           ?.like
                                                           ?.count !=
                                                       null
                                                   ? Utils.numFormat(
                                                       _dynamicDetailController
                                                           .item
-                                                          .modules!
+                                                          .modules
                                                           .moduleStat!
                                                           .like!
                                                           .count)
@@ -705,7 +705,7 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
                                                 color: _dynamicDetailController
                                                             .item
                                                             .modules
-                                                            ?.moduleStat
+                                                            .moduleStat
                                                             ?.like
                                                             ?.status ==
                                                         true

@@ -2,7 +2,6 @@ import 'package:PiliPlus/grpc/app/main/community/reply/v1/reply.pb.dart';
 import 'package:PiliPlus/http/dynamics.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/common/reply_type.dart';
-import 'package:PiliPlus/models/dynamics/opus_detail/data.dart';
 import 'package:PiliPlus/models/dynamics/result.dart';
 import 'package:PiliPlus/pages/common/reply_controller.dart';
 import 'package:PiliPlus/utils/id_utils.dart';
@@ -31,7 +30,7 @@ class DynamicDetailController extends ReplyController<MainListReply> {
     item = Get.arguments['item'];
     floor = Get.arguments['floor'];
     if (floor == 1) {
-      count.value = int.parse(item.modules!.moduleStat!.comment!.count ?? '0');
+      count.value = item.modules.moduleStat?.comment?.count ?? 0;
     }
 
     if (oid != 0) {
@@ -41,10 +40,10 @@ class DynamicDetailController extends ReplyController<MainListReply> {
 
   getCommentParams(int id) async {
     var res = await DynamicsHttp.opusDetail(opusId: id);
-    if (res['status']) {
-      OpusData data = res['data'];
-      type = data.item!.basic!.commentType!;
-      oid = int.parse(data.item!.basic!.commentIdStr!);
+    if (res is Success) {
+      final data = (res as Success<DynamicItemModel>).response;
+      type = data.basic!.commentType!;
+      oid = int.parse(data.basic!.commentIdStr!);
       queryData();
     }
   }
