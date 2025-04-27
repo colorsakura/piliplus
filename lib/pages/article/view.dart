@@ -339,7 +339,7 @@ class _ArticlePageState extends State<ArticlePage>
           () {
             if (_articleCtr.isLoaded.value) {
               if (_articleCtr.type == 'read') {
-                var res = parser.parse(_articleCtr.articleData.content);
+                late final res = parser.parse(_articleCtr.articleData.content);
                 return SliverMainAxisGroup(
                   slivers: [
                     if (_articleCtr.articleData.title != null)
@@ -403,19 +403,26 @@ class _ArticlePageState extends State<ArticlePage>
                         ),
                       ),
                     ),
-                    SliverList.separated(
-                      itemCount: res.body!.children.length,
-                      itemBuilder: (context, index) {
-                        return htmlRender(
-                          context: context,
-                          element: res.body!.children[index],
-                          maxWidth: maxWidth,
-                          callback: _getImageCallback,
-                        );
-                      },
-                      separatorBuilder: (context, index) =>
-                          const SizedBox(height: 10),
-                    ),
+                    _articleCtr.articleData.modules?.isNotEmpty == true
+                        ? opusContent(
+                            context: context,
+                            modules: _articleCtr.articleData.modules,
+                            callback: _getImageCallback,
+                            maxWidth: maxWidth,
+                          )
+                        : SliverList.separated(
+                            itemCount: res.body!.children.length,
+                            itemBuilder: (context, index) {
+                              return htmlRender(
+                                context: context,
+                                element: res.body!.children[index],
+                                maxWidth: maxWidth,
+                                callback: _getImageCallback,
+                              );
+                            },
+                            separatorBuilder: (context, index) =>
+                                const SizedBox(height: 10),
+                          ),
                   ],
                 );
               } else {

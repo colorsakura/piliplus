@@ -5,8 +5,15 @@ class Word {
   double? fontSize;
   Style? style;
   String? words;
+  String? fontLevel;
 
-  Word({this.color, this.fontSize, this.style, this.words});
+  Word({
+    this.color,
+    this.fontSize,
+    this.style,
+    this.words,
+    this.fontLevel,
+  });
 
   factory Word.fromJson(Map<String, dynamic> json) => Word(
         color: json['color'] == null
@@ -17,6 +24,7 @@ class Word {
             ? null
             : Style.fromJson(json['style'] as Map<String, dynamic>),
         words: json['words'] as String?,
+        fontLevel: json['font_level'] as String?,
       );
 
   Map<String, dynamic> toJson() => {
@@ -24,5 +32,6 @@ class Word {
         'font_size': fontSize,
         'style': style?.toJson(),
         'words': words,
+        'font_level': fontLevel,
       };
 }

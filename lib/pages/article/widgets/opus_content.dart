@@ -10,6 +10,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:re_highlight/languages/all.dart';
 import 'package:re_highlight/re_highlight.dart';
 import 'package:re_highlight/styles/all.dart';
@@ -95,7 +96,7 @@ Widget opusContent({
               itemBuilder: (context, index) {
                 final element = item.moduleContent!.paragraphs![index];
 
-                if ((element.paraType == 1 || element.paraType == 4)) {
+                if (element.paraType == 1 || element.paraType == 4) {
                   return SelectableText.rich(
                     textAlign: element.align == 1 ? TextAlign.center : null,
                     TextSpan(
@@ -117,7 +118,7 @@ Widget opusContent({
                           ),
                           recognizer: TapGestureRecognizer()
                             ..onTap = () {
-                              if (item.rich!.jumpUrl != null) {
+                              if (item.rich?.jumpUrl != null) {
                                 PiliScheme.routePushFromUrl(
                                     item.rich!.jumpUrl!);
                               }
@@ -179,6 +180,53 @@ Widget opusContent({
                     fit: BoxFit.contain,
                     height: element.line?.pic?.height,
                     imageUrl: Utils.thumbnailImgUrl(element.line!.pic!.url!),
+                  );
+                }
+
+                if (element.paraType == 5) {
+                  return SelectableText.rich(
+                    TextSpan(
+                      children:
+                          element.list?.items?.asMap().entries.map((entry) {
+                        return TextSpan(
+                          children: [
+                            WidgetSpan(
+                              child: Icon(MdiIcons.circleMedium),
+                              alignment: PlaceholderAlignment.middle,
+                            ),
+                            ...entry.value.nodes!.map((item) {
+                              return TextSpan(
+                                children: [
+                                  TextSpan(
+                                    text: item.word?.words,
+                                    style: TextStyle(
+                                      decoration:
+                                          item.word?.style?.strikethrough ==
+                                                  true
+                                              ? TextDecoration.lineThrough
+                                              : null,
+                                      fontStyle:
+                                          item.word?.style?.italic == true
+                                              ? FontStyle.italic
+                                              : null,
+                                      fontWeight: item.word?.style?.bold == true
+                                          ? FontWeight.bold
+                                          : null,
+                                      color: item.word?.color != null
+                                          ? Color(item.word!.color!)
+                                          : null,
+                                      fontSize: item.word?.fontSize,
+                                    ),
+                                  ),
+                                ],
+                              );
+                            }),
+                            if (entry.key < element.list!.items!.length - 1)
+                              TextSpan(text: '\n'),
+                          ],
+                        );
+                      }).toList(),
+                    ),
                   );
                 }
 
@@ -260,6 +308,33 @@ Widget opusContent({
                     ),
                     width: double.infinity,
                     child: SelectableText.rich(renderer.span!),
+                  );
+                }
+
+                if (element.text?.nodes?.isNotEmpty == true) {
+                  return SelectableText.rich(
+                    textAlign: element.align == 1 ? TextAlign.center : null,
+                    TextSpan(
+                        children: element.text!.nodes!.map<TextSpan>((item) {
+                      return TextSpan(
+                        text: item.word?.words,
+                        style: TextStyle(
+                          decoration: item.word?.style?.strikethrough == true
+                              ? TextDecoration.lineThrough
+                              : null,
+                          fontStyle: item.word?.style?.italic == true
+                              ? FontStyle.italic
+                              : null,
+                          fontWeight: item.word?.style?.bold == true
+                              ? FontWeight.bold
+                              : null,
+                          color: item.word?.color != null
+                              ? Color(item.word!.color!)
+                              : null,
+                          fontSize: item.word?.fontSize,
+                        ),
+                      );
+                    }).toList()),
                   );
                 }
 

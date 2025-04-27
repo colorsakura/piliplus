@@ -1,3 +1,7 @@
+import 'package:PiliPlus/models/dynamics/opus_detail/module.dart';
+import 'package:PiliPlus/models/dynamics/opus_detail/module_content.dart';
+import 'package:PiliPlus/models/dynamics/opus_detail/paragraph.dart';
+
 import 'author.dart';
 import 'category.dart';
 import 'media.dart';
@@ -44,6 +48,7 @@ class ArticleData {
   int? versionId;
   String? dynIdStr;
   int? totalArtNum;
+  List<OpusModule>? modules;
 
   ArticleData({
     this.id,
@@ -85,61 +90,77 @@ class ArticleData {
     this.versionId,
     this.dynIdStr,
     this.totalArtNum,
+    this.modules,
   });
 
-  factory ArticleData.fromJson(Map<String, dynamic> json) => ArticleData(
-        id: json['id'] as int?,
-        category: json['category'] == null
-            ? null
-            : Category.fromJson(json['category'] as Map<String, dynamic>),
-        categories: (json['categories'] as List<dynamic>?)
-            ?.map((e) => Category.fromJson(e as Map<String, dynamic>))
-            .toList(),
-        title: json['title'] as String?,
-        summary: json['summary'] as String?,
-        bannerUrl: json['banner_url'] as String?,
-        templateId: json['template_id'] as int?,
-        state: json['state'] as int?,
-        author: json['author'] == null
-            ? null
-            : Author.fromJson(json['author'] as Map<String, dynamic>),
-        reprint: json['reprint'] as int?,
-        imageUrls: json['image_urls'],
-        publishTime: json['publish_time'] as int?,
-        ctime: json['ctime'] as int?,
-        mtime: json['mtime'] as int?,
-        stats: json['stats'] == null
-            ? null
-            : Stats.fromJson(json['stats'] as Map<String, dynamic>),
-        tags: (json['tags'] as List<dynamic>?)
-            ?.map((e) => Tag.fromJson(e as Map<String, dynamic>))
-            .toList(),
-        words: json['words'] as int?,
-        originImageUrls: json['origin_image_urls'],
-        list: json['list'] as dynamic,
-        isLike: json['is_like'] as bool?,
-        media: json['media'] == null
-            ? null
-            : Media.fromJson(json['media'] as Map<String, dynamic>),
-        applyTime: json['apply_time'] as String?,
-        checkTime: json['check_time'] as String?,
-        original: json['original'] as int?,
-        actId: json['act_id'] as int?,
-        dispute: json['dispute'] as dynamic,
-        authenMark: json['authenMark'] as dynamic,
-        coverAvid: json['cover_avid'] as int?,
-        topVideoInfo: json['top_video_info'] as dynamic,
-        type: json['type'] as int?,
-        checkState: json['check_state'] as int?,
-        originTemplateId: json['origin_template_id'] as int?,
-        privatePub: json['private_pub'] as int?,
-        contentPicList: json['content_pic_list'] as dynamic,
-        content: json['content'] as String?,
-        keywords: json['keywords'] as String?,
-        versionId: json['version_id'] as int?,
-        dynIdStr: json['dyn_id_str'] as String?,
-        totalArtNum: json['total_art_num'] as int?,
-      );
+  factory ArticleData.fromJson(Map<String, dynamic> json) {
+    final data = ArticleData(
+      id: json['id'] as int?,
+      category: json['category'] == null
+          ? null
+          : Category.fromJson(json['category'] as Map<String, dynamic>),
+      categories: (json['categories'] as List<dynamic>?)
+          ?.map((e) => Category.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      title: json['title'] as String?,
+      summary: json['summary'] as String?,
+      bannerUrl: json['banner_url'] as String?,
+      templateId: json['template_id'] as int?,
+      state: json['state'] as int?,
+      author: json['author'] == null
+          ? null
+          : Author.fromJson(json['author'] as Map<String, dynamic>),
+      reprint: json['reprint'] as int?,
+      imageUrls: json['image_urls'],
+      publishTime: json['publish_time'] as int?,
+      ctime: json['ctime'] as int?,
+      mtime: json['mtime'] as int?,
+      stats: json['stats'] == null
+          ? null
+          : Stats.fromJson(json['stats'] as Map<String, dynamic>),
+      tags: (json['tags'] as List<dynamic>?)
+          ?.map((e) => Tag.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      words: json['words'] as int?,
+      originImageUrls: json['origin_image_urls'],
+      list: json['list'] as dynamic,
+      isLike: json['is_like'] as bool?,
+      media: json['media'] == null
+          ? null
+          : Media.fromJson(json['media'] as Map<String, dynamic>),
+      applyTime: json['apply_time'] as String?,
+      checkTime: json['check_time'] as String?,
+      original: json['original'] as int?,
+      actId: json['act_id'] as int?,
+      dispute: json['dispute'] as dynamic,
+      authenMark: json['authenMark'] as dynamic,
+      coverAvid: json['cover_avid'] as int?,
+      topVideoInfo: json['top_video_info'] as dynamic,
+      type: json['type'] as int?,
+      checkState: json['check_state'] as int?,
+      originTemplateId: json['origin_template_id'] as int?,
+      privatePub: json['private_pub'] as int?,
+      contentPicList: json['content_pic_list'] as dynamic,
+      content: json['content'] as String?,
+      keywords: json['keywords'] as String?,
+      versionId: json['version_id'] as int?,
+      dynIdStr: json['dyn_id_str'] as String?,
+      totalArtNum: json['total_art_num'] as int?,
+    );
+    if (data.type == 3 && json['opus'] != null) {
+      data.modules = [
+        OpusModule(
+          moduleType: 'MODULE_TYPE_CONTENT',
+          moduleContent: ModuleContent(
+            paragraphs: (json['opus']?['content']?['paragraphs'] as List?)
+                ?.map((e) => Paragraph.fromJson(e))
+                .toList(),
+          ),
+        )
+      ];
+    }
+    return data;
+  }
 
   Map<String, dynamic> toJson() => {
         'id': id,

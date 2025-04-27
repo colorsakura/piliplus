@@ -1,3 +1,4 @@
+import 'node.dart';
 import 'pic.dart';
 import 'text.dart';
 
@@ -9,6 +10,7 @@ class Paragraph {
   Line? line;
   LinkCard? linkCard;
   Code? code;
+  L1st? list;
 
   Paragraph({
     this.align,
@@ -18,6 +20,7 @@ class Paragraph {
     this.line,
     this.linkCard,
     this.code,
+    this.list,
   });
 
   factory Paragraph.fromJson(Map<String, dynamic> json) => Paragraph(
@@ -34,6 +37,7 @@ class Paragraph {
             ? null
             : LinkCard.fromJson(json['link_card']),
         code: json['code'] == null ? null : Code.fromJson(json['code']),
+        list: json['list'] == null ? null : L1st.fromJson(json['list']),
       );
 
   Map<String, dynamic> toJson() => {
@@ -42,6 +46,28 @@ class Paragraph {
         'text': text?.toJson(),
         'pic': pic?.toJson(),
       };
+}
+
+class L1st {
+  List<Item>? items;
+  int? style;
+
+  L1st.fromJson(Map<String, dynamic> json) {
+    items = (json['items'] as List?)?.map((e) => Item.fromJson(e)).toList();
+    style = json['style'];
+  }
+}
+
+class Item {
+  int? level;
+  int? order;
+  List<Node>? nodes;
+
+  Item.fromJson(Map<String, dynamic> json) {
+    level = json['level'];
+    order = json['order'];
+    nodes = (json['nodes'] as List?)?.map((e) => Node.fromJson(e)).toList();
+  }
 }
 
 class Code {
