@@ -1,3 +1,4 @@
+import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/common/widgets/interactiveviewer_gallery/interactiveviewer_gallery.dart'
     show SourceModel;
 import 'package:PiliPlus/common/widgets/network_img_layer.dart';
@@ -9,6 +10,9 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:re_highlight/languages/all.dart';
+import 'package:re_highlight/re_highlight.dart';
+import 'package:re_highlight/styles/all.dart';
 
 Widget opusContent({
   required BuildContext context,
@@ -95,7 +99,7 @@ Widget opusContent({
                   return SelectableText.rich(
                     textAlign: element.align == 1 ? TextAlign.center : null,
                     TextSpan(
-                        children: element.text?.nodes!.map<TextSpan>((item) {
+                        children: element.text?.nodes?.map<TextSpan>((item) {
                       if (item.rich != null) {
                         return TextSpan(
                           text: '\u{1F517}${item.rich?.text}',
@@ -149,10 +153,7 @@ Widget opusContent({
                     child: GestureDetector(
                       onTap: () {
                         if (callback != null) {
-                          callback(
-                            [element.pic!.pics!.first.url!],
-                            0,
-                          );
+                          callback([element.pic!.pics!.first.url!], 0);
                         } else {
                           context.imageView(
                             initialPage: 0,
@@ -183,8 +184,7 @@ Widget opusContent({
 
                 if (element.paraType == 6) {
                   if (element.linkCard?.card?.ugc != null) {
-                    return Card(
-                      margin: EdgeInsets.zero,
+                    return Material(
                       shape: RoundedRectangleBorder(
                         borderRadius:
                             const BorderRadius.all(Radius.circular(8)),
@@ -207,7 +207,7 @@ Widget opusContent({
                             children: [
                               NetworkImgLayer(
                                 radius: 6,
-                                width: 65 * 16 / 10,
+                                width: 65 * StyleString.aspectRatio,
                                 height: 65,
                                 src: element.linkCard!.card!.ugc!.cover,
                               ),
@@ -235,6 +235,32 @@ Widget opusContent({
                       ),
                     );
                   }
+                }
+
+                if (element.paraType == 7) {
+                  final Highlight highlight = Highlight()
+                    ..registerLanguages(builtinAllLanguages);
+                  final HighlightResult result = highlight.highlightAuto(
+                      element.code!.content!,
+                      element.code!.lang == 'language-clike'
+                          ? ['c', 'java']
+                          : [
+                              element.code!.lang!
+                                  .replaceAll('language-', '')
+                                  .replaceAll('like', ''),
+                            ]);
+                  final TextSpanRenderer renderer = TextSpanRenderer(
+                      const TextStyle(), builtinAllThemes['github']!);
+                  result.render(renderer);
+                  return Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      borderRadius: const BorderRadius.all(Radius.circular(8)),
+                      color: Theme.of(context).colorScheme.onInverseSurface,
+                    ),
+                    width: double.infinity,
+                    child: SelectableText.rich(renderer.span!),
+                  );
                 }
 
                 return const SizedBox.shrink();

@@ -8,6 +8,7 @@ class Paragraph {
   Pic? pic;
   Line? line;
   LinkCard? linkCard;
+  Code? code;
 
   Paragraph({
     this.align,
@@ -16,6 +17,7 @@ class Paragraph {
     this.pic,
     this.line,
     this.linkCard,
+    this.code,
   });
 
   factory Paragraph.fromJson(Map<String, dynamic> json) => Paragraph(
@@ -31,6 +33,7 @@ class Paragraph {
         linkCard: json['link_card'] == null
             ? null
             : LinkCard.fromJson(json['link_card']),
+        code: json['code'] == null ? null : Code.fromJson(json['code']),
       );
 
   Map<String, dynamic> toJson() => {
@@ -39,6 +42,16 @@ class Paragraph {
         'text': text?.toJson(),
         'pic': pic?.toJson(),
       };
+}
+
+class Code {
+  String? content;
+  String? lang;
+
+  Code.fromJson(Map<String, dynamic> json) {
+    content = json['content'];
+    lang = json['lang'];
+  }
 }
 
 class Ugc {
