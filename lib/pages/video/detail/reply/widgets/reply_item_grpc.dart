@@ -1125,8 +1125,8 @@ class ReplyItemGrpc extends StatelessWidget {
           InkWell(
             onTap: Get.back,
             borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(28),
-              topRight: Radius.circular(28),
+              topLeft: Radius.circular(18),
+              topRight: Radius.circular(18),
             ),
             child: Container(
               height: 35,
