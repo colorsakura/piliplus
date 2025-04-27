@@ -423,7 +423,7 @@ class VideoDetailController extends GetxController
                   }
                 : null,
           );
-      if (plPlayerController.isFullScreen.value) {
+      if (plPlayerController.isFullScreen.value || showVideoSheet) {
         PageUtils.showVideoBottomSheet(
           context,
           child: plPlayerController.darkVideoPage && MyApp.darkThemeData != null
@@ -444,6 +444,11 @@ class VideoDetailController extends GetxController
       getMediaList();
     }
   }
+
+  bool horizontalScreen =
+      GStorage.setting.get(SettingBoxKey.horizontalScreen, defaultValue: false);
+  bool get showVideoSheet =>
+      !horizontalScreen && Get.context!.orientation == Orientation.landscape;
 
   int? _lastPos;
   double? _blockLimit;
@@ -1356,7 +1361,7 @@ class VideoDetailController extends GetxController
         ),
       );
     }
-    if (plPlayerController.isFullScreen.value) {
+    if (plPlayerController.isFullScreen.value || showVideoSheet) {
       PageUtils.showVideoBottomSheet(
         context,
         child: plPlayerController.darkVideoPage && MyApp.darkThemeData != null
@@ -1649,7 +1654,7 @@ class VideoDetailController extends GetxController
       title =
           Get.find<VideoIntroController>(tag: heroTag).videoDetail.value.title;
     } catch (_) {}
-    if (plPlayerController.isFullScreen.value) {
+    if (plPlayerController.isFullScreen.value || showVideoSheet) {
       PageUtils.showVideoBottomSheet(
         context,
         child: plPlayerController.darkVideoPage && MyApp.darkThemeData != null

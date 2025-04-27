@@ -126,6 +126,7 @@ class _SettingPageState extends State<SettingPage> {
                   child: MediaQuery.removePadding(
                     context: context,
                     removeRight: true,
+                    removeTop: true,
                     child: _buildList,
                   ),
                 ),
@@ -138,6 +139,7 @@ class _SettingPageState extends State<SettingPage> {
                   child: MediaQuery.removePadding(
                     context: context,
                     removeLeft: true,
+                    removeTop: true,
                     child: switch (_type) {
                       'privacySetting' => PrivacySetting(showAppBar: false),
                       'recommendSetting' => RecommendSetting(showAppBar: false),
