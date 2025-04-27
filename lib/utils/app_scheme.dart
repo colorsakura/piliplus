@@ -500,6 +500,7 @@ class PiliScheme {
     // www.bilibili.com
     // space.bilibili.com
     // live.bilibili.com
+    // search.bilibili.com
 
     // redirect
     if (host.contains('b23.tv')) {
@@ -538,6 +539,20 @@ class PiliScheme {
       String? mid = uriDigitRegExp.firstMatch(path)?.group(1);
       if (mid != null) {
         PageUtils.toDupNamed('/member?mid=$mid', off: off);
+        return true;
+      }
+      launchURL();
+      return false;
+    }
+
+    if (host.contains('search.bilibili.com')) {
+      String? keyword = uri.queryParameters['keyword'];
+      if (keyword != null) {
+        PageUtils.toDupNamed(
+          '/searchResult',
+          parameters: {'keyword': keyword},
+          off: off,
+        );
         return true;
       }
       launchURL();
