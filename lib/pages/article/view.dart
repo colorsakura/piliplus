@@ -620,10 +620,17 @@ class _ArticlePageState extends State<ArticlePage>
                   ],
                 ),
               ),
-              if (_articleCtr.type == 'read' && _articleCtr.stats.value != null)
+              if (_articleCtr.commentType == 12 &&
+                  _articleCtr.stats.value != null)
                 PopupMenuItem(
-                  onTap: () {
+                  onTap: () async {
                     try {
+                      if (_articleCtr.summary.cover == null) {
+                        final res = await _articleCtr.getArticleCover();
+                        if (res != true) {
+                          return;
+                        }
+                      }
                       PageUtils.pmShare(
                         content: {
                           "id": _articleCtr.commentId,
