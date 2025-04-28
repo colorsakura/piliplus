@@ -440,7 +440,7 @@ class _ArticlePageState extends State<ArticlePage>
   Widget _buildReplyList(LoadingState<List<ReplyInfo>?> loadingState) {
     return switch (loadingState) {
       Loading() => SliverList.builder(
-          itemCount: 5,
+          itemCount: 12,
           itemBuilder: (context, index) {
             return const VideoReplySkeleton();
           },
@@ -778,6 +778,15 @@ class _ArticlePageState extends State<ArticlePage>
                                             stat: _articleCtr
                                                 .stats.value?.forward,
                                             callback: () {
+                                              if (_articleCtr.opusData ==
+                                                      null &&
+                                                  _articleCtr.articleData
+                                                          ?.dynIdStr ==
+                                                      null) {
+                                                SmartDialog.showToast(
+                                                    'err: ${_articleCtr.id}');
+                                                return;
+                                              }
                                               showModalBottomSheet(
                                                 context: context,
                                                 isScrollControlled: true,
@@ -785,10 +794,14 @@ class _ArticlePageState extends State<ArticlePage>
                                                 builder: (context) =>
                                                     RepostPanel(
                                                   item: _articleCtr.opusData,
+                                                  dynIdStr: _articleCtr
+                                                      .articleData?.dynIdStr,
                                                   pic:
                                                       _articleCtr.summary.cover,
                                                   title:
                                                       _articleCtr.summary.title,
+                                                  uname: _articleCtr
+                                                      .summary.author?.name,
                                                   callback: () {
                                                     int count = _articleCtr
                                                             .stats
@@ -834,16 +847,7 @@ class _ArticlePageState extends State<ArticlePage>
                                       Expanded(
                                         child: Builder(
                                           builder: (context) => TextButton.icon(
-                                            onPressed: () {
-                                              _articleCtr.onLike(
-                                                () {
-                                                  if (context.mounted) {
-                                                    (context as Element?)
-                                                        ?.markNeedsBuild();
-                                                  }
-                                                },
-                                              );
-                                            },
+                                            onPressed: _articleCtr.onLike,
                                             icon: Icon(
                                               _articleCtr.stats.value?.like
                                                           ?.status ==

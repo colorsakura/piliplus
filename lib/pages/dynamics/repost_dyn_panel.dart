@@ -16,6 +16,7 @@ class RepostPanel extends CommonPublishPage {
   const RepostPanel({
     super.key,
     this.item,
+    this.dynIdStr,
     this.callback,
     // video
     this.rid,
@@ -35,6 +36,7 @@ class RepostPanel extends CommonPublishPage {
   final bool? isMax;
 
   final DynamicItemModel? item;
+  final String? dynIdStr;
   final VoidCallback? callback;
 
   @override
@@ -343,7 +345,7 @@ class _RepostPanelState extends CommonPublishPageState<RepostPanel> {
   Future onCustomPublish({required String message, List? pictures}) async {
     dynamic result = await MsgHttp.createDynamic(
       mid: Accounts.main.mid,
-      dynIdStr: widget.item?.idStr,
+      dynIdStr: widget.item?.idStr ?? widget.dynIdStr,
       rid: widget.rid,
       dynType: widget.dynType,
       rawText: editController.text,
