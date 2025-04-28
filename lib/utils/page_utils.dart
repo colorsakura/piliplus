@@ -28,7 +28,7 @@ import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class PageUtils {
-  static void pmShare({required Map content}) async {
+  static void pmShare(BuildContext context, {required Map content}) async {
     // debugPrint(content.toString());
 
     List<UserModel> userList = <UserModel>[];
@@ -54,16 +54,18 @@ class PageUtils {
       }
     }
 
-    showModalBottomSheet(
-      context: Get.context!,
-      builder: (context) => SharePanel(
-        content: content,
-        userList: userList,
-      ),
-      useSafeArea: true,
-      enableDrag: false,
-      isScrollControlled: true,
-    );
+    if (context.mounted) {
+      showModalBottomSheet(
+        context: context,
+        builder: (context) => SharePanel(
+          content: content,
+          userList: userList,
+        ),
+        useSafeArea: true,
+        enableDrag: false,
+        isScrollControlled: true,
+      );
+    }
   }
 
   static void scheduleExit(BuildContext context, isFullScreen,

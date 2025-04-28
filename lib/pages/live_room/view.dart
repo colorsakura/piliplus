@@ -454,6 +454,7 @@ class _LiveRoomPageState extends State<LiveRoomPage>
                 onTap: () {
                   try {
                     PageUtils.pmShare(
+                      this.context,
                       content: {
                         "cover": _liveRoomController
                             .roomInfoH5.value.roomInfo!.cover!,

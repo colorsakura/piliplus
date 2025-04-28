@@ -240,10 +240,10 @@ class AuthorPanel extends StatelessWidget {
       constraints: BoxConstraints(
         maxWidth: min(640, min(Get.width, Get.height)),
       ),
-      builder: (context) {
+      builder: (context1) {
         return Padding(
           padding:
-              EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom),
+              EdgeInsets.only(bottom: MediaQuery.of(context1).padding.bottom),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -338,6 +338,7 @@ class AuthorPanel extends StatelessWidget {
                           : item.modules.moduleDynamic!.major!.opus!.pics!.first
                               .url!;
                       PageUtils.pmShare(
+                        context,
                         content: {
                           "id": id,
                           "title": title,

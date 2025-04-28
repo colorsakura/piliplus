@@ -435,7 +435,7 @@ class VideoIntroController extends GetxController {
   Future actionShareVideo(context) async {
     showDialog(
         context: context,
-        builder: (context) {
+        builder: (_) {
           String videoUrl = '${HttpString.baseUrl}/video/$bvid';
           return AlertDialog(
             clipBehavior: Clip.hardEdge,
@@ -510,6 +510,7 @@ class VideoIntroController extends GetxController {
                     Get.back();
                     try {
                       PageUtils.pmShare(
+                        context,
                         content: {
                           "id": videoDetail.value.aid!.toString(),
                           "title": videoDetail.value.title!,

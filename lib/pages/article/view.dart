@@ -630,18 +630,21 @@ class _ArticlePageState extends State<ArticlePage>
                           return;
                         }
                       }
-                      PageUtils.pmShare(
-                        content: {
-                          "id": _articleCtr.commentId,
-                          "title": "- 哔哩哔哩专栏",
-                          "headline": _articleCtr.summary.title!, // throw
-                          "source": 6,
-                          "thumb": _articleCtr.summary.cover!,
-                          "author": _articleCtr.summary.author!.name,
-                          "author_id":
-                              _articleCtr.summary.author!.mid.toString(),
-                        },
-                      );
+                      if (mounted) {
+                        PageUtils.pmShare(
+                          this.context,
+                          content: {
+                            "id": _articleCtr.commentId,
+                            "title": "- 哔哩哔哩专栏",
+                            "headline": _articleCtr.summary.title!, // throw
+                            "source": 6,
+                            "thumb": _articleCtr.summary.cover!,
+                            "author": _articleCtr.summary.author!.name,
+                            "author_id":
+                                _articleCtr.summary.author!.mid.toString(),
+                          },
+                        );
+                      }
                     } catch (e) {
                       SmartDialog.showToast(e.toString());
                     }
