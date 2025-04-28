@@ -102,13 +102,7 @@ InlineSpan? richNode(item, BuildContext context) {
                     SmartDialog.showToast('未获取到链接');
                     return;
                   }
-                  if (url.startsWith('//')) {
-                    PiliScheme.routePushFromUrl('https:$url');
-                    return;
-                  }
-                  PageUtils.handleWebview(
-                    url.startsWith('//') ? "https://$url" : url,
-                  );
+                  PiliScheme.routePushFromUrl(url);
                 },
                 child: Text(
                   i.text ?? '',

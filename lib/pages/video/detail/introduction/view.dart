@@ -710,24 +710,34 @@ class _VideoInfoState extends State<VideoInfo> {
                         ],
                         if (videoIntroController.videoTags is List &&
                             videoIntroController.videoTags.isNotEmpty) ...[
-                          const SizedBox(height: 8),
-                          Wrap(
-                            spacing: 8,
-                            runSpacing: 8,
-                            children: (videoIntroController.videoTags as List)
-                                .map(
-                                  (item) => SearchText(
-                                    fontSize: 13,
-                                    text: item['tag_name'],
-                                    onTap: (_) => Get.toNamed(
-                                      '/searchResult',
-                                      parameters: {'keyword': item['tag_name']},
-                                    ),
-                                    onLongPress: (_) =>
-                                        Utils.copyText(item['tag_name']),
-                                  ),
-                                )
-                                .toList(),
+                          GestureDetector(
+                            onTap: () {},
+                            behavior: HitTestBehavior.opaque,
+                            child: Container(
+                              width: double.infinity,
+                              padding: const EdgeInsets.only(top: 8),
+                              child: Wrap(
+                                spacing: 8,
+                                runSpacing: 8,
+                                children: (videoIntroController.videoTags
+                                        as List)
+                                    .map(
+                                      (item) => SearchText(
+                                        fontSize: 13,
+                                        text: item['tag_name'],
+                                        onTap: (_) => Get.toNamed(
+                                          '/searchResult',
+                                          parameters: {
+                                            'keyword': item['tag_name']
+                                          },
+                                        ),
+                                        onLongPress: (_) =>
+                                            Utils.copyText(item['tag_name']),
+                                      ),
+                                    )
+                                    .toList(),
+                              ),
+                            ),
                           ),
                         ],
                       ],
