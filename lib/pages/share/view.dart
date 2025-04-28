@@ -1,7 +1,7 @@
 import 'package:PiliPlus/common/widgets/icon_button.dart';
 import 'package:PiliPlus/common/widgets/network_img_layer.dart';
 import 'package:PiliPlus/common/widgets/self_sized_horizontal_list.dart';
-import 'package:PiliPlus/pages/video/detail/contact/view.dart';
+import 'package:PiliPlus/pages/contact/view.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/request_utils.dart';
 import 'package:flutter/material.dart';
@@ -76,7 +76,7 @@ class _SharePanelState extends State<SharePanel> {
     return Padding(
       padding: const EdgeInsets.all(12) +
           MediaQuery.paddingOf(context) +
-          MediaQuery.of(context).viewInsets,
+          MediaQuery.viewInsetsOf(context),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
@@ -112,37 +112,52 @@ class _SharePanelState extends State<SharePanel> {
                       behavior: HitTestBehavior.opaque,
                       child: SizedBox(
                         width: 65,
-                        child: Column(
+                        child: Stack(
+                          clipBehavior: Clip.none,
+                          alignment: Alignment.topCenter,
                           children: [
-                            Container(
-                              decoration: index == _selectedIndex
-                                  ? BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      border: Border.all(
-                                        width: 1.5,
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .primary,
-                                      ),
-                                    )
-                                  : null,
-                              width: 50,
-                              height: 50,
-                              alignment: Alignment.center,
-                              child: NetworkImgLayer(
-                                width: 40,
-                                height: 40,
-                                src: _userList[index].avatar,
-                                type: 'avatar',
+                            Column(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.all(5),
+                                  child: NetworkImgLayer(
+                                    width: 40,
+                                    height: 40,
+                                    src: _userList[index].avatar,
+                                    type: 'avatar',
+                                  ),
+                                ),
+                                const SizedBox(height: 2),
+                                Text(
+                                  _userList[index].name,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(fontSize: 12),
+                                ),
+                              ],
+                            ),
+                            if (index == _selectedIndex)
+                              Container(
+                                width: 50,
+                                height: 50,
+                                decoration: BoxDecoration(
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .primary
+                                      .withOpacity(0.3),
+                                  shape: BoxShape.circle,
+                                  border: Border.all(
+                                    width: 1.5,
+                                    color:
+                                        Theme.of(context).colorScheme.primary,
+                                  ),
+                                ),
+                                child: Icon(
+                                  Icons.check,
+                                  size: 20,
+                                  color: Colors.white,
+                                ),
                               ),
-                            ),
-                            const SizedBox(height: 2),
-                            Text(
-                              _userList[index].name,
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(fontSize: 12),
-                            ),
                           ],
                         ),
                       ),
@@ -207,12 +222,15 @@ class _SharePanelState extends State<SharePanel> {
                 child: TextField(
                   controller: _controller,
                   focusNode: _focusNode,
+                  minLines: 1,
+                  maxLines: 2,
+                  textInputAction: TextInputAction.newline,
                   decoration: InputDecoration(
                     hintText: '说说你的想法吧...',
                     hintStyle: const TextStyle(fontSize: 14),
                     border: OutlineInputBorder(
                       borderSide: BorderSide.none,
-                      borderRadius: BorderRadius.circular(25),
+                      borderRadius: BorderRadius.circular(20),
                     ),
                     filled: true,
                     isDense: true,

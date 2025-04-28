@@ -1,4 +1,4 @@
-import 'package:PiliPlus/pages/video/detail/share/view.dart' show UserModel;
+import 'package:PiliPlus/pages/share/view.dart' show UserModel;
 import 'package:PiliPlus/utils/request_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

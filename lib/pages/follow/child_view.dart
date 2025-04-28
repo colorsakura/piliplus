@@ -6,7 +6,7 @@ import 'package:PiliPlus/models/follow/result.dart';
 import 'package:PiliPlus/pages/follow/child_controller.dart';
 import 'package:PiliPlus/pages/follow/controller.dart';
 import 'package:PiliPlus/pages/follow/widgets/follow_item.dart';
-import 'package:PiliPlus/pages/video/detail/share/view.dart' show UserModel;
+import 'package:PiliPlus/pages/share/view.dart' show UserModel;
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
