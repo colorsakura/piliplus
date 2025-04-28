@@ -1,7 +1,6 @@
 import 'package:PiliPlus/grpc/app/main/community/reply/v1/reply.pb.dart';
 import 'package:PiliPlus/http/dynamics.dart';
 import 'package:PiliPlus/http/loading_state.dart';
-import 'package:PiliPlus/http/msg.dart';
 import 'package:PiliPlus/http/user.dart';
 import 'package:PiliPlus/http/video.dart';
 import 'package:PiliPlus/models/dynamics/article_content_model.dart'
@@ -12,7 +11,6 @@ import 'package:PiliPlus/models/space_article/item.dart';
 import 'package:PiliPlus/pages/common/reply_controller.dart';
 import 'package:PiliPlus/pages/mine/controller.dart';
 import 'package:PiliPlus/utils/storage.dart';
-import 'package:PiliPlus/utils/url_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
@@ -23,7 +21,9 @@ class ArticleController extends ReplyController<MainListReply> {
   late String id;
   late String type;
 
-  late String url;
+  late String url = type == 'read'
+      ? 'https://www.bilibili.com/read/cv$id'
+      : 'https://www.bilibili.com/opus/$id';
   late int commentType;
   late int commentId;
   final summary = Summary();
@@ -37,7 +37,7 @@ class ArticleController extends ReplyController<MainListReply> {
   dynamic get sourceId => commentType == 12 ? 'cv$commentId' : id;
 
   final RxBool isLoaded = false.obs;
-  DynamicItemModel? opusData; // 采用opus信息作为动态信息, 标题信息从summary获取
+  DynamicItemModel? opusData; // 标题信息从summary获取, 动态没有favorite
   Item? articleData;
   final Rx<ModuleStatModel?> stats = Rx<ModuleStatModel?>(null);
 
@@ -50,52 +50,23 @@ class ArticleController extends ReplyController<MainListReply> {
     id = Get.parameters['id']!;
     type = Get.parameters['type']!;
 
-    if (Get.arguments?['item'] is DynamicItemModel) {
-      opusData = Get.arguments['item'];
-      if (opusData!.modules.moduleStat != null) {
-        stats.value = opusData!.modules.moduleStat!;
-      }
-    }
-
-    // to opus
-    if (type == 'read') {
-      UrlUtils.parseRedirectUrl('https://www.bilibili.com/read/cv$id/')
-          .then((url) {
-        if (url != null) {
-          id = url.split('/').last;
-          type = 'opus';
-        }
-        init();
-      });
-    } else {
-      init();
-    }
-  }
-
-  setUrl() {
-    url = type == 'read'
-        ? 'https://www.bilibili.com/read/cv$id'
-        : 'https://www.bilibili.com/opus/$id';
-  }
-
-  init() {
-    setUrl();
     commentType = type == 'picture' ? 11 : 12;
 
-    _queryContent();
+    _queryContent(); // lazy to opus
   }
 
-  Future<bool> queryOpus(opusId) async {
+  Future<void> _queryOpus(opusId) async {
     final res = await DynamicsHttp.opusDetail(opusId: opusId);
-    if (res is Success) {
-      final opusData = (res as Success<DynamicItemModel>).response;
+    if (res.isSuccess) {
+      final opusData = res.data;
       //fallback
       if (opusData.fallback?.id != null) {
         id = opusData.fallback!.id!;
         type = 'read';
-        setUrl();
-        _queryContent();
-        return false;
+        if (articleData?.content == null) {
+          await _queryRead(id, false);
+        }
+        return;
       }
       this.opusData = opusData;
       commentType = opusData.basic!.commentType!;
@@ -106,44 +77,45 @@ class ArticleController extends ReplyController<MainListReply> {
       summary
         ..author ??= opusData.modules.moduleAuthor
         ..title ??= opusData.modules.moduleTag?.text;
-      return true;
+      isLoaded.value = true;
     }
-    return false;
   }
 
-  Future<bool> queryRead(cvid) async {
-    final res = await DynamicsHttp.articleView(cvId: cvid);
-    if (res is Success) {
-      articleData = (res as Success<Item>).response;
+  Future<void> _queryRead(cvId, [bool toOpus = false]) async {
+    final res = await DynamicsHttp.articleView(cvId: cvId);
+    if (res.isSuccess) {
+      articleData = res.data;
       summary
         ..author ??= articleData!.author
         ..title ??= articleData!.title
         ..cover ??= articleData!.originImageUrls?.firstOrNull;
+      isLoaded.value = true;
 
-      if (showDynActionBar) {
-        _queryReadAsDyn(articleData!.dynIdStr);
-        _getArticleInfo();
+      if (toOpus &&
+          articleData!.dynIdStr != null &&
+          articleData?.opus?.content?.isNotEmpty != true) {
+        await _queryOpus(articleData!.dynIdStr);
+        if (opusData != null) {
+          id = articleData!.dynIdStr!;
+          type = 'opus';
+          isLoaded.refresh();
+        }
       }
-      return true;
-    }
-    return false;
-  }
-
-  // data for forward
-  Future _queryReadAsDyn(id) async {
-    if (opusData != null) {
-      return;
-    }
-    final res = await DynamicsHttp.dynamicDetail(id: id);
-    if (res['status']) {
-      opusData = res['data'];
+      if (showDynActionBar && stats.value == null) {
+        // _queryReadAsDyn(articleData!.dynIdStr);
+        getArticleInfo();
+      }
     }
   }
 
   // stats
-  Future _getArticleInfo() async {
+  Future<bool> getArticleInfo() async {
     final res = await DynamicsHttp.articleInfo(cvId: commentId);
     if (res['status']) {
+      summary
+        ..cover ??= (res['data']?['origin_image_urls'] as List?)?.firstOrNull
+        ..title ??= res['data']?['title'];
+
       stats.value = ModuleStatModel(
         comment: DynamicStat(count: res['data']?['stats']?['reply']),
         forward: DynamicStat(count: res['data']?['stats']?['share']),
@@ -156,17 +128,20 @@ class ArticleController extends ReplyController<MainListReply> {
           status: res['data']?['favorite'],
         ),
       );
+      return true;
     }
+    SmartDialog.showToast(res['msg']);
+    return false;
   }
 
   // 请求动态内容
   Future _queryContent() async {
     if (type != 'read') {
-      isLoaded.value = await queryOpus(id);
+      await _queryOpus(id);
     } else {
       commentId = int.parse(id);
       commentType = 12;
-      isLoaded.value = await queryRead(commentId);
+      await _queryRead(commentId, true);
     }
     if (isLoaded.value) {
       queryData();
@@ -219,7 +194,8 @@ class ArticleController extends ReplyController<MainListReply> {
   Future onLike(VoidCallback callback) async {
     bool isLike = stats.value?.like?.status == true;
     final res = await DynamicsHttp.likeDynamic(
-        dynamicId: opusData?.idStr, up: isLike ? 2 : 1);
+        dynamicId: opusData?.idStr ?? articleData?.dynIdStr,
+        up: isLike ? 2 : 1);
     if (res['status']) {
       stats.value?.like?.status = !isLike;
       int count = stats.value?.like?.count ?? 0;
@@ -230,19 +206,6 @@ class ArticleController extends ReplyController<MainListReply> {
       }
       stats.refresh();
       SmartDialog.showToast(!isLike ? '点赞成功' : '取消赞');
-    } else {
-      SmartDialog.showToast(res['msg']);
-    }
-  }
-
-  Future getArticleCover() async {
-    final res = await MsgHttp.feedInfoWeb(articleIds: [commentId]);
-    if (res['status']) {
-      summary.cover = ((res['data']?['article'] as List?)
-              ?.firstOrNull?['image_urls'] as List?)
-          ?.firstOrNull;
-      // debugPrint('cover: ${summary.cover}');
-      return summary.cover != null;
     } else {
       SmartDialog.showToast(res['msg']);
     }
