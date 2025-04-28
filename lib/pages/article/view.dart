@@ -648,7 +648,7 @@ class _ArticlePageState extends State<ArticlePage>
                     children: [
                       Icon(Icons.forward_to_inbox, size: 19),
                       SizedBox(width: 10),
-                      Text('分享至动态'),
+                      Text('分享至消息'),
                     ],
                   ),
                 ),

@@ -246,7 +246,14 @@ class _HistoryPageState extends State<HistoryPage>
           physics: const AlwaysScrollableScrollPhysics(),
           controller: _historyController.scrollController,
           slivers: [
-            Obx(() => _buildBody(_historyController.loadingState.value)),
+            SliverPadding(
+              padding: EdgeInsets.only(
+                top: StyleString.safeSpace - 5,
+                bottom: MediaQuery.of(context).padding.bottom + 80,
+              ),
+              sliver:
+                  Obx(() => _buildBody(_historyController.loadingState.value)),
+            ),
           ],
         ),
       );
@@ -263,29 +270,23 @@ class _HistoryPageState extends State<HistoryPage>
           ),
         ),
       Success() => loadingState.response?.isNotEmpty == true
-          ? SliverPadding(
-              padding: EdgeInsets.only(
-                top: StyleString.safeSpace - 5,
-                bottom: MediaQuery.of(context).padding.bottom + 80,
-              ),
-              sliver: SliverGrid(
-                gridDelegate: Grid.videoCardHDelegate(context),
-                delegate: SliverChildBuilderDelegate(
-                  (context, index) {
-                    if (index == loadingState.response!.length - 1) {
-                      _historyController.onLoadMore();
-                    }
-                    final item = loadingState.response![index];
-                    return HistoryItem(
-                      videoItem: item,
-                      ctr: _historyController.baseCtr,
-                      onChoose: () => _historyController.onSelect(index),
-                      onDelete: (kid, business) =>
-                          _historyController.delHistory(item),
-                    );
-                  },
-                  childCount: loadingState.response!.length,
-                ),
+          ? SliverGrid(
+              gridDelegate: Grid.videoCardHDelegate(context),
+              delegate: SliverChildBuilderDelegate(
+                (context, index) {
+                  if (index == loadingState.response!.length - 1) {
+                    _historyController.onLoadMore();
+                  }
+                  final item = loadingState.response![index];
+                  return HistoryItem(
+                    videoItem: item,
+                    ctr: _historyController.baseCtr,
+                    onChoose: () => _historyController.onSelect(index),
+                    onDelete: (kid, business) =>
+                        _historyController.delHistory(item),
+                  );
+                },
+                childCount: loadingState.response!.length,
               ),
             )
           : HttpError(

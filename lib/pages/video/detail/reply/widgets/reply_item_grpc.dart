@@ -25,7 +25,6 @@ import 'package:PiliPlus/utils/feed_back.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/url_utils.dart';
 import 'package:PiliPlus/utils/utils.dart';
-import 'package:html/parser.dart' show parse;
 
 class ReplyItemGrpc extends StatelessWidget {
   const ReplyItemGrpc({
@@ -618,7 +617,6 @@ class ReplyItemGrpc extends StatelessWidget {
       });
       message = message.replaceAll(RegExp(r"\{vote:\d+?\}"), "");
     }
-    message = parse(message).body?.text ?? message;
     // 构建正则表达式
     final List<String> specialTokens = [
       ...content.emote.keys,

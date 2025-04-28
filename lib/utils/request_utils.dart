@@ -43,12 +43,11 @@ class RequestUtils {
     required int receiverId,
     required Map content,
     String? message,
-    ValueChanged<bool>? callback,
   }) async {
     SmartDialog.showLoading();
 
     final ownerMid = Accounts.main.mid;
-    final videoRes = await GrpcRepo.sendMsg(
+    final contentRes = await GrpcRepo.sendMsg(
       senderUid: ownerMid,
       receiverId: receiverId,
       content: jsonEncode(content),
@@ -57,26 +56,26 @@ class RequestUtils {
           : MsgType.EN_MSG_TYPE_SHARE_V2,
     );
 
-    if (videoRes['status']) {
+    if (contentRes['status']) {
       if (message?.isNotEmpty == true) {
-        var textRes = await MsgHttp.sendMsg(
+        var msgRes = await MsgHttp.sendMsg(
           senderUid: ownerMid,
           receiverId: receiverId,
           content: jsonEncode({"content": message}),
           msgType: 1,
         );
         Get.back();
-        if (textRes['status']) {
+        if (msgRes['status']) {
           SmartDialog.showToast('分享成功');
         } else {
-          SmartDialog.showToast('视频分享成功，但消息分享失败: ${textRes['msg']}');
+          SmartDialog.showToast('内容分享成功，但消息分享失败: ${msgRes['msg']}');
         }
       } else {
         Get.back();
         SmartDialog.showToast('分享成功');
       }
     } else {
-      SmartDialog.showToast('分享失败: ${videoRes['msg']}');
+      SmartDialog.showToast('分享失败: ${contentRes['msg']}');
     }
     SmartDialog.dismiss();
   }
