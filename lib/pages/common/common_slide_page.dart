@@ -19,19 +19,20 @@ abstract class CommonSlidePageState<T extends CommonSlidePage>
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return enableSlide
         ? Padding(
             padding: EdgeInsets.only(top: padding),
-            child: buildPage,
+            child: buildPage(theme),
           )
-        : buildPage;
+        : buildPage(theme);
   }
 
-  Widget get buildPage;
+  Widget buildPage(ThemeData theme);
 
-  Widget get buildList => throw UnimplementedError();
+  Widget buildList(ThemeData theme) => throw UnimplementedError();
 
-  Widget slideList([Widget? buildList]) => GestureDetector(
+  Widget slideList(ThemeData theme, [Widget? buildList]) => GestureDetector(
         onPanDown: (event) {
           if (event.localPosition.dx > 30) {
             isSliding = false;
@@ -86,6 +87,6 @@ abstract class CommonSlidePageState<T extends CommonSlidePage>
           downPos = null;
           isSliding = null;
         },
-        child: buildList ?? this.buildList,
+        child: buildList ?? this.buildList(theme),
       );
 }

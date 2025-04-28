@@ -64,7 +64,6 @@ class VideoCardH extends StatelessWidget {
                   onLongPress!();
                 } else {
                   imageSaveDialog(
-                    context: context,
                     title: videoItem.title,
                     cover: videoItem.pic,
                   );
@@ -213,6 +212,7 @@ class VideoCardH extends StatelessWidget {
   }
 
   Widget videoContent(BuildContext context) {
+    final theme = Theme.of(context);
     String pubdate = showPubdate
         ? Utils.dateFormat(videoItem.pubdate!, formatType: 'day')
         : '';
@@ -234,13 +234,12 @@ class VideoCardH extends StatelessWidget {
                       TextSpan(
                         text: i['text'],
                         style: TextStyle(
-                          fontSize:
-                              Theme.of(context).textTheme.bodyMedium!.fontSize,
+                          fontSize: theme.textTheme.bodyMedium!.fontSize,
                           height: 1.42,
                           letterSpacing: 0.3,
                           color: i['type'] == 'em'
-                              ? Theme.of(context).colorScheme.primary
-                              : Theme.of(context).colorScheme.onSurface,
+                              ? theme.colorScheme.primary
+                              : theme.colorScheme.onSurface,
                         ),
                       ),
                   ],
@@ -253,7 +252,7 @@ class VideoCardH extends StatelessWidget {
                 videoItem.title,
                 textAlign: TextAlign.start,
                 style: TextStyle(
-                  fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
+                  fontSize: theme.textTheme.bodyMedium!.fontSize,
                   height: 1.42,
                   letterSpacing: 0.3,
                 ),
@@ -268,7 +267,7 @@ class VideoCardH extends StatelessWidget {
               style: TextStyle(
                 fontSize: 12,
                 height: 1,
-                color: Theme.of(context).colorScheme.outline,
+                color: theme.colorScheme.outline,
                 overflow: TextOverflow.clip,
               ),
             ),

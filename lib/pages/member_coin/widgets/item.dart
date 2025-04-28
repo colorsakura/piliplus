@@ -35,7 +35,6 @@ class MemberCoinsItem extends StatelessWidget {
           );
         },
         onLongPress: () => imageSaveDialog(
-          context: context,
           title: coinItem.title,
           cover: coinItem.pic,
         ),

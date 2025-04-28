@@ -24,6 +24,7 @@ class _ReplyMePageState extends State<ReplyMePage> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(title: const Text('回复我的')),
       body: refreshIndicator(
@@ -36,8 +37,8 @@ class _ReplyMePageState extends State<ReplyMePage> {
             SliverPadding(
               padding: EdgeInsets.only(
                   bottom: MediaQuery.paddingOf(context).bottom + 80),
-              sliver:
-                  Obx(() => _buildBody(_replyMeController.loadingState.value)),
+              sliver: Obx(() =>
+                  _buildBody(theme, _replyMeController.loadingState.value)),
             ),
           ],
         ),
@@ -45,7 +46,8 @@ class _ReplyMePageState extends State<ReplyMePage> {
     );
   }
 
-  Widget _buildBody(LoadingState<List<ReplyMeItems>?> loadingState) {
+  Widget _buildBody(
+      ThemeData theme, LoadingState<List<ReplyMeItems>?> loadingState) {
     return switch (loadingState) {
       Loading() => SliverList.builder(
           itemCount: 12,
@@ -98,30 +100,20 @@ class _ReplyMePageState extends State<ReplyMePage> {
                       children: [
                         TextSpan(
                           text: "${item.user?.nickname}",
-                          style: Theme.of(context)
-                              .textTheme
-                              .titleSmall!
-                              .copyWith(
-                                  color: Theme.of(context).colorScheme.primary),
+                          style: theme.textTheme.titleSmall!
+                              .copyWith(color: theme.colorScheme.primary),
                         ),
                         if (item.isMulti == 1)
                           TextSpan(
                             text: " 等人",
-                            style: Theme.of(context)
-                                .textTheme
-                                .titleSmall!
+                            style: theme.textTheme.titleSmall!
                                 .copyWith(fontSize: 12),
                           ),
                         TextSpan(
                           text:
                               " 对我的${item.item?.business}发布了${item.counts}条评论",
-                          style: Theme.of(context)
-                              .textTheme
-                              .titleSmall!
-                              .copyWith(
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .onSurfaceVariant),
+                          style: theme.textTheme.titleSmall!.copyWith(
+                              color: theme.colorScheme.onSurfaceVariant),
                         ),
                       ],
                     ),
@@ -132,38 +124,28 @@ class _ReplyMePageState extends State<ReplyMePage> {
                     children: [
                       const SizedBox(height: 4),
                       Text(item.item?.sourceContent ?? "",
-                          style: Theme.of(context).textTheme.bodyMedium),
+                          style: theme.textTheme.bodyMedium),
                       const SizedBox(height: 4),
                       if (item.item?.targetReplyContent != null &&
                           item.item?.targetReplyContent != "")
                         Text("| ${item.item?.targetReplyContent}",
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
-                            style: Theme.of(context)
-                                .textTheme
-                                .labelMedium!
-                                .copyWith(
-                                    color:
-                                        Theme.of(context).colorScheme.outline,
-                                    height: 1.5)),
+                            style: theme.textTheme.labelMedium!.copyWith(
+                                color: theme.colorScheme.outline, height: 1.5)),
                       if (item.item?.rootReplyContent != null &&
                           item.item?.rootReplyContent != "")
                         Text(" | ${item.item?.rootReplyContent}",
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
-                            style: Theme.of(context)
-                                .textTheme
-                                .labelMedium!
-                                .copyWith(
-                                    color:
-                                        Theme.of(context).colorScheme.outline,
-                                    height: 1.5)),
+                            style: theme.textTheme.labelMedium!.copyWith(
+                                color: theme.colorScheme.outline, height: 1.5)),
                       Text(
                         Utils.dateFormat(item.replyTime),
-                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                              fontSize: 13,
-                              color: Theme.of(context).colorScheme.outline,
-                            ),
+                        style: theme.textTheme.bodyMedium!.copyWith(
+                          fontSize: 13,
+                          color: theme.colorScheme.outline,
+                        ),
                       ),
                     ],
                   ),

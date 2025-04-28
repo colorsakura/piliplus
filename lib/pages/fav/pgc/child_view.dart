@@ -35,6 +35,7 @@ class _FavPgcChildPageState extends State<FavPgcChildPage>
   @override
   Widget build(BuildContext context) {
     super.build(context);
+    final theme = Theme.of(context);
     return LayoutBuilder(
       builder: (context, constraints) => Stack(
         clipBehavior: Clip.none,
@@ -62,14 +63,11 @@ class _FavPgcChildPageState extends State<FavPgcChildPage>
                 child: Container(
                   padding: MediaQuery.paddingOf(context),
                   decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.onInverseSurface,
+                    color: theme.colorScheme.onInverseSurface,
                     border: Border(
                       top: BorderSide(
                         width: 0.5,
-                        color: Theme.of(context)
-                            .colorScheme
-                            .outline
-                            .withOpacity(0.5),
+                        color: theme.colorScheme.outline.withOpacity(0.5),
                       ),
                     ),
                   ),
@@ -135,9 +133,7 @@ class _FavPgcChildPageState extends State<FavPgcChildPage>
                                   child: Text(
                                     '标记为${item['title']}',
                                     style: TextStyle(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onSurfaceVariant,
+                                      color: theme.colorScheme.onSurfaceVariant,
                                     ),
                                   ),
                                 ),

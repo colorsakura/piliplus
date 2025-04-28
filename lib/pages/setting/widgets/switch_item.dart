@@ -59,7 +59,7 @@ class _SetSwitchItemState extends State<SetSwitchItem> {
     setVal();
   }
 
-  void switchChange(value) async {
+  void switchChange(ThemeData theme, value) async {
     if (widget.setKey == SettingBoxKey.badCertificateCallback &&
         (value ?? !val)) {
       showDialog(
@@ -73,7 +73,7 @@ class _SetSwitchItemState extends State<SetSwitchItem> {
               child: Text(
                 '取消',
                 style: TextStyle(
-                  color: Theme.of(context).colorScheme.outline,
+                  color: theme.colorScheme.outline,
                 ),
               ),
             ),
@@ -111,22 +111,21 @@ class _SetSwitchItemState extends State<SetSwitchItem> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     TextStyle titleStyle = widget.titleStyle ??
-        Theme.of(context).textTheme.titleMedium!.copyWith(
-              color: widget.onTap != null && !val
-                  ? Theme.of(context).colorScheme.outline
-                  : null,
-            );
-    TextStyle subTitleStyle = Theme.of(context)
-        .textTheme
-        .labelMedium!
-        .copyWith(color: Theme.of(context).colorScheme.outline);
+        theme.textTheme.titleMedium!.copyWith(
+          color:
+              widget.onTap != null && !val ? theme.colorScheme.outline : null,
+        );
+    TextStyle subTitleStyle =
+        theme.textTheme.labelMedium!.copyWith(color: theme.colorScheme.outline);
     return ListTile(
       contentPadding: widget.contentPadding,
       enabled: widget.onTap != null ? val : true,
       enableFeedback: true,
-      onTap: () =>
-          widget.onTap != null ? widget.onTap?.call() : switchChange(null),
+      onTap: () => widget.onTap != null
+          ? widget.onTap?.call()
+          : switchChange(theme, null),
       title: Text(widget.title!, style: titleStyle),
       subtitle: widget.subtitle != null
           ? Text(widget.subtitle!, style: subTitleStyle)
@@ -144,7 +143,7 @@ class _SetSwitchItemState extends State<SetSwitchItem> {
             return null;
           }),
           value: val,
-          onChanged: switchChange,
+          onChanged: (value) => switchChange(theme, value),
         ),
       ),
     );

@@ -6,7 +6,8 @@ class DynamicCardSkeleton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color = Theme.of(context).colorScheme.onInverseSurface;
+    final ThemeData theme = Theme.of(context);
+    final color = theme.colorScheme.onInverseSurface;
     return Skeleton(
       child: Container(
         padding: const EdgeInsets.only(left: 12, right: 12, top: 12),
@@ -14,7 +15,7 @@ class DynamicCardSkeleton extends StatelessWidget {
           border: Border(
             bottom: BorderSide(
               width: 8,
-              color: Theme.of(context).dividerColor.withOpacity(0.05),
+              color: theme.dividerColor.withOpacity(0.05),
             ),
           ),
         ),
@@ -101,10 +102,8 @@ class DynamicCardSkeleton extends StatelessWidget {
                     ),
                     style: TextButton.styleFrom(
                       padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
-                      foregroundColor: Theme.of(context)
-                          .colorScheme
-                          .outline
-                          .withOpacity(0.2),
+                      foregroundColor:
+                          theme.colorScheme.outline.withOpacity(0.2),
                     ),
                     label: Text(
                       i == 0

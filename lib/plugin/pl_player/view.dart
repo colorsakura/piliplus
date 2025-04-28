@@ -722,7 +722,8 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
 
   @override
   Widget build(BuildContext context) {
-    final Color colorTheme = Theme.of(context).colorScheme.primary;
+    final ThemeData theme = Theme.of(context);
+    final Color primary = theme.colorScheme.primary;
     const TextStyle textStyle = TextStyle(
       color: Colors.white,
       fontSize: 12,
@@ -855,15 +856,12 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                             horizontal: 8, vertical: 4),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(6),
-                          color:
-                              Theme.of(context).colorScheme.secondaryContainer,
+                          color: theme.colorScheme.secondaryContainer,
                         ),
                         child: Text(
                           '松开手指，取消进退',
                           style: TextStyle(
-                            color: Theme.of(context)
-                                .colorScheme
-                                .onSecondaryContainer,
+                            color: theme.colorScheme.onSecondaryContainer,
                           ),
                         ),
                       ),
@@ -1328,9 +1326,8 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                         child: FilledButton.tonal(
                           style: FilledButton.styleFrom(
                             tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                            backgroundColor: Theme.of(context)
-                                .colorScheme
-                                .secondaryContainer
+                            backgroundColor: theme
+                                .colorScheme.secondaryContainer
                                 .withOpacity(0.8),
                             visualDensity:
                                 VisualDensity(horizontal: -2, vertical: -2),
@@ -1411,7 +1408,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                     children: [
                       if (plPlayerController.dmTrend.isNotEmpty &&
                           plPlayerController.showDmChart.value)
-                        buildDmChart(context, plPlayerController),
+                        buildDmChart(theme, plPlayerController),
                       if (plPlayerController.viewPointList.isNotEmpty &&
                           plPlayerController.showVP.value)
                         buildViewPointWidget(plPlayerController, 4.25),
@@ -1420,14 +1417,11 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                           progress: Duration(seconds: value),
                           buffered: Duration(seconds: buffer),
                           total: Duration(seconds: max),
-                          progressBarColor: colorTheme,
+                          progressBarColor: primary,
                           baseBarColor: Colors.white.withOpacity(0.2),
-                          bufferedBarColor: Theme.of(context)
-                              .colorScheme
-                              .primary
-                              .withOpacity(0.4),
+                          bufferedBarColor: primary.withOpacity(0.4),
                           timeLabelLocation: TimeLabelLocation.none,
-                          thumbColor: colorTheme,
+                          thumbColor: primary,
                           barHeight: 3.5,
                           thumbRadius: draggingFixedProgressBar.value ? 7 : 2.5,
                           // onDragStart: (duration) {
@@ -1757,10 +1751,11 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
 }
 
 Widget buildDmChart(
-  BuildContext context,
+  ThemeData theme,
   PlPlayerController plPlayerController, [
   double offset = 0,
 ]) {
+  final color = theme.colorScheme.primary;
   return IgnorePointer(
     child: Container(
       height: 12,
@@ -1793,11 +1788,11 @@ Widget buildDmChart(
               ),
               isCurved: true,
               barWidth: 1,
-              color: Theme.of(context).colorScheme.primary,
+              color: color,
               dotData: const FlDotData(show: false),
               belowBarData: BarAreaData(
                 show: true,
-                color: Theme.of(context).colorScheme.primary.withOpacity(0.4),
+                color: color.withOpacity(0.4),
               ),
             ),
           ],

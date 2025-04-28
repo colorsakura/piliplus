@@ -38,10 +38,12 @@ class UserInfoCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return isV ? _buildV(context) : _buildH(context);
+    final theme = Theme.of(context);
+    return isV ? _buildV(context, theme) : _buildH(context, theme);
   }
 
   Widget _countWidget({
+    required ThemeData theme,
     required String title,
     required int count,
     required VoidCallback onTap,
@@ -62,7 +64,7 @@ class UserInfoCard extends StatelessWidget {
             style: TextStyle(
               height: 1,
               fontSize: 11,
-              color: Theme.of(Get.context!).colorScheme.outline,
+              color: theme.colorScheme.outline,
             ),
           ),
         ],
@@ -70,8 +72,8 @@ class UserInfoCard extends StatelessWidget {
     );
   }
 
-  _buildHeader(BuildContext context) {
-    bool darken = Theme.of(context).brightness == Brightness.dark;
+  _buildHeader(BuildContext context, ThemeData theme) {
+    bool darken = theme.brightness == Brightness.dark;
     String imgUrl = (darken
             ? images.nightImgurl?.isEmpty == true
                 ? images.imgUrl
@@ -107,7 +109,7 @@ class UserInfoCard extends StatelessWidget {
     );
   }
 
-  _buildLeft(BuildContext context) => [
+  _buildLeft(BuildContext context, ThemeData theme) => [
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Wrap(
@@ -181,7 +183,7 @@ class UserInfoCard extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
             decoration: BoxDecoration(
               borderRadius: const BorderRadius.all(Radius.circular(12)),
-              color: Theme.of(context).colorScheme.onInverseSurface,
+              color: theme.colorScheme.onInverseSurface,
             ),
             child: Text.rich(
               TextSpan(
@@ -192,7 +194,7 @@ class UserInfoCard extends StatelessWidget {
                       child: DecoratedBox(
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
-                          color: Theme.of(context).colorScheme.surface,
+                          color: theme.colorScheme.surface,
                         ),
                         child: Icon(
                           Icons.offline_bolt,
@@ -212,10 +214,7 @@ class UserInfoCard extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.bold,
-                      color: Theme.of(context)
-                          .colorScheme
-                          .onSurface
-                          .withOpacity(0.7),
+                      color: theme.colorScheme.onSurface.withOpacity(0.7),
                     ),
                   )
                 ],
@@ -245,7 +244,7 @@ class UserInfoCard extends StatelessWidget {
                   'UID: ${card.mid}',
                   style: TextStyle(
                     fontSize: 12,
-                    color: Theme.of(context).colorScheme.outline,
+                    color: theme.colorScheme.outline,
                   ),
                 ),
               ),
@@ -255,7 +254,7 @@ class UserInfoCard extends StatelessWidget {
                     item.title ?? '',
                     style: TextStyle(
                       fontSize: 12,
-                      color: Theme.of(context).colorScheme.outline,
+                      color: theme.colorScheme.outline,
                     ),
                   ),
                 ),
@@ -264,14 +263,14 @@ class UserInfoCard extends StatelessWidget {
         ),
         if (silence == 1)
           Builder(builder: (context) {
-            bool isLight = Theme.of(context).brightness == Brightness.light;
+            bool isLight = theme.brightness == Brightness.light;
             return Container(
               width: double.infinity,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(6),
                 color: isLight
-                    ? Theme.of(context).colorScheme.errorContainer
-                    : Theme.of(context).colorScheme.error,
+                    ? theme.colorScheme.errorContainer
+                    : theme.colorScheme.error,
               ),
               margin: const EdgeInsets.only(left: 20, top: 8, right: 20),
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
@@ -284,16 +283,16 @@ class UserInfoCard extends StatelessWidget {
                         Icons.info,
                         size: 17,
                         color: isLight
-                            ? Theme.of(context).colorScheme.onErrorContainer
-                            : Theme.of(context).colorScheme.onError,
+                            ? theme.colorScheme.onErrorContainer
+                            : theme.colorScheme.onError,
                       ),
                     ),
                     TextSpan(
                       text: ' 该账号封禁中${endTime ?? ''}',
                       style: TextStyle(
                         color: isLight
-                            ? Theme.of(context).colorScheme.onErrorContainer
-                            : Theme.of(context).colorScheme.onError,
+                            ? theme.colorScheme.onErrorContainer
+                            : theme.colorScheme.onError,
                       ),
                     ),
                   ],
@@ -303,7 +302,7 @@ class UserInfoCard extends StatelessWidget {
           }),
       ];
 
-  _buildRight(BuildContext context) => Column(
+  _buildRight(BuildContext context, ThemeData theme) => Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           Row(
@@ -312,6 +311,7 @@ class UserInfoCard extends StatelessWidget {
               5,
               (index) => index % 2 == 0
                   ? _countWidget(
+                      theme: theme,
                       title: ['粉丝', '关注', '获赞'][index ~/ 2],
                       count: index == 0
                           ? card.fans
@@ -358,10 +358,7 @@ class UserInfoCard extends StatelessWidget {
                   style: IconButton.styleFrom(
                     side: BorderSide(
                       width: 1.0,
-                      color: Theme.of(context)
-                          .colorScheme
-                          .outline
-                          .withOpacity(0.5),
+                      color: theme.colorScheme.outline.withOpacity(0.5),
                     ),
                     padding: EdgeInsets.zero,
                     tapTargetSize: MaterialTapTargetSize.shrinkWrap,
@@ -378,7 +375,7 @@ class UserInfoCard extends StatelessWidget {
                   onPressed: onFollow,
                   style: FilledButton.styleFrom(
                     backgroundColor: relation != 0
-                        ? Theme.of(context).colorScheme.onInverseSurface
+                        ? theme.colorScheme.onInverseSurface
                         : null,
                     visualDensity: const VisualDensity(
                       horizontal: -2,
@@ -387,9 +384,7 @@ class UserInfoCard extends StatelessWidget {
                   ),
                   child: Text.rich(
                     style: TextStyle(
-                      color: relation != 0
-                          ? Theme.of(context).colorScheme.outline
-                          : null,
+                      color: relation != 0 ? theme.colorScheme.outline : null,
                     ),
                     TextSpan(
                       children: [
@@ -399,7 +394,7 @@ class UserInfoCard extends StatelessWidget {
                             child: Icon(
                               Icons.sort,
                               size: 16,
-                              color: Theme.of(context).colorScheme.outline,
+                              color: theme.colorScheme.outline,
                             ),
                           ),
                         TextSpan(
@@ -440,7 +435,7 @@ class UserInfoCard extends StatelessWidget {
             .imageView(imgList: [SourceModel(url: card.face.http2https)]),
       ));
 
-  _buildV(BuildContext context) => Column(
+  _buildV(BuildContext context, ThemeData theme) => Column(
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -450,7 +445,7 @@ class UserInfoCard extends StatelessWidget {
               Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  _buildHeader(context),
+                  _buildHeader(context, theme),
                   const SizedBox(width: double.infinity, height: 85)
                 ],
               ),
@@ -468,21 +463,21 @@ class UserInfoCard extends StatelessWidget {
                   builder: (_, constraints) => FittedBox(
                     child: SizedBox(
                       width: constraints.maxWidth,
-                      child: _buildRight(context),
+                      child: _buildRight(context, theme),
                     ),
                   ),
                 ),
               ),
             ],
           ),
-          ..._buildLeft(context),
-          if (card.prInfo?.content?.isNotEmpty == true) buildPrInfo,
+          ..._buildLeft(context, theme),
+          if (card.prInfo?.content?.isNotEmpty == true) buildPrInfo(theme),
           const SizedBox(height: 5),
         ],
       );
 
-  Widget get buildPrInfo => Builder(builder: (context) {
-        final isDark = Theme.of(context).brightness == Brightness.dark;
+  Widget buildPrInfo(ThemeData theme) => Builder(builder: (context) {
+        final isDark = theme.brightness == Brightness.dark;
         final textColor = isDark
             ? Color(int.parse('FF${card.prInfo?.textColorNight?.substring(1)}',
                 radix: 16))
@@ -537,7 +532,7 @@ class UserInfoCard extends StatelessWidget {
         );
       });
 
-  _buildH(BuildContext context) => Column(
+  _buildH(BuildContext context, ThemeData theme) => Column(
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -565,16 +560,16 @@ class UserInfoCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const SizedBox(height: 10),
-                      ..._buildLeft(context),
+                      ..._buildLeft(context, theme),
                       const SizedBox(height: 5),
                     ],
                   ),
                 ),
-                Expanded(child: _buildRight(context)),
+                Expanded(child: _buildRight(context, theme)),
               ],
             ),
           ),
-          if (card.prInfo?.content?.isNotEmpty == true) buildPrInfo,
+          if (card.prInfo?.content?.isNotEmpty == true) buildPrInfo(theme),
         ],
       );
 }

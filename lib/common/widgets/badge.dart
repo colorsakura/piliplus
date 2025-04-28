@@ -39,26 +39,26 @@ class PBadge extends StatelessWidget {
       return const SizedBox.shrink();
     }
 
-    ColorScheme t = Theme.of(context).colorScheme;
+    ColorScheme theme = Theme.of(context).colorScheme;
     // 背景色
-    Color bgColor = t.primary;
+    Color bgColor = theme.primary;
     // 前景色
-    Color color = t.onPrimary;
+    Color color = theme.onPrimary;
     // 边框色
     Color borderColor = Colors.transparent;
     if (type == 'gray') {
       bgColor = Colors.black45;
       color = Colors.white;
     } else if (type == 'color') {
-      bgColor = t.secondaryContainer.withOpacity(0.5);
-      color = t.onSecondaryContainer;
+      bgColor = theme.secondaryContainer.withOpacity(0.5);
+      color = theme.onSecondaryContainer;
     } else if (type == 'line') {
       bgColor = Colors.transparent;
-      color = t.primary;
-      borderColor = t.primary;
+      color = theme.primary;
+      borderColor = theme.primary;
     } else if (type == 'error') {
-      bgColor = t.error;
-      color = t.onError;
+      bgColor = theme.error;
+      color = theme.onError;
     }
 
     late EdgeInsets paddingStyle =

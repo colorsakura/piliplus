@@ -41,85 +41,90 @@ class SearchUserController
       constraints: BoxConstraints(
         maxWidth: min(640, min(Get.width, Get.height)),
       ),
-      builder: (context) => SingleChildScrollView(
-        child: Container(
-          width: double.infinity,
-          padding: EdgeInsets.only(
-            top: 20,
-            left: 16,
-            right: 16,
-            bottom: 80 + MediaQuery.of(context).padding.bottom,
+      builder: (context) {
+        final theme = Theme.of(context);
+        return SingleChildScrollView(
+          child: Container(
+            width: double.infinity,
+            padding: EdgeInsets.only(
+              top: 20,
+              left: 16,
+              right: 16,
+              bottom: 80 + MediaQuery.of(context).padding.bottom,
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(height: 10),
+                const Text('用户粉丝数及等级排序顺序', style: TextStyle(fontSize: 16)),
+                const SizedBox(height: 10),
+                Wrap(
+                  spacing: 8,
+                  runSpacing: 8,
+                  children: orderFiltersList
+                      .map(
+                        (item) => SearchText(
+                          text: item['label'],
+                          onTap: (_) async {
+                            Get.back();
+                            currentOrderFilterval.value = item['value'];
+                            SmartDialog.dismiss();
+                            SmartDialog.showToast("「${item['label']}」的筛选结果");
+                            orderSort = item['orderSort'];
+                            order.value = item['order'];
+                            SmartDialog.showLoading(msg: 'loading');
+                            await onReload();
+                            SmartDialog.dismiss();
+                          },
+                          bgColor: item['value'] == currentOrderFilterval.value
+                              ? theme.colorScheme.secondaryContainer
+                              : null,
+                          textColor:
+                              item['value'] == currentOrderFilterval.value
+                                  ? theme.colorScheme.onSecondaryContainer
+                                  : null,
+                        ),
+                      )
+                      .toList(),
+                ),
+                const SizedBox(height: 20),
+                const Text('用户分类', style: TextStyle(fontSize: 16)),
+                const SizedBox(height: 10),
+                Wrap(
+                  spacing: 8,
+                  runSpacing: 8,
+                  children: userTypeFiltersList
+                      .map(
+                        (item) => SearchText(
+                          text: item['label'],
+                          onTap: (_) async {
+                            Get.back();
+                            currentUserTypeFilterval.value = item['value'];
+                            SmartDialog.dismiss();
+                            SmartDialog.showToast("「${item['label']}」的筛选结果");
+                            userType = item['userType'];
+                            SmartDialog.showLoading(msg: 'loading');
+                            await onReload();
+                            SmartDialog.dismiss();
+                          },
+                          bgColor:
+                              item['value'] == currentUserTypeFilterval.value
+                                  ? theme.colorScheme.secondaryContainer
+                                  : null,
+                          textColor:
+                              item['value'] == currentUserTypeFilterval.value
+                                  ? theme.colorScheme.onSecondaryContainer
+                                  : null,
+                        ),
+                      )
+                      .toList(),
+                ),
+              ],
+            ),
           ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(height: 10),
-              const Text('用户粉丝数及等级排序顺序', style: TextStyle(fontSize: 16)),
-              const SizedBox(height: 10),
-              Wrap(
-                spacing: 8,
-                runSpacing: 8,
-                children: orderFiltersList
-                    .map(
-                      (item) => SearchText(
-                        text: item['label'],
-                        onTap: (_) async {
-                          Get.back();
-                          currentOrderFilterval.value = item['value'];
-                          SmartDialog.dismiss();
-                          SmartDialog.showToast("「${item['label']}」的筛选结果");
-                          orderSort = item['orderSort'];
-                          order.value = item['order'];
-                          SmartDialog.showLoading(msg: 'loading');
-                          await onReload();
-                          SmartDialog.dismiss();
-                        },
-                        bgColor: item['value'] == currentOrderFilterval.value
-                            ? Theme.of(context).colorScheme.secondaryContainer
-                            : null,
-                        textColor: item['value'] == currentOrderFilterval.value
-                            ? Theme.of(context).colorScheme.onSecondaryContainer
-                            : null,
-                      ),
-                    )
-                    .toList(),
-              ),
-              const SizedBox(height: 20),
-              const Text('用户分类', style: TextStyle(fontSize: 16)),
-              const SizedBox(height: 10),
-              Wrap(
-                spacing: 8,
-                runSpacing: 8,
-                children: userTypeFiltersList
-                    .map(
-                      (item) => SearchText(
-                        text: item['label'],
-                        onTap: (_) async {
-                          Get.back();
-                          currentUserTypeFilterval.value = item['value'];
-                          SmartDialog.dismiss();
-                          SmartDialog.showToast("「${item['label']}」的筛选结果");
-                          userType = item['userType'];
-                          SmartDialog.showLoading(msg: 'loading');
-                          await onReload();
-                          SmartDialog.dismiss();
-                        },
-                        bgColor: item['value'] == currentUserTypeFilterval.value
-                            ? Theme.of(context).colorScheme.secondaryContainer
-                            : null,
-                        textColor: item['value'] ==
-                                currentUserTypeFilterval.value
-                            ? Theme.of(context).colorScheme.onSecondaryContainer
-                            : null,
-                      ),
-                    )
-                    .toList(),
-              ),
-            ],
-          ),
-        ),
-      ),
+        );
+      },
     );
   }
 }

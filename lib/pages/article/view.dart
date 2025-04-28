@@ -227,6 +227,7 @@ class _ArticlePageState extends State<ArticlePage>
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: _buildAppBar,
@@ -249,18 +250,16 @@ class _ArticlePageState extends State<ArticlePage>
                         controller: _articleCtr.scrollController,
                         physics: const AlwaysScrollableScrollPhysics(),
                         slivers: [
-                          _buildContent(maxWidth),
+                          _buildContent(theme, maxWidth),
                           SliverToBoxAdapter(
                             child: Divider(
                               thickness: 8,
-                              color: Theme.of(context)
-                                  .dividerColor
-                                  .withOpacity(0.05),
+                              color: theme.dividerColor.withOpacity(0.05),
                             ),
                           ),
                           _buildReplyHeader,
-                          Obx(() =>
-                              _buildReplyList(_articleCtr.loadingState.value)),
+                          Obx(() => _buildReplyList(
+                              theme, _articleCtr.loadingState.value)),
                         ],
                       ),
                     );
@@ -286,7 +285,7 @@ class _ArticlePageState extends State<ArticlePage>
                                         MediaQuery.paddingOf(context).bottom +
                                             80,
                                   ),
-                                  sliver: _buildContent(maxWidth),
+                                  sliver: _buildContent(theme, maxWidth),
                                 ),
                               ],
                             );
@@ -295,7 +294,7 @@ class _ArticlePageState extends State<ArticlePage>
                       ),
                       VerticalDivider(
                         thickness: 8,
-                        color: Theme.of(context).dividerColor.withOpacity(0.05),
+                        color: theme.dividerColor.withOpacity(0.05),
                       ),
                       Expanded(
                         flex: _ratio[1].toInt(),
@@ -314,7 +313,7 @@ class _ArticlePageState extends State<ArticlePage>
                                 slivers: [
                                   _buildReplyHeader,
                                   Obx(() => _buildReplyList(
-                                      _articleCtr.loadingState.value)),
+                                      theme, _articleCtr.loadingState.value)),
                                 ],
                               ),
                             ),
@@ -327,13 +326,13 @@ class _ArticlePageState extends State<ArticlePage>
               },
             ),
           ),
-          _buildBottom,
+          _buildBottom(theme),
         ],
       ),
     );
   }
 
-  Widget _buildContent(double maxWidth) => SliverPadding(
+  Widget _buildContent(ThemeData theme, double maxWidth) => SliverPadding(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
         sliver: Obx(
           () {
@@ -401,22 +400,17 @@ class _ArticlePageState extends State<ArticlePage>
                                 Text(
                                   _articleCtr.summary.author?.name ?? '',
                                   style: TextStyle(
-                                    fontSize: Theme.of(context)
-                                        .textTheme
-                                        .titleSmall!
-                                        .fontSize,
+                                    fontSize:
+                                        theme.textTheme.titleSmall!.fontSize,
                                   ),
                                 ),
                                 if (pubTime != null)
                                   Text(
                                     Utils.dateFormat(pubTime),
                                     style: TextStyle(
-                                      color:
-                                          Theme.of(context).colorScheme.outline,
-                                      fontSize: Theme.of(context)
-                                          .textTheme
-                                          .labelSmall!
-                                          .fontSize,
+                                      color: theme.colorScheme.outline,
+                                      fontSize:
+                                          theme.textTheme.labelSmall!.fontSize,
                                     ),
                                   ),
                               ],
@@ -436,7 +430,8 @@ class _ArticlePageState extends State<ArticlePage>
         ),
       );
 
-  Widget _buildReplyList(LoadingState<List<ReplyInfo>?> loadingState) {
+  Widget _buildReplyList(
+      ThemeData theme, LoadingState<List<ReplyInfo>?> loadingState) {
     return switch (loadingState) {
       Loading() => SliverList.builder(
           itemCount: 12,
@@ -463,7 +458,7 @@ class _ArticlePageState extends State<ArticlePage>
                               : '没有更多了',
                       style: TextStyle(
                         fontSize: 12,
-                        color: Theme.of(context).colorScheme.outline,
+                        color: theme.colorScheme.outline,
                       ),
                     ),
                   );
@@ -663,7 +658,7 @@ class _ArticlePageState extends State<ArticlePage>
         ],
       );
 
-  Widget get _buildBottom => Positioned(
+  Widget _buildBottom(ThemeData theme) => Positioned(
         left: 0,
         bottom: 0,
         right: 0,
@@ -711,8 +706,8 @@ class _ArticlePageState extends State<ArticlePage>
                       }) {
                         final show = stat?.status == true;
                         final color = show
-                            ? Theme.of(context).colorScheme.primary
-                            : Theme.of(context).colorScheme.outline;
+                            ? theme.colorScheme.primary
+                            : theme.colorScheme.outline;
                         return TextButton.icon(
                           onPressed: callback,
                           icon: Icon(
@@ -723,8 +718,7 @@ class _ArticlePageState extends State<ArticlePage>
                           ),
                           style: TextButton.styleFrom(
                             padding: const EdgeInsets.symmetric(horizontal: 15),
-                            foregroundColor:
-                                Theme.of(context).colorScheme.outline,
+                            foregroundColor: theme.colorScheme.outline,
                           ),
                           label: Text(stat?.count != null
                               ? Utils.numFormat(stat!.count)
@@ -749,13 +743,10 @@ class _ArticlePageState extends State<ArticlePage>
                           _articleCtr.stats.value != null
                               ? Container(
                                   decoration: BoxDecoration(
-                                    color:
-                                        Theme.of(context).colorScheme.surface,
+                                    color: theme.colorScheme.surface,
                                     border: Border(
                                       top: BorderSide(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .outline
+                                        color: theme.colorScheme.outline
                                             .withOpacity(0.08),
                                       ),
                                     ),
@@ -858,12 +849,8 @@ class _ArticlePageState extends State<ArticlePage>
                                               color: _articleCtr.stats.value
                                                           ?.like?.status ==
                                                       true
-                                                  ? Theme.of(context)
-                                                      .colorScheme
-                                                      .primary
-                                                  : Theme.of(context)
-                                                      .colorScheme
-                                                      .outline,
+                                                  ? theme.colorScheme.primary
+                                                  : theme.colorScheme.outline,
                                               semanticLabel: _articleCtr
                                                           .stats
                                                           .value
@@ -877,9 +864,8 @@ class _ArticlePageState extends State<ArticlePage>
                                               padding:
                                                   const EdgeInsets.symmetric(
                                                       horizontal: 15),
-                                              foregroundColor: Theme.of(context)
-                                                  .colorScheme
-                                                  .outline,
+                                              foregroundColor:
+                                                  theme.colorScheme.outline,
                                             ),
                                             label: AnimatedSwitcher(
                                               duration: const Duration(
@@ -902,12 +888,10 @@ class _ArticlePageState extends State<ArticlePage>
                                                   color: _articleCtr.stats.value
                                                               ?.like?.status ==
                                                           true
-                                                      ? Theme.of(context)
-                                                          .colorScheme
-                                                          .primary
-                                                      : Theme.of(context)
-                                                          .colorScheme
-                                                          .outline,
+                                                      ? theme
+                                                          .colorScheme.primary
+                                                      : theme
+                                                          .colorScheme.outline,
                                                 ),
                                               ),
                                             ),

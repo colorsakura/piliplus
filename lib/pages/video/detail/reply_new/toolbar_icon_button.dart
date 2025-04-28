@@ -16,6 +16,7 @@ class ToolbarIconButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
     return SizedBox(
       width: 36,
       height: 36,
@@ -23,16 +24,14 @@ class ToolbarIconButton extends StatelessWidget {
         tooltip: tooltip,
         onPressed: onPressed,
         icon: icon,
-        highlightColor: Theme.of(context).colorScheme.secondaryContainer,
+        highlightColor: theme.colorScheme.secondaryContainer,
         color: selected
-            ? Theme.of(context).colorScheme.onSecondaryContainer
-            : Theme.of(context).colorScheme.outline,
+            ? theme.colorScheme.onSecondaryContainer
+            : theme.colorScheme.outline,
         style: ButtonStyle(
           padding: WidgetStateProperty.all(EdgeInsets.zero),
           backgroundColor: WidgetStateProperty.resolveWith((states) {
-            return selected
-                ? Theme.of(context).colorScheme.secondaryContainer
-                : null;
+            return selected ? theme.colorScheme.secondaryContainer : null;
           }),
         ),
       ),

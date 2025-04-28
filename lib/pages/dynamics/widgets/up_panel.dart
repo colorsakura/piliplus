@@ -27,6 +27,7 @@ class _UpPanelState extends State<UpPanel> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     if (widget.dynamicsController.isLogin.value.not) {
       return const SizedBox.shrink();
     }
@@ -74,14 +75,15 @@ class _UpPanelState extends State<UpPanel> {
           SliverList.builder(
             itemCount: liveList.length,
             itemBuilder: (context, index) {
-              return upItemBuild(liveList[index]);
+              return upItemBuild(theme, liveList[index]);
             },
           ),
         SliverToBoxAdapter(
-          child: upItemBuild(UpItem(face: '', uname: '全部动态', mid: -1)),
+          child: upItemBuild(theme, UpItem(face: '', uname: '全部动态', mid: -1)),
         ),
         SliverToBoxAdapter(
           child: upItemBuild(
+            theme,
             UpItem(
               uname: '我',
               face: widget.dynamicsController.face,
@@ -93,7 +95,7 @@ class _UpPanelState extends State<UpPanel> {
           SliverList.builder(
             itemCount: upList.length,
             itemBuilder: (context, index) {
-              return upItemBuild(upList[index]);
+              return upItemBuild(theme, upList[index]);
             },
           ),
         const SliverToBoxAdapter(child: SizedBox(height: 200)),
@@ -101,7 +103,7 @@ class _UpPanelState extends State<UpPanel> {
     );
   }
 
-  Widget upItemBuild(data) {
+  Widget upItemBuild(theme, data) {
     bool isCurrent = widget.dynamicsController.currentMid == data.mid ||
         widget.dynamicsController.currentMid == -1;
     return SizedBox(
@@ -163,17 +165,14 @@ class _UpPanelState extends State<UpPanel> {
                     child: Badge(
                       smallSize: 8,
                       label: data.type == 'live' ? const Text(' Live ') : null,
-                      textColor:
-                          Theme.of(context).colorScheme.onSecondaryContainer,
+                      textColor: theme.colorScheme.onSecondaryContainer,
                       alignment: AlignmentDirectional.topStart,
                       isLabelVisible: data.type == 'live' ||
                           (data.type == 'up' && (data.hasUpdate ?? false)),
                       backgroundColor: data.type == 'live'
-                          ? Theme.of(context)
-                              .colorScheme
-                              .secondaryContainer
+                          ? theme.colorScheme.secondaryContainer
                               .withOpacity(0.75)
-                          : Theme.of(context).colorScheme.primary,
+                          : theme.colorScheme.primary,
                     ),
                   ),
                 ],
@@ -189,8 +188,8 @@ class _UpPanelState extends State<UpPanel> {
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     color: widget.dynamicsController.currentMid == data.mid
-                        ? Theme.of(context).colorScheme.primary
-                        : Theme.of(context).colorScheme.outline,
+                        ? theme.colorScheme.primary
+                        : theme.colorScheme.outline,
                     height: 1.1,
                     fontSize: 12.5,
                   ),
@@ -200,34 +199,6 @@ class _UpPanelState extends State<UpPanel> {
           ),
         ),
       ),
-    );
-  }
-}
-
-class UpPanelSkeleton extends StatelessWidget {
-  const UpPanelSkeleton({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Container(
-          width: 50,
-          height: 50,
-          decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.onInverseSurface,
-            borderRadius: BorderRadius.circular(50),
-          ),
-        ),
-        Container(
-          margin: const EdgeInsets.only(top: 6),
-          width: 45,
-          height: 12,
-          color: Theme.of(context).colorScheme.onInverseSurface,
-        ),
-      ],
     );
   }
 }

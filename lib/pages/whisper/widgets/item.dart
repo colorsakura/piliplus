@@ -21,6 +21,7 @@ class WhisperSessionItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     dynamic content = item.lastMsg?.content;
+    final ThemeData theme = Theme.of(context);
     if (content == null || content == "") {
       content = '不支持的消息类型';
     } else {
@@ -37,9 +38,7 @@ class WhisperSessionItem extends StatelessWidget {
     }
 
     return ListTile(
-      tileColor: item.topTs == 0
-          ? null
-          : Theme.of(context).colorScheme.onInverseSurface,
+      tileColor: item.topTs == 0 ? null : theme.colorScheme.onInverseSurface,
       onLongPress: () {
         showDialog(
           context: context,
@@ -122,17 +121,15 @@ class WhisperSessionItem extends StatelessWidget {
         '$content',
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
-        style: Theme.of(context)
-            .textTheme
-            .labelMedium!
-            .copyWith(color: Theme.of(context).colorScheme.outline),
+        style: theme.textTheme.labelMedium!
+            .copyWith(color: theme.colorScheme.outline),
       ),
       trailing: item.lastMsg?.timestamp != null
           ? Text(
               Utils.dateFormat(item.lastMsg!.timestamp, formatType: "day"),
               style: TextStyle(
                 fontSize: 12,
-                color: Theme.of(context).colorScheme.outline,
+                color: theme.colorScheme.outline,
               ),
             )
           : null,

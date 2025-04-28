@@ -38,6 +38,7 @@ class _WhisperDetailPageState
 
   @override
   Widget build(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
@@ -49,14 +50,13 @@ class _WhisperDetailPageState
               tooltip: '返回',
               style: IconButton.styleFrom(
                 padding: EdgeInsets.zero,
-                backgroundColor:
-                    Theme.of(context).colorScheme.secondaryContainer,
+                backgroundColor: theme.colorScheme.secondaryContainer,
               ),
               onPressed: Get.back,
               icon: Icon(
                 Icons.arrow_back_outlined,
                 size: 18,
-                color: Theme.of(context).colorScheme.onSecondaryContainer,
+                color: theme.colorScheme.onSecondaryContainer,
               ),
             ),
           ),
@@ -87,7 +87,7 @@ class _WhisperDetailPageState
                   _whisperDetailController.name,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: Theme.of(context).textTheme.titleMedium,
+                  style: theme.textTheme.titleMedium,
                 ),
               ),
             ],
@@ -109,8 +109,8 @@ class _WhisperDetailPageState
                 },
               ),
             ),
-            _buildInputView(),
-            buildPanelContainer(Theme.of(context).colorScheme.onInverseSurface),
+            _buildInputView(theme),
+            buildPanelContainer(theme.colorScheme.onInverseSurface),
           ],
         ),
       ),
@@ -192,11 +192,11 @@ class _WhisperDetailPageState
     };
   }
 
-  Widget _buildInputView() {
+  Widget _buildInputView(theme) {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 8),
       decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.onInverseSurface,
+        color: theme.colorScheme.onInverseSurface,
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(16),
           topRight: Radius.circular(16),
@@ -243,7 +243,7 @@ class _WhisperDetailPageState
                   decoration: InputDecoration(
                     filled: true,
                     hintText: '发个消息聊聊呗~',
-                    fillColor: Theme.of(context).colorScheme.surface,
+                    fillColor: theme.colorScheme.surface,
                     border: OutlineInputBorder(
                       borderSide: BorderSide.none,
                       borderRadius: BorderRadius.circular(6),

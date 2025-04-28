@@ -70,6 +70,7 @@ class _RepostPanelState extends CommonPublishPageState<RepostPanel> {
 
   @override
   Widget build(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
     return AnimatedSize(
       alignment: Alignment.topCenter,
       curve: Curves.ease,
@@ -79,10 +80,13 @@ class _RepostPanelState extends CommonPublishPageState<RepostPanel> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SizedBox(height: _isMax ? 16 : 10),
-          _buildAppBar,
-          if (_isMax) Expanded(child: _buildEditPanel) else _buildEditPanel,
+          _buildAppBar(theme),
+          if (_isMax)
+            Expanded(child: _buildEditPanel(theme))
+          else
+            _buildEditPanel(theme),
           if (_isMax.not)
-            ..._biuldDismiss
+            ..._biuldDismiss(theme)
           else ...[
             _buildToolbar,
             buildPanelContainer(Colors.transparent),
@@ -92,7 +96,7 @@ class _RepostPanelState extends CommonPublishPageState<RepostPanel> {
     );
   }
 
-  Widget get _buildEditPanel => Column(
+  Widget _buildEditPanel(ThemeData theme) => Column(
         mainAxisSize: _isMax ? MainAxisSize.max : MainAxisSize.min,
         children: [
           Flexible(
@@ -105,28 +109,30 @@ class _RepostPanelState extends CommonPublishPageState<RepostPanel> {
                         border: Border(
                           left: BorderSide(
                             width: 2,
-                            color: Theme.of(context).colorScheme.primary,
+                            color: theme.colorScheme.primary,
                           ),
                         ),
                       )
                     : null,
-                child: _isMax.not ? _buildEditPlaceHolder : _buildEditWidget,
+                child: _isMax.not
+                    ? _buildEditPlaceHolder(theme)
+                    : _buildEditWidget,
               ),
             ),
           ),
           const SizedBox(height: 10),
-          _buildRefWidget,
+          _buildRefWidget(theme),
         ],
       );
 
-  Widget get _buildRefWidget => Container(
+  Widget _buildRefWidget(ThemeData theme) => Container(
         padding: const EdgeInsets.all(10),
         margin: const EdgeInsets.symmetric(horizontal: 16),
         decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.surfaceContainerHigh ==
-                  Theme.of(context).colorScheme.surface
-              ? Theme.of(context).colorScheme.onInverseSurface
-              : Theme.of(context).colorScheme.surfaceContainerHighest,
+          color: theme.colorScheme.surfaceContainerHigh ==
+                  theme.colorScheme.surface
+              ? theme.colorScheme.onInverseSurface
+              : theme.colorScheme.surfaceContainerHighest,
           borderRadius: BorderRadius.circular(12),
         ),
         child: Row(
@@ -149,7 +155,7 @@ class _RepostPanelState extends CommonPublishPageState<RepostPanel> {
                     Text(
                       '@$_uname',
                       style: TextStyle(
-                        color: Theme.of(context).colorScheme.primary,
+                        color: theme.colorScheme.primary,
                         fontSize: 13,
                       ),
                     ),
@@ -165,7 +171,7 @@ class _RepostPanelState extends CommonPublishPageState<RepostPanel> {
         ),
       );
 
-  Widget get _buildEditPlaceHolder => GestureDetector(
+  Widget _buildEditPlaceHolder(ThemeData theme) => GestureDetector(
         onTap: () async {
           setState(() => _isMax = true);
           await Future.delayed(const Duration(milliseconds: 300));
@@ -178,7 +184,7 @@ class _RepostPanelState extends CommonPublishPageState<RepostPanel> {
           style: TextStyle(
             height: 1.75,
             fontSize: 15,
-            color: Theme.of(context).colorScheme.outline,
+            color: theme.colorScheme.outline,
           ),
         ),
       );
@@ -212,7 +218,7 @@ class _RepostPanelState extends CommonPublishPageState<RepostPanel> {
         ),
       );
 
-  Widget get _buildAppBar => _isMax.not
+  Widget _buildAppBar(ThemeData theme) => _isMax.not
       ? Row(
           children: [
             const SizedBox(width: 16),
@@ -253,14 +259,14 @@ class _RepostPanelState extends CommonPublishPageState<RepostPanel> {
                       padding: WidgetStateProperty.all(EdgeInsets.zero),
                       backgroundColor:
                           WidgetStateProperty.resolveWith((states) {
-                        return Theme.of(context).colorScheme.secondaryContainer;
+                        return theme.colorScheme.secondaryContainer;
                       }),
                     ),
                     onPressed: Get.back,
                     icon: Icon(
                       Icons.arrow_back_outlined,
                       size: 18,
-                      color: Theme.of(context).colorScheme.onSecondaryContainer,
+                      color: theme.colorScheme.onSecondaryContainer,
                     ),
                   ),
                 ),
@@ -316,11 +322,11 @@ class _RepostPanelState extends CommonPublishPageState<RepostPanel> {
         ),
       );
 
-  List<Widget> get _biuldDismiss => [
+  List<Widget> _biuldDismiss(ThemeData theme) => [
         const SizedBox(height: 10),
         Divider(
           height: 1,
-          color: Theme.of(context).colorScheme.outline.withOpacity(0.1),
+          color: theme.colorScheme.outline.withOpacity(0.1),
         ),
         ListTile(
           dense: true,
@@ -328,7 +334,7 @@ class _RepostPanelState extends CommonPublishPageState<RepostPanel> {
           title: Center(
             child: Text(
               '取消',
-              style: TextStyle(color: Theme.of(context).colorScheme.outline),
+              style: TextStyle(color: theme.colorScheme.outline),
             ),
           ),
         ),

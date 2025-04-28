@@ -7,16 +7,19 @@ import 'package:get/get.dart';
 class SearchUserItem extends StatelessWidget {
   const SearchUserItem({
     super.key,
-    required this.style,
     required this.item,
   });
 
-  final TextStyle style;
   final SearchUserItemModel item;
 
   @override
   Widget build(BuildContext context) {
     String heroTag = Utils.makeHeroTag(item.mid);
+    final theme = Theme.of(context);
+    final style = TextStyle(
+      fontSize: theme.textTheme.labelSmall!.fontSize,
+      color: theme.colorScheme.outline,
+    );
     return InkWell(
       onTap: () => Get.toNamed(
         '/member?mid=${item.mid}',

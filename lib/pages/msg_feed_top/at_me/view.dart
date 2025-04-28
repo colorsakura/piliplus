@@ -24,6 +24,7 @@ class _AtMePageState extends State<AtMePage> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(
         title: const Text('@我的'),
@@ -38,7 +39,8 @@ class _AtMePageState extends State<AtMePage> {
             SliverPadding(
               padding: EdgeInsets.only(
                   bottom: MediaQuery.paddingOf(context).bottom + 80),
-              sliver: Obx(() => _buildBody(_atMeController.loadingState.value)),
+              sliver: Obx(
+                  () => _buildBody(theme, _atMeController.loadingState.value)),
             ),
           ],
         ),
@@ -46,7 +48,8 @@ class _AtMePageState extends State<AtMePage> {
     );
   }
 
-  Widget _buildBody(LoadingState<List<AtMeItems>?> loadingState) {
+  Widget _buildBody(
+      ThemeData theme, LoadingState<List<AtMeItems>?> loadingState) {
     return switch (loadingState) {
       Loading() => SliverList.builder(
           itemCount: 12,
@@ -94,21 +97,15 @@ class _AtMePageState extends State<AtMePage> {
                       children: [
                         TextSpan(
                           text: "${item.user?.nickname}",
-                          style: Theme.of(context)
-                              .textTheme
-                              .titleSmall!
-                              .copyWith(
-                                color: Theme.of(context).colorScheme.primary,
-                              ),
+                          style: theme.textTheme.titleSmall!.copyWith(
+                            color: theme.colorScheme.primary,
+                          ),
                         ),
                         TextSpan(
                           text: " 在${item.item?.business}中@了我",
-                          style:
-                              Theme.of(context).textTheme.titleSmall!.copyWith(
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .onSurfaceVariant,
-                                  ),
+                          style: theme.textTheme.titleSmall!.copyWith(
+                            color: theme.colorScheme.onSurfaceVariant,
+                          ),
                         ),
                       ],
                     ),
@@ -121,20 +118,16 @@ class _AtMePageState extends State<AtMePage> {
                         Text(item.item!.sourceContent!,
                             maxLines: 3,
                             overflow: TextOverflow.ellipsis,
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyMedium!
-                                .copyWith(
-                                    color:
-                                        Theme.of(context).colorScheme.outline)),
+                            style: theme.textTheme.bodyMedium!
+                                .copyWith(color: theme.colorScheme.outline)),
                       ],
                       const SizedBox(height: 4),
                       Text(
                         Utils.dateFormat(item.atTime),
-                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                              fontSize: 13,
-                              color: Theme.of(context).colorScheme.outline,
-                            ),
+                        style: theme.textTheme.bodyMedium!.copyWith(
+                          fontSize: 13,
+                          color: theme.colorScheme.outline,
+                        ),
                       ),
                     ],
                   ),

@@ -129,7 +129,8 @@ class _LaterPageState extends State<LaterPage>
   }
 
   PreferredSizeWidget get _buildAppbar {
-    Color color = Theme.of(context).colorScheme.secondary;
+    final theme = Theme.of(context);
+    Color color = theme.colorScheme.secondary;
 
     return AppBarWidget(
       visible: _baseCtr.enableMultiSelect.value,
@@ -284,7 +285,7 @@ class _LaterPageState extends State<LaterPage>
             child: Text(
               '复制',
               style: TextStyle(
-                color: Theme.of(context).colorScheme.onSurfaceVariant,
+                color: theme.colorScheme.onSurfaceVariant,
               ),
             ),
           ),
@@ -305,7 +306,7 @@ class _LaterPageState extends State<LaterPage>
             child: Text(
               '移动',
               style: TextStyle(
-                color: Theme.of(context).colorScheme.onSurfaceVariant,
+                color: theme.colorScheme.onSurfaceVariant,
               ),
             ),
           ),
@@ -316,7 +317,7 @@ class _LaterPageState extends State<LaterPage>
             onPressed: () => currCtr().onDelChecked(context),
             child: Text(
               '移除',
-              style: TextStyle(color: Theme.of(context).colorScheme.error),
+              style: TextStyle(color: theme.colorScheme.error),
             ),
           ),
           const SizedBox(width: 6),

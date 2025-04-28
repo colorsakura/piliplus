@@ -38,7 +38,6 @@ class VideoCardHGrpc extends StatelessWidget {
           child: InkWell(
             borderRadius: BorderRadius.circular(12),
             onLongPress: () => imageSaveDialog(
-              context: context,
               title: videoItem.smallCoverV5.base.title,
               cover: videoItem.smallCoverV5.base.cover,
             ),
@@ -110,6 +109,7 @@ class VideoCardHGrpc extends StatelessWidget {
   }
 
   Widget videoContent(context) {
+    final theme = Theme.of(context);
     return Expanded(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -119,7 +119,7 @@ class VideoCardHGrpc extends StatelessWidget {
               videoItem.smallCoverV5.base.title,
               textAlign: TextAlign.start,
               style: TextStyle(
-                fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
+                fontSize: theme.textTheme.bodyMedium!.fontSize,
                 height: 1.42,
                 letterSpacing: 0.3,
               ),
@@ -132,9 +132,9 @@ class VideoCardHGrpc extends StatelessWidget {
               videoItem.smallCoverV5.rightDesc1,
               maxLines: 1,
               style: TextStyle(
-                fontSize: Theme.of(context).textTheme.labelMedium!.fontSize,
+                fontSize: theme.textTheme.labelMedium!.fontSize,
                 height: 1,
-                color: Theme.of(context).colorScheme.outline,
+                color: theme.colorScheme.outline,
                 overflow: TextOverflow.clip,
               ),
             ),
@@ -143,9 +143,9 @@ class VideoCardHGrpc extends StatelessWidget {
             videoItem.smallCoverV5.rightDesc2,
             maxLines: 1,
             style: TextStyle(
-              fontSize: Theme.of(context).textTheme.labelMedium!.fontSize,
+              fontSize: theme.textTheme.labelMedium!.fontSize,
               height: 1,
-              color: Theme.of(context).colorScheme.outline,
+              color: theme.colorScheme.outline,
               overflow: TextOverflow.clip,
             ),
           ),

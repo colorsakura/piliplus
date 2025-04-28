@@ -64,7 +64,6 @@ class VideoCardVMemberHome extends StatelessWidget {
             child: InkWell(
               onTap: () => onPushDetail(Utils.makeHeroTag(videoItem.bvid)),
               onLongPress: () => imageSaveDialog(
-                context: context,
                 title: videoItem.title,
                 cover: videoItem.cover,
               ),

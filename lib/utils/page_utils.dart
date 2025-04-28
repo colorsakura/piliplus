@@ -78,19 +78,20 @@ class PageUtils {
     if (isLive) {
       shutdownTimerService.waitForPlayingCompleted = false;
     }
-    PageUtils.showVideoBottomSheet(
+    showVideoBottomSheet(
       context,
       isFullScreen: () => isFullScreen,
       child: StatefulBuilder(
         builder: (_, setState) {
+          final ThemeData theme = Theme.of(context);
           return Theme(
-            data: Theme.of(context),
+            data: theme,
             child: Material(
               color: Colors.transparent,
               child: Container(
                 clipBehavior: Clip.hardEdge,
                 decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.surface,
+                  color: theme.colorScheme.surface,
                   borderRadius: const BorderRadius.all(Radius.circular(12)),
                 ),
                 margin: const EdgeInsets.all(12),
@@ -140,9 +141,7 @@ class PageUtils {
                                       child: Text(
                                         '取消',
                                         style: TextStyle(
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .outline),
+                                            color: theme.colorScheme.outline),
                                       ),
                                     ),
                                     TextButton(
@@ -179,7 +178,7 @@ class PageUtils {
                                 choice
                             ? Icon(
                                 Icons.done,
-                                color: Theme.of(context).colorScheme.primary,
+                                color: theme.colorScheme.primary,
                               )
                             : null,
                       ),

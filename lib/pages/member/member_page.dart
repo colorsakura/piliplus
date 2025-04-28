@@ -60,6 +60,7 @@ class _MemberPageNewState extends State<MemberPageNew> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
       extendBody: true,
       extendBodyBehindAppBar: true,
@@ -149,13 +150,12 @@ class _MemberPageNewState extends State<MemberPageNew> {
                       Icon(
                         Icons.error_outline,
                         size: 19,
-                        color: Theme.of(context).colorScheme.error,
+                        color: theme.colorScheme.error,
                       ),
                       const SizedBox(width: 10),
                       Text(
                         '举报',
-                        style: TextStyle(
-                            color: Theme.of(context).colorScheme.error),
+                        style: TextStyle(color: theme.colorScheme.error),
                       ),
                     ],
                   ),
@@ -192,7 +192,7 @@ class _MemberPageNewState extends State<MemberPageNew> {
                             child: Column(
                               children: [
                                 if ((_userController.tab2?.length ?? 0) > 1)
-                                  _buildTab,
+                                  _buildTab(theme),
                                 Expanded(child: _buildBody),
                               ],
                             ),
@@ -208,8 +208,8 @@ class _MemberPageNewState extends State<MemberPageNew> {
     );
   }
 
-  Widget get _buildTab => Material(
-        color: Theme.of(context).colorScheme.surface,
+  Widget _buildTab(ThemeData theme) => Material(
+        color: theme.colorScheme.surface,
         child: TabBar(
           controller: _userController.tabController,
           tabs: _userController.tabs,
@@ -316,6 +316,7 @@ class _ReportPanelState extends State<ReportPanel> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return SingleChildScrollView(
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -364,8 +365,7 @@ class _ReportPanelState extends State<ReportPanel> {
                 onPressed: Get.back,
                 child: Text(
                   '取消',
-                  style:
-                      TextStyle(color: Theme.of(context).colorScheme.outline),
+                  style: TextStyle(color: theme.colorScheme.outline),
                 ),
               ),
               TextButton(

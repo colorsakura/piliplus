@@ -50,87 +50,91 @@ class _NoteListPageState extends CommonSlidePageState<NoteListPage> {
   }
 
   @override
-  Widget get buildPage => Scaffold(
-        key: _key,
+  Widget buildPage(ThemeData theme) {
+    return Scaffold(
+      key: _key,
+      resizeToAvoidBottomInset: false,
+      body: Scaffold(
+        backgroundColor: Colors.transparent,
         resizeToAvoidBottomInset: false,
-        body: Scaffold(
-          backgroundColor: Colors.transparent,
-          resizeToAvoidBottomInset: false,
-          appBar: AppBar(
-            automaticallyImplyLeading: false,
-            titleSpacing: 16,
-            toolbarHeight: 45,
-            title: Obx(
-              () => Text(
-                  '笔记${_controller.count.value == -1 ? '' : '(${_controller.count.value})'}'),
-            ),
-            bottom: PreferredSize(
-              preferredSize: Size.fromHeight(1),
-              child: Divider(
-                height: 1,
-                color: Theme.of(context).colorScheme.outline.withOpacity(0.1),
-              ),
-            ),
-            actions: [
-              iconButton(
-                context: context,
-                tooltip: '关闭',
-                icon: Icons.clear,
-                onPressed: Get.back,
-                size: 32,
-              ),
-              const SizedBox(width: 16),
-            ],
+        appBar: AppBar(
+          automaticallyImplyLeading: false,
+          titleSpacing: 16,
+          toolbarHeight: 45,
+          title: Obx(
+            () => Text(
+                '笔记${_controller.count.value == -1 ? '' : '(${_controller.count.value})'}'),
           ),
-          body: enableSlide
-              ? slideList(Obx(() => _buildBody(_controller.loadingState.value)))
-              : Obx(() => _buildBody(_controller.loadingState.value)),
-          bottomNavigationBar: Container(
-            padding: EdgeInsets.only(
-              left: 12,
-              right: 12,
-              top: 6,
-              bottom: MediaQuery.paddingOf(context).bottom + 6,
+          bottom: PreferredSize(
+            preferredSize: Size.fromHeight(1),
+            child: Divider(
+              height: 1,
+              color: theme.colorScheme.outline.withOpacity(0.1),
             ),
-            width: double.infinity,
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.onInverseSurface,
-              border: Border(
-                top: BorderSide(
-                  width: 0.5,
-                  color: Theme.of(context).colorScheme.outline.withOpacity(0.1),
-                ),
+          ),
+          actions: [
+            iconButton(
+              context: context,
+              tooltip: '关闭',
+              icon: Icons.clear,
+              onPressed: Get.back,
+              size: 32,
+            ),
+            const SizedBox(width: 16),
+          ],
+        ),
+        body: enableSlide
+            ? slideList(theme,
+                Obx(() => _buildBody(theme, _controller.loadingState.value)))
+            : Obx(() => _buildBody(theme, _controller.loadingState.value)),
+        bottomNavigationBar: Container(
+          padding: EdgeInsets.only(
+            left: 12,
+            right: 12,
+            top: 6,
+            bottom: MediaQuery.paddingOf(context).bottom + 6,
+          ),
+          width: double.infinity,
+          decoration: BoxDecoration(
+            color: theme.colorScheme.onInverseSurface,
+            border: Border(
+              top: BorderSide(
+                width: 0.5,
+                color: theme.colorScheme.outline.withOpacity(0.1),
               ),
             ),
-            child: FilledButton.tonal(
-              style: FilledButton.styleFrom(
-                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                padding: EdgeInsets.zero,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(6),
-                ),
+          ),
+          child: FilledButton.tonal(
+            style: FilledButton.styleFrom(
+              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+              padding: EdgeInsets.zero,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(6),
               ),
-              onPressed: () {
-                if (!Accounts.main.isLogin) {
-                  SmartDialog.showToast('账号未登录');
-                  return;
-                }
-                _key.currentState?.showBottomSheet(
-                  (context) => WebviewPageNew(
-                    oid: widget.oid,
-                    title: widget.title,
-                    url:
-                        'https://www.bilibili.com/h5/note-app?oid=${widget.oid}&pagefrom=ugcvideo&is_stein_gate=${widget.isStein ? 1 : 0}',
-                  ),
-                );
-              },
-              child: const Text('开始记笔记'),
             ),
+            onPressed: () {
+              if (!Accounts.main.isLogin) {
+                SmartDialog.showToast('账号未登录');
+                return;
+              }
+              _key.currentState?.showBottomSheet(
+                (context) => WebviewPageNew(
+                  oid: widget.oid,
+                  title: widget.title,
+                  url:
+                      'https://www.bilibili.com/h5/note-app?oid=${widget.oid}&pagefrom=ugcvideo&is_stein_gate=${widget.isStein ? 1 : 0}',
+                ),
+              );
+            },
+            child: const Text('开始记笔记'),
           ),
         ),
-      );
+      ),
+    );
+  }
 
-  Widget _buildBody(LoadingState<List<dynamic>?> loadingState) {
+  Widget _buildBody(
+      ThemeData theme, LoadingState<List<dynamic>?> loadingState) {
     return switch (loadingState) {
       Loading() => CustomScrollView(
           physics: const NeverScrollableScrollPhysics(),
@@ -158,15 +162,12 @@ class _NoteListPageState extends CommonSlidePageState<NoteListPage> {
                         _controller.onLoadMore();
                       }
                       return _itemWidget(
-                          context, loadingState.response![index]);
+                          context, theme, loadingState.response![index]);
                     },
                     itemCount: loadingState.response!.length,
                     separatorBuilder: (context, index) => Divider(
                       height: 1,
-                      color: Theme.of(context)
-                          .colorScheme
-                          .outline
-                          .withOpacity(0.1),
+                      color: theme.colorScheme.outline.withOpacity(0.1),
                     ),
                   ),
                   SliverToBoxAdapter(
@@ -193,7 +194,7 @@ class _NoteListPageState extends CommonSlidePageState<NoteListPage> {
       );
 }
 
-Widget _itemWidget(BuildContext context, dynamic item) {
+Widget _itemWidget(BuildContext context, ThemeData theme, dynamic item) {
   return InkWell(
     onTap: () {
       if (item['web_url'] != null && item['web_url'] != '') {
@@ -235,7 +236,7 @@ Widget _itemWidget(BuildContext context, dynamic item) {
                                       0 &&
                                   item['author']?['vip_info']?['type'] == 2
                               ? context.vipColor
-                              : Theme.of(context).colorScheme.outline,
+                              : theme.colorScheme.outline,
                           fontSize: 13,
                         ),
                       ),
@@ -251,7 +252,7 @@ Widget _itemWidget(BuildContext context, dynamic item) {
                 Text(
                   item['pubtime'],
                   style: TextStyle(
-                    color: Theme.of(context).colorScheme.outline,
+                    color: theme.colorScheme.outline,
                     fontSize: 12,
                   ),
                 ),
@@ -261,18 +262,16 @@ Widget _itemWidget(BuildContext context, dynamic item) {
                     item['summary'],
                     style: TextStyle(
                       height: 1.75,
-                      fontSize:
-                          Theme.of(context).textTheme.bodyMedium!.fontSize,
+                      fontSize: theme.textTheme.bodyMedium!.fontSize,
                     ),
                   ),
                   if (item['web_url'] != null && item['web_url'] != '')
                     Text(
                       '查看全部',
                       style: TextStyle(
-                        color: Theme.of(context).colorScheme.primary,
+                        color: theme.colorScheme.primary,
                         height: 1.75,
-                        fontSize:
-                            Theme.of(context).textTheme.bodyMedium!.fontSize,
+                        fontSize: theme.textTheme.bodyMedium!.fontSize,
                       ),
                     ),
                 ],

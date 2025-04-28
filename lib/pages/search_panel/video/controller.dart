@@ -151,6 +151,7 @@ class SearchVideoController
       ),
       builder: (context) => StatefulBuilder(
         builder: (context, setState) {
+          final theme = Theme.of(context);
           Widget dateWidget([bool isFirst = true]) {
             return SearchText(
               text: DateFormat('yyyy-MM-dd')
@@ -200,12 +201,12 @@ class SearchVideoController
               },
               bgColor: currentPubTimeFilter == -1 &&
                       (isFirst ? customPubBeginDate : customPubEndDate)
-                  ? Theme.of(context).colorScheme.secondaryContainer
-                  : Theme.of(context).colorScheme.outline.withOpacity(0.1),
+                  ? theme.colorScheme.secondaryContainer
+                  : theme.colorScheme.outline.withOpacity(0.1),
               textColor: currentPubTimeFilter == -1 &&
                       (isFirst ? customPubBeginDate : customPubEndDate)
-                  ? Theme.of(context).colorScheme.onSecondaryContainer
-                  : Theme.of(context).colorScheme.outline.withOpacity(0.8),
+                  ? theme.colorScheme.onSecondaryContainer
+                  : theme.colorScheme.outline.withOpacity(0.8),
             );
           }
 
@@ -271,14 +272,10 @@ class SearchVideoController
                               SmartDialog.dismiss();
                             },
                             bgColor: item['value'] == currentPubTimeFilter
-                                ? Theme.of(context)
-                                    .colorScheme
-                                    .secondaryContainer
+                                ? theme.colorScheme.secondaryContainer
                                 : null,
                             textColor: item['value'] == currentPubTimeFilter
-                                ? Theme.of(context)
-                                    .colorScheme
-                                    .onSecondaryContainer
+                                ? theme.colorScheme.onSecondaryContainer
                                 : null,
                           ),
                         )
@@ -318,14 +315,10 @@ class SearchVideoController
                               SmartDialog.dismiss();
                             },
                             bgColor: item['value'] == currentTimeFilter
-                                ? Theme.of(context)
-                                    .colorScheme
-                                    .secondaryContainer
+                                ? theme.colorScheme.secondaryContainer
                                 : null,
                             textColor: item['value'] == currentTimeFilter
-                                ? Theme.of(context)
-                                    .colorScheme
-                                    .onSecondaryContainer
+                                ? theme.colorScheme.onSecondaryContainer
                                 : null,
                           ),
                         )
@@ -352,14 +345,10 @@ class SearchVideoController
                               SmartDialog.dismiss();
                             },
                             bgColor: item['value'] == currentZoneFilter
-                                ? Theme.of(context)
-                                    .colorScheme
-                                    .secondaryContainer
+                                ? theme.colorScheme.secondaryContainer
                                 : null,
                             textColor: item['value'] == currentZoneFilter
-                                ? Theme.of(context)
-                                    .colorScheme
-                                    .onSecondaryContainer
+                                ? theme.colorScheme.onSecondaryContainer
                                 : null,
                           ),
                         )

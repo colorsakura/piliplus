@@ -35,6 +35,7 @@ class _FontSizeSelectPageState extends State<FontSizeSelectPage> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(
         actions: [
@@ -65,11 +66,8 @@ class _FontSizeSelectPageState extends State<FontSizeSelectPage> {
               decoration: BoxDecoration(
                 border: Border(
                     top: BorderSide(
-                        color: Theme.of(context)
-                            .colorScheme
-                            .primary
-                            .withOpacity(0.3))),
-                color: Theme.of(context).colorScheme.surface,
+                        color: theme.colorScheme.primary.withOpacity(0.3))),
+                color: theme.colorScheme.surface,
               ),
               child: Row(
                 children: [

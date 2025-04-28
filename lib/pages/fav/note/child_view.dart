@@ -28,6 +28,7 @@ class _FavNoteChildPageState extends State<FavNoteChildPage>
   @override
   Widget build(BuildContext context) {
     super.build(context);
+    final theme = Theme.of(context);
     return LayoutBuilder(
       builder: (context, constraints) => Stack(
         clipBehavior: Clip.none,
@@ -55,14 +56,11 @@ class _FavNoteChildPageState extends State<FavNoteChildPage>
                 child: Container(
                   padding: MediaQuery.paddingOf(context),
                   decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.onInverseSurface,
+                    color: theme.colorScheme.onInverseSurface,
                     border: Border(
                       top: BorderSide(
                         width: 0.5,
-                        color: Theme.of(context)
-                            .colorScheme
-                            .outline
-                            .withOpacity(0.5),
+                        color: theme.colorScheme.outline.withOpacity(0.5),
                       ),
                     ),
                   ),

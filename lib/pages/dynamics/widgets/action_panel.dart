@@ -58,8 +58,10 @@ class _ActionPanelState extends State<ActionPanel> {
 
   @override
   Widget build(BuildContext context) {
-    var color = Theme.of(context).colorScheme.outline;
-    var primary = Theme.of(context).colorScheme.primary;
+    final theme = Theme.of(context);
+    final color = theme.colorScheme.outline;
+    final primary = theme.colorScheme.primary;
+    final outline = theme.colorScheme.outline;
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
@@ -90,7 +92,7 @@ class _ActionPanelState extends State<ActionPanel> {
             ),
             style: TextButton.styleFrom(
               padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
-              foregroundColor: Theme.of(context).colorScheme.outline,
+              foregroundColor: outline,
             ),
             label: Text(
               widget.item.modules.moduleStat!.forward!.count != null
@@ -113,7 +115,7 @@ class _ActionPanelState extends State<ActionPanel> {
             ),
             style: TextButton.styleFrom(
               padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
-              foregroundColor: Theme.of(context).colorScheme.outline,
+              foregroundColor: outline,
             ),
             label: Text(
               widget.item.modules.moduleStat!.comment!.count != null
@@ -140,7 +142,7 @@ class _ActionPanelState extends State<ActionPanel> {
             ),
             style: TextButton.styleFrom(
               padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
-              foregroundColor: Theme.of(context).colorScheme.outline,
+              foregroundColor: outline,
             ),
             label: AnimatedSwitcher(
               duration: const Duration(milliseconds: 400),

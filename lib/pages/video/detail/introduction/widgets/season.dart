@@ -88,6 +88,7 @@ class _SeasonPanelState extends State<SeasonPanel> {
     if (episodes.isEmpty) {
       return const SizedBox.shrink();
     }
+    final theme = Theme.of(context);
     return Builder(builder: (BuildContext context) {
       return Container(
         margin: const EdgeInsets.only(
@@ -96,7 +97,7 @@ class _SeasonPanelState extends State<SeasonPanel> {
           right: 2,
         ),
         child: Material(
-          color: Theme.of(context).colorScheme.onInverseSurface,
+          color: theme.colorScheme.onInverseSurface,
           borderRadius: BorderRadius.circular(6),
           clipBehavior: Clip.hardEdge,
           child: InkWell(
@@ -117,14 +118,14 @@ class _SeasonPanelState extends State<SeasonPanel> {
                   Expanded(
                     child: Text(
                       '合集：${videoDetail.ugcSeason!.title!}',
-                      style: Theme.of(context).textTheme.labelMedium,
+                      style: theme.textTheme.labelMedium,
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
                   const SizedBox(width: 15),
                   Image.asset(
                     'assets/images/live.png',
-                    color: Theme.of(context).colorScheme.primary,
+                    color: theme.colorScheme.primary,
                     height: 12,
                     semanticLabel: "正在播放：",
                   ),
@@ -132,7 +133,7 @@ class _SeasonPanelState extends State<SeasonPanel> {
                   Obx(
                     () => Text(
                       '${currentIndex.value + 1}/${episodes.length}',
-                      style: Theme.of(context).textTheme.labelMedium,
+                      style: theme.textTheme.labelMedium,
                       semanticsLabel:
                           '第${currentIndex.value + 1}集，共${episodes.length}集',
                     ),

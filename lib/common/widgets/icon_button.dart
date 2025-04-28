@@ -10,6 +10,7 @@ Widget iconButton({
   Color? bgColor,
   Color? iconColor,
 }) {
+  late final theme = Theme.of(context);
   return SizedBox(
     width: size,
     height: size,
@@ -19,12 +20,11 @@ Widget iconButton({
       icon: Icon(
         icon,
         size: iconSize ?? size / 2,
-        color: iconColor ?? Theme.of(context).colorScheme.onSecondaryContainer,
+        color: iconColor ?? theme.colorScheme.onSecondaryContainer,
       ),
       style: IconButton.styleFrom(
         padding: EdgeInsets.zero,
-        backgroundColor:
-            bgColor ?? Theme.of(context).colorScheme.secondaryContainer,
+        backgroundColor: bgColor ?? theme.colorScheme.secondaryContainer,
       ),
     ),
   );

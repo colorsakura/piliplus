@@ -18,7 +18,7 @@ class _MinePageState extends State<MinePage> {
   final MineController _mineController = Get.put(MineController())
     ..queryUserInfo();
 
-  Widget get _header => FittedBox(
+  Widget _header(ThemeData theme) => FittedBox(
         child: Row(
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -31,7 +31,7 @@ class _MinePageState extends State<MinePage> {
             const SizedBox(width: 5),
             Text(
               'PiliPlus',
-              style: Theme.of(context).textTheme.titleMedium,
+              style: theme.textTheme.titleMedium,
             ),
             const SizedBox(width: 30),
             IconButton(
@@ -92,24 +92,25 @@ class _MinePageState extends State<MinePage> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return IntrinsicWidth(
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           const SizedBox(height: 8),
-          _header,
+          _header(theme),
           const SizedBox(height: 10),
-          Obx(userInfoBuild),
+          Obx(() => userInfoBuild(theme)),
         ],
       ),
     );
   }
 
-  Widget userInfoBuild() {
+  Widget userInfoBuild(ThemeData theme) {
     LevelInfo? levelInfo = _mineController.userInfo.value.levelInfo;
     TextStyle style = TextStyle(
-      fontSize: Theme.of(context).textTheme.titleMedium!.fontSize,
-      color: Theme.of(context).colorScheme.primary,
+      fontSize: theme.textTheme.titleMedium!.fontSize,
+      color: theme.colorScheme.primary,
       fontWeight: FontWeight.bold,
     );
     return Column(
@@ -137,7 +138,7 @@ class _MinePageState extends State<MinePage> {
                         alignment: Alignment.center,
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
-                          color: Theme.of(context).colorScheme.onInverseSurface,
+                          color: theme.colorScheme.onInverseSurface,
                         ),
                         child: Image.asset(
                           'assets/images/noface.jpeg',
@@ -158,9 +159,7 @@ class _MinePageState extends State<MinePage> {
                         children: [
                           Text(
                             _mineController.userInfo.value.uname ?? '点击头像登录',
-                            style: Theme.of(context)
-                                .textTheme
-                                .titleMedium!
+                            style: theme.textTheme.titleMedium!
                                 .copyWith(height: 1),
                           ),
                           const SizedBox(width: 4),
@@ -181,11 +180,8 @@ class _MinePageState extends State<MinePage> {
                             TextSpan(
                               text: '硬币 ',
                               style: TextStyle(
-                                fontSize: Theme.of(context)
-                                    .textTheme
-                                    .labelSmall!
-                                    .fontSize,
-                                color: Theme.of(context).colorScheme.outline,
+                                fontSize: theme.textTheme.labelSmall!.fontSize,
+                                color: theme.colorScheme.outline,
                               ),
                             ),
                             TextSpan(
@@ -193,22 +189,16 @@ class _MinePageState extends State<MinePage> {
                                   (_mineController.userInfo.value.money ?? '-')
                                       .toString(),
                               style: TextStyle(
-                                fontSize: Theme.of(context)
-                                    .textTheme
-                                    .labelSmall!
-                                    .fontSize,
+                                fontSize: theme.textTheme.labelSmall!.fontSize,
                                 fontWeight: FontWeight.bold,
-                                color: Theme.of(context).colorScheme.primary,
+                                color: theme.colorScheme.primary,
                               ),
                             ),
                             TextSpan(
                               text: "  经验 ",
                               style: TextStyle(
-                                fontSize: Theme.of(context)
-                                    .textTheme
-                                    .labelSmall!
-                                    .fontSize,
-                                color: Theme.of(context).colorScheme.outline,
+                                fontSize: theme.textTheme.labelSmall!.fontSize,
+                                color: theme.colorScheme.outline,
                               ),
                             ),
                             TextSpan(
@@ -216,23 +206,17 @@ class _MinePageState extends State<MinePage> {
                               semanticsLabel:
                                   "当前${levelInfo?.currentExp ?? '-'}",
                               style: TextStyle(
-                                fontSize: Theme.of(context)
-                                    .textTheme
-                                    .labelSmall!
-                                    .fontSize,
+                                fontSize: theme.textTheme.labelSmall!.fontSize,
                                 fontWeight: FontWeight.bold,
-                                color: Theme.of(context).colorScheme.primary,
+                                color: theme.colorScheme.primary,
                               ),
                             ),
                             TextSpan(
                               text: "/${levelInfo?.nextExp ?? '-'}",
                               semanticsLabel: "升级需${levelInfo?.nextExp ?? '-'}",
                               style: TextStyle(
-                                fontSize: Theme.of(context)
-                                    .textTheme
-                                    .labelSmall!
-                                    .fontSize,
-                                color: Theme.of(context).colorScheme.outline,
+                                fontSize: theme.textTheme.labelSmall!.fontSize,
+                                color: theme.colorScheme.outline,
                               ),
                             ),
                           ],
@@ -247,10 +231,9 @@ class _MinePageState extends State<MinePage> {
                         value: levelInfo != null
                             ? (levelInfo.currentExp! / levelInfo.nextExp!)
                             : 0,
-                        backgroundColor:
-                            Theme.of(context).colorScheme.inversePrimary,
+                        backgroundColor: theme.colorScheme.inversePrimary,
                         valueColor: AlwaysStoppedAnimation<Color>(
-                            Theme.of(context).colorScheme.primary),
+                            theme.colorScheme.primary),
                       ),
                     ),
                   ],
@@ -286,7 +269,7 @@ class _MinePageState extends State<MinePage> {
                     const SizedBox(height: 8),
                     Text(
                       '动态',
-                      style: Theme.of(context).textTheme.labelMedium,
+                      style: theme.textTheme.labelMedium,
                     ),
                   ],
                 ),
@@ -307,7 +290,7 @@ class _MinePageState extends State<MinePage> {
                     const SizedBox(height: 8),
                     Text(
                       '关注',
-                      style: Theme.of(context).textTheme.labelMedium,
+                      style: theme.textTheme.labelMedium,
                     ),
                   ],
                 ),
@@ -329,7 +312,7 @@ class _MinePageState extends State<MinePage> {
                     const SizedBox(height: 8),
                     Text(
                       '粉丝',
-                      style: Theme.of(context).textTheme.labelMedium,
+                      style: theme.textTheme.labelMedium,
                     ),
                   ],
                 ),

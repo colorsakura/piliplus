@@ -35,6 +35,14 @@ class _DynamicsPageState extends State<DynamicsPage>
   final DynamicsController _dynamicsController = Get.put(DynamicsController());
   late UpPanelPosition upPanelPosition;
 
+  late ThemeData theme;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    theme = Theme.of(context);
+  }
+
   @override
   bool get wantKeepAlive => true;
 
@@ -49,7 +57,7 @@ class _DynamicsPageState extends State<DynamicsPage>
             style: ButtonStyle(
               padding: WidgetStateProperty.all(EdgeInsets.zero),
               backgroundColor: WidgetStateProperty.resolveWith((states) {
-                return Theme.of(context).colorScheme.secondaryContainer;
+                return theme.colorScheme.secondaryContainer;
               }),
             ),
             onPressed: () {
@@ -65,7 +73,7 @@ class _DynamicsPageState extends State<DynamicsPage>
             icon: Icon(
               Icons.add,
               size: 18,
-              color: Theme.of(context).colorScheme.onSecondaryContainer,
+              color: theme.colorScheme.onSecondaryContainer,
             ),
           ),
         ),
@@ -103,7 +111,7 @@ class _DynamicsPageState extends State<DynamicsPage>
     return Container(
       //抽屉模式增加底色
       color: upPanelPosition.index > 1
-          ? Theme.of(context).colorScheme.surface
+          ? theme.colorScheme.surface
           : Colors.transparent,
       width: 64,
       child: Obx(
@@ -149,9 +157,9 @@ class _DynamicsPageState extends State<DynamicsPage>
             dividerColor: Colors.transparent,
             dividerHeight: 0,
             tabAlignment: TabAlignment.center,
-            indicatorColor: Theme.of(context).colorScheme.primary,
-            labelColor: Theme.of(context).colorScheme.primary,
-            unselectedLabelColor: Theme.of(context).colorScheme.onSurface,
+            indicatorColor: theme.colorScheme.primary,
+            labelColor: theme.colorScheme.primary,
+            unselectedLabelColor: theme.colorScheme.onSurface,
             labelStyle:
                 TabBarTheme.of(context).labelStyle?.copyWith(fontSize: 13) ??
                     const TextStyle(fontSize: 13),

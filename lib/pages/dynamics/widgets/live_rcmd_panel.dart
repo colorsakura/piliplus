@@ -9,13 +9,21 @@ import 'package:PiliPlus/utils/utils.dart';
 
 import 'rich_node_panel.dart';
 
-Widget liveRcmdPanel(source, DynamicItemModel item, context, {floor = 1}) {
-  TextStyle authorStyle =
-      TextStyle(color: Theme.of(context).colorScheme.primary);
-  DynamicLiveModel liveRcmd = item.modules.moduleDynamic!.major!.liveRcmd!;
-  int liveStatus = liveRcmd.liveStatus!;
-  Map watchedShow = liveRcmd.watchedShow!;
-  InlineSpan? richNodes = richNode(item, context);
+Widget liveRcmdPanel(
+  ThemeData theme,
+  String? source,
+  DynamicItemModel item,
+  BuildContext context, {
+  int floor = 1,
+}) {
+  DynamicLiveModel? liveRcmd = item.modules.moduleDynamic?.major?.liveRcmd;
+  if (liveRcmd == null) {
+    return const SizedBox.shrink();
+  }
+  int? liveStatus = liveRcmd.liveStatus;
+  Map? watchedShow = liveRcmd.watchedShow;
+  TextSpan? richNodes = richNode(theme, item, context);
+  late final authorStyle = TextStyle(color: theme.colorScheme.primary);
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
@@ -24,8 +32,9 @@ Widget liveRcmdPanel(source, DynamicItemModel item, context, {floor = 1}) {
           children: [
             GestureDetector(
               onTap: () => Get.toNamed(
-                  '/member?mid=${item.modules.moduleAuthor?.mid}',
-                  arguments: {'face': item.modules.moduleAuthor?.face}),
+                '/member?mid=${item.modules.moduleAuthor?.mid}',
+                arguments: {'face': item.modules.moduleAuthor?.face},
+              ),
               child: Text(
                 '@${item.modules.moduleAuthor?.name}',
                 style: authorStyle,
@@ -35,8 +44,9 @@ Widget liveRcmdPanel(source, DynamicItemModel item, context, {floor = 1}) {
             Text(
               Utils.dateFormat(item.modules.moduleAuthor?.pubTs),
               style: TextStyle(
-                  color: Theme.of(context).colorScheme.outline,
-                  fontSize: Theme.of(context).textTheme.labelSmall!.fontSize),
+                color: theme.colorScheme.outline,
+                fontSize: theme.textTheme.labelSmall!.fontSize,
+              ),
             ),
           ],
         ),
@@ -46,27 +56,27 @@ Widget liveRcmdPanel(source, DynamicItemModel item, context, {floor = 1}) {
         Padding(
           padding:
               const EdgeInsets.symmetric(horizontal: StyleString.safeSpace),
-          child: GestureDetector(
-            child: Text(
-              '#${item.modules.moduleDynamic!.topic!.name}',
-              style: authorStyle,
-            ),
+          child: Text(
+            '#${item.modules.moduleDynamic!.topic!.name}',
+            style: authorStyle,
           ),
         ),
         const SizedBox(height: 6),
       ],
-      if (floor == 2 && item.modules.moduleDynamic?.desc != null) ...[
-        if (richNodes != null) Text.rich(richNodes),
+      if (floor == 2 &&
+          item.modules.moduleDynamic?.desc != null &&
+          richNodes != null) ...[
+        Text.rich(richNodes),
         const SizedBox(height: 6),
       ],
       Padding(
-          padding:
-              const EdgeInsets.symmetric(horizontal: StyleString.safeSpace),
-          child: GestureDetector(
-            onTap: () {
-              PageUtils.pushDynDetail(item, floor);
-            },
-            child: LayoutBuilder(builder: (context, box) {
+        padding: const EdgeInsets.symmetric(horizontal: StyleString.safeSpace),
+        child: GestureDetector(
+          onTap: () {
+            PageUtils.pushDynDetail(item, floor);
+          },
+          child: LayoutBuilder(
+            builder: (context, box) {
               double width = box.maxWidth;
               return Stack(
                 children: [
@@ -75,33 +85,31 @@ Widget liveRcmdPanel(source, DynamicItemModel item, context, {floor = 1}) {
                     child: NetworkImgLayer(
                       width: width,
                       height: width / StyleString.aspectRatio,
-                      src: item.modules.moduleDynamic?.major?.liveRcmd?.cover,
+                      src: liveRcmd.cover,
                     ),
                   ),
                   PBadge(
-                    text: watchedShow['text_large'],
+                    text: watchedShow?['text_large'],
                     top: 6,
                     right: 56,
-                    bottom: null,
-                    left: null,
                     type: 'gray',
                   ),
                   PBadge(
                     text: liveStatus == 1 ? '直播中' : '直播结束',
                     top: 6,
                     right: 6,
-                    bottom: null,
-                    left: null,
                   ),
-                  Positioned(
-                    left: 0,
-                    right: 0,
-                    bottom: 0,
-                    child: Container(
-                      height: 80,
-                      padding: const EdgeInsets.fromLTRB(12, 0, 10, 10),
-                      clipBehavior: Clip.hardEdge,
-                      decoration: BoxDecoration(
+                  if (liveRcmd.areaName != null)
+                    Positioned(
+                      left: 0,
+                      right: 0,
+                      bottom: 0,
+                      child: Container(
+                        height: 80,
+                        alignment: Alignment.bottomLeft,
+                        padding: const EdgeInsets.fromLTRB(12, 0, 10, 10),
+                        clipBehavior: Clip.hardEdge,
+                        decoration: BoxDecoration(
                           gradient: const LinearGradient(
                             begin: Alignment.topCenter,
                             end: Alignment.bottomCenter,
@@ -111,45 +119,42 @@ Widget liveRcmdPanel(source, DynamicItemModel item, context, {floor = 1}) {
                             ],
                           ),
                           borderRadius: floor == 1
-                              ? StyleString.mdRadius
-                              : const BorderRadius.all(Radius.circular(6))),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          DefaultTextStyle.merge(
-                            style: TextStyle(
-                                fontSize: Theme.of(context)
-                                    .textTheme
-                                    .labelMedium!
-                                    .fontSize,
-                                color: Colors.white),
-                            child: Row(
-                              children: [
-                                Text(item.modules.moduleDynamic?.major?.liveRcmd
-                                        ?.areaName ??
-                                    ''),
-                              ],
-                            ),
+                              ? const BorderRadius.only(
+                                  bottomLeft: StyleString.imgRadius,
+                                  bottomRight: StyleString.imgRadius,
+                                )
+                              : const BorderRadius.only(
+                                  bottomLeft: Radius.circular(6),
+                                  bottomRight: Radius.circular(6),
+                                ),
+                        ),
+                        child: Text(
+                          liveRcmd.areaName!,
+                          style: TextStyle(
+                            fontSize: theme.textTheme.labelMedium!.fontSize,
+                            color: Colors.white,
                           ),
-                        ],
+                        ),
                       ),
                     ),
-                  ),
                 ],
               );
-            }),
-          )),
-      const SizedBox(height: 6),
-      Padding(
-        padding: const EdgeInsets.symmetric(horizontal: StyleString.safeSpace),
-        child: Text(
-          item.modules.moduleDynamic!.major!.liveRcmd!.title!,
-          maxLines: source == 'detail' ? null : 1,
-          style: const TextStyle(fontWeight: FontWeight.bold),
-          overflow: source == 'detail' ? null : TextOverflow.ellipsis,
+            },
+          ),
         ),
       ),
+      const SizedBox(height: 6),
+      if (liveRcmd.title != null)
+        Padding(
+          padding:
+              const EdgeInsets.symmetric(horizontal: StyleString.safeSpace),
+          child: Text(
+            liveRcmd.title!,
+            maxLines: source == 'detail' ? null : 1,
+            style: const TextStyle(fontWeight: FontWeight.bold),
+            overflow: source == 'detail' ? null : TextOverflow.ellipsis,
+          ),
+        ),
       const SizedBox(height: 2),
     ],
   );

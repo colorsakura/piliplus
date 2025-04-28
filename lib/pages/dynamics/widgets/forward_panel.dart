@@ -19,7 +19,10 @@ import 'pic_panel.dart';
 import 'rich_node_panel.dart';
 import 'video_panel.dart';
 
-InlineSpan picsNodes(List<OpusPicsModel> pics, callback) {
+InlineSpan picsNodes(
+  List<OpusPicsModel> pics,
+  Function(List<String>, int)? callback,
+) {
   return WidgetSpan(
     child: LayoutBuilder(
       builder: (context, constraints) => imageView(
@@ -40,7 +43,7 @@ InlineSpan picsNodes(List<OpusPicsModel> pics, callback) {
   );
 }
 
-Widget _blockedItem(BuildContext context, DynamicItemModel item, source) {
+Widget _blockedItem(ThemeData theme, DynamicItemModel item, String? source) {
   return Container(
     width: double.infinity,
     padding: EdgeInsets.only(
@@ -53,7 +56,7 @@ Widget _blockedItem(BuildContext context, DynamicItemModel item, source) {
           Text(
             item.modules.moduleDynamic!.major!.blocked!['title'],
             style: TextStyle(
-              color: Theme.of(context).colorScheme.secondary,
+              color: theme.colorScheme.secondary,
             ),
           ),
         if (item.modules.moduleDynamic!.major!.blocked!['hint_message'] != null)
@@ -61,7 +64,7 @@ Widget _blockedItem(BuildContext context, DynamicItemModel item, source) {
             item.modules.moduleDynamic!.major!.blocked!['hint_message'],
             style: TextStyle(
               fontSize: 12,
-              color: Theme.of(context).colorScheme.outline,
+              color: theme.colorScheme.outline,
             ),
           ),
       ],
@@ -70,15 +73,21 @@ Widget _blockedItem(BuildContext context, DynamicItemModel item, source) {
 }
 
 Widget forWard(
-    bool isSave, DynamicItemModel item, BuildContext context, source, callback,
-    {floor = 1}) {
+  ThemeData theme,
+  bool isSave,
+  DynamicItemModel item,
+  BuildContext context,
+  source,
+  callback, {
+  floor = 1,
+}) {
   switch (item.type) {
     // 图文
     case 'DYNAMIC_TYPE_DRAW':
       bool hasPics =
           item.modules.moduleDynamic?.major?.opus?.pics?.isNotEmpty == true;
 
-      InlineSpan? richNodes = richNode(item, context);
+      TextSpan? richNodes = richNode(theme, item, context);
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -91,17 +100,15 @@ Widget forWard(
                       arguments: {'face': item.modules.moduleAuthor!.face}),
                   child: Text(
                     '@${item.modules.moduleAuthor!.name}',
-                    style:
-                        TextStyle(color: Theme.of(context).colorScheme.primary),
+                    style: TextStyle(color: theme.colorScheme.primary),
                   ),
                 ),
                 const SizedBox(width: 6),
                 Text(
                   Utils.dateFormat(item.modules.moduleAuthor!.pubTs),
                   style: TextStyle(
-                      color: Theme.of(context).colorScheme.outline,
-                      fontSize:
-                          Theme.of(context).textTheme.labelSmall!.fontSize),
+                      color: theme.colorScheme.outline,
+                      fontSize: theme.textTheme.labelSmall!.fontSize),
                 ),
               ],
             ),
@@ -139,22 +146,24 @@ Widget forWard(
           /// 附加内容 商品信息、直播预约等等
           if (item.modules.moduleDynamic?.additional != null)
             addWidget(
+              theme,
               item,
               context,
               item.modules.moduleDynamic?.additional?.type,
               floor: floor,
             ),
           if (item.modules.moduleDynamic?.major?.blocked != null)
-            _blockedItem(context, item, source),
+            _blockedItem(theme, item, source),
         ],
       );
     // 视频
     case 'DYNAMIC_TYPE_AV':
-      return videoSeasonWidget(source, item, context, 'archive', floor: floor);
+      return videoSeasonWidget(theme, source, item, context, 'archive',
+          floor: floor);
     // 文章
     case 'DYNAMIC_TYPE_ARTICLE':
       return item.isForwarded == true
-          ? articlePanel(source, item, context, callback, floor: floor)
+          ? articlePanel(theme, source, item, context, callback, floor: floor)
           : item.modules.moduleDynamic?.major?.blocked != null
               ? Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -168,7 +177,7 @@ Widget forWard(
                         Text(
                           item.modules.moduleDynamic!.major!.blocked!['title'],
                           style: TextStyle(
-                            color: Theme.of(context).colorScheme.secondary,
+                            color: theme.colorScheme.secondary,
                           ),
                         ),
                       if (item.modules.moduleDynamic?.major
@@ -179,7 +188,7 @@ Widget forWard(
                               .blocked!['hint_message'],
                           style: TextStyle(
                             fontSize: 12,
-                            color: Theme.of(context).colorScheme.outline,
+                            color: theme.colorScheme.outline,
                           ),
                         )
                     ],
@@ -225,29 +234,28 @@ Widget forWard(
                     return;
                 }
                 imageSaveDialog(
-                  context: context,
                   title: title,
                   cover: cover,
                 );
               },
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
-          color: Theme.of(context).dividerColor.withOpacity(0.08),
-          child: forWard(isSave, item.orig!, context, source, callback,
+          color: theme.dividerColor.withOpacity(0.08),
+          child: forWard(theme, isSave, item.orig!, context, source, callback,
               floor: floor + 1),
         ),
       );
     // 直播
     case 'DYNAMIC_TYPE_LIVE_RCMD':
-      return liveRcmdPanel(source, item, context, floor: floor);
+      return liveRcmdPanel(theme, source, item, context, floor: floor);
     // 直播
     case 'DYNAMIC_TYPE_LIVE':
-      return livePanel(source, item, context, floor: floor);
+      return livePanel(theme, source, item, context, floor: floor);
     // 合集
     case 'DYNAMIC_TYPE_UGC_SEASON':
-      return videoSeasonWidget(source, item, context, 'ugcSeason');
+      return videoSeasonWidget(theme, source, item, context, 'ugcSeason');
     case 'DYNAMIC_TYPE_WORD':
-      InlineSpan? richNodes = richNode(item, context);
+      late TextSpan? richNodes = richNode(theme, item, context);
       return floor == 2
           ? Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -260,17 +268,15 @@ Widget forWard(
                           arguments: {'face': item.modules.moduleAuthor?.face}),
                       child: Text(
                         '@${item.modules.moduleAuthor?.name}',
-                        style: TextStyle(
-                            color: Theme.of(context).colorScheme.primary),
+                        style: TextStyle(color: theme.colorScheme.primary),
                       ),
                     ),
                     const SizedBox(width: 6),
                     Text(
                       Utils.dateFormat(item.modules.moduleAuthor?.pubTs),
                       style: TextStyle(
-                          color: Theme.of(context).colorScheme.outline,
-                          fontSize:
-                              Theme.of(context).textTheme.labelSmall!.fontSize),
+                          color: theme.colorScheme.outline,
+                          fontSize: theme.textTheme.labelSmall!.fontSize),
                     ),
                   ],
                 ),
@@ -294,18 +300,21 @@ Widget forWard(
             )
           : item.modules.moduleDynamic?.additional != null
               ? addWidget(
+                  theme,
                   item,
                   context,
                   item.modules.moduleDynamic!.additional!.type,
                   floor: floor,
                 )
               : item.modules.moduleDynamic?.major?.blocked != null
-                  ? _blockedItem(context, item, source)
+                  ? _blockedItem(theme, item, source)
                   : const SizedBox(height: 0);
     case 'DYNAMIC_TYPE_PGC':
-      return videoSeasonWidget(source, item, context, 'pgc', floor: floor);
+      return videoSeasonWidget(theme, source, item, context, 'pgc',
+          floor: floor);
     case 'DYNAMIC_TYPE_PGC_UNION':
-      return videoSeasonWidget(source, item, context, 'pgc', floor: floor);
+      return videoSeasonWidget(theme, source, item, context, 'pgc',
+          floor: floor);
     // 直播结束
     case 'DYNAMIC_TYPE_NONE':
       return Row(
@@ -347,7 +356,7 @@ Widget forWard(
           width: double.infinity,
           padding:
               const EdgeInsets.only(left: 12, top: 10, right: 12, bottom: 10),
-          color: Theme.of(context).dividerColor.withOpacity(0.08),
+          color: theme.dividerColor.withOpacity(0.08),
           child: Row(
             children: [
               NetworkImgLayer(
@@ -365,7 +374,7 @@ Widget forWard(
                     Text(
                       item.modules.moduleDynamic!.major!.common!['title'],
                       style: TextStyle(
-                        color: Theme.of(context).colorScheme.primary,
+                        color: theme.colorScheme.primary,
                       ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
@@ -374,9 +383,8 @@ Widget forWard(
                     Text(
                       item.modules.moduleDynamic!.major!.common!['desc'],
                       style: TextStyle(
-                        color: Theme.of(context).colorScheme.outline,
-                        fontSize:
-                            Theme.of(context).textTheme.labelMedium!.fontSize,
+                        color: theme.colorScheme.outline,
+                        fontSize: theme.textTheme.labelMedium!.fontSize,
                       ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
@@ -398,7 +406,7 @@ Widget forWard(
           width: double.infinity,
           padding:
               const EdgeInsets.only(left: 12, top: 10, right: 12, bottom: 10),
-          color: Theme.of(context).dividerColor.withOpacity(0.08),
+          color: theme.dividerColor.withOpacity(0.08),
           child: Row(
             children: [
               NetworkImgLayer(
@@ -415,7 +423,7 @@ Widget forWard(
                   Text(
                     music['title'],
                     style: TextStyle(
-                      color: Theme.of(context).colorScheme.primary,
+                      color: theme.colorScheme.primary,
                     ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
@@ -424,9 +432,8 @@ Widget forWard(
                   Text(
                     music['label'],
                     style: TextStyle(
-                      color: Theme.of(context).colorScheme.outline,
-                      fontSize:
-                          Theme.of(context).textTheme.labelMedium!.fontSize,
+                      color: theme.colorScheme.outline,
+                      fontSize: theme.textTheme.labelMedium!.fontSize,
                     ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
@@ -464,9 +471,8 @@ Widget forWard(
                               item.modules.moduleAuthor!.vip!['status'] > 0 &&
                               item.modules.moduleAuthor!.vip!['type'] == 2
                           ? context.vipColor
-                          : Theme.of(context).colorScheme.onSurface,
-                      fontSize:
-                          Theme.of(context).textTheme.titleMedium!.fontSize,
+                          : theme.colorScheme.onSurface,
+                      fontSize: theme.textTheme.titleMedium!.fontSize,
                     ),
                   ),
                 ],
@@ -510,10 +516,7 @@ Widget forWard(
                       Text(
                         item.modules.moduleDynamic!.major!.medialist!['title'],
                         style: TextStyle(
-                            fontSize: Theme.of(context)
-                                .textTheme
-                                .titleMedium!
-                                .fontSize,
+                            fontSize: theme.textTheme.titleMedium!.fontSize,
                             fontWeight: FontWeight.bold),
                       ),
                       if (item.modules.moduleDynamic?.major
@@ -524,11 +527,8 @@ Widget forWard(
                           item.modules.moduleDynamic!.major!
                               .medialist!['sub_title'],
                           style: TextStyle(
-                              fontSize: Theme.of(context)
-                                  .textTheme
-                                  .labelLarge!
-                                  .fontSize,
-                              color: Theme.of(context).colorScheme.outline),
+                              fontSize: theme.textTheme.labelLarge!.fontSize,
+                              color: theme.colorScheme.outline),
                         ),
                       ],
                     ],

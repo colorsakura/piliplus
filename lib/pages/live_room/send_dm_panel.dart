@@ -48,6 +48,7 @@ class _ReplyPageState extends CommonPublishPageState<LiveSendDmPanel> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return MediaQuery.removePadding(
       removeTop: true,
       context: context,
@@ -67,9 +68,8 @@ class _ReplyPageState extends CommonPublishPageState<LiveSendDmPanel> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      buildInputView(),
-                      buildPanelContainer(
-                          Theme.of(context).colorScheme.surface),
+                      buildInputView(theme),
+                      buildPanelContainer(theme.colorScheme.surface),
                     ],
                   ),
                 ),
@@ -98,7 +98,7 @@ class _ReplyPageState extends CommonPublishPageState<LiveSendDmPanel> {
         ),
       );
 
-  Widget buildInputView() {
+  Widget buildInputView(ThemeData theme) {
     return Container(
       clipBehavior: Clip.hardEdge,
       margin: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
@@ -107,7 +107,7 @@ class _ReplyPageState extends CommonPublishPageState<LiveSendDmPanel> {
           topLeft: Radius.circular(12),
           topRight: Radius.circular(12),
         ),
-        color: Theme.of(context).colorScheme.surface,
+        color: theme.colorScheme.surface,
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -145,7 +145,7 @@ class _ReplyPageState extends CommonPublishPageState<LiveSendDmPanel> {
                         hintText: "输入弹幕内容",
                         border: InputBorder.none,
                         hintStyle: TextStyle(fontSize: 14)),
-                    style: Theme.of(context).textTheme.bodyLarge,
+                    style: theme.textTheme.bodyLarge,
                     inputFormatters: [LengthLimitingTextInputFormatter(20)],
                   ),
                 ),
@@ -154,7 +154,7 @@ class _ReplyPageState extends CommonPublishPageState<LiveSendDmPanel> {
           ),
           Divider(
             height: 1,
-            color: Theme.of(context).dividerColor.withOpacity(0.1),
+            color: theme.dividerColor.withOpacity(0.1),
           ),
           Container(
             height: 52,

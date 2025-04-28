@@ -29,7 +29,6 @@ class SubItem extends StatelessWidget {
         },
       ),
       onLongPress: () => imageSaveDialog(
-        context: context,
         title: subFolderItem.title,
         cover: subFolderItem.cover,
       ),
@@ -65,6 +64,7 @@ class SubItem extends StatelessWidget {
   }
 
   Widget videoContent(context) {
+    final theme = Theme.of(context);
     // subFolderItem.type == 11：播单
     // subFolderItem.type == 21：合集
     // 其它：其它
@@ -91,8 +91,8 @@ class SubItem extends StatelessWidget {
                 '[$typeString] UP主：${subFolderItem.upper!.name!}',
                 textAlign: TextAlign.start,
                 style: TextStyle(
-                  fontSize: Theme.of(context).textTheme.labelMedium!.fontSize,
-                  color: Theme.of(context).colorScheme.outline,
+                  fontSize: theme.textTheme.labelMedium!.fontSize,
+                  color: theme.colorScheme.outline,
                 ),
               ),
               const SizedBox(height: 2),
@@ -100,8 +100,8 @@ class SubItem extends StatelessWidget {
                 '${subFolderItem.mediaCount}个视频',
                 textAlign: TextAlign.start,
                 style: TextStyle(
-                  fontSize: Theme.of(context).textTheme.labelMedium!.fontSize,
-                  color: Theme.of(context).colorScheme.outline,
+                  fontSize: theme.textTheme.labelMedium!.fontSize,
+                  color: theme.colorScheme.outline,
                 ),
               ),
               const Spacer(),
@@ -116,7 +116,7 @@ class SubItem extends StatelessWidget {
               child: IconButton(
                 onPressed: () => cancelSub(subFolderItem),
                 style: TextButton.styleFrom(
-                  foregroundColor: Theme.of(context).colorScheme.outline,
+                  foregroundColor: theme.colorScheme.outline,
                   padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
                 ),
                 icon: const Icon(Icons.delete_outline, size: 18),

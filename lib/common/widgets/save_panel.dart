@@ -275,6 +275,7 @@ class _SavePanelState extends State<SavePanel> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: Get.back,
@@ -295,7 +296,7 @@ class _SavePanelState extends State<SavePanel> {
                     child: Container(
                       clipBehavior: Clip.hardEdge,
                       decoration: BoxDecoration(
-                        color: Theme.of(context).colorScheme.surface,
+                        color: theme.colorScheme.surface,
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: AnimatedSize(
@@ -332,9 +333,7 @@ class _SavePanelState extends State<SavePanel> {
                                     const EdgeInsets.symmetric(horizontal: 12),
                                 padding: const EdgeInsets.all(8),
                                 decoration: BoxDecoration(
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .onInverseSurface,
+                                  color: theme.colorScheme.onInverseSurface,
                                   borderRadius: BorderRadius.circular(8),
                                 ),
                                 child: Row(
@@ -369,9 +368,8 @@ class _SavePanelState extends State<SavePanel> {
                                                   .toString()
                                                   .substring(0, 19),
                                               style: TextStyle(
-                                                color: Theme.of(context)
-                                                    .colorScheme
-                                                    .outline,
+                                                color:
+                                                    theme.colorScheme.outline,
                                               ),
                                             ),
                                           ],
@@ -405,10 +403,9 @@ class _SavePanelState extends State<SavePanel> {
                                                         overflow: TextOverflow
                                                             .ellipsis,
                                                         style: TextStyle(
-                                                          color:
-                                                              Theme.of(context)
-                                                                  .colorScheme
-                                                                  .primary,
+                                                          color: theme
+                                                              .colorScheme
+                                                              .primary,
                                                         ),
                                                       ),
                                                       const SizedBox(height: 4),
@@ -417,8 +414,7 @@ class _SavePanelState extends State<SavePanel> {
                                                       '识别二维码，$viewType$itemType',
                                                       textAlign: TextAlign.end,
                                                       style: TextStyle(
-                                                        color: Theme.of(context)
-                                                            .colorScheme
+                                                        color: theme.colorScheme
                                                             .onSurfaceVariant,
                                                       ),
                                                     ),
@@ -431,8 +427,7 @@ class _SavePanelState extends State<SavePanel> {
                                                       textAlign: TextAlign.end,
                                                       style: TextStyle(
                                                         fontSize: 13,
-                                                        color: Theme.of(context)
-                                                            .colorScheme
+                                                        color: theme.colorScheme
                                                             .outline,
                                                       ),
                                                     ),
@@ -447,9 +442,8 @@ class _SavePanelState extends State<SavePanel> {
                                                 child: Container(
                                                   color: Get.isDarkMode
                                                       ? Colors.white
-                                                      : Theme.of(context)
-                                                          .colorScheme
-                                                          .surface,
+                                                      : theme
+                                                          .colorScheme.surface,
                                                   padding:
                                                       const EdgeInsets.all(3),
                                                   child: PrettyQrView.data(
@@ -473,9 +467,8 @@ class _SavePanelState extends State<SavePanel> {
                                         child: Image.asset(
                                           'assets/images/logo/logo_2.png',
                                           width: 100,
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .onSurfaceVariant,
+                                          color: theme
+                                              .colorScheme.onSurfaceVariant,
                                         ),
                                       ),
                                     ],
@@ -517,8 +510,8 @@ class _SavePanelState extends State<SavePanel> {
                       context: context,
                       icon: Icons.clear,
                       onPressed: Get.back,
-                      bgColor: Theme.of(context).colorScheme.onInverseSurface,
-                      iconColor: Theme.of(context).colorScheme.onSurfaceVariant,
+                      bgColor: theme.colorScheme.onInverseSurface,
+                      iconColor: theme.colorScheme.onSurfaceVariant,
                     ),
                     const SizedBox(width: 40),
                     iconButton(

@@ -26,7 +26,6 @@ class LiveCardVFollow extends StatelessWidget {
           Get.toNamed('/liveRoom?roomid=${liveItem.roomId}');
         },
         onLongPress: () => imageSaveDialog(
-          context: context,
           title: liveItem.title,
           cover: liveItem.roomCover,
         ),
@@ -72,6 +71,7 @@ class LiveCardVFollow extends StatelessWidget {
   }
 
   Widget liveContent(context) {
+    final theme = Theme.of(context);
     return Expanded(
       flex: 1,
       child: Padding(
@@ -96,9 +96,8 @@ class LiveCardVFollow extends StatelessWidget {
                     '${liveItem.uname}',
                     textAlign: TextAlign.start,
                     style: TextStyle(
-                      fontSize:
-                          Theme.of(context).textTheme.labelMedium!.fontSize,
-                      color: Theme.of(context).colorScheme.outline,
+                      fontSize: theme.textTheme.labelMedium!.fontSize,
+                      color: theme.colorScheme.outline,
                     ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,

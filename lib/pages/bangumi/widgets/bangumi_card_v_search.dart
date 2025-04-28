@@ -22,7 +22,6 @@ class BangumiCardVSearch extends StatelessWidget {
       margin: EdgeInsets.zero,
       child: InkWell(
         onLongPress: () => imageSaveDialog(
-          context: context,
           title: item.title?.map((e) => e['text']).join(),
           cover: item.cover,
         ),

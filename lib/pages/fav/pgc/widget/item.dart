@@ -23,6 +23,7 @@ class FavPgcItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Material(
       color: Colors.transparent,
       child: Stack(
@@ -108,9 +109,8 @@ class FavPgcItem extends StatelessWidget {
                                                   WidgetStateProperty
                                                       .resolveWith(
                                                 (states) {
-                                                  return Theme.of(context)
-                                                      .colorScheme
-                                                      .surface
+                                                  return theme
+                                                      .colorScheme.surface
                                                       .withOpacity(0.8);
                                                 },
                                               ),
@@ -118,9 +118,7 @@ class FavPgcItem extends StatelessWidget {
                                             onPressed: null,
                                             icon: Icon(
                                               Icons.done_all_outlined,
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .primary,
+                                              color: theme.colorScheme.primary,
                                             ),
                                           ),
                                         ),
@@ -148,9 +146,7 @@ class FavPgcItem extends StatelessWidget {
                             '${item.newEp?['index_show']}${item.isFinish == 0 && item.renewalTime?.isNotEmpty == true ? '，${item.renewalTime}' : ''}',
                             style: TextStyle(
                               fontSize: 13,
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .onSurfaceVariant,
+                              color: theme.colorScheme.onSurfaceVariant,
                             ),
                           ),
                         ],
@@ -162,9 +158,7 @@ class FavPgcItem extends StatelessWidget {
                             item.progress!,
                             style: TextStyle(
                               fontSize: 13,
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .onSurfaceVariant,
+                              color: theme.colorScheme.onSurfaceVariant,
                             ),
                           ),
                         ],
@@ -183,7 +177,7 @@ class FavPgcItem extends StatelessWidget {
               context: context,
               onPressed: onUpdateStatus,
               icon: Icons.more_vert,
-              iconColor: Theme.of(context).colorScheme.outline,
+              iconColor: theme.colorScheme.outline,
               bgColor: Colors.transparent,
             ),
           ),

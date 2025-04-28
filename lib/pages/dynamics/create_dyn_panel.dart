@@ -36,10 +36,11 @@ class _CreateDynPanelState extends CommonPublishPageState<CreateDynPanel> {
 
   @override
   Widget build(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
     return Scaffold(
       backgroundColor: Colors.transparent,
       resizeToAvoidBottomInset: false,
-      appBar: _buildAppBar,
+      appBar: _buildAppBar(theme),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -65,16 +66,16 @@ class _CreateDynPanelState extends CommonPublishPageState<CreateDynPanel> {
                         mainAxisSize: MainAxisSize.min,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          _buildReplyOptionWidget,
+                          _buildReplyOptionWidget(theme),
                           const SizedBox(height: 5),
-                          _buildPrivateWidget,
+                          _buildPrivateWidget(theme),
                         ],
                       ),
                     ],
                   ),
                 ),
                 const SizedBox(height: 10),
-                _buildImageList,
+                _buildImageList(theme),
                 const SizedBox(height: 2),
               ],
             ),
@@ -86,7 +87,7 @@ class _CreateDynPanelState extends CommonPublishPageState<CreateDynPanel> {
     );
   }
 
-  Widget get _buildImageList => Obx(
+  Widget _buildImageList(ThemeData theme) => Obx(
         () => SizedBox(
           height: 100,
           child: ListView.separated(
@@ -114,7 +115,7 @@ class _CreateDynPanelState extends CommonPublishPageState<CreateDynPanel> {
                       height: 100,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(12),
-                        color: Theme.of(context).colorScheme.secondaryContainer,
+                        color: theme.colorScheme.secondaryContainer,
                       ),
                       child: Center(child: Icon(Icons.add, size: 35)),
                     ),
@@ -129,7 +130,7 @@ class _CreateDynPanelState extends CommonPublishPageState<CreateDynPanel> {
         ),
       );
 
-  PreferredSizeWidget get _buildAppBar => PreferredSize(
+  PreferredSizeWidget _buildAppBar(ThemeData theme) => PreferredSize(
         preferredSize: Size.fromHeight(66),
         child: Padding(
           padding: const EdgeInsets.all(16),
@@ -147,9 +148,7 @@ class _CreateDynPanelState extends CommonPublishPageState<CreateDynPanel> {
                       padding: WidgetStateProperty.all(EdgeInsets.zero),
                       backgroundColor: WidgetStateProperty.resolveWith(
                         (states) {
-                          return Theme.of(context)
-                              .colorScheme
-                              .secondaryContainer;
+                          return theme.colorScheme.secondaryContainer;
                         },
                       ),
                     ),
@@ -157,7 +156,7 @@ class _CreateDynPanelState extends CommonPublishPageState<CreateDynPanel> {
                     icon: Icon(
                       Icons.arrow_back_outlined,
                       size: 18,
-                      color: Theme.of(context).colorScheme.onSecondaryContainer,
+                      color: theme.colorScheme.onSecondaryContainer,
                     ),
                   ),
                 ),
@@ -193,127 +192,124 @@ class _CreateDynPanelState extends CommonPublishPageState<CreateDynPanel> {
         ),
       );
 
-  Widget get _buildPrivateWidget => PopupMenuButton(
-        initialValue: _isPrivate,
-        onOpened: controller.keepChatPanel,
-        onSelected: (value) {
-          setState(() {
-            _isPrivate = value;
-          });
-        },
-        itemBuilder: (context) => List.generate(
-          2,
-          (index) => PopupMenuItem<bool>(
-            enabled: _publishTime != null && index == 1 ? false : true,
-            value: index == 0 ? false : true,
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(
-                  size: 19,
-                  index == 0 ? Icons.visibility : Icons.visibility_off,
-                ),
-                const SizedBox(width: 4),
-                Text(index == 0 ? '所有人可见' : '仅自己可见'),
-              ],
+  Widget _buildPrivateWidget(ThemeData theme) {
+    final color =
+        _isPrivate ? theme.colorScheme.error : theme.colorScheme.secondary;
+    return PopupMenuButton(
+      initialValue: _isPrivate,
+      onOpened: controller.keepChatPanel,
+      onSelected: (value) {
+        setState(() {
+          _isPrivate = value;
+        });
+      },
+      itemBuilder: (context) => List.generate(
+        2,
+        (index) => PopupMenuItem<bool>(
+          enabled: _publishTime != null && index == 1 ? false : true,
+          value: index == 0 ? false : true,
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(
+                size: 19,
+                index == 0 ? Icons.visibility : Icons.visibility_off,
+              ),
+              const SizedBox(width: 4),
+              Text(index == 0 ? '所有人可见' : '仅自己可见'),
+            ],
+          ),
+        ),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 2),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              size: 19,
+              _isPrivate ? Icons.visibility_off : Icons.visibility,
+              color: color,
             ),
-          ),
+            const SizedBox(width: 4),
+            Text(
+              _isPrivate ? '仅自己可见' : '所有人可见',
+              style: TextStyle(
+                height: 1,
+                color: color,
+              ),
+              strutStyle: StrutStyle(leading: 0, height: 1),
+            ),
+            Icon(
+              size: 20,
+              Icons.keyboard_arrow_right,
+              color: color,
+            ),
+          ],
         ),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 2),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(
-                size: 19,
-                _isPrivate ? Icons.visibility_off : Icons.visibility,
-                color: _isPrivate
-                    ? Theme.of(context).colorScheme.error
-                    : Theme.of(context).colorScheme.secondary,
-              ),
-              const SizedBox(width: 4),
-              Text(
-                _isPrivate ? '仅自己可见' : '所有人可见',
-                style: TextStyle(
-                  height: 1,
-                  color: _isPrivate
-                      ? Theme.of(context).colorScheme.error
-                      : Theme.of(context).colorScheme.secondary,
-                ),
-                strutStyle: StrutStyle(leading: 0, height: 1),
-              ),
-              Icon(
-                size: 20,
-                Icons.keyboard_arrow_right,
-                color: _isPrivate
-                    ? Theme.of(context).colorScheme.error
-                    : Theme.of(context).colorScheme.secondary,
-              ),
-            ],
-          ),
-        ),
-      );
+      ),
+    );
+  }
 
-  Widget get _buildReplyOptionWidget => PopupMenuButton(
-        initialValue: _replyOption,
-        onOpened: controller.keepChatPanel,
-        onSelected: (item) {
-          setState(() {
-            _replyOption = item;
-          });
-        },
-        itemBuilder: (context) => ReplyOption.values
-            .map(
-              (item) => PopupMenuItem<ReplyOption>(
-                value: item,
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(
-                      size: 19,
-                      item.iconData,
-                    ),
-                    const SizedBox(width: 4),
-                    Text(item.title),
-                  ],
-                ),
+  Widget _buildReplyOptionWidget(ThemeData theme) {
+    final color = _replyOption == ReplyOption.close
+        ? theme.colorScheme.error
+        : theme.colorScheme.secondary;
+    return PopupMenuButton(
+      initialValue: _replyOption,
+      onOpened: controller.keepChatPanel,
+      onSelected: (item) {
+        setState(() {
+          _replyOption = item;
+        });
+      },
+      itemBuilder: (context) => ReplyOption.values
+          .map(
+            (item) => PopupMenuItem<ReplyOption>(
+              value: item,
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(
+                    size: 19,
+                    item.iconData,
+                  ),
+                  const SizedBox(width: 4),
+                  Text(item.title),
+                ],
               ),
-            )
-            .toList(),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 2),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(
-                size: 19,
-                _replyOption.iconData,
-                color: _replyOption == ReplyOption.close
-                    ? Theme.of(context).colorScheme.error
-                    : Theme.of(context).colorScheme.secondary,
+            ),
+          )
+          .toList(),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 2),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              size: 19,
+              _replyOption.iconData,
+              color: color,
+            ),
+            const SizedBox(width: 4),
+            Text(
+              _replyOption.title,
+              style: TextStyle(
+                height: 1,
+                color: color,
               ),
-              const SizedBox(width: 4),
-              Text(
-                _replyOption.title,
-                style: TextStyle(
-                  height: 1,
-                  color: _replyOption == ReplyOption.close
-                      ? Theme.of(context).colorScheme.error
-                      : Theme.of(context).colorScheme.secondary,
-                ),
-                strutStyle: StrutStyle(leading: 0, height: 1),
-              ),
-              Icon(
-                size: 20,
-                Icons.keyboard_arrow_right,
-                color: _replyOption == ReplyOption.close
-                    ? Theme.of(context).colorScheme.error
-                    : Theme.of(context).colorScheme.secondary,
-              ),
-            ],
-          ),
+              strutStyle: StrutStyle(leading: 0, height: 1),
+            ),
+            Icon(
+              size: 20,
+              Icons.keyboard_arrow_right,
+              color: color,
+            ),
+          ],
         ),
-      );
+      ),
+    );
+  }
 
   Widget get _buildPubtimeWidget => _publishTime == null
       ? FilledButton.tonal(

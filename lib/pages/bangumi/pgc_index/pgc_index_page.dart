@@ -35,15 +35,16 @@ class _PgcIndexPageState extends State<PgcIndexPage>
   @override
   Widget build(BuildContext context) {
     super.build(context);
+    final theme = Theme.of(context);
     return widget.indexType == null
         ? Scaffold(
             appBar: AppBar(title: const Text('索引')),
-            body: Obx(() => _buildBody(_ctr.conditionState.value)),
+            body: Obx(() => _buildBody(theme, _ctr.conditionState.value)),
           )
-        : Obx(() => _buildBody(_ctr.conditionState.value));
+        : Obx(() => _buildBody(theme, _ctr.conditionState.value));
   }
 
-  Widget _buildBody(LoadingState loadingState) {
+  Widget _buildBody(ThemeData theme, LoadingState loadingState) {
     return switch (loadingState) {
       Loading() => loadingWidget,
       Success() => Builder(builder: (context) {
@@ -63,8 +64,8 @@ class _PgcIndexPageState extends State<PgcIndexPage>
                     alignment: Alignment.topCenter,
                     duration: const Duration(milliseconds: 200),
                     child: count > 5
-                        ? Obx(() => _buildSortWidget(count, data))
-                        : _buildSortWidget(count, data),
+                        ? Obx(() => _buildSortWidget(theme, count, data))
+                        : _buildSortWidget(theme, count, data),
                   ),
                 ),
                 SliverPadding(
@@ -90,7 +91,7 @@ class _PgcIndexPageState extends State<PgcIndexPage>
     };
   }
 
-  Widget _buildSortWidget(count, data) => Column(
+  Widget _buildSortWidget(ThemeData theme, count, data) => Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -129,9 +130,7 @@ class _PgcIndexPageState extends State<PgcIndexPage>
                                     (item[childIndex] is Order
                                         ? item[childIndex].field
                                         : item[childIndex].keyword)
-                                ? Theme.of(context)
-                                    .colorScheme
-                                    .secondaryContainer
+                                ? theme.colorScheme.secondaryContainer
                                 : Colors.transparent,
                             textColor: (item[childIndex] is Order
                                         ? _ctr.indexParams['order']
@@ -144,12 +143,8 @@ class _PgcIndexPageState extends State<PgcIndexPage>
                                     (item[childIndex] is Order
                                         ? item[childIndex].field
                                         : item[childIndex].keyword)
-                                ? Theme.of(context)
-                                    .colorScheme
-                                    .onSecondaryContainer
-                                : Theme.of(context)
-                                    .colorScheme
-                                    .onSurfaceVariant,
+                                ? theme.colorScheme.onSecondaryContainer
+                                : theme.colorScheme.onSurfaceVariant,
                             text: item[childIndex].name,
                             padding: const EdgeInsets.symmetric(
                               horizontal: 6,
@@ -192,14 +187,14 @@ class _PgcIndexPageState extends State<PgcIndexPage>
                     Text(
                       _ctr.isExpand.value ? '收起' : '展开',
                       style: TextStyle(
-                        color: Theme.of(context).colorScheme.outline,
+                        color: theme.colorScheme.outline,
                       ),
                     ),
                     Icon(
                       _ctr.isExpand.value
                           ? Icons.keyboard_arrow_up
                           : Icons.keyboard_arrow_down,
-                      color: Theme.of(context).colorScheme.outline,
+                      color: theme.colorScheme.outline,
                     ),
                   ],
                 ),

@@ -517,6 +517,7 @@ class Utils {
         SmartDialog.show(
           animationType: SmartAnimationType.centerFade_otherSlide,
           builder: (context) {
+            final ThemeData theme = Theme.of(context);
             return AlertDialog(
               title: const Text('🎉 发现新版本 '),
               content: SizedBox(
@@ -541,7 +542,7 @@ class Utils {
                         child: Text(
                           "点此查看完整更新(即commit)内容",
                           style: TextStyle(
-                            color: Theme.of(context).colorScheme.primary,
+                            color: theme.colorScheme.primary,
                           ),
                         ),
                       ),
@@ -558,7 +559,7 @@ class Utils {
                   child: Text(
                     '不再提醒',
                     style: TextStyle(
-                      color: Theme.of(context).colorScheme.outline,
+                      color: theme.colorScheme.outline,
                     ),
                   ),
                 ),
@@ -567,7 +568,7 @@ class Utils {
                   child: Text(
                     '取消',
                     style: TextStyle(
-                      color: Theme.of(context).colorScheme.outline,
+                      color: theme.colorScheme.outline,
                     ),
                   ),
                 ),

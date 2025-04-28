@@ -61,6 +61,7 @@ class _CreateFavPageState extends State<CreateFavPage> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(
         title: Text(_mediaId != null ? '编辑' : '创建'),
@@ -94,7 +95,7 @@ class _CreateFavPageState extends State<CreateFavPage> {
       ),
       body: _mediaId != null
           ? _titleController.text.isNotEmpty
-              ? _buildBody
+              ? _buildBody(theme)
               : _errMsg?.isNotEmpty == true
                   ? Center(
                       child: CustomScrollView(
@@ -108,11 +109,11 @@ class _CreateFavPageState extends State<CreateFavPage> {
                       ),
                     )
                   : Center(child: CircularProgressIndicator())
-          : _buildBody,
+          : _buildBody(theme),
     );
   }
 
-  void _pickImg() async {
+  void _pickImg(ThemeData theme) async {
     try {
       XFile? pickedFile = await _imagePicker.pickImage(
         source: ImageSource.gallery,
@@ -124,9 +125,8 @@ class _CreateFavPageState extends State<CreateFavPage> {
           uiSettings: [
             AndroidUiSettings(
               toolbarTitle: '裁剪',
-              toolbarColor: Theme.of(context).colorScheme.secondaryContainer,
-              toolbarWidgetColor:
-                  Theme.of(context).colorScheme.onSecondaryContainer,
+              toolbarColor: theme.colorScheme.secondaryContainer,
+              toolbarWidgetColor: theme.colorScheme.onSecondaryContainer,
               aspectRatioPresets: [
                 CropAspectRatioPreset.ratio16x9,
               ],
@@ -167,12 +167,12 @@ class _CreateFavPageState extends State<CreateFavPage> {
 
   dynamic leadingStyle = TextStyle(fontSize: 14);
 
-  Widget get _buildBody => SingleChildScrollView(
+  Widget _buildBody(ThemeData theme) => SingleChildScrollView(
         child: Column(
           children: [
             if (_attr == null || !Utils.isDefaultFav(_attr!)) ...[
               ListTile(
-                tileColor: Theme.of(context).colorScheme.onInverseSurface,
+                tileColor: theme.colorScheme.onInverseSurface,
                 onTap: () {
                   EasyThrottle.throttle(
                       'imagePicker', const Duration(milliseconds: 500),
@@ -192,7 +192,7 @@ class _CreateFavPageState extends State<CreateFavPage> {
                                   dense: true,
                                   onTap: () {
                                     Get.back();
-                                    _pickImg();
+                                    _pickImg(theme);
                                   },
                                   title: const Text(
                                     '替换封面',
@@ -217,7 +217,7 @@ class _CreateFavPageState extends State<CreateFavPage> {
                         },
                       );
                     } else {
-                      _pickImg();
+                      _pickImg(theme);
                     }
                   });
                 },
@@ -248,7 +248,7 @@ class _CreateFavPageState extends State<CreateFavPage> {
                     const SizedBox(width: 10),
                     Icon(
                       Icons.keyboard_arrow_right,
-                      color: Theme.of(context).colorScheme.outline,
+                      color: theme.colorScheme.outline,
                     ),
                   ],
                 ),
@@ -256,7 +256,7 @@ class _CreateFavPageState extends State<CreateFavPage> {
               const SizedBox(height: 16),
             ],
             ListTile(
-              tileColor: Theme.of(context).colorScheme.onInverseSurface,
+              tileColor: theme.colorScheme.onInverseSurface,
               leading: Text.rich(
                 style: TextStyle(
                   height: 1,
@@ -269,7 +269,7 @@ class _CreateFavPageState extends State<CreateFavPage> {
                       style: TextStyle(
                         fontSize: 14,
                         height: 1,
-                        color: Theme.of(context).colorScheme.error,
+                        color: theme.colorScheme.error,
                       ),
                     ),
                     TextSpan(
@@ -289,7 +289,7 @@ class _CreateFavPageState extends State<CreateFavPage> {
                 style: TextStyle(
                   fontSize: 14,
                   color: _attr != null && Utils.isDefaultFav(_attr!)
-                      ? Theme.of(context).colorScheme.outline
+                      ? theme.colorScheme.outline
                       : null,
                 ),
                 inputFormatters: [
@@ -300,7 +300,7 @@ class _CreateFavPageState extends State<CreateFavPage> {
                   hintText: '名称',
                   hintStyle: TextStyle(
                     fontSize: 14,
-                    color: Theme.of(context).colorScheme.outline,
+                    color: theme.colorScheme.outline,
                   ),
                   border: OutlineInputBorder(
                     borderSide: BorderSide.none,
@@ -313,7 +313,7 @@ class _CreateFavPageState extends State<CreateFavPage> {
             const SizedBox(height: 16),
             if (_attr == null || !Utils.isDefaultFav(_attr!)) ...[
               ListTile(
-                tileColor: Theme.of(context).colorScheme.onInverseSurface,
+                tileColor: theme.colorScheme.onInverseSurface,
                 title: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -324,9 +324,7 @@ class _CreateFavPageState extends State<CreateFavPage> {
                             text: '简介',
                             style: TextStyle(
                               fontSize: 14,
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .onSurfaceVariant,
+                              color: theme.colorScheme.onSurfaceVariant,
                             ),
                           ),
                           TextSpan(
@@ -351,7 +349,7 @@ class _CreateFavPageState extends State<CreateFavPage> {
                           hintText: '可填写简介',
                           hintStyle: TextStyle(
                             fontSize: 14,
-                            color: Theme.of(context).colorScheme.outline,
+                            color: theme.colorScheme.outline,
                           ),
                           border: OutlineInputBorder(
                             borderSide: BorderSide.none,
@@ -372,7 +370,7 @@ class _CreateFavPageState extends State<CreateFavPage> {
                   _isPublic = !_isPublic;
                 });
               },
-              tileColor: Theme.of(context).colorScheme.onInverseSurface,
+              tileColor: theme.colorScheme.onInverseSurface,
               leading: Text(
                 '公开',
                 style: leadingStyle,

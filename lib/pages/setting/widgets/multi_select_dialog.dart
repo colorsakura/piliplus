@@ -27,6 +27,7 @@ class _MultiSelectDialogState<T> extends State<MultiSelectDialog<T>> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return AlertDialog(
       clipBehavior: Clip.hardEdge,
       title: Text(widget.title),
@@ -43,7 +44,7 @@ class _MultiSelectDialogState<T> extends State<MultiSelectDialog<T>> {
                 controlAffinity: ListTileControlAffinity.leading,
                 title: Text(
                   i.value,
-                  style: Theme.of(context).textTheme.titleMedium!,
+                  style: theme.textTheme.titleMedium!,
                 ),
                 onChanged: (value) {
                   isChecked
@@ -63,7 +64,7 @@ class _MultiSelectDialogState<T> extends State<MultiSelectDialog<T>> {
           child: Text(
             '取消',
             style: TextStyle(
-              color: Theme.of(context).colorScheme.outline,
+              color: theme.colorScheme.outline,
             ),
           ),
         ),

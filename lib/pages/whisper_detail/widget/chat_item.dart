@@ -68,10 +68,11 @@ class ChatItem extends StatelessWidget {
         item.msgType == MsgType.pic_card.value ||
         item.msgType == MsgType.auto_reply_push.value;
     dynamic content = item.content ?? '';
+    final ThemeData theme = Theme.of(context);
     Color textColor() {
       return isOwner
-          ? Theme.of(context).colorScheme.onSecondaryContainer
-          : Theme.of(context).colorScheme.onSurfaceVariant;
+          ? theme.colorScheme.onSecondaryContainer
+          : theme.colorScheme.onSurfaceVariant;
     }
 
     Widget richTextMessage(BuildContext context) {
@@ -140,9 +141,9 @@ class ChatItem extends StatelessWidget {
     Widget messageContent(BuildContext context) {
       switch (MsgType.parse(item.msgType!)) {
         case MsgType.notify_msg:
-          return SystemNotice(item: item);
+          return systemNotice(theme);
         case MsgType.pic_card:
-          return SystemNotice2(item: item);
+          return systemNotice2();
         case MsgType.notify_text:
           return Text(
             jsonDecode(content['content'])
@@ -152,7 +153,7 @@ class ChatItem extends StatelessWidget {
             style: TextStyle(
               letterSpacing: 0.6,
               height: 5,
-              color: Theme.of(context).colorScheme.outline.withOpacity(0.8),
+              color: theme.colorScheme.outline.withOpacity(0.8),
             ),
           );
         case MsgType.text:
@@ -355,10 +356,7 @@ class ChatItem extends StatelessWidget {
                 maxWidth: 300.0, // 设置最大宽度为200.0
               ),
               decoration: BoxDecoration(
-                color: Theme.of(context)
-                    .colorScheme
-                    .secondaryContainer
-                    .withOpacity(0.4),
+                color: theme.colorScheme.secondaryContainer.withOpacity(0.4),
                 borderRadius: const BorderRadius.only(
                   topLeft: Radius.circular(16),
                   topRight: Radius.circular(16),
@@ -591,8 +589,8 @@ class ChatItem extends StatelessWidget {
                       ),
                       decoration: BoxDecoration(
                         color: isOwner
-                            ? Theme.of(context).colorScheme.secondaryContainer
-                            : Theme.of(context).colorScheme.onInverseSurface,
+                            ? theme.colorScheme.secondaryContainer
+                            : theme.colorScheme.onInverseSurface,
                         borderRadius: BorderRadius.only(
                           topLeft: const Radius.circular(16),
                           topRight: const Radius.circular(16),
@@ -619,31 +617,19 @@ class ChatItem extends StatelessWidget {
                             children: [
                               Text(
                                 Utils.dateFormat(item.timestamp),
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .labelSmall!
-                                    .copyWith(
-                                        color: isOwner
-                                            ? Theme.of(context)
-                                                .colorScheme
-                                                .onSecondaryContainer
-                                                .withOpacity(0.8)
-                                            : Theme.of(context)
-                                                .colorScheme
-                                                .onSurfaceVariant
-                                                .withOpacity(0.8)),
+                                style: theme.textTheme.labelSmall!.copyWith(
+                                    color: isOwner
+                                        ? theme.colorScheme.onSecondaryContainer
+                                            .withOpacity(0.8)
+                                        : theme.colorScheme.onSurfaceVariant
+                                            .withOpacity(0.8)),
                               ),
                               if (item.msgStatus == 1)
                                 Text(
                                   '  已撤回',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .labelSmall!
-                                      .copyWith(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .onErrorContainer,
-                                      ),
+                                  style: theme.textTheme.labelSmall!.copyWith(
+                                    color: theme.colorScheme.onErrorContainer,
+                                  ),
                                 ),
                             ],
                           )
@@ -656,15 +642,8 @@ class ChatItem extends StatelessWidget {
                 ),
               );
   }
-}
 
-class SystemNotice extends StatelessWidget {
-  final dynamic item;
-  const SystemNotice({super.key, this.item});
-
-  @override
-  Widget build(BuildContext context) {
-    Map content = item.content ?? '';
+  Widget systemNotice(ThemeData theme) {
     return Row(
       children: [
         const SizedBox(width: 12),
@@ -673,10 +652,7 @@ class SystemNotice extends StatelessWidget {
             maxWidth: 300.0, // 设置最大宽度为200.0
           ),
           decoration: BoxDecoration(
-            color: Theme.of(context)
-                .colorScheme
-                .secondaryContainer
-                .withOpacity(0.4),
+            color: theme.colorScheme.secondaryContainer.withOpacity(0.4),
             borderRadius: const BorderRadius.only(
               topLeft: Radius.circular(16),
               topRight: Radius.circular(16),
@@ -689,23 +665,19 @@ class SystemNotice extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SelectableText(content['title'],
-                  style: Theme.of(context)
-                      .textTheme
-                      .titleMedium!
+              SelectableText(item.content['title'],
+                  style: theme.textTheme.titleMedium!
                       .copyWith(fontWeight: FontWeight.bold)),
               Text(
                 Utils.dateFormat(item.timestamp),
-                style: Theme.of(context)
-                    .textTheme
-                    .labelSmall!
-                    .copyWith(color: Theme.of(context).colorScheme.outline),
+                style: theme.textTheme.labelSmall!
+                    .copyWith(color: theme.colorScheme.outline),
               ),
               Divider(
-                color: Theme.of(context).colorScheme.primary.withOpacity(0.05),
+                color: theme.colorScheme.primary.withOpacity(0.05),
               ),
               SelectableText(
-                content['text'],
+                item.content['text'],
               )
             ],
           ),
@@ -714,15 +686,8 @@ class SystemNotice extends StatelessWidget {
       ],
     );
   }
-}
 
-class SystemNotice2 extends StatelessWidget {
-  final dynamic item;
-  const SystemNotice2({super.key, this.item});
-
-  @override
-  Widget build(BuildContext context) {
-    Map content = item.content ?? '';
+  Widget systemNotice2() {
     return Row(
       children: [
         const SizedBox(width: 12),
@@ -735,7 +700,7 @@ class SystemNotice2 extends StatelessWidget {
           child: NetworkImgLayer(
             width: 320,
             height: 150,
-            src: content['pic_url'],
+            src: item.content['pic_url'],
           ),
         ),
         const Spacer(),

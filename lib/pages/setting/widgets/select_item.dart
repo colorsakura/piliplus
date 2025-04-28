@@ -91,10 +91,9 @@ class _SetSelectItemState extends State<SetSelectItem> {
 
   @override
   Widget build(BuildContext context) {
-    TextStyle subTitleStyle = Theme.of(context)
-        .textTheme
-        .labelMedium!
-        .copyWith(color: Theme.of(context).colorScheme.outline);
+    final theme = Theme.of(context);
+    TextStyle subTitleStyle =
+        theme.textTheme.labelMedium!.copyWith(color: theme.colorScheme.outline);
     return ListTile(
       onTap: () {},
       title: Text(widget.title!),

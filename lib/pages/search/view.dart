@@ -27,12 +27,13 @@ class _SearchPageState extends State<SearchPage> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
         shape: Border(
           bottom: BorderSide(
-            color: Theme.of(context).dividerColor.withOpacity(0.08),
+            color: theme.dividerColor.withOpacity(0.08),
             width: 1,
           ),
         ),
@@ -81,9 +82,9 @@ class _SearchPageState extends State<SearchPage> {
             // 搜索建议
             if (_searchController.searchSuggestion) _searchSuggest(),
             if (context.orientation == Orientation.portrait) ...[
-              if (_searchController.enableHotKey) hotSearch(),
-              if (_searchController.recordSearchHistory.value) _history(),
-              if (_searchController.enableSearchRcmd) hotSearch(false)
+              if (_searchController.enableHotKey) hotSearch(theme),
+              if (_searchController.recordSearchHistory.value) _history(theme),
+              if (_searchController.enableSearchRcmd) hotSearch(theme, false)
             ] else
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -93,14 +94,14 @@ class _SearchPageState extends State<SearchPage> {
                     Expanded(
                       child: Column(
                         children: [
-                          if (_searchController.enableHotKey) hotSearch(),
+                          if (_searchController.enableHotKey) hotSearch(theme),
                           if (_searchController.enableSearchRcmd)
-                            hotSearch(false)
+                            hotSearch(theme, false)
                         ],
                       ),
                     ),
                   if (_searchController.recordSearchHistory.value)
-                    Expanded(child: _history()),
+                    Expanded(child: _history(theme)),
                 ],
               ),
           ],
@@ -141,13 +142,11 @@ class _SearchPageState extends State<SearchPage> {
     );
   }
 
-  Widget hotSearch([bool isHot = true]) {
+  Widget hotSearch(ThemeData theme, [bool isHot = true]) {
     final text = Text(
       isHot ? '大家都在搜' : '搜索发现',
       strutStyle: const StrutStyle(leading: 0, height: 1),
-      style: Theme.of(context)
-          .textTheme
-          .titleMedium!
+      style: theme.textTheme.titleMedium!
           .copyWith(height: 1, fontWeight: FontWeight.bold),
     );
     return Padding(
@@ -180,14 +179,13 @@ class _SearchPageState extends State<SearchPage> {
                                   '完整榜单',
                                   style: TextStyle(
                                     fontSize: 13,
-                                    color:
-                                        Theme.of(context).colorScheme.outline,
+                                    color: theme.colorScheme.outline,
                                   ),
                                 ),
                                 icon: Icon(
                                   size: 16,
                                   Icons.keyboard_arrow_right,
-                                  color: Theme.of(context).colorScheme.outline,
+                                  color: theme.colorScheme.outline,
                                 ),
                                 iconAlignment: IconAlignment.end,
                               ),
@@ -209,12 +207,12 @@ class _SearchPageState extends State<SearchPage> {
                     icon: Icon(
                       Icons.refresh_outlined,
                       size: 18,
-                      color: Theme.of(context).colorScheme.secondary,
+                      color: theme.colorScheme.secondary,
                     ),
                     label: Text(
                       '刷新',
                       style: TextStyle(
-                        color: Theme.of(context).colorScheme.secondary,
+                        color: theme.colorScheme.secondary,
                       ),
                     ),
                   ),
@@ -233,7 +231,7 @@ class _SearchPageState extends State<SearchPage> {
     );
   }
 
-  Widget _history() {
+  Widget _history(ThemeData theme) {
     return Obx(
       () => Padding(
         padding: EdgeInsets.fromLTRB(
@@ -257,9 +255,7 @@ class _SearchPageState extends State<SearchPage> {
                     Text(
                       '搜索历史',
                       strutStyle: StrutStyle(leading: 0, height: 1),
-                      style: Theme.of(context)
-                          .textTheme
-                          .titleMedium!
+                      style: theme.textTheme.titleMedium!
                           .copyWith(height: 1, fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(width: 12),
@@ -273,8 +269,8 @@ class _SearchPageState extends State<SearchPage> {
                               ? '记录搜索'
                               : '无痕搜索',
                           icon: _searchController.recordSearchHistory.value
-                              ? historyIcon
-                              : historyIcon.disable(),
+                              ? historyIcon(theme)
+                              : historyIcon(theme).disable(),
                           style: IconButton.styleFrom(
                             padding: EdgeInsets.zero,
                           ),
@@ -307,12 +303,12 @@ class _SearchPageState extends State<SearchPage> {
                         icon: Icon(
                           Icons.clear_all_outlined,
                           size: 18,
-                          color: Theme.of(context).colorScheme.secondary,
+                          color: theme.colorScheme.secondary,
                         ),
                         label: Text(
                           '清空',
                           style: TextStyle(
-                            color: Theme.of(context).colorScheme.secondary,
+                            color: theme.colorScheme.secondary,
                           ),
                         ),
                       ),
@@ -343,8 +339,8 @@ class _SearchPageState extends State<SearchPage> {
     );
   }
 
-  Icon get historyIcon => Icon(Icons.history,
-      color: Theme.of(context).colorScheme.onSurfaceVariant.withOpacity(0.8));
+  Icon historyIcon(ThemeData theme) => Icon(Icons.history,
+      color: theme.colorScheme.onSurfaceVariant.withOpacity(0.8));
 
   Widget _buildHotKey(
       LoadingState<SearchKeywordData> loadingState, bool isHot) {

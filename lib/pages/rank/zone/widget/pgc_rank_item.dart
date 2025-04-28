@@ -23,7 +23,6 @@ class PgcRankItem extends StatelessWidget {
         },
         onLongPress: () {
           imageSaveDialog(
-            context: context,
             title: item.title,
             cover: item.cover,
           );

@@ -27,6 +27,7 @@ class _FavPgcPageState extends State<FavPgcPage>
   @override
   Widget build(BuildContext context) {
     super.build(context);
+    final theme = Theme.of(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -45,7 +46,7 @@ class _FavPgcPageState extends State<FavPgcPage>
                 indicatorPadding:
                     const EdgeInsets.symmetric(horizontal: 3, vertical: 8),
                 indicator: BoxDecoration(
-                  color: Theme.of(context).colorScheme.secondaryContainer,
+                  color: theme.colorScheme.secondaryContainer,
                   borderRadius: BorderRadius.circular(20),
                 ),
                 indicatorSize: TabBarIndicatorSize.tab,
@@ -53,8 +54,8 @@ class _FavPgcPageState extends State<FavPgcPage>
                         .labelStyle
                         ?.copyWith(fontSize: 14) ??
                     const TextStyle(fontSize: 14),
-                labelColor: Theme.of(context).colorScheme.onSecondaryContainer,
-                unselectedLabelColor: Theme.of(context).colorScheme.outline,
+                labelColor: theme.colorScheme.onSecondaryContainer,
+                unselectedLabelColor: theme.colorScheme.outline,
                 tabs: const [
                   Tab(text: '想看'),
                   Tab(text: '在看'),
@@ -64,7 +65,7 @@ class _FavPgcPageState extends State<FavPgcPage>
             ),
             // TextButton(
             //   style: TextButton.styleFrom(
-            //     foregroundColor: Theme.of(context).colorScheme.onSurfaceVariant,
+            //     foregroundColor: theme.colorScheme.onSurfaceVariant,
             //     visualDensity: VisualDensity(horizontal: -2, vertical: -2),
             //     tapTargetSize: MaterialTapTargetSize.shrinkWrap,
             //   ),

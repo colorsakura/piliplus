@@ -17,7 +17,6 @@ class SearchAllPanel extends CommonSearchPanel {
     required super.keyword,
     required super.tag,
     required super.searchType,
-    super.hasHeader = false,
   });
 
   @override
@@ -36,22 +35,12 @@ class _SearchAllPanelState
     tag: widget.searchType.name + widget.tag,
   );
 
-  late final TextStyle pgcStyle = TextStyle(fontSize: 13);
-  late TextStyle userStyle;
-
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    userStyle = TextStyle(
-      fontSize: Theme.of(context).textTheme.labelSmall!.fontSize,
-      color: Theme.of(context).colorScheme.outline,
-    );
-  }
-
-  @override
-  Widget buildList(List<dynamic> list) {
+  Widget buildList(ThemeData theme, List<dynamic> list) {
     return SliverPadding(
-      padding: const EdgeInsets.only(bottom: 80),
+      padding: EdgeInsets.only(
+        bottom: MediaQuery.paddingOf(context).bottom + 80,
+      ),
       sliver: SliverWaterfallFlow.extent(
         maxCrossAxisExtent: Grid.smallCardWidth * 2,
         crossAxisSpacing: StyleString.safeSpace,
@@ -76,7 +65,7 @@ class _SearchAllPanelState
                 List<SearchMBangumiItemModel>() => item.length == 1
                     ? SizedBox(
                         height: 160,
-                        child: SearchPgcItem(style: pgcStyle, item: item.first),
+                        child: SearchPgcItem(item: item.first),
                       )
                     : SizedBox(
                         height: Grid.smallCardWidth / 2 / 0.75 +
@@ -103,7 +92,6 @@ class _SearchAllPanelState
                 SearchUserItemModel() => Padding(
                     padding: const EdgeInsets.only(bottom: 5),
                     child: SearchUserItem(
-                      style: userStyle,
                       item: item,
                     ),
                   ),

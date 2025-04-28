@@ -159,6 +159,7 @@ class _BanUserCheckboxState extends State<BanUserCheckbox> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return GestureDetector(
       onTap: () {
         setState(() => _banUid = !_banUid);
@@ -174,13 +175,13 @@ class _BanUserCheckboxState extends State<BanUserCheckbox> {
                   ? Icons.check_box_outlined
                   : Icons.check_box_outline_blank,
               color: _banUid
-                  ? Theme.of(context).colorScheme.primary
-                  : Theme.of(context).colorScheme.onSurfaceVariant,
+                  ? theme.colorScheme.primary
+                  : theme.colorScheme.onSurfaceVariant,
             ),
             Text(
               ' 拉黑该用户',
               style: TextStyle(
-                color: _banUid ? Theme.of(context).colorScheme.primary : null,
+                color: _banUid ? theme.colorScheme.primary : null,
               ),
             ),
           ],

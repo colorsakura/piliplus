@@ -17,6 +17,7 @@ class FavArticleItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Material(
       color: Colors.transparent,
       child: Stack(
@@ -66,10 +67,7 @@ class FavArticleItem extends StatelessWidget {
                           child: Text(
                             item['content'],
                             style: TextStyle(
-                              fontSize: Theme.of(context)
-                                  .textTheme
-                                  .bodyMedium!
-                                  .fontSize,
+                              fontSize: theme.textTheme.bodyMedium!.fontSize,
                               height: 1.42,
                               letterSpacing: 0.3,
                             ),
@@ -83,7 +81,7 @@ class FavArticleItem extends StatelessWidget {
                             //   context: context,
                             //   value: item['stat']['view'],
                             //   goto: 'picture',
-                            //   textColor: Theme.of(context).colorScheme.outline,
+                            //   textColor: theme.colorScheme.outline,
                             // ),
                             // const SizedBox(width: 16),
                             StatView(
@@ -92,7 +90,7 @@ class FavArticleItem extends StatelessWidget {
                               value: item['stat']['like'] == ''
                                   ? 0
                                   : item['stat']['like'],
-                              textColor: Theme.of(context).colorScheme.outline,
+                              textColor: theme.colorScheme.outline,
                             ),
                           ],
                         ),
@@ -103,7 +101,7 @@ class FavArticleItem extends StatelessWidget {
                           style: TextStyle(
                             fontSize: 13,
                             height: 1,
-                            color: Theme.of(context).colorScheme.outline,
+                            color: theme.colorScheme.outline,
                             overflow: TextOverflow.clip,
                           ),
                         ),
@@ -122,7 +120,7 @@ class FavArticleItem extends StatelessWidget {
               context: context,
               onPressed: onDelete,
               icon: Icons.clear,
-              iconColor: Theme.of(context).colorScheme.outline,
+              iconColor: theme.colorScheme.outline,
               bgColor: Colors.transparent,
             ),
           ),

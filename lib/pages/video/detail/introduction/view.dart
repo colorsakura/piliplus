@@ -128,79 +128,76 @@ class _VideoInfoState extends State<VideoInfo> {
 
   late final _horizontalMemberPage = GStorage.horizontalMemberPage;
 
-  Widget _buildVideoTitle([bool isExpand = false]) => videoDetailCtr
-          .enableSponsorBlock
-      ? Obx(
-          () => Text.rich(
-            TextSpan(
-              children: [
-                if (videoDetailCtr.videoLabel.value.isNotEmpty) ...[
-                  WidgetSpan(
-                    alignment: PlaceholderAlignment.middle,
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 4,
-                        vertical: 2,
-                      ),
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).colorScheme.secondaryContainer,
-                        borderRadius: BorderRadius.circular(4),
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Stack(
-                            alignment: Alignment.center,
+  Widget _buildVideoTitle(ThemeData theme, [bool isExpand = false]) =>
+      videoDetailCtr.enableSponsorBlock
+          ? Obx(
+              () => Text.rich(
+                TextSpan(
+                  children: [
+                    if (videoDetailCtr.videoLabel.value.isNotEmpty) ...[
+                      WidgetSpan(
+                        alignment: PlaceholderAlignment.middle,
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 4,
+                            vertical: 2,
+                          ),
+                          decoration: BoxDecoration(
+                            color: theme.colorScheme.secondaryContainer,
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
                             children: [
-                              Icon(
-                                Icons.shield_outlined,
-                                size: 16,
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .onSecondaryContainer,
+                              Stack(
+                                alignment: Alignment.center,
+                                children: [
+                                  Icon(
+                                    Icons.shield_outlined,
+                                    size: 16,
+                                    color:
+                                        theme.colorScheme.onSecondaryContainer,
+                                  ),
+                                  Icon(
+                                    Icons.play_arrow_rounded,
+                                    size: 12,
+                                    color:
+                                        theme.colorScheme.onSecondaryContainer,
+                                  ),
+                                ],
                               ),
-                              Icon(
-                                Icons.play_arrow_rounded,
-                                size: 12,
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .onSecondaryContainer,
+                              Text(
+                                videoDetailCtr.videoLabel.value,
+                                textScaler: TextScaler.linear(1),
+                                strutStyle: StrutStyle(leading: 0, height: 1),
+                                style: TextStyle(
+                                  height: 1,
+                                  fontSize: 13,
+                                  color: theme.colorScheme.onSecondaryContainer,
+                                ),
                               ),
                             ],
                           ),
-                          Text(
-                            videoDetailCtr.videoLabel.value,
-                            textScaler: TextScaler.linear(1),
-                            strutStyle: StrutStyle(leading: 0, height: 1),
-                            style: TextStyle(
-                              height: 1,
-                              fontSize: 13,
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .onSecondaryContainer,
-                            ),
-                          ),
-                        ],
+                        ),
                       ),
-                    ),
-                  ),
-                  TextSpan(text: ' '),
-                ],
-                TextSpan(
-                    text: '${videoDetail.title ?? videoItem['title'] ?? ''}'),
-              ],
-            ),
-            maxLines: isExpand ? null : 2,
-            overflow: isExpand ? null : TextOverflow.ellipsis,
-            style: const TextStyle(fontSize: 16),
-          ),
-        )
-      : Text(
-          '${videoDetail.title ?? videoItem['title'] ?? ''}',
-          maxLines: isExpand ? null : 2,
-          overflow: isExpand ? null : TextOverflow.ellipsis,
-          style: const TextStyle(fontSize: 16),
-        );
+                      TextSpan(text: ' '),
+                    ],
+                    TextSpan(
+                        text:
+                            '${videoDetail.title ?? videoItem['title'] ?? ''}'),
+                  ],
+                ),
+                maxLines: isExpand ? null : 2,
+                overflow: isExpand ? null : TextOverflow.ellipsis,
+                style: const TextStyle(fontSize: 16),
+              ),
+            )
+          : Text(
+              '${videoDetail.title ?? videoItem['title'] ?? ''}',
+              maxLines: isExpand ? null : 2,
+              overflow: isExpand ? null : TextOverflow.ellipsis,
+              style: const TextStyle(fontSize: 16),
+            );
 
   void handleState(Future Function() action) async {
     if (isProcessing.not) {
@@ -263,7 +260,7 @@ class _VideoInfoState extends State<VideoInfo> {
 
   @override
   Widget build(BuildContext context) {
-    final ThemeData themeData = Theme.of(context);
+    final ThemeData theme = Theme.of(context);
     return SliverLayoutBuilder(
       builder: (BuildContext context, SliverConstraints constraints) {
         bool isHorizontal = context.orientation == Orientation.landscape &&
@@ -350,8 +347,7 @@ class _VideoInfoState extends State<VideoInfo> {
                                             '${Utils.numFormat(videoIntroController.userStat['follower'])}粉丝    ${videoIntroController.userStat['archive_count'] != null ? '${Utils.numFormat(videoIntroController.userStat['archive_count'])}视频' : ''}',
                                             style: TextStyle(
                                               fontSize: 12,
-                                              color:
-                                                  themeData.colorScheme.outline,
+                                              color: theme.colorScheme.outline,
                                             ),
                                           ),
                                         ),
@@ -362,7 +358,7 @@ class _VideoInfoState extends State<VideoInfo> {
                               ),
                             ),
                           ),
-                          followButton(context, themeData),
+                          followButton(context, theme),
                         ] else
                           Expanded(
                             child: SelfSizedHorizontalList(
@@ -409,9 +405,8 @@ class _VideoInfoState extends State<VideoInfo> {
                                             child: Container(
                                               decoration: BoxDecoration(
                                                 shape: BoxShape.circle,
-                                                color: Theme.of(context)
-                                                    .colorScheme
-                                                    .surface,
+                                                color:
+                                                    theme.colorScheme.surface,
                                               ),
                                               child: Icon(
                                                 Icons.offline_bolt,
@@ -461,16 +456,14 @@ class _VideoInfoState extends State<VideoInfo> {
                                                           const EdgeInsets.all(
                                                               2),
                                                       decoration: BoxDecoration(
-                                                        color: Theme.of(context)
-                                                            .colorScheme
+                                                        color: theme.colorScheme
                                                             .secondaryContainer,
                                                         shape: BoxShape.circle,
                                                       ),
                                                       child: Icon(
                                                         MdiIcons.plus,
                                                         size: 16,
-                                                        color: Theme.of(context)
-                                                            .colorScheme
+                                                        color: theme.colorScheme
                                                             .onSecondaryContainer,
                                                       ),
                                                     ),
@@ -508,9 +501,7 @@ class _VideoInfoState extends State<VideoInfo> {
                                           videoItem['staff'][index].title,
                                           style: TextStyle(
                                             fontSize: 12,
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .outline,
+                                            color: theme.colorScheme.outline,
                                           ),
                                         ),
                                       ],
@@ -537,7 +528,7 @@ class _VideoInfoState extends State<VideoInfo> {
                         Utils.copyText(
                             '${videoDetail.title ?? videoItem['title'] ?? ''}');
                       },
-                      child: _buildVideoTitle(),
+                      child: _buildVideoTitle(theme),
                     ),
                     expanded: GestureDetector(
                       onLongPress: () {
@@ -545,7 +536,7 @@ class _VideoInfoState extends State<VideoInfo> {
                         Utils.copyText(
                             '${videoDetail.title ?? videoItem['title'] ?? ''}');
                       },
-                      child: _buildVideoTitle(true),
+                      child: _buildVideoTitle(theme, true),
                     ),
                     theme: const ExpandableThemeData(
                       animationDuration: Duration(milliseconds: 300),
@@ -566,7 +557,7 @@ class _VideoInfoState extends State<VideoInfo> {
                             value: Utils.numFormat(!widget.loadingStatus
                                 ? videoDetail.stat?.view ?? '-'
                                 : videoItem['stat']?.view ?? '-'),
-                            textColor: themeData.colorScheme.outline,
+                            textColor: theme.colorScheme.outline,
                           ),
                           const SizedBox(width: 10),
                           StatDanMu(
@@ -575,7 +566,7 @@ class _VideoInfoState extends State<VideoInfo> {
                             value: Utils.numFormat(!widget.loadingStatus
                                 ? videoDetail.stat?.danmaku ?? '-'
                                 : videoItem['stat']?.danmu ?? '-'),
-                            textColor: themeData.colorScheme.outline,
+                            textColor: theme.colorScheme.outline,
                           ),
                           const SizedBox(width: 10),
                           Text(
@@ -586,7 +577,7 @@ class _VideoInfoState extends State<VideoInfo> {
                                 formatType: 'detail'),
                             style: TextStyle(
                               fontSize: 12,
-                              color: themeData.colorScheme.outline,
+                              color: theme.colorScheme.outline,
                             ),
                           ),
                           if (MineController.anonymity.value) ...<Widget>[
@@ -594,7 +585,7 @@ class _VideoInfoState extends State<VideoInfo> {
                             Icon(
                               MdiIcons.incognito,
                               size: 15,
-                              color: themeData.colorScheme.outline,
+                              color: theme.colorScheme.outline,
                               semanticLabel: '无痕',
                             ),
                           ],
@@ -605,7 +596,7 @@ class _VideoInfoState extends State<VideoInfo> {
                                 '${videoIntroController.total.value}人在看',
                                 style: TextStyle(
                                   fontSize: 12,
-                                  color: themeData.colorScheme.outline,
+                                  color: theme.colorScheme.outline,
                                 ),
                               ),
                             ),
@@ -656,7 +647,7 @@ class _VideoInfoState extends State<VideoInfo> {
                             child: Icon(
                               size: 13,
                               Icons.error_outline,
-                              color: Theme.of(context).colorScheme.outline,
+                              color: theme.colorScheme.outline,
                             ),
                           ),
                           WidgetSpan(child: SizedBox(width: 2)),
@@ -668,7 +659,7 @@ class _VideoInfoState extends State<VideoInfo> {
                       ),
                       style: TextStyle(
                         fontSize: 12,
-                        color: Theme.of(context).colorScheme.outline,
+                        color: theme.colorScheme.outline,
                       ),
                     ),
                   ],
@@ -689,7 +680,7 @@ class _VideoInfoState extends State<VideoInfo> {
                             videoIntroController.videoDetail.value.bvid ?? '',
                             style: TextStyle(
                               fontSize: 14,
-                              color: Theme.of(context).colorScheme.primary,
+                              color: theme.colorScheme.primary,
                             ),
                           ),
                         ),
@@ -702,7 +693,7 @@ class _VideoInfoState extends State<VideoInfo> {
                             ),
                             TextSpan(
                               children: [
-                                buildContent(context,
+                                buildContent(theme,
                                     videoIntroController.videoDetail.value),
                               ],
                             ),
@@ -1013,7 +1004,7 @@ class _VideoInfoState extends State<VideoInfo> {
     ]);
   }
 
-  InlineSpan buildContent(BuildContext context, VideoDetailData content) {
+  InlineSpan buildContent(ThemeData theme, VideoDetailData content) {
     final List descV2 = content.descV2!;
     // type
     // 1 普通文本
@@ -1039,8 +1030,7 @@ class _VideoInfoState extends State<VideoInfo> {
                   spanChildren.add(
                     TextSpan(
                       text: matchStr,
-                      style: TextStyle(
-                          color: Theme.of(context).colorScheme.primary),
+                      style: TextStyle(color: theme.colorScheme.primary),
                       recognizer: TapGestureRecognizer()
                         ..onTap = () {
                           PiliScheme.videoPush(aid, null);
@@ -1057,8 +1047,7 @@ class _VideoInfoState extends State<VideoInfo> {
                   spanChildren.add(
                     TextSpan(
                       text: matchStr,
-                      style: TextStyle(
-                          color: Theme.of(context).colorScheme.primary),
+                      style: TextStyle(color: theme.colorScheme.primary),
                       recognizer: TapGestureRecognizer()
                         ..onTap = () {
                           PiliScheme.videoPush(null, matchStr);
@@ -1072,8 +1061,7 @@ class _VideoInfoState extends State<VideoInfo> {
                 spanChildren.add(
                   TextSpan(
                     text: matchStr,
-                    style:
-                        TextStyle(color: Theme.of(context).colorScheme.primary),
+                    style: TextStyle(color: theme.colorScheme.primary),
                     recognizer: TapGestureRecognizer()
                       ..onTap = () {
                         try {
@@ -1094,8 +1082,7 @@ class _VideoInfoState extends State<VideoInfo> {
           );
           return TextSpan(children: spanChildren);
         case 2:
-          final Color colorSchemePrimary =
-              Theme.of(context).colorScheme.primary;
+          final Color colorSchemePrimary = theme.colorScheme.primary;
           final String heroTag = Utils.makeHeroTag(currentDesc.bizId);
           return TextSpan(
             text: '@${currentDesc.rawText}',

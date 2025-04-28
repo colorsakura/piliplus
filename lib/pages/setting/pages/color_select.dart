@@ -42,14 +42,13 @@ class _ColorSelectPageState extends State<ColorSelectPage> {
   final ColorSelectController ctr = Get.put(ColorSelectController());
   FlexSchemeVariant _dynamicSchemeVariant =
       FlexSchemeVariant.values[GStorage.schemeVariant];
-  TextStyle get titleStyle => Theme.of(context).textTheme.titleMedium!;
-  TextStyle get subTitleStyle => Theme.of(context)
-      .textTheme
-      .labelMedium!
-      .copyWith(color: Theme.of(context).colorScheme.outline);
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    TextStyle titleStyle = theme.textTheme.titleMedium!;
+    TextStyle subTitleStyle =
+        theme.textTheme.labelMedium!.copyWith(color: theme.colorScheme.outline);
     return Scaffold(
       appBar: AppBar(title: const Text('选择应用主题')),
       body: SafeArea(
@@ -119,11 +118,8 @@ class _ColorSelectPageState extends State<ColorSelectPage> {
                               height: 1,
                               fontSize: 13,
                               color: ctr.type.value == 0
-                                  ? Theme.of(context)
-                                      .colorScheme
-                                      .outline
-                                      .withOpacity(0.8)
-                                  : Theme.of(context).colorScheme.secondary,
+                                  ? theme.colorScheme.outline.withOpacity(0.8)
+                                  : theme.colorScheme.secondary,
                             ),
                             strutStyle: StrutStyle(leading: 0, height: 1),
                           ),
@@ -131,11 +127,8 @@ class _ColorSelectPageState extends State<ColorSelectPage> {
                             size: 20,
                             Icons.keyboard_arrow_right,
                             color: ctr.type.value == 0
-                                ? Theme.of(context)
-                                    .colorScheme
-                                    .outline
-                                    .withOpacity(0.8)
-                                : Theme.of(context).colorScheme.secondary,
+                                ? theme.colorScheme.outline.withOpacity(0.8)
+                                : theme.colorScheme.secondary,
                           )
                         ],
                       ),
@@ -236,9 +229,7 @@ class _ColorSelectPageState extends State<ColorSelectPage> {
                                     style: TextStyle(
                                       fontSize: 12,
                                       color: ctr.currentColor.value != index
-                                          ? Theme.of(context)
-                                              .colorScheme
-                                              .outline
+                                          ? theme.colorScheme.outline
                                           : null,
                                     ),
                                   ),

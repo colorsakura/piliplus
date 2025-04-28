@@ -56,12 +56,6 @@ class _SponsorBlockPageState extends State<SponsorBlockPage> {
     super.dispose();
   }
 
-  TextStyle get _titleStyle => TextStyle(fontSize: 15);
-  TextStyle get _subTitleStyle => TextStyle(
-        fontSize: 13,
-        color: Theme.of(context).colorScheme.outline,
-      );
-
   _checkServerStatus() {
     Request()
         .get(
@@ -78,7 +72,9 @@ class _SponsorBlockPageState extends State<SponsorBlockPage> {
     });
   }
 
-  Widget get _blockLimitItem => ListTile(
+  Widget _blockLimitItem(
+          ThemeData theme, TextStyle titleStyle, TextStyle subTitleStyle) =>
+      ListTile(
         dense: true,
         onTap: () {
           _textController.text = _blockLimit.toString();
@@ -86,7 +82,7 @@ class _SponsorBlockPageState extends State<SponsorBlockPage> {
             context: context,
             builder: (BuildContext context) {
               return AlertDialog(
-                title: Text('最短片段时长', style: _titleStyle),
+                title: Text('最短片段时长', style: titleStyle),
                 content: TextFormField(
                   keyboardType: TextInputType.numberWithOptions(decimal: true),
                   controller: _textController,
@@ -102,7 +98,7 @@ class _SponsorBlockPageState extends State<SponsorBlockPage> {
                     child: Text(
                       '取消',
                       style: TextStyle(
-                        color: Theme.of(context).colorScheme.outline,
+                        color: theme.colorScheme.outline,
                       ),
                     ),
                   ),
@@ -121,10 +117,10 @@ class _SponsorBlockPageState extends State<SponsorBlockPage> {
             },
           );
         },
-        title: Text('最短片段时长', style: _titleStyle),
+        title: Text('最短片段时长', style: titleStyle),
         subtitle: Text(
           '忽略短于此时长的片段',
-          style: _subTitleStyle,
+          style: subTitleStyle,
         ),
         trailing: Text(
           '${_blockLimit}s',
@@ -132,17 +128,19 @@ class _SponsorBlockPageState extends State<SponsorBlockPage> {
         ),
       );
 
-  Widget get _aboudItem => ListTile(
+  Widget _aboudItem(TextStyle titleStyle, TextStyle subTitleStyle) => ListTile(
         dense: true,
-        title: Text('关于空降助手', style: _titleStyle),
-        subtitle: Text(_url, style: _subTitleStyle),
+        title: Text('关于空降助手', style: titleStyle),
+        subtitle: Text(_url, style: subTitleStyle),
         onTap: () => PageUtils.launchURL(_url),
       );
 
-  Widget get _userIdItem => ListTile(
+  Widget _userIdItem(
+          ThemeData theme, TextStyle titleStyle, TextStyle subTitleStyle) =>
+      ListTile(
         dense: true,
-        title: Text('用户ID', style: _titleStyle),
-        subtitle: Text(_userId, style: _subTitleStyle),
+        title: Text('用户ID', style: titleStyle),
+        subtitle: Text(_userId, style: subTitleStyle),
         onTap: () {
           final key = GlobalKey<FormState>();
           _textController.text = _userId;
@@ -150,7 +148,7 @@ class _SponsorBlockPageState extends State<SponsorBlockPage> {
             context: context,
             builder: (BuildContext context) {
               return AlertDialog(
-                title: Text('用户ID', style: _titleStyle),
+                title: Text('用户ID', style: titleStyle),
                 content: Form(
                   key: key,
                   child: TextFormField(
@@ -184,7 +182,7 @@ class _SponsorBlockPageState extends State<SponsorBlockPage> {
                     child: Text(
                       '取消',
                       style: TextStyle(
-                        color: Theme.of(context).colorScheme.outline,
+                        color: theme.colorScheme.outline,
                       ),
                     ),
                   ),
@@ -218,12 +216,12 @@ class _SponsorBlockPageState extends State<SponsorBlockPage> {
     setState(() {});
   }
 
-  Widget get _blockToastItem => ListTile(
+  Widget _blockToastItem(TextStyle titleStyle) => ListTile(
       dense: true,
       onTap: _updateBlockToast,
       title: Text(
         '显示跳过Toast',
-        style: _titleStyle,
+        style: titleStyle,
       ),
       trailing: Transform.scale(
         alignment: Alignment.centerRight,
@@ -242,36 +240,39 @@ class _SponsorBlockPageState extends State<SponsorBlockPage> {
         ),
       ));
 
-  Widget get _blockTrackItem => ListTile(
-      dense: true,
-      onTap: _updateBlockTrack,
-      title: Text(
-        '跳过次数统计跟踪',
-        style: _titleStyle,
-      ),
-      subtitle: Text(
-        // from origin extension
-        '此功能追踪您跳过了哪些片段，让用户知道他们提交的片段帮助了多少人。同时点赞会作为依据，确保垃圾信息不会污染数据库。在您每次跳过片段时，我们都会向服务器发送一条消息。希望大家开启此项设置，以便得到更准确的统计数据。:)',
-        style: _subTitleStyle,
-      ),
-      trailing: Transform.scale(
-        alignment: Alignment.centerRight,
-        scale: 0.8,
-        child: Switch(
-          thumbIcon: WidgetStateProperty.resolveWith<Icon?>((states) {
-            if (states.isNotEmpty && states.first == WidgetState.selected) {
-              return const Icon(Icons.done);
-            }
-            return null;
-          }),
-          value: _blockTrack,
-          onChanged: (val) {
-            _updateBlockTrack();
-          },
-        ),
-      ));
+  Widget _blockTrackItem(TextStyle titleStyle, TextStyle subTitleStyle) =>
+      ListTile(
+          dense: true,
+          onTap: _updateBlockTrack,
+          title: Text(
+            '跳过次数统计跟踪',
+            style: titleStyle,
+          ),
+          subtitle: Text(
+            // from origin extension
+            '此功能追踪您跳过了哪些片段，让用户知道他们提交的片段帮助了多少人。同时点赞会作为依据，确保垃圾信息不会污染数据库。在您每次跳过片段时，我们都会向服务器发送一条消息。希望大家开启此项设置，以便得到更准确的统计数据。:)',
+            style: subTitleStyle,
+          ),
+          trailing: Transform.scale(
+            alignment: Alignment.centerRight,
+            scale: 0.8,
+            child: Switch(
+              thumbIcon: WidgetStateProperty.resolveWith<Icon?>((states) {
+                if (states.isNotEmpty && states.first == WidgetState.selected) {
+                  return const Icon(Icons.done);
+                }
+                return null;
+              }),
+              value: _blockTrack,
+              onChanged: (val) {
+                _updateBlockTrack();
+              },
+            ),
+          ));
 
-  Widget get _blockServerItem => ListTile(
+  Widget _blockServerItem(
+          ThemeData theme, TextStyle titleStyle, TextStyle subTitleStyle) =>
+      ListTile(
         dense: true,
         onTap: () {
           _textController.text = _blockServer;
@@ -279,7 +280,7 @@ class _SponsorBlockPageState extends State<SponsorBlockPage> {
             context: context,
             builder: (BuildContext context) {
               return AlertDialog(
-                title: Text('服务器地址', style: _titleStyle),
+                title: Text('服务器地址', style: titleStyle),
                 content: TextFormField(
                   keyboardType: TextInputType.url,
                   controller: _textController,
@@ -302,7 +303,7 @@ class _SponsorBlockPageState extends State<SponsorBlockPage> {
                     child: Text(
                       '取消',
                       style: TextStyle(
-                        color: Theme.of(context).colorScheme.outline,
+                        color: theme.colorScheme.outline,
                       ),
                     ),
                   ),
@@ -324,20 +325,20 @@ class _SponsorBlockPageState extends State<SponsorBlockPage> {
         },
         title: Text(
           '服务器地址',
-          style: _titleStyle,
+          style: titleStyle,
         ),
         subtitle: Text(
           _blockServer,
-          style: _subTitleStyle,
+          style: subTitleStyle,
         ),
       );
 
-  Widget get _serverStatusItem => ListTile(
+  Widget _serverStatusItem(ThemeData theme, TextStyle titleStyle) => ListTile(
         dense: true,
         onTap: _checkServerStatus,
         title: Text(
           '服务器状态',
-          style: _titleStyle,
+          style: titleStyle,
         ),
         trailing: Text(
           _serverStatus == null
@@ -350,41 +351,51 @@ class _SponsorBlockPageState extends State<SponsorBlockPage> {
             color: _serverStatus == null
                 ? null
                 : _serverStatus == true
-                    ? Theme.of(context).colorScheme.primary
-                    : Theme.of(context).colorScheme.error,
+                    ? theme.colorScheme.primary
+                    : theme.colorScheme.error,
           ),
-        ),
-      );
-
-  Widget get _divider => SliverToBoxAdapter(
-        child: Divider(
-          height: 1,
-          color: Theme.of(context).colorScheme.outline.withOpacity(0.1),
-        ),
-      );
-
-  Widget get _dividerL => SliverToBoxAdapter(
-        child: Divider(
-          thickness: 16,
-          color: Theme.of(context).colorScheme.outline.withOpacity(0.1),
         ),
       );
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    final titleStyle = TextStyle(fontSize: 15);
+
+    final subTitleStyle = TextStyle(
+      fontSize: 13,
+      color: theme.colorScheme.outline,
+    );
+
+    final divider = SliverToBoxAdapter(
+      child: Divider(
+        height: 1,
+        color: theme.colorScheme.outline.withOpacity(0.1),
+      ),
+    );
+
+    final dividerL = SliverToBoxAdapter(
+      child: Divider(
+        thickness: 16,
+        color: theme.colorScheme.outline.withOpacity(0.1),
+      ),
+    );
+
     return Scaffold(
       appBar: AppBar(title: Text('空降助手')),
       body: CustomScrollView(
         slivers: [
-          _dividerL,
-          SliverToBoxAdapter(child: _serverStatusItem),
-          _dividerL,
-          SliverToBoxAdapter(child: _blockLimitItem),
-          _divider,
-          SliverToBoxAdapter(child: _blockToastItem),
-          _divider,
-          SliverToBoxAdapter(child: _blockTrackItem),
-          _dividerL,
+          dividerL,
+          SliverToBoxAdapter(child: _serverStatusItem(theme, titleStyle)),
+          dividerL,
+          SliverToBoxAdapter(
+              child: _blockLimitItem(theme, titleStyle, subTitleStyle)),
+          divider,
+          SliverToBoxAdapter(child: _blockToastItem(titleStyle)),
+          divider,
+          SliverToBoxAdapter(child: _blockTrackItem(titleStyle, titleStyle)),
+          dividerL,
           SliverList.separated(
             itemCount: _blockSettings.length,
             itemBuilder: (context, index) => ListTile(
@@ -493,11 +504,8 @@ class _SponsorBlockPageState extends State<SponsorBlockPage> {
                               fontSize: 14,
                               color: _blockSettings[index].second ==
                                       SkipType.disable
-                                  ? Theme.of(context)
-                                      .colorScheme
-                                      .outline
-                                      .withOpacity(0.7)
-                                  : Theme.of(context).colorScheme.secondary,
+                                  ? theme.colorScheme.outline.withOpacity(0.7)
+                                  : theme.colorScheme.secondary,
                             ),
                             strutStyle: StrutStyle(height: 1, leading: 0),
                           ),
@@ -506,11 +514,8 @@ class _SponsorBlockPageState extends State<SponsorBlockPage> {
                             size: MediaQuery.textScalerOf(context).scale(14),
                             color:
                                 _blockSettings[index].second == SkipType.disable
-                                    ? Theme.of(context)
-                                        .colorScheme
-                                        .outline
-                                        .withOpacity(0.7)
-                                    : Theme.of(context).colorScheme.secondary,
+                                    ? theme.colorScheme.outline.withOpacity(0.7)
+                                    : theme.colorScheme.secondary,
                           ),
                         ],
                       ),
@@ -524,22 +529,24 @@ class _SponsorBlockPageState extends State<SponsorBlockPage> {
                   fontSize: 12,
                   color: _blockSettings[index].second == SkipType.disable
                       ? null
-                      : Theme.of(context).colorScheme.outline,
+                      : theme.colorScheme.outline,
                 ),
               ),
             ),
             separatorBuilder: (context, index) => Divider(
               height: 1,
-              color: Theme.of(context).colorScheme.outline.withOpacity(0.1),
+              color: theme.colorScheme.outline.withOpacity(0.1),
             ),
           ),
-          _dividerL,
-          SliverToBoxAdapter(child: _userIdItem),
-          _divider,
-          SliverToBoxAdapter(child: _blockServerItem),
-          _dividerL,
-          SliverToBoxAdapter(child: _aboudItem),
-          _dividerL,
+          dividerL,
+          SliverToBoxAdapter(
+              child: _userIdItem(theme, titleStyle, subTitleStyle)),
+          divider,
+          SliverToBoxAdapter(
+              child: _blockServerItem(theme, titleStyle, subTitleStyle)),
+          dividerL,
+          SliverToBoxAdapter(child: _aboudItem(titleStyle, subTitleStyle)),
+          dividerL,
           SliverToBoxAdapter(
               child: SizedBox(
             height: 55 + MediaQuery.paddingOf(context).bottom,

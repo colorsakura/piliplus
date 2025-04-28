@@ -35,25 +35,25 @@ class _MediaBangumiSkeletonState extends State<MediaBangumiSkeleton> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
-                      color: Theme.of(context).colorScheme.onInverseSurface,
+                      color: bgColor,
                       width: 200,
                       height: 20,
                       margin: const EdgeInsets.only(bottom: 15),
                     ),
                     Container(
-                      color: Theme.of(context).colorScheme.onInverseSurface,
+                      color: bgColor,
                       width: 150,
                       height: 13,
                       margin: const EdgeInsets.only(bottom: 5),
                     ),
                     Container(
-                      color: Theme.of(context).colorScheme.onInverseSurface,
+                      color: bgColor,
                       width: 150,
                       height: 13,
                       margin: const EdgeInsets.only(bottom: 5),
                     ),
                     Container(
-                      color: Theme.of(context).colorScheme.onInverseSurface,
+                      color: bgColor,
                       width: 150,
                       height: 13,
                     ),
@@ -64,7 +64,7 @@ class _MediaBangumiSkeletonState extends State<MediaBangumiSkeleton> {
                       decoration: BoxDecoration(
                         borderRadius:
                             const BorderRadius.all(Radius.circular(20)),
-                        color: Theme.of(context).colorScheme.onInverseSurface,
+                        color: bgColor,
                       ),
                     ),
                   ],

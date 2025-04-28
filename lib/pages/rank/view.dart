@@ -20,6 +20,7 @@ class _RankPageState extends State<RankPage>
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     super.build(context);
     return Row(
       children: [
@@ -45,8 +46,8 @@ class _RankPageState extends State<RankPage>
                       },
                       child: ColoredBox(
                         color: index == _rankController.tabIndex.value
-                            ? Theme.of(context).colorScheme.onInverseSurface
-                            : Theme.of(context).colorScheme.surface,
+                            ? theme.colorScheme.onInverseSurface
+                            : theme.colorScheme.surface,
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
@@ -54,7 +55,7 @@ class _RankPageState extends State<RankPage>
                               height: double.infinity,
                               width: 3,
                               color: index == _rankController.tabIndex.value
-                                  ? Theme.of(context).colorScheme.primary
+                                  ? theme.colorScheme.primary
                                   : Colors.transparent,
                             ),
                             Expanded(
@@ -66,12 +67,10 @@ class _RankPageState extends State<RankPage>
                                 child: Text(
                                   tabsConfig[index]['label'],
                                   style: TextStyle(
-                                    color: index ==
-                                            _rankController.tabIndex.value
-                                        ? Theme.of(context).colorScheme.primary
-                                        : Theme.of(context)
-                                            .colorScheme
-                                            .onSurface,
+                                    color:
+                                        index == _rankController.tabIndex.value
+                                            ? theme.colorScheme.primary
+                                            : theme.colorScheme.onSurface,
                                     fontSize: 15,
                                   ),
                                   maxLines: 1,

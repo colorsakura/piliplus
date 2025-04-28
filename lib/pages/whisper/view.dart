@@ -93,6 +93,7 @@ class _WhisperPageState extends State<WhisperPage> {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: List.generate(_whisperController.msgFeedTopItems.length,
                 (index) {
+              final ThemeData theme = Theme.of(context);
               return GestureDetector(
                 behavior: HitTestBehavior.opaque,
                 child: Padding(
@@ -111,12 +112,11 @@ class _WhisperPageState extends State<WhisperPage> {
                           alignment: Alignment.topRight,
                           child: CircleAvatar(
                             radius: 22,
-                            backgroundColor:
-                                Theme.of(context).colorScheme.onInverseSurface,
+                            backgroundColor: theme.colorScheme.onInverseSurface,
                             child: Icon(
                               _whisperController.msgFeedTopItems[index]['icon'],
                               size: 20,
-                              color: Theme.of(context).colorScheme.primary,
+                              color: theme.colorScheme.primary,
                             ),
                           ),
                         ),

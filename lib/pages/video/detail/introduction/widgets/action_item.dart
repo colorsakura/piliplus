@@ -127,10 +127,13 @@ class ActionItemState extends State<ActionItem>
 
   @override
   Widget build(BuildContext context) {
-    return widget.expand == false ? _buildItem : Expanded(child: _buildItem);
+    final theme = Theme.of(context);
+    return widget.expand == false
+        ? _buildItem(theme)
+        : Expanded(child: _buildItem(theme));
   }
 
-  Widget get _buildItem => Semantics(
+  Widget _buildItem(ThemeData theme) => Semantics(
         label: (widget.text ?? "") +
             (widget.selectStatus ? "已" : "") +
             widget.semanticsLabel,
@@ -160,7 +163,7 @@ class ActionItemState extends State<ActionItem>
                     CustomPaint(
                       size: const Size(28, 28),
                       painter: _ArcPainter(
-                        color: Theme.of(context).colorScheme.primary,
+                        color: theme.colorScheme.primary,
                         sweepAngle: _animation!.value,
                       ),
                     )
@@ -172,9 +175,8 @@ class ActionItemState extends State<ActionItem>
                         : widget.icon.icon,
                     size: 18,
                     color: widget.selectStatus
-                        ? Theme.of(context).colorScheme.primary
-                        : widget.icon.color ??
-                            Theme.of(context).colorScheme.outline,
+                        ? theme.colorScheme.primary
+                        : widget.icon.color ?? theme.colorScheme.outline,
                   ),
                 ],
               ),
@@ -193,10 +195,9 @@ class ActionItemState extends State<ActionItem>
                       key: ValueKey<String>(widget.text!),
                       style: TextStyle(
                         color: widget.selectStatus
-                            ? Theme.of(context).colorScheme.primary
-                            : Theme.of(context).colorScheme.outline,
-                        fontSize:
-                            Theme.of(context).textTheme.labelSmall!.fontSize,
+                            ? theme.colorScheme.primary
+                            : theme.colorScheme.outline,
+                        fontSize: theme.textTheme.labelSmall!.fontSize,
                       ),
                       semanticsLabel: "",
                     ),

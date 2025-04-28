@@ -30,7 +30,8 @@ class BottomControl extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    Color colorTheme = Theme.of(context).colorScheme.primary;
+    final theme = Theme.of(context);
+    Color colorTheme = theme.colorScheme.primary;
     //阅读器限制
     Timer? accessibilityDebounce;
     double lastAnnouncedValue = -1;
@@ -57,7 +58,7 @@ class BottomControl extends StatelessWidget implements PreferredSizeWidget {
                     children: [
                       if (controller.dmTrend.isNotEmpty &&
                           controller.showDmChart.value)
-                        buildDmChart(context, controller, 4.5),
+                        buildDmChart(theme, controller, 4.5),
                       if (controller.viewPointList.isNotEmpty &&
                           controller.showVP.value)
                         buildViewPointWidget(controller, 8.75),

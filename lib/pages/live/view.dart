@@ -120,6 +120,7 @@ class _LivePageState extends CommonPageState<LivePage, LiveController>
   }
 
   Widget _buildFollowList() {
+    final theme = Theme.of(context);
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -135,14 +136,14 @@ class _LivePageState extends CommonPageState<LivePage, LiveController>
                       text: '${controller.liveCount.value}',
                       style: TextStyle(
                         fontSize: 13,
-                        color: Theme.of(context).colorScheme.primary,
+                        color: theme.colorScheme.primary,
                       ),
                     ),
                     TextSpan(
                       text: '人正在直播',
                       style: TextStyle(
                         fontSize: 13,
-                        color: Theme.of(context).colorScheme.outline,
+                        color: theme.colorScheme.outline,
                       ),
                     ),
                   ],
@@ -160,25 +161,25 @@ class _LivePageState extends CommonPageState<LivePage, LiveController>
                   Text(
                     '查看更多',
                     style: TextStyle(
-                      color: Theme.of(context).colorScheme.outline,
+                      color: theme.colorScheme.outline,
                     ),
                   ),
                   Icon(
                     size: 20,
                     Icons.keyboard_arrow_right_outlined,
-                    color: Theme.of(context).colorScheme.outline,
+                    color: theme.colorScheme.outline,
                   ),
                 ],
               ),
             ),
           ],
         ),
-        Obx(() => _buildFollowBody(controller.followListState.value)),
+        Obx(() => _buildFollowBody(theme, controller.followListState.value)),
       ],
     );
   }
 
-  Widget _buildFollowBody(LoadingState loadingState) {
+  Widget _buildFollowBody(ThemeData theme, LoadingState loadingState) {
     return switch (loadingState) {
       Loading() => SizedBox(
           height: 80,
@@ -223,7 +224,7 @@ class _LivePageState extends CommonPageState<LivePage, LiveController>
                             decoration: BoxDecoration(
                               border: Border.all(
                                 width: 1.5,
-                                color: Theme.of(context).colorScheme.primary,
+                                color: theme.colorScheme.primary,
                                 strokeAlign: BorderSide.strokeAlignOutside,
                               ),
                               shape: BoxShape.circle,

@@ -129,7 +129,7 @@ class _PlaySpeedPageState extends State<PlaySpeedPage> {
   }
 
   // 设定倍速弹窗
-  void showBottomSheet(index) {
+  void showBottomSheet(ThemeData theme, int index) {
     showModalBottomSheet(
       context: context,
       useSafeArea: true,
@@ -150,11 +150,11 @@ class _PlaySpeedPageState extends State<PlaySpeedPage> {
                   menuAction(index, item['id']);
                 },
                 minLeadingWidth: 0,
-                iconColor: Theme.of(context).colorScheme.onSurface,
+                iconColor: theme.colorScheme.onSurface,
                 leading: item['leading'],
                 title: Text(
                   item['title'],
-                  style: Theme.of(context).textTheme.titleSmall,
+                  style: theme.textTheme.titleSmall,
                 ),
               ),
             ),
@@ -194,6 +194,7 @@ class _PlaySpeedPageState extends State<PlaySpeedPage> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(
         title: const Text('倍速设置'),
@@ -218,7 +219,7 @@ class _PlaySpeedPageState extends State<PlaySpeedPage> {
                   const EdgeInsets.only(left: 14, right: 14, top: 6, bottom: 0),
               child: Text(
                 '点击下方按钮设置默认（长按）倍速',
-                style: TextStyle(color: Theme.of(context).colorScheme.outline),
+                style: TextStyle(color: theme.colorScheme.outline),
               ),
             ),
             ListTile(
@@ -255,7 +256,7 @@ class _PlaySpeedPageState extends State<PlaySpeedPage> {
                 children: [
                   Text(
                     '倍速列表',
-                    style: Theme.of(context).textTheme.titleMedium,
+                    style: theme.textTheme.titleMedium,
                   ),
                   const SizedBox(width: 12),
                   TextButton(
@@ -278,7 +279,7 @@ class _PlaySpeedPageState extends State<PlaySpeedPage> {
                 children: List.generate(
                   speedList.length,
                   (index) => FilledButton.tonal(
-                    onPressed: () => showBottomSheet(index),
+                    onPressed: () => showBottomSheet(theme, index),
                     child: Text(speedList[index].toString()),
                   ),
                 ),

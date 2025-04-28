@@ -29,6 +29,7 @@ class DynamicPanel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     final authorWidget = AuthorPanel(
       item: item,
       source: source,
@@ -45,7 +46,7 @@ class DynamicPanel extends StatelessWidget {
               border: Border(
                 bottom: BorderSide(
                   width: 8,
-                  color: Theme.of(context).dividerColor.withOpacity(0.05),
+                  color: theme.dividerColor.withOpacity(0.05),
                 ),
               ),
             ),
@@ -76,8 +77,8 @@ class DynamicPanel extends StatelessWidget {
               ),
               if (item.modules.moduleDynamic!.desc != null ||
                   item.modules.moduleDynamic!.major != null)
-                content(isSave, context, item, source, callback),
-              forWard(isSave, item, context, source, callback),
+                content(theme, isSave, context, item, source, callback),
+              forWard(theme, isSave, item, context, source, callback),
               const SizedBox(height: 2),
               if (source == null) ActionPanel(item: item),
               if (source == 'detail' && !isSave) const SizedBox(height: 12),
@@ -121,7 +122,6 @@ class DynamicPanel extends StatelessWidget {
         return;
     }
     imageSaveDialog(
-      context: context,
       title: title,
       cover: cover,
     );

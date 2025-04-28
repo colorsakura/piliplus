@@ -50,352 +50,363 @@ class _PostPanelState extends CommonCollapseSlidePageState<PostPanel> {
       plPlayerController.position.value.inMilliseconds / 1000;
 
   @override
-  Widget get buildPage => Scaffold(
-        resizeToAvoidBottomInset: false,
-        appBar: AppBar(
-          automaticallyImplyLeading: false,
-          titleSpacing: 16,
-          title: const Text('提交片段'),
-          actions: [
-            iconButton(
-              context: context,
-              tooltip: '添加片段',
-              onPressed: () {
-                setState(() {
-                  list?.insert(
-                    0,
-                    PostSegmentModel(
-                      segment: Pair(
-                        first: 0,
-                        second: currentPos,
-                      ),
-                      category: SegmentType.sponsor,
-                      actionType: ActionType.skip,
+  Widget buildPage(ThemeData theme) {
+    return Scaffold(
+      resizeToAvoidBottomInset: false,
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        titleSpacing: 16,
+        title: const Text('提交片段'),
+        actions: [
+          iconButton(
+            context: context,
+            tooltip: '添加片段',
+            onPressed: () {
+              setState(() {
+                list?.insert(
+                  0,
+                  PostSegmentModel(
+                    segment: Pair(
+                      first: 0,
+                      second: currentPos,
                     ),
-                  );
-                });
-              },
-              icon: Icons.add,
-            ),
-            const SizedBox(width: 10),
-            iconButton(
-              context: context,
-              tooltip: '关闭',
-              onPressed: Get.back,
-              icon: Icons.close,
-            ),
-            const SizedBox(width: 16),
-          ],
-        ),
-        body: enableSlide ? slideList() : buildList,
-      );
+                    category: SegmentType.sponsor,
+                    actionType: ActionType.skip,
+                  ),
+                );
+              });
+            },
+            icon: Icons.add,
+          ),
+          const SizedBox(width: 10),
+          iconButton(
+            context: context,
+            tooltip: '关闭',
+            onPressed: Get.back,
+            icon: Icons.close,
+          ),
+          const SizedBox(width: 16),
+        ],
+      ),
+      body: enableSlide ? slideList(theme) : buildList(theme),
+    );
+  }
 
   @override
-  Widget get buildList => list?.isNotEmpty == true
-      ? Stack(
-          children: [
-            SingleChildScrollView(
-              controller: ScrollController(),
-              physics: const AlwaysScrollableScrollPhysics(),
-              child: Column(
-                children: [
-                  ...List.generate(
-                    list!.length,
-                    (index) => Stack(
-                      clipBehavior: Clip.none,
-                      children: [
-                        Container(
-                          width: double.infinity,
-                          margin: const EdgeInsets.symmetric(
-                            horizontal: 16,
-                            vertical: 5,
-                          ),
-                          padding: const EdgeInsets.all(12),
-                          decoration: BoxDecoration(
-                            color:
-                                Theme.of(context).colorScheme.onInverseSurface,
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              if (list![index].actionType !=
-                                  ActionType.full) ...[
+  Widget buildList(ThemeData theme) {
+    return list?.isNotEmpty == true
+        ? Stack(
+            children: [
+              SingleChildScrollView(
+                controller: ScrollController(),
+                physics: const AlwaysScrollableScrollPhysics(),
+                child: Column(
+                  children: [
+                    ...List.generate(
+                      list!.length,
+                      (index) => Stack(
+                        clipBehavior: Clip.none,
+                        children: [
+                          Container(
+                            width: double.infinity,
+                            margin: const EdgeInsets.symmetric(
+                              horizontal: 16,
+                              vertical: 5,
+                            ),
+                            padding: const EdgeInsets.all(12),
+                            decoration: BoxDecoration(
+                              color: theme.colorScheme.onInverseSurface,
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                if (list![index].actionType !=
+                                    ActionType.full) ...[
+                                  Wrap(
+                                    runSpacing: 8,
+                                    spacing: 16,
+                                    children: [
+                                      Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: segmentWidget(
+                                          theme,
+                                          isFirst: true,
+                                          index: index,
+                                        ),
+                                      ),
+                                      if (list![index].category !=
+                                          SegmentType.poi_highlight)
+                                        Row(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: segmentWidget(
+                                            theme,
+                                            isFirst: false,
+                                            index: index,
+                                          ),
+                                        ),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 8),
+                                ],
                                 Wrap(
                                   runSpacing: 8,
                                   spacing: 16,
                                   children: [
                                     Row(
                                       mainAxisSize: MainAxisSize.min,
-                                      children: segmentWidget(
-                                        isFirst: true,
-                                        index: index,
-                                      ),
-                                    ),
-                                    if (list![index].category !=
-                                        SegmentType.poi_highlight)
-                                      Row(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: segmentWidget(
-                                          isFirst: false,
-                                          index: index,
+                                      children: [
+                                        const Text('分类: '),
+                                        PopupMenuButton<SegmentType>(
+                                          initialValue: list![index].category,
+                                          onSelected: (item) async {
+                                            list![index].category = item;
+                                            List<ActionType> constraintList =
+                                                segmentType2ActionType(item);
+                                            if (constraintList
+                                                .contains(
+                                                    list![index].actionType)
+                                                .not) {
+                                              list![index].actionType =
+                                                  constraintList.first;
+                                            }
+                                            switch (item) {
+                                              case SegmentType.poi_highlight:
+                                                updateSegment(
+                                                  isFirst: false,
+                                                  index: index,
+                                                  value: list![index]
+                                                      .segment
+                                                      .first,
+                                                );
+                                                break;
+                                              case SegmentType.exclusive_access:
+                                                updateSegment(
+                                                  isFirst: true,
+                                                  index: index,
+                                                  value: 0,
+                                                );
+                                                break;
+                                              case _:
+                                            }
+                                            setState(() {});
+                                          },
+                                          itemBuilder: (context) => SegmentType
+                                              .values
+                                              .map((item) =>
+                                                  PopupMenuItem<SegmentType>(
+                                                    value: item,
+                                                    child: Text(item.title),
+                                                  ))
+                                              .toList(),
+                                          child: Row(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              Text(
+                                                list![index].category.title,
+                                                style: TextStyle(
+                                                  height: 1,
+                                                  fontSize: 14,
+                                                  color: theme
+                                                      .colorScheme.secondary,
+                                                ),
+                                                strutStyle: StrutStyle(
+                                                  height: 1,
+                                                  leading: 0,
+                                                ),
+                                              ),
+                                              Icon(
+                                                MdiIcons.unfoldMoreHorizontal,
+                                                size: MediaQuery.textScalerOf(
+                                                        context)
+                                                    .scale(14),
+                                                color:
+                                                    theme.colorScheme.secondary,
+                                              ),
+                                            ],
+                                          ),
                                         ),
-                                      ),
-                                  ],
-                                ),
-                                const SizedBox(height: 8),
-                              ],
-                              Wrap(
-                                runSpacing: 8,
-                                spacing: 16,
-                                children: [
-                                  Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      const Text('分类: '),
-                                      PopupMenuButton<SegmentType>(
-                                        initialValue: list![index].category,
-                                        onSelected: (item) async {
-                                          list![index].category = item;
-                                          List<ActionType> constraintList =
-                                              segmentType2ActionType(item);
-                                          if (constraintList
-                                              .contains(list![index].actionType)
-                                              .not) {
-                                            list![index].actionType =
-                                                constraintList.first;
-                                          }
-                                          switch (item) {
-                                            case SegmentType.poi_highlight:
-                                              updateSegment(
-                                                isFirst: false,
-                                                index: index,
-                                                value:
-                                                    list![index].segment.first,
-                                              );
-                                              break;
-                                            case SegmentType.exclusive_access:
+                                      ],
+                                    ),
+                                    Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        const Text('行为类别: '),
+                                        PopupMenuButton<ActionType>(
+                                          initialValue: list![index].actionType,
+                                          onSelected: (item) async {
+                                            list![index].actionType = item;
+                                            if (item == ActionType.full) {
                                               updateSegment(
                                                 isFirst: true,
                                                 index: index,
                                                 value: 0,
                                               );
-                                              break;
-                                            case _:
-                                          }
-                                          setState(() {});
-                                        },
-                                        itemBuilder: (context) => SegmentType
-                                            .values
-                                            .map((item) =>
-                                                PopupMenuItem<SegmentType>(
+                                            }
+                                            setState(() {});
+                                          },
+                                          itemBuilder: (context) => ActionType
+                                              .values
+                                              .map(
+                                                (item) =>
+                                                    PopupMenuItem<ActionType>(
+                                                  enabled:
+                                                      segmentType2ActionType(
+                                                              list![index]
+                                                                  .category)
+                                                          .contains(item),
                                                   value: item,
                                                   child: Text(item.title),
-                                                ))
-                                            .toList(),
-                                        child: Row(
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            Text(
-                                              list![index].category.title,
-                                              style: TextStyle(
-                                                height: 1,
-                                                fontSize: 14,
-                                                color: Theme.of(context)
-                                                    .colorScheme
-                                                    .secondary,
+                                                ),
+                                              )
+                                              .toList(),
+                                          child: Row(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              Text(
+                                                list![index].actionType.title,
+                                                style: TextStyle(
+                                                  height: 1,
+                                                  fontSize: 14,
+                                                  color: theme
+                                                      .colorScheme.secondary,
+                                                ),
+                                                strutStyle: StrutStyle(
+                                                  height: 1,
+                                                  leading: 0,
+                                                ),
                                               ),
-                                              strutStyle: StrutStyle(
-                                                height: 1,
-                                                leading: 0,
+                                              Icon(
+                                                MdiIcons.unfoldMoreHorizontal,
+                                                size: MediaQuery.textScalerOf(
+                                                        context)
+                                                    .scale(14),
+                                                color:
+                                                    theme.colorScheme.secondary,
                                               ),
-                                            ),
-                                            Icon(
-                                              MdiIcons.unfoldMoreHorizontal,
-                                              size: MediaQuery.textScalerOf(
-                                                      context)
-                                                  .scale(14),
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .secondary,
-                                            ),
-                                          ],
+                                            ],
+                                          ),
                                         ),
-                                      ),
-                                    ],
-                                  ),
-                                  Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      const Text('行为类别: '),
-                                      PopupMenuButton<ActionType>(
-                                        initialValue: list![index].actionType,
-                                        onSelected: (item) async {
-                                          list![index].actionType = item;
-                                          if (item == ActionType.full) {
-                                            updateSegment(
-                                              isFirst: true,
-                                              index: index,
-                                              value: 0,
-                                            );
-                                          }
-                                          setState(() {});
-                                        },
-                                        itemBuilder: (context) => ActionType
-                                            .values
-                                            .map(
-                                              (item) =>
-                                                  PopupMenuItem<ActionType>(
-                                                enabled: segmentType2ActionType(
-                                                        list![index].category)
-                                                    .contains(item),
-                                                value: item,
-                                                child: Text(item.title),
-                                              ),
-                                            )
-                                            .toList(),
-                                        child: Row(
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            Text(
-                                              list![index].actionType.title,
-                                              style: TextStyle(
-                                                height: 1,
-                                                fontSize: 14,
-                                                color: Theme.of(context)
-                                                    .colorScheme
-                                                    .secondary,
-                                              ),
-                                              strutStyle: StrutStyle(
-                                                height: 1,
-                                                leading: 0,
-                                              ),
-                                            ),
-                                            Icon(
-                                              MdiIcons.unfoldMoreHorizontal,
-                                              size: MediaQuery.textScalerOf(
-                                                      context)
-                                                  .scale(14),
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .secondary,
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                        Positioned(
-                          top: 0,
-                          right: 4,
-                          child: iconButton(
-                            context: context,
-                            size: 26,
-                            tooltip: '移除',
-                            icon: Icons.clear,
-                            onPressed: () {
-                              setState(() {
-                                list!.removeAt(index);
-                              });
-                            },
-                          ),
-                        ),
-                        Positioned(
-                          top: 0,
-                          left: 4,
-                          child: iconButton(
-                            context: context,
-                            size: 26,
-                            tooltip: '预览',
-                            icon: Icons.preview_outlined,
-                            onPressed: () async {
-                              if (widget.plPlayerController
-                                      .videoPlayerController !=
-                                  null) {
-                                int start = max(
-                                  0,
-                                  (list![index].segment.first * 1000).toInt() -
-                                      1,
-                                );
-                                await widget
-                                    .plPlayerController.videoPlayerController!
-                                    .seek(
-                                  Duration(milliseconds: start),
-                                );
-                                if (widget.plPlayerController
-                                    .videoPlayerController!.state.playing.not) {
-                                  await widget
-                                      .plPlayerController.videoPlayerController!
-                                      .play();
-                                }
-                                if (start != 0) {
-                                  await Future.delayed(
-                                      const Duration(seconds: 1));
-                                }
-                                widget.plPlayerController.videoPlayerController!
-                                    .seek(
-                                  Duration(
-                                    milliseconds:
-                                        (list![index].segment.second * 1000)
-                                            .toInt(),
-                                  ),
-                                );
-                              }
-                            },
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  SizedBox(
-                    height: 88 + MediaQuery.paddingOf(context).bottom,
-                  ),
-                ],
-              ),
-            ),
-            Positioned(
-              right: 16,
-              bottom: 16 + MediaQuery.paddingOf(context).bottom,
-              child: FloatingActionButton(
-                tooltip: '提交',
-                onPressed: () {
-                  showDialog(
-                    context: context,
-                    builder: (context) => AlertDialog(
-                      title: const Text('确定无误再提交'),
-                      actions: [
-                        TextButton(
-                          onPressed: Get.back,
-                          child: Text(
-                            '取消',
-                            style: TextStyle(
-                              color: Theme.of(context).colorScheme.outline,
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ],
                             ),
                           ),
-                        ),
-                        TextButton(
-                          onPressed: () {
-                            Get.back();
-                            _onPost();
-                          },
-                          child: const Text('确定提交'),
-                        ),
-                      ],
+                          Positioned(
+                            top: 0,
+                            right: 4,
+                            child: iconButton(
+                              context: context,
+                              size: 26,
+                              tooltip: '移除',
+                              icon: Icons.clear,
+                              onPressed: () {
+                                setState(() {
+                                  list!.removeAt(index);
+                                });
+                              },
+                            ),
+                          ),
+                          Positioned(
+                            top: 0,
+                            left: 4,
+                            child: iconButton(
+                              context: context,
+                              size: 26,
+                              tooltip: '预览',
+                              icon: Icons.preview_outlined,
+                              onPressed: () async {
+                                if (widget.plPlayerController
+                                        .videoPlayerController !=
+                                    null) {
+                                  int start = max(
+                                    0,
+                                    (list![index].segment.first * 1000)
+                                            .toInt() -
+                                        1,
+                                  );
+                                  await widget
+                                      .plPlayerController.videoPlayerController!
+                                      .seek(
+                                    Duration(milliseconds: start),
+                                  );
+                                  if (widget
+                                      .plPlayerController
+                                      .videoPlayerController!
+                                      .state
+                                      .playing
+                                      .not) {
+                                    await widget.plPlayerController
+                                        .videoPlayerController!
+                                        .play();
+                                  }
+                                  if (start != 0) {
+                                    await Future.delayed(
+                                        const Duration(seconds: 1));
+                                  }
+                                  widget
+                                      .plPlayerController.videoPlayerController!
+                                      .seek(
+                                    Duration(
+                                      milliseconds:
+                                          (list![index].segment.second * 1000)
+                                              .toInt(),
+                                    ),
+                                  );
+                                }
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  );
-                },
-                child: Icon(Icons.check),
+                    SizedBox(
+                      height: 88 + MediaQuery.paddingOf(context).bottom,
+                    ),
+                  ],
+                ),
               ),
-            )
-          ],
-        )
-      : errorWidget();
+              Positioned(
+                right: 16,
+                bottom: 16 + MediaQuery.paddingOf(context).bottom,
+                child: FloatingActionButton(
+                  tooltip: '提交',
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                        title: const Text('确定无误再提交'),
+                        actions: [
+                          TextButton(
+                            onPressed: Get.back,
+                            child: Text(
+                              '取消',
+                              style: TextStyle(
+                                color: theme.colorScheme.outline,
+                              ),
+                            ),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              Get.back();
+                              _onPost();
+                            },
+                            child: const Text('确定提交'),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                  child: Icon(Icons.check),
+                ),
+              )
+            ],
+          )
+        : errorWidget();
+  }
 
   void updateSegment({
     required bool isFirst,
@@ -413,7 +424,8 @@ class _PostPanelState extends CommonCollapseSlidePageState<PostPanel> {
     }
   }
 
-  List<Widget> segmentWidget({
+  List<Widget> segmentWidget(
+    ThemeData theme, {
     required int index,
     required bool isFirst,
   }) {
@@ -484,8 +496,7 @@ class _PostPanelState extends CommonCollapseSlidePageState<PostPanel> {
                     onPressed: Get.back,
                     child: Text(
                       '取消',
-                      style: TextStyle(
-                          color: Theme.of(context).colorScheme.outline),
+                      style: TextStyle(color: theme.colorScheme.outline),
                     ),
                   ),
                   TextButton(

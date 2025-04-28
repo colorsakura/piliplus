@@ -38,7 +38,6 @@ class SubVideoCardH extends StatelessWidget {
         );
       },
       onLongPress: () => imageSaveDialog(
-        context: context,
         title: videoItem.title,
         cover: videoItem.cover,
       ),

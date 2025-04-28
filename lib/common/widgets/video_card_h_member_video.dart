@@ -31,7 +31,6 @@ class VideoCardHMemberVideo extends StatelessWidget {
       children: [
         InkWell(
           onLongPress: () => imageSaveDialog(
-            context: context,
             title: videoItem.title,
             cover: videoItem.cover,
           ),
@@ -185,6 +184,7 @@ class VideoCardHMemberVideo extends StatelessWidget {
   }
 
   Widget videoContent(context) {
+    final theme = Theme.of(context);
     return Expanded(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -197,11 +197,11 @@ class VideoCardHMemberVideo extends StatelessWidget {
                 fontWeight: videoItem.bvid != null && videoItem.bvid == bvid
                     ? FontWeight.bold
                     : null,
-                fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
+                fontSize: theme.textTheme.bodyMedium!.fontSize,
                 height: 1.42,
                 letterSpacing: 0.3,
                 color: videoItem.bvid != null && videoItem.bvid == bvid
-                    ? Theme.of(context).colorScheme.primary
+                    ? theme.colorScheme.primary
                     : null,
               ),
               maxLines: 2,
@@ -216,7 +216,7 @@ class VideoCardHMemberVideo extends StatelessWidget {
             style: TextStyle(
               fontSize: 12,
               height: 1,
-              color: Theme.of(context).colorScheme.outline,
+              color: theme.colorScheme.outline,
               overflow: TextOverflow.clip,
             ),
           ),

@@ -26,7 +26,7 @@ class _LoginPageState extends State<LoginPage> {
   bool showPassword = false;
   GlobalKey globalKey = GlobalKey();
 
-  Widget loginByQRCode() {
+  Widget loginByQRCode(ThemeData theme) {
     return Column(
       children: [
         const SizedBox(height: 20),
@@ -35,7 +35,7 @@ class _LoginPageState extends State<LoginPage> {
         Obx(() => Text('剩余有效时间: ${_loginPageCtr.qrCodeLeftTime} 秒',
             style: TextStyle(
                 fontFeatures: const [FontFeature.tabularFigures()],
-                color: Theme.of(context).colorScheme.primaryFixedDim))),
+                color: theme.colorScheme.primaryFixedDim))),
         const SizedBox(height: 5),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -110,8 +110,7 @@ class _LoginPageState extends State<LoginPage> {
         const SizedBox(height: 10),
         Obx(() => Text(
               _loginPageCtr.statusQRCode.value,
-              style: TextStyle(
-                  color: Theme.of(context).colorScheme.secondaryFixedDim),
+              style: TextStyle(color: theme.colorScheme.secondaryFixedDim),
             )),
         Obx(() => GestureDetector(
               onTap: () {
@@ -123,26 +122,20 @@ class _LoginPageState extends State<LoginPage> {
                 padding:
                     const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
                 child: Text(_loginPageCtr.codeInfo['data']?['url'] ?? "",
-                    style: Theme.of(context).textTheme.labelSmall!.copyWith(
-                        color: Theme.of(context)
-                            .colorScheme
-                            .onSurface
-                            .withOpacity(0.4))),
+                    style: theme.textTheme.labelSmall!.copyWith(
+                        color: theme.colorScheme.onSurface.withOpacity(0.4))),
               ),
             )),
         Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Text('请务必在 PiliPlus 开源仓库等可信渠道下载安装。',
-                style: Theme.of(context).textTheme.labelSmall!.copyWith(
-                    color: Theme.of(context)
-                        .colorScheme
-                        .onSurface
-                        .withOpacity(0.4)))),
+                style: theme.textTheme.labelSmall!.copyWith(
+                    color: theme.colorScheme.onSurface.withOpacity(0.4)))),
       ],
     );
   }
 
-  Widget loginByCookie() {
+  Widget loginByCookie(ThemeData theme) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -153,9 +146,9 @@ class _LoginPageState extends State<LoginPage> {
           padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Text(
             '使用App端Api实现的功能将不可用',
-            style: Theme.of(context).textTheme.labelMedium!.copyWith(
-                  color: Theme.of(context).colorScheme.primary,
-                ),
+            style: theme.textTheme.labelMedium!.copyWith(
+              color: theme.colorScheme.primary,
+            ),
           ),
         ),
         const SizedBox(height: 10),
@@ -186,7 +179,7 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Widget loginByPassword() {
+  Widget loginByPassword(ThemeData theme) {
     return Column(
       children: [
         const SizedBox(height: 20),
@@ -317,16 +310,13 @@ class _LoginPageState extends State<LoginPage> {
                 '账号密码仅用于该登录接口，不予保存；本地仅存储登录凭证。\n'
                 '请务必在 PiliPlus 开源仓库等可信渠道下载安装。',
                 textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.labelSmall!.copyWith(
-                    color: Theme.of(context)
-                        .colorScheme
-                        .onSurface
-                        .withOpacity(0.4)))),
+                style: theme.textTheme.labelSmall!.copyWith(
+                    color: theme.colorScheme.onSurface.withOpacity(0.4)))),
       ],
     );
   }
 
-  Widget loginBySmS() {
+  Widget loginBySmS(ThemeData theme) {
     return Column(
       children: [
         const SizedBox(height: 20),
@@ -337,15 +327,14 @@ class _LoginPageState extends State<LoginPage> {
             child: Container(
               decoration: UnderlineTabIndicator(
                 borderSide: BorderSide(
-                    color:
-                        Theme.of(context).colorScheme.outline.withOpacity(0.4)),
+                    color: theme.colorScheme.outline.withOpacity(0.4)),
               ),
               child: Row(
                 children: [
                   const SizedBox(width: 12),
                   Icon(
                     Icons.phone,
-                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    color: theme.colorScheme.onSurfaceVariant,
                   ),
                   const SizedBox(width: 12),
                   PopupMenuButton<Map<String, dynamic>>(
@@ -379,10 +368,7 @@ class _LoginPageState extends State<LoginPage> {
                   SizedBox(
                     height: 24,
                     child: VerticalDivider(
-                      color: Theme.of(context)
-                          .colorScheme
-                          .outline
-                          .withOpacity(0.5),
+                      color: theme.colorScheme.outline.withOpacity(0.5),
                     ),
                   ),
                   const SizedBox(width: 6),
@@ -410,8 +396,7 @@ class _LoginPageState extends State<LoginPage> {
             child: Container(
               decoration: UnderlineTabIndicator(
                 borderSide: BorderSide(
-                    color:
-                        Theme.of(context).colorScheme.outline.withOpacity(0.4)),
+                    color: theme.colorScheme.outline.withOpacity(0.4)),
               ),
               child: Row(
                 children: [
@@ -455,17 +440,15 @@ class _LoginPageState extends State<LoginPage> {
                 '本地仅存储登录凭证。\n'
                 '请务必在 PiliPlus 开源仓库等可信渠道下载安装。',
                 textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.labelSmall!.copyWith(
-                    color: Theme.of(context)
-                        .colorScheme
-                        .onSurface
-                        .withOpacity(0.4)))),
+                style: theme.textTheme.labelSmall!.copyWith(
+                    color: theme.colorScheme.onSurface.withOpacity(0.4)))),
       ],
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return OrientationBuilder(builder: (context, orientation) {
       return Scaffold(
         appBar: AppBar(
@@ -542,10 +525,10 @@ class _LoginPageState extends State<LoginPage> {
           child: tabBarView(
             controller: _loginPageCtr.tabController,
             children: [
-              tabViewOuter(loginByPassword()),
-              tabViewOuter(loginBySmS()),
-              tabViewOuter(loginByQRCode()),
-              tabViewOuter(loginByCookie()),
+              tabViewOuter(loginByPassword(theme)),
+              tabViewOuter(loginBySmS(theme)),
+              tabViewOuter(loginByQRCode(theme)),
+              tabViewOuter(loginByCookie(theme)),
             ],
           ),
         ),

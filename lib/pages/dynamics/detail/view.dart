@@ -282,6 +282,7 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
@@ -353,14 +354,14 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
                 onRefresh: () async {
                   await _dynamicDetailController.onRefresh();
                 },
-                child: _buildBody(context.orientation),
+                child: _buildBody(context.orientation, theme),
               )
-            : _buildBody(context.orientation),
+            : _buildBody(context.orientation, theme),
       ),
     );
   }
 
-  Widget _buildBody(Orientation orientation) => Stack(
+  Widget _buildBody(Orientation orientation, ThemeData theme) => Stack(
         children: [
           Builder(
             builder: (context) {
@@ -377,10 +378,10 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
                         callback: _getImageCallback,
                       ),
                     ),
-                    replyPersistentHeader(context),
+                    replyPersistentHeader(theme),
                     Obx(
                       () => replyList(
-                          _dynamicDetailController.loadingState.value),
+                          theme, _dynamicDetailController.loadingState.value),
                     ),
                   ]
                       .map<Widget>((e) => SliverPadding(
@@ -429,13 +430,15 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
                             slivers: [
                               SliverPadding(
                                 padding: EdgeInsets.only(right: padding / 4),
-                                sliver: replyPersistentHeader(context),
+                                sliver: replyPersistentHeader(theme),
                               ),
                               SliverPadding(
                                 padding: EdgeInsets.only(right: padding / 4),
                                 sliver: Obx(
-                                  () => replyList(_dynamicDetailController
-                                      .loadingState.value),
+                                  () => replyList(
+                                      theme,
+                                      _dynamicDetailController
+                                          .loadingState.value),
                                 ),
                               ),
                             ],
@@ -499,12 +502,10 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
                               ),
                               Container(
                                 decoration: BoxDecoration(
-                                  color: Theme.of(context).colorScheme.surface,
+                                  color: theme.colorScheme.surface,
                                   border: Border(
                                     top: BorderSide(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .outline
+                                      color: theme.colorScheme.outline
                                           .withOpacity(0.08),
                                     ),
                                   ),
@@ -565,17 +566,14 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
                                           icon: Icon(
                                             FontAwesomeIcons.shareFromSquare,
                                             size: 16,
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .outline,
+                                            color: theme.colorScheme.outline,
                                             semanticLabel: "转发",
                                           ),
                                           style: TextButton.styleFrom(
                                             padding: const EdgeInsets.fromLTRB(
                                                 15, 0, 15, 0),
-                                            foregroundColor: Theme.of(context)
-                                                .colorScheme
-                                                .outline,
+                                            foregroundColor:
+                                                theme.colorScheme.outline,
                                           ),
                                           label: Text(
                                             _dynamicDetailController
@@ -606,17 +604,14 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
                                         icon: Icon(
                                           FontAwesomeIcons.shareNodes,
                                           size: 16,
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .outline,
+                                          color: theme.colorScheme.outline,
                                           semanticLabel: "分享",
                                         ),
                                         style: TextButton.styleFrom(
                                           padding: const EdgeInsets.fromLTRB(
                                               15, 0, 15, 0),
-                                          foregroundColor: Theme.of(context)
-                                              .colorScheme
-                                              .outline,
+                                          foregroundColor:
+                                              theme.colorScheme.outline,
                                         ),
                                         label: const Text('分享'),
                                       ),
@@ -652,12 +647,8 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
                                                         ?.like
                                                         ?.status ==
                                                     true
-                                                ? Theme.of(context)
-                                                    .colorScheme
-                                                    .primary
-                                                : Theme.of(context)
-                                                    .colorScheme
-                                                    .outline,
+                                                ? theme.colorScheme.primary
+                                                : theme.colorScheme.outline,
                                             semanticLabel:
                                                 _dynamicDetailController
                                                             .item
@@ -672,9 +663,8 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
                                           style: TextButton.styleFrom(
                                             padding: const EdgeInsets.fromLTRB(
                                                 15, 0, 15, 0),
-                                            foregroundColor: Theme.of(context)
-                                                .colorScheme
-                                                .outline,
+                                            foregroundColor:
+                                                theme.colorScheme.outline,
                                           ),
                                           label: AnimatedSwitcher(
                                             duration: const Duration(
@@ -709,12 +699,8 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
                                                             ?.like
                                                             ?.status ==
                                                         true
-                                                    ? Theme.of(context)
-                                                        .colorScheme
-                                                        .primary
-                                                    : Theme.of(context)
-                                                        .colorScheme
-                                                        .outline,
+                                                    ? theme.colorScheme.primary
+                                                    : theme.colorScheme.outline,
                                               ),
                                             ),
                                           ),
@@ -733,10 +719,10 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
         ],
       );
 
-  SliverPersistentHeader replyPersistentHeader(BuildContext context) {
+  SliverPersistentHeader replyPersistentHeader(ThemeData theme) {
     return SliverPersistentHeader(
       delegate: CustomSliverPersistentHeaderDelegate(
-        bgColor: Theme.of(context).colorScheme.surface,
+        bgColor: theme.colorScheme.surface,
         child: Container(
           height: 45,
           padding: const EdgeInsets.only(left: 12, right: 6),
@@ -763,13 +749,13 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
                   icon: Icon(
                     Icons.sort,
                     size: 16,
-                    color: Theme.of(context).colorScheme.secondary,
+                    color: theme.colorScheme.secondary,
                   ),
                   label: Obx(() => Text(
                         _dynamicDetailController.sortType.value.label,
                         style: TextStyle(
                           fontSize: 13,
-                          color: Theme.of(context).colorScheme.secondary,
+                          color: theme.colorScheme.secondary,
                         ),
                       )),
                 ),
@@ -782,7 +768,8 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
     );
   }
 
-  Widget replyList(LoadingState<List<ReplyInfo>?> loadingState) {
+  Widget replyList(
+      ThemeData theme, LoadingState<List<ReplyInfo>?> loadingState) {
     return switch (loadingState) {
       Loading() => SliverList.builder(
           itemBuilder: (context, index) {
@@ -808,7 +795,7 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
                               : '没有更多了',
                       style: TextStyle(
                         fontSize: 12,
-                        color: Theme.of(context).colorScheme.outline,
+                        color: theme.colorScheme.outline,
                       ),
                     ),
                   );

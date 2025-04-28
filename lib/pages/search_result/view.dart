@@ -62,11 +62,12 @@ class _SearchResultPageState extends State<SearchResultPage>
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(
         shape: Border(
           bottom: BorderSide(
-            color: Theme.of(context).dividerColor.withOpacity(0.08),
+            color: theme.dividerColor.withOpacity(0.08),
             width: 1,
           ),
         ),
@@ -86,7 +87,7 @@ class _SearchResultPageState extends State<SearchResultPage>
             width: double.infinity,
             child: Text(
               _searchResultController.keyword,
-              style: Theme.of(context).textTheme.titleMedium,
+              style: theme.textTheme.titleMedium,
               maxLines: 1,
             ),
           ),
@@ -121,18 +122,18 @@ class _SearchResultPageState extends State<SearchResultPage>
                 indicatorPadding:
                     const EdgeInsets.symmetric(horizontal: 3, vertical: 8),
                 indicator: BoxDecoration(
-                  color: Theme.of(context).colorScheme.secondaryContainer,
+                  color: theme.colorScheme.secondaryContainer,
                   borderRadius: const BorderRadius.all(Radius.circular(20)),
                 ),
                 indicatorSize: TabBarIndicatorSize.tab,
-                labelColor: Theme.of(context).colorScheme.onSecondaryContainer,
+                labelColor: theme.colorScheme.onSecondaryContainer,
                 labelStyle: TabBarTheme.of(context)
                         .labelStyle
                         ?.copyWith(fontSize: 13) ??
                     const TextStyle(fontSize: 13),
                 dividerColor: Colors.transparent,
                 dividerHeight: 0,
-                unselectedLabelColor: Theme.of(context).colorScheme.outline,
+                unselectedLabelColor: theme.colorScheme.outline,
                 tabAlignment: TabAlignment.start,
                 onTap: (index) {
                   if (_tabController.indexIsChanging.not) {

@@ -10,11 +10,12 @@ class Skeleton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final color = Theme.of(context).colorScheme.surface.withAlpha(10);
     var shimmerGradient = LinearGradient(
       colors: [
         Colors.transparent,
-        Theme.of(context).colorScheme.surface.withAlpha(10),
-        Theme.of(context).colorScheme.surface.withAlpha(10),
+        color,
+        color,
         Colors.transparent,
       ],
       stops: const [

@@ -13,6 +13,8 @@ class MemberArticleItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final outline = theme.colorScheme.outline;
     return Material(
       color: Colors.transparent,
       child: InkWell(
@@ -23,7 +25,6 @@ class MemberArticleItem extends StatelessWidget {
         },
         onLongPress: () {
           imageSaveDialog(
-            context: context,
             title: item.title,
             cover: item.originImageUrls?.firstOrNull,
           );
@@ -65,10 +66,7 @@ class MemberArticleItem extends StatelessWidget {
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
-                            fontSize: Theme.of(context)
-                                .textTheme
-                                .bodyMedium!
-                                .fontSize,
+                            fontSize: theme.textTheme.bodyMedium!.fontSize,
                             height: 1.42,
                             letterSpacing: 0.3,
                           ),
@@ -80,7 +78,7 @@ class MemberArticleItem extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 12,
                         height: 1,
-                        color: Theme.of(context).colorScheme.outline,
+                        color: outline,
                       ),
                     ),
                     const SizedBox(height: 3),
@@ -90,14 +88,14 @@ class MemberArticleItem extends StatelessWidget {
                           context: context,
                           value: item.stats?.view ?? 0,
                           goto: 'picture',
-                          textColor: Theme.of(context).colorScheme.outline,
+                          textColor: outline,
                         ),
                         const SizedBox(width: 16),
                         StatView(
                           context: context,
                           goto: 'reply',
                           value: item.stats?.reply ?? 0,
-                          textColor: Theme.of(context).colorScheme.outline,
+                          textColor: outline,
                         ),
                       ],
                     ),

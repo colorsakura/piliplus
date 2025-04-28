@@ -93,8 +93,9 @@ class MineController extends GetxController {
         displayTime: const Duration(seconds: 2),
         alignment: Alignment.bottomCenter,
         builder: (context) {
+          final theme = Theme.of(context);
           return ColoredBox(
-            color: Theme.of(context).colorScheme.primaryContainer,
+            color: theme.colorScheme.primaryContainer,
             child: Padding(
               padding: EdgeInsets.only(
                 top: 15,
@@ -111,8 +112,7 @@ class MineController extends GetxController {
                         MdiIcons.incognito,
                       ),
                       const SizedBox(width: 10),
-                      Text('已进入无痕模式',
-                          style: Theme.of(context).textTheme.titleMedium)
+                      Text('已进入无痕模式', style: theme.textTheme.titleMedium)
                     ],
                   ),
                   const SizedBox(height: 10),
@@ -121,7 +121,7 @@ class MineController extends GetxController {
                       '不产生查询或播放记录\n'
                       '点赞等其它操作不受影响\n'
                       '（前往隐私设置了解详情）',
-                      style: Theme.of(context).textTheme.bodySmall),
+                      style: theme.textTheme.bodySmall),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
@@ -133,7 +133,7 @@ class MineController extends GetxController {
                           child: Text(
                             '保存为永久',
                             style: TextStyle(
-                              color: Theme.of(context).colorScheme.primary,
+                              color: theme.colorScheme.primary,
                             ),
                           )),
                       const SizedBox(width: 10),
@@ -145,7 +145,7 @@ class MineController extends GetxController {
                         child: Text(
                           '仅本次（默认）',
                           style: TextStyle(
-                            color: Theme.of(context).colorScheme.primary,
+                            color: theme.colorScheme.primary,
                           ),
                         ),
                       ),
@@ -169,8 +169,9 @@ class MineController extends GetxController {
         displayTime: const Duration(seconds: 1),
         alignment: Alignment.bottomCenter,
         builder: (context) {
+          final theme = Theme.of(context);
           return ColoredBox(
-            color: Theme.of(context).colorScheme.secondaryContainer,
+            color: theme.colorScheme.secondaryContainer,
             child: Padding(
               padding: EdgeInsets.only(
                 top: 15,
@@ -185,8 +186,7 @@ class MineController extends GetxController {
                     MdiIcons.incognitoOff,
                   ),
                   const SizedBox(width: 10),
-                  Text('已退出无痕模式',
-                      style: Theme.of(context).textTheme.titleMedium),
+                  Text('已退出无痕模式', style: theme.textTheme.titleMedium),
                 ],
               ),
             ),

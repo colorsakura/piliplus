@@ -44,6 +44,7 @@ class _SubDetailPageState extends State<SubDetailPage> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
       body: SafeArea(
         top: false,
@@ -52,8 +53,8 @@ class _SubDetailPageState extends State<SubDetailPage> {
           controller: _subDetailController.scrollController,
           physics: const AlwaysScrollableScrollPhysics(),
           slivers: [
-            _buildAppBar,
-            _buildCount,
+            _buildAppBar(theme),
+            _buildCount(theme),
             Obx(() => _buildBody(_subDetailController.loadingState.value)),
           ],
         ),
@@ -100,15 +101,15 @@ class _SubDetailPageState extends State<SubDetailPage> {
     };
   }
 
-  Widget get _buildCount => SliverToBoxAdapter(
+  Widget _buildCount(ThemeData theme) => SliverToBoxAdapter(
         child: Padding(
           padding: const EdgeInsets.only(top: 12, bottom: 8, left: 14),
           child: Obx(
             () => Text(
               '共${_subDetailController.mediaCount}条视频',
               style: TextStyle(
-                fontSize: Theme.of(context).textTheme.labelMedium!.fontSize,
-                color: Theme.of(context).colorScheme.outline,
+                fontSize: theme.textTheme.labelMedium!.fontSize,
+                color: theme.colorScheme.outline,
                 letterSpacing: 1,
               ),
             ),
@@ -116,7 +117,7 @@ class _SubDetailPageState extends State<SubDetailPage> {
         ),
       );
 
-  Widget get _buildAppBar => SliverAppBar(
+  Widget _buildAppBar(ThemeData theme) => SliverAppBar(
         expandedHeight: 210 - MediaQuery.paddingOf(context).top,
         pinned: true,
         title: Obx(
@@ -132,11 +133,11 @@ class _SubDetailPageState extends State<SubDetailPage> {
                     _subDetailController.item.title!,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: Theme.of(context).textTheme.titleMedium,
+                    style: theme.textTheme.titleMedium,
                   ),
                   Text(
                     '共${_subDetailController.mediaCount.value}条视频',
-                    style: Theme.of(context).textTheme.labelMedium,
+                    style: theme.textTheme.labelMedium,
                   )
                 ],
               ),
@@ -149,7 +150,7 @@ class _SubDetailPageState extends State<SubDetailPage> {
             decoration: BoxDecoration(
               border: Border(
                 bottom: BorderSide(
-                  color: Theme.of(context).dividerColor.withOpacity(0.2),
+                  color: theme.dividerColor.withOpacity(0.2),
                 ),
               ),
             ),
@@ -180,10 +181,7 @@ class _SubDetailPageState extends State<SubDetailPage> {
                       Text(
                         _subDetailController.item.title!,
                         style: TextStyle(
-                            fontSize: Theme.of(context)
-                                .textTheme
-                                .titleMedium!
-                                .fontSize,
+                            fontSize: theme.textTheme.titleMedium!.fontSize,
                             fontWeight: FontWeight.bold),
                       ),
                       const SizedBox(height: 4),
@@ -199,8 +197,7 @@ class _SubDetailPageState extends State<SubDetailPage> {
                         },
                         child: Text(
                           _subDetailController.item.upper!.name!,
-                          style: TextStyle(
-                              color: Theme.of(context).colorScheme.primary),
+                          style: TextStyle(color: theme.colorScheme.primary),
                         ),
                       ),
                       const SizedBox(height: 4),
@@ -209,7 +206,7 @@ class _SubDetailPageState extends State<SubDetailPage> {
                           '${Utils.numFormat(_subDetailController.playCount.value)}次播放',
                           style: TextStyle(
                             fontSize: 12,
-                            color: Theme.of(context).colorScheme.outline,
+                            color: theme.colorScheme.outline,
                           ),
                         ),
                       ),

@@ -12,6 +12,7 @@ class LiveItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Card(
       elevation: 1,
       clipBehavior: Clip.hardEdge,
@@ -21,7 +22,6 @@ class LiveItem extends StatelessWidget {
           Get.toNamed('/liveRoom?roomid=${liveItem.roomid}');
         },
         onLongPress: () => imageSaveDialog(
-          context: context,
           title: liveItem.title?.map((item) => item['text']).join() ?? '',
           cover: liveItem.cover,
         ),
@@ -60,14 +60,14 @@ class LiveItem extends StatelessWidget {
                 }),
               ),
             ),
-            liveContent(context)
+            liveContent(theme)
           ],
         ),
       ),
     );
   }
 
-  Widget liveContent(BuildContext context) => Expanded(
+  Widget liveContent(ThemeData theme) => Expanded(
         child: Padding(
           padding: const EdgeInsets.fromLTRB(9, 8, 9, 6),
           child: Column(
@@ -83,8 +83,8 @@ class LiveItem extends StatelessWidget {
                         style: TextStyle(
                           letterSpacing: 0.3,
                           color: i['type'] == 'em'
-                              ? Theme.of(context).colorScheme.primary
-                              : Theme.of(context).colorScheme.onSurface,
+                              ? theme.colorScheme.primary
+                              : theme.colorScheme.onSurface,
                         ),
                       ),
                     ]
@@ -97,8 +97,8 @@ class LiveItem extends StatelessWidget {
                   liveItem.uname!,
                   maxLines: 1,
                   style: TextStyle(
-                    fontSize: Theme.of(context).textTheme.labelMedium!.fontSize,
-                    color: Theme.of(context).colorScheme.outline,
+                    fontSize: theme.textTheme.labelMedium!.fontSize,
+                    color: theme.colorScheme.outline,
                   ),
                 ),
               ),

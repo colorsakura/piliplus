@@ -19,7 +19,6 @@ class SeasonSeriesCard extends StatelessWidget {
     return InkWell(
       onLongPress: () {
         imageSaveDialog(
-          context: context,
           title: item['meta']['name'],
           cover: item['meta']['cover'],
         );
@@ -67,6 +66,7 @@ class SeasonSeriesCard extends StatelessWidget {
   }
 
   Widget videoContent(context) {
+    final theme = Theme.of(context);
     return Expanded(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -75,7 +75,7 @@ class SeasonSeriesCard extends StatelessWidget {
             item['meta']['name'],
             textAlign: TextAlign.start,
             style: TextStyle(
-              fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
+              fontSize: theme.textTheme.bodyMedium!.fontSize,
               height: 1.42,
               letterSpacing: 0.3,
             ),
@@ -89,7 +89,7 @@ class SeasonSeriesCard extends StatelessWidget {
             style: TextStyle(
               fontSize: 12,
               height: 1,
-              color: Theme.of(context).colorScheme.outline,
+              color: theme.colorScheme.outline,
               overflow: TextOverflow.clip,
             ),
           ),

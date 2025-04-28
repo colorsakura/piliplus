@@ -46,6 +46,7 @@ class _BangumiPageState extends CommonPageState<BangumiPage, BangumiController>
   @override
   Widget build(BuildContext context) {
     super.build(context);
+    final ThemeData theme = Theme.of(context);
     return refreshIndicator(
       onRefresh: () async {
         await controller.onRefresh();
@@ -54,17 +55,17 @@ class _BangumiPageState extends CommonPageState<BangumiPage, BangumiController>
         controller: controller.scrollController,
         physics: const AlwaysScrollableScrollPhysics(),
         slivers: [
-          _buildFollow,
+          _buildFollow(theme),
           if (controller.showPgcTimeline)
             SliverToBoxAdapter(
               child: SizedBox(
                 height: Grid.smallCardWidth / 2 / 0.75 +
                     MediaQuery.textScalerOf(context).scale(96),
-                child:
-                    Obx(() => _buildTimeline(controller.timelineState.value)),
+                child: Obx(() =>
+                    _buildTimeline(theme, controller.timelineState.value)),
               ),
             ),
-          ..._buildRcmd,
+          ..._buildRcmd(theme),
         ],
       ),
     );
@@ -80,7 +81,8 @@ class _BangumiPageState extends CommonPageState<BangumiPage, BangumiController>
     '日',
   ];
 
-  Widget _buildTimeline(LoadingState<List<Result>?> loadingState) =>
+  Widget _buildTimeline(
+          ThemeData theme, LoadingState<List<Result>?> loadingState) =>
       switch (loadingState) {
         Loading() => loadingWidget,
         Success() => loadingState.response?.isNotEmpty == true
@@ -99,7 +101,7 @@ class _BangumiPageState extends CommonPageState<BangumiPage, BangumiController>
                           const SizedBox(width: 16),
                           Text(
                             '追番时间表',
-                            style: Theme.of(context).textTheme.titleMedium,
+                            style: theme.textTheme.titleMedium,
                           ),
                           const SizedBox(width: 16),
                           Expanded(
@@ -118,16 +120,13 @@ class _BangumiPageState extends CommonPageState<BangumiPage, BangumiController>
                                   vertical: 10,
                                 ),
                                 indicator: BoxDecoration(
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .secondaryContainer,
+                                  color: theme.colorScheme.secondaryContainer,
                                   borderRadius: const BorderRadius.all(
                                       Radius.circular(20)),
                                 ),
                                 indicatorSize: TabBarIndicatorSize.tab,
-                                labelColor: Theme.of(context)
-                                    .colorScheme
-                                    .onSecondaryContainer,
+                                labelColor:
+                                    theme.colorScheme.onSecondaryContainer,
                                 labelStyle: TabBarTheme.of(context)
                                         .labelStyle
                                         ?.copyWith(fontSize: 14) ??
@@ -200,8 +199,8 @@ class _BangumiPageState extends CommonPageState<BangumiPage, BangumiController>
           ),
       };
 
-  List<Widget> get _buildRcmd => [
-        _buildRcmdTitle,
+  List<Widget> _buildRcmd(ThemeData theme) => [
+        _buildRcmdTitle(theme),
         SliverPadding(
           padding: const EdgeInsets.fromLTRB(
               StyleString.safeSpace, 0, StyleString.safeSpace, 0),
@@ -211,7 +210,7 @@ class _BangumiPageState extends CommonPageState<BangumiPage, BangumiController>
         ),
       ];
 
-  Widget get _buildRcmdTitle => SliverToBoxAdapter(
+  Widget _buildRcmdTitle(ThemeData theme) => SliverToBoxAdapter(
         child: Padding(
           padding: const EdgeInsets.only(
             top: 10,
@@ -224,7 +223,7 @@ class _BangumiPageState extends CommonPageState<BangumiPage, BangumiController>
             children: [
               Text(
                 '推荐',
-                style: Theme.of(context).textTheme.titleMedium,
+                style: theme.textTheme.titleMedium,
               ),
               GestureDetector(
                 behavior: HitTestBehavior.opaque,
@@ -279,12 +278,12 @@ class _BangumiPageState extends CommonPageState<BangumiPage, BangumiController>
                         strutStyle: StrutStyle(leading: 0, height: 1),
                         style: TextStyle(
                           height: 1,
-                          color: Theme.of(context).colorScheme.secondary,
+                          color: theme.colorScheme.secondary,
                         ),
                       ),
                       Icon(
                         Icons.chevron_right,
-                        color: Theme.of(context).colorScheme.secondary,
+                        color: theme.colorScheme.secondary,
                       ),
                     ],
                   ),
@@ -332,12 +331,12 @@ class _BangumiPageState extends CommonPageState<BangumiPage, BangumiController>
     };
   }
 
-  Widget get _buildFollow => SliverToBoxAdapter(
+  Widget _buildFollow(ThemeData theme) => SliverToBoxAdapter(
         child: Obx(
           () => controller.isLogin.value
               ? Column(
                   children: [
-                    _buildFollowTitle,
+                    _buildFollowTitle(theme),
                     SizedBox(
                       height: Grid.smallCardWidth / 2 / 0.75 +
                           MediaQuery.textScalerOf(context).scale(50),
@@ -351,14 +350,14 @@ class _BangumiPageState extends CommonPageState<BangumiPage, BangumiController>
         ),
       );
 
-  Widget get _buildFollowTitle => Padding(
+  Widget _buildFollowTitle(ThemeData theme) => Padding(
         padding: const EdgeInsets.only(left: 16),
         child: Row(
           children: [
             Obx(
               () => Text(
                 '最近${widget.tabType == TabType.bangumi ? '追番' : '追剧'}${controller.followCount.value == -1 ? '' : ' ${controller.followCount.value}'}',
-                style: Theme.of(context).textTheme.titleMedium,
+                style: theme.textTheme.titleMedium,
               ),
             ),
             const Spacer(),
@@ -398,13 +397,12 @@ class _BangumiPageState extends CommonPageState<BangumiPage, BangumiController>
                                 strutStyle: StrutStyle(leading: 0, height: 1),
                                 style: TextStyle(
                                   height: 1,
-                                  color:
-                                      Theme.of(context).colorScheme.secondary,
+                                  color: theme.colorScheme.secondary,
                                 ),
                               ),
                               Icon(
                                 Icons.chevron_right,
-                                color: Theme.of(context).colorScheme.secondary,
+                                color: theme.colorScheme.secondary,
                               ),
                             ],
                           ),

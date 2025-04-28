@@ -30,6 +30,7 @@ class _HomePageState extends State<HomePage>
   @override
   Widget build(BuildContext context) {
     super.build(context);
+    final theme = Theme.of(context);
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(toolbarHeight: 0),
@@ -37,10 +38,10 @@ class _HomePageState extends State<HomePage>
         children: [
           if (!_homeController.useSideBar &&
               context.orientation == Orientation.portrait)
-            customAppBar,
+            customAppBar(theme),
           if (_homeController.tabs.length > 1)
             Material(
-              color: Theme.of(context).colorScheme.surface,
+              color: theme.colorScheme.surface,
               child: Container(
                 height: 42,
                 padding: const EdgeInsets.only(top: 4),
@@ -78,10 +79,10 @@ class _HomePageState extends State<HomePage>
     );
   }
 
-  Widget get searchBarAndUser {
+  Widget searchBarAndUser(ThemeData theme) {
     return Row(
       children: [
-        searchBar,
+        searchBar(theme),
         const SizedBox(width: 4),
         Obx(
           () => _homeController.isLogin.value
@@ -108,9 +109,7 @@ class _HomePageState extends State<HomePage>
                           child: InkWell(
                             onTap: () =>
                                 _homeController.showUserInfoDialog(context),
-                            splashColor: Theme.of(context)
-                                .colorScheme
-                                .primaryContainer
+                            splashColor: theme.colorScheme.primaryContainer
                                 .withOpacity(0.3),
                             borderRadius: const BorderRadius.all(
                               Radius.circular(50),
@@ -126,17 +125,14 @@ class _HomePageState extends State<HomePage>
                                 child: Container(
                                   padding: const EdgeInsets.all(2),
                                   decoration: BoxDecoration(
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .secondaryContainer,
+                                    color: theme.colorScheme.secondaryContainer,
                                     shape: BoxShape.circle,
                                   ),
                                   child: Icon(
                                     size: 16,
                                     MdiIcons.incognito,
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .onSecondaryContainer,
+                                    color:
+                                        theme.colorScheme.onSecondaryContainer,
                                   ),
                                 ),
                               )
@@ -144,7 +140,8 @@ class _HomePageState extends State<HomePage>
                       ),
                     ],
                   )
-                : DefaultUser(
+                : defaultUser(
+                    theme: theme,
                     onPressed: () =>
                         _homeController.showUserInfoDialog(context),
                   ),
@@ -154,7 +151,7 @@ class _HomePageState extends State<HomePage>
     );
   }
 
-  Widget get customAppBar {
+  Widget customAppBar(ThemeData theme) {
     return StreamBuilder(
       stream: _homeController.hideSearchBar
           ? _mainController.navSearchStreamDebounce
@@ -173,14 +170,14 @@ class _HomePageState extends State<HomePage>
             duration: const Duration(milliseconds: 500),
             height: snapshot.data ? 52 : 0,
             padding: const EdgeInsets.fromLTRB(14, 6, 14, 0),
-            child: searchBarAndUser,
+            child: searchBarAndUser(theme),
           ),
         );
       },
     );
   }
 
-  Widget get searchBar {
+  Widget searchBar(ThemeData theme) {
     return Expanded(
       child: Container(
         height: 44,
@@ -189,13 +186,9 @@ class _HomePageState extends State<HomePage>
           borderRadius: BorderRadius.circular(25),
         ),
         child: Material(
-          color: Theme.of(context)
-              .colorScheme
-              .onSecondaryContainer
-              .withOpacity(0.05),
+          color: theme.colorScheme.onSecondaryContainer.withOpacity(0.05),
           child: InkWell(
-            splashColor:
-                Theme.of(context).colorScheme.primaryContainer.withOpacity(0.3),
+            splashColor: theme.colorScheme.primaryContainer.withOpacity(0.3),
             onTap: () => Get.toNamed(
               '/search',
               parameters: {
@@ -208,7 +201,7 @@ class _HomePageState extends State<HomePage>
                 const SizedBox(width: 14),
                 Icon(
                   Icons.search_outlined,
-                  color: Theme.of(context).colorScheme.onSecondaryContainer,
+                  color: theme.colorScheme.onSecondaryContainer,
                   semanticLabel: '搜索',
                 ),
                 const SizedBox(width: 10),
@@ -219,8 +212,7 @@ class _HomePageState extends State<HomePage>
                         _homeController.defaultSearch.value,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                            color: Theme.of(context).colorScheme.outline),
+                        style: TextStyle(color: theme.colorScheme.outline),
                       ),
                     ),
                   ),
@@ -235,32 +227,29 @@ class _HomePageState extends State<HomePage>
   }
 }
 
-class DefaultUser extends StatelessWidget {
-  const DefaultUser({super.key, required this.onPressed});
-  final VoidCallback onPressed;
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: 38,
-      height: 38,
-      child: IconButton(
-        tooltip: '默认用户头像',
-        style: ButtonStyle(
-          padding: WidgetStateProperty.all(EdgeInsets.zero),
-          backgroundColor: WidgetStateProperty.resolveWith((states) {
-            return Theme.of(context).colorScheme.onInverseSurface;
-          }),
-        ),
-        onPressed: onPressed,
-        icon: Icon(
-          Icons.person_rounded,
-          size: 22,
-          color: Theme.of(context).colorScheme.primary,
-        ),
+Widget defaultUser({
+  required ThemeData theme,
+  required VoidCallback onPressed,
+}) {
+  return SizedBox(
+    width: 38,
+    height: 38,
+    child: IconButton(
+      tooltip: '默认用户头像',
+      style: ButtonStyle(
+        padding: WidgetStateProperty.all(EdgeInsets.zero),
+        backgroundColor: WidgetStateProperty.resolveWith((states) {
+          return theme.colorScheme.onInverseSurface;
+        }),
       ),
-    );
-  }
+      onPressed: onPressed,
+      icon: Icon(
+        Icons.person_rounded,
+        size: 22,
+        color: theme.colorScheme.primary,
+      ),
+    ),
+  );
 }
 
 Widget msgBadge(MainController mainController) {

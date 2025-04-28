@@ -16,6 +16,7 @@ class MemberFavItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Material(
       color: Colors.transparent,
       child: InkWell(
@@ -58,7 +59,6 @@ class MemberFavItem extends StatelessWidget {
         },
         onLongPress: () {
           imageSaveDialog(
-            context: context,
             title: item.title,
             cover: item.cover,
           );
@@ -100,12 +100,12 @@ class MemberFavItem extends StatelessWidget {
                               padding: const EdgeInsets.all(5),
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
-                                color: Theme.of(context).colorScheme.primary,
+                                color: theme.colorScheme.primary,
                               ),
                               child: Icon(
                                 Icons.video_library_outlined,
                                 size: 12,
-                                color: Theme.of(context).colorScheme.onPrimary,
+                                color: theme.colorScheme.onPrimary,
                               ),
                             ),
                           ),
@@ -136,7 +136,7 @@ class MemberFavItem extends StatelessWidget {
                                   : '${item.mediaCount}个内容',
                       style: TextStyle(
                         fontSize: 12,
-                        color: Theme.of(context).colorScheme.outline,
+                        color: theme.colorScheme.outline,
                       ),
                     ),
                   ],

@@ -42,11 +42,6 @@ class SettingPage extends StatefulWidget {
 class _SettingPageState extends State<SettingPage> {
   late String _type = 'privacySetting';
   final RxBool _noAccount = Accounts.accountMode.isEmpty.obs;
-  TextStyle get _titleStyle => Theme.of(context).textTheme.titleMedium!;
-  TextStyle get _subTitleStyle => Theme.of(context)
-      .textTheme
-      .labelMedium!
-      .copyWith(color: Theme.of(context).colorScheme.outline);
   bool get _isPortrait => context.orientation == Orientation.portrait;
 
   final List<_SettingsModel> _items = [
@@ -100,6 +95,7 @@ class _SettingPageState extends State<SettingPage> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(
         title: _isPortrait
@@ -117,7 +113,7 @@ class _SettingPageState extends State<SettingPage> {
               }),
       ),
       body: _isPortrait
-          ? _buildList
+          ? _buildList(theme)
           : Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -127,12 +123,12 @@ class _SettingPageState extends State<SettingPage> {
                     context: context,
                     removeRight: true,
                     removeTop: true,
-                    child: _buildList,
+                    child: _buildList(theme),
                   ),
                 ),
                 VerticalDivider(
                   width: 1,
-                  color: Theme.of(context).colorScheme.outline.withOpacity(0.1),
+                  color: theme.colorScheme.outline.withOpacity(0.1),
                 ),
                 Expanded(
                   flex: 6,
@@ -167,29 +163,30 @@ class _SettingPageState extends State<SettingPage> {
     }
   }
 
-  Color? _getTileColor(String name) {
+  Color? _getTileColor(ThemeData theme, String name) {
     if (_isPortrait) {
       return null;
     } else {
-      return name == _type
-          ? Theme.of(context).colorScheme.onInverseSurface
-          : null;
+      return name == _type ? theme.colorScheme.onInverseSurface : null;
     }
   }
 
-  Widget get _buildList {
+  Widget _buildList(ThemeData theme) {
+    TextStyle titleStyle = theme.textTheme.titleMedium!;
+    TextStyle subTitleStyle =
+        theme.textTheme.labelMedium!.copyWith(color: theme.colorScheme.outline);
     return ListView(
       children: [
-        _buildSearchItem,
+        _buildSearchItem(theme),
         ..._items.sublist(0, _items.length - 1).map(
               (item) => ListTile(
-                tileColor: _getTileColor(item.name),
+                tileColor: _getTileColor(theme, item.name),
                 onTap: () => _toPage(item.name),
                 leading: Icon(item.icon),
-                title: Text(item.title, style: _titleStyle),
+                title: Text(item.title, style: titleStyle),
                 subtitle: item.subtitle == null
                     ? null
-                    : Text(item.subtitle!, style: _subTitleStyle),
+                    : Text(item.subtitle!, style: subTitleStyle),
               ),
             ),
         ListTile(
@@ -203,14 +200,14 @@ class _SettingPageState extends State<SettingPage> {
               : ListTile(
                   leading: const Icon(Icons.logout_outlined),
                   onTap: () => _logoutDialog(context),
-                  title: Text('退出登录', style: _titleStyle),
+                  title: Text('退出登录', style: titleStyle),
                 ),
         ),
         ListTile(
-          tileColor: _getTileColor(_items.last.name),
+          tileColor: _getTileColor(theme, _items.last.name),
           onTap: () => _toPage(_items.last.name),
           leading: Icon(_items.last.icon),
-          title: Text(_items.last.title, style: _titleStyle),
+          title: Text(_items.last.title, style: titleStyle),
         ),
         SizedBox(height: MediaQuery.paddingOf(context).bottom + 80),
       ],
@@ -234,9 +231,10 @@ class _SettingPageState extends State<SettingPage> {
       return Accounts.deleteAll(result);
     }
 
-    await showDialog(
+    showDialog(
         context: context,
         builder: (context) {
+          final theme = Theme.of(context);
           return AlertDialog(
             title: const Text('提示'),
             content: Text(
@@ -247,7 +245,7 @@ class _SettingPageState extends State<SettingPage> {
                 child: Text(
                   '点错了',
                   style: TextStyle(
-                    color: Theme.of(context).colorScheme.outline,
+                    color: theme.colorScheme.outline,
                   ),
                 ),
               ),
@@ -258,7 +256,7 @@ class _SettingPageState extends State<SettingPage> {
                 },
                 child: Text(
                   '仅登出',
-                  style: TextStyle(color: Theme.of(context).colorScheme.error),
+                  style: TextStyle(color: theme.colorScheme.error),
                 ),
               ),
               TextButton(
@@ -281,7 +279,7 @@ class _SettingPageState extends State<SettingPage> {
         });
   }
 
-  Widget get _buildSearchItem => Padding(
+  Widget _buildSearchItem(ThemeData theme) => Padding(
         padding: const EdgeInsets.only(left: 16, right: 16, bottom: 5),
         child: InkWell(
           onTap: () => Get.toNamed('/settingsSearch'),
@@ -290,7 +288,7 @@ class _SettingPageState extends State<SettingPage> {
             padding: const EdgeInsets.symmetric(vertical: 6),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(50),
-              color: Theme.of(context).colorScheme.onInverseSurface,
+              color: theme.colorScheme.onInverseSurface,
             ),
             child: Center(
               child: Row(

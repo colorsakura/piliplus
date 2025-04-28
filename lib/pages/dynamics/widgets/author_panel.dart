@@ -241,6 +241,7 @@ class AuthorPanel extends StatelessWidget {
         maxWidth: min(640, min(Get.width, Get.height)),
       ),
       builder: (context1) {
+        final theme = Theme.of(context);
         return Padding(
           padding:
               EdgeInsets.only(bottom: MediaQuery.of(context1).padding.bottom),
@@ -261,7 +262,7 @@ class AuthorPanel extends StatelessWidget {
                       width: 32,
                       height: 3,
                       decoration: BoxDecoration(
-                          color: Theme.of(context).colorScheme.outline,
+                          color: theme.colorScheme.outline,
                           borderRadius:
                               const BorderRadius.all(Radius.circular(3))),
                     ),
@@ -283,7 +284,7 @@ class AuthorPanel extends StatelessWidget {
                   leading: const Icon(Icons.watch_later_outlined, size: 19),
                   title: Text(
                     '稍后再看',
-                    style: Theme.of(context).textTheme.titleSmall,
+                    style: theme.textTheme.titleSmall,
                   ),
                 ),
               ListTile(
@@ -293,13 +294,12 @@ class AuthorPanel extends StatelessWidget {
                 },
                 minLeadingWidth: 0,
                 leading: const Icon(Icons.save_alt, size: 19),
-                title: Text('保存动态',
-                    style: Theme.of(context).textTheme.titleSmall!),
+                title: Text('保存动态', style: theme.textTheme.titleSmall!),
               ),
               ListTile(
                 title: Text(
                   '分享动态',
-                  style: Theme.of(context).textTheme.titleSmall,
+                  style: theme.textTheme.titleSmall,
                 ),
                 leading: const Icon(Icons.share_outlined, size: 19),
                 onTap: () {
@@ -314,7 +314,7 @@ class AuthorPanel extends StatelessWidget {
                 ListTile(
                   title: Text(
                     '分享至消息',
-                    style: Theme.of(context).textTheme.titleSmall,
+                    style: theme.textTheme.titleSmall,
                   ),
                   leading: const Icon(Icons.forward_to_inbox, size: 19),
                   onTap: () {
@@ -359,7 +359,7 @@ class AuthorPanel extends StatelessWidget {
               ListTile(
                 title: Text(
                   '临时屏蔽：${item.modules.moduleAuthor?.name}',
-                  style: Theme.of(context).textTheme.titleSmall,
+                  style: theme.textTheme.titleSmall,
                 ),
                 leading: const Icon(Icons.visibility_off_outlined, size: 19),
                 onTap: () {
@@ -387,8 +387,7 @@ class AuthorPanel extends StatelessWidget {
                       Icon(Icons.published_with_changes_sharp, size: 12),
                     ],
                   ),
-                  title: Text('检查动态',
-                      style: Theme.of(context).textTheme.titleSmall!),
+                  title: Text('检查动态', style: theme.textTheme.titleSmall!),
                 ),
                 if (onSetTop != null)
                   ListTile(
@@ -401,7 +400,7 @@ class AuthorPanel extends StatelessWidget {
                     leading: const Icon(Icons.vertical_align_top, size: 19),
                     title: Text(
                         '${item.modules.moduleTag?.text != null ? '取消' : ''}置顶',
-                        style: Theme.of(context).textTheme.titleSmall!),
+                        style: theme.textTheme.titleSmall!),
                   ),
                 if (onRemove != null)
                   ListTile(
@@ -417,7 +416,7 @@ class AuthorPanel extends StatelessWidget {
                               child: Text(
                                 '取消',
                                 style: TextStyle(
-                                  color: Theme.of(context).colorScheme.outline,
+                                  color: theme.colorScheme.outline,
                                 ),
                               ),
                             ),
@@ -434,24 +433,24 @@ class AuthorPanel extends StatelessWidget {
                     },
                     minLeadingWidth: 0,
                     leading: Icon(Icons.delete_outline,
-                        color: Theme.of(context).colorScheme.error, size: 19),
+                        color: theme.colorScheme.error, size: 19),
                     title: Text('删除',
-                        style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                            color: Theme.of(context).colorScheme.error)),
+                        style: theme.textTheme.titleSmall!
+                            .copyWith(color: theme.colorScheme.error)),
                   ),
               ],
               if (Accounts.main.isLogin)
                 ListTile(
                   title: Text(
                     '举报',
-                    style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                          color: Theme.of(context).colorScheme.error,
-                        ),
+                    style: theme.textTheme.titleSmall!.copyWith(
+                      color: theme.colorScheme.error,
+                    ),
                   ),
                   leading: Icon(
                     Icons.error_outline_outlined,
                     size: 19,
-                    color: Theme.of(context).colorScheme.error,
+                    color: theme.colorScheme.error,
                   ),
                   onTap: () {
                     Get.back();
@@ -483,8 +482,7 @@ class AuthorPanel extends StatelessWidget {
                 dense: true,
                 title: Text(
                   '取消',
-                  style:
-                      TextStyle(color: Theme.of(context).colorScheme.outline),
+                  style: TextStyle(color: theme.colorScheme.outline),
                   textAlign: TextAlign.center,
                 ),
               ),

@@ -73,6 +73,7 @@ class _SharePanelState extends State<SharePanel> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Padding(
       padding: const EdgeInsets.all(12) +
           MediaQuery.paddingOf(context) +
@@ -141,15 +142,12 @@ class _SharePanelState extends State<SharePanel> {
                                 width: 50,
                                 height: 50,
                                 decoration: BoxDecoration(
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .primary
+                                  color: theme.colorScheme.primary
                                       .withOpacity(0.3),
                                   shape: BoxShape.circle,
                                   border: Border.all(
                                     width: 1.5,
-                                    color:
-                                        Theme.of(context).colorScheme.primary,
+                                    color: theme.colorScheme.primary,
                                   ),
                                 ),
                                 child: Icon(
@@ -195,15 +193,11 @@ class _SharePanelState extends State<SharePanel> {
                           height: 40,
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            color: Theme.of(context)
-                                .colorScheme
-                                .secondaryContainer,
+                            color: theme.colorScheme.secondaryContainer,
                           ),
                           child: Icon(
                             Icons.person_add_alt,
-                            color: Theme.of(context)
-                                .colorScheme
-                                .onSecondaryContainer,
+                            color: theme.colorScheme.onSecondaryContainer,
                           ),
                         ),
                       ),
@@ -236,7 +230,7 @@ class _SharePanelState extends State<SharePanel> {
                     isDense: true,
                     contentPadding:
                         const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                    fillColor: Theme.of(context).colorScheme.onInverseSurface,
+                    fillColor: theme.colorScheme.onInverseSurface,
                   ),
                 ),
               ),

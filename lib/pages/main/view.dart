@@ -173,6 +173,7 @@ class _MainAppState extends State<MainApp>
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     final bool isPortrait = context.orientation == Orientation.portrait;
     return PopScope(
       canPop: false,
@@ -192,8 +193,7 @@ class _MainAppState extends State<MainApp>
       child: AnnotatedRegion<SystemUiOverlayStyle>(
         value: SystemUiOverlayStyle(
           systemNavigationBarColor: Colors.transparent,
-          systemNavigationBarIconBrightness:
-              Theme.of(context).brightness.reverse,
+          systemNavigationBarIconBrightness: theme.brightness.reverse,
         ),
         child: Scaffold(
           resizeToAvoidBottomInset: false,
@@ -210,7 +210,7 @@ class _MainAppState extends State<MainApp>
                                 SizedBox(
                                     height:
                                         MediaQuery.paddingOf(context).top + 50),
-                                userAndSearchVertical,
+                                userAndSearchVertical(theme),
                                 const Spacer(flex: 2),
                                 Expanded(
                                   flex: 5,
@@ -259,7 +259,7 @@ class _MainAppState extends State<MainApp>
                                   _mainController.selectedIndex.value,
                               onDestinationSelected: setIndex,
                               labelType: NavigationRailLabelType.selected,
-                              leading: userAndSearchVertical,
+                              leading: userAndSearchVertical(theme),
                               destinations: _mainController.navigationBars
                                   .map(
                                     (e) => NavigationRailDestination(
@@ -285,7 +285,7 @@ class _MainAppState extends State<MainApp>
                               top: 10,
                             ),
                             width: 80,
-                            child: userAndSearchVertical,
+                            child: userAndSearchVertical(theme),
                           ),
                         ),
                 ),
@@ -293,8 +293,7 @@ class _MainAppState extends State<MainApp>
                   width: 1,
                   indent: MediaQuery.of(context).padding.top,
                   endIndent: MediaQuery.of(context).padding.bottom,
-                  color:
-                      Theme.of(context).colorScheme.outline.withOpacity(0.06),
+                  color: theme.colorScheme.outline.withOpacity(0.06),
                 ),
               ],
               Expanded(
@@ -418,7 +417,7 @@ class _MainAppState extends State<MainApp>
             )
           : icon;
 
-  Widget get userAndSearchVertical {
+  Widget userAndSearchVertical(ThemeData theme) {
     return Column(
       children: [
         Semantics(
@@ -440,9 +439,7 @@ class _MainAppState extends State<MainApp>
                           child: InkWell(
                             onTap: () =>
                                 _homeController.showUserInfoDialog(context),
-                            splashColor: Theme.of(context)
-                                .colorScheme
-                                .primaryContainer
+                            splashColor: theme.colorScheme.primaryContainer
                                 .withOpacity(0.3),
                             borderRadius: const BorderRadius.all(
                               Radius.circular(50),
@@ -458,17 +455,14 @@ class _MainAppState extends State<MainApp>
                                 child: Container(
                                   padding: const EdgeInsets.all(2),
                                   decoration: BoxDecoration(
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .secondaryContainer,
+                                    color: theme.colorScheme.secondaryContainer,
                                     shape: BoxShape.circle,
                                   ),
                                   child: Icon(
                                     size: 16,
                                     MdiIcons.incognito,
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .onSecondaryContainer,
+                                    color:
+                                        theme.colorScheme.onSecondaryContainer,
                                   ),
                                 ),
                               )
@@ -476,9 +470,11 @@ class _MainAppState extends State<MainApp>
                       ),
                     ],
                   )
-                : DefaultUser(
+                : defaultUser(
+                    theme: theme,
                     onPressed: () =>
-                        _homeController.showUserInfoDialog(context)),
+                        _homeController.showUserInfoDialog(context),
+                  ),
           ),
         ),
         const SizedBox(height: 8),

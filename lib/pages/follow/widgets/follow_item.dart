@@ -23,6 +23,7 @@ class FollowItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     String heroTag = Utils.makeHeroTag(item.mid);
     return ListTile(
       onTap: () {
@@ -60,7 +61,7 @@ class FollowItem extends StatelessWidget {
               child: Container(
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: Theme.of(context).colorScheme.surface,
+                  color: theme.colorScheme.surface,
                 ),
                 child: Icon(
                   Icons.offline_bolt,
@@ -99,12 +100,11 @@ class FollowItem extends StatelessWidget {
                 },
                 style: FilledButton.styleFrom(
                   padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
-                  foregroundColor: item.attribute == -1
-                      ? null
-                      : Theme.of(context).colorScheme.outline,
+                  foregroundColor:
+                      item.attribute == -1 ? null : theme.colorScheme.outline,
                   backgroundColor: item.attribute == -1
                       ? null
-                      : Theme.of(context).colorScheme.onInverseSurface,
+                      : theme.colorScheme.onInverseSurface,
                 ),
                 child: Text(
                   '${item.attribute == -1 ? '' : '已'}关注',

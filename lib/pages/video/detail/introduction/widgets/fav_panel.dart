@@ -31,6 +31,7 @@ class _FavPanelState extends State<FavPanel> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return NotificationListener<DraggableScrollableNotification>(
       onNotification: (notification) {
         if (notification.extent <= 1e-5) {
@@ -62,7 +63,7 @@ class _FavPanelState extends State<FavPanel> {
                 },
                 icon: Icon(
                   Icons.add,
-                  color: Theme.of(context).colorScheme.primary,
+                  color: theme.colorScheme.primary,
                 ),
                 label: const Text('新建收藏夹'),
                 style: TextButton.styleFrom(
@@ -156,7 +157,7 @@ class _FavPanelState extends State<FavPanel> {
           ),
           Divider(
             height: 1,
-            color: Theme.of(context).disabledColor.withOpacity(0.08),
+            color: theme.disabledColor.withOpacity(0.08),
           ),
           Padding(
             padding: EdgeInsets.only(
@@ -177,9 +178,8 @@ class _FavPanelState extends State<FavPanel> {
                       horizontal: -1,
                       vertical: -2,
                     ),
-                    foregroundColor: Theme.of(context).colorScheme.outline,
-                    backgroundColor:
-                        Theme.of(context).colorScheme.onInverseSurface,
+                    foregroundColor: theme.colorScheme.outline,
+                    backgroundColor: theme.colorScheme.onInverseSurface,
                   ),
                   child: const Text('取消'),
                 ),

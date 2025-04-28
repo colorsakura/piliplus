@@ -27,7 +27,6 @@ class BangumiCardVMemberHome extends StatelessWidget {
           PageUtils.viewBangumi(seasonId: seasonId);
         },
         onLongPress: () => imageSaveDialog(
-          context: context,
           title: bangumiItem.title,
           cover: bangumiItem.cover,
         ),

@@ -29,6 +29,7 @@ class _SysMsgPageState extends State<SysMsgPage> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(
         title: const Text('系统通知'),
@@ -43,8 +44,8 @@ class _SysMsgPageState extends State<SysMsgPage> {
             SliverPadding(
               padding: EdgeInsets.only(
                   bottom: MediaQuery.paddingOf(context).bottom + 80),
-              sliver:
-                  Obx(() => _buildBody(_sysMsgController.loadingState.value)),
+              sliver: Obx(() =>
+                  _buildBody(theme, _sysMsgController.loadingState.value)),
             ),
           ],
         ),
@@ -52,7 +53,8 @@ class _SysMsgPageState extends State<SysMsgPage> {
     );
   }
 
-  Widget _buildBody(LoadingState<List<SystemNotifyList>?> loadingState) {
+  Widget _buildBody(
+      ThemeData theme, LoadingState<List<SystemNotifyList>?> loadingState) {
     return switch (loadingState) {
       Loading() => SliverSafeArea(
           sliver: SliverList.builder(
@@ -92,20 +94,17 @@ class _SysMsgPageState extends State<SysMsgPage> {
                   },
                   title: Text(
                     "${item.title}",
-                    style: Theme.of(context).textTheme.titleMedium,
+                    style: theme.textTheme.titleMedium,
                   ),
                   subtitle: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const SizedBox(height: 4),
                       Text.rich(
-                        _buildContent(content ?? ''),
+                        _buildContent(theme, content ?? ''),
                         style: TextStyle(
                           fontSize: 14,
-                          color: Theme.of(context)
-                              .colorScheme
-                              .onSurface
-                              .withOpacity(0.85),
+                          color: theme.colorScheme.onSurface.withOpacity(0.85),
                         ),
                       ),
                       const SizedBox(height: 5),
@@ -115,13 +114,10 @@ class _SysMsgPageState extends State<SysMsgPage> {
                           "${item.timeAt}",
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyMedium!
-                              .copyWith(
-                                fontSize: 13,
-                                color: Theme.of(context).colorScheme.outline,
-                              ),
+                          style: theme.textTheme.bodyMedium!.copyWith(
+                            fontSize: 13,
+                            color: theme.colorScheme.outline,
+                          ),
                           textAlign: TextAlign.end,
                         ),
                       ),
@@ -146,7 +142,7 @@ class _SysMsgPageState extends State<SysMsgPage> {
     };
   }
 
-  InlineSpan _buildContent(String content) {
+  InlineSpan _buildContent(ThemeData theme, String content) {
     final List<InlineSpan> spanChildren = <InlineSpan>[];
     RegExp urlRegExp = RegExp(
         r'#\{([^}]*)\}\{([^}]*)\}|https?:\/\/[^\s/\$.?#].[^\s]*|www\.[^\s/\$.?#].[^\s]*|【(.*?)】|（(\d+)）');
@@ -158,7 +154,7 @@ class _SysMsgPageState extends State<SysMsgPage> {
           spanChildren.add(
             TextSpan(
               text: match[1],
-              style: TextStyle(color: Theme.of(context).colorScheme.primary),
+              style: TextStyle(color: theme.colorScheme.primary),
               recognizer: TapGestureRecognizer()
                 ..onTap = () {
                   try {
@@ -181,7 +177,7 @@ class _SysMsgPageState extends State<SysMsgPage> {
             spanChildren.add(
               TextSpan(
                 text: match[3],
-                style: TextStyle(color: Theme.of(context).colorScheme.primary),
+                style: TextStyle(color: theme.colorScheme.primary),
                 recognizer: TapGestureRecognizer()
                   ..onTap = () {
                     try {
@@ -206,7 +202,7 @@ class _SysMsgPageState extends State<SysMsgPage> {
             spanChildren.add(
               TextSpan(
                 text: '查看动态',
-                style: TextStyle(color: Theme.of(context).colorScheme.primary),
+                style: TextStyle(color: theme.colorScheme.primary),
                 recognizer: TapGestureRecognizer()
                   ..onTap = () {
                     try {
@@ -225,7 +221,7 @@ class _SysMsgPageState extends State<SysMsgPage> {
           spanChildren.add(
             TextSpan(
               text: '\u{1F517}网页链接',
-              style: TextStyle(color: Theme.of(context).colorScheme.primary),
+              style: TextStyle(color: theme.colorScheme.primary),
               recognizer: TapGestureRecognizer()
                 ..onTap = () {
                   try {

@@ -23,10 +23,11 @@ class ActionRowItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Material(
       color: selectStatus
-          ? Theme.of(context).colorScheme.primaryContainer.withOpacity(0.6)
-          : Theme.of(context).highlightColor.withOpacity(0.2),
+          ? theme.colorScheme.primaryContainer.withOpacity(0.6)
+          : theme.highlightColor.withOpacity(0.2),
       borderRadius: const BorderRadius.all(Radius.circular(30)),
       clipBehavior: Clip.hardEdge,
       child: InkWell(
@@ -47,8 +48,8 @@ class ActionRowItem extends StatelessWidget {
                 Icon(icon!.icon!,
                     size: 13,
                     color: selectStatus
-                        ? Theme.of(context).colorScheme.primary
-                        : Theme.of(context).colorScheme.onSecondaryContainer),
+                        ? theme.colorScheme.primary
+                        : theme.colorScheme.onSecondaryContainer),
                 const SizedBox(width: 6),
               ],
               AnimatedOpacity(
@@ -64,11 +65,8 @@ class ActionRowItem extends StatelessWidget {
                     text ?? '',
                     key: ValueKey<String>(text ?? ''),
                     style: TextStyle(
-                        color: selectStatus
-                            ? Theme.of(context).colorScheme.primary
-                            : null,
-                        fontSize:
-                            Theme.of(context).textTheme.labelMedium!.fontSize),
+                        color: selectStatus ? theme.colorScheme.primary : null,
+                        fontSize: theme.textTheme.labelMedium!.fontSize),
                   ),
                 ),
               ),

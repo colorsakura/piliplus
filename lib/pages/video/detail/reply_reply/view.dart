@@ -93,8 +93,8 @@ class _VideoReplyReplyPanelState
     super.dispose();
   }
 
-  Widget get _header => firstFloor == null
-      ? _sortWidget
+  Widget _header(ThemeData theme) => firstFloor == null
+      ? _sortWidget(theme)
       : ValueListenableBuilder<Iterable<ItemPosition>>(
           valueListenable: itemPositionsListener.itemPositions,
           builder: (context, positions, child) {
@@ -109,139 +109,144 @@ class _VideoReplyReplyPanelState
                           : min)
                   .index;
             }
-            return min >= 2 ? _sortWidget : const SizedBox.shrink();
+            return min >= 2 ? _sortWidget(theme) : const SizedBox.shrink();
           },
         );
 
   @override
-  Widget get buildPage => Scaffold(
-        key: _key,
-        resizeToAvoidBottomInset: false,
-        body: Column(
-          children: [
-            widget.source == 'videoDetail'
-                ? Container(
-                    height: 45,
-                    decoration: BoxDecoration(
-                      border: Border(
-                        bottom: BorderSide(
-                          width: 1,
-                          color:
-                              Theme.of(context).dividerColor.withOpacity(0.1),
-                        ),
+  Widget buildPage(ThemeData theme) {
+    return Scaffold(
+      key: _key,
+      resizeToAvoidBottomInset: false,
+      body: Column(
+        children: [
+          widget.source == 'videoDetail'
+              ? Container(
+                  height: 45,
+                  decoration: BoxDecoration(
+                    border: Border(
+                      bottom: BorderSide(
+                        width: 1,
+                        color: theme.dividerColor.withOpacity(0.1),
                       ),
                     ),
-                    padding: const EdgeInsets.only(left: 12, right: 2),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Text(widget.isDialogue ? '对话列表' : '评论详情'),
-                        IconButton(
-                          tooltip: '关闭',
-                          icon: const Icon(Icons.close, size: 20),
-                          onPressed: Get.back,
-                        ),
-                      ],
-                    ),
-                  )
-                : Divider(
-                    height: 1,
-                    color: Theme.of(context).dividerColor.withOpacity(0.1),
                   ),
-            Expanded(
-              child: enableSlide ? slideList() : buildList,
-            ),
-          ],
-        ),
-      );
+                  padding: const EdgeInsets.only(left: 12, right: 2),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Text(widget.isDialogue ? '对话列表' : '评论详情'),
+                      IconButton(
+                        tooltip: '关闭',
+                        icon: const Icon(Icons.close, size: 20),
+                        onPressed: Get.back,
+                      ),
+                    ],
+                  ),
+                )
+              : Divider(
+                  height: 1,
+                  color: theme.dividerColor.withOpacity(0.1),
+                ),
+          Expanded(
+            child: enableSlide ? slideList(theme) : buildList(theme),
+          ),
+        ],
+      ),
+    );
+  }
 
   @override
-  Widget get buildList => ClipRect(
-        child: refreshIndicator(
-          onRefresh: () async {
-            await _videoReplyReplyController.onRefresh();
-          },
-          child: Obx(
-            () => Stack(
-              children: [
-                ScrollablePositionedList.builder(
-                  key: _listKey,
-                  itemPositionsListener: itemPositionsListener,
-                  itemCount:
-                      _itemCount(_videoReplyReplyController.loadingState.value),
-                  itemScrollController:
-                      _videoReplyReplyController.itemScrollCtr,
-                  physics: const AlwaysScrollableScrollPhysics(),
-                  itemBuilder: (context, index) {
-                    if (widget.isDialogue) {
-                      return _buildBody(
-                          _videoReplyReplyController.loadingState.value, index);
-                    } else if (firstFloor != null) {
-                      if (index == 0) {
-                        return ReplyItemGrpc(
-                          replyItem: firstFloor,
-                          replyLevel: '2',
-                          needDivider: false,
-                          onReply: () {
-                            _onReply(firstFloor, -1);
-                          },
-                          upMid: _videoReplyReplyController.upMid,
-                          onViewImage: widget.onViewImage,
-                          onDismissed: widget.onDismissed,
-                          callback: _getImageCallback,
-                          onCheckReply: (item) => _videoReplyReplyController
-                              .onCheckReply(context, item),
-                          onToggleTop: (isUpTop, rpid) =>
-                              _videoReplyReplyController.onToggleTop(
-                            index,
-                            _videoReplyReplyController.oid,
-                            _videoReplyReplyController.replyType.index,
-                            isUpTop,
-                            rpid,
-                          ),
-                        );
-                      } else if (index == 1) {
-                        return Divider(
-                          height: 20,
-                          color:
-                              Theme.of(context).dividerColor.withOpacity(0.1),
-                          thickness: 6,
-                        );
-                      } else if (index == 2) {
-                        return _sortWidget;
-                      } else {
-                        return _buildBody(
-                            _videoReplyReplyController.loadingState.value,
-                            index - 3);
-                      }
+  Widget buildList(ThemeData theme) {
+    return ClipRect(
+      child: refreshIndicator(
+        onRefresh: () async {
+          await _videoReplyReplyController.onRefresh();
+        },
+        child: Obx(
+          () => Stack(
+            children: [
+              ScrollablePositionedList.builder(
+                key: _listKey,
+                itemPositionsListener: itemPositionsListener,
+                itemCount:
+                    _itemCount(_videoReplyReplyController.loadingState.value),
+                itemScrollController: _videoReplyReplyController.itemScrollCtr,
+                physics: const AlwaysScrollableScrollPhysics(),
+                itemBuilder: (context, index) {
+                  if (widget.isDialogue) {
+                    return _buildBody(theme,
+                        _videoReplyReplyController.loadingState.value, index);
+                  } else if (firstFloor != null) {
+                    if (index == 0) {
+                      return ReplyItemGrpc(
+                        replyItem: firstFloor,
+                        replyLevel: '2',
+                        needDivider: false,
+                        onReply: () {
+                          _onReply(firstFloor, -1);
+                        },
+                        upMid: _videoReplyReplyController.upMid,
+                        onViewImage: widget.onViewImage,
+                        onDismissed: widget.onDismissed,
+                        callback: _getImageCallback,
+                        onCheckReply: (item) => _videoReplyReplyController
+                            .onCheckReply(context, item),
+                        onToggleTop: (isUpTop, rpid) =>
+                            _videoReplyReplyController.onToggleTop(
+                          index,
+                          _videoReplyReplyController.oid,
+                          _videoReplyReplyController.replyType.index,
+                          isUpTop,
+                          rpid,
+                        ),
+                      );
+                    } else if (index == 1) {
+                      return Divider(
+                        height: 20,
+                        color: theme.dividerColor.withOpacity(0.1),
+                        thickness: 6,
+                      );
+                    } else if (index == 2) {
+                      return _sortWidget(theme);
                     } else {
-                      if (index == 0) {
-                        return _sortWidget;
-                      } else {
-                        return _buildBody(
-                            _videoReplyReplyController.loadingState.value,
-                            index - 1);
-                      }
+                      return _buildBody(
+                        theme,
+                        _videoReplyReplyController.loadingState.value,
+                        index - 3,
+                      );
                     }
-                  },
-                ),
-                if (!widget.isDialogue &&
-                    _videoReplyReplyController.loadingState.value is Success)
-                  _header,
-              ],
-            ),
+                  } else {
+                    if (index == 0) {
+                      return _sortWidget(theme);
+                    } else {
+                      return _buildBody(
+                        theme,
+                        _videoReplyReplyController.loadingState.value,
+                        index - 1,
+                      );
+                    }
+                  }
+                },
+              ),
+              if (!widget.isDialogue &&
+                  _videoReplyReplyController.loadingState.value is Success)
+                _header(theme),
+            ],
           ),
         ),
-      );
+      ),
+    );
+  }
 
-  Widget get _sortWidget => Container(
+  Widget _sortWidget(ThemeData theme) => Container(
         height: 40,
         padding: const EdgeInsets.fromLTRB(12, 0, 6, 0),
         decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.surface,
+          color: theme.colorScheme.surface,
           boxShadow: [
             BoxShadow(
-              color: Theme.of(context).colorScheme.surface,
+              color: theme.colorScheme.surface,
               offset: const Offset(0, -2),
             ),
           ],
@@ -264,7 +269,7 @@ class _VideoReplyReplyPanelState
                 icon: Icon(
                   Icons.sort,
                   size: 16,
-                  color: Theme.of(context).colorScheme.secondary,
+                  color: theme.colorScheme.secondary,
                 ),
                 label: Obx(
                   () => Text(
@@ -273,7 +278,7 @@ class _VideoReplyReplyPanelState
                         : '按时间',
                     style: TextStyle(
                       fontSize: 13,
-                      color: Theme.of(context).colorScheme.secondary,
+                      color: theme.colorScheme.secondary,
                     ),
                   ),
                 ),
@@ -384,7 +389,7 @@ class _VideoReplyReplyPanelState
     });
   }
 
-  Widget _buildBody(LoadingState loadingState, int index) {
+  Widget _buildBody(ThemeData theme, LoadingState loadingState, int index) {
     return switch (loadingState) {
       Loading() => IgnorePointer(
           child: CustomScrollView(
@@ -416,7 +421,7 @@ class _VideoReplyReplyPanelState
                         : '没有更多了',
                 style: TextStyle(
                   fontSize: 12,
-                  color: Theme.of(context).colorScheme.outline,
+                  color: theme.colorScheme.outline,
                 ),
               ),
             );
@@ -424,15 +429,15 @@ class _VideoReplyReplyPanelState
             if (_videoReplyReplyController.index != null &&
                 _videoReplyReplyController.index == index) {
               colorAnimation ??= ColorTween(
-                begin: Theme.of(context).colorScheme.onInverseSurface,
-                end: Theme.of(context).colorScheme.surface,
+                begin: theme.colorScheme.onInverseSurface,
+                end: theme.colorScheme.surface,
               ).animate(_videoReplyReplyController.controller!);
               return AnimatedBuilder(
                 animation: colorAnimation!,
                 builder: (context, child) {
                   return ColoredBox(
                     color: colorAnimation!.value ??
-                        Theme.of(context).colorScheme.onInverseSurface,
+                        theme.colorScheme.onInverseSurface,
                     child: _replyItem(loadingState.response[index], index),
                   );
                 },

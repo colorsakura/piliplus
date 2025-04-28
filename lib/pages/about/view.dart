@@ -35,9 +35,6 @@ class _AboutPageState extends State<AboutPage> {
 
   late int _pressCount = 0;
 
-  late Color outline;
-  late TextStyle subTitleStyle;
-
   @override
   void initState() {
     super.initState();
@@ -57,15 +54,10 @@ class _AboutPageState extends State<AboutPage> {
   }
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    outline = Theme.of(context).colorScheme.outline;
-    subTitleStyle =
-        TextStyle(fontSize: 13, color: Theme.of(context).colorScheme.outline);
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final outline = theme.colorScheme.outline;
+    final subTitleStyle = TextStyle(fontSize: 13, color: outline);
     return Scaffold(
       appBar:
           widget.showAppBar == false ? null : AppBar(title: const Text('关于')),
@@ -107,8 +99,7 @@ class _AboutPageState extends State<AboutPage> {
             title: Text(
               'PiliPlus',
               textAlign: TextAlign.center,
-              style:
-                  Theme.of(context).textTheme.titleMedium!.copyWith(height: 2),
+              style: theme.textTheme.titleMedium!.copyWith(height: 2),
             ),
             subtitle: Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -153,7 +144,7 @@ Commit Hash: ${BuildConfig.commitHash}''',
           Divider(
             thickness: 1,
             height: 30,
-            color: Theme.of(context).colorScheme.outlineVariant,
+            color: theme.colorScheme.outlineVariant,
           ),
           ListTile(
             onTap: () => PageUtils.launchURL(_sourceCodeUrl),

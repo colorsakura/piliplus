@@ -27,7 +27,6 @@ class FavItem extends StatelessWidget {
           (onTap == null
               ? null
               : () => imageSaveDialog(
-                    context: context,
                     title: favFolderItem.title,
                     cover: favFolderItem.cover,
                   )),
@@ -61,6 +60,9 @@ class FavItem extends StatelessWidget {
   }
 
   Widget videoContent(context) {
+    final theme = Theme.of(context);
+    final fontSize = theme.textTheme.labelMedium!.fontSize;
+    final color = theme.colorScheme.outline;
     return Expanded(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -76,23 +78,23 @@ class FavItem extends StatelessWidget {
             Text(
               favFolderItem.intro!,
               style: TextStyle(
-                fontSize: Theme.of(context).textTheme.labelMedium!.fontSize,
-                color: Theme.of(context).colorScheme.outline,
+                fontSize: fontSize,
+                color: color,
               ),
             ),
           Text(
             '${favFolderItem.mediaCount}个内容',
             style: TextStyle(
-              fontSize: Theme.of(context).textTheme.labelMedium!.fontSize,
-              color: Theme.of(context).colorScheme.outline,
+              fontSize: fontSize,
+              color: color,
             ),
           ),
           const Spacer(),
           Text(
             Utils.isPublicFavText(favFolderItem.attr ?? 0),
             style: TextStyle(
-              fontSize: Theme.of(context).textTheme.labelMedium!.fontSize,
-              color: Theme.of(context).colorScheme.outline,
+              fontSize: fontSize,
+              color: color,
             ),
           ),
         ],

@@ -52,6 +52,7 @@ class _SearchTrendingPageState extends State<SearchTrendingPage> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return LayoutBuilder(builder: (context, constraints) {
       final maxWidth = constraints.maxWidth;
       final width = constraints.maxWidth > constraints.maxHeight
@@ -78,10 +79,8 @@ class _SearchTrendingPageState extends State<SearchTrendingPage> {
                     ),
                   ),
                 ),
-                backgroundColor: Theme.of(context)
-                    .colorScheme
-                    .surface
-                    .withOpacity(_scrollRatio.value),
+                backgroundColor:
+                    theme.colorScheme.surface.withOpacity(_scrollRatio.value),
                 foregroundColor: flag ? null : Colors.white,
                 systemOverlayStyle: flag
                     ? null
@@ -94,10 +93,7 @@ class _SearchTrendingPageState extends State<SearchTrendingPage> {
                         preferredSize: Size.fromHeight(1),
                         child: Divider(
                           height: 1,
-                          color: Theme.of(context)
-                              .colorScheme
-                              .outline
-                              .withOpacity(0.1),
+                          color: theme.colorScheme.outline.withOpacity(0.1),
                         ),
                       )
                     : null,
@@ -134,7 +130,8 @@ class _SearchTrendingPageState extends State<SearchTrendingPage> {
                         },
                       ),
                     ),
-                    Obx(() => _buildBody(_controller.loadingState.value)),
+                    Obx(() =>
+                        _buildBody(theme, _controller.loadingState.value)),
                   ],
                 ),
               ),
@@ -145,7 +142,8 @@ class _SearchTrendingPageState extends State<SearchTrendingPage> {
     });
   }
 
-  Widget _buildBody(LoadingState<List<SearchKeywordList>?> loadingState) {
+  Widget _buildBody(
+      ThemeData theme, LoadingState<List<SearchKeywordList>?> loadingState) {
     return switch (loadingState) {
       Loading() => SliverToBoxAdapter(child: LinearProgressIndicator()),
       Success() => loadingState.response?.isNotEmpty == true
@@ -180,7 +178,7 @@ class _SearchTrendingPageState extends State<SearchTrendingPage> {
                                 0 => const Color(0xFFfdad13),
                                 1 => const Color(0xFF8aace1),
                                 2 => const Color(0xFFdfa777),
-                                _ => Theme.of(context).colorScheme.outline,
+                                _ => theme.colorScheme.outline,
                               },
                               fontSize: 17,
                               fontStyle: FontStyle.italic,
@@ -218,7 +216,7 @@ class _SearchTrendingPageState extends State<SearchTrendingPage> {
                 separatorBuilder: (context, index) => Divider(
                   height: 1,
                   indent: 48,
-                  color: Theme.of(context).colorScheme.outline.withOpacity(0.1),
+                  color: theme.colorScheme.outline.withOpacity(0.1),
                 ),
               ),
             )

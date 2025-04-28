@@ -61,6 +61,7 @@ class _MemberVideoState extends State<MemberVideo>
   }
 
   _buildBody(LoadingState<List<Item>?> loadingState) {
+    final theme = Theme.of(context);
     return switch (loadingState) {
       Loading() => loadingWidget,
       Success() => loadingState.response?.isNotEmpty == true
@@ -82,7 +83,7 @@ class _MemberVideoState extends State<MemberVideo>
                         floating: true,
                         delegate: CustomSliverPersistentHeaderDelegate(
                           extent: 40,
-                          bgColor: Theme.of(context).colorScheme.surface,
+                          bgColor: theme.colorScheme.surface,
                           child: SizedBox(
                             height: 40,
                             child: Row(
@@ -115,9 +116,8 @@ class _MemberVideoState extends State<MemberVideo>
                                             icon: Icon(
                                               Icons.play_circle_outline_rounded,
                                               size: 16,
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .secondary,
+                                              color:
+                                                  theme.colorScheme.secondary,
                                             ),
                                             label: Text(
                                               _controller.episodicButton.value
@@ -125,9 +125,8 @@ class _MemberVideoState extends State<MemberVideo>
                                                   '播放全部',
                                               style: TextStyle(
                                                 fontSize: 13,
-                                                color: Theme.of(context)
-                                                    .colorScheme
-                                                    .secondary,
+                                                color:
+                                                    theme.colorScheme.secondary,
                                               ),
                                             ),
                                           ),
@@ -142,9 +141,7 @@ class _MemberVideoState extends State<MemberVideo>
                                     icon: Icon(
                                       Icons.sort,
                                       size: 16,
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .secondary,
+                                      color: theme.colorScheme.secondary,
                                     ),
                                     label: Obx(
                                       () => Text(
@@ -158,9 +155,7 @@ class _MemberVideoState extends State<MemberVideo>
                                                 : '倒序',
                                         style: TextStyle(
                                           fontSize: 13,
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .secondary,
+                                          color: theme.colorScheme.secondary,
                                         ),
                                       ),
                                     ),

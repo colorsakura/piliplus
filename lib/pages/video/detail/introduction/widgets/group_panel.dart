@@ -68,6 +68,7 @@ class _GroupPanelState extends State<GroupPanel> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return NotificationListener<DraggableScrollableNotification>(
       onNotification: (notification) {
         if (notification.extent <= 1e-5) {
@@ -159,7 +160,7 @@ class _GroupPanelState extends State<GroupPanel> {
           ),
           Divider(
             height: 1,
-            color: Theme.of(context).disabledColor.withOpacity(0.08),
+            color: theme.disabledColor.withOpacity(0.08),
           ),
           Padding(
             padding: EdgeInsets.only(
@@ -175,8 +176,8 @@ class _GroupPanelState extends State<GroupPanel> {
                   onPressed: () => onSave(),
                   style: TextButton.styleFrom(
                     padding: const EdgeInsets.only(left: 30, right: 30),
-                    foregroundColor: Theme.of(context).colorScheme.onPrimary,
-                    backgroundColor: Theme.of(context).colorScheme.primary,
+                    foregroundColor: theme.colorScheme.onPrimary,
+                    backgroundColor: theme.colorScheme.primary,
                   ),
                   child: Text(showDefaultBtn ? '保存至默认分组' : '保存'),
                 ),

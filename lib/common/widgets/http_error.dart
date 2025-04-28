@@ -25,40 +25,43 @@ class HttpError extends StatelessWidget {
           );
   }
 
-  Widget content(BuildContext context) => Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const SizedBox(height: 40),
-          SvgPicture.asset(
-            "assets/images/error.svg",
-            height: 200,
+  Widget content(BuildContext context) {
+    final theme = Theme.of(context);
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        const SizedBox(height: 40),
+        SvgPicture.asset(
+          "assets/images/error.svg",
+          height: 200,
+        ),
+        const SizedBox(height: 30),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 5),
+          child: SelectableText(
+            errMsg ?? '没有数据',
+            textAlign: TextAlign.center,
+            style: theme.textTheme.titleSmall,
+            scrollPhysics: const NeverScrollableScrollPhysics(),
           ),
-          const SizedBox(height: 30),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 5),
-            child: SelectableText(
-              errMsg ?? '没有数据',
-              textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.titleSmall,
-              scrollPhysics: const NeverScrollableScrollPhysics(),
+        ),
+        if (onReload != null)
+          FilledButton.tonal(
+            onPressed: onReload,
+            style: ButtonStyle(
+              backgroundColor: WidgetStateProperty.resolveWith((states) {
+                return theme.colorScheme.primary.withAlpha(20);
+              }),
+            ),
+            child: Text(
+              btnText ?? '点击重试',
+              style: TextStyle(color: theme.colorScheme.primary),
             ),
           ),
-          if (onReload != null)
-            FilledButton.tonal(
-              onPressed: onReload,
-              style: ButtonStyle(
-                backgroundColor: WidgetStateProperty.resolveWith((states) {
-                  return Theme.of(context).colorScheme.primary.withAlpha(20);
-                }),
-              ),
-              child: Text(
-                btnText ?? '点击重试',
-                style: TextStyle(color: Theme.of(context).colorScheme.primary),
-              ),
-            ),
-          SizedBox(height: 40 + MediaQuery.paddingOf(context).bottom),
-        ],
-      );
+        SizedBox(height: 40 + MediaQuery.paddingOf(context).bottom),
+      ],
+    );
+  }
 }

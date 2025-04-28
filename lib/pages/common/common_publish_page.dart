@@ -275,6 +275,9 @@ abstract class CommonPublishPageState<T extends CommonPublishPage>
   }
 
   Widget buildImage(int index, double height) {
+    final color =
+        Theme.of(context).colorScheme.secondaryContainer.withOpacity(0.5);
+
     void onClear() {
       pathList.removeAt(index);
       if (pathList.isEmpty && editController.text.trim().isEmpty) {
@@ -319,10 +322,7 @@ abstract class CommonPublishPageState<T extends CommonPublishPage>
             },
             size: 24,
             iconSize: 14,
-            bgColor: Theme.of(context)
-                .colorScheme
-                .secondaryContainer
-                .withOpacity(0.5),
+            bgColor: color,
           ),
         ),
         Positioned(
@@ -334,10 +334,7 @@ abstract class CommonPublishPageState<T extends CommonPublishPage>
             onPressed: onClear,
             size: 24,
             iconSize: 14,
-            bgColor: Theme.of(context)
-                .colorScheme
-                .secondaryContainer
-                .withOpacity(0.5),
+            bgColor: color,
           ),
         ),
       ],
@@ -345,14 +342,14 @@ abstract class CommonPublishPageState<T extends CommonPublishPage>
   }
 
   void onCropImage(int index) async {
+    final theme = Theme.of(context);
     CroppedFile? croppedFile = await ImageCropper().cropImage(
       sourcePath: pathList[index],
       uiSettings: [
         AndroidUiSettings(
           toolbarTitle: '裁剪',
-          toolbarColor: Theme.of(context).colorScheme.secondaryContainer,
-          toolbarWidgetColor:
-              Theme.of(context).colorScheme.onSecondaryContainer,
+          toolbarColor: theme.colorScheme.secondaryContainer,
+          toolbarWidgetColor: theme.colorScheme.onSecondaryContainer,
         ),
         IOSUiSettings(
           title: '裁剪',

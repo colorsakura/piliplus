@@ -245,100 +245,94 @@ class _MemberHomeState extends State<MemberHome>
     required String param,
     String? param1,
     required int count,
-  }) =>
-      SliverToBoxAdapter(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text.rich(
+  }) {
+    final color = Theme.of(context).colorScheme.outline;
+    return SliverToBoxAdapter(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text.rich(
+              TextSpan(
+                children: [
+                  TextSpan(text: '$title '),
+                  TextSpan(
+                    text: count.toString(),
+                    style: TextStyle(fontSize: 13, color: color),
+                  ),
+                ],
+              ),
+            ),
+            GestureDetector(
+              onTap: () {
+                int index =
+                    _ctr.tab2!.indexWhere((item) => item.param == param);
+                if (index != -1) {
+                  if (['video', 'article', 'audio'].contains(param1)) {
+                    List<Item> items = _ctr.tab2!
+                        .firstWhere((item) => item.param == param)
+                        .items!;
+                    int index1 =
+                        items.indexWhere((item) => item.param == param1);
+                    try {
+                      final contributeCtr =
+                          Get.find<MemberContributeCtr>(tag: widget.heroTag);
+                      // contributeCtr.tabController?.animateTo(index1);
+                      if (contributeCtr.tabController?.index != index1) {
+                        contributeCtr.tabController?.index = index1;
+                      }
+                      debugPrint('initialized');
+                    } catch (e) {
+                      _ctr.contributeInitialIndex.value = index1;
+                      debugPrint('not initialized');
+                    }
+                  }
+                  _ctr.tabController?.animateTo(index);
+                } else {
+                  if (param == 'coinArchive') {
+                    Get.to(MemberCoinPage(
+                      mid: _ctr.mid,
+                      name: _ctr.username,
+                    ));
+                    return;
+                  }
+
+                  if (param == 'likeArchive') {
+                    Get.to(MemberLikePage(
+                      mid: _ctr.mid,
+                      name: _ctr.username,
+                    ));
+                    return;
+                  }
+
+                  // else TODO
+                  SmartDialog.showToast('view $param');
+                }
+              },
+              child: Text.rich(
                 TextSpan(
                   children: [
-                    TextSpan(text: '$title '),
                     TextSpan(
-                      text: count.toString(),
-                      style: TextStyle(
-                        fontSize: 13,
-                        color: Theme.of(context).colorScheme.outline,
+                      text: '查看更多',
+                      style: TextStyle(color: color),
+                    ),
+                    WidgetSpan(
+                      alignment: PlaceholderAlignment.top,
+                      child: Icon(
+                        Icons.arrow_forward_ios,
+                        size: 14,
+                        color: color,
                       ),
+                      style: TextStyle(fontSize: 13, color: color),
                     ),
                   ],
                 ),
               ),
-              GestureDetector(
-                onTap: () {
-                  int index =
-                      _ctr.tab2!.indexWhere((item) => item.param == param);
-                  if (index != -1) {
-                    if (['video', 'article', 'audio'].contains(param1)) {
-                      List<Item> items = _ctr.tab2!
-                          .firstWhere((item) => item.param == param)
-                          .items!;
-                      int index1 =
-                          items.indexWhere((item) => item.param == param1);
-                      try {
-                        final contributeCtr =
-                            Get.find<MemberContributeCtr>(tag: widget.heroTag);
-                        // contributeCtr.tabController?.animateTo(index1);
-                        if (contributeCtr.tabController?.index != index1) {
-                          contributeCtr.tabController?.index = index1;
-                        }
-                        debugPrint('initialized');
-                      } catch (e) {
-                        _ctr.contributeInitialIndex.value = index1;
-                        debugPrint('not initialized');
-                      }
-                    }
-                    _ctr.tabController?.animateTo(index);
-                  } else {
-                    if (param == 'coinArchive') {
-                      Get.to(MemberCoinPage(
-                        mid: _ctr.mid,
-                        name: _ctr.username,
-                      ));
-                      return;
-                    }
-
-                    if (param == 'likeArchive') {
-                      Get.to(MemberLikePage(
-                        mid: _ctr.mid,
-                        name: _ctr.username,
-                      ));
-                      return;
-                    }
-
-                    // else TODO
-                    SmartDialog.showToast('view $param');
-                  }
-                },
-                child: Text.rich(
-                  TextSpan(
-                    children: [
-                      TextSpan(
-                        text: '查看更多',
-                        style: TextStyle(
-                          color: Theme.of(context).colorScheme.outline,
-                        ),
-                      ),
-                      WidgetSpan(
-                        alignment: PlaceholderAlignment.top,
-                        child: Icon(
-                          Icons.arrow_forward_ios,
-                          size: 14,
-                          color: Theme.of(context).colorScheme.outline,
-                        ),
-                        style: TextStyle(
-                          fontSize: 13,
-                          color: Theme.of(context).colorScheme.outline,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
-      );
+      ),
+    );
+  }
 }

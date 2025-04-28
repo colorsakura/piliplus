@@ -81,6 +81,7 @@ class _BangumiPanelState extends State<BangumiPanel> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Column(
       children: [
         Padding(
@@ -95,7 +96,7 @@ class _BangumiPanelState extends State<BangumiPanel> {
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                     fontSize: 12,
-                    color: Theme.of(context).colorScheme.outline,
+                    color: theme.colorScheme.outline,
                   ),
                 ),
               ),
@@ -140,7 +141,7 @@ class _BangumiPanelState extends State<BangumiPanel> {
                   right: index == widget.pages.length - 1 ? 0 : 10,
                 ),
                 child: Material(
-                  color: Theme.of(context).colorScheme.onInverseSurface,
+                  color: theme.colorScheme.onInverseSurface,
                   borderRadius: BorderRadius.circular(6),
                   clipBehavior: Clip.hardEdge,
                   child: InkWell(
@@ -169,7 +170,7 @@ class _BangumiPanelState extends State<BangumiPanel> {
                               if (index == currentIndex) ...<Widget>[
                                 Image.asset(
                                   'assets/images/live.png',
-                                  color: Theme.of(context).colorScheme.primary,
+                                  color: theme.colorScheme.primary,
                                   height: 12,
                                   semanticLabel: "正在播放：",
                                 ),
@@ -185,10 +186,8 @@ class _BangumiPanelState extends State<BangumiPanel> {
                                 style: TextStyle(
                                     fontSize: 13,
                                     color: index == currentIndex
-                                        ? Theme.of(context).colorScheme.primary
-                                        : Theme.of(context)
-                                            .colorScheme
-                                            .onSurface),
+                                        ? theme.colorScheme.primary
+                                        : theme.colorScheme.onSurface),
                               )),
                               const SizedBox(width: 2),
                               if (item.badge != null) ...[
@@ -205,8 +204,7 @@ class _BangumiPanelState extends State<BangumiPanel> {
                                     item.badge!,
                                     style: TextStyle(
                                       fontSize: 11,
-                                      color:
-                                          Theme.of(context).colorScheme.primary,
+                                      color: theme.colorScheme.primary,
                                     ),
                                   ),
                                 ],
@@ -222,10 +220,8 @@ class _BangumiPanelState extends State<BangumiPanel> {
                               style: TextStyle(
                                   fontSize: 13,
                                   color: index == currentIndex
-                                      ? Theme.of(context).colorScheme.primary
-                                      : Theme.of(context)
-                                          .colorScheme
-                                          .onSurface),
+                                      ? theme.colorScheme.primary
+                                      : theme.colorScheme.onSurface),
                               overflow: TextOverflow.ellipsis,
                             )
                           ]

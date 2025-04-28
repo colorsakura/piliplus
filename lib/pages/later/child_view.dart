@@ -61,6 +61,7 @@ class _LaterViewChildPageState extends State<LaterViewChildPage>
   }
 
   Widget _buildBody(LoadingState<List<HotVideoItemModel>?> loadingState) {
+    final theme = Theme.of(context);
     return switch (loadingState) {
       Loading() => SliverGrid(
           gridDelegate: Grid.videoCardHDelegate(context),
@@ -150,9 +151,7 @@ class _LaterViewChildPageState extends State<LaterViewChildPage>
                                         backgroundColor:
                                             WidgetStateProperty.resolveWith(
                                           (states) {
-                                            return Theme.of(context)
-                                                .colorScheme
-                                                .surface
+                                            return theme.colorScheme.surface
                                                 .withOpacity(0.8);
                                           },
                                         ),
@@ -160,9 +159,7 @@ class _LaterViewChildPageState extends State<LaterViewChildPage>
                                       onPressed: null,
                                       icon: Icon(
                                         Icons.done_all_outlined,
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .primary,
+                                        color: theme.colorScheme.primary,
                                       ),
                                     ),
                                   ),
@@ -186,7 +183,7 @@ class _LaterViewChildPageState extends State<LaterViewChildPage>
                             );
                           },
                           icon: Icons.clear,
-                          iconColor: Theme.of(context).colorScheme.outline,
+                          iconColor: theme.colorScheme.outline,
                           bgColor: Colors.transparent,
                         ),
                       ),

@@ -39,7 +39,8 @@ class _MediaPageState extends CommonPageState<MediaPage, MediaController>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    Color primary = Theme.of(context).colorScheme.primary;
+    final theme = Theme.of(context);
+    Color primary = theme.colorScheme.primary;
     return MediaQuery.removePadding(
       context: context,
       removeLeft: context.orientation == Orientation.landscape,
@@ -59,7 +60,7 @@ class _MediaPageState extends CommonPageState<MediaPage, MediaController>
                 child: Text(
                   '媒体库',
                   style: TextStyle(
-                    fontSize: Theme.of(context).textTheme.titleLarge!.fontSize,
+                    fontSize: theme.textTheme.titleLarge!.fontSize,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -97,7 +98,7 @@ class _MediaPageState extends CommonPageState<MediaPage, MediaController>
             Obx(
               () => controller.loadingState.value is Loading
                   ? const SizedBox.shrink()
-                  : favFolder(),
+                  : favFolder(theme),
             )
           ],
         ),
@@ -105,12 +106,12 @@ class _MediaPageState extends CommonPageState<MediaPage, MediaController>
     );
   }
 
-  Widget favFolder() {
+  Widget favFolder(ThemeData theme) {
     return Column(
       children: [
         Divider(
           height: 20,
-          color: Theme.of(context).dividerColor.withOpacity(0.1),
+          color: theme.dividerColor.withOpacity(0.1),
         ),
         ListTile(
           onTap: () async {
@@ -129,24 +130,22 @@ class _MediaPageState extends CommonPageState<MediaPage, MediaController>
                     TextSpan(
                       text: '我的收藏  ',
                       style: TextStyle(
-                          fontSize:
-                              Theme.of(context).textTheme.titleMedium!.fontSize,
+                          fontSize: theme.textTheme.titleMedium!.fontSize,
                           fontWeight: FontWeight.bold),
                     ),
                     if (controller.count.value != -1)
                       TextSpan(
                         text: "${controller.count.value}  ",
                         style: TextStyle(
-                          fontSize:
-                              Theme.of(context).textTheme.titleSmall!.fontSize,
-                          color: Theme.of(context).colorScheme.primary,
+                          fontSize: theme.textTheme.titleSmall!.fontSize,
+                          color: theme.colorScheme.primary,
                         ),
                       ),
                     WidgetSpan(
                       child: Icon(
                         Icons.arrow_forward_ios,
                         size: 18,
-                        color: Theme.of(context).colorScheme.primary,
+                        color: theme.colorScheme.primary,
                       ),
                     ),
                   ],
@@ -163,14 +162,14 @@ class _MediaPageState extends CommonPageState<MediaPage, MediaController>
         SizedBox(
           width: double.infinity,
           height: 200,
-          child: Obx(() => _buildBody(controller.loadingState.value)),
+          child: Obx(() => _buildBody(theme, controller.loadingState.value)),
         ),
         const SizedBox(height: 100),
       ],
     );
   }
 
-  Widget _buildBody(LoadingState loadingState) {
+  Widget _buildBody(ThemeData theme, LoadingState loadingState) {
     if (loadingState is Success) {
       List<FavFolderItemData>? favFolderList = loadingState.response.list;
       if (favFolderList.isNullOrEmpty) {
@@ -189,9 +188,7 @@ class _MediaPageState extends CommonPageState<MediaPage, MediaController>
                   style: ButtonStyle(
                     padding: WidgetStateProperty.all(EdgeInsets.zero),
                     backgroundColor: WidgetStateProperty.resolveWith((states) {
-                      return Theme.of(context)
-                          .colorScheme
-                          .primaryContainer
+                      return theme.colorScheme.primaryContainer
                           .withOpacity(0.5);
                     }),
                   ),
@@ -204,7 +201,7 @@ class _MediaPageState extends CommonPageState<MediaPage, MediaController>
                   icon: Icon(
                     Icons.arrow_forward_ios,
                     size: 18,
-                    color: Theme.of(context).colorScheme.primary,
+                    color: theme.colorScheme.primary,
                   ),
                 ),
               ),
@@ -266,6 +263,7 @@ class FavFolderItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Container(
       margin: EdgeInsets.only(left: index == 0 ? 20 : 0, right: 14),
       child: GestureDetector(
@@ -282,16 +280,10 @@ class FavFolderItem extends StatelessWidget {
               clipBehavior: Clip.hardEdge,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(12),
-                color: Theme.of(context)
-                    .colorScheme
-                    .onInverseSurface
-                    .withOpacity(0.4),
+                color: theme.colorScheme.onInverseSurface.withOpacity(0.4),
                 boxShadow: [
                   BoxShadow(
-                    color: Theme.of(context)
-                        .colorScheme
-                        .onInverseSurface
-                        .withOpacity(0.4),
+                    color: theme.colorScheme.onInverseSurface.withOpacity(0.4),
                     offset: const Offset(4, -12),
                     blurRadius: 0.0,
                     spreadRadius: 0.0,
@@ -318,10 +310,8 @@ class FavFolderItem extends StatelessWidget {
             ),
             Text(
               ' 共${item!.mediaCount}条视频 · ${Utils.isPublicFavText(item?.attr ?? 0)}',
-              style: Theme.of(context)
-                  .textTheme
-                  .labelSmall!
-                  .copyWith(color: Theme.of(context).colorScheme.outline),
+              style: theme.textTheme.labelSmall!
+                  .copyWith(color: theme.colorScheme.outline),
             )
           ],
         ),

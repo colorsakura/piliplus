@@ -78,12 +78,13 @@ class _HorizontalMemberPageState extends State<HorizontalMemberPage> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Obx(
-      () => _buildUserPage(_controller.userState.value),
+      () => _buildUserPage(theme, _controller.userState.value),
     );
   }
 
-  Widget _buildUserPage(LoadingState userState) {
+  Widget _buildUserPage(ThemeData theme, LoadingState userState) {
     return switch (userState) {
       Loading() => loadingWidget,
       Success() => Column(
@@ -102,10 +103,11 @@ class _HorizontalMemberPageState extends State<HorizontalMemberPage> {
                 const SizedBox(width: 16),
               ],
             ),
-            _buildUserInfo(userState.response),
+            _buildUserInfo(theme, userState.response),
             const SizedBox(height: 5),
             Expanded(
-              child: Obx(() => _buildVideoList(_controller.loadingState.value)),
+              child: Obx(
+                  () => _buildVideoList(theme, _controller.loadingState.value)),
             ),
           ],
         ),
@@ -120,13 +122,13 @@ class _HorizontalMemberPageState extends State<HorizontalMemberPage> {
     };
   }
 
-  Widget get _buildSliverHeader {
+  Widget _buildSliverHeader(ThemeData theme) {
     return SliverPersistentHeader(
       pinned: false,
       floating: true,
       delegate: CustomSliverPersistentHeaderDelegate(
         extent: 40,
-        bgColor: Theme.of(context).colorScheme.surface,
+        bgColor: theme.colorScheme.surface,
         child: Container(
           height: 40,
           padding: const EdgeInsets.fromLTRB(12, 0, 6, 0),
@@ -153,14 +155,14 @@ class _HorizontalMemberPageState extends State<HorizontalMemberPage> {
                   icon: Icon(
                     Icons.sort,
                     size: 16,
-                    color: Theme.of(context).colorScheme.secondary,
+                    color: theme.colorScheme.secondary,
                   ),
                   label: Obx(
                     () => Text(
                       _controller.order.value == 'pubdate' ? '最新发布' : '最多播放',
                       style: TextStyle(
                         fontSize: 13,
-                        color: Theme.of(context).colorScheme.secondary,
+                        color: theme.colorScheme.secondary,
                       ),
                     ),
                   ),
@@ -173,7 +175,7 @@ class _HorizontalMemberPageState extends State<HorizontalMemberPage> {
     );
   }
 
-  Widget _buildVideoList(LoadingState loadingState) {
+  Widget _buildVideoList(ThemeData theme, LoadingState loadingState) {
     return switch (loadingState) {
       Loading() => loadingWidget,
       Success() => Material(
@@ -185,7 +187,7 @@ class _HorizontalMemberPageState extends State<HorizontalMemberPage> {
               parent: ClampingScrollPhysics(),
             ),
             slivers: [
-              _buildSliverHeader,
+              _buildSliverHeader(theme),
               SliverPadding(
                 padding: EdgeInsets.only(
                   bottom: MediaQuery.of(context).padding.bottom + 80,
@@ -234,19 +236,19 @@ class _HorizontalMemberPageState extends State<HorizontalMemberPage> {
     };
   }
 
-  Widget _buildUserInfo(MemberInfoModel memberInfoModel) {
+  Widget _buildUserInfo(ThemeData theme, MemberInfoModel memberInfoModel) {
     return Row(
       children: [
         const SizedBox(width: 16),
         _buildAvatar(memberInfoModel.face),
         const SizedBox(width: 10),
-        Expanded(child: _buildInfo(memberInfoModel)),
+        Expanded(child: _buildInfo(theme, memberInfoModel)),
         const SizedBox(width: 16),
       ],
     );
   }
 
-  _buildInfo(MemberInfoModel memberInfoModel) => Column(
+  _buildInfo(ThemeData theme, MemberInfoModel memberInfoModel) => Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -281,6 +283,7 @@ class _HorizontalMemberPageState extends State<HorizontalMemberPage> {
               children: List.generate(5, (index) {
                 if (index % 2 == 0) {
                   return _buildChildInfo(
+                    theme: theme,
                     title: const ['粉丝', '关注', '获赞'][index ~/ 2],
                     num: index == 0
                         ? _controller.userStat['follower'] != null
@@ -307,7 +310,7 @@ class _HorizontalMemberPageState extends State<HorizontalMemberPage> {
                     width: 20,
                     child: VerticalDivider(
                       width: 1,
-                      color: Theme.of(context).colorScheme.outline,
+                      color: theme.colorScheme.outline,
                     ),
                   );
                 }
@@ -321,10 +324,10 @@ class _HorizontalMemberPageState extends State<HorizontalMemberPage> {
                 child: FilledButton.tonal(
                   style: FilledButton.styleFrom(
                     backgroundColor: memberInfoModel.isFollowed == true
-                        ? Theme.of(context).colorScheme.onInverseSurface
+                        ? theme.colorScheme.onInverseSurface
                         : null,
                     foregroundColor: memberInfoModel.isFollowed == true
-                        ? Theme.of(context).colorScheme.outline
+                        ? theme.colorScheme.outline
                         : null,
                     padding: const EdgeInsets.all(0),
                     visualDensity: const VisualDensity(
@@ -389,6 +392,7 @@ class _HorizontalMemberPageState extends State<HorizontalMemberPage> {
       );
 
   Widget _buildChildInfo({
+    required ThemeData theme,
     required String title,
     required dynamic num,
     required VoidCallback onTap,
@@ -399,7 +403,7 @@ class _HorizontalMemberPageState extends State<HorizontalMemberPage> {
         '$num$title',
         style: TextStyle(
           fontSize: 14,
-          color: Theme.of(context).colorScheme.outline,
+          color: theme.colorScheme.outline,
         ),
       ),
     );

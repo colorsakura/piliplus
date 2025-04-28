@@ -102,9 +102,9 @@ class _ZanButtonGrpcState extends State<ZanButtonGrpc> {
 
   @override
   Widget build(BuildContext context) {
-    final ThemeData t = Theme.of(context);
-    final Color color = t.colorScheme.outline;
-    final Color primary = t.colorScheme.primary;
+    final ThemeData theme = Theme.of(context);
+    final Color color = theme.colorScheme.outline;
+    final Color primary = theme.colorScheme.primary;
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -160,7 +160,7 @@ class _ZanButtonGrpcState extends State<ZanButtonGrpc> {
                       color: widget.replyItem.replyControl.action.toInt() == 1
                           ? primary
                           : color,
-                      fontSize: t.textTheme.labelSmall!.fontSize,
+                      fontSize: theme.textTheme.labelSmall!.fontSize,
                     ),
                   ),
                 ),

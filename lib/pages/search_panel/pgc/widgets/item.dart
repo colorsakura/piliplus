@@ -10,21 +10,20 @@ import 'package:flutter/material.dart';
 class SearchPgcItem extends StatelessWidget {
   const SearchPgcItem({
     super.key,
-    required this.style,
     required this.item,
   });
 
-  final TextStyle style;
   final SearchMBangumiItemModel item;
 
   @override
   Widget build(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
+    final TextStyle style = TextStyle(fontSize: 13);
     return InkWell(
       onTap: () {
         PageUtils.viewBangumi(seasonId: item.seasonId);
       },
       onLongPress: () => imageSaveDialog(
-        context: context,
         title: item.title?.map((item) => item['text']).join() ?? '',
         cover: item.cover,
       ),
@@ -60,21 +59,17 @@ class SearchPgcItem extends StatelessWidget {
                   const SizedBox(height: 4),
                   Text.rich(
                     TextSpan(
-                      style: TextStyle(
-                          color: Theme.of(context).colorScheme.onSurface),
+                      style: TextStyle(color: theme.colorScheme.onSurface),
                       children: [
                         for (var i in item.title!) ...[
                           TextSpan(
                             text: i['text'],
                             style: TextStyle(
-                              fontSize: Theme.of(context)
-                                  .textTheme
-                                  .titleSmall!
-                                  .fontSize!,
+                              fontSize: theme.textTheme.titleSmall!.fontSize!,
                               fontWeight: FontWeight.bold,
                               color: i['type'] == 'em'
-                                  ? Theme.of(context).colorScheme.primary
-                                  : Theme.of(context).colorScheme.onSurface,
+                                  ? theme.colorScheme.primary
+                                  : theme.colorScheme.onSurface,
                             ),
                           ),
                         ],

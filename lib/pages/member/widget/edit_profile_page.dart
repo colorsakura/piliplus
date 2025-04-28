@@ -47,9 +47,10 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(title: const Text('账号资料')),
-      body: _buildBody(_loadingState),
+      body: _buildBody(theme, _loadingState),
     );
   }
 
@@ -77,23 +78,24 @@ class _EditProfilePageState extends State<EditProfilePage> {
     });
   }
 
-  Widget get _divider => Divider(
-        height: 1,
-        color: Theme.of(context).dividerColor.withOpacity(0.1),
-      );
+  Widget _buildBody(ThemeData theme, LoadingState loadingState) {
+    late final divider = Divider(
+      height: 1,
+      color: theme.dividerColor.withOpacity(0.1),
+    );
 
-  Widget get _divider1 => Divider(
-        thickness: 16,
-        color: Theme.of(context).dividerColor.withOpacity(0.1),
-      );
+    late final divider1 = Divider(
+      thickness: 16,
+      color: theme.dividerColor.withOpacity(0.1),
+    );
 
-  Widget _buildBody(LoadingState loadingState) {
     return switch (loadingState) {
       Loading() => loadingWidget,
       Success() => SingleChildScrollView(
           child: Column(
             children: [
               _item(
+                theme: theme,
                 title: '头像',
                 widget: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 5),
@@ -108,12 +110,13 @@ class _EditProfilePageState extends State<EditProfilePage> {
                   EasyThrottle.throttle(
                       'imagePicker', const Duration(milliseconds: 500),
                       () async {
-                    _pickImg();
+                    _pickImg(theme);
                   });
                 },
               ),
-              _divider,
+              divider,
               _item(
+                theme: theme,
                 title: '昵称',
                 text: loadingState.response['name'],
                 onTap: () {
@@ -128,8 +131,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
                   }
                 },
               ),
-              _divider,
+              divider,
               _item(
+                theme: theme,
                 title: '性别',
                 text: _sex(loadingState.response['sex']),
                 onTap: () {
@@ -140,8 +144,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
                   );
                 },
               ),
-              _divider,
+              divider,
               _item(
+                theme: theme,
                 title: '出生年月',
                 text: loadingState.response['birthday'],
                 onTap: () {
@@ -161,8 +166,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
                   });
                 },
               ),
-              _divider,
+              divider,
               _item(
+                theme: theme,
                 title: '个性签名',
                 text: loadingState.response['sign'].isEmpty
                     ? '无'
@@ -175,27 +181,30 @@ class _EditProfilePageState extends State<EditProfilePage> {
                   );
                 },
               ),
-              _divider1,
+              divider1,
               _item(
+                theme: theme,
                 title: '头像挂件',
                 onTap: () => PageUtils.launchURL(
                     'https://www.bilibili.com/h5/mall/pendant/home'),
               ),
-              _divider1,
+              divider1,
               _item(
+                theme: theme,
                 title: 'UID',
                 needIcon: false,
                 text: loadingState.response['mid'].toString(),
                 onTap: () =>
                     Utils.copyText(loadingState.response['mid'].toString()),
               ),
-              _divider1,
+              divider1,
               _item(
+                theme: theme,
                 title: '哔哩哔哩认证',
                 onTap: () => PageUtils.launchURL(
                     'https://account.bilibili.com/official/mobile/home'),
               ),
-              _divider,
+              divider,
               SizedBox(height: 25 + MediaQuery.paddingOf(context).bottom),
             ],
           ),
@@ -254,6 +263,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
+        final theme = Theme.of(context);
         return AlertDialog(
           title: Text('修改$title'),
           content: TextField(
@@ -272,7 +282,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
               hintText: text,
               hintStyle: TextStyle(
                 fontSize: 14,
-                color: Theme.of(context).colorScheme.outline,
+                color: theme.colorScheme.outline,
               ),
             ),
           ),
@@ -281,7 +291,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
               onPressed: Get.back,
               child: Text(
                 '取消',
-                style: TextStyle(color: Theme.of(context).colorScheme.outline),
+                style: TextStyle(color: theme.colorScheme.outline),
               ),
             ),
             TextButton(
@@ -372,6 +382,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
   }
 
   Widget _item({
+    required ThemeData theme,
     required String title,
     Widget? widget,
     String? text,
@@ -399,7 +410,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
               style: TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.normal,
-                color: Theme.of(context).colorScheme.outline,
+                color: theme.colorScheme.outline,
               ),
             )
           else if (widget != null)
@@ -407,14 +418,14 @@ class _EditProfilePageState extends State<EditProfilePage> {
           if (needIcon)
             Icon(
               Icons.keyboard_arrow_right,
-              color: Theme.of(context).colorScheme.outline,
+              color: theme.colorScheme.outline,
             )
         ],
       ),
     );
   }
 
-  void _pickImg() async {
+  void _pickImg(ThemeData theme) async {
     try {
       XFile? pickedFile = await _imagePicker.pickImage(
         source: ImageSource.gallery,
@@ -432,9 +443,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
           uiSettings: [
             AndroidUiSettings(
               toolbarTitle: '裁剪',
-              toolbarColor: Theme.of(context).colorScheme.secondaryContainer,
-              toolbarWidgetColor:
-                  Theme.of(context).colorScheme.onSecondaryContainer,
+              toolbarColor: theme.colorScheme.secondaryContainer,
+              toolbarWidgetColor: theme.colorScheme.onSecondaryContainer,
               aspectRatioPresets: [
                 CropAspectRatioPresetCustom(),
               ],

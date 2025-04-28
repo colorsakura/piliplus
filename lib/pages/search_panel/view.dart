@@ -20,13 +20,11 @@ abstract class CommonSearchPanel extends StatefulWidget {
     required this.keyword,
     required this.searchType,
     required this.tag,
-    this.hasHeader = false,
   });
 
   final String keyword;
   final SearchType searchType;
   final String tag;
-  final bool hasHeader;
 }
 
 abstract class CommonSearchPanelState<
@@ -41,6 +39,7 @@ abstract class CommonSearchPanelState<
   @override
   Widget build(BuildContext context) {
     super.build(context);
+    final theme = Theme.of(context);
     return refreshIndicator(
       onRefresh: () async {
         await controller.onRefresh();
@@ -49,16 +48,10 @@ abstract class CommonSearchPanelState<
         controller: controller.scrollController,
         physics: const AlwaysScrollableScrollPhysics(),
         slivers: [
-          if (widget.hasHeader)
-            Obx(() => buildHeader(controller.loadingState.value)),
-          Obx(() => _buildBody(controller.loadingState.value)),
+          Obx(() => _buildBody(theme, controller.loadingState.value)),
         ],
       ),
     );
-  }
-
-  Widget buildHeader(LoadingState<List<T>?> loadingState) {
-    throw UnimplementedError();
   }
 
   Widget get _builLoading {
@@ -103,7 +96,7 @@ abstract class CommonSearchPanelState<
     );
   }
 
-  Widget _buildBody(LoadingState<List<T>?> loadingState) {
+  Widget _buildBody(ThemeData theme, LoadingState<List<T>?> loadingState) {
     return switch (loadingState) {
       Loading() => widget.searchType == SearchType.live_room
           ? SliverPadding(
@@ -115,7 +108,7 @@ abstract class CommonSearchPanelState<
             )
           : _builLoading,
       Success() => loadingState.response?.isNotEmpty == true
-          ? buildList(loadingState.response!)
+          ? buildList(theme, loadingState.response!)
           : HttpError(
               onReload: controller.onReload,
             ),
@@ -126,5 +119,5 @@ abstract class CommonSearchPanelState<
     };
   }
 
-  Widget buildList(List<T> list);
+  Widget buildList(ThemeData theme, List<T> list);
 }

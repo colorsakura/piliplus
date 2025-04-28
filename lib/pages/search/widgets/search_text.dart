@@ -24,8 +24,9 @@ class SearchText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    late final theme = Theme.of(context);
     return Material(
-      color: bgColor ?? Theme.of(context).colorScheme.onInverseSurface,
+      color: bgColor ?? theme.colorScheme.onInverseSurface,
       borderRadius: BorderRadius.circular(6),
       child: InkWell(
         onTap: () {
@@ -45,8 +46,7 @@ class SearchText extends StatelessWidget {
             textAlign: textAlign,
             style: TextStyle(
               fontSize: fontSize,
-              color:
-                  textColor ?? Theme.of(context).colorScheme.onSurfaceVariant,
+              color: textColor ?? theme.colorScheme.onSurfaceVariant,
             ),
           ),
         ),

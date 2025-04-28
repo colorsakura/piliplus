@@ -198,53 +198,57 @@ class _EpisodePanelState extends CommonSlidePageState<EpisodePanel>
   }
 
   @override
-  Widget get buildPage => Material(
-        color: widget.showTitle == false
-            ? Colors.transparent
-            : Theme.of(context).colorScheme.surface,
-        child: Column(
-          children: [
-            _buildToolbar,
-            if (widget.type == EpisodeType.season &&
-                widget.list.length > 1) ...[
-              TabBar(
-                controller: _tabController,
-                padding: const EdgeInsets.only(right: 60),
-                isScrollable: true,
-                tabs: widget.list.map((item) => Tab(text: item.title)).toList(),
-                dividerHeight: 1,
-                dividerColor: Theme.of(context).dividerColor.withOpacity(0.1),
-              ),
-              Expanded(
-                child: Material(
-                  color: Colors.transparent,
-                  child: tabBarView(
-                    controller: _tabController,
-                    children: List.generate(
-                      widget.list.length,
-                      (index) => _buildBody(
-                        index,
-                        widget.list[index].episodes,
-                      ),
+  Widget buildPage(ThemeData theme) {
+    return Material(
+      color: widget.showTitle == false
+          ? Colors.transparent
+          : theme.colorScheme.surface,
+      child: Column(
+        children: [
+          _buildToolbar(theme),
+          if (widget.type == EpisodeType.season && widget.list.length > 1) ...[
+            TabBar(
+              controller: _tabController,
+              padding: const EdgeInsets.only(right: 60),
+              isScrollable: true,
+              tabs: widget.list.map((item) => Tab(text: item.title)).toList(),
+              dividerHeight: 1,
+              dividerColor: theme.dividerColor.withOpacity(0.1),
+            ),
+            Expanded(
+              child: Material(
+                color: Colors.transparent,
+                child: tabBarView(
+                  controller: _tabController,
+                  children: List.generate(
+                    widget.list.length,
+                    (index) => _buildBody(
+                      theme,
+                      index,
+                      widget.list[index].episodes,
                     ),
                   ),
                 ),
               ),
-            ] else
-              Expanded(
-                child: enableSlide ? slideList() : buildList,
-              ),
-          ],
-        ),
-      );
+            ),
+          ] else
+            Expanded(
+              child: enableSlide ? slideList(theme) : buildList(theme),
+            ),
+        ],
+      ),
+    );
+  }
 
   @override
-  Widget get buildList => Material(
-        color: Colors.transparent,
-        child: _buildBody(0, _getCurrEpisodes),
-      );
+  Widget buildList(ThemeData theme) {
+    return Material(
+      color: Colors.transparent,
+      child: _buildBody(theme, 0, _getCurrEpisodes),
+    );
+  }
 
-  Widget _buildBody(int index, episodes) {
+  Widget _buildBody(ThemeData theme, int index, episodes) {
     return KeepAliveWrapper(
       builder: (context) => ScrollablePositionedList.separated(
         padding: EdgeInsets.only(
@@ -265,6 +269,7 @@ class _EpisodePanelState extends CommonSlidePageState<EpisodePanel>
                   children: [
                     Obx(
                       () => _buildEpisodeItem(
+                        theme: theme,
                         episode: episode,
                         index: index,
                         length: episodes.length,
@@ -293,6 +298,7 @@ class _EpisodePanelState extends CommonSlidePageState<EpisodePanel>
                 )
               : Obx(
                   () => _buildEpisodeItem(
+                    theme: theme,
                     episode: episode,
                     index: index,
                     length: episodes.length,
@@ -310,6 +316,7 @@ class _EpisodePanelState extends CommonSlidePageState<EpisodePanel>
   }
 
   Widget _buildEpisodeItem({
+    required ThemeData theme,
     required dynamic episode,
     required int index,
     required int length,
@@ -351,7 +358,7 @@ class _EpisodePanelState extends CommonSlidePageState<EpisodePanel>
         pubdate = episode.pubTime;
         break;
     }
-    late final Color primary = Theme.of(context).colorScheme.primary;
+    late final Color primary = theme.colorScheme.primary;
 
     return Material(
       color: Colors.transparent,
@@ -396,7 +403,7 @@ class _EpisodePanelState extends CommonSlidePageState<EpisodePanel>
           },
           onLongPress: () {
             if (cover?.isNotEmpty == true) {
-              imageSaveDialog(context: context, title: title, cover: cover);
+              imageSaveDialog(title: title, cover: cover);
             }
           },
           child: Padding(
@@ -450,10 +457,7 @@ class _EpisodePanelState extends CommonSlidePageState<EpisodePanel>
                           title,
                           textAlign: TextAlign.start,
                           style: TextStyle(
-                            fontSize: Theme.of(context)
-                                .textTheme
-                                .bodyMedium!
-                                .fontSize,
+                            fontSize: theme.textTheme.bodyMedium!.fontSize,
                             height: 1.42,
                             letterSpacing: 0.3,
                             fontWeight: isCurrentIndex ? FontWeight.bold : null,
@@ -470,7 +474,7 @@ class _EpisodePanelState extends CommonSlidePageState<EpisodePanel>
                           style: TextStyle(
                             fontSize: 12,
                             height: 1,
-                            color: Theme.of(context).colorScheme.outline,
+                            color: theme.colorScheme.outline,
                             overflow: TextOverflow.clip,
                           ),
                         ),
@@ -550,14 +554,14 @@ class _EpisodePanelState extends CommonSlidePageState<EpisodePanel>
         },
       );
 
-  Widget get _buildToolbar => Container(
+  Widget _buildToolbar(ThemeData theme) => Container(
         height: 45,
         padding: EdgeInsets.symmetric(
             horizontal: widget.showTitle != false ? 14 : 6),
         decoration: BoxDecoration(
           border: Border(
             bottom: BorderSide(
-              color: Theme.of(context).dividerColor.withOpacity(0.1),
+              color: theme.dividerColor.withOpacity(0.1),
             ),
           ),
         ),
@@ -566,7 +570,7 @@ class _EpisodePanelState extends CommonSlidePageState<EpisodePanel>
             if (widget.showTitle != false)
               Text(
                 widget.type.title,
-                style: Theme.of(context).textTheme.titleMedium,
+                style: theme.textTheme.titleMedium,
               ),
             if (_favState != null) Obx(() => _buildFavBtn(_favState!.value)),
             mediumButton(

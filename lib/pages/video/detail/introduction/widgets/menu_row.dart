@@ -10,9 +10,10 @@ class MenuRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Container(
       width: double.infinity,
-      color: Theme.of(context).colorScheme.surface,
+      color: theme.colorScheme.surface,
       padding: const EdgeInsets.only(top: 9, bottom: 9, left: 12),
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
@@ -50,11 +51,11 @@ class MenuRow extends StatelessWidget {
   }
 
   Widget actionRowLineItem(
-      BuildContext context, Function? onTap, bool? loadingStatus, String? text,
+      ThemeData theme, Function? onTap, bool? loadingStatus, String? text,
       {bool selectStatus = false}) {
     return Material(
       color: selectStatus
-          ? Theme.of(context).highlightColor.withOpacity(0.2)
+          ? theme.highlightColor.withOpacity(0.2)
           : Colors.transparent,
       borderRadius: const BorderRadius.all(Radius.circular(30)),
       clipBehavior: Clip.hardEdge,
@@ -70,7 +71,7 @@ class MenuRow extends StatelessWidget {
             border: Border.all(
               color: selectStatus
                   ? Colors.transparent
-                  : Theme.of(context).highlightColor.withOpacity(0.2),
+                  : theme.highlightColor.withOpacity(0.2),
             ),
           ),
           child: Row(
@@ -84,8 +85,8 @@ class MenuRow extends StatelessWidget {
                   style: TextStyle(
                       fontSize: 13,
                       color: selectStatus
-                          ? Theme.of(context).colorScheme.onSurface
-                          : Theme.of(context).colorScheme.outline),
+                          ? theme.colorScheme.onSurface
+                          : theme.colorScheme.outline),
                 ),
               ),
             ],
@@ -115,9 +116,10 @@ class ActionRowLineItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Material(
       color: selectStatus
-          ? Theme.of(context).colorScheme.secondaryContainer
+          ? theme.colorScheme.secondaryContainer
           : Colors.transparent,
       borderRadius: const BorderRadius.all(Radius.circular(30)),
       clipBehavior: Clip.hardEdge,
@@ -133,7 +135,7 @@ class ActionRowLineItem extends StatelessWidget {
             border: Border.all(
               color: selectStatus
                   ? Colors.transparent
-                  : Theme.of(context).colorScheme.secondaryContainer,
+                  : theme.colorScheme.secondaryContainer,
             ),
           ),
           child: Row(
@@ -144,8 +146,8 @@ class ActionRowLineItem extends StatelessWidget {
                   iconData,
                   size: 13,
                   color: selectStatus
-                      ? Theme.of(context).colorScheme.onSecondaryContainer
-                      : Theme.of(context).colorScheme.outline,
+                      ? theme.colorScheme.onSecondaryContainer
+                      : theme.colorScheme.outline,
                 )
               else if (icon != null)
                 icon!,
@@ -157,8 +159,8 @@ class ActionRowLineItem extends StatelessWidget {
                   style: TextStyle(
                       fontSize: 13,
                       color: selectStatus
-                          ? Theme.of(context).colorScheme.onSecondaryContainer
-                          : Theme.of(context).colorScheme.outline),
+                          ? theme.colorScheme.onSecondaryContainer
+                          : theme.colorScheme.outline),
                 ),
               ),
             ],

@@ -36,6 +36,7 @@ class HistoryItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     int aid = videoItem.history.oid!;
     String bvid = videoItem.history.bvid ?? IdUtils.av2bv(aid);
     return InkWell(
@@ -112,7 +113,6 @@ class HistoryItem extends StatelessWidget {
           return;
         }
         imageSaveDialog(
-          context: context,
           title: videoItem.title,
           cover: videoItem.cover,
         );
@@ -200,9 +200,7 @@ class HistoryItem extends StatelessWidget {
                                   backgroundColor:
                                       WidgetStateProperty.resolveWith(
                                     (states) {
-                                      return Theme.of(context)
-                                          .colorScheme
-                                          .surface
+                                      return theme.colorScheme.surface
                                           .withOpacity(0.8);
                                     },
                                   ),
@@ -212,8 +210,7 @@ class HistoryItem extends StatelessWidget {
                                   onChoose?.call();
                                 },
                                 icon: Icon(Icons.done_all_outlined,
-                                    color:
-                                        Theme.of(context).colorScheme.primary),
+                                    color: theme.colorScheme.primary),
                               ),
                             ),
                           ),
@@ -237,7 +234,7 @@ class HistoryItem extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(width: 10),
-                videoContent(context),
+                videoContent(theme),
               ],
             ),
           ),
@@ -252,7 +249,7 @@ class HistoryItem extends StatelessWidget {
                 tooltip: '功能菜单',
                 icon: Icon(
                   Icons.more_vert_outlined,
-                  color: Theme.of(context).colorScheme.outline,
+                  color: theme.colorScheme.outline,
                   size: 18,
                 ),
                 position: PopupMenuPosition.under,
@@ -321,7 +318,7 @@ class HistoryItem extends StatelessWidget {
     );
   }
 
-  Widget videoContent(context) {
+  Widget videoContent(ThemeData theme) {
     return Expanded(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -331,7 +328,7 @@ class HistoryItem extends StatelessWidget {
               videoItem.title,
               textAlign: TextAlign.start,
               style: TextStyle(
-                fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
+                fontSize: theme.textTheme.bodyMedium!.fontSize,
                 height: 1.42,
                 letterSpacing: 0.3,
               ),
@@ -343,16 +340,16 @@ class HistoryItem extends StatelessWidget {
             Text(
               videoItem.authorName!,
               style: TextStyle(
-                fontSize: Theme.of(context).textTheme.labelMedium!.fontSize,
-                color: Theme.of(context).colorScheme.outline,
+                fontSize: theme.textTheme.labelMedium!.fontSize,
+                color: theme.colorScheme.outline,
               ),
             ),
           const SizedBox(height: 2),
           Text(
             Utils.dateFormat(videoItem.viewAt!),
             style: TextStyle(
-              fontSize: Theme.of(context).textTheme.labelMedium!.fontSize,
-              color: Theme.of(context).colorScheme.outline,
+              fontSize: theme.textTheme.labelMedium!.fontSize,
+              color: theme.colorScheme.outline,
             ),
           ),
         ],

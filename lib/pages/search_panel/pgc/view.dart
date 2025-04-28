@@ -30,12 +30,11 @@ class _SearchPgcPanelState extends CommonSearchPanelState<SearchPgcPanel,
     tag: widget.searchType.name + widget.tag,
   );
 
-  late final TextStyle style = TextStyle(fontSize: 13);
-
   @override
-  Widget buildList(List<SearchMBangumiItemModel> list) {
+  Widget buildList(ThemeData theme, List<SearchMBangumiItemModel> list) {
     return SliverPadding(
-      padding: const EdgeInsets.only(bottom: 80),
+      padding:
+          EdgeInsets.only(bottom: MediaQuery.paddingOf(context).bottom + 80),
       sliver: SliverGrid(
         gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
           maxCrossAxisExtent: Grid.smallCardWidth * 2,
@@ -46,7 +45,7 @@ class _SearchPgcPanelState extends CommonSearchPanelState<SearchPgcPanel,
             if (index == list.length - 1) {
               controller.onLoadMore();
             }
-            return SearchPgcItem(style: style, item: list[index]);
+            return SearchPgcItem(item: list[index]);
           },
           childCount: list.length,
         ),

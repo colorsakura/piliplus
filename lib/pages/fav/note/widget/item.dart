@@ -19,6 +19,7 @@ class FavNoteItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Material(
       color: Colors.transparent,
       child: InkWell(
@@ -72,7 +73,7 @@ class FavNoteItem extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 13,
                         height: 1,
-                        color: Theme.of(context).colorScheme.outline,
+                        color: theme.colorScheme.outline,
                         overflow: TextOverflow.clip,
                       ),
                     ),
@@ -83,7 +84,7 @@ class FavNoteItem extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 13,
                         height: 1,
-                        color: Theme.of(context).colorScheme.outline,
+                        color: theme.colorScheme.outline,
                         overflow: TextOverflow.clip,
                       ),
                     ),
@@ -137,9 +138,7 @@ class FavNoteItem extends StatelessWidget {
                                             backgroundColor:
                                                 WidgetStateProperty.resolveWith(
                                               (states) {
-                                                return Theme.of(context)
-                                                    .colorScheme
-                                                    .surface
+                                                return theme.colorScheme.surface
                                                     .withOpacity(0.8);
                                               },
                                             ),
@@ -147,9 +146,7 @@ class FavNoteItem extends StatelessWidget {
                                           onPressed: null,
                                           icon: Icon(
                                             Icons.done_all_outlined,
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .primary,
+                                            color: theme.colorScheme.primary,
                                           ),
                                         ),
                                       ),

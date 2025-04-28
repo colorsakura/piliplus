@@ -57,6 +57,7 @@ class _LikeMePageState extends State<LikeMePage> {
           },
         ),
       Success() => () {
+          final theme = Theme.of(context);
           Pair<List<LikeMeItems>, List<LikeMeItems>> pair =
               loadingState.response;
           List<LikeMeItems> latest = pair.first;
@@ -65,13 +66,14 @@ class _LikeMePageState extends State<LikeMePage> {
             return SliverMainAxisGroup(
               slivers: [
                 if (latest.isNotEmpty) ...[
-                  _buildHeader('最新'),
+                  _buildHeader(theme, '最新'),
                   SliverList.separated(
                     itemBuilder: (context, index) {
                       if (total.isEmpty && index == latest.length - 1) {
                         _likeMeController.onLoadMore();
                       }
                       return _buildItem(
+                        theme,
                         latest[index],
                         (id) {
                           _likeMeController.onRemove(id, index, true);
@@ -90,13 +92,14 @@ class _LikeMePageState extends State<LikeMePage> {
                   ),
                 ],
                 if (total.isNotEmpty) ...[
-                  _buildHeader('累计'),
+                  _buildHeader(theme, '累计'),
                   SliverList.separated(
                     itemBuilder: (context, index) {
                       if (index == total.length - 1) {
                         _likeMeController.onLoadMore();
                       }
                       return _buildItem(
+                        theme,
                         total[index],
                         (id) {
                           _likeMeController.onRemove(id, index, false);
@@ -126,7 +129,7 @@ class _LikeMePageState extends State<LikeMePage> {
     };
   }
 
-  Widget _buildHeader(String title) {
+  Widget _buildHeader(ThemeData theme, String title) {
     return SliverSafeArea(
       top: false,
       bottom: false,
@@ -135,16 +138,16 @@ class _LikeMePageState extends State<LikeMePage> {
           padding: const EdgeInsets.only(left: 16),
           child: Text(
             title,
-            style: Theme.of(context).textTheme.labelLarge!.copyWith(
-                  color: Theme.of(context).colorScheme.secondary,
-                ),
+            style: theme.textTheme.labelLarge!.copyWith(
+              color: theme.colorScheme.secondary,
+            ),
           ),
         ),
       ),
     );
   }
 
-  Widget _buildItem(LikeMeItems item, ValueChanged onRemove) {
+  Widget _buildItem(ThemeData theme, LikeMeItems item, ValueChanged onRemove) {
     return ListTile(
       onTap: () {
         String? nativeUri = item.item?.nativeUri;
@@ -193,23 +196,21 @@ class _LikeMePageState extends State<LikeMePage> {
           children: [
             TextSpan(
               text: "${item.users![0].nickname}",
-              style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                  height: 1.5, color: Theme.of(context).colorScheme.primary),
+              style: theme.textTheme.titleSmall!
+                  .copyWith(height: 1.5, color: theme.colorScheme.primary),
             ),
             if (item.counts! > 1)
               TextSpan(
                 text: ' 等${item.counts}人',
-                style: Theme.of(context)
-                    .textTheme
-                    .titleSmall!
+                style: theme.textTheme.titleSmall!
                     .copyWith(fontSize: 12, height: 1.5),
               ),
             TextSpan(
               text: " 赞了我的${item.item?.business}",
-              style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                    height: 1.5,
-                    color: Theme.of(context).colorScheme.onSurfaceVariant,
-                  ),
+              style: theme.textTheme.titleSmall!.copyWith(
+                height: 1.5,
+                color: theme.colorScheme.onSurfaceVariant,
+              ),
             ),
           ],
         ),
@@ -224,16 +225,16 @@ class _LikeMePageState extends State<LikeMePage> {
             Text(item.item!.title!,
                 maxLines: 3,
                 overflow: TextOverflow.ellipsis,
-                style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                    color: Theme.of(context).colorScheme.outline, height: 1.5)),
+                style: theme.textTheme.bodyMedium!
+                    .copyWith(color: theme.colorScheme.outline, height: 1.5)),
           ],
           const SizedBox(height: 4),
           Text(
             Utils.dateFormat(item.likeTime),
-            style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                  fontSize: 13,
-                  color: Theme.of(context).colorScheme.outline,
-                ),
+            style: theme.textTheme.bodyMedium!.copyWith(
+              fontSize: 13,
+              color: theme.colorScheme.outline,
+            ),
           ),
         ],
       ),

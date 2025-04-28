@@ -10,27 +10,27 @@ import 'package:PiliPlus/http/search.dart';
 import 'package:PiliPlus/utils/app_scheme.dart';
 
 // 富文本
-InlineSpan? richNode(item, BuildContext context) {
-  final spacer = _VerticalSpaceSpan(0.0);
+TextSpan? richNode(
+  ThemeData theme,
+  DynamicItemModel item,
+  BuildContext context,
+) {
   try {
-    TextStyle authorStyle =
-        TextStyle(color: Theme.of(context).colorScheme.primary);
+    late final authorStyle = TextStyle(color: theme.colorScheme.primary);
     List<InlineSpan> spanChildren = [];
 
     List<RichTextNodeItem>? richTextNodes;
-    if (item.modules.moduleDynamic.desc != null) {
-      richTextNodes = item.modules.moduleDynamic.desc.richTextNodes;
-    } else if (item.modules.moduleDynamic.major != null) {
+    if (item.modules.moduleDynamic?.desc != null) {
+      richTextNodes = item.modules.moduleDynamic!.desc!.richTextNodes;
+    } else if (item.modules.moduleDynamic?.major != null) {
       // 动态页面 richTextNodes 层级可能与主页动态层级不同
       richTextNodes =
-          item.modules.moduleDynamic.major.opus?.summary?.richTextNodes;
-      if (item.modules.moduleDynamic.major.opus?.title != null) {
+          item.modules.moduleDynamic!.major!.opus?.summary?.richTextNodes;
+      if (item.modules.moduleDynamic?.major?.opus?.title != null) {
         spanChildren.add(
           TextSpan(
-            text: item.modules.moduleDynamic.major.opus.title + '\n',
-            style: Theme.of(context)
-                .textTheme
-                .titleMedium!
+            text: '${item.modules.moduleDynamic!.major!.opus!.title!}\n',
+            style: theme.textTheme.titleMedium!
                 .copyWith(fontWeight: FontWeight.bold),
           ),
         );
@@ -42,7 +42,8 @@ InlineSpan? richNode(item, BuildContext context) {
       for (var i in richTextNodes) {
         if (i.type == 'RICH_TEXT_NODE_TYPE_TEXT') {
           spanChildren.add(
-              TextSpan(text: i.origText, style: const TextStyle(height: 1.65)));
+            TextSpan(text: i.origText, style: const TextStyle(height: 1.65)),
+          );
         }
         // @用户
         else if (i.type == 'RICH_TEXT_NODE_TYPE_AT') {
@@ -53,8 +54,7 @@ InlineSpan? richNode(item, BuildContext context) {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   GestureDetector(
-                    onTap: () => Get.toNamed('/member?mid=${i.rid}',
-                        arguments: {'face': null}),
+                    onTap: () => Get.toNamed('/member?mid=${i.rid}'),
                     child: Text(
                       ' ${i.text}',
                       style: authorStyle,
@@ -88,7 +88,7 @@ InlineSpan? richNode(item, BuildContext context) {
               child: Icon(
                 Icons.link,
                 size: 20,
-                color: Theme.of(context).colorScheme.primary,
+                color: theme.colorScheme.primary,
               ),
             ),
           );
@@ -120,14 +120,12 @@ InlineSpan? richNode(item, BuildContext context) {
               child: GestureDetector(
                 onTap: () {
                   try {
-                    String dynamicId = item.basic.commentIdStr;
+                    String dynamicId = item.basic!.commentIdStr!;
                     Get.toNamed(
                       '/webview',
                       parameters: {
                         'url':
                             'https://t.bilibili.com/vote/h5/index/#/result?vote_id=${i.rid}&dynamic_id=$dynamicId&isWeb=1',
-                        'type': 'vote',
-                        'pageTitle': '投票'
                       },
                     );
                   } catch (_) {}
@@ -161,7 +159,7 @@ InlineSpan? richNode(item, BuildContext context) {
               child: Icon(
                 Icons.redeem_rounded,
                 size: 16,
-                color: Theme.of(context).colorScheme.primary,
+                color: theme.colorScheme.primary,
               ),
             ),
           );
@@ -195,7 +193,7 @@ InlineSpan? richNode(item, BuildContext context) {
               child: Icon(
                 Icons.shopping_bag_outlined,
                 size: 16,
-                color: Theme.of(context).colorScheme.primary,
+                color: theme.colorScheme.primary,
               ),
             ),
           );
@@ -220,7 +218,7 @@ InlineSpan? richNode(item, BuildContext context) {
               child: Icon(
                 Icons.play_circle_outline_outlined,
                 size: 16,
-                color: Theme.of(context).colorScheme.primary,
+                color: theme.colorScheme.primary,
               ),
             ),
           );
@@ -234,7 +232,6 @@ InlineSpan? richNode(item, BuildContext context) {
                     PageUtils.toVideoPage(
                       'bvid=${i.rid}&cid=$cid',
                       arguments: {
-                        'pic': null,
                         'heroTag': Utils.makeHeroTag(i.rid),
                       },
                     );
@@ -285,11 +282,6 @@ InlineSpan? richNode(item, BuildContext context) {
     }
   } catch (err) {
     debugPrint('❌rich_node_panel err: $err');
-    return spacer;
+    return null;
   }
-}
-
-class _VerticalSpaceSpan extends WidgetSpan {
-  _VerticalSpaceSpan(double height)
-      : super(child: SizedBox(height: height, width: double.infinity));
 }

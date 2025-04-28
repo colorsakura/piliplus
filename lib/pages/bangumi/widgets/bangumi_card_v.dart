@@ -23,7 +23,6 @@ class BangumiCardV extends StatelessWidget {
       margin: EdgeInsets.zero,
       child: InkWell(
         onLongPress: () => imageSaveDialog(
-          context: context,
           title: bangumiItem.title,
           cover: bangumiItem.cover,
         ),
@@ -88,6 +87,11 @@ class BangumiCardV extends StatelessWidget {
   }
 
   Widget bagumiContent(context) {
+    final theme = Theme.of(context);
+    final style = TextStyle(
+      fontSize: theme.textTheme.labelMedium!.fontSize,
+      color: theme.colorScheme.outline,
+    );
     return Expanded(
       child: Padding(
         padding: const EdgeInsets.fromLTRB(4, 5, 0, 3),
@@ -108,19 +112,13 @@ class BangumiCardV extends StatelessWidget {
               Text(
                 bangumiItem.indexShow,
                 maxLines: 1,
-                style: TextStyle(
-                  fontSize: Theme.of(context).textTheme.labelMedium!.fontSize,
-                  color: Theme.of(context).colorScheme.outline,
-                ),
+                style: style,
               ),
             if (bangumiItem.progress != null)
               Text(
                 bangumiItem.progress,
                 maxLines: 1,
-                style: TextStyle(
-                  fontSize: Theme.of(context).textTheme.labelMedium!.fontSize,
-                  color: Theme.of(context).colorScheme.outline,
-                ),
+                style: style,
               ),
           ],
         ),

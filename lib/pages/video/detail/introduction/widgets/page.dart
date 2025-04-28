@@ -87,6 +87,7 @@ class _PagesPanelState extends State<PagesPanel> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Column(
       children: <Widget>[
         if (widget.showEpisodes != null)
@@ -102,7 +103,7 @@ class _PagesPanelState extends State<PagesPanel> {
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
                       fontSize: 12,
-                      color: Theme.of(context).colorScheme.outline,
+                      color: theme.colorScheme.outline,
                     ),
                   ),
                 ),
@@ -145,7 +146,7 @@ class _PagesPanelState extends State<PagesPanel> {
                   right: i != pages.length - 1 ? 10 : 0,
                 ),
                 child: Material(
-                  color: Theme.of(context).colorScheme.onInverseSurface,
+                  color: theme.colorScheme.onInverseSurface,
                   borderRadius: BorderRadius.circular(6),
                   clipBehavior: Clip.hardEdge,
                   child: InkWell(
@@ -175,7 +176,7 @@ class _PagesPanelState extends State<PagesPanel> {
                           if (isCurrentIndex) ...<Widget>[
                             Image.asset(
                               'assets/images/live.png',
-                              color: Theme.of(context).colorScheme.primary,
+                              color: theme.colorScheme.primary,
                               height: 12,
                               semanticLabel: "正在播放：",
                             ),
@@ -188,8 +189,8 @@ class _PagesPanelState extends State<PagesPanel> {
                             style: TextStyle(
                               fontSize: 13,
                               color: isCurrentIndex
-                                  ? Theme.of(context).colorScheme.primary
-                                  : Theme.of(context).colorScheme.onSurface,
+                                  ? theme.colorScheme.primary
+                                  : theme.colorScheme.onSurface,
                             ),
                             overflow: TextOverflow.ellipsis,
                           ))

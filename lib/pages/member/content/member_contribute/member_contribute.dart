@@ -40,6 +40,7 @@ class _MemberContributeState extends State<MemberContribute>
   @override
   Widget build(BuildContext context) {
     super.build(context);
+    final theme = Theme.of(context);
     return _controller.tabs != null
         ? Column(
             children: [
@@ -58,7 +59,7 @@ class _MemberContributeState extends State<MemberContribute>
                   indicatorPadding:
                       const EdgeInsets.symmetric(horizontal: 3, vertical: 8),
                   indicator: BoxDecoration(
-                    color: Theme.of(context).colorScheme.secondaryContainer,
+                    color: theme.colorScheme.secondaryContainer,
                     borderRadius: BorderRadius.circular(20),
                   ),
                   indicatorSize: TabBarIndicatorSize.tab,
@@ -66,9 +67,8 @@ class _MemberContributeState extends State<MemberContribute>
                           .labelStyle
                           ?.copyWith(fontSize: 14) ??
                       const TextStyle(fontSize: 14),
-                  labelColor:
-                      Theme.of(context).colorScheme.onSecondaryContainer,
-                  unselectedLabelColor: Theme.of(context).colorScheme.outline,
+                  labelColor: theme.colorScheme.onSecondaryContainer,
+                  unselectedLabelColor: theme.colorScheme.outline,
                 ),
               ),
               Expanded(

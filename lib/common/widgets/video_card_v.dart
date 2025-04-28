@@ -38,8 +38,8 @@ class VideoCardV extends StatelessWidget {
         break;
       case 'av':
         String bvid = videoItem.bvid ?? IdUtils.av2bv(videoItem.aid!);
-        int cid = videoItem.cid!;
-        if (cid == -1) {
+        int? cid = videoItem.cid;
+        if (cid == null || cid == 0 || cid == -1) {
           cid = await SearchHttp.ab2c(aid: videoItem.aid, bvid: bvid);
         }
         PageUtils.toVideoPage(
@@ -100,7 +100,6 @@ class VideoCardV extends StatelessWidget {
           child: InkWell(
             onTap: () => onPushDetail(Utils.makeHeroTag(videoItem.aid)),
             onLongPress: () => imageSaveDialog(
-              context: context,
               title: videoItem.title,
               cover: videoItem.pic,
             ),
@@ -152,6 +151,7 @@ class VideoCardV extends StatelessWidget {
   }
 
   Widget videoContent(context) {
+    final theme = Theme.of(context);
     return Expanded(
       child: Padding(
         padding: const EdgeInsets.fromLTRB(6, 5, 6, 5),
@@ -168,7 +168,7 @@ class VideoCardV extends StatelessWidget {
                 ),
               ),
             ),
-            videoStat(context),
+            videoStat(context, theme),
             Row(
               children: [
                 if (videoItem.goto == 'bangumi') ...[
@@ -217,9 +217,8 @@ class VideoCardV extends StatelessWidget {
                     overflow: TextOverflow.clip,
                     style: TextStyle(
                       height: 1.5,
-                      fontSize:
-                          Theme.of(context).textTheme.labelMedium!.fontSize,
-                      color: Theme.of(context).colorScheme.outline,
+                      fontSize: theme.textTheme.labelMedium!.fontSize,
+                      color: theme.colorScheme.outline,
                     ),
                   ),
                 ),
@@ -232,7 +231,7 @@ class VideoCardV extends StatelessWidget {
     );
   }
 
-  Widget videoStat(context) {
+  Widget videoStat(BuildContext context, ThemeData theme) {
     return Row(
       children: [
         StatView(
@@ -254,8 +253,8 @@ class VideoCardV extends StatelessWidget {
             maxLines: 1,
             TextSpan(
                 style: TextStyle(
-                  fontSize: Theme.of(context).textTheme.labelSmall!.fontSize,
-                  color: Theme.of(context).colorScheme.outline.withOpacity(0.8),
+                  fontSize: theme.textTheme.labelSmall!.fontSize,
+                  color: theme.colorScheme.outline.withOpacity(0.8),
                 ),
                 text: Utils.formatTimestampToRelativeTime(videoItem.pubdate)),
           ),
@@ -268,8 +267,8 @@ class VideoCardV extends StatelessWidget {
             maxLines: 1,
             TextSpan(
                 style: TextStyle(
-                  fontSize: Theme.of(context).textTheme.labelSmall!.fontSize,
-                  color: Theme.of(context).colorScheme.outline.withOpacity(0.8),
+                  fontSize: theme.textTheme.labelSmall!.fontSize,
+                  color: theme.colorScheme.outline.withOpacity(0.8),
                 ),
                 text: Utils.shortenChineseDateString(
                     videoItem.desc!.split(' · ').last)),
