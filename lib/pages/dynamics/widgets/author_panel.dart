@@ -309,8 +309,9 @@ class AuthorPanel extends StatelessWidget {
                 },
                 minLeadingWidth: 0,
               ),
-              if (item.basic!.commentType == 17 ||
-                  item.basic!.commentType == 11)
+              if ((item.basic!.commentType == 17 ||
+                      item.basic!.commentType == 11) &&
+                  item.modules.moduleBlocked == null)
                 ListTile(
                   title: Text(
                     '分享至消息',
