@@ -311,7 +311,7 @@ class AuthorPanel extends StatelessWidget {
               ),
               if ((item.basic!.commentType == 17 ||
                       item.basic!.commentType == 11) &&
-                  item.modules.moduleBlocked == null)
+                  item.modules.moduleDynamic?.major?.blocked == null)
                 ListTile(
                   title: Text(
                     '分享至消息',
