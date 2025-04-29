@@ -100,6 +100,7 @@ class ItemModulesModel {
   // 专栏
   List<ModuleTag>? moduleExtend; // opus的tag
   List<ArticleContentModel>? moduleContent;
+  ModuleBlocked? moduleBlocked;
 
   // moduleBottom
 
@@ -137,6 +138,11 @@ class ItemModulesModel {
               ?.map((i) => ArticleContentModel.fromJson(i))
               .toList();
           break;
+        case 'MODULE_TYPE_BLOCKED':
+          moduleBlocked = i['module_blocked'] == null
+              ? null
+              : ModuleBlocked.fromJson(i['module_blocked']);
+          break;
         case 'MODULE_TYPE_EXTEND':
           moduleExtend = (i['module_extend']['items'] as List?)
               ?.map((i) => ModuleTag.fromJson(i))
@@ -153,6 +159,46 @@ class ItemModulesModel {
         //   debugPrint('unknown type: ${i}');
       }
     }
+  }
+}
+
+class ModuleBlocked {
+  BgImg? bgImg;
+  int? blockedType;
+  Button? button;
+  String? hintMessage;
+  BgImg? icon;
+
+  ModuleBlocked.fromJson(Map<String, dynamic> json) {
+    bgImg = json['bg_img'] == null ? null : BgImg.fromJson(json['bg_img']);
+    blockedType = json['blocked_type'];
+    button = json['button'] == null ? null : Button.fromJson(json['button']);
+    hintMessage = json['hint_message'];
+    icon = json['icon'] == null ? null : BgImg.fromJson(json['icon']);
+  }
+}
+
+class Button {
+  int? handleType;
+  String? icon;
+  String? jumpUrl;
+  String? text;
+
+  Button.fromJson(Map<String, dynamic> json) {
+    handleType = json['handle_type'];
+    icon = json['icon'];
+    jumpUrl = json['jump_url'];
+    text = json['text'];
+  }
+}
+
+class BgImg {
+  String? imgDark;
+  String? imgDay;
+
+  BgImg.fromJson(Map<String, dynamic> json) {
+    imgDark = json['img_dark'];
+    imgDay = json['img_day'];
   }
 }
 

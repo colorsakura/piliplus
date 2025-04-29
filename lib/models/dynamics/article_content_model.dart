@@ -173,11 +173,28 @@ class Card {
   String? oid;
   String? type;
   Ugc? ugc;
+  ItemNull? itemNull;
 
   Card.fromJson(Map<String, dynamic> json) {
     oid = json['oid'];
     type = json['type'];
     ugc = json['ugc'] == null ? null : Ugc.fromJson(json['ugc']);
+    itemNull =
+        json['item_null'] == null ? null : ItemNull.fromJson(json['item_null']);
+  }
+}
+
+class ItemNull {
+  ItemNull({
+    this.icon,
+    this.text,
+  });
+  String? icon;
+  String? text;
+
+  ItemNull.fromJson(Map<String, dynamic> json) {
+    icon = json['icon'];
+    text = json['text'];
   }
 }
 

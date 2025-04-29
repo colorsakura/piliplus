@@ -4,12 +4,14 @@ import 'package:PiliPlus/common/widgets/interactiveviewer_gallery/interactivevie
 import 'package:PiliPlus/common/widgets/network_img_layer.dart';
 import 'package:PiliPlus/models/dynamics/article_content_model.dart'
     show ArticleContentModel, Style, Word;
+import 'package:PiliPlus/models/dynamics/result.dart';
 import 'package:PiliPlus/utils/app_scheme.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:re_highlight/languages/all.dart';
 import 'package:re_highlight/re_highlight.dart';
@@ -168,7 +170,7 @@ class OpusContent extends StatelessWidget {
                   }).toList(),
                 ),
               );
-            case 6 when (element.linkCard?.card?.ugc != null):
+            case 6:
               return Material(
                 shape: const RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(Radius.circular(8)),
@@ -186,32 +188,46 @@ class OpusContent extends StatelessWidget {
                   borderRadius: const BorderRadius.all(Radius.circular(8)),
                   child: Padding(
                     padding: const EdgeInsets.all(8),
-                    child: Row(
-                      children: [
-                        NetworkImgLayer(
-                          radius: 6,
-                          width: 65 * StyleString.aspectRatio,
-                          height: 65,
-                          src: element.linkCard!.card!.ugc!.cover,
-                        ),
-                        const SizedBox(width: 10),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(element.linkCard!.card!.ugc!.title!),
-                              Text(
-                                element.linkCard!.card!.ugc!.descSecond!,
-                                style: TextStyle(
-                                  fontSize: 13,
-                                  color: colorScheme.outline,
-                                ),
+                    child: switch (element.linkCard?.card?.type) {
+                      'LINK_CARD_TYPE_UGC' => Row(
+                          children: [
+                            NetworkImgLayer(
+                              radius: 6,
+                              width: 65 * StyleString.aspectRatio,
+                              height: 65,
+                              src: element.linkCard!.card!.ugc!.cover,
+                            ),
+                            const SizedBox(width: 10),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(element.linkCard!.card!.ugc!.title!),
+                                  Text(
+                                    element.linkCard!.card!.ugc!.descSecond!,
+                                    style: TextStyle(
+                                      fontSize: 13,
+                                      color: colorScheme.outline,
+                                    ),
+                                  ),
+                                ],
                               ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
+                      'LINK_CARD_TYPE_ITEM_NULL' => Row(
+                          children: [
+                            if (element.linkCard?.card?.itemNull?.icon
+                                    ?.isNullOrEmpty ==
+                                true)
+                              Icon(Icons.info, size: 20),
+                            Text(' ${element.linkCard?.card?.itemNull?.text}'),
+                          ],
+                        ),
+                      _ => throw UnimplementedError(
+                          '\nparaType: ${element.paraType},\ncard type: ${element.linkCard?.card?.type}',
+                        ),
+                    },
                   ),
                 ),
               );
@@ -268,4 +284,81 @@ class OpusContent extends StatelessWidget {
       separatorBuilder: (context, index) => const SizedBox(height: 10),
     );
   }
+}
+
+Widget moduleBlockedItem(ModuleBlocked moduleBlocked, double width) {
+  return SliverToBoxAdapter(
+    child: Stack(
+      clipBehavior: Clip.none,
+      children: [
+        if (moduleBlocked.bgImg != null)
+          CachedNetworkImage(
+            width: width,
+            fit: BoxFit.cover,
+            imageUrl: Utils.thumbnailImgUrl(
+              Get.isDarkMode
+                  ? moduleBlocked.bgImg!.imgDark
+                  : moduleBlocked.bgImg!.imgDay,
+            ),
+          ),
+        Container(
+          width: width,
+          height: width,
+          padding: const EdgeInsets.all(12),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              if (moduleBlocked.icon != null)
+                CachedNetworkImage(
+                  width: width / 7,
+                  fit: BoxFit.contain,
+                  imageUrl: Utils.thumbnailImgUrl(
+                    Get.isDarkMode
+                        ? moduleBlocked.icon!.imgDark
+                        : moduleBlocked.icon!.imgDay,
+                  ),
+                ),
+              if (moduleBlocked.hintMessage != null) ...[
+                const SizedBox(height: 5),
+                Text(
+                  moduleBlocked.hintMessage!,
+                  textAlign: TextAlign.center,
+                ),
+              ],
+              if (moduleBlocked.button != null) ...[
+                const SizedBox(height: 5),
+                FilledButton.tonal(
+                  style: FilledButton.styleFrom(
+                    visualDensity: const VisualDensity(vertical: -2.5),
+                    backgroundColor: Get.isDarkMode
+                        ? const Color(0xFF8F0030)
+                        : const Color(0xFFFF6699),
+                    foregroundColor: Colors.white,
+                  ),
+                  onPressed: () {
+                    if (moduleBlocked.button!.jumpUrl != null) {
+                      PiliScheme.routePushFromUrl(
+                          moduleBlocked.button!.jumpUrl!);
+                    }
+                  },
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      if (moduleBlocked.button!.icon != null)
+                        CachedNetworkImage(
+                          height: 16,
+                          color: Colors.white,
+                          imageUrl: moduleBlocked.button!.icon!,
+                        ),
+                      Text(moduleBlocked.button!.text ?? ''),
+                    ],
+                  ),
+                ),
+              ],
+            ],
+          ),
+        ),
+      ],
+    ),
+  );
 }

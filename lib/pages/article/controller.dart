@@ -119,7 +119,7 @@ class ArticleController extends ReplyController<MainListReply> {
   }
 
   // stats
-  Future<bool> getArticleInfo() async {
+  Future<bool> getArticleInfo([bool isGetCover = false]) async {
     final res = await DynamicsHttp.articleInfo(cvId: commentId);
     if (res['status']) {
       summary
@@ -139,6 +139,9 @@ class ArticleController extends ReplyController<MainListReply> {
         ),
       );
       return true;
+    }
+    if (isGetCover) {
+      SmartDialog.showToast(res['msg']);
     }
     return false;
   }

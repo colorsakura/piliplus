@@ -338,29 +338,48 @@ class _ArticlePageState extends State<ArticlePage>
           () {
             if (_articleCtr.isLoaded.value) {
               late Widget content;
-              if (_articleCtr.opus == null) {
-                debugPrint('html page');
-                final res = parser.parse(_articleCtr.articleData!.content!);
-                content = SliverList.separated(
-                  itemCount: res.body!.children.length,
-                  itemBuilder: (context, index) {
-                    return htmlRender(
-                      context: context,
-                      element: res.body!.children[index],
-                      maxWidth: maxWidth,
-                      callback: _getImageCallback,
-                    );
-                  },
-                  separatorBuilder: (context, index) =>
-                      const SizedBox(height: 10),
-                );
-              } else {
+              if (_articleCtr.opus != null) {
                 debugPrint('json page');
                 content = OpusContent(
                   opus: _articleCtr.opus!,
                   callback: _getImageCallback,
                   maxWidth: maxWidth,
                 );
+              } else if (_articleCtr.opusData?.modules.moduleBlocked != null) {
+                debugPrint('moduleBlocked');
+                final moduleBlocked =
+                    _articleCtr.opusData!.modules.moduleBlocked!;
+                final width = maxWidth * 0.8;
+                content = moduleBlockedItem(moduleBlocked, width);
+              } else if (_articleCtr.articleData?.content != null) {
+                debugPrint('html page');
+                final res = parser.parse(_articleCtr.articleData!.content!);
+                if (res.body!.children.isEmpty) {
+                  content = SliverToBoxAdapter(
+                    child: htmlRender(
+                      context: context,
+                      html: _articleCtr.articleData!.content!,
+                      maxWidth: maxWidth,
+                      callback: _getImageCallback,
+                    ),
+                  );
+                } else {
+                  content = SliverList.separated(
+                    itemCount: res.body!.children.length,
+                    itemBuilder: (context, index) {
+                      return htmlRender(
+                        context: context,
+                        element: res.body!.children[index],
+                        maxWidth: maxWidth,
+                        callback: _getImageCallback,
+                      );
+                    },
+                    separatorBuilder: (context, index) =>
+                        const SizedBox(height: 10),
+                  );
+                }
+              } else {
+                content = SliverToBoxAdapter(child: Text('NULL'));
               }
 
               int? pubTime =
@@ -615,12 +634,13 @@ class _ArticlePageState extends State<ArticlePage>
                 ),
               ),
               if (_articleCtr.commentType == 12 &&
-                  _articleCtr.stats.value != null)
+                  _articleCtr.stats.value != null &&
+                  _articleCtr.opusData?.modules.moduleBlocked == null)
                 PopupMenuItem(
                   onTap: () async {
                     try {
                       if (_articleCtr.summary.cover == null) {
-                        if (!await _articleCtr.getArticleInfo()) {
+                        if (!await _articleCtr.getArticleInfo(true)) {
                           return;
                         }
                       }
