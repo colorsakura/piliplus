@@ -290,174 +290,138 @@ class OpusContent extends StatelessWidget {
 
 Widget moduleBlockedItem(
     ThemeData theme, ModuleBlocked moduleBlocked, double maxWidth) {
-  if (moduleBlocked.blockedType == 1) {
-    maxWidth = min(400, maxWidth * 0.8);
-    return Stack(
-      clipBehavior: Clip.none,
-      children: [
-        if (moduleBlocked.bgImg != null)
-          CachedNetworkImage(
-            width: maxWidth,
-            fit: BoxFit.cover,
-            imageUrl: Utils.thumbnailImgUrl(
-              Get.isDarkMode
-                  ? moduleBlocked.bgImg!.imgDark
-                  : moduleBlocked.bgImg!.imgDay,
-            ),
-          ),
-        Container(
-          width: maxWidth,
-          height: maxWidth,
-          padding: const EdgeInsets.all(12),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              if (moduleBlocked.icon != null)
-                CachedNetworkImage(
-                  width: maxWidth / 7,
-                  fit: BoxFit.contain,
-                  imageUrl: Utils.thumbnailImgUrl(
-                    Get.isDarkMode
-                        ? moduleBlocked.icon!.imgDark
-                        : moduleBlocked.icon!.imgDay,
-                  ),
+  BoxDecoration? bgImg() {
+    return moduleBlocked.bgImg == null
+        ? null
+        : BoxDecoration(
+            image: DecorationImage(
+              fit: BoxFit.fill,
+              image: CachedNetworkImageProvider(
+                Utils.thumbnailImgUrl(
+                  Get.isDarkMode
+                      ? moduleBlocked.bgImg!.imgDark
+                      : moduleBlocked.bgImg!.imgDay,
                 ),
+              ),
+            ),
+          );
+  }
+
+  Widget icon(double width) {
+    return CachedNetworkImage(
+      width: width,
+      fit: BoxFit.contain,
+      imageUrl: Utils.thumbnailImgUrl(
+        Get.isDarkMode
+            ? moduleBlocked.icon!.imgDark
+            : moduleBlocked.icon!.imgDay,
+      ),
+    );
+  }
+
+  Widget btn({
+    OutlinedBorder? shape,
+    VisualDensity? visualDensity,
+    EdgeInsetsGeometry? padding,
+  }) {
+    return FilledButton.tonal(
+      style: FilledButton.styleFrom(
+        padding: padding,
+        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+        visualDensity: visualDensity,
+        backgroundColor:
+            Get.isDarkMode ? const Color(0xFF8F0030) : const Color(0xFFFF6699),
+        foregroundColor: Colors.white,
+        shape: shape,
+      ),
+      onPressed: () {
+        if (moduleBlocked.button!.jumpUrl != null) {
+          PiliScheme.routePushFromUrl(moduleBlocked.button!.jumpUrl!);
+        }
+      },
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (moduleBlocked.button!.icon != null)
+            CachedNetworkImage(
+              height: 16,
+              color: Colors.white,
+              imageUrl: moduleBlocked.button!.icon!,
+            ),
+          Text(moduleBlocked.button!.text ?? ''),
+        ],
+      ),
+    );
+  }
+
+  if (moduleBlocked.blockedType == 1) {
+    maxWidth = maxWidth <= 255 ? maxWidth : min(400, maxWidth * 0.8);
+    return Container(
+      width: maxWidth,
+      height: maxWidth,
+      decoration: bgImg(),
+      padding: const EdgeInsets.all(12),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          if (moduleBlocked.icon != null) icon(max(40, maxWidth / 7)),
+          if (moduleBlocked.hintMessage != null) ...[
+            const SizedBox(height: 5),
+            Text(
+              moduleBlocked.hintMessage!,
+              textAlign: TextAlign.center,
+              style: TextStyle(color: theme.colorScheme.outline),
+            ),
+          ],
+          if (moduleBlocked.button != null) ...[
+            const SizedBox(height: 8),
+            btn(
+              visualDensity: const VisualDensity(vertical: -2.5),
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+  return Container(
+    decoration: bgImg(),
+    padding: const EdgeInsets.all(12),
+    child: Row(
+      children: [
+        if (moduleBlocked.icon != null) ...[
+          icon(42),
+          const SizedBox(width: 8),
+        ],
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              if (moduleBlocked.title != null) Text(moduleBlocked.title!),
               if (moduleBlocked.hintMessage != null) ...[
-                const SizedBox(height: 5),
+                const SizedBox(height: 2),
                 Text(
                   moduleBlocked.hintMessage!,
-                  textAlign: TextAlign.center,
                   style: TextStyle(
+                    fontSize: 13,
                     color: theme.colorScheme.outline,
                   ),
                 ),
               ],
-              if (moduleBlocked.button != null) ...[
-                const SizedBox(height: 5),
-                FilledButton.tonal(
-                  style: FilledButton.styleFrom(
-                    visualDensity: const VisualDensity(vertical: -2.5),
-                    backgroundColor: Get.isDarkMode
-                        ? const Color(0xFF8F0030)
-                        : const Color(0xFFFF6699),
-                    foregroundColor: Colors.white,
-                  ),
-                  onPressed: () {
-                    if (moduleBlocked.button!.jumpUrl != null) {
-                      PiliScheme.routePushFromUrl(
-                          moduleBlocked.button!.jumpUrl!);
-                    }
-                  },
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      if (moduleBlocked.button!.icon != null)
-                        CachedNetworkImage(
-                          height: 16,
-                          color: Colors.white,
-                          imageUrl: moduleBlocked.button!.icon!,
-                        ),
-                      Text(moduleBlocked.button!.text ?? ''),
-                    ],
-                  ),
-                ),
-              ],
             ],
           ),
         ),
-      ],
-    );
-  }
-  return Stack(
-    clipBehavior: Clip.none,
-    alignment: Alignment.center,
-    children: [
-      if (moduleBlocked.bgImg != null)
-        CachedNetworkImage(
-          width: maxWidth,
-          fit: BoxFit.cover,
-          imageUrl: Utils.thumbnailImgUrl(
-            Get.isDarkMode
-                ? moduleBlocked.bgImg!.imgDark
-                : moduleBlocked.bgImg!.imgDay,
-          ),
-        ),
-      Padding(
-        padding: const EdgeInsets.all(12),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            if (moduleBlocked.icon != null) ...[
-              CachedNetworkImage(
-                width: 42,
-                fit: BoxFit.contain,
-                imageUrl: Utils.thumbnailImgUrl(
-                  Get.isDarkMode
-                      ? moduleBlocked.icon!.imgDark
-                      : moduleBlocked.icon!.imgDay,
-                ),
-              ),
-              const SizedBox(width: 8),
-            ],
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  if (moduleBlocked.title != null)
-                    Text(
-                      moduleBlocked.title!,
-                    ),
-                  if (moduleBlocked.hintMessage != null) ...[
-                    const SizedBox(height: 2),
-                    Text(
-                      moduleBlocked.hintMessage!,
-                      style: TextStyle(
-                        fontSize: 13,
-                        color: theme.colorScheme.outline,
-                      ),
-                    ),
-                  ],
-                ],
-              ),
+        if (moduleBlocked.button != null) ...[
+          const SizedBox(width: 8),
+          btn(
+            visualDensity: const VisualDensity(vertical: -3, horizontal: -4),
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(6)),
             ),
-            if (moduleBlocked.button != null) ...[
-              const SizedBox(width: 8),
-              FilledButton.tonal(
-                style: FilledButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
-                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                  visualDensity:
-                      const VisualDensity(vertical: -3, horizontal: -4),
-                  backgroundColor: Get.isDarkMode
-                      ? const Color(0xFF8F0030)
-                      : const Color(0xFFFF6699),
-                  foregroundColor: Colors.white,
-                  shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(6))),
-                ),
-                onPressed: () {
-                  if (moduleBlocked.button!.jumpUrl != null) {
-                    PiliScheme.routePushFromUrl(moduleBlocked.button!.jumpUrl!);
-                  }
-                },
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    if (moduleBlocked.button!.icon != null)
-                      CachedNetworkImage(
-                        height: 16,
-                        color: Colors.white,
-                        imageUrl: moduleBlocked.button!.icon!,
-                      ),
-                    Text(moduleBlocked.button!.text ?? ''),
-                  ],
-                ),
-              ),
-            ],
-          ],
-        ),
-      ),
-    ],
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+          ),
+        ],
+      ],
+    ),
   );
 }
