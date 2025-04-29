@@ -48,18 +48,22 @@ class _MemberArticleState extends State<MemberArticle>
               },
               child: CustomScrollView(
                 slivers: [
-                  SliverGrid(
-                    gridDelegate: Grid.videoCardHDelegate(context),
-                    delegate: SliverChildBuilderDelegate(
-                      (context, index) {
-                        if (index == loadingState.response!.length - 1) {
-                          _controller.onLoadMore();
-                        }
-                        return MemberArticleItem(
-                          item: loadingState.response![index],
-                        );
-                      },
-                      childCount: loadingState.response!.length,
+                  SliverPadding(
+                    padding: EdgeInsets.only(
+                        bottom: MediaQuery.paddingOf(context).bottom + 80),
+                    sliver: SliverGrid(
+                      gridDelegate: Grid.videoCardHDelegate(context),
+                      delegate: SliverChildBuilderDelegate(
+                        (context, index) {
+                          if (index == loadingState.response!.length - 1) {
+                            _controller.onLoadMore();
+                          }
+                          return MemberArticleItem(
+                            item: loadingState.response![index],
+                          );
+                        },
+                        childCount: loadingState.response!.length,
+                      ),
                     ),
                   ),
                 ],
