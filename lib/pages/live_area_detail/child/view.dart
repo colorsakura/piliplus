@@ -2,10 +2,12 @@ import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/common/skeleton/video_card_v.dart';
 import 'package:PiliPlus/common/widgets/loading_widget/http_error.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
+import 'package:PiliPlus/common/widgets/self_sized_horizontal_list.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/live/live_feed_index/card_data_list_item.dart';
 import 'package:PiliPlus/pages/live/widgets/live_item_app.dart';
 import 'package:PiliPlus/pages/live_area_detail/child/controller.dart';
+import 'package:PiliPlus/pages/search/widgets/search_text.dart';
 import 'package:PiliPlus/utils/grid.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -34,6 +36,7 @@ class _LiveAreaChildPageState extends State<LiveAreaChildPage>
   @override
   Widget build(BuildContext context) {
     super.build(context);
+    final ThemeData theme = Theme.of(context);
     return refreshIndicator(
       onRefresh: _controller.onRefresh,
       child: CustomScrollView(
@@ -45,14 +48,16 @@ class _LiveAreaChildPageState extends State<LiveAreaChildPage>
               top: StyleString.safeSpace,
               bottom: MediaQuery.paddingOf(context).bottom + 80,
             ),
-            sliver: Obx(() => _buildBody(_controller.loadingState.value)),
+            sliver:
+                Obx(() => _buildBody(theme, _controller.loadingState.value)),
           ),
         ],
       ),
     );
   }
 
-  Widget _buildBody(LoadingState<List<CardLiveItem>?> loadingState) {
+  Widget _buildBody(
+      ThemeData theme, LoadingState<List<CardLiveItem>?> loadingState) {
     return switch (loadingState) {
       Loading() => SliverGrid(
           gridDelegate: SliverGridDelegateWithExtentAndRatio(
@@ -69,28 +74,69 @@ class _LiveAreaChildPageState extends State<LiveAreaChildPage>
             childCount: 10,
           ),
         ),
-      Success() => loadingState.response?.isNotEmpty == true
-          ? SliverGrid(
-              gridDelegate: SliverGridDelegateWithExtentAndRatio(
-                mainAxisSpacing: StyleString.cardSpace,
-                crossAxisSpacing: StyleString.cardSpace,
-                maxCrossAxisExtent: Grid.smallCardWidth,
-                childAspectRatio: StyleString.aspectRatio,
-                mainAxisExtent: MediaQuery.textScalerOf(context).scale(90),
+      Success() => SliverMainAxisGroup(
+          slivers: [
+            if (_controller.newTags?.isNotEmpty == true)
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.only(bottom: 12),
+                  child: SelfSizedHorizontalList(
+                    gapSize: 12,
+                    childBuilder: (index) {
+                      late final item = _controller.newTags![index];
+                      return Obx(
+                        () => SearchText(
+                          fontSize: 14,
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 8,
+                            vertical: 3,
+                          ),
+                          text: '${item.name}',
+                          bgColor: index == _controller.tagIndex.value
+                              ? theme.colorScheme.secondaryContainer
+                              : Colors.transparent,
+                          textColor: index == _controller.tagIndex.value
+                              ? theme.colorScheme.onSecondaryContainer
+                              : null,
+                          onTap: (value) {
+                            _controller.onSelectTag(
+                              index,
+                              item.sortType,
+                            );
+                          },
+                        ),
+                      );
+                    },
+                    itemCount: _controller.newTags!.length,
+                  ),
+                ),
               ),
-              delegate: SliverChildBuilderDelegate(
-                (context, index) {
-                  if (index == loadingState.response!.length - 1) {
-                    _controller.onLoadMore();
-                  }
-                  return LiveCardVApp(item: loadingState.response![index]);
-                },
-                childCount: loadingState.response!.length,
-              ),
-            )
-          : HttpError(
-              onReload: _controller.onReload,
-            ),
+            loadingState.response?.isNotEmpty == true
+                ? SliverGrid(
+                    gridDelegate: SliverGridDelegateWithExtentAndRatio(
+                      mainAxisSpacing: StyleString.cardSpace,
+                      crossAxisSpacing: StyleString.cardSpace,
+                      maxCrossAxisExtent: Grid.smallCardWidth,
+                      childAspectRatio: StyleString.aspectRatio,
+                      mainAxisExtent:
+                          MediaQuery.textScalerOf(context).scale(90),
+                    ),
+                    delegate: SliverChildBuilderDelegate(
+                      (context, index) {
+                        if (index == loadingState.response!.length - 1) {
+                          _controller.onLoadMore();
+                        }
+                        return LiveCardVApp(
+                            item: loadingState.response![index]);
+                      },
+                      childCount: loadingState.response!.length,
+                    ),
+                  )
+                : HttpError(
+                    onReload: _controller.onReload,
+                  ),
+          ],
+        ),
       Error() => HttpError(
           errMsg: loadingState.errMsg,
           onReload: _controller.onReload,

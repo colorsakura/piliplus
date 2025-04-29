@@ -1,3 +1,5 @@
+import 'package:PiliPlus/common/widgets/button/icon_button.dart';
+import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
 import 'package:PiliPlus/common/widgets/scroll_physics.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/live/live_area_list/area_item.dart';
@@ -59,27 +61,48 @@ class _LiveAreaDetailPageState extends State<LiveAreaDetailPage> {
           ? DefaultTabController(
               initialIndex: _controller.initialIndex,
               length: loadingState.response!.length,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  TabBar(
-                    isScrollable: true,
-                    tabAlignment: TabAlignment.start,
-                    tabs: loadingState.response!
-                        .map((e) => Tab(text: e.name ?? ''))
-                        .toList(),
-                  ),
-                  Expanded(
-                    child: tabBarView(
-                      children: loadingState.response!
-                          .map((e) => LiveAreaChildPage(
-                                areaId: e.id,
-                                parentAreaId: e.parentId,
-                              ))
-                          .toList(),
-                    ),
-                  ),
-                ],
+              child: Builder(
+                builder: (context) {
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Expanded(
+                            child: TabBar(
+                              dividerHeight: 0,
+                              dividerColor: Colors.transparent,
+                              isScrollable: true,
+                              tabAlignment: TabAlignment.start,
+                              tabs: loadingState.response!
+                                  .map((e) => Tab(text: e.name ?? ''))
+                                  .toList(),
+                            ),
+                          ),
+                          iconButton(
+                            context: context,
+                            icon: Icons.menu,
+                            bgColor: Colors.transparent,
+                            onPressed: () {
+                              _showTags(context, theme, loadingState.response!);
+                            },
+                          ),
+                        ],
+                      ),
+                      const Divider(height: 1),
+                      Expanded(
+                        child: tabBarView(
+                          children: loadingState.response!
+                              .map((e) => LiveAreaChildPage(
+                                    areaId: e.id,
+                                    parentAreaId: e.parentId,
+                                  ))
+                              .toList(),
+                        ),
+                      ),
+                    ],
+                  );
+                },
               ),
             )
           : LiveAreaChildPage(
@@ -91,5 +114,106 @@ class _LiveAreaDetailPageState extends State<LiveAreaDetailPage> {
           parentAreaId: widget.parentAreaId,
         ),
     };
+  }
+
+  Widget _tagItem({
+    required ThemeData theme,
+    required AreaItem item,
+    required VoidCallback onTap,
+  }) {
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: onTap,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          NetworkImgLayer(
+            width: 45,
+            height: 45,
+            src: item.pic,
+            type: 'emote',
+          ),
+          const SizedBox(height: 4),
+          Text(
+            item.name!,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: const TextStyle(fontSize: 12),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showTags(BuildContext context, ThemeData theme, List<AreaItem> list) {
+    showModalBottomSheet(
+      context: context,
+      useSafeArea: true,
+      isScrollControlled: true,
+      builder: (_) {
+        return DraggableScrollableSheet(
+          minChildSize: 0,
+          maxChildSize: 1,
+          initialChildSize: 1,
+          snap: true,
+          expand: false,
+          snapSizes: const [1],
+          builder: (_, scrollController) {
+            return NotificationListener<DraggableScrollableNotification>(
+              onNotification: (notification) {
+                if (notification.extent <= 1e-5) {
+                  Get.back();
+                }
+                return false;
+              },
+              child: Column(
+                children: [
+                  AppBar(
+                    centerTitle: true,
+                    backgroundColor: Colors.transparent,
+                    automaticallyImplyLeading: false,
+                    title: Text(widget.parentName),
+                    actions: [
+                      IconButton(
+                        onPressed: Get.back,
+                        icon: const Icon(Icons.clear),
+                      ),
+                      const SizedBox(width: 12),
+                    ],
+                  ),
+                  Expanded(
+                    child: GridView.builder(
+                      controller: scrollController,
+                      padding: EdgeInsets.only(
+                        top: 12,
+                        bottom: MediaQuery.paddingOf(context).bottom + 80,
+                      ),
+                      itemCount: list.length,
+                      gridDelegate:
+                          const SliverGridDelegateWithMaxCrossAxisExtent(
+                        maxCrossAxisExtent: 100,
+                        mainAxisSpacing: 10,
+                        crossAxisSpacing: 10,
+                        mainAxisExtent: 80,
+                      ),
+                      itemBuilder: (_, index) {
+                        return _tagItem(
+                          theme: theme,
+                          item: list[index],
+                          onTap: () {
+                            Get.back();
+                            DefaultTabController.of(context).index = index;
+                          },
+                        );
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+        );
+      },
+    );
   }
 }

@@ -15,6 +15,8 @@ class LiveController extends CommonListController {
     queryData();
   }
 
+  int? count;
+
   // area
   int? areaId;
   String? sortType;
@@ -30,6 +32,13 @@ class LiveController extends CommonListController {
   final RxBool isLogin = Accounts.main.isLogin.obs;
 
   @override
+  void checkIsEnd(int length) {
+    if (count != null && length >= count!) {
+      isEnd = true;
+    }
+  }
+
+  @override
   List? getDataList(response) {
     return response.cardList;
   }
@@ -38,11 +47,15 @@ class LiveController extends CommonListController {
   bool customHandleResponse(bool isRefresh, Success response) {
     if (isRefresh) {
       if (areaIndex.value == 0) {
+        if (response.response.hasMore == 0) {
+          isEnd = true;
+        }
         topState.value = Pair(
           first: response.response.followItem,
           second: response.response.areaItem,
         );
       } else {
+        count = response.response.count;
         newTags = response.response.newTags;
         if (sortType != null) {
           tagIndex.value =
@@ -69,6 +82,7 @@ class LiveController extends CommonListController {
 
   @override
   Future<void> onRefresh() {
+    count = null;
     currentPage = 1;
     isEnd = false;
     if (areaIndex.value != 0) {
@@ -109,6 +123,7 @@ class LiveController extends CommonListController {
     areaId = cardLiveItem?.areaV2Id;
     parentAreaId = cardLiveItem?.areaV2ParentId;
 
+    count = null;
     currentPage = 1;
     isEnd = false;
     queryData();
@@ -118,6 +133,7 @@ class LiveController extends CommonListController {
     tagIndex.value = index;
     this.sortType = sortType;
 
+    count = null;
     currentPage = 1;
     isEnd = false;
     queryData();

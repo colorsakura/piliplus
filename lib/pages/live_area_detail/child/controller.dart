@@ -1,9 +1,13 @@
+import 'dart:math';
+
 import 'package:PiliPlus/http/live.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/live/live_feed_index/card_data_list_item.dart';
 import 'package:PiliPlus/models/live/live_second_list/data.dart';
+import 'package:PiliPlus/models/live/live_second_list/tag.dart';
 import 'package:PiliPlus/pages/common/common_list_controller.dart';
 import 'package:PiliPlus/utils/storage.dart';
+import 'package:get/get.dart';
 
 class LiveAreaChildController
     extends CommonListController<LiveSecondData, CardLiveItem> {
@@ -11,7 +15,13 @@ class LiveAreaChildController
   final dynamic areaId;
   final dynamic parentAreaId;
 
+  int? count;
+
   String? sortType;
+
+  // tag
+  final RxInt tagIndex = 0.obs;
+  List<LiveSecondTag>? newTags;
 
   final isLogin = Accounts.main.isLogin;
 
@@ -22,7 +32,18 @@ class LiveAreaChildController
   }
 
   @override
+  void checkIsEnd(int length) {
+    if (count != null && length >= count!) {
+      isEnd = true;
+    }
+  }
+
+  @override
   List<CardLiveItem>? getDataList(LiveSecondData response) {
+    count = response.count;
+    newTags = response.newTags;
+    tagIndex.value =
+        max(0, newTags?.indexWhere((e) => e.sortType == sortType) ?? 0);
     return response.cardList;
   }
 
@@ -35,4 +56,11 @@ class LiveAreaChildController
         parentAreaId: parentAreaId,
         sortType: sortType,
       );
+
+  void onSelectTag(int index, String? sortType) {
+    tagIndex.value = index;
+    this.sortType = sortType;
+
+    onRefresh();
+  }
 }
