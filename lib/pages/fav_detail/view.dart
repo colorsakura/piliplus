@@ -41,11 +41,8 @@ class _FavDetailPageState extends State<FavDetailPage> {
   }
 
   void listener() {
-    if (_favDetailController.scrollController.offset > 160) {
-      _favDetailController.titleCtr.value = true;
-    } else if (_favDetailController.scrollController.offset <= 160) {
-      _favDetailController.titleCtr.value = false;
-    }
+    _favDetailController.titleCtr.value =
+        _favDetailController.scrollController.offset >= 120;
   }
 
   @override
@@ -95,7 +92,7 @@ class _FavDetailPageState extends State<FavDetailPage> {
                             icon: const Icon(Icons.close_outlined),
                           )
                         : null,
-                    expandedHeight: 200 - MediaQuery.of(context).padding.top,
+                    expandedHeight: kTextTabBarHeight + 130,
                     pinned: true,
                     title: _favDetailController.enableMultiSelect.value
                         ? Text(
@@ -316,7 +313,7 @@ class _FavDetailPageState extends State<FavDetailPage> {
                             const SizedBox(width: 6),
                           ],
                     flexibleSpace: FlexibleSpaceBar(
-                      background: Container(
+                      background: Padding(
                         padding: EdgeInsets.only(
                           top: kTextTabBarHeight +
                               MediaQuery.of(context).padding.top +
@@ -333,7 +330,7 @@ class _FavDetailPageState extends State<FavDetailPage> {
                                 Hero(
                                   tag: _favDetailController.heroTag,
                                   child: NetworkImgLayer(
-                                    width: 180,
+                                    width: 110 * StyleString.aspectRatio,
                                     height: 110,
                                     src: _favDetailController.item.value.cover,
                                   ),

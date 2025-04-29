@@ -665,6 +665,21 @@ class PiliScheme {
         }
         launchURL();
         return false;
+      case 'medialist':
+        String? mediaId = RegExp(r'/ml(\d+)').firstMatch(path)?.group(1);
+        if (mediaId != null) {
+          PageUtils.toDupNamed(
+            '/favDetail',
+            parameters: {
+              'mediaId': mediaId,
+              'heroTag': Utils.makeHeroTag(mediaId),
+            },
+            off: off,
+          );
+          return true;
+        }
+        launchURL();
+        return false;
       default:
         Map map = IdUtils.matchAvorBv(input: area?.split('?').first);
         if (map.isNotEmpty) {
