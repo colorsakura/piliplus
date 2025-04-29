@@ -222,7 +222,7 @@ class Request {
    * post请求
    */
   Future<Response> post(url,
-      {data, queryParameters, options, cancelToken, extra}) async {
+      {data, queryParameters, options, cancelToken, isRedirect}) async {
     // debugPrint('post-data: $data');
     Response response;
     try {
@@ -236,6 +236,21 @@ class Request {
       // debugPrint('post success: ${response.data}');
       return response;
     } on DioException catch (e) {
+      if (isRedirect != true &&
+          const [301, 302, 303, 307, 308].contains(e.response?.statusCode)) {
+        String? redirectUrl = e.response?.headers['location']?.firstOrNull;
+        if (redirectUrl != null) {
+          return await post(
+            redirectUrl,
+            data: data,
+            queryParameters: queryParameters,
+            options: options,
+            cancelToken: cancelToken,
+            isRedirect: true,
+          );
+        }
+      }
+      AccountManager.toast(e);
       Response errResponse = Response(
         data: {
           'message': await AccountManager.dioError(e)

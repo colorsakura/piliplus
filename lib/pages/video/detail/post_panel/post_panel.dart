@@ -535,8 +535,7 @@ class _PostPanelState extends CommonCollapseSlidePageState<PostPanel> {
   }
 
   void _onPost({String? url}) async {
-    Request()
-        .post(
+    Request().post(
       url ?? '${GStorage.blockServer}/api/skipSegments',
       data: {
         'videoID': videoDetailController.bvid,
@@ -558,10 +557,13 @@ class _PostPanelState extends CommonCollapseSlidePageState<PostPanel> {
             .toList(),
       },
       options: Options(
-        validateStatus: (status) => true,
+        validateStatus: (int? status) {
+          return status != null &&
+              ((status >= 200 && status < 300) ||
+                  const [400, 403, 429, 409].contains(status));
+        },
       ),
-    )
-        .then(
+    ).then(
       (res) {
         if (res.statusCode == 200) {
           Get.back();
@@ -574,15 +576,8 @@ class _PostPanelState extends CommonCollapseSlidePageState<PostPanel> {
             videoDetailController.initSkip();
           }
         } else {
-          if (const [301, 302, 303, 307, 308].contains(res.statusCode)) {
-            String? redirectUrl = res.headers['location']?.firstOrNull;
-            if (redirectUrl != null) {
-              _onPost(url: redirectUrl);
-              return;
-            }
-          }
           SmartDialog.showToast(
-            '提交失败: ${{
+            '提交失败: ${const {
                   400: '参数错误',
                   403: '被自动审核机制拒绝',
                   429: '重复提交太快',

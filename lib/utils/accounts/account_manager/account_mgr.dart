@@ -170,7 +170,28 @@ class AccountManager extends Interceptor {
   }
 
   @override
-  void onError(DioException err, ErrorInterceptorHandler handler) {
+  void onError(DioException err, ErrorInterceptorHandler handler) async {
+    if (err.requestOptions.method != 'POST') {
+      toast(err);
+    }
+    if (err.response != null &&
+        !err.response!.requestOptions.path.startsWith(HttpString.appBaseUrl)) {
+      _saveCookies(err.response!).then((_) => handler.next(err)).catchError(
+        (dynamic e, StackTrace s) {
+          final error = DioException(
+            requestOptions: err.response!.requestOptions,
+            error: e,
+            stackTrace: s,
+          );
+          handler.next(error);
+        },
+      );
+    } else {
+      handler.next(err);
+    }
+  }
+
+  static void toast(err) {
     const List<String> skipShow = [
       'heartbeat',
       'history/report',
@@ -189,22 +210,6 @@ class AccountManager extends Interceptor {
       // skip
     } else {
       dioError(err).then((res) => SmartDialog.showToast(res + url));
-    }
-
-    if (err.response != null &&
-        !err.response!.requestOptions.path.startsWith(HttpString.appBaseUrl)) {
-      _saveCookies(err.response!).then((_) => handler.next(err)).catchError(
-        (dynamic e, StackTrace s) {
-          final error = DioException(
-            requestOptions: err.response!.requestOptions,
-            error: e,
-            stackTrace: s,
-          );
-          handler.next(error);
-        },
-      );
-    } else {
-      handler.next(err);
     }
   }
 
