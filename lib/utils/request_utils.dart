@@ -312,7 +312,7 @@ class RequestUtils {
     int count = like?.count ?? 0;
     bool status = like?.status ?? false;
     int up = status ? 2 : 1;
-    var res = await DynamicsHttp.likeDynamic(dynamicId: dynamicId, up: up);
+    var res = await DynamicsHttp.thumbDynamic(dynamicId: dynamicId, up: up);
     if (res['status']) {
       SmartDialog.showToast(!status ? '点赞成功' : '取消赞');
       if (up == 1) {

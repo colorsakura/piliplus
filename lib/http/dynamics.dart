@@ -1,3 +1,4 @@
+import 'package:PiliPlus/http/constants.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/utils/accounts/account.dart';
 import 'package:PiliPlus/utils/storage.dart';
@@ -60,23 +61,51 @@ class DynamicsHttp {
   }
 
   // 动态点赞
-  static Future likeDynamic({
+  // static Future likeDynamic({
+  //   required String? dynamicId,
+  //   required int? up,
+  // }) async {
+  //   var res = await Request().post(
+  //     Api.likeDynamic,
+  //     queryParameters: {
+  //       'dynamic_id': dynamicId,
+  //       'up': up,
+  //       'csrf': Accounts.main.csrf,
+  //     },
+  //   );
+  //   if (res.data['code'] == 0) {
+  //     return {
+  //       'status': true,
+  //       'data': res.data['data'],
+  //     };
+  //   } else {
+  //     return {'status': false, 'msg': res.data['message']};
+  //   }
+  // }
+
+  // 动态点赞
+  static Future thumbDynamic({
     required String? dynamicId,
     required int? up,
   }) async {
     var res = await Request().post(
-      Api.likeDynamic,
+      Api.thumbDynamic,
       queryParameters: {
-        'dynamic_id': dynamicId,
-        'up': up,
         'csrf': Accounts.main.csrf,
       },
+      data: {
+        'dyn_id_str': dynamicId,
+        'up': up,
+        'spmid': '333.1365.0.0',
+      },
+      options: Options(
+        headers: {
+          'referer': HttpString.dynamicShareBaseUrl,
+        },
+      ),
     );
     if (res.data['code'] == 0) {
-      return {
-        'status': true,
-        'data': res.data['data'],
-      };
+      return {'status': true, 'data': res.data['data']};
     } else {
       return {'status': false, 'msg': res.data['message']};
     }

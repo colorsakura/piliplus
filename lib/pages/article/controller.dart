@@ -205,7 +205,7 @@ class ArticleController extends ReplyController<MainListReply> {
 
   Future onLike() async {
     bool isLike = stats.value?.like?.status == true;
-    final res = await DynamicsHttp.likeDynamic(
+    final res = await DynamicsHttp.thumbDynamic(
         dynamicId: opusData?.idStr ?? articleData?.dynIdStr,
         up: isLike ? 2 : 1);
     if (res['status']) {
