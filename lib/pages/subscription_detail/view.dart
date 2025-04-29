@@ -33,7 +33,7 @@ class _SubDetailPageState extends State<SubDetailPage> {
   }
 
   void listener() {
-    showTitle.value = _subDetailController.scrollController.offset > 160;
+    showTitle.value = _subDetailController.scrollController.offset > 132;
   }
 
   @override
@@ -118,7 +118,7 @@ class _SubDetailPageState extends State<SubDetailPage> {
       );
 
   Widget _buildAppBar(ThemeData theme) => SliverAppBar(
-        expandedHeight: 210 - MediaQuery.paddingOf(context).top,
+        expandedHeight: kToolbarHeight + 132,
         pinned: true,
         title: Obx(
           () {
@@ -146,7 +146,6 @@ class _SubDetailPageState extends State<SubDetailPage> {
         ),
         flexibleSpace: FlexibleSpaceBar(
           background: Container(
-            height: 180,
             decoration: BoxDecoration(
               border: Border(
                 bottom: BorderSide(
@@ -155,7 +154,7 @@ class _SubDetailPageState extends State<SubDetailPage> {
               ),
             ),
             padding: EdgeInsets.only(
-              top: kTextTabBarHeight + MediaQuery.of(context).padding.top + 15,
+              top: kToolbarHeight + MediaQuery.of(context).padding.top + 10,
               left: 12,
               right: 12,
               bottom: 12,
@@ -166,7 +165,7 @@ class _SubDetailPageState extends State<SubDetailPage> {
                 Hero(
                   tag: _subDetailController.heroTag,
                   child: NetworkImgLayer(
-                    width: 180,
+                    width: 176,
                     height: 110,
                     src: _subDetailController.item.cover,
                   ),
