@@ -789,4 +789,8 @@ class Api {
   static const String articleView = '/x/article/view';
 
   static const String opusDetail = '/x/polymer/web-dynamic/v1/opus/detail';
+
+  static const String gaiaVgateRegister = '/x/gaia-vgate/v1/register';
+
+  static const String gaiaVgateValidate = '/x/gaia-vgate/v1/validate';
 }

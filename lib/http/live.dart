@@ -14,8 +14,13 @@ import 'api.dart';
 import 'init.dart';
 
 class LiveHttp {
-  static Future<LoadingState<List<LiveItemModel>?>> liveList(
-      {int? vmid, int? pn, int? ps, String? orderType}) async {
+  static Future<LoadingState<List<LiveItemModel>?>> liveList({
+    int? vmid,
+    int? pn,
+    int? ps,
+    String? orderType,
+    String? gaiaVtoken,
+  }) async {
     var res = await Request().get(
       Api.liveList,
       queryParameters: await WbiSign.makSign({
@@ -23,6 +28,7 @@ class LiveHttp {
         'page_size': 30,
         'platform': 'web',
         'web_location': 0.0,
+        if (gaiaVtoken != null) 'gaia_vtoken': gaiaVtoken,
       }),
       options: Options(
         headers: {
@@ -30,6 +36,9 @@ class LiveHttp {
           'referer': 'https://live.bilibili.com/',
           'user-agent': Request.headerUa(type: 'pc'),
         },
+        extra: gaiaVtoken == null
+            ? null
+            : {'cookie': 'x-bili-gaia-vtoken=$gaiaVtoken'},
       ),
     );
     if (res.data['code'] == 0) {
@@ -38,7 +47,11 @@ class LiveHttp {
           .toList();
       return LoadingState.success(list);
     } else {
-      return LoadingState.error(res.data['message']);
+      String? vVoucher;
+      if (gaiaVtoken == null && res.data['code'] == -352) {
+        vVoucher = res.headers['x-bili-gaia-vvoucher']?.firstOrNull;
+      }
+      return LoadingState.error(vVoucher ?? res.data['message']);
     }
   }
 

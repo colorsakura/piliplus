@@ -129,13 +129,20 @@ class AccountManager extends Interceptor {
       account.cookieJar.loadForRequest(options.uri).then((cookies) {
         final previousCookies =
             options.headers[HttpHeaders.cookieHeader] as String?;
-        final newCookies = getCookies([
+        String newCookies = getCookies([
           ...?previousCookies
               ?.split(';')
               .where((e) => e.isNotEmpty)
               .map((c) => Cookie.fromSetCookieValue(c)),
           ...cookies,
         ]);
+        if (options.extra['cookie'] != null) {
+          if (newCookies.isEmpty) {
+            newCookies = '${options.extra['cookie']}';
+          } else {
+            newCookies += ';${options.extra['cookie']}';
+          }
+        }
         options.headers[HttpHeaders.cookieHeader] =
             newCookies.isNotEmpty ? newCookies : '';
         handler.next(options);
