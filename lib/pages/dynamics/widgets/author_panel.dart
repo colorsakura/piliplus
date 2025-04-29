@@ -65,6 +65,7 @@ class AuthorPanel extends StatelessWidget {
             : Utils.dateFormat(item.modules.moduleAuthor!.pubTs)
         : item.modules.moduleAuthor?.pubTime;
     return Stack(
+      clipBehavior: Clip.none,
       alignment: Alignment.center,
       children: [
         Align(
@@ -382,6 +383,7 @@ class AuthorPanel extends StatelessWidget {
                   },
                   minLeadingWidth: 0,
                   leading: const Stack(
+                    clipBehavior: Clip.none,
                     alignment: Alignment.center,
                     children: [
                       Icon(Icons.shield_outlined, size: 19),

@@ -55,6 +55,7 @@ class VideoCardVMemberHome extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Stack(
+      clipBehavior: Clip.none,
       children: [
         Semantics(
           excludeSemantics: true,
@@ -77,6 +78,7 @@ class VideoCardVMemberHome extends StatelessWidget {
                         double maxWidth = boxConstraints.maxWidth;
                         double maxHeight = boxConstraints.maxHeight;
                         return Stack(
+                          clipBehavior: Clip.none,
                           children: [
                             NetworkImgLayer(
                               src: videoItem.cover,

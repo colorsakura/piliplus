@@ -90,64 +90,68 @@ class VideoCardV extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(children: [
-      Semantics(
-        label: Utils.videoItemSemantics(videoItem),
-        excludeSemantics: true,
-        child: Card(
-          clipBehavior: Clip.hardEdge,
-          margin: EdgeInsets.zero,
-          child: InkWell(
-            onTap: () => onPushDetail(Utils.makeHeroTag(videoItem.aid)),
-            onLongPress: () => imageSaveDialog(
-              title: videoItem.title,
-              cover: videoItem.pic,
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                AspectRatio(
-                  aspectRatio: StyleString.aspectRatio,
-                  child: LayoutBuilder(builder: (context, boxConstraints) {
-                    double maxWidth = boxConstraints.maxWidth;
-                    double maxHeight = boxConstraints.maxHeight;
-                    return Stack(
-                      children: [
-                        NetworkImgLayer(
-                          src: videoItem.pic,
-                          width: maxWidth,
-                          height: maxHeight,
-                        ),
-                        if (videoItem.duration > 0)
-                          PBadge(
-                            bottom: 6,
-                            right: 7,
-                            size: 'small',
-                            type: 'gray',
-                            text: Utils.timeFormat(videoItem.duration),
-                          )
-                      ],
-                    );
-                  }),
-                ),
-                videoContent(context)
-              ],
+    return Stack(
+      clipBehavior: Clip.none,
+      children: [
+        Semantics(
+          label: Utils.videoItemSemantics(videoItem),
+          excludeSemantics: true,
+          child: Card(
+            clipBehavior: Clip.hardEdge,
+            margin: EdgeInsets.zero,
+            child: InkWell(
+              onTap: () => onPushDetail(Utils.makeHeroTag(videoItem.aid)),
+              onLongPress: () => imageSaveDialog(
+                title: videoItem.title,
+                cover: videoItem.pic,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  AspectRatio(
+                    aspectRatio: StyleString.aspectRatio,
+                    child: LayoutBuilder(builder: (context, boxConstraints) {
+                      double maxWidth = boxConstraints.maxWidth;
+                      double maxHeight = boxConstraints.maxHeight;
+                      return Stack(
+                        clipBehavior: Clip.none,
+                        children: [
+                          NetworkImgLayer(
+                            src: videoItem.pic,
+                            width: maxWidth,
+                            height: maxHeight,
+                          ),
+                          if (videoItem.duration > 0)
+                            PBadge(
+                              bottom: 6,
+                              right: 7,
+                              size: 'small',
+                              type: 'gray',
+                              text: Utils.timeFormat(videoItem.duration),
+                            )
+                        ],
+                      );
+                    }),
+                  ),
+                  videoContent(context)
+                ],
+              ),
             ),
           ),
         ),
-      ),
-      if (videoItem.goto == 'av')
-        Positioned(
-          right: -5,
-          bottom: -2,
-          child: VideoPopupMenu(
-            size: 29,
-            iconSize: 17,
-            videoItem: videoItem,
-            onRemove: onRemove,
+        if (videoItem.goto == 'av')
+          Positioned(
+            right: -5,
+            bottom: -2,
+            child: VideoPopupMenu(
+              size: 29,
+              iconSize: 17,
+              videoItem: videoItem,
+              onRemove: onRemove,
+            ),
           ),
-        ),
-    ]);
+      ],
+    );
   }
 
   Widget videoContent(context) {

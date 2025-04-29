@@ -57,6 +57,7 @@ class SubVideoCardH extends StatelessWidget {
                   double maxWidth = boxConstraints.maxWidth;
                   double maxHeight = boxConstraints.maxHeight;
                   return Stack(
+                    clipBehavior: Clip.none,
                     children: [
                       NetworkImgLayer(
                         src: videoItem.cover,
@@ -85,6 +86,7 @@ class SubVideoCardH extends StatelessWidget {
   Widget videoContent(context) {
     return Expanded(
       child: Stack(
+        clipBehavior: Clip.none,
         children: [
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,

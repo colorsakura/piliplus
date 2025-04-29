@@ -96,6 +96,7 @@ class _PostPanelState extends CommonCollapseSlidePageState<PostPanel> {
   Widget buildList(ThemeData theme) {
     return list?.isNotEmpty == true
         ? Stack(
+            clipBehavior: Clip.none,
             children: [
               SingleChildScrollView(
                 controller: ScrollController(),

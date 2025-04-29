@@ -441,6 +441,7 @@ Widget forWard(
             children: [
               if (floor == 1) const SizedBox(width: 12),
               Stack(
+                clipBehavior: Clip.none,
                 children: [
                   Hero(
                     tag: item.modules.moduleDynamic!.major!.medialist!['cover'],

@@ -362,6 +362,7 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
   }
 
   Widget _buildBody(Orientation orientation, ThemeData theme) => Stack(
+        clipBehavior: Clip.none,
         children: [
           Builder(
             builder: (context) {

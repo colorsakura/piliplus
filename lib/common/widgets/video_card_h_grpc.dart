@@ -32,6 +32,7 @@ class VideoCardHGrpc extends StatelessWidget {
     String type = 'video';
     final String heroTag = Utils.makeHeroTag(aid);
     return Stack(
+      clipBehavior: Clip.none,
       children: [
         Semantics(
           excludeSemantics: true,
@@ -66,6 +67,7 @@ class VideoCardHGrpc extends StatelessWidget {
                           final double maxWidth = boxConstraints.maxWidth;
                           final double maxHeight = boxConstraints.maxHeight;
                           return Stack(
+                            clipBehavior: Clip.none,
                             children: [
                               Hero(
                                 tag: heroTag,

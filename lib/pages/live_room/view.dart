@@ -214,6 +214,7 @@ class _LiveRoomPageState extends State<LiveRoomPage>
     return ColoredBox(
       color: Colors.black,
       child: Stack(
+        clipBehavior: Clip.none,
         children: [
           Obx(
             () => isFullScreen
@@ -281,6 +282,7 @@ class _LiveRoomPageState extends State<LiveRoomPage>
         resizeToAvoidBottomInset: false,
         backgroundColor: Colors.transparent,
         body: Stack(
+          clipBehavior: Clip.none,
           children: [
             _buildAppBar,
             Column(

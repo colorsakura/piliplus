@@ -380,6 +380,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                         color: Colors.white,
                       )
                     : Stack(
+                        clipBehavior: Clip.none,
                         alignment: Alignment.center,
                         children: [
                           Icon(
@@ -731,6 +732,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
     return Stack(
       fit: StackFit.passthrough,
       key: _playerKey,
+      clipBehavior: Clip.none,
       children: <Widget>[
         Obx(
           () => Video(
