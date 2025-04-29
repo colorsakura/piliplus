@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/common/widgets/interactiveviewer_gallery/interactiveviewer_gallery.dart'
     show SourceModel;
@@ -286,14 +288,16 @@ class OpusContent extends StatelessWidget {
   }
 }
 
-Widget moduleBlockedItem(ModuleBlocked moduleBlocked, double width) {
-  return SliverToBoxAdapter(
-    child: Stack(
+Widget moduleBlockedItem(
+    ThemeData theme, ModuleBlocked moduleBlocked, double maxWidth) {
+  if (moduleBlocked.blockedType == 1) {
+    maxWidth = min(400, maxWidth * 0.8);
+    return Stack(
       clipBehavior: Clip.none,
       children: [
         if (moduleBlocked.bgImg != null)
           CachedNetworkImage(
-            width: width,
+            width: maxWidth,
             fit: BoxFit.cover,
             imageUrl: Utils.thumbnailImgUrl(
               Get.isDarkMode
@@ -302,15 +306,15 @@ Widget moduleBlockedItem(ModuleBlocked moduleBlocked, double width) {
             ),
           ),
         Container(
-          width: width,
-          height: width,
+          width: maxWidth,
+          height: maxWidth,
           padding: const EdgeInsets.all(12),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               if (moduleBlocked.icon != null)
                 CachedNetworkImage(
-                  width: width / 7,
+                  width: maxWidth / 7,
                   fit: BoxFit.contain,
                   imageUrl: Utils.thumbnailImgUrl(
                     Get.isDarkMode
@@ -323,6 +327,9 @@ Widget moduleBlockedItem(ModuleBlocked moduleBlocked, double width) {
                 Text(
                   moduleBlocked.hintMessage!,
                   textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: theme.colorScheme.outline,
+                  ),
                 ),
               ],
               if (moduleBlocked.button != null) ...[
@@ -359,6 +366,98 @@ Widget moduleBlockedItem(ModuleBlocked moduleBlocked, double width) {
           ),
         ),
       ],
-    ),
+    );
+  }
+  return Stack(
+    clipBehavior: Clip.none,
+    alignment: Alignment.center,
+    children: [
+      if (moduleBlocked.bgImg != null)
+        CachedNetworkImage(
+          width: maxWidth,
+          fit: BoxFit.cover,
+          imageUrl: Utils.thumbnailImgUrl(
+            Get.isDarkMode
+                ? moduleBlocked.bgImg!.imgDark
+                : moduleBlocked.bgImg!.imgDay,
+          ),
+        ),
+      Padding(
+        padding: const EdgeInsets.all(12),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            if (moduleBlocked.icon != null) ...[
+              CachedNetworkImage(
+                width: 42,
+                fit: BoxFit.contain,
+                imageUrl: Utils.thumbnailImgUrl(
+                  Get.isDarkMode
+                      ? moduleBlocked.icon!.imgDark
+                      : moduleBlocked.icon!.imgDay,
+                ),
+              ),
+              const SizedBox(width: 8),
+            ],
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  if (moduleBlocked.title != null)
+                    Text(
+                      moduleBlocked.title!,
+                    ),
+                  if (moduleBlocked.hintMessage != null) ...[
+                    const SizedBox(height: 2),
+                    Text(
+                      moduleBlocked.hintMessage!,
+                      style: TextStyle(
+                        fontSize: 13,
+                        color: theme.colorScheme.outline,
+                      ),
+                    ),
+                  ],
+                ],
+              ),
+            ),
+            if (moduleBlocked.button != null) ...[
+              const SizedBox(width: 8),
+              FilledButton.tonal(
+                style: FilledButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  visualDensity:
+                      const VisualDensity(vertical: -3, horizontal: -4),
+                  backgroundColor: Get.isDarkMode
+                      ? const Color(0xFF8F0030)
+                      : const Color(0xFFFF6699),
+                  foregroundColor: Colors.white,
+                  shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(6))),
+                ),
+                onPressed: () {
+                  if (moduleBlocked.button!.jumpUrl != null) {
+                    PiliScheme.routePushFromUrl(moduleBlocked.button!.jumpUrl!);
+                  }
+                },
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    if (moduleBlocked.button!.icon != null)
+                      CachedNetworkImage(
+                        height: 16,
+                        color: Colors.white,
+                        imageUrl: moduleBlocked.button!.icon!,
+                      ),
+                    Text(moduleBlocked.button!.text ?? ''),
+                  ],
+                ),
+              ),
+            ],
+          ],
+        ),
+      ),
+    ],
   );
 }

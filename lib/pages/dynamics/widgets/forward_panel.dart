@@ -3,6 +3,7 @@ import 'package:PiliPlus/common/widgets/badge.dart';
 import 'package:PiliPlus/common/widgets/image_save.dart';
 import 'package:PiliPlus/common/widgets/image_view.dart';
 import 'package:PiliPlus/common/widgets/network_img_layer.dart';
+import 'package:PiliPlus/pages/article/widgets/opus_content.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:flutter/material.dart';
@@ -43,31 +44,13 @@ InlineSpan picsNodes(
   );
 }
 
-Widget _blockedItem(ThemeData theme, DynamicItemModel item, String? source) {
-  return Container(
-    width: double.infinity,
-    padding: EdgeInsets.only(
-        left: 12, right: 12, bottom: source == 'detail' ? 8 : 0),
-    child: Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        if (item.modules.moduleDynamic!.major!.blocked!['title'] != null)
-          Text(
-            item.modules.moduleDynamic!.major!.blocked!['title'],
-            style: TextStyle(
-              color: theme.colorScheme.secondary,
-            ),
-          ),
-        if (item.modules.moduleDynamic!.major!.blocked!['hint_message'] != null)
-          Text(
-            item.modules.moduleDynamic!.major!.blocked!['hint_message'],
-            style: TextStyle(
-              fontSize: 12,
-              color: theme.colorScheme.outline,
-            ),
-          ),
-      ],
+Widget _blockedItem(ThemeData theme, ModuleBlocked moduleBlocked) {
+  return Padding(
+    padding: EdgeInsets.symmetric(horizontal: 13, vertical: 1),
+    child: LayoutBuilder(
+      builder: (context, constraints) {
+        return moduleBlockedItem(theme, moduleBlocked, constraints.maxWidth);
+      },
     ),
   );
 }
@@ -153,7 +136,7 @@ Widget forWard(
               floor: floor,
             ),
           if (item.modules.moduleDynamic?.major?.blocked != null)
-            _blockedItem(theme, item, source),
+            _blockedItem(theme, item.modules.moduleDynamic!.major!.blocked!),
         ],
       );
     // 视频
@@ -165,35 +148,7 @@ Widget forWard(
       return item.isForwarded == true
           ? articlePanel(theme, source, item, context, callback, floor: floor)
           : item.modules.moduleDynamic?.major?.blocked != null
-              ? Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 12),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      if (item.modules.moduleDynamic?.major
-                              ?.blocked?['title'] !=
-                          null)
-                        Text(
-                          item.modules.moduleDynamic!.major!.blocked!['title'],
-                          style: TextStyle(
-                            color: theme.colorScheme.secondary,
-                          ),
-                        ),
-                      if (item.modules.moduleDynamic?.major
-                              ?.blocked?['hint_message'] !=
-                          null)
-                        Text(
-                          item.modules.moduleDynamic!.major!
-                              .blocked!['hint_message'],
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: theme.colorScheme.outline,
-                          ),
-                        )
-                    ],
-                  ),
-                )
+              ? _blockedItem(theme, item.modules.moduleDynamic!.major!.blocked!)
               : const SizedBox.shrink();
     // 转发
     case 'DYNAMIC_TYPE_FORWARD':
@@ -307,7 +262,8 @@ Widget forWard(
                   floor: floor,
                 )
               : item.modules.moduleDynamic?.major?.blocked != null
-                  ? _blockedItem(theme, item, source)
+                  ? _blockedItem(
+                      theme, item.modules.moduleDynamic!.major!.blocked!)
                   : const SizedBox(height: 0);
     case 'DYNAMIC_TYPE_PGC':
       return videoSeasonWidget(theme, source, item, context, 'pgc',

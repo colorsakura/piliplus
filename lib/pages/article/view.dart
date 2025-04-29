@@ -349,8 +349,9 @@ class _ArticlePageState extends State<ArticlePage>
                 debugPrint('moduleBlocked');
                 final moduleBlocked =
                     _articleCtr.opusData!.modules.moduleBlocked!;
-                final width = maxWidth * 0.8;
-                content = moduleBlockedItem(moduleBlocked, width);
+                content = SliverToBoxAdapter(
+                  child: moduleBlockedItem(theme, moduleBlocked, maxWidth),
+                );
               } else if (_articleCtr.articleData?.content != null) {
                 debugPrint('html page');
                 final res = parser.parse(_articleCtr.articleData!.content!);

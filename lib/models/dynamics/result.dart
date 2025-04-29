@@ -166,6 +166,7 @@ class ModuleBlocked {
   BgImg? bgImg;
   int? blockedType;
   Button? button;
+  String? title;
   String? hintMessage;
   BgImg? icon;
 
@@ -173,6 +174,7 @@ class ModuleBlocked {
     bgImg = json['bg_img'] == null ? null : BgImg.fromJson(json['bg_img']);
     blockedType = json['blocked_type'];
     button = json['button'] == null ? null : Button.fromJson(json['button']);
+    title = json['title'];
     hintMessage = json['hint_message'];
     icon = json['icon'] == null ? null : BgImg.fromJson(json['icon']);
   }
@@ -533,7 +535,7 @@ class DynamicMajorModel {
   Map? courses;
   Map? common;
   Map? music;
-  Map? blocked;
+  ModuleBlocked? blocked;
   Map? medialist;
 
   DynamicMajorModel.fromJson(Map<String, dynamic> json) {
@@ -560,7 +562,9 @@ class DynamicMajorModel {
     courses = json['courses'] ?? {};
     common = json['common'] ?? {};
     music = json['music'] ?? {};
-    blocked = json['blocked'];
+    blocked = json['blocked'] == null
+        ? null
+        : ModuleBlocked.fromJson(json['blocked']);
     medialist = json['medialist'];
   }
 }
