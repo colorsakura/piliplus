@@ -52,7 +52,8 @@ class WhisperDetailController
         ackSessionMsg(messageList.last.msgSeqno);
       }
       if (response.response.eInfos != null) {
-        eInfos = response.response.eInfos;
+        eInfos ??= [];
+        eInfos!.addAll(response.response.eInfos!);
       }
     }
     return false;
@@ -130,6 +131,7 @@ class WhisperDetailController
   @override
   Future<void> onRefresh() {
     msgSeqno = null;
+    eInfos = null;
     scrollController.jumpToTop();
     return super.onRefresh();
   }
