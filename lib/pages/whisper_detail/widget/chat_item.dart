@@ -79,20 +79,25 @@ class ChatItem extends StatelessWidget {
       var text = content['content'];
       if (eInfos != null) {
         final List<InlineSpan> children = [];
-        Map<String, String> emojiMap = {};
+        Map<String, Map> emojiMap = {};
         for (var e in eInfos!) {
-          emojiMap[e['text']] = e['url'];
+          emojiMap[e['text']] = {
+            'url': e['gif_url'] ?? e['url'],
+            'size': e['size'] ?? 1,
+          };
         }
         text.splitMapJoin(
           RegExp(r"\[[^\[\]]+\]"),
           onMatch: (Match match) {
             final String emojiKey = match[0]!;
             if (emojiMap.containsKey(emojiKey)) {
+              final double size = 24.0 * emojiMap[emojiKey]!['size'];
               children.add(WidgetSpan(
                 child: NetworkImgLayer(
-                  width: 18,
-                  height: 18,
-                  src: emojiMap[emojiKey]!,
+                  width: size,
+                  height: size,
+                  src: emojiMap[emojiKey]!['url'],
+                  type: 'emote',
                 ),
               ));
             } else {
