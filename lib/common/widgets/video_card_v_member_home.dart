@@ -1,10 +1,10 @@
 import 'package:PiliPlus/common/widgets/image_save.dart';
 import 'package:PiliPlus/http/search.dart';
 import 'package:PiliPlus/models/space/item.dart';
+import 'package:PiliPlus/utils/app_scheme.dart';
 import 'package:PiliPlus/utils/id_utils.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import '../../utils/utils.dart';
 import '../constants.dart';
 import 'badge.dart';
@@ -47,8 +47,9 @@ class VideoCardVMemberHome extends StatelessWidget {
         );
         break;
       default:
-        SmartDialog.showToast(goto);
-        PageUtils.handleWebview(videoItem.uri ?? '');
+        if (videoItem.uri?.isNotEmpty == true) {
+          PiliScheme.routePushFromUrl(videoItem.uri!);
+        }
     }
   }
 
