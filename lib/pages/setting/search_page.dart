@@ -1,6 +1,7 @@
 import 'package:PiliPlus/common/widgets/http_error.dart';
 import 'package:PiliPlus/pages/setting/widgets/model.dart';
 import 'package:PiliPlus/utils/grid.dart';
+import 'package:easy_debounce/easy_throttle.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:waterfall_flow/waterfall_flow.dart';
@@ -15,6 +16,14 @@ class SettingsSearchPage extends StatefulWidget {
 class _SettingsSearchPageState extends State<SettingsSearchPage> {
   final _textEditingController = TextEditingController();
   final RxList<SettingsModel> _list = <SettingsModel>[].obs;
+  late final _settings = [
+    ...extraSettings,
+    ...privacySettings,
+    ...recommendSettings,
+    ...videoSettings,
+    ...playSettings,
+    ...styleSettings,
+  ]..removeWhere((item) => item.settingsType == SettingsType.divider);
 
   @override
   void dispose() {
@@ -45,28 +54,21 @@ class _SettingsSearchPageState extends State<SettingsSearchPage> {
           controller: _textEditingController,
           textAlignVertical: TextAlignVertical.center,
           onChanged: (value) {
-            if (value.isEmpty) {
-              _list.value = <SettingsModel>[];
-            } else {
-              _list.value = [
-                ...extraSettings,
-                ...privacySettings,
-                ...recommendSettings,
-                ...videoSettings,
-                ...playSettings,
-                ...styleSettings,
-              ]
-                  .where((item) =>
-                      item.settingsType != SettingsType.divider &&
-                          (item.title ?? item.getTitle?.call())
-                              ?.toLowerCase()
-                              .contains(value.toLowerCase()) ||
-                      item.subtitle
-                              ?.toLowerCase()
-                              .contains(value.toLowerCase()) ==
-                          true)
-                  .toList();
-            }
+            EasyThrottle.throttle(
+                'searchSettings', const Duration(milliseconds: 200), () {
+              if (value.isEmpty) {
+                _list.clear();
+              } else {
+                value = value.toLowerCase();
+                _list.value = _settings
+                    .where((item) =>
+                        (item.title ?? item.getTitle?.call())
+                            ?.toLowerCase()
+                            .contains(value) ||
+                        item.subtitle?.toLowerCase().contains(value) == true)
+                    .toList();
+              }
+            });
           },
           decoration: InputDecoration(
             isDense: true,

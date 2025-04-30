@@ -280,7 +280,11 @@ class _SettingPageState extends State<SettingPage> {
   }
 
   Widget _buildSearchItem(ThemeData theme) => Padding(
-        padding: const EdgeInsets.only(left: 16, right: 16, bottom: 5),
+        padding: EdgeInsets.only(
+          left: 16 + MediaQuery.paddingOf(context).left,
+          right: 16,
+          bottom: 8,
+        ),
         child: InkWell(
           onTap: () => Get.toNamed('/settingsSearch'),
           borderRadius: BorderRadius.circular(50),
