@@ -55,57 +55,49 @@ class VideoCardVMemberHome extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      clipBehavior: Clip.none,
-      children: [
-        Semantics(
-          excludeSemantics: true,
-          child: Card(
-            clipBehavior: Clip.hardEdge,
-            margin: EdgeInsets.zero,
-            child: InkWell(
-              onTap: () => onPushDetail(Utils.makeHeroTag(videoItem.bvid)),
-              onLongPress: () => imageSaveDialog(
-                title: videoItem.title,
-                cover: videoItem.cover,
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  AspectRatio(
-                    aspectRatio: StyleString.aspectRatio,
-                    child: LayoutBuilder(
-                      builder: (context, boxConstraints) {
-                        double maxWidth = boxConstraints.maxWidth;
-                        double maxHeight = boxConstraints.maxHeight;
-                        return Stack(
-                          clipBehavior: Clip.none,
-                          children: [
-                            NetworkImgLayer(
-                              src: videoItem.cover,
-                              width: maxWidth,
-                              height: maxHeight,
-                            ),
-                            if ((videoItem.duration ?? -1) > 0)
-                              PBadge(
-                                bottom: 6,
-                                right: 7,
-                                size: 'small',
-                                type: 'gray',
-                                text: Utils.timeFormat(videoItem.duration),
-                              )
-                          ],
-                        );
-                      },
-                    ),
-                  ),
-                  videoContent(context, videoItem)
-                ],
+    return Card(
+      clipBehavior: Clip.hardEdge,
+      margin: EdgeInsets.zero,
+      child: InkWell(
+        onTap: () => onPushDetail(Utils.makeHeroTag(videoItem.bvid)),
+        onLongPress: () => imageSaveDialog(
+          title: videoItem.title,
+          cover: videoItem.cover,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            AspectRatio(
+              aspectRatio: StyleString.aspectRatio,
+              child: LayoutBuilder(
+                builder: (context, boxConstraints) {
+                  double maxWidth = boxConstraints.maxWidth;
+                  double maxHeight = boxConstraints.maxHeight;
+                  return Stack(
+                    clipBehavior: Clip.none,
+                    children: [
+                      NetworkImgLayer(
+                        src: videoItem.cover,
+                        width: maxWidth,
+                        height: maxHeight,
+                      ),
+                      if ((videoItem.duration ?? -1) > 0)
+                        PBadge(
+                          bottom: 6,
+                          right: 7,
+                          size: 'small',
+                          type: 'gray',
+                          text: Utils.timeFormat(videoItem.duration),
+                        )
+                    ],
+                  );
+                },
               ),
             ),
-          ),
+            videoContent(context, videoItem)
+          ],
         ),
-      ],
+      ),
     );
   }
 }

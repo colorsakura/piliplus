@@ -85,47 +85,42 @@ class SubVideoCardH extends StatelessWidget {
 
   Widget videoContent(context) {
     return Expanded(
-      child: Stack(
-        clipBehavior: Clip.none,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+          Expanded(
+            child: Text(
+              '${videoItem.title}',
+              textAlign: TextAlign.start,
+              style: const TextStyle(
+                letterSpacing: 0.3,
+              ),
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+          Text(
+            Utils.dateFormat(videoItem.pubtime),
+            style: TextStyle(
+              fontSize: 12,
+              color: Theme.of(context).colorScheme.outline,
+            ),
+          ),
+          const SizedBox(height: 3),
+          Row(
             children: [
-              Expanded(
-                child: Text(
-                  '${videoItem.title}',
-                  textAlign: TextAlign.start,
-                  style: const TextStyle(
-                    letterSpacing: 0.3,
-                  ),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                ),
+              StatView(
+                context: context,
+                theme: 'gray',
+                value: Utils.numFormat(videoItem.cntInfo?['play']),
               ),
-              Text(
-                Utils.dateFormat(videoItem.pubtime),
-                style: TextStyle(
-                  fontSize: 12,
-                  color: Theme.of(context).colorScheme.outline,
-                ),
+              const SizedBox(width: 8),
+              StatDanMu(
+                context: context,
+                theme: 'gray',
+                value: Utils.numFormat(videoItem.cntInfo?['danmaku']),
               ),
-              const SizedBox(height: 3),
-              Row(
-                children: [
-                  StatView(
-                    context: context,
-                    theme: 'gray',
-                    value: Utils.numFormat(videoItem.cntInfo?['play']),
-                  ),
-                  const SizedBox(width: 8),
-                  StatDanMu(
-                    context: context,
-                    theme: 'gray',
-                    value: Utils.numFormat(videoItem.cntInfo?['danmaku']),
-                  ),
-                  const Spacer(),
-                ],
-              ),
+              const Spacer(),
             ],
           ),
         ],
