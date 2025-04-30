@@ -460,6 +460,7 @@ class VideoDetailController extends GetxController
   Color _getColor(SegmentType segment) =>
       _blockColor?[segment.index] ?? segment.color;
   late RxString videoLabel = ''.obs;
+  late final blockServer = GStorage.blockServer;
 
   Timer? skipTimer;
   late final listKey = GlobalKey<AnimatedListState>();
@@ -467,7 +468,7 @@ class VideoDetailController extends GetxController
 
   Future _vote(String uuid, int type) async {
     Request().post(
-      '${GStorage.blockServer}/api/voteOnSponsorTime',
+      '$blockServer/api/voteOnSponsorTime',
       queryParameters: {
         'UUID': uuid,
         'userID': GStorage.blockUserID,
@@ -493,7 +494,7 @@ class VideoDetailController extends GetxController
                       onTap: () {
                         Get.back();
                         Request().post(
-                          '${GStorage.blockServer}/api/voteOnSponsorTime',
+                          '$blockServer/api/voteOnSponsorTime',
                           queryParameters: {
                             'UUID': segment.UUID,
                             'userID': GStorage.blockUserID,
@@ -693,7 +694,7 @@ class VideoDetailController extends GetxController
     segmentList.clear();
     segmentProgressList = null;
     final result = await Request().get(
-      '${GStorage.blockServer}/api/skipSegments',
+      '$blockServer/api/skipSegments',
       queryParameters: {
         'videoID': bvid,
         'cid': cid.value,
@@ -936,7 +937,7 @@ class VideoDetailController extends GetxController
         }
         if (GStorage.blockTrack) {
           Request().post(
-            '${GStorage.blockServer}/api/viewedVideoSponsorTime',
+            '$blockServer/api/viewedVideoSponsorTime',
             queryParameters: {'UUID': item.UUID},
           );
         }

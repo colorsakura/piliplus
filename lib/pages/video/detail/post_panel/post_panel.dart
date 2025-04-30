@@ -535,9 +535,10 @@ class _PostPanelState extends CommonCollapseSlidePageState<PostPanel> {
     ];
   }
 
-  Future _onPost({String? url}) {
-    return Request().post(
-      url ?? '${GStorage.blockServer}/api/skipSegments',
+  void _onPost() {
+    Request()
+        .post(
+      '${widget.videoDetailController.blockServer}/api/skipSegments',
       data: {
         'videoID': videoDetailController.bvid,
         'cid': videoDetailController.cid.value.toString(),
@@ -557,7 +558,14 @@ class _PostPanelState extends CommonCollapseSlidePageState<PostPanel> {
             )
             .toList(),
       },
-      options: Options(followRedirects: true),
+      options: Options(
+        followRedirects: true, // Defaults to true.
+        validateStatus: (int? status) {
+          return (status! >= 200 && status < 300) ||
+              const [400, 403, 429, 409] // reduce extra toast
+                  .contains(status);
+        },
+      ),
     )
         .then(
       (res) {

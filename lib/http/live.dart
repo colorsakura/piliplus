@@ -35,7 +35,7 @@ class LiveHttp {
           'origin': 'https://live.bilibili.com',
           'referer': 'https://live.bilibili.com/',
           'user-agent': Request.headerUa(type: 'pc'),
-          if (gaiaVtoken == null) 'cookie': 'x-bili-gaia-vtoken=$gaiaVtoken'
+          if (gaiaVtoken != null) 'cookie': 'x-bili-gaia-vtoken=$gaiaVtoken'
         },
       ),
     );
