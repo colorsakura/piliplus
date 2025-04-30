@@ -356,30 +356,33 @@ Widget moduleBlockedItem(
 
   if (moduleBlocked.blockedType == 1) {
     maxWidth = maxWidth <= 255 ? maxWidth : min(400, maxWidth * 0.8);
-    return Container(
-      width: maxWidth,
-      height: maxWidth,
-      decoration: bgImg(),
-      padding: const EdgeInsets.all(12),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          if (moduleBlocked.icon != null) icon(max(40, maxWidth / 7)),
-          if (moduleBlocked.hintMessage != null) ...[
-            const SizedBox(height: 5),
-            Text(
-              moduleBlocked.hintMessage!,
-              textAlign: TextAlign.center,
-              style: TextStyle(color: theme.colorScheme.outline),
-            ),
+    return UnconstrainedBox(
+      alignment: Alignment.centerLeft,
+      child: Container(
+        width: maxWidth,
+        height: maxWidth,
+        decoration: bgImg(),
+        padding: const EdgeInsets.all(12),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            if (moduleBlocked.icon != null) icon(max(40, maxWidth / 7)),
+            if (moduleBlocked.hintMessage != null) ...[
+              const SizedBox(height: 5),
+              Text(
+                moduleBlocked.hintMessage!,
+                textAlign: TextAlign.center,
+                style: TextStyle(color: theme.colorScheme.outline),
+              ),
+            ],
+            if (moduleBlocked.button != null) ...[
+              const SizedBox(height: 8),
+              btn(
+                visualDensity: const VisualDensity(vertical: -2.5),
+              ),
+            ],
           ],
-          if (moduleBlocked.button != null) ...[
-            const SizedBox(height: 8),
-            btn(
-              visualDensity: const VisualDensity(vertical: -2.5),
-            ),
-          ],
-        ],
+        ),
       ),
     );
   }

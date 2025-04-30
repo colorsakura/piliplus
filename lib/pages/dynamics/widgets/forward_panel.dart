@@ -264,7 +264,7 @@ Widget forWard(
               : item.modules.moduleDynamic?.major?.blocked != null
                   ? _blockedItem(
                       theme, item.modules.moduleDynamic!.major!.blocked!)
-                  : const SizedBox(height: 0);
+                  : const SizedBox.shrink();
     case 'DYNAMIC_TYPE_PGC':
       return videoSeasonWidget(theme, source, item, context, 'pgc',
           floor: floor);
