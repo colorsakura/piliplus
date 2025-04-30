@@ -32,7 +32,7 @@ class VideoCardV extends StatelessWidget {
   }
 
   void onPushDetail(heroTag) async {
-    String goto = videoItem.goto!;
+    String? goto = videoItem.goto;
     switch (goto) {
       case 'bangumi':
         PageUtils.viewBangumi(epId: videoItem.param!);
