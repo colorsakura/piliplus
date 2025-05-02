@@ -1,14 +1,14 @@
-import 'dart:io';
 import 'dart:convert';
 import 'package:PiliPlus/common/widgets/pair.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
-import 'package:device_info_plus/device_info_plus.dart';
+import 'package:get/get.dart';
 import 'package:webdav_client/webdav_client.dart' as webdav;
 
 class WebDav {
   late String _webdavDirectory;
+  String? _fileName;
 
   webdav.Client? _client;
 
@@ -46,33 +46,11 @@ class WebDav {
       return Pair(first: false, second: e.toString());
     }
   }
-  
-  Future<bool> _isPhone() async {
-    final deviceInfoPlugin = DeviceInfoPlugin();
-    if (Platform.isAndroid) {
-      AndroidDeviceInfo androidInfo = await deviceInfoPlugin.androidInfo;
-      return androidInfo.systemFeatures.contains("android.hardware.telephony");
-    } else if (Platform.isIOS) {
-      IosDeviceInfo iosInfo = await deviceInfoPlugin.iosInfo;
-      return _isIosPhone(iosInfo.utsname.machine);
-    } else {
-      return true;
-    }
-  }
-  bool _isIosPhone(String machine) {
-    if (machine.startsWith("iPhone")) {
-      return true;
-    } else if (machine.startsWith("iPad")) {
-      return false;
-    }
-    return true;
-  }
 
-  Future<String> _getFileName() async {
-    final isPhoneDevice = await _isPhone();
-    return isPhoneDevice
-        ? 'piliplus_settings_phone.json'
-        : 'piliplus_settings_pad.json';
+  String _getFileName() {
+    return Get.context!.isTablet
+        ? 'piliplus_settings_pad.json'
+        : 'piliplus_settings_phone.json';
   }
 
   Future backup() async {
@@ -85,9 +63,8 @@ class WebDav {
     }
     try {
       String data = await GStorage.exportAllSettings();
-      final isPhoneDevice = await _isPhone();
-      final fileName = await _getFileName();
-      final path = '$_webdavDirectory/$fileName';
+      _fileName ??= _getFileName();
+      final path = '$_webdavDirectory/$_fileName';
       try {
         await _client!.remove(path);
       } catch (_) {}
@@ -107,9 +84,8 @@ class WebDav {
       }
     }
     try {
-      final isPhoneDevice = await _isPhone();
-      final fileName = await _getFileName();
-      final path = '$_webdavDirectory/$fileName';
+      _fileName ??= _getFileName();
+      final path = '$_webdavDirectory/$_fileName';
       final data = await _client!.read(path);
       await GStorage.importAllSettings(utf8.decode(data));
       SmartDialog.showToast('恢复成功');
