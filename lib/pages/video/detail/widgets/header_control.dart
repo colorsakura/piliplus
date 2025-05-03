@@ -1929,10 +1929,16 @@ class HeaderControlState extends State<HeaderControl> {
                           builder: (context, constraints) {
                             return Obx(
                               () {
+                                String title = videoIntroController
+                                        .videoDetail.value.pages
+                                        ?.firstWhereOrNull((e) =>
+                                            e.cid == videoDetailCtr.cid.value)
+                                        ?.pagePart ??
+                                    videoIntroController
+                                        .videoDetail.value.title!;
                                 final textPainter = TextPainter(
                                   text: TextSpan(
-                                    text: videoIntroController
-                                        .videoDetail.value.title!,
+                                    text: title,
                                     style: const TextStyle(
                                       color: Colors.white,
                                       fontSize: 16,
@@ -1945,8 +1951,7 @@ class HeaderControlState extends State<HeaderControl> {
                                   return ConstrainedBox(
                                     constraints: BoxConstraints(maxHeight: 25),
                                     child: Marquee(
-                                      text: videoIntroController
-                                          .videoDetail.value.title!,
+                                      text: title,
                                       style: const TextStyle(
                                         color: Colors.white,
                                         fontSize: 16,
@@ -1972,8 +1977,7 @@ class HeaderControlState extends State<HeaderControl> {
                                   );
                                 } else {
                                   return Text(
-                                    videoIntroController
-                                        .videoDetail.value.title!,
+                                    title,
                                     style: const TextStyle(
                                       color: Colors.white,
                                       fontSize: 16,
