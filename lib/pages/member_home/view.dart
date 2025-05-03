@@ -32,7 +32,7 @@ class _MemberHomeState extends State<MemberHome>
   @override
   bool get wantKeepAlive => true;
 
-  late final _ctr = Get.find<MemberControllerNew>(tag: widget.heroTag);
+  late final _ctr = Get.find<MemberController>(tag: widget.heroTag);
 
   @override
   Widget build(BuildContext context) {

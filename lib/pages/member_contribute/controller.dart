@@ -20,7 +20,7 @@ class MemberContributeCtr extends CommonDataController
 
   TabController? tabController;
   List<Tab>? tabs;
-  late final _ctr = Get.find<MemberControllerNew>(tag: heroTag);
+  late final _ctr = Get.find<MemberController>(tag: heroTag);
   List<SpaceItem>? items;
 
   @override

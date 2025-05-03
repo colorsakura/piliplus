@@ -18,7 +18,7 @@ class MemberBangumiCtr
   final int mid;
   final String? heroTag;
   int? count;
-  late final _ctr = Get.find<MemberControllerNew>(tag: heroTag);
+  late final _ctr = Get.find<MemberController>(tag: heroTag);
 
   @override
   void onInit() {

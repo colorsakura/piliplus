@@ -32,9 +32,8 @@ extension _WebviewMenuItemExt on _WebviewMenuItem {
       ][index];
 }
 
-class WebviewPageNew extends StatefulWidget {
-  const WebviewPageNew(
-      {super.key, this.url, this.oid, this.title, this.uaType});
+class WebviewPage extends StatefulWidget {
+  const WebviewPage({super.key, this.url, this.oid, this.title, this.uaType});
 
   final String? url;
 
@@ -44,10 +43,10 @@ class WebviewPageNew extends StatefulWidget {
   final String? uaType;
 
   @override
-  State<WebviewPageNew> createState() => _WebviewPageNewState();
+  State<WebviewPage> createState() => _WebviewPageState();
 }
 
-class _WebviewPageNewState extends State<WebviewPageNew> {
+class _WebviewPageState extends State<WebviewPage> {
   late final String _url = widget.url ?? Get.parameters['url'] ?? '';
   late final uaType = widget.uaType ?? Get.parameters['uaType'] ?? 'mob';
   final RxString title = ''.obs;

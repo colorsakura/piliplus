@@ -118,7 +118,7 @@ class _NoteListPageState extends CommonSlidePageState<NoteListPage> {
                 return;
               }
               _key.currentState?.showBottomSheet(
-                (context) => WebviewPageNew(
+                (context) => WebviewPage(
                   oid: widget.oid,
                   title: widget.title,
                   url:

@@ -29,7 +29,7 @@ class MemberPage extends StatefulWidget {
 class _MemberPageState extends State<MemberPage> {
   late final int _mid;
   late final String _heroTag;
-  late final MemberControllerNew _userController;
+  late final MemberController _userController;
   final _key = GlobalKey<ExtendedNestedScrollViewState>();
   int _offset = 120;
 
@@ -39,7 +39,7 @@ class _MemberPageState extends State<MemberPage> {
     _mid = int.tryParse(Get.parameters['mid']!) ?? -1;
     _heroTag = Utils.makeHeroTag(_mid);
     _userController = Get.put(
-      MemberControllerNew(mid: _mid),
+      MemberController(mid: _mid),
       tag: _heroTag,
     );
     _userController.scrollController.addListener(listener);

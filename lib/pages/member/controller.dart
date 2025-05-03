@@ -21,9 +21,9 @@ extension MemberTabTypeExt on MemberTabType {
   String get title => ['默认', '首页', '动态', '投稿', '收藏', '番剧'][index];
 }
 
-class MemberControllerNew extends CommonDataController<SpaceData, dynamic>
+class MemberController extends CommonDataController<SpaceData, dynamic>
     with GetTickerProviderStateMixin {
-  MemberControllerNew({required this.mid});
+  MemberController({required this.mid});
   int mid;
   int? ownerMid;
   String? username;
