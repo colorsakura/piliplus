@@ -1,6 +1,6 @@
 import 'package:PiliPlus/common/constants.dart';
-import 'package:PiliPlus/common/widgets/http_error.dart';
-import 'package:PiliPlus/common/widgets/loading_widget.dart';
+import 'package:PiliPlus/common/widgets/loading_widget/http_error.dart';
+import 'package:PiliPlus/common/widgets/loading_widget/loading_widget.dart';
 import 'package:PiliPlus/common/widgets/self_sized_horizontal_list.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/bangumi/pgc_index/condition.dart';

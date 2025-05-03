@@ -1,5 +1,5 @@
-import 'package:PiliPlus/common/widgets/dialog.dart';
-import 'package:PiliPlus/common/widgets/loading_widget.dart';
+import 'package:PiliPlus/common/widgets/dialog/dialog.dart';
+import 'package:PiliPlus/common/widgets/loading_widget/loading_widget.dart';
 import 'package:PiliPlus/common/widgets/scroll_physics.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/member/tags.dart';

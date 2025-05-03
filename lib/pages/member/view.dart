@@ -1,5 +1,5 @@
 import 'package:PiliPlus/common/widgets/dynamic_sliver_appbar.dart';
-import 'package:PiliPlus/common/widgets/loading_widget.dart';
+import 'package:PiliPlus/common/widgets/loading_widget/loading_widget.dart';
 import 'package:PiliPlus/common/widgets/radio_widget.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/http/member.dart';

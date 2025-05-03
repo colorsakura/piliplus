@@ -1,5 +1,5 @@
-import 'package:PiliPlus/common/widgets/loading_widget.dart';
-import 'package:PiliPlus/common/widgets/network_img_layer.dart';
+import 'package:PiliPlus/common/widgets/loading_widget/loading_widget.dart';
+import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/common/widgets/self_sized_horizontal_list.dart';
 import 'package:PiliPlus/http/loading_state.dart';
@@ -14,7 +14,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/common/skeleton/video_card_v.dart';
-import 'package:PiliPlus/common/widgets/http_error.dart';
+import 'package:PiliPlus/common/widgets/loading_widget/http_error.dart';
 
 class LivePage extends CommonPage {
   const LivePage({super.key});

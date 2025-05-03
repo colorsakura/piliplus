@@ -1,4 +1,4 @@
-import 'package:PiliPlus/common/widgets/http_error.dart';
+import 'package:PiliPlus/common/widgets/loading_widget/http_error.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/pages/common/common_search_controller.dart';
 import 'package:flutter/material.dart';

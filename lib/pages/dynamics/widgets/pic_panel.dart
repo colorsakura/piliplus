@@ -1,4 +1,4 @@
-import 'package:PiliPlus/common/widgets/image_view.dart';
+import 'package:PiliPlus/common/widgets/image/image_view.dart';
 import 'package:PiliPlus/models/dynamics/result.dart';
 import 'package:flutter/material.dart';
 

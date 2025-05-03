@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'package:PiliPlus/common/widgets/avatar.dart';
-import 'package:PiliPlus/common/widgets/report.dart';
+import 'package:PiliPlus/common/widgets/dialog/report.dart';
 import 'package:PiliPlus/pages/save_panel/view.dart';
 import 'package:PiliPlus/http/constants.dart';
 import 'package:PiliPlus/http/video.dart';

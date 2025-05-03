@@ -2,8 +2,8 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:math';
 
-import 'package:PiliPlus/common/widgets/audio_video_progress_bar.dart';
-import 'package:PiliPlus/common/widgets/segment_progress_bar.dart';
+import 'package:PiliPlus/common/widgets/progress_bar/audio_video_progress_bar.dart';
+import 'package:PiliPlus/common/widgets/progress_bar/segment_progress_bar.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/common/super_resolution_type.dart';
 import 'package:PiliPlus/models/video_detail_res.dart';

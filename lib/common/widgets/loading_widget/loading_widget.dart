@@ -1,4 +1,4 @@
-import 'package:PiliPlus/common/widgets/http_error.dart';
+import 'package:PiliPlus/common/widgets/loading_widget/http_error.dart';
 import 'package:flutter/material.dart';
 
 Widget get loadingWidget => Center(child: CircularProgressIndicator());

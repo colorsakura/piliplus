@@ -1,4 +1,4 @@
-import 'package:PiliPlus/common/widgets/network_img_layer.dart';
+import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
 import 'package:PiliPlus/pages/live_room/controller.dart';
 import 'package:PiliPlus/services/loggeer.dart';
 import 'package:PiliPlus/utils/utils.dart';

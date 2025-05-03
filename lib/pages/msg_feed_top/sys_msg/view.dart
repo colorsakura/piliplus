@@ -1,8 +1,8 @@
 import 'dart:convert';
 
 import 'package:PiliPlus/common/skeleton/msg_feed_sys_msg_.dart';
-import 'package:PiliPlus/common/widgets/dialog.dart';
-import 'package:PiliPlus/common/widgets/http_error.dart';
+import 'package:PiliPlus/common/widgets/dialog/dialog.dart';
+import 'package:PiliPlus/common/widgets/loading_widget/http_error.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/msg/msgfeed_sys_msg.dart';

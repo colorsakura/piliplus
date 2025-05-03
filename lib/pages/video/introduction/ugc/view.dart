@@ -19,7 +19,7 @@ import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/pages/mine/controller.dart';
-import 'package:PiliPlus/common/widgets/network_img_layer.dart';
+import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
 import 'package:PiliPlus/common/widgets/stat/stat.dart';
 import 'package:PiliPlus/models/video_detail_res.dart';
 import 'package:PiliPlus/pages/video/introduction/ugc/controller.dart';

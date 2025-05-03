@@ -1,5 +1,5 @@
 import 'package:PiliPlus/common/constants.dart';
-import 'package:PiliPlus/common/widgets/video_card_h.dart';
+import 'package:PiliPlus/common/widgets/video_card/video_card_h.dart';
 import 'package:PiliPlus/models/search/result.dart';
 import 'package:PiliPlus/pages/bangumi/widgets/bangumi_card_v_search.dart';
 import 'package:PiliPlus/pages/search_panel/all/controller.dart';

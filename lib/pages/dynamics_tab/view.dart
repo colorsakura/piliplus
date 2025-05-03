@@ -14,7 +14,7 @@ import 'package:PiliPlus/utils/storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:PiliPlus/common/constants.dart';
-import 'package:PiliPlus/common/widgets/http_error.dart';
+import 'package:PiliPlus/common/widgets/loading_widget/http_error.dart';
 import 'package:waterfall_flow/waterfall_flow.dart';
 
 class DynamicsTabPage extends CommonPage {

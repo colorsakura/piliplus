@@ -1,11 +1,11 @@
 import 'package:PiliPlus/common/widgets/custom_sliver_persistent_header_delegate.dart';
-import 'package:PiliPlus/common/widgets/icon_button.dart';
+import 'package:PiliPlus/common/widgets/button/icon_button.dart';
 import 'package:PiliPlus/common/widgets/interactiveviewer_gallery/interactiveviewer_gallery.dart'
     show SourceModel;
-import 'package:PiliPlus/common/widgets/loading_widget.dart';
-import 'package:PiliPlus/common/widgets/network_img_layer.dart';
+import 'package:PiliPlus/common/widgets/loading_widget/loading_widget.dart';
+import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
 import 'package:PiliPlus/common/widgets/scroll_physics.dart';
-import 'package:PiliPlus/common/widgets/video_card_h_member_video.dart';
+import 'package:PiliPlus/common/widgets/video_card/video_card_h_member_video.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/member/info.dart';
 import 'package:PiliPlus/models/space_archive/item.dart';

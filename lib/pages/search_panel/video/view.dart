@@ -1,5 +1,5 @@
 import 'package:PiliPlus/common/widgets/custom_sliver_persistent_header_delegate.dart';
-import 'package:PiliPlus/common/widgets/video_card_h.dart';
+import 'package:PiliPlus/common/widgets/video_card/video_card_h.dart';
 import 'package:PiliPlus/models/search/result.dart';
 import 'package:PiliPlus/pages/search/widgets/search_text.dart';
 import 'package:PiliPlus/pages/search_panel/video/controller.dart';

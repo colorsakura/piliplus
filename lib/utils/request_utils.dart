@@ -19,7 +19,7 @@ import 'package:PiliPlus/models/user/fav_folder.dart';
 import 'package:PiliPlus/pages/common/multi_select_controller.dart';
 import 'package:PiliPlus/pages/dynamics_tab/controller.dart';
 import 'package:PiliPlus/pages/later/controller.dart';
-import 'package:PiliPlus/pages/group_panel/group_panel.dart';
+import 'package:PiliPlus/pages/group_panel/view.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/feed_back.dart';
 import 'package:PiliPlus/utils/storage.dart';

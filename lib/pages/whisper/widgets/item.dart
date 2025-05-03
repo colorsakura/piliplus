@@ -1,4 +1,4 @@
-import 'package:PiliPlus/common/widgets/network_img_layer.dart';
+import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
 import 'package:PiliPlus/models/msg/session.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';

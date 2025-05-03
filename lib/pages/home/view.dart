@@ -5,7 +5,7 @@ import 'package:PiliPlus/pages/mine/controller.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:PiliPlus/common/widgets/network_img_layer.dart';
+import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
 import 'package:PiliPlus/utils/feed_back.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import './controller.dart';

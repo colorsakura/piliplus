@@ -5,7 +5,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import 'network_img_layer.dart';
+import 'image/network_img_layer.dart';
 
 class Avatar extends StatelessWidget {
   final _BadgeType _badgeType;

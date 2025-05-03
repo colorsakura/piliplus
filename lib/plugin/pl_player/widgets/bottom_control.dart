@@ -1,7 +1,7 @@
 import 'dart:async';
 
-import 'package:PiliPlus/common/widgets/audio_video_progress_bar.dart';
-import 'package:PiliPlus/common/widgets/segment_progress_bar.dart';
+import 'package:PiliPlus/common/widgets/progress_bar/audio_video_progress_bar.dart';
+import 'package:PiliPlus/common/widgets/progress_bar/segment_progress_bar.dart';
 import 'package:PiliPlus/plugin/pl_player/controller.dart';
 import 'package:PiliPlus/plugin/pl_player/view.dart';
 import 'package:PiliPlus/utils/extension.dart';

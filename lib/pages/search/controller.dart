@@ -1,4 +1,4 @@
-import 'package:PiliPlus/common/widgets/dialog.dart';
+import 'package:PiliPlus/common/widgets/dialog/dialog.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/search/search_trending/trending_data.dart';
 import 'package:flutter/material.dart';

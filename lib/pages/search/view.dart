@@ -1,5 +1,5 @@
 import 'package:PiliPlus/common/widgets/disabled_icon.dart';
-import 'package:PiliPlus/common/widgets/loading_widget.dart';
+import 'package:PiliPlus/common/widgets/loading_widget/loading_widget.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/search/search_trending/trending_data.dart';
 import 'package:PiliPlus/models/search/suggest.dart';

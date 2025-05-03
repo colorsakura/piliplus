@@ -1,7 +1,7 @@
 import 'dart:math';
 
-import 'package:PiliPlus/common/widgets/loading_widget.dart';
-import 'package:PiliPlus/common/widgets/network_img_layer.dart';
+import 'package:PiliPlus/common/widgets/loading_widget/loading_widget.dart';
+import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/live/live_emoticons/datum.dart';
 import 'package:PiliPlus/models/live/live_emoticons/emoticon.dart';
