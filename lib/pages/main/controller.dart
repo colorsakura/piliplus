@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:PiliPlus/grpc/grpc_repo.dart';
 import 'package:PiliPlus/http/api.dart';
 import 'package:PiliPlus/http/init.dart';
+import 'package:PiliPlus/models/common/dynamic_badge_mode.dart';
+import 'package:PiliPlus/models/common/nav_bar_config.dart';
 import 'package:PiliPlus/pages/dynamics/view.dart';
 import 'package:PiliPlus/pages/home/view.dart';
 import 'package:PiliPlus/pages/media/view.dart';
@@ -11,8 +13,6 @@ import 'package:PiliPlus/utils/utils.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:PiliPlus/utils/storage.dart';
-import '../../models/common/dynamic_badge_mode.dart';
-import '../../models/common/nav_bar_config.dart';
 
 class MainController extends GetxController {
   List<Widget> pages = <Widget>[];

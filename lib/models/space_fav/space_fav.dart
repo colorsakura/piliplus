@@ -6,16 +6,16 @@ part 'space_fav.g.dart';
 
 @JsonSerializable()
 class SpaceFav {
-	int? code;
-	String? message;
-	int? ttl;
-	List<Datum>? data;
+  int? code;
+  String? message;
+  int? ttl;
+  List<SpaceFavData>? data;
 
-	SpaceFav({this.code, this.message, this.ttl, this.data});
+  SpaceFav({this.code, this.message, this.ttl, this.data});
 
-	factory SpaceFav.fromJson(Map<String, dynamic> json) {
-		return _$SpaceFavFromJson(json);
-	}
+  factory SpaceFav.fromJson(Map<String, dynamic> json) {
+    return _$SpaceFavFromJson(json);
+  }
 
-	Map<String, dynamic> toJson() => _$SpaceFavToJson(this);
+  Map<String, dynamic> toJson() => _$SpaceFavToJson(this);
 }

@@ -1,8 +1,9 @@
+import 'package:PiliPlus/pages/live_room/controller.dart';
+import 'package:PiliPlus/plugin/pl_player/controller.dart';
+import 'package:PiliPlus/plugin/pl_player/widgets/common_btn.dart';
 import 'package:PiliPlus/plugin/pl_player/widgets/play_pause_btn.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:flutter/material.dart';
-import 'package:PiliPlus/pages/live_room/index.dart';
-import 'package:PiliPlus/plugin/pl_player/index.dart';
 import 'package:get/get.dart';
 
 class BottomControl extends StatelessWidget implements PreferredSizeWidget {

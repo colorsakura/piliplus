@@ -1,10 +1,10 @@
 import 'package:PiliPlus/common/widgets/loading_widget.dart';
+import 'package:PiliPlus/common/widgets/network_img_layer.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/video/reply/emote.dart';
+import 'package:PiliPlus/pages/emote/controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../common/widgets/network_img_layer.dart';
-import 'controller.dart';
 import 'package:PiliPlus/common/widgets/scroll_physics.dart';
 
 class EmotePanel extends StatefulWidget {

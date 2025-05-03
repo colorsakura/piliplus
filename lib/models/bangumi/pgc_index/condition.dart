@@ -1,13 +1,13 @@
-class Condition {
+class PgcIndexCondition {
   List<Filter>? filter;
   List<Order>? order;
 
-  Condition({
+  PgcIndexCondition({
     this.filter,
     this.order,
   });
 
-  Condition.fromJson(Map json) {
+  PgcIndexCondition.fromJson(Map json) {
     filter = (json['filter'] as List?)
         ?.map((item) => Filter.fromJson(item))
         .toList();

@@ -6,7 +6,7 @@ part 'like_archive.g.dart';
 @JsonSerializable()
 class LikeArchive {
   int? count;
-  List<Item>? item;
+  List<SpaceItem>? item;
 
   LikeArchive({this.count, this.item});
 

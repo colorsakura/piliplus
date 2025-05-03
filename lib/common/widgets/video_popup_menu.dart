@@ -1,17 +1,16 @@
+import 'package:PiliPlus/http/user.dart';
+import 'package:PiliPlus/http/video.dart';
+import 'package:PiliPlus/models/home/rcmd/result.dart';
 import 'package:PiliPlus/models/model_video.dart';
+import 'package:PiliPlus/models/space_archive/item.dart';
+import 'package:PiliPlus/pages/mine/controller.dart';
 import 'package:PiliPlus/pages/search/widgets/search_text.dart';
+import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-
-import '../../http/user.dart';
-import '../../http/video.dart';
-import '../../models/home/rcmd/result.dart';
-import '../../pages/mine/controller.dart';
-import '../../utils/storage.dart';
-import 'package:PiliPlus/models/space_archive/item.dart';
 
 class VideoCustomAction {
   String title;
@@ -54,7 +53,7 @@ class VideoCustomActions {
           },
         ),
       ],
-      if (videoItem is! Item)
+      if (videoItem is! SpaceArchiveItem)
         VideoCustomAction(
           '访问：${videoItem.owner.name}',
           'visit',
@@ -65,7 +64,7 @@ class VideoCustomActions {
             });
           },
         ),
-      if (videoItem is! Item)
+      if (videoItem is! SpaceArchiveItem)
         VideoCustomAction(
             '不感兴趣', 'dislike', Icon(MdiIcons.thumbDownOutline, size: 16),
             () async {
@@ -234,7 +233,7 @@ class VideoCustomActions {
             );
           }
         }),
-      if (videoItem is! Item)
+      if (videoItem is! SpaceArchiveItem)
         VideoCustomAction('拉黑：${videoItem.owner.name}', 'block',
             Icon(MdiIcons.cancel, size: 16), () async {
           await showDialog(

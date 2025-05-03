@@ -4,15 +4,14 @@ import 'package:PiliPlus/common/widgets/network_img_layer.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/fans/result.dart';
+import 'package:PiliPlus/pages/fan/controller.dart';
 import 'package:PiliPlus/pages/share/view.dart' show UserModel;
+import 'package:PiliPlus/utils/grid.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:PiliPlus/common/widgets/http_error.dart';
-
-import '../../utils/grid.dart';
-import 'controller.dart';
 
 class FansPage extends StatefulWidget {
   const FansPage({

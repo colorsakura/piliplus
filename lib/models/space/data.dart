@@ -1,3 +1,4 @@
+import 'package:PiliPlus/models/space_article/data.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 import 'archive.dart';
@@ -13,12 +14,11 @@ import 'series.dart';
 import 'setting.dart';
 import 'tab.dart';
 import 'tab2.dart';
-import 'package:PiliPlus/models/space_article/data.dart' as space;
 
 part 'data.g.dart';
 
 @JsonSerializable()
-class Data {
+class SpaceData {
   int? relation;
   @JsonKey(name: 'rel_special')
   int? relSpecial;
@@ -30,11 +30,11 @@ class Data {
   bool? isParams;
   Setting? setting;
   Tab? tab;
-  Card? card;
-  Images? images;
+  SpaceCard? card;
+  SpaceImages? images;
   Archive? archive;
   Series? series;
-  space.Data? article;
+  SpaceArticleData? article;
   Season? season;
   @JsonKey(name: 'coin_archive')
   CoinArchive? coinArchive;
@@ -55,7 +55,7 @@ class Data {
   dynamic live;
   UgcSeason? ugcSeason;
 
-  Data({
+  SpaceData({
     this.relation,
     this.relSpecial,
     this.guestRelation,
@@ -83,7 +83,7 @@ class Data {
     this.ugcSeason,
   });
 
-  factory Data.fromJson(Map<String, dynamic> json) => _$DataFromJson(json);
+  factory SpaceData.fromJson(Map<String, dynamic> json) => _$DataFromJson(json);
 
   Map<String, dynamic> toJson() => _$DataToJson(this);
 }

@@ -6,7 +6,7 @@ part of 'data.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-Data _$DataFromJson(Map<String, dynamic> json) => Data(
+SpaceData _$DataFromJson(Map<String, dynamic> json) => SpaceData(
       relation: (json['relation'] as num?)?.toInt(),
       relSpecial: (json['rel_special'] as num?)?.toInt(),
       guestRelation: (json['guest_relation'] as num?)?.toInt(),
@@ -20,10 +20,10 @@ Data _$DataFromJson(Map<String, dynamic> json) => Data(
           : Tab.fromJson(json['tab'] as Map<String, dynamic>),
       card: json['card'] == null
           ? null
-          : Card.fromJson(json['card'] as Map<String, dynamic>),
+          : SpaceCard.fromJson(json['card'] as Map<String, dynamic>),
       images: json['images'] == null
           ? null
-          : Images.fromJson(json['images'] as Map<String, dynamic>),
+          : SpaceImages.fromJson(json['images'] as Map<String, dynamic>),
       archive: json['archive'] == null
           ? null
           : Archive.fromJson(json['archive'] as Map<String, dynamic>),
@@ -32,7 +32,7 @@ Data _$DataFromJson(Map<String, dynamic> json) => Data(
           : Series.fromJson(json['series'] as Map<String, dynamic>),
       article: json['article'] == null
           ? null
-          : space.Data.fromJson(json['article'] as Map<String, dynamic>),
+          : SpaceArticleData.fromJson(json['article'] as Map<String, dynamic>),
       season: json['season'] == null
           ? null
           : Season.fromJson(json['season'] as Map<String, dynamic>),
@@ -67,7 +67,7 @@ Data _$DataFromJson(Map<String, dynamic> json) => Data(
           : null,
     );
 
-Map<String, dynamic> _$DataToJson(Data instance) => <String, dynamic>{
+Map<String, dynamic> _$DataToJson(SpaceData instance) => <String, dynamic>{
       'relation': instance.relation,
       'rel_special': instance.relSpecial,
       'guest_relation': instance.guestRelation,

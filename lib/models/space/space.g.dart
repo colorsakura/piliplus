@@ -12,7 +12,7 @@ Space _$SpaceFromJson(Map<String, dynamic> json) => Space(
       ttl: (json['ttl'] as num?)?.toInt(),
       data: json['data'] == null
           ? null
-          : Data.fromJson(json['data'] as Map<String, dynamic>),
+          : SpaceData.fromJson(json['data'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$SpaceToJson(Space instance) => <String, dynamic>{

@@ -1,8 +1,9 @@
 import 'package:PiliPlus/grpc/dm/v1/dm.pb.dart';
 import 'package:PiliPlus/grpc/grpc_repo.dart';
+import 'package:PiliPlus/http/api.dart';
+import 'package:PiliPlus/http/init.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:dio/dio.dart';
-import 'index.dart';
 
 class DanmakuHttp {
   // 获取视频弹幕

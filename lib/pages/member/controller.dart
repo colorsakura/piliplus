@@ -21,7 +21,7 @@ extension MemberTabTypeExt on MemberTabType {
   String get title => ['默认', '首页', '动态', '投稿', '收藏', '番剧'][index];
 }
 
-class MemberControllerNew extends CommonDataController<Data, dynamic>
+class MemberControllerNew extends CommonDataController<SpaceData, dynamic>
     with GetTickerProviderStateMixin {
   MemberControllerNew({required this.mid});
   int mid;
@@ -61,8 +61,8 @@ class MemberControllerNew extends CommonDataController<Data, dynamic>
   }
 
   @override
-  bool customHandleResponse(bool isRefresh, Success<Data> response) {
-    Data data = response.response;
+  bool customHandleResponse(bool isRefresh, Success<SpaceData> response) {
+    SpaceData data = response.response;
     username = data.card?.name ?? '';
     isFollowed = data.card?.relation?.isFollowed;
     if (data.relation == -1) {
@@ -133,7 +133,7 @@ class MemberControllerNew extends CommonDataController<Data, dynamic>
       Tab2(
         title: '投稿',
         param: 'contribute',
-        items: [Item(title: '视频', param: 'video')],
+        items: [SpaceItem(title: '视频', param: 'video')],
       ),
       Tab2(title: '收藏', param: 'favorite'),
       Tab2(title: '追番', param: 'bangumi'),
@@ -151,7 +151,7 @@ class MemberControllerNew extends CommonDataController<Data, dynamic>
   }
 
   @override
-  Future<LoadingState<Data>> customGetData() => MemberHttp.space(
+  Future<LoadingState<SpaceData>> customGetData() => MemberHttp.space(
         mid: mid,
         fromViewAid: fromViewAid,
       );

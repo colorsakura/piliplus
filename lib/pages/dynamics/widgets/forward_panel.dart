@@ -3,22 +3,21 @@ import 'package:PiliPlus/common/widgets/badge.dart';
 import 'package:PiliPlus/common/widgets/image_save.dart';
 import 'package:PiliPlus/common/widgets/image_view.dart';
 import 'package:PiliPlus/common/widgets/network_img_layer.dart';
+import 'package:PiliPlus/models/dynamics/result.dart';
 import 'package:PiliPlus/pages/article/widgets/opus_content.dart';
+import 'package:PiliPlus/pages/dynamics/widgets/additional_panel.dart';
+import 'package:PiliPlus/pages/dynamics/widgets/article_panel.dart';
+import 'package:PiliPlus/pages/dynamics/widgets/live_panel.dart';
+import 'package:PiliPlus/pages/dynamics/widgets/live_rcmd_panel.dart';
+import 'package:PiliPlus/pages/dynamics/widgets/pic_panel.dart';
+import 'package:PiliPlus/pages/dynamics/widgets/rich_node_panel.dart';
+import 'package:PiliPlus/pages/dynamics/widgets/video_panel.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:PiliPlus/utils/utils.dart';
-
-import '../../../models/dynamics/result.dart';
-import 'additional_panel.dart';
-import 'article_panel.dart';
-import 'live_panel.dart';
-import 'live_rcmd_panel.dart';
-import 'pic_panel.dart';
-import 'rich_node_panel.dart';
-import 'video_panel.dart';
 
 InlineSpan picsNodes(
   List<OpusPicsModel> pics,

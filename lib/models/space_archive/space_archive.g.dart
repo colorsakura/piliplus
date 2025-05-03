@@ -12,7 +12,7 @@ SpaceArchive _$SpaceArchiveFromJson(Map<String, dynamic> json) => SpaceArchive(
       ttl: (json['ttl'] as num?)?.toInt(),
       data: json['data'] == null
           ? null
-          : Data.fromJson(json['data'] as Map<String, dynamic>),
+          : SpaceArchiveData.fromJson(json['data'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$SpaceArchiveToJson(SpaceArchive instance) =>

@@ -5,13 +5,12 @@ import 'package:PiliPlus/common/widgets/pair.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/msg/msgfeed_like_me.dart';
+import 'package:PiliPlus/pages/msg_feed_top/like_me/controller.dart';
+import 'package:PiliPlus/utils/app_scheme.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:PiliPlus/common/widgets/network_img_layer.dart';
-
-import '../../../utils/app_scheme.dart';
-import 'controller.dart';
 
 class LikeMePage extends StatefulWidget {
   const LikeMePage({super.key});

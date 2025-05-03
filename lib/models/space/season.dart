@@ -6,7 +6,7 @@ part 'season.g.dart';
 @JsonSerializable()
 class Season {
   int? count;
-  List<Item>? item;
+  List<SpaceArchiveItem>? item;
 
   Season({this.count, this.item});
 

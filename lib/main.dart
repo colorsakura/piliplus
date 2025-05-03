@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:PiliPlus/build_config.dart';
-import 'package:PiliPlus/pages/video/detail/view_v.dart';
+import 'package:PiliPlus/pages/video/view.dart';
 import 'package:PiliPlus/utils/cache_manage.dart';
 import 'package:PiliPlus/utils/theme_utils.dart';
 import 'package:flex_seed_scheme/flex_seed_scheme.dart';

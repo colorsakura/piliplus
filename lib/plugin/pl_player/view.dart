@@ -2,13 +2,25 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:math';
 
+import 'package:PiliPlus/common/widgets/audio_video_progress_bar.dart';
 import 'package:PiliPlus/common/widgets/segment_progress_bar.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/common/super_resolution_type.dart';
-import 'package:PiliPlus/pages/video/detail/controller.dart';
-import 'package:PiliPlus/pages/video/detail/introduction/controller.dart';
+import 'package:PiliPlus/models/video_detail_res.dart';
+import 'package:PiliPlus/pages/video/controller.dart';
+import 'package:PiliPlus/pages/video/introduction/pgc/controller.dart';
+import 'package:PiliPlus/pages/video/introduction/ugc/controller.dart';
+import 'package:PiliPlus/plugin/pl_player/models/bottom_control_type.dart';
+import 'package:PiliPlus/plugin/pl_player/models/bottom_progress_behavior.dart';
+import 'package:PiliPlus/plugin/pl_player/widgets/app_bar_ani.dart';
+import 'package:PiliPlus/plugin/pl_player/widgets/backward_seek.dart';
+import 'package:PiliPlus/plugin/pl_player/widgets/bottom_control.dart';
+import 'package:PiliPlus/plugin/pl_player/widgets/common_btn.dart';
+import 'package:PiliPlus/plugin/pl_player/widgets/forward_seek.dart';
+import 'package:PiliPlus/plugin/pl_player/widgets/play_pause_btn.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/id_utils.dart';
+import 'package:PiliPlus/utils/utils.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_debounce/easy_throttle.dart';
 import 'package:fl_chart/fl_chart.dart';
@@ -27,19 +39,6 @@ import 'package:PiliPlus/plugin/pl_player/utils.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:saver_gallery/saver_gallery.dart';
 import 'package:screen_brightness/screen_brightness.dart';
-
-import '../../common/widgets/audio_video_progress_bar.dart';
-import '../../models/video_detail_res.dart';
-import '../../pages/bangumi/introduction/controller.dart';
-import '../../utils/utils.dart';
-import 'models/bottom_control_type.dart';
-import 'models/bottom_progress_behavior.dart';
-import 'widgets/app_bar_ani.dart';
-import 'widgets/backward_seek.dart';
-import 'widgets/bottom_control.dart';
-import 'widgets/common_btn.dart';
-import 'widgets/forward_seek.dart';
-import 'widgets/play_pause_btn.dart';
 
 class PLVideoPlayer extends StatefulWidget {
   const PLVideoPlayer({

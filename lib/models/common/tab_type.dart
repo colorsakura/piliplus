@@ -1,11 +1,15 @@
+import 'package:PiliPlus/pages/bangumi/controller.dart';
+import 'package:PiliPlus/pages/bangumi/view.dart';
+import 'package:PiliPlus/pages/hot/controller.dart';
+import 'package:PiliPlus/pages/hot/view.dart';
+import 'package:PiliPlus/pages/live/controller.dart';
 import 'package:PiliPlus/pages/live/view.dart';
-import 'package:PiliPlus/pages/rank/index.dart';
+import 'package:PiliPlus/pages/rank/controller.dart';
+import 'package:PiliPlus/pages/rank/view.dart';
+import 'package:PiliPlus/pages/rcmd/controller.dart';
+import 'package:PiliPlus/pages/rcmd/view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:PiliPlus/pages/bangumi/index.dart';
-import 'package:PiliPlus/pages/hot/index.dart';
-import 'package:PiliPlus/pages/live/index.dart';
-import 'package:PiliPlus/pages/rcmd/index.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 enum TabType { live, rcmd, hot, rank, bangumi, cinema }

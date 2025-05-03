@@ -1,10 +1,9 @@
+import 'package:PiliPlus/models/live/room_info.dart';
 import 'package:PiliPlus/models/video/play/CDN.dart';
 import 'package:PiliPlus/models/video/play/url.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:flutter/material.dart';
-
-import '../models/live/room_info.dart';
 
 class VideoUtils {
   static String getCdnUrl(dynamic item, [defaultCDNService]) {

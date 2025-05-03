@@ -6,7 +6,7 @@ part of 'data.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-Data _$DataFromJson(Map<String, dynamic> json) => Data(
+SpaceArchiveData _$DataFromJson(Map<String, dynamic> json) => SpaceArchiveData(
       episodicButton: json['episodic_button'] == null
           ? null
           : EpisodicButton.fromJson(
@@ -16,7 +16,7 @@ Data _$DataFromJson(Map<String, dynamic> json) => Data(
           .toList(),
       count: (json['count'] as num?)?.toInt(),
       item: (json['item'] as List<dynamic>?)
-          ?.map((e) => Item.fromJson(e as Map<String, dynamic>))
+          ?.map((e) => SpaceArchiveItem.fromJson(e as Map<String, dynamic>))
           .toList(),
       lastWatchedLocator: json['last_watched_locator'] == null
           ? null
@@ -27,7 +27,8 @@ Data _$DataFromJson(Map<String, dynamic> json) => Data(
       next: json['next'],
     );
 
-Map<String, dynamic> _$DataToJson(Data instance) => <String, dynamic>{
+Map<String, dynamic> _$DataToJson(SpaceArchiveData instance) =>
+    <String, dynamic>{
       'episodic_button': instance.episodicButton,
       'order': instance.order,
       'count': instance.count,

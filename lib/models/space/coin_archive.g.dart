@@ -9,7 +9,7 @@ part of 'coin_archive.dart';
 CoinArchive _$CoinArchiveFromJson(Map<String, dynamic> json) => CoinArchive(
       count: (json['count'] as num?)?.toInt(),
       item: (json['item'] as List<dynamic>?)
-          ?.map((json) => Item.fromJson(json))
+          ?.map((json) => SpaceItem.fromJson(json))
           .toList(),
     );
 

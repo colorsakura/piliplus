@@ -6,7 +6,7 @@ part 'coin_archive.g.dart';
 @JsonSerializable()
 class CoinArchive {
   int? count;
-  List<Item>? item;
+  List<SpaceItem>? item;
 
   CoinArchive({this.count, this.item});
 

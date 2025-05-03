@@ -1,17 +1,17 @@
 import 'dart:async';
 
+import 'package:PiliPlus/http/search.dart';
 import 'package:PiliPlus/models/common/reply_type.dart';
+import 'package:PiliPlus/pages/video/reply_reply/view.dart';
 import 'package:PiliPlus/utils/extension.dart';
+import 'package:PiliPlus/utils/id_utils.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
+import 'package:PiliPlus/utils/url_utils.dart';
+import 'package:PiliPlus/utils/utils.dart';
 import 'package:app_links/app_links.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
-import '../http/search.dart';
-import '../pages/video/detail/reply_reply/view.dart';
-import 'id_utils.dart';
-import 'url_utils.dart';
-import 'utils.dart';
 
 class PiliScheme {
   static late AppLinks appLinks;

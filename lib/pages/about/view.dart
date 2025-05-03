@@ -3,8 +3,10 @@ import 'dart:io';
 
 import 'package:PiliPlus/build_config.dart';
 import 'package:PiliPlus/common/widgets/dialog.dart';
+import 'package:PiliPlus/pages/mine/controller.dart';
 import 'package:PiliPlus/services/loggeer.dart';
 import 'package:PiliPlus/utils/accounts/account.dart';
+import 'package:PiliPlus/utils/cache_manage.dart';
 import 'package:PiliPlus/utils/login_utils.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:flutter/material.dart';
@@ -15,8 +17,6 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/utils.dart';
-import '../../utils/cache_manage.dart';
-import '../mine/controller.dart';
 
 class AboutPage extends StatefulWidget {
   const AboutPage({super.key, this.showAppBar});

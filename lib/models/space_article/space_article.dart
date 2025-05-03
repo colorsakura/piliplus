@@ -6,16 +6,16 @@ part 'space_article.g.dart';
 
 @JsonSerializable()
 class SpaceArticle {
-	int? code;
-	String? message;
-	int? ttl;
-	Data? data;
+  int? code;
+  String? message;
+  int? ttl;
+  SpaceArticleData? data;
 
-	SpaceArticle({this.code, this.message, this.ttl, this.data});
+  SpaceArticle({this.code, this.message, this.ttl, this.data});
 
-	factory SpaceArticle.fromJson(Map<String, dynamic> json) {
-		return _$SpaceArticleFromJson(json);
-	}
+  factory SpaceArticle.fromJson(Map<String, dynamic> json) {
+    return _$SpaceArticleFromJson(json);
+  }
 
-	Map<String, dynamic> toJson() => _$SpaceArticleToJson(this);
+  Map<String, dynamic> toJson() => _$SpaceArticleToJson(this);
 }

@@ -1,14 +1,14 @@
+import 'package:PiliPlus/http/api.dart';
 import 'package:PiliPlus/http/constants.dart';
+import 'package:PiliPlus/http/init.dart';
 import 'package:PiliPlus/http/loading_state.dart';
+import 'package:PiliPlus/models/dynamics/result.dart';
+import 'package:PiliPlus/models/dynamics/up.dart';
+import 'package:PiliPlus/models/space_article/item.dart';
 import 'package:PiliPlus/utils/accounts/account.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/wbi_sign.dart';
 import 'package:dio/dio.dart';
-
-import '../models/space_article/item.dart';
-import '../models/dynamics/result.dart';
-import '../models/dynamics/up.dart';
-import 'index.dart';
 
 class DynamicsHttp {
   static Future<LoadingState<DynamicsDataModel>> followDynamic({
@@ -188,7 +188,8 @@ class DynamicsHttp {
     }
   }
 
-  static Future<LoadingState<Item>> articleView({required dynamic cvId}) async {
+  static Future<LoadingState<SpaceArticleItem>> articleView(
+      {required dynamic cvId}) async {
     final res = await Request().get(
       Api.articleView,
       queryParameters: await WbiSign.makSign({
@@ -199,7 +200,7 @@ class DynamicsHttp {
     );
 
     return res.data['code'] == 0
-        ? LoadingState.success(Item.fromJson(res.data['data']))
+        ? LoadingState.success(SpaceArticleItem.fromJson(res.data['data']))
         : LoadingState.error(res.data['message']);
   }
 

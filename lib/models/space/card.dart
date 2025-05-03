@@ -19,7 +19,7 @@ import 'vip.dart';
 part 'card.g.dart';
 
 @JsonSerializable()
-class Card {
+class SpaceCard {
   Avatar? avatar;
   String? mid;
   String? name;
@@ -89,7 +89,7 @@ class Card {
   @JsonKey(name: 'has_digital_asset')
   bool? hasDigitalAsset;
 
-  Card({
+  SpaceCard({
     this.avatar,
     this.mid,
     this.name,
@@ -140,7 +140,7 @@ class Card {
     this.hasDigitalAsset,
   });
 
-  factory Card.fromJson(Map<String, dynamic> json) => _$CardFromJson(json);
+  factory SpaceCard.fromJson(Map<String, dynamic> json) => _$CardFromJson(json);
 
   Map<String, dynamic> toJson() => _$CardToJson(this);
 }

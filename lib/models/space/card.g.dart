@@ -6,7 +6,7 @@ part of 'card.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-Card _$CardFromJson(Map<String, dynamic> json) => Card(
+SpaceCard _$CardFromJson(Map<String, dynamic> json) => SpaceCard(
       avatar: json['avatar'] == null
           ? null
           : Avatar.fromJson(json['avatar'] as Map<String, dynamic>),
@@ -99,7 +99,7 @@ Card _$CardFromJson(Map<String, dynamic> json) => Card(
       hasDigitalAsset: json['has_digital_asset'] as bool?,
     );
 
-Map<String, dynamic> _$CardToJson(Card instance) => <String, dynamic>{
+Map<String, dynamic> _$CardToJson(SpaceCard instance) => <String, dynamic>{
       'avatar': instance.avatar,
       'mid': instance.mid,
       'name': instance.name,

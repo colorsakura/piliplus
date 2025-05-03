@@ -36,7 +36,7 @@ class ArticleController extends ReplyController<MainListReply> {
 
   final RxBool isLoaded = false.obs;
   DynamicItemModel? opusData; // 标题信息从summary获取, 动态没有favorite
-  Item? articleData;
+  SpaceArticleItem? articleData;
   final Rx<ModuleStatModel?> stats = Rx<ModuleStatModel?>(null);
 
   List<ArticleContentModel>? get opus =>

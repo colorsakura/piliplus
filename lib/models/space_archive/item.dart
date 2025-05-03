@@ -4,7 +4,7 @@ import 'badge.dart';
 import 'cursor_attr.dart';
 import 'three_point.dart';
 
-class Item extends BaseSimpleVideoItemModel {
+class SpaceArchiveItem extends BaseSimpleVideoItemModel {
   String? subtitle;
   String? tname;
   String? get cover => pic; // 不知道哪里使用了cover
@@ -34,7 +34,7 @@ class Item extends BaseSimpleVideoItemModel {
   Map? season;
   Map? history;
 
-  Item.fromJson(Map<String, dynamic> json) {
+  SpaceArchiveItem.fromJson(Map<String, dynamic> json) {
     title = json['title'];
     subtitle = json['subtitle'];
     tname = json['tname'];

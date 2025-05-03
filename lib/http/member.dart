@@ -3,31 +3,27 @@ import 'dart:io';
 
 import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/grpc/grpc_repo.dart';
+import 'package:PiliPlus/http/api.dart';
 import 'package:PiliPlus/http/constants.dart';
+import 'package:PiliPlus/http/init.dart';
 import 'package:PiliPlus/http/loading_state.dart';
+import 'package:PiliPlus/models/dynamics/result.dart';
+import 'package:PiliPlus/models/follow/result.dart';
+import 'package:PiliPlus/models/member/archive.dart';
+import 'package:PiliPlus/models/member/coin.dart';
+import 'package:PiliPlus/models/member/info.dart';
+import 'package:PiliPlus/models/member/seasons.dart';
+import 'package:PiliPlus/models/member/tags.dart';
 import 'package:PiliPlus/models/space/data.dart';
-import 'package:PiliPlus/models/space_archive/data.dart' as space_archive;
-import 'package:PiliPlus/models/space_article/data.dart' as space_article;
-import 'package:PiliPlus/models/space/data.dart' as space_;
+import 'package:PiliPlus/models/space_archive/data.dart';
+import 'package:PiliPlus/models/space_article/data.dart';
 import 'package:PiliPlus/models/space_fav/space_fav.dart';
-import 'package:PiliPlus/pages/member/content/member_contribute/member_contribute.dart'
-    show ContributeType;
+import 'package:PiliPlus/pages/member_contribute/view.dart' show ContributeType;
 import 'package:PiliPlus/utils/storage.dart';
+import 'package:PiliPlus/utils/utils.dart';
+import 'package:PiliPlus/utils/wbi_sign.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-
-import '../models/dynamics/result.dart';
-import '../models/follow/result.dart';
-import '../models/member/archive.dart';
-import '../models/member/coin.dart';
-import '../models/member/info.dart';
-import '../models/member/seasons.dart';
-import '../models/member/tags.dart';
-import '../models/space_archive/data.dart' as archive;
-import '../models/space_article/data.dart' as article;
-import '../utils/utils.dart';
-import '../utils/wbi_sign.dart';
-import 'index.dart';
 
 class MemberHttp {
   static Future reportMember(
@@ -65,7 +61,7 @@ class MemberHttp {
     }
   }
 
-  static Future<LoadingState<space_article.Data>> spaceArticle({
+  static Future<LoadingState<SpaceArticleData>> spaceArticle({
     required int mid,
     required int page,
   }) async {
@@ -92,7 +88,7 @@ class MemberHttp {
       ),
     );
     if (res.data['code'] == 0) {
-      return LoadingState.success(article.Data.fromJson(res.data['data']));
+      return LoadingState.success(SpaceArticleData.fromJson(res.data['data']));
     } else {
       return LoadingState.error(res.data['message']);
     }
@@ -147,7 +143,7 @@ class MemberHttp {
     }
   }
 
-  static Future<LoadingState<space_archive.Data>> spaceArchive({
+  static Future<LoadingState<SpaceArchiveData>> spaceArchive({
     required ContributeType type,
     required int? mid,
     String? aid,
@@ -196,7 +192,7 @@ class MemberHttp {
       ),
     );
     if (res.data['code'] == 0) {
-      return LoadingState.success(archive.Data.fromJson(res.data['data']));
+      return LoadingState.success(SpaceArchiveData.fromJson(res.data['data']));
     } else {
       return LoadingState.error(res.data['message']);
     }
@@ -244,7 +240,7 @@ class MemberHttp {
     }
   }
 
-  static Future<LoadingState<space_.Data>> space({
+  static Future<LoadingState<SpaceData>> space({
     int? mid,
     dynamic fromViewAid,
   }) async {
@@ -270,7 +266,7 @@ class MemberHttp {
       ),
     );
     if (res.data['code'] == 0) {
-      return LoadingState.success(Data.fromJson(res.data['data']));
+      return LoadingState.success(SpaceData.fromJson(res.data['data']));
     } else {
       return LoadingState.error(res.data['message']);
     }

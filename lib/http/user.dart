@@ -1,4 +1,15 @@
+import 'package:PiliPlus/common/constants.dart';
+import 'package:PiliPlus/http/api.dart';
+import 'package:PiliPlus/http/init.dart';
 import 'package:PiliPlus/http/loading_state.dart';
+import 'package:PiliPlus/models/model_hot_video_item.dart';
+import 'package:PiliPlus/models/user/fav_detail.dart';
+import 'package:PiliPlus/models/user/fav_folder.dart';
+import 'package:PiliPlus/models/user/history.dart';
+import 'package:PiliPlus/models/user/info.dart';
+import 'package:PiliPlus/models/user/stat.dart';
+import 'package:PiliPlus/models/user/sub_detail.dart';
+import 'package:PiliPlus/models/user/sub_folder.dart';
 import 'package:PiliPlus/models/video/later.dart';
 import 'package:PiliPlus/utils/global_data.dart';
 import 'package:PiliPlus/utils/storage.dart';
@@ -6,17 +17,6 @@ import 'package:PiliPlus/utils/utils.dart';
 import 'package:PiliPlus/utils/wbi_sign.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
-import '../common/constants.dart';
-import '../models/model_hot_video_item.dart';
-import '../models/user/fav_detail.dart';
-import '../models/user/fav_folder.dart';
-import '../models/user/history.dart';
-import '../models/user/info.dart';
-import '../models/user/stat.dart';
-import '../models/user/sub_detail.dart';
-import '../models/user/sub_folder.dart';
-import 'api.dart';
-import 'init.dart';
 
 class UserHttp {
   static Future<dynamic> userStat({required int mid}) async {

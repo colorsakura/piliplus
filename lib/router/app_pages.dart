@@ -1,64 +1,62 @@
 import 'package:PiliPlus/pages/about/view.dart';
 import 'package:PiliPlus/pages/article/view.dart';
+import 'package:PiliPlus/pages/blacklist/view.dart';
+import 'package:PiliPlus/pages/danmaku_block/view.dart';
+import 'package:PiliPlus/pages/dynamics/view.dart';
+import 'package:PiliPlus/pages/dynamics_detail/view.dart';
+import 'package:PiliPlus/pages/fan/view.dart';
 import 'package:PiliPlus/pages/fav/view.dart';
+import 'package:PiliPlus/pages/fav_detail/view.dart';
 import 'package:PiliPlus/pages/fav_search/view.dart';
+import 'package:PiliPlus/pages/follow/view.dart';
 import 'package:PiliPlus/pages/follow_search/view.dart';
+import 'package:PiliPlus/pages/history/view.dart';
 import 'package:PiliPlus/pages/history_search/view.dart';
+import 'package:PiliPlus/pages/home/view.dart';
+import 'package:PiliPlus/pages/hot/view.dart';
+import 'package:PiliPlus/pages/later/view.dart';
 import 'package:PiliPlus/pages/later_search/view.dart';
-import 'package:PiliPlus/pages/member/member_page.dart';
-import 'package:PiliPlus/pages/member/widget/edit_profile_page.dart';
+import 'package:PiliPlus/pages/live_room/view.dart';
+import 'package:PiliPlus/pages/login/view.dart';
+import 'package:PiliPlus/pages/media/view.dart';
+import 'package:PiliPlus/pages/member/view.dart';
+import 'package:PiliPlus/pages/member_dynamics/view.dart';
+import 'package:PiliPlus/pages/member_profile/view.dart';
+import 'package:PiliPlus/pages/member_search/view.dart';
+import 'package:PiliPlus/pages/msg_feed_top/sys_msg/view.dart';
+import 'package:PiliPlus/pages/search/view.dart';
+import 'package:PiliPlus/pages/search_result/view.dart';
 import 'package:PiliPlus/pages/search_trending/view.dart';
+import 'package:PiliPlus/pages/setting/extra_setting.dart';
 import 'package:PiliPlus/pages/setting/navigation_bar_set.dart';
-import 'package:PiliPlus/pages/setting/search_page.dart';
-import 'package:PiliPlus/pages/setting/sponsor_block_page.dart';
+import 'package:PiliPlus/pages/setting/pages/color_select.dart';
+import 'package:PiliPlus/pages/setting/pages/display_mode.dart';
+import 'package:PiliPlus/pages/setting/pages/font_size_select.dart';
+import 'package:PiliPlus/pages/setting/pages/home_tabbar_set.dart';
+import 'package:PiliPlus/pages/setting/pages/play_speed_set.dart';
+import 'package:PiliPlus/pages/setting/play_setting.dart';
+import 'package:PiliPlus/pages/setting/privacy_setting.dart';
+import 'package:PiliPlus/pages/setting/recommend_setting.dart';
+import 'package:PiliPlus/pages/setting/style_setting.dart';
+import 'package:PiliPlus/pages/setting/video_setting.dart';
+import 'package:PiliPlus/pages/settings_search/view.dart';
+import 'package:PiliPlus/pages/sponsor_block/view.dart';
 import 'package:PiliPlus/pages/setting/view.dart';
-import 'package:PiliPlus/pages/video/detail/introduction/widgets/create_fav_page.dart';
-import 'package:PiliPlus/pages/video/detail/view_v.dart';
+import 'package:PiliPlus/pages/fav_create/view.dart';
+import 'package:PiliPlus/pages/subscription/view.dart';
+import 'package:PiliPlus/pages/subscription_detail/view.dart';
+import 'package:PiliPlus/pages/video/view.dart';
 import 'package:PiliPlus/pages/webdav/view.dart';
-import 'package:PiliPlus/pages/webview/webview_page.dart';
+import 'package:PiliPlus/pages/webview/view.dart';
+import 'package:PiliPlus/pages/whisper/view.dart';
+import 'package:PiliPlus/pages/whisper_detail/view.dart';
 import 'package:PiliPlus/utils/storage.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:PiliPlus/pages/msg_feed_top/at_me/view.dart';
 import 'package:PiliPlus/pages/msg_feed_top/reply_me/view.dart';
 import 'package:PiliPlus/pages/msg_feed_top/like_me/view.dart';
 import 'package:PiliPlus/pages/setting/pages/logs.dart';
-
-import '../pages/blacklist/view.dart';
-import '../pages/danmaku_block/view.dart';
-import '../pages/dynamics/detail/index.dart';
-import '../pages/dynamics/index.dart';
-import '../pages/fan/index.dart';
-import '../pages/fav_detail/index.dart';
-import '../pages/follow/index.dart';
-import '../pages/history/index.dart';
-import '../pages/home/index.dart';
-import '../pages/hot/index.dart';
-import '../pages/later/index.dart';
-import '../pages/live_room/view.dart';
-import '../pages/login/index.dart';
-import '../pages/media/index.dart';
-import '../pages/member_dynamics/index.dart';
-import '../pages/member_search/index.dart';
-import '../pages/msg_feed_top/sys_msg/view.dart';
-import '../pages/search/index.dart';
-import '../pages/search_result/index.dart';
-import '../pages/setting/extra_setting.dart';
-import '../pages/setting/pages/color_select.dart';
-import '../pages/setting/pages/display_mode.dart';
-import '../pages/setting/pages/font_size_select.dart';
-import '../pages/setting/pages/home_tabbar_set.dart';
-import '../pages/setting/pages/play_speed_set.dart';
-import '../pages/setting/recommend_setting.dart';
-import '../pages/setting/play_setting.dart';
-import '../pages/setting/video_setting.dart';
-import '../pages/setting/privacy_setting.dart';
-import '../pages/setting/style_setting.dart';
-import '../pages/subscription/index.dart';
-import '../pages/subscription_detail/index.dart';
-import '../pages/video/detail/index.dart';
-import '../pages/whisper/index.dart';
-import '../pages/whisper_detail/index.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class Routes {
   static final List<GetPage<dynamic>> getPages = [
@@ -98,7 +96,7 @@ class Routes {
     // 直播详情
     CustomGetPage(name: '/liveRoom', page: () => const LiveRoomPage()),
     // 用户中心
-    CustomGetPage(name: '/member', page: () => const MemberPageNew()),
+    CustomGetPage(name: '/member', page: () => const MemberPage()),
     CustomGetPage(name: '/memberSearch', page: () => const MemberSearchPage()),
     // 推荐流设置
     CustomGetPage(

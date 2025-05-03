@@ -1,16 +1,15 @@
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/user/sub_detail.dart';
+import 'package:PiliPlus/models/user/sub_folder.dart';
+import 'package:PiliPlus/pages/subscription_detail/controller.dart';
+import 'package:PiliPlus/pages/subscription_detail/widget/sub_video_card.dart';
 import 'package:PiliPlus/utils/grid.dart';
+import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:PiliPlus/common/skeleton/video_card_h.dart';
 import 'package:PiliPlus/common/widgets/http_error.dart';
 import 'package:PiliPlus/common/widgets/network_img_layer.dart';
-
-import '../../models/user/sub_folder.dart';
-import '../../utils/utils.dart';
-import 'controller.dart';
-import 'widget/sub_video_card.dart';
 
 class SubDetailPage extends StatefulWidget {
   const SubDetailPage({super.key});

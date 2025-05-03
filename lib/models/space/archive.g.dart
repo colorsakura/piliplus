@@ -16,7 +16,7 @@ Archive _$ArchiveFromJson(Map<String, dynamic> json) => Archive(
           .toList(),
       count: (json['count'] as num?)?.toInt(),
       item: (json['item'] as List<dynamic>?)
-          ?.map((e) => Item.fromJson(e as Map<String, dynamic>))
+          ?.map((e) => SpaceItem.fromJson(e as Map<String, dynamic>))
           .toList(),
     );
 

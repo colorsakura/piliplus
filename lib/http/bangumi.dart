@@ -1,10 +1,10 @@
+import 'package:PiliPlus/http/api.dart';
+import 'package:PiliPlus/http/init.dart';
 import 'package:PiliPlus/http/loading_state.dart';
+import 'package:PiliPlus/models/bangumi/list.dart';
+import 'package:PiliPlus/models/bangumi/pgc_index/condition.dart';
 import 'package:PiliPlus/models/bangumi/pgc_timeline/pgc_timeline.dart';
 import 'package:PiliPlus/models/bangumi/pgc_timeline/result.dart';
-
-import '../models/bangumi/list.dart';
-import '../models/bangumi/pgc_index/condition.dart';
-import 'index.dart';
 
 class BangumiHttp {
   static Future<LoadingState> pgcIndexResult({
@@ -46,7 +46,7 @@ class BangumiHttp {
       },
     );
     if (res.data['code'] == 0) {
-      return LoadingState.success(Condition.fromJson(res.data['data']));
+      return LoadingState.success(PgcIndexCondition.fromJson(res.data['data']));
     } else {
       return LoadingState.error(res.data['message']);
     }

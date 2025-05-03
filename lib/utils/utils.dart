@@ -6,6 +6,9 @@ import 'package:PiliPlus/build_config.dart';
 import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/http/api.dart';
 import 'package:PiliPlus/http/init.dart';
+import 'package:PiliPlus/models/home/rcmd/result.dart';
+import 'package:PiliPlus/models/model_rec_video_item.dart';
+import 'package:PiliPlus/models/model_video.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/global_data.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
@@ -19,10 +22,6 @@ import 'package:get/get.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:path/path.dart' as path;
 import 'package:uuid/v4.dart';
-
-import '../models/home/rcmd/result.dart';
-import '../models/model_rec_video_item.dart';
-import '../models/model_video.dart';
 
 class Utils {
   static final Random random = Random();

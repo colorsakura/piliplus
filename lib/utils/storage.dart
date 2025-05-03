@@ -18,7 +18,7 @@ import 'package:PiliPlus/models/video/play/CDN.dart';
 import 'package:PiliPlus/models/video/play/quality.dart';
 import 'package:PiliPlus/models/video/play/subtitle.dart';
 import 'package:PiliPlus/pages/member/controller.dart' show MemberTabType;
-import 'package:PiliPlus/pages/mine/index.dart';
+import 'package:PiliPlus/pages/mine/controller.dart';
 import 'package:PiliPlus/plugin/pl_player/models/bottom_progress_behavior.dart';
 import 'package:PiliPlus/plugin/pl_player/models/fullscreen_mode.dart';
 import 'package:PiliPlus/utils/accounts/account.dart';

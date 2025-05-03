@@ -1,6 +1,5 @@
+import 'package:PiliPlus/http/init.dart';
 import 'package:dio/dio.dart';
-
-import 'index.dart';
 
 class RetryInterceptor extends Interceptor {
   final int _count;

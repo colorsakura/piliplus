@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:PiliPlus/common/widgets/interactiveviewer_gallery/interactiveviewer_gallery.dart';
+import 'package:PiliPlus/http/search.dart';
 import 'package:PiliPlus/models/msg/session.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/id_utils.dart';
@@ -10,8 +11,6 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:PiliPlus/common/widgets/network_img_layer.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:get/get.dart';
-
-import '../../../http/search.dart';
 
 enum MsgType {
   invalid(value: 0, label: "空空的~"),

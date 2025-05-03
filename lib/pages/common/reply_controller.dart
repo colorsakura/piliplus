@@ -7,7 +7,7 @@ import 'package:PiliPlus/http/reply.dart';
 import 'package:PiliPlus/models/common/reply_type.dart';
 import 'package:PiliPlus/models/video/reply/data.dart';
 import 'package:PiliPlus/pages/common/common_list_controller.dart';
-import 'package:PiliPlus/pages/video/detail/reply_new/reply_page.dart';
+import 'package:PiliPlus/pages/video/reply_new/view.dart';
 import 'package:PiliPlus/utils/accounts/account.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/request_utils.dart';

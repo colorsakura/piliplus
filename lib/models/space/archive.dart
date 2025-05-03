@@ -8,17 +8,17 @@ part 'archive.g.dart';
 
 @JsonSerializable()
 class Archive {
-	@JsonKey(name: 'episodic_button') 
-	EpisodicButton? episodicButton;
-	List<Order>? order;
-	int? count;
-	List<Item>? item;
+  @JsonKey(name: 'episodic_button')
+  EpisodicButton? episodicButton;
+  List<Order>? order;
+  int? count;
+  List<SpaceItem>? item;
 
-	Archive({this.episodicButton, this.order, this.count, this.item});
+  Archive({this.episodicButton, this.order, this.count, this.item});
 
-	factory Archive.fromJson(Map<String, dynamic> json) {
-		return _$ArchiveFromJson(json);
-	}
+  factory Archive.fromJson(Map<String, dynamic> json) {
+    return _$ArchiveFromJson(json);
+  }
 
-	Map<String, dynamic> toJson() => _$ArchiveToJson(this);
+  Map<String, dynamic> toJson() => _$ArchiveToJson(this);
 }

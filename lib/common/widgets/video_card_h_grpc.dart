@@ -1,12 +1,12 @@
+import 'package:PiliPlus/common/constants.dart';
+import 'package:PiliPlus/common/widgets/badge.dart';
 import 'package:PiliPlus/common/widgets/image_save.dart';
+import 'package:PiliPlus/common/widgets/network_img_layer.dart';
 import 'package:PiliPlus/grpc/app/card/v1/card.pb.dart' as card;
 import 'package:PiliPlus/utils/app_scheme.dart';
+import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
-import '../../utils/utils.dart';
-import '../constants.dart';
-import 'badge.dart';
-import 'network_img_layer.dart';
 
 // 视频卡片 - 水平布局
 class VideoCardHGrpc extends StatelessWidget {

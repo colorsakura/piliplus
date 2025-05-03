@@ -11,7 +11,7 @@ SpaceFav _$SpaceFavFromJson(Map<String, dynamic> json) => SpaceFav(
       message: json['message'] as String?,
       ttl: (json['ttl'] as num?)?.toInt(),
       data: (json['data'] as List<dynamic>?)
-          ?.map((e) => Datum.fromJson(e as Map<String, dynamic>))
+          ?.map((e) => SpaceFavData.fromJson(e as Map<String, dynamic>))
           .toList(),
     );
 

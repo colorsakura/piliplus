@@ -3,12 +3,12 @@ import 'dart:async';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/pages/common/common_page.dart';
 import 'package:PiliPlus/pages/main/controller.dart';
+import 'package:PiliPlus/pages/media/controller.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:PiliPlus/common/widgets/network_img_layer.dart';
 import 'package:PiliPlus/models/user/fav_folder.dart';
-import 'package:PiliPlus/pages/media/index.dart';
 import 'package:PiliPlus/utils/utils.dart';
 
 class MediaPage extends CommonPage {

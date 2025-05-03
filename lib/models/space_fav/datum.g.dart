@@ -6,7 +6,7 @@ part of 'datum.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-Datum _$DatumFromJson(Map<String, dynamic> json) => Datum(
+SpaceFavData _$DatumFromJson(Map<String, dynamic> json) => SpaceFavData(
       id: (json['id'] as num?)?.toInt(),
       name: json['name'] as String?,
       mediaListResponse: json['mediaListResponse'] == null
@@ -16,7 +16,7 @@ Datum _$DatumFromJson(Map<String, dynamic> json) => Datum(
       uri: json['uri'] as String?,
     );
 
-Map<String, dynamic> _$DatumToJson(Datum instance) => <String, dynamic>{
+Map<String, dynamic> _$DatumToJson(SpaceFavData instance) => <String, dynamic>{
       'id': instance.id,
       'name': instance.name,
       'mediaListResponse': instance.mediaListResponse,

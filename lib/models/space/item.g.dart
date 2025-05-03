@@ -6,7 +6,7 @@ part of 'item.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-Item _$ItemFromJson(Map<String, dynamic> json) => Item(
+SpaceItem _$ItemFromJson(Map<String, dynamic> json) => SpaceItem(
       title: json['title'] as String?,
       subtitle: json['subtitle'] as String?,
       tname: json['tname'] as String?,
@@ -45,7 +45,7 @@ Item _$ItemFromJson(Map<String, dynamic> json) => Item(
       publishTimeText: json['publish_time_text'] as String?,
     );
 
-Map<String, dynamic> _$ItemToJson(Item instance) => <String, dynamic>{
+Map<String, dynamic> _$ItemToJson(SpaceItem instance) => <String, dynamic>{
       'title': instance.title,
       'subtitle': instance.subtitle,
       'tname': instance.tname,

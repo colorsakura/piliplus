@@ -3,11 +3,15 @@ import 'dart:convert';
 import 'package:PiliPlus/http/video.dart';
 import 'package:PiliPlus/models/live/danmu_info.dart';
 import 'package:PiliPlus/models/live/quality.dart';
+import 'package:PiliPlus/models/live/room_info_h5.dart';
 import 'package:PiliPlus/pages/mine/controller.dart';
+import 'package:PiliPlus/plugin/pl_player/controller.dart';
+import 'package:PiliPlus/plugin/pl_player/models/data_source.dart';
 import 'package:PiliPlus/services/service_locator.dart';
 import 'package:PiliPlus/tcp/live.dart';
 import 'package:PiliPlus/utils/danmaku_utils.dart';
 import 'package:PiliPlus/utils/storage.dart';
+import 'package:PiliPlus/utils/video_utils.dart';
 import 'package:canvas_danmaku/canvas_danmaku.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
@@ -16,9 +20,6 @@ import 'package:get/get.dart';
 import 'package:PiliPlus/http/constants.dart';
 import 'package:PiliPlus/http/live.dart';
 import 'package:PiliPlus/models/live/room_info.dart';
-import 'package:PiliPlus/plugin/pl_player/index.dart';
-import '../../models/live/room_info_h5.dart';
-import '../../utils/video_utils.dart';
 
 class LiveRoomController extends GetxController {
   LiveRoomController(this.heroTag);

@@ -2,6 +2,11 @@ import 'dart:io';
 
 import 'package:PiliPlus/common/widgets/network_img_layer.dart';
 import 'package:PiliPlus/common/widgets/tabs.dart';
+import 'package:PiliPlus/pages/dynamics/controller.dart';
+import 'package:PiliPlus/pages/dynamics/view.dart';
+import 'package:PiliPlus/pages/home/controller.dart';
+import 'package:PiliPlus/pages/home/view.dart';
+import 'package:PiliPlus/pages/main/controller.dart';
 import 'package:PiliPlus/pages/mine/controller.dart';
 import 'package:PiliPlus/utils/app_scheme.dart';
 import 'package:PiliPlus/utils/extension.dart';
@@ -11,13 +16,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:PiliPlus/models/common/dynamic_badge_mode.dart';
-import 'package:PiliPlus/pages/dynamics/index.dart';
-import 'package:PiliPlus/pages/home/index.dart';
 import 'package:PiliPlus/utils/event_bus.dart';
 import 'package:PiliPlus/utils/feed_back.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import './controller.dart';
 import 'package:stream_transform/stream_transform.dart';
 
 class MainApp extends StatefulWidget {

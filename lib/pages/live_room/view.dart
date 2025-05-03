@@ -3,12 +3,18 @@ import 'dart:io';
 import 'dart:ui';
 
 import 'package:PiliPlus/models/live/room_info_h5.dart';
-import 'package:PiliPlus/pages/live_room/send_dm_panel.dart';
+import 'package:PiliPlus/pages/live_room/controller.dart';
+import 'package:PiliPlus/pages/live_room/send_danmaku/view.dart';
+import 'package:PiliPlus/pages/live_room/widgets/bottom_control.dart';
 import 'package:PiliPlus/pages/live_room/widgets/chat.dart';
 import 'package:PiliPlus/pages/live_room/widgets/header_control.dart';
+import 'package:PiliPlus/plugin/pl_player/controller.dart';
+import 'package:PiliPlus/plugin/pl_player/models/play_status.dart';
+import 'package:PiliPlus/plugin/pl_player/view.dart';
 import 'package:PiliPlus/services/service_locator.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
+import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:canvas_danmaku/canvas_danmaku.dart';
@@ -18,12 +24,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 import 'package:PiliPlus/common/widgets/network_img_layer.dart';
-import 'package:PiliPlus/plugin/pl_player/index.dart';
 import 'package:screen_brightness/screen_brightness.dart';
-
-import '../../utils/storage.dart';
-import 'controller.dart';
-import 'widgets/bottom_control.dart';
 
 class LiveRoomPage extends StatefulWidget {
   const LiveRoomPage({super.key});

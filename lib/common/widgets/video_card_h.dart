@@ -1,19 +1,19 @@
+import 'package:PiliPlus/common/constants.dart';
+import 'package:PiliPlus/common/widgets/badge.dart';
 import 'package:PiliPlus/common/widgets/image_save.dart';
+import 'package:PiliPlus/common/widgets/network_img_layer.dart';
+import 'package:PiliPlus/common/widgets/stat/stat.dart';
+import 'package:PiliPlus/common/widgets/video_popup_menu.dart';
 import 'package:PiliPlus/common/widgets/video_progress_indicator.dart';
+import 'package:PiliPlus/http/search.dart';
 import 'package:PiliPlus/models/model_hot_video_item.dart';
 import 'package:PiliPlus/models/model_video.dart';
 import 'package:PiliPlus/models/search/result.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
+import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
-import '../../http/search.dart';
-import '../../utils/utils.dart';
-import '../constants.dart';
-import 'badge.dart';
-import 'network_img_layer.dart';
-import 'stat/stat.dart';
-import 'video_popup_menu.dart';
 
 // 视频卡片 - 水平布局
 class VideoCardH extends StatelessWidget {

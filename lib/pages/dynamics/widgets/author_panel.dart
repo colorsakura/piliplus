@@ -2,9 +2,11 @@ import 'dart:math';
 
 import 'package:PiliPlus/common/widgets/avatar.dart';
 import 'package:PiliPlus/common/widgets/report.dart';
-import 'package:PiliPlus/common/widgets/save_panel.dart';
+import 'package:PiliPlus/pages/save_panel/view.dart';
+import 'package:PiliPlus/http/constants.dart';
 import 'package:PiliPlus/http/video.dart';
 import 'package:PiliPlus/models/dynamics/result.dart';
+import 'package:PiliPlus/pages/dynamics/controller.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:PiliPlus/utils/request_utils.dart';
@@ -16,9 +18,6 @@ import 'package:get/get.dart';
 import 'package:PiliPlus/http/user.dart';
 import 'package:PiliPlus/utils/feed_back.dart';
 import 'package:PiliPlus/utils/utils.dart';
-
-import '../../../http/constants.dart';
-import '../controller.dart';
 
 class AuthorPanel extends StatelessWidget {
   final DynamicItemModel item;

@@ -13,7 +13,7 @@ class BangumiCardVMemberHome extends StatelessWidget {
     required this.bangumiItem,
   });
 
-  final Item bangumiItem;
+  final SpaceArchiveItem bangumiItem;
 
   @override
   Widget build(BuildContext context) {
@@ -62,7 +62,7 @@ class BangumiCardVMemberHome extends StatelessWidget {
   }
 }
 
-Widget bangumiContent(Item bangumiItem) {
+Widget bangumiContent(SpaceArchiveItem bangumiItem) {
   return Expanded(
     child: Padding(
       padding: const EdgeInsets.fromLTRB(4, 5, 0, 3),

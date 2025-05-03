@@ -2,8 +2,8 @@ import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/common/widgets/avatar.dart';
 import 'package:PiliPlus/common/widgets/interactiveviewer_gallery/interactiveviewer_gallery.dart'
     show SourceModel;
-import 'package:PiliPlus/models/space/card.dart' as space;
-import 'package:PiliPlus/models/space/images.dart' as space;
+import 'package:PiliPlus/models/space/card.dart';
+import 'package:PiliPlus/models/space/images.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:PiliPlus/utils/storage.dart';
@@ -29,8 +29,8 @@ class UserInfoCard extends StatelessWidget {
   final bool isV;
   final bool isOwner;
   final int relation;
-  final space.Card card;
-  final space.Images images;
+  final SpaceCard card;
+  final SpaceImages images;
   final VoidCallback onFollow;
   final dynamic live;
   final int? silence;

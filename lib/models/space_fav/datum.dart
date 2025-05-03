@@ -5,15 +5,16 @@ import 'media_list_response.dart';
 part 'datum.g.dart';
 
 @JsonSerializable()
-class Datum {
-	int? id;
-	String? name;
-	MediaListResponse? mediaListResponse;
-	String? uri;
+class SpaceFavData {
+  int? id;
+  String? name;
+  MediaListResponse? mediaListResponse;
+  String? uri;
 
-	Datum({this.id, this.name, this.mediaListResponse, this.uri});
+  SpaceFavData({this.id, this.name, this.mediaListResponse, this.uri});
 
-	factory Datum.fromJson(Map<String, dynamic> json) => _$DatumFromJson(json);
+  factory SpaceFavData.fromJson(Map<String, dynamic> json) =>
+      _$DatumFromJson(json);
 
-	Map<String, dynamic> toJson() => _$DatumToJson(this);
+  Map<String, dynamic> toJson() => _$DatumToJson(this);
 }

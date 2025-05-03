@@ -1,6 +1,6 @@
 import 'package:PiliPlus/models/common/nav_bar_config.dart';
 import 'package:PiliPlus/models/common/theme_type.dart';
-import 'package:PiliPlus/pages/home/index.dart';
+import 'package:PiliPlus/pages/home/view.dart';
 import 'package:PiliPlus/pages/mine/controller.dart';
 import 'package:PiliPlus/pages/setting/widgets/select_dialog.dart';
 import 'package:flex_seed_scheme/flex_seed_scheme.dart';

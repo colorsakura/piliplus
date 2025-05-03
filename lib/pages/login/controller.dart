@@ -13,7 +13,7 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 import 'package:PiliPlus/http/login.dart';
 import 'package:gt3_flutter_plugin/gt3_flutter_plugin.dart';
-import 'package:PiliPlus/models/login/index.dart';
+import 'package:PiliPlus/models/login/model.dart';
 
 class LoginPageController extends GetxController
     with GetSingleTickerProviderStateMixin {

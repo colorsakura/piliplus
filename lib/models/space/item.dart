@@ -3,7 +3,7 @@ import 'package:json_annotation/json_annotation.dart';
 part 'item.g.dart';
 
 @JsonSerializable()
-class Item {
+class SpaceItem {
   String? title;
   String? subtitle;
   String? tname;
@@ -57,7 +57,7 @@ class Item {
   @JsonKey(name: 'publish_time_text')
   String? publishTimeText;
 
-  Item({
+  SpaceItem({
     this.title,
     this.subtitle,
     this.tname,
@@ -94,7 +94,7 @@ class Item {
     this.publishTimeText,
   });
 
-  factory Item.fromJson(Map<String, dynamic> json) => _$ItemFromJson(json);
+  factory SpaceItem.fromJson(Map<String, dynamic> json) => _$ItemFromJson(json);
 
   Map<String, dynamic> toJson() => _$ItemToJson(this);
 }

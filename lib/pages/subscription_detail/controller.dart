@@ -1,10 +1,9 @@
 import 'package:PiliPlus/http/loading_state.dart';
+import 'package:PiliPlus/models/user/sub_detail.dart';
+import 'package:PiliPlus/models/user/sub_folder.dart';
 import 'package:PiliPlus/pages/common/common_list_controller.dart';
 import 'package:get/get.dart';
 import 'package:PiliPlus/http/user.dart';
-
-import '../../models/user/sub_detail.dart';
-import '../../models/user/sub_folder.dart';
 
 class SubDetailController
     extends CommonListController<SubDetailModelData, SubDetailMediaItem> {

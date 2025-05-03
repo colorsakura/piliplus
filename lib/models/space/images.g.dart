@@ -6,7 +6,7 @@ part of 'images.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-Images _$ImagesFromJson(Map<String, dynamic> json) => Images(
+SpaceImages _$ImagesFromJson(Map<String, dynamic> json) => SpaceImages(
       imgUrl: json['imgUrl'] as String?,
       nightImgurl: json['night_imgurl'] as String?,
       hasGarb: json['has_garb'] as bool?,
@@ -25,7 +25,7 @@ Images _$ImagesFromJson(Map<String, dynamic> json) => Images(
       collectionTopSimple: json['collection_top_simple'],
     );
 
-Map<String, dynamic> _$ImagesToJson(Images instance) => <String, dynamic>{
+Map<String, dynamic> _$ImagesToJson(SpaceImages instance) => <String, dynamic>{
       'imgUrl': instance.imgUrl,
       'night_imgurl': instance.nightImgurl,
       'has_garb': instance.hasGarb,

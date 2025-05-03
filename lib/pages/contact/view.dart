@@ -1,5 +1,5 @@
 import 'package:PiliPlus/common/widgets/scroll_physics.dart';
-import 'package:PiliPlus/pages/fan/index.dart';
+import 'package:PiliPlus/pages/fan/view.dart';
 import 'package:PiliPlus/pages/follow/child_view.dart';
 import 'package:PiliPlus/pages/follow_search/view.dart';
 import 'package:PiliPlus/pages/share/view.dart' show UserModel;

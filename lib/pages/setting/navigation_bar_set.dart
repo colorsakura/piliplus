@@ -1,8 +1,7 @@
+import 'package:PiliPlus/models/common/nav_bar_config.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
-
-import '../../../models/common/nav_bar_config.dart';
 
 class NavigationBarSetPage extends StatefulWidget {
   const NavigationBarSetPage({super.key});

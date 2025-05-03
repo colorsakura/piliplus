@@ -1,18 +1,18 @@
+import 'package:PiliPlus/common/constants.dart';
+import 'package:PiliPlus/common/widgets/badge.dart';
 import 'package:PiliPlus/common/widgets/image_save.dart';
+import 'package:PiliPlus/common/widgets/network_img_layer.dart';
 import 'package:PiliPlus/http/search.dart';
 import 'package:PiliPlus/models/space/item.dart';
 import 'package:PiliPlus/utils/app_scheme.dart';
 import 'package:PiliPlus/utils/id_utils.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
+import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
-import '../../utils/utils.dart';
-import '../constants.dart';
-import 'badge.dart';
-import 'network_img_layer.dart';
 
 // 视频卡片 - 垂直布局
 class VideoCardVMemberHome extends StatelessWidget {
-  final Item videoItem;
+  final SpaceItem videoItem;
 
   const VideoCardVMemberHome({
     super.key,
@@ -102,7 +102,7 @@ class VideoCardVMemberHome extends StatelessWidget {
   }
 }
 
-Widget videoContent(BuildContext context, Item videoItem) {
+Widget videoContent(BuildContext context, SpaceItem videoItem) {
   return Expanded(
     child: Padding(
       padding: const EdgeInsets.fromLTRB(6, 5, 6, 5),

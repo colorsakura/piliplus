@@ -10,7 +10,7 @@ Tab2 _$Tab2FromJson(Map<String, dynamic> json) => Tab2(
       title: json['title'] as String?,
       param: json['param'] as String?,
       items: (json['items'] as List<dynamic>?)
-          ?.map((e) => Item.fromJson(e as Map<String, dynamic>))
+          ?.map((e) => SpaceItem.fromJson(e as Map<String, dynamic>))
           .toList(),
     );
 

@@ -1,4 +1,4 @@
-import 'package:PiliPlus/pages/dynamics/repost_dyn_panel.dart';
+import 'package:PiliPlus/pages/dynamics_repost/view.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:PiliPlus/utils/utils.dart';

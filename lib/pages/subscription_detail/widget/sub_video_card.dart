@@ -1,4 +1,6 @@
+import 'package:PiliPlus/common/widgets/badge.dart';
 import 'package:PiliPlus/common/widgets/image_save.dart';
+import 'package:PiliPlus/models/user/sub_detail.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:PiliPlus/common/constants.dart';
@@ -7,8 +9,6 @@ import 'package:PiliPlus/http/search.dart';
 import 'package:PiliPlus/models/common/search_type.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:PiliPlus/common/widgets/network_img_layer.dart';
-import '../../../common/widgets/badge.dart';
-import '../../../models/user/sub_detail.dart';
 
 // 收藏视频卡片 - 水平布局
 class SubVideoCardH extends StatelessWidget {

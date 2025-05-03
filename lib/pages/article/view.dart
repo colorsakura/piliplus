@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:PiliPlus/common/widgets/network_img_layer.dart';
 import 'package:PiliPlus/models/dynamics/result.dart' show DynamicStat;
+import 'package:PiliPlus/pages/article/controller.dart';
 import 'package:PiliPlus/pages/article/widgets/opus_content.dart';
 import 'package:PiliPlus/pages/article/widgets/html_render.dart';
 import 'package:PiliPlus/common/widgets/http_error.dart';
@@ -9,9 +10,11 @@ import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/grpc/app/main/community/reply/v1/reply.pb.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/common/reply_sort_type.dart';
-import 'package:PiliPlus/pages/dynamics/repost_dyn_panel.dart';
-import 'package:PiliPlus/pages/video/detail/reply/widgets/reply_item_grpc.dart';
+import 'package:PiliPlus/pages/dynamics_repost/view.dart';
+import 'package:PiliPlus/pages/video/reply/widgets/reply_item_grpc.dart';
+import 'package:PiliPlus/pages/video/reply_reply/view.dart';
 import 'package:PiliPlus/utils/extension.dart';
+import 'package:PiliPlus/utils/grid.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/utils.dart';
@@ -23,12 +26,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:PiliPlus/common/skeleton/video_reply.dart';
 import 'package:PiliPlus/models/common/reply_type.dart';
-import 'package:PiliPlus/pages/video/detail/reply_reply/index.dart';
 import 'package:PiliPlus/utils/feed_back.dart';
 import 'package:html/parser.dart' as parser;
-
-import '../../utils/grid.dart';
-import 'controller.dart';
 
 class ArticlePage extends StatefulWidget {
   const ArticlePage({super.key});
