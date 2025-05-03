@@ -89,11 +89,22 @@ class Nodes {
   int? nodeType;
   Word? word;
   Rich? rich;
+  Formula? formula;
 
   Nodes.fromJson(Map<String, dynamic> json) {
     nodeType = json['node_type'];
     word = json['word'] == null ? null : Word.fromJson(json['word']);
     rich = json['rich'] == null ? null : Rich.fromJson(json['rich']);
+    formula =
+        json['formula'] == null ? null : Formula.fromJson(json['formula']);
+  }
+}
+
+class Formula {
+  String? latexContent;
+
+  Formula.fromJson(Map<String, dynamic> json) {
+    latexContent = json['latex_content'];
   }
 }
 
@@ -174,6 +185,12 @@ class Card {
   String? type;
   Ugc? ugc;
   ItemNull? itemNull;
+  Common? common;
+  Live? live;
+  Opus? opus;
+  Vote? vote;
+  Music? music;
+  Goods? goods;
 
   Card.fromJson(Map<String, dynamic> json) {
     oid = json['oid'];
@@ -181,6 +198,163 @@ class Card {
     ugc = json['ugc'] == null ? null : Ugc.fromJson(json['ugc']);
     itemNull =
         json['item_null'] == null ? null : ItemNull.fromJson(json['item_null']);
+    common = json['common'] == null ? null : Common.fromJson(json['common']);
+    live = json['live'] == null ? null : Live.fromJson(json['live']);
+    opus = json['opus'] == null ? null : Opus.fromJson(json['opus']);
+    vote = json['vote'] == null ? null : Vote.fromJson(json['vote']);
+    music = json['music'] == null ? null : Music.fromJson(json['music']);
+    goods = json['goods'] == null ? null : Goods.fromJson(json['goods']);
+  }
+}
+
+class Goods {
+  String? headIcon;
+  String? headText;
+  String? jumpUrl;
+  List<GoodsItem>? items;
+
+  Goods.fromJson(Map<String, dynamic> json) {
+    headIcon = json['head_icon'];
+    headText = json['head_text'];
+    jumpUrl = json['jump_url'];
+    items = (json['items'] as List?)
+        ?.map((item) => GoodsItem.fromJson(item))
+        .toList();
+  }
+}
+
+class GoodsItem {
+  String? brief;
+  String? cover;
+  int? id;
+  String? jumpDesc;
+  String? jumpUrl;
+  String? name;
+  String? price;
+
+  GoodsItem.fromJson(Map<String, dynamic> json) {
+    brief = json['brief'];
+    cover = json['cover'];
+    id = json['id'];
+    jumpDesc = json['jump_desc'];
+    jumpUrl = json['jump_url'];
+    name = json['name'];
+    price = json['price'];
+  }
+}
+
+class Music {
+  String? cover;
+  int? id;
+  String? jumpUrl;
+  String? label;
+  String? title;
+
+  Music.fromJson(Map<String, dynamic> json) {
+    cover = json['cover'];
+    id = json['id'];
+    jumpUrl = json['jump_url'];
+    label = json['label'];
+    title = json['title'];
+  }
+}
+
+class Vote {
+  int? choiceCnt;
+  int? defaultShare;
+  String? desc;
+  int? endTime;
+  int? status;
+  int? uid;
+  int? voteId;
+  late int joinNum;
+
+  Vote.fromJson(Map<String, dynamic> json) {
+    choiceCnt = json['choice_cnt'];
+    defaultShare = json['default_share'];
+    desc = json['desc'];
+    endTime = json['end_time'];
+    status = json['status'];
+    uid = json['uid'];
+    voteId = json['vote_id'];
+    joinNum = json['join_num'] ?? 0;
+  }
+}
+
+class Opus {
+  int? authorMid;
+  String? authorName;
+  String? cover;
+  String? jumpUrl;
+  String? title;
+  int? statView;
+
+  Opus.fromJson(Map<String, dynamic> json) {
+    authorMid = json['author']?['mid'];
+    authorName = json['author']?['name'];
+    cover = json['cover'];
+    jumpUrl = json['jump_url'];
+    title = json['title'];
+    statView = json['stat']?['view'];
+  }
+}
+
+class Live {
+  String? cover;
+  String? descFirst;
+  String? descSecond;
+  String? title;
+  String? jumpUrl;
+  int? id;
+  int? liveState;
+  int? reserveType;
+  String? badgeText;
+
+  Live.fromJson(Map<String, dynamic> json) {
+    cover = json['cover'];
+    descFirst = json['desc_first'];
+    descSecond = json['desc_second'];
+    title = json['title'];
+    jumpUrl = json['jump_url'];
+    id = json['id'];
+    liveState = json['live_state'];
+    reserveType = json['reserve_type'];
+    badgeText = json['badge']?['text'];
+  }
+}
+
+class Common {
+  Common({
+    this.cover,
+    this.desc1,
+    this.desc2,
+    this.headText,
+    this.idStr,
+    this.jumpUrl,
+    this.style,
+    this.subType,
+    this.title,
+  });
+  String? cover;
+  String? desc1;
+  String? desc2;
+  String? headText;
+  String? idStr;
+  String? jumpUrl;
+  int? style;
+  String? subType;
+  String? title;
+
+  Common.fromJson(Map<String, dynamic> json) {
+    cover = json['cover'];
+    desc1 = json['desc1'];
+    desc2 = json['desc2'];
+    headText = json['head_text'];
+    idStr = json['id_str'];
+    jumpUrl = json['jump_url'];
+    style = json['style'];
+    subType = json['sub_type'];
+    title = json['title'];
   }
 }
 

@@ -11,6 +11,7 @@ import 'package:PiliPlus/utils/app_scheme.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cached_network_svg_image/cached_network_svg_image.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -70,14 +71,35 @@ class OpusContent extends StatelessWidget {
                     children: element.text?.nodes?.map<TextSpan>((item) {
                   if (item.rich != null) {
                     return TextSpan(
-                      text: '\u{1F517}${item.rich?.text}',
-                      style: _getStyle(item.rich?.style, colorScheme.primary),
-                      recognizer: item.rich?.jumpUrl == null
+                      text: '\u{1F517}${item.rich!.text}',
+                      style: _getStyle(item.rich!.style, colorScheme.primary),
+                      recognizer: item.rich!.jumpUrl == null
                           ? null
                           : (TapGestureRecognizer()
                             ..onTap = () {
                               PiliScheme.routePushFromUrl(item.rich!.jumpUrl!);
                             }),
+                    );
+                  } else if (item.formula != null) {
+                    // TEXT_NODE_TYPE_FORMULA
+                    return TextSpan(
+                      children: [
+                        WidgetSpan(
+                          child: SizedBox(
+                            height: 65,
+                            child: CachedNetworkSVGImage(
+                              'https://api.bilibili.com/x/web-frontend/mathjax/tex?formula=${Uri.encodeComponent(item.formula!.latexContent!)}',
+                              colorFilter: ColorFilter.mode(
+                                colorScheme.onSurfaceVariant,
+                                BlendMode.srcIn,
+                              ),
+                              alignment: Alignment.centerLeft,
+                              placeholderBuilder: (context) =>
+                                  const SizedBox.shrink(),
+                            ),
+                          ),
+                        ),
+                      ],
                     );
                   }
                   return _getSpan(item.word);
@@ -85,13 +107,15 @@ class OpusContent extends StatelessWidget {
               );
             case 4:
               return Container(
-                padding: const EdgeInsets.only(left: 8),
+                padding:
+                    const EdgeInsets.only(left: 8, top: 4, right: 4, bottom: 4),
                 decoration: BoxDecoration(
                   border: Border(
                     left:
                         BorderSide(color: colorScheme.outlineVariant, width: 4),
                   ),
-                  color: colorScheme.surfaceContainer,
+                  borderRadius: const BorderRadius.all(Radius.circular(6)),
+                  color: colorScheme.onInverseSurface,
                 ),
                 child: SelectableText.rich(
                   textAlign: element.align == 1 ? TextAlign.center : null,
@@ -183,10 +207,35 @@ class OpusContent extends StatelessWidget {
                 child: InkWell(
                   onTap: () {
                     try {
-                      PiliScheme.videoPush(
-                        int.parse(element.linkCard!.card!.oid!),
-                        null,
-                      );
+                      if (element.linkCard!.card!.type ==
+                          'LINK_CARD_TYPE_VOTE') {
+                        Get.toNamed(
+                          '/webview',
+                          parameters: {
+                            'url':
+                                'https://t.bilibili.com/vote/h5/index/#/result?vote_id=${element.linkCard!.card!.oid}',
+                          },
+                        );
+                        return;
+                      }
+                      String? url = switch (element.linkCard!.card!.type) {
+                        'LINK_CARD_TYPE_UGC' =>
+                          element.linkCard!.card!.ugc!.jumpUrl,
+                        'LINK_CARD_TYPE_COMMON' =>
+                          element.linkCard!.card!.common!.jumpUrl,
+                        'LINK_CARD_TYPE_LIVE' =>
+                          element.linkCard!.card!.live!.jumpUrl,
+                        'LINK_CARD_TYPE_OPUS' =>
+                          element.linkCard!.card!.opus!.jumpUrl,
+                        'LINK_CARD_TYPE_MUSIC' =>
+                          element.linkCard!.card!.music!.jumpUrl,
+                        'LINK_CARD_TYPE_GOODS' =>
+                          element.linkCard!.card!.goods!.jumpUrl,
+                        _ => null,
+                      };
+                      if (url != null) {
+                        PiliScheme.routePushFromUrl(url);
+                      }
                     } catch (_) {}
                   },
                   borderRadius: const BorderRadius.all(Radius.circular(8)),
@@ -226,6 +275,212 @@ class OpusContent extends StatelessWidget {
                                 true)
                               Icon(Icons.info, size: 20),
                             Text(' ${element.linkCard?.card?.itemNull?.text}'),
+                          ],
+                        ),
+                      'LINK_CARD_TYPE_COMMON' => Row(
+                          children: [
+                            NetworkImgLayer(
+                              radius: 6,
+                              width: 65 * StyleString.aspectRatio,
+                              height: 65,
+                              src: element.linkCard!.card!.common!.cover,
+                            ),
+                            const SizedBox(width: 10),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(element.linkCard!.card!.common!.title!),
+                                  if (element.linkCard!.card!.common!.desc1 !=
+                                      null)
+                                    Text(
+                                      element.linkCard!.card!.common!.desc1!,
+                                      style: TextStyle(
+                                        fontSize: 13,
+                                        color: colorScheme.outline,
+                                      ),
+                                    ),
+                                  if (element.linkCard!.card!.common!.desc2 !=
+                                      null)
+                                    Text(
+                                      element.linkCard!.card!.common!.desc2!,
+                                      style: TextStyle(
+                                        fontSize: 13,
+                                        color: colorScheme.outline,
+                                      ),
+                                    ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      'LINK_CARD_TYPE_LIVE' => Row(
+                          children: [
+                            NetworkImgLayer(
+                              radius: 6,
+                              width: 65 * StyleString.aspectRatio,
+                              height: 65,
+                              src: element.linkCard!.card!.live!.cover,
+                            ),
+                            const SizedBox(width: 10),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(element.linkCard!.card!.live!.title!),
+                                  if (element.linkCard!.card!.live!.descFirst !=
+                                      null)
+                                    Text(
+                                      element.linkCard!.card!.live!.descFirst!,
+                                      style: TextStyle(
+                                        fontSize: 13,
+                                        color: colorScheme.outline,
+                                      ),
+                                    ),
+                                  if (element
+                                          .linkCard!.card!.live!.descSecond !=
+                                      null)
+                                    Text(
+                                      element.linkCard!.card!.live!.descSecond!,
+                                      style: TextStyle(
+                                        fontSize: 13,
+                                        color: colorScheme.outline,
+                                      ),
+                                    ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      'LINK_CARD_TYPE_OPUS' => Row(
+                          children: [
+                            NetworkImgLayer(
+                              radius: 6,
+                              width: 65 * StyleString.aspectRatio,
+                              height: 65,
+                              src: element.linkCard!.card!.opus!.cover,
+                            ),
+                            const SizedBox(width: 10),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(element.linkCard!.card!.opus!.title!),
+                                  Text(
+                                    '${element.linkCard!.card!.opus!.authorName} · ${element.linkCard!.card!.opus!.statView ?? 0}阅读',
+                                    style: TextStyle(
+                                      fontSize: 13,
+                                      color: colorScheme.outline,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      'LINK_CARD_TYPE_VOTE' => Row(
+                          children: [
+                            Container(
+                              decoration: BoxDecoration(
+                                borderRadius: const BorderRadius.all(
+                                  Radius.circular(6),
+                                ),
+                                color: colorScheme.secondaryContainer,
+                              ),
+                              width: 75,
+                              height: 50,
+                              alignment: Alignment.center,
+                              child: Icon(
+                                Icons.bar_chart_rounded,
+                                color: colorScheme.onSecondaryContainer,
+                              ),
+                            ),
+                            const SizedBox(width: 10),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(element.linkCard!.card!.vote!.desc!),
+                                  Text(
+                                    '${element.linkCard!.card!.vote!.joinNum}人参与',
+                                    style: TextStyle(
+                                      fontSize: 13,
+                                      color: colorScheme.outline,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      'LINK_CARD_TYPE_MUSIC' => Row(
+                          children: [
+                            NetworkImgLayer(
+                              radius: 6,
+                              width: 65 * StyleString.aspectRatio,
+                              height: 65,
+                              src: element.linkCard!.card!.music!.cover,
+                            ),
+                            const SizedBox(width: 10),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(element.linkCard!.card!.music!.title!),
+                                  if (element.linkCard!.card!.music!.label !=
+                                      null)
+                                    Text(
+                                      element.linkCard!.card!.music!.label!,
+                                      style: TextStyle(
+                                        fontSize: 13,
+                                        color: colorScheme.outline,
+                                      ),
+                                    ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      'LINK_CARD_TYPE_GOODS' => Row(
+                          children: [
+                            NetworkImgLayer(
+                              radius: 6,
+                              width: 65 * StyleString.aspectRatio,
+                              height: 65,
+                              src: element
+                                  .linkCard!.card!.goods!.items!.first.cover,
+                            ),
+                            const SizedBox(width: 10),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(element.linkCard!.card!.goods!.items!
+                                      .first.name!),
+                                  if (element.linkCard!.card!.goods!.items!
+                                          .first.brief !=
+                                      null)
+                                    Text(
+                                      element.linkCard!.card!.goods!.items!
+                                          .first.brief!,
+                                      style: TextStyle(
+                                        fontSize: 13,
+                                        color: colorScheme.outline,
+                                      ),
+                                    ),
+                                  if (element.linkCard!.card!.goods!.items!
+                                          .first.price !=
+                                      null)
+                                    Text(
+                                      '${element.linkCard!.card!.goods!.items!.first.price!}起',
+                                      style: TextStyle(
+                                        fontSize: 13,
+                                        color: colorScheme.outline,
+                                      ),
+                                    ),
+                                ],
+                              ),
+                            ),
                           ],
                         ),
                       _ => throw UnimplementedError(
