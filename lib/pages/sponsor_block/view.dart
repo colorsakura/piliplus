@@ -104,11 +104,11 @@ class _SponsorBlockPageState extends State<SponsorBlockPage> {
                     ),
                   ),
                   TextButton(
-                    onPressed: () async {
+                    onPressed: () {
                       Get.back();
                       _blockLimit = max(
                           0.0, double.tryParse(_textController.text) ?? 0.0);
-                      await setting.put(SettingBoxKey.blockLimit, _blockLimit);
+                      setting.put(SettingBoxKey.blockLimit, _blockLimit);
                       setState(() {});
                     },
                     child: const Text('确定'),
@@ -170,10 +170,10 @@ class _SponsorBlockPageState extends State<SponsorBlockPage> {
                 ),
                 actions: [
                   TextButton(
-                    onPressed: () async {
+                    onPressed: () {
                       Get.back();
                       _userId = const Uuid().v4().replaceAll('-', '');
-                      await setting.put(SettingBoxKey.blockUserID, _userId);
+                      setting.put(SettingBoxKey.blockUserID, _userId);
                       setState(() {});
                     },
                     child: const Text('随机'),
@@ -188,11 +188,11 @@ class _SponsorBlockPageState extends State<SponsorBlockPage> {
                     ),
                   ),
                   TextButton(
-                    onPressed: () async {
+                    onPressed: () {
                       if (key.currentState?.validate() == true) {
                         Get.back();
                         _userId = _textController.text;
-                        await setting.put(SettingBoxKey.blockUserID, _userId);
+                        setting.put(SettingBoxKey.blockUserID, _userId);
                         setState(() {});
                       }
                     },
@@ -205,15 +205,15 @@ class _SponsorBlockPageState extends State<SponsorBlockPage> {
         },
       );
 
-  Future<void> _updateBlockToast() async {
+  void _updateBlockToast() {
     _blockToast = !_blockToast;
-    await setting.put(SettingBoxKey.blockToast, _blockToast);
+    setting.put(SettingBoxKey.blockToast, _blockToast);
     setState(() {});
   }
 
-  Future<void> _updateBlockTrack() async {
+  void _updateBlockTrack() {
     _blockTrack = !_blockTrack;
-    await setting.put(SettingBoxKey.blockTrack, _blockTrack);
+    setting.put(SettingBoxKey.blockTrack, _blockTrack);
     setState(() {});
   }
 
@@ -289,11 +289,10 @@ class _SponsorBlockPageState extends State<SponsorBlockPage> {
                 ),
                 actions: [
                   TextButton(
-                    onPressed: () async {
+                    onPressed: () {
                       Get.back();
                       _blockServer = HttpString.sponsorBlockBaseUrl;
-                      await setting.put(
-                          SettingBoxKey.blockServer, _blockServer);
+                      setting.put(SettingBoxKey.blockServer, _blockServer);
                       Request.accountManager.blockServer = _blockServer;
                       setState(() {});
                     },
@@ -309,11 +308,10 @@ class _SponsorBlockPageState extends State<SponsorBlockPage> {
                     ),
                   ),
                   TextButton(
-                    onPressed: () async {
+                    onPressed: () {
                       Get.back();
                       _blockServer = _textController.text;
-                      await setting.put(
-                          SettingBoxKey.blockServer, _blockServer);
+                      setting.put(SettingBoxKey.blockServer, _blockServer);
                       Request.accountManager.blockServer = _blockServer;
                       setState(() {});
                     },
@@ -336,14 +334,16 @@ class _SponsorBlockPageState extends State<SponsorBlockPage> {
 
   Widget _serverStatusItem(ThemeData theme, TextStyle titleStyle) => ListTile(
         dense: true,
-        onTap: _checkServerStatus,
-        title: Text(
-          '服务器状态',
-          style: titleStyle,
-        ),
+        onTap: () {
+          setState(() {
+            _serverStatus = null;
+          });
+          _checkServerStatus();
+        },
+        title: Text('服务器状态', style: titleStyle),
         trailing: Text(
           _serverStatus == null
-              ? '-'
+              ? '——'
               : _serverStatus == true
                   ? '正常'
                   : '错误',
@@ -436,10 +436,10 @@ class _SponsorBlockPageState extends State<SponsorBlockPage> {
                     ),
                     content: SlideColorPicker(
                       color: _blockColor[index],
-                      callback: (Color? color) async {
+                      callback: (Color? color) {
                         _blockColor[index] =
                             color ?? _blockSettings[index].first.color;
-                        await setting.put(
+                        setting.put(
                             SettingBoxKey.blockColor,
                             _blockColor
                                 .map((item) =>
@@ -478,9 +478,9 @@ class _SponsorBlockPageState extends State<SponsorBlockPage> {
                   ),
                   PopupMenuButton(
                     initialValue: _blockSettings[index].second,
-                    onSelected: (item) async {
+                    onSelected: (item) {
                       _blockSettings[index].second = item;
-                      await setting.put(
+                      setting.put(
                           SettingBoxKey.blockSettings,
                           _blockSettings
                               .map((item) => item.second.index)
