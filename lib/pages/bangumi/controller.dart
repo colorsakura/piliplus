@@ -1,13 +1,13 @@
+import 'package:PiliPlus/http/bangumi.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/bangumi/list.dart';
 import 'package:PiliPlus/models/bangumi/pgc_timeline/result.dart';
 import 'package:PiliPlus/models/common/tab_type.dart';
 import 'package:PiliPlus/pages/common/common_list_controller.dart';
 import 'package:PiliPlus/utils/extension.dart';
+import 'package:PiliPlus/utils/storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:PiliPlus/http/bangumi.dart';
-import 'package:PiliPlus/utils/storage.dart';
 
 class BangumiController extends CommonListController<
     List<BangumiListItemModel>?, BangumiListItemModel> {

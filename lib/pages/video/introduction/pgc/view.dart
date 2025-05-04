@@ -1,27 +1,27 @@
 import 'dart:async';
 
+import 'package:PiliPlus/common/constants.dart';
+import 'package:PiliPlus/common/widgets/badge.dart';
 import 'package:PiliPlus/common/widgets/dialog/dialog.dart';
-import 'package:PiliPlus/common/widgets/loading_widget/http_error.dart';
+import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
 import 'package:PiliPlus/common/widgets/interactiveviewer_gallery/interactiveviewer_gallery.dart'
     show SourceModel;
+import 'package:PiliPlus/common/widgets/loading_widget/http_error.dart';
+import 'package:PiliPlus/common/widgets/stat/stat.dart';
 import 'package:PiliPlus/http/loading_state.dart';
+import 'package:PiliPlus/models/bangumi/info.dart';
 import 'package:PiliPlus/pages/video/controller.dart';
 import 'package:PiliPlus/pages/video/introduction/pgc/controller.dart';
+import 'package:PiliPlus/pages/video/introduction/pgc/widgets/bangumi_panel.dart';
+import 'package:PiliPlus/pages/video/introduction/ugc/widgets/action_item.dart';
+import 'package:PiliPlus/pages/video/introduction/ugc/widgets/action_row_item.dart';
 import 'package:PiliPlus/utils/extension.dart';
+import 'package:PiliPlus/utils/feed_back.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import 'package:PiliPlus/common/constants.dart';
-import 'package:PiliPlus/common/widgets/badge.dart';
-import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
-import 'package:PiliPlus/common/widgets/stat/stat.dart';
-import 'package:PiliPlus/models/bangumi/info.dart';
-import 'package:PiliPlus/pages/video/introduction/pgc/widgets/bangumi_panel.dart';
-import 'package:PiliPlus/pages/video/introduction/ugc/widgets/action_item.dart';
-import 'package:PiliPlus/pages/video/introduction/ugc/widgets/action_row_item.dart';
-import 'package:PiliPlus/utils/feed_back.dart';
 
 class BangumiIntroPanel extends StatefulWidget {
   final int? cid;

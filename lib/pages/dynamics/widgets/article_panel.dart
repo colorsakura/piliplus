@@ -1,8 +1,8 @@
 import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/models/dynamics/result.dart';
 import 'package:PiliPlus/pages/dynamics/widgets/pic_panel.dart';
-import 'package:flutter/material.dart';
 import 'package:PiliPlus/utils/utils.dart';
+import 'package:flutter/material.dart';
 
 Widget articlePanel(
   ThemeData theme,

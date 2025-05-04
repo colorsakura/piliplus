@@ -2,8 +2,8 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:PiliPlus/utils/storage.dart';
-import 'package:device_info_plus/device_info_plus.dart';
 import 'package:auto_orientation/auto_orientation.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 

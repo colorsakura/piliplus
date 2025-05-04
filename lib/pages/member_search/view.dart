@@ -1,9 +1,9 @@
+import 'package:PiliPlus/common/widgets/scroll_physics.dart';
+import 'package:PiliPlus/pages/member_search/controller.dart';
 import 'package:PiliPlus/pages/member_search/search_archive.dart';
 import 'package:PiliPlus/pages/member_search/search_dynamic.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:PiliPlus/pages/member_search/controller.dart';
-import 'package:PiliPlus/common/widgets/scroll_physics.dart';
 
 class MemberSearchPage extends StatefulWidget {
   const MemberSearchPage({super.key});

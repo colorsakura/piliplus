@@ -1,10 +1,10 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
-import 'package:get/get.dart';
 import 'package:PiliPlus/common/widgets/loading_widget/http_error.dart';
 import 'package:PiliPlus/http/member.dart';
 import 'package:PiliPlus/models/member/tags.dart';
 import 'package:PiliPlus/utils/feed_back.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
+import 'package:get/get.dart';
 
 class GroupPanel extends StatefulWidget {
   final int? mid;

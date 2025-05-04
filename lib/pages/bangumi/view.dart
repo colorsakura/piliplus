@@ -1,5 +1,7 @@
 import 'dart:math';
 
+import 'package:PiliPlus/common/constants.dart';
+import 'package:PiliPlus/common/widgets/loading_widget/http_error.dart';
 import 'package:PiliPlus/common/widgets/loading_widget/loading_widget.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/common/widgets/scroll_physics.dart';
@@ -9,15 +11,13 @@ import 'package:PiliPlus/models/bangumi/pgc_timeline/result.dart';
 import 'package:PiliPlus/models/common/tab_type.dart';
 import 'package:PiliPlus/pages/bangumi/controller.dart';
 import 'package:PiliPlus/pages/bangumi/widgets/bangumi_card_v.dart';
-import 'package:PiliPlus/pages/pgc_index/view.dart';
 import 'package:PiliPlus/pages/bangumi/widgets/bangumi_card_v_timeline.dart';
 import 'package:PiliPlus/pages/common/common_page.dart';
+import 'package:PiliPlus/pages/pgc_index/view.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/grid.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:PiliPlus/common/constants.dart';
-import 'package:PiliPlus/common/widgets/loading_widget/http_error.dart';
 
 class BangumiPage extends CommonPage {
   const BangumiPage({

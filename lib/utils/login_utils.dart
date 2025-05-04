@@ -1,25 +1,25 @@
 import 'dart:math';
 
 import 'package:PiliPlus/http/loading_state.dart';
+import 'package:PiliPlus/http/user.dart';
 import 'package:PiliPlus/models/common/dynamics_type.dart';
 import 'package:PiliPlus/models/common/tab_type.dart' hide tabsConfig;
 import 'package:PiliPlus/models/user/info.dart';
 import 'package:PiliPlus/models/user/stat.dart';
 import 'package:PiliPlus/pages/bangumi/controller.dart';
+import 'package:PiliPlus/pages/dynamics/controller.dart';
 import 'package:PiliPlus/pages/dynamics_tab/controller.dart';
+import 'package:PiliPlus/pages/home/controller.dart';
 import 'package:PiliPlus/pages/live/controller.dart';
 import 'package:PiliPlus/pages/main/controller.dart';
+import 'package:PiliPlus/pages/media/controller.dart';
+import 'package:PiliPlus/pages/mine/controller.dart';
 import 'package:PiliPlus/utils/accounts/account.dart';
 import 'package:PiliPlus/utils/storage.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart' as web;
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 import 'package:webview_cookie_manager/webview_cookie_manager.dart';
-import 'package:flutter_inappwebview/flutter_inappwebview.dart' as web;
-import 'package:PiliPlus/pages/dynamics/controller.dart';
-import 'package:PiliPlus/pages/home/controller.dart';
-import 'package:PiliPlus/pages/media/controller.dart';
-import 'package:PiliPlus/pages/mine/controller.dart';
-import 'package:PiliPlus/http/user.dart';
 
 class LoginUtils {
   static final random = Random();

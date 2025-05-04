@@ -1,5 +1,8 @@
 import 'dart:io';
 
+import 'package:PiliPlus/common/widgets/interactiveviewer_gallery/interactive_viewer.dart'
+    as custom;
+import 'package:PiliPlus/common/widgets/interactiveviewer_gallery/interactive_viewer_boundary.dart';
 import 'package:PiliPlus/utils/download.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/storage.dart';
@@ -11,9 +14,6 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:media_kit/media_kit.dart';
 import 'package:media_kit_video/media_kit_video.dart';
-import 'package:PiliPlus/common/widgets/interactiveviewer_gallery/interactive_viewer_boundary.dart';
-import 'package:PiliPlus/common/widgets/interactiveviewer_gallery/interactive_viewer.dart'
-    as custom;
 
 /// https://github.com/qq326646683/interactiveviewer_gallery
 

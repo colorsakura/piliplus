@@ -1,10 +1,10 @@
+import 'package:PiliPlus/models/video/ai.dart';
 import 'package:PiliPlus/pages/common/common_collapse_slide_page.dart';
 import 'package:PiliPlus/pages/video/controller.dart';
+import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:PiliPlus/models/video/ai.dart';
-import 'package:PiliPlus/utils/utils.dart';
 
 class AiDetail extends CommonCollapseSlidePage {
   final ModelResult modelResult;

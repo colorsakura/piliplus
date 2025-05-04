@@ -8,9 +8,9 @@ import 'package:PiliPlus/pages/dynamics/widgets/dynamic_panel.dart';
 import 'package:PiliPlus/pages/member_dynamics/controller.dart';
 import 'package:PiliPlus/utils/grid.dart';
 import 'package:PiliPlus/utils/storage.dart';
+import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:PiliPlus/utils/utils.dart';
 import 'package:waterfall_flow/waterfall_flow.dart';
 
 class MemberDynamicsPage extends StatefulWidget {

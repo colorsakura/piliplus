@@ -6,6 +6,7 @@ import 'package:PiliPlus/common/widgets/loading_widget/http_error.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/msg/msgfeed_sys_msg.dart';
+import 'package:PiliPlus/pages/msg_feed_top/sys_msg/controller.dart';
 import 'package:PiliPlus/utils/app_scheme.dart';
 import 'package:PiliPlus/utils/id_utils.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
@@ -14,8 +15,6 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
-
-import 'package:PiliPlus/pages/msg_feed_top/sys_msg/controller.dart';
 
 class SysMsgPage extends StatefulWidget {
   const SysMsgPage({super.key});

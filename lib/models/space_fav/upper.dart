@@ -4,13 +4,13 @@ part 'upper.g.dart';
 
 @JsonSerializable()
 class Upper {
-	int? mid;
-	String? name;
-	String? face;
+  int? mid;
+  String? name;
+  String? face;
 
-	Upper({this.mid, this.name, this.face});
+  Upper({this.mid, this.name, this.face});
 
-	factory Upper.fromJson(Map<String, dynamic> json) => _$UpperFromJson(json);
+  factory Upper.fromJson(Map<String, dynamic> json) => _$UpperFromJson(json);
 
-	Map<String, dynamic> toJson() => _$UpperToJson(this);
+  Map<String, dynamic> toJson() => _$UpperToJson(this);
 }

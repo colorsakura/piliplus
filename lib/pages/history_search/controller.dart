@@ -1,8 +1,8 @@
 import 'package:PiliPlus/http/loading_state.dart';
+import 'package:PiliPlus/http/user.dart';
 import 'package:PiliPlus/models/user/history.dart';
 import 'package:PiliPlus/pages/common/common_search_controller.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
-import 'package:PiliPlus/http/user.dart';
 
 class HistorySearchController
     extends CommonSearchController<HistoryData, HisListItem> {

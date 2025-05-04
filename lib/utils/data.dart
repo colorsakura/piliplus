@@ -1,5 +1,4 @@
 import 'package:PiliPlus/http/user.dart';
-
 import 'package:PiliPlus/utils/storage.dart';
 
 class Data {

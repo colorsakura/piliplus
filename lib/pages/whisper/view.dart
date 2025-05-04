@@ -3,12 +3,11 @@ import 'package:PiliPlus/common/widgets/loading_widget/http_error.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/msg/session.dart';
+import 'package:PiliPlus/pages/whisper/controller.dart';
 import 'package:PiliPlus/pages/whisper/widgets/item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
-
-import 'package:PiliPlus/pages/whisper/controller.dart';
 
 class WhisperPage extends StatefulWidget {
   const WhisperPage({super.key});

@@ -1,11 +1,11 @@
 import 'dart:async';
 
+import 'package:PiliPlus/models/video_detail_res.dart';
 import 'package:PiliPlus/pages/video/controller.dart';
 import 'package:PiliPlus/pages/video/introduction/ugc/controller.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:PiliPlus/models/video_detail_res.dart';
 
 class SeasonPanel extends StatefulWidget {
   const SeasonPanel({

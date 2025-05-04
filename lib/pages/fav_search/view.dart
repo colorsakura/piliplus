@@ -1,13 +1,12 @@
 import 'package:PiliPlus/models/user/fav_detail.dart';
 import 'package:PiliPlus/pages/common/common_search_page.dart';
+import 'package:PiliPlus/pages/fav_detail/widget/fav_video_card.dart';
+import 'package:PiliPlus/pages/fav_search/controller.dart';
 import 'package:PiliPlus/utils/grid.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:PiliPlus/pages/fav_detail/widget/fav_video_card.dart';
-
-import 'package:PiliPlus/pages/fav_search/controller.dart';
 
 class FavSearchPage extends CommonSearchPage {
   const FavSearchPage({super.key});

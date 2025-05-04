@@ -1,22 +1,21 @@
+import 'package:PiliPlus/common/skeleton/video_reply.dart';
 import 'package:PiliPlus/common/widgets/loading_widget/loading_widget.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/grpc/app/main/community/reply/v1/reply.pb.dart';
 import 'package:PiliPlus/http/loading_state.dart';
+import 'package:PiliPlus/models/common/reply_type.dart';
 import 'package:PiliPlus/pages/common/common_slide_page.dart';
 import 'package:PiliPlus/pages/video/reply/widgets/reply_item_grpc.dart';
 import 'package:PiliPlus/pages/video/reply_new/view.dart';
+import 'package:PiliPlus/pages/video/reply_reply/controller.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:PiliPlus/utils/request_utils.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:PiliPlus/common/skeleton/video_reply.dart';
-import 'package:PiliPlus/models/common/reply_type.dart';
 import 'package:get/get_navigation/src/dialog/dialog_route.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
-
-import 'package:PiliPlus/pages/video/reply_reply/controller.dart';
 
 class VideoReplyReplyPanel extends CommonSlidePage {
   const VideoReplyReplyPanel({

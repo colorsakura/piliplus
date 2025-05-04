@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:PiliPlus/common/skeleton/skeleton.dart';
+import 'package:flutter/material.dart';
 
 class DynamicCardSkeleton extends StatelessWidget {
   const DynamicCardSkeleton({super.key});

@@ -1,6 +1,6 @@
 import 'package:PiliPlus/common/constants.dart';
-import 'package:flutter/material.dart';
 import 'package:PiliPlus/common/skeleton/skeleton.dart';
+import 'package:flutter/material.dart';
 
 class FavPgcItemSkeleton extends StatelessWidget {
   const FavPgcItemSkeleton({super.key});

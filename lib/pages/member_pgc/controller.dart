@@ -4,8 +4,8 @@ import 'package:PiliPlus/models/space/data.dart';
 import 'package:PiliPlus/models/space_archive/data.dart';
 import 'package:PiliPlus/models/space_archive/item.dart';
 import 'package:PiliPlus/pages/common/common_list_controller.dart';
-import 'package:PiliPlus/pages/member_contribute/view.dart' show ContributeType;
 import 'package:PiliPlus/pages/member/controller.dart';
+import 'package:PiliPlus/pages/member_contribute/view.dart' show ContributeType;
 import 'package:get/get.dart';
 
 class MemberBangumiCtr

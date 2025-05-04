@@ -3,13 +3,13 @@ import 'package:PiliPlus/common/widgets/loading_widget/loading_widget.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/search/search_trending/trending_data.dart';
 import 'package:PiliPlus/models/search/suggest.dart';
+import 'package:PiliPlus/pages/search/controller.dart';
+import 'package:PiliPlus/pages/search/widgets/hot_keyword.dart';
+import 'package:PiliPlus/pages/search/widgets/search_text.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:PiliPlus/pages/search/controller.dart';
-import 'package:PiliPlus/pages/search/widgets/hot_keyword.dart';
-import 'package:PiliPlus/pages/search/widgets/search_text.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({super.key});

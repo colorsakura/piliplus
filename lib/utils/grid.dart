@@ -1,9 +1,9 @@
 import 'dart:math';
 
 import 'package:PiliPlus/common/constants.dart';
+import 'package:PiliPlus/utils/storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:PiliPlus/utils/storage.dart';
 
 class Grid {
   static double smallCardWidth = GStorage.smallCardWidth;

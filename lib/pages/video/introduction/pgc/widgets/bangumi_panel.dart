@@ -1,12 +1,12 @@
 import 'dart:async';
 
+import 'package:PiliPlus/models/bangumi/info.dart';
 import 'package:PiliPlus/pages/video/controller.dart';
+import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
-import 'package:PiliPlus/models/bangumi/info.dart';
-import 'package:PiliPlus/utils/storage.dart';
 
 class BangumiPanel extends StatefulWidget {
   const BangumiPanel({

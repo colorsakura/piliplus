@@ -1,4 +1,8 @@
+import 'package:PiliPlus/common/constants.dart';
+import 'package:PiliPlus/common/skeleton/video_card_h.dart';
+import 'package:PiliPlus/common/widgets/loading_widget/http_error.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
+import 'package:PiliPlus/common/widgets/video_card/video_card_h.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/model_hot_video_item.dart';
 import 'package:PiliPlus/pages/common/common_page.dart';
@@ -7,10 +11,6 @@ import 'package:PiliPlus/pages/rank/zone/widget/pgc_rank_item.dart';
 import 'package:PiliPlus/utils/grid.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:PiliPlus/common/constants.dart';
-import 'package:PiliPlus/common/skeleton/video_card_h.dart';
-import 'package:PiliPlus/common/widgets/loading_widget/http_error.dart';
-import 'package:PiliPlus/common/widgets/video_card/video_card_h.dart';
 
 class ZonePage extends CommonPage {
   const ZonePage({super.key, this.rid, this.seasonType});

@@ -1,37 +1,36 @@
 import 'dart:async';
 
+import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/common/widgets/avatar.dart';
+import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
 import 'package:PiliPlus/common/widgets/self_sized_horizontal_list.dart';
+import 'package:PiliPlus/common/widgets/stat/stat.dart';
+import 'package:PiliPlus/models/video_detail_res.dart';
+import 'package:PiliPlus/pages/mine/controller.dart';
 import 'package:PiliPlus/pages/search/widgets/search_text.dart';
 import 'package:PiliPlus/pages/video/controller.dart';
+import 'package:PiliPlus/pages/video/introduction/ugc/controller.dart';
+import 'package:PiliPlus/pages/video/introduction/ugc/widgets/action_item.dart';
+import 'package:PiliPlus/pages/video/introduction/ugc/widgets/action_row_item.dart';
+import 'package:PiliPlus/pages/video/introduction/ugc/widgets/page.dart';
+import 'package:PiliPlus/pages/video/introduction/ugc/widgets/season.dart';
 import 'package:PiliPlus/utils/app_scheme.dart';
 import 'package:PiliPlus/utils/extension.dart';
+import 'package:PiliPlus/utils/feed_back.dart';
 import 'package:PiliPlus/utils/id_utils.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:PiliPlus/utils/request_utils.dart';
+import 'package:PiliPlus/utils/storage.dart';
+import 'package:PiliPlus/utils/utils.dart';
 import 'package:expandable/expandable.dart';
 import 'package:flutter/gestures.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import 'package:flutter/material.dart';
-import 'package:PiliPlus/common/constants.dart';
-import 'package:PiliPlus/pages/mine/controller.dart';
-import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
-import 'package:PiliPlus/common/widgets/stat/stat.dart';
-import 'package:PiliPlus/models/video_detail_res.dart';
-import 'package:PiliPlus/pages/video/introduction/ugc/controller.dart';
-import 'package:PiliPlus/utils/feed_back.dart';
-import 'package:PiliPlus/utils/storage.dart';
-import 'package:PiliPlus/utils/utils.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-
-import 'package:PiliPlus/pages/video/introduction/ugc/widgets/action_item.dart';
-import 'package:PiliPlus/pages/video/introduction/ugc/widgets/action_row_item.dart';
-import 'package:PiliPlus/pages/video/introduction/ugc/widgets/page.dart';
-import 'package:PiliPlus/pages/video/introduction/ugc/widgets/season.dart';
 
 class VideoIntroPanel extends StatefulWidget {
   const VideoIntroPanel({

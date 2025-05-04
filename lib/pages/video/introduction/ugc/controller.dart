@@ -1,35 +1,35 @@
 import 'dart:async';
 
 import 'package:PiliPlus/http/api.dart';
+import 'package:PiliPlus/http/constants.dart';
 import 'package:PiliPlus/http/init.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/http/member.dart';
 import 'package:PiliPlus/http/search.dart';
+import 'package:PiliPlus/http/user.dart';
+import 'package:PiliPlus/http/video.dart';
 import 'package:PiliPlus/models/model_hot_video_item.dart';
+import 'package:PiliPlus/models/user/fav_folder.dart';
+import 'package:PiliPlus/models/video/ai.dart';
+import 'package:PiliPlus/models/video_detail_res.dart';
 import 'package:PiliPlus/pages/dynamics_repost/view.dart';
+import 'package:PiliPlus/pages/video/controller.dart';
 import 'package:PiliPlus/pages/video/pay_coins/view.dart';
 import 'package:PiliPlus/pages/video/related/controller.dart';
 import 'package:PiliPlus/pages/video/reply/controller.dart';
+import 'package:PiliPlus/plugin/pl_player/models/play_repeat.dart';
 import 'package:PiliPlus/utils/extension.dart';
+import 'package:PiliPlus/utils/feed_back.dart';
 import 'package:PiliPlus/utils/global_data.dart';
+import 'package:PiliPlus/utils/id_utils.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:PiliPlus/utils/request_utils.dart';
+import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
-import 'package:PiliPlus/http/constants.dart';
-import 'package:PiliPlus/http/user.dart';
-import 'package:PiliPlus/http/video.dart';
-import 'package:PiliPlus/models/user/fav_folder.dart';
-import 'package:PiliPlus/models/video/ai.dart';
-import 'package:PiliPlus/models/video_detail_res.dart';
-import 'package:PiliPlus/pages/video/controller.dart';
-import 'package:PiliPlus/plugin/pl_player/models/play_repeat.dart';
-import 'package:PiliPlus/utils/feed_back.dart';
-import 'package:PiliPlus/utils/id_utils.dart';
-import 'package:PiliPlus/utils/storage.dart';
 
 class VideoIntroController extends GetxController {
   // 视频bvid

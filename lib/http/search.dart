@@ -1,6 +1,8 @@
 import 'dart:convert';
+
 import 'package:PiliPlus/http/api.dart';
 import 'package:PiliPlus/http/init.dart';
+import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/bangumi/info.dart';
 import 'package:PiliPlus/models/common/search_type.dart';
 import 'package:PiliPlus/models/search/result.dart';
@@ -10,7 +12,6 @@ import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
-import 'package:PiliPlus/http/loading_state.dart';
 
 class SearchHttp {
   // 获取搜索建议

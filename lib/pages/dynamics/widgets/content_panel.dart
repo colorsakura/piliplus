@@ -1,9 +1,8 @@
 // 内容
 import 'package:PiliPlus/common/widgets/image/image_view.dart';
 import 'package:PiliPlus/models/dynamics/result.dart';
-import 'package:flutter/material.dart';
-
 import 'package:PiliPlus/pages/dynamics/widgets/rich_node_panel.dart';
+import 'package:flutter/material.dart';
 
 Widget content(
   ThemeData theme,

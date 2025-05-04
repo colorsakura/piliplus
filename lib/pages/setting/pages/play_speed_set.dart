@@ -1,11 +1,11 @@
 import 'dart:math';
 
+import 'package:PiliPlus/pages/setting/widgets/switch_item.dart';
+import 'package:PiliPlus/utils/storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
-import 'package:PiliPlus/pages/setting/widgets/switch_item.dart';
-import 'package:PiliPlus/utils/storage.dart';
 import 'package:hive/hive.dart';
 
 class PlaySpeedPage extends StatefulWidget {

@@ -1,10 +1,10 @@
 import 'package:PiliPlus/http/loading_state.dart';
+import 'package:PiliPlus/http/user.dart';
 import 'package:PiliPlus/models/user/fav_folder.dart';
 import 'package:PiliPlus/pages/common/common_data_controller.dart';
+import 'package:PiliPlus/utils/storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:PiliPlus/http/user.dart';
-import 'package:PiliPlus/utils/storage.dart';
 
 class MediaController
     extends CommonDataController<FavFolderData, FavFolderData> {

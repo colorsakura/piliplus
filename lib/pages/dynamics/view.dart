@@ -1,15 +1,14 @@
+import 'package:PiliPlus/common/widgets/scroll_physics.dart';
 import 'package:PiliPlus/models/common/dynamics_type.dart';
 import 'package:PiliPlus/models/common/up_panel_position.dart';
+import 'package:PiliPlus/pages/dynamics/controller.dart';
+import 'package:PiliPlus/pages/dynamics/widgets/up_panel.dart';
 import 'package:PiliPlus/pages/dynamics_create/view.dart';
+import 'package:PiliPlus/utils/storage.dart';
 import 'package:easy_debounce/easy_throttle.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:PiliPlus/utils/storage.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-
-import 'package:PiliPlus/pages/dynamics/controller.dart';
-import 'package:PiliPlus/pages/dynamics/widgets/up_panel.dart';
-import 'package:PiliPlus/common/widgets/scroll_physics.dart';
 
 enum ReplyOption { allow, close, choose }
 

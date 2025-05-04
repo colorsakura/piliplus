@@ -1,8 +1,8 @@
 import 'package:PiliPlus/pages/member_article/view.dart';
 import 'package:PiliPlus/pages/member_audio/view.dart';
+import 'package:PiliPlus/pages/member_contribute/controller.dart';
 import 'package:PiliPlus/pages/member_season_series/view.dart';
 import 'package:PiliPlus/pages/member_video/view.dart';
-import 'package:PiliPlus/pages/member_contribute/controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

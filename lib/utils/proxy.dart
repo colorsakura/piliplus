@@ -1,4 +1,5 @@
 import 'dart:io';
+
 import 'package:system_proxy/system_proxy.dart';
 
 class CustomProxy {

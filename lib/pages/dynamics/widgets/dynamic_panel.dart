@@ -1,13 +1,13 @@
 import 'package:PiliPlus/common/widgets/image/image_save.dart';
 import 'package:PiliPlus/models/dynamics/result.dart';
-import 'package:PiliPlus/utils/extension.dart';
-import 'package:PiliPlus/utils/page_utils.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:PiliPlus/pages/dynamics/widgets/action_panel.dart';
 import 'package:PiliPlus/pages/dynamics/widgets/author_panel.dart';
 import 'package:PiliPlus/pages/dynamics/widgets/content_panel.dart';
 import 'package:PiliPlus/pages/dynamics/widgets/forward_panel.dart';
+import 'package:PiliPlus/utils/extension.dart';
+import 'package:PiliPlus/utils/page_utils.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class DynamicPanel extends StatelessWidget {
   final DynamicItemModel item;

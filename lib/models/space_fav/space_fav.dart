@@ -1,6 +1,5 @@
-import 'package:json_annotation/json_annotation.dart';
-
 import 'package:PiliPlus/models/space_fav/datum.dart';
+import 'package:json_annotation/json_annotation.dart';
 
 part 'space_fav.g.dart';
 

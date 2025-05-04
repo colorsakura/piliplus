@@ -1,15 +1,15 @@
 import 'package:PiliPlus/common/constants.dart';
+import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
+import 'package:PiliPlus/common/widgets/scroll_physics.dart';
 import 'package:PiliPlus/models/common/dynamic_badge_mode.dart';
+import 'package:PiliPlus/pages/home/controller.dart';
 import 'package:PiliPlus/pages/main/controller.dart';
 import 'package:PiliPlus/pages/mine/controller.dart';
 import 'package:PiliPlus/utils/extension.dart';
+import 'package:PiliPlus/utils/feed_back.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
-import 'package:PiliPlus/utils/feed_back.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:PiliPlus/pages/home/controller.dart';
-import 'package:PiliPlus/common/widgets/scroll_physics.dart';
 import 'package:stream_transform/stream_transform.dart';
 
 class HomePage extends StatefulWidget {

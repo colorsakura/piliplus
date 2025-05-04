@@ -1,7 +1,6 @@
-import 'package:flutter/material.dart';
 import 'package:PiliPlus/common/constants.dart';
-
 import 'package:PiliPlus/common/skeleton/skeleton.dart';
+import 'package:flutter/material.dart';
 
 class MediaBangumiSkeleton extends StatefulWidget {
   const MediaBangumiSkeleton({super.key});

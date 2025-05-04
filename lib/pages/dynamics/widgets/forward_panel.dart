@@ -14,10 +14,10 @@ import 'package:PiliPlus/pages/dynamics/widgets/rich_node_panel.dart';
 import 'package:PiliPlus/pages/dynamics/widgets/video_panel.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
+import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import 'package:PiliPlus/utils/utils.dart';
 
 InlineSpan picsNodes(
   List<OpusPicsModel> pics,

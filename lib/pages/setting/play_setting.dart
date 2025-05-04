@@ -1,6 +1,6 @@
 import 'package:PiliPlus/pages/setting/widgets/model.dart';
-import 'package:flutter/material.dart';
 import 'package:PiliPlus/services/service_locator.dart';
+import 'package:flutter/material.dart';
 
 class PlaySetting extends StatefulWidget {
   const PlaySetting({super.key, this.showAppBar});

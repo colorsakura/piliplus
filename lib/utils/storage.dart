@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
+
 import 'package:PiliPlus/common/widgets/pair.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart'
     show kDragContainerExtentPercentage, displacement;
@@ -12,8 +13,10 @@ import 'package:PiliPlus/models/common/tab_type.dart';
 import 'package:PiliPlus/models/common/theme_type.dart';
 import 'package:PiliPlus/models/common/up_panel_position.dart';
 import 'package:PiliPlus/models/live/quality.dart';
+import 'package:PiliPlus/models/model_owner.dart';
 import 'package:PiliPlus/models/user/danmaku_rule.dart';
 import 'package:PiliPlus/models/user/danmaku_rule_adapter.dart';
+import 'package:PiliPlus/models/user/info.dart';
 import 'package:PiliPlus/models/video/play/CDN.dart';
 import 'package:PiliPlus/models/video/play/quality.dart';
 import 'package:PiliPlus/models/video/play/subtitle.dart';
@@ -23,8 +26,9 @@ import 'package:PiliPlus/plugin/pl_player/models/bottom_progress_behavior.dart';
 import 'package:PiliPlus/plugin/pl_player/models/fullscreen_mode.dart';
 import 'package:PiliPlus/utils/accounts/account.dart';
 import 'package:PiliPlus/utils/accounts/account_adapter.dart';
-import 'package:PiliPlus/utils/accounts/cookie_jar_adapter.dart';
 import 'package:PiliPlus/utils/accounts/account_type_adapter.dart';
+import 'package:PiliPlus/utils/accounts/cookie_jar_adapter.dart';
+import 'package:PiliPlus/utils/global_data.dart';
 import 'package:PiliPlus/utils/login_utils.dart';
 import 'package:PiliPlus/utils/set_int_adapter.dart';
 import 'package:cookie_jar/cookie_jar.dart';
@@ -32,9 +36,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get_navigation/src/routes/transitions_type.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:PiliPlus/models/model_owner.dart';
-import 'package:PiliPlus/models/user/info.dart';
-import 'package:PiliPlus/utils/global_data.dart';
 import 'package:uuid/uuid.dart';
 
 class GStorage {

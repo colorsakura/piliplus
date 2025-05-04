@@ -2,13 +2,12 @@ import 'package:PiliPlus/common/widgets/button/icon_button.dart';
 import 'package:PiliPlus/common/widgets/video_card/video_card_h.dart';
 import 'package:PiliPlus/models/model_hot_video_item.dart';
 import 'package:PiliPlus/pages/common/common_search_page.dart';
+import 'package:PiliPlus/pages/later_search/controller.dart';
 import 'package:PiliPlus/utils/grid.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
-import 'package:PiliPlus/pages/later_search/controller.dart';
 
 class LaterSearchPage extends CommonSearchPage {
   const LaterSearchPage({super.key});

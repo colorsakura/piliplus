@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/common/widgets/scroll_physics.dart';
+import 'package:PiliPlus/pages/login/controller.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -10,8 +11,6 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 import 'package:pretty_qr_code/pretty_qr_code.dart';
 import 'package:saver_gallery/saver_gallery.dart';
-
-import 'package:PiliPlus/pages/login/controller.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});

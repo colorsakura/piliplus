@@ -1,5 +1,6 @@
 import 'package:PiliPlus/common/widgets/dialog/dialog.dart';
 import 'package:PiliPlus/http/loading_state.dart';
+import 'package:PiliPlus/http/user.dart';
 import 'package:PiliPlus/models/model_hot_video_item.dart';
 import 'package:PiliPlus/pages/common/multi_select_controller.dart';
 import 'package:PiliPlus/pages/later/base_controller.dart';
@@ -12,7 +13,6 @@ import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
-import 'package:PiliPlus/http/user.dart';
 
 class LaterController extends MultiSelectController<Map, HotVideoItemModel> {
   LaterController(this.laterViewType);

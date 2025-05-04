@@ -1,11 +1,10 @@
+import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
-import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
 
 class Avatar extends StatelessWidget {
   final _BadgeType _badgeType;

@@ -1,23 +1,23 @@
 import 'package:PiliPlus/common/widgets/dynamic_sliver_appbar.dart';
 import 'package:PiliPlus/common/widgets/loading_widget/loading_widget.dart';
 import 'package:PiliPlus/common/widgets/radio_widget.dart';
+import 'package:PiliPlus/common/widgets/scroll_physics.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/http/member.dart';
 import 'package:PiliPlus/models/space/data.dart';
-import 'package:PiliPlus/pages/member_pgc/view.dart';
-import 'package:PiliPlus/pages/member_favorite/view.dart';
-import 'package:PiliPlus/pages/member_contribute/view.dart';
-import 'package:PiliPlus/pages/member_home/view.dart';
 import 'package:PiliPlus/pages/member/controller.dart';
 import 'package:PiliPlus/pages/member/widget/user_info_card.dart';
+import 'package:PiliPlus/pages/member_contribute/view.dart';
 import 'package:PiliPlus/pages/member_dynamics/view.dart';
+import 'package:PiliPlus/pages/member_favorite/view.dart';
+import 'package:PiliPlus/pages/member_home/view.dart';
+import 'package:PiliPlus/pages/member_pgc/view.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
-import 'package:PiliPlus/common/widgets/scroll_physics.dart';
 
 class MemberPage extends StatefulWidget {
   const MemberPage({super.key});

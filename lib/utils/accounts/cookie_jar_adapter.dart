@@ -1,7 +1,6 @@
+import 'package:PiliPlus/utils/accounts/account.dart';
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:hive/hive.dart';
-
-import 'package:PiliPlus/utils/accounts/account.dart';
 
 class BiliCookieJarAdapter extends TypeAdapter<DefaultCookieJar> {
   @override

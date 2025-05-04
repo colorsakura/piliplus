@@ -1,31 +1,31 @@
 import 'dart:convert';
 
+import 'package:PiliPlus/http/constants.dart';
 import 'package:PiliPlus/http/init.dart';
 import 'package:PiliPlus/http/loading_state.dart';
+import 'package:PiliPlus/http/search.dart';
 import 'package:PiliPlus/http/user.dart';
+import 'package:PiliPlus/http/video.dart';
+import 'package:PiliPlus/models/bangumi/info.dart';
+import 'package:PiliPlus/models/user/fav_folder.dart';
 import 'package:PiliPlus/pages/common/common_data_controller.dart';
 import 'package:PiliPlus/pages/dynamics_repost/view.dart';
 import 'package:PiliPlus/pages/video/controller.dart';
 import 'package:PiliPlus/pages/video/introduction/ugc/controller.dart';
 import 'package:PiliPlus/pages/video/pay_coins/view.dart';
 import 'package:PiliPlus/pages/video/reply/controller.dart';
+import 'package:PiliPlus/plugin/pl_player/models/play_repeat.dart';
 import 'package:PiliPlus/utils/extension.dart';
+import 'package:PiliPlus/utils/feed_back.dart';
 import 'package:PiliPlus/utils/global_data.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
+import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
-import 'package:PiliPlus/http/constants.dart';
-import 'package:PiliPlus/http/search.dart';
-import 'package:PiliPlus/http/video.dart';
-import 'package:PiliPlus/models/bangumi/info.dart';
-import 'package:PiliPlus/models/user/fav_folder.dart';
-import 'package:PiliPlus/plugin/pl_player/models/play_repeat.dart';
-import 'package:PiliPlus/utils/feed_back.dart';
-import 'package:PiliPlus/utils/storage.dart';
-import 'package:html/parser.dart' as html_parser;
 import 'package:html/dom.dart' as dom;
+import 'package:html/parser.dart' as html_parser;
 
 class BangumiIntroController
     extends CommonDataController<BangumiInfoModel, BangumiInfoModel> {
