@@ -39,9 +39,11 @@ class SharePanel extends StatefulWidget {
     super.key,
     required this.content,
     this.userList,
+    this.selectedIndex,
   });
 
   final Map content;
+  final int? selectedIndex;
   final List<UserModel>? userList;
 
   @override
@@ -68,6 +70,9 @@ class _SharePanelState extends State<SharePanel> {
     super.initState();
     if (widget.userList?.isNotEmpty == true) {
       _userList.addAll(widget.userList!);
+      if (widget.selectedIndex != null) {
+        _selectedIndex = widget.selectedIndex!;
+      }
     }
   }
 

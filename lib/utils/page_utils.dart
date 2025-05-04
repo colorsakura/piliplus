@@ -32,6 +32,7 @@ class PageUtils {
       {required Map content}) async {
     // debugPrint(content.toString());
 
+    int? selectedIndex;
     List<UserModel> userList = <UserModel>[];
 
     final shareListRes = await GrpcRepo.shareList(size: 3);
@@ -51,6 +52,7 @@ class PageUtils {
         transitionDuration: const Duration(milliseconds: 120),
       );
       if (userModel != null) {
+        selectedIndex = 0;
         userList.add(userModel);
       }
     }
@@ -61,6 +63,7 @@ class PageUtils {
         builder: (context) => SharePanel(
           content: content,
           userList: userList,
+          selectedIndex: selectedIndex,
         ),
         useSafeArea: true,
         enableDrag: false,
