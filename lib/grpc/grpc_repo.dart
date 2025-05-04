@@ -51,8 +51,8 @@ class GrpcUrl {
 }
 
 class GrpcRepo {
-  static final String? _accessKey = Accounts.main.accessKey;
-  static const _build = 1462100;
+  static String? _accessKey = Accounts.main.accessKey;
+  static const _build = 2001100;
   static const _biliChannel = 'bili';
   static const _mobiApp = 'android_hd';
   static const _phone = 'phone';
@@ -60,6 +60,24 @@ class GrpcRepo {
   static final _buvid = LoginUtils.buvid;
   static final _traceId = Utils.genTraceId();
   static final _sessionId = Utils.generateRandomString(8);
+
+  static void updateHeaders(String? accessKey) {
+    _accessKey = accessKey;
+    if (_accessKey != null) {
+      headers['authorization'] = 'identify_v1 $_accessKey';
+    } else {
+      headers.remove('authorization');
+    }
+    headers['x-bili-metadata-bin'] = base64Encode(Metadata(
+      accessKey: _accessKey ?? '',
+      mobiApp: _mobiApp,
+      device: _phone,
+      build: _build,
+      channel: _biliChannel,
+      buvid: _buvid,
+      platform: _mobiApp,
+    ).writeToBuffer());
+  }
 
   static final Map<String, String> headers = {
     Headers.contentTypeHeader: 'application/grpc',
