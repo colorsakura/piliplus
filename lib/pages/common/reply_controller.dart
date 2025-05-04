@@ -34,7 +34,6 @@ abstract class ReplyController<R> extends CommonListController<R, ReplyInfo> {
 
   dynamic upMid;
   FeedPaginationReply? paginationReply;
-  String? sessionId;
   late Rx<Mode> mode = Mode.MAIN_LIST_HOT.obs;
   late bool hasUpTop = false;
 
@@ -76,7 +75,6 @@ abstract class ReplyController<R> extends CommonListController<R, ReplyInfo> {
   bool customHandleResponse(bool isRefresh, Success response) {
     MainListReply data = response.response;
     paginationReply = data.paginationReply;
-    sessionId = data.sessionId;
     count.value = data.subjectControl.count.toInt();
     if (isRefresh) {
       upMid ??= data.subjectControl.upMid;
@@ -92,7 +90,6 @@ abstract class ReplyController<R> extends CommonListController<R, ReplyInfo> {
   @override
   Future onRefresh() {
     paginationReply = null;
-    sessionId = null;
     return super.onRefresh();
   }
 

@@ -128,7 +128,6 @@ class ReplyHttp {
     required int oid,
     required Mode mode,
     required String? offset,
-    required String? sessionId,
     required bool antiGoodsReply,
   }) async {
     dynamic res = await GrpcRepo.mainList(
@@ -136,7 +135,6 @@ class ReplyHttp {
       oid: oid,
       mode: mode,
       offset: offset,
-      sessionId: sessionId,
     );
     if (res['status']) {
       MainListReply mainListReply = res['data'];

@@ -235,7 +235,6 @@ class GrpcRepo {
     required int oid,
     required Mode mode,
     required String? offset,
-    required String? sessionId,
   }) async {
     return await _request(
       GrpcUrl.mainList,

@@ -175,7 +175,6 @@ class ArticleController extends ReplyController<MainListReply> {
       oid: commentId,
       mode: mode.value,
       offset: paginationReply?.nextOffset,
-      sessionId: sessionId,
       antiGoodsReply: antiGoodsReply,
     );
   }

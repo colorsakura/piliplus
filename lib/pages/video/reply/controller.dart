@@ -45,7 +45,6 @@ class VideoReplyController extends ReplyController<MainListReply>
         oid: aid,
         mode: mode.value,
         offset: paginationReply?.nextOffset,
-        sessionId: sessionId,
         antiGoodsReply: antiGoodsReply,
       );
 
