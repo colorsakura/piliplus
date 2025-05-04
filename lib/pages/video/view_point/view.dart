@@ -42,7 +42,7 @@ class _ViewPointsPageState
         title: const Text('分段信息'),
         toolbarHeight: 45,
         actions: [
-          Text(
+          const Text(
             '分段进度条',
             style: TextStyle(fontSize: 16),
           ),
@@ -75,7 +75,7 @@ class _ViewPointsPageState
           const SizedBox(width: 16),
         ],
         bottom: PreferredSize(
-          preferredSize: Size.fromHeight(1),
+          preferredSize: const Size.fromHeight(1),
           child: Divider(
             height: 1,
             color: theme.dividerColor.withOpacity(0.1),
@@ -120,7 +120,8 @@ class _ViewPointsPageState
                   margin: const EdgeInsets.symmetric(vertical: 6),
                   decoration: currentIndex == index
                       ? BoxDecoration(
-                          borderRadius: BorderRadius.circular(6),
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(6)),
                           border: Border.all(
                             width: 1.8,
                             strokeAlign: BorderSide.strokeAlignOutside,

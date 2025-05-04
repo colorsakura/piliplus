@@ -265,10 +265,10 @@ class HistoryItem extends StatelessWidget {
                       child: Row(
                         children: [
                           Icon(MdiIcons.accountCircleOutline, size: 16),
-                          SizedBox(width: 6),
+                          const SizedBox(width: 6),
                           Text(
                             '访问：${videoItem.authorName}',
-                            style: TextStyle(fontSize: 13),
+                            style: const TextStyle(fontSize: 13),
                           )
                         ],
                       ),

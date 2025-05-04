@@ -41,7 +41,7 @@ class UrlUtils {
   }
 
   // 匹配url路由跳转
-  static matchUrlPush(
+  static Future<void> matchUrlPush(
     String pathSegment,
     String redirectUrl,
   ) async {

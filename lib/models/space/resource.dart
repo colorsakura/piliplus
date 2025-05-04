@@ -1,6 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 
-import 'res_native_draw.dart';
+import 'package:PiliPlus/models/space/res_native_draw.dart';
 
 part 'resource.g.dart';
 

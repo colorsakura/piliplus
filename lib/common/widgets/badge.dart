@@ -64,12 +64,12 @@ class PBadge extends StatelessWidget {
     late EdgeInsets paddingStyle =
         const EdgeInsets.symmetric(vertical: 2, horizontal: 3);
     double fontSize = 11;
-    BorderRadius br = BorderRadius.circular(4);
+    BorderRadius br = const BorderRadius.all(Radius.circular(4));
 
     if (size == 'small') {
       paddingStyle = const EdgeInsets.symmetric(vertical: 2, horizontal: 3);
       fontSize = 11;
-      br = BorderRadius.circular(3);
+      br = const BorderRadius.all(Radius.circular(3));
     }
 
     Widget content = Container(

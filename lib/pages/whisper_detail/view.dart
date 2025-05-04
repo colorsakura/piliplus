@@ -17,7 +17,7 @@ import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
 import 'package:PiliPlus/pages/whisper_detail/controller.dart';
 import 'package:PiliPlus/utils/feed_back.dart';
 import 'package:image_picker/image_picker.dart';
-import 'widget/chat_item.dart';
+import 'package:PiliPlus/pages/whisper_detail/widget/chat_item.dart';
 
 class WhisperDetailPage extends CommonPublishPage {
   const WhisperDetailPage({
@@ -197,7 +197,7 @@ class _WhisperDetailPageState
       padding: const EdgeInsets.symmetric(vertical: 8),
       decoration: BoxDecoration(
         color: theme.colorScheme.onInverseSurface,
-        borderRadius: BorderRadius.only(
+        borderRadius: const BorderRadius.only(
           topLeft: Radius.circular(16),
           topRight: Radius.circular(16),
         ),
@@ -244,9 +244,9 @@ class _WhisperDetailPageState
                     filled: true,
                     hintText: '发个消息聊聊呗~',
                     fillColor: theme.colorScheme.surface,
-                    border: OutlineInputBorder(
+                    border: const OutlineInputBorder(
                       borderSide: BorderSide.none,
-                      borderRadius: BorderRadius.circular(6),
+                      borderRadius: BorderRadius.all(Radius.circular(6)),
                       gapPadding: 0,
                     ),
                     contentPadding: const EdgeInsets.all(10),
@@ -319,10 +319,7 @@ class _WhisperDetailPageState
   }
 
   @override
-  Widget? customPanel(double height) => SizedBox(
-        height: height,
-        child: EmotePanel(onChoose: onChooseEmote),
-      );
+  Widget? get customPanel => EmotePanel(onChoose: onChooseEmote);
 
   @override
   Future onCustomPublish({required String message, List? pictures}) {

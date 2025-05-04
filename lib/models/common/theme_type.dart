@@ -8,7 +8,7 @@ enum ThemeType {
 }
 
 extension ThemeTypeExt on ThemeType {
-  String get description => ['浅色', '深色', '跟随系统'][index];
+  String get description => const ['浅色', '深色', '跟随系统'][index];
 
   int get code => index;
 

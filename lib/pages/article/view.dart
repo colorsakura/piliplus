@@ -54,45 +54,46 @@ class _ArticlePageState extends State<ArticlePage>
 
   late final _key = GlobalKey<ScaffoldState>();
 
-  get _getImageCallback => _horizontalPreview
-      ? (imgList, index) {
-          _imageStatus = true;
-          bool isFabVisible = _isFabVisible;
-          if (isFabVisible) {
-            _hideFab();
-          }
-          final ctr = AnimationController(
-            vsync: this,
-            duration: const Duration(milliseconds: 200),
-          )..forward();
-          PageUtils.onHorizontalPreview(
-            _key,
-            AnimationController(
-              vsync: this,
-              duration: Duration.zero,
-            ),
-            ctr,
-            imgList,
-            index,
-            (value) async {
-              _imageStatus = null;
+  Function(dynamic imgList, dynamic index)? get _getImageCallback =>
+      _horizontalPreview
+          ? (imgList, index) {
+              _imageStatus = true;
+              bool isFabVisible = _isFabVisible;
               if (isFabVisible) {
-                isFabVisible = false;
-                _showFab();
+                _hideFab();
               }
-              if (value == false) {
-                await ctr.reverse();
-              }
-              try {
-                ctr.dispose();
-              } catch (_) {}
-              if (value == false) {
-                Get.back();
-              }
-            },
-          );
-        }
-      : null;
+              final ctr = AnimationController(
+                vsync: this,
+                duration: const Duration(milliseconds: 200),
+              )..forward();
+              PageUtils.onHorizontalPreview(
+                _key,
+                AnimationController(
+                  vsync: this,
+                  duration: Duration.zero,
+                ),
+                ctr,
+                imgList,
+                index,
+                (value) async {
+                  _imageStatus = null;
+                  if (isFabVisible) {
+                    isFabVisible = false;
+                    _showFab();
+                  }
+                  if (value == false) {
+                    await ctr.reverse();
+                  }
+                  try {
+                    ctr.dispose();
+                  } catch (_) {}
+                  if (value == false) {
+                    Get.back();
+                  }
+                },
+              );
+            }
+          : null;
 
   @override
   void initState() {
@@ -380,7 +381,7 @@ class _ArticlePageState extends State<ArticlePage>
                   );
                 }
               } else {
-                content = SliverToBoxAdapter(child: Text('NULL'));
+                content = const SliverToBoxAdapter(child: Text('NULL'));
               }
 
               int? pubTime =
@@ -392,7 +393,7 @@ class _ArticlePageState extends State<ArticlePage>
                     SliverToBoxAdapter(
                       child: Text(
                         _articleCtr.summary.title!,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 17,
                           fontWeight: FontWeight.bold,
                         ),
@@ -568,7 +569,7 @@ class _ArticlePageState extends State<ArticlePage>
                   builder: (context) => Align(
                     alignment: Alignment.topRight,
                     child: Container(
-                      margin: EdgeInsets.only(
+                      margin: const EdgeInsets.only(
                         top: 56,
                         right: 16,
                       ),
@@ -599,7 +600,7 @@ class _ArticlePageState extends State<ArticlePage>
               },
               icon: Transform.rotate(
                 angle: pi / 2,
-                child: Icon(Icons.splitscreen, size: 19),
+                child: const Icon(Icons.splitscreen, size: 19),
               ),
             ),
           IconButton(
@@ -686,7 +687,7 @@ class _ArticlePageState extends State<ArticlePage>
         child: SlideTransition(
           position: Tween<Offset>(
             begin: const Offset(0, 1),
-            end: const Offset(0, 0),
+            end: Offset.zero,
           ).animate(CurvedAnimation(
             parent: fabAnimationCtr,
             curve: Curves.easeInOut,

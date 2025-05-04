@@ -1,8 +1,8 @@
 import 'package:json_annotation/json_annotation.dart';
 
-import 'digital_info.dart';
-import 'entrance_button.dart';
-import 'purchase_button.dart';
+import 'package:PiliPlus/models/space/digital_info.dart';
+import 'package:PiliPlus/models/space/entrance_button.dart';
+import 'package:PiliPlus/models/space/purchase_button.dart';
 
 part 'images.g.dart';
 

@@ -121,7 +121,7 @@ class _ColorSelectPageState extends State<ColorSelectPage> {
                                   ? theme.colorScheme.outline.withOpacity(0.8)
                                   : theme.colorScheme.secondary,
                             ),
-                            strutStyle: StrutStyle(leading: 0, height: 1),
+                            strutStyle: const StrutStyle(leading: 0, height: 1),
                           ),
                           Icon(
                             size: 20,
@@ -138,11 +138,11 @@ class _ColorSelectPageState extends State<ColorSelectPage> {
                 leading: Container(
                   width: 40,
                   alignment: Alignment.center,
-                  child: Icon(Icons.palette_outlined),
+                  child: const Icon(Icons.palette_outlined),
                 ),
                 subtitle: Text(
                   _dynamicSchemeVariant.description,
-                  style: TextStyle(fontSize: 12),
+                  style: const TextStyle(fontSize: 12),
                 ),
               ),
             ),
@@ -202,7 +202,8 @@ class _ColorSelectPageState extends State<ColorSelectPage> {
                                     height: 46,
                                     decoration: BoxDecoration(
                                       color: e['color'].withOpacity(0.8),
-                                      borderRadius: BorderRadius.circular(50),
+                                      borderRadius: const BorderRadius.all(
+                                          Radius.circular(50)),
                                       border: Border.all(
                                         width: 2,
                                         color: ctr.currentColor.value == index

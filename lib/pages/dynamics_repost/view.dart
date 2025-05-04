@@ -133,7 +133,7 @@ class _RepostPanelState extends CommonPublishPageState<RepostPanel> {
                   theme.colorScheme.surface
               ? theme.colorScheme.onInverseSurface
               : theme.colorScheme.surfaceContainerHighest,
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: const BorderRadius.all(Radius.circular(12)),
         ),
         child: Row(
           children: [
@@ -224,7 +224,7 @@ class _RepostPanelState extends CommonPublishPageState<RepostPanel> {
             const SizedBox(width: 16),
             Text(
               widget.rid != null ? '分享至动态' : '转发动态',
-              style: TextStyle(fontWeight: FontWeight.bold),
+              style: const TextStyle(fontWeight: FontWeight.bold),
             ),
             const Spacer(),
             TextButton(
@@ -232,10 +232,7 @@ class _RepostPanelState extends CommonPublishPageState<RepostPanel> {
               style: TextButton.styleFrom(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                visualDensity: const VisualDensity(
-                  horizontal: -2,
-                  vertical: -2,
-                ),
+                visualDensity: VisualDensity.compact,
               ),
               child: Text(widget.rid != null ? '立即发布' : '立即转发'),
             ),
@@ -275,7 +272,8 @@ class _RepostPanelState extends CommonPublishPageState<RepostPanel> {
               Center(
                 child: Text(
                   widget.rid != null ? '分享至动态' : '转发动态',
-                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                  style: const TextStyle(
+                      fontSize: 15, fontWeight: FontWeight.bold),
                 ),
               ),
               Align(
@@ -288,10 +286,7 @@ class _RepostPanelState extends CommonPublishPageState<RepostPanel> {
                       horizontal: 20,
                       vertical: 10,
                     ),
-                    visualDensity: const VisualDensity(
-                      horizontal: -2,
-                      vertical: -2,
-                    ),
+                    visualDensity: VisualDensity.compact,
                   ),
                   child: Text(widget.rid != null ? '发布' : '转发'),
                 ),
@@ -343,10 +338,7 @@ class _RepostPanelState extends CommonPublishPageState<RepostPanel> {
       ];
 
   @override
-  Widget? customPanel(double height) => SizedBox(
-        height: height,
-        child: EmotePanel(onChoose: onChooseEmote),
-      );
+  Widget? get customPanel => EmotePanel(onChoose: onChooseEmote);
 
   @override
   Future onCustomPublish({required String message, List? pictures}) async {

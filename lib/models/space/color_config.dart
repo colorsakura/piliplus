@@ -1,7 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
 
-import 'day.dart';
-import 'night.dart';
+import 'package:PiliPlus/models/space/day.dart';
+import 'package:PiliPlus/models/space/night.dart';
 
 part 'color_config.g.dart';
 

@@ -58,7 +58,7 @@ class FollowItem extends StatelessWidget {
             Positioned(
               bottom: 0,
               right: 0,
-              child: Container(
+              child: DecoratedBox(
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   color: theme.colorScheme.surface,
@@ -108,7 +108,7 @@ class FollowItem extends StatelessWidget {
                 ),
                 child: Text(
                   '${item.attribute == -1 ? '' : '已'}关注',
-                  style: TextStyle(fontSize: 12),
+                  style: const TextStyle(fontSize: 12),
                 ),
               ),
             )

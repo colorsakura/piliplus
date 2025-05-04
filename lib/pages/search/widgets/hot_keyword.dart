@@ -15,7 +15,7 @@ class HotKeyword extends StatelessWidget {
     required this.hotSearchList,
     this.onClick,
     this.showMore = true,
-  }) : this.width = width / 2 - 4;
+  }) : width = width / 2 - 4;
 
   @override
   Widget build(BuildContext context) {

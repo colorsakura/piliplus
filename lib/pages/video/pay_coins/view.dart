@@ -23,7 +23,7 @@ class PayCoinsPage extends StatefulWidget {
   @override
   State<PayCoinsPage> createState() => _PayCoinsPageState();
 
-  static toPayCoinsPage({
+  static Future<void> toPayCoinsPage({
     required Function(int coin, bool coinWithLike) onPayCoin,
     int copyright = 1,
     bool hasCoin = false,
@@ -113,7 +113,7 @@ class _PayCoinsPageState extends State<PayCoinsPage>
   late AnimationController _coinFadeController;
   late AnimationController _boxAnimController;
 
-  final List<String> _images = [
+  final List<String> _images = const [
     'assets/images/paycoins/ic_thunder_1.png',
     'assets/images/paycoins/ic_thunder_2.png',
     'assets/images/paycoins/ic_thunder_3.png',
@@ -240,7 +240,7 @@ class _PayCoinsPageState extends State<PayCoinsPage>
                         child: SizedBox(
                           height: 100,
                           child: PageView.builder(
-                            key: PageStorageKey('PageView'),
+                            key: const PageStorageKey('PageView'),
                             physics: const ClampingScrollPhysics(),
                             itemCount: widget.copyright == 1 ? 2 : 1,
                             controller: _controller,
@@ -276,8 +276,7 @@ class _PayCoinsPageState extends State<PayCoinsPage>
                                                 position:
                                                     _boxAnimController.drive(
                                                   Tween(
-                                                    begin:
-                                                        const Offset(0.0, 0.0),
+                                                    begin: Offset.zero,
                                                     end:
                                                         const Offset(0.0, -0.2),
                                                   ),
@@ -290,8 +289,7 @@ class _PayCoinsPageState extends State<PayCoinsPage>
                                                 position:
                                                     _coinSlideController.drive(
                                                   Tween(
-                                                    begin:
-                                                        const Offset(0.0, 0.0),
+                                                    begin: Offset.zero,
                                                     end: const Offset(0.0, -2),
                                                   ),
                                                 ),
@@ -365,7 +363,7 @@ class _PayCoinsPageState extends State<PayCoinsPage>
                             child: SlideTransition(
                               position: _slide22Controller.drive(
                                 Tween(
-                                  begin: const Offset(0.0, 0.0),
+                                  begin: Offset.zero,
                                   end: const Offset(0.0, -0.2),
                                 ),
                               ),
@@ -385,7 +383,8 @@ class _PayCoinsPageState extends State<PayCoinsPage>
                     Center(
                       child: Text(
                         '${_coins != null ? '硬币余额：${_coins!.toDouble().toPrecision(1)}' : ''}${widget.hasCoin ? '${_coins != null ? '，' : ''}已投1枚硬币' : ''}',
-                        style: TextStyle(color: Colors.white, fontSize: 13),
+                        style:
+                            const TextStyle(color: Colors.white, fontSize: 13),
                       ),
                     ),
                   ],

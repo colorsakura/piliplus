@@ -10,7 +10,7 @@ import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import 'controller.dart';
+import 'package:PiliPlus/pages/msg_feed_top/at_me/controller.dart';
 
 class AtMePage extends StatefulWidget {
   const AtMePage({super.key});

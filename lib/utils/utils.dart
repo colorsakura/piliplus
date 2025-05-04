@@ -69,7 +69,7 @@ class Utils {
     return _isIpad!;
   }
 
-  static void shareText(String text) async {
+  static Future<void> shareText(String text) async {
     try {
       Rect? sharePositionOrigin;
       if (await isIpad()) {
@@ -275,11 +275,12 @@ class Utils {
     semanticsLabel.write(videoItem.title);
 
     if (!emptyStatCheck(videoItem.stat.view)) {
-      semanticsLabel.write(',${Utils.numFormat(videoItem.stat.view)}');
-      semanticsLabel.write(
-          (videoItem is RecVideoItemAppModel && videoItem.goto == 'picture')
-              ? '浏览'
-              : '播放');
+      semanticsLabel
+        ..write(',${Utils.numFormat(videoItem.stat.view)}')
+        ..write(
+            (videoItem is RecVideoItemAppModel && videoItem.goto == 'picture')
+                ? '浏览'
+                : '播放');
     }
     if (!emptyStatCheck(videoItem.stat.danmu)) {
       semanticsLabel.write(',${Utils.numFormat(videoItem.stat.danmu)}弹幕');
@@ -494,7 +495,7 @@ class Utils {
   }
 
   // 检查更新
-  static Future checkUpdate([bool isAuto = true]) async {
+  static Future<void> checkUpdate([bool isAuto = true]) async {
     if (BuildConfig.isDebug) return;
     SmartDialog.dismiss();
     try {

@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:PiliPlus/pages/fav_detail/widget/fav_video_card.dart';
 
-import 'controller.dart';
+import 'package:PiliPlus/pages/fav_search/controller.dart';
 
 class FavSearchPage extends CommonSearchPage {
   const FavSearchPage({super.key});

@@ -17,7 +17,7 @@ enum LaterViewType { all, toView, unfinished, viewed }
 extension LaterViewTypeExt on LaterViewType {
   int get type => index;
 
-  String get title => ['全部', '未看', '未看完', '已看完'][index];
+  String get title => const ['全部', '未看', '未看完', '已看完'][index];
 
   Widget get page => LaterViewChildPage(laterViewType: this);
 }
@@ -58,8 +58,9 @@ class _LaterPageState extends State<LaterPage>
 
   @override
   void dispose() {
-    _tabController.removeListener(listener);
-    _tabController.dispose();
+    _tabController
+      ..removeListener(listener)
+      ..dispose();
     Get.delete<LaterBaseController>();
     super.dispose();
   }
@@ -156,7 +157,7 @@ class _LaterPageState extends State<LaterPage>
           ),
           Material(
             clipBehavior: Clip.hardEdge,
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: const BorderRadius.all(Radius.circular(20)),
             child: Builder(
               key: sortKey,
               builder: (context) {
@@ -191,13 +192,13 @@ class _LaterPageState extends State<LaterPage>
                     ),
                   ),
                   itemBuilder: (BuildContext context) => [
-                    PopupMenuItem(
+                    const PopupMenuItem(
                       value: false,
-                      child: const Text('最近添加'),
+                      child: Text('最近添加'),
                     ),
-                    PopupMenuItem(
+                    const PopupMenuItem(
                       value: true,
-                      child: const Text('最早添加'),
+                      child: Text('最早添加'),
                     ),
                   ],
                 );
@@ -206,7 +207,7 @@ class _LaterPageState extends State<LaterPage>
           ),
           Material(
             clipBehavior: Clip.hardEdge,
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: const BorderRadius.all(Radius.circular(20)),
             child: PopupMenuButton(
               tooltip: '清空',
               child: Padding(
@@ -215,7 +216,7 @@ class _LaterPageState extends State<LaterPage>
                 child: Text.rich(
                   TextSpan(
                     children: [
-                      TextSpan(
+                      const TextSpan(
                         text: '清空',
                       ),
                       WidgetSpan(
@@ -263,14 +264,14 @@ class _LaterPageState extends State<LaterPage>
         actions: [
           TextButton(
             style: TextButton.styleFrom(
-              visualDensity: VisualDensity(horizontal: -2, vertical: -2),
+              visualDensity: VisualDensity.compact,
             ),
             onPressed: () => currCtr().handleSelect(true),
             child: const Text('全选'),
           ),
           TextButton(
             style: TextButton.styleFrom(
-              visualDensity: VisualDensity(horizontal: -2, vertical: -2),
+              visualDensity: VisualDensity.compact,
             ),
             onPressed: () {
               final ctr = currCtr();
@@ -291,7 +292,7 @@ class _LaterPageState extends State<LaterPage>
           ),
           TextButton(
             style: TextButton.styleFrom(
-              visualDensity: VisualDensity(horizontal: -2, vertical: -2),
+              visualDensity: VisualDensity.compact,
             ),
             onPressed: () {
               final ctr = currCtr();
@@ -312,7 +313,7 @@ class _LaterPageState extends State<LaterPage>
           ),
           TextButton(
             style: TextButton.styleFrom(
-              visualDensity: VisualDensity(horizontal: -2, vertical: -2),
+              visualDensity: VisualDensity.compact,
             ),
             onPressed: () => currCtr().onDelChecked(context),
             child: Text(

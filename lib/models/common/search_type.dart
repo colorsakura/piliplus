@@ -24,7 +24,7 @@ enum SearchType {
 }
 
 extension SearchTypeExtension on SearchType {
-  String get label => [
+  String get label => const [
         // '综合',
         '视频',
         '番剧',
@@ -49,5 +49,5 @@ enum ArchiveFilterType {
 
 extension ArchiveFilterTypeExtension on ArchiveFilterType {
   String get description =>
-      ['默认排序', '播放多', '新发布', '弹幕多', '收藏多', '评论多', '最多喜欢'][index];
+      const ['默认排序', '播放多', '新发布', '弹幕多', '收藏多', '评论多', '最多喜欢'][index];
 }

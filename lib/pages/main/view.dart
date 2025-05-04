@@ -99,8 +99,9 @@ class _MainAppState extends State<MainApp>
       }
       int now = DateTime.now().millisecondsSinceEpoch;
       if (now - _homeController.lateCheckSearchAt >= 5 * 60 * 1000) {
-        _homeController.lateCheckSearchAt = now;
-        _homeController.querySearchDefault();
+        _homeController
+          ..lateCheckSearchAt = now
+          ..querySearchDefault();
       }
     }
   }
@@ -116,13 +117,14 @@ class _MainAppState extends State<MainApp>
       }
       int now = DateTime.now().millisecondsSinceEpoch;
       if (now - _mainController.lastCheckUnreadAt >= 5 * 60 * 1000) {
-        _mainController.lastCheckUnreadAt = now;
-        _mainController.queryUnreadMsg();
+        _mainController
+          ..lastCheckUnreadAt = now
+          ..queryUnreadMsg();
       }
     }
   }
 
-  void setIndex(int value) async {
+  Future<void> setIndex(int value) async {
     feedBack();
 
     if (value != _mainController.selectedIndex.value) {
@@ -225,9 +227,12 @@ class _MainAppState extends State<MainApp>
                                         backgroundColor: Colors.transparent,
                                         tilePadding: const EdgeInsets.symmetric(
                                             vertical: 5, horizontal: 12),
-                                        indicatorShape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(16)),
+                                        indicatorShape:
+                                            const RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.all(
+                                            Radius.circular(16),
+                                          ),
+                                        ),
                                         onDestinationSelected: setIndex,
                                         selectedIndex:
                                             _mainController.selectedIndex.value,
@@ -283,7 +288,7 @@ class _MainAppState extends State<MainApp>
                       : SafeArea(
                           right: false,
                           child: Container(
-                            padding: EdgeInsets.only(
+                            padding: const EdgeInsets.only(
                               top: 10,
                             ),
                             width: 80,

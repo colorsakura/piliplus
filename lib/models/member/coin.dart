@@ -1,4 +1,4 @@
-import '../model_hot_video_item.dart';
+import 'package:PiliPlus/models/model_hot_video_item.dart';
 
 class MemberCoinsDataModel extends HotVideoItemModel {
   String? subtitle;

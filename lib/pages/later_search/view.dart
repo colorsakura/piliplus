@@ -8,7 +8,7 @@ import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import 'controller.dart';
+import 'package:PiliPlus/pages/later_search/controller.dart';
 
 class LaterSearchPage extends CommonSearchPage {
   const LaterSearchPage({super.key});

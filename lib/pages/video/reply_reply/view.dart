@@ -16,7 +16,7 @@ import 'package:PiliPlus/models/common/reply_type.dart';
 import 'package:get/get_navigation/src/dialog/dialog_route.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
-import 'controller.dart';
+import 'package:PiliPlus/pages/video/reply_reply/controller.dart';
 
 class VideoReplyReplyPanel extends CommonSlidePage {
   const VideoReplyReplyPanel({
@@ -289,35 +289,36 @@ class _VideoReplyReplyPanelState
         ),
       );
 
-  get _getImageCallback => _horizontalPreview
-      ? (imgList, index) {
-          final ctr = AnimationController(
-            vsync: this,
-            duration: const Duration(milliseconds: 200),
-          )..forward();
-          PageUtils.onHorizontalPreview(
-            _key,
-            AnimationController(
-              vsync: this,
-              duration: Duration.zero,
-            ),
-            ctr,
-            imgList,
-            index,
-            (value) async {
-              if (value == false) {
-                await ctr.reverse();
-              }
-              try {
-                ctr.dispose();
-              } catch (_) {}
-              if (value == false) {
-                Get.back();
-              }
-            },
-          );
-        }
-      : null;
+  Function(dynamic imgList, dynamic index)? get _getImageCallback =>
+      _horizontalPreview
+          ? (imgList, index) {
+              final ctr = AnimationController(
+                vsync: this,
+                duration: const Duration(milliseconds: 200),
+              )..forward();
+              PageUtils.onHorizontalPreview(
+                _key,
+                AnimationController(
+                  vsync: this,
+                  duration: Duration.zero,
+                ),
+                ctr,
+                imgList,
+                index,
+                (value) async {
+                  if (value == false) {
+                    await ctr.reverse();
+                  }
+                  try {
+                    ctr.dispose();
+                  } catch (_) {}
+                  if (value == false) {
+                    Get.back();
+                  }
+                },
+              );
+            }
+          : null;
 
   void _onReply(dynamic item, int index) {
     dynamic oid = item?.oid.toInt();

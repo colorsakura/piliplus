@@ -28,7 +28,7 @@ import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 enum EpisodeType { part, season, bangumi }
 
 extension EpisodeTypeExt on EpisodeType {
-  String get title => ['分P', '合集', '番剧'][index];
+  String get title => const ['分P', '合集', '番剧'][index];
 }
 
 class EpisodePanel extends CommonSlidePage {
@@ -181,16 +181,17 @@ class _EpisodePanelState extends CommonSlidePageState<EpisodePanel>
 
   @override
   void dispose() {
-    _tabController.removeListener(listener);
-    _tabController.dispose();
+    _tabController
+      ..removeListener(listener)
+      ..dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     if (_isInit) {
-      return CustomScrollView(
-        physics: const NeverScrollableScrollPhysics(),
+      return const CustomScrollView(
+        physics: NeverScrollableScrollPhysics(),
       );
     }
 

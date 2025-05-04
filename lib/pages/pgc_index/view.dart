@@ -56,7 +56,7 @@ class _PgcIndexPageState extends State<PgcIndexPage>
             child: CustomScrollView(
               slivers: [
                 if (widget.indexType != null)
-                  SliverToBoxAdapter(child: const SizedBox(height: 12)),
+                  const SliverToBoxAdapter(child: SizedBox(height: 12)),
                 SliverToBoxAdapter(
                   child: AnimatedSize(
                     curve: Curves.easeInOut,
@@ -205,7 +205,7 @@ class _PgcIndexPageState extends State<PgcIndexPage>
 
   Widget _buildList(LoadingState<List<dynamic>?> loadingState) {
     return switch (loadingState) {
-      Loading() => HttpError(errMsg: '加载中'),
+      Loading() => const HttpError(errMsg: '加载中'),
       Success() => loadingState.response?.isNotEmpty == true
           ? SliverGrid(
               gridDelegate: SliverGridDelegateWithExtentAndRatio(

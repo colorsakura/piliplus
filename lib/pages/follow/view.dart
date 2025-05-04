@@ -8,7 +8,7 @@ import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'controller.dart';
+import 'package:PiliPlus/pages/follow/controller.dart';
 
 class FollowPage extends StatefulWidget {
   const FollowPage({super.key});
@@ -106,7 +106,7 @@ class _FollowPageState extends State<FollowPage> {
                               Text(
                                 '${item.name}${count != null ? '($count)' : ''} ',
                               ),
-                              Icon(Icons.menu, size: 18),
+                              const Icon(Icons.menu, size: 18),
                             ],
                           ),
                         ),

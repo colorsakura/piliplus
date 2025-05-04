@@ -34,7 +34,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:PiliPlus/models/model_owner.dart';
 import 'package:PiliPlus/models/user/info.dart';
-import 'global_data.dart';
+import 'package:PiliPlus/utils/global_data.dart';
 import 'package:uuid/uuid.dart';
 
 class GStorage {
@@ -47,7 +47,7 @@ class GStorage {
   static List<double> get speedList => List<double>.from(
         video.get(
           VideoBoxKey.speedsList,
-          defaultValue: [0.5, 0.75, 1.0, 1.25, 1.5, 1.75, 2.0, 3.0],
+          defaultValue: const [0.5, 0.75, 1.0, 1.25, 1.5, 1.75, 2.0, 3.0],
         ),
       );
 
@@ -226,7 +226,7 @@ class GStorage {
     String blockUserID =
         setting.get(SettingBoxKey.blockUserID, defaultValue: '');
     if (blockUserID.isEmpty) {
-      blockUserID = Uuid().v4().replaceAll('-', '');
+      blockUserID = const Uuid().v4().replaceAll('-', '');
       setting.put(SettingBoxKey.blockUserID, blockUserID);
     }
     return blockUserID;
@@ -475,7 +475,7 @@ class GStorage {
       GStorage.setting.get(SettingBoxKey.optTabletNav, defaultValue: true);
 
   static List<double> get dynamicDetailRatio => List<double>.from(setting
-      .get(SettingBoxKey.dynamicDetailRatio, defaultValue: [60.0, 40.0]));
+      .get(SettingBoxKey.dynamicDetailRatio, defaultValue: const [60.0, 40.0]));
 
   static Set<int> get blackMids =>
       GStorage.localCache.get(LocalCacheKey.blackMids, defaultValue: <int>{});
@@ -583,29 +583,35 @@ class GStorage {
   }
 
   static void regAdapter() {
-    Hive.registerAdapter(OwnerAdapter());
-    Hive.registerAdapter(UserInfoDataAdapter());
-    Hive.registerAdapter(LevelInfoAdapter());
-    Hive.registerAdapter(BiliCookieJarAdapter());
-    Hive.registerAdapter(LoginAccountAdapter());
-    Hive.registerAdapter(AccountTypeAdapter());
-    Hive.registerAdapter(SetIntAdapter());
-    Hive.registerAdapter(RuleFilterAdapter());
+    Hive
+      ..registerAdapter(OwnerAdapter())
+      ..registerAdapter(UserInfoDataAdapter())
+      ..registerAdapter(LevelInfoAdapter())
+      ..registerAdapter(BiliCookieJarAdapter())
+      ..registerAdapter(LoginAccountAdapter())
+      ..registerAdapter(AccountTypeAdapter())
+      ..registerAdapter(SetIntAdapter())
+      ..registerAdapter(RuleFilterAdapter());
   }
 
   static Future<void> close() async {
     // user.compact();
     // user.close();
-    userInfo.compact();
-    userInfo.close();
-    historyWord.compact();
-    historyWord.close();
-    localCache.compact();
-    localCache.close();
-    setting.compact();
-    setting.close();
-    video.compact();
-    video.close();
+    userInfo
+      ..compact()
+      ..close();
+    historyWord
+      ..compact()
+      ..close();
+    localCache
+      ..compact()
+      ..close();
+    setting
+      ..compact()
+      ..close();
+    video
+      ..compact()
+      ..close();
     Accounts.close();
   }
 }
@@ -877,7 +883,7 @@ class Accounts {
     final Directory tempDir = await getApplicationSupportDirectory();
     final String tempPath = "${tempDir.path}/.plpl/";
     final Directory dir = Directory(tempPath);
-    if (await dir.exists()) {
+    if (dir.existsSync()) {
       debugPrint('migrating...');
       final cookieJar =
           PersistCookieJar(ignoreExpires: true, storage: FileStorage(tempPath));
@@ -928,8 +934,9 @@ class Accounts {
   }
 
   static Future<void> close() async {
-    account.compact();
-    account.close();
+    account
+      ..compact()
+      ..close();
   }
 
   static Future<void> deleteAll(Set<Account> accounts) async {

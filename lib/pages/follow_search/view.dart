@@ -5,7 +5,7 @@ import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import 'controller.dart';
+import 'package:PiliPlus/pages/follow_search/controller.dart';
 
 class FollowSearchPage extends CommonSearchPage {
   const FollowSearchPage({super.key, this.mid});

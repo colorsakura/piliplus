@@ -15,7 +15,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 
-import 'controller.dart';
+import 'package:PiliPlus/pages/msg_feed_top/sys_msg/controller.dart';
 
 class SysMsgPage extends StatefulWidget {
   const SysMsgPage({super.key});
@@ -82,7 +82,6 @@ class _SysMsgPageState extends State<SysMsgPage> {
                   } catch (_) {}
                 }
                 return ListTile(
-                  onTap: () {},
                   onLongPress: () {
                     showConfirmDialog(
                       context: context,
@@ -173,47 +172,49 @@ class _SysMsgPageState extends State<SysMsgPage> {
             } else {
               IdUtils.av2bv(int.parse(match[3]!));
             }
-            spanChildren.add(TextSpan(text: '【'));
-            spanChildren.add(
-              TextSpan(
-                text: match[3],
-                style: TextStyle(color: theme.colorScheme.primary),
-                recognizer: TapGestureRecognizer()
-                  ..onTap = () {
-                    try {
-                      PiliScheme.videoPush(
-                        isBV ? null : int.parse(match[3]!),
-                        isBV ? match[3]! : null,
-                      );
-                    } catch (err) {
-                      SmartDialog.showToast(err.toString());
-                    }
-                  },
-              ),
-            );
-            spanChildren.add(TextSpan(text: '】'));
+            spanChildren
+              ..add(const TextSpan(text: '【'))
+              ..add(
+                TextSpan(
+                  text: match[3],
+                  style: TextStyle(color: theme.colorScheme.primary),
+                  recognizer: TapGestureRecognizer()
+                    ..onTap = () {
+                      try {
+                        PiliScheme.videoPush(
+                          isBV ? null : int.parse(match[3]!),
+                          isBV ? match[3]! : null,
+                        );
+                      } catch (err) {
+                        SmartDialog.showToast(err.toString());
+                      }
+                    },
+                ),
+              )
+              ..add(const TextSpan(text: '】'));
           } catch (e) {
             spanChildren.add(TextSpan(text: match[0]));
           }
         } else if (matchStr.startsWith('（')) {
           try {
             match[4]; // dynId
-            spanChildren.add(TextSpan(text: '（'));
-            spanChildren.add(
-              TextSpan(
-                text: '查看动态',
-                style: TextStyle(color: theme.colorScheme.primary),
-                recognizer: TapGestureRecognizer()
-                  ..onTap = () {
-                    try {
-                      PageUtils.pushDynFromId(id: match[4]);
-                    } catch (err) {
-                      SmartDialog.showToast(err.toString());
-                    }
-                  },
-              ),
-            );
-            spanChildren.add(TextSpan(text: '）'));
+            spanChildren
+              ..add(const TextSpan(text: '（'))
+              ..add(
+                TextSpan(
+                  text: '查看动态',
+                  style: TextStyle(color: theme.colorScheme.primary),
+                  recognizer: TapGestureRecognizer()
+                    ..onTap = () {
+                      try {
+                        PageUtils.pushDynFromId(id: match[4]);
+                      } catch (err) {
+                        SmartDialog.showToast(err.toString());
+                      }
+                    },
+                ),
+              )
+              ..add(const TextSpan(text: '）'));
           } catch (e) {
             spanChildren.add(TextSpan(text: match[0]));
           }

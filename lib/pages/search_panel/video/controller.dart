@@ -62,7 +62,7 @@ class SearchVideoController
     return false;
   }
 
-  void onPushDetail(resultList) async {
+  Future<void> onPushDetail(resultList) async {
     try {
       int? aid = int.tryParse(keyword);
       if (aid != null && resultList.first.aid == aid) {
@@ -140,7 +140,7 @@ class SearchVideoController
   int currentTimeFilter = 0;
   int currentZoneFilter = 0;
 
-  onShowFilterDialog(BuildContext context) {
+  void onShowFilterDialog(BuildContext context) {
     showModalBottomSheet(
       context: context,
       useSafeArea: true,

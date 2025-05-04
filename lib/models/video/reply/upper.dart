@@ -1,4 +1,4 @@
-import 'item.dart';
+import 'package:PiliPlus/models/video/reply/item.dart';
 
 class ReplyUpper {
   ReplyUpper({

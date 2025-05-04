@@ -4,10 +4,10 @@ import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'action_panel.dart';
-import 'author_panel.dart';
-import 'content_panel.dart';
-import 'forward_panel.dart';
+import 'package:PiliPlus/pages/dynamics/widgets/action_panel.dart';
+import 'package:PiliPlus/pages/dynamics/widgets/author_panel.dart';
+import 'package:PiliPlus/pages/dynamics/widgets/content_panel.dart';
+import 'package:PiliPlus/pages/dynamics/widgets/forward_panel.dart';
 
 class DynamicPanel extends StatelessWidget {
   final DynamicItemModel item;
@@ -37,54 +37,59 @@ class DynamicPanel extends StatelessWidget {
       isSave: isSave,
       onSetTop: onSetTop,
     );
-    return Container(
-      decoration: isSave ||
-              (source == 'detail' &&
-                  Get.context!.orientation == Orientation.landscape)
-          ? null
-          : BoxDecoration(
-              border: Border(
-                bottom: BorderSide(
-                  width: 8,
-                  color: theme.dividerColor.withOpacity(0.05),
-                ),
-              ),
+    final child = Material(
+      elevation: 0,
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: source == 'detail' &&
+                const {
+                  'DYNAMIC_TYPE_AV',
+                  'DYNAMIC_TYPE_UGC_SEASON',
+                  'DYNAMIC_TYPE_PGC_UNION',
+                  'DYNAMIC_TYPE_PGC',
+                  'DYNAMIC_TYPE_LIVE',
+                  'DYNAMIC_TYPE_LIVE_RCMD',
+                  'DYNAMIC_TYPE_MEDIALIST',
+                }.contains(item.type).not
+            ? null
+            : () => PageUtils.pushDynDetail(item, 1),
+        onLongPress: () => _imageSaveDialog(context, authorWidget.morePanel),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(12, 12, 12, 6),
+              child: authorWidget,
             ),
-      child: Material(
-        elevation: 0,
-        color: Colors.transparent,
-        child: InkWell(
-          onTap: source == 'detail' &&
-                  const {
-                    'DYNAMIC_TYPE_AV',
-                    'DYNAMIC_TYPE_UGC_SEASON',
-                    'DYNAMIC_TYPE_PGC_UNION',
-                    'DYNAMIC_TYPE_PGC',
-                    'DYNAMIC_TYPE_LIVE',
-                    'DYNAMIC_TYPE_LIVE_RCMD',
-                    'DYNAMIC_TYPE_MEDIALIST',
-                  }.contains(item.type).not
-              ? null
-              : () => PageUtils.pushDynDetail(item, 1),
-          onLongPress: () => _imageSaveDialog(context, authorWidget.morePanel),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.fromLTRB(12, 12, 12, 6),
-                child: authorWidget,
-              ),
-              if (item.modules.moduleDynamic!.desc != null ||
-                  item.modules.moduleDynamic!.major != null)
-                content(theme, isSave, context, item, source, callback),
-              forWard(theme, isSave, item, context, source, callback),
-              const SizedBox(height: 2),
-              if (source == null) ActionPanel(item: item),
-              if (source == 'detail' && !isSave) const SizedBox(height: 12),
-            ],
+            if (item.modules.moduleDynamic!.desc != null ||
+                item.modules.moduleDynamic!.major != null)
+              content(theme, isSave, context, item, source, callback),
+            forWard(theme, isSave, item, context, source, callback),
+            const SizedBox(height: 2),
+            if (source == null) ActionPanel(item: item),
+            if (source == 'detail' && !isSave) const SizedBox(height: 12),
+          ],
+        ),
+      ),
+    );
+    if (isSave ||
+        (source == 'detail' &&
+            Get.context!.orientation == Orientation.landscape)) {
+      return child;
+    }
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        border: Border(
+          bottom: BorderSide(
+            width: 8,
+            color: theme.dividerColor.withOpacity(0.05),
           ),
         ),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.only(bottom: 8),
+        child: child,
       ),
     );
   }

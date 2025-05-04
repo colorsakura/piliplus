@@ -17,7 +17,7 @@ class CustomToast extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
       decoration: BoxDecoration(
         color: theme.colorScheme.primaryContainer.withOpacity(toastOpacity),
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: const BorderRadius.all(Radius.circular(20)),
       ),
       child: Text(
         msg,
@@ -44,7 +44,7 @@ class LoadingWidget extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
       decoration: BoxDecoration(
         color: theme.dialogBackgroundColor,
-        borderRadius: BorderRadius.circular(15),
+        borderRadius: const BorderRadius.all(Radius.circular(15)),
       ),
       child: Column(mainAxisSize: MainAxisSize.min, children: [
         //loading animation

@@ -1,7 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
 
-import 'item.dart';
-import 'list.dart';
+import 'package:PiliPlus/models/space_article/item.dart';
+import 'package:PiliPlus/models/space_article/list.dart';
 
 part 'data.g.dart';
 

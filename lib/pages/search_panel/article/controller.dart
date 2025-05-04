@@ -60,7 +60,7 @@ class SearchArticleController
   RxInt currentOrderFilterval = 0.obs;
   RxInt currentZoneFilterval = 0.obs;
 
-  onShowFilterDialog(BuildContext context) {
+  void onShowFilterDialog(BuildContext context) {
     showModalBottomSheet(
       context: context,
       useSafeArea: true,

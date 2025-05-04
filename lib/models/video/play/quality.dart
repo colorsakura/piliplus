@@ -16,7 +16,7 @@ enum VideoQuality {
 }
 
 extension VideoQualityCode on VideoQuality {
-  static final List<int> _codeList = [
+  static const List<int> _codeList = [
     6,
     16,
     32,
@@ -42,7 +42,7 @@ extension VideoQualityCode on VideoQuality {
 }
 
 extension VideoQualityDesc on VideoQuality {
-  static final List<String> _descList = [
+  static const List<String> _descList = [
     '240P 极速',
     '360P 流畅',
     '480P 清晰',
@@ -62,7 +62,7 @@ extension VideoQualityDesc on VideoQuality {
 enum AudioQuality { k64, k132, k192, dolby, hiRes }
 
 extension AudioQualityCode on AudioQuality {
-  static final List<int> _codeList = [
+  static const List<int> _codeList = [
     30216,
     30232,
     30280,
@@ -81,7 +81,7 @@ extension AudioQualityCode on AudioQuality {
 }
 
 extension AudioQualityDesc on AudioQuality {
-  static final List<String> _descList = [
+  static const List<String> _descList = [
     '64K',
     '132K',
     '192K',
@@ -99,12 +99,12 @@ enum VideoDecodeFormats {
 }
 
 extension VideoDecodeFormatsDesc on VideoDecodeFormats {
-  static final List<String> _descList = ['DVH1', 'AV1', 'HEVC', 'AVC'];
+  static const List<String> _descList = ['DVH1', 'AV1', 'HEVC', 'AVC'];
   String get description => _descList[index];
 }
 
 extension VideoDecodeFormatsCode on VideoDecodeFormats {
-  static final List<String> _codeList = ['dvh1', 'av01', 'hev1', 'avc1'];
+  static const List<String> _codeList = ['dvh1', 'av01', 'hev1', 'avc1'];
   String get code => _codeList[index];
 
   static VideoDecodeFormats? fromCode(String code) {

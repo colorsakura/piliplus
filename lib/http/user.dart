@@ -605,7 +605,7 @@ class UserHttp {
     }
   }
 
-  static videoTags({required String bvid}) async {
+  static Future<Map<String, dynamic>> videoTags({required String bvid}) async {
     var res =
         await Request().get(Api.videoTags, queryParameters: {'bvid': bvid});
     if (res.data['code'] == 0) {

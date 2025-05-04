@@ -100,9 +100,9 @@ class _CreateDynPanelState extends CommonPublishPageState<CreateDynPanel> {
             itemBuilder: (context, index) {
               if (pathList.length != limit && index == pathList.length) {
                 return Material(
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: const BorderRadius.all(Radius.circular(12)),
                   child: InkWell(
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: const BorderRadius.all(Radius.circular(12)),
                     onTap: () {
                       onPickImage(() {
                         if (pathList.isNotEmpty && !enablePublish.value) {
@@ -114,10 +114,11 @@ class _CreateDynPanelState extends CommonPublishPageState<CreateDynPanel> {
                       width: 100,
                       height: 100,
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(12)),
                         color: theme.colorScheme.secondaryContainer,
                       ),
-                      child: Center(child: Icon(Icons.add, size: 35)),
+                      child: const Center(child: Icon(Icons.add, size: 35)),
                     ),
                   ),
                 );
@@ -131,7 +132,7 @@ class _CreateDynPanelState extends CommonPublishPageState<CreateDynPanel> {
       );
 
   PreferredSizeWidget _buildAppBar(ThemeData theme) => PreferredSize(
-        preferredSize: Size.fromHeight(66),
+        preferredSize: const Size.fromHeight(66),
         child: Padding(
           padding: const EdgeInsets.all(16),
           child: Stack(
@@ -162,8 +163,8 @@ class _CreateDynPanelState extends CommonPublishPageState<CreateDynPanel> {
                   ),
                 ),
               ),
-              Center(
-                child: const Text(
+              const Center(
+                child: Text(
                   '发布动态',
                   style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                 ),
@@ -179,10 +180,7 @@ class _CreateDynPanelState extends CommonPublishPageState<CreateDynPanel> {
                         horizontal: 20,
                         vertical: 10,
                       ),
-                      visualDensity: const VisualDensity(
-                        horizontal: -2,
-                        vertical: -2,
-                      ),
+                      visualDensity: VisualDensity.compact,
                     ),
                     child: Text(_publishTime == null ? '发布' : '定时发布'),
                   ),
@@ -239,7 +237,7 @@ class _CreateDynPanelState extends CommonPublishPageState<CreateDynPanel> {
                 height: 1,
                 color: color,
               ),
-              strutStyle: StrutStyle(leading: 0, height: 1),
+              strutStyle: const StrutStyle(leading: 0, height: 1),
             ),
             Icon(
               size: 20,
@@ -299,7 +297,7 @@ class _CreateDynPanelState extends CommonPublishPageState<CreateDynPanel> {
                 height: 1,
                 color: color,
               ),
-              strutStyle: StrutStyle(leading: 0, height: 1),
+              strutStyle: const StrutStyle(leading: 0, height: 1),
             ),
             Icon(
               size: 20,
@@ -319,10 +317,7 @@ class _CreateDynPanelState extends CommonPublishPageState<CreateDynPanel> {
               horizontal: 16,
               vertical: 10,
             ),
-            visualDensity: const VisualDensity(
-              horizontal: -2,
-              vertical: -2,
-            ),
+            visualDensity: VisualDensity.compact,
           ),
           onPressed: _isPrivate
               ? null
@@ -387,10 +382,7 @@ class _CreateDynPanelState extends CommonPublishPageState<CreateDynPanel> {
               horizontal: 16,
               vertical: 10,
             ),
-            visualDensity: const VisualDensity(
-              horizontal: -2,
-              vertical: -2,
-            ),
+            visualDensity: VisualDensity.compact,
           ),
           onPressed: () {
             setState(() {
@@ -398,7 +390,7 @@ class _CreateDynPanelState extends CommonPublishPageState<CreateDynPanel> {
             });
           },
           label: Text(DateFormat('yyyy-MM-dd HH:mm').format(_publishTime!)),
-          icon: Icon(Icons.clear, size: 20),
+          icon: const Icon(Icons.clear, size: 20),
           iconAlignment: IconAlignment.end,
         );
 
@@ -463,10 +455,7 @@ class _CreateDynPanelState extends CommonPublishPageState<CreateDynPanel> {
       );
 
   @override
-  Widget? customPanel(double height) => SizedBox(
-        height: height,
-        child: EmotePanel(onChoose: onChooseEmote),
-      );
+  Widget? get customPanel => EmotePanel(onChoose: onChooseEmote);
 
   @override
   Future onCustomPublish({required String message, List? pictures}) async {

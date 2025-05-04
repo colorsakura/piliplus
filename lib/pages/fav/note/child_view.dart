@@ -50,7 +50,7 @@ class _FavNoteChildPageState extends State<FavNoteChildPage>
             child: Obx(
               () => AnimatedSlide(
                 offset: _favNoteController.enableMultiSelect.value
-                    ? Offset(0, -1)
+                    ? const Offset(0, -1)
                     : Offset.zero,
                 duration: const Duration(milliseconds: 150),
                 child: Container(
@@ -91,20 +91,19 @@ class _FavNoteChildPageState extends State<FavNoteChildPage>
                           _favNoteController.handleSelect(
                               !_favNoteController.allSelected.value);
                         },
-                        child: Padding(
-                          padding: const EdgeInsets.only(
+                        child: const Padding(
+                          padding: EdgeInsets.only(
                             top: 14,
                             bottom: 14,
                             right: 12,
                           ),
-                          child: const Text('全选'),
+                          child: Text('全选'),
                         ),
                       ),
                       const Spacer(),
                       FilledButton.tonal(
                         style: TextButton.styleFrom(
-                          visualDensity:
-                              VisualDensity(horizontal: -2, vertical: -2),
+                          visualDensity: VisualDensity.compact,
                           tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                         ),
                         onPressed: () {

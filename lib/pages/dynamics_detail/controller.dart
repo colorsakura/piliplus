@@ -38,7 +38,7 @@ class DynamicDetailController extends ReplyController<MainListReply> {
     }
   }
 
-  getCommentParams(int id) async {
+  Future<void> getCommentParams(int id) async {
     var res = await DynamicsHttp.opusDetail(opusId: id);
     if (res is Success) {
       final data = (res as Success<DynamicItemModel>).response;

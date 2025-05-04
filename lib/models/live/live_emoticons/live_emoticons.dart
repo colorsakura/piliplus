@@ -1,4 +1,4 @@
-import 'data.dart';
+import 'package:PiliPlus/models/live/live_emoticons/data.dart';
 
 class LiveEmoticons {
   int? code;

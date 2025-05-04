@@ -47,45 +47,9 @@ enum SegmentType {
 //   };
 // }
 
-List<ActionType> segmentType2ActionType(SegmentType segmentType) {
-  return switch (segmentType) {
-    SegmentType.sponsor => [ActionType.skip, ActionType.mute, ActionType.full],
-    SegmentType.selfpromo => [
-        ActionType.skip,
-        ActionType.mute,
-        ActionType.full
-      ],
-    SegmentType.interaction => [
-        ActionType.skip,
-        ActionType.mute,
-      ],
-    SegmentType.intro => [
-        ActionType.skip,
-        ActionType.mute,
-      ],
-    SegmentType.outro => [
-        ActionType.skip,
-        ActionType.mute,
-      ],
-    SegmentType.preview => [
-        ActionType.skip,
-        ActionType.mute,
-      ],
-    SegmentType.music_offtopic => [
-        ActionType.skip,
-      ],
-    SegmentType.poi_highlight => [ActionType.poi],
-    SegmentType.filler => [
-        ActionType.skip,
-        ActionType.mute,
-      ],
-    SegmentType.exclusive_access => [ActionType.full],
-  };
-}
-
 extension SegmentTypeExt on SegmentType {
   /// from https://github.com/hanydd/BilibiliSponsorBlock/blob/master/public/_locales/zh_CN/messages.json
-  String get title => [
+  String get title => const [
         '赞助广告', //sponsor
         '无偿/自我推广', //selfpromo
         '三连/订阅提醒', //interaction
@@ -98,7 +62,7 @@ extension SegmentTypeExt on SegmentType {
         '柔性推广/品牌合作', //exclusive_access
       ][index];
 
-  String get shortTitle => [
+  String get shortTitle => const [
         '赞助广告', //sponsor
         '推广', //selfpromo
         '订阅提醒', //interaction
@@ -111,7 +75,7 @@ extension SegmentTypeExt on SegmentType {
         '品牌合作', //exclusive_access
       ][index];
 
-  String get description => [
+  String get description => const [
         '付费推广、付费推荐和直接广告。不是自我推广或免费提及他们喜欢的商品/创作者/网站/产品。', //sponsor
         '类似于 “赞助广告” ，但无报酬或是自我推广。包括有关商品、捐赠的部分或合作者的信息。', //selfpromo
         '视频中间简短提醒观众来一键三连或关注。 如果片段较长，或是有具体内容，则应分类为自我推广。', //interaction
@@ -124,7 +88,7 @@ extension SegmentTypeExt on SegmentType {
         '仅用于对整个视频进行标记。适用于展示UP主免费或获得补贴后使用的产品、服务或场地的视频。', //exclusive_access
       ][index];
 
-  Color get color => [
+  Color get color => const [
         Color(0xFF00d400), //sponsor
         Color(0xFFffff00), //selfpromo
         Color(0xFFcc00ff), //interaction
@@ -136,4 +100,44 @@ extension SegmentTypeExt on SegmentType {
         Color(0xFF7300FF), //filler
         Color(0xFF008a5c), //exclusive_access
       ][index];
+
+  List<ActionType> get toActionType {
+    return switch (this) {
+      SegmentType.sponsor => const [
+          ActionType.skip,
+          ActionType.mute,
+          ActionType.full
+        ],
+      SegmentType.selfpromo => const [
+          ActionType.skip,
+          ActionType.mute,
+          ActionType.full
+        ],
+      SegmentType.interaction => const [
+          ActionType.skip,
+          ActionType.mute,
+        ],
+      SegmentType.intro => const [
+          ActionType.skip,
+          ActionType.mute,
+        ],
+      SegmentType.outro => const [
+          ActionType.skip,
+          ActionType.mute,
+        ],
+      SegmentType.preview => const [
+          ActionType.skip,
+          ActionType.mute,
+        ],
+      SegmentType.music_offtopic => const [
+          ActionType.skip,
+        ],
+      SegmentType.poi_highlight => const [ActionType.poi],
+      SegmentType.filler => const [
+          ActionType.skip,
+          ActionType.mute,
+        ],
+      SegmentType.exclusive_access => const [ActionType.full],
+    };
+  }
 }

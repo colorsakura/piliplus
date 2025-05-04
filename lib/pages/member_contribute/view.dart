@@ -60,7 +60,7 @@ class _MemberContributeState extends State<MemberContribute>
                       const EdgeInsets.symmetric(horizontal: 3, vertical: 8),
                   indicator: BoxDecoration(
                     color: theme.colorScheme.secondaryContainer,
-                    borderRadius: BorderRadius.circular(20),
+                    borderRadius: const BorderRadius.all(Radius.circular(20)),
                   ),
                   indicatorSize: TabBarIndicatorSize.tab,
                   labelStyle: TabBarTheme.of(context)

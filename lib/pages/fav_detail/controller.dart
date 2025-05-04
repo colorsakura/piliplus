@@ -59,7 +59,7 @@ class FavDetailController
     return false;
   }
 
-  onCancelFav(int index, int id, int type) async {
+  Future<void> onCancelFav(int index, int id, int type) async {
     var result = await VideoHttp.delFav(
       ids: ['$id:$type'],
       delIds: mediaId.toString(),
@@ -85,7 +85,7 @@ class FavDetailController
         mediaId: mediaId,
       );
 
-  onDelChecked(BuildContext context) {
+  void onDelChecked(BuildContext context) {
     showDialog(
       context: context,
       builder: (context) {

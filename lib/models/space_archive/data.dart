@@ -1,9 +1,9 @@
 import 'package:json_annotation/json_annotation.dart';
 
-import 'episodic_button.dart';
-import 'item.dart';
-import 'last_watched_locator.dart';
-import 'order.dart';
+import 'package:PiliPlus/models/space_archive/episodic_button.dart';
+import 'package:PiliPlus/models/space_archive/item.dart';
+import 'package:PiliPlus/models/space_archive/last_watched_locator.dart';
+import 'package:PiliPlus/models/space_archive/order.dart';
 
 part 'data.g.dart';
 

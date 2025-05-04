@@ -1,7 +1,7 @@
 enum SubtitlePreference { off, on, withoutAi, auto }
 
 extension SubtitlePreferenceDesc on SubtitlePreference {
-  static final List<String> _descList = [
+  static const List<String> _descList = [
     '默认不显示字幕',
     '优先选择非自动生成(ai)字幕',
     '跳过自动生成(ai)字幕，选择第一个可用字幕',

@@ -59,7 +59,7 @@ class _MemberVideoState extends State<MemberVideo>
     return Obx(() => _buildBody(_controller.loadingState.value));
   }
 
-  _buildBody(LoadingState<List<SpaceArchiveItem>?> loadingState) {
+  Widget _buildBody(LoadingState<List<SpaceArchiveItem>?> loadingState) {
     final theme = Theme.of(context);
     return switch (loadingState) {
       Loading() => loadingWidget,
@@ -74,7 +74,7 @@ class _MemberVideoState extends State<MemberVideo>
                   child: CustomScrollView(
                     physics: PositionRetainedScrollPhysics(
                       shouldRetain: _controller.isLocating == true,
-                      parent: ClampingScrollPhysics(),
+                      parent: const ClampingScrollPhysics(),
                     ),
                     slivers: [
                       SliverPersistentHeader(

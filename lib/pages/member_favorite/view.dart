@@ -38,7 +38,7 @@ class _MemberFavoriteState extends State<MemberFavorite>
     return Obx(() => _buildBody(_controller.loadingState.value));
   }
 
-  _buildBody(LoadingState loadingState) {
+  Widget _buildBody(LoadingState loadingState) {
     final theme = Theme.of(context);
     return switch (loadingState) {
       Loading() => loadingWidget,
@@ -77,7 +77,7 @@ class _MemberFavoriteState extends State<MemberFavorite>
     };
   }
 
-  _buildItem(ThemeData theme, SpaceFavData data, bool isFirst) {
+  Theme _buildItem(ThemeData theme, SpaceFavData data, bool isFirst) {
     return Theme(
       data: theme.copyWith(
         dividerColor: Colors.transparent,
@@ -90,7 +90,7 @@ class _MemberFavoriteState extends State<MemberFavorite>
             children: [
               TextSpan(
                 text: data.name,
-                style: TextStyle(fontSize: 14),
+                style: const TextStyle(fontSize: 14),
               ),
               TextSpan(
                 text: ' ${data.mediaListResponse?.count}',
@@ -135,7 +135,7 @@ class _MemberFavoriteState extends State<MemberFavorite>
     );
   }
 
-  _buildLoadMoreItem(ThemeData theme, bool isFirst) {
+  ListTile _buildLoadMoreItem(ThemeData theme, bool isFirst) {
     return ListTile(
       dense: true,
       onTap: () {

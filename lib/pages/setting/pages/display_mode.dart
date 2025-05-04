@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
@@ -39,8 +38,9 @@ class _SetDisplayModeState extends State<SetDisplayMode> {
 
   @override
   void dispose() {
-    controller.removeListener(listener);
-    controller.dispose();
+    controller
+      ..removeListener(listener)
+      ..dispose();
     super.dispose();
   }
 

@@ -1,4 +1,4 @@
-import 'episode.dart';
+import 'package:PiliPlus/models/bangumi/pgc_timeline/episode.dart';
 
 class Result {
 	String? date;

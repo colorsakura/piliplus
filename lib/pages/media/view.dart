@@ -279,7 +279,7 @@ class FavFolderItem extends StatelessWidget {
               margin: const EdgeInsets.only(bottom: 8),
               clipBehavior: Clip.hardEdge,
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: const BorderRadius.all(Radius.circular(12)),
                 color: theme.colorScheme.onInverseSurface.withOpacity(0.4),
                 boxShadow: [
                   BoxShadow(

@@ -145,8 +145,8 @@ extension RationalExt on Rational {
   /// Android docs specified boundaries as inclusive.
   bool get fitsInAndroidRequirements {
     final aspectRatio = numerator / denominator;
-    final min = 1 / 2.39;
-    final max = 2.39;
+    const min = 1 / 2.39;
+    const max = 2.39;
     return (min <= aspectRatio) && (aspectRatio <= max);
   }
 }

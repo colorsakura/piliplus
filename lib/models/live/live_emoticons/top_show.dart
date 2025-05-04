@@ -1,5 +1,5 @@
-import 'top_left.dart';
-import 'top_right.dart';
+import 'package:PiliPlus/models/live/live_emoticons/top_left.dart';
+import 'package:PiliPlus/models/live/live_emoticons/top_right.dart';
 
 class TopShow {
 	TopLeft? topLeft;

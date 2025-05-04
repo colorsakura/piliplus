@@ -73,47 +73,45 @@ TextSpan? richNode(
             spanChildren.add(
               WidgetSpan(
                 alignment: PlaceholderAlignment.middle,
-                child: GestureDetector(
-                  onTap: () {},
-                  child: Text(
-                    '${i.origText}',
-                    style: authorStyle,
-                  ),
+                child: Text(
+                  '${i.origText}',
+                  style: authorStyle,
                 ),
               ),
             );
             break;
           // 网页链接
           case 'RICH_TEXT_NODE_TYPE_WEB':
-            spanChildren.add(
-              WidgetSpan(
-                alignment: PlaceholderAlignment.middle,
-                child: Icon(
-                  Icons.link,
-                  size: 20,
-                  color: theme.colorScheme.primary,
-                ),
-              ),
-            );
-            spanChildren.add(
-              WidgetSpan(
-                alignment: PlaceholderAlignment.middle,
-                child: GestureDetector(
-                  onTap: () {
-                    String? url = i.origText;
-                    if (url == null) {
-                      SmartDialog.showToast('未获取到链接');
-                      return;
-                    }
-                    PiliScheme.routePushFromUrl(url);
-                  },
-                  child: Text(
-                    i.text ?? '',
-                    style: authorStyle,
+            spanChildren
+              ..add(
+                WidgetSpan(
+                  alignment: PlaceholderAlignment.middle,
+                  child: Icon(
+                    Icons.link,
+                    size: 20,
+                    color: theme.colorScheme.primary,
                   ),
                 ),
-              ),
-            );
+              )
+              ..add(
+                WidgetSpan(
+                  alignment: PlaceholderAlignment.middle,
+                  child: GestureDetector(
+                    onTap: () {
+                      String? url = i.origText;
+                      if (url == null) {
+                        SmartDialog.showToast('未获取到链接');
+                        return;
+                      }
+                      PiliScheme.routePushFromUrl(url);
+                    },
+                    child: Text(
+                      i.text ?? '',
+                      style: authorStyle,
+                    ),
+                  ),
+                ),
+              );
             break;
           // 投票
           case 'RICH_TEXT_NODE_TYPE_VOTE':
@@ -148,121 +146,122 @@ TextSpan? richNode(
             break;
           // 抽奖
           case 'RICH_TEXT_NODE_TYPE_LOTTERY':
-            spanChildren.add(
-              WidgetSpan(
-                alignment: PlaceholderAlignment.middle,
-                child: Icon(
-                  Icons.redeem_rounded,
-                  size: 16,
-                  color: theme.colorScheme.primary,
-                ),
-              ),
-            );
-            spanChildren.add(
-              WidgetSpan(
-                alignment: PlaceholderAlignment.middle,
-                child: GestureDetector(
-                  onTap: () {
-                    Get.toNamed(
-                      '/webview',
-                      parameters: {
-                        'url':
-                            'https://www.bilibili.com/h5/lottery/result?business_id=${item.idStr}'
-                      },
-                    );
-                  },
-                  child: Text(
-                    '${i.origText} ',
-                    style: authorStyle,
+            spanChildren
+              ..add(
+                WidgetSpan(
+                  alignment: PlaceholderAlignment.middle,
+                  child: Icon(
+                    Icons.redeem_rounded,
+                    size: 16,
+                    color: theme.colorScheme.primary,
                   ),
                 ),
-              ),
-            );
+              )
+              ..add(
+                WidgetSpan(
+                  alignment: PlaceholderAlignment.middle,
+                  child: GestureDetector(
+                    onTap: () {
+                      Get.toNamed(
+                        '/webview',
+                        parameters: {
+                          'url':
+                              'https://www.bilibili.com/h5/lottery/result?business_id=${item.idStr}'
+                        },
+                      );
+                    },
+                    child: Text(
+                      '${i.origText} ',
+                      style: authorStyle,
+                    ),
+                  ),
+                ),
+              );
             break;
 
           /// TODO 商品
           case 'RICH_TEXT_NODE_TYPE_GOODS':
-            spanChildren.add(
-              WidgetSpan(
-                alignment: PlaceholderAlignment.middle,
-                child: Icon(
-                  Icons.shopping_bag_outlined,
-                  size: 16,
-                  color: theme.colorScheme.primary,
+            spanChildren
+              ..add(
+                WidgetSpan(
+                  alignment: PlaceholderAlignment.middle,
+                  child: Icon(
+                    Icons.shopping_bag_outlined,
+                    size: 16,
+                    color: theme.colorScheme.primary,
+                  ),
                 ),
-              ),
-            );
-            spanChildren.add(
-              WidgetSpan(
-                alignment: PlaceholderAlignment.middle,
-                child: GestureDetector(
-                  onTap: () {},
+              )
+              ..add(
+                WidgetSpan(
+                  alignment: PlaceholderAlignment.middle,
                   child: Text(
                     '${i.text} ',
                     style: authorStyle,
                   ),
                 ),
-              ),
-            );
+              );
             break;
           // 投稿
           case 'RICH_TEXT_NODE_TYPE_BV':
-            spanChildren.add(
-              WidgetSpan(
-                alignment: PlaceholderAlignment.middle,
-                child: Icon(
-                  Icons.play_circle_outline_outlined,
-                  size: 16,
-                  color: theme.colorScheme.primary,
-                ),
-              ),
-            );
-            spanChildren.add(
-              WidgetSpan(
-                alignment: PlaceholderAlignment.middle,
-                child: GestureDetector(
-                  onTap: () async {
-                    try {
-                      int cid = await SearchHttp.ab2c(bvid: i.rid);
-                      PageUtils.toVideoPage(
-                        'bvid=${i.rid}&cid=$cid',
-                        arguments: {
-                          'heroTag': Utils.makeHeroTag(i.rid),
-                        },
-                      );
-                    } catch (err) {
-                      SmartDialog.showToast(err.toString());
-                    }
-                  },
-                  child: Text(
-                    '${i.text} ',
-                    style: authorStyle,
+            spanChildren
+              ..add(
+                WidgetSpan(
+                  alignment: PlaceholderAlignment.middle,
+                  child: Icon(
+                    Icons.play_circle_outline_outlined,
+                    size: 16,
+                    color: theme.colorScheme.primary,
                   ),
                 ),
-              ),
-            );
+              )
+              ..add(
+                WidgetSpan(
+                  alignment: PlaceholderAlignment.middle,
+                  child: GestureDetector(
+                    onTap: () async {
+                      try {
+                        int cid = await SearchHttp.ab2c(bvid: i.rid);
+                        PageUtils.toVideoPage(
+                          'bvid=${i.rid}&cid=$cid',
+                          arguments: {
+                            'heroTag': Utils.makeHeroTag(i.rid),
+                          },
+                        );
+                      } catch (err) {
+                        SmartDialog.showToast(err.toString());
+                      }
+                    },
+                    child: Text(
+                      '${i.text} ',
+                      style: authorStyle,
+                    ),
+                  ),
+                ),
+              );
             break;
           case 'RICH_TEXT_NODE_TYPE_VIEW_PICTURE'
               when (i.pics?.isNotEmpty == true):
-            spanChildren.add(TextSpan(text: '\n'));
-            spanChildren.add(
-              WidgetSpan(
-                child: LayoutBuilder(
-                  builder: (context, constraints) {
-                    return imageView(
-                      constraints.maxWidth,
-                      i.pics!
-                          .map((item) => ImageModel(
-                                url: item.src ?? '',
-                                width: item.width,
-                                height: item.height,
-                              ))
-                          .toList(),
-                    );
-                  },
+            spanChildren
+              ..add(const TextSpan(text: '\n'))
+              ..add(
+                WidgetSpan(
+                  child: LayoutBuilder(
+                    builder: (context, constraints) {
+                      return imageView(
+                        constraints.maxWidth,
+                        i.pics!
+                            .map((item) => ImageModel(
+                                  url: item.src ?? '',
+                                  width: item.width,
+                                  height: item.height,
+                                ))
+                            .toList(),
+                      );
+                    },
+                  ),
                 ),
-              ),
-            );
+              );
             break;
           default:
             spanChildren.add(

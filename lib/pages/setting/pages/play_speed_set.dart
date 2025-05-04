@@ -85,11 +85,12 @@ class _PlaySpeedPageState extends State<PlaySpeedPage> {
               const SizedBox(height: 12),
               TextField(
                 autofocus: true,
-                keyboardType: TextInputType.numberWithOptions(decimal: true),
-                decoration: InputDecoration(
+                keyboardType:
+                    const TextInputType.numberWithOptions(decimal: true),
+                decoration: const InputDecoration(
                   labelText: '自定义倍速',
                   border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(6.0),
+                    borderRadius: BorderRadius.all(Radius.circular(6)),
                   ),
                 ),
                 onChanged: (value) {
@@ -114,8 +115,9 @@ class _PlaySpeedPageState extends State<PlaySpeedPage> {
                   SmartDialog.showToast('该倍速已存在');
                 } else {
                   Get.back();
-                  speedList.add(customSpeed!);
-                  speedList.sort();
+                  speedList
+                    ..add(customSpeed!)
+                    ..sort();
                   await video.put(VideoBoxKey.speedsList, speedList);
                   setState(() {});
                 }
@@ -166,7 +168,7 @@ class _PlaySpeedPageState extends State<PlaySpeedPage> {
   }
 
   //
-  void menuAction(index, id) async {
+  Future<void> menuAction(index, id) async {
     double speed = speedList[index];
     // 设置
     if (id == 1) {
@@ -205,7 +207,7 @@ class _PlaySpeedPageState extends State<PlaySpeedPage> {
               speedList = GStorage.speedList;
               setState(() {});
             },
-            child: Text('重置'),
+            child: const Text('重置'),
           ),
           const SizedBox(width: 16),
         ],

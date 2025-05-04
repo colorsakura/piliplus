@@ -37,7 +37,7 @@ class FavSearchController
     return false;
   }
 
-  onCancelFav(int index, int id, int? type) async {
+  Future<void> onCancelFav(int index, int id, int? type) async {
     var result = await VideoHttp.favVideo(
       aid: id,
       addIds: '',

@@ -71,9 +71,9 @@ class RenderMaskedIcon extends RenderProxyBox {
           ..lineTo(rect.right, rect.bottom - sqrt2Width)
           ..lineTo(rect.left + sqrt2Width, rect.top));
 
-    canvas.save();
-
-    canvas.clipPath(path, doAntiAlias: false);
+    canvas
+      ..save()
+      ..clipPath(path, doAntiAlias: false);
     super.paint(context, offset);
 
     context.canvas.restore();

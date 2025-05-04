@@ -199,7 +199,7 @@ class _HistoryPageState extends State<HistoryPage>
                                   }
                                 },
                                 tabs: [
-                                  Tab(text: '全部'),
+                                  const Tab(text: '全部'),
                                   ..._historyController.tabs.map(
                                     (item) => Tab(text: item.name),
                                   ),

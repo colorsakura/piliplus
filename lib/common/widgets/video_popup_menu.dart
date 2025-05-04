@@ -116,7 +116,7 @@ class VideoCustomActions {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         if (tp.dislikeReasons != null) ...[
-                          Text('我不想看'),
+                          const Text('我不想看'),
                           const SizedBox(height: 5),
                           Wrap(
                             spacing: 8.0,
@@ -128,7 +128,7 @@ class VideoCustomActions {
                         ],
                         if (tp.feedbacks != null) ...[
                           const SizedBox(height: 5),
-                          Text('反馈'),
+                          const Text('反馈'),
                           const SizedBox(height: 5),
                           Wrap(
                             spacing: 8.0,
@@ -153,10 +153,7 @@ class VideoCustomActions {
                               Get.back();
                             },
                             style: FilledButton.styleFrom(
-                              visualDensity: VisualDensity(
-                                horizontal: -2,
-                                vertical: -2,
-                              ),
+                              visualDensity: VisualDensity.compact,
                             ),
                             child: const Text("撤销"),
                           ),
@@ -197,10 +194,7 @@ class VideoCustomActions {
                                 }
                               },
                               style: FilledButton.styleFrom(
-                                visualDensity: VisualDensity(
-                                  horizontal: -2,
-                                  vertical: -2,
-                                ),
+                                visualDensity: VisualDensity.compact,
                               ),
                               child: const Text("点踩"),
                             ),
@@ -216,10 +210,7 @@ class VideoCustomActions {
                                     res['status'] ? "取消踩" : res['msg']);
                               },
                               style: FilledButton.styleFrom(
-                                visualDensity: VisualDensity(
-                                  horizontal: -2,
-                                  vertical: -2,
-                                ),
+                                visualDensity: VisualDensity.compact,
                               ),
                               child: const Text("撤销"),
                             ),
@@ -288,7 +279,7 @@ class VideoCustomActions {
 class VideoPopupMenu extends StatelessWidget {
   final double? size;
   final double? iconSize;
-  final double menuItemHeight = 45;
+  final double menuItemHeight;
   final dynamic videoItem;
   final VoidCallback? onRemove;
 
@@ -298,6 +289,7 @@ class VideoPopupMenu extends StatelessWidget {
     required this.iconSize,
     required this.videoItem,
     this.onRemove,
+    this.menuItemHeight = 45,
   });
 
   @override

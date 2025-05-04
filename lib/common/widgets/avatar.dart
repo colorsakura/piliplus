@@ -5,7 +5,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import 'image/network_img_layer.dart';
+import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
 
 class Avatar extends StatelessWidget {
   final _BadgeType _badgeType;
@@ -73,10 +73,10 @@ class Avatar extends StatelessWidget {
                 Get.toNamed('/liveRoom?roomid=$roomId');
               },
               child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 5, vertical: 1),
+                padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1),
                 decoration: BoxDecoration(
                   color: colorScheme.secondaryContainer,
-                  borderRadius: BorderRadius.circular(36),
+                  borderRadius: const BorderRadius.all(Radius.circular(36)),
                 ),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
@@ -106,7 +106,7 @@ class Avatar extends StatelessWidget {
   }
 
   Widget _buildAvatar(ColorScheme colorScheme) => size == 80
-      ? Container(
+      ? DecoratedBox(
           decoration: BoxDecoration(
             border: Border.all(
               width: 2,
@@ -114,11 +114,14 @@ class Avatar extends StatelessWidget {
             ),
             shape: BoxShape.circle,
           ),
-          child: NetworkImgLayer(
-            src: avatar,
-            width: size,
-            height: size,
-            type: 'avatar',
+          child: Padding(
+            padding: const EdgeInsets.all(2),
+            child: NetworkImgLayer(
+              src: avatar,
+              width: size,
+              height: size,
+              type: 'avatar',
+            ),
           ),
         )
       : NetworkImgLayer(

@@ -15,7 +15,7 @@ enum FullScreenMode {
 }
 
 extension FullScreenModeDesc on FullScreenMode {
-  String get description => [
+  String get description => const [
         '按视频方向（默认）',
         '不改变当前方向',
         '强制竖屏',
@@ -26,14 +26,9 @@ extension FullScreenModeDesc on FullScreenMode {
 }
 
 extension FullScreenModeCode on FullScreenMode {
-  static final List<int> _codeList = [0, 1, 2, 3, 4, 5];
-  int get code => _codeList[index];
+  int get code => index;
 
-  static FullScreenMode? fromCode(int code) {
-    final index = _codeList.indexOf(code);
-    if (index != -1) {
-      return FullScreenMode.values[index];
-    }
-    return null;
+  static FullScreenMode fromCode(int code) {
+    return FullScreenMode.values[code];
   }
 }

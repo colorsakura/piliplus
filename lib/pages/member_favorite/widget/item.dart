@@ -85,7 +85,7 @@ class MemberFavItem extends StatelessWidget {
                           height: boxConstraints.maxHeight,
                         ),
                         if (item.type == 21)
-                          PBadge(
+                          const PBadge(
                             right: 3,
                             bottom: 3,
                             text: '合集',

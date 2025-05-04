@@ -56,7 +56,7 @@ class _SponsorBlockPageState extends State<SponsorBlockPage> {
     super.dispose();
   }
 
-  _checkServerStatus() {
+  void _checkServerStatus() {
     Request()
         .get(
       '$_blockServer/api/status/uptime',
@@ -84,10 +84,11 @@ class _SponsorBlockPageState extends State<SponsorBlockPage> {
               return AlertDialog(
                 title: Text('最短片段时长', style: titleStyle),
                 content: TextFormField(
-                  keyboardType: TextInputType.numberWithOptions(decimal: true),
+                  keyboardType:
+                      const TextInputType.numberWithOptions(decimal: true),
                   controller: _textController,
                   autofocus: true,
-                  decoration: InputDecoration(suffixText: 's'),
+                  decoration: const InputDecoration(suffixText: 's'),
                   inputFormatters: [
                     FilteringTextInputFormatter.allow(RegExp(r'[\d\.]+')),
                   ],
@@ -110,7 +111,7 @@ class _SponsorBlockPageState extends State<SponsorBlockPage> {
                       await setting.put(SettingBoxKey.blockLimit, _blockLimit);
                       setState(() {});
                     },
-                    child: Text('确定'),
+                    child: const Text('确定'),
                   )
                 ],
               );
@@ -124,7 +125,7 @@ class _SponsorBlockPageState extends State<SponsorBlockPage> {
         ),
         trailing: Text(
           '${_blockLimit}s',
-          style: TextStyle(fontSize: 13),
+          style: const TextStyle(fontSize: 13),
         ),
       );
 
@@ -171,11 +172,11 @@ class _SponsorBlockPageState extends State<SponsorBlockPage> {
                   TextButton(
                     onPressed: () async {
                       Get.back();
-                      _userId = Uuid().v4().replaceAll('-', '');
+                      _userId = const Uuid().v4().replaceAll('-', '');
                       await setting.put(SettingBoxKey.blockUserID, _userId);
                       setState(() {});
                     },
-                    child: Text('随机'),
+                    child: const Text('随机'),
                   ),
                   TextButton(
                     onPressed: Get.back,
@@ -195,7 +196,7 @@ class _SponsorBlockPageState extends State<SponsorBlockPage> {
                         setState(() {});
                       }
                     },
-                    child: Text('确定'),
+                    child: const Text('确定'),
                   )
                 ],
               );
@@ -204,13 +205,13 @@ class _SponsorBlockPageState extends State<SponsorBlockPage> {
         },
       );
 
-  void _updateBlockToast() async {
+  Future<void> _updateBlockToast() async {
     _blockToast = !_blockToast;
     await setting.put(SettingBoxKey.blockToast, _blockToast);
     setState(() {});
   }
 
-  void _updateBlockTrack() async {
+  Future<void> _updateBlockTrack() async {
     _blockTrack = !_blockTrack;
     await setting.put(SettingBoxKey.blockTrack, _blockTrack);
     setState(() {});
@@ -296,7 +297,7 @@ class _SponsorBlockPageState extends State<SponsorBlockPage> {
                       Request.accountManager.blockServer = _blockServer;
                       setState(() {});
                     },
-                    child: Text('重置'),
+                    child: const Text('重置'),
                   ),
                   TextButton(
                     onPressed: Get.back,
@@ -316,7 +317,7 @@ class _SponsorBlockPageState extends State<SponsorBlockPage> {
                       Request.accountManager.blockServer = _blockServer;
                       setState(() {});
                     },
-                    child: Text('确定'),
+                    child: const Text('确定'),
                   )
                 ],
               );
@@ -361,7 +362,7 @@ class _SponsorBlockPageState extends State<SponsorBlockPage> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    final titleStyle = TextStyle(fontSize: 15);
+    const titleStyle = TextStyle(fontSize: 15);
 
     final subTitleStyle = TextStyle(
       fontSize: 13,
@@ -383,7 +384,7 @@ class _SponsorBlockPageState extends State<SponsorBlockPage> {
     );
 
     return Scaffold(
-      appBar: AppBar(title: Text('空降助手')),
+      appBar: AppBar(title: const Text('空降助手')),
       body: CustomScrollView(
         slivers: [
           dividerL,
@@ -410,7 +411,7 @@ class _SponsorBlockPageState extends State<SponsorBlockPage> {
                     title: Text.rich(
                       TextSpan(
                         children: [
-                          TextSpan(
+                          const TextSpan(
                             text: 'Color Picker ',
                             style: TextStyle(fontSize: 15),
                           ),
@@ -424,11 +425,11 @@ class _SponsorBlockPageState extends State<SponsorBlockPage> {
                                 color: _blockColor[index],
                               ),
                             ),
-                            style: TextStyle(fontSize: 13, height: 1),
+                            style: const TextStyle(fontSize: 13, height: 1),
                           ),
                           TextSpan(
                             text: ' ${_blockSettings[index].first.title}',
-                            style: TextStyle(fontSize: 13, height: 1),
+                            style: const TextStyle(fontSize: 13, height: 1),
                           ),
                         ],
                       ),
@@ -466,11 +467,11 @@ class _SponsorBlockPageState extends State<SponsorBlockPage> {
                               color: _blockColor[index],
                             ),
                           ),
-                          style: TextStyle(fontSize: 14, height: 1),
+                          style: const TextStyle(fontSize: 14, height: 1),
                         ),
                         TextSpan(
                           text: ' ${_blockSettings[index].first.title}',
-                          style: TextStyle(fontSize: 14, height: 1),
+                          style: const TextStyle(fontSize: 14, height: 1),
                         ),
                       ],
                     ),
@@ -507,7 +508,7 @@ class _SponsorBlockPageState extends State<SponsorBlockPage> {
                                   ? theme.colorScheme.outline.withOpacity(0.7)
                                   : theme.colorScheme.secondary,
                             ),
-                            strutStyle: StrutStyle(height: 1, leading: 0),
+                            strutStyle: const StrutStyle(height: 1, leading: 0),
                           ),
                           Icon(
                             MdiIcons.unfoldMoreHorizontal,

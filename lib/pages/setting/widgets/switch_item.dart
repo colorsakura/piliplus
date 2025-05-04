@@ -59,7 +59,7 @@ class _SetSwitchItemState extends State<SetSwitchItem> {
     setVal();
   }
 
-  void switchChange(ThemeData theme, value) async {
+  Future<void> switchChange(ThemeData theme, value) async {
     if (widget.setKey == SettingBoxKey.badCertificateCallback &&
         (value ?? !val)) {
       showDialog(

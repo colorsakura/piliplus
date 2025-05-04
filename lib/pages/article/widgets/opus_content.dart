@@ -249,7 +249,7 @@ class OpusContent extends StatelessWidget {
                             if (element.linkCard?.card?.itemNull?.icon
                                     ?.isNullOrEmpty ==
                                 true)
-                              Icon(Icons.info, size: 20),
+                              const Icon(Icons.info, size: 20),
                             Text(' ${element.linkCard?.card?.itemNull?.text}'),
                           ],
                         ),

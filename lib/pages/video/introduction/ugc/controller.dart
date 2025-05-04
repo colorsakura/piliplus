@@ -147,8 +147,9 @@ class VideoIntroController extends GetxController {
       }
       if (videoDetail.value.cid == data.cid) {
         // keep reversed pages
-        data.pages = videoDetail.value.pages;
-        data.isPageReversed = videoDetail.value.isPageReversed;
+        data
+          ..pages = videoDetail.value.pages
+          ..isPageReversed = videoDetail.value.isPageReversed;
       }
       videoDetail.value = data;
       videoItem['staff'] = data.staff;
@@ -315,7 +316,7 @@ class VideoIntroController extends GetxController {
     SmartDialog.showToast(res['msg']);
   }
 
-  void coinVideo(int coin, [bool selectLike = false]) async {
+  Future<void> coinVideo(int coin, [bool selectLike = false]) async {
     if (videoDetail.value.stat?.coin == null) {
       // not init
       return;
@@ -546,7 +547,7 @@ class VideoIntroController extends GetxController {
   }
 
   // 选择文件夹
-  onChoose(bool checkValue, int index) {
+  void onChoose(bool checkValue, int index) {
     feedBack();
     List<FavFolderItemData> datalist = favFolderData.value.list!;
     datalist[index].favState = checkValue ? 1 : 0;
@@ -595,6 +596,9 @@ class VideoIntroController extends GetxController {
         followStatus: followStatus,
         callback: (attribute) {
           followStatus['attribute'] = attribute;
+          Future.delayed(const Duration(milliseconds: 500), () {
+            queryFollowStatus();
+          });
         },
       );
     }
@@ -636,7 +640,7 @@ class VideoIntroController extends GetxController {
       }
 
       // 重新请求相关视频
-      if (videoDetailCtr.showRelatedVideo) {
+      if (videoDetailCtr.plPlayerController.showRelatedVideo) {
         try {
           Get.find<RelatedController>(tag: heroTag)
             ..bvid = bvid
@@ -779,7 +783,7 @@ class VideoIntroController extends GetxController {
 
       if (episodes.isEmpty) {
         if (playRepeat == PlayRepeat.autoPlayRelated &&
-            videoDetailCtr.showRelatedVideo) {
+            videoDetailCtr.plPlayerController.showRelatedVideo) {
           return playRelated();
         }
         return false;
@@ -811,7 +815,7 @@ class VideoIntroController extends GetxController {
         if (playRepeat == PlayRepeat.listCycle) {
           nextIndex = 0;
         } else if (playRepeat == PlayRepeat.autoPlayRelated &&
-            videoDetailCtr.showRelatedVideo) {
+            videoDetailCtr.plPlayerController.showRelatedVideo) {
           return playRelated();
         } else {
           return false;
@@ -906,7 +910,7 @@ class VideoIntroController extends GetxController {
   }
 
   // 收藏
-  showFavBottomSheet(BuildContext context, {type = 'tap'}) {
+  void showFavBottomSheet(BuildContext context, {type = 'tap'}) {
     if (userInfo == null) {
       SmartDialog.showToast('账号未登录');
       return;

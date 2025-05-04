@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'skeleton.dart';
+import 'package:PiliPlus/common/skeleton/skeleton.dart';
 
 class VideoReplySkeleton extends StatelessWidget {
   const VideoReplySkeleton({super.key});

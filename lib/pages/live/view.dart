@@ -38,7 +38,7 @@ class _LivePageState extends CommonPageState<LivePage, LiveController>
       clipBehavior: Clip.hardEdge,
       margin: const EdgeInsets.only(
           left: StyleString.safeSpace, right: StyleString.safeSpace),
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         borderRadius: StyleString.mdRadius,
       ),
       child: refreshIndicator(
@@ -52,7 +52,7 @@ class _LivePageState extends CommonPageState<LivePage, LiveController>
             Obx(
               () => controller.isLogin.value
                   ? SliverPadding(
-                      padding: EdgeInsets.symmetric(
+                      padding: const EdgeInsets.symmetric(
                         vertical: StyleString.cardSpace,
                       ),
                       sliver: SliverToBoxAdapter(
@@ -130,7 +130,7 @@ class _LivePageState extends CommonPageState<LivePage, LiveController>
               () => Text.rich(
                 TextSpan(
                   children: [
-                    TextSpan(text: '我的关注  '),
+                    const TextSpan(text: '我的关注  '),
                     TextSpan(
                       text: '${controller.liveCount.value}',
                       style: TextStyle(
@@ -240,7 +240,7 @@ class _LivePageState extends CommonPageState<LivePage, LiveController>
                             loadingState.response[index].uname,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
-                            style: TextStyle(fontSize: 12),
+                            style: const TextStyle(fontSize: 12),
                             textAlign: TextAlign.center,
                           ),
                         ],

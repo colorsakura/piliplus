@@ -771,14 +771,16 @@ class _InteractiveViewerState extends State<InteractiveViewer>
     widget.onInteractionStart?.call(details);
 
     if (_controller.isAnimating) {
-      _controller.stop();
-      _controller.reset();
+      _controller
+        ..stop()
+        ..reset();
       _animation?.removeListener(_onAnimate);
       _animation = null;
     }
     if (_scaleController.isAnimating) {
-      _scaleController.stop();
-      _scaleController.reset();
+      _scaleController
+        ..stop()
+        ..reset();
       _scaleAnimation?.removeListener(_onScaleAnimate);
       _scaleAnimation = null;
     }

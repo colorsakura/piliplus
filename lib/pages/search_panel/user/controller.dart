@@ -32,7 +32,7 @@ class SearchUserController
   RxInt currentOrderFilterval = 0.obs;
   RxInt currentUserTypeFilterval = 0.obs;
 
-  onShowFilterDialog(BuildContext context) {
+  void onShowFilterDialog(BuildContext context) {
     showModalBottomSheet(
       context: context,
       useSafeArea: true,

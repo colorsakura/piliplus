@@ -18,7 +18,7 @@ class SearchPgcItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
-    final TextStyle style = TextStyle(fontSize: 13);
+    const TextStyle style = TextStyle(fontSize: 13);
     return InkWell(
       onTap: () {
         PageUtils.viewBangumi(seasonId: item.seasonId);

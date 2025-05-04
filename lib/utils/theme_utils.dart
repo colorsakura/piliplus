@@ -110,7 +110,7 @@ class ThemeUtils {
     return themeData;
   }
 
-  static darkenTheme(ThemeData themeData) {
+  static ThemeData darkenTheme(ThemeData themeData) {
     Color color = themeData.colorScheme.surfaceContainerHighest.darken(0.7);
     return themeData.copyWith(
       scaffoldBackgroundColor: Colors.black,

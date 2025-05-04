@@ -96,7 +96,7 @@ class SSearchController extends GetxController {
   }
 
   // 搜索
-  void submit() async {
+  Future<void> submit() async {
     if (controller.text.isEmpty) {
       if (hintText.isEmpty) {
         return;
@@ -106,8 +106,9 @@ class SSearchController extends GetxController {
     }
 
     if (recordSearchHistory.value) {
-      historyList.remove(controller.text);
-      historyList.insert(0, controller.text);
+      historyList
+        ..remove(controller.text)
+        ..insert(0, controller.text);
       GStorage.historyWord.put('cacheList', historyList);
     }
 
@@ -153,12 +154,12 @@ class SSearchController extends GetxController {
     }
   }
 
-  onLongSelect(word) {
+  void onLongSelect(word) {
     historyList.remove(word);
     GStorage.historyWord.put('cacheList', historyList);
   }
 
-  onClearHistory() {
+  void onClearHistory() {
     showConfirmDialog(
       context: Get.context!,
       title: '确定清空搜索历史？',

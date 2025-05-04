@@ -144,7 +144,7 @@ class BangumiIntroController
     }
   }
 
-  void coinVideo(int coin, [bool selectLike = false]) async {
+  Future<void> coinVideo(int coin, [bool selectLike = false]) async {
     var res = await VideoHttp.coinVideo(
       bvid: bvid,
       multiply: coin,
@@ -383,7 +383,7 @@ class BangumiIntroController
   }
 
   // 选择文件夹
-  onChoose(bool checkValue, int index) {
+  void onChoose(bool checkValue, int index) {
     feedBack();
     List<FavFolderItemData> datalist = favFolderData.value.list!;
     datalist[index].favState = checkValue ? 1 : 0;
@@ -608,7 +608,7 @@ class BangumiIntroController
   }
 
   // 收藏
-  showFavBottomSheet(BuildContext context, {type = 'tap'}) {
+  void showFavBottomSheet(BuildContext context, {type = 'tap'}) {
     if (userInfo == null) {
       SmartDialog.showToast('账号未登录');
       return;

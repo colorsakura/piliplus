@@ -7,39 +7,39 @@ enum DynamicsType {
 }
 
 extension BusinessTypeExtension on DynamicsType {
-  String get values => ['all', 'video', 'pgc', 'article', 'up'][index];
-  String get labels => ['全部', '投稿', '番剧', '专栏', 'UP'][index];
+  String get values => const ['all', 'video', 'pgc', 'article', 'up'][index];
+  String get labels => const ['全部', '投稿', '番剧', '专栏', 'UP'][index];
 }
 
-List get tabsConfig => [
-      {
-        'tag': 'all',
-        'value': DynamicsType.all,
-        'label': '全部',
-        'enabled': true,
-      },
-      {
-        'tag': 'video',
-        'value': DynamicsType.video,
-        'label': '投稿',
-        'enabled': true,
-      },
-      {
-        'tag': 'pgc',
-        'value': DynamicsType.pgc,
-        'label': '番剧',
-        'enabled': true,
-      },
-      {
-        'tag': 'article',
-        'value': DynamicsType.article,
-        'label': '专栏',
-        'enabled': true,
-      },
-      {
-        'tag': 'up',
-        'value': DynamicsType.up,
-        'label': 'UP',
-        'enabled': true,
-      },
-    ];
+const List tabsConfig = [
+  {
+    'tag': 'all',
+    'value': DynamicsType.all,
+    'label': '全部',
+    'enabled': true,
+  },
+  {
+    'tag': 'video',
+    'value': DynamicsType.video,
+    'label': '投稿',
+    'enabled': true,
+  },
+  {
+    'tag': 'pgc',
+    'value': DynamicsType.pgc,
+    'label': '番剧',
+    'enabled': true,
+  },
+  {
+    'tag': 'article',
+    'value': DynamicsType.article,
+    'label': '专栏',
+    'enabled': true,
+  },
+  {
+    'tag': 'up',
+    'value': DynamicsType.up,
+    'label': 'UP',
+    'enabled': true,
+  },
+];

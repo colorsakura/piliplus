@@ -12,7 +12,7 @@ import 'package:get/get.dart';
 import 'package:PiliPlus/common/skeleton/video_reply.dart';
 import 'package:PiliPlus/models/common/reply_type.dart';
 import 'package:PiliPlus/utils/feed_back.dart';
-import 'controller.dart';
+import 'package:PiliPlus/pages/video/reply/controller.dart';
 
 class VideoReplyPanel extends StatefulWidget {
   final String? bvid;
@@ -171,7 +171,7 @@ class _VideoReplyPanelState extends State<VideoReplyPanel>
             child: SlideTransition(
               position: Tween<Offset>(
                 begin: const Offset(0, 2),
-                end: const Offset(0, 0),
+                end: Offset.zero,
               ).animate(CurvedAnimation(
                 parent: _videoReplyController.fabAnimationCtr,
                 curve: Curves.easeInOut,

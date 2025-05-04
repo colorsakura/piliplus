@@ -15,9 +15,9 @@ enum BusinessType {
 
 extension BusinessTypeExtension on BusinessType {
   String get type =>
-      ['archive', 'pgc', 'live', 'article-list', 'article'][index];
+      const ['archive', 'pgc', 'live', 'article-list', 'article'][index];
   // 隐藏时长
-  List get hiddenDurationType => ['live', 'article-list', 'article'];
+  List get hiddenDurationType => const ['live', 'article-list', 'article'];
   // 右上
-  List get showBadge => ['pgc', 'article-list', 'article'];
+  List get showBadge => const ['pgc', 'article-list', 'article'];
 }

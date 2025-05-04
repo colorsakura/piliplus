@@ -9,7 +9,7 @@ class ExtraSetting extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: showAppBar == false ? null : AppBar(title: Text('其它设置')),
+      appBar: showAppBar == false ? null : AppBar(title: const Text('其它设置')),
       body: ListView(
         children: [
           ...extraSettings.map((item) => item.widget),

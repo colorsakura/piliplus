@@ -32,7 +32,7 @@ class VideoCardHGrpc extends StatelessWidget {
     String type = 'video';
     final String heroTag = Utils.makeHeroTag(aid);
     return InkWell(
-      borderRadius: BorderRadius.circular(12),
+      borderRadius: const BorderRadius.all(Radius.circular(12)),
       onLongPress: () => imageSaveDialog(
         title: videoItem.smallCoverV5.base.title,
         cover: videoItem.smallCoverV5.base.cover,

@@ -22,7 +22,7 @@ enum _WebviewMenuItem {
 }
 
 extension _WebviewMenuItemExt on _WebviewMenuItem {
-  String get title => [
+  String get title => const [
         '刷新',
         '复制链接',
         '浏览器中打开',
@@ -177,25 +177,27 @@ class _WebviewPageState extends State<WebviewPage> {
               URLRequest(url: WebUri.uri(Uri.tryParse(_url) ?? Uri())),
           onWebViewCreated: (InAppWebViewController controller) {
             _webViewController = controller;
-            controller.addJavaScriptHandler(
-              handlerName: 'finishButtonClicked',
-              callback: (args) {
-                Get.back();
-              },
-            );
-            controller.addJavaScriptHandler(
-              handlerName: 'infoBarClicked',
-              callback: (args) async {
-                WebUri? uri = await controller.getUrl();
-                if (uri != null) {
-                  String? oid =
-                      RegExp(r'oid=(\d+)').firstMatch(uri.toString())?.group(1);
-                  if (oid != null) {
-                    PiliScheme.videoPush(int.parse(oid), null);
+            controller
+              ..addJavaScriptHandler(
+                handlerName: 'finishButtonClicked',
+                callback: (args) {
+                  Get.back();
+                },
+              )
+              ..addJavaScriptHandler(
+                handlerName: 'infoBarClicked',
+                callback: (args) async {
+                  WebUri? uri = await controller.getUrl();
+                  if (uri != null) {
+                    String? oid = RegExp(r'oid=(\d+)')
+                        .firstMatch(uri.toString())
+                        ?.group(1);
+                    if (oid != null) {
+                      PiliScheme.videoPush(int.parse(oid), null);
+                    }
                   }
-                }
-              },
-            );
+                },
+              );
           },
           onProgressChanged: (controller, progress) {
             this.progress.value = progress / 100;
@@ -207,12 +209,13 @@ class _WebviewPageState extends State<WebviewPage> {
           onLoadStop: (controller, uri) {
             final url = uri.toString();
             if (url.startsWith('https://www.bilibili.com/h5/note-app')) {
-              controller.evaluateJavascript(source: """
+              controller
+                ..evaluateJavascript(source: """
   document.querySelector('.finish-btn').addEventListener('click', function() {
       window.flutter_inappwebview.callHandler('finishButtonClicked');
   });
-""");
-              controller.evaluateJavascript(source: """
+""")
+                ..evaluateJavascript(source: """
   document.querySelector('.info-bar').addEventListener('click', function() {
       window.flutter_inappwebview.callHandler('infoBarClicked');
   });

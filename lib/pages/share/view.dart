@@ -85,7 +85,7 @@ class _SharePanelState extends State<SharePanel> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('分享给'),
+              const Text('分享给'),
               iconButton(
                 size: 32,
                 iconSize: 18,
@@ -133,7 +133,7 @@ class _SharePanelState extends State<SharePanel> {
                                   _userList[index].name,
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(fontSize: 12),
+                                  style: const TextStyle(fontSize: 12),
                                 ),
                               ],
                             ),
@@ -150,7 +150,7 @@ class _SharePanelState extends State<SharePanel> {
                                     color: theme.colorScheme.primary,
                                   ),
                                 ),
-                                child: Icon(
+                                child: const Icon(
                                   Icons.check,
                                   size: 20,
                                   color: Colors.white,
@@ -172,8 +172,9 @@ class _SharePanelState extends State<SharePanel> {
                     transitionDuration: const Duration(milliseconds: 120),
                   );
                   if (userModel != null) {
-                    _userList.remove(userModel);
-                    _userList.insert(0, userModel);
+                    _userList
+                      ..remove(userModel)
+                      ..insert(0, userModel);
                     _selectedIndex = 0;
                     _scrollController.jumpToTop();
                     setState(() {});
@@ -222,9 +223,9 @@ class _SharePanelState extends State<SharePanel> {
                   decoration: InputDecoration(
                     hintText: '说说你的想法吧...',
                     hintStyle: const TextStyle(fontSize: 14),
-                    border: OutlineInputBorder(
+                    border: const OutlineInputBorder(
                       borderSide: BorderSide.none,
-                      borderRadius: BorderRadius.circular(20),
+                      borderRadius: BorderRadius.all(Radius.circular(20)),
                     ),
                     filled: true,
                     isDense: true,

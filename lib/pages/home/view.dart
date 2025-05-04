@@ -8,7 +8,7 @@ import 'package:get/get.dart';
 import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
 import 'package:PiliPlus/utils/feed_back.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import './controller.dart';
+import 'package:PiliPlus/pages/home/controller.dart';
 import 'package:PiliPlus/common/widgets/scroll_physics.dart';
 import 'package:stream_transform/stream_transform.dart';
 
@@ -182,8 +182,8 @@ class _HomePageState extends State<HomePage>
       child: Container(
         height: 44,
         clipBehavior: Clip.hardEdge,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(25),
+        decoration: const BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(25)),
         ),
         child: Material(
           color: theme.colorScheme.onSecondaryContainer.withOpacity(0.05),
@@ -265,8 +265,8 @@ Widget msgBadge(MainController mainController) {
       isLabelVisible: mainController.msgBadgeMode != DynamicBadgeMode.hidden &&
           mainController.msgUnReadCount.value.isNotEmpty,
       alignment: mainController.msgBadgeMode == DynamicBadgeMode.number
-          ? Alignment(0, -0.5)
-          : Alignment(0.5, -0.5),
+          ? const Alignment(0, -0.5)
+          : const Alignment(0.5, -0.5),
       label: mainController.msgBadgeMode == DynamicBadgeMode.number &&
               mainController.msgUnReadCount.value.isNotEmpty
           ? Text(mainController.msgUnReadCount.value.toString())

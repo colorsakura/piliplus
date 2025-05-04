@@ -11,7 +11,7 @@ import 'package:get/get.dart';
 import 'package:pretty_qr_code/pretty_qr_code.dart';
 import 'package:saver_gallery/saver_gallery.dart';
 
-import 'controller.dart';
+import 'package:PiliPlus/pages/login/controller.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -85,7 +85,7 @@ class _LoginPageState extends State<LoginPage> {
                 height: 200,
                 width: 200,
                 alignment: Alignment.center,
-                child: CircularProgressIndicator(
+                child: const CircularProgressIndicator(
                   semanticsLabel: '二维码加载中',
                 ),
               );
@@ -97,10 +97,10 @@ class _LoginPageState extends State<LoginPage> {
               padding: const EdgeInsets.all(8),
               child: PrettyQrView.data(
                 data: _loginPageCtr.codeInfo['data']!['url']!,
-                decoration: PrettyQrDecoration(
+                decoration: const PrettyQrDecoration(
                   shape: PrettyQrRoundedSymbol(
                     color: Colors.black87,
-                    borderRadius: BorderRadius.circular(0),
+                    borderRadius: BorderRadius.zero,
                   ),
                 ),
               ),
@@ -259,13 +259,14 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                             dense: false,
                             onTap: () async {
-                              Get.back();
-                              Get.toNamed('/webview', parameters: {
-                                'url':
-                                    'https://passport.bilibili.com/h5-app/passport/login/findPassword',
-                                'type': 'url',
-                                'pageTitle': '忘记密码',
-                              });
+                              Get
+                                ..back()
+                                ..toNamed('/webview', parameters: {
+                                  'url':
+                                      'https://passport.bilibili.com/h5-app/passport/login/findPassword',
+                                  'type': 'url',
+                                  'pageTitle': '忘记密码',
+                                });
                             }),
                         ListTile(
                             title: const Text(
@@ -277,14 +278,15 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                             dense: false,
                             onTap: () async {
-                              Get.back();
-                              Get.toNamed('/webview', parameters: {
-                                'url':
-                                    'https://passport.bilibili.com/pc/passport/findPassword',
-                                'type': 'url',
-                                'pageTitle': '忘记密码',
-                                'uaType': 'pc'
-                              });
+                              Get
+                                ..back()
+                                ..toNamed('/webview', parameters: {
+                                  'url':
+                                      'https://passport.bilibili.com/pc/passport/findPassword',
+                                  'type': 'url',
+                                  'pageTitle': '忘记密码',
+                                  'uaType': 'pc'
+                                });
                             }),
                       ],
                     );
@@ -324,7 +326,7 @@ class _LoginPageState extends State<LoginPage> {
         const SizedBox(height: 10),
         Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-            child: Container(
+            child: DecoratedBox(
               decoration: UnderlineTabIndicator(
                 borderSide: BorderSide(
                     color: theme.colorScheme.outline.withOpacity(0.4)),
@@ -393,7 +395,7 @@ class _LoginPageState extends State<LoginPage> {
             )),
         Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-            child: Container(
+            child: DecoratedBox(
               decoration: UnderlineTabIndicator(
                 borderSide: BorderSide(
                     color: theme.colorScheme.outline.withOpacity(0.4)),
@@ -541,7 +543,7 @@ class _LoginPageState extends State<LoginPage> {
       child: Align(
         alignment: Alignment.topCenter,
         child: ConstrainedBox(
-          constraints: BoxConstraints(maxWidth: 600),
+          constraints: const BoxConstraints(maxWidth: 600),
           child: child,
         ),
       ),

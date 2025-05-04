@@ -1,6 +1,6 @@
 import 'package:PiliPlus/utils/utils.dart';
 
-import '../model_video.dart';
+import 'package:PiliPlus/models/model_video.dart';
 
 class MemberArchiveDataModel {
   MemberArchiveDataModel({

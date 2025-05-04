@@ -144,8 +144,9 @@ class _PlDanmakuState extends State<PlDanmaku> {
   @override
   void dispose() {
     _listenerFS?.cancel();
-    playerController.removePositionListener(videoPositionListen);
-    playerController.removeStatusLister(playerListener);
+    playerController
+      ..removePositionListener(videoPositionListen)
+      ..removeStatusLister(playerListener);
     _plDanmakuController.dispose();
     super.dispose();
   }

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'skeleton.dart';
+import 'package:PiliPlus/common/skeleton/skeleton.dart';
 
 class DynamicCardSkeleton extends StatelessWidget {
   const DynamicCardSkeleton({super.key});
@@ -28,7 +28,7 @@ class DynamicCardSkeleton extends StatelessWidget {
                   height: 40,
                   decoration: BoxDecoration(
                     color: color,
-                    borderRadius: BorderRadius.circular(20),
+                    borderRadius: const BorderRadius.all(Radius.circular(20)),
                   ),
                 ),
                 const SizedBox(width: 10),

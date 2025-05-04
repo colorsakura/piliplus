@@ -108,12 +108,12 @@ class _CreateFavPageState extends State<CreateFavPage> {
                         ],
                       ),
                     )
-                  : Center(child: CircularProgressIndicator())
+                  : const Center(child: CircularProgressIndicator())
           : _buildBody(theme),
     );
   }
 
-  void _pickImg(ThemeData theme) async {
+  Future<void> _pickImg(ThemeData theme) async {
     try {
       XFile? pickedFile = await _imagePicker.pickImage(
         source: ImageSource.gallery,
@@ -165,7 +165,7 @@ class _CreateFavPageState extends State<CreateFavPage> {
     }
   }
 
-  dynamic leadingStyle = TextStyle(fontSize: 14);
+  final leadingStyle = const TextStyle(fontSize: 14);
 
   Widget _buildBody(ThemeData theme) => SingleChildScrollView(
         child: Column(
@@ -234,7 +234,8 @@ class _CreateFavPageState extends State<CreateFavPage> {
                         child: LayoutBuilder(
                           builder: (context, constraints) {
                             return ClipRRect(
-                              borderRadius: BorderRadius.circular(6),
+                              borderRadius:
+                                  const BorderRadius.all(Radius.circular(6)),
                               child: CachedNetworkImage(
                                 imageUrl: Utils.thumbnailImgUrl(_cover!),
                                 height: constraints.maxHeight,
@@ -258,7 +259,7 @@ class _CreateFavPageState extends State<CreateFavPage> {
             ListTile(
               tileColor: theme.colorScheme.onInverseSurface,
               leading: Text.rich(
-                style: TextStyle(
+                style: const TextStyle(
                   height: 1,
                   fontSize: 14,
                 ),
@@ -272,7 +273,7 @@ class _CreateFavPageState extends State<CreateFavPage> {
                         color: theme.colorScheme.error,
                       ),
                     ),
-                    TextSpan(
+                    const TextSpan(
                       text: '名称',
                       style: TextStyle(
                         height: 1,
@@ -302,11 +303,11 @@ class _CreateFavPageState extends State<CreateFavPage> {
                     fontSize: 14,
                     color: theme.colorScheme.outline,
                   ),
-                  border: OutlineInputBorder(
+                  border: const OutlineInputBorder(
                     borderSide: BorderSide.none,
                     gapPadding: 0,
                   ),
-                  contentPadding: EdgeInsets.all(0),
+                  contentPadding: EdgeInsets.zero,
                 ),
               ),
             ),
@@ -327,7 +328,7 @@ class _CreateFavPageState extends State<CreateFavPage> {
                               color: theme.colorScheme.onSurfaceVariant,
                             ),
                           ),
-                          TextSpan(
+                          const TextSpan(
                             text: '*',
                             style: TextStyle(color: Colors.transparent),
                           )
@@ -340,7 +341,7 @@ class _CreateFavPageState extends State<CreateFavPage> {
                         minLines: 6,
                         maxLines: 6,
                         controller: _introController,
-                        style: TextStyle(fontSize: 14),
+                        style: const TextStyle(fontSize: 14),
                         inputFormatters: [
                           LengthLimitingTextInputFormatter(200),
                         ],
@@ -351,11 +352,11 @@ class _CreateFavPageState extends State<CreateFavPage> {
                             fontSize: 14,
                             color: theme.colorScheme.outline,
                           ),
-                          border: OutlineInputBorder(
+                          border: const OutlineInputBorder(
                             borderSide: BorderSide.none,
                             gapPadding: 0,
                           ),
-                          contentPadding: EdgeInsets.all(0),
+                          contentPadding: EdgeInsets.zero,
                         ),
                       ),
                     ),

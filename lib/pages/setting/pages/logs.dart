@@ -27,14 +27,14 @@ class _LogsPageState extends State<LogsPage> {
   @override
   void dispose() {
     if (latestLog != null) {
-      if (DateTime.now().difference(latestLog!) >= Duration(days: 14)) {
+      if (DateTime.now().difference(latestLog!) >= const Duration(days: 14)) {
         clearLogs();
       }
     }
     super.dispose();
   }
 
-  void getPath() async {
+  Future<void> getPath() async {
     logsPath = await getLogsPath();
     fileContent = await logsPath.readAsString();
     logsContent = await parseLogs(fileContent);
@@ -82,7 +82,7 @@ class _LogsPageState extends State<LogsPage> {
     return result.reversed.toList();
   }
 
-  void copyLogs() async {
+  Future<void> copyLogs() async {
     await Utils.copyText('```\n$fileContent\n```', needToast: false);
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -91,7 +91,7 @@ class _LogsPageState extends State<LogsPage> {
     }
   }
 
-  void clearLogsHandle() async {
+  Future<void> clearLogsHandle() async {
     if (await clearLogs()) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -174,8 +174,7 @@ class _LogsPageState extends State<LogsPage> {
                             TextButton.icon(
                               style: TextButton.styleFrom(
                                 tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                                visualDensity:
-                                    VisualDensity(horizontal: -2, vertical: -2),
+                                visualDensity: VisualDensity.compact,
                               ),
                               onPressed: () async {
                                 await Utils.copyText('```\n${log['body']}\n```',

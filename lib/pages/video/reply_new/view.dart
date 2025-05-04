@@ -39,31 +39,28 @@ class ReplyPage extends CommonPublishPage {
 class _ReplyPageState extends CommonPublishPageState<ReplyPage> {
   final RxBool _syncToDynamic = false.obs;
 
-  Widget get child => GestureDetector(
-        onTap: Get.back,
-        child: LayoutBuilder(
-          builder: (context, constraints) {
-            bool isH = constraints.maxWidth > constraints.maxHeight;
-            late double padding = constraints.maxWidth * 0.12;
-            return Padding(
-              padding: EdgeInsets.symmetric(horizontal: isH ? padding : 0),
-              child: Scaffold(
-                resizeToAvoidBottomInset: false,
-                backgroundColor: Colors.transparent,
-                body: GestureDetector(
-                  onTap: () {},
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      buildInputView(),
-                      buildImagePreview(),
-                      buildPanelContainer(themeData.colorScheme.surface),
-                    ],
-                  ),
-                ),
+  Widget get child => SafeArea(
+        bottom: false,
+        child: Align(
+          alignment: Alignment.bottomCenter,
+          child: Container(
+            constraints: const BoxConstraints(maxWidth: 640),
+            decoration: BoxDecoration(
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(12),
+                topRight: Radius.circular(12),
               ),
-            );
-          },
+              color: themeData.colorScheme.surface,
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                ...buildInputView(),
+                buildImagePreview(),
+                buildPanelContainer(Colors.transparent),
+              ],
+            ),
+          ),
         ),
       );
 
@@ -85,10 +82,7 @@ class _ReplyPageState extends CommonPublishPageState<ReplyPage> {
   }
 
   @override
-  Widget? customPanel(double height) => SizedBox(
-        height: height,
-        child: EmotePanel(onChoose: onChooseEmote),
-      );
+  Widget? get customPanel => EmotePanel(onChoose: onChooseEmote);
 
   Widget buildImagePreview() {
     return Obx(
@@ -96,7 +90,6 @@ class _ReplyPageState extends CommonPublishPageState<ReplyPage> {
         if (pathList.isNotEmpty) {
           return Container(
             height: 85,
-            color: themeData.colorScheme.surface,
             padding: const EdgeInsets.only(bottom: 10),
             child: ListView.separated(
               scrollDirection: Axis.horizontal,
@@ -116,152 +109,133 @@ class _ReplyPageState extends CommonPublishPageState<ReplyPage> {
     );
   }
 
-  Widget buildInputView() {
-    return Container(
-      clipBehavior: Clip.hardEdge,
-      margin: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
-      decoration: BoxDecoration(
-        borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(12),
-          topRight: Radius.circular(12),
-        ),
-        color: themeData.colorScheme.surface,
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(
-            padding:
-                const EdgeInsets.only(top: 12, right: 15, left: 15, bottom: 10),
-            child: Form(
-              autovalidateMode: AutovalidateMode.onUserInteraction,
-              child: Listener(
-                onPointerUp: (event) {
-                  if (readOnly.value) {
-                    updatePanelType(PanelType.keyboard);
-                    selectKeyboard.value = true;
+  List<Widget> buildInputView() {
+    return [
+      Padding(
+        padding:
+            const EdgeInsets.only(top: 12, right: 15, left: 15, bottom: 10),
+        child: Form(
+          autovalidateMode: AutovalidateMode.onUserInteraction,
+          child: Listener(
+            onPointerUp: (event) {
+              if (readOnly.value) {
+                updatePanelType(PanelType.keyboard);
+                selectKeyboard.value = true;
+              }
+            },
+            child: Obx(
+              () => TextField(
+                controller: editController,
+                minLines: 4,
+                maxLines: 8,
+                autofocus: false,
+                readOnly: readOnly.value,
+                onChanged: (value) {
+                  bool isEmpty = value.trim().isEmpty;
+                  if (!isEmpty && !enablePublish.value) {
+                    enablePublish.value = true;
+                  } else if (isEmpty && enablePublish.value) {
+                    enablePublish.value = false;
                   }
+                  widget.onSave?.call(value);
                 },
-                child: Obx(
-                  () => TextField(
-                    controller: editController,
-                    minLines: 4,
-                    maxLines: 8,
-                    autofocus: false,
-                    readOnly: readOnly.value,
-                    onChanged: (value) {
-                      bool isEmpty = value.trim().isEmpty;
-                      if (!isEmpty && !enablePublish.value) {
-                        enablePublish.value = true;
-                      } else if (isEmpty && enablePublish.value) {
-                        enablePublish.value = false;
-                      }
-                      widget.onSave?.call(value);
-                    },
-                    focusNode: focusNode,
-                    decoration: InputDecoration(
-                        hintText: widget.hint ?? "输入回复内容",
-                        border: InputBorder.none,
-                        hintStyle: TextStyle(fontSize: 14)),
-                    style: themeData.textTheme.bodyLarge,
-                  ),
+                focusNode: focusNode,
+                decoration: InputDecoration(
+                  hintText: widget.hint ?? "输入回复内容",
+                  border: InputBorder.none,
+                  hintStyle: const TextStyle(fontSize: 14),
                 ),
+                style: themeData.textTheme.bodyLarge,
               ),
             ),
           ),
-          Divider(
-            height: 1,
-            color: themeData.dividerColor.withOpacity(0.1),
-          ),
-          Container(
-            height: 52,
-            padding: const EdgeInsets.only(left: 12, right: 12),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Obx(
-                  () => ToolbarIconButton(
-                    tooltip: '输入',
-                    onPressed: () {
-                      if (!selectKeyboard.value) {
-                        selectKeyboard.value = true;
-                        updatePanelType(PanelType.keyboard);
-                      }
-                    },
-                    icon: const Icon(Icons.keyboard, size: 22),
-                    selected: selectKeyboard.value,
-                  ),
-                ),
-                const SizedBox(width: 10),
-                Obx(
-                  () => ToolbarIconButton(
-                    tooltip: '表情',
-                    onPressed: () {
-                      if (selectKeyboard.value) {
-                        selectKeyboard.value = false;
-                        updatePanelType(PanelType.emoji);
-                      }
-                    },
-                    icon: const Icon(Icons.emoji_emotions, size: 22),
-                    selected: !selectKeyboard.value,
-                  ),
-                ),
-                if (widget.root == 0) ...[
-                  const SizedBox(width: 10),
-                  ToolbarIconButton(
-                    tooltip: '图片',
-                    selected: false,
-                    icon: const Icon(Icons.image, size: 22),
-                    onPressed: onPickImage,
-                  ),
-                ],
-                const Spacer(),
-                Obx(
-                  () => TextButton.icon(
-                    style: TextButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 15, vertical: 13),
-                      visualDensity: const VisualDensity(
-                        horizontal: -2,
-                        vertical: -2,
-                      ),
-                      foregroundColor: _syncToDynamic.value
-                          ? themeData.colorScheme.secondary
-                          : themeData.colorScheme.outline,
-                    ),
-                    onPressed: () {
-                      _syncToDynamic.value = !_syncToDynamic.value;
-                    },
-                    icon: Icon(
-                      _syncToDynamic.value
-                          ? Icons.check_box
-                          : Icons.check_box_outline_blank,
-                      size: 22,
-                    ),
-                    label: const Text('转发至动态'),
-                  ),
-                ),
-                const Spacer(),
-                Obx(
-                  () => FilledButton.tonal(
-                    onPressed: enablePublish.value ? onPublish : null,
-                    style: FilledButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 20, vertical: 10),
-                      visualDensity: const VisualDensity(
-                        horizontal: -2,
-                        vertical: -2,
-                      ),
-                    ),
-                    child: const Text('发送'),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
+        ),
       ),
-    );
+      Divider(
+        height: 1,
+        color: themeData.dividerColor.withOpacity(0.1),
+      ),
+      Container(
+        height: 52,
+        padding: const EdgeInsets.only(left: 12, right: 12),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Obx(
+              () => ToolbarIconButton(
+                tooltip: '输入',
+                onPressed: () {
+                  if (!selectKeyboard.value) {
+                    selectKeyboard.value = true;
+                    updatePanelType(PanelType.keyboard);
+                  }
+                },
+                icon: const Icon(Icons.keyboard, size: 22),
+                selected: selectKeyboard.value,
+              ),
+            ),
+            const SizedBox(width: 10),
+            Obx(
+              () => ToolbarIconButton(
+                tooltip: '表情',
+                onPressed: () {
+                  if (selectKeyboard.value) {
+                    selectKeyboard.value = false;
+                    updatePanelType(PanelType.emoji);
+                  }
+                },
+                icon: const Icon(Icons.emoji_emotions, size: 22),
+                selected: !selectKeyboard.value,
+              ),
+            ),
+            if (widget.root == 0) ...[
+              const SizedBox(width: 10),
+              ToolbarIconButton(
+                tooltip: '图片',
+                selected: false,
+                icon: const Icon(Icons.image, size: 22),
+                onPressed: onPickImage,
+              ),
+            ],
+            const Spacer(),
+            Obx(
+              () => TextButton.icon(
+                style: TextButton.styleFrom(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 15, vertical: 13),
+                  visualDensity: VisualDensity.compact,
+                  foregroundColor: _syncToDynamic.value
+                      ? themeData.colorScheme.secondary
+                      : themeData.colorScheme.outline,
+                ),
+                onPressed: () {
+                  _syncToDynamic.value = !_syncToDynamic.value;
+                },
+                icon: Icon(
+                  _syncToDynamic.value
+                      ? Icons.check_box
+                      : Icons.check_box_outline_blank,
+                  size: 22,
+                ),
+                label: const Text('转发至动态'),
+              ),
+            ),
+            const Spacer(),
+            Obx(
+              () => FilledButton.tonal(
+                onPressed: enablePublish.value ? onPublish : null,
+                style: FilledButton.styleFrom(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  visualDensity: VisualDensity.compact,
+                ),
+                child: const Text('发送'),
+              ),
+            ),
+          ],
+        ),
+      )
+    ];
   }
 
   @override

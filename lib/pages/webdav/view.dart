@@ -83,7 +83,7 @@ class _WebDavSettingPageState extends State<WebDavSettingPage> {
               Expanded(
                 child: FilledButton.tonal(
                   style: FilledButton.styleFrom(
-                    shape: RoundedRectangleBorder(
+                    shape: const RoundedRectangleBorder(
                       borderRadius: StyleString.mdRadius,
                     ),
                   ),
@@ -95,7 +95,7 @@ class _WebDavSettingPageState extends State<WebDavSettingPage> {
               Expanded(
                 child: FilledButton.tonal(
                   style: FilledButton.styleFrom(
-                    shape: RoundedRectangleBorder(
+                    shape: const RoundedRectangleBorder(
                       borderRadius: StyleString.mdRadius,
                     ),
                   ),

@@ -132,7 +132,7 @@ class _DynamicSliverAppBarState extends State<DynamicSliverAppBar> {
       return SliverToBoxAdapter(
         child: SizedBox(
           key: _childKey,
-          child: widget.flexibleSpace ?? SizedBox(height: kToolbarHeight),
+          child: widget.flexibleSpace ?? const SizedBox(height: kToolbarHeight),
         ),
       );
     }

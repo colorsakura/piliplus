@@ -1,8 +1,8 @@
 import 'package:json_annotation/json_annotation.dart';
 
-import 'pos_spec.dart';
-import 'render_spec.dart';
-import 'size_spec.dart';
+import 'package:PiliPlus/models/space/pos_spec.dart';
+import 'package:PiliPlus/models/space/render_spec.dart';
+import 'package:PiliPlus/models/space/size_spec.dart';
 
 part 'general_spec.g.dart';
 

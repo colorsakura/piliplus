@@ -55,8 +55,9 @@ class _FavPageState extends State<FavPage> with SingleTickerProviderStateMixin {
 
   @override
   void dispose() {
-    _tabController.removeListener(listener);
-    _tabController.dispose();
+    _tabController
+      ..removeListener(listener)
+      ..dispose();
     super.dispose();
   }
 

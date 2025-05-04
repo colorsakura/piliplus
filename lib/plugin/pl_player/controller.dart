@@ -3,9 +3,12 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:PiliPlus/common/constants.dart';
+import 'package:PiliPlus/common/widgets/pair.dart';
 import 'package:PiliPlus/common/widgets/progress_bar/segment_progress_bar.dart';
 import 'package:PiliPlus/http/init.dart';
 import 'package:PiliPlus/models/common/audio_normalization.dart';
+import 'package:PiliPlus/models/common/sponsor_block/segment_type.dart';
+import 'package:PiliPlus/models/common/sponsor_block/skip_type.dart';
 import 'package:PiliPlus/models/user/danmaku_rule.dart';
 import 'package:PiliPlus/plugin/pl_player/models/data_source.dart';
 import 'package:PiliPlus/plugin/pl_player/models/data_status.dart';
@@ -111,7 +114,6 @@ class PlPlayerController {
   dynamic _seasonId;
   dynamic _subType;
   int _heartDuration = 0;
-  bool _enableHeart = true;
 
   late DataSource dataSource;
 
@@ -239,14 +241,6 @@ class PlPlayerController {
   /// 弹幕开关
   RxBool isOpenDanmu = false.obs;
 
-  late final showFSActionItem = GStorage.showFSActionItem;
-  late final enableShrinkVideoSize = GStorage.enableShrinkVideoSize;
-  late final darkVideoPage = GStorage.darkVideoPage;
-  late final enableSlideVolumeBrightness = GStorage.enableSlideVolumeBrightness;
-  late final enableSlideFS = GStorage.enableSlideFS;
-  late final enableDragSubtitle = GStorage.enableDragSubtitle;
-  late final fastForBackwardDuration = GStorage.fastForBackwardDuration;
-
   /// 弹幕权重
   int danmakuWeight = 0;
   late RuleFilter filters;
@@ -278,6 +272,47 @@ class PlPlayerController {
   late bool showSpecialDanmaku = GStorage.showSpecialDanmaku;
   late double subtitleStrokeWidth = GStorage.subtitleStrokeWidth;
   late int subtitleFontWeight = GStorage.subtitleFontWeight;
+
+  // sponsor block
+  late final bool enableSponsorBlock =
+      setting.get(SettingBoxKey.enableSponsorBlock, defaultValue: false);
+  late final double blockLimit = GStorage.blockLimit;
+  late final List<Pair<SegmentType, SkipType>> blockSettings =
+      GStorage.blockSettings;
+  late final List<Color> blockColor = GStorage.blockColor;
+  late final List<String> segmentTypes =
+      SegmentType.values.map((item) => item.name).toList();
+  late final List<String> enableList = blockSettings
+      .where((item) => item.second != SkipType.disable)
+      .map((item) => item.first.name)
+      .toList();
+  late final blockServer = GStorage.blockServer;
+
+  // settings
+  late final showFSActionItem = GStorage.showFSActionItem;
+  late final enableShrinkVideoSize = GStorage.enableShrinkVideoSize;
+  late final darkVideoPage = GStorage.darkVideoPage;
+  late final enableSlideVolumeBrightness = GStorage.enableSlideVolumeBrightness;
+  late final enableSlideFS = GStorage.enableSlideFS;
+  late final enableDragSubtitle = GStorage.enableDragSubtitle;
+  late final fastForBackwardDuration = GStorage.fastForBackwardDuration;
+
+  late final horizontalSeasonPanel = GStorage.horizontalSeasonPanel;
+  late final preInitPlayer = GStorage.preInitPlayer;
+  late final showRelatedVideo = GStorage.showRelatedVideo;
+  late final showVideoReply = GStorage.showVideoReply;
+  late final showBangumiReply = GStorage.showBangumiReply;
+  late final reverseFromFirst = GStorage.reverseFromFirst;
+  late final horizontalPreview = GStorage.horizontalPreview;
+  late final showDmChart = GStorage.showDmChart;
+
+  int? cacheVideoQa;
+  late int cacheAudioQa;
+  bool enableHeart = true;
+
+  bool enableHA =
+      GStorage.setting.get(SettingBoxKey.enableHA, defaultValue: true);
+  String hwdec = GStorage.hardwareDecoding;
 
   // 播放顺序相关
   PlayRepeat playRepeat = PlayRepeat.pause;
@@ -440,6 +475,11 @@ class PlPlayerController {
         setting.get(SettingBoxKey.enableLongShowControl, defaultValue: false);
     speedList = GStorage.speedList;
 
+    if (!Accounts.get(AccountType.heartbeat).isLogin ||
+        GStorage.localCache.get(LocalCacheKey.historyPause) == true) {
+      enableHeart = false;
+    }
+
     // _playerEventSubs = onPlayerStatusChanged.listen((PlayerStatus status) {
     //   if (status == PlayerStatus.playing) {
     //     WakelockPlus.enable();
@@ -474,9 +514,6 @@ class PlPlayerController {
     Duration? seekTo,
     // 初始化播放速度
     double speed = 1.0,
-    // 硬件加速
-    bool enableHA = true,
-    String? hwdec,
     double? width,
     double? height,
     Duration? duration,
@@ -485,8 +522,6 @@ class PlPlayerController {
     // 记录历史记录
     String bvid = '',
     int cid = 0,
-    // 历史记录开关
-    bool enableHeart = true,
     dynamic epid,
     dynamic seasonId,
     dynamic subType,
@@ -511,7 +546,6 @@ class PlPlayerController {
       _epid = epid;
       _seasonId = seasonId;
       _subType = subType;
-      _enableHeart = enableHeart;
 
       if (showSeekPreview) {
         videoShot = null;
@@ -529,7 +563,7 @@ class PlPlayerController {
       }
       // 配置Player 音轨、字幕等等
       _videoPlayerController = await _createVideoController(
-          dataSource, _looping, enableHA, hwdec, width, height, seekTo);
+          dataSource, _looping, width, height, seekTo);
       callback?.call();
       // 获取视频时长 00:00
       _duration.value = duration ?? _videoPlayerController!.state.duration;
@@ -564,7 +598,7 @@ class PlPlayerController {
     final directory = await getApplicationSupportDirectory();
     shadersDirectory = Directory(path.join(directory.path, 'anime_shaders'));
 
-    if (!await shadersDirectory!.exists()) {
+    if (!shadersDirectory!.existsSync()) {
       await shadersDirectory!.create(recursive: true);
     }
 
@@ -576,7 +610,7 @@ class PlPlayerController {
     for (var filePath in shaderFiles) {
       final fileName = filePath.split('/').last;
       final targetFile = File(path.join(shadersDirectory!.path, fileName));
-      if (await targetFile.exists()) {
+      if (targetFile.existsSync()) {
         continue;
       }
 
@@ -636,8 +670,6 @@ class PlPlayerController {
   Future<Player> _createVideoController(
     DataSource dataSource,
     PlaylistMode looping,
-    bool enableHA,
-    String? hwdec,
     double? width,
     double? height,
     Duration? seekTo,
@@ -1123,7 +1155,7 @@ class PlPlayerController {
   }
 
   /// 调整播放时间
-  onChangedSlider(double v) {
+  void onChangedSlider(double v) {
     _sliderPosition.value = Duration(seconds: v.floor());
     updateSliderPositionSecond();
   }
@@ -1278,7 +1310,7 @@ class PlPlayerController {
   }
 
   /// 设置长按倍速状态 live模式下禁用
-  void setLongPressStatus(bool val) async {
+  Future<void> setLongPressStatus(bool val) async {
     if (videoType.value == 'live') {
       return;
     }
@@ -1314,13 +1346,17 @@ class PlPlayerController {
     updateSubtitleStyle();
   }
 
+  late final FullScreenMode mode = FullScreenModeCode.fromCode(
+      setting.get(SettingBoxKey.fullScreenMode, defaultValue: 0));
+  late final horizontalScreen =
+      setting.get(SettingBoxKey.horizontalScreen, defaultValue: false);
+
   // 全屏
   void triggerFullScreen({bool status = true, int duration = 500}) {
     EasyThrottle.throttle('fullScreen', Duration(milliseconds: duration),
         () async {
       stopScreenTimer();
-      FullScreenMode mode = FullScreenModeCode.fromCode(
-          setting.get(SettingBoxKey.fullScreenMode, defaultValue: 0))!;
+
       if (!isFullScreen.value && status) {
         hideStatusBar();
 
@@ -1354,7 +1390,7 @@ class PlPlayerController {
         if (mode == FullScreenMode.none) {
           return;
         }
-        if (!setting.get(SettingBoxKey.horizontalScreen, defaultValue: false)) {
+        if (!horizontalScreen) {
           await verticalScreenForTwoSeconds();
         } else {
           await autoScreen();
@@ -1398,7 +1434,7 @@ class PlPlayerController {
     dynamic seasonId,
     dynamic subType,
   }) async {
-    if (!_enableHeart || MineController.anonymity.value || progress == 0) {
+    if (!enableHeart || MineController.anonymity.value || progress == 0) {
       return;
     } else if (playerStatus.status.value == PlayerStatus.paused) {
       if (isManual.not) {
@@ -1440,33 +1476,35 @@ class PlPlayerController {
     }
   }
 
-  setPlayRepeat(PlayRepeat type) {
+  void setPlayRepeat(PlayRepeat type) {
     playRepeat = type;
     video.put(VideoBoxKey.playRepeat, type.value);
   }
 
   void putDanmakuSettings() {
-    setting.put(SettingBoxKey.danmakuWeight, danmakuWeight);
-    setting.put(SettingBoxKey.danmakuBlockType, blockTypes);
-    setting.put(SettingBoxKey.danmakuShowArea, showArea);
-    setting.put(SettingBoxKey.danmakuOpacity, opacity);
-    setting.put(SettingBoxKey.danmakuFontScale, fontSize);
-    setting.put(SettingBoxKey.danmakuFontScaleFS, fontSizeFS);
-    setting.put(SettingBoxKey.danmakuDuration, danmakuDuration);
-    setting.put(SettingBoxKey.danmakuStaticDuration, danmakuStaticDuration);
-    setting.put(SettingBoxKey.strokeWidth, strokeWidth);
-    setting.put(SettingBoxKey.fontWeight, fontWeight);
-    setting.put(SettingBoxKey.danmakuLineHeight, danmakuLineHeight);
+    setting
+      ..put(SettingBoxKey.danmakuWeight, danmakuWeight)
+      ..put(SettingBoxKey.danmakuBlockType, blockTypes)
+      ..put(SettingBoxKey.danmakuShowArea, showArea)
+      ..put(SettingBoxKey.danmakuOpacity, opacity)
+      ..put(SettingBoxKey.danmakuFontScale, fontSize)
+      ..put(SettingBoxKey.danmakuFontScaleFS, fontSizeFS)
+      ..put(SettingBoxKey.danmakuDuration, danmakuDuration)
+      ..put(SettingBoxKey.danmakuStaticDuration, danmakuStaticDuration)
+      ..put(SettingBoxKey.strokeWidth, strokeWidth)
+      ..put(SettingBoxKey.fontWeight, fontWeight)
+      ..put(SettingBoxKey.danmakuLineHeight, danmakuLineHeight);
   }
 
   void putSubtitleSettings() {
-    setting.put(SettingBoxKey.subtitleFontScale, subtitleFontScale);
-    setting.put(SettingBoxKey.subtitleFontScaleFS, subtitleFontScaleFS);
-    setting.put(SettingBoxKey.subtitlePaddingH, subtitlePaddingH);
-    setting.put(SettingBoxKey.subtitlePaddingB, subtitlePaddingB);
-    setting.put(SettingBoxKey.subtitleBgOpaticy, subtitleBgOpaticy);
-    setting.put(SettingBoxKey.subtitleStrokeWidth, subtitleStrokeWidth);
-    setting.put(SettingBoxKey.subtitleFontWeight, subtitleFontWeight);
+    setting
+      ..put(SettingBoxKey.subtitleFontScale, subtitleFontScale)
+      ..put(SettingBoxKey.subtitleFontScaleFS, subtitleFontScaleFS)
+      ..put(SettingBoxKey.subtitlePaddingH, subtitlePaddingH)
+      ..put(SettingBoxKey.subtitlePaddingB, subtitlePaddingB)
+      ..put(SettingBoxKey.subtitleBgOpaticy, subtitleBgOpaticy)
+      ..put(SettingBoxKey.subtitleStrokeWidth, subtitleStrokeWidth)
+      ..put(SettingBoxKey.subtitleFontWeight, subtitleFontWeight);
   }
 
   Future<void> dispose({String type = 'single'}) async {
@@ -1541,7 +1579,7 @@ class PlPlayerController {
   late final RxBool showPreview = false.obs;
   late final RxDouble previewDx = 0.0.obs;
 
-  void getVideoShot() async {
+  Future<void> getVideoShot() async {
     if (_isQueryingVideoShot) {
       return;
     }
@@ -1571,7 +1609,7 @@ class PlPlayerController {
   }
 
   late final RxList dmTrend = [].obs;
-  late final RxBool showDmChart = true.obs;
+  late final RxBool showDmTreandChart = true.obs;
 }
 
 extension BoxFitExt on BoxFit {

@@ -27,10 +27,11 @@ class _FontSizeSelectPageState extends State<FontSizeSelectPage> {
         setting.get(SettingBoxKey.defaultTextScale, defaultValue: 1.0);
   }
 
-  setFontSize() {
+  void setFontSize() {
     setting.put(SettingBoxKey.defaultTextScale, currentSize);
-    Get.back(result: currentSize);
-    Get.forceAppUpdate();
+    Get
+      ..back(result: currentSize)
+      ..forceAppUpdate();
   }
 
   @override
@@ -62,7 +63,7 @@ class _FontSizeSelectPageState extends State<FontSizeSelectPage> {
             ),
             Container(
               width: double.infinity,
-              padding: EdgeInsets.all(20),
+              padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
                 border: Border(
                     top: BorderSide(

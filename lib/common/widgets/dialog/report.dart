@@ -7,7 +7,8 @@ import 'package:get/get.dart';
 void autoWrapReportDialog(
   BuildContext context,
   Map<String, Map<int, String>> options,
-  Future<Map> Function(int, String?, bool) onSuccess,
+  Future<Map> Function(int reasonType, String? reasonDesc, bool banUid)
+      onSuccess,
 ) {
   int? reasonType;
   String? reasonDesc;
@@ -211,7 +212,7 @@ class _CheckBoxTextState extends State<CheckBoxText> {
 
 class ReportOptions {
   // from https://s1.hdslb.com/bfs/seed/jinkela/comment-h5/static/js/605.chunks.js
-  static Map<String, Map<int, String>> get commentReport => {
+  static Map<String, Map<int, String>> get commentReport => const {
         '违反法律法规': {9: '违法违规', 2: '色情', 10: '低俗', 12: '赌博诈骗', 23: '违法信息外链'},
         '谣言类不实信息': {19: '涉政谣言', 22: '虚假不实信息', 20: '涉社会事件谣言'},
         '侵犯个人权益': {7: '人身攻击', 15: '侵犯隐私'},
@@ -227,7 +228,7 @@ class ReportOptions {
         '其他': {0: '其他'},
       };
 
-  static Map<String, Map<int, String>> get dynamicReport => {
+  static Map<String, Map<int, String>> get dynamicReport => const {
         '': {
           4: '垃圾广告',
           8: '引战',

@@ -22,7 +22,7 @@ void imageSaveDialog({
         margin: const EdgeInsets.symmetric(horizontal: StyleString.safeSpace),
         decoration: BoxDecoration(
           color: theme.colorScheme.surface,
-          borderRadius: BorderRadius.circular(10.0),
+          borderRadius: StyleString.mdRadius,
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,

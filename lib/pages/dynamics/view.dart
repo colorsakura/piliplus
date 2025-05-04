@@ -7,14 +7,14 @@ import 'package:get/get.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
-import 'controller.dart';
-import 'widgets/up_panel.dart';
+import 'package:PiliPlus/pages/dynamics/controller.dart';
+import 'package:PiliPlus/pages/dynamics/widgets/up_panel.dart';
 import 'package:PiliPlus/common/widgets/scroll_physics.dart';
 
 enum ReplyOption { allow, close, choose }
 
 extension ReplyOptionExtension on ReplyOption {
-  String get title => ['允许评论', '关闭评论', '精选评论'][index];
+  String get title => const ['允许评论', '关闭评论', '精选评论'][index];
 
   IconData get iconData => [
         MdiIcons.commentTextOutline,
@@ -82,9 +82,7 @@ class _DynamicsPageState extends State<DynamicsPage>
   @override
   void initState() {
     super.initState();
-    upPanelPosition = UpPanelPosition.values[GStorage.setting.get(
-        SettingBoxKey.upPanelPosition,
-        defaultValue: UpPanelPosition.leftFixed.index)];
+    upPanelPosition = GStorage.upPanelPosition;
     debugPrint('upPanelPosition: $upPanelPosition');
     if (GStorage.setting
         .get(SettingBoxKey.dynamicsShowAllFollowedUp, defaultValue: false)) {
@@ -122,7 +120,7 @@ class _DynamicsPageState extends State<DynamicsPage>
           } else if (_dynamicsController.upData.value.errMsg != null) {
             return Center(
               child: IconButton(
-                icon: Icon(Icons.refresh),
+                icon: const Icon(Icons.refresh),
                 onPressed: () {
                   _dynamicsController.queryFollowUp();
                 },

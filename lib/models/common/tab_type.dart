@@ -15,7 +15,7 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 enum TabType { live, rcmd, hot, rank, bangumi, cinema }
 
 extension TabTypeDesc on TabType {
-  String get description => ['直播', '推荐', '热门', '分区', '番剧', '影视'][index];
+  String get description => const ['直播', '推荐', '热门', '分区', '番剧', '影视'][index];
 }
 
 List get tabsConfig => [

@@ -60,7 +60,7 @@ class FavNoteItem extends StatelessWidget {
                         item.title ?? '',
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
+                        style: const TextStyle(
                           height: 1.4,
                           fontSize: 14,
                           fontWeight: FontWeight.bold,

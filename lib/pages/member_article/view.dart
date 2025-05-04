@@ -38,7 +38,7 @@ class _MemberArticleState extends State<MemberArticle>
     return Obx(() => _buildBody(_controller.loadingState.value));
   }
 
-  _buildBody(LoadingState<List<SpaceArticleItem>?> loadingState) {
+  Widget _buildBody(LoadingState<List<SpaceArticleItem>?> loadingState) {
     return switch (loadingState) {
       Loading() => loadingWidget,
       Success() => loadingState.response?.isNotEmpty == true

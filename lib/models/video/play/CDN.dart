@@ -25,7 +25,7 @@ enum CDNService {
 }
 
 extension CDNServiceDesc on CDNService {
-  static final List<String> _descList = [
+  static const List<String> _descList = [
     '基础 URL（不推荐）',
     '备用 URL',
     'ali（阿里云）',
@@ -52,7 +52,7 @@ extension CDNServiceDesc on CDNService {
 }
 
 extension CDNServiceHost on CDNService {
-  static final List<String> _hostList = [
+  static const List<String> _hostList = [
     '',
     '',
     'upos-sz-mirrorali.bilivideo.com',
@@ -79,7 +79,7 @@ extension CDNServiceHost on CDNService {
 }
 
 extension CDNServiceCode on CDNService {
-  static final List<String> _codeList = [
+  static const List<String> _codeList = [
     'baseUrl',
     'backupUrl',
     'ali',

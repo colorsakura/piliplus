@@ -6,5 +6,5 @@ enum UpPanelPosition {
 }
 
 extension UpPanelPositionDesc on UpPanelPosition {
-  String get labels => ['左侧常驻', '右侧常驻', '左侧抽屉', '右侧抽屉'][index];
+  String get labels => const ['左侧常驻', '右侧常驻', '左侧抽屉', '右侧抽屉'][index];
 }

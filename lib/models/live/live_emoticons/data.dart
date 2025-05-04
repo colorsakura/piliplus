@@ -1,4 +1,4 @@
-import 'datum.dart';
+import 'package:PiliPlus/models/live/live_emoticons/datum.dart';
 
 class LiveEmoteData {
   int? fansBrand;

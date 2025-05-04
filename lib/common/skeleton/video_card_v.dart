@@ -1,6 +1,6 @@
 import 'package:PiliPlus/common/constants.dart';
 import 'package:flutter/material.dart';
-import 'skeleton.dart';
+import 'package:PiliPlus/common/skeleton/skeleton.dart';
 
 class VideoCardVSkeleton extends StatelessWidget {
   const VideoCardVSkeleton({super.key});

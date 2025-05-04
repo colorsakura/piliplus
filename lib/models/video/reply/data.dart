@@ -1,8 +1,8 @@
 import 'package:PiliPlus/models/video/reply/item.dart';
 
-import 'config.dart';
-import 'page.dart';
-import 'upper.dart';
+import 'package:PiliPlus/models/video/reply/config.dart';
+import 'package:PiliPlus/models/video/reply/page.dart';
+import 'package:PiliPlus/models/video/reply/upper.dart';
 
 class ReplyData {
   ReplyData({

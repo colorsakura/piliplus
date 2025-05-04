@@ -20,7 +20,7 @@ class _MemberAudioState extends State<MemberAudio>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return Center(
+    return const Center(
       child: Text('Audio'),
     );
   }

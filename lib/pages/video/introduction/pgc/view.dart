@@ -78,7 +78,7 @@ class _BangumiIntroPanelState extends State<BangumiIntroPanel>
     return Obx(() => _buildBody(bangumiIntroController.loadingState.value));
   }
 
-  _buildBody(LoadingState loadingState) {
+  Widget _buildBody(LoadingState loadingState) {
     return switch (loadingState) {
       Loading() => BangumiInfo(
           heroTag: widget.heroTag,
@@ -135,7 +135,7 @@ class _BangumiInfoState extends State<BangumiInfo> {
   late final BangumiInfoModel? bangumiItem;
   int? cid;
   bool isProcessing = false;
-  void handleState(Future Function() action) async {
+  Future<void> handleState(Future Function() action) async {
     if (isProcessing.not) {
       isProcessing = true;
       await action();
@@ -171,7 +171,7 @@ class _BangumiInfoState extends State<BangumiInfo> {
   }
 
   // 视频介绍
-  showIntroDetail() {
+  void showIntroDetail() {
     feedBack();
     widget.showIntroDetail();
   }
@@ -275,10 +275,7 @@ class _BangumiInfoState extends State<BangumiInfo> {
                                             horizontal: 20,
                                             vertical: 10,
                                           ),
-                                          visualDensity: const VisualDensity(
-                                            horizontal: -2,
-                                            vertical: -2,
-                                          ),
+                                          visualDensity: VisualDensity.compact,
                                           foregroundColor:
                                               bangumiIntroController
                                                       .isFollowed.value

@@ -1,5 +1,5 @@
-import 'audio_handler.dart';
-import 'audio_session.dart';
+import 'package:PiliPlus/services/audio_handler.dart';
+import 'package:PiliPlus/services/audio_session.dart';
 
 late VideoPlayerServiceHandler videoPlayerServiceHandler;
 late AudioSessionHandler audioSessionHandler;

@@ -66,7 +66,7 @@ class _NoteListPageState extends CommonSlidePageState<NoteListPage> {
                 '笔记${_controller.count.value == -1 ? '' : '(${_controller.count.value})'}'),
           ),
           bottom: PreferredSize(
-            preferredSize: Size.fromHeight(1),
+            preferredSize: const Size.fromHeight(1),
             child: Divider(
               height: 1,
               color: theme.colorScheme.outline.withOpacity(0.1),
@@ -108,8 +108,8 @@ class _NoteListPageState extends CommonSlidePageState<NoteListPage> {
             style: FilledButton.styleFrom(
               tapTargetSize: MaterialTapTargetSize.shrinkWrap,
               padding: EdgeInsets.zero,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(6),
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(6)),
               ),
             ),
             onPressed: () {

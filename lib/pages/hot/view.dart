@@ -47,7 +47,7 @@ class _HotPageState extends CommonPageState<HotPage, HotController>
           const SizedBox(height: 4),
           Text(
             title,
-            style: TextStyle(fontSize: 12),
+            style: const TextStyle(fontSize: 12),
           ),
         ],
       ),
@@ -91,7 +91,7 @@ class _HotPageState extends CommonPageState<HotPage, HotController>
                                   Get.to(
                                     Scaffold(
                                       appBar: AppBar(title: const Text('排行榜')),
-                                      body: SafeArea(
+                                      body: const SafeArea(
                                         top: false,
                                         bottom: false,
                                         child: RankPage(),

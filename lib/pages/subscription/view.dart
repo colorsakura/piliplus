@@ -7,7 +7,7 @@ import 'package:PiliPlus/utils/grid.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:PiliPlus/common/widgets/loading_widget/http_error.dart';
-import 'controller.dart';
+import 'package:PiliPlus/pages/subscription/controller.dart';
 
 class SubPage extends StatefulWidget {
   const SubPage({super.key});

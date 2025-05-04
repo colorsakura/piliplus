@@ -88,8 +88,9 @@ class WbiSign {
           Utils.getFileName(wbiUrls['img_url'], fileExt: false) +
               Utils.getFileName(wbiUrls['sub_url'], fileExt: false));
 
-      localCache.put(LocalCacheKey.mixinKey, mixinKey);
-      localCache.put(LocalCacheKey.timeStamp, nowDate.millisecondsSinceEpoch);
+      localCache
+        ..put(LocalCacheKey.mixinKey, mixinKey)
+        ..put(LocalCacheKey.timeStamp, nowDate.millisecondsSinceEpoch);
 
       return mixinKey;
     } catch (_) {

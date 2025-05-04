@@ -1,6 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 
-import 'list.dart';
+import 'package:PiliPlus/models/space_fav/list.dart';
 
 part 'media_list_response.g.dart';
 

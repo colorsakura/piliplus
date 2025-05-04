@@ -94,7 +94,7 @@ class LiveHeaderControl extends StatelessWidget implements PreferredSizeWidget {
               plPlayerController.isFullScreen.value,
               true,
             ),
-            icon: Icon(
+            icon: const Icon(
               size: 18,
               Icons.schedule,
               color: Colors.white,

@@ -8,19 +8,20 @@ import 'package:get/get.dart';
 
 class BottomControl extends StatelessWidget implements PreferredSizeWidget {
   const BottomControl({
+    super.key,
     required this.plPlayerController,
     required this.liveRoomCtr,
     required this.onRefresh,
-    super.key,
+    this.subTitleStyle = const TextStyle(fontSize: 12),
+    this.titleStyle = const TextStyle(fontSize: 14),
   });
 
   final PlPlayerController plPlayerController;
   final LiveRoomController liveRoomCtr;
   final VoidCallback onRefresh;
 
-  final TextStyle subTitleStyle = const TextStyle(fontSize: 12);
-
-  final TextStyle titleStyle = const TextStyle(fontSize: 14);
+  final TextStyle subTitleStyle;
+  final TextStyle titleStyle;
 
   @override
   Size get preferredSize => const Size(double.infinity, kToolbarHeight);

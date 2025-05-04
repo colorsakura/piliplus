@@ -78,7 +78,7 @@ class _VotePanelState extends State<VotePanel> {
                       text: _voteInfo.joinNum.toString(),
                       style: TextStyle(color: theme.colorScheme.primary),
                     ),
-                    TextSpan(text: '人参与'),
+                    const TextSpan(text: '人参与'),
                   ],
                 ),
               ),
@@ -107,7 +107,7 @@ class _VotePanelState extends State<VotePanel> {
           Flexible(fit: FlexFit.loose, child: _buildContext()),
         if (_enabled)
           Padding(
-            padding: EdgeInsets.only(top: 16),
+            padding: const EdgeInsets.only(top: 16),
             child: ValueListenableBuilder(
               valueListenable: _canVote,
               builder: (_, val, __) => OutlinedButton(

@@ -104,7 +104,7 @@ class HorizontalMemberPageController extends CommonDataController {
     await queryData();
   }
 
-  queryBySort() {
+  void queryBySort() {
     order.value = order.value == 'pubdate' ? 'click' : 'pubdate';
     onReload();
   }

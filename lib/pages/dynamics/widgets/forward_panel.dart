@@ -45,7 +45,7 @@ InlineSpan picsNodes(
 
 Widget _blockedItem(ThemeData theme, ModuleBlocked moduleBlocked) {
   return Padding(
-    padding: EdgeInsets.symmetric(horizontal: 13, vertical: 1),
+    padding: const EdgeInsets.symmetric(horizontal: 13, vertical: 1),
     child: LayoutBuilder(
       builder: (context, constraints) {
         return moduleBlockedItem(theme, moduleBlocked, constraints.maxWidth);
@@ -66,9 +66,6 @@ Widget forWard(
   switch (item.type) {
     // 图文
     case 'DYNAMIC_TYPE_DRAW':
-      bool hasPics =
-          item.modules.moduleDynamic?.major?.opus?.pics?.isNotEmpty == true;
-
       TextSpan? richNodes = richNode(theme, item, context);
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -110,12 +107,12 @@ Widget forWard(
                         ? null
                         : TextOverflow.ellipsis,
               ),
-            if (hasPics) ...[
+            if (item.modules.moduleDynamic?.major?.opus?.pics?.isNotEmpty ==
+                true)
               Text.rich(
                 picsNodes(
                     item.modules.moduleDynamic!.major!.opus!.pics!, callback),
               ),
-            ],
             const SizedBox(height: 4),
           ],
           Padding(

@@ -1,4 +1,4 @@
-import 'icon_font.dart';
+import 'package:PiliPlus/models/bangumi/pgc_timeline/icon_font.dart';
 
 class Episode {
   String? cover;

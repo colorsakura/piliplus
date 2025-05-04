@@ -18,7 +18,7 @@ import 'package:intl/intl.dart';
 enum MemberTabType { none, home, dynamic, contribute, favorite, bangumi }
 
 extension MemberTabTypeExt on MemberTabType {
-  String get title => ['默认', '首页', '动态', '投稿', '收藏', '番剧'][index];
+  String get title => const ['默认', '首页', '动态', '投稿', '收藏', '番剧'][index];
 }
 
 class MemberController extends CommonDataController<SpaceData, dynamic>
@@ -192,7 +192,7 @@ class MemberController extends CommonDataController<SpaceData, dynamic>
     Utils.shareText('https://space.bilibili.com/$mid');
   }
 
-  void _onBlock() async {
+  Future<void> _onBlock() async {
     dynamic res = await VideoHttp.relationMod(
       mid: mid,
       act: relation.value != 128 ? 5 : 6,
@@ -203,7 +203,7 @@ class MemberController extends CommonDataController<SpaceData, dynamic>
     }
   }
 
-  void onFollow(BuildContext context) async {
+  Future<void> onFollow(BuildContext context) async {
     if (mid == ownerMid) {
       Get.toNamed('/editProfile');
     } else if (relation.value == 128) {

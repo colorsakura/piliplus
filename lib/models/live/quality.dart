@@ -9,7 +9,7 @@ enum LiveQuality {
 }
 
 extension LiveQualityCode on LiveQuality {
-  static final List<int> _codeList = [
+  static const List<int> _codeList = [
     30000,
     20000,
     10000,
@@ -27,17 +27,14 @@ extension LiveQualityCode on LiveQuality {
     }
     return null;
   }
-}
 
-extension VideoQualityDesc on LiveQuality {
-  static final List<String> _descList = [
-    '杜比',
-    '4K',
-    '原画',
-    '蓝光',
-    '超清',
-    '高清',
-    '流畅',
-  ];
-  String get description => _descList[index];
+  String get description => const [
+        '杜比',
+        '4K',
+        '原画',
+        '蓝光',
+        '超清',
+        '高清',
+        '流畅',
+      ][index];
 }

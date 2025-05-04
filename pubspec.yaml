@@ -193,6 +193,15 @@ dependencies:
   re_highlight: ^0.0.3
   cached_network_svg_image: ^1.2.0
 
+  vector_math: any
+  fixnum: any
+  json_annotation: any
+  stream_transform: any
+  screen_brightness: any
+  mime: any
+  universal_platform: any
+  path: any
+
 dependency_overrides:
   screen_brightness: ^2.0.1
   path: 1.9.1
@@ -281,9 +290,9 @@ flutter:
   #   - family: Jura-Bold
   #     fonts:
   #       - asset: assets/fonts/Jura-Bold.ttf
-    # - family: HarmonyOS
-    #   fonts:
-    #     - asset: assets/fonts/HarmonyOS_Sans_SC_Regular.ttf
+  # - family: HarmonyOS
+  #   fonts:
+  #     - asset: assets/fonts/HarmonyOS_Sans_SC_Regular.ttf
 
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages

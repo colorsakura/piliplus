@@ -70,7 +70,7 @@ class _SettingsSearchPageState extends State<SettingsSearchPage> {
               }
             });
           },
-          decoration: InputDecoration(
+          decoration: const InputDecoration(
             isDense: true,
             hintText: '搜索',
             border: InputBorder.none,
@@ -83,7 +83,7 @@ class _SettingsSearchPageState extends State<SettingsSearchPage> {
           slivers: [
             Obx(
               () => _list.isEmpty
-                  ? HttpError()
+                  ? const HttpError()
                   : SliverPadding(
                       padding: EdgeInsets.only(
                         bottom: MediaQuery.paddingOf(context).bottom + 80,

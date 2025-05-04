@@ -27,39 +27,36 @@ class LiveItem extends StatelessWidget {
         ),
         child: Column(
           children: [
-            ClipRRect(
-              borderRadius: BorderRadius.all(StyleString.imgRadius),
-              child: AspectRatio(
-                aspectRatio: StyleString.aspectRatio,
-                child: LayoutBuilder(builder: (context, boxConstraints) {
-                  double maxWidth = boxConstraints.maxWidth;
-                  double maxHeight = boxConstraints.maxHeight;
-                  return Stack(
-                    clipBehavior: Clip.none,
-                    children: [
-                      NetworkImgLayer(
-                        src: liveItem.cover,
-                        type: 'emote',
-                        width: maxWidth,
-                        height: maxHeight,
-                      ),
-                      Positioned(
-                        left: 0,
-                        right: 0,
-                        bottom: 0,
-                        child: AnimatedOpacity(
-                          opacity: 1,
-                          duration: const Duration(milliseconds: 200),
-                          child: liveStat(
-                            liveItem.online,
-                            liveItem.cateName,
-                          ),
+            AspectRatio(
+              aspectRatio: StyleString.aspectRatio,
+              child: LayoutBuilder(builder: (context, boxConstraints) {
+                double maxWidth = boxConstraints.maxWidth;
+                double maxHeight = boxConstraints.maxHeight;
+                return Stack(
+                  clipBehavior: Clip.none,
+                  children: [
+                    NetworkImgLayer(
+                      src: liveItem.cover,
+                      type: 'emote',
+                      width: maxWidth,
+                      height: maxHeight,
+                    ),
+                    Positioned(
+                      left: 0,
+                      right: 0,
+                      bottom: 0,
+                      child: AnimatedOpacity(
+                        opacity: 1,
+                        duration: const Duration(milliseconds: 200),
+                        child: liveStat(
+                          liveItem.online,
+                          liveItem.cateName,
                         ),
                       ),
-                    ],
-                  );
-                }),
-              ),
+                    ),
+                  ],
+                );
+              }),
             ),
             liveContent(theme)
           ],

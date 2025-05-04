@@ -319,7 +319,7 @@ class GrpcRepo {
     required String content,
     MsgType msgType = MsgType.EN_MSG_TYPE_TEXT,
   }) async {
-    final devId = Uuid().v4();
+    final devId = const Uuid().v4();
     return await _request(
       GrpcUrl.sendMsg,
       ReqSendMsg(

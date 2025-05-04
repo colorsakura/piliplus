@@ -70,16 +70,6 @@ class _BangumiPageState extends CommonPageState<BangumiPage, BangumiController>
     );
   }
 
-  late final List<String> weekList = [
-    '一',
-    '二',
-    '三',
-    '四',
-    '五',
-    '六',
-    '日',
-  ];
-
   Widget _buildTimeline(
           ThemeData theme, LoadingState<List<Result>?> loadingState) =>
       switch (loadingState) {
@@ -131,14 +121,22 @@ class _BangumiPageState extends CommonPageState<BangumiPage, BangumiController>
                                         ?.copyWith(fontSize: 14) ??
                                     const TextStyle(fontSize: 14),
                                 dividerColor: Colors.transparent,
-                                tabs: loadingState.response!
-                                    .map(
-                                      (item) => Tab(
-                                        text:
-                                            '${item.date} ${item.isToday == 1 ? '今天' : '周${weekList[item.dayOfWeek! - 1]}'}',
-                                      ),
-                                    )
-                                    .toList(),
+                                tabs: loadingState.response!.map(
+                                  (item) {
+                                    return Tab(
+                                      text:
+                                          '${item.date} ${item.isToday == 1 ? '今天' : '周${const [
+                                              '一',
+                                              '二',
+                                              '三',
+                                              '四',
+                                              '五',
+                                              '六',
+                                              '日',
+                                            ][item.dayOfWeek! - 1]}'}',
+                                    );
+                                  },
+                                ).toList(),
                               ),
                             ),
                           ),
@@ -228,7 +226,7 @@ class _BangumiPageState extends CommonPageState<BangumiPage, BangumiController>
                 behavior: HitTestBehavior.opaque,
                 onTap: () {
                   if (widget.tabType == TabType.bangumi) {
-                    Get.to(PgcIndexPage());
+                    Get.to(const PgcIndexPage());
                   } else {
                     List<String> titles = const [
                       '全部',
@@ -274,7 +272,7 @@ class _BangumiPageState extends CommonPageState<BangumiPage, BangumiController>
                     children: [
                       Text(
                         '查看更多',
-                        strutStyle: StrutStyle(leading: 0, height: 1),
+                        strutStyle: const StrutStyle(leading: 0, height: 1),
                         style: TextStyle(
                           height: 1,
                           color: theme.colorScheme.secondary,
@@ -393,7 +391,8 @@ class _BangumiPageState extends CommonPageState<BangumiPage, BangumiController>
                             children: [
                               Text(
                                 '查看全部',
-                                strutStyle: StrutStyle(leading: 0, height: 1),
+                                strutStyle:
+                                    const StrutStyle(leading: 0, height: 1),
                                 style: TextStyle(
                                   height: 1,
                                   color: theme.colorScheme.secondary,

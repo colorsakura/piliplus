@@ -47,9 +47,9 @@ class NetworkImgLayer extends StatelessWidget {
             : radius == 0 || type == 'emote'
                 ? _buildImage(context)
                 : ClipRRect(
-                    borderRadius: BorderRadius.circular(
-                      radius ?? StyleString.imgRadius.x,
-                    ),
+                    borderRadius: radius != null
+                        ? BorderRadius.circular(radius!)
+                        : StyleString.mdRadius,
                     child: _buildImage(context),
                   )
         : getPlaceHolder?.call() ?? placeholder(context);
@@ -90,9 +90,9 @@ class NetworkImgLayer extends StatelessWidget {
         color: Theme.of(context).colorScheme.onInverseSurface.withOpacity(0.4),
         borderRadius: type == 'avatar' || type == 'emote' || radius == 0
             ? null
-            : BorderRadius.circular(
-                radius ?? StyleString.imgRadius.x,
-              ),
+            : radius != null
+                ? BorderRadius.circular(radius!)
+                : StyleString.mdRadius,
       ),
       child: type == 'bg'
           ? const SizedBox.shrink()

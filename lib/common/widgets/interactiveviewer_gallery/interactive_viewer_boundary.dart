@@ -1,4 +1,5 @@
-import 'interactive_viewer.dart' as custom;
+import 'package:PiliPlus/common/widgets/interactiveviewer_gallery/interactive_viewer.dart'
+    as custom;
 import 'package:flutter/material.dart';
 
 /// https://github.com/qq326646683/interactiveviewer_gallery

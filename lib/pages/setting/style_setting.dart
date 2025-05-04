@@ -9,7 +9,7 @@ class StyleSetting extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: showAppBar == false ? null : AppBar(title: Text('外观设置')),
+      appBar: showAppBar == false ? null : AppBar(title: const Text('外观设置')),
       body: ListView(
         children: [
           ...styleSettings.map((item) => item.widget),

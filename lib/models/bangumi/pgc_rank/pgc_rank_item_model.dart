@@ -1,7 +1,7 @@
-import 'badge_info.dart';
-import 'icon_font.dart';
-import 'new_ep.dart';
-import 'stat.dart';
+import 'package:PiliPlus/models/bangumi/pgc_rank/badge_info.dart';
+import 'package:PiliPlus/models/bangumi/pgc_rank/icon_font.dart';
+import 'package:PiliPlus/models/bangumi/pgc_rank/new_ep.dart';
+import 'package:PiliPlus/models/bangumi/pgc_rank/stat.dart';
 
 class PgcRankItemModel {
   String? badge;

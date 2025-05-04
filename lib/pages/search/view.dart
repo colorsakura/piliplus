@@ -7,9 +7,9 @@ import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'controller.dart';
-import 'widgets/hot_keyword.dart';
-import 'widgets/search_text.dart';
+import 'package:PiliPlus/pages/search/controller.dart';
+import 'package:PiliPlus/pages/search/widgets/hot_keyword.dart';
+import 'package:PiliPlus/pages/search/widgets/search_text.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({super.key});
@@ -121,9 +121,7 @@ class _SearchPageState extends State<SearchPage> {
               children: _searchController.searchSuggestList
                   .map(
                     (item) => InkWell(
-                      customBorder: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(4),
-                      ),
+                      borderRadius: const BorderRadius.all(Radius.circular(4)),
                       onTap: () => _searchController.onClickKeyword(item.term!),
                       child: Container(
                         width: double.infinity,
@@ -197,8 +195,8 @@ class _SearchPageState extends State<SearchPage> {
                 SizedBox(
                   height: 34,
                   child: TextButton.icon(
-                    style: ButtonStyle(
-                      padding: const WidgetStatePropertyAll(
+                    style: const ButtonStyle(
+                      padding: WidgetStatePropertyAll(
                           EdgeInsets.symmetric(horizontal: 10, vertical: 6)),
                     ),
                     onPressed: isHot
@@ -254,7 +252,7 @@ class _SearchPageState extends State<SearchPage> {
                   children: [
                     Text(
                       '搜索历史',
-                      strutStyle: StrutStyle(leading: 0, height: 1),
+                      strutStyle: const StrutStyle(leading: 0, height: 1),
                       style: theme.textTheme.titleMedium!
                           .copyWith(height: 1, fontWeight: FontWeight.bold),
                     ),

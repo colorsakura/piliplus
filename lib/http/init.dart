@@ -128,9 +128,10 @@ class Request {
         ..autoUncompress = false; // Http2Adapter没有自动解压, 统一行为
       // 设置代理
       if (enableSystemProxy) {
-        client.findProxy = (_) => 'PROXY $systemProxyHost:$systemProxyPort';
-        client.badCertificateCallback =
-            (X509Certificate cert, String host, int port) => true;
+        client
+          ..findProxy = ((_) => 'PROXY $systemProxyHost:$systemProxyPort')
+          ..badCertificateCallback =
+              (X509Certificate cert, String host, int port) => true;
       }
       return client;
     });

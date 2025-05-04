@@ -138,7 +138,7 @@ class ActionItemState extends State<ActionItem>
             (widget.selectStatus ? "已" : "") +
             widget.semanticsLabel,
         child: InkWell(
-          borderRadius: BorderRadius.circular(6),
+          borderRadius: const BorderRadius.all(Radius.circular(6)),
           onTap: _isThumbsUp
               ? null
               : () {

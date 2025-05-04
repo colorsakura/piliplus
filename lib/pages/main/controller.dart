@@ -170,7 +170,7 @@ class MainController extends GetxController {
     } catch (_) {}
   }
 
-  void getUnreadDynamic() async {
+  Future<void> getUnreadDynamic() async {
     if (!isLogin.value || dynIndex == -1) {
       return;
     }
@@ -181,7 +181,7 @@ class MainController extends GetxController {
     });
   }
 
-  void setCount([int count = 0]) async {
+  Future<void> setCount([int count = 0]) async {
     if (dynIndex == -1 || navigationBars[dynIndex]['count'] == count) return;
     navigationBars[dynIndex]['count'] = count;
     navigationBars.refresh();
@@ -201,13 +201,14 @@ class MainController extends GetxController {
     }
   }
 
-  void setNavBarConfig() async {
+  Future<void> setNavBarConfig() async {
     List defaultNavTabs = [...defaultNavigationBars];
     List navBarSort =
         GStorage.setting.get(SettingBoxKey.navBarSort, defaultValue: [0, 1, 2]);
-    defaultNavTabs.retainWhere((item) => navBarSort.contains(item['id']));
-    defaultNavTabs.sort((a, b) =>
-        navBarSort.indexOf(a['id']).compareTo(navBarSort.indexOf(b['id'])));
+    defaultNavTabs
+      ..retainWhere((item) => navBarSort.contains(item['id']))
+      ..sort((a, b) =>
+          navBarSort.indexOf(a['id']).compareTo(navBarSort.indexOf(b['id'])));
     navigationBars.value = defaultNavTabs;
     int defaultHomePage = GStorage.setting
         .get(SettingBoxKey.defaultHomePage, defaultValue: 0) as int;

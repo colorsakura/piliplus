@@ -117,7 +117,7 @@ class SubItem extends StatelessWidget {
                 onPressed: () => cancelSub(subFolderItem),
                 style: TextButton.styleFrom(
                   foregroundColor: theme.colorScheme.outline,
-                  padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                  padding: EdgeInsets.zero,
                 ),
                 icon: const Icon(Icons.delete_outline, size: 18),
               ),

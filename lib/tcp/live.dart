@@ -29,24 +29,22 @@ class PackageHeader {
   });
 
   Uint8List toBytes() {
-    final buffer = BytesBuilder();
-    buffer.add(_int32ToBytes(totalSize));
-    buffer.add(_int16ToBytes(headerSize));
-    buffer.add(_int16ToBytes(protocolVer));
-    buffer.add(_int32ToBytes(operationCode));
-    buffer.add(_int32ToBytes(seq));
+    final buffer = BytesBuilder()
+      ..add(_int32ToBytes(totalSize))
+      ..add(_int16ToBytes(headerSize))
+      ..add(_int16ToBytes(protocolVer))
+      ..add(_int32ToBytes(operationCode))
+      ..add(_int32ToBytes(seq));
     return buffer.toBytes();
   }
 
   List<int> _int32ToBytes(int value) {
-    final bytes = ByteData(4);
-    bytes.setInt32(0, value, Endian.big);
+    final bytes = ByteData(4)..setInt32(0, value, Endian.big);
     return bytes.buffer.asUint8List();
   }
 
   List<int> _int16ToBytes(int value) {
-    final bytes = ByteData(2);
-    bytes.setInt16(0, value, Endian.big);
+    final bytes = ByteData(2)..setInt16(0, value, Endian.big);
     return bytes.buffer.asUint8List();
   }
 
@@ -131,9 +129,9 @@ class AuthPackage extends AbstractPackage<Message> {
     header.headerSize = 0x10; // 固定大小
     size += header.headerSize;
     header.totalSize = size;
-    final buffer = BytesBuilder();
-    buffer.add(header.toBytes());
-    buffer.add(utf8.encode(body.toJsonStr()));
+    final buffer = BytesBuilder()
+      ..add(header.toBytes())
+      ..add(utf8.encode(body.toJsonStr()));
     return buffer.toBytes();
   }
 }
@@ -145,8 +143,9 @@ class HeartbeatPackage extends AbstractPackage<dynamic> {
   @override
   Uint8List marshal() {
     final buffer = BytesBuilder();
-    header.headerSize = 0x10;
-    header.totalSize = 0x10;
+    header
+      ..headerSize = 0x10
+      ..totalSize = 0x10;
     buffer.add(header.toBytes());
     return buffer.toBytes();
   }
@@ -170,7 +169,7 @@ class LiveMessageStream {
   PiliLogger logger = getLogger();
   final String logTag = "LiveStreamService";
 
-  void init() async {
+  Future<void> init() async {
     final authPackage = AuthPackage(
       header: PackageHeader(
         totalSize: 0,
@@ -264,7 +263,7 @@ class LiveMessageStream {
     }
   }
 
-  void _heartBeat() async {
+  Future<void> _heartBeat() async {
     logger.i("$logTag 直播间信息流认证成功");
     int heartBeatCount = 1;
     while (heartBeat) {
@@ -290,7 +289,7 @@ class LiveMessageStream {
     eventListeners.add(func);
   }
 
-  void close() async {
+  Future<void> close() async {
     heartBeat = false;
     eventListeners.clear();
     _socketSubscription?.cancel();

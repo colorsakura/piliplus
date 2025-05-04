@@ -1,6 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 
-import 'upper.dart';
+import 'package:PiliPlus/models/space_fav/upper.dart';
 
 part 'list.g.dart';
 

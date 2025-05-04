@@ -3,12 +3,13 @@ import 'dart:math';
 import 'package:PiliPlus/common/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'storage.dart';
+import 'package:PiliPlus/utils/storage.dart';
 
 class Grid {
   static double smallCardWidth = GStorage.smallCardWidth;
 
-  static videoCardHDelegate(context, {double minHeight = 90}) =>
+  static SliverGridDelegateWithExtentAndRatio videoCardHDelegate(context,
+          {double minHeight = 90}) =>
       SliverGridDelegateWithExtentAndRatio(
         mainAxisSpacing: 2,
         maxCrossAxisExtent: Grid.smallCardWidth * 2,

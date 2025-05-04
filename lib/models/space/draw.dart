@@ -1,6 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 
-import 'color_config.dart';
+import 'package:PiliPlus/models/space/color_config.dart';
 
 part 'draw.g.dart';
 

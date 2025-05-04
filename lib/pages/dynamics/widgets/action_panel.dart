@@ -22,7 +22,7 @@ class ActionPanel extends StatefulWidget {
 
 class _ActionPanelState extends State<ActionPanel> {
   bool isProcessing = false;
-  void handleState(Future Function() action) async {
+  Future<void> handleState(Future Function() action) async {
     if (isProcessing.not) {
       isProcessing = true;
       await action();

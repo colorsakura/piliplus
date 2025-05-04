@@ -1,6 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 
-import 'data.dart';
+import 'package:PiliPlus/models/space_article/data.dart';
 
 part 'space_article.g.dart';
 

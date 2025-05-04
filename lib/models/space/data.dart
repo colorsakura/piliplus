@@ -1,19 +1,19 @@
 import 'package:PiliPlus/models/space_article/data.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-import 'archive.dart';
-import 'attention_tip.dart';
-import 'audios.dart';
-import 'card.dart';
-import 'coin_archive.dart';
-import 'favourite2.dart';
-import 'images.dart';
-import 'like_archive.dart';
-import 'season.dart';
-import 'series.dart';
-import 'setting.dart';
-import 'tab.dart';
-import 'tab2.dart';
+import 'package:PiliPlus/models/space/archive.dart';
+import 'package:PiliPlus/models/space/attention_tip.dart';
+import 'package:PiliPlus/models/space/audios.dart';
+import 'package:PiliPlus/models/space/card.dart';
+import 'package:PiliPlus/models/space/coin_archive.dart';
+import 'package:PiliPlus/models/space/favourite2.dart';
+import 'package:PiliPlus/models/space/images.dart';
+import 'package:PiliPlus/models/space/like_archive.dart';
+import 'package:PiliPlus/models/space/season.dart';
+import 'package:PiliPlus/models/space/series.dart';
+import 'package:PiliPlus/models/space/setting.dart';
+import 'package:PiliPlus/models/space/tab.dart';
+import 'package:PiliPlus/models/space/tab2.dart';
 
 part 'data.g.dart';
 

@@ -57,8 +57,9 @@ class _FavFolderSortPageState extends State<FavFolderSortPage> {
 
   @override
   void dispose() {
-    _scrollController.removeListener(listener);
-    _scrollController.dispose();
+    _scrollController
+      ..removeListener(listener)
+      ..dispose();
     super.dispose();
   }
 
@@ -66,7 +67,7 @@ class _FavFolderSortPageState extends State<FavFolderSortPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('收藏夹排序'),
+        title: const Text('收藏夹排序'),
         actions: [
           TextButton(
             onPressed: () async {

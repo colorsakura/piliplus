@@ -320,43 +320,42 @@ class ProgressBar extends LeafRenderObjectWidget {
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
-    properties.add(StringProperty('progress', progress.toString()));
-    properties.add(StringProperty('total', total.toString()));
-    properties.add(StringProperty('buffered', buffered.toString()));
-    properties.add(ObjectFlagProperty<ValueChanged<Duration>>('onSeek', onSeek,
-        ifNull: 'unimplemented'));
-    properties.add(ObjectFlagProperty<ThumbDragStartCallback>(
-        'onDragStart', onDragStart,
-        ifNull: 'unimplemented'));
-    properties.add(ObjectFlagProperty<ThumbDragUpdateCallback>(
-        'onDragUpdate', onDragUpdate,
-        ifNull: 'unimplemented'));
-    properties.add(ObjectFlagProperty<VoidCallback>('onDragEnd', onDragEnd,
-        ifNull: 'unimplemented'));
-    properties.add(DoubleProperty('barHeight', barHeight));
-    properties.add(ColorProperty('baseBarColor', baseBarColor));
-    properties.add(ColorProperty('progressBarColor', progressBarColor));
-    properties.add(ColorProperty('bufferedBarColor', bufferedBarColor));
-    properties.add(StringProperty('barCapShape', barCapShape.toString()));
-    properties.add(DoubleProperty('thumbRadius', thumbRadius));
-    properties.add(ColorProperty('thumbColor', thumbColor));
-    properties.add(ColorProperty('thumbGlowColor', thumbGlowColor));
-    properties.add(DoubleProperty('thumbGlowRadius', thumbGlowRadius));
-    properties.add(
-      FlagProperty(
-        'thumbCanPaintOutsideBar',
-        value: thumbCanPaintOutsideBar,
-        ifTrue: 'true',
-        ifFalse: 'false',
-        showName: true,
-      ),
-    );
     properties
-        .add(StringProperty('timeLabelLocation', timeLabelLocation.toString()));
-    properties.add(StringProperty('timeLabelType', timeLabelType.toString()));
-    properties
-        .add(DiagnosticsProperty('timeLabelTextStyle', timeLabelTextStyle));
-    properties.add(DoubleProperty('timeLabelPadding', timeLabelPadding));
+      ..add(StringProperty('progress', progress.toString()))
+      ..add(StringProperty('total', total.toString()))
+      ..add(StringProperty('buffered', buffered.toString()))
+      ..add(ObjectFlagProperty<ValueChanged<Duration>>('onSeek', onSeek,
+          ifNull: 'unimplemented'))
+      ..add(ObjectFlagProperty<ThumbDragStartCallback>(
+          'onDragStart', onDragStart,
+          ifNull: 'unimplemented'))
+      ..add(ObjectFlagProperty<ThumbDragUpdateCallback>(
+          'onDragUpdate', onDragUpdate,
+          ifNull: 'unimplemented'))
+      ..add(ObjectFlagProperty<VoidCallback>('onDragEnd', onDragEnd,
+          ifNull: 'unimplemented'))
+      ..add(DoubleProperty('barHeight', barHeight))
+      ..add(ColorProperty('baseBarColor', baseBarColor))
+      ..add(ColorProperty('progressBarColor', progressBarColor))
+      ..add(ColorProperty('bufferedBarColor', bufferedBarColor))
+      ..add(StringProperty('barCapShape', barCapShape.toString()))
+      ..add(DoubleProperty('thumbRadius', thumbRadius))
+      ..add(ColorProperty('thumbColor', thumbColor))
+      ..add(ColorProperty('thumbGlowColor', thumbGlowColor))
+      ..add(DoubleProperty('thumbGlowRadius', thumbGlowRadius))
+      ..add(
+        FlagProperty(
+          'thumbCanPaintOutsideBar',
+          value: thumbCanPaintOutsideBar,
+          ifTrue: 'true',
+          ifFalse: 'false',
+          showName: true,
+        ),
+      )
+      ..add(StringProperty('timeLabelLocation', timeLabelLocation.toString()))
+      ..add(StringProperty('timeLabelType', timeLabelType.toString()))
+      ..add(DiagnosticsProperty('timeLabelTextStyle', timeLabelTextStyle))
+      ..add(DoubleProperty('timeLabelPadding', timeLabelPadding));
   }
 }
 
@@ -619,11 +618,10 @@ class _RenderProgressBar extends RenderBox {
 
   TextPainter _layoutText(String text) {
     TextPainter textPainter = TextPainter(
-      text: TextSpan(text: text, style: _timeLabelTextStyle),
-      textDirection: TextDirection.ltr,
-      textScaleFactor: textScaleFactor,
-    );
-    textPainter.layout(minWidth: 0, maxWidth: double.infinity);
+        text: TextSpan(text: text, style: _timeLabelTextStyle),
+        textDirection: TextDirection.ltr,
+        textScaler: TextScaler.linear(textScaleFactor))
+      ..layout(minWidth: 0, maxWidth: double.infinity);
     return textPainter;
   }
 
@@ -919,9 +917,9 @@ class _RenderProgressBar extends RenderBox {
 
   @override
   void paint(PaintingContext context, Offset offset) {
-    final canvas = context.canvas;
-    canvas.save();
-    canvas.translate(offset.dx, offset.dy);
+    final canvas = context.canvas
+      ..save()
+      ..translate(offset.dx, offset.dy);
 
     switch (_timeLabelLocation) {
       case TimeLabelLocation.above:
@@ -1013,8 +1011,9 @@ class _RenderProgressBar extends RenderBox {
   }
 
   void _drawProgressBar(Canvas canvas, Offset offset, Size localSize) {
-    canvas.save();
-    canvas.translate(offset.dx, offset.dy);
+    canvas
+      ..save()
+      ..translate(offset.dx, offset.dy);
     _drawBaseBar(canvas, localSize);
     _drawBufferedBar(canvas, localSize);
     _drawCurrentProgressBar(canvas, localSize);
@@ -1109,17 +1108,19 @@ class _RenderProgressBar extends RenderBox {
     super.describeSemanticsConfiguration(config);
 
     // description
-    config.textDirection = TextDirection.ltr;
-    config.label = '进度条'; //'Progress bar';
-    config.value = '${(_thumbValue * 100).round()}%';
+    config
+      ..textDirection = TextDirection.ltr
+      ..label = '进度条' //'Progress bar';
+      ..value = '${(_thumbValue * 100).round()}%'
 
-    // increase action
-    config.onIncrease = increaseAction;
+      // increase action
+      ..onIncrease = increaseAction;
     final increased = _thumbValue + _semanticActionUnit;
-    config.increasedValue = '${((increased).clamp(0.0, 1.0) * 100).round()}%';
+    config
+      ..increasedValue = '${((increased).clamp(0.0, 1.0) * 100).round()}%'
 
-    // decrease action
-    config.onDecrease = decreaseAction;
+      // decrease action
+      ..onDecrease = decreaseAction;
     final decreased = _thumbValue - _semanticActionUnit;
     config.decreasedValue = '${((decreased).clamp(0.0, 1.0) * 100).round()}%';
   }

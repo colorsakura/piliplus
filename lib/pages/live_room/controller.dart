@@ -57,7 +57,7 @@ class LiveRoomController extends GetxController {
     }
   }
 
-  playerInit(source) async {
+  Future<void> playerInit(source) async {
     await plPlayerController.setDataSource(
       DataSource(
         videoSource: source,
@@ -69,8 +69,6 @@ class LiveRoomController extends GetxController {
           'referer': HttpString.baseUrl
         },
       ),
-      // 硬解
-      enableHA: true,
       autoplay: true,
       direction: isPortrait.value ? 'vertical' : 'horizontal',
     );
@@ -230,13 +228,14 @@ class LiveRoomController extends GetxController {
 
   @override
   void onClose() {
-    scrollController.removeListener(listener);
-    scrollController.dispose();
+    scrollController
+      ..removeListener(listener)
+      ..dispose();
     super.onClose();
   }
 
   // 修改画质
-  void changeQn(int qn) async {
+  Future<void> changeQn(int qn) async {
     if (currentQn == qn) {
       return;
     }

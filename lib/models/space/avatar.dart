@@ -1,7 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
 
-import 'container_size.dart';
-import 'fallback_layers.dart';
+import 'package:PiliPlus/models/space/container_size.dart';
+import 'package:PiliPlus/models/space/fallback_layers.dart';
 
 part 'avatar.g.dart';
 

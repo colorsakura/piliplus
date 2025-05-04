@@ -212,7 +212,8 @@ class HeaderControlState extends State<HeaderControl> {
                                       .values[
                                           widget.controller.superResolutionType]
                                       .title,
-                                  strutStyle: StrutStyle(leading: 0, height: 1),
+                                  strutStyle:
+                                      const StrutStyle(leading: 0, height: 1),
                                   style: TextStyle(
                                     height: 1,
                                     fontSize: 14,
@@ -645,9 +646,10 @@ class HeaderControlState extends State<HeaderControl> {
                                 }
                                 Get.back();
                                 final int quality = videoFormat[i].quality!;
-                                videoDetailCtr.currentVideoQa =
-                                    VideoQualityCode.fromCode(quality)!;
-                                videoDetailCtr.updatePlayer();
+                                videoDetailCtr
+                                  ..currentVideoQa =
+                                      VideoQualityCode.fromCode(quality)!
+                                  ..updatePlayer();
 
                                 // update
                                 late String oldQualityDesc;
@@ -739,9 +741,10 @@ class HeaderControlState extends State<HeaderControl> {
                               }
                               Get.back();
                               final int quality = i.id!;
-                              videoDetailCtr.currentAudioQa =
-                                  AudioQualityCode.fromCode(quality)!;
-                              videoDetailCtr.updatePlayer();
+                              videoDetailCtr
+                                ..currentAudioQa =
+                                    AudioQualityCode.fromCode(quality)!
+                                ..updatePlayer();
 
                               // update
                               late String oldQualityDesc;
@@ -840,9 +843,10 @@ class HeaderControlState extends State<HeaderControl> {
                               if (i.startsWith(currentDecodeFormats.code)) {
                                 return;
                               }
-                              videoDetailCtr.currentDecodeFormats =
-                                  VideoDecodeFormatsCode.fromString(i)!;
-                              videoDetailCtr.updatePlayer();
+                              videoDetailCtr
+                                ..currentDecodeFormats =
+                                    VideoDecodeFormatsCode.fromString(i)!
+                                ..updatePlayer();
                               Get.back();
                             },
                             contentPadding:
@@ -929,8 +933,8 @@ class HeaderControlState extends State<HeaderControl> {
                           SmartDialog.showToast(e.toString());
                         }
                       },
-                      title:
-                          Text(item['lan_doc'], style: TextStyle(fontSize: 14)),
+                      title: Text(item['lan_doc'],
+                          style: const TextStyle(fontSize: 14)),
                     ),
                   )
                   .toList(),
@@ -1038,7 +1042,7 @@ class HeaderControlState extends State<HeaderControl> {
               child: ListView(
                 padding: EdgeInsets.zero,
                 children: [
-                  SizedBox(
+                  const SizedBox(
                     height: 45,
                     child: Center(child: Text('字幕设置', style: titleStyle)),
                   ),
@@ -1260,7 +1264,7 @@ class HeaderControlState extends State<HeaderControl> {
   /// 弹幕功能
   void showSetDanmaku() {
     // 屏蔽类型
-    final List<Map<String, dynamic>> blockTypesList = [
+    const List<Map<String, dynamic>> blockTypesList = [
       {'value': 5, 'label': '顶部'},
       {'value': 2, 'label': '滚动'},
       {'value': 4, 'label': '底部'},
@@ -1443,7 +1447,7 @@ class HeaderControlState extends State<HeaderControl> {
               child: ListView(
                 padding: EdgeInsets.zero,
                 children: [
-                  SizedBox(
+                  const SizedBox(
                     height: 45,
                     child: Center(child: Text('弹幕设置', style: titleStyle)),
                   ),
@@ -1533,8 +1537,8 @@ class HeaderControlState extends State<HeaderControl> {
                   ),
                   SetSwitchItem(
                     title: '海量弹幕',
-                    contentPadding: EdgeInsets.all(0),
-                    titleStyle: TextStyle(fontSize: 14),
+                    contentPadding: EdgeInsets.zero,
+                    titleStyle: const TextStyle(fontSize: 14),
                     defaultVal: massiveMode,
                     setKey: SettingBoxKey.danmakuMassiveMode,
                     onChanged: (value) {
@@ -1851,7 +1855,7 @@ class HeaderControlState extends State<HeaderControl> {
     );
   }
 
-  startClock() {
+  void startClock() {
     clock ??= Timer.periodic(const Duration(seconds: 1), (Timer t) {
       if (!mounted) {
         return;
@@ -1950,7 +1954,8 @@ class HeaderControlState extends State<HeaderControl> {
                                 )..layout(maxWidth: constraints.maxWidth);
                                 if (textPainter.didExceedMaxLines) {
                                   return ConstrainedBox(
-                                    constraints: BoxConstraints(maxHeight: 25),
+                                    constraints:
+                                        const BoxConstraints(maxHeight: 25),
                                     child: Marquee(
                                       text: title,
                                       style: const TextStyle(
@@ -2026,7 +2031,7 @@ class HeaderControlState extends State<HeaderControl> {
                     return const SizedBox.shrink();
                   },
                 ),
-                if (videoDetailCtr.enableSponsorBlock == true)
+                if (plPlayerController.enableSponsorBlock == true)
                   SizedBox(
                     width: 42,
                     height: 34,
@@ -2036,7 +2041,7 @@ class HeaderControlState extends State<HeaderControl> {
                         padding: WidgetStateProperty.all(EdgeInsets.zero),
                       ),
                       onPressed: () => videoDetailCtr.onBlock(context),
-                      icon: Stack(
+                      icon: const Stack(
                         clipBehavior: Clip.none,
                         alignment: Alignment.center,
                         children: [
@@ -2252,8 +2257,9 @@ class HeaderControlState extends State<HeaderControl> {
                                 onTap: videoIntroController.actionLikeVideo,
                                 onLongPress: () {
                                   videoIntroController.actionOneThree();
-                                  plPlayerController.isTriple = null;
-                                  plPlayerController.hideTaskControls();
+                                  plPlayerController
+                                    ..isTriple = null
+                                    ..hideTaskControls();
                                 },
                                 selectStatus:
                                     videoIntroController.hasLike.value,
@@ -2273,8 +2279,9 @@ class HeaderControlState extends State<HeaderControl> {
                                     _coinKey.currentState?.controller
                                         ?.reverse();
                                     _favKey.currentState?.controller?.reverse();
-                                    plPlayerController.isTriple = null;
-                                    plPlayerController.hideTaskControls();
+                                    plPlayerController
+                                      ..isTriple = null
+                                      ..hideTaskControls();
                                   }
                                 },
                               ),
@@ -2372,8 +2379,9 @@ class HeaderControlState extends State<HeaderControl> {
                                 onTap: bangumiIntroController.actionLikeVideo,
                                 onLongPress: () {
                                   bangumiIntroController.actionOneThree();
-                                  plPlayerController.isTriple = null;
-                                  plPlayerController.hideTaskControls();
+                                  plPlayerController
+                                    ..isTriple = null
+                                    ..hideTaskControls();
                                 },
                                 selectStatus:
                                     bangumiIntroController.hasLike.value,
@@ -2394,8 +2402,9 @@ class HeaderControlState extends State<HeaderControl> {
                                     _coinKey.currentState?.controller
                                         ?.reverse();
                                     _favKey.currentState?.controller?.reverse();
-                                    plPlayerController.isTriple = null;
-                                    plPlayerController.hideTaskControls();
+                                    plPlayerController
+                                      ..isTriple = null
+                                      ..hideTaskControls();
                                   }
                                 },
                               ),

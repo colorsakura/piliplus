@@ -221,7 +221,7 @@ class _SavePanelState extends State<SavePanel> {
     return uri;
   }
 
-  void _onSaveOrSharePic([bool isShare = false]) async {
+  Future<void> _onSaveOrSharePic([bool isShare = false]) async {
     if (!isShare) {
       if (mounted &&
           !await DownloadUtils.checkPermissionDependOnSdkInt(context)) {
@@ -297,7 +297,8 @@ class _SavePanelState extends State<SavePanel> {
                       clipBehavior: Clip.hardEdge,
                       decoration: BoxDecoration(
                         color: theme.colorScheme.surface,
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(12)),
                       ),
                       child: AnimatedSize(
                         curve: Curves.easeInOut,
@@ -334,7 +335,8 @@ class _SavePanelState extends State<SavePanel> {
                                 padding: const EdgeInsets.all(8),
                                 decoration: BoxDecoration(
                                   color: theme.colorScheme.onInverseSurface,
-                                  borderRadius: BorderRadius.circular(8),
+                                  borderRadius: const BorderRadius.all(
+                                      Radius.circular(8)),
                                 ),
                                 child: Row(
                                   children: [

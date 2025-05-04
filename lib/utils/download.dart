@@ -16,7 +16,7 @@ import 'package:share_plus/share_plus.dart';
 
 class DownloadUtils {
   // 图片分享
-  static void onShareImg(String imgUrl) async {
+  static Future<void> onShareImg(String imgUrl) async {
     try {
       SmartDialog.showLoading();
       var response = await Request()

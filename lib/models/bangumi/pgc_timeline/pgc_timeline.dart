@@ -1,4 +1,4 @@
-import 'result.dart';
+import 'package:PiliPlus/models/bangumi/pgc_timeline/result.dart';
 
 class PgcTimeline {
   int? code;

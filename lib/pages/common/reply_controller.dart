@@ -94,7 +94,7 @@ abstract class ReplyController<R> extends CommonListController<R, ReplyInfo> {
   }
 
   // 排序搜索评论
-  queryBySort() {
+  void queryBySort() {
     EasyThrottle.throttle('queryBySort', const Duration(seconds: 1), () {
       feedBack();
       switch (sortType.value) {
@@ -251,7 +251,7 @@ abstract class ReplyController<R> extends CommonListController<R, ReplyInfo> {
   }
 
   // ref https://github.com/freedom-introvert/biliSendCommAntifraud
-  void checkReply({
+  Future<void> checkReply({
     required BuildContext context,
     required dynamic oid,
     required dynamic rpid,
@@ -304,7 +304,7 @@ abstract class ReplyController<R> extends CommonListController<R, ReplyInfo> {
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          title: Text('评论检查结果'),
+          title: const Text('评论检查结果'),
           content: SelectableText(message),
         ),
       );
@@ -479,7 +479,7 @@ https://api.bilibili.com/x/v2/reply/reply?oid=$oid&pn=1&ps=20&root=${rpid ?? rep
     }
   }
 
-  void onToggleTop(index, oid, int type, bool isUpTop, int rpid) async {
+  Future<void> onToggleTop(index, oid, int type, bool isUpTop, int rpid) async {
     final res = await ReplyHttp.replyTop(
       oid: oid,
       type: type,

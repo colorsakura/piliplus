@@ -78,7 +78,7 @@ abstract class CommonPublishPageState<T extends CommonPublishPage>
     super.dispose();
   }
 
-  void _requestFocus() async {
+  Future<void> _requestFocus() async {
     await Future.delayed(const Duration(microseconds: 200));
     focusNode.requestFocus();
   }
@@ -104,7 +104,7 @@ abstract class CommonPublishPageState<T extends CommonPublishPage>
     }
   }
 
-  updatePanelType(PanelType type) async {
+  Future<void> updatePanelType(PanelType type) async {
     final isSwitchToKeyboard = PanelType.keyboard == type;
     final isSwitchToEmojiPanel = PanelType.emoji == type;
     bool isUpdated = false;
@@ -119,7 +119,7 @@ abstract class CommonPublishPageState<T extends CommonPublishPage>
         break;
     }
 
-    updatePanelTypeFunc() {
+    void updatePanelTypeFunc() {
       controller.updatePanelType(
         isSwitchToKeyboard
             ? ChatBottomPanelType.keyboard
@@ -141,7 +141,7 @@ abstract class CommonPublishPageState<T extends CommonPublishPage>
     }
   }
 
-  hidePanel() async {
+  Future<void> hidePanel() async {
     if (focusNode.hasFocus) {
       await Future.delayed(const Duration(milliseconds: 100));
       focusNode.unfocus();
@@ -224,7 +224,7 @@ abstract class CommonPublishPageState<T extends CommonPublishPage>
     widget.onSave?.call(editController.text);
   }
 
-  Widget? customPanel(double height) => null;
+  Widget? get customPanel => null;
 
   Widget buildEmojiPickerPanel() {
     double height = 170;
@@ -232,7 +232,10 @@ abstract class CommonPublishPageState<T extends CommonPublishPage>
     if (keyboardHeight != 0) {
       height = max(height, keyboardHeight);
     }
-    return customPanel(height) ?? SizedBox(height: height);
+    return SizedBox(
+      height: height,
+      child: customPanel,
+    );
   }
 
   Widget buildPanelContainer([Color? panelBgColor]) {
@@ -342,7 +345,7 @@ abstract class CommonPublishPageState<T extends CommonPublishPage>
     );
   }
 
-  void onCropImage(int index) async {
+  Future<void> onCropImage(int index) async {
     final theme = Theme.of(context);
     CroppedFile? croppedFile = await ImageCropper().cropImage(
       sourcePath: pathList[index],

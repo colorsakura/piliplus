@@ -25,7 +25,7 @@ class PlDanmakuController {
     return progress ~/ segmentLength;
   }
 
-  void queryDanmaku(int segmentIndex) async {
+  Future<void> queryDanmaku(int segmentIndex) async {
     if (requestedSeg[segmentIndex] == true) {
       return;
     }

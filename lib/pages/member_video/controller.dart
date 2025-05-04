@@ -74,8 +74,9 @@ class MemberVideoCtr
   bool customHandleResponse(
       bool isRefresh, Success<SpaceArchiveData> response) {
     SpaceArchiveData data = response.response;
-    episodicButton.value = data.episodicButton ?? EpisodicButton();
-    episodicButton.refresh();
+    episodicButton
+      ..value = data.episodicButton ?? EpisodicButton()
+      ..refresh();
     next = data.next;
     if (currentPage == 0 || isLoadPrevious == true) {
       hasPrev = data.hasPrev;
@@ -129,7 +130,7 @@ class MemberVideoCtr
         includeCursor: isLocating == true && currentPage == 0 ? true : null,
       );
 
-  queryBySort() {
+  void queryBySort() {
     if (type == ContributeType.video) {
       isLocating = null;
       order.value = order.value == 'pubdate' ? 'click' : 'pubdate';
@@ -139,7 +140,7 @@ class MemberVideoCtr
     onReload();
   }
 
-  void toViewPlayAll() async {
+  Future<void> toViewPlayAll() async {
     if (loadingState.value is Success) {
       List<SpaceArchiveItem>? list = (loadingState.value as Success).response;
 

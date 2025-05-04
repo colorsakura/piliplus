@@ -1,8 +1,8 @@
-import '../model_owner.dart';
-import 'nameplate.dart';
-import 'official_verify.dart';
-import 'pendant.dart';
-import 'vip.dart';
+import 'package:PiliPlus/models/model_owner.dart';
+import 'package:PiliPlus/models/space_article/nameplate.dart';
+import 'package:PiliPlus/models/space_article/official_verify.dart';
+import 'package:PiliPlus/models/space_article/pendant.dart';
+import 'package:PiliPlus/models/space_article/vip.dart';
 
 class Author extends Owner {
   Pendant? pendant;

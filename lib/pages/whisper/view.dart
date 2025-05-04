@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 
-import 'controller.dart';
+import 'package:PiliPlus/pages/whisper/controller.dart';
 
 class WhisperPage extends StatefulWidget {
   const WhisperPage({super.key});

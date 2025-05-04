@@ -1,6 +1,6 @@
-import 'emoticon.dart';
-import 'top_show.dart';
-import 'top_show_recent.dart';
+import 'package:PiliPlus/models/live/live_emoticons/emoticon.dart';
+import 'package:PiliPlus/models/live/live_emoticons/top_show.dart';
+import 'package:PiliPlus/models/live/live_emoticons/top_show_recent.dart';
 
 class LiveEmoteDatum {
   List<LiveEmoticon>? emoticons;

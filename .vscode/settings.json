@@ -2,5 +2,8 @@
     "editor.formatOnSave": true,
     "[dart]": {
         "editor.formatOnType": true
-    }
+    },
+    // "editor.codeActionsOnSave": {
+    //     "source.fixAll": true,
+    // }
 }

@@ -564,6 +564,6 @@ class MsgHttp {
   }
 
   static String getDevId() {
-    return Uuid().v4();
+    return const Uuid().v4();
   }
 }

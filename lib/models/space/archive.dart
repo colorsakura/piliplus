@@ -1,8 +1,8 @@
 import 'package:json_annotation/json_annotation.dart';
 
-import 'episodic_button.dart';
-import 'item.dart';
-import 'order.dart';
+import 'package:PiliPlus/models/space/episodic_button.dart';
+import 'package:PiliPlus/models/space/item.dart';
+import 'package:PiliPlus/models/space/order.dart';
 
 part 'archive.g.dart';
 

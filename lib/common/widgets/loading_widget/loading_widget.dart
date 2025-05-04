@@ -1,7 +1,7 @@
 import 'package:PiliPlus/common/widgets/loading_widget/http_error.dart';
 import 'package:flutter/material.dart';
 
-Widget get loadingWidget => Center(child: CircularProgressIndicator());
+Widget get loadingWidget => const Center(child: CircularProgressIndicator());
 
 Widget errorWidget({errMsg, onReload}) => HttpError(
       isSliver: false,

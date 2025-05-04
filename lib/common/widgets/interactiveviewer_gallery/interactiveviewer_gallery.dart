@@ -11,8 +11,9 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:media_kit/media_kit.dart';
 import 'package:media_kit_video/media_kit_video.dart';
-import 'interactive_viewer_boundary.dart';
-import 'interactive_viewer.dart' as custom;
+import 'package:PiliPlus/common/widgets/interactiveviewer_gallery/interactive_viewer_boundary.dart';
+import 'package:PiliPlus/common/widgets/interactiveviewer_gallery/interactive_viewer.dart'
+    as custom;
 
 /// https://github.com/qq326646683/interactiveviewer_gallery
 
@@ -136,7 +137,7 @@ class _InteractiveviewerGalleryState extends State<InteractiveviewerGallery>
   }
 
   SystemUiMode? mode;
-  setStatusBar() async {
+  Future<void> setStatusBar() async {
     if (Platform.isIOS || Platform.isAndroid) {
       SystemChrome.setEnabledSystemUIMode(
         SystemUiMode.immersiveSticky,
@@ -153,8 +154,9 @@ class _InteractiveviewerGalleryState extends State<InteractiveviewerGallery>
     widget.onClose?.call(true);
     _player?.dispose();
     _pageController?.dispose();
-    _animationController.removeListener(listener);
-    _animationController.dispose();
+    _animationController
+      ..removeListener(listener)
+      ..dispose();
     if (widget.setStatusBar != false) {
       if (Platform.isIOS || Platform.isAndroid) {
         SystemChrome.setEnabledSystemUIMode(
@@ -403,7 +405,7 @@ class _InteractiveviewerGalleryState extends State<InteractiveviewerGallery>
                                       .toList(),
                                 );
                               },
-                              child: const Text("保存全部图片"),
+                              child: const Text("保存全部"),
                             ),
                           if (widget.sources[currentIndex.value].sourceType ==
                               SourceType.livePhoto)
@@ -470,7 +472,7 @@ class _InteractiveviewerGalleryState extends State<InteractiveviewerGallery>
     );
   }
 
-  onDoubleTap() {
+  void onDoubleTap() {
     Matrix4 matrix = _transformationController!.value.clone();
     double currentScale = matrix.row0.x;
 
@@ -517,7 +519,7 @@ class _InteractiveviewerGalleryState extends State<InteractiveviewerGallery>
         .whenComplete(() => _onScaleChanged(targetScale));
   }
 
-  onLongPress() {
+  void onLongPress() {
     showDialog(
       context: context,
       builder: (context) {

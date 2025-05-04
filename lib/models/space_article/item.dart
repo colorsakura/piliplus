@@ -1,9 +1,9 @@
 import 'package:PiliPlus/models/dynamics/article_content_model.dart';
 
-import 'author.dart';
-import 'category.dart';
-import 'media.dart';
-import 'stats.dart';
+import 'package:PiliPlus/models/space_article/author.dart';
+import 'package:PiliPlus/models/space_article/category.dart';
+import 'package:PiliPlus/models/space_article/media.dart';
+import 'package:PiliPlus/models/space_article/stats.dart';
 
 class SpaceArticleItem {
   int? id;

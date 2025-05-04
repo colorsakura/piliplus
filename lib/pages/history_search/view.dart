@@ -6,7 +6,7 @@ import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import 'controller.dart';
+import 'package:PiliPlus/pages/history_search/controller.dart';
 
 class HistorySearchPage extends CommonSearchPage {
   const HistorySearchPage({super.key});

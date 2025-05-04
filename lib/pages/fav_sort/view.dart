@@ -58,8 +58,9 @@ class _FavSortPageState extends State<FavSortPage> {
 
   @override
   void dispose() {
-    _scrollController.removeListener(listener);
-    _scrollController.dispose();
+    _scrollController
+      ..removeListener(listener)
+      ..dispose();
     super.dispose();
   }
 

@@ -1,7 +1,7 @@
 import 'package:PiliPlus/models/model_video.dart';
 import 'package:hive/hive.dart';
 
-import 'storage.dart';
+import 'package:PiliPlus/utils/storage.dart';
 
 class RecommendFilter {
   static late int minDurationForRcmd;

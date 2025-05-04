@@ -55,7 +55,7 @@ class UserInfoCard extends StatelessWidget {
         children: [
           Text(
             Utils.numFormat(count),
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 14,
             ),
           ),
@@ -72,7 +72,7 @@ class UserInfoCard extends StatelessWidget {
     );
   }
 
-  _buildHeader(BuildContext context, ThemeData theme) {
+  Widget _buildHeader(BuildContext context, ThemeData theme) {
     bool darken = theme.brightness == Brightness.dark;
     String imgUrl = (darken
             ? images.nightImgurl?.isEmpty == true
@@ -109,7 +109,7 @@ class UserInfoCard extends StatelessWidget {
     );
   }
 
-  _buildLeft(BuildContext context, ThemeData theme) => [
+  List<Widget> _buildLeft(BuildContext context, ThemeData theme) => [
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Wrap(
@@ -158,7 +158,7 @@ class UserInfoCard extends StatelessWidget {
                       fontSize: 10,
                       fontWeight: FontWeight.bold,
                     ),
-                    style: TextStyle(
+                    style: const TextStyle(
                       height: 1,
                       fontWeight: FontWeight.bold,
                       fontSize: 10,
@@ -205,7 +205,7 @@ class UserInfoCard extends StatelessWidget {
                         ),
                       ),
                     ),
-                    TextSpan(
+                    const TextSpan(
                       text: ' ',
                     )
                   ],
@@ -267,7 +267,7 @@ class UserInfoCard extends StatelessWidget {
             return Container(
               width: double.infinity,
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(6),
+                borderRadius: const BorderRadius.all(Radius.circular(6)),
                 color: isLight
                     ? theme.colorScheme.errorContainer
                     : theme.colorScheme.error,
@@ -302,7 +302,7 @@ class UserInfoCard extends StatelessWidget {
           }),
       ];
 
-  _buildRight(BuildContext context, ThemeData theme) => Column(
+  Column _buildRight(BuildContext context, ThemeData theme) => Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           Row(
@@ -327,7 +327,7 @@ class UserInfoCard extends StatelessWidget {
                         }
                       },
                     )
-                  : SizedBox(
+                  : const SizedBox(
                       height: 15,
                       width: 1,
                       child: VerticalDivider(),
@@ -362,10 +362,7 @@ class UserInfoCard extends StatelessWidget {
                     ),
                     padding: EdgeInsets.zero,
                     tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                    visualDensity: const VisualDensity(
-                      horizontal: -2,
-                      vertical: -2,
-                    ),
+                    visualDensity: VisualDensity.compact,
                   ),
                 ),
                 const SizedBox(width: 10),
@@ -377,10 +374,7 @@ class UserInfoCard extends StatelessWidget {
                     backgroundColor: relation != 0
                         ? theme.colorScheme.onInverseSurface
                         : null,
-                    visualDensity: const VisualDensity(
-                      horizontal: -2,
-                      vertical: -2,
-                    ),
+                    visualDensity: VisualDensity.compact,
                   ),
                   child: Text.rich(
                     style: TextStyle(
@@ -421,7 +415,7 @@ class UserInfoCard extends StatelessWidget {
         ],
       );
 
-  _buildAvatar(BuildContext context) => Hero(
+  Hero _buildAvatar(BuildContext context) => Hero(
       tag: card.face ?? '',
       child: Avatar(
         avatar: card.face ?? '',
@@ -435,7 +429,7 @@ class UserInfoCard extends StatelessWidget {
             .imageView(imgList: [SourceModel(url: card.face.http2https)]),
       ));
 
-  _buildV(BuildContext context, ThemeData theme) => Column(
+  Column _buildV(BuildContext context, ThemeData theme) => Column(
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -533,7 +527,7 @@ class UserInfoCard extends StatelessWidget {
         );
       });
 
-  _buildH(BuildContext context, ThemeData theme) => Column(
+  Column _buildH(BuildContext context, ThemeData theme) => Column(
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,

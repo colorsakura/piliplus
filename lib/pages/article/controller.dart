@@ -63,7 +63,7 @@ class ArticleController extends ReplyController<MainListReply> {
     }
   }
 
-  init() {
+  void init() {
     url = type == 'read'
         ? 'https://www.bilibili.com/read/cv$id'
         : 'https://www.bilibili.com/opus/$id';

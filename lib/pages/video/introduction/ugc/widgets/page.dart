@@ -146,7 +146,7 @@ class _PagesPanelState extends State<PagesPanel> {
                 ),
                 child: Material(
                   color: theme.colorScheme.onInverseSurface,
-                  borderRadius: BorderRadius.circular(6),
+                  borderRadius: const BorderRadius.all(Radius.circular(6)),
                   clipBehavior: Clip.hardEdge,
                   child: InkWell(
                     onTap: () {

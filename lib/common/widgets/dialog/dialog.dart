@@ -30,7 +30,7 @@ void showConfirmDialog({
               Get.back();
               onConfirm();
             },
-            child: Text('确认'),
+            child: const Text('确认'),
           ),
         ],
       );
@@ -89,10 +89,10 @@ void showPgcFollowDialog({
                 ListTile(
                   dense: true,
                   title: Padding(
-                    padding: EdgeInsets.only(left: 10),
+                    padding: const EdgeInsets.only(left: 10),
                     child: Text(
                       '取消$type',
-                      style: TextStyle(fontSize: 14),
+                      style: const TextStyle(fontSize: 14),
                     ),
                   ),
                   onTap: () {

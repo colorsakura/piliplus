@@ -7,7 +7,7 @@ import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
 import 'package:PiliPlus/models/dynamics/result.dart';
 import 'package:PiliPlus/utils/utils.dart';
 
-import 'rich_node_panel.dart';
+import 'package:PiliPlus/pages/dynamics/widgets/rich_node_panel.dart';
 
 Widget liveRcmdPanel(
   ThemeData theme,

@@ -47,7 +47,7 @@ class _FavPgcPageState extends State<FavPgcPage>
                     const EdgeInsets.symmetric(horizontal: 3, vertical: 8),
                 indicator: BoxDecoration(
                   color: theme.colorScheme.secondaryContainer,
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: const BorderRadius.all(Radius.circular(20)),
                 ),
                 indicatorSize: TabBarIndicatorSize.tab,
                 labelStyle: TabBarTheme.of(context)
@@ -66,7 +66,8 @@ class _FavPgcPageState extends State<FavPgcPage>
             // TextButton(
             //   style: TextButton.styleFrom(
             //     foregroundColor: theme.colorScheme.onSurfaceVariant,
-            //     visualDensity: VisualDensity(horizontal: -2, vertical: -2),
+            //     visualDensity:
+            //         const VisualDensity(horizontal: -2, vertical: -2),
             //     tapTargetSize: MaterialTapTargetSize.shrinkWrap,
             //   ),
             //   onPressed: () {},

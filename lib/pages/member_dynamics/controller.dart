@@ -14,7 +14,7 @@ class MemberDynamicsController
   String offset = '';
 
   @override
-  void onInit() async {
+  void onInit() {
     super.onInit();
     queryData();
   }
@@ -79,8 +79,9 @@ class MemberDynamicsController
       } else {
         final item = list.firstWhere((item) => item.idStr == dynamicId);
         item.modules.moduleTag = ModuleTag(text: '置顶');
-        list.remove(item);
-        list.insert(0, item);
+        list
+          ..remove(item)
+          ..insert(0, item);
         loadingState.refresh();
         SmartDialog.showToast('置顶成功');
       }

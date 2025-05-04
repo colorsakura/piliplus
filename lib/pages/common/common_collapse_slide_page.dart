@@ -28,8 +28,8 @@ abstract class CommonCollapseSlidePageState<T extends CommonCollapseSlidePage>
   @override
   Widget build(BuildContext context) {
     if (isInit) {
-      return CustomScrollView(
-        physics: const NeverScrollableScrollPhysics(),
+      return const CustomScrollView(
+        physics: NeverScrollableScrollPhysics(),
       );
     }
 

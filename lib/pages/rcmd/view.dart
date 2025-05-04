@@ -74,8 +74,9 @@ class _RcmdPageState extends CommonPageState<RcmdPage, RcmdController>
                     if (controller.lastRefreshAt == index) {
                       return GestureDetector(
                         onTap: () {
-                          controller.animateToTop();
-                          controller.onRefresh();
+                          controller
+                            ..animateToTop()
+                            ..onRefresh();
                         },
                         child: Card(
                           margin: EdgeInsets.zero,

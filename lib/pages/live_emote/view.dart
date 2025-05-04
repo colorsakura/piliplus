@@ -75,7 +75,8 @@ class _LiveEmotePanelState extends State<LiveEmotePanel>
                             return Material(
                               color: Colors.transparent,
                               child: InkWell(
-                                borderRadius: BorderRadius.circular(8),
+                                borderRadius:
+                                    const BorderRadius.all(Radius.circular(8)),
                                 onTap: () {
                                   if (item.pkgType == 3) {
                                     widget.onChoose(item.emoticons![index]);
@@ -139,7 +140,7 @@ class _LiveEmotePanelState extends State<LiveEmotePanel>
   Widget _errorWidget([String? errMsg]) => Center(
         child: TextButton.icon(
           onPressed: _emotePanelController.onReload,
-          icon: Icon(Icons.refresh),
+          icon: const Icon(Icons.refresh),
           label: Text(errMsg ?? '没有数据'),
         ),
       );

@@ -54,7 +54,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
     );
   }
 
-  _getInfo() async {
+  Future<void> _getInfo() async {
     Map<String, String> data = {
       'build': '1462100',
       'c_locale': 'zh_CN',
@@ -271,7 +271,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
             minLines: type == ProfileType.uname ? 1 : 4,
             maxLines: type == ProfileType.uname ? 1 : 4,
             autofocus: true,
-            style: TextStyle(fontSize: 14),
+            style: const TextStyle(fontSize: 14),
             textInputAction:
                 type == ProfileType.sign ? TextInputAction.newline : null,
             inputFormatters: [
@@ -312,7 +312,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
     });
   }
 
-  _update({
+  Future<void> _update({
     required ProfileType type,
     dynamic datum,
   }) async {
@@ -394,7 +394,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
       dense: title != '头像',
       leading: Text(
         title,
-        style: TextStyle(
+        style: const TextStyle(
           fontSize: 14,
           fontWeight: FontWeight.normal,
         ),
@@ -425,7 +425,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
     );
   }
 
-  void _pickImg(ThemeData theme) async {
+  Future<void> _pickImg(ThemeData theme) async {
     try {
       XFile? pickedFile = await _imagePicker.pickImage(
         source: ImageSource.gallery,

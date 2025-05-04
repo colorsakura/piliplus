@@ -45,7 +45,7 @@ class _GroupPanelState extends State<GroupPanel> {
     }();
   }
 
-  void onSave() async {
+  Future<void> onSave() async {
     feedBack();
     // 是否有选中的 有选中的带id，没选使用默认0
     final bool anyHasChecked =

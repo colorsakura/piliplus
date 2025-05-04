@@ -28,7 +28,7 @@ class MineController extends GetxController {
       ThemeType.values[(themeType.value.index + 1) % ThemeType.values.length];
 
   @override
-  onInit() {
+  void onInit() {
     super.onInit();
 
     dynamic userInfoCache = GStorage.userInfo.get('userInfoCache');
@@ -38,7 +38,7 @@ class MineController extends GetxController {
     }
   }
 
-  onLogin([bool longPress = false]) async {
+  Future<void> onLogin([bool longPress = false]) async {
     if (!isLogin.value || longPress) {
       Get.toNamed('/loginPage', preventDuplicates: false);
     } else {
@@ -80,7 +80,7 @@ class MineController extends GetxController {
     }
   }
 
-  static onChangeAnonymity(BuildContext context) {
+  static void onChangeAnonymity(BuildContext context) {
     if (Accounts.account.isEmpty) {
       SmartDialog.showToast('请先登录');
       return;
@@ -196,7 +196,7 @@ class MineController extends GetxController {
     }
   }
 
-  onChangeTheme() {
+  void onChangeTheme() {
     themeType.value = nextThemeType;
     try {
       Get.find<MineController>().themeType.value = themeType.value;
@@ -205,7 +205,7 @@ class MineController extends GetxController {
     Get.changeThemeMode(themeType.value.toThemeMode);
   }
 
-  pushFollow() {
+  void pushFollow() {
     if (!isLogin.value) {
       SmartDialog.showToast('账号未登录');
       return;
@@ -213,7 +213,7 @@ class MineController extends GetxController {
     Get.toNamed('/follow?mid=${userInfo.value.mid}', preventDuplicates: false);
   }
 
-  pushFans() {
+  void pushFans() {
     if (!isLogin.value) {
       SmartDialog.showToast('账号未登录');
       return;
@@ -221,7 +221,7 @@ class MineController extends GetxController {
     Get.toNamed('/fan?mid=${userInfo.value.mid}', preventDuplicates: false);
   }
 
-  pushDynamic() {
+  void pushDynamic() {
     if (!isLogin.value) {
       SmartDialog.showToast('账号未登录');
       return;

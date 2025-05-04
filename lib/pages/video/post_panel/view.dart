@@ -41,7 +41,7 @@ class _PostPanelState extends CommonCollapseSlidePageState<PostPanel> {
   VideoDetailController get videoDetailController =>
       widget.videoDetailController;
   PlPlayerController get plPlayerController => widget.plPlayerController;
-  List<PostSegmentModel>? get list => videoDetailController.list;
+  List<PostSegmentModel>? get list => videoDetailController.postList;
 
   late final double videoDuration =
       plPlayerController.durationSeconds.value.inMilliseconds / 1000;
@@ -117,7 +117,8 @@ class _PostPanelState extends CommonCollapseSlidePageState<PostPanel> {
                             padding: const EdgeInsets.all(12),
                             decoration: BoxDecoration(
                               color: theme.colorScheme.onInverseSurface,
-                              borderRadius: BorderRadius.circular(12),
+                              borderRadius:
+                                  const BorderRadius.all(Radius.circular(12)),
                             ),
                             child: Column(
                               mainAxisSize: MainAxisSize.min,
@@ -164,7 +165,7 @@ class _PostPanelState extends CommonCollapseSlidePageState<PostPanel> {
                                           onSelected: (item) async {
                                             list![index].category = item;
                                             List<ActionType> constraintList =
-                                                segmentType2ActionType(item);
+                                                item.toActionType;
                                             if (constraintList
                                                 .contains(
                                                     list![index].actionType)
@@ -212,7 +213,7 @@ class _PostPanelState extends CommonCollapseSlidePageState<PostPanel> {
                                                   color: theme
                                                       .colorScheme.secondary,
                                                 ),
-                                                strutStyle: StrutStyle(
+                                                strutStyle: const StrutStyle(
                                                   height: 1,
                                                   leading: 0,
                                                 ),
@@ -252,11 +253,10 @@ class _PostPanelState extends CommonCollapseSlidePageState<PostPanel> {
                                               .map(
                                                 (item) =>
                                                     PopupMenuItem<ActionType>(
-                                                  enabled:
-                                                      segmentType2ActionType(
-                                                              list![index]
-                                                                  .category)
-                                                          .contains(item),
+                                                  enabled: list![index]
+                                                      .category
+                                                      .toActionType
+                                                      .contains(item),
                                                   value: item,
                                                   child: Text(item.title),
                                                 ),
@@ -273,7 +273,7 @@ class _PostPanelState extends CommonCollapseSlidePageState<PostPanel> {
                                                   color: theme
                                                       .colorScheme.secondary,
                                                 ),
-                                                strutStyle: StrutStyle(
+                                                strutStyle: const StrutStyle(
                                                   height: 1,
                                                   leading: 0,
                                                 ),
@@ -401,7 +401,7 @@ class _PostPanelState extends CommonCollapseSlidePageState<PostPanel> {
                       ),
                     );
                   },
-                  child: Icon(Icons.check),
+                  child: const Icon(Icons.check),
                 ),
               )
             ],
@@ -502,7 +502,7 @@ class _PostPanelState extends CommonCollapseSlidePageState<PostPanel> {
                   ),
                   TextButton(
                     onPressed: () => Get.back(result: initV),
-                    child: Text('确定'),
+                    child: const Text('确定'),
                   ),
                 ],
               );

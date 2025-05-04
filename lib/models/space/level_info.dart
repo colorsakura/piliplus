@@ -1,6 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 
-import 'senior_inquiry.dart';
+import 'package:PiliPlus/models/space/senior_inquiry.dart';
 
 part 'level_info.g.dart';
 

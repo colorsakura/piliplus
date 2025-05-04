@@ -62,6 +62,8 @@ class ReplyItemGrpc extends StatelessWidget {
 
   static final _voteRegExp = RegExp(r"\{vote:\d+?\}");
   static final _timeRegExp = RegExp(r'^\b(?:\d+[:：])?\d+[:：]\d+\b$');
+  static bool enableWordRe =
+      GStorage.setting.get(SettingBoxKey.enableWordRe, defaultValue: false);
 
   @override
   Widget build(BuildContext context) {
@@ -327,10 +329,10 @@ class ReplyItemGrpc extends StatelessWidget {
     );
   }
 
-  get _style => TextButton.styleFrom(
-        padding: const EdgeInsets.all(0),
+  ButtonStyle get _style => TextButton.styleFrom(
+        padding: EdgeInsets.zero,
         tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-        visualDensity: VisualDensity(horizontal: -2, vertical: -2),
+        visualDensity: VisualDensity.compact,
       );
 
   // 感谢、回复、复制
@@ -424,7 +426,7 @@ class ReplyItemGrpc extends StatelessWidget {
       margin: const EdgeInsets.only(left: 42, right: 4, top: 0),
       child: Material(
         color: theme.colorScheme.onInverseSurface,
-        borderRadius: BorderRadius.circular(6),
+        borderRadius: const BorderRadius.all(Radius.circular(6)),
         clipBehavior: Clip.hardEdge,
         animationDuration: Duration.zero,
         child: Column(
@@ -637,9 +639,6 @@ class ReplyItemGrpc extends StatelessWidget {
         text: str,
       ));
     }
-
-    late final bool enableWordRe =
-        GStorage.setting.get(SettingBoxKey.enableWordRe, defaultValue: false);
 
     // 分割文本并处理每个部分
     message.splitMapJoin(
@@ -916,28 +915,29 @@ class ReplyItemGrpc extends StatelessWidget {
 
     // 图片渲染
     if (content.pictures.isNotEmpty) {
-      spanChildren.add(const TextSpan(text: '\n'));
-      spanChildren.add(
-        WidgetSpan(
-          child: LayoutBuilder(
-            builder: (context, constraints) => imageView(
-              constraints.maxWidth,
-              content.pictures
-                  .map(
-                    (item) => ImageModel(
-                      width: item.imgWidth,
-                      height: item.imgHeight,
-                      url: item.imgSrc,
-                    ),
-                  )
-                  .toList(),
-              onViewImage: onViewImage,
-              onDismissed: onDismissed,
-              callback: callback,
+      spanChildren
+        ..add(const TextSpan(text: '\n'))
+        ..add(
+          WidgetSpan(
+            child: LayoutBuilder(
+              builder: (context, constraints) => imageView(
+                constraints.maxWidth,
+                content.pictures
+                    .map(
+                      (item) => ImageModel(
+                        width: item.imgWidth,
+                        height: item.imgHeight,
+                        url: item.imgSrc,
+                      ),
+                    )
+                    .toList(),
+                onViewImage: onViewImage,
+                onDismissed: onDismissed,
+                callback: callback,
+              ),
             ),
           ),
-        ),
-      );
+        );
     }
 
     // 笔记链接
@@ -1027,7 +1027,7 @@ class ReplyItemGrpc extends StatelessWidget {
                 content: Text.rich(
                   TextSpan(
                     children: [
-                      TextSpan(text: '确定删除这条评论吗？\n\n'),
+                      const TextSpan(text: '确定删除这条评论吗？\n\n'),
                       if (ownerMid != item.member.mid.toInt()) ...[
                         TextSpan(
                           text: '@${item.member.name}',
@@ -1035,7 +1035,7 @@ class ReplyItemGrpc extends StatelessWidget {
                             color: theme.colorScheme.primary,
                           ),
                         ),
-                        TextSpan(text: ':\n'),
+                        const TextSpan(text: ':\n'),
                       ],
                       TextSpan(text: message),
                     ],
@@ -1144,7 +1144,7 @@ class ReplyItemGrpc extends StatelessWidget {
             ListTile(
               onTap: () => menuActionHandler('top'),
               minLeadingWidth: 0,
-              leading: Icon(Icons.vertical_align_top, size: 19),
+              leading: const Icon(Icons.vertical_align_top, size: 19),
               title: Text(
                 '${replyItem.replyControl.isUpTop ? '取消' : ''}置顶',
                 style: style,
@@ -1172,12 +1172,12 @@ class ReplyItemGrpc extends StatelessWidget {
             ListTile(
               onTap: () => menuActionHandler('checkReply'),
               minLeadingWidth: 0,
-              leading: Stack(
+              leading: const Stack(
                 clipBehavior: Clip.none,
                 alignment: Alignment.center,
                 children: [
-                  const Icon(Icons.shield_outlined, size: 19),
-                  const Icon(Icons.reply, size: 12),
+                  Icon(Icons.shield_outlined, size: 19),
+                  Icon(Icons.reply, size: 12),
                 ],
               ),
               title: Text('检查评论', style: style),

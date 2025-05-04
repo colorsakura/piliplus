@@ -33,7 +33,7 @@ class VideoPlayerServiceHandler extends BaseAudioHandler with SeekHandler {
     revalidateSetting();
   }
 
-  revalidateSetting() {
+  void revalidateSetting() {
     enableBackgroundPlay = GStorage.setting
         .get(SettingBoxKey.enableBackgroundPlay, defaultValue: true);
   }
@@ -105,14 +105,14 @@ class VideoPlayerServiceHandler extends BaseAudioHandler with SeekHandler {
     ));
   }
 
-  onStatusChange(PlayerStatus status, bool isBuffering, isLive) {
+  void onStatusChange(PlayerStatus status, bool isBuffering, isLive) {
     if (!enableBackgroundPlay) return;
 
     if (_item.isEmpty) return;
     setPlaybackState(status, isBuffering, isLive);
   }
 
-  onVideoDetailChange(dynamic data, int cid, String herotag) {
+  void onVideoDetailChange(dynamic data, int cid, String herotag) {
     if (!enableBackgroundPlay) return;
     // debugPrint('当前调用栈为：');
     // debugPrint(StackTrace.current);
@@ -168,7 +168,7 @@ class VideoPlayerServiceHandler extends BaseAudioHandler with SeekHandler {
     setMediaItem(mediaItem);
   }
 
-  onVideoDetailDispose(String herotag) {
+  void onVideoDetailDispose(String herotag) {
     if (!enableBackgroundPlay) return;
 
     if (_item.isNotEmpty) {
@@ -184,7 +184,7 @@ class VideoPlayerServiceHandler extends BaseAudioHandler with SeekHandler {
     }
   }
 
-  clear() {
+  void clear() {
     if (!enableBackgroundPlay) return;
     mediaItem.add(null);
     _item.clear();
@@ -206,7 +206,7 @@ class VideoPlayerServiceHandler extends BaseAudioHandler with SeekHandler {
     ));
   }
 
-  onPositionChange(Duration position) {
+  void onPositionChange(Duration position) {
     if (!enableBackgroundPlay ||
         _item.isEmpty ||
         PlPlayerController.instanceExists().not) return;

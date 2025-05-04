@@ -103,9 +103,9 @@ class _MemberPageState extends State<MemberPage> {
                 if (_userController.isFollowed == 1)
                   PopupMenuItem(
                     onTap: _userController.onRemoveFan,
-                    child: Row(
+                    child: const Row(
                       mainAxisSize: MainAxisSize.min,
-                      children: const [
+                      children: [
                         Icon(Icons.remove_circle_outline_outlined, size: 19),
                         SizedBox(width: 10),
                         Text('移除粉丝'),
@@ -197,7 +197,7 @@ class _MemberPageState extends State<MemberPage> {
                               ],
                             ),
                           )
-                        : Center(child: const Text('EMPTY')),
+                        : const Center(child: Text('EMPTY')),
                   );
                 },
               )
@@ -288,7 +288,7 @@ class _MemberPageState extends State<MemberPage> {
           : GestureDetector(
               onTap: _userController.onReload,
               behavior: HitTestBehavior.opaque,
-              child: SizedBox(height: 56, width: double.infinity),
+              child: const SizedBox(height: 56, width: double.infinity),
             ),
       Error() => _errorWidget(userState.errMsg),
     };

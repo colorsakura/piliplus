@@ -1,5 +1,5 @@
-import 'content.dart';
-import 'member.dart';
+import 'package:PiliPlus/models/video/reply/content.dart';
+import 'package:PiliPlus/models/video/reply/member.dart';
 
 class ReplyItemModel {
   ReplyItemModel({

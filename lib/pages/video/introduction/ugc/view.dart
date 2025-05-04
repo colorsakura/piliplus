@@ -28,10 +28,10 @@ import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
-import 'widgets/action_item.dart';
-import 'widgets/action_row_item.dart';
-import 'widgets/page.dart';
-import 'widgets/season.dart';
+import 'package:PiliPlus/pages/video/introduction/ugc/widgets/action_item.dart';
+import 'package:PiliPlus/pages/video/introduction/ugc/widgets/action_row_item.dart';
+import 'package:PiliPlus/pages/video/introduction/ugc/widgets/page.dart';
+import 'package:PiliPlus/pages/video/introduction/ugc/widgets/season.dart';
 
 class VideoIntroPanel extends StatefulWidget {
   const VideoIntroPanel({
@@ -129,7 +129,7 @@ class _VideoInfoState extends State<VideoInfo> {
   late final _horizontalMemberPage = GStorage.horizontalMemberPage;
 
   Widget _buildVideoTitle(ThemeData theme, [bool isExpand = false]) =>
-      videoDetailCtr.enableSponsorBlock
+      videoDetailCtr.plPlayerController.enableSponsorBlock
           ? Obx(
               () => Text.rich(
                 TextSpan(
@@ -144,7 +144,8 @@ class _VideoInfoState extends State<VideoInfo> {
                           ),
                           decoration: BoxDecoration(
                             color: theme.colorScheme.secondaryContainer,
-                            borderRadius: BorderRadius.circular(4),
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(4)),
                           ),
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
@@ -169,8 +170,9 @@ class _VideoInfoState extends State<VideoInfo> {
                               ),
                               Text(
                                 videoDetailCtr.videoLabel.value,
-                                textScaler: TextScaler.linear(1),
-                                strutStyle: StrutStyle(leading: 0, height: 1),
+                                textScaler: TextScaler.noScaling,
+                                strutStyle:
+                                    const StrutStyle(leading: 0, height: 1),
                                 style: TextStyle(
                                   height: 1,
                                   fontSize: 13,
@@ -181,7 +183,7 @@ class _VideoInfoState extends State<VideoInfo> {
                           ),
                         ),
                       ),
-                      TextSpan(text: ' '),
+                      const TextSpan(text: ' '),
                     ],
                     TextSpan(
                         text:
@@ -200,7 +202,7 @@ class _VideoInfoState extends State<VideoInfo> {
               style: const TextStyle(fontSize: 16),
             );
 
-  void handleState(Future Function() action) async {
+  Future<void> handleState(Future Function() action) async {
     if (isProcessing.not) {
       isProcessing = true;
       await action();
@@ -233,7 +235,7 @@ class _VideoInfoState extends State<VideoInfo> {
   }
 
   // 视频介绍
-  showIntroDetail() {
+  void showIntroDetail() {
     if (widget.loadingStatus) {
       return;
     }
@@ -242,7 +244,7 @@ class _VideoInfoState extends State<VideoInfo> {
   }
 
   // 用户主页
-  onPushMember() {
+  void onPushMember() {
     feedBack();
     int? mid = !widget.loadingStatus
         ? videoDetail.owner?.mid
@@ -403,7 +405,7 @@ class _VideoInfoState extends State<VideoInfo> {
                                           Positioned(
                                             right: -2,
                                             bottom: -2,
-                                            child: Container(
+                                            child: DecoratedBox(
                                               decoration: BoxDecoration(
                                                 shape: BoxShape.circle,
                                                 color:
@@ -652,7 +654,7 @@ class _VideoInfoState extends State<VideoInfo> {
                               color: theme.colorScheme.outline,
                             ),
                           ),
-                          WidgetSpan(child: SizedBox(width: 2)),
+                          const WidgetSpan(child: SizedBox(width: 2)),
                           TextSpan(
                             text:
                                 '${videoIntroController.videoDetail.value.argueMsg}',
@@ -772,7 +774,8 @@ class _VideoInfoState extends State<VideoInfo> {
                       videoDetail.ugcSeason != null &&
                       (context.orientation != Orientation.landscape ||
                           (context.orientation == Orientation.landscape &&
-                              videoDetailCtr.horizontalSeasonPanel.not)))
+                              videoDetailCtr.plPlayerController
+                                  .horizontalSeasonPanel.not)))
                     Obx(
                       () => SeasonPanel(
                         key: ValueKey(videoIntroController.videoDetail.value),
@@ -787,7 +790,8 @@ class _VideoInfoState extends State<VideoInfo> {
                       videoDetail.pages!.length > 1 &&
                       (context.orientation != Orientation.landscape ||
                           (context.orientation == Orientation.landscape &&
-                              videoDetailCtr.horizontalSeasonPanel.not))) ...[
+                              videoDetailCtr.plPlayerController
+                                  .horizontalSeasonPanel.not))) ...[
                     Obx(
                       () => PagesPanel(
                         key: ValueKey(videoIntroController.videoDetail.value),

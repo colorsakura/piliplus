@@ -1,6 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 
-import 'label.dart';
+import 'package:PiliPlus/models/space/label.dart';
 
 part 'vip.g.dart';
 

@@ -57,7 +57,7 @@ class _MultiSelectDialogState<T> extends State<MultiSelectDialog<T>> {
           ),
         );
       }),
-      actionsPadding: EdgeInsets.only(left: 16, right: 16, bottom: 12),
+      actionsPadding: const EdgeInsets.only(left: 16, right: 16, bottom: 12),
       actions: [
         TextButton(
           onPressed: Get.back,

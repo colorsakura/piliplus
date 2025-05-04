@@ -45,7 +45,7 @@ class _FavNotePageState extends State<FavNotePage>
                     const EdgeInsets.symmetric(horizontal: 3, vertical: 8),
                 indicator: BoxDecoration(
                   color: theme.colorScheme.secondaryContainer,
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: const BorderRadius.all(Radius.circular(20)),
                 ),
                 indicatorSize: TabBarIndicatorSize.tab,
                 labelStyle: TabBarTheme.of(context)
@@ -55,15 +55,15 @@ class _FavNotePageState extends State<FavNotePage>
                 labelColor: theme.colorScheme.onSecondaryContainer,
                 unselectedLabelColor: theme.colorScheme.outline,
                 tabs: [
-                  Tab(text: '未发布笔记'),
-                  Tab(text: '公开笔记'),
+                  const Tab(text: '未发布笔记'),
+                  const Tab(text: '公开笔记'),
                 ],
               ),
             ),
             // TextButton(
             //   style: TextButton.styleFrom(
             //     foregroundColor: theme.colorScheme.onSurfaceVariant,
-            //     visualDensity: VisualDensity(horizontal: -2, vertical: -2),
+            //     visualDensity: const VisualDensity(horizontal: -2, vertical: -2),
             //     tapTargetSize: MaterialTapTargetSize.shrinkWrap,
             //   ),
             //   onPressed: () async {
@@ -91,8 +91,8 @@ class _FavNotePageState extends State<FavNotePage>
             controller: _tabController,
             physics: const NeverScrollableScrollPhysics(),
             children: [
-              FavNoteChildPage(isPublish: false),
-              FavNoteChildPage(isPublish: true),
+              const FavNoteChildPage(isPublish: false),
+              const FavNoteChildPage(isPublish: true),
             ],
           ),
         ),

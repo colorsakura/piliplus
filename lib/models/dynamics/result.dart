@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:PiliPlus/common/widgets/avatar.dart';
 import 'package:PiliPlus/models/model_owner.dart';
 
-import 'article_content_model.dart';
+import 'package:PiliPlus/models/dynamics/article_content_model.dart';
 
 class DynamicsDataModel {
   bool? hasMore;

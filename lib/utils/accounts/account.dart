@@ -72,7 +72,7 @@ class LoginAccount implements Account {
 
   LoginAccount(this.cookieJar, this.accessKey, this.refresh,
       [Set<AccountType>? type])
-      : this.type = type ?? {};
+      : type = type ?? {};
 
   LoginAccount.fromJson(Map json) {
     cookieJar = BiliCookieJar.fromJson(json['cookies']);

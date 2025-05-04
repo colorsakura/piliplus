@@ -16,7 +16,7 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
-import 'widgets/multi_select_dialog.dart';
+import 'package:PiliPlus/pages/setting/widgets/multi_select_dialog.dart';
 
 class _SettingsModel {
   final String name;
@@ -45,37 +45,37 @@ class _SettingPageState extends State<SettingPage> {
   bool get _isPortrait => context.orientation == Orientation.portrait;
 
   final List<_SettingsModel> _items = [
-    _SettingsModel(
+    const _SettingsModel(
       name: 'privacySetting',
       title: '隐私设置',
       subtitle: '黑名单、无痕模式',
       icon: Icons.privacy_tip_outlined,
     ),
-    _SettingsModel(
+    const _SettingsModel(
       name: 'recommendSetting',
       title: '推荐流设置',
       subtitle: '推荐来源（web/app）、刷新保留内容、过滤器',
       icon: Icons.explore_outlined,
     ),
-    _SettingsModel(
+    const _SettingsModel(
       name: 'videoSetting',
       title: '音视频设置',
       subtitle: '画质、音质、解码、缓冲、音频输出等',
       icon: Icons.video_settings_outlined,
     ),
-    _SettingsModel(
+    const _SettingsModel(
       name: 'playSetting',
       title: '播放器设置',
       subtitle: '双击/长按、全屏、后台播放、弹幕、字幕、底部进度条等',
       icon: Icons.touch_app_outlined,
     ),
-    _SettingsModel(
+    const _SettingsModel(
       name: 'styleSetting',
       title: '外观设置',
       subtitle: '横屏适配（平板）、侧栏、列宽、首页、动态红点、主题、字号、图片、帧率等',
       icon: Icons.style_outlined,
     ),
-    _SettingsModel(
+    const _SettingsModel(
       name: 'extraSetting',
       title: '其它设置',
       subtitle: '震动、搜索、收藏、ai、评论、动态、代理、更新检查等',
@@ -86,7 +86,7 @@ class _SettingPageState extends State<SettingPage> {
       title: 'WebDAV 设置',
       icon: MdiIcons.databaseCogOutline,
     ),
-    _SettingsModel(
+    const _SettingsModel(
       name: 'about',
       title: '关于',
       icon: Icons.info_outline,
@@ -137,14 +137,17 @@ class _SettingPageState extends State<SettingPage> {
                     removeLeft: true,
                     removeTop: true,
                     child: switch (_type) {
-                      'privacySetting' => PrivacySetting(showAppBar: false),
-                      'recommendSetting' => RecommendSetting(showAppBar: false),
-                      'videoSetting' => VideoSetting(showAppBar: false),
-                      'playSetting' => PlaySetting(showAppBar: false),
-                      'styleSetting' => StyleSetting(showAppBar: false),
-                      'extraSetting' => ExtraSetting(showAppBar: false),
-                      'webdavSetting' => WebDavSettingPage(showAppBar: false),
-                      'about' => AboutPage(showAppBar: false),
+                      'privacySetting' =>
+                        const PrivacySetting(showAppBar: false),
+                      'recommendSetting' =>
+                        const RecommendSetting(showAppBar: false),
+                      'videoSetting' => const VideoSetting(showAppBar: false),
+                      'playSetting' => const PlaySetting(showAppBar: false),
+                      'styleSetting' => const StyleSetting(showAppBar: false),
+                      'extraSetting' => const ExtraSetting(showAppBar: false),
+                      'webdavSetting' =>
+                        const WebDavSettingPage(showAppBar: false),
+                      'about' => const AboutPage(showAppBar: false),
                       _ => const SizedBox.shrink(),
                     },
                   ),
@@ -220,7 +223,7 @@ class _SettingPageState extends State<SettingPage> {
       builder: (context) {
         return MultiSelectDialog<LoginAccount>(
           title: '选择要登出的账号uid',
-          initValues: Iterable.empty(),
+          initValues: const Iterable.empty(),
           values: {for (var i in Accounts.account.values) i: i.mid.toString()},
         );
       },
@@ -287,11 +290,11 @@ class _SettingPageState extends State<SettingPage> {
         ),
         child: InkWell(
           onTap: () => Get.toNamed('/settingsSearch'),
-          borderRadius: BorderRadius.circular(50),
+          borderRadius: const BorderRadius.all(Radius.circular(50)),
           child: Ink(
             padding: const EdgeInsets.symmetric(vertical: 6),
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(50),
+              borderRadius: const BorderRadius.all(Radius.circular(50)),
               color: theme.colorScheme.onInverseSurface,
             ),
             child: Center(

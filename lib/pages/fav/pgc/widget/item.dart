@@ -89,7 +89,8 @@ class FavPgcItem extends StatelessWidget {
                                       width: constraints.maxHeight *
                                           StyleString.aspectRatio,
                                       decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(4),
+                                        borderRadius: const BorderRadius.all(
+                                            Radius.circular(4)),
                                         color: Colors.black.withOpacity(0.6),
                                       ),
                                       child: SizedBox(

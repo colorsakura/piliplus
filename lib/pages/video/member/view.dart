@@ -63,8 +63,9 @@ class _HorizontalMemberPageState extends State<HorizontalMemberPage> {
   void listener() {
     if (_controller.scrollController.position.pixels == 0) {
       if (_controller.hasPrev) {
-        _controller.isLoadPrevious = true;
-        _controller.onLoadMore();
+        _controller
+          ..isLoadPrevious = true
+          ..onLoadMore();
       }
     }
   }
@@ -183,7 +184,7 @@ class _HorizontalMemberPageState extends State<HorizontalMemberPage> {
             controller: _controller.scrollController,
             physics: PositionRetainedScrollPhysics(
               shouldRetain: _controller.hasPrev,
-              parent: ClampingScrollPhysics(),
+              parent: const ClampingScrollPhysics(),
             ),
             slivers: [
               _buildSliverHeader(theme),
@@ -248,7 +249,7 @@ class _HorizontalMemberPageState extends State<HorizontalMemberPage> {
     );
   }
 
-  _buildInfo(ThemeData theme, MemberInfoModel memberInfoModel) => Column(
+  Column _buildInfo(ThemeData theme, MemberInfoModel memberInfoModel) => Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -329,10 +330,8 @@ class _HorizontalMemberPageState extends State<HorizontalMemberPage> {
                     foregroundColor: memberInfoModel.isFollowed == true
                         ? theme.colorScheme.outline
                         : null,
-                    padding: const EdgeInsets.all(0),
-                    visualDensity: const VisualDensity(
-                      vertical: -2,
-                    ),
+                    padding: EdgeInsets.zero,
+                    visualDensity: const VisualDensity(vertical: -2),
                   ),
                   onPressed: () {
                     if (widget.mid == _ownerMid) {
@@ -363,7 +362,7 @@ class _HorizontalMemberPageState extends State<HorizontalMemberPage> {
                             ? '已关注'
                             : '关注',
                     maxLines: 1,
-                    style: TextStyle(fontSize: 14),
+                    style: const TextStyle(fontSize: 14),
                   ),
                 ),
               ),
@@ -371,15 +370,13 @@ class _HorizontalMemberPageState extends State<HorizontalMemberPage> {
               Expanded(
                 child: OutlinedButton(
                   style: OutlinedButton.styleFrom(
-                    padding: const EdgeInsets.all(0),
-                    visualDensity: const VisualDensity(
-                      vertical: -2,
-                    ),
+                    padding: EdgeInsets.zero,
+                    visualDensity: const VisualDensity(vertical: -2),
                   ),
                   onPressed: () {
                     Get.toNamed('/member?mid=${widget.mid}');
                   },
-                  child: Text(
+                  child: const Text(
                     '查看主页',
                     maxLines: 1,
                     style: TextStyle(fontSize: 14),
@@ -409,7 +406,7 @@ class _HorizontalMemberPageState extends State<HorizontalMemberPage> {
     );
   }
 
-  _buildAvatar(face) => Hero(
+  Hero _buildAvatar(face) => Hero(
         tag: face,
         child: GestureDetector(
           onTap: () {

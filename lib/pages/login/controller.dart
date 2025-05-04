@@ -52,8 +52,9 @@ class LoginPageController extends GetxController
 
   @override
   void onClose() {
-    tabController.removeListener(_handleTabChange);
-    tabController.dispose();
+    tabController
+      ..removeListener(_handleTabChange)
+      ..dispose();
     qrCodeTimer?.cancel();
     smsSendCooldownTimer?.cancel();
     telTextController.dispose();
@@ -115,95 +116,97 @@ class LoginPageController extends GetxController
       success: true,
     );
 
-    captcha.addEventHandler(
-        onShow: (Map<String, dynamic> message) async {},
-        onClose: (Map<String, dynamic> message) async {
-          SmartDialog.showToast('关闭验证');
-        },
-        onResult: (Map<String, dynamic> message) async {
-          debugPrint("Captcha result: $message");
-          String code = message["code"];
-          if (code == "1") {
-            // 发送 message["result"] 中的数据向 B 端的业务服务接口进行查询
-            SmartDialog.showToast('验证成功');
-            captchaData.validate = message['result']['geetest_validate'];
-            captchaData.seccode = message['result']['geetest_seccode'];
-            captchaData.geetest = GeetestData(
-              challenge: message['result']['geetest_challenge'],
-              gt: geeGt,
-            );
-            onSuccess();
-          } else {
-            // 终端用户完成验证失败，自动重试 If the verification fails, it will be automatically retried.
-            debugPrint("Captcha result code : $code");
-          }
-        },
-        onError: (Map<String, dynamic> message) async {
-          SmartDialog.showToast("Captcha onError: $message");
-          String code = message["code"];
-          // 处理验证中返回的错误 Handling errors returned in verification
-          if (Platform.isAndroid) {
-            // Android 平台
-            if (code == "-2") {
-              // Dart 调用异常 Call exception
-            } else if (code == "-1") {
-              // Gt3RegisterData 参数不合法 Parameter is invalid
-            } else if (code == "201") {
-              // 网络无法访问 Network inaccessible
-            } else if (code == "202") {
-              // Json 解析错误 Analysis error
-            } else if (code == "204") {
-              // WebView 加载超时，请检查是否混淆极验 SDK   Load timed out
-            } else if (code == "204_1") {
-              // WebView 加载前端页面错误，请查看日志 Error loading front-end page, please check the log
-            } else if (code == "204_2") {
-              // WebView 加载 SSLError
-            } else if (code == "206") {
-              // gettype 接口错误或返回为 null   API error or return null
-            } else if (code == "207") {
-              // getphp 接口错误或返回为 null    API error or return null
-            } else if (code == "208") {
-              // ajax 接口错误或返回为 null      API error or return null
+    captcha
+      ..addEventHandler(
+          onShow: (Map<String, dynamic> message) async {},
+          onClose: (Map<String, dynamic> message) async {
+            SmartDialog.showToast('关闭验证');
+          },
+          onResult: (Map<String, dynamic> message) async {
+            debugPrint("Captcha result: $message");
+            String code = message["code"];
+            if (code == "1") {
+              // 发送 message["result"] 中的数据向 B 端的业务服务接口进行查询
+              SmartDialog.showToast('验证成功');
+              captchaData
+                ..validate = message['result']['geetest_validate']
+                ..seccode = message['result']['geetest_seccode']
+                ..geetest = GeetestData(
+                  challenge: message['result']['geetest_challenge'],
+                  gt: geeGt,
+                );
+              onSuccess();
             } else {
-              // 更多错误码参考开发文档  More error codes refer to the development document
-              // https://docs.geetest.com/sensebot/apirefer/errorcode/android
+              // 终端用户完成验证失败，自动重试 If the verification fails, it will be automatically retried.
+              debugPrint("Captcha result code : $code");
             }
-          }
+          },
+          onError: (Map<String, dynamic> message) async {
+            SmartDialog.showToast("Captcha onError: $message");
+            String code = message["code"];
+            // 处理验证中返回的错误 Handling errors returned in verification
+            if (Platform.isAndroid) {
+              // Android 平台
+              if (code == "-2") {
+                // Dart 调用异常 Call exception
+              } else if (code == "-1") {
+                // Gt3RegisterData 参数不合法 Parameter is invalid
+              } else if (code == "201") {
+                // 网络无法访问 Network inaccessible
+              } else if (code == "202") {
+                // Json 解析错误 Analysis error
+              } else if (code == "204") {
+                // WebView 加载超时，请检查是否混淆极验 SDK   Load timed out
+              } else if (code == "204_1") {
+                // WebView 加载前端页面错误，请查看日志 Error loading front-end page, please check the log
+              } else if (code == "204_2") {
+                // WebView 加载 SSLError
+              } else if (code == "206") {
+                // gettype 接口错误或返回为 null   API error or return null
+              } else if (code == "207") {
+                // getphp 接口错误或返回为 null    API error or return null
+              } else if (code == "208") {
+                // ajax 接口错误或返回为 null      API error or return null
+              } else {
+                // 更多错误码参考开发文档  More error codes refer to the development document
+                // https://docs.geetest.com/sensebot/apirefer/errorcode/android
+              }
+            }
 
-          if (Platform.isIOS) {
-            // iOS 平台
-            if (code == "-1009") {
-              // 网络无法访问 Network inaccessible
-            } else if (code == "-1004") {
-              // 无法查找到 HOST  Unable to find HOST
-            } else if (code == "-1002") {
-              // 非法的 URL  Illegal URL
-            } else if (code == "-1001") {
-              // 网络超时 Network timeout
-            } else if (code == "-999") {
-              // 请求被意外中断, 一般由用户进行取消操作导致 The interrupted request was usually caused by the user cancelling the operation
-            } else if (code == "-21") {
-              // 使用了重复的 challenge   Duplicate challenges are used
-              // 检查获取 challenge 是否进行了缓存  Check if the fetch challenge is cached
-            } else if (code == "-20") {
-              // 尝试过多, 重新引导用户触发验证即可 Try too many times, lead the user to request verification again
-            } else if (code == "-10") {
-              // 预判断时被封禁, 不会再进行图形验证 Banned during pre-judgment, and no more image captcha verification
-            } else if (code == "-2") {
-              // Dart 调用异常 Call exception
-            } else if (code == "-1") {
-              // Gt3RegisterData 参数不合法  Parameter is invalid
-            } else {
-              // 更多错误码参考开发文档 More error codes refer to the development document
-              // https://docs.geetest.com/sensebot/apirefer/errorcode/ios
+            if (Platform.isIOS) {
+              // iOS 平台
+              if (code == "-1009") {
+                // 网络无法访问 Network inaccessible
+              } else if (code == "-1004") {
+                // 无法查找到 HOST  Unable to find HOST
+              } else if (code == "-1002") {
+                // 非法的 URL  Illegal URL
+              } else if (code == "-1001") {
+                // 网络超时 Network timeout
+              } else if (code == "-999") {
+                // 请求被意外中断, 一般由用户进行取消操作导致 The interrupted request was usually caused by the user cancelling the operation
+              } else if (code == "-21") {
+                // 使用了重复的 challenge   Duplicate challenges are used
+                // 检查获取 challenge 是否进行了缓存  Check if the fetch challenge is cached
+              } else if (code == "-20") {
+                // 尝试过多, 重新引导用户触发验证即可 Try too many times, lead the user to request verification again
+              } else if (code == "-10") {
+                // 预判断时被封禁, 不会再进行图形验证 Banned during pre-judgment, and no more image captcha verification
+              } else if (code == "-2") {
+                // Dart 调用异常 Call exception
+              } else if (code == "-1") {
+                // Gt3RegisterData 参数不合法  Parameter is invalid
+              } else {
+                // 更多错误码参考开发文档 More error codes refer to the development document
+                // https://docs.geetest.com/sensebot/apirefer/errorcode/ios
+              }
             }
-          }
-        });
-    captcha.startCaptcha(registerData);
+          })
+      ..startCaptcha(registerData);
   }
 
   // cookie登录
-  void loginByCookie() async {
+  Future<void> loginByCookie() async {
     if (cookieTextController.text.isEmpty) {
       SmartDialog.showToast('cookie不能为空');
       return;
@@ -243,7 +246,7 @@ class LoginPageController extends GetxController
   }
 
   // app端密码登录
-  void loginByPassword() async {
+  Future<void> loginByPassword() async {
     String username = usernameTextController.text;
     String password = passwordTextController.text;
     if (username.isEmpty || password.isEmpty) {
@@ -263,10 +266,10 @@ class LoginPageController extends GetxController
       password: password,
       key: key,
       salt: salt,
-      gee_validate: captchaData.validate,
-      gee_seccode: captchaData.seccode,
-      gee_challenge: captchaData.geetest?.challenge,
-      recaptcha_token: captchaData.token,
+      geeValidate: captchaData.validate,
+      geeSeccode: captchaData.seccode,
+      geeChallenge: captchaData.geetest?.challenge,
+      recaptchaToken: captchaData.token,
     );
     if (res['status']) {
       var data = res['data'];
@@ -301,9 +304,10 @@ class LoginPageController extends GetxController
         Get.dialog(
           AlertDialog(
             titlePadding:
-                EdgeInsets.only(left: 16, top: 18, right: 16, bottom: 12),
-            contentPadding: EdgeInsets.symmetric(horizontal: 16),
-            actionsPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                const EdgeInsets.only(left: 16, top: 18, right: 16, bottom: 12),
+            contentPadding: const EdgeInsets.symmetric(horizontal: 16),
+            actionsPadding:
+                const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             title: const Text(
               "本次登录需要验证您的手机号",
               textAlign: TextAlign.center,
@@ -317,12 +321,12 @@ class LoginPageController extends GetxController
                 ),
                 // 带有清空按钮的输入框
                 TextField(
-                  style: TextStyle(fontSize: 15),
+                  style: const TextStyle(fontSize: 15),
                   controller: textFieldController,
                   textAlign: TextAlign.center,
                   decoration: InputDecoration(
                     hintText: "请输入短信验证码",
-                    hintStyle: TextStyle(fontSize: 15),
+                    hintStyle: const TextStyle(fontSize: 15),
                     suffixIcon: iconButton(
                       context: Get.context!,
                       icon: Icons.clear,
@@ -330,7 +334,7 @@ class LoginPageController extends GetxController
                       bgColor: Colors.transparent,
                       onPressed: textFieldController.clear,
                     ),
-                    suffixIconConstraints: BoxConstraints(
+                    suffixIconConstraints: const BoxConstraints(
                       maxHeight: 32,
                       maxWidth: 32,
                     ),
@@ -430,8 +434,9 @@ class LoginPageController extends GetxController
                   SmartDialog.showToast('正在保存身份信息');
                   await setAccount(
                       data['token_info'], data['cookie_info']['cookies']);
-                  Get.back();
-                  Get.back();
+                  Get
+                    ..back()
+                    ..back();
                 },
                 child: const Text("确认"),
               ),
@@ -476,7 +481,7 @@ class LoginPageController extends GetxController
   }
 
   // 短信验证码登录
-  void loginBySmsCode() async {
+  Future<void> loginBySmsCode() async {
     if (telTextController.text.isEmpty) {
       SmartDialog.showToast('手机号不能为空');
       return;
@@ -518,7 +523,7 @@ class LoginPageController extends GetxController
   }
 
   // app端验证码
-  void sendSmsCode() async {
+  Future<void> sendSmsCode() async {
     if (telTextController.text.isEmpty) {
       SmartDialog.showToast('手机号不能为空');
       return;
@@ -569,10 +574,10 @@ class LoginPageController extends GetxController
       tel: telTextController.text,
       cid: selectedCountryCodeId['country_id'],
       // deviceTouristId: guestId,
-      gee_validate: captchaData.validate,
-      gee_seccode: captchaData.seccode,
-      gee_challenge: captchaData.geetest?.challenge,
-      recaptcha_token: captchaData.token,
+      geeValidate: captchaData.validate,
+      geeSeccode: captchaData.seccode,
+      geeChallenge: captchaData.geetest?.challenge,
+      recaptchaToken: captchaData.token,
     );
     if (res['status']) {
       SmartDialog.showToast('发送成功');

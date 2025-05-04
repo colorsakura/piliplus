@@ -64,7 +64,7 @@ abstract class CommonSearchPageState<S extends CommonSearchPage, R, T>
 
   Widget _buildBody(LoadingState<List<T>?> loadingState) {
     return switch (loadingState) {
-      Loading() => HttpError(),
+      Loading() => const HttpError(),
       Success() => loadingState.response?.isNotEmpty == true
           ? buildList(loadingState.response!)
           : HttpError(

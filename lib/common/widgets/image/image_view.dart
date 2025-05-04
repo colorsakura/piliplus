@@ -61,32 +61,22 @@ Widget imageView(
     }
     final int row = picArr.length == 4 ? 2 : 3;
     return BorderRadius.only(
-      topLeft: Radius.circular(
-        (index - row >= 0 ||
-                ((index - 1) >= 0 && (index - 1) % row < index % row))
-            ? 0
-            : 10,
-      ),
-      topRight: Radius.circular(
-        (index - row >= 0 ||
-                ((index + 1) < picArr.length &&
-                    (index + 1) % row > index % row))
-            ? 0
-            : 10,
-      ),
-      bottomLeft: Radius.circular(
-        (index + row < picArr.length ||
-                ((index - 1) >= 0 && (index - 1) % row < index % row))
-            ? 0
-            : 10,
-      ),
-      bottomRight: Radius.circular(
-        (index + row < picArr.length ||
-                ((index + 1) < picArr.length &&
-                    (index + 1) % row > index % row))
-            ? 0
-            : 10,
-      ),
+      topLeft: index - row >= 0 ||
+              ((index - 1) >= 0 && (index - 1) % row < index % row)
+          ? Radius.zero
+          : StyleString.imgRadius,
+      topRight: index - row >= 0 ||
+              ((index + 1) < picArr.length && (index + 1) % row > index % row)
+          ? Radius.zero
+          : StyleString.imgRadius,
+      bottomLeft: index + row < picArr.length ||
+              ((index - 1) >= 0 && (index - 1) % row < index % row)
+          ? Radius.zero
+          : StyleString.imgRadius,
+      bottomRight: index + row < picArr.length ||
+              ((index + 1) < picArr.length && (index + 1) % row > index % row)
+          ? Radius.zero
+          : StyleString.imgRadius,
     );
   }
 

@@ -7,7 +7,7 @@ enum PlayRepeat {
 }
 
 extension PlayRepeatExtension on PlayRepeat {
-  static final List<String> _descList = <String>[
+  static const List<String> _descList = <String>[
     '播完暂停',
     '顺序播放',
     '单个循环',
@@ -16,7 +16,7 @@ extension PlayRepeatExtension on PlayRepeat {
   ];
   String get description => _descList[index];
 
-  static final List<double> _valueList = [
+  static const List<double> _valueList = [
     1,
     2,
     3,

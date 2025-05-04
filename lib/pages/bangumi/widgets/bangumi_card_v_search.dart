@@ -2,7 +2,6 @@ import 'package:PiliPlus/common/widgets/image/image_save.dart';
 import 'package:PiliPlus/models/search/result.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:flutter/material.dart';
-import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/common/widgets/badge.dart';
 import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
 
@@ -31,30 +30,27 @@ class BangumiCardVSearch extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            ClipRRect(
-              borderRadius: StyleString.mdRadius,
-              child: AspectRatio(
-                aspectRatio: 0.75,
-                child: LayoutBuilder(builder: (context, boxConstraints) {
-                  final double maxWidth = boxConstraints.maxWidth;
-                  final double maxHeight = boxConstraints.maxHeight;
-                  return Stack(
-                    clipBehavior: Clip.none,
-                    children: [
-                      NetworkImgLayer(
-                        src: item.cover,
-                        width: maxWidth,
-                        height: maxHeight,
-                      ),
-                      PBadge(
-                        text: item.seasonTypeName,
-                        right: 6,
-                        top: 6,
-                      ),
-                    ],
-                  );
-                }),
-              ),
+            AspectRatio(
+              aspectRatio: 0.75,
+              child: LayoutBuilder(builder: (context, boxConstraints) {
+                final double maxWidth = boxConstraints.maxWidth;
+                final double maxHeight = boxConstraints.maxHeight;
+                return Stack(
+                  clipBehavior: Clip.none,
+                  children: [
+                    NetworkImgLayer(
+                      src: item.cover,
+                      width: maxWidth,
+                      height: maxHeight,
+                    ),
+                    PBadge(
+                      text: item.seasonTypeName,
+                      right: 6,
+                      top: 6,
+                    ),
+                  ],
+                );
+              }),
             ),
             bagumiContent(context)
           ],

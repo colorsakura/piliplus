@@ -42,7 +42,7 @@ class _MemberBangumiState extends State<MemberBangumi>
     return Obx(() => _buildBody(_controller.loadingState.value));
   }
 
-  _buildBody(LoadingState<List<SpaceArchiveItem>?> loadingState) {
+  Widget _buildBody(LoadingState<List<SpaceArchiveItem>?> loadingState) {
     return switch (loadingState) {
       Loading() => loadingWidget,
       Success() => loadingState.response?.isNotEmpty == true

@@ -17,7 +17,7 @@ class FavNoteController
   }
 
   @override
-  onSelect(int index, [bool disableSelect = true]) {
+  void onSelect(int index, [bool disableSelect = true]) {
     super.onSelect(index, false);
   }
 
@@ -34,7 +34,7 @@ class FavNoteController
         : VideoHttp.noteList(page: currentPage);
   }
 
-  void onRemove() async {
+  Future<void> onRemove() async {
     List<FavArticleModel> dataList = (loadingState.value as Success).response;
     Set<FavArticleModel> removeList =
         dataList.where((item) => item.checked == true).toSet();

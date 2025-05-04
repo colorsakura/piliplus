@@ -50,19 +50,19 @@ class _SendDanmakuPanelState extends CommonPublishPageState<SendDanmakuPanel> {
 
   final List<Color> _colorList = [
     Colors.white,
-    Color(0xFFFE0302),
-    Color(0xFFFF7204),
-    Color(0xFFFFAA02),
-    Color(0xFFFFD302),
-    Color(0xFFFFFF00),
-    Color(0xFFA0EE00),
-    Color(0xFF00CD00),
-    Color(0xFF019899),
-    Color(0xFF4266BE),
-    Color(0xFF89D5FF),
-    Color(0xFFCC0273),
-    Color(0xFF222222),
-    Color(0xFF9B9B9B),
+    const Color(0xFFFE0302),
+    const Color(0xFFFF7204),
+    const Color(0xFFFFAA02),
+    const Color(0xFFFFD302),
+    const Color(0xFFFFFF00),
+    const Color(0xFFA0EE00),
+    const Color(0xFF00CD00),
+    const Color(0xFF019899),
+    const Color(0xFF4266BE),
+    const Color(0xFF89D5FF),
+    const Color(0xFFCC0273),
+    const Color(0xFF222222),
+    const Color(0xFF9B9B9B),
   ];
 
   @override
@@ -86,7 +86,7 @@ class _SendDanmakuPanelState extends CommonPublishPageState<SendDanmakuPanel> {
     super.dispose();
   }
 
-  get _buildColorPanel => Expanded(
+  Expanded get _buildColorPanel => Expanded(
         child: Obx(
           () => LayoutBuilder(
             key: ValueKey(_color.value),
@@ -98,6 +98,7 @@ class _SendDanmakuPanelState extends CommonPublishPageState<SendDanmakuPanel> {
               return GridView.builder(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
+                padding: EdgeInsets.zero,
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: crossAxisCount,
                   crossAxisSpacing: 4,
@@ -113,7 +114,8 @@ class _SendDanmakuPanelState extends CommonPublishPageState<SendDanmakuPanel> {
                       child: Container(
                         decoration: BoxDecoration(
                           color: themeData.colorScheme.secondaryContainer,
-                          borderRadius: BorderRadius.circular(8),
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(8)),
                         ),
                         alignment: Alignment.center,
                         margin: const EdgeInsets.all(2),
@@ -135,33 +137,26 @@ class _SendDanmakuPanelState extends CommonPublishPageState<SendDanmakuPanel> {
         ),
       );
 
-  Widget get child => MediaQuery.removePadding(
-        removeTop: true,
-        context: context,
-        child: GestureDetector(
-          onTap: Get.back,
-          child: LayoutBuilder(
-            builder: (context, constraints) {
-              bool isH = constraints.maxWidth > constraints.maxHeight;
-              late double padding = constraints.maxWidth * 0.12;
-              return Padding(
-                padding: EdgeInsets.symmetric(horizontal: isH ? padding : 0),
-                child: Scaffold(
-                  resizeToAvoidBottomInset: false,
-                  backgroundColor: Colors.transparent,
-                  body: GestureDetector(
-                    onTap: () {},
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        _buildInputView(),
-                        buildPanelContainer(themeData.colorScheme.surface),
-                      ],
-                    ),
-                  ),
-                ),
-              );
-            },
+  Widget get child => SafeArea(
+        bottom: false,
+        child: Align(
+          alignment: Alignment.bottomCenter,
+          child: Container(
+            constraints: const BoxConstraints(maxWidth: 450),
+            decoration: BoxDecoration(
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(12),
+                topRight: Radius.circular(12),
+              ),
+              color: themeData.colorScheme.surface,
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                _buildInputView(),
+                buildPanelContainer(Colors.transparent),
+              ],
+            ),
           ),
         ),
       );
@@ -182,8 +177,7 @@ class _SendDanmakuPanelState extends CommonPublishPageState<SendDanmakuPanel> {
   }
 
   @override
-  Widget? customPanel(double height) => Container(
-        height: height,
+  Widget? get customPanel => Container(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         decoration: BoxDecoration(
           border: Border(
@@ -227,7 +221,7 @@ class _SendDanmakuPanelState extends CommonPublishPageState<SendDanmakuPanel> {
                   _buildColorPanel,
                 ],
               ),
-              const SizedBox(height: 12),
+              SizedBox(height: 12 + MediaQuery.paddingOf(context).bottom),
             ],
           ),
         ),
@@ -239,8 +233,9 @@ class _SendDanmakuPanelState extends CommonPublishPageState<SendDanmakuPanel> {
         _color.value = color;
       },
       child: Container(
+        padding: const EdgeInsets.all(2),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: const BorderRadius.all(Radius.circular(8)),
           border: _color.value != color
               ? null
               : Border.all(
@@ -248,11 +243,10 @@ class _SendDanmakuPanelState extends CommonPublishPageState<SendDanmakuPanel> {
                   color: themeData.colorScheme.primary,
                 ),
         ),
-        child: Container(
-          margin: const EdgeInsets.all(2),
+        child: DecoratedBox(
           decoration: BoxDecoration(
             color: color,
-            borderRadius: BorderRadius.circular(6),
+            borderRadius: const BorderRadius.all(Radius.circular(6)),
           ),
           child: color == Colors.transparent
               ? Stack(
@@ -260,8 +254,8 @@ class _SendDanmakuPanelState extends CommonPublishPageState<SendDanmakuPanel> {
                   alignment: Alignment.center,
                   children: [
                     Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(6),
+                      decoration: const BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(6)),
                         gradient: LinearGradient(
                           colors: [
                             Color(0xFFDD94DA),
@@ -272,9 +266,9 @@ class _SendDanmakuPanelState extends CommonPublishPageState<SendDanmakuPanel> {
                     ),
                     Container(
                       margin: const EdgeInsets.all(5),
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                         color: Colors.white,
-                        borderRadius: BorderRadius.circular(4),
+                        borderRadius: BorderRadius.all(Radius.circular(4)),
                       ),
                     ),
                   ],
@@ -298,7 +292,7 @@ class _SendDanmakuPanelState extends CommonPublishPageState<SendDanmakuPanel> {
               color: _mode.value == mode
                   ? themeData.colorScheme.secondaryContainer
                   : themeData.colorScheme.onInverseSurface,
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: const BorderRadius.all(Radius.circular(8)),
             ),
             padding: const EdgeInsets.symmetric(vertical: 5),
             child: Text(
@@ -328,7 +322,7 @@ class _SendDanmakuPanelState extends CommonPublishPageState<SendDanmakuPanel> {
               color: _fontsize.value == fontsize
                   ? themeData.colorScheme.secondaryContainer
                   : themeData.colorScheme.onInverseSurface,
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: const BorderRadius.all(Radius.circular(8)),
             ),
             padding: const EdgeInsets.symmetric(vertical: 5),
             child: Text(
@@ -346,17 +340,8 @@ class _SendDanmakuPanelState extends CommonPublishPageState<SendDanmakuPanel> {
   }
 
   Widget _buildInputView() {
-    return Container(
-      clipBehavior: Clip.hardEdge,
-      margin: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
+    return Padding(
       padding: const EdgeInsets.only(left: 8, top: 2, right: 8),
-      decoration: BoxDecoration(
-        borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(12),
-          topRight: Radius.circular(12),
-        ),
-        color: themeData.colorScheme.surface,
-      ),
       child: Row(
         children: [
           Obx(
@@ -470,7 +455,7 @@ class _SendDanmakuPanelState extends CommonPublishPageState<SendDanmakuPanel> {
       builder: (context) => AlertDialog(
         clipBehavior: Clip.hardEdge,
         contentPadding: const EdgeInsets.symmetric(vertical: 16),
-        title: Text('Color Picker'),
+        title: const Text('Color Picker'),
         content: SlideColorPicker(
           showResetBtn: false,
           color: _color.value,

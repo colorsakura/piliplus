@@ -89,10 +89,10 @@ class _SlideColorPickerState extends State<SlideColorPicker> {
                 FilteringTextInputFormatter.allow(RegExp('[0-9a-fA-F]')),
               ],
               controller: _textController,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 isDense: true,
                 prefixText: '#',
-                contentPadding: const EdgeInsets.all(0),
+                contentPadding: EdgeInsets.zero,
               ),
               onChanged: (value) {
                 _textController.text = value.toUpperCase();
@@ -147,9 +147,7 @@ class _SlideColorPickerState extends State<SlideColorPicker> {
                     Get.back();
                     widget.callback(null);
                   },
-                  child: Text(
-                    '重置',
-                  ),
+                  child: const Text('重置'),
                 ),
               ],
               const Spacer(),

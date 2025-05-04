@@ -16,7 +16,7 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 final _setCookieReg = RegExp('(?<=)(,)(?=[^;]+?=)');
 
 class AccountManager extends Interceptor {
-  static final Map<AccountType, Set<String>> apiTypeSet = {
+  static const Map<AccountType, Set<String>> apiTypeSet = {
     AccountType.heartbeat: {
       Api.videoIntro,
       Api.replyList,
@@ -53,7 +53,7 @@ class AccountManager extends Interceptor {
     AccountType.video: {Api.videoUrl, Api.bangumiVideoUrl}
   };
 
-  static final loginApi = {
+  static const loginApi = {
     Api.getTVCode,
     Api.qrcodePoll,
     Api.getCaptcha,

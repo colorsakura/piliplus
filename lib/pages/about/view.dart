@@ -130,7 +130,7 @@ class _AboutPageState extends State<AboutPage> {
             ),
           ),
           ListTile(
-            title: Text(
+            title: const Text(
               '''
 Build Time: ${BuildConfig.buildTime}
 Commit Hash: ${BuildConfig.commitHash}''',

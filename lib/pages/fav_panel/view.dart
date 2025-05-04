@@ -68,10 +68,7 @@ class _FavPanelState extends State<FavPanel> {
                 style: TextButton.styleFrom(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
-                  visualDensity: const VisualDensity(
-                    horizontal: -2,
-                    vertical: -2,
-                  ),
+                  visualDensity: VisualDensity.compact,
                 ),
               ),
               const SizedBox(width: 16),

@@ -5,7 +5,7 @@ import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
 import 'package:PiliPlus/models/common/theme_type.dart';
 import 'package:PiliPlus/models/user/info.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'controller.dart';
+import 'package:PiliPlus/pages/mine/controller.dart';
 
 class MinePage extends StatefulWidget {
   const MinePage({super.key});

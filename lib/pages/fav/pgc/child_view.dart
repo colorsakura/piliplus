@@ -57,7 +57,7 @@ class _FavPgcChildPageState extends State<FavPgcChildPage>
             child: Obx(
               () => AnimatedSlide(
                 offset: _favPgcController.enableMultiSelect.value
-                    ? Offset(0, -1)
+                    ? const Offset(0, -1)
                     : Offset.zero,
                 duration: const Duration(milliseconds: 150),
                 child: Container(
@@ -98,13 +98,13 @@ class _FavPgcChildPageState extends State<FavPgcChildPage>
                           _favPgcController.handleSelect(
                               !_favPgcController.allSelected.value);
                         },
-                        child: Padding(
-                          padding: const EdgeInsets.only(
+                        child: const Padding(
+                          padding: EdgeInsets.only(
                             top: 14,
                             bottom: 14,
                             right: 12,
                           ),
-                          child: const Text('全选'),
+                          child: Text('全选'),
                         ),
                       ),
                       const Spacer(),

@@ -31,6 +31,7 @@ import 'package:PiliPlus/pages/setting/widgets/normal_item.dart';
 import 'package:PiliPlus/pages/setting/widgets/select_dialog.dart';
 import 'package:PiliPlus/pages/setting/widgets/slide_dialog.dart';
 import 'package:PiliPlus/pages/setting/widgets/switch_item.dart';
+import 'package:PiliPlus/pages/video/reply/widgets/reply_item_grpc.dart';
 import 'package:PiliPlus/plugin/pl_player/models/bottom_progress_behavior.dart';
 import 'package:PiliPlus/plugin/pl_player/models/fullscreen_mode.dart';
 import 'package:PiliPlus/plugin/pl_player/utils/fullscreen.dart';
@@ -332,9 +333,8 @@ List<SettingsModel> get styleSettings => [
             },
           );
           if (result != null) {
-            MainController mainController = Get.put(MainController());
-            mainController.dynamicBadgeMode =
-                DynamicBadgeMode.values[result.index];
+            MainController mainController = Get.put(MainController())
+              ..dynamicBadgeMode = DynamicBadgeMode.values[result.index];
             if (mainController.dynamicBadgeMode != DynamicBadgeMode.hidden) {
               mainController.getUnreadDynamic();
             }
@@ -364,8 +364,8 @@ List<SettingsModel> get styleSettings => [
             },
           );
           if (result != null) {
-            MainController mainController = Get.put(MainController());
-            mainController.msgBadgeMode = DynamicBadgeMode.values[result.index];
+            MainController mainController = Get.put(MainController())
+              ..msgBadgeMode = DynamicBadgeMode.values[result.index];
             if (mainController.msgBadgeMode != DynamicBadgeMode.hidden) {
               mainController.queryUnreadMsg();
             } else {
@@ -395,8 +395,8 @@ List<SettingsModel> get styleSettings => [
             },
           );
           if (result != null) {
-            MainController mainController = Get.put(MainController());
-            mainController.msgUnReadTypes = result;
+            MainController mainController = Get.put(MainController())
+              ..msgUnReadTypes = result;
             if (mainController.msgBadgeMode != DynamicBadgeMode.hidden) {
               mainController.queryUnreadMsg();
             }
@@ -624,7 +624,7 @@ List<SettingsModel> get styleSettings => [
                       autofocus: index == 0,
                       initialValue: springDescription[index],
                       keyboardType:
-                          TextInputType.numberWithOptions(decimal: true),
+                          const TextInputType.numberWithOptions(decimal: true),
                       onChanged: (value) {
                         springDescription[index] = value;
                       },
@@ -929,7 +929,7 @@ List<SettingsModel> get playSettings => [
         title: '默认全屏方向',
         leading: const Icon(Icons.open_with_outlined),
         getSubtitle: () =>
-            '当前全屏方向：${FullScreenModeCode.fromCode(GStorage.defaultFullScreenMode)!.description}',
+            '当前全屏方向：${FullScreenModeCode.fromCode(GStorage.defaultFullScreenMode).description}',
         onTap: (setState) async {
           int? result = await showDialog(
             context: Get.context!,
@@ -953,7 +953,7 @@ List<SettingsModel> get playSettings => [
         title: '底部进度条展示',
         leading: const Icon(Icons.border_bottom_outlined),
         getSubtitle: () =>
-            '当前展示方式：${BtmProgresBehaviorCode.fromCode(GStorage.defaultBtmProgressBehavior)!.description}',
+            '当前展示方式：${BtmProgresBehaviorCode.fromCode(GStorage.defaultBtmProgressBehavior).description}',
         onTap: (setState) async {
           int? result = await showDialog(
             context: Get.context!,
@@ -1031,7 +1031,7 @@ List<SettingsModel> get videoSettings => [
           String? result = await showDialog(
             context: Get.context!,
             builder: (context) {
-              return CdnSelectDialog();
+              return const CdnSelectDialog();
             },
           );
           if (result != null) {
@@ -1377,8 +1377,8 @@ List<SettingsModel> get recommendSettings => [
         defaultVal: true,
         onChanged: (value) {
           try {
-            RcmdController ctr = Get.find<RcmdController>();
-            ctr.savedRcmdTip = value;
+            RcmdController ctr = Get.find<RcmdController>()
+              ..savedRcmdTip = value;
             if (value.not) {
               ctr.lastRefreshAt = null;
             }
@@ -1537,14 +1537,14 @@ List<SettingsModel> get extraSettings => [
                 content: TextFormField(
                   autofocus: true,
                   initialValue: dynamicPeriod.toString(),
-                  keyboardType: TextInputType.numberWithOptions(),
+                  keyboardType: TextInputType.number,
                   onChanged: (value) {
                     dynamicPeriod = int.tryParse(value) ?? 5;
                   },
                   inputFormatters: [
                     FilteringTextInputFormatter.allow(RegExp(r'\d+')),
                   ],
-                  decoration: InputDecoration(suffixText: 'min'),
+                  decoration: const InputDecoration(suffixText: 'min'),
                 ),
                 actions: [
                   TextButton(
@@ -1650,14 +1650,14 @@ List<SettingsModel> get extraSettings => [
                 content: TextFormField(
                   autofocus: true,
                   initialValue: replyLengthLimit,
-                  keyboardType: TextInputType.numberWithOptions(),
+                  keyboardType: TextInputType.number,
                   onChanged: (value) {
                     replyLengthLimit = value;
                   },
                   inputFormatters: [
                     FilteringTextInputFormatter.allow(RegExp(r'\d+')),
                   ],
-                  decoration: InputDecoration(suffixText: '行'),
+                  decoration: const InputDecoration(suffixText: '行'),
                 ),
                 actions: [
                   TextButton(
@@ -1708,7 +1708,8 @@ List<SettingsModel> get extraSettings => [
                 content: TextFormField(
                   autofocus: true,
                   initialValue: danmakuLineHeight,
-                  keyboardType: TextInputType.numberWithOptions(decimal: true),
+                  keyboardType:
+                      const TextInputType.numberWithOptions(decimal: true),
                   onChanged: (value) {
                     danmakuLineHeight = value;
                   },
@@ -2078,7 +2079,7 @@ List<SettingsModel> get extraSettings => [
         settingsType: SettingsType.sw1tch,
         title: '使用「哔哩发评反诈」检查评论',
         subtitle: '仅对Android生效',
-        leading: Icon(
+        leading: const Icon(
           FontAwesomeIcons.b,
           size: 22,
         ),
@@ -2185,6 +2186,7 @@ List<SettingsModel> get extraSettings => [
         enableFeedback: true,
         setKey: SettingBoxKey.feedBackEnable,
         onChanged: (value) {
+          enableFeedback = value;
           feedBack();
         },
         leading: const Icon(Icons.vibration_outlined),
@@ -2233,6 +2235,9 @@ List<SettingsModel> get extraSettings => [
         leading: const Icon(Icons.search_outlined),
         setKey: SettingBoxKey.enableWordRe,
         defaultVal: false,
+        onChanged: (value) {
+          ReplyItemGrpc.enableWordRe = value;
+        },
       ),
       SettingsModel(
         settingsType: SettingsType.sw1tch,
@@ -2418,8 +2423,8 @@ List<SettingsModel> get extraSettings => [
                         labelText: systemProxyHost != ''
                             ? systemProxyHost
                             : '请输入Host，使用 . 分割',
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(6.0),
+                        border: const OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(6)),
                         ),
                         hintText: systemProxyHost,
                       ),
@@ -2434,8 +2439,8 @@ List<SettingsModel> get extraSettings => [
                         isDense: true,
                         labelText:
                             systemProxyPort != '' ? systemProxyPort : '请输入Port',
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(6.0),
+                        border: const OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(6)),
                         ),
                         hintText: systemProxyPort,
                       ),
@@ -2503,7 +2508,7 @@ List<SettingsModel> get extraSettings => [
                   inputFormatters: [
                     FilteringTextInputFormatter.allow(RegExp(r'[\d\.]+')),
                   ],
-                  decoration: InputDecoration(suffixText: 'MB'),
+                  decoration: const InputDecoration(suffixText: 'MB'),
                 ),
                 actions: [
                   TextButton(

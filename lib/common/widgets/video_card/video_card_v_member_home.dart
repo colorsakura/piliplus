@@ -19,7 +19,7 @@ class VideoCardVMemberHome extends StatelessWidget {
     required this.videoItem,
   });
 
-  void onPushDetail(heroTag) async {
+  Future<void> onPushDetail(heroTag) async {
     String? goto = videoItem.goto;
     switch (goto) {
       case 'bangumi':

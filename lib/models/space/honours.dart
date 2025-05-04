@@ -1,6 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 
-import 'colour.dart';
+import 'package:PiliPlus/models/space/colour.dart';
 
 part 'honours.g.dart';
 

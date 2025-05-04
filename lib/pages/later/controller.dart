@@ -31,7 +31,7 @@ class LaterController extends MultiSelectController<Map, HotVideoItemModel> {
       );
 
   @override
-  onSelect(int index, [bool disableSelect = true]) {
+  void onSelect(int index, [bool disableSelect = true]) {
     List<HotVideoItemModel> list = (loadingState.value as Success).response;
     list[index].checked = !(list[index].checked ?? false);
     baseCtr.checkedCount.value =
@@ -91,7 +91,7 @@ class LaterController extends MultiSelectController<Map, HotVideoItemModel> {
       builder: (context) {
         return AlertDialog(
           title: const Text('提示'),
-          content: Text('即将移除该视频，确定是否移除'),
+          content: const Text('即将移除该视频，确定是否移除'),
           actions: [
             TextButton(
               onPressed: Get.back,
@@ -114,7 +114,7 @@ class LaterController extends MultiSelectController<Map, HotVideoItemModel> {
                 }
                 SmartDialog.showToast(res['msg']);
               },
-              child: Text('确认移除'),
+              child: const Text('确认移除'),
             )
           ],
         );
@@ -150,7 +150,7 @@ class LaterController extends MultiSelectController<Map, HotVideoItemModel> {
     );
   }
 
-  onDelChecked(BuildContext context) {
+  void onDelChecked(BuildContext context) {
     showDialog(
       context: context,
       builder: (context) {
@@ -183,7 +183,7 @@ class LaterController extends MultiSelectController<Map, HotVideoItemModel> {
     );
   }
 
-  void _onDelete(List<HotVideoItemModel> result) async {
+  Future<void> _onDelete(List<HotVideoItemModel> result) async {
     SmartDialog.showLoading(msg: '请求中');
     List<int?> aids = result.map((item) => item.aid).toList();
     dynamic res = await UserHttp.toViewDel(aids: aids);

@@ -86,7 +86,7 @@ class _ZanButtonGrpcState extends State<ZanButtonGrpc> {
   }
 
   bool isProcessing = false;
-  void handleState(Future Function() action) async {
+  Future<void> handleState(Future Function() action) async {
     if (isProcessing.not) {
       isProcessing = true;
       await action();
@@ -94,10 +94,10 @@ class _ZanButtonGrpcState extends State<ZanButtonGrpc> {
     }
   }
 
-  get _style => TextButton.styleFrom(
-        padding: const EdgeInsets.all(0),
+  ButtonStyle get _style => TextButton.styleFrom(
+        padding: EdgeInsets.zero,
         tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-        visualDensity: VisualDensity(horizontal: -2, vertical: -2),
+        visualDensity: VisualDensity.compact,
       );
 
   @override

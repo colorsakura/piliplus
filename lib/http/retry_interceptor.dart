@@ -23,8 +23,9 @@ class RetryInterceptor extends Interceptor {
             }
             (options..path = redirectUrl).maxRedirects--;
             if (status == 303) {
-              options.data = null;
-              options.method = 'GET';
+              options
+                ..data = null
+                ..method = 'GET';
             }
             Request.dio
                 .fetch(options)

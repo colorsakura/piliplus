@@ -221,7 +221,7 @@ class AuthorPanel extends StatelessWidget {
   void morePanel(BuildContext context) {
     String? bvid;
     try {
-      getBvid(String? type, DynamicMajorModel? major) => switch (type) {
+      String? getBvid(String? type, DynamicMajorModel? major) => switch (type) {
             'DYNAMIC_TYPE_AV' => major?.archive?.bvid,
             'DYNAMIC_TYPE_UGC_SEASON' => major?.ugcSeason?.bvid,
             _ => null,

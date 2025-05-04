@@ -1,6 +1,6 @@
 import 'package:PiliPlus/common/constants.dart';
 import 'package:flutter/material.dart';
-import 'skeleton.dart';
+import 'package:PiliPlus/common/skeleton/skeleton.dart';
 
 class FavPgcItemSkeleton extends StatelessWidget {
   const FavPgcItemSkeleton({super.key});
@@ -25,7 +25,7 @@ class FavPgcItemSkeleton extends StatelessWidget {
                   return Container(
                     decoration: BoxDecoration(
                       color: color,
-                      borderRadius: BorderRadius.circular(4),
+                      borderRadius: const BorderRadius.all(Radius.circular(4)),
                     ),
                     width: boxConstraints.maxWidth,
                     height: boxConstraints.maxHeight,

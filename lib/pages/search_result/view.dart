@@ -8,7 +8,7 @@ import 'package:PiliPlus/utils/extension.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:PiliPlus/models/common/search_type.dart';
-import 'controller.dart';
+import 'package:PiliPlus/pages/search_result/controller.dart';
 import 'package:PiliPlus/common/widgets/scroll_physics.dart';
 
 class SearchResultPage extends StatefulWidget {
@@ -55,8 +55,9 @@ class _SearchResultPageState extends State<SearchResultPage>
 
   @override
   void dispose() {
-    _tabController.removeListener(listener);
-    _tabController.dispose();
+    _tabController
+      ..removeListener(listener)
+      ..dispose();
     super.dispose();
   }
 

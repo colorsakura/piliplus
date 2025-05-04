@@ -950,11 +950,11 @@ class VideoHttp {
     }
 
     String processList(List list) {
-      final sb = StringBuffer('WEBVTT\n\n');
-      sb.writeAll(
-          list.map((item) =>
-              '${item?['sid'] ?? 0}\n${subtitleTimecode(item['from'])} --> ${subtitleTimecode(item['to'])}\n${item['content'].trim()}'),
-          '\n\n');
+      final sb = StringBuffer('WEBVTT\n\n')
+        ..writeAll(
+            list.map((item) =>
+                '${item?['sid'] ?? 0}\n${subtitleTimecode(item['from'])} --> ${subtitleTimecode(item['to'])}\n${item['content'].trim()}'),
+            '\n\n');
       return sb.toString();
     }
 

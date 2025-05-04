@@ -94,11 +94,11 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
       (videoIntroController.videoDetail.value.ugcSeason != null ||
           ((videoIntroController.videoDetail.value.pages?.length ?? 0) > 1)) &&
       context.orientation == Orientation.landscape &&
-      videoDetailController.horizontalSeasonPanel;
+      videoDetailController.plPlayerController.horizontalSeasonPanel;
 
   bool get _horizontalPreview =>
       context.orientation == Orientation.landscape &&
-      videoDetailController.horizontalPreview;
+      videoDetailController.plPlayerController.horizontalPreview;
 
   StreamSubscription? _listenerDetail;
   StreamSubscription? _listenerLoadingState;
@@ -226,7 +226,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
   }
 
   // 播放器状态监听
-  void playerListener(PlayerStatus? status) async {
+  Future<void> playerListener(PlayerStatus? status) async {
     try {
       if (videoDetailController.scrollCtr.hasClients) {
         bool isPlaying = status == PlayerStatus.playing;
@@ -303,7 +303,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
   }
 
   // 继续播放或重新播放
-  void continuePlay() async {
+  Future<void> continuePlay() async {
     plPlayerController!.play();
   }
 
@@ -322,7 +322,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
     plPlayerController = videoDetailController.plPlayerController;
     videoDetailController.isShowCover.value = false;
     videoDetailController.autoPlay.value = true;
-    if (videoDetailController.preInitPlayer) {
+    if (videoDetailController.plPlayerController.preInitPlayer) {
       await plPlayerController!.play();
     } else {
       await videoDetailController.playerInit(autoplay: true);
@@ -383,7 +383,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
 
   @override
   // 离开当前页面时
-  void didPushNext() async {
+  Future<void> didPushNext() async {
     if (videoDetailController.imageStatus) {
       return;
     }
@@ -395,13 +395,13 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
     videoDetailController.positionSubscription?.cancel();
     videoIntroController.canelTimer();
 
-    videoDetailController.playerStatus =
-        plPlayerController?.playerStatus.status.value;
-
-    videoDetailController.brightness = plPlayerController?.brightness.value;
+    videoDetailController
+      ..playerStatus = plPlayerController?.playerStatus.status.value
+      ..brightness = plPlayerController?.brightness.value;
     if (plPlayerController != null) {
-      videoDetailController.makeHeartBeat();
-      videoDetailController.showVP = plPlayerController!.showVP.value;
+      videoDetailController
+        ..makeHeartBeat()
+        ..showVP = plPlayerController!.showVP.value;
       plPlayerController!.removeStatusLister(playerListener);
       plPlayerController!.removePositionListener(positionListener);
       plPlayerController!.pause();
@@ -412,7 +412,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
 
   @override
   // 返回当前页面时
-  void didPopNext() async {
+  Future<void> didPopNext() async {
     if (videoDetailController.imageStatus) {
       return;
     }
@@ -449,7 +449,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
       await videoDetailController.playerInit(
         autoplay: videoDetailController.playerStatus == PlayerStatus.playing,
       );
-    } else if (videoDetailController.preInitPlayer &&
+    } else if (videoDetailController.plPlayerController.preInitPlayer &&
         videoDetailController.isQuerying.not &&
         videoDetailController.videoState.value is! Error) {
       await videoDetailController.playerInit();
@@ -549,7 +549,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
           appBar: removeSafeArea
               ? null
               : PreferredSize(
-                  preferredSize: Size.fromHeight(0),
+                  preferredSize: const Size.fromHeight(0),
                   child: Obx(
                     () {
                       bool shouldShow =
@@ -1155,7 +1155,8 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                           introText: '相关视频',
                           showIntro: videoDetailController.videoType ==
                                   SearchType.video &&
-                              videoDetailController.showRelatedVideo,
+                              videoDetailController
+                                  .plPlayerController.showRelatedVideo,
                           showReply: videoDetailController.showReply,
                         ),
                         Expanded(
@@ -1164,7 +1165,8 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                             children: [
                               if (videoDetailController.videoType ==
                                       SearchType.video &&
-                                  videoDetailController.showRelatedVideo)
+                                  videoDetailController
+                                      .plPlayerController.showRelatedVideo)
                                 CustomScrollView(
                                   controller: _introController,
                                   slivers: [
@@ -1646,7 +1648,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
       child: Stack(
         clipBehavior: Clip.none,
         children: [
-          Positioned.fill(child: ColoredBox(color: Colors.black)),
+          const Positioned.fill(child: ColoredBox(color: Colors.black)),
 
           if (isShowing) plPlayer,
 
@@ -1686,7 +1688,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
             manualPlayerWidget,
           ],
 
-          if (videoDetailController.enableSponsorBlock ||
+          if (videoDetailController.plPlayerController.enableSponsorBlock ||
               videoDetailController.continuePlayingPart)
             Positioned(
               left: 16,
@@ -1759,8 +1761,9 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                             .map((item) {
                           return FilledButton.tonal(
                             style: FilledButton.styleFrom(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(6),
+                              shape: const RoundedRectangleBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(6)),
                               ),
                               backgroundColor: themeData
                                   .colorScheme.secondaryContainer
@@ -1769,8 +1772,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                                 horizontal: 15,
                                 vertical: 10,
                               ),
-                              visualDensity:
-                                  VisualDensity(horizontal: -2, vertical: -2),
+                              visualDensity: VisualDensity.compact,
                               tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                             ),
                             onPressed: () {
@@ -1824,7 +1826,9 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                   showEpisodes: showEpisodes,
                   onShowMemberPage: onShowMemberPage,
                 ),
-                if (needRelated && videoDetailController.showRelatedVideo) ...[
+                if (needRelated &&
+                    videoDetailController
+                        .plPlayerController.showRelatedVideo) ...[
                   SliverToBoxAdapter(
                     child: Padding(
                       padding:
@@ -2087,14 +2091,14 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
   }
 
   // ai总结
-  showAiBottomSheet() {
+  void showAiBottomSheet() {
     videoDetailController.childKey.currentState?.showBottomSheet(
       backgroundColor: Colors.transparent,
       (context) => AiDetail(modelResult: videoIntroController.modelResult),
     );
   }
 
-  showIntroDetail(videoDetail, videoTags) {
+  void showIntroDetail(videoDetail, videoTags) {
     videoDetailController.childKey.currentState?.showBottomSheet(
       backgroundColor: Colors.transparent,
       (context) => bangumi.IntroDetail(
@@ -2104,7 +2108,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
     );
   }
 
-  showEpisodes([index, season, episodes, bvid, aid, cid]) {
+  void showEpisodes([index, season, episodes, bvid, aid, cid]) {
     if (bvid == null) {
       videoDetailController.showMediaListPanel(context);
       return;
@@ -2212,7 +2216,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
               .reversed
               .toList();
 
-      if (videoDetailController.reverseFromFirst.not) {
+      if (videoDetailController.plPlayerController.reverseFromFirst.not) {
         // keep current episode
         videoDetailController.seasonIndex.refresh();
         videoDetailController.cid.refresh();
@@ -2234,7 +2238,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
           !videoIntroController.videoDetail.value.isPageReversed;
       videoIntroController.videoDetail.value.pages =
           videoIntroController.videoDetail.value.pages!.reversed.toList();
-      if (videoDetailController.reverseFromFirst.not) {
+      if (videoDetailController.plPlayerController.reverseFromFirst.not) {
         // keep current episode
         videoDetailController.cid.refresh();
       } else {

@@ -1,6 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 
-import 'layer.dart';
+import 'package:PiliPlus/models/space/layer.dart';
 
 part 'fallback_layers.g.dart';
 

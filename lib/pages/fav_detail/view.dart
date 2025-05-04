@@ -122,8 +122,7 @@ class _FavDetailPageState extends State<FavDetailPage> {
                         ? [
                             TextButton(
                               style: TextButton.styleFrom(
-                                visualDensity:
-                                    VisualDensity(horizontal: -2, vertical: -2),
+                                visualDensity: VisualDensity.compact,
                               ),
                               onPressed: () =>
                                   _favDetailController.handleSelect(true),
@@ -131,8 +130,7 @@ class _FavDetailPageState extends State<FavDetailPage> {
                             ),
                             TextButton(
                               style: TextButton.styleFrom(
-                                visualDensity:
-                                    VisualDensity(horizontal: -2, vertical: -2),
+                                visualDensity: VisualDensity.compact,
                               ),
                               onPressed: () {
                                 RequestUtils.onCopyOrMove<FavDetailData,
@@ -153,8 +151,7 @@ class _FavDetailPageState extends State<FavDetailPage> {
                             ),
                             TextButton(
                               style: TextButton.styleFrom(
-                                visualDensity:
-                                    VisualDensity(horizontal: -2, vertical: -2),
+                                visualDensity: VisualDensity.compact,
                               ),
                               onPressed: () {
                                 RequestUtils.onCopyOrMove<FavDetailData,
@@ -175,8 +172,7 @@ class _FavDetailPageState extends State<FavDetailPage> {
                             ),
                             TextButton(
                               style: TextButton.styleFrom(
-                                visualDensity:
-                                    VisualDensity(horizontal: -2, vertical: -2),
+                                visualDensity: VisualDensity.compact,
                               ),
                               onPressed: () =>
                                   _favDetailController.onDelChecked(context),
@@ -222,7 +218,7 @@ class _FavDetailPageState extends State<FavDetailPage> {
                                               }
                                             });
                                           },
-                                          child: Text('编辑信息'),
+                                          child: const Text('编辑信息'),
                                         ),
                                         PopupMenuItem(
                                           onTap: () {
@@ -242,7 +238,7 @@ class _FavDetailPageState extends State<FavDetailPage> {
                                               }
                                             });
                                           },
-                                          child: Text('清除失效内容'),
+                                          child: const Text('清除失效内容'),
                                         ),
                                         PopupMenuItem(
                                           onTap: () {
@@ -271,7 +267,7 @@ class _FavDetailPageState extends State<FavDetailPage> {
                                               );
                                             }
                                           },
-                                          child: Text('排序'),
+                                          child: const Text('排序'),
                                         ),
                                         if (!Utils.isDefaultFav(
                                             _favDetailController

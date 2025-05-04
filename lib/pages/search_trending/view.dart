@@ -65,7 +65,7 @@ class _SearchTrendingPageState extends State<SearchTrendingPage> {
         extendBody: true,
         extendBodyBehindAppBar: true,
         appBar: PreferredSize(
-          preferredSize: Size.fromHeight(56),
+          preferredSize: const Size.fromHeight(56),
           child: Obx(
             () {
               final flag = removePadding || _scrollRatio.value >= 0.5;
@@ -84,13 +84,13 @@ class _SearchTrendingPageState extends State<SearchTrendingPage> {
                 foregroundColor: flag ? null : Colors.white,
                 systemOverlayStyle: flag
                     ? null
-                    : SystemUiOverlayStyle(
+                    : const SystemUiOverlayStyle(
                         statusBarBrightness: Brightness.dark,
                         statusBarIconBrightness: Brightness.light,
                       ),
                 bottom: _scrollRatio.value == 1
                     ? PreferredSize(
-                        preferredSize: Size.fromHeight(1),
+                        preferredSize: const Size.fromHeight(1),
                         child: Divider(
                           height: 1,
                           color: theme.colorScheme.outline.withOpacity(0.1),
@@ -145,7 +145,7 @@ class _SearchTrendingPageState extends State<SearchTrendingPage> {
   Widget _buildBody(
       ThemeData theme, LoadingState<List<SearchKeywordList>?> loadingState) {
     return switch (loadingState) {
-      Loading() => SliverToBoxAdapter(child: LinearProgressIndicator()),
+      Loading() => const SliverToBoxAdapter(child: LinearProgressIndicator()),
       Success() => loadingState.response?.isNotEmpty == true
           ? SliverPadding(
               padding: EdgeInsets.only(
@@ -165,10 +165,10 @@ class _SearchTrendingPageState extends State<SearchTrendingPage> {
                       );
                     },
                     leading: index < _controller.topCount
-                        ? Icon(
+                        ? const Icon(
                             size: 17,
                             Icons.vertical_align_top_outlined,
-                            color: const Color(0xFFd1403e),
+                            color: Color(0xFFd1403e),
                           )
                         : Text(
                             '${index + 1 - _controller.topCount}',
@@ -191,8 +191,8 @@ class _SearchTrendingPageState extends State<SearchTrendingPage> {
                             item.keyword!,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
-                            strutStyle: StrutStyle(height: 1, leading: 0),
-                            style: TextStyle(height: 1, fontSize: 15),
+                            strutStyle: const StrutStyle(height: 1, leading: 0),
+                            style: const TextStyle(height: 1, fontSize: 15),
                           ),
                         ),
                         if (item.icon?.isNotEmpty == true) ...[

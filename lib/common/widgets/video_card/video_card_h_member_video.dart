@@ -86,14 +86,14 @@ class VideoCardHMemberVideo extends StatelessWidget {
                                 height: maxHeight,
                               ),
                               if (fromViewAid == videoItem.param)
-                                Positioned.fill(
+                                const Positioned.fill(
                                   child: DecoratedBox(
                                     decoration: BoxDecoration(
                                       borderRadius: StyleString.mdRadius,
                                       color: Colors.black54,
                                     ),
                                     child: Center(
-                                      child: const Text(
+                                      child: Text(
                                         '上次观看',
                                         style: TextStyle(
                                           color: Colors.white,

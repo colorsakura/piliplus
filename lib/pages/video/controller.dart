@@ -76,9 +76,6 @@ class VideoDetailController extends GetxController
   RxBool autoPlay = true.obs;
   // 封面图的展示
   RxBool isShowCover = true.obs;
-  // 硬解
-  RxBool enableHA = true.obs;
-  RxString hwdec = GStorage.hardwareDecoding.obs;
 
   RxInt oid = 0.obs;
 
@@ -96,32 +93,22 @@ class VideoDetailController extends GetxController
   Duration? playedTime;
   // 亮度
   double? brightness;
-  // 默认记录历史记录
-  bool enableHeart = true;
+
   Floating? floating;
   late final headerCtrKey = GlobalKey<HeaderControlState>();
 
   Box get setting => GStorage.setting;
 
-  int? cacheVideoQa;
   late String cacheDecode;
   late String cacheSecondDecode;
-  late int cacheAudioQa;
 
-  late final showRelatedVideo = GStorage.showRelatedVideo;
+  bool get showReply => videoType == SearchType.video
+      ? plPlayerController.showVideoReply
+      : plPlayerController.showBangumiReply;
 
-  late final _showVideoReply = GStorage.showVideoReply;
-  late final _showBangumiReply = GStorage.showBangumiReply;
-  bool get showReply =>
-      videoType == SearchType.video ? _showVideoReply : _showBangumiReply;
-
-  late final preInitPlayer = GStorage.preInitPlayer;
-  late final horizontalSeasonPanel = GStorage.horizontalSeasonPanel;
   int? seasonCid;
   late RxInt seasonIndex = 0.obs;
-  late final reverseFromFirst = GStorage.reverseFromFirst;
 
-  late final bool enableSponsorBlock;
   PlayerStatus? playerStatus;
   StreamSubscription<Duration>? positionSubscription;
 
@@ -224,14 +211,13 @@ class VideoDetailController extends GetxController
     imageStatus = false;
   }
 
-  late final horizontalPreview = GStorage.horizontalPreview;
-
 // 页面来源 稍后再看 收藏夹
   String sourceType = 'normal';
   late bool _mediaDesc = false;
   late RxList<MediaVideoItemModel> mediaList = <MediaVideoItemModel>[].obs;
   late String watchLaterTitle = '';
-  bool get isPlayAll => ['watchLater', 'fav', 'archive'].contains(sourceType);
+  bool get isPlayAll =>
+      const ['watchLater', 'fav', 'archive'].contains(sourceType);
   int get _mediaType => switch (sourceType) {
         'archive' => 1,
         'watchLater' => 2,
@@ -278,11 +264,6 @@ class VideoDetailController extends GetxController
     autoPlay.value =
         setting.get(SettingBoxKey.autoPlayEnable, defaultValue: false);
     if (autoPlay.value) isShowCover.value = false;
-    enableHA.value = setting.get(SettingBoxKey.enableHA, defaultValue: true);
-    if (!Accounts.get(AccountType.heartbeat).isLogin ||
-        GStorage.localCache.get(LocalCacheKey.historyPause) == true) {
-      enableHeart = false;
-    }
     danmakuCid.value = cid.value;
 
     if (Platform.isAndroid) {
@@ -295,16 +276,9 @@ class VideoDetailController extends GetxController
     cacheSecondDecode = setting.get(SettingBoxKey.secondDecode,
         defaultValue: VideoDecodeFormats.values[1].code);
     oid.value = IdUtils.bv2av(Get.parameters['bvid']!);
-    enableSponsorBlock =
-        setting.get(SettingBoxKey.enableSponsorBlock, defaultValue: false);
-    if (enableSponsorBlock) {
-      _blockLimit = GStorage.blockLimit;
-      _blockSettings = GStorage.blockSettings;
-      _blockColor = GStorage.blockColor;
-    }
   }
 
-  void getMediaList({
+  Future<void> getMediaList({
     bool isReverse = false,
     bool isLoadPrevious = false,
   }) async {
@@ -373,7 +347,7 @@ class VideoDetailController extends GetxController
   }
 
   // 稍后再看面板展开
-  showMediaListPanel(context) {
+  void showMediaListPanel(context) {
     if (mediaList.isNotEmpty) {
       Widget panel() => MediaListPanel(
             mediaList: mediaList,
@@ -446,22 +420,19 @@ class VideoDetailController extends GetxController
     }
   }
 
-  bool horizontalScreen =
-      GStorage.setting.get(SettingBoxKey.horizontalScreen, defaultValue: false);
+  bool get horizontalScreen => plPlayerController.horizontalScreen;
   bool get showVideoSheet =>
       !horizontalScreen && Get.context!.orientation == Orientation.landscape;
 
   int? _lastPos;
-  double? _blockLimit;
-  List<Pair<SegmentType, SkipType>>? _blockSettings;
-  List<Color>? _blockColor;
+  List<PostSegmentModel>? postList;
   RxList<SegmentModel> segmentList = <SegmentModel>[].obs;
   List<Segment> viewPointList = <Segment>[];
   List<Segment>? segmentProgressList;
   Color _getColor(SegmentType segment) =>
-      _blockColor?[segment.index] ?? segment.color;
+      plPlayerController.blockColor[segment.index];
   late RxString videoLabel = ''.obs;
-  late final blockServer = GStorage.blockServer;
+  String get blockServer => plPlayerController.blockServer;
 
   Timer? skipTimer;
   late final listKey = GlobalKey<AnimatedListState>();
@@ -519,11 +490,11 @@ class VideoDetailController extends GetxController
                                   color: _getColor(item),
                                 ),
                               ),
-                              style: TextStyle(fontSize: 14, height: 1),
+                              style: const TextStyle(fontSize: 14, height: 1),
                             ),
                             TextSpan(
                               text: ' ${item.title}',
-                              style: TextStyle(fontSize: 14, height: 1),
+                              style: const TextStyle(fontSize: 14, height: 1),
                             ),
                           ],
                         ),
@@ -548,7 +519,7 @@ class VideoDetailController extends GetxController
             children: [
               ListTile(
                 dense: true,
-                title: Text(
+                title: const Text(
                   '赞成票',
                   style: TextStyle(fontSize: 14),
                 ),
@@ -559,7 +530,7 @@ class VideoDetailController extends GetxController
               ),
               ListTile(
                 dense: true,
-                title: Text(
+                title: const Text(
                   '反对票',
                   style: TextStyle(fontSize: 14),
                 ),
@@ -570,7 +541,7 @@ class VideoDetailController extends GetxController
               ),
               ListTile(
                 dense: true,
-                title: Text(
+                title: const Text(
                   '更改类别',
                   style: TextStyle(fontSize: 14),
                 ),
@@ -616,26 +587,26 @@ class VideoDetailController extends GetxController
                                 color: _getColor(item.segmentType),
                               ),
                             ),
-                            style: TextStyle(fontSize: 14, height: 1),
+                            style: const TextStyle(fontSize: 14, height: 1),
                           ),
                           TextSpan(
                             text: ' ${item.segmentType.title}',
-                            style: TextStyle(fontSize: 14, height: 1),
+                            style: const TextStyle(fontSize: 14, height: 1),
                           ),
                         ],
                       ),
                     ),
-                    contentPadding: EdgeInsets.only(left: 16, right: 8),
+                    contentPadding: const EdgeInsets.only(left: 16, right: 8),
                     subtitle: Text(
                       '${Utils.formatDuration(item.segment.first)} 至 ${Utils.formatDuration(item.segment.second)}',
-                      style: TextStyle(fontSize: 13),
+                      style: const TextStyle(fontSize: 13),
                     ),
                     trailing: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(
                           item.skipType.title,
-                          style: TextStyle(fontSize: 13),
+                          style: const TextStyle(fontSize: 13),
                         ),
                         if (item.segment.second != 0)
                           SizedBox(
@@ -684,8 +655,9 @@ class VideoDetailController extends GetxController
   void _showBlockToast(String msg) {
     SmartDialog.showToast(
       msg,
-      alignment:
-          plPlayerController.isFullScreen.value ? Alignment(0, 0.7) : null,
+      alignment: plPlayerController.isFullScreen.value
+          ? const Alignment(0, 0.7)
+          : null,
     );
   }
 
@@ -709,31 +681,25 @@ class VideoDetailController extends GetxController
   void handleSBData(result) {
     if (result.data is List && result.data.isNotEmpty) {
       try {
-        List<String> list =
-            SegmentType.values.map((item) => item.name).toList();
-        List<String> enableList = _blockSettings!
-            .where((item) => item.second != SkipType.disable)
-            .toList()
-            .map((item) => item.first.name)
-            .toList();
-
         // segmentList
         segmentList.addAll((result.data as List)
             .where((item) =>
-                enableList.contains(item['category']) &&
+                plPlayerController.enableList.contains(item['category']) &&
                 item['segment'][1] >= item['segment'][0])
             .map(
           (item) {
-            SegmentType segmentType =
-                SegmentType.values[list.indexOf(item['category'])];
+            SegmentType segmentType = SegmentType.values[
+                plPlayerController.segmentTypes.indexOf(item['category'])];
             if (item['segment'][0] == 0 && item['segment'][1] == 0) {
               videoLabel.value +=
                   '${videoLabel.value.isNotEmpty ? '/' : ''}${segmentType.title}';
             }
-            SkipType skipType = _blockSettings![segmentType.index].second;
+            SkipType skipType =
+                plPlayerController.blockSettings[segmentType.index].second;
             if (skipType != SkipType.showOnly) {
               if (item['segment'][1] == item['segment'][0] ||
-                  item['segment'][1] - item['segment'][0] < _blockLimit) {
+                  item['segment'][1] - item['segment'][0] <
+                      plPlayerController.blockLimit) {
                 skipType = SkipType.showOnly;
               }
             }
@@ -796,7 +762,7 @@ class VideoDetailController extends GetxController
         }).toList());
 
         if (positionSubscription == null &&
-            (!isShowCover.value || preInitPlayer)) {
+            (!isShowCover.value || plPlayerController.preInitPlayer)) {
           initSkip();
           plPlayerController.segmentList.value = segmentProgressList!;
         }
@@ -872,8 +838,8 @@ class VideoDetailController extends GetxController
       alignment: Alignment.centerLeft,
       child: SlideTransition(
         position: Tween<Offset>(
-          begin: Offset(-1, 0),
-          end: Offset(0, 0),
+          begin: const Offset(-1, 0),
+          end: Offset.zero,
         ).animate(animation),
         child: Padding(
           padding: const EdgeInsets.only(top: 5),
@@ -927,7 +893,7 @@ class VideoDetailController extends GetxController
     );
   }
 
-  void onSkip(SegmentModel item, [bool isSkip = true]) async {
+  Future<void> onSkip(SegmentModel item, [bool isSkip = true]) async {
     try {
       plPlayerController.danmakuController?.clear();
       await plPlayerController.videoPlayerController
@@ -959,7 +925,7 @@ class VideoDetailController extends GetxController
   String? savedDanmaku;
 
   /// 发送弹幕
-  void showShootDanmakuSheet() async {
+  Future<void> showShootDanmakuSheet() async {
     bool isPlaying =
         plPlayerController.playerStatus.status.value == PlayerStatus.playing;
     if (isPlaying) {
@@ -1005,7 +971,7 @@ class VideoDetailController extends GetxController
   }
 
   /// 更新画质、音质
-  updatePlayer() {
+  void updatePlayer() {
     isShowCover.value = false;
     playedTime = plPlayerController.position.value;
     plPlayerController.removeListeners();
@@ -1109,9 +1075,6 @@ class VideoDetailController extends GetxController
       viewPointList: viewPointList,
       showVP: showVP,
       dmTrend: dmTrend,
-      // 硬解
-      enableHA: enableHA.value,
-      hwdec: hwdec.value,
       seekTo: seekToTime ?? defaultST ?? playedTime,
       duration: duration ?? data.timeLength == null
           ? null
@@ -1120,7 +1083,6 @@ class VideoDetailController extends GetxController
       direction: direction.value,
       bvid: bvid,
       cid: cid.value,
-      enableHeart: enableHeart,
       autoplay: autoplay ?? autoPlay.value,
       epid: videoType == SearchType.media_bangumi ? epId : null,
       seasonId: videoType == SearchType.media_bangumi ? seasonId : null,
@@ -1139,7 +1101,7 @@ class VideoDetailController extends GetxController
       _getSubtitle();
     }
 
-    if (showDmChart && dmTrend == null) {
+    if (plPlayerController.showDmChart && dmTrend == null) {
       _getDmTrend();
     }
 
@@ -1155,19 +1117,19 @@ class VideoDetailController extends GetxController
       return;
     }
     isQuerying = true;
-    if (cacheVideoQa == null) {
+    if (plPlayerController.cacheVideoQa == null) {
       await Connectivity().checkConnectivity().then((res) {
-        cacheVideoQa = res.contains(ConnectivityResult.wifi)
-            ? setting.get(SettingBoxKey.defaultVideoQa,
-                defaultValue: VideoQuality.values.last.code)
-            : setting.get(SettingBoxKey.defaultVideoQaCellular,
-                defaultValue: VideoQuality.high1080.code);
-
-        cacheAudioQa = res.contains(ConnectivityResult.wifi)
-            ? setting.get(SettingBoxKey.defaultAudioQa,
-                defaultValue: AudioQuality.hiRes.code)
-            : setting.get(SettingBoxKey.defaultAudioQaCellular,
-                defaultValue: AudioQuality.k192.code);
+        plPlayerController
+          ..cacheVideoQa = res.contains(ConnectivityResult.wifi)
+              ? setting.get(SettingBoxKey.defaultVideoQa,
+                  defaultValue: VideoQuality.values.last.code)
+              : setting.get(SettingBoxKey.defaultVideoQaCellular,
+                  defaultValue: VideoQuality.high1080.code)
+          ..cacheAudioQa = res.contains(ConnectivityResult.wifi)
+              ? setting.get(SettingBoxKey.defaultAudioQa,
+                  defaultValue: AudioQuality.hiRes.code)
+              : setting.get(SettingBoxKey.defaultAudioQaCellular,
+                  defaultValue: AudioQuality.k192.code);
       });
     }
     dynamic result = await VideoHttp.videoUrl(
@@ -1180,7 +1142,7 @@ class VideoDetailController extends GetxController
     if (result['status']) {
       data = result['data'];
 
-      if (enableSponsorBlock) {
+      if (plPlayerController.enableSponsorBlock) {
         _querySponsorBlock();
       }
 
@@ -1211,7 +1173,7 @@ class VideoDetailController extends GetxController
         if (autoPlay.value) {
           isShowCover.value = false;
           await playerInit();
-        } else if (preInitPlayer) {
+        } else if (plPlayerController.preInitPlayer) {
           await playerInit();
         }
         isQuerying = false;
@@ -1233,13 +1195,13 @@ class VideoDetailController extends GetxController
       // 当前可播放的最高质量视频
       int currentHighVideoQa = allVideosList.first.quality!.code;
       // 预设的画质为null，则当前可用的最高质量
-      cacheVideoQa ??= currentHighVideoQa;
       int resVideoQa = currentHighVideoQa;
-      if (cacheVideoQa! <= currentHighVideoQa) {
+      if (plPlayerController.cacheVideoQa! <= currentHighVideoQa) {
         // 如果预设的画质低于当前最高
         final List<int> numbers =
             data.acceptQuality!.where((e) => e <= currentHighVideoQa).toList();
-        resVideoQa = Utils.findClosestNumber(cacheVideoQa!, numbers);
+        resVideoQa =
+            Utils.findClosestNumber(plPlayerController.cacheVideoQa!, numbers);
       }
       currentVideoQa = VideoQualityCode.fromCode(resVideoQa)!;
 
@@ -1299,9 +1261,10 @@ class VideoDetailController extends GetxController
 
       if (audiosList.isNotEmpty) {
         final List<int> numbers = audiosList.map((map) => map.id!).toList();
-        int closestNumber = Utils.findClosestNumber(cacheAudioQa, numbers);
-        if (!numbers.contains(cacheAudioQa) &&
-            numbers.any((e) => e > cacheAudioQa)) {
+        int closestNumber =
+            Utils.findClosestNumber(plPlayerController.cacheAudioQa, numbers);
+        if (!numbers.contains(plPlayerController.cacheAudioQa) &&
+            numbers.any((e) => e > plPlayerController.cacheAudioQa)) {
           closestNumber = 30280;
         }
         firstAudio = audiosList.firstWhere((e) => e.id == closestNumber,
@@ -1325,7 +1288,7 @@ class VideoDetailController extends GetxController
       if (autoPlay.value) {
         isShowCover.value = false;
         await playerInit();
-      } else if (preInitPlayer) {
+      } else if (plPlayerController.preInitPlayer) {
         await playerInit();
       }
     } else {
@@ -1347,12 +1310,10 @@ class VideoDetailController extends GetxController
     isQuerying = false;
   }
 
-  List<PostSegmentModel>? list;
-
   void onBlock(BuildContext context) {
-    list ??= <PostSegmentModel>[];
-    if (list!.isEmpty) {
-      list!.add(
+    postList ??= <PostSegmentModel>[];
+    if (postList!.isEmpty) {
+      postList!.add(
         PostSegmentModel(
           segment: Pair(
             first: 0,
@@ -1405,7 +1366,7 @@ class VideoDetailController extends GetxController
   }
 
   // 设定字幕轨道
-  setSubtitle(int index) async {
+  Future<void> setSubtitle(int index) async {
     if (index <= 0) {
       plPlayerController.videoPlayerController
           ?.setSubtitleTrack(SubtitleTrack.no());
@@ -1440,7 +1401,7 @@ class VideoDetailController extends GetxController
   dynamic graphVersion;
   Map? steinEdgeInfo;
   late final RxBool showSteinEdgeInfo = false.obs;
-  void getSteinEdgeInfo([edgeId]) async {
+  Future<void> getSteinEdgeInfo([edgeId]) async {
     steinEdgeInfo = null;
     try {
       dynamic res = await Request().get(
@@ -1553,7 +1514,7 @@ class VideoDetailController extends GetxController
   }
 
   void makeHeartBeat() {
-    if (enableHeart &&
+    if (plPlayerController.enableHeart &&
         plPlayerController.playerStatus.status.value !=
             PlayerStatus.completed &&
         playedTime != null) {
@@ -1579,13 +1540,14 @@ class VideoDetailController extends GetxController
   @override
   void onClose() {
     tabCtr.dispose();
-    scrollCtr.removeListener(scrollListener);
-    scrollCtr.dispose;
+    scrollCtr
+      ..removeListener(scrollListener)
+      ..dispose();
     animationController.dispose();
     super.onClose();
   }
 
-  onReset([isStein]) {
+  void onReset([isStein]) {
     playedTime = null;
     videoUrl = null;
     audioUrl = null;
@@ -1607,7 +1569,7 @@ class VideoDetailController extends GetxController
     viewPointList.clear();
 
     // sponsor block
-    if (enableSponsorBlock) {
+    if (plPlayerController.enableSponsorBlock) {
       positionSubscription?.cancel();
       positionSubscription = null;
       videoLabel.value = '';
@@ -1623,10 +1585,9 @@ class VideoDetailController extends GetxController
     showSteinEdgeInfo.value = false;
   }
 
-  late final showDmChart = GStorage.showDmChart;
   List? dmTrend;
 
-  void _getDmTrend() async {
+  Future<void> _getDmTrend() async {
     dmTrend = [];
     try {
       dynamic res = await Request().get(
@@ -1650,7 +1611,7 @@ class VideoDetailController extends GetxController
     }
   }
 
-  void showNoteList(BuildContext context) async {
+  Future<void> showNoteList(BuildContext context) async {
     String? title;
     try {
       title =

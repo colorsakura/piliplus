@@ -25,7 +25,7 @@ import 'package:PiliPlus/utils/storage.dart';
 import 'package:media_kit/media_kit.dart'; // Provides [Player], [Media], [Playlist] etc.
 import 'package:PiliPlus/utils/recommend_filter.dart';
 import 'package:catcher_2/catcher_2.dart';
-import './services/loggeer.dart';
+import 'package:PiliPlus/services/loggeer.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -67,7 +67,7 @@ void main() async {
   await Request.setCookie();
   RecommendFilter();
   // 异常捕获 logo记录
-  final String buildConfig = '''\n
+  const String buildConfig = '''\n
 Build Time: ${BuildConfig.buildTime}
 Commit Hash: ${BuildConfig.commitHash}''';
   final Catcher2Options debugConfig = Catcher2Options(

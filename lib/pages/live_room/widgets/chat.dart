@@ -1,6 +1,5 @@
 import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
 import 'package:PiliPlus/pages/live_room/controller.dart';
-import 'package:PiliPlus/services/loggeer.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -26,10 +25,11 @@ class LiveRoomChat extends StatelessWidget {
       children: [
         Obx(
           () => ListView.separated(
-            padding: const EdgeInsets.all(0),
+            padding: EdgeInsets.zero,
             controller: liveRoomController.scrollController,
             separatorBuilder: (context, index) => const SizedBox(height: 6),
             itemCount: liveRoomController.messages.length,
+            physics: const ClampingScrollPhysics(),
             itemBuilder: (context, index) {
               return Container(
                 alignment: Alignment.centerLeft,
@@ -40,7 +40,7 @@ class LiveRoomChat extends StatelessWidget {
                   decoration: BoxDecoration(
                     color: isPP == true
                         ? Colors.black.withOpacity(0.3)
-                        : Color(0x15FFFFFF),
+                        : const Color(0x15FFFFFF),
                     borderRadius: const BorderRadius.all(Radius.circular(18)),
                   ),
                   child: Text.rich(
@@ -159,5 +159,3 @@ class LiveRoomChat extends StatelessWidget {
     }
   }
 }
-
-final PiliLogger logger = getLogger();
