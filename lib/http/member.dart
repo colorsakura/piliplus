@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:PiliPlus/common/constants.dart';
-import 'package:PiliPlus/grpc/grpc_repo.dart';
 import 'package:PiliPlus/http/api.dart';
 import 'package:PiliPlus/http/constants.dart';
 import 'package:PiliPlus/http/init.dart';
@@ -49,17 +48,17 @@ class MemberHttp {
     };
   }
 
-  static Future<LoadingState> spaceDynamic({
-    required int mid,
-    required int page,
-  }) async {
-    dynamic result = await GrpcRepo.dynSpace(uid: mid, page: page);
-    if (result['status']) {
-      return LoadingState.success(result['data']);
-    } else {
-      return LoadingState.error(result['msg']);
-    }
-  }
+  // static Future<LoadingState> spaceDynamic({
+  //   required int mid,
+  //   required int page,
+  // }) async {
+  //   dynamic result = await GrpcRepo.dynSpace(uid: mid, page: page);
+  //   if (result['status']) {
+  //     return LoadingState.success(result['data']);
+  //   } else {
+  //     return LoadingState.error(result['msg']);
+  //   }
+  // }
 
   static Future<LoadingState<SpaceArticleData>> spaceArticle({
     required int mid,

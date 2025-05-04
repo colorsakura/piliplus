@@ -515,7 +515,6 @@ class MsgHttp {
   static Future sendMsg({
     int? senderUid,
     int? receiverId,
-    int? receiverType,
     int? msgType,
     dynamic content,
   }) async {
@@ -525,7 +524,7 @@ class MsgHttp {
       'msg': {
         'sender_uid': senderUid,
         'receiver_id': receiverId,
-        'receiver_type': receiverType ?? 1,
+        'receiver_type': 1,
         'msg_type': msgType ?? 1,
         'msg_status': 0,
         'dev_id': devId,

@@ -1,4 +1,5 @@
-import 'package:PiliPlus/grpc/app/main/community/reply/v1/reply.pb.dart';
+import 'package:PiliPlus/grpc/bilibili/main/community/reply/v1.pb.dart'
+    show ReplyInfo, DetailListReply, Mode;
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/http/reply.dart';
 import 'package:PiliPlus/models/common/reply_type.dart';
@@ -51,7 +52,7 @@ class VideoReplyReplyController extends ReplyController
 
   @override
   Future onRefresh() {
-    cursor = null;
+    paginationReply = null;
     return super.onRefresh();
   }
 
@@ -65,8 +66,8 @@ class VideoReplyReplyController extends ReplyController
     final data = response.response;
 
     upMid ??= data.subjectControl.upMid.toInt();
-    cursor = data.cursor;
-    isEnd = cursor?.isEnd ?? false;
+    paginationReply = data.paginationReply;
+    isEnd = data.cursor?.isEnd ?? false;
 
     // reply2Reply // isDialogue.not
     if (data is DetailListReply) {
@@ -106,28 +107,22 @@ class VideoReplyReplyController extends ReplyController
 
   @override
   Future<LoadingState> customGetData() => isDialogue
-      ? ReplyHttp.dialogListGrpc(
+      ? ReplyHttp.dialogList(
           type: replyType.index,
           oid: oid,
           root: rpid,
-          rpid: dialog!,
-          cursor: CursorReq(
-            next: cursor?.next,
-            mode: mode.value,
-          ),
+          dialog: dialog!,
+          offset: paginationReply?.nextOffset,
           antiGoodsReply: antiGoodsReply,
         )
-      : ReplyHttp.replyReplyListGrpc(
+      : ReplyHttp.detailList(
           type: replyType.index,
           oid: oid,
           root: rpid,
           rpid: id ?? 0,
-          cursor: CursorReq(
-            next: cursor?.next,
-            mode: mode.value,
-          ),
+          mode: mode.value,
+          offset: paginationReply?.nextOffset,
           antiGoodsReply: antiGoodsReply,
-          page: currentPage,
         );
 
   @override

@@ -5,7 +5,8 @@ import 'dart:ui';
 
 import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/common/widgets/scroll_physics.dart';
-import 'package:PiliPlus/grpc/app/main/community/reply/v1/reply.pb.dart';
+import 'package:PiliPlus/grpc/bilibili/main/community/reply/v1.pb.dart'
+    show ReplyInfo;
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/main.dart';
 import 'package:PiliPlus/models/bangumi/info.dart' as bangumi;

@@ -1,6 +1,8 @@
-import 'package:PiliPlus/grpc/app/main/community/reply/v1/reply.pb.dart';
+import 'package:PiliPlus/grpc/bilibili/main/community/reply/v1.pb.dart'
+    show MainListReply, ReplyInfo;
 import 'package:PiliPlus/http/dynamics.dart';
 import 'package:PiliPlus/http/loading_state.dart';
+import 'package:PiliPlus/http/reply.dart';
 import 'package:PiliPlus/http/user.dart';
 import 'package:PiliPlus/http/video.dart';
 import 'package:PiliPlus/models/dynamics/article_content_model.dart'
@@ -14,8 +16,6 @@ import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/url_utils.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
-import 'package:PiliPlus/http/reply.dart';
-import 'package:fixnum/fixnum.dart' as $fixnum;
 
 class ArticleController extends ReplyController<MainListReply> {
   late String id;
@@ -170,13 +170,12 @@ class ArticleController extends ReplyController<MainListReply> {
 
   @override
   Future<LoadingState<MainListReply>> customGetData() {
-    return ReplyHttp.replyListGrpc(
+    return ReplyHttp.mainList(
       type: commentType,
       oid: commentId,
-      cursor: CursorReq(
-        next: cursor?.next ?? $fixnum.Int64(0),
-        mode: mode.value,
-      ),
+      mode: mode.value,
+      offset: paginationReply?.nextOffset,
+      sessionId: sessionId,
       antiGoodsReply: antiGoodsReply,
     );
   }

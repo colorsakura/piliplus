@@ -6,7 +6,8 @@ import 'package:PiliPlus/common/widgets/badge.dart';
 import 'package:PiliPlus/common/widgets/dialog/report.dart';
 import 'package:PiliPlus/common/widgets/image/image_view.dart';
 import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
-import 'package:PiliPlus/grpc/app/main/community/reply/v1/reply.pb.dart';
+import 'package:PiliPlus/grpc/bilibili/main/community/reply/v1.pb.dart'
+    show ReplyInfo, ReplyControl, Content;
 import 'package:PiliPlus/http/init.dart';
 import 'package:PiliPlus/http/video.dart';
 import 'package:PiliPlus/pages/dynamics/widgets/vote.dart';
@@ -615,11 +616,11 @@ class ReplyItemGrpc extends StatelessWidget {
     }
     // 构建正则表达式
     final List<String> specialTokens = [
-      ...content.emote.keys,
-      ...content.topic.keys.map((e) => '#$e#'),
+      ...content.emotes.keys,
+      ...content.topics.keys.map((e) => '#$e#'),
       ...content.atNameToMid.keys.map((e) => '@$e'),
     ];
-    List<String> jumpUrlKeysList = content.url.keys.map<String>((String e) {
+    List<String> jumpUrlKeysList = content.urls.keys.map<String>((String e) {
       return e;
     }).toList();
     specialTokens.sort((a, b) => b.length.compareTo(a.length));
@@ -645,15 +646,15 @@ class ReplyItemGrpc extends StatelessWidget {
       pattern,
       onMatch: (Match match) {
         String matchStr = match[0]!;
-        if (content.emote.containsKey(matchStr)) {
+        if (content.emotes.containsKey(matchStr)) {
           // 处理表情
-          final int size = content.emote[matchStr]!.size.toInt();
+          final int size = content.emotes[matchStr]!.size.toInt();
           spanChildren.add(WidgetSpan(
             child: ExcludeSemantics(
                 child: NetworkImgLayer(
-              src: content.emote[matchStr]?.hasGifUrl() == true
-                  ? content.emote[matchStr]?.gifUrl
-                  : content.emote[matchStr]?.url,
+              src: content.emotes[matchStr]?.hasGifUrl() == true
+                  ? content.emotes[matchStr]?.gifUrl
+                  : content.emotes[matchStr]?.url,
               type: 'emote',
               width: size * 20,
               height: size * 20,
@@ -730,20 +731,20 @@ class ReplyItemGrpc extends StatelessWidget {
           );
         } else {
           String appUrlSchema = '';
-          if (content.url[matchStr] != null &&
+          if (content.urls[matchStr] != null &&
               !matchedStrs.contains(matchStr)) {
-            appUrlSchema = content.url[matchStr]!.appUrlSchema;
+            appUrlSchema = content.urls[matchStr]!.appUrlSchema;
             if (appUrlSchema.startsWith('bilibili://search') && !enableWordRe) {
               addPlainTextSpan(matchStr);
               return "";
             }
             spanChildren.addAll(
               [
-                if (content.url[matchStr]?.hasPrefixIcon() == true) ...[
+                if (content.urls[matchStr]?.hasPrefixIcon() == true) ...[
                   WidgetSpan(
                     child: CachedNetworkImage(
                       imageUrl: Utils.thumbnailImgUrl(
-                          content.url[matchStr]!.prefixIcon),
+                          content.urls[matchStr]!.prefixIcon),
                       height: 19,
                       color: theme.colorScheme.primary,
                       placeholder: (context, url) {
@@ -753,13 +754,13 @@ class ReplyItemGrpc extends StatelessWidget {
                   )
                 ],
                 TextSpan(
-                  text: content.url[matchStr]!.title,
+                  text: content.urls[matchStr]!.title,
                   style: TextStyle(
                     color: theme.colorScheme.primary,
                   ),
                   recognizer: TapGestureRecognizer()
                     ..onTap = () async {
-                      late final String title = content.url[matchStr]!.title;
+                      late final String title = content.urls[matchStr]!.title;
                       if (appUrlSchema == '') {
                         if (RegExp(r'^(av|bv)', caseSensitive: false)
                             .hasMatch(matchStr)) {
@@ -801,7 +802,7 @@ class ReplyItemGrpc extends StatelessWidget {
             // 只显示一次
             matchedStrs.add(matchStr);
           } else if (matchStr.length > 1 &&
-              content.topic[matchStr.substring(1, matchStr.length - 1)] !=
+              content.topics[matchStr.substring(1, matchStr.length - 1)] !=
                   null) {
             spanChildren.add(
               TextSpan(
@@ -845,25 +846,25 @@ class ReplyItemGrpc extends StatelessWidget {
       },
     );
 
-    if (content.url.keys.isNotEmpty) {
-      List<String> unmatchedItems = content.url.keys
+    if (content.urls.keys.isNotEmpty) {
+      List<String> unmatchedItems = content.urls.keys
           .toList()
           .where((item) => !content.message.contains(item))
           .toList();
       if (unmatchedItems.isNotEmpty) {
         for (int i = 0; i < unmatchedItems.length; i++) {
           String patternStr = unmatchedItems[i];
-          if (content.url[patternStr]?.extra.isWordSearch == true &&
+          if (content.urls[patternStr]?.extra.isWordSearch == true &&
               enableWordRe.not) {
             continue;
           }
           spanChildren.addAll(
             [
-              if (content.url[patternStr]?.hasPrefixIcon() == true) ...[
+              if (content.urls[patternStr]?.hasPrefixIcon() == true) ...[
                 WidgetSpan(
                   child: CachedNetworkImage(
                     imageUrl: Utils.thumbnailImgUrl(
-                        content.url[patternStr]!.prefixIcon),
+                        content.urls[patternStr]!.prefixIcon),
                     height: 19,
                     color: theme.colorScheme.primary,
                     placeholder: (context, url) {
@@ -873,7 +874,7 @@ class ReplyItemGrpc extends StatelessWidget {
                 )
               ],
               TextSpan(
-                text: content.url[patternStr]!.title,
+                text: content.urls[patternStr]!.title,
                 style: TextStyle(
                   color: theme.colorScheme.primary,
                 ),

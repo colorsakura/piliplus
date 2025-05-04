@@ -174,7 +174,7 @@ class MainController extends GetxController {
     if (!isLogin.value || dynIndex == -1) {
       return;
     }
-    await GrpcRepo.dynRed().then((res) {
+    GrpcRepo.dynRed().then((res) {
       if (res['status']) {
         setCount(res['data']);
       }

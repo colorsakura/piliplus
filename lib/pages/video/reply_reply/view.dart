@@ -1,7 +1,8 @@
 import 'package:PiliPlus/common/skeleton/video_reply.dart';
 import 'package:PiliPlus/common/widgets/loading_widget/loading_widget.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
-import 'package:PiliPlus/grpc/app/main/community/reply/v1/reply.pb.dart';
+import 'package:PiliPlus/grpc/bilibili/main/community/reply/v1.pb.dart'
+    show ReplyInfo, Mode;
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/common/reply_type.dart';
 import 'package:PiliPlus/pages/common/common_slide_page.dart';

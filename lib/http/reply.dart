@@ -1,5 +1,5 @@
 import 'package:PiliPlus/common/constants.dart';
-import 'package:PiliPlus/grpc/app/main/community/reply/v1/reply.pb.dart';
+import 'package:PiliPlus/grpc/bilibili/main/community/reply/v1.pb.dart';
 import 'package:PiliPlus/grpc/grpc_repo.dart';
 import 'package:PiliPlus/http/api.dart';
 import 'package:PiliPlus/http/init.dart';
@@ -123,13 +123,21 @@ class ReplyHttp {
     }
   }
 
-  static Future<LoadingState<MainListReply>> replyListGrpc({
+  static Future<LoadingState<MainListReply>> mainList({
     int type = 1,
     required int oid,
-    required CursorReq cursor,
+    required Mode mode,
+    required String? offset,
+    required String? sessionId,
     required bool antiGoodsReply,
   }) async {
-    dynamic res = await GrpcRepo.mainList(type: type, oid: oid, cursor: cursor);
+    dynamic res = await GrpcRepo.mainList(
+      type: type,
+      oid: oid,
+      mode: mode,
+      offset: offset,
+      sessionId: sessionId,
+    );
     if (res['status']) {
       MainListReply mainListReply = res['data'];
       // keyword filter
@@ -185,8 +193,8 @@ class ReplyHttp {
 
   // ref BiliRoamingX
   static bool needRemoveGrpc(ReplyInfo reply) {
-    if ((reply.content.url.isNotEmpty &&
-            reply.content.url.values.any((url) {
+    if ((reply.content.urls.isNotEmpty &&
+            reply.content.urls.values.any((url) {
               return url.hasExtra() &&
                   (url.extra.goodsCmControl == 1 ||
                       url.extra.goodsItemId != 0 ||
@@ -260,22 +268,22 @@ class ReplyHttp {
     }
   }
 
-  static Future<LoadingState> replyReplyListGrpc({
+  static Future<LoadingState> detailList({
     int type = 1,
     required int oid,
     required int root,
     required int rpid,
-    required CursorReq cursor,
+    required Mode mode,
+    required String? offset,
     required bool antiGoodsReply,
-    required int page,
   }) async {
     dynamic res = await GrpcRepo.detailList(
       type: type,
       oid: oid,
       root: root,
       rpid: rpid,
-      cursor: cursor,
-      page: page,
+      mode: mode,
+      offset: offset,
     );
     if (res['status']) {
       DetailListReply detailListReply = res['data'];
@@ -296,20 +304,20 @@ class ReplyHttp {
     }
   }
 
-  static Future<LoadingState> dialogListGrpc({
+  static Future<LoadingState> dialogList({
     int type = 1,
     required int oid,
     required int root,
-    required int rpid,
-    required CursorReq cursor,
+    required int dialog,
+    required String? offset,
     required bool antiGoodsReply,
   }) async {
     dynamic res = await GrpcRepo.dialogList(
       type: type,
       oid: oid,
       root: root,
-      rpid: rpid,
-      cursor: cursor,
+      dialog: dialog,
+      offset: offset,
     );
     if (res['status']) {
       DialogListReply dialogListReply = res['data'];

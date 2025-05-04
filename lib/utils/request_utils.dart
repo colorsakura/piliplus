@@ -3,9 +3,10 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:PiliPlus/common/widgets/radio_widget.dart';
-import 'package:PiliPlus/grpc/app/main/community/reply/v1/reply.pb.dart';
+import 'package:PiliPlus/grpc/bilibili/im/type.pbenum.dart';
+import 'package:PiliPlus/grpc/bilibili/main/community/reply/v1.pb.dart'
+    show ReplyInfo;
 import 'package:PiliPlus/grpc/grpc_repo.dart';
-import 'package:PiliPlus/grpc/im/type/im.pbenum.dart';
 import 'package:PiliPlus/http/dynamics.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/http/member.dart';

@@ -1,4 +1,4 @@
-import 'package:PiliPlus/grpc/dm/v1/dm.pb.dart';
+import 'package:PiliPlus/grpc/bilibili/community/service/dm/v1.pb.dart';
 import 'package:PiliPlus/grpc/grpc_repo.dart';
 import 'package:PiliPlus/http/api.dart';
 import 'package:PiliPlus/http/init.dart';

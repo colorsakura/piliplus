@@ -1,4 +1,4 @@
-import 'package:PiliPlus/grpc/dm/v1/dm.pb.dart';
+import 'package:PiliPlus/grpc/bilibili/community/service/dm/v1.pb.dart';
 import 'package:PiliPlus/http/danmaku.dart';
 import 'package:PiliPlus/plugin/pl_player/controller.dart';
 

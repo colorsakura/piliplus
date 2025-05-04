@@ -2,7 +2,7 @@
 //  Generated code. Do not modify.
 //  source: google/protobuf/any.proto
 //
-// @dart = 2.12
+// @dart = 3.3
 
 // ignore_for_file: annotate_overrides, camel_case_types, comment_references
 // ignore_for_file: constant_identifier_names, library_prefixes
@@ -25,3 +25,4 @@ const Any$json = {
 /// Descriptor for `Any`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List anyDescriptor = $convert.base64Decode(
     'CgNBbnkSGQoIdHlwZV91cmwYASABKAlSB3R5cGVVcmwSFAoFdmFsdWUYAiABKAxSBXZhbHVl');
+

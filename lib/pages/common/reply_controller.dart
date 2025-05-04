@@ -1,7 +1,9 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:PiliPlus/grpc/app/main/community/reply/v1/reply.pb.dart';
+import 'package:PiliPlus/grpc/bilibili/main/community/reply/v1.pb.dart'
+    show MainListReply, ReplyInfo, SubjectControl, Mode;
+import 'package:PiliPlus/grpc/bilibili/pagination.pb.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/http/reply.dart';
 import 'package:PiliPlus/models/common/reply_sort_type.dart';
@@ -22,7 +24,6 @@ import 'package:get/get.dart';
 import 'package:get/get_navigation/src/dialog/dialog_route.dart';
 
 abstract class ReplyController<R> extends CommonListController<R, ReplyInfo> {
-  String nextOffset = '';
   RxInt count = (-1).obs;
 
   Rx<ReplySortType> sortType = ReplySortType.time.obs;
@@ -32,7 +33,8 @@ abstract class ReplyController<R> extends CommonListController<R, ReplyInfo> {
   late final bool isLogin = Accounts.main.isLogin;
 
   dynamic upMid;
-  CursorReply? cursor;
+  FeedPaginationReply? paginationReply;
+  String? sessionId;
   late Rx<Mode> mode = Mode.MAIN_LIST_HOT.obs;
   late bool hasUpTop = false;
 
@@ -65,7 +67,7 @@ abstract class ReplyController<R> extends CommonListController<R, ReplyInfo> {
 
   @override
   void checkIsEnd(int length) {
-    if (length >= count.value) {
+    if (count.value != -1 && length >= count.value) {
       isEnd = true;
     }
   }
@@ -73,7 +75,8 @@ abstract class ReplyController<R> extends CommonListController<R, ReplyInfo> {
   @override
   bool customHandleResponse(bool isRefresh, Success response) {
     MainListReply data = response.response;
-    cursor = data.cursor;
+    paginationReply = data.paginationReply;
+    sessionId = data.sessionId;
     count.value = data.subjectControl.count.toInt();
     if (isRefresh) {
       upMid ??= data.subjectControl.upMid;
@@ -88,8 +91,8 @@ abstract class ReplyController<R> extends CommonListController<R, ReplyInfo> {
 
   @override
   Future onRefresh() {
-    cursor = null;
-    nextOffset = '';
+    paginationReply = null;
+    sessionId = null;
     return super.onRefresh();
   }
 
@@ -107,7 +110,6 @@ abstract class ReplyController<R> extends CommonListController<R, ReplyInfo> {
           mode.value = Mode.MAIN_LIST_TIME;
           break;
       }
-      nextOffset = '';
       onReload();
     });
   }

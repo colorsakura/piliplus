@@ -1,4 +1,5 @@
-import 'package:PiliPlus/grpc/app/main/community/reply/v1/reply.pb.dart';
+import 'package:PiliPlus/grpc/bilibili/main/community/reply/v1.pb.dart'
+    show MainListReply, ReplyInfo;
 import 'package:PiliPlus/http/dynamics.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/http/reply.dart';
@@ -7,7 +8,6 @@ import 'package:PiliPlus/models/dynamics/result.dart';
 import 'package:PiliPlus/pages/common/reply_controller.dart';
 import 'package:PiliPlus/utils/id_utils.dart';
 import 'package:PiliPlus/utils/storage.dart';
-import 'package:fixnum/fixnum.dart' as $fixnum;
 import 'package:get/get.dart';
 
 class DynamicDetailController extends ReplyController<MainListReply> {
@@ -54,14 +54,12 @@ class DynamicDetailController extends ReplyController<MainListReply> {
   }
 
   @override
-  Future<LoadingState<MainListReply>> customGetData() =>
-      ReplyHttp.replyListGrpc(
+  Future<LoadingState<MainListReply>> customGetData() => ReplyHttp.mainList(
         type: type,
         oid: oid,
-        cursor: CursorReq(
-          next: cursor?.next ?? $fixnum.Int64(0),
-          mode: mode.value,
-        ),
+        mode: mode.value,
+        offset: paginationReply?.nextOffset,
+        sessionId: sessionId,
         antiGoodsReply: antiGoodsReply,
       );
 }

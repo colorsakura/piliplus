@@ -2,7 +2,7 @@
 //  Generated code. Do not modify.
 //  source: google/protobuf/any.proto
 //
-// @dart = 2.12
+// @dart = 3.3
 
 // ignore_for_file: annotate_overrides, camel_case_types, comment_references
 // ignore_for_file: constant_identifier_names, library_prefixes
@@ -13,6 +13,8 @@ import 'dart:core' as $core;
 
 import 'package:protobuf/protobuf.dart' as $pb;
 import 'package:protobuf/src/protobuf/mixins/well_known.dart' as $mixin;
+
+export 'package:protobuf/protobuf.dart' show GeneratedMessageGenericExtensions;
 
 ///  `Any` contains an arbitrary serialized protocol buffer message along with a
 ///  URL that describes the type of the serialized message.
@@ -38,10 +40,6 @@ import 'package:protobuf/src/protobuf/mixins/well_known.dart' as $mixin;
 ///      if (any.is(Foo.class)) {
 ///        foo = any.unpack(Foo.class);
 ///      }
-///      // or ...
-///      if (any.isSameTypeAs(Foo.getDefaultInstance())) {
-///        foo = any.unpack(Foo.getDefaultInstance());
-///      }
 ///
 ///   Example 3: Pack and unpack a message in Python.
 ///
@@ -56,13 +54,10 @@ import 'package:protobuf/src/protobuf/mixins/well_known.dart' as $mixin;
 ///   Example 4: Pack and unpack a message in Go
 ///
 ///       foo := &pb.Foo{...}
-///       any, err := anypb.New(foo)
-///       if err != nil {
-///         ...
-///       }
+///       any, err := ptypes.MarshalAny(foo)
 ///       ...
 ///       foo := &pb.Foo{}
-///       if err := any.UnmarshalTo(foo); err != nil {
+///       if err := ptypes.UnmarshalAny(any, foo); err != nil {
 ///         ...
 ///       }
 ///
@@ -71,6 +66,7 @@ import 'package:protobuf/src/protobuf/mixins/well_known.dart' as $mixin;
 ///  methods only use the fully qualified type name after the last '/'
 ///  in the type URL, for example "foo.bar.com/x/y.z" will yield type
 ///  name "y.z".
+///
 ///
 ///  JSON
 ///  ====
@@ -104,44 +100,35 @@ class Any extends $pb.GeneratedMessage with $mixin.AnyMixin {
     $core.String? typeUrl,
     $core.List<$core.int>? value,
   }) {
-    final result = create();
+    final $result = create();
     if (typeUrl != null) {
-      result.typeUrl = typeUrl;
+      $result.typeUrl = typeUrl;
     }
     if (value != null) {
-      result.value = value;
+      $result.value = value;
     }
-    return result;
+    return $result;
   }
   Any._() : super();
-  factory Any.fromBuffer($core.List<$core.int> i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromBuffer(i, r);
-  factory Any.fromJson($core.String i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromJson(i, r);
+  factory Any.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory Any.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
-      _omitMessageNames ? '' : 'Any',
-      package:
-          const $pb.PackageName(_omitMessageNames ? '' : 'google.protobuf'),
-      createEmptyInstance: create,
-      toProto3Json: $mixin.AnyMixin.toProto3JsonHelper,
-      fromProto3Json: $mixin.AnyMixin.fromProto3JsonHelper)
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'Any', package: const $pb.PackageName(_omitMessageNames ? '' : 'google.protobuf'), createEmptyInstance: create, toProto3Json: $mixin.AnyMixin.toProto3JsonHelper, fromProto3Json: $mixin.AnyMixin.fromProto3JsonHelper)
     ..aOS(1, _omitFieldNames ? '' : 'typeUrl')
-    ..a<$core.List<$core.int>>(
-        2, _omitFieldNames ? '' : 'value', $pb.PbFieldType.OY)
-    ..hasRequiredFields = false;
+    ..a<$core.List<$core.int>>(2, _omitFieldNames ? '' : 'value', $pb.PbFieldType.OY)
+    ..hasRequiredFields = false
+  ;
 
-  @$core.Deprecated('Using this can add significant overhead to your binary. '
-      'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-      'Will be removed in next major version')
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
   Any clone() => Any()..mergeFromMessage(this);
-  @$core.Deprecated('Using this can add significant overhead to your binary. '
-      'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-      'Will be removed in next major version')
-  Any copyWith(void Function(Any) updates) =>
-      super.copyWith((message) => updates(message as Any)) as Any;
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  Any copyWith(void Function(Any) updates) => super.copyWith((message) => updates(message as Any)) as Any;
 
   $pb.BuilderInfo get info_ => _i;
 
@@ -150,13 +137,11 @@ class Any extends $pb.GeneratedMessage with $mixin.AnyMixin {
   Any createEmptyInstance() => create();
   static $pb.PbList<Any> createRepeated() => $pb.PbList<Any>();
   @$core.pragma('dart2js:noInline')
-  static Any getDefault() =>
-      _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<Any>(create);
+  static Any getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<Any>(create);
   static Any? _defaultInstance;
 
   ///  A URL/resource name that uniquely identifies the type of the serialized
-  ///  protocol buffer message. This string must contain at least
-  ///  one "/" character. The last segment of the URL's path must represent
+  ///  protocol buffer message. The last segment of the URL's path must represent
   ///  the fully qualified name of the type (as in
   ///  `path/google.protobuf.Duration`). The name should be in a canonical form
   ///  (e.g., leading "." is not accepted).
@@ -177,48 +162,41 @@ class Any extends $pb.GeneratedMessage with $mixin.AnyMixin {
   ///
   ///  Note: this functionality is not currently available in the official
   ///  protobuf release, and it is not used for type URLs beginning with
-  ///  type.googleapis.com. As of May 2023, there are no widely used type server
-  ///  implementations and no plans to implement one.
+  ///  type.googleapis.com.
   ///
   ///  Schemes other than `http`, `https` (or the empty scheme) might be
   ///  used with implementation specific semantics.
   @$pb.TagNumber(1)
   $core.String get typeUrl => $_getSZ(0);
   @$pb.TagNumber(1)
-  set typeUrl($core.String v) {
-    $_setString(0, v);
-  }
-
+  set typeUrl($core.String v) { $_setString(0, v); }
   @$pb.TagNumber(1)
   $core.bool hasTypeUrl() => $_has(0);
   @$pb.TagNumber(1)
-  void clearTypeUrl() => clearField(1);
+  void clearTypeUrl() => $_clearField(1);
 
   /// Must be a valid serialized protocol buffer of the above specified type.
   @$pb.TagNumber(2)
   $core.List<$core.int> get value => $_getN(1);
   @$pb.TagNumber(2)
-  set value($core.List<$core.int> v) {
-    $_setBytes(1, v);
-  }
-
+  set value($core.List<$core.int> v) { $_setBytes(1, v); }
   @$pb.TagNumber(2)
   $core.bool hasValue() => $_has(1);
   @$pb.TagNumber(2)
-  void clearValue() => clearField(2);
-
+  void clearValue() => $_clearField(2);
   /// Creates a new [Any] encoding [message].
   ///
   /// The [typeUrl] will be [typeUrlPrefix]/`fullName` where `fullName` is
   /// the fully qualified name of the type of [message].
   static Any pack($pb.GeneratedMessage message,
-      {$core.String typeUrlPrefix = 'type.googleapis.com'}) {
+  {$core.String typeUrlPrefix = 'type.googleapis.com'}) {
     final result = create();
-    $mixin.AnyMixin.packIntoAny(result, message, typeUrlPrefix: typeUrlPrefix);
+    $mixin.AnyMixin.packIntoAny(result, message,
+        typeUrlPrefix: typeUrlPrefix);
     return result;
   }
 }
 
+
 const _omitFieldNames = $core.bool.fromEnvironment('protobuf.omit_field_names');
-const _omitMessageNames =
-    $core.bool.fromEnvironment('protobuf.omit_message_names');
+const _omitMessageNames = $core.bool.fromEnvironment('protobuf.omit_message_names');
