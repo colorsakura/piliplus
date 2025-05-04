@@ -928,7 +928,7 @@ class VideoHttp {
       dynamic data = res.data['data'];
       return {
         'status': true,
-        'subtitles': data['subtitle']['subtitles'],
+        'subtitles': data['subtitle']?['subtitles'],
         'view_points': data['view_points'],
         'last_play_cid': data['last_play_cid'],
         'interaction': data['interaction'],
