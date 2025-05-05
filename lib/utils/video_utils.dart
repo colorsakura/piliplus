@@ -1,5 +1,5 @@
 import 'package:PiliPlus/models/common/video/CDN.dart';
-import 'package:PiliPlus/models/live/room_info.dart';
+import 'package:PiliPlus/models/live/live_room/room_info.dart';
 import 'package:PiliPlus/models/video/play/url.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/storage.dart';
