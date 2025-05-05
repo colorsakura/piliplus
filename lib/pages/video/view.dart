@@ -1749,9 +1749,10 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                   return Align(
                     alignment: Alignment.bottomCenter,
                     child: Padding(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: plPlayerController?.showControls.value == true
+                      padding: EdgeInsets.only(
+                        left: 16,
+                        right: 16,
+                        bottom: plPlayerController?.showControls.value == true
                             ? 75
                             : 16,
                       ),
