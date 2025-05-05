@@ -28,6 +28,8 @@ class ArticleController extends ReplyController<MainListReply> {
 
   RxBool showTitle = false.obs;
 
+  late final RxInt topIndex = 0.obs;
+
   late final horizontalPreview = GStorage.horizontalPreview;
   late final showDynActionBar = GStorage.showDynActionBar;
 

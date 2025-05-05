@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:PiliPlus/common/constants.dart';
+import 'package:PiliPlus/common/widgets/image/image_view.dart';
 import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
 import 'package:PiliPlus/models/common/image_preview_type.dart';
 import 'package:PiliPlus/models/dynamics/article_content_model.dart'
@@ -124,30 +125,39 @@ class OpusContent extends StatelessWidget {
               }
               return widget;
             case 2 when (element.pic != null):
-              element.pic!.pics!.first.onCalHeight(maxWidth);
-              return Hero(
-                tag: element.pic!.pics!.first.url!,
-                child: GestureDetector(
-                  onTap: () {
-                    if (callback != null) {
-                      callback!([element.pic!.pics!.first.url!], 0);
-                    } else {
-                      context.imageView(
-                        initialPage: 0,
-                        imgList: [
-                          SourceModel(url: element.pic!.pics!.first.url!)
-                        ],
-                      );
-                    }
-                  },
-                  child: NetworkImgLayer(
-                    width: maxWidth,
-                    height: element.pic!.pics!.first.calHeight,
-                    src: element.pic!.pics!.first.url!,
-                    quality: 60,
+              if (element.pic!.pics!.length == 1) {
+                element.pic!.pics!.first.onCalHeight(maxWidth);
+                return Hero(
+                  tag: element.pic!.pics!.first.url!,
+                  child: GestureDetector(
+                    onTap: () {
+                      if (callback != null) {
+                        callback!([element.pic!.pics!.first.url!], 0);
+                      } else {
+                        context.imageView(
+                          initialPage: 0,
+                          imgList: [
+                            SourceModel(url: element.pic!.pics!.first.url!)
+                          ],
+                        );
+                      }
+                    },
+                    child: NetworkImgLayer(
+                      width: maxWidth,
+                      height: element.pic!.pics!.first.calHeight,
+                      src: element.pic!.pics!.first.url!,
+                      quality: 60,
+                    ),
                   ),
-                ),
-              );
+                );
+              } else {
+                return imageView(
+                    maxWidth,
+                    element.pic!.pics!
+                        .map(
+                            (e) => ImageModel(width: 1, height: 1, url: e.url!))
+                        .toList());
+              }
             case 3 when (element.line != null):
               return CachedNetworkImage(
                 width: maxWidth,

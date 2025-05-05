@@ -97,6 +97,7 @@ class ItemModulesModel {
   // ModuleInterModel? moduleInter;
 
   // 专栏
+  ModuleTop? moduleTop;
   List<ModuleTag>? moduleExtend; // opus的tag
   List<ArticleContentModel>? moduleContent;
   ModuleBlocked? moduleBlocked;
@@ -122,6 +123,11 @@ class ItemModulesModel {
   ItemModulesModel.fromOpusJson(List<Map<String, dynamic>> json) {
     for (var i in json) {
       switch (i['module_type']) {
+        case 'MODULE_TYPE_TOP':
+          moduleTop = i['module_top'] == null
+              ? null
+              : ModuleTop.fromJson(i['module_top']);
+          break;
         case 'MODULE_TYPE_TITLE':
           moduleTag = i['module_title'] == null
               ? null
@@ -158,6 +164,37 @@ class ItemModulesModel {
         //   debugPrint('unknown type: ${i}');
       }
     }
+  }
+}
+
+class ModuleTop {
+  ModuleTopDisplay? display;
+
+  ModuleTop.fromJson(Map<String, dynamic> json) {
+    display = json['display'] == null
+        ? null
+        : ModuleTopDisplay.fromJson(json['display']);
+  }
+}
+
+class ModuleTopDisplay {
+  ModuleTopAlbum? album;
+  int? type;
+
+  ModuleTopDisplay.fromJson(Map<String, dynamic> json) {
+    album =
+        json['album'] == null ? null : ModuleTopAlbum.fromJson(json['album']);
+    type = json['type'];
+  }
+}
+
+class ModuleTopAlbum {
+  List<Pic>? pics;
+  int? type;
+
+  ModuleTopAlbum.fromJson(Map<String, dynamic> json) {
+    pics = (json['pics'] as List?)?.map((e) => Pic.fromJson(e)).toList();
+    type = json['type'];
   }
 }
 
