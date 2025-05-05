@@ -4,6 +4,7 @@ import 'package:PiliPlus/common/widgets/dialog/report.dart';
 import 'package:PiliPlus/http/dynamics.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/dynamics/vote_model.dart';
+import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 
@@ -65,8 +66,9 @@ class _VotePanelState extends State<VotePanel> {
           Text(_voteInfo.desc!, style: theme.textTheme.titleSmall),
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 8),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          child: Wrap(
+            spacing: 10,
+            runSpacing: 5,
             children: [
               Text(
                 '至 ${DateTime.fromMillisecondsSinceEpoch(_voteInfo.endTime! * 1000).toString().substring(0, 19)}',
@@ -75,7 +77,7 @@ class _VotePanelState extends State<VotePanel> {
                 TextSpan(
                   children: [
                     TextSpan(
-                      text: _voteInfo.joinNum.toString(),
+                      text: Utils.numFormat(_voteInfo.joinNum),
                       style: TextStyle(color: theme.colorScheme.primary),
                     ),
                     const TextSpan(text: '人参与'),
@@ -95,10 +97,11 @@ class _VotePanelState extends State<VotePanel> {
                       ? '已结束'
                       : '已完成',
             ),
-            ValueListenableBuilder(
-              valueListenable: _selectedNum,
-              builder: (_, val, __) => Text('$val / $_maxCnt'),
-            ),
+            if (_enabled)
+              ValueListenableBuilder(
+                valueListenable: _selectedNum,
+                builder: (_, val, __) => Text('$val / $_maxCnt'),
+              ),
           ],
         ),
         if (_embedded)
@@ -184,6 +187,7 @@ class _VotePanelState extends State<VotePanel> {
             ],
           )
         : CustomScrollView(
+            shrinkWrap: true,
             slivers: [
               SliverList.builder(
                 itemCount: _voteInfo.options.length,
