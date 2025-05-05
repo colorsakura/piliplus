@@ -1,4 +1,4 @@
-import 'package:PiliPlus/pages/later/view.dart';
+import 'package:PiliPlus/models/common/later_view_type.dart';
 import 'package:get/get.dart';
 
 class LaterBaseController extends GetxController {

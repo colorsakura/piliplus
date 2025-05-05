@@ -1,6 +1,6 @@
 import 'package:PiliPlus/common/widgets/scroll_physics.dart';
-import 'package:PiliPlus/models/common/dynamics_type.dart';
-import 'package:PiliPlus/models/common/up_panel_position.dart';
+import 'package:PiliPlus/models/common/dynamic/dynamics_type.dart';
+import 'package:PiliPlus/models/common/dynamic/up_panel_position.dart';
 import 'package:PiliPlus/pages/dynamics/controller.dart';
 import 'package:PiliPlus/pages/dynamics/widgets/up_panel.dart';
 import 'package:PiliPlus/pages/dynamics_create/view.dart';
@@ -8,19 +8,6 @@ import 'package:PiliPlus/utils/storage.dart';
 import 'package:easy_debounce/easy_throttle.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-
-enum ReplyOption { allow, close, choose }
-
-extension ReplyOptionExtension on ReplyOption {
-  String get title => const ['允许评论', '关闭评论', '精选评论'][index];
-
-  IconData get iconData => [
-        MdiIcons.commentTextOutline,
-        MdiIcons.commentOffOutline,
-        MdiIcons.commentProcessingOutline,
-      ][index];
-}
 
 class DynamicsPage extends StatefulWidget {
   const DynamicsPage({super.key});
@@ -160,7 +147,8 @@ class _DynamicsPageState extends State<DynamicsPage>
             labelStyle:
                 TabBarTheme.of(context).labelStyle?.copyWith(fontSize: 13) ??
                     const TextStyle(fontSize: 13),
-            tabs: DynamicsType.values.map((e) => Tab(text: e.labels)).toList(),
+            tabs:
+                DynamicsTabType.values.map((e) => Tab(text: e.labels)).toList(),
             onTap: (index) {
               if (!_dynamicsController.tabController.indexIsChanging) {
                 _dynamicsController.animateToTop();

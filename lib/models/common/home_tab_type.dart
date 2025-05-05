@@ -12,9 +12,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
-enum TabType { live, rcmd, hot, rank, bangumi, cinema }
+enum HomeTabType { live, rcmd, hot, rank, bangumi, cinema }
 
-extension TabTypeDesc on TabType {
+extension HomeTabTypeExt on HomeTabType {
   String get description => const ['直播', '推荐', '热门', '分区', '番剧', '影视'][index];
 }
 
@@ -25,7 +25,7 @@ List get tabsConfig => [
           size: 15,
         ),
         'label': '直播',
-        'type': TabType.live,
+        'type': HomeTabType.live,
         'ctr': Get.find<LiveController>,
         'page': const LivePage(),
       },
@@ -35,7 +35,7 @@ List get tabsConfig => [
           size: 15,
         ),
         'label': '推荐',
-        'type': TabType.rcmd,
+        'type': HomeTabType.rcmd,
         'ctr': Get.find<RcmdController>,
         'page': const RcmdPage(),
       },
@@ -45,7 +45,7 @@ List get tabsConfig => [
           size: 15,
         ),
         'label': '热门',
-        'type': TabType.hot,
+        'type': HomeTabType.hot,
         'ctr': Get.find<HotController>,
         'page': const HotPage(),
       },
@@ -55,7 +55,7 @@ List get tabsConfig => [
           size: 15,
         ),
         'label': '分区',
-        'type': TabType.rank,
+        'type': HomeTabType.rank,
         'ctr': Get.find<RankController>,
         'page': const RankPage(),
       },
@@ -65,9 +65,9 @@ List get tabsConfig => [
           size: 15,
         ),
         'label': '番剧',
-        'type': TabType.bangumi,
+        'type': HomeTabType.bangumi,
         'ctr': Get.find<BangumiController>,
-        'page': const BangumiPage(tabType: TabType.bangumi),
+        'page': const BangumiPage(tabType: HomeTabType.bangumi),
       },
       {
         'icon': Icon(
@@ -75,8 +75,8 @@ List get tabsConfig => [
           size: 15,
         ),
         'label': '影视',
-        'type': TabType.cinema,
+        'type': HomeTabType.cinema,
         'ctr': Get.find<BangumiController>,
-        'page': const BangumiPage(tabType: TabType.cinema),
+        'page': const BangumiPage(tabType: HomeTabType.cinema),
       },
     ];

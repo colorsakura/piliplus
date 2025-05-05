@@ -1,9 +1,9 @@
 import 'package:PiliPlus/common/widgets/scroll_physics.dart';
 import 'package:PiliPlus/http/loading_state.dart';
+import 'package:PiliPlus/models/common/later_view_type.dart';
 import 'package:PiliPlus/models/model_hot_video_item.dart';
 import 'package:PiliPlus/pages/history/view.dart' show AppBarWidget;
 import 'package:PiliPlus/pages/later/base_controller.dart';
-import 'package:PiliPlus/pages/later/child_view.dart';
 import 'package:PiliPlus/pages/later/controller.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/request_utils.dart';
@@ -11,16 +11,6 @@ import 'package:PiliPlus/utils/storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-
-enum LaterViewType { all, toView, unfinished, viewed }
-
-extension LaterViewTypeExt on LaterViewType {
-  int get type => index;
-
-  String get title => const ['全部', '未看', '未看完', '已看完'][index];
-
-  Widget get page => LaterViewChildPage(laterViewType: this);
-}
 
 class LaterPage extends StatefulWidget {
   const LaterPage({super.key});

@@ -3,8 +3,8 @@ import 'dart:math';
 import 'package:PiliPlus/grpc/grpc_repo.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/http/user.dart';
-import 'package:PiliPlus/models/common/dynamics_type.dart';
-import 'package:PiliPlus/models/common/tab_type.dart' hide tabsConfig;
+import 'package:PiliPlus/models/common/dynamic/dynamics_type.dart';
+import 'package:PiliPlus/models/common/home_tab_type.dart' hide tabsConfig;
 import 'package:PiliPlus/models/user/info.dart';
 import 'package:PiliPlus/models/user/stat.dart';
 import 'package:PiliPlus/pages/bangumi/controller.dart';
@@ -91,14 +91,14 @@ class LoginUtils {
       } catch (_) {}
 
       try {
-        Get.find<BangumiController>(tag: TabType.bangumi.name)
+        Get.find<BangumiController>(tag: HomeTabType.bangumi.name)
           ..isLogin.value = true
           ..mid = data.mid
           ..queryBangumiFollow();
       } catch (_) {}
 
       try {
-        Get.find<BangumiController>(tag: TabType.cinema.name)
+        Get.find<BangumiController>(tag: HomeTabType.cinema.name)
           ..isLogin.value = true
           ..mid = data.mid
           ..queryBangumiFollow();
@@ -164,14 +164,14 @@ class LoginUtils {
     }
 
     try {
-      Get.find<BangumiController>(tag: TabType.bangumi.name)
+      Get.find<BangumiController>(tag: HomeTabType.bangumi.name)
         ..mid = null
         ..isLogin.value = false
         ..followState.value = LoadingState.loading();
     } catch (_) {}
 
     try {
-      Get.find<BangumiController>(tag: TabType.cinema.name)
+      Get.find<BangumiController>(tag: HomeTabType.cinema.name)
         ..mid = null
         ..isLogin.value = false
         ..followState.value = LoadingState.loading();

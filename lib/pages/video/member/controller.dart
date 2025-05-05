@@ -1,10 +1,10 @@
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/http/member.dart';
+import 'package:PiliPlus/models/common/member/contribute_type.dart';
 import 'package:PiliPlus/models/member/info.dart';
 import 'package:PiliPlus/models/space_archive/data.dart';
 import 'package:PiliPlus/models/space_archive/item.dart';
 import 'package:PiliPlus/pages/common/common_data_controller.dart';
-import 'package:PiliPlus/pages/member_contribute/view.dart' show ContributeType;
 import 'package:get/get.dart';
 
 class HorizontalMemberPageController extends CommonDataController {

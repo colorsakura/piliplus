@@ -6,7 +6,7 @@ import 'package:PiliPlus/common/widgets/progress_bar/video_progress_indicator.da
 import 'package:PiliPlus/http/search.dart';
 import 'package:PiliPlus/http/user.dart';
 import 'package:PiliPlus/http/video.dart';
-import 'package:PiliPlus/models/common/business_type.dart';
+import 'package:PiliPlus/models/common/history_business_type.dart';
 import 'package:PiliPlus/models/user/history.dart';
 import 'package:PiliPlus/pages/common/multi_select_controller.dart';
 import 'package:PiliPlus/pages/history/base_controller.dart';
@@ -145,7 +145,7 @@ class HistoryItem extends StatelessWidget {
                             width: maxWidth,
                             height: maxHeight,
                           ),
-                          if (!BusinessType
+                          if (!HistoryBusinessType
                               .hiddenDurationType.hiddenDurationType
                               .contains(videoItem.history.business))
                             PBadge(
@@ -157,10 +157,10 @@ class HistoryItem extends StatelessWidget {
                               type: 'gray',
                             ),
                           // 右上角
-                          if (BusinessType.showBadge.showBadge
+                          if (HistoryBusinessType.showBadge.showBadge
                                   .contains(videoItem.history.business) ||
                               videoItem.history.business ==
-                                  BusinessType.live.type)
+                                  HistoryBusinessType.live.type)
                             PBadge(
                               text: videoItem.badge,
                               top: 6.0,

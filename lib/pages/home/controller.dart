@@ -3,7 +3,7 @@ import 'dart:math';
 
 import 'package:PiliPlus/http/api.dart';
 import 'package:PiliPlus/http/init.dart';
-import 'package:PiliPlus/models/common/tab_type.dart';
+import 'package:PiliPlus/models/common/home_tab_type.dart';
 import 'package:PiliPlus/pages/common/common_controller.dart';
 import 'package:PiliPlus/pages/mine/view.dart';
 import 'package:PiliPlus/utils/feed_back.dart';
@@ -32,8 +32,8 @@ class HomeController extends GetxController
     final index = tabController.index;
     return tabsCtrList[index]!(
         tag: switch (tabs[index]['type']) {
-      TabType.bangumi => TabType.bangumi.name,
-      TabType.cinema => TabType.cinema.name,
+      HomeTabType.bangumi => HomeTabType.bangumi.name,
+      HomeTabType.cinema => HomeTabType.cinema.name,
       _ => null,
     });
   }
@@ -77,17 +77,17 @@ class HomeController extends GetxController
     final tabbarSort = GStorage.tabbarSort;
     defaultTabs
       ..retainWhere(
-          (item) => tabbarSort.contains((item['type'] as TabType).name))
+          (item) => tabbarSort.contains((item['type'] as HomeTabType).name))
       ..sort((a, b) => tabbarSort
-          .indexOf((a['type'] as TabType).name)
-          .compareTo(tabbarSort.indexOf((b['type'] as TabType).name)));
+          .indexOf((a['type'] as HomeTabType).name)
+          .compareTo(tabbarSort.indexOf((b['type'] as HomeTabType).name)));
 
     tabs = defaultTabs;
 
     tabsCtrList = tabs.map((e) => e['ctr']).toList();
 
     tabController = TabController(
-      initialIndex: max(0, tabbarSort.indexOf(TabType.rcmd.name)),
+      initialIndex: max(0, tabbarSort.indexOf(HomeTabType.rcmd.name)),
       length: tabs.length,
       vsync: this,
     );

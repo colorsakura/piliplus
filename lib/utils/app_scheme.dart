@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:PiliPlus/http/search.dart';
-import 'package:PiliPlus/models/common/reply_type.dart';
+import 'package:PiliPlus/models/common/reply/reply_type.dart';
 import 'package:PiliPlus/pages/video/reply_reply/view.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/id_utils.dart';

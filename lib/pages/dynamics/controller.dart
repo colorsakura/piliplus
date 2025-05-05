@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:PiliPlus/http/dynamics.dart';
 import 'package:PiliPlus/http/follow.dart';
-import 'package:PiliPlus/models/common/dynamics_type.dart';
+import 'package:PiliPlus/models/common/dynamic/dynamics_type.dart';
 import 'package:PiliPlus/models/dynamics/up.dart';
 import 'package:PiliPlus/models/follow/result.dart';
 import 'package:PiliPlus/pages/common/common_controller.dart';

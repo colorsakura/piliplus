@@ -1,13 +1,12 @@
 import 'dart:math';
 
 import 'package:PiliPlus/common/constants.dart';
-import 'package:PiliPlus/common/widgets/interactiveviewer_gallery/interactiveviewer_gallery.dart'
-    show SourceModel;
 import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
-import 'package:PiliPlus/pages/dynamics/widgets/vote.dart';
+import 'package:PiliPlus/models/common/image_preview_type.dart';
 import 'package:PiliPlus/models/dynamics/article_content_model.dart'
     show ArticleContentModel, Style, Word;
 import 'package:PiliPlus/models/dynamics/result.dart';
+import 'package:PiliPlus/pages/dynamics/widgets/vote.dart';
 import 'package:PiliPlus/utils/app_scheme.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/utils.dart';

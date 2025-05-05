@@ -1,4 +1,5 @@
-import 'package:PiliPlus/models/video/play/quality.dart';
+import 'package:PiliPlus/models/common/video/audio_quality.dart';
+import 'package:PiliPlus/models/common/video/video_quality.dart';
 
 class PlayUrlModel {
   PlayUrlModel({

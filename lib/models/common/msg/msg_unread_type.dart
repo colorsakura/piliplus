@@ -1,9 +1,3 @@
-enum DynamicBadgeMode { hidden, point, number }
-
-extension DynamicBadgeModeDesc on DynamicBadgeMode {
-  String get description => const ['隐藏', '红点', '数字'][index];
-}
-
 enum MsgUnReadType { pm, reply, at, like, sysMsg }
 
 extension MsgUnReadTypeExt on MsgUnReadType {

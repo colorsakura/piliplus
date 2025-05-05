@@ -8,7 +8,7 @@ enum LiveQuality {
   flunt,
 }
 
-extension LiveQualityCode on LiveQuality {
+extension LiveQualityExt on LiveQuality {
   static const List<int> _codeList = [
     30000,
     20000,

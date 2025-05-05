@@ -1,7 +1,6 @@
 import 'package:PiliPlus/common/constants.dart';
-import 'package:PiliPlus/common/widgets/interactiveviewer_gallery/interactiveviewer_gallery.dart'
-    show SourceModel;
 import 'package:PiliPlus/common/widgets/pendant_avatar.dart';
+import 'package:PiliPlus/models/common/image_preview_type.dart';
 import 'package:PiliPlus/models/space/card.dart';
 import 'package:PiliPlus/models/space/images.dart';
 import 'package:PiliPlus/utils/extension.dart';

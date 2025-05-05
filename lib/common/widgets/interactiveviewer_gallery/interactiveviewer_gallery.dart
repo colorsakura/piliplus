@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:PiliPlus/common/widgets/interactiveviewer_gallery/interactive_viewer.dart'
     as custom;
 import 'package:PiliPlus/common/widgets/interactiveviewer_gallery/interactive_viewer_boundary.dart';
+import 'package:PiliPlus/models/common/image_preview_type.dart';
 import 'package:PiliPlus/utils/download.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/storage.dart';
@@ -31,24 +32,6 @@ typedef IndexedFocusedWidgetBuilder = Widget Function(
     BuildContext context, int index, bool isFocus, bool enablePageView);
 
 typedef IndexedTagStringBuilder = String Function(int index);
-
-enum SourceType { fileImage, networkImage, livePhoto }
-
-class SourceModel {
-  final SourceType sourceType;
-  final String url;
-  final String? liveUrl;
-  final int? width;
-  final int? height;
-
-  const SourceModel({
-    this.sourceType = SourceType.networkImage,
-    required this.url,
-    this.liveUrl,
-    this.width,
-    this.height,
-  });
-}
 
 class InteractiveviewerGallery<T> extends StatefulWidget {
   const InteractiveviewerGallery({

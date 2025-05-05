@@ -17,8 +17,10 @@ import 'package:PiliPlus/models/common/sponsor_block/post_segment_model.dart';
 import 'package:PiliPlus/models/common/sponsor_block/segment_model.dart';
 import 'package:PiliPlus/models/common/sponsor_block/segment_type.dart';
 import 'package:PiliPlus/models/common/sponsor_block/skip_type.dart';
+import 'package:PiliPlus/models/common/video/audio_quality.dart';
+import 'package:PiliPlus/models/common/video/video_decode_type.dart';
+import 'package:PiliPlus/models/common/video/video_quality.dart';
 import 'package:PiliPlus/models/video/later.dart';
-import 'package:PiliPlus/models/video/play/quality.dart';
 import 'package:PiliPlus/models/video/play/url.dart';
 import 'package:PiliPlus/models/video_detail_res.dart';
 import 'package:PiliPlus/pages/search/widgets/search_text.dart';
@@ -72,7 +74,7 @@ class VideoDetailController extends GetxController
   /// 播放器配置 画质 音质 解码格式
   late VideoQuality currentVideoQa;
   AudioQuality? currentAudioQa;
-  late VideoDecodeFormats currentDecodeFormats;
+  late VideoDecodeFormatType currentDecodeFormats;
   // 是否开始自动播放 存在多p的情况下，第二p需要为true
   RxBool autoPlay = true.obs;
   // 封面图的展示
@@ -273,9 +275,9 @@ class VideoDetailController extends GetxController
 
     // 预设的解码格式
     cacheDecode = setting.get(SettingBoxKey.defaultDecode,
-        defaultValue: VideoDecodeFormats.values.last.code);
+        defaultValue: VideoDecodeFormatType.values.last.code);
     cacheSecondDecode = setting.get(SettingBoxKey.secondDecode,
-        defaultValue: VideoDecodeFormats.values[1].code);
+        defaultValue: VideoDecodeFormatType.values[1].code);
     oid.value = IdUtils.bv2av(Get.parameters['bvid']!);
   }
 
@@ -984,10 +986,10 @@ class VideoDetailController extends GetxController
         data.dash!.video!.where((i) => i.id == currentVideoQa.code).toList();
 
     final List supportDecodeFormats = videoList.map((e) => e.codecs!).toList();
-    VideoDecodeFormats defaultDecodeFormats =
-        VideoDecodeFormatsCode.fromString(cacheDecode)!;
-    VideoDecodeFormats secondDecodeFormats =
-        VideoDecodeFormatsCode.fromString(cacheSecondDecode)!;
+    VideoDecodeFormatType defaultDecodeFormats =
+        VideoDecodeFormatTypeExt.fromString(cacheDecode)!;
+    VideoDecodeFormatType secondDecodeFormats =
+        VideoDecodeFormatTypeExt.fromString(cacheSecondDecode)!;
     try {
       // 当前视频没有对应格式返回第一个
       int flag = 0;
@@ -1011,7 +1013,7 @@ class VideoDetailController extends GetxController
       } else {
         if (currentVideoQa == VideoQuality.dolbyVision) {
           currentDecodeFormats =
-              VideoDecodeFormatsCode.fromString(videoList.first.codecs!)!;
+              VideoDecodeFormatTypeExt.fromString(videoList.first.codecs!)!;
           firstVideo = videoList.first;
         } else if (flag == 2) {
           //defaultDecodeFormats
@@ -1029,7 +1031,7 @@ class VideoDetailController extends GetxController
           );
         } else if (flag == 0) {
           currentDecodeFormats =
-              VideoDecodeFormatsCode.fromString(supportDecodeFormats.first)!;
+              VideoDecodeFormatTypeExt.fromString(supportDecodeFormats.first)!;
           firstVideo = videoList.first;
         }
       }
@@ -1167,10 +1169,10 @@ class VideoDetailController extends GetxController
             id: data.quality!,
             baseUrl: videoUrl,
             codecs: 'avc1',
-            quality: VideoQualityCode.fromCode(data.quality!)!);
+            quality: VideoQualityExt.fromCode(data.quality!)!);
         setVideoHeight();
-        currentDecodeFormats = VideoDecodeFormatsCode.fromString('avc1')!;
-        currentVideoQa = VideoQualityCode.fromCode(data.quality!)!;
+        currentDecodeFormats = VideoDecodeFormatTypeExt.fromString('avc1')!;
+        currentVideoQa = VideoQualityExt.fromCode(data.quality!)!;
         if (autoPlay.value) {
           isShowCover.value = false;
           await playerInit();
@@ -1204,7 +1206,7 @@ class VideoDetailController extends GetxController
         resVideoQa =
             Utils.findClosestNumber(plPlayerController.cacheVideoQa!, numbers);
       }
-      currentVideoQa = VideoQualityCode.fromCode(resVideoQa)!;
+      currentVideoQa = VideoQualityExt.fromCode(resVideoQa)!;
 
       /// 取出符合当前画质的videoList
       final List<VideoItem> videosList =
@@ -1218,9 +1220,9 @@ class VideoDetailController extends GetxController
               orElse: () => supportFormats.first)
           .codecs!;
       // 默认从设置中取AV1
-      currentDecodeFormats = VideoDecodeFormatsCode.fromString(cacheDecode)!;
-      VideoDecodeFormats secondDecodeFormats =
-          VideoDecodeFormatsCode.fromString(cacheSecondDecode)!;
+      currentDecodeFormats = VideoDecodeFormatTypeExt.fromString(cacheDecode)!;
+      VideoDecodeFormatType secondDecodeFormats =
+          VideoDecodeFormatTypeExt.fromString(cacheSecondDecode)!;
       // 当前视频没有对应格式返回第一个
       int flag = 0;
       for (var i in supportDecodeFormats) {
@@ -1235,7 +1237,7 @@ class VideoDetailController extends GetxController
         currentDecodeFormats = secondDecodeFormats;
       } else if (flag == 0) {
         currentDecodeFormats =
-            VideoDecodeFormatsCode.fromString(supportDecodeFormats.first)!;
+            VideoDecodeFormatTypeExt.fromString(supportDecodeFormats.first)!;
       }
 
       /// 取出符合当前解码格式的videoItem
@@ -1272,7 +1274,7 @@ class VideoDetailController extends GetxController
             orElse: () => audiosList.first);
         audioUrl = VideoUtils.getCdnUrl(firstAudio);
         if (firstAudio.id != null) {
-          currentAudioQa = AudioQualityCode.fromCode(firstAudio.id!)!;
+          currentAudioQa = AudioQualityExt.fromCode(firstAudio.id!)!;
         }
       } else {
         firstAudio = AudioItem();

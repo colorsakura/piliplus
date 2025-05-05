@@ -1,7 +1,8 @@
 import 'package:PiliPlus/common/widgets/button/toolbar_icon_button.dart';
 import 'package:PiliPlus/http/msg.dart';
+import 'package:PiliPlus/models/common/publish_panel_type.dart';
+import 'package:PiliPlus/models/common/reply/reply_option_type.dart';
 import 'package:PiliPlus/pages/common/common_publish_page.dart';
-import 'package:PiliPlus/pages/dynamics/view.dart';
 import 'package:PiliPlus/pages/emote/controller.dart';
 import 'package:PiliPlus/pages/emote/view.dart';
 import 'package:PiliPlus/utils/request_utils.dart';
@@ -24,7 +25,7 @@ class CreateDynPanel extends CommonPublishPage {
 class _CreateDynPanelState extends CommonPublishPageState<CreateDynPanel> {
   bool _isPrivate = false;
   DateTime? _publishTime;
-  ReplyOption _replyOption = ReplyOption.allow;
+  ReplyOptionType _replyOption = ReplyOptionType.allow;
 
   @override
   void dispose() {
@@ -251,7 +252,7 @@ class _CreateDynPanelState extends CommonPublishPageState<CreateDynPanel> {
   }
 
   Widget _buildReplyOptionWidget(ThemeData theme) {
-    final color = _replyOption == ReplyOption.close
+    final color = _replyOption == ReplyOptionType.close
         ? theme.colorScheme.error
         : theme.colorScheme.secondary;
     return PopupMenuButton(
@@ -262,9 +263,9 @@ class _CreateDynPanelState extends CommonPublishPageState<CreateDynPanel> {
           _replyOption = item;
         });
       },
-      itemBuilder: (context) => ReplyOption.values
+      itemBuilder: (context) => ReplyOptionType.values
           .map(
-            (item) => PopupMenuItem<ReplyOption>(
+            (item) => PopupMenuItem<ReplyOptionType>(
               value: item,
               child: Row(
                 mainAxisSize: MainAxisSize.min,

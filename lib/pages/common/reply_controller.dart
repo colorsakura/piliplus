@@ -6,8 +6,8 @@ import 'package:PiliPlus/grpc/bilibili/main/community/reply/v1.pb.dart'
 import 'package:PiliPlus/grpc/bilibili/pagination.pb.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/http/reply.dart';
-import 'package:PiliPlus/models/common/reply_sort_type.dart';
-import 'package:PiliPlus/models/common/reply_type.dart';
+import 'package:PiliPlus/models/common/reply/reply_sort_type.dart';
+import 'package:PiliPlus/models/common/reply/reply_type.dart';
 import 'package:PiliPlus/models/video/reply/data.dart';
 import 'package:PiliPlus/pages/common/common_list_controller.dart';
 import 'package:PiliPlus/pages/video/reply_new/view.dart';

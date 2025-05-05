@@ -6,21 +6,25 @@ import 'package:PiliPlus/common/widgets/pair.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart'
     show kDragContainerExtentPercentage, displacement;
 import 'package:PiliPlus/http/constants.dart';
-import 'package:PiliPlus/models/common/dynamic_badge_mode.dart';
+import 'package:PiliPlus/models/common/account_type.dart';
+import 'package:PiliPlus/models/common/dynamic/dynamic_badge_mode.dart';
+import 'package:PiliPlus/models/common/dynamic/up_panel_position.dart';
+import 'package:PiliPlus/models/common/home_tab_type.dart';
+import 'package:PiliPlus/models/common/member/tab_type.dart';
+import 'package:PiliPlus/models/common/msg/msg_unread_type.dart';
 import 'package:PiliPlus/models/common/sponsor_block/segment_type.dart';
 import 'package:PiliPlus/models/common/sponsor_block/skip_type.dart';
-import 'package:PiliPlus/models/common/tab_type.dart';
-import 'package:PiliPlus/models/common/theme_type.dart';
-import 'package:PiliPlus/models/common/up_panel_position.dart';
-import 'package:PiliPlus/models/live/quality.dart';
+import 'package:PiliPlus/models/common/theme/theme_type.dart';
+import 'package:PiliPlus/models/common/video/CDN.dart';
+import 'package:PiliPlus/models/common/video/audio_quality.dart';
+import 'package:PiliPlus/models/common/video/live_quality.dart';
+import 'package:PiliPlus/models/common/video/subtitle_pref_type.dart';
+import 'package:PiliPlus/models/common/video/video_decode_type.dart';
+import 'package:PiliPlus/models/common/video/video_quality.dart';
 import 'package:PiliPlus/models/model_owner.dart';
 import 'package:PiliPlus/models/user/danmaku_rule.dart';
 import 'package:PiliPlus/models/user/danmaku_rule_adapter.dart';
 import 'package:PiliPlus/models/user/info.dart';
-import 'package:PiliPlus/models/video/play/CDN.dart';
-import 'package:PiliPlus/models/video/play/quality.dart';
-import 'package:PiliPlus/models/video/play/subtitle.dart';
-import 'package:PiliPlus/pages/member/controller.dart' show MemberTabType;
 import 'package:PiliPlus/pages/mine/controller.dart';
 import 'package:PiliPlus/plugin/pl_player/models/bottom_progress_behavior.dart';
 import 'package:PiliPlus/plugin/pl_player/models/fullscreen_mode.dart';
@@ -54,7 +58,7 @@ class GStorage {
 
   static List<String> get tabbarSort =>
       List<String>.from(setting.get(SettingBoxKey.tabbarSort,
-          defaultValue: TabType.values.map((item) => item.name).toList()));
+          defaultValue: HomeTabType.values.map((item) => item.name).toList()));
 
   static List<Pair<SegmentType, SkipType>> get blockSettings {
     List<int> list = List<int>.from(setting.get(
@@ -137,7 +141,7 @@ class GStorage {
 
   static String get defaultSubtitlePreference =>
       setting.get(SettingBoxKey.subtitlePreference,
-          defaultValue: SubtitlePreference.values.first.code);
+          defaultValue: SubtitlePrefType.values.first.code);
 
   static bool get useRelativeSlide =>
       setting.get(SettingBoxKey.useRelativeSlide, defaultValue: false);
@@ -167,12 +171,12 @@ class GStorage {
 
   static String get defaultDecode => setting.get(
         SettingBoxKey.defaultDecode,
-        defaultValue: VideoDecodeFormats.values.last.code,
+        defaultValue: VideoDecodeFormatType.values.last.code,
       );
 
   static String get secondDecode => setting.get(
         SettingBoxKey.secondDecode,
-        defaultValue: VideoDecodeFormats.values[1].code,
+        defaultValue: VideoDecodeFormatType.values[1].code,
       );
 
   static String get hardwareDecoding => setting.get(
@@ -972,15 +976,4 @@ class Accounts {
   static Account get(AccountType key) {
     return accountMode[key]!;
   }
-}
-
-enum AccountType {
-  main,
-  heartbeat,
-  recommend,
-  video,
-}
-
-extension AccountTypeExt on AccountType {
-  String get title => const ['主账号', '记录观看', '推荐', '视频取流'][index];
 }

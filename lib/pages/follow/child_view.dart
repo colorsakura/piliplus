@@ -2,6 +2,7 @@ import 'package:PiliPlus/common/skeleton/msg_feed_top.dart';
 import 'package:PiliPlus/common/widgets/loading_widget/http_error.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/http/loading_state.dart';
+import 'package:PiliPlus/models/common/follow_order_type.dart';
 import 'package:PiliPlus/models/follow/result.dart';
 import 'package:PiliPlus/pages/follow/child_controller.dart';
 import 'package:PiliPlus/pages/follow/controller.dart';
@@ -47,9 +48,9 @@ class _FollowChildPageState extends State<FollowChildPage>
           onPressed: () {
             _followController
               ..orderType.value =
-                  _followController.orderType.value == OrderType.def
-                      ? OrderType.attention
-                      : OrderType.def
+                  _followController.orderType.value == FollowOrderType.def
+                      ? FollowOrderType.attention
+                      : FollowOrderType.def
               ..onReload();
           },
           icon: const Icon(Icons.format_list_bulleted, size: 20),

@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:PiliPlus/build_config.dart';
 import 'package:PiliPlus/common/widgets/dialog/dialog.dart';
+import 'package:PiliPlus/models/common/account_type.dart';
 import 'package:PiliPlus/pages/mine/controller.dart';
 import 'package:PiliPlus/services/loggeer.dart';
 import 'package:PiliPlus/utils/accounts/account.dart';

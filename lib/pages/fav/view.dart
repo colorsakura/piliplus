@@ -1,28 +1,11 @@
 import 'package:PiliPlus/common/widgets/scroll_physics.dart';
 import 'package:PiliPlus/http/loading_state.dart';
+import 'package:PiliPlus/models/common/fav_type.dart';
 import 'package:PiliPlus/models/user/fav_folder.dart';
-import 'package:PiliPlus/pages/fav/article/view.dart';
-import 'package:PiliPlus/pages/fav/note/view.dart';
-import 'package:PiliPlus/pages/fav/pgc/view.dart';
 import 'package:PiliPlus/pages/fav/video/controller.dart';
-import 'package:PiliPlus/pages/fav/video/view.dart';
 import 'package:PiliPlus/pages/fav_folder_sort/view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
-enum _FavType { video, bangumi, cinema, article, note }
-
-extension _FavTypeExt on _FavType {
-  String get title => const ['视频', '追番', '追剧', '专栏', '笔记'][index];
-
-  Widget get page => switch (this) {
-        _FavType.video => const FavVideoPage(),
-        _FavType.bangumi => const FavPgcPage(type: 1),
-        _FavType.cinema => const FavPgcPage(type: 2),
-        _FavType.article => const FavArticlePage(),
-        _FavType.note => const FavNotePage(),
-      };
-}
 
 class FavPage extends StatefulWidget {
   const FavPage({super.key});
@@ -46,7 +29,7 @@ class _FavPageState extends State<FavPage> with SingleTickerProviderStateMixin {
     int initialIndex = Get.arguments is int ? Get.arguments as int : 0;
     _showVideoFavMenu = (initialIndex == 0).obs;
     _tabController = TabController(
-      length: _FavType.values.length,
+      length: FavTabType.values.length,
       vsync: this,
       initialIndex: initialIndex,
     );
@@ -133,7 +116,7 @@ class _FavPageState extends State<FavPage> with SingleTickerProviderStateMixin {
         ],
         bottom: TabBar(
           controller: _tabController,
-          tabs: _FavType.values.map((item) => Tab(text: item.title)).toList(),
+          tabs: FavTabType.values.map((item) => Tab(text: item.title)).toList(),
         ),
       ),
       body: SafeArea(
@@ -141,7 +124,7 @@ class _FavPageState extends State<FavPage> with SingleTickerProviderStateMixin {
         bottom: false,
         child: tabBarView(
           controller: _tabController,
-          children: _FavType.values.map((item) => item.page).toList(),
+          children: FavTabType.values.map((item) => item.page).toList(),
         ),
       ),
     );

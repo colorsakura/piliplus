@@ -4,13 +4,13 @@ import 'package:PiliPlus/http/api.dart';
 import 'package:PiliPlus/http/constants.dart';
 import 'package:PiliPlus/http/init.dart';
 import 'package:PiliPlus/http/loading_state.dart';
+import 'package:PiliPlus/models/common/reply/reply_option_type.dart';
 import 'package:PiliPlus/models/msg/account.dart';
 import 'package:PiliPlus/models/msg/msgfeed_at_me.dart';
 import 'package:PiliPlus/models/msg/msgfeed_like_me.dart';
 import 'package:PiliPlus/models/msg/msgfeed_reply_me.dart';
 import 'package:PiliPlus/models/msg/msgfeed_sys_msg.dart';
 import 'package:PiliPlus/models/msg/session.dart';
-import 'package:PiliPlus/pages/dynamics/view.dart' show ReplyOption;
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/wbi_sign.dart';
 import 'package:dio/dio.dart';
@@ -123,7 +123,7 @@ class MsgHttp {
     dynamic rawText,
     List? pics,
     int? publishTime,
-    ReplyOption? replyOption,
+    ReplyOptionType? replyOption,
     int? privatePub,
   }) async {
     String csrf = Accounts.main.csrf;
@@ -150,9 +150,9 @@ class MsgHttp {
             "option": {
               if (privatePub != null) 'private_pub': privatePub,
               if (publishTime != null) "timer_pub_time": publishTime,
-              if (replyOption == ReplyOption.close)
+              if (replyOption == ReplyOptionType.close)
                 "close_comment": 1
-              else if (replyOption == ReplyOption.choose)
+              else if (replyOption == ReplyOptionType.choose)
                 "up_choose_comment": 1,
             },
           "scene": rid != null

@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:PiliPlus/http/init.dart';
+import 'package:PiliPlus/models/common/webview_menu_type.dart';
 import 'package:PiliPlus/utils/accounts/account.dart';
 import 'package:PiliPlus/utils/app_scheme.dart';
 import 'package:PiliPlus/utils/cache_manage.dart';
@@ -11,26 +12,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
-
-enum _WebviewMenuItem {
-  refresh,
-  copy,
-  openInBrowser,
-  clearCache,
-  resetCookie,
-  goBack,
-}
-
-extension _WebviewMenuItemExt on _WebviewMenuItem {
-  String get title => const [
-        '刷新',
-        '复制链接',
-        '浏览器中打开',
-        '清除缓存',
-        '重新设置Cookie',
-        '返回',
-      ][index];
-}
 
 class WebviewPage extends StatefulWidget {
   const WebviewPage({super.key, this.url, this.oid, this.title, this.uaType});
@@ -96,22 +77,22 @@ class _WebviewPageState extends State<WebviewPage> {
                 PopupMenuButton(
                   onSelected: (item) async {
                     switch (item) {
-                      case _WebviewMenuItem.refresh:
+                      case WebviewMenuItem.refresh:
                         _webViewController?.reload();
                         break;
-                      case _WebviewMenuItem.copy:
+                      case WebviewMenuItem.copy:
                         WebUri? uri = await _webViewController?.getUrl();
                         if (uri != null) {
                           Utils.copyText(uri.toString());
                         }
                         break;
-                      case _WebviewMenuItem.openInBrowser:
+                      case WebviewMenuItem.openInBrowser:
                         WebUri? uri = await _webViewController?.getUrl();
                         if (uri != null) {
                           PageUtils.launchURL(uri.toString());
                         }
                         break;
-                      case _WebviewMenuItem.clearCache:
+                      case WebviewMenuItem.clearCache:
                         try {
                           await InAppWebViewController.clearAllCache();
                           await _webViewController?.clearHistory();
@@ -120,14 +101,14 @@ class _WebviewPageState extends State<WebviewPage> {
                           SmartDialog.showToast(e.toString());
                         }
                         break;
-                      case _WebviewMenuItem.goBack:
+                      case WebviewMenuItem.goBack:
                         if (await _webViewController?.canGoBack() == true) {
                           _webViewController?.goBack();
                         } else {
                           Get.back();
                         }
                         break;
-                      case _WebviewMenuItem.resetCookie:
+                      case WebviewMenuItem.resetCookie:
                         final cookies = Accounts.main.cookieJar.toList();
                         for (var item in cookies) {
                           await CookieManager().setCookie(
@@ -144,16 +125,16 @@ class _WebviewPageState extends State<WebviewPage> {
                         break;
                     }
                   },
-                  itemBuilder: (context) => <PopupMenuEntry<_WebviewMenuItem>>[
-                    ..._WebviewMenuItem.values
-                        .sublist(0, _WebviewMenuItem.values.length - 1)
+                  itemBuilder: (context) => <PopupMenuEntry<WebviewMenuItem>>[
+                    ...WebviewMenuItem.values
+                        .sublist(0, WebviewMenuItem.values.length - 1)
                         .map((item) => PopupMenuItem(
                             value: item, child: Text(item.title))),
                     const PopupMenuDivider(),
                     PopupMenuItem(
-                        value: _WebviewMenuItem.goBack,
+                        value: WebviewMenuItem.goBack,
                         child: Text(
-                          _WebviewMenuItem.goBack.title,
+                          WebviewMenuItem.goBack.title,
                           style: TextStyle(
                               color: Theme.of(context).colorScheme.error),
                         )),

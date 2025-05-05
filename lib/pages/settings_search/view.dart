@@ -1,4 +1,5 @@
 import 'package:PiliPlus/common/widgets/loading_widget/http_error.dart';
+import 'package:PiliPlus/models/common/settings_type.dart';
 import 'package:PiliPlus/pages/setting/widgets/model.dart';
 import 'package:PiliPlus/utils/grid.dart';
 import 'package:easy_debounce/easy_throttle.dart';

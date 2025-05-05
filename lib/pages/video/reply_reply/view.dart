@@ -4,7 +4,7 @@ import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/grpc/bilibili/main/community/reply/v1.pb.dart'
     show ReplyInfo, Mode;
 import 'package:PiliPlus/http/loading_state.dart';
-import 'package:PiliPlus/models/common/reply_type.dart';
+import 'package:PiliPlus/models/common/reply/reply_type.dart';
 import 'package:PiliPlus/pages/common/common_slide_page.dart';
 import 'package:PiliPlus/pages/video/reply/widgets/reply_item_grpc.dart';
 import 'package:PiliPlus/pages/video/reply_new/view.dart';

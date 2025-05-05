@@ -1,4 +1,5 @@
 import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
+import 'package:PiliPlus/models/common/avatar_badge_type.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/utils.dart';
@@ -7,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class PendantAvatar extends StatelessWidget {
-  final _BadgeType _badgeType;
+  final BadgeType _badgeType;
   final String? avatar;
   final double size;
   final double badgeSize;
@@ -27,13 +28,13 @@ class PendantAvatar extends StatelessWidget {
     this.onTap,
   })  : _badgeType = officialType == null || officialType < 0
             ? isVip == true
-                ? _BadgeType.vip
-                : _BadgeType.none
+                ? BadgeType.vip
+                : BadgeType.none
             : officialType == 0
-                ? _BadgeType.person
+                ? BadgeType.person
                 : officialType == 1
-                    ? _BadgeType.institution
-                    : _BadgeType.none,
+                    ? BadgeType.institution
+                    : BadgeType.none,
         badgeSize = badgeSize ?? size / 3;
 
   static bool showDynDecorate = GStorage.showDynDecorate;
@@ -98,7 +99,7 @@ class PendantAvatar extends StatelessWidget {
               ),
             ),
           )
-        else if (_badgeType != _BadgeType.none)
+        else if (_badgeType != BadgeType.none)
           _buildBadge(colorScheme),
       ],
     );
@@ -132,7 +133,7 @@ class PendantAvatar extends StatelessWidget {
 
   Widget _buildBadge(ColorScheme colorScheme) {
     final child = switch (_badgeType) {
-      _BadgeType.vip => Image.asset(
+      BadgeType.vip => Image.asset(
           'assets/images/big-vip.png',
           height: badgeSize,
           semanticLabel: _badgeType.desc,
@@ -156,16 +157,4 @@ class PendantAvatar extends StatelessWidget {
               child: child),
         ));
   }
-}
-
-enum _BadgeType { none, vip, person, institution }
-
-extension _BadgeTypeExt on _BadgeType {
-  String get desc => const ['', '大会员', '认证个人', '认证机构'][index];
-  Color get color => const [
-        Colors.transparent,
-        Color(0xFFFF6699),
-        Color(0xFFFFCC00),
-        Colors.lightBlueAccent
-      ][index];
 }

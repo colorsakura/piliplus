@@ -6,8 +6,10 @@ import 'package:PiliPlus/common/widgets/button/icon_button.dart';
 import 'package:PiliPlus/common/widgets/self_sized_horizontal_list.dart';
 import 'package:PiliPlus/models/common/search_type.dart';
 import 'package:PiliPlus/models/common/super_resolution_type.dart';
-import 'package:PiliPlus/models/video/play/CDN.dart';
-import 'package:PiliPlus/models/video/play/quality.dart';
+import 'package:PiliPlus/models/common/video/CDN.dart';
+import 'package:PiliPlus/models/common/video/audio_quality.dart';
+import 'package:PiliPlus/models/common/video/video_decode_type.dart';
+import 'package:PiliPlus/models/common/video/video_quality.dart';
 import 'package:PiliPlus/models/video/play/url.dart';
 import 'package:PiliPlus/pages/setting/widgets/select_dialog.dart';
 import 'package:PiliPlus/pages/setting/widgets/switch_item.dart';
@@ -648,7 +650,7 @@ class HeaderControlState extends State<HeaderControl> {
                                 final int quality = videoFormat[i].quality!;
                                 videoDetailCtr
                                   ..currentVideoQa =
-                                      VideoQualityCode.fromCode(quality)!
+                                      VideoQualityExt.fromCode(quality)!
                                   ..updatePlayer();
 
                                 // update
@@ -657,7 +659,7 @@ class HeaderControlState extends State<HeaderControl> {
                                     .checkConnectivity()
                                     .then((res) {
                                   if (res.contains(ConnectivityResult.wifi)) {
-                                    oldQualityDesc = VideoQualityCode.fromCode(
+                                    oldQualityDesc = VideoQualityExt.fromCode(
                                             GStorage.defaultVideoQa)!
                                         .description;
                                     setting.put(
@@ -665,7 +667,7 @@ class HeaderControlState extends State<HeaderControl> {
                                       quality,
                                     );
                                   } else {
-                                    oldQualityDesc = VideoQualityCode.fromCode(
+                                    oldQualityDesc = VideoQualityExt.fromCode(
                                             GStorage.defaultVideoQaCellular)!
                                         .description;
                                     setting.put(
@@ -675,7 +677,7 @@ class HeaderControlState extends State<HeaderControl> {
                                   }
                                 });
                                 SmartDialog.showToast(
-                                  "默认画质由：$oldQualityDesc 变为：${VideoQualityCode.fromCode(quality)!.description}",
+                                  "默认画质由：$oldQualityDesc 变为：${VideoQualityExt.fromCode(quality)!.description}",
                                 );
                               },
                               // 可能包含会员解锁画质
@@ -743,7 +745,7 @@ class HeaderControlState extends State<HeaderControl> {
                               final int quality = i.id!;
                               videoDetailCtr
                                 ..currentAudioQa =
-                                    AudioQualityCode.fromCode(quality)!
+                                    AudioQualityExt.fromCode(quality)!
                                 ..updatePlayer();
 
                               // update
@@ -752,7 +754,7 @@ class HeaderControlState extends State<HeaderControl> {
                                   .checkConnectivity()
                                   .then((res) {
                                 if (res.contains(ConnectivityResult.wifi)) {
-                                  oldQualityDesc = AudioQualityCode.fromCode(
+                                  oldQualityDesc = AudioQualityExt.fromCode(
                                           GStorage.defaultAudioQa)!
                                       .description;
                                   setting.put(
@@ -760,7 +762,7 @@ class HeaderControlState extends State<HeaderControl> {
                                     quality,
                                   );
                                 } else {
-                                  oldQualityDesc = AudioQualityCode.fromCode(
+                                  oldQualityDesc = AudioQualityExt.fromCode(
                                           GStorage.defaultAudioQaCellular)!
                                       .description;
                                   setting.put(
@@ -770,7 +772,7 @@ class HeaderControlState extends State<HeaderControl> {
                                 }
                               });
                               SmartDialog.showToast(
-                                "默认音质由：$oldQualityDesc 变为：${AudioQualityCode.fromCode(quality)!.description}",
+                                "默认音质由：$oldQualityDesc 变为：${AudioQualityExt.fromCode(quality)!.description}",
                               );
                             },
                             contentPadding:
@@ -803,7 +805,7 @@ class HeaderControlState extends State<HeaderControl> {
   // 选择解码格式
   void showSetDecodeFormats() {
     // 当前选中的解码格式
-    final VideoDecodeFormats currentDecodeFormats =
+    final VideoDecodeFormatType currentDecodeFormats =
         videoDetailCtr.currentDecodeFormats;
     final VideoItem firstVideo = videoDetailCtr.firstVideo;
     // 当前视频可用的解码格式
@@ -845,13 +847,13 @@ class HeaderControlState extends State<HeaderControl> {
                               }
                               videoDetailCtr
                                 ..currentDecodeFormats =
-                                    VideoDecodeFormatsCode.fromString(i)!
+                                    VideoDecodeFormatTypeExt.fromString(i)!
                                 ..updatePlayer();
                               Get.back();
                             },
                             contentPadding:
                                 const EdgeInsets.only(left: 20, right: 20),
-                            title: Text(VideoDecodeFormatsCode.fromString(i)!
+                            title: Text(VideoDecodeFormatTypeExt.fromString(i)!
                                 .description),
                             subtitle: Text(
                               i!,

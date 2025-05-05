@@ -1,3 +1,5 @@
+// ignore_for_file: constant_identifier_names
+
 import 'dart:ui';
 
 import 'package:PiliPlus/models/common/sponsor_block/action_type.dart';
@@ -9,12 +11,9 @@ enum SegmentType {
   intro,
   outro,
   preview,
-  // ignore: constant_identifier_names
   music_offtopic,
-  // ignore: constant_identifier_names
   poi_highlight,
   filler,
-  // ignore: constant_identifier_names
   exclusive_access
 }
 

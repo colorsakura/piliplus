@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:PiliPlus/build_config.dart';
 import 'package:PiliPlus/common/widgets/custom_toast.dart';
 import 'package:PiliPlus/http/init.dart';
-import 'package:PiliPlus/models/common/color_type.dart';
+import 'package:PiliPlus/models/common/theme/theme_color_type.dart';
 import 'package:PiliPlus/pages/main/view.dart';
 import 'package:PiliPlus/pages/video/view.dart';
 import 'package:PiliPlus/router/app_pages.dart';

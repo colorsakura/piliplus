@@ -1,5 +1,6 @@
 import 'package:PiliPlus/common/widgets/interactiveviewer_gallery/hero_dialog_route.dart';
 import 'package:PiliPlus/common/widgets/interactiveviewer_gallery/interactiveviewer_gallery.dart';
+import 'package:PiliPlus/models/common/image_preview_type.dart';
 import 'package:floating/floating.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

@@ -4,9 +4,9 @@ import 'dart:math';
 
 import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/common/widgets/button/icon_button.dart';
-import 'package:PiliPlus/common/widgets/interactiveviewer_gallery/interactiveviewer_gallery.dart'
-    show SourceModel, SourceType;
 import 'package:PiliPlus/http/msg.dart';
+import 'package:PiliPlus/models/common/image_preview_type.dart';
+import 'package:PiliPlus/models/common/publish_panel_type.dart';
 import 'package:PiliPlus/models/live/live_emoticons/emoticon.dart';
 import 'package:PiliPlus/models/video/reply/emote.dart';
 import 'package:PiliPlus/utils/extension.dart';
@@ -19,8 +19,6 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
-
-enum PanelType { none, keyboard, emoji }
 
 abstract class CommonPublishPage extends StatefulWidget {
   const CommonPublishPage({

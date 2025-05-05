@@ -1,4 +1,4 @@
-enum BusinessType {
+enum HistoryBusinessType {
   // 普通视频
   archive,
   // 剧集（番剧 / 影视）
@@ -13,7 +13,7 @@ enum BusinessType {
   showBadge
 }
 
-extension BusinessTypeExtension on BusinessType {
+extension HistoryBusinessTypeExt on HistoryBusinessType {
   String get type =>
       const ['archive', 'pgc', 'live', 'article-list', 'article'][index];
   // 隐藏时长

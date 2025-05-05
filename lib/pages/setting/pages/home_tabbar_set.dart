@@ -1,4 +1,4 @@
-import 'package:PiliPlus/models/common/tab_type.dart';
+import 'package:PiliPlus/models/common/home_tab_type.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -21,8 +21,8 @@ class _TabbarSetPageState extends State<TabbarSetPage> {
     tabbarSort = GStorage.tabbarSort;
     // 对 tabData 进行排序
     defaultTabs.sort((a, b) {
-      int indexA = tabbarSort.indexOf((a['type'] as TabType).name);
-      int indexB = tabbarSort.indexOf((b['type'] as TabType).name);
+      int indexA = tabbarSort.indexOf((a['type'] as HomeTabType).name);
+      int indexB = tabbarSort.indexOf((b['type'] as HomeTabType).name);
 
       // 如果类型在 sortOrder 中不存在，则放在末尾
       if (indexA == -1) indexA = tabbarSort.length;
@@ -34,8 +34,8 @@ class _TabbarSetPageState extends State<TabbarSetPage> {
 
   void saveEdit() {
     List<String> sortedTabbar = defaultTabs
-        .where((i) => tabbarSort.contains((i['type'] as TabType).name))
-        .map<String>((i) => (i['type'] as TabType).name)
+        .where((i) => tabbarSort.contains((i['type'] as HomeTabType).name))
+        .map<String>((i) => (i['type'] as HomeTabType).name)
         .toList();
     GStorage.setting.put(SettingBoxKey.tabbarSort, sortedTabbar);
     SmartDialog.showToast('保存成功，下次启动时生效');
@@ -57,9 +57,10 @@ class _TabbarSetPageState extends State<TabbarSetPage> {
       for (int i = 0; i < defaultTabs.length; i++) ...[
         CheckboxListTile(
           key: Key(defaultTabs[i]['label']),
-          value: tabbarSort.contains((defaultTabs[i]['type'] as TabType).name),
+          value:
+              tabbarSort.contains((defaultTabs[i]['type'] as HomeTabType).name),
           onChanged: (bool? newValue) {
-            String tabTypeId = (defaultTabs[i]['type'] as TabType).name;
+            String tabTypeId = (defaultTabs[i]['type'] as HomeTabType).name;
             if (!newValue!) {
               tabbarSort.remove(tabTypeId);
             } else {

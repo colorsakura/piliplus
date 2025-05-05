@@ -1,5 +1,6 @@
 import 'package:PiliPlus/http/user.dart';
-import 'package:PiliPlus/models/common/theme_type.dart';
+import 'package:PiliPlus/models/common/account_type.dart';
+import 'package:PiliPlus/models/common/theme/theme_type.dart';
 import 'package:PiliPlus/models/user/info.dart';
 import 'package:PiliPlus/models/user/stat.dart';
 import 'package:PiliPlus/utils/accounts/account.dart';

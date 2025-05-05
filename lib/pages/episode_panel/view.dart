@@ -11,6 +11,7 @@ import 'package:PiliPlus/common/widgets/stat/stat.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/http/video.dart';
 import 'package:PiliPlus/models/bangumi/info.dart' as bangumi;
+import 'package:PiliPlus/models/common/episode_panel_type.dart';
 import 'package:PiliPlus/models/video_detail_res.dart' as video;
 import 'package:PiliPlus/pages/common/common_slide_page.dart';
 import 'package:PiliPlus/pages/video/controller.dart';
@@ -24,12 +25,6 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
-
-enum EpisodeType { part, season, bangumi }
-
-extension EpisodeTypeExt on EpisodeType {
-  String get title => const ['分P', '合集', '番剧'][index];
-}
 
 class EpisodePanel extends CommonSlidePage {
   const EpisodePanel({

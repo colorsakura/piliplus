@@ -7,22 +7,27 @@ import 'package:PiliPlus/common/widgets/refresh_indicator.dart'
 import 'package:PiliPlus/http/reply.dart';
 import 'package:PiliPlus/http/video.dart';
 import 'package:PiliPlus/main.dart';
+import 'package:PiliPlus/models/common/account_type.dart';
 import 'package:PiliPlus/models/common/audio_normalization.dart';
-import 'package:PiliPlus/models/common/dynamic_badge_mode.dart';
-import 'package:PiliPlus/models/common/dynamics_type.dart';
+import 'package:PiliPlus/models/common/dynamic/dynamic_badge_mode.dart';
+import 'package:PiliPlus/models/common/dynamic/dynamics_type.dart';
+import 'package:PiliPlus/models/common/dynamic/up_panel_position.dart';
+import 'package:PiliPlus/models/common/member/tab_type.dart';
+import 'package:PiliPlus/models/common/msg/msg_unread_type.dart';
 import 'package:PiliPlus/models/common/nav_bar_config.dart';
-import 'package:PiliPlus/models/common/reply_sort_type.dart';
+import 'package:PiliPlus/models/common/reply/reply_sort_type.dart';
+import 'package:PiliPlus/models/common/settings_type.dart';
 import 'package:PiliPlus/models/common/super_resolution_type.dart';
-import 'package:PiliPlus/models/common/theme_type.dart';
-import 'package:PiliPlus/models/common/up_panel_position.dart';
-import 'package:PiliPlus/models/live/quality.dart';
-import 'package:PiliPlus/models/video/play/CDN.dart';
-import 'package:PiliPlus/models/video/play/quality.dart';
-import 'package:PiliPlus/models/video/play/subtitle.dart';
+import 'package:PiliPlus/models/common/theme/theme_type.dart';
+import 'package:PiliPlus/models/common/video/CDN.dart';
+import 'package:PiliPlus/models/common/video/audio_quality.dart';
+import 'package:PiliPlus/models/common/video/live_quality.dart';
+import 'package:PiliPlus/models/common/video/subtitle_pref_type.dart';
+import 'package:PiliPlus/models/common/video/video_decode_type.dart';
+import 'package:PiliPlus/models/common/video/video_quality.dart';
 import 'package:PiliPlus/pages/home/controller.dart';
 import 'package:PiliPlus/pages/hot/controller.dart';
 import 'package:PiliPlus/pages/main/controller.dart';
-import 'package:PiliPlus/pages/member/controller.dart';
 import 'package:PiliPlus/pages/mine/controller.dart';
 import 'package:PiliPlus/pages/rcmd/controller.dart';
 import 'package:PiliPlus/pages/setting/pages/color_select.dart';
@@ -119,8 +124,6 @@ class SettingsModel {
     this.enableFeedback,
   });
 }
-
-enum SettingsType { normal, sw1tch, divider }
 
 List<SettingsModel> get styleSettings => [
       SettingsModel(
@@ -815,7 +818,7 @@ List<SettingsModel> get playSettings => [
         title: '自动启用字幕',
         leading: const Icon(Icons.closed_caption_outlined),
         getSubtitle: () =>
-            '当前选择偏好：${SubtitlePreferenceCode.fromCode(GStorage.defaultSubtitlePreference)!.description}',
+            '当前选择偏好：${SubtitlePrefTypeExt.fromCode(GStorage.defaultSubtitlePreference)!.description}',
         onTap: (setState) async {
           String? result = await showDialog(
             context: Get.context!,
@@ -823,8 +826,8 @@ List<SettingsModel> get playSettings => [
               return SelectDialog<String>(
                 title: '字幕选择偏好',
                 value: GStorage.setting.get(SettingBoxKey.subtitlePreference,
-                    defaultValue: SubtitlePreference.values.first.code),
-                values: SubtitlePreference.values
+                    defaultValue: SubtitlePrefType.values.first.code),
+                values: SubtitlePrefType.values
                     .map((e) => (e.code, e.description))
                     .toList(),
               );
@@ -1061,7 +1064,7 @@ List<SettingsModel> get videoSettings => [
         title: '默认画质',
         leading: const Icon(Icons.video_settings_outlined),
         getSubtitle: () =>
-            '当前画质：${VideoQualityCode.fromCode(GStorage.defaultVideoQa)!.description}',
+            '当前画质：${VideoQualityExt.fromCode(GStorage.defaultVideoQa)!.description}',
         onTap: (setState) async {
           int? result = await showDialog(
             context: Get.context!,
@@ -1086,7 +1089,7 @@ List<SettingsModel> get videoSettings => [
         title: '蜂窝网络画质',
         leading: const Icon(Icons.video_settings_outlined),
         getSubtitle: () =>
-            '当前画质：${VideoQualityCode.fromCode(GStorage.defaultVideoQaCellular)!.description}',
+            '当前画质：${VideoQualityExt.fromCode(GStorage.defaultVideoQaCellular)!.description}',
         onTap: (setState) async {
           int? result = await showDialog(
             context: Get.context!,
@@ -1112,7 +1115,7 @@ List<SettingsModel> get videoSettings => [
         title: '默认音质',
         leading: const Icon(Icons.music_video_outlined),
         getSubtitle: () =>
-            '当前音质：${AudioQualityCode.fromCode(GStorage.defaultAudioQa)!.description}',
+            '当前音质：${AudioQualityExt.fromCode(GStorage.defaultAudioQa)!.description}',
         onTap: (setState) async {
           int? result = await showDialog(
             context: Get.context!,
@@ -1137,7 +1140,7 @@ List<SettingsModel> get videoSettings => [
         title: '蜂窝网络音质',
         leading: const Icon(Icons.music_video_outlined),
         getSubtitle: () =>
-            '当前音质：${AudioQualityCode.fromCode(GStorage.defaultAudioQaCellular)!.description}',
+            '当前音质：${AudioQualityExt.fromCode(GStorage.defaultAudioQaCellular)!.description}',
         onTap: (setState) async {
           int? result = await showDialog(
             context: Get.context!,
@@ -1163,7 +1166,7 @@ List<SettingsModel> get videoSettings => [
         title: '直播默认画质',
         leading: const Icon(Icons.video_settings_outlined),
         getSubtitle: () =>
-            '当前画质：${LiveQualityCode.fromCode(GStorage.liveQuality)!.description}',
+            '当前画质：${LiveQualityExt.fromCode(GStorage.liveQuality)!.description}',
         onTap: (setState) async {
           int? result = await showDialog(
             context: Get.context!,
@@ -1188,7 +1191,7 @@ List<SettingsModel> get videoSettings => [
         title: '蜂窝网络直播默认画质',
         leading: const Icon(Icons.video_settings_outlined),
         getSubtitle: () =>
-            '当前画质：${LiveQualityCode.fromCode(GStorage.liveQualityCellular)!.description}',
+            '当前画质：${LiveQualityExt.fromCode(GStorage.liveQualityCellular)!.description}',
         onTap: (setState) async {
           int? result = await showDialog(
             context: Get.context!,
@@ -1214,7 +1217,7 @@ List<SettingsModel> get videoSettings => [
         title: '首选解码格式',
         leading: const Icon(Icons.movie_creation_outlined),
         getSubtitle: () =>
-            '首选解码格式：${VideoDecodeFormatsCode.fromCode(GStorage.defaultDecode)!.description}，请根据设备支持情况与需求调整',
+            '首选解码格式：${VideoDecodeFormatTypeExt.fromCode(GStorage.defaultDecode)!.description}，请根据设备支持情况与需求调整',
         onTap: (setState) async {
           String? result = await showDialog(
             context: Get.context!,
@@ -1222,7 +1225,7 @@ List<SettingsModel> get videoSettings => [
               return SelectDialog<String>(
                   title: '默认解码格式',
                   value: GStorage.defaultDecode,
-                  values: VideoDecodeFormats.values
+                  values: VideoDecodeFormatType.values
                       .map((e) => (e.code, e.description))
                       .toList());
             },
@@ -1237,7 +1240,7 @@ List<SettingsModel> get videoSettings => [
         settingsType: SettingsType.normal,
         title: '次选解码格式',
         getSubtitle: () =>
-            '非杜比视频次选：${VideoDecodeFormatsCode.fromCode(GStorage.secondDecode)!.description}，仍无则选择首个提供的解码格式',
+            '非杜比视频次选：${VideoDecodeFormatTypeExt.fromCode(GStorage.secondDecode)!.description}，仍无则选择首个提供的解码格式',
         leading: const Icon(Icons.swap_horizontal_circle_outlined),
         onTap: (setState) async {
           String? result = await showDialog(
@@ -1246,7 +1249,7 @@ List<SettingsModel> get videoSettings => [
               return SelectDialog<String>(
                   title: '次选解码格式',
                   value: GStorage.secondDecode,
-                  values: VideoDecodeFormats.values.map((e) {
+                  values: VideoDecodeFormatType.values.map((e) {
                     return (e.code, e.description);
                   }).toList());
             },
@@ -2358,7 +2361,7 @@ List<SettingsModel> get extraSettings => [
         setKey: SettingBoxKey.defaultDynamicType,
         leading: const Icon(Icons.dynamic_feed_outlined),
         getSubtitle: () =>
-            '当前优先展示「${DynamicsType.values[GStorage.defaultDynamicType].labels}」',
+            '当前优先展示「${DynamicsTabType.values[GStorage.defaultDynamicType].labels}」',
         onTap: (setState) async {
           int? result = await showDialog(
             context: Get.context!,
@@ -2366,7 +2369,7 @@ List<SettingsModel> get extraSettings => [
               return SelectDialog<int>(
                   title: '动态展示',
                   value: GStorage.defaultDynamicType,
-                  values: DynamicsType.values.sublist(0, 4).map((e) {
+                  values: DynamicsTabType.values.sublist(0, 4).map((e) {
                     return (e.index, e.labels);
                   }).toList());
             },

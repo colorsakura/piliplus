@@ -1,4 +1,6 @@
-import 'package:PiliPlus/models/video/play/quality.dart';
+import 'package:PiliPlus/models/common/video/audio_quality.dart';
+import 'package:PiliPlus/models/common/video/video_decode_type.dart';
+import 'package:PiliPlus/models/common/video/video_quality.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
@@ -65,9 +67,9 @@ class _SetSelectItemState extends State<SetSelectItem> {
         ];
         break;
       case 'defaultDecode':
-        defaultVal = VideoDecodeFormats.values[0].description;
+        defaultVal = VideoDecodeFormatType.values[0].description;
         currentVal = setting.get(widget.setKey, defaultValue: defaultVal);
-        List<VideoDecodeFormats> list = menus = VideoDecodeFormats.values;
+        List<VideoDecodeFormatType> list = menus = VideoDecodeFormatType.values;
 
         currentIndex =
             list.firstWhere((i) => i.description == currentVal).index;

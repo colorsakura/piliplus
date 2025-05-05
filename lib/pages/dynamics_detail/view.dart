@@ -8,8 +8,8 @@ import 'package:PiliPlus/grpc/bilibili/main/community/reply/v1.pb.dart'
     show ReplyInfo;
 import 'package:PiliPlus/http/constants.dart';
 import 'package:PiliPlus/http/loading_state.dart';
-import 'package:PiliPlus/models/common/reply_sort_type.dart';
-import 'package:PiliPlus/models/common/reply_type.dart';
+import 'package:PiliPlus/models/common/reply/reply_sort_type.dart';
+import 'package:PiliPlus/models/common/reply/reply_type.dart';
 import 'package:PiliPlus/models/dynamics/result.dart';
 import 'package:PiliPlus/pages/dynamics/widgets/author_panel.dart';
 import 'package:PiliPlus/pages/dynamics/widgets/dynamic_panel.dart';

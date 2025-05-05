@@ -1,17 +1,11 @@
 import 'package:PiliPlus/http/follow.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/http/member.dart';
+import 'package:PiliPlus/models/common/follow_order_type.dart';
 import 'package:PiliPlus/models/follow/result.dart';
 import 'package:PiliPlus/pages/common/common_list_controller.dart';
 import 'package:PiliPlus/pages/follow/controller.dart';
 import 'package:get/get.dart';
-
-enum OrderType { def, attention }
-
-extension OrderTypeExt on OrderType {
-  String get type => const ['', 'attention'][index];
-  String get title => const ['最近关注', '最常访问'][index];
-}
 
 class FollowChildController
     extends CommonListController<FollowDataModel, FollowItemModel> {
@@ -20,7 +14,7 @@ class FollowChildController
   final int? tagid;
   final int mid;
 
-  late final Rx<OrderType> orderType = OrderType.def.obs;
+  late final Rx<FollowOrderType> orderType = FollowOrderType.def.obs;
 
   @override
   void onInit() {

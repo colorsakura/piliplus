@@ -5,6 +5,7 @@ import 'package:PiliPlus/grpc/grpc_repo.dart';
 import 'package:PiliPlus/http/dynamics.dart';
 import 'package:PiliPlus/http/search.dart';
 import 'package:PiliPlus/models/bangumi/info.dart';
+import 'package:PiliPlus/models/common/image_preview_type.dart';
 import 'package:PiliPlus/models/common/search_type.dart';
 import 'package:PiliPlus/models/dynamics/result.dart';
 import 'package:PiliPlus/models/live/item.dart';
