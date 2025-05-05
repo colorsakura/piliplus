@@ -704,7 +704,8 @@ class Api {
   /// 取消订阅-播单
   static const String unfavFolder = '/x/v3/fav/folder/unfav';
 
-  static const String videoTags = '/x/tag/archive/tags';
+  // static const String videoTags = '/x/tag/archive/tags';
+  static const String videoTags = '/x/web-interface/view/detail/tag';
 
   static const String reportMember = '/ajax/report/add';
 
