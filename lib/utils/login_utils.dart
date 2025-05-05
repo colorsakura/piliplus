@@ -85,9 +85,7 @@ class LoginUtils {
       } catch (_) {}
 
       try {
-        Get.find<LiveController>()
-          ..isLogin.value = true
-          ..fetchLiveFollowing();
+        Get.find<LiveController>().isLogin.value = true;
       } catch (_) {}
 
       try {
@@ -152,9 +150,7 @@ class LoginUtils {
     } catch (_) {}
 
     try {
-      Get.find<LiveController>()
-        ..isLogin.value = false
-        ..followListState.value = LoadingState.loading();
+      Get.find<LiveController>().isLogin.value = false;
     } catch (_) {}
 
     for (int i = 0; i < tabsConfig.length; i++) {

@@ -1,33 +1,33 @@
 import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/common/widgets/image/image_save.dart';
 import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
-import 'package:PiliPlus/models/live/follow.dart';
+import 'package:PiliPlus/models/live/live_feed_index/card_data_list_item.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 // 视频卡片 - 垂直布局
-class LiveCardVFollow extends StatelessWidget {
-  final LiveFollowingItemModel liveItem;
+class LiveCardVApp extends StatelessWidget {
+  final CardLiveItem item;
 
-  const LiveCardVFollow({
+  const LiveCardVApp({
     super.key,
-    required this.liveItem,
+    required this.item,
   });
 
   @override
   Widget build(BuildContext context) {
-    String heroTag = Utils.makeHeroTag(liveItem.roomId);
+    String heroTag = Utils.makeHeroTag(item.id);
     return Card(
       clipBehavior: Clip.hardEdge,
       margin: EdgeInsets.zero,
       child: InkWell(
         onTap: () {
-          Get.toNamed('/liveRoom?roomid=${liveItem.roomId}');
+          Get.toNamed('/liveRoom?roomid=${item.id}');
         },
         onLongPress: () => imageSaveDialog(
-          title: liveItem.title,
-          cover: liveItem.roomCover,
+          title: item.title,
+          cover: item.cover,
         ),
         child: Column(
           children: [
@@ -42,7 +42,7 @@ class LiveCardVFollow extends StatelessWidget {
                     Hero(
                       tag: heroTag,
                       child: NetworkImgLayer(
-                        src: liveItem.roomCover!,
+                        src: item.cover!,
                         width: maxWidth,
                         height: maxHeight,
                       ),
@@ -79,7 +79,7 @@ class LiveCardVFollow extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              '${liveItem.title}',
+              '${item.title}',
               textAlign: TextAlign.start,
               style: const TextStyle(
                 letterSpacing: 0.3,
@@ -91,7 +91,7 @@ class LiveCardVFollow extends StatelessWidget {
               children: [
                 Expanded(
                   child: Text(
-                    '${liveItem.uname}',
+                    '${item.uname}',
                     textAlign: TextAlign.start,
                     style: TextStyle(
                       fontSize: theme.textTheme.labelMedium!.fontSize,
@@ -128,13 +128,14 @@ class LiveCardVFollow extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
-            '${liveItem.areaName}',
+            '${item.areaName}',
             style: const TextStyle(fontSize: 11, color: Colors.white),
           ),
-          Text(
-            liveItem.textSmall ?? '',
-            style: const TextStyle(fontSize: 11, color: Colors.white),
-          ),
+          if (item.watchedShow?.textSmall != null)
+            Text(
+              '${Utils.numFormat(item.watchedShow!.textSmall)}围观',
+              style: const TextStyle(fontSize: 11, color: Colors.white),
+            ),
         ],
       ),
     );

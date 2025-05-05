@@ -737,10 +737,6 @@ class Api {
   /// 稍后再看&收藏夹视频列表
   static const String mediaList = '/x/v2/medialist/resource/list';
 
-  /// 我的关注 - 正在直播
-  static const String getFollowingLive =
-      '${HttpString.liveBaseUrl}/xlive/web-ucenter/user/following';
-
   static const String pgcIndexCondition = '/pgc/season/index/condition';
 
   static const String pgcIndexResult = '/pgc/season/index/result';
@@ -800,4 +796,10 @@ class Api {
   static const String voteInfo = '/x/vote/vote_info';
 
   static const String doVote = '/x/vote/do_vote';
+
+  static const String liveFeedIndex =
+      '${HttpString.liveBaseUrl}/xlive/app-interface/v2/index/feed';
+
+  static const String liveFollow =
+      '${HttpString.liveBaseUrl}/xlive/web-ucenter/user/following';
 }
