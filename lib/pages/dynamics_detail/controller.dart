@@ -58,6 +58,7 @@ class DynamicDetailController extends ReplyController<MainListReply> {
         type: type,
         oid: oid,
         mode: mode.value,
+        cursorNext: cursorNext,
         offset: paginationReply?.nextOffset,
         antiGoodsReply: antiGoodsReply,
       );

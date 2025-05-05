@@ -44,6 +44,7 @@ class VideoReplyController extends ReplyController<MainListReply>
   Future<LoadingState<MainListReply>> customGetData() => ReplyHttp.mainList(
         oid: aid,
         mode: mode.value,
+        cursorNext: cursorNext,
         offset: paginationReply?.nextOffset,
         antiGoodsReply: antiGoodsReply,
       );

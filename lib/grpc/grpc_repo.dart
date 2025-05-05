@@ -253,6 +253,7 @@ class GrpcRepo {
     required int oid,
     required Mode mode,
     required String? offset,
+    required Int64? cursorNext,
   }) async {
     return await _request(
       GrpcUrl.mainList,
@@ -260,8 +261,11 @@ class GrpcRepo {
         oid: Int64(oid),
         type: Int64(type),
         rpid: Int64(0),
-        mode: mode,
-        pagination: FeedPagination(offset: offset ?? ''),
+        cursor: CursorReq(
+          mode: mode,
+          next: cursorNext,
+        ),
+        // pagination: FeedPagination(offset: offset ?? ''),
       ),
       MainListReply.fromBuffer,
     );

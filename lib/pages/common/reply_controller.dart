@@ -18,6 +18,7 @@ import 'package:PiliPlus/utils/request_utils.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:easy_debounce/easy_throttle.dart';
+import 'package:fixnum/fixnum.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
@@ -33,6 +34,7 @@ abstract class ReplyController<R> extends CommonListController<R, ReplyInfo> {
   late final bool isLogin = Accounts.main.isLogin;
 
   dynamic upMid;
+  Int64? cursorNext;
   FeedPaginationReply? paginationReply;
   late Rx<Mode> mode = Mode.MAIN_LIST_HOT.obs;
   late bool hasUpTop = false;
@@ -74,6 +76,7 @@ abstract class ReplyController<R> extends CommonListController<R, ReplyInfo> {
   @override
   bool customHandleResponse(bool isRefresh, Success response) {
     MainListReply data = response.response;
+    cursorNext = data.cursor.next;
     paginationReply = data.paginationReply;
     count.value = data.subjectControl.count.toInt();
     if (isRefresh) {
@@ -89,6 +92,7 @@ abstract class ReplyController<R> extends CommonListController<R, ReplyInfo> {
 
   @override
   Future onRefresh() {
+    cursorNext = null;
     paginationReply = null;
     return super.onRefresh();
   }

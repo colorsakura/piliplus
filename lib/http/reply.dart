@@ -11,6 +11,7 @@ import 'package:PiliPlus/utils/accounts/account.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:dio/dio.dart';
+import 'package:fixnum/fixnum.dart';
 
 class ReplyHttp {
   static Options get _options =>
@@ -128,6 +129,7 @@ class ReplyHttp {
     required int oid,
     required Mode mode,
     required String? offset,
+    required Int64? cursorNext,
     required bool antiGoodsReply,
   }) async {
     dynamic res = await GrpcRepo.mainList(
@@ -135,6 +137,7 @@ class ReplyHttp {
       oid: oid,
       mode: mode,
       offset: offset,
+      cursorNext: cursorNext,
     );
     if (res['status']) {
       MainListReply mainListReply = res['data'];
