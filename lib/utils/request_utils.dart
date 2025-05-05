@@ -219,13 +219,14 @@ class RequestUtils {
   }
 
   static ReplyInfo replyCast(res) {
-    Map? emote = res['content']['emote'];
+    Map? emote = res['content']?['emote'];
     emote?.forEach((key, value) {
       value['size'] = value['meta']['size'];
     });
     return ReplyInfo.create()
       ..mergeFromProto3Json(
         res
+          ..['content'].remove('members')
           ..['id'] = res['rpid']
           ..['member']['name'] = res['member']['uname']
           ..['member']['face'] = res['member']['avatar']
@@ -234,7 +235,7 @@ class RequestUtils {
           ..['member']['vipType'] = res['member']['vip']['vipType']
           ..['member']['officialVerifyType'] =
               res['member']['official_verify']['type']
-          ..['content']['emote'] = emote,
+          ..['content']['emotes'] = emote,
         ignoreUnknownFields: true,
       );
   }
