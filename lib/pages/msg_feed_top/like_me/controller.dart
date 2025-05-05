@@ -67,4 +67,23 @@ class LikeMeController extends CommonDataController<MsgFeedLikeMe, dynamic> {
       }
     } catch (_) {}
   }
+
+  Future<void> onSetNotice(
+      int? id, int index, bool isNotice, bool isLatest) async {
+    int noticeState = isNotice ? 1 : 0;
+    var res = await MsgHttp.msgSetNotice(id: id, noticeState: noticeState);
+    if (res['status']) {
+      Pair<List<LikeMeItems>, List<LikeMeItems>> pair =
+          (loadingState.value as Success).response;
+      if (isLatest) {
+        pair.first[index].noticeState = noticeState;
+      } else {
+        pair.second[index].noticeState = noticeState;
+      }
+      loadingState.refresh();
+      SmartDialog.showToast('操作成功');
+    } else {
+      SmartDialog.showToast(res['msg']);
+    }
+  }
 }

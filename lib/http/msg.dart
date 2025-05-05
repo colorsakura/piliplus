@@ -566,4 +566,32 @@ class MsgHttp {
   static String getDevId() {
     return const Uuid().v4();
   }
+
+  static Future msgSetNotice({
+    required dynamic id,
+    required int noticeState,
+  }) async {
+    final csrf = Accounts.main.csrf;
+    var res = await Request().post(
+      Api.msgSetNotice,
+      data: {
+        'mobi_app': 'web',
+        'platform': 'web',
+        'tp': 0,
+        'id': id,
+        'notice_state': noticeState,
+        'build': 0,
+        'csrf_token': csrf,
+        'csrf': csrf,
+      },
+      options: Options(
+        contentType: Headers.formUrlEncodedContentType,
+      ),
+    );
+    if (res.data['code'] == 0) {
+      return {'status': true};
+    } else {
+      return {'status': false, 'msg': res.data['message']};
+    }
+  }
 }

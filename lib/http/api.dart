@@ -805,4 +805,6 @@ class Api {
 
   static const String liveSecondList =
       '${HttpString.liveBaseUrl}/xlive/app-interface/v2/second/getList';
+
+  static const String msgSetNotice = '/x/msgfeed/notice';
 }

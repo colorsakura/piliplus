@@ -77,6 +77,10 @@ class _LikeMePageState extends State<LikeMePage> {
                         (id) {
                           _likeMeController.onRemove(id, index, true);
                         },
+                        (isNotice, id) {
+                          _likeMeController.onSetNotice(
+                              id, index, isNotice, true);
+                        },
                       );
                     },
                     itemCount: latest.length,
@@ -102,6 +106,10 @@ class _LikeMePageState extends State<LikeMePage> {
                         total[index],
                         (id) {
                           _likeMeController.onRemove(id, index, false);
+                        },
+                        (isNotice, id) {
+                          _likeMeController.onSetNotice(
+                              id, index, isNotice, false);
                         },
                       );
                     },
@@ -146,7 +154,12 @@ class _LikeMePageState extends State<LikeMePage> {
     );
   }
 
-  Widget _buildItem(ThemeData theme, LikeMeItems item, ValueChanged onRemove) {
+  Widget _buildItem(
+    ThemeData theme,
+    LikeMeItems item,
+    ValueChanged<int?> onRemove,
+    Function(bool isNotice, int? id) onSetNotice,
+  ) {
     return ListTile(
       onTap: () {
         String? nativeUri = item.item?.nativeUri;
@@ -155,11 +168,59 @@ class _LikeMePageState extends State<LikeMePage> {
         }
       },
       onLongPress: () {
-        showConfirmDialog(
+        showDialog(
           context: context,
-          title: '确定删除该通知?',
-          onConfirm: () {
-            onRemove(item.id);
+          builder: (context) {
+            final isNotice = item.noticeState == 0;
+            return AlertDialog(
+              clipBehavior: Clip.hardEdge,
+              contentPadding: const EdgeInsets.symmetric(vertical: 12),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  ListTile(
+                    onTap: () {
+                      Get.back();
+                      showConfirmDialog(
+                        context: context,
+                        title: '删除',
+                        content: '该条通知删除后，当有新点赞时会重新出现在列表，是否继续？',
+                        onConfirm: () {
+                          onRemove(item.id);
+                        },
+                      );
+                    },
+                    dense: true,
+                    title: const Text(
+                      '删除',
+                      style: TextStyle(fontSize: 14),
+                    ),
+                  ),
+                  ListTile(
+                    onTap: () {
+                      Get.back();
+                      if (isNotice) {
+                        showConfirmDialog(
+                          context: context,
+                          title: '不再通知',
+                          content: '这条内容的点赞将不再通知，但仍可在列表内查看，是否继续？',
+                          onConfirm: () {
+                            onSetNotice(isNotice, item.id);
+                          },
+                        );
+                      } else {
+                        onSetNotice(isNotice, item.id);
+                      }
+                    },
+                    dense: true,
+                    title: Text(
+                      isNotice ? '不再通知' : '接收通知',
+                      style: const TextStyle(fontSize: 14),
+                    ),
+                  ),
+                ],
+              ),
+            );
           },
         );
       },
@@ -238,14 +299,24 @@ class _LikeMePageState extends State<LikeMePage> {
           ),
         ],
       ),
-      trailing: item.item?.image != null && item.item?.image != ""
-          ? NetworkImgLayer(
+      trailing: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (item.item?.image?.isNotEmpty == true)
+            NetworkImgLayer(
               width: 45,
               height: 45,
               type: 'cover',
-              src: item.item?.image,
-            )
-          : null,
+              src: item.item!.image,
+            ),
+          if (item.noticeState == 1)
+            Icon(
+              size: 18,
+              Icons.notifications_off,
+              color: theme.colorScheme.outline,
+            ),
+        ],
+      ),
     );
   }
 }

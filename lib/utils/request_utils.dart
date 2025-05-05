@@ -219,7 +219,7 @@ class RequestUtils {
   }
 
   static ReplyInfo replyCast(res) {
-    Map? emote = res['content']?['emote'];
+    Map? emote = res['content']['emote'];
     emote?.forEach((key, value) {
       value['size'] = value['meta']['size'];
     });
