@@ -6,6 +6,8 @@ class LiveIndexData {
   int? hasMore;
   int? triggerTime;
   int? isNeedRefresh;
+  LiveCardList? followItem;
+  LiveCardList? areaItem;
 
   LiveIndexData({
     this.cardList,
@@ -17,14 +19,22 @@ class LiveIndexData {
 
   LiveIndexData.fromJson(Map<String, dynamic> json) {
     if ((json['card_list'] as List<dynamic>?)?.isNotEmpty == true) {
-      cardList = <LiveCardList>[];
       // banner_v2
       // my_idol_v1
       // area_entrance_v3
       // small_card_v1
       for (var json in json['card_list']) {
-        if (const ['my_idol_v1', 'small_card_v1'].contains(json['card_type'])) {
-          cardList!.add(LiveCardList.fromJson(json));
+        switch (json['card_type']) {
+          case 'my_idol_v1':
+            followItem = LiveCardList.fromJson(json);
+            break;
+          case 'area_entrance_v3':
+            areaItem = LiveCardList.fromJson(json);
+            break;
+          case 'small_card_v1':
+            cardList ??= <LiveCardList>[];
+            cardList!.add(LiveCardList.fromJson(json));
+            break;
         }
       }
     }

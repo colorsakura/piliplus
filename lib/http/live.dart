@@ -10,6 +10,7 @@ import 'package:PiliPlus/models/live/live_room/danmu_info.dart';
 import 'package:PiliPlus/models/live/live_room/item.dart';
 import 'package:PiliPlus/models/live/live_room/room_info.dart';
 import 'package:PiliPlus/models/live/live_room/room_info_h5.dart';
+import 'package:PiliPlus/models/live/live_second_list/data.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:PiliPlus/utils/wbi_sign.dart';
@@ -172,6 +173,7 @@ class LiveHttp {
   static Future<LoadingState<LiveIndexData>> liveFeedIndex({
     required int pn,
     required bool isLogin,
+    bool? moduleSelect,
   }) async {
     final params = {
       if (isLogin) 'access_key': Accounts.main.accessKey,
@@ -185,17 +187,16 @@ class LiveHttp {
       'fnval': '912',
       'disable_rcmd': '0',
       'https_url_req': '1',
-      'login_event': isLogin ? '1' : '0',
+      if (moduleSelect == true) 'module_select': '1',
       'mobi_app': 'android_hd',
-      'module_select': '0',
       'network': 'wifi',
-      'page': pn.toString(),
+      'page': pn,
       'platform': 'android',
       if (isLogin) 'relation_page': '1',
       's_locale': 'zh_CN',
       'scale': '2',
       'statistics': Constants.statistics,
-      'ts': (DateTime.now().millisecondsSinceEpoch ~/ 1000).toString(),
+      'ts': DateTime.now().millisecondsSinceEpoch ~/ 1000,
     };
     Utils.appSign(
       params,
@@ -225,6 +226,55 @@ class LiveHttp {
     );
     if (res.data['code'] == 0) {
       return LoadingState.success(LiveFollowData.fromJson(res.data['data']));
+    } else {
+      return LoadingState.error(res.data['message']);
+    }
+  }
+
+  static Future<LoadingState<LiveSecondData>> liveSecondList({
+    required int pn,
+    required bool isLogin,
+    required int? areaId,
+    required int? parentAreaId,
+  }) async {
+    final params = {
+      if (isLogin) 'access_key': Accounts.main.accessKey,
+      'appkey': Constants.appKey,
+      'actionKey': 'appkey',
+      if (areaId != null) 'area_id': areaId,
+      if (parentAreaId != null) 'parent_area_id': parentAreaId,
+      'build': '8350200',
+      'c_locale': 'zh_CN',
+      'device': 'pad',
+      'device_name': 'vivo',
+      'device_type': '0',
+      'fnval': '912',
+      'disable_rcmd': '0',
+      'https_url_req': '1',
+      'mobi_app': 'android_hd',
+      'module_select': '0',
+      'network': 'wifi',
+      'page': pn,
+      'page_size': '20',
+      'platform': 'android',
+      'qn': '0',
+      'tag_version': '1',
+      's_locale': 'zh_CN',
+      'scale': '2',
+      'statistics': Constants.statistics,
+      'ts': (DateTime.now().millisecondsSinceEpoch ~/ 1000).toString(),
+    };
+    Utils.appSign(
+      params,
+      Constants.appKey,
+      Constants.appSec,
+    );
+    var res = await Request().get(
+      Api.liveSecondList,
+      queryParameters: params,
+    );
+    if (res.data['code'] == 0) {
+      return LoadingState.success(LiveSecondData.fromJson(res.data['data']));
     } else {
       return LoadingState.error(res.data['message']);
     }

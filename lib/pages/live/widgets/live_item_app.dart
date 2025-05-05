@@ -17,13 +17,13 @@ class LiveCardVApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String heroTag = Utils.makeHeroTag(item.id);
+    String heroTag = Utils.makeHeroTag(item.roomid);
     return Card(
       clipBehavior: Clip.hardEdge,
       margin: EdgeInsets.zero,
       child: InkWell(
         onTap: () {
-          Get.toNamed('/liveRoom?roomid=${item.id}');
+          Get.toNamed('/liveRoom?roomid=${item.roomid}');
         },
         onLongPress: () => imageSaveDialog(
           title: item.title,

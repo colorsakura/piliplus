@@ -42,10 +42,13 @@ class _SelfSizedHorizontalListState extends State<SelfSizedHorizontalList> {
     }
     if (widget.itemCount == 0) return const SizedBox.shrink();
     if (isInit) {
-      return Container(
-        key: infoKey,
-        padding: widget.padding,
-        child: widget.childBuilder(0),
+      return Align(
+        alignment: Alignment.centerLeft,
+        child: Padding(
+          key: infoKey,
+          padding: widget.padding ?? EdgeInsets.zero,
+          child: widget.childBuilder(0),
+        ),
       );
     }
 
