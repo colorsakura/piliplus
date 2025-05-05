@@ -18,7 +18,7 @@ extension HomeTabTypeExt on HomeTabType {
   String get description => const ['直播', '推荐', '热门', '分区', '番剧', '影视'][index];
 }
 
-List get tabsConfig => [
+List get homeTabsConfig => [
       {
         'icon': const Icon(
           Icons.live_tv_outlined,

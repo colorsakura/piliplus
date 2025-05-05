@@ -73,7 +73,7 @@ class HomeController extends GetxController
   }
 
   Future<void> setTabConfig() async {
-    final defaultTabs = [...tabsConfig];
+    final defaultTabs = [...homeTabsConfig];
     final tabbarSort = GStorage.tabbarSort;
     defaultTabs
       ..retainWhere(

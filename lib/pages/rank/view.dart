@@ -32,7 +32,7 @@ class _RankPageState extends State<RankPage>
             ),
             child: Column(
               children: List.generate(
-                tabsConfig.length,
+                rankTabsConfig.length,
                 (index) => Obx(
                   () => IntrinsicHeight(
                     child: InkWell(
@@ -65,7 +65,7 @@ class _RankPageState extends State<RankPage>
                                 padding:
                                     const EdgeInsets.symmetric(vertical: 7),
                                 child: Text(
-                                  tabsConfig[index]['label'],
+                                  rankTabsConfig[index]['label'],
                                   style: TextStyle(
                                     color:
                                         index == _rankController.tabIndex.value
@@ -92,7 +92,7 @@ class _RankPageState extends State<RankPage>
           child: TabBarView(
             physics: const NeverScrollableScrollPhysics(),
             controller: _rankController.tabController,
-            children: tabsConfig
+            children: rankTabsConfig
                 .map((item) => ZonePage(
                       rid: item['rid'],
                       seasonType: item['season_type'],

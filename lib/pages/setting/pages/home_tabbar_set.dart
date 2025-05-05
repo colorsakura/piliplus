@@ -17,7 +17,7 @@ class _TabbarSetPageState extends State<TabbarSetPage> {
   @override
   void initState() {
     super.initState();
-    defaultTabs = tabsConfig;
+    defaultTabs = homeTabsConfig;
     tabbarSort = GStorage.tabbarSort;
     // 对 tabData 进行排序
     defaultTabs.sort((a, b) {

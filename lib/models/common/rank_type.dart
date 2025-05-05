@@ -1,4 +1,4 @@
-const List tabsConfig = [
+const List rankTabsConfig = [
   {
     'rid': 0,
     'label': '全站',
