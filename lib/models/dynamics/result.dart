@@ -278,6 +278,8 @@ class ModuleAuthorModel extends Avatar {
     type = json['type'];
     if (PendantAvatar.showDynDecorate) {
       decorate = json['decorate'];
+    } else {
+      pendant = null;
     }
   }
 }
