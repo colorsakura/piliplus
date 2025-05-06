@@ -114,10 +114,6 @@ class _MemberFavoriteState extends State<MemberFavorite>
                     _controller.first.value.mediaListResponse?.list
                         ?.remove(item);
                     _controller.first.refresh();
-                  } else {
-                    Future.delayed(const Duration(milliseconds: 100), () {
-                      _controller.onRefresh();
-                    });
                   }
                 },
               ),
