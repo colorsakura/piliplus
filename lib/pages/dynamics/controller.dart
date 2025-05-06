@@ -39,8 +39,14 @@ class DynamicsController extends GetxController
   late int currentMid = -1;
   late bool showLiveItems = GStorage.expandDynLivePanel;
 
-  DynamicsTabController get controller => Get.find<DynamicsTabController>(
-      tag: tabsConfig[tabController.index]['tag']);
+  DynamicsTabController? get controller {
+    try {
+      return Get.find<DynamicsTabController>(
+          tag: tabsConfig[tabController.index]['tag']);
+    } catch (_) {
+      return null;
+    }
+  }
 
   @override
   void onInit() {
@@ -171,7 +177,7 @@ class DynamicsController extends GetxController
       if (mid == -1) {
         queryFollowUp();
       }
-      controller.onReload();
+      controller?.onReload();
       return;
     }
 
@@ -182,20 +188,20 @@ class DynamicsController extends GetxController
   @override
   Future<void> onRefresh() async {
     queryFollowUp();
-    await controller.onRefresh();
+    await controller?.onRefresh();
   }
 
   @override
   Future<void> animateToTop() async {
-    controller.animateToTop();
+    controller?.animateToTop();
     scrollController.animToTop();
   }
 
   @override
   void toTopOrRefresh() {
     final ctr = controller;
-    if (ctr.scrollController.hasClients) {
-      if (ctr.scrollController.position.pixels == 0) {
+    if (ctr?.scrollController.hasClients == true) {
+      if (ctr!.scrollController.position.pixels == 0) {
         if (scrollController.hasClients &&
             scrollController.position.pixels != 0) {
           scrollController.animToTop();
