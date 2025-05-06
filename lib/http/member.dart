@@ -383,6 +383,53 @@ class MemberHttp {
     }
   }
 
+  static Future<LoadingState> memberArchiveNew({
+    required mid,
+    int ps = 25,
+    int tid = 0,
+    int? pn,
+    String? keyword,
+    String order = 'pubdate',
+    bool orderAvoided = true,
+  }) async {
+    String dmImgStr = Utils.base64EncodeRandomString(16, 64);
+    String dmCoverImgStr = Utils.base64EncodeRandomString(32, 128);
+    Map params = await WbiSign.makSign({
+      'mid': mid,
+      'ps': ps,
+      'tid': tid,
+      'pn': pn,
+      if (keyword != null) 'keyword': keyword,
+      'order': order,
+      'platform': 'web',
+      'web_location': '333.1387',
+      'order_avoided': orderAvoided,
+      'dm_img_list': '[]',
+      'dm_img_str': dmImgStr,
+      'dm_cover_img_str': dmCoverImgStr,
+      'dm_img_inter': '{"ds":[],"wh":[0,0,0],"of":[0,0,0]}',
+    });
+    var res = await Request().get(
+      Api.memberArchive,
+      queryParameters: params,
+      options: Options(headers: {
+        HttpHeaders.userAgentHeader: Request.headerUa(type: 'pc'),
+        HttpHeaders.refererHeader: '${HttpString.spaceBaseUrl}/$mid',
+        'origin': HttpString.spaceBaseUrl,
+      }),
+    );
+    if (res.data['code'] == 0) {
+      return LoadingState.success(
+          MemberArchiveDataModel.fromJson(res.data['data']));
+    } else {
+      Map errMap = {
+        -352: '风控校验失败，请检查登录状态',
+      };
+      return LoadingState.error(
+          errMap[res.data['code']] ?? res.data['message']);
+    }
+  }
+
   // 用户动态
   static Future<LoadingState<DynamicsDataModel>> memberDynamic({
     String? offset,
@@ -452,6 +499,30 @@ class MemberHttp {
         'status': false,
         'msg': res.data['message'],
       };
+    }
+  }
+
+  static Future<LoadingState> memberDynamicSearchNew({
+    required int pn,
+    required dynamic mid,
+    required dynamic offset,
+    required String keyword,
+  }) async {
+    var res = await Request().get(
+      Api.memberDynamicSearch,
+      queryParameters: {
+        'host_mid': mid,
+        'page': pn,
+        'offset': offset,
+        'keyword': keyword,
+        'features': 'itemOpusStyle,listOnlyfans',
+        'web_location': 333.1387,
+      },
+    );
+    if (res.data['code'] == 0) {
+      return LoadingState.success(DynamicsDataModel.fromJson(res.data['data']));
+    } else {
+      return LoadingState.error(res.data['message']);
     }
   }
 

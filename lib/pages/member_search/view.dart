@@ -1,7 +1,8 @@
 import 'package:PiliPlus/common/widgets/scroll_physics.dart';
+import 'package:PiliPlus/models/common/member/search_type.dart';
+import 'package:PiliPlus/pages/member_search/child/view.dart';
 import 'package:PiliPlus/pages/member_search/controller.dart';
-import 'package:PiliPlus/pages/member_search/search_archive.dart';
-import 'package:PiliPlus/pages/member_search/search_dynamic.dart';
+import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -13,7 +14,8 @@ class MemberSearchPage extends StatefulWidget {
 }
 
 class _MemberSearchPageState extends State<MemberSearchPage> {
-  final _memberSearchCtr = Get.put(MemberSearchController());
+  final _controller =
+      Get.put(MemberSearchController(), tag: Utils.generateRandomString(8));
 
   @override
   Widget build(BuildContext context) {
@@ -23,15 +25,15 @@ class _MemberSearchPageState extends State<MemberSearchPage> {
         actions: [
           IconButton(
             tooltip: '搜索',
-            onPressed: _memberSearchCtr.submit,
+            onPressed: _controller.submit,
             icon: const Icon(Icons.search, size: 22),
           ),
           const SizedBox(width: 10)
         ],
         title: TextField(
           autofocus: true,
-          focusNode: _memberSearchCtr.searchFocusNode,
-          controller: _memberSearchCtr.textEditingController,
+          focusNode: _controller.focusNode,
+          controller: _controller.editingController,
           textInputAction: TextInputAction.search,
           textAlignVertical: TextAlignVertical.center,
           decoration: InputDecoration(
@@ -40,63 +42,80 @@ class _MemberSearchPageState extends State<MemberSearchPage> {
             suffixIcon: IconButton(
               tooltip: '清空',
               icon: const Icon(Icons.clear, size: 22),
-              onPressed: _memberSearchCtr.onClear,
+              onPressed: _controller.onClear,
             ),
           ),
-          onSubmitted: (value) => _memberSearchCtr.submit(),
+          onSubmitted: (value) => _controller.submit(),
           onChanged: (value) {
             if (value.isEmpty) {
-              _memberSearchCtr.hasData.value = false;
+              _controller.hasData.value = false;
             }
           },
         ),
       ),
-      body: Obx(
-        () => _memberSearchCtr.hasData.value
-            ? SafeArea(
-                top: false,
-                bottom: false,
+      body: SafeArea(
+        top: false,
+        bottom: false,
+        child: Stack(
+          clipBehavior: Clip.none,
+          children: [
+            Obx(() {
+              return Opacity(
+                opacity: _controller.hasData.value ? 1 : 0,
                 child: Column(
                   children: [
                     TabBar(
-                      controller: _memberSearchCtr.tabController,
+                      controller: _controller.tabController,
                       tabs: [
                         Obx(
                           () => Tab(
                             text:
-                                '视频 ${_memberSearchCtr.archiveCount.value != -1 ? '${_memberSearchCtr.archiveCount.value}' : ''}',
+                                '视频 ${_controller.counts[0] != -1 ? _controller.counts[0] : ''}',
                           ),
                         ),
                         Obx(
                           () => Tab(
                             text:
-                                '动态 ${_memberSearchCtr.dynamicCount.value != -1 ? '${_memberSearchCtr.dynamicCount.value}' : ''}',
+                                '动态 ${_controller.counts[1] != -1 ? _controller.counts[1] : ''}',
                           ),
                         ),
                       ],
                     ),
                     Expanded(
                       child: tabBarView(
-                        controller: _memberSearchCtr.tabController,
+                        controller: _controller.tabController,
                         children: [
-                          SearchArchive(ctr: _memberSearchCtr),
-                          SearchDynamic(ctr: _memberSearchCtr),
+                          MemberSearchChildPage(
+                            controller: _controller.arcCtr,
+                            searchType: MemberSearchType.archive,
+                          ),
+                          MemberSearchChildPage(
+                            controller: _controller.dynCtr,
+                            searchType: MemberSearchType.dynamic,
+                          ),
                         ],
                       ),
                     ),
                   ],
                 ),
-              )
-            : FractionallySizedBox(
-                heightFactor: 0.5,
-                widthFactor: 1.0,
-                child: Center(
-                  child: Text(
-                    '搜索「${_memberSearchCtr.uname.value}」的动态、视频',
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-              ),
+              );
+            }),
+            Obx(
+              () => _controller.hasData.value
+                  ? const SizedBox.shrink()
+                  : FractionallySizedBox(
+                      heightFactor: 0.5,
+                      widthFactor: 1.0,
+                      child: Center(
+                        child: Text(
+                          '搜索「${_controller.uname}」的动态、视频',
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ),
+            ),
+          ],
+        ),
       ),
     );
   }
