@@ -134,6 +134,7 @@ class WhisperSessionItem extends StatelessWidget {
             PBadge(
               isStack: false,
               type: PBadgeType.line_secondary,
+              size: PBadgeSize.small,
               fontSize: 10,
               isBold: false,
               text: item.sessionInfo.userLabel.style.borderedLabel.text,

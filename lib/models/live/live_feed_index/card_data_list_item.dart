@@ -1,4 +1,4 @@
-import 'watched_show.dart';
+import 'package:PiliPlus/models/live/live_feed_index/watched_show.dart';
 
 class CardLiveItem {
   int? roomid;

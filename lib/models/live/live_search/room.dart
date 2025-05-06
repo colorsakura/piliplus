@@ -1,4 +1,4 @@
-import 'room_item.dart';
+import 'package:PiliPlus/models/live/live_search/room_item.dart';
 
 class Room {
   List<LiveSearchRoomItemModel>? list;

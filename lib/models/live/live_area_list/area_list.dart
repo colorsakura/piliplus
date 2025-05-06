@@ -1,4 +1,4 @@
-import 'area_item.dart';
+import 'package:PiliPlus/models/live/live_area_list/area_item.dart';
 
 class AreaList {
   int? id;

@@ -1,4 +1,4 @@
-import 'item.dart';
+import 'package:PiliPlus/models/live/live_follow/item.dart';
 
 class LiveFollowData {
   String? title;

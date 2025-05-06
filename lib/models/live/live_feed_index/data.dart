@@ -1,4 +1,4 @@
-import 'card_list.dart';
+import 'package:PiliPlus/models/live/live_feed_index/card_list.dart';
 
 class LiveIndexData {
   List<LiveCardList>? cardList;

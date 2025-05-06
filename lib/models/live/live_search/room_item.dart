@@ -1,4 +1,4 @@
-import 'watched_show.dart';
+import 'package:PiliPlus/models/live/live_search/watched_show.dart';
 
 class LiveSearchRoomItemModel {
   int? roomid;

@@ -1,4 +1,4 @@
-import 'data.dart';
+import 'package:PiliPlus/models/live/live_search/data.dart';
 
 class LiveSearch {
   int? code;

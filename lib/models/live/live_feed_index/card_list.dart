@@ -1,4 +1,4 @@
-import 'card_data.dart';
+import 'package:PiliPlus/models/live/live_feed_index/card_data.dart';
 
 class LiveCardList {
   String? cardType;

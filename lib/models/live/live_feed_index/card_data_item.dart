@@ -1,6 +1,5 @@
 import 'package:PiliPlus/models/live/live_feed_index/card_data_list_item.dart';
-
-import 'module_info.dart';
+import 'package:PiliPlus/models/live/live_feed_index/module_info.dart';
 
 class CardDataItem {
   ModuleInfo? moduleInfo;
