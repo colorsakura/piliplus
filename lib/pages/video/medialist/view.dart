@@ -7,6 +7,7 @@ import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/common/widgets/stat/stat.dart';
 import 'package:PiliPlus/http/search.dart';
+import 'package:PiliPlus/models/common/badge_type.dart';
 import 'package:PiliPlus/models/video/later.dart';
 import 'package:PiliPlus/pages/common/common_collapse_slide_page.dart';
 import 'package:PiliPlus/utils/utils.dart';
@@ -206,7 +207,7 @@ class _MediaListPanelState
                                         text: Utils.timeFormat(item.duration!),
                                         right: 6.0,
                                         bottom: 6.0,
-                                        type: 'gray',
+                                        type: PBadgeType.gray,
                                       ),
                                     ],
                                   );

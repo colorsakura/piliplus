@@ -1,8 +1,8 @@
 import 'package:PiliPlus/common/skeleton/whisper_item.dart';
 import 'package:PiliPlus/common/widgets/loading_widget/http_error.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
+import 'package:PiliPlus/grpc/bilibili/app/im/v1.pb.dart';
 import 'package:PiliPlus/http/loading_state.dart';
-import 'package:PiliPlus/models/msg/session.dart';
 import 'package:PiliPlus/pages/whisper/controller.dart';
 import 'package:PiliPlus/pages/whisper/widgets/item.dart';
 import 'package:flutter/material.dart';
@@ -38,7 +38,7 @@ class _WhisperPageState extends State<WhisperPage> {
     );
   }
 
-  Widget _buildBody(LoadingState<List<SessionList>?> loadingState) {
+  Widget _buildBody(LoadingState<List<Session>?> loadingState) {
     return switch (loadingState) {
       Loading() => SliverList.builder(
           itemCount: 12,

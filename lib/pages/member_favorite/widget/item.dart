@@ -2,6 +2,7 @@ import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/common/widgets/badge.dart';
 import 'package:PiliPlus/common/widgets/image/image_save.dart';
 import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
+import 'package:PiliPlus/models/common/badge_type.dart';
 import 'package:PiliPlus/models/space_fav/list.dart';
 import 'package:PiliPlus/models/user/sub_folder.dart';
 import 'package:PiliPlus/utils/utils.dart';
@@ -89,8 +90,8 @@ class MemberFavItem extends StatelessWidget {
                             right: 3,
                             bottom: 3,
                             text: '合集',
-                            bold: false,
-                            size: 'small',
+                            isBold: false,
+                            size: PBadgeSize.small,
                           )
                         else if (item.type == 0 || item.type == 11)
                           Positioned(

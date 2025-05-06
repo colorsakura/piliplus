@@ -6,6 +6,7 @@ import 'package:PiliPlus/common/widgets/progress_bar/video_progress_indicator.da
 import 'package:PiliPlus/http/search.dart';
 import 'package:PiliPlus/http/user.dart';
 import 'package:PiliPlus/http/video.dart';
+import 'package:PiliPlus/models/common/badge_type.dart';
 import 'package:PiliPlus/models/common/history_business_type.dart';
 import 'package:PiliPlus/models/user/history.dart';
 import 'package:PiliPlus/pages/common/multi_select_controller.dart';
@@ -153,7 +154,7 @@ class HistoryItem extends StatelessWidget {
                                   : '${Utils.timeFormat(videoItem.progress)}/${Utils.timeFormat(videoItem.duration!)}',
                               right: 6.0,
                               bottom: 8.0,
-                              type: 'gray',
+                              type: PBadgeType.gray,
                             ),
                           // 右上角
                           if (HistoryBusinessType.showBadge

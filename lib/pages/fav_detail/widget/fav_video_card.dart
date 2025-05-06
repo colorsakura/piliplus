@@ -6,6 +6,7 @@ import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
 import 'package:PiliPlus/common/widgets/stat/stat.dart';
 import 'package:PiliPlus/http/search.dart';
 import 'package:PiliPlus/http/video.dart';
+import 'package:PiliPlus/models/common/badge_type.dart';
 import 'package:PiliPlus/models/user/fav_detail.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/id_utils.dart';
@@ -107,7 +108,7 @@ class FavVideoCardH extends StatelessWidget {
                         text: Utils.timeFormat(videoItem.duration),
                         right: 6.0,
                         bottom: 6.0,
-                        type: 'gray',
+                        type: PBadgeType.gray,
                       ),
                       PBadge(
                         text: videoItem.ogv?['type_name'],

@@ -5,6 +5,7 @@ import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
 import 'package:PiliPlus/common/widgets/stat/stat.dart';
 import 'package:PiliPlus/common/widgets/video_popup_menu.dart';
 import 'package:PiliPlus/http/search.dart';
+import 'package:PiliPlus/models/common/badge_type.dart';
 import 'package:PiliPlus/models/home/rcmd/result.dart';
 import 'package:PiliPlus/models/model_rec_video_item.dart';
 import 'package:PiliPlus/utils/app_scheme.dart';
@@ -127,8 +128,8 @@ class VideoCardV extends StatelessWidget {
                             PBadge(
                               bottom: 6,
                               right: 7,
-                              size: 'small',
-                              type: 'gray',
+                              size: PBadgeSize.small,
+                              type: PBadgeType.gray,
                               text: Utils.timeFormat(videoItem.duration),
                             )
                         ],
@@ -180,38 +181,38 @@ class VideoCardV extends StatelessWidget {
                 if (videoItem.goto == 'bangumi') ...[
                   PBadge(
                     text: videoItem.bangumiBadge,
-                    stack: 'normal',
-                    size: 'small',
-                    type: 'line',
-                    fs: 9,
+                    isStack: false,
+                    size: PBadgeSize.small,
+                    type: PBadgeType.line_primary,
+                    fontSize: 9,
                   ),
                   const SizedBox(width: 2),
                 ],
                 if (videoItem.rcmdReason != null) ...[
                   PBadge(
                     text: videoItem.rcmdReason,
-                    stack: 'normal',
-                    size: 'small',
-                    type: 'color',
+                    isStack: false,
+                    size: PBadgeSize.small,
+                    type: PBadgeType.secondary,
                   ),
                   const SizedBox(width: 2),
                 ],
                 if (videoItem.goto == 'picture') ...[
                   const PBadge(
                     text: '动态',
-                    stack: 'normal',
-                    size: 'small',
-                    type: 'line',
-                    fs: 9,
+                    isStack: false,
+                    size: PBadgeSize.small,
+                    type: PBadgeType.line_primary,
+                    fontSize: 9,
                   ),
                   const SizedBox(width: 2),
                 ],
                 if (videoItem.isFollowed) ...[
                   const PBadge(
                     text: '已关注',
-                    stack: 'normal',
-                    size: 'small',
-                    type: 'color',
+                    isStack: false,
+                    size: PBadgeSize.small,
+                    type: PBadgeType.secondary,
                   ),
                   const SizedBox(width: 2),
                 ],

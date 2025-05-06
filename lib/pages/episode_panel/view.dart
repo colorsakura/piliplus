@@ -11,6 +11,7 @@ import 'package:PiliPlus/common/widgets/stat/stat.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/http/video.dart';
 import 'package:PiliPlus/models/bangumi/info.dart' as bangumi;
+import 'package:PiliPlus/models/common/badge_type.dart';
 import 'package:PiliPlus/models/common/episode_panel_type.dart';
 import 'package:PiliPlus/models/video_detail_res.dart' as video;
 import 'package:PiliPlus/pages/common/common_slide_page.dart';
@@ -428,7 +429,7 @@ class _EpisodePanelState extends CommonSlidePageState<EpisodePanel>
                                 text: Utils.timeFormat(duration),
                                 right: 6.0,
                                 bottom: 6.0,
-                                type: 'gray',
+                                type: PBadgeType.gray,
                               ),
                           ],
                         );

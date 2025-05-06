@@ -1,6 +1,7 @@
 import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/common/widgets/badge.dart';
 import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
+import 'package:PiliPlus/models/common/badge_type.dart';
 import 'package:PiliPlus/models/dynamics/result.dart';
 import 'package:PiliPlus/pages/dynamics/widgets/rich_node_panel.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
@@ -92,7 +93,7 @@ Widget liveRcmdPanel(
                     text: watchedShow?['text_large'],
                     top: 6,
                     right: 56,
-                    type: 'gray',
+                    type: PBadgeType.gray,
                   ),
                   PBadge(
                     text: liveStatus == 1 ? '直播中' : '直播结束',

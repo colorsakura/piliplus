@@ -1,5 +1,7 @@
 import 'dart:math';
 
+import 'package:PiliPlus/grpc/bilibili/app/im/v1.pb.dart';
+import 'package:PiliPlus/grpc/grpc_repo.dart';
 import 'package:PiliPlus/http/api.dart';
 import 'package:PiliPlus/http/constants.dart';
 import 'package:PiliPlus/http/init.dart';
@@ -15,6 +17,7 @@ import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/wbi_sign.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:protobuf/protobuf.dart' show PbMap;
 import 'package:uuid/uuid.dart';
 
 class MsgHttp {
@@ -427,6 +430,16 @@ class MsgHttp {
       }
     } else {
       return LoadingState.error(res.data['message']);
+    }
+  }
+
+  static Future<LoadingState<SessionMainReply>> sessionMain(
+      {PbMap<int, Offset>? offset}) async {
+    final res = await GrpcRepo.sessionMain(offset: offset);
+    if (res['status']) {
+      return LoadingState.success(res['data']);
+    } else {
+      return LoadingState.error(res['msg']);
     }
   }
 

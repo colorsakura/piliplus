@@ -4,6 +4,7 @@ import 'package:PiliPlus/common/widgets/image/image_save.dart';
 import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
 import 'package:PiliPlus/common/widgets/stat/stat.dart';
 import 'package:PiliPlus/http/search.dart';
+import 'package:PiliPlus/models/common/badge_type.dart';
 import 'package:PiliPlus/models/member/coin.dart';
 import 'package:PiliPlus/utils/app_scheme.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
@@ -67,7 +68,7 @@ class MemberCoinsItem extends StatelessWidget {
                       PBadge(
                         bottom: 6,
                         right: 6,
-                        type: 'gray',
+                        type: PBadgeType.gray,
                         text: Utils.timeFormat(coinItem.duration),
                       )
                   ],

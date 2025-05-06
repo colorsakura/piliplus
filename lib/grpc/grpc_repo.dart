@@ -3,6 +3,7 @@ import 'dart:typed_data';
 
 import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/grpc/bilibili/app/dynamic/v1.pb.dart';
+import 'package:PiliPlus/grpc/bilibili/app/im/v1.pb.dart';
 import 'package:PiliPlus/grpc/bilibili/community/service/dm/v1.pb.dart';
 import 'package:PiliPlus/grpc/bilibili/im/interfaces/v1.pb.dart';
 import 'package:PiliPlus/grpc/bilibili/im/type.pb.dart';
@@ -22,7 +23,7 @@ import 'package:PiliPlus/utils/utils.dart';
 import 'package:archive/archive.dart';
 import 'package:dio/dio.dart';
 import 'package:fixnum/fixnum.dart';
-import 'package:protobuf/protobuf.dart' show GeneratedMessage;
+import 'package:protobuf/protobuf.dart' show GeneratedMessage, PbMap;
 import 'package:uuid/uuid.dart';
 
 class GrpcUrl {
@@ -46,8 +47,10 @@ class GrpcUrl {
 
   // im
   static const im = '/bilibili.im.interface.v1.ImInterface';
+  static const im2 = '/bilibili.app.im.v1.im';
   static const sendMsg = '$im/SendMsg';
   static const shareList = '$im/ShareList';
+  static const sessionMain = '$im2/SessionMain';
 }
 
 class GrpcRepo {
@@ -367,6 +370,16 @@ class GrpcRepo {
       GrpcUrl.shareList,
       ReqShareList(size: size),
       RspShareList.fromBuffer,
+    );
+  }
+
+  static Future sessionMain({PbMap<int, Offset>? offset}) async {
+    return await _request(
+      GrpcUrl.sessionMain,
+      SessionMainReq(
+        paginationParams: PaginationParams(offsets: offset),
+      ),
+      SessionMainReply.fromBuffer,
     );
   }
 }

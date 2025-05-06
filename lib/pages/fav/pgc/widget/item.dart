@@ -70,7 +70,7 @@ class FavPgcItem extends StatelessWidget {
                               right: 4,
                               top: 4,
                               text: item.badge,
-                              fs: 10,
+                              fontSize: 10,
                               padding: const EdgeInsets.symmetric(
                                 horizontal: 2,
                                 vertical: 1,

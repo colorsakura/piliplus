@@ -10,6 +10,7 @@ import 'package:PiliPlus/grpc/bilibili/main/community/reply/v1.pb.dart'
     show ReplyInfo, ReplyControl, Content;
 import 'package:PiliPlus/http/init.dart';
 import 'package:PiliPlus/http/video.dart';
+import 'package:PiliPlus/models/common/badge_type.dart';
 import 'package:PiliPlus/pages/dynamics/widgets/vote.dart';
 import 'package:PiliPlus/pages/save_panel/view.dart';
 import 'package:PiliPlus/pages/video/controller.dart';
@@ -219,9 +220,9 @@ class ReplyItemGrpc extends StatelessWidget {
                       if (replyItem.mid == upMid)
                         const PBadge(
                           text: 'UP',
-                          size: 'small',
-                          stack: 'normal',
-                          fs: 9,
+                          size: PBadgeSize.small,
+                          isStack: false,
+                          fontSize: 9,
                         ),
                     ],
                   ),
@@ -290,11 +291,10 @@ class ReplyItemGrpc extends StatelessWidget {
                           alignment: PlaceholderAlignment.top,
                           child: PBadge(
                             text: 'TOP',
-                            size: 'small',
-                            stack: 'normal',
-                            type: 'line',
-                            fs: 9,
-                            semanticsLabel: '置顶',
+                            size: PBadgeSize.small,
+                            isStack: false,
+                            type: PBadgeType.line_primary,
+                            fontSize: 9,
                             textScaleFactor: 1,
                           ),
                         ),
@@ -503,9 +503,9 @@ class ReplyItemGrpc extends StatelessWidget {
                                 alignment: PlaceholderAlignment.middle,
                                 child: PBadge(
                                   text: 'UP',
-                                  size: 'small',
-                                  stack: 'normal',
-                                  fs: 9,
+                                  size: PBadgeSize.small,
+                                  isStack: false,
+                                  fontSize: 9,
                                   textScaleFactor: 1,
                                 ),
                               ),

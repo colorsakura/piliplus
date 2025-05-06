@@ -4,6 +4,7 @@ import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/common/widgets/badge.dart';
 import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
 import 'package:PiliPlus/common/widgets/image/nine_grid_view.dart';
+import 'package:PiliPlus/models/common/badge_type.dart';
 import 'package:PiliPlus/models/common/image_preview_type.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/storage.dart';
@@ -168,7 +169,7 @@ Widget imageView(
                 text: 'Live',
                 right: 8,
                 bottom: 8,
-                type: 'gray',
+                type: PBadgeType.gray,
               )
             else if (picArr[index].isLongPic)
               const PBadge(

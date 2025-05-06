@@ -2,6 +2,7 @@
 import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/common/widgets/badge.dart';
 import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
+import 'package:PiliPlus/models/common/badge_type.dart';
 import 'package:PiliPlus/models/dynamics/result.dart';
 import 'package:PiliPlus/pages/dynamics/widgets/rich_node_panel.dart';
 import 'package:PiliPlus/utils/utils.dart';
@@ -77,7 +78,9 @@ Widget videoSeasonWidget(
                 right: 10.0,
                 bottom: null,
                 left: null,
-                type: content.badge!['text'] == '充电专属' ? 'error' : 'primary',
+                type: content.badge!['text'] == '充电专属'
+                    ? PBadgeType.error
+                    : PBadgeType.primary,
               ),
             Positioned(
               left: 0,

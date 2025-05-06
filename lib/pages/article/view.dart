@@ -8,6 +8,7 @@ import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/grpc/bilibili/main/community/reply/v1.pb.dart'
     show ReplyInfo;
 import 'package:PiliPlus/http/loading_state.dart';
+import 'package:PiliPlus/models/common/badge_type.dart';
 import 'package:PiliPlus/models/common/image_preview_type.dart';
 import 'package:PiliPlus/models/common/reply/reply_sort_type.dart';
 import 'package:PiliPlus/models/common/reply/reply_type.dart';
@@ -454,7 +455,7 @@ class _ArticlePageState extends State<ArticlePage>
                                 () => PBadge(
                                     top: 12,
                                     right: paddingRight,
-                                    type: 'gray',
+                                    type: PBadgeType.gray,
                                     text:
                                         '${_articleCtr.topIndex.value + 1}/$length'),
                               ),

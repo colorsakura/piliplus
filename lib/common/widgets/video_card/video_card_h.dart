@@ -6,6 +6,7 @@ import 'package:PiliPlus/common/widgets/progress_bar/video_progress_indicator.da
 import 'package:PiliPlus/common/widgets/stat/stat.dart';
 import 'package:PiliPlus/common/widgets/video_popup_menu.dart';
 import 'package:PiliPlus/http/search.dart';
+import 'package:PiliPlus/models/common/badge_type.dart';
 import 'package:PiliPlus/models/model_hot_video_item.dart';
 import 'package:PiliPlus/models/model_video.dart';
 import 'package:PiliPlus/models/search/result.dart';
@@ -158,7 +159,7 @@ class VideoCardH extends StatelessWidget {
                                       : '${Utils.timeFormat(progress)}/${Utils.timeFormat(videoItem.duration)}',
                                   right: 6,
                                   bottom: 8,
-                                  type: 'gray',
+                                  type: PBadgeType.gray,
                                 ),
                                 Positioned(
                                   left: 0,
@@ -175,14 +176,14 @@ class VideoCardH extends StatelessWidget {
                                   text: Utils.timeFormat(videoItem.duration),
                                   right: 6.0,
                                   bottom: 6.0,
-                                  type: 'gray',
+                                  type: PBadgeType.gray,
                                 ),
                               if (type != 'video')
                                 PBadge(
                                   text: type,
                                   left: 6.0,
                                   bottom: 6.0,
-                                  type: 'primary',
+                                  type: PBadgeType.primary,
                                 ),
                             ],
                           );

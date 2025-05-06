@@ -1,20 +1,23 @@
+import 'package:PiliPlus/models/common/badge_type.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:flutter/material.dart';
 
 class PBadge extends StatelessWidget {
   final String? text;
+
+  final bool isStack;
   final double? top;
   final double? right;
   final double? bottom;
   final double? left;
-  final String? type;
-  final String? size;
-  final String? stack;
-  final double? fs;
-  final String? semanticsLabel;
-  final bool bold;
-  final double? textScaleFactor;
   final EdgeInsets? padding;
+
+  final PBadgeType type;
+  final PBadgeSize size;
+
+  final double fontSize;
+  final bool isBold;
+  final double? textScaleFactor;
 
   const PBadge({
     super.key,
@@ -23,12 +26,11 @@ class PBadge extends StatelessWidget {
     this.right,
     this.bottom,
     this.left,
-    this.type = 'primary',
-    this.size = 'medium',
-    this.stack = 'position',
-    this.fs = 11,
-    this.semanticsLabel,
-    this.bold = true,
+    this.type = PBadgeType.primary,
+    this.size = PBadgeSize.medium,
+    this.isStack = true,
+    this.fontSize = 11,
+    this.isBold = true,
     this.textScaleFactor,
     this.padding,
   });
@@ -40,37 +42,39 @@ class PBadge extends StatelessWidget {
     }
 
     ColorScheme theme = Theme.of(context).colorScheme;
-    // 背景色
-    Color bgColor = theme.primary;
-    // 前景色
-    Color color = theme.onPrimary;
-    // 边框色
+
+    Color bgColor;
+    Color color;
     Color borderColor = Colors.transparent;
-    if (type == 'gray') {
-      bgColor = Colors.black45;
-      color = Colors.white;
-    } else if (type == 'color') {
-      bgColor = theme.secondaryContainer.withOpacity(0.5);
-      color = theme.onSecondaryContainer;
-    } else if (type == 'line') {
-      bgColor = Colors.transparent;
-      color = theme.primary;
-      borderColor = theme.primary;
-    } else if (type == 'error') {
-      bgColor = theme.error;
-      color = theme.onError;
+
+    switch (type) {
+      case PBadgeType.primary:
+        bgColor = theme.primary;
+        color = theme.onPrimary;
+      case PBadgeType.secondary:
+        bgColor = theme.secondaryContainer.withOpacity(0.5);
+        color = theme.onSecondaryContainer;
+      case PBadgeType.gray:
+        bgColor = Colors.black45;
+        color = Colors.white;
+      case PBadgeType.error:
+        bgColor = theme.error;
+        color = theme.onError;
+      case PBadgeType.line_primary:
+        color = theme.primary;
+        bgColor = Colors.transparent;
+        borderColor = theme.primary;
+      case PBadgeType.line_secondary:
+        color = theme.secondary;
+        bgColor = Colors.transparent;
+        borderColor = theme.secondary;
     }
 
     late EdgeInsets paddingStyle =
         const EdgeInsets.symmetric(vertical: 2, horizontal: 3);
-    double fontSize = 11;
-    BorderRadius br = const BorderRadius.all(Radius.circular(4));
-
-    if (size == 'small') {
-      paddingStyle = const EdgeInsets.symmetric(vertical: 2, horizontal: 3);
-      fontSize = 11;
-      br = const BorderRadius.all(Radius.circular(3));
-    }
+    BorderRadius br = size == PBadgeSize.small
+        ? const BorderRadius.all(Radius.circular(3))
+        : const BorderRadius.all(Radius.circular(4));
 
     Widget content = Container(
       padding: padding ?? paddingStyle,
@@ -86,20 +90,19 @@ class PBadge extends StatelessWidget {
             : null,
         style: TextStyle(
           height: 1,
-          fontSize: fs ?? fontSize,
+          fontSize: fontSize,
           color: color,
-          fontWeight: bold ? FontWeight.bold : null,
+          fontWeight: isBold ? FontWeight.bold : null,
         ),
         strutStyle: StrutStyle(
           leading: 0,
           height: 1,
-          fontSize: fs ?? fontSize,
-          fontWeight: bold ? FontWeight.bold : null,
+          fontSize: fontSize,
+          fontWeight: isBold ? FontWeight.bold : null,
         ),
-        semanticsLabel: semanticsLabel,
       ),
     );
-    if (stack == 'position') {
+    if (isStack) {
       return Positioned(
         top: top,
         left: left,

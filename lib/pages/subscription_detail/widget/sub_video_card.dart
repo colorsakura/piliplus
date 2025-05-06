@@ -4,6 +4,7 @@ import 'package:PiliPlus/common/widgets/image/image_save.dart';
 import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
 import 'package:PiliPlus/common/widgets/stat/stat.dart';
 import 'package:PiliPlus/http/search.dart';
+import 'package:PiliPlus/models/common/badge_type.dart';
 import 'package:PiliPlus/models/common/search_type.dart';
 import 'package:PiliPlus/models/user/sub_detail.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
@@ -68,7 +69,7 @@ class SubVideoCardH extends StatelessWidget {
                         text: Utils.timeFormat(videoItem.duration!),
                         right: 6.0,
                         bottom: 6.0,
-                        type: 'gray',
+                        type: PBadgeType.gray,
                       ),
                     ],
                   );
