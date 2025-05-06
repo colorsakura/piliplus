@@ -2,6 +2,7 @@ import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/http/api.dart';
 import 'package:PiliPlus/http/init.dart';
 import 'package:PiliPlus/http/loading_state.dart';
+import 'package:PiliPlus/models/common/live_search_type.dart';
 import 'package:PiliPlus/models/live/live_area_list/area_item.dart';
 import 'package:PiliPlus/models/live/live_area_list/area_list.dart';
 import 'package:PiliPlus/models/live/live_emoticons/data.dart';
@@ -12,6 +13,7 @@ import 'package:PiliPlus/models/live/live_room/danmu_info.dart';
 import 'package:PiliPlus/models/live/live_room/item.dart';
 import 'package:PiliPlus/models/live/live_room/room_info.dart';
 import 'package:PiliPlus/models/live/live_room/room_info_h5.dart';
+import 'package:PiliPlus/models/live/live_search/data.dart';
 import 'package:PiliPlus/models/live/live_second_list/data.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/utils.dart';
@@ -428,6 +430,46 @@ class LiveHttp {
       return LoadingState.success((res.data['data'] as List?)
           ?.map((e) => AreaItem.fromJson(e))
           .toList());
+    } else {
+      return LoadingState.error(res.data['message']);
+    }
+  }
+
+  static Future<LoadingState<LiveSearchData>> liveSearch({
+    required bool isLogin,
+    required int page,
+    required String keyword,
+    required LiveSearchType type,
+  }) async {
+    final params = {
+      if (isLogin) 'access_key': Accounts.main.accessKey,
+      'appkey': Constants.appKey,
+      'actionKey': 'appkey',
+      'build': '8350200',
+      'c_locale': 'zh_CN',
+      'device': 'pad',
+      'page': page,
+      'pagesize': 30,
+      'keyword': keyword,
+      'disable_rcmd': '0',
+      'mobi_app': 'android_hd',
+      'platform': 'android',
+      's_locale': 'zh_CN',
+      'statistics': Constants.statistics,
+      'ts': DateTime.now().millisecondsSinceEpoch ~/ 1000,
+      'type': type.name,
+    };
+    Utils.appSign(
+      params,
+      Constants.appKey,
+      Constants.appSec,
+    );
+    var res = await Request().get(
+      Api.liveSearch,
+      queryParameters: params,
+    );
+    if (res.data['code'] == 0) {
+      return LoadingState.success(LiveSearchData.fromJson(res.data['data']));
     } else {
       return LoadingState.error(res.data['message']);
     }

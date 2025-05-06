@@ -316,8 +316,8 @@ class _LiveAreaPageState extends State<LiveAreaPage> {
             border: Border.all(
               color: theme.colorScheme.outline,
             ),
-            borderRadius: const BorderRadius.all(Radius.circular(4)),
             color: theme.colorScheme.surface,
+            borderRadius: const BorderRadius.all(Radius.circular(4)),
           ),
           child: SearchText(
             text: item.name!,

@@ -3,6 +3,7 @@ import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/live/live_area_list/area_item.dart';
 import 'package:PiliPlus/pages/live_area_detail/child/view.dart';
 import 'package:PiliPlus/pages/live_area_detail/controller.dart';
+import 'package:PiliPlus/pages/live_search/view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -35,7 +36,7 @@ class _LiveAreaDetailPageState extends State<LiveAreaDetailPage> {
         actions: [
           IconButton(
             onPressed: () {
-              // TODO: search
+              Get.to(const LiveSearchPage());
             },
             icon: const Icon(Icons.search),
           ),

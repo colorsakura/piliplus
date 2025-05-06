@@ -50,7 +50,9 @@ class _MemberArticleState extends State<MemberArticle>
                 slivers: [
                   SliverPadding(
                     padding: EdgeInsets.only(
-                        bottom: MediaQuery.paddingOf(context).bottom + 80),
+                      top: 7,
+                      bottom: MediaQuery.paddingOf(context).bottom + 80,
+                    ),
                     sliver: SliverGrid(
                       gridDelegate: Grid.videoCardHDelegate(context),
                       delegate: SliverChildBuilderDelegate(

@@ -37,6 +37,7 @@ class _LivePageState extends CommonPageState<LivePage, LiveController>
   @override
   Widget build(BuildContext context) {
     super.build(context);
+    final ThemeData theme = Theme.of(context);
     return Container(
       clipBehavior: Clip.hardEdge,
       margin: const EdgeInsets.only(
@@ -58,8 +59,8 @@ class _LivePageState extends CommonPageState<LivePage, LiveController>
                 bottom: MediaQuery.paddingOf(context).bottom + 80,
               ),
               sliver: SliverMainAxisGroup(slivers: [
-                Obx(() => _buildTop(controller.topState.value)),
-                Obx(() => _buildBody(controller.loadingState.value)),
+                Obx(() => _buildTop(theme, controller.topState.value)),
+                Obx(() => _buildBody(theme, controller.loadingState.value)),
               ]),
             ),
           ],
@@ -68,11 +69,11 @@ class _LivePageState extends CommonPageState<LivePage, LiveController>
     );
   }
 
-  Widget _buildTop(Pair<LiveCardList?, LiveCardList?> data) {
+  Widget _buildTop(ThemeData theme, Pair<LiveCardList?, LiveCardList?> data) {
     return SliverMainAxisGroup(
       slivers: [
         if (data.first != null)
-          SliverToBoxAdapter(child: _buildFollowList(data.first!)),
+          SliverToBoxAdapter(child: _buildFollowList(theme, data.first!)),
         if (data.second?.cardData?.areaEntranceV3?.list?.isNotEmpty == true)
           SliverToBoxAdapter(
             child: Row(
@@ -94,12 +95,10 @@ class _LivePageState extends CommonPageState<LivePage, LiveController>
                           ),
                           text: index == 0 ? '推荐' : '${item.title}',
                           bgColor: index == controller.areaIndex.value
-                              ? Theme.of(context).colorScheme.secondaryContainer
+                              ? theme.colorScheme.secondaryContainer
                               : Colors.transparent,
                           textColor: index == controller.areaIndex.value
-                              ? Theme.of(context)
-                                  .colorScheme
-                                  .onSecondaryContainer
+                              ? theme.colorScheme.onSecondaryContainer
                               : null,
                           onTap: (value) {
                             controller.onSelectArea(
@@ -133,7 +132,7 @@ class _LivePageState extends CommonPageState<LivePage, LiveController>
     );
   }
 
-  Widget _buildBody(LoadingState<List?> loadingState) {
+  Widget _buildBody(ThemeData theme, LoadingState<List?> loadingState) {
     return switch (loadingState) {
       Loading() => SliverGrid(
           gridDelegate: SliverGridDelegateWithExtentAndRatio(
@@ -169,14 +168,10 @@ class _LivePageState extends CommonPageState<LivePage, LiveController>
                             ),
                             text: '${item.name}',
                             bgColor: index == controller.tagIndex.value
-                                ? Theme.of(context)
-                                    .colorScheme
-                                    .secondaryContainer
+                                ? theme.colorScheme.secondaryContainer
                                 : Colors.transparent,
                             textColor: index == controller.tagIndex.value
-                                ? Theme.of(context)
-                                    .colorScheme
-                                    .onSecondaryContainer
+                                ? theme.colorScheme.onSecondaryContainer
                                 : null,
                             onTap: (value) {
                               controller.onSelectTag(
@@ -224,8 +219,7 @@ class _LivePageState extends CommonPageState<LivePage, LiveController>
     };
   }
 
-  Widget _buildFollowList(LiveCardList item) {
-    final theme = Theme.of(context);
+  Widget _buildFollowList(ThemeData theme, LiveCardList item) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,

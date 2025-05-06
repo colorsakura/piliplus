@@ -819,4 +819,7 @@ class Api {
 
   static const String setLiveFavTag =
       '${HttpString.liveBaseUrl}/xlive/app-interface/v2/second/set_fav_tag';
+
+  static const String liveSearch =
+      '${HttpString.liveBaseUrl}/xlive/app-interface/v2/search_live';
 }

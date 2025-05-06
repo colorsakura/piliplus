@@ -45,33 +45,21 @@ class BangumiCardVMemberHome extends StatelessWidget {
                 );
               }),
             ),
-            bangumiContent(bangumiItem)
+            Padding(
+              padding: const EdgeInsets.fromLTRB(4, 5, 0, 3),
+              child: Text(
+                bangumiItem.title,
+                textAlign: TextAlign.start,
+                style: const TextStyle(
+                  letterSpacing: 0.3,
+                ),
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
           ],
         ),
       ),
     );
   }
-}
-
-Widget bangumiContent(SpaceArchiveItem bangumiItem) {
-  return Expanded(
-    child: Padding(
-      padding: const EdgeInsets.fromLTRB(4, 5, 0, 3),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            bangumiItem.title,
-            textAlign: TextAlign.start,
-            style: const TextStyle(
-              letterSpacing: 0.3,
-            ),
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
-          ),
-          const SizedBox(height: 1),
-        ],
-      ),
-    ),
-  );
 }
