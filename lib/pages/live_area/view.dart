@@ -1,0 +1,372 @@
+import 'package:PiliPlus/common/widgets/button/icon_button.dart';
+import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
+import 'package:PiliPlus/common/widgets/keep_alive_wrapper.dart';
+import 'package:PiliPlus/common/widgets/loading_widget/loading_widget.dart';
+import 'package:PiliPlus/common/widgets/scroll_physics.dart';
+import 'package:PiliPlus/http/loading_state.dart';
+import 'package:PiliPlus/models/live/live_area_list/area_item.dart';
+import 'package:PiliPlus/models/live/live_area_list/area_list.dart';
+import 'package:PiliPlus/pages/live_area/controller.dart';
+import 'package:PiliPlus/pages/live_area_detail/view.dart';
+import 'package:PiliPlus/pages/search/widgets/search_text.dart';
+import 'package:PiliPlus/utils/extension.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_sortable_wrap/sortable_wrap.dart';
+import 'package:get/get.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+
+class LiveAreaPage extends StatefulWidget {
+  const LiveAreaPage({super.key});
+
+  @override
+  State<LiveAreaPage> createState() => _LiveAreaPageState();
+}
+
+class _LiveAreaPageState extends State<LiveAreaPage> {
+  final _controller = Get.put(LiveAreaController());
+
+  @override
+  Widget build(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('全部标签'),
+        actions: _controller.isLogin
+            ? [
+                TextButton(
+                  onPressed: _controller.onEdit,
+                  style: TextButton.styleFrom(
+                    visualDensity: VisualDensity.compact,
+                  ),
+                  child: Obx(
+                      () => Text(_controller.isEditing.value ? '完成' : '编辑')),
+                ),
+                const SizedBox(width: 16),
+              ]
+            : null,
+      ),
+      body: SafeArea(
+        top: false,
+        bottom: false,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            if (_controller.isLogin)
+              Obx(() => _buildFavWidget(theme, _controller.favState.value)),
+            Expanded(
+              child:
+                  Obx(() => _buildBody(theme, _controller.loadingState.value)),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildBody(
+      ThemeData theme, LoadingState<List<AreaList>?> loadingState) {
+    return switch (loadingState) {
+      Loading() => const SizedBox.shrink(),
+      Success() => loadingState.response?.isNotEmpty == true
+          ? DefaultTabController(
+              length: loadingState.response!.length,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  TabBar(
+                    isScrollable: true,
+                    tabAlignment: TabAlignment.start,
+                    tabs: loadingState.response!
+                        .map((e) => Tab(text: e.name))
+                        .toList(),
+                  ),
+                  Expanded(
+                    child: tabBarView(
+                        children: loadingState.response!
+                            .map(
+                              (e) => KeepAliveWrapper(
+                                builder: (context) {
+                                  if (e.areaList.isNullOrEmpty) {
+                                    return const SizedBox.shrink();
+                                  }
+                                  return GridView.builder(
+                                    padding: EdgeInsets.only(
+                                      top: 12,
+                                      bottom:
+                                          MediaQuery.paddingOf(context).bottom +
+                                              80,
+                                    ),
+                                    gridDelegate:
+                                        const SliverGridDelegateWithMaxCrossAxisExtent(
+                                      maxCrossAxisExtent: 100,
+                                      mainAxisSpacing: 10,
+                                      crossAxisSpacing: 10,
+                                      mainAxisExtent: 80,
+                                    ),
+                                    itemCount: e.areaList!.length,
+                                    itemBuilder: (context, index) {
+                                      final item = e.areaList![index];
+                                      return _tagItem(
+                                        theme: theme,
+                                        item: item,
+                                        onPressed: () {
+                                          // success
+                                          if (item.isFav == true) {
+                                            _controller.favState
+                                              ..value.data.remove(item)
+                                              ..refresh();
+                                            item.isFav = false;
+                                            (context as Element)
+                                                .markNeedsBuild();
+                                          } else {
+                                            // check
+                                            if (_controller.favState.value
+                                                is Success) {
+                                              _controller.favState
+                                                ..value.data.add(item)
+                                                ..refresh();
+                                              item.isFav = true;
+                                              (context as Element)
+                                                  .markNeedsBuild();
+                                            }
+                                          }
+                                        },
+                                      );
+                                    },
+                                  );
+                                },
+                              ),
+                            )
+                            .toList()),
+                  )
+                ],
+              ),
+            )
+          : scrollErrorWidget(onReload: _controller.onReload),
+      Error() => scrollErrorWidget(
+          errMsg: loadingState.errMsg,
+          onReload: _controller.onReload,
+        ),
+    };
+  }
+
+  Widget _buildFavWidget(
+      ThemeData theme, LoadingState<List<AreaItem>?> loadingState) {
+    if (loadingState is Success) {
+      final List<AreaItem>? list = loadingState.data;
+      return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 12),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text.rich(
+              TextSpan(
+                children: [
+                  const TextSpan(text: '我的常用标签  '),
+                  TextSpan(
+                    text: '点击进入标签',
+                    style: TextStyle(
+                      fontSize: 13,
+                      color: theme.colorScheme.outline,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 8),
+            if (list?.isNotEmpty == true) ...[
+              SortableWrap(
+                onSortStart: (index) {
+                  _controller.isEditing.value = true;
+                },
+                onSorted: (int oldIndex, int newIndex) {
+                  list.insert(newIndex, list.removeAt(oldIndex));
+                },
+                spacing: 12,
+                runSpacing: 8,
+                children: list!
+                    .map(
+                      (item) => _favTagItem(
+                        theme: theme,
+                        item: item,
+                        onPressed: () {
+                          list.remove(item);
+                          _controller.favState.refresh();
+
+                          // update isFav
+                          if (_controller.loadingState.value is Success) {
+                            List<AreaList>? areaList =
+                                _controller.loadingState.value.data;
+                            if (areaList?.isNotEmpty == true) {
+                              for (var i in areaList!) {
+                                if (i.areaList?.isNotEmpty == true) {
+                                  for (var j in i.areaList!) {
+                                    if (j == item) {
+                                      j.isFav = false;
+                                      _controller.loadingState.refresh();
+                                      break;
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        },
+                      ),
+                    )
+                    .toList(),
+              ),
+              const SizedBox(height: 4),
+            ],
+          ],
+        ),
+      );
+    }
+
+    return const SizedBox.shrink();
+  }
+
+  Widget _tagItem({
+    required ThemeData theme,
+    required AreaItem item,
+    required VoidCallback onPressed,
+  }) {
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: () {
+        if (_controller.isEditing.value) {
+          onPressed();
+          return;
+        }
+
+        Get.to(
+          LiveAreaDetailPage(
+            areaId: item.id,
+            parentAreaId: item.parentId,
+            parentName: item.parentName ?? '',
+          ),
+        );
+      },
+      child: Stack(
+        alignment: Alignment.center,
+        clipBehavior: Clip.none,
+        children: [
+          Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              NetworkImgLayer(
+                width: 45,
+                height: 45,
+                src: item.pic,
+                type: 'emote',
+              ),
+              const SizedBox(height: 4),
+              Text(
+                item.name!,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(fontSize: 12),
+              ),
+            ],
+          ),
+          Positioned(
+            top: 0,
+            right: 16,
+            child: Obx(() {
+              if (_controller.isEditing.value &&
+                  _controller.favState.value is Success) {
+                // init isFav
+                item.isFav ??= _controller.favState.value.data.contains(item);
+
+                return Builder(
+                  builder: (context) {
+                    return iconButton(
+                      size: 17,
+                      iconSize: 13,
+                      context: context,
+                      icon: item.isFav == true ? MdiIcons.check : MdiIcons.plus,
+                      bgColor: item.isFav == true
+                          ? theme.colorScheme.onInverseSurface
+                          : null,
+                      iconColor:
+                          item.isFav == true ? theme.colorScheme.outline : null,
+                      onPressed: onPressed,
+                    );
+                  },
+                );
+              }
+              return const SizedBox.shrink();
+            }),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _favTagItem({
+    required ThemeData theme,
+    required AreaItem item,
+    required VoidCallback onPressed,
+  }) {
+    return Stack(
+      clipBehavior: Clip.none,
+      children: [
+        DecoratedBox(
+          decoration: BoxDecoration(
+            border: Border.all(
+              color: theme.colorScheme.outline,
+            ),
+            borderRadius: const BorderRadius.all(Radius.circular(4)),
+            color: theme.colorScheme.surface,
+          ),
+          child: SearchText(
+            text: item.name!,
+            fontSize: 14,
+            bgColor: Colors.transparent,
+            padding: const EdgeInsets.symmetric(
+              horizontal: 12,
+              vertical: 4,
+            ),
+            onTap: (value) {
+              if (_controller.isEditing.value) {
+                onPressed();
+                return;
+              }
+
+              Get.to(
+                LiveAreaDetailPage(
+                  areaId: item.id,
+                  parentAreaId: item.parentId,
+                  parentName: item.parentName ?? '',
+                ),
+              );
+            },
+          ),
+        ),
+        Positioned(
+          right: -4,
+          top: -4,
+          child: Obx(() {
+            if (_controller.isEditing.value) {
+              final isDark = theme.brightness == Brightness.dark;
+              return iconButton(
+                size: 16,
+                iconSize: 12,
+                context: context,
+                icon: Icons.horizontal_rule,
+                bgColor: isDark
+                    ? theme.colorScheme.error
+                    : theme.colorScheme.errorContainer,
+                iconColor: isDark
+                    ? theme.colorScheme.onError
+                    : theme.colorScheme.onErrorContainer,
+                onPressed: onPressed,
+              );
+            }
+            return const SizedBox.shrink();
+          }),
+        )
+      ],
+    );
+  }
+}

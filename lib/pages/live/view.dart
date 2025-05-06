@@ -1,5 +1,6 @@
 import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/common/skeleton/video_card_v.dart';
+import 'package:PiliPlus/common/widgets/button/icon_button.dart';
 import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
 import 'package:PiliPlus/common/widgets/loading_widget/http_error.dart';
 import 'package:PiliPlus/common/widgets/pair.dart';
@@ -11,6 +12,7 @@ import 'package:PiliPlus/models/live/live_feed_index/card_list.dart';
 import 'package:PiliPlus/pages/common/common_page.dart';
 import 'package:PiliPlus/pages/live/controller.dart';
 import 'package:PiliPlus/pages/live/widgets/live_item_app.dart';
+import 'package:PiliPlus/pages/live_area/view.dart';
 import 'package:PiliPlus/pages/live_follow/view.dart';
 import 'package:PiliPlus/pages/search/widgets/search_text.dart';
 import 'package:PiliPlus/utils/grid.dart';
@@ -73,39 +75,60 @@ class _LivePageState extends CommonPageState<LivePage, LiveController>
           SliverToBoxAdapter(child: _buildFollowList(data.first!)),
         if (data.second?.cardData?.areaEntranceV3?.list?.isNotEmpty == true)
           SliverToBoxAdapter(
-            child: SelfSizedHorizontalList(
-              gapSize: 12,
-              padding: const EdgeInsets.only(bottom: 10),
-              childBuilder: (index) {
-                late final item =
-                    data.second!.cardData!.areaEntranceV3!.list![index - 1];
-                return Obx(
-                  () => SearchText(
-                    fontSize: 14,
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 8,
-                      vertical: 3,
-                    ),
-                    text: index == 0 ? '推荐' : '${item.title}',
-                    bgColor: index == controller.areaIndex.value
-                        ? Theme.of(context).colorScheme.secondaryContainer
-                        : Colors.transparent,
-                    textColor: index == controller.areaIndex.value
-                        ? Theme.of(context).colorScheme.onSecondaryContainer
-                        : null,
-                    onTap: (value) {
-                      controller.onSelectArea(
-                        index,
-                        index == 0 ? null : item,
+            child: Row(
+              children: [
+                Expanded(
+                  child: SelfSizedHorizontalList(
+                    gapSize: 12,
+                    padding:
+                        const EdgeInsets.only(top: 10, bottom: 10, right: 12),
+                    childBuilder: (index) {
+                      late final item = data
+                          .second!.cardData!.areaEntranceV3!.list![index - 1];
+                      return Obx(
+                        () => SearchText(
+                          fontSize: 14,
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 8,
+                            vertical: 3,
+                          ),
+                          text: index == 0 ? '推荐' : '${item.title}',
+                          bgColor: index == controller.areaIndex.value
+                              ? Theme.of(context).colorScheme.secondaryContainer
+                              : Colors.transparent,
+                          textColor: index == controller.areaIndex.value
+                              ? Theme.of(context)
+                                  .colorScheme
+                                  .onSecondaryContainer
+                              : null,
+                          onTap: (value) {
+                            controller.onSelectArea(
+                              index,
+                              index == 0 ? null : item,
+                            );
+                          },
+                        ),
                       );
                     },
+                    itemCount:
+                        data.second!.cardData!.areaEntranceV3!.list!.length + 1,
                   ),
-                );
-              },
-              itemCount:
-                  data.second!.cardData!.areaEntranceV3!.list!.length + 1,
+                ),
+                iconButton(
+                  size: 26,
+                  iconSize: 16,
+                  context: context,
+                  tooltip: '全部标签',
+                  icon: Icons.widgets,
+                  onPressed: () {
+                    Get.to(const LiveAreaPage());
+                  },
+                ),
+              ],
             ),
-          ),
+          )
+        else
+          const SliverToBoxAdapter(child: SizedBox(height: 10)),
       ],
     );
   }
@@ -128,29 +151,70 @@ class _LivePageState extends CommonPageState<LivePage, LiveController>
           ),
         ),
       Success() => loadingState.response?.isNotEmpty == true
-          ? SliverGrid(
-              gridDelegate: SliverGridDelegateWithExtentAndRatio(
-                mainAxisSpacing: StyleString.cardSpace,
-                crossAxisSpacing: StyleString.cardSpace,
-                maxCrossAxisExtent: Grid.smallCardWidth,
-                childAspectRatio: StyleString.aspectRatio,
-                mainAxisExtent: MediaQuery.textScalerOf(context).scale(90),
-              ),
-              delegate: SliverChildBuilderDelegate(
-                (context, index) {
-                  if (index == loadingState.response!.length - 1) {
-                    controller.onLoadMore();
-                  }
-                  final item = loadingState.response![index];
-                  if (item is LiveCardList) {
-                    return LiveCardVApp(
-                      item: item.cardData!.smallCardV1!,
-                    );
-                  }
-                  return LiveCardVApp(item: item);
-                },
-                childCount: loadingState.response!.length,
-              ),
+          ? SliverMainAxisGroup(
+              slivers: [
+                if (controller.newTags?.isNotEmpty == true)
+                  SliverToBoxAdapter(
+                    child: SelfSizedHorizontalList(
+                      gapSize: 12,
+                      padding: const EdgeInsets.only(bottom: 8),
+                      childBuilder: (index) {
+                        late final item = controller.newTags![index];
+                        return Obx(
+                          () => SearchText(
+                            fontSize: 13,
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 8,
+                              vertical: 3,
+                            ),
+                            text: '${item.name}',
+                            bgColor: index == controller.tagIndex.value
+                                ? Theme.of(context)
+                                    .colorScheme
+                                    .secondaryContainer
+                                : Colors.transparent,
+                            textColor: index == controller.tagIndex.value
+                                ? Theme.of(context)
+                                    .colorScheme
+                                    .onSecondaryContainer
+                                : null,
+                            onTap: (value) {
+                              controller.onSelectTag(
+                                index,
+                                item.sortType,
+                              );
+                            },
+                          ),
+                        );
+                      },
+                      itemCount: controller.newTags!.length,
+                    ),
+                  ),
+                SliverGrid(
+                  gridDelegate: SliverGridDelegateWithExtentAndRatio(
+                    mainAxisSpacing: StyleString.cardSpace,
+                    crossAxisSpacing: StyleString.cardSpace,
+                    maxCrossAxisExtent: Grid.smallCardWidth,
+                    childAspectRatio: StyleString.aspectRatio,
+                    mainAxisExtent: MediaQuery.textScalerOf(context).scale(90),
+                  ),
+                  delegate: SliverChildBuilderDelegate(
+                    (context, index) {
+                      if (index == loadingState.response!.length - 1) {
+                        controller.onLoadMore();
+                      }
+                      final item = loadingState.response![index];
+                      if (item is LiveCardList) {
+                        return LiveCardVApp(
+                          item: item.cardData!.smallCardV1!,
+                        );
+                      }
+                      return LiveCardVApp(item: item);
+                    },
+                    childCount: loadingState.response!.length,
+                  ),
+                ),
+              ],
             )
           : HttpError(onReload: controller.onReload),
       Error() => HttpError(
@@ -216,7 +280,6 @@ class _LivePageState extends CommonPageState<LivePage, LiveController>
         ),
         if (item.cardData?.myIdolV1?.list?.isNotEmpty == true)
           _buildFollowBody(theme, item.cardData!.myIdolV1!.list!),
-        const SizedBox(height: 10),
       ],
     );
   }

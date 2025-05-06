@@ -3,6 +3,7 @@ import 'package:PiliPlus/http/live.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/live/live_feed_index/card_data_list_item.dart';
 import 'package:PiliPlus/models/live/live_feed_index/card_list.dart';
+import 'package:PiliPlus/models/live/live_second_list/tag.dart';
 import 'package:PiliPlus/pages/common/common_list_controller.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:get/get_rx/src/rx_types/rx_types.dart';
@@ -14,9 +15,16 @@ class LiveController extends CommonListController {
     queryData();
   }
 
+  // area
   int? areaId;
+  String? sortType;
   int? parentAreaId;
   final RxInt areaIndex = 0.obs;
+
+  // tag
+  final RxInt tagIndex = 0.obs;
+  List<LiveSecondTag>? newTags;
+
   final Rx<Pair<LiveCardList?, LiveCardList?>> topState =
       Pair<LiveCardList?, LiveCardList?>(first: null, second: null).obs;
   final RxBool isLogin = Accounts.main.isLogin.obs;
@@ -28,11 +36,19 @@ class LiveController extends CommonListController {
 
   @override
   bool customHandleResponse(bool isRefresh, Success response) {
-    if (isRefresh && areaIndex.value == 0) {
-      topState.value = Pair(
-        first: response.response.followItem,
-        second: response.response.areaItem,
-      );
+    if (isRefresh) {
+      if (areaIndex.value == 0) {
+        topState.value = Pair(
+          first: response.response.followItem,
+          second: response.response.areaItem,
+        );
+      } else {
+        newTags = response.response.newTags;
+        if (sortType != null) {
+          tagIndex.value =
+              newTags?.indexWhere((e) => e.sortType == sortType) ?? -1;
+        }
+      }
     }
     return false;
   }
@@ -45,6 +61,7 @@ class LiveController extends CommonListController {
         isLogin: isLogin.value,
         areaId: areaId,
         parentAreaId: parentAreaId,
+        sortType: sortType,
       );
     }
     return LiveHttp.liveFeedIndex(pn: currentPage, isLogin: isLogin.value);
@@ -72,6 +89,12 @@ class LiveController extends CommonListController {
         first: data.followItem,
         second: data.areaItem,
       );
+      areaIndex.value = (data.areaItem?.cardData?.areaEntranceV3?.list
+                  ?.indexWhere((e) =>
+                      e.areaV2Id == areaId &&
+                      e.areaV2ParentId == parentAreaId) ??
+              -2) +
+          1;
     }
   }
 
@@ -79,9 +102,21 @@ class LiveController extends CommonListController {
     if (index == areaIndex.value) {
       return;
     }
+    tagIndex.value = 0;
+    newTags = null;
+    sortType = null;
     areaIndex.value = index;
     areaId = cardLiveItem?.areaV2Id;
     parentAreaId = cardLiveItem?.areaV2ParentId;
+
+    currentPage = 1;
+    isEnd = false;
+    queryData();
+  }
+
+  void onSelectTag(int index, String? sortType) {
+    tagIndex.value = index;
+    this.sortType = sortType;
 
     currentPage = 1;
     isEnd = false;

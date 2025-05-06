@@ -807,4 +807,16 @@ class Api {
       '${HttpString.liveBaseUrl}/xlive/app-interface/v2/second/getList';
 
   static const String msgSetNotice = '/x/msgfeed/notice';
+
+  static const String liveAreaList =
+      '${HttpString.liveBaseUrl}/xlive/app-interface/v2/index/getAreaList';
+
+  static const String liveRoomAreaList =
+      '${HttpString.liveBaseUrl}/room/v1/Area/getList';
+
+  static const String getLiveFavTag =
+      '${HttpString.liveBaseUrl}/xlive/app-interface/v2/second/get_fav_tag';
+
+  static const String setLiveFavTag =
+      '${HttpString.liveBaseUrl}/xlive/app-interface/v2/second/set_fav_tag';
 }

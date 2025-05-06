@@ -757,6 +757,15 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.9.8+7"
+  flutter_sortable_wrap:
+    dependency: "direct main"
+    description:
+      path: "."
+      ref: master
+      resolved-ref: ed2d47c7a8cc0d218bc322ab770fd19c0b56a863
+      url: "https://github.com/bggRGjQaUbCoE/flutter_sortable_wrap.git"
+    source: git
+    version: "1.0.6"
   flutter_svg:
     dependency: "direct main"
     description:

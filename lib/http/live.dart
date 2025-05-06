@@ -2,6 +2,8 @@ import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/http/api.dart';
 import 'package:PiliPlus/http/init.dart';
 import 'package:PiliPlus/http/loading_state.dart';
+import 'package:PiliPlus/models/live/live_area_list/area_item.dart';
+import 'package:PiliPlus/models/live/live_area_list/area_list.dart';
 import 'package:PiliPlus/models/live/live_emoticons/data.dart';
 import 'package:PiliPlus/models/live/live_emoticons/datum.dart';
 import 'package:PiliPlus/models/live/live_feed_index/data.dart';
@@ -234,8 +236,9 @@ class LiveHttp {
   static Future<LoadingState<LiveSecondData>> liveSecondList({
     required int pn,
     required bool isLogin,
-    required int? areaId,
-    required int? parentAreaId,
+    required areaId,
+    required parentAreaId,
+    String? sortType,
   }) async {
     final params = {
       if (isLogin) 'access_key': Accounts.main.accessKey,
@@ -258,6 +261,7 @@ class LiveHttp {
       'page_size': '20',
       'platform': 'android',
       'qn': '0',
+      if (sortType != null) 'sort_type': sortType,
       'tag_version': '1',
       's_locale': 'zh_CN',
       'scale': '2',
@@ -275,6 +279,155 @@ class LiveHttp {
     );
     if (res.data['code'] == 0) {
       return LoadingState.success(LiveSecondData.fromJson(res.data['data']));
+    } else {
+      return LoadingState.error(res.data['message']);
+    }
+  }
+
+  static Future<LoadingState<List<AreaList>?>> liveAreaList({
+    required bool isLogin,
+  }) async {
+    final params = {
+      if (isLogin) 'access_key': Accounts.main.accessKey,
+      'appkey': Constants.appKey,
+      'actionKey': 'appkey',
+      'build': '8350200',
+      'c_locale': 'zh_CN',
+      'device': 'pad',
+      'disable_rcmd': '0',
+      'mobi_app': 'android_hd',
+      'platform': 'android',
+      's_locale': 'zh_CN',
+      'statistics': Constants.statistics,
+      'ts': DateTime.now().millisecondsSinceEpoch ~/ 1000,
+    };
+    Utils.appSign(
+      params,
+      Constants.appKey,
+      Constants.appSec,
+    );
+    var res = await Request().get(
+      Api.liveAreaList,
+      queryParameters: params,
+    );
+    if (res.data['code'] == 0) {
+      return LoadingState.success((res.data['data']?['list'] as List?)
+          ?.map((e) => AreaList.fromJson(e))
+          .toList());
+    } else {
+      return LoadingState.error(res.data['message']);
+    }
+  }
+
+  static Future<LoadingState<List<AreaItem>>> getLiveFavTag({
+    required bool isLogin,
+  }) async {
+    final params = {
+      if (isLogin) 'access_key': Accounts.main.accessKey,
+      'appkey': Constants.appKey,
+      'actionKey': 'appkey',
+      'build': '8350200',
+      'c_locale': 'zh_CN',
+      'device': 'pad',
+      'disable_rcmd': '0',
+      'mobi_app': 'android_hd',
+      'platform': 'android',
+      's_locale': 'zh_CN',
+      'statistics': Constants.statistics,
+      'ts': DateTime.now().millisecondsSinceEpoch ~/ 1000,
+    };
+    Utils.appSign(
+      params,
+      Constants.appKey,
+      Constants.appSec,
+    );
+    var res = await Request().get(
+      Api.getLiveFavTag,
+      queryParameters: params,
+    );
+
+    if (res.data['code'] == 0) {
+      return LoadingState.success((res.data['data']?['tags'] as List?)
+              ?.map((e) => AreaItem.fromJson(e))
+              .toList() ??
+          <AreaItem>[]);
+    } else {
+      return LoadingState.error(res.data['message']);
+    }
+  }
+
+  static Future setLiveFavTag({
+    required List ids,
+  }) async {
+    final data = {
+      'tags': ids.join(','),
+      'access_key': Accounts.main.accessKey,
+      'appkey': Constants.appKey,
+      'actionKey': 'appkey',
+      'build': '8350200',
+      'c_locale': 'zh_CN',
+      'device': 'pad',
+      'disable_rcmd': '0',
+      'mobi_app': 'android_hd',
+      'platform': 'android',
+      's_locale': 'zh_CN',
+      'statistics': Constants.statistics,
+      'ts': DateTime.now().millisecondsSinceEpoch ~/ 1000,
+    };
+    Utils.appSign(
+      data,
+      Constants.appKey,
+      Constants.appSec,
+    );
+    var res = await Request().post(
+      Api.setLiveFavTag,
+      data: data,
+      options: Options(
+        contentType: Headers.formUrlEncodedContentType,
+      ),
+    );
+
+    if (res.data['code'] == 0) {
+      return {'status': true};
+    } else {
+      return {'status': false, 'msg': res.data['message']};
+    }
+  }
+
+  static Future<LoadingState<List<AreaItem>?>> liveRoomAreaList({
+    required bool isLogin,
+    required parentid,
+  }) async {
+    final params = {
+      if (isLogin) 'access_key': Accounts.main.accessKey,
+      'appkey': Constants.appKey,
+      'actionKey': 'appkey',
+      'build': '8350200',
+      'c_locale': 'zh_CN',
+      'device': 'pad',
+      'disable_rcmd': '0',
+      'need_entrance': 1,
+      'parent_id': parentid,
+      'source_id': 2,
+      'mobi_app': 'android_hd',
+      'platform': 'android',
+      's_locale': 'zh_CN',
+      'statistics': Constants.statistics,
+      'ts': DateTime.now().millisecondsSinceEpoch ~/ 1000,
+    };
+    Utils.appSign(
+      params,
+      Constants.appKey,
+      Constants.appSec,
+    );
+    var res = await Request().get(
+      Api.liveRoomAreaList,
+      queryParameters: params,
+    );
+    if (res.data['code'] == 0) {
+      return LoadingState.success((res.data['data'] as List?)
+          ?.map((e) => AreaItem.fromJson(e))
+          .toList());
     } else {
       return LoadingState.error(res.data['message']);
     }

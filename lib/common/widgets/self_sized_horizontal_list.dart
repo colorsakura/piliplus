@@ -35,6 +35,14 @@ class _SelfSizedHorizontalListState extends State<SelfSizedHorizontalList> {
 
   bool get isInit => height == null;
 
+  // @override
+  // void didUpdateWidget(SelfSizedHorizontalList oldWidget) {
+  //   super.didUpdateWidget(oldWidget);
+  //   if (BuildConfig.isDebug) {
+  //     prevHeight = null;
+  //   }
+  // }
+
   @override
   Widget build(BuildContext context) {
     if (height == null) {

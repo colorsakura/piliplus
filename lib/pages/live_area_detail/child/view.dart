@@ -1,0 +1,103 @@
+import 'package:PiliPlus/common/constants.dart';
+import 'package:PiliPlus/common/skeleton/video_card_v.dart';
+import 'package:PiliPlus/common/widgets/loading_widget/http_error.dart';
+import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
+import 'package:PiliPlus/http/loading_state.dart';
+import 'package:PiliPlus/models/live/live_feed_index/card_data_list_item.dart';
+import 'package:PiliPlus/pages/live/widgets/live_item_app.dart';
+import 'package:PiliPlus/pages/live_area_detail/child/controller.dart';
+import 'package:PiliPlus/utils/grid.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+
+class LiveAreaChildPage extends StatefulWidget {
+  const LiveAreaChildPage({
+    super.key,
+    required this.areaId,
+    required this.parentAreaId,
+  });
+
+  final dynamic areaId;
+  final dynamic parentAreaId;
+
+  @override
+  State<LiveAreaChildPage> createState() => _LiveAreaChildPageState();
+}
+
+class _LiveAreaChildPageState extends State<LiveAreaChildPage>
+    with AutomaticKeepAliveClientMixin {
+  late final _controller = Get.put(
+    LiveAreaChildController(widget.areaId, widget.parentAreaId),
+    tag: '${widget.areaId}${widget.parentAreaId}',
+  );
+
+  @override
+  Widget build(BuildContext context) {
+    super.build(context);
+    return refreshIndicator(
+      onRefresh: _controller.onRefresh,
+      child: CustomScrollView(
+        slivers: [
+          SliverPadding(
+            padding: EdgeInsets.only(
+              left: StyleString.safeSpace,
+              right: StyleString.safeSpace,
+              top: StyleString.safeSpace,
+              bottom: MediaQuery.paddingOf(context).bottom + 80,
+            ),
+            sliver: Obx(() => _buildBody(_controller.loadingState.value)),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildBody(LoadingState<List<CardLiveItem>?> loadingState) {
+    return switch (loadingState) {
+      Loading() => SliverGrid(
+          gridDelegate: SliverGridDelegateWithExtentAndRatio(
+            mainAxisSpacing: StyleString.cardSpace,
+            crossAxisSpacing: StyleString.cardSpace,
+            maxCrossAxisExtent: Grid.smallCardWidth,
+            childAspectRatio: StyleString.aspectRatio,
+            mainAxisExtent: MediaQuery.textScalerOf(context).scale(90),
+          ),
+          delegate: SliverChildBuilderDelegate(
+            (context, index) {
+              return const VideoCardVSkeleton();
+            },
+            childCount: 10,
+          ),
+        ),
+      Success() => loadingState.response?.isNotEmpty == true
+          ? SliverGrid(
+              gridDelegate: SliverGridDelegateWithExtentAndRatio(
+                mainAxisSpacing: StyleString.cardSpace,
+                crossAxisSpacing: StyleString.cardSpace,
+                maxCrossAxisExtent: Grid.smallCardWidth,
+                childAspectRatio: StyleString.aspectRatio,
+                mainAxisExtent: MediaQuery.textScalerOf(context).scale(90),
+              ),
+              delegate: SliverChildBuilderDelegate(
+                (context, index) {
+                  if (index == loadingState.response!.length - 1) {
+                    _controller.onLoadMore();
+                  }
+                  return LiveCardVApp(item: loadingState.response![index]);
+                },
+                childCount: loadingState.response!.length,
+              ),
+            )
+          : HttpError(
+              onReload: _controller.onReload,
+            ),
+      Error() => HttpError(
+          errMsg: loadingState.errMsg,
+          onReload: _controller.onReload,
+        ),
+    };
+  }
+
+  @override
+  bool get wantKeepAlive => true;
+}
