@@ -71,10 +71,9 @@ class LoginUtils {
           ..onRefresh();
       } catch (_) {}
 
-      for (int i = 0; i < tabsConfig.length; i++) {
+      for (var item in DynamicsTabType.values) {
         try {
-          Get.find<DynamicsTabController>(tag: tabsConfig[i]['tag'])
-              .onRefresh();
+          Get.find<DynamicsTabController>(tag: item.name).onRefresh();
         } catch (_) {}
       }
 
@@ -157,9 +156,9 @@ class LoginUtils {
         ..onRefresh();
     } catch (_) {}
 
-    for (int i = 0; i < tabsConfig.length; i++) {
+    for (var item in DynamicsTabType.values) {
       try {
-        Get.find<DynamicsTabController>(tag: tabsConfig[i]['tag']).onRefresh();
+        Get.find<DynamicsTabController>(tag: item.name).onRefresh();
       } catch (_) {}
     }
 

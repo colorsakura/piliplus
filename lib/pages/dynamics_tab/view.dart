@@ -5,6 +5,7 @@ import 'package:PiliPlus/common/skeleton/dynamic_card.dart';
 import 'package:PiliPlus/common/widgets/loading_widget/http_error.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/http/loading_state.dart';
+import 'package:PiliPlus/models/common/dynamic/dynamics_type.dart';
 import 'package:PiliPlus/models/dynamics/result.dart';
 import 'package:PiliPlus/pages/common/common_page.dart';
 import 'package:PiliPlus/pages/dynamics/controller.dart';
@@ -20,7 +21,7 @@ import 'package:waterfall_flow/waterfall_flow.dart';
 class DynamicsTabPage extends CommonPage {
   const DynamicsTabPage({super.key, required this.dynamicsType});
 
-  final String dynamicsType;
+  final DynamicsTabType dynamicsType;
 
   @override
   State<DynamicsTabPage> createState() => _DynamicsTabPageState();
@@ -73,7 +74,7 @@ class _DynamicsTabPageState
   late DynamicsTabController controller = Get.put(
     DynamicsTabController(dynamicsType: widget.dynamicsType)
       ..mid = dynamicsController.mid.value,
-    tag: widget.dynamicsType,
+    tag: widget.dynamicsType.name,
   );
 
   @override
@@ -91,7 +92,7 @@ class _DynamicsTabPageState
   @override
   void initState() {
     super.initState();
-    if (widget.dynamicsType == 'up') {
+    if (widget.dynamicsType == DynamicsTabType.up) {
       _listener = dynamicsController.mid.listen((mid) {
         if (mid != -1) {
           controller
@@ -115,7 +116,10 @@ class _DynamicsTabPageState
   Widget build(BuildContext context) {
     super.build(context);
     return refreshIndicator(
-      onRefresh: controller.onRefresh,
+      onRefresh: () {
+        dynamicsController.queryFollowUp();
+        return controller.onRefresh();
+      },
       child: CustomScrollView(
         physics: const AlwaysScrollableScrollPhysics(),
         controller: controller.scrollController,

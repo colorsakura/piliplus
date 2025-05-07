@@ -42,7 +42,7 @@ class DynamicsController extends GetxController
   DynamicsTabController? get controller {
     try {
       return Get.find<DynamicsTabController>(
-          tag: tabsConfig[tabController.index]['tag']);
+          tag: DynamicsTabType.values[tabController.index].name);
     } catch (_) {
       return null;
     }
@@ -58,13 +58,14 @@ class DynamicsController extends GetxController
     isLogin.value = userInfo != null;
 
     tabController = TabController(
-      length: tabsConfig.length,
+      length: DynamicsTabType.values.length,
       vsync: this,
       initialIndex: GStorage.setting
           .get(SettingBoxKey.defaultDynamicType, defaultValue: 0),
     );
-    tabsPageList =
-        tabsConfig.map((e) => DynamicsTabPage(dynamicsType: e['tag'])).toList();
+    tabsPageList = DynamicsTabType.values
+        .map((e) => DynamicsTabPage(dynamicsType: e))
+        .toList();
 
     queryFollowUp();
   }

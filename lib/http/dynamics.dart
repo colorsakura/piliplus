@@ -2,6 +2,7 @@ import 'package:PiliPlus/http/api.dart';
 import 'package:PiliPlus/http/constants.dart';
 import 'package:PiliPlus/http/init.dart';
 import 'package:PiliPlus/http/loading_state.dart';
+import 'package:PiliPlus/models/common/dynamic/dynamics_type.dart';
 import 'package:PiliPlus/models/dynamics/dyn_topic_feed/topic_card_list.dart';
 import 'package:PiliPlus/models/dynamics/dyn_topic_top/top_details.dart';
 import 'package:PiliPlus/models/dynamics/result.dart';
@@ -15,20 +16,20 @@ import 'package:dio/dio.dart';
 
 class DynamicsHttp {
   static Future<LoadingState<DynamicsDataModel>> followDynamic({
-    String? type,
+    DynamicsTabType type = DynamicsTabType.all,
     String? offset,
     int? mid,
   }) async {
     Map<String, dynamic> data = {
-      'type': type ?? 'all',
-      'timezone_offset': '-480',
+      if (type == DynamicsTabType.up)
+        'host_mid': mid
+      else ...{
+        'type': type.name,
+        'timezone_offset': '-480',
+      },
       'offset': offset,
-      'features': 'itemOpusStyle,listOnlyfans'
+      'features': 'itemOpusStyle,listOnlyfans',
     };
-    if (mid != -1) {
-      data['host_mid'] = mid;
-      data.remove('timezone_offset');
-    }
     var res = await Request().get(Api.followDynamic, queryParameters: data);
     if (res.data['code'] == 0) {
       try {

@@ -1,9 +1,9 @@
 import 'package:PiliPlus/http/dynamics.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/http/msg.dart';
+import 'package:PiliPlus/models/common/dynamic/dynamics_type.dart';
 import 'package:PiliPlus/models/dynamics/result.dart';
 import 'package:PiliPlus/pages/common/common_list_controller.dart';
-import 'package:PiliPlus/pages/dynamics/controller.dart';
 import 'package:PiliPlus/pages/main/controller.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -12,11 +12,10 @@ import 'package:get/get.dart';
 class DynamicsTabController
     extends CommonListController<DynamicsDataModel, DynamicItemModel> {
   DynamicsTabController({required this.dynamicsType});
-  final String dynamicsType;
+  final DynamicsTabType dynamicsType;
   String offset = '';
-  int mid = -1;
+  int? mid;
   late final MainController mainController = Get.find<MainController>();
-  DynamicsController dynamicsController = Get.find<DynamicsController>();
 
   @override
   void onInit() {
@@ -26,11 +25,10 @@ class DynamicsTabController
 
   @override
   Future<void> onRefresh() {
-    if (dynamicsType == 'all') {
+    if (dynamicsType == DynamicsTabType.all) {
       mainController.setCount();
     }
     offset = '';
-    dynamicsController.queryFollowUp();
     return super.onRefresh();
   }
 
@@ -49,9 +47,9 @@ class DynamicsTabController
   @override
   Future<LoadingState<DynamicsDataModel>> customGetData() =>
       DynamicsHttp.followDynamic(
-        type: dynamicsType == "up" ? "all" : dynamicsType,
+        type: dynamicsType,
         offset: offset,
-        mid: dynamicsType == "up" ? mid : -1,
+        mid: mid,
       );
 
   Future<void> onRemove(dynamic dynamicId) async {
