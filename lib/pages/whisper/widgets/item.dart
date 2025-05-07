@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:PiliPlus/common/widgets/badge.dart';
-import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
+import 'package:PiliPlus/common/widgets/pendant_avatar.dart';
 import 'package:PiliPlus/grpc/bilibili/app/im/v1.pb.dart'
     show Session, UnreadStyle;
 import 'package:PiliPlus/models/common/badge_type.dart';
@@ -31,7 +31,10 @@ class WhisperSessionItem extends StatelessWidget {
         : null;
     final ThemeData theme = Theme.of(context);
     return ListTile(
-      tileColor: item.isPinned ? theme.colorScheme.onInverseSurface : null,
+      tileColor: item.isPinned
+          ? theme.colorScheme.onInverseSurface
+              .withOpacity(Get.isDarkMode ? 0.4 : 0.8)
+          : null,
       onLongPress: () {
         showDialog(
           context: context,
@@ -89,13 +92,32 @@ class WhisperSessionItem extends StatelessWidget {
       },
       leading: Builder(
         builder: (context) {
-          Widget buildAvatar() => NetworkImgLayer(
-                width: 45,
-                height: 45,
-                type: 'avatar',
-                src: item.sessionInfo.avatar.fallbackLayers.layers.first
-                    .resource.resImage.imageSrc.remote.url,
-              );
+          Widget buildAvatar() {
+            final pendant = item.sessionInfo.avatar.fallbackLayers.layers
+                .getOrNull(1)
+                ?.resource;
+            final offcial = item.sessionInfo.avatar.fallbackLayers.layers
+                .lastOrNull?.resource.resImage.imageSrc;
+            return PendantAvatar(
+              size: 42,
+              badgeSize: 14,
+              avatar: item.sessionInfo.avatar.fallbackLayers.layers.first
+                  .resource.resImage.imageSrc.remote.url,
+              garbPendantImage:
+                  pendant?.resImage.imageSrc.remote.hasUrl() == true
+                      ? pendant!.resImage.imageSrc.remote.url
+                      : pendant?.resAnimation.webpSrc.remote.url,
+              isVip: vipInfo?['status'] != null && vipInfo!['status'] > 0,
+              officialType: offcial?.hasLocalValue() == true
+                  ? switch (offcial!.localValue) {
+                      3 => 0,
+                      4 => 1,
+                      _ => null,
+                    }
+                  : null,
+            );
+          }
+
           return GestureDetector(
             onTap: item.sessionInfo.avatar.hasMid()
                 ? () {
@@ -122,6 +144,7 @@ class WhisperSessionItem extends StatelessWidget {
           Text(
             item.sessionInfo.sessionName,
             style: TextStyle(
+              fontSize: 15,
               color: vipInfo?['status'] != null &&
                       vipInfo!['status'] > 0 &&
                       vipInfo['type'] == 2
