@@ -1,15 +1,15 @@
 import 'package:PiliPlus/common/widgets/image/image_view.dart';
+import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
+import 'package:PiliPlus/http/search.dart';
 import 'package:PiliPlus/models/dynamics/result.dart';
 import 'package:PiliPlus/pages/dynamics/widgets/vote.dart';
+import 'package:PiliPlus/utils/app_scheme.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
-import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
-import 'package:PiliPlus/http/search.dart';
-import 'package:PiliPlus/utils/app_scheme.dart';
 
 // 富文本
 TextSpan? richNode(
@@ -45,38 +45,41 @@ TextSpan? richNode(
         switch (i.type) {
           case 'RICH_TEXT_NODE_TYPE_TEXT':
             spanChildren.add(
-              TextSpan(text: i.origText, style: const TextStyle(height: 1.65)),
+              TextSpan(
+                text: i.origText,
+                style: const TextStyle(height: 1.65),
+              ),
             );
             break;
           // @用户
           case 'RICH_TEXT_NODE_TYPE_AT':
             spanChildren.add(
-              WidgetSpan(
-                alignment: PlaceholderAlignment.middle,
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    GestureDetector(
-                      onTap: () => Get.toNamed('/member?mid=${i.rid}'),
-                      child: Text(
-                        ' ${i.text}',
-                        style: authorStyle,
-                      ),
-                    ),
-                  ],
-                ),
+              TextSpan(
+                text: ' ${i.text}',
+                style: authorStyle,
+                recognizer: TapGestureRecognizer()
+                  ..onTap = () {
+                    Get.toNamed('/member?mid=${i.rid}');
+                  },
               ),
             );
             break;
           // 话题
           case 'RICH_TEXT_NODE_TYPE_TOPIC':
             spanChildren.add(
-              WidgetSpan(
-                alignment: PlaceholderAlignment.middle,
-                child: Text(
-                  '${i.origText}',
-                  style: authorStyle,
-                ),
+              TextSpan(
+                text: i.origText!,
+                style: authorStyle,
+                recognizer: TapGestureRecognizer()
+                  ..onTap = () {
+                    Get.toNamed(
+                      '/searchResult',
+                      parameters: {
+                        'keyword':
+                            i.origText!.substring(1, i.origText!.length - 1),
+                      },
+                    );
+                  },
               ),
             );
             break;
@@ -94,10 +97,11 @@ TextSpan? richNode(
                 ),
               )
               ..add(
-                WidgetSpan(
-                  alignment: PlaceholderAlignment.middle,
-                  child: GestureDetector(
-                    onTap: () {
+                TextSpan(
+                  text: i.text ?? '',
+                  style: authorStyle,
+                  recognizer: TapGestureRecognizer()
+                    ..onTap = () {
                       String? url = i.origText;
                       if (url == null) {
                         SmartDialog.showToast('未获取到链接');
@@ -105,11 +109,6 @@ TextSpan? richNode(
                       }
                       PiliScheme.routePushFromUrl(url);
                     },
-                    child: Text(
-                      i.text ?? '',
-                      style: authorStyle,
-                    ),
-                  ),
                 ),
               );
             break;
@@ -158,10 +157,11 @@ TextSpan? richNode(
                 ),
               )
               ..add(
-                WidgetSpan(
-                  alignment: PlaceholderAlignment.middle,
-                  child: GestureDetector(
-                    onTap: () {
+                TextSpan(
+                  text: '${i.origText} ',
+                  style: authorStyle,
+                  recognizer: TapGestureRecognizer()
+                    ..onTap = () {
                       Get.toNamed(
                         '/webview',
                         parameters: {
@@ -170,11 +170,6 @@ TextSpan? richNode(
                         },
                       );
                     },
-                    child: Text(
-                      '${i.origText} ',
-                      style: authorStyle,
-                    ),
-                  ),
                 ),
               );
             break;
@@ -193,12 +188,9 @@ TextSpan? richNode(
                 ),
               )
               ..add(
-                WidgetSpan(
-                  alignment: PlaceholderAlignment.middle,
-                  child: Text(
-                    '${i.text} ',
-                    style: authorStyle,
-                  ),
+                TextSpan(
+                  text: '${i.text} ',
+                  style: authorStyle,
                 ),
               );
             break;
@@ -216,10 +208,11 @@ TextSpan? richNode(
                 ),
               )
               ..add(
-                WidgetSpan(
-                  alignment: PlaceholderAlignment.middle,
-                  child: GestureDetector(
-                    onTap: () async {
+                TextSpan(
+                  text: '${i.text} ',
+                  style: authorStyle,
+                  recognizer: TapGestureRecognizer()
+                    ..onTap = () async {
                       try {
                         int cid = await SearchHttp.ab2c(bvid: i.rid);
                         PageUtils.toVideoPage(
@@ -232,11 +225,6 @@ TextSpan? richNode(
                         SmartDialog.showToast(err.toString());
                       }
                     },
-                    child: Text(
-                      '${i.text} ',
-                      style: authorStyle,
-                    ),
-                  ),
                 ),
               );
             break;

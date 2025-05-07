@@ -4,6 +4,7 @@ import 'package:PiliPlus/common/widgets/badge.dart';
 import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
 import 'package:PiliPlus/models/common/badge_type.dart';
 import 'package:PiliPlus/models/dynamics/result.dart';
+import 'package:PiliPlus/pages/dynamics/widgets/content_panel.dart';
 import 'package:PiliPlus/pages/dynamics/widgets/rich_node_panel.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
@@ -11,10 +12,12 @@ import 'package:get/get.dart';
 
 Widget videoSeasonWidget(
   ThemeData theme,
+  bool isSave,
   String? source,
   DynamicItemModel item,
   BuildContext context,
-  String type, {
+  String type,
+  Function(List<String>, int)? callback, {
   floor = 1,
 }) {
   if (item.modules.moduleDynamic?.major?.type == 'MAJOR_TYPE_NONE') {
@@ -46,14 +49,14 @@ Widget videoSeasonWidget(
   // 1 投稿视频 铺满 borderRadius 0
   // 2 转发视频 铺满 borderRadius 6
 
-  DynamicArchiveModel? content = switch (type) {
+  DynamicArchiveModel? itemContent = switch (type) {
     'ugcSeason' => item.modules.moduleDynamic?.major?.ugcSeason,
     'archive' => item.modules.moduleDynamic?.major?.archive,
     'pgc' => item.modules.moduleDynamic?.major?.pgc,
     _ => null,
   };
 
-  if (content == null) {
+  if (itemContent == null) {
     return const SizedBox.shrink();
   }
 
@@ -69,16 +72,16 @@ Widget videoSeasonWidget(
             NetworkImgLayer(
               width: width,
               height: width / StyleString.aspectRatio,
-              src: content.cover,
+              src: itemContent.cover,
             ),
-            if (content.badge?['text'] != null)
+            if (itemContent.badge?['text'] != null)
               PBadge(
-                text: content.badge!['text'],
+                text: itemContent.badge!['text'],
                 top: 8.0,
                 right: 10.0,
                 bottom: null,
                 left: null,
-                type: content.badge!['text'] == '充电专属'
+                type: itemContent.badge!['text'] == '充电专属'
                     ? PBadgeType.error
                     : PBadgeType.primary,
               ),
@@ -113,17 +116,17 @@ Widget videoSeasonWidget(
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-                      if (content.durationText != null) ...[
+                      if (itemContent.durationText != null) ...[
                         Text(
-                          content.durationText!,
+                          itemContent.durationText!,
                           semanticsLabel:
-                              '时长${Utils.durationReadFormat(content.durationText!)}',
+                              '时长${Utils.durationReadFormat(itemContent.durationText!)}',
                         ),
                         const SizedBox(width: 6),
                       ],
-                      Text('${content.stat?.play}次围观'),
+                      Text('${itemContent.stat?.play}次围观'),
                       const SizedBox(width: 6),
-                      Text('${content.stat?.danmu}条弹幕'),
+                      Text('${itemContent.stat?.danmu}条弹幕'),
                       const Spacer(),
                       Image.asset(
                         'assets/images/play.png',
@@ -172,12 +175,13 @@ Widget videoSeasonWidget(
           ],
         ),
         const SizedBox(height: 6),
+        content(theme, isSave, context, item, source, null, floor: 2),
+        if (itemContent.desc != null && richNodes != null) ...[
+          Text.rich(richNodes),
+          const SizedBox(height: 6),
+        ],
       ],
-      if (floor == 2 && content.desc != null && richNodes != null) ...[
-        Text.rich(richNodes),
-        const SizedBox(height: 6),
-      ],
-      if (content.cover != null)
+      if (itemContent.cover != null)
         if (item.isForwarded == true)
           buildCover()
         else
@@ -187,13 +191,13 @@ Widget videoSeasonWidget(
             child: buildCover(),
           ),
       const SizedBox(height: 6),
-      if (content.title != null)
+      if (itemContent.title != null)
         Padding(
           padding: floor == 1
               ? const EdgeInsets.only(left: 12, right: 12)
               : EdgeInsets.zero,
           child: Text(
-            content.title!,
+            itemContent.title!,
             maxLines: source == 'detail' ? null : 1,
             style: const TextStyle(fontWeight: FontWeight.bold),
             overflow: source == 'detail' ? null : TextOverflow.ellipsis,

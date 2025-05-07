@@ -53,12 +53,23 @@ Widget liveRcmdPanel(
       ],
       const SizedBox(height: 4),
       if (item.modules.moduleDynamic?.topic != null) ...[
-        Padding(
-          padding:
-              const EdgeInsets.symmetric(horizontal: StyleString.safeSpace),
-          child: Text(
-            '#${item.modules.moduleDynamic!.topic!.name}',
-            style: authorStyle,
+        GestureDetector(
+          onTap: () {
+            Get.toNamed(
+              '/dynTopic',
+              parameters: {
+                'id': item.modules.moduleDynamic!.topic!.id!.toString(),
+                'name': item.modules.moduleDynamic!.topic!.name!,
+              },
+            );
+          },
+          child: Padding(
+            padding:
+                const EdgeInsets.symmetric(horizontal: StyleString.safeSpace),
+            child: Text(
+              '#${item.modules.moduleDynamic!.topic!.name}',
+              style: authorStyle,
+            ),
           ),
         ),
         const SizedBox(height: 6),

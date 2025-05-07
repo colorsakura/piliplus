@@ -4,6 +4,7 @@ import 'package:PiliPlus/pages/blacklist/view.dart';
 import 'package:PiliPlus/pages/danmaku_block/view.dart';
 import 'package:PiliPlus/pages/dynamics/view.dart';
 import 'package:PiliPlus/pages/dynamics_detail/view.dart';
+import 'package:PiliPlus/pages/dynamics_topic/view.dart';
 import 'package:PiliPlus/pages/fan/view.dart';
 import 'package:PiliPlus/pages/fav/view.dart';
 import 'package:PiliPlus/pages/fav_create/view.dart';
@@ -172,6 +173,7 @@ class Routes {
         name: '/webdavSetting', page: () => const WebDavSettingPage()),
     CustomGetPage(
         name: '/searchTrending', page: () => const SearchTrendingPage()),
+    CustomGetPage(name: '/dynTopic', page: () => const DynTopicPage()),
   ];
 }
 

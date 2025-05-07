@@ -1,10 +1,10 @@
 import 'package:PiliPlus/common/constants.dart';
-import 'package:PiliPlus/common/skeleton/dynamic_card.dart';
 import 'package:PiliPlus/common/widgets/loading_widget/http_error.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/dynamics/result.dart';
 import 'package:PiliPlus/pages/dynamics/widgets/dynamic_panel.dart';
+import 'package:PiliPlus/pages/dynamics_tab/view.dart';
 import 'package:PiliPlus/pages/member_dynamics/controller.dart';
 import 'package:PiliPlus/utils/grid.dart';
 import 'package:PiliPlus/utils/storage.dart';
@@ -65,44 +65,9 @@ class _MemberDynamicsPageState extends State<MemberDynamicsPage>
         ),
       );
 
-  Widget skeleton() {
-    if (!dynamicsWaterfallFlow) {
-      return SliverCrossAxisGroup(
-        slivers: [
-          const SliverFillRemaining(),
-          SliverConstrainedCrossAxis(
-            maxExtent: Grid.smallCardWidth * 2,
-            sliver: SliverList.builder(
-              itemBuilder: (context, index) {
-                return const DynamicCardSkeleton();
-              },
-              itemCount: 10,
-            ),
-          ),
-          const SliverFillRemaining()
-        ],
-      );
-    }
-    return SliverGrid(
-      gridDelegate: SliverGridDelegateWithExtentAndRatio(
-        crossAxisSpacing: StyleString.cardSpace / 2,
-        mainAxisSpacing: StyleString.cardSpace / 2,
-        maxCrossAxisExtent: Grid.smallCardWidth * 2,
-        childAspectRatio: StyleString.aspectRatio,
-        mainAxisExtent: 50,
-      ),
-      delegate: SliverChildBuilderDelegate(
-        (context, index) {
-          return const DynamicCardSkeleton();
-        },
-        childCount: 10,
-      ),
-    );
-  }
-
   Widget _buildContent(LoadingState<List<DynamicItemModel>?> loadingState) {
     return switch (loadingState) {
-      Loading() => skeleton(),
+      Loading() => DynamicsTabPage.dynSkeleton(dynamicsWaterfallFlow),
       Success() => loadingState.response?.isNotEmpty == true
           ? SliverPadding(
               padding: EdgeInsets.only(

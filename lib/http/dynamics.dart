@@ -2,6 +2,8 @@ import 'package:PiliPlus/http/api.dart';
 import 'package:PiliPlus/http/constants.dart';
 import 'package:PiliPlus/http/init.dart';
 import 'package:PiliPlus/http/loading_state.dart';
+import 'package:PiliPlus/models/dynamics/dyn_topic_feed/topic_card_list.dart';
+import 'package:PiliPlus/models/dynamics/dyn_topic_top/top_details.dart';
 import 'package:PiliPlus/models/dynamics/result.dart';
 import 'package:PiliPlus/models/dynamics/up.dart';
 import 'package:PiliPlus/models/dynamics/vote_model.dart';
@@ -255,5 +257,50 @@ class DynamicsHttp {
     return res.data['code'] == 0
         ? LoadingState.success(VoteInfo.fromJson(res.data['data']['vote_info']))
         : LoadingState.error(res.data['message']);
+  }
+
+  static Future<LoadingState<TopDetails?>> topicTop({required topicId}) async {
+    final res = await Request().get(
+      Api.topicTop,
+      queryParameters: {
+        'topic_id': topicId,
+        'source': 'Web',
+      },
+    );
+    if (res.data['code'] == 0) {
+      TopDetails? data = res.data['data']?['top_details'] == null
+          ? null
+          : TopDetails.fromJson(res.data['data']['top_details']);
+      return LoadingState.success(data);
+    } else {
+      return LoadingState.error(res.data['message']);
+    }
+  }
+
+  static Future<LoadingState<TopicCardList?>> topicFeed({
+    required topicId,
+    required String offset,
+    required int sortBy,
+  }) async {
+    final res = await Request().get(
+      Api.topicFeed,
+      queryParameters: {
+        'topic_id': topicId,
+        'sort_by': sortBy,
+        'offset': offset,
+        'page_size': 20,
+        'source': 'Web',
+        // itemOpusStyle,listOnlyfans,opusBigCover,onlyfansVote,decorationCard
+        'features': 'itemOpusStyle,listOnlyfans',
+      },
+    );
+    if (res.data['code'] == 0) {
+      TopicCardList? data = res.data['data']?['topic_card_list'] == null
+          ? null
+          : TopicCardList.fromJson(res.data['data']['topic_card_list']);
+      return LoadingState.success(data);
+    } else {
+      return LoadingState.error(res.data['message']);
+    }
   }
 }

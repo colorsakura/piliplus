@@ -1,5 +1,4 @@
 import 'package:PiliPlus/common/constants.dart';
-import 'package:PiliPlus/common/skeleton/dynamic_card.dart';
 import 'package:PiliPlus/common/skeleton/video_card_h.dart';
 import 'package:PiliPlus/common/widgets/loading_widget/http_error.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
@@ -7,6 +6,7 @@ import 'package:PiliPlus/common/widgets/video_card/video_card_h.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/common/member/search_type.dart';
 import 'package:PiliPlus/pages/dynamics/widgets/dynamic_panel.dart';
+import 'package:PiliPlus/pages/dynamics_tab/view.dart';
 import 'package:PiliPlus/pages/member_search/child/controller.dart';
 import 'package:PiliPlus/utils/grid.dart';
 import 'package:PiliPlus/utils/storage.dart';
@@ -64,43 +64,9 @@ class _MemberSearchChildPageState extends State<MemberSearchChildPage>
             childCount: 10,
           ),
         ),
-      MemberSearchType.dynamic => dynSkeleton(),
+      MemberSearchType.dynamic =>
+        DynamicsTabPage.dynSkeleton(dynamicsWaterfallFlow),
     };
-  }
-
-  Widget dynSkeleton() {
-    if (!dynamicsWaterfallFlow) {
-      return SliverCrossAxisGroup(
-        slivers: [
-          const SliverFillRemaining(),
-          SliverConstrainedCrossAxis(
-            maxExtent: Grid.smallCardWidth * 2,
-            sliver: SliverList.builder(
-              itemBuilder: (context, index) {
-                return const DynamicCardSkeleton();
-              },
-              itemCount: 10,
-            ),
-          ),
-          const SliverFillRemaining()
-        ],
-      );
-    }
-    return SliverGrid(
-      gridDelegate: SliverGridDelegateWithExtentAndRatio(
-        crossAxisSpacing: StyleString.cardSpace / 2,
-        mainAxisSpacing: StyleString.cardSpace / 2,
-        maxCrossAxisExtent: Grid.smallCardWidth * 2,
-        childAspectRatio: StyleString.aspectRatio,
-        mainAxisExtent: 50,
-      ),
-      delegate: SliverChildBuilderDelegate(
-        (context, index) {
-          return const DynamicCardSkeleton();
-        },
-        childCount: 10,
-      ),
-    );
   }
 
   Widget _buildBody(LoadingState<List?> loadingState) {

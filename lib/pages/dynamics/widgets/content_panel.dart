@@ -3,6 +3,7 @@ import 'package:PiliPlus/common/widgets/image/image_view.dart';
 import 'package:PiliPlus/models/dynamics/result.dart';
 import 'package:PiliPlus/pages/dynamics/widgets/rich_node_panel.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 Widget content(
   ThemeData theme,
@@ -10,8 +11,9 @@ Widget content(
   BuildContext context,
   DynamicItemModel item,
   String? source,
-  Function(List<String>, int)? callback,
-) {
+  Function(List<String>, int)? callback, {
+  floor = 1,
+}) {
   InlineSpan picsNodes() {
     return WidgetSpan(
       child: LayoutBuilder(
@@ -35,16 +37,28 @@ Widget content(
 
   TextSpan? richNodes = richNode(theme, item, context);
 
-  return Container(
-    width: double.infinity,
-    padding: const EdgeInsets.fromLTRB(12, 0, 12, 6),
+  return Padding(
+    padding: floor == 1
+        ? const EdgeInsets.fromLTRB(12, 0, 12, 6)
+        : const EdgeInsets.only(bottom: 6),
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         if (item.modules.moduleDynamic?.topic != null) ...[
-          Text(
-            '#${item.modules.moduleDynamic!.topic!.name}',
-            style: TextStyle(color: theme.colorScheme.primary),
+          GestureDetector(
+            onTap: () {
+              Get.toNamed(
+                '/dynTopic',
+                parameters: {
+                  'id': item.modules.moduleDynamic!.topic!.id!.toString(),
+                  'name': item.modules.moduleDynamic!.topic!.name!,
+                },
+              );
+            },
+            child: Text(
+              '#${item.modules.moduleDynamic!.topic!.name}',
+              style: TextStyle(color: theme.colorScheme.primary),
+            ),
           ),
         ],
         if (richNodes != null)

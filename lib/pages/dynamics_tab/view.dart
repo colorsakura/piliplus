@@ -24,6 +24,41 @@ class DynamicsTabPage extends CommonPage {
 
   @override
   State<DynamicsTabPage> createState() => _DynamicsTabPageState();
+
+  static Widget dynSkeleton(bool dynamicsWaterfallFlow) {
+    if (!dynamicsWaterfallFlow) {
+      return SliverCrossAxisGroup(
+        slivers: [
+          const SliverFillRemaining(),
+          SliverConstrainedCrossAxis(
+            maxExtent: Grid.smallCardWidth * 2,
+            sliver: SliverList.builder(
+              itemBuilder: (context, index) {
+                return const DynamicCardSkeleton();
+              },
+              itemCount: 10,
+            ),
+          ),
+          const SliverFillRemaining()
+        ],
+      );
+    }
+    return SliverGrid(
+      gridDelegate: SliverGridDelegateWithExtentAndRatio(
+        crossAxisSpacing: StyleString.cardSpace / 2,
+        mainAxisSpacing: StyleString.cardSpace / 2,
+        maxCrossAxisExtent: Grid.smallCardWidth * 2,
+        childAspectRatio: StyleString.aspectRatio,
+        mainAxisExtent: 50,
+      ),
+      delegate: SliverChildBuilderDelegate(
+        (context, index) {
+          return const DynamicCardSkeleton();
+        },
+        childCount: 10,
+      ),
+    );
+  }
 }
 
 class _DynamicsTabPageState
@@ -91,44 +126,9 @@ class _DynamicsTabPageState
     );
   }
 
-  Widget skeleton() {
-    if (!dynamicsWaterfallFlow) {
-      return SliverCrossAxisGroup(
-        slivers: [
-          const SliverFillRemaining(),
-          SliverConstrainedCrossAxis(
-            maxExtent: Grid.smallCardWidth * 2,
-            sliver: SliverList.builder(
-              itemBuilder: (context, index) {
-                return const DynamicCardSkeleton();
-              },
-              itemCount: 10,
-            ),
-          ),
-          const SliverFillRemaining()
-        ],
-      );
-    }
-    return SliverGrid(
-      gridDelegate: SliverGridDelegateWithExtentAndRatio(
-        crossAxisSpacing: StyleString.cardSpace / 2,
-        mainAxisSpacing: StyleString.cardSpace / 2,
-        maxCrossAxisExtent: Grid.smallCardWidth * 2,
-        childAspectRatio: StyleString.aspectRatio,
-        mainAxisExtent: 50,
-      ),
-      delegate: SliverChildBuilderDelegate(
-        (context, index) {
-          return const DynamicCardSkeleton();
-        },
-        childCount: 10,
-      ),
-    );
-  }
-
   Widget _buildBody(LoadingState<List<DynamicItemModel>?> loadingState) {
     return switch (loadingState) {
-      Loading() => skeleton(),
+      Loading() => DynamicsTabPage.dynSkeleton(dynamicsWaterfallFlow),
       Success() => loadingState.response?.isNotEmpty == true
           ? SliverPadding(
               padding: EdgeInsets.only(

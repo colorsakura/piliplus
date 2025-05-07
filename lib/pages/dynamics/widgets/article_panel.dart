@@ -9,7 +9,7 @@ Widget articlePanel(
   String? source,
   DynamicItemModel item,
   BuildContext context,
-  callback, {
+  Function(List<String>, int)? callback, {
   floor = 1,
 }) {
   return Padding(

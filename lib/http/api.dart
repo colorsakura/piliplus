@@ -822,4 +822,9 @@ class Api {
 
   static const String liveSearch =
       '${HttpString.liveBaseUrl}/xlive/app-interface/v2/search_live';
+
+  static const String topicTop =
+      '${HttpString.appBaseUrl}/x/topic/web/details/top';
+
+  static const String topicFeed = '/x/polymer/web-dynamic/v1/feed/topic';
 }

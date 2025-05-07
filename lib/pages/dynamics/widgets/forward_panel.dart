@@ -59,8 +59,8 @@ Widget forWard(
   bool isSave,
   DynamicItemModel item,
   BuildContext context,
-  source,
-  callback, {
+  String? source,
+  Function(List<String>, int)? callback, {
   floor = 1,
 }) {
   switch (item.type) {
@@ -137,7 +137,8 @@ Widget forWard(
       );
     // 视频
     case 'DYNAMIC_TYPE_AV':
-      return videoSeasonWidget(theme, source, item, context, 'archive',
+      return videoSeasonWidget(
+          theme, isSave, source, item, context, 'archive', callback,
           floor: floor);
     // 文章
     case 'DYNAMIC_TYPE_ARTICLE':
@@ -204,7 +205,8 @@ Widget forWard(
       return livePanel(theme, source, item, context, floor: floor);
     // 合集
     case 'DYNAMIC_TYPE_UGC_SEASON':
-      return videoSeasonWidget(theme, source, item, context, 'ugcSeason');
+      return videoSeasonWidget(
+          theme, isSave, source, item, context, 'ugcSeason', callback);
     case 'DYNAMIC_TYPE_WORD':
       late TextSpan? richNodes = richNode(theme, item, context);
       return floor == 2
@@ -262,10 +264,12 @@ Widget forWard(
                       theme, item.modules.moduleDynamic!.major!.blocked!)
                   : const SizedBox.shrink();
     case 'DYNAMIC_TYPE_PGC':
-      return videoSeasonWidget(theme, source, item, context, 'pgc',
+      return videoSeasonWidget(
+          theme, isSave, source, item, context, 'pgc', callback,
           floor: floor);
     case 'DYNAMIC_TYPE_PGC_UNION':
-      return videoSeasonWidget(theme, source, item, context, 'pgc',
+      return videoSeasonWidget(
+          theme, isSave, source, item, context, 'pgc', callback,
           floor: floor);
     // 直播结束
     case 'DYNAMIC_TYPE_NONE':
