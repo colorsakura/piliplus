@@ -124,7 +124,7 @@ class _MainAppState extends State<MainApp>
     }
   }
 
-  Future<void> setIndex(int value) async {
+  void setIndex(int value) {
     feedBack();
 
     if (value != _mainController.selectedIndex.value) {
@@ -181,7 +181,7 @@ class _MainAppState extends State<MainApp>
     final bool isPortrait = context.orientation == Orientation.portrait;
     return PopScope(
       canPop: false,
-      onPopInvokedWithResult: (bool didPop, Object? result) async {
+      onPopInvokedWithResult: (bool didPop, Object? result) {
         if (_mainController.selectedIndex.value != 0) {
           setIndex(0);
           _mainController.bottomBarStream?.add(true);

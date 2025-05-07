@@ -101,9 +101,7 @@ class _VideoReplyPanelState extends State<VideoReplyPanel>
     super.build(context);
     final theme = Theme.of(context);
     return refreshIndicator(
-      onRefresh: () async {
-        await _videoReplyController.onRefresh();
-      },
+      onRefresh: _videoReplyController.onRefresh,
       child: Stack(
         clipBehavior: Clip.none,
         children: [

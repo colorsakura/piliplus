@@ -28,7 +28,7 @@ class SubController
   }
 
   // 取消订阅
-  Future<void> cancelSub(SubFolderItemData subFolderItem) async {
+  void cancelSub(SubFolderItemData subFolderItem) {
     showDialog(
       context: Get.context!,
       builder: (context) => AlertDialog(

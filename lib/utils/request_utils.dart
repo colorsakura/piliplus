@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
@@ -474,7 +475,7 @@ class RequestUtils {
 
     Gt3FlutterPlugin()
       ..addEventHandler(
-        onClose: (Map<String, dynamic> message) async {
+        onClose: (Map<String, dynamic> message) {
           SmartDialog.showToast('关闭验证');
         },
         onResult: (Map<String, dynamic> message) async {
@@ -510,7 +511,7 @@ class RequestUtils {
             debugPrint("Captcha result code : $code");
           }
         },
-        onError: (Map<String, dynamic> message) async {
+        onError: (Map<String, dynamic> message) {
           SmartDialog.showToast("Captcha onError: $message");
           String code = message["code"];
           // 处理验证中返回的错误 Handling errors returned in verification

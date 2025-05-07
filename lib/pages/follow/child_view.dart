@@ -62,9 +62,7 @@ class _FollowChildPageState extends State<FollowChildPage>
   }
 
   Widget get _child => refreshIndicator(
-        onRefresh: () async {
-          await _followController.onRefresh();
-        },
+        onRefresh: _followController.onRefresh,
         child: CustomScrollView(
           physics: const AlwaysScrollableScrollPhysics(),
           slivers: [

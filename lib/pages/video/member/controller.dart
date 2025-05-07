@@ -97,11 +97,11 @@ class HorizontalMemberPageController extends CommonDataController {
       );
 
   @override
-  Future onRefresh() async {
+  Future onRefresh() {
     currentPage = 0;
     hasPrev = true;
     hasNext = true;
-    await queryData();
+    return queryData();
   }
 
   void queryBySort() {

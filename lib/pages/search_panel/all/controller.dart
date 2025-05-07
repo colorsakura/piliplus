@@ -51,7 +51,7 @@ class SearchAllController
         pubEnd: pubEnd,
       );
 
-  Future<void> onPushDetail(resultList) async {
+  void onPushDetail(resultList) {
     try {
       int? aid = int.tryParse(keyword);
       if (aid != null && resultList.first.aid == aid) {

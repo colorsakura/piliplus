@@ -41,9 +41,7 @@ class _FavPgcChildPageState extends State<FavPgcChildPage>
         clipBehavior: Clip.none,
         children: [
           refreshIndicator(
-            onRefresh: () async {
-              await _favPgcController.onRefresh();
-            },
+            onRefresh: _favPgcController.onRefresh,
             child: CustomScrollView(
               slivers: [
                 Obx(() => _buildBody(_favPgcController.loadingState.value)),

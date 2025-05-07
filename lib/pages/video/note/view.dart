@@ -149,9 +149,7 @@ class _NoteListPageState extends CommonSlidePageState<NoteListPage> {
         ),
       Success() => loadingState.response?.isNotEmpty == true
           ? refreshIndicator(
-              onRefresh: () async {
-                await _controller.onRefresh();
-              },
+              onRefresh: _controller.onRefresh,
               child: CustomScrollView(
                 controller: _controller.scrollController,
                 physics: const AlwaysScrollableScrollPhysics(),

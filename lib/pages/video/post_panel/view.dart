@@ -162,7 +162,7 @@ class _PostPanelState extends CommonCollapseSlidePageState<PostPanel> {
                                         const Text('分类: '),
                                         PopupMenuButton<SegmentType>(
                                           initialValue: list![index].category,
-                                          onSelected: (item) async {
+                                          onSelected: (item) {
                                             list![index].category = item;
                                             List<ActionType> constraintList =
                                                 item.toActionType;
@@ -237,7 +237,7 @@ class _PostPanelState extends CommonCollapseSlidePageState<PostPanel> {
                                         const Text('行为类别: '),
                                         PopupMenuButton<ActionType>(
                                           initialValue: list![index].actionType,
-                                          onSelected: (item) async {
+                                          onSelected: (item) {
                                             list![index].actionType = item;
                                             if (item == ActionType.full) {
                                               updateSegment(

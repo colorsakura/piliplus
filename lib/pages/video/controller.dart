@@ -371,7 +371,7 @@ class VideoDetailController extends GetxController
             },
             loadPrevious: Get.arguments['isContinuePlaying'] == true
                 ? () {
-                    getMediaList(isLoadPrevious: true);
+                    return getMediaList(isLoadPrevious: true);
                   }
                 : null,
             onDelete: sourceType == 'watchLater' ||
@@ -441,7 +441,7 @@ class VideoDetailController extends GetxController
   late final listKey = GlobalKey<AnimatedListState>();
   late final List listData = [];
 
-  Future _vote(String uuid, int type) async {
+  void _vote(String uuid, int type) {
     Request().post(
       '$blockServer/api/voteOnSponsorTime',
       queryParameters: {
@@ -619,7 +619,7 @@ class VideoDetailController extends GetxController
                               tooltip: item.skipType == SkipType.showOnly
                                   ? '跳至此片段'
                                   : '跳过此片段',
-                              onPressed: () async {
+                              onPressed: () {
                                 Get.back();
                                 onSkip(
                                   item,
@@ -943,7 +943,7 @@ class VideoDetailController extends GetxController
             progress: plPlayerController.position.value.inMilliseconds,
             initialValue: savedDanmaku,
             onSave: (danmaku) => savedDanmaku = danmaku,
-            callback: (danmakuModel) async {
+            callback: (danmakuModel) {
               savedDanmaku = null;
               plPlayerController.danmakuController?.addDanmaku(danmakuModel);
             },
@@ -1614,7 +1614,7 @@ class VideoDetailController extends GetxController
     }
   }
 
-  Future<void> showNoteList(BuildContext context) async {
+  void showNoteList(BuildContext context) {
     String? title;
     try {
       title =

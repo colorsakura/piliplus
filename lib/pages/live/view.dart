@@ -46,9 +46,7 @@ class _LivePageState extends CommonPageState<LivePage, LiveController>
         borderRadius: StyleString.mdRadius,
       ),
       child: refreshIndicator(
-        onRefresh: () async {
-          await controller.onRefresh();
-        },
+        onRefresh: controller.onRefresh,
         child: CustomScrollView(
           controller: controller.scrollController,
           physics: const AlwaysScrollableScrollPhysics(),

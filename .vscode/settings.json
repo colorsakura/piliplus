@@ -4,6 +4,7 @@
         "editor.formatOnType": true
     },
     "editor.codeActionsOnSave": {
-        "source.organizeImports": "explicit"
+        "source.organizeImports": "explicit",
+        // "source.fixAll": "explicit",
     }
 }

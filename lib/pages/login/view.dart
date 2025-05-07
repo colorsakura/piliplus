@@ -276,7 +276,7 @@ class _LoginPageState extends State<LoginPage> {
                               'https://passport.bilibili.com/pc/passport/findPassword',
                             ),
                             dense: false,
-                            onTap: () async {
+                            onTap: () {
                               Get
                                 ..back()
                                 ..toNamed('/webview', parameters: {

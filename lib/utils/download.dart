@@ -50,7 +50,7 @@ class DownloadUtils {
     if (status == PermissionStatus.denied ||
         status == PermissionStatus.permanentlyDenied) {
       if (!context.mounted) return false;
-      await showDialog(
+      showDialog(
         context: context,
         builder: (context) {
           return AlertDialog(
@@ -58,7 +58,7 @@ class DownloadUtils {
             content: const Text('存储权限未授权'),
             actions: [
               TextButton(
-                onPressed: () async {
+                onPressed: () {
                   openAppSettings();
                 },
                 child: const Text('去授权'),

@@ -323,11 +323,11 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
                               min: 1,
                               max: 100,
                               value: _ratio.first,
-                              onChanged: (value) async {
+                              onChanged: (value) {
                                 if (value >= 10 && value <= 90) {
                                   _ratio[0] = value;
                                   _ratio[1] = 100 - value;
-                                  await GStorage.setting.put(
+                                  GStorage.setting.put(
                                     SettingBoxKey.dynamicDetailRatio,
                                     _ratio,
                                   );
@@ -355,9 +355,7 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
         bottom: false,
         child: context.orientation == Orientation.portrait
             ? refreshIndicator(
-                onRefresh: () async {
-                  await _dynamicDetailController.onRefresh();
-                },
+                onRefresh: _dynamicDetailController.onRefresh,
                 child: _buildBody(context.orientation, theme),
               )
             : _buildBody(context.orientation, theme),
@@ -425,9 +423,7 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
                         key: _key,
                         backgroundColor: Colors.transparent,
                         body: refreshIndicator(
-                          onRefresh: () async {
-                            await _dynamicDetailController.onRefresh();
-                          },
+                          onRefresh: _dynamicDetailController.onRefresh,
                           child: CustomScrollView(
                             controller:
                                 _dynamicDetailController.scrollController,

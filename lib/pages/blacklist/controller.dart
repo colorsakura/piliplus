@@ -38,7 +38,7 @@ class BlackListController
     return false;
   }
 
-  Future onRemove(BuildContext context, int index, name, mid) async {
+  void onRemove(BuildContext context, int index, name, mid) {
     showConfirmDialog(
       context: context,
       title: '确定将 $name 移出黑名单？',

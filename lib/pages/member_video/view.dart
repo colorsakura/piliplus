@@ -68,9 +68,7 @@ class _MemberVideoState extends State<MemberVideo>
               clipBehavior: Clip.none,
               children: [
                 refreshIndicator(
-                  onRefresh: () async {
-                    await _controller.onRefresh();
-                  },
+                  onRefresh: _controller.onRefresh,
                   child: CustomScrollView(
                     physics: PositionRetainedScrollPhysics(
                       shouldRetain: _controller.isLocating == true,

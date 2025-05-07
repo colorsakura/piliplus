@@ -29,9 +29,7 @@ class _AtMePageState extends State<AtMePage> {
         title: const Text('@我的'),
       ),
       body: refreshIndicator(
-        onRefresh: () async {
-          await _atMeController.onRefresh();
-        },
+        onRefresh: _atMeController.onRefresh,
         child: CustomScrollView(
           physics: const AlwaysScrollableScrollPhysics(),
           slivers: [

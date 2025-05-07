@@ -38,11 +38,11 @@ class _LogsPageState extends State<LogsPage> {
   Future<void> getPath() async {
     logsPath = await getLogsPath();
     fileContent = await logsPath.readAsString();
-    logsContent = await parseLogs(fileContent);
+    logsContent = parseLogs(fileContent);
     setState(() {});
   }
 
-  Future<List<Map<String, dynamic>>> parseLogs(String fileContent) async {
+  List<Map<String, dynamic>> parseLogs(String fileContent) {
     const String splitToken =
         '======================================================================';
     List contentList = fileContent.split(splitToken).map((item) {
@@ -83,8 +83,8 @@ class _LogsPageState extends State<LogsPage> {
     return result.reversed.toList();
   }
 
-  Future<void> copyLogs() async {
-    await Utils.copyText('```\n$fileContent\n```', needToast: false);
+  void copyLogs() {
+    Utils.copyText('```\n$fileContent\n```', needToast: false);
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('复制成功')),
@@ -177,8 +177,8 @@ class _LogsPageState extends State<LogsPage> {
                                 tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                                 visualDensity: VisualDensity.compact,
                               ),
-                              onPressed: () async {
-                                await Utils.copyText('```\n${log['body']}\n```',
+                              onPressed: () {
+                                Utils.copyText('```\n${log['body']}\n```',
                                     needToast: false);
                                 if (context.mounted) {
                                   ScaffoldMessenger.of(context).showSnackBar(

@@ -29,9 +29,7 @@ class _LikeMePageState extends State<LikeMePage> {
         title: const Text('收到的赞'),
       ),
       body: refreshIndicator(
-        onRefresh: () async {
-          await _likeMeController.onRefresh();
-        },
+        onRefresh: _likeMeController.onRefresh,
         child: CustomScrollView(
           physics: const AlwaysScrollableScrollPhysics(),
           slivers: [

@@ -435,7 +435,7 @@ class ChatItem extends StatelessWidget {
               ));
         case MsgType.articleCard:
           return GestureDetector(
-            onTap: () async {
+            onTap: () {
               Get.toNamed(
                 '/articlePage',
                 parameters: {

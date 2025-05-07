@@ -69,7 +69,7 @@ class DynamicsController extends GetxController
     queryFollowUp();
   }
 
-  Future<void> onSelectType(value) async {
+  void onSelectType(value) {
     initialValue.value = value;
   }
 
@@ -171,7 +171,7 @@ class DynamicsController extends GetxController
     isQuerying = false;
   }
 
-  Future<void> onSelectUp(mid) async {
+  void onSelectUp(mid) {
     if (this.mid == mid) {
       tabController.index = (mid == -1 ? 0 : 4);
       if (mid == -1) {
@@ -192,7 +192,7 @@ class DynamicsController extends GetxController
   }
 
   @override
-  Future<void> animateToTop() async {
+  void animateToTop() {
     controller?.animateToTop();
     scrollController.animToTop();
   }

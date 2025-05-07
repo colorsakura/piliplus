@@ -202,7 +202,7 @@ class MainController extends GetxController {
     }
   }
 
-  Future<void> setNavBarConfig() async {
+  void setNavBarConfig() {
     List defaultNavTabs = [...defaultNavigationBars];
     List navBarSort =
         GStorage.setting.get(SettingBoxKey.navBarSort, defaultValue: [0, 1, 2]);

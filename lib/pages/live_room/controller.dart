@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:PiliPlus/http/constants.dart';
@@ -235,14 +236,14 @@ class LiveRoomController extends GetxController {
   }
 
   // 修改画质
-  Future<void> changeQn(int qn) async {
+  FutureOr<void> changeQn(int qn) {
     if (currentQn == qn) {
-      return;
+      return null;
     }
     currentQn = qn;
     currentQnDesc.value = LiveQuality.values
         .firstWhere((element) => element.code == currentQn)
         .description;
-    await queryLiveInfo();
+    return queryLiveInfo();
   }
 }

@@ -108,7 +108,7 @@ class _PlaySpeedPageState extends State<PlaySpeedPage> {
               child: const Text('取消'),
             ),
             TextButton(
-              onPressed: () async {
+              onPressed: () {
                 if (customSpeed == null) {
                   SmartDialog.showToast('输入倍数不合法');
                 } else if (speedList.contains(customSpeed)) {
@@ -118,7 +118,7 @@ class _PlaySpeedPageState extends State<PlaySpeedPage> {
                   speedList
                     ..add(customSpeed!)
                     ..sort();
-                  await video.put(VideoBoxKey.speedsList, speedList);
+                  video.put(VideoBoxKey.speedsList, speedList);
                   setState(() {});
                 }
               },
@@ -168,7 +168,7 @@ class _PlaySpeedPageState extends State<PlaySpeedPage> {
   }
 
   //
-  Future<void> menuAction(index, id) async {
+  void menuAction(index, id) {
     double speed = speedList[index];
     // 设置
     if (id == 1) {
@@ -189,7 +189,7 @@ class _PlaySpeedPageState extends State<PlaySpeedPage> {
         return;
       }
       speedList.removeAt(index);
-      await video.put(VideoBoxKey.speedsList, speedList);
+      video.put(VideoBoxKey.speedsList, speedList);
     }
     setState(() {});
   }

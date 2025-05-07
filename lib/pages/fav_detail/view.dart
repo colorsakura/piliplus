@@ -76,9 +76,7 @@ class _FavDetailPageState extends State<FavDetailPage> {
             top: false,
             bottom: false,
             child: refreshIndicator(
-              onRefresh: () async {
-                await _favDetailController.onRefresh();
-              },
+              onRefresh: _favDetailController.onRefresh,
               child: CustomScrollView(
                 physics: const AlwaysScrollableScrollPhysics(),
                 controller: _favDetailController.scrollController,

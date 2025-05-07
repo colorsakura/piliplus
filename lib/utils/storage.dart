@@ -572,7 +572,7 @@ class GStorage {
       ..replyLengthLimit = replyLengthLimit;
   }
 
-  static Future<String> exportAllSettings() async {
+  static String exportAllSettings() {
     return jsonEncode({
       setting.name: setting.toMap(),
       video.name: video.toMap(),
@@ -599,7 +599,7 @@ class GStorage {
       ..registerAdapter(RuleFilterAdapter());
   }
 
-  static Future<void> close() async {
+  static void close() {
     // user.compact();
     // user.close();
     userInfo
@@ -915,7 +915,7 @@ class Accounts {
     }
   }
 
-  static Future<void> refresh() async {
+  static void refresh() {
     for (var a in account.values) {
       for (var t in a.type) {
         accountMode[t] = a;
@@ -938,7 +938,7 @@ class Accounts {
     // Request.buvidActive(AnonymousAccount());
   }
 
-  static Future<void> close() async {
+  static void close() {
     account
       ..compact()
       ..close();

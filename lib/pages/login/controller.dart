@@ -110,7 +110,7 @@ class LoginPageController extends GetxController
   }
 
   // 申请极验验证码
-  Future getCaptcha(geeGt, geeChallenge, onSuccess) async {
+  void getCaptcha(geeGt, geeChallenge, onSuccess) {
     var registerData = Gt3RegisterData(
       challenge: geeChallenge,
       gt: geeGt,
@@ -119,11 +119,11 @@ class LoginPageController extends GetxController
 
     captcha
       ..addEventHandler(
-          onShow: (Map<String, dynamic> message) async {},
-          onClose: (Map<String, dynamic> message) async {
+          onShow: (Map<String, dynamic> message) {},
+          onClose: (Map<String, dynamic> message) {
             SmartDialog.showToast('关闭验证');
           },
-          onResult: (Map<String, dynamic> message) async {
+          onResult: (Map<String, dynamic> message) {
             debugPrint("Captcha result: $message");
             String code = message["code"];
             if (code == "1") {
@@ -142,7 +142,7 @@ class LoginPageController extends GetxController
               debugPrint("Captcha result code : $code");
             }
           },
-          onError: (Map<String, dynamic> message) async {
+          onError: (Map<String, dynamic> message) {
             SmartDialog.showToast("Captcha onError: $message");
             String code = message["code"];
             // 处理验证中返回的错误 Handling errors returned in verification

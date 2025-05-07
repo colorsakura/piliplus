@@ -68,13 +68,13 @@ class LiveController extends CommonListController {
   }
 
   @override
-  Future<void> onRefresh() async {
+  Future<void> onRefresh() {
     currentPage = 1;
     isEnd = false;
     if (areaIndex.value != 0) {
       queryTop();
     }
-    await queryData();
+    return queryData();
   }
 
   Future<void> queryTop() async {

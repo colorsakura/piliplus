@@ -243,7 +243,7 @@ class _WebviewPageState extends State<WebviewPage> {
                               child: const Text('取消'),
                             ),
                             TextButton(
-                                onPressed: () async {
+                                onPressed: () {
                                   Get.back();
                                   PageUtils.launchURL(request.url.toString());
                                 },

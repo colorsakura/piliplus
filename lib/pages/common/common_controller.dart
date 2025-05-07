@@ -92,19 +92,19 @@ abstract class CommonController<R, T> extends GetxController
   }
 
   @override
-  Future<void> onRefresh() async {
+  Future<void> onRefresh() {
     currentPage = 1;
     isEnd = false;
-    await queryData();
+    return queryData();
   }
 
-  Future onLoadMore() async {
-    await queryData(false);
+  Future<void> onLoadMore() {
+    return queryData(false);
   }
 
-  Future onReload() async {
+  Future<void> onReload() {
     loadingState.value = LoadingState.loading();
-    await onRefresh();
+    return onRefresh();
   }
 
   @override

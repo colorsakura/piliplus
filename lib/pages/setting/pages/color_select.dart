@@ -97,9 +97,9 @@ class _ColorSelectPageState extends State<ColorSelectPage> {
                     PopupMenuButton(
                       enabled: ctr.type.value != 0,
                       initialValue: _dynamicSchemeVariant,
-                      onSelected: (item) async {
+                      onSelected: (item) {
                         _dynamicSchemeVariant = item;
-                        await GStorage.setting
+                        GStorage.setting
                             .put(SettingBoxKey.schemeVariant, item.index);
                         Get.forceAppUpdate();
                       },
@@ -151,7 +151,7 @@ class _ColorSelectPageState extends State<ColorSelectPage> {
                 value: 0,
                 title: const Text('动态取色'),
                 groupValue: ctr.type.value,
-                onChanged: (dynamic val) async {
+                onChanged: (dynamic val) {
                   ctr.type.value = 0;
                   ctr.setting.put(SettingBoxKey.dynamicColor, true);
                   Get.forceAppUpdate();
@@ -163,7 +163,7 @@ class _ColorSelectPageState extends State<ColorSelectPage> {
                 value: 1,
                 title: const Text('指定颜色'),
                 groupValue: ctr.type.value,
-                onChanged: (dynamic val) async {
+                onChanged: (dynamic val) {
                   ctr.type.value = 1;
                   ctr.setting.put(SettingBoxKey.dynamicColor, false);
                   Get.forceAppUpdate();

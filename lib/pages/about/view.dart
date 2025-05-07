@@ -229,7 +229,7 @@ Commit Hash: ${BuildConfig.commitHash}''',
                   children: [
                     ListTile(
                       title: const Text('导出'),
-                      onTap: () async {
+                      onTap: () {
                         Get.back();
                         String res = jsonEncode(Accounts.account.toMap());
                         Utils.copyText(res);
@@ -246,7 +246,7 @@ Commit Hash: ${BuildConfig.commitHash}''',
                           return;
                         }
                         if (!context.mounted) return;
-                        await showDialog(
+                        showDialog(
                           context: context,
                           builder: (context) {
                             return AlertDialog(
@@ -312,9 +312,9 @@ Commit Hash: ${BuildConfig.commitHash}''',
                     children: [
                       ListTile(
                         title: const Text('导出设置至剪贴板'),
-                        onTap: () async {
+                        onTap: () {
                           Get.back();
-                          String data = await GStorage.exportAllSettings();
+                          String data = GStorage.exportAllSettings();
                           Utils.copyText(data);
                         },
                       ),

@@ -34,9 +34,7 @@ class _SysMsgPageState extends State<SysMsgPage> {
         title: const Text('系统通知'),
       ),
       body: refreshIndicator(
-        onRefresh: () async {
-          await _sysMsgController.onRefresh();
-        },
+        onRefresh: _sysMsgController.onRefresh,
         child: CustomScrollView(
           physics: const AlwaysScrollableScrollPhysics(),
           slivers: [

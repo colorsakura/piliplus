@@ -27,7 +27,7 @@ class SysMsgController
     }
   }
 
-  Future msgSysUpdateCursor(int? cursor) async {
+  void msgSysUpdateCursor(int? cursor) {
     if (cursor != null) {
       MsgHttp.msgSysUpdateCursor(cursor);
     }

@@ -45,9 +45,7 @@ class _WhisperPageState extends State<WhisperPage> {
         ],
       ),
       body: refreshIndicator(
-        onRefresh: () async {
-          await _whisperController.onRefresh();
-        },
+        onRefresh: _whisperController.onRefresh,
         child: CustomScrollView(
           physics: const AlwaysScrollableScrollPhysics(),
           slivers: [

@@ -305,7 +305,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
   }
 
   // 继续播放或重新播放
-  Future<void> continuePlay() async {
+  void continuePlay() {
     plPlayerController!.play();
   }
 

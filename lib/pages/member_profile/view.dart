@@ -107,8 +107,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 ),
                 onTap: () {
                   EasyThrottle.throttle(
-                      'imagePicker', const Duration(milliseconds: 500),
-                      () async {
+                      'imagePicker', const Duration(milliseconds: 500), () {
                     _pickImg(theme);
                   });
                 },

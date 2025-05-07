@@ -395,8 +395,7 @@ class PlPlayerController {
 
   static Function? _playCallBack;
 
-  static Future<void> playIfExists(
-      {bool repeat = false, bool hideControls = true}) async {
+  static void playIfExists({bool repeat = false, bool hideControls = true}) {
     // await _instance?.play(repeat: repeat, hideControls: hideControls);
     _playCallBack?.call();
   }
@@ -848,7 +847,7 @@ class PlPlayerController {
 
     // 自动播放
     if (_autoPlay) {
-      await playIfExists();
+      playIfExists();
       // await play(duration: duration);
     }
   }

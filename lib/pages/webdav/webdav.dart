@@ -63,7 +63,7 @@ class WebDav {
       }
     }
     try {
-      String data = await GStorage.exportAllSettings();
+      String data = GStorage.exportAllSettings();
       _fileName ??= _getFileName();
       final path = '$_webdavDirectory/$_fileName';
       try {

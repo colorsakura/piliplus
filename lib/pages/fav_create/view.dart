@@ -175,8 +175,7 @@ class _CreateFavPageState extends State<CreateFavPage> {
                 tileColor: theme.colorScheme.onInverseSurface,
                 onTap: () {
                   EasyThrottle.throttle(
-                      'imagePicker', const Duration(milliseconds: 500),
-                      () async {
+                      'imagePicker', const Duration(milliseconds: 500), () {
                     if (_cover?.isNotEmpty == true) {
                       showDialog(
                         context: context,

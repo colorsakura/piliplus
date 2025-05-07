@@ -33,9 +33,7 @@ class _RcmdPageState extends CommonPageState<RcmdPage, RcmdController>
       margin: const EdgeInsets.symmetric(horizontal: StyleString.safeSpace),
       decoration: const BoxDecoration(borderRadius: StyleString.mdRadius),
       child: refreshIndicator(
-        onRefresh: () async {
-          await controller.onRefresh();
-        },
+        onRefresh: controller.onRefresh,
         child: CustomScrollView(
           controller: controller.scrollController,
           physics: const AlwaysScrollableScrollPhysics(),

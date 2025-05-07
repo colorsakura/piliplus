@@ -40,9 +40,7 @@ abstract class CommonSearchPanelState<
     super.build(context);
     final theme = Theme.of(context);
     return refreshIndicator(
-      onRefresh: () async {
-        await controller.onRefresh();
-      },
+      onRefresh: controller.onRefresh,
       child: CustomScrollView(
         controller: controller.scrollController,
         physics: const AlwaysScrollableScrollPhysics(),

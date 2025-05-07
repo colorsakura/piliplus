@@ -102,7 +102,7 @@ class HistoryController extends MultiSelectController<HistoryData, HisListItem>
   }
 
   // 删除某条历史记录
-  Future delHistory(HisListItem item) async {
+  void delHistory(HisListItem item) {
     _onDelete([item]);
   }
 
@@ -166,7 +166,7 @@ class HistoryController extends MultiSelectController<HistoryData, HisListItem>
               ),
             ),
             TextButton(
-              onPressed: () async {
+              onPressed: () {
                 Get.back();
                 if (loadingState.value is Success) {
                   _onDelete(((loadingState.value as Success).response

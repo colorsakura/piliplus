@@ -245,7 +245,7 @@ class VideoIntroController extends GetxController {
     if (hasLike.value && hasCoin && hasFav.value) {
       // 已点赞、投币、收藏
       SmartDialog.showToast('已三连');
-      return false;
+      return;
     }
     var result = await VideoHttp.oneThree(bvid: bvid);
     if (result['status']) {
@@ -316,7 +316,7 @@ class VideoIntroController extends GetxController {
     SmartDialog.showToast(res['msg']);
   }
 
-  Future<void> coinVideo(int coin, [bool selectLike = false]) async {
+  Future coinVideo(int coin, [bool selectLike = false]) async {
     if (videoDetail.value.stat?.coin == null) {
       // not init
       return;
@@ -432,7 +432,7 @@ class VideoIntroController extends GetxController {
   }
 
   // 分享视频
-  Future actionShareVideo(context) async {
+  void actionShareVideo(context) {
     showDialog(
         context: context,
         builder: (_) {

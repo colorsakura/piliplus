@@ -80,10 +80,7 @@ class _DynamicsTabPageState
   Widget build(BuildContext context) {
     super.build(context);
     return refreshIndicator(
-      onRefresh: () async {
-        dynamicsController.queryFollowUp();
-        await controller.onRefresh();
-      },
+      onRefresh: controller.onRefresh,
       child: CustomScrollView(
         physics: const AlwaysScrollableScrollPhysics(),
         controller: controller.scrollController,

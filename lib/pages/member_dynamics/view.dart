@@ -54,9 +54,7 @@ class _MemberDynamicsPageState extends State<MemberDynamicsPage>
   }
 
   Widget get _buildBody => refreshIndicator(
-        onRefresh: () async {
-          await _memberDynamicController.onRefresh();
-        },
+        onRefresh: _memberDynamicController.onRefresh,
         child: CustomScrollView(
           physics: const AlwaysScrollableScrollPhysics(),
           slivers: [

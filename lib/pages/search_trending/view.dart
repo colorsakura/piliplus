@@ -109,9 +109,7 @@ class _SearchTrendingPageState extends State<SearchTrendingPage> {
               removeLeft: removePadding,
               removeRight: removePadding,
               child: refreshIndicator(
-                onRefresh: () async {
-                  await _controller.onRefresh();
-                },
+                onRefresh: _controller.onRefresh,
                 child: CustomScrollView(
                   controller: _controller.scrollController,
                   slivers: [

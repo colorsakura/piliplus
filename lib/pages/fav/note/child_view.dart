@@ -34,9 +34,7 @@ class _FavNoteChildPageState extends State<FavNoteChildPage>
         clipBehavior: Clip.none,
         children: [
           refreshIndicator(
-            onRefresh: () async {
-              await _favNoteController.onRefresh();
-            },
+            onRefresh: _favNoteController.onRefresh,
             child: CustomScrollView(
               slivers: [
                 Obx(() => _buildBody(_favNoteController.loadingState.value)),

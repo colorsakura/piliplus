@@ -34,9 +34,7 @@ class _LiveFollowPageState extends State<LiveFollowPage> {
         top: false,
         bottom: false,
         child: refreshIndicator(
-          onRefresh: () async {
-            await _controller.onRefresh();
-          },
+          onRefresh: _controller.onRefresh,
           child: CustomScrollView(
             slivers: [
               SliverPadding(

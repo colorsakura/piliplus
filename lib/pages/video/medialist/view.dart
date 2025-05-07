@@ -11,7 +11,7 @@ import 'package:PiliPlus/models/common/badge_type.dart';
 import 'package:PiliPlus/models/video/later.dart';
 import 'package:PiliPlus/pages/common/common_collapse_slide_page.dart';
 import 'package:PiliPlus/utils/utils.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide RefreshCallback;
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -40,7 +40,7 @@ class MediaListPanel extends CommonCollapseSlidePage {
   final int? count;
   final bool desc;
   final VoidCallback onReverse;
-  final Function? loadPrevious;
+  final RefreshCallback? loadPrevious;
   final ValueChanged<int>? onDelete;
 
   @override
@@ -126,9 +126,7 @@ class _MediaListPanelState
   Widget buildList(ThemeData theme) {
     return widget.loadPrevious != null
         ? refreshIndicator(
-            onRefresh: () async {
-              await widget.loadPrevious!();
-            },
+            onRefresh: widget.loadPrevious!,
             child: _buildList(theme),
           )
         : _buildList(theme);

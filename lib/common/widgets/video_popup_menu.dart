@@ -59,7 +59,7 @@ class VideoCustomActions {
           '访问：${videoItem.owner.name}',
           'visit',
           Icon(MdiIcons.accountCircleOutline, size: 16),
-          () async {
+          () {
             Get.toNamed('/member?mid=${videoItem.owner.mid}', arguments: {
               'heroTag': '${videoItem.owner.mid}',
             });
@@ -108,7 +108,7 @@ class VideoCustomActions {
               );
             }
 
-            await showDialog(
+            showDialog(
               context: context,
               builder: (context) {
                 return AlertDialog(
@@ -166,7 +166,7 @@ class VideoCustomActions {
               },
             );
           } else {
-            await showDialog(
+            showDialog(
               context: context,
               builder: (context) {
                 return AlertDialog(
@@ -227,8 +227,8 @@ class VideoCustomActions {
         }),
       if (videoItem is! SpaceArchiveItem)
         VideoCustomAction('拉黑：${videoItem.owner.name}', 'block',
-            Icon(MdiIcons.cancel, size: 16), () async {
-          await showDialog(
+            Icon(MdiIcons.cancel, size: 16), () {
+          showDialog(
             context: context,
             builder: (context) {
               return AlertDialog(

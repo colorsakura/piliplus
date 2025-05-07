@@ -29,9 +29,7 @@ class _FavVideoPageState extends State<FavVideoPage>
   Widget build(BuildContext context) {
     super.build(context);
     return refreshIndicator(
-      onRefresh: () async {
-        await _favController.onRefresh();
-      },
+      onRefresh: _favController.onRefresh,
       child: CustomScrollView(
         controller: _favController.scrollController,
         physics: const AlwaysScrollableScrollPhysics(),

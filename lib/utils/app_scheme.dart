@@ -18,7 +18,7 @@ class PiliScheme {
   static StreamSubscription? listener;
   static final uriDigitRegExp = RegExp(r'/(\d+)');
 
-  static Future<void> init() async {
+  static void init() {
     // Register our protocol only on Windows platform
     // registerProtocolHandler('bilibili');
     appLinks = AppLinks();

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:PiliPlus/http/constants.dart';
@@ -253,7 +254,7 @@ class BangumiIntroController
   }
 
   // 分享视频
-  Future actionShareVideo(context) async {
+  void actionShareVideo(context) {
     showDialog(
         context: context,
         builder: (_) {
@@ -395,7 +396,7 @@ class BangumiIntroController
   }
 
   // 修改分P或番剧分集
-  Future changeSeasonOrbangu(epId, bvid, cid, aid, cover) async {
+  void changeSeasonOrbangu(epId, bvid, cid, aid, cover) {
     // 重新获取视频资源
     this.epId = epId;
     this.bvid = bvid;
@@ -570,7 +571,7 @@ class BangumiIntroController
     if (hasLike.value && hasCoin && hasFav.value) {
       // 已点赞、投币、收藏
       SmartDialog.showToast('已三连');
-      return false;
+      return;
     }
     var result = await VideoHttp.triple(epId: epId, seasonId: seasonId);
     if (result['status']) {

@@ -40,7 +40,7 @@ class VideoPlayerServiceHandler extends BaseAudioHandler with SeekHandler {
 
   @override
   Future<void> play() async {
-    await PlPlayerController.playIfExists();
+    PlPlayerController.playIfExists();
     // player.play();
   }
 

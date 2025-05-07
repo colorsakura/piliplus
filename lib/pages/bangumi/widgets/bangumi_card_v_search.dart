@@ -24,7 +24,7 @@ class BangumiCardVSearch extends StatelessWidget {
           title: item.title?.map((e) => e['text']).join(),
           cover: item.cover,
         ),
-        onTap: () async {
+        onTap: () {
           PageUtils.viewBangumi(seasonId: item.seasonId);
         },
         child: Column(

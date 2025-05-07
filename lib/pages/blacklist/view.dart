@@ -40,7 +40,7 @@ class _BlackListPageState extends State<BlackListPage> {
         ),
       ),
       body: refreshIndicator(
-        onRefresh: () async => await _blackListController.onRefresh(),
+        onRefresh: _blackListController.onRefresh,
         child: CustomScrollView(
           physics: const AlwaysScrollableScrollPhysics(),
           controller: _blackListController.scrollController,

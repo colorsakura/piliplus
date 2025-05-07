@@ -26,7 +26,7 @@ class BangumiCardV extends StatelessWidget {
           title: bangumiItem.title,
           cover: bangumiItem.cover,
         ),
-        onTap: () async {
+        onTap: () {
           final int seasonId = bangumiItem.seasonId;
           PageUtils.viewBangumi(seasonId: seasonId);
         },

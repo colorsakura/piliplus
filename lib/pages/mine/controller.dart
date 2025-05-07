@@ -39,7 +39,7 @@ class MineController extends GetxController {
     }
   }
 
-  Future<void> onLogin([bool longPress = false]) async {
+  void onLogin([bool longPress = false]) {
     if (!isLogin.value || longPress) {
       Get.toNamed('/loginPage', preventDuplicates: false);
     } else {

@@ -44,9 +44,7 @@ class _MemberFavoriteState extends State<MemberFavorite>
       Loading() => loadingWidget,
       Success() => (loadingState.response as List?)?.isNotEmpty == true
           ? refreshIndicator(
-              onRefresh: () async {
-                await _controller.onRefresh();
-              },
+              onRefresh: _controller.onRefresh,
               child: CustomScrollView(
                 slivers: [
                   SliverToBoxAdapter(

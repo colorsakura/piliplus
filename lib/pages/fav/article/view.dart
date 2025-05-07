@@ -29,9 +29,7 @@ class _FavArticlePageState extends State<FavArticlePage>
   Widget build(BuildContext context) {
     super.build(context);
     return refreshIndicator(
-      onRefresh: () async {
-        await _favArticleController.onRefresh();
-      },
+      onRefresh: _favArticleController.onRefresh,
       child: CustomScrollView(
         slivers: [
           SliverPadding(

@@ -11,8 +11,8 @@ class HistoryBaseController extends GetxController {
   RxInt checkedCount = 0.obs;
 
 // 清空观看历史
-  Future onClearHistory(BuildContext context, VoidCallback onSuccess) async {
-    await showDialog(
+  void onClearHistory(BuildContext context, VoidCallback onSuccess) {
+    showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
@@ -40,8 +40,8 @@ class HistoryBaseController extends GetxController {
   }
 
   // 暂停观看历史
-  Future onPauseHistory(BuildContext context) async {
-    await showDialog(
+  void onPauseHistory(BuildContext context) {
+    showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(

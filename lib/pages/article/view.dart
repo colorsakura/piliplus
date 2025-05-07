@@ -308,9 +308,7 @@ class _ArticlePageState extends State<ArticlePage>
                           key: _key,
                           backgroundColor: Colors.transparent,
                           body: refreshIndicator(
-                            onRefresh: () async {
-                              await _articleCtr.onRefresh();
-                            },
+                            onRefresh: _articleCtr.onRefresh,
                             child: Padding(
                               padding: EdgeInsets.only(right: padding / 4),
                               child: CustomScrollView(
@@ -655,11 +653,11 @@ class _ArticlePageState extends State<ArticlePage>
                           min: 1,
                           max: 100,
                           value: _ratio.first,
-                          onChanged: (value) async {
+                          onChanged: (value) {
                             if (value >= 10 && value <= 90) {
                               _ratio[0] = value;
                               _ratio[1] = 100 - value;
-                              await GStorage.setting.put(
+                              GStorage.setting.put(
                                 SettingBoxKey.dynamicDetailRatio,
                                 _ratio,
                               );

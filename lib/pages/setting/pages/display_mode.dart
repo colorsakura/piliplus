@@ -59,13 +59,13 @@ class _SetDisplayModeState extends State<SetDisplayMode> {
     } on PlatformException catch (e) {
       debugPrint(e.toString());
     }
-    var res = await getDisplayModeType(modes);
+    var res = getDisplayModeType(modes);
 
     preferred = modes.toList().firstWhere((el) => el == res);
     FlutterDisplayMode.setPreferredMode(preferred!);
   }
 
-  Future<DisplayMode> getDisplayModeType(modes) async {
+  DisplayMode getDisplayModeType(modes) {
     var value = setting.get(SettingBoxKey.displayMode);
     DisplayMode f = DisplayMode.auto;
     if (value != null) {

@@ -47,9 +47,7 @@ class _BangumiPageState extends CommonPageState<BangumiPage, BangumiController>
     super.build(context);
     final ThemeData theme = Theme.of(context);
     return refreshIndicator(
-      onRefresh: () async {
-        await controller.onRefresh();
-      },
+      onRefresh: controller.onRefresh,
       child: CustomScrollView(
         controller: controller.scrollController,
         physics: const AlwaysScrollableScrollPhysics(),

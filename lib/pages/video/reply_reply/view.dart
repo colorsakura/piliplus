@@ -160,9 +160,7 @@ class _VideoReplyReplyPanelState
   Widget buildList(ThemeData theme) {
     return ClipRect(
       child: refreshIndicator(
-        onRefresh: () async {
-          await _videoReplyReplyController.onRefresh();
-        },
+        onRefresh: _videoReplyReplyController.onRefresh,
         child: Obx(
           () => Stack(
             clipBehavior: Clip.none,

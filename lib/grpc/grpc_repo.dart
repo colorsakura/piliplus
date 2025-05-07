@@ -211,24 +211,24 @@ class GrpcRepo {
   // static Future playerOnline({
   //   int aid = 0,
   //   int cid = 0,
-  // }) async {
-  //   return await _request(
+  // }) {
+  //   return _request(
   //       GrpcUrl.playerOnline,
   //       PlayerOnlineReq(aid: Int64(aid), cid: Int64(cid), playOpen: true),
   //       PlayerOnlineReply.fromBuffer,
   //       onSuccess: (response) => response.totalNumberText);
   // }
 
-  // static Future popular(int idx) async {
-  //   return await _request(GrpcUrl.popular, PopularResultReq(idx: Int64(idx)),
+  // static Future popular(int idx) {
+  //   return _request(GrpcUrl.popular, PopularResultReq(idx: Int64(idx)),
   //       PopularReply.fromBuffer, onSuccess: (response) {
   //     response.items.retainWhere((item) => item.smallCoverV5.base.goto == 'av');
   //     return {'status': true, 'data': response.items};
   //   });
   // }
 
-  // static Future replyInfo({required int rpid}) async {
-  //   return await _request(
+  // static Future replyInfo({required int rpid}) {
+  //   return _request(
   //     GrpcUrl.replyInfo,
   //     ReplyInfoReq(rpid: Int64(rpid)),
   //     ReplyInfoReply.fromBuffer,
@@ -239,8 +239,8 @@ class GrpcRepo {
   // static Future dynSpace({
   //   required int uid,
   //   required int page,
-  // }) async {
-  //   return await _request(
+  // }) {
+  //   return _request(
   //     GrpcUrl.dynSpace,
   //     DynSpaceReq(
   //       hostUid: Int64(uid),
@@ -258,8 +258,8 @@ class GrpcRepo {
     required Mode mode,
     required String? offset,
     required Int64? cursorNext,
-  }) async {
-    return await _request(
+  }) {
+    return _request(
       GrpcUrl.mainList,
       MainListReq(
         oid: Int64(oid),
@@ -282,8 +282,8 @@ class GrpcRepo {
     required int rpid,
     required Mode mode,
     required String? offset,
-  }) async {
-    return await _request(
+  }) {
+    return _request(
       GrpcUrl.detailList,
       DetailListReq(
         oid: Int64(oid),
@@ -304,8 +304,8 @@ class GrpcRepo {
     required int root,
     required int dialog,
     required String? offset,
-  }) async {
-    return await _request(
+  }) {
+    return _request(
       GrpcUrl.dialogList,
       DialogListReq(
         oid: Int64(oid),
@@ -318,8 +318,8 @@ class GrpcRepo {
     );
   }
 
-  static Future dynRed() async {
-    return await _request(
+  static Future dynRed() {
+    return _request(
       GrpcUrl.dynRed,
       DynRedReq(tabOffset: [TabOffset(tab: 1)]),
       DynRedReply.fromBuffer,
@@ -328,8 +328,8 @@ class GrpcRepo {
   }
 
   static Future dmSegMobile(
-      {required int cid, required int segmentIndex, int type = 1}) async {
-    return await _request(
+      {required int cid, required int segmentIndex, int type = 1}) {
+    return _request(
       GrpcUrl.dmSegMobile,
       DmSegMobileReq(
         oid: Int64(cid),
@@ -345,9 +345,9 @@ class GrpcRepo {
     required int receiverId,
     required String content,
     MsgType msgType = MsgType.EN_MSG_TYPE_TEXT,
-  }) async {
+  }) {
     final devId = const Uuid().v4();
-    return await _request(
+    return _request(
       GrpcUrl.sendMsg,
       ReqSendMsg(
         msg: Msg(
@@ -366,16 +366,16 @@ class GrpcRepo {
     );
   }
 
-  static Future shareList({int size = 10}) async {
-    return await _request(
+  static Future shareList({int size = 10}) {
+    return _request(
       GrpcUrl.shareList,
       ReqShareList(size: size),
       RspShareList.fromBuffer,
     );
   }
 
-  static Future sessionMain({PbMap<int, Offset>? offset}) async {
-    return await _request(
+  static Future sessionMain({PbMap<int, Offset>? offset}) {
+    return _request(
       GrpcUrl.sessionMain,
       SessionMainReq(
         paginationParams: PaginationParams(offsets: offset),
@@ -387,8 +387,8 @@ class GrpcRepo {
   static Future clearUnread({
     SessionPageType? pageType,
     SessionId? sessionId,
-  }) async {
-    return await _request(
+  }) {
+    return _request(
       GrpcUrl.clearUnread,
       ClearUnreadReq(
         pageType: pageType,

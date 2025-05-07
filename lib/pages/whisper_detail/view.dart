@@ -123,9 +123,7 @@ class _WhisperDetailPageState
       Loading() => loadingWidget,
       Success() => loadingState.response?.isNotEmpty == true
           ? refreshIndicator(
-              onRefresh: () async {
-                await _whisperDetailController.onRefresh();
-              },
+              onRefresh: _whisperDetailController.onRefresh,
               child: ListView.builder(
                 shrinkWrap: true,
                 reverse: true,
@@ -207,7 +205,7 @@ class _WhisperDetailPageState
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           IconButton(
-            onPressed: () async {
+            onPressed: () {
               updatePanelType(
                 PanelType.emoji == currentPanelType
                     ? PanelType.keyboard

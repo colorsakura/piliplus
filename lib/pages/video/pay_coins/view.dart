@@ -23,11 +23,11 @@ class PayCoinsPage extends StatefulWidget {
   @override
   State<PayCoinsPage> createState() => _PayCoinsPageState();
 
-  static Future<void> toPayCoinsPage({
+  static void toPayCoinsPage({
     required Function(int coin, bool coinWithLike) onPayCoin,
     int copyright = 1,
     bool hasCoin = false,
-  }) async {
+  }) {
     Navigator.of(Get.context!).push(
       GetDialogRoute(
         pageBuilder: (buildContext, animation, secondaryAnimation) {

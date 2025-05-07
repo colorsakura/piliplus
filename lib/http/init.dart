@@ -32,7 +32,7 @@ class Request {
   static Future<void> setCookie() async {
     accountManager = AccountManager();
     dio.interceptors.add(accountManager);
-    await Accounts.refresh();
+    Accounts.refresh();
     final List<Cookie> cookies = Accounts.main.cookieJar.toList();
     final webManager = web.CookieManager();
     await Future.wait(cookies.map((item) => webManager.setCookie(

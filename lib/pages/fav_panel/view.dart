@@ -181,9 +181,9 @@ class _FavPanelState extends State<FavPanel> {
                 ),
                 const SizedBox(width: 25),
                 FilledButton.tonal(
-                  onPressed: () async {
+                  onPressed: () {
                     feedBack();
-                    await widget.ctr.actionFavVideo();
+                    widget.ctr.actionFavVideo();
                   },
                   style: FilledButton.styleFrom(
                     padding: const EdgeInsets.symmetric(

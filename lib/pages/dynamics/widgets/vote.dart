@@ -369,7 +369,7 @@ Future showVoteDialog(BuildContext context, int voteId,
   final voteInfo = await DynamicsHttp.voteInfo(voteId);
   if (context.mounted) {
     if (voteInfo.isSuccess) {
-      await showDialog(
+      showDialog(
           context: context,
           builder: (context) => AlertDialog(
                 content: SizedBox(

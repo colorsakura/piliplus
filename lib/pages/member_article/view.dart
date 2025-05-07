@@ -43,9 +43,7 @@ class _MemberArticleState extends State<MemberArticle>
       Loading() => loadingWidget,
       Success() => loadingState.response?.isNotEmpty == true
           ? refreshIndicator(
-              onRefresh: () async {
-                await _controller.onRefresh();
-              },
+              onRefresh: _controller.onRefresh,
               child: CustomScrollView(
                 slivers: [
                   SliverPadding(

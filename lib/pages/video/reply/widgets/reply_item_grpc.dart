@@ -760,7 +760,7 @@ class ReplyItemGrpc extends StatelessWidget {
                     color: theme.colorScheme.primary,
                   ),
                   recognizer: TapGestureRecognizer()
-                    ..onTap = () async {
+                    ..onTap = () {
                       late final String title = content.urls[matchStr]!.title;
                       if (appUrlSchema == '') {
                         if (RegExp(r'^(av|bv)', caseSensitive: false)

@@ -72,7 +72,7 @@ class HomeController extends GetxController
     return controller.onRefresh().catchError((e) => debugPrint(e.toString()));
   }
 
-  Future<void> setTabConfig() async {
+  void setTabConfig() {
     final defaultTabs = [...homeTabsConfig];
     final tabbarSort = GStorage.tabbarSort;
     defaultTabs

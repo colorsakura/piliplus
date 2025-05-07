@@ -55,7 +55,7 @@ class _FansPageState extends State<FansPage> {
       body: SafeArea(
         bottom: false,
         child: refreshIndicator(
-          onRefresh: () async => await _fansController.onRefresh(),
+          onRefresh: _fansController.onRefresh,
           child: CustomScrollView(
             physics: const AlwaysScrollableScrollPhysics(),
             controller: _fansController.scrollController,

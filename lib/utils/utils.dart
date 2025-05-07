@@ -57,7 +57,7 @@ class Utils {
 
   static bool? _isIpad;
 
-  static FutureOr<bool> isIpad() async {
+  static Future<bool> isIpad() async {
     if (Platform.isIOS.not) {
       return false;
     }
@@ -164,11 +164,11 @@ class Utils {
     return '${randomTraceId.toString()}:${randomTraceId.toString().substring(16, 32)}:0:0';
   }
 
-  static Future copyText(
+  static void copyText(
     String text, {
     bool needToast = true,
     String? toastText,
-  }) async {
+  }) {
     Clipboard.setData(ClipboardData(text: text));
     if (needToast) {
       SmartDialog.showToast(toastText ?? '已复制');

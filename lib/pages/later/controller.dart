@@ -84,8 +84,8 @@ class LaterController extends MultiSelectController<Map, HotVideoItemModel> {
   }
 
   // single
-  Future toViewDel(BuildContext context, int index, int? aid) async {
-    await showDialog(
+  void toViewDel(BuildContext context, int index, int? aid) {
+    showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
@@ -165,7 +165,7 @@ class LaterController extends MultiSelectController<Map, HotVideoItemModel> {
               ),
             ),
             TextButton(
-              onPressed: () async {
+              onPressed: () {
                 Get.back();
                 _onDelete(((loadingState.value as Success).response
                         as List<HotVideoItemModel>)

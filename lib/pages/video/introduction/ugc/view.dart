@@ -201,7 +201,7 @@ class _VideoInfoState extends State<VideoInfo> {
               style: const TextStyle(fontSize: 16),
             );
 
-  Future<void> handleState(Future Function() action) async {
+  Future<void> handleState(FutureOr Function() action) async {
     if (isProcessing.not) {
       isProcessing = true;
       await action();

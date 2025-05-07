@@ -38,9 +38,7 @@ class _LaterViewChildPageState extends State<LaterViewChildPage>
   Widget build(BuildContext context) {
     super.build(context);
     return refreshIndicator(
-      onRefresh: () async {
-        await _laterController.onRefresh();
-      },
+      onRefresh: _laterController.onRefresh,
       child: CustomScrollView(
         physics: const AlwaysScrollableScrollPhysics(),
         controller: _laterController.scrollController,

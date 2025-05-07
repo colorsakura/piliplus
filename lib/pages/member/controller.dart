@@ -151,12 +151,12 @@ class MemberController extends CommonDataController<SpaceData, SpaceData?>
         fromViewAid: fromViewAid,
       );
 
-  Future blockUser(BuildContext context) async {
+  void blockUser(BuildContext context) {
     if (ownerMid == 0) {
       SmartDialog.showToast('账号未登录');
       return;
     }
-    await showDialog(
+    showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
@@ -171,7 +171,7 @@ class MemberController extends CommonDataController<SpaceData, SpaceData?>
               ),
             ),
             TextButton(
-              onPressed: () async {
+              onPressed: () {
                 Get.back();
                 _onBlock();
               },
@@ -198,7 +198,7 @@ class MemberController extends CommonDataController<SpaceData, SpaceData?>
     }
   }
 
-  Future<void> onFollow(BuildContext context) async {
+  void onFollow(BuildContext context) {
     if (mid == ownerMid) {
       Get.toNamed('/editProfile');
     } else if (relation.value == 128) {

@@ -85,7 +85,7 @@ abstract class CommonPublishPageState<T extends CommonPublishPage>
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
       if (mounted && widget.autofocus && selectKeyboard.value) {
-        WidgetsBinding.instance.addPostFrameCallback((_) async {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
           if (focusNode.hasFocus) {
             focusNode.unfocus();
             _requestFocus();
@@ -102,7 +102,7 @@ abstract class CommonPublishPageState<T extends CommonPublishPage>
     }
   }
 
-  Future<void> updatePanelType(PanelType type) async {
+  void updatePanelType(PanelType type) {
     final isSwitchToKeyboard = PanelType.keyboard == type;
     final isSwitchToEmojiPanel = PanelType.emoji == type;
     bool isUpdated = false;

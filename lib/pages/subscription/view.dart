@@ -27,9 +27,7 @@ class _SubPageState extends State<SubPage> {
         top: false,
         bottom: false,
         child: refreshIndicator(
-          onRefresh: () async {
-            await _subController.onRefresh();
-          },
+          onRefresh: _subController.onRefresh,
           child: CustomScrollView(
             slivers: [
               Obx(() => _buildBody(_subController.loadingState.value)),

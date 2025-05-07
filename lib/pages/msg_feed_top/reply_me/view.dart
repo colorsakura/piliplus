@@ -27,9 +27,7 @@ class _ReplyMePageState extends State<ReplyMePage> {
     return Scaffold(
       appBar: AppBar(title: const Text('回复我的')),
       body: refreshIndicator(
-        onRefresh: () async {
-          await _replyMeController.onRefresh();
-        },
+        onRefresh: _replyMeController.onRefresh,
         child: CustomScrollView(
           physics: const AlwaysScrollableScrollPhysics(),
           slivers: [
