@@ -44,7 +44,7 @@ class MemberVideoCtr
   bool? hasPrev;
 
   @override
-  Future onRefresh() async {
+  Future<void> onRefresh() async {
     if (isLocating == true) {
       if (hasPrev == true) {
         isLoadPrevious = true;
@@ -220,7 +220,7 @@ class MemberVideoCtr
   }
 
   @override
-  Future onReload() {
+  Future<void> onReload() {
     isLocating = null;
     return super.onReload();
   }

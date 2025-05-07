@@ -590,7 +590,7 @@ class Utils {
   }
 
   // 下载适用于当前系统的安装包
-  static Future onDownload(data) async {
+  static Future<void> onDownload(data) async {
     await SmartDialog.dismiss();
     try {
       void download(plat) {

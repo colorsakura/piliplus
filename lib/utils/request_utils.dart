@@ -45,7 +45,7 @@ class RequestUtils {
   // 16：番剧（id 为 epid）
   // 17：番剧
   // https://github.com/SocialSisterYi/bilibili-API-collect/tree/master/docs/message/private_msg_content.md
-  static Future pmShare({
+  static Future<void> pmShare({
     required int receiverId,
     required Map content,
     String? message,
@@ -86,7 +86,7 @@ class RequestUtils {
     SmartDialog.dismiss();
   }
 
-  static Future actionRelationMod({
+  static Future<void> actionRelationMod({
     required BuildContext context,
     required dynamic mid,
     required bool isFollow,
@@ -260,7 +260,7 @@ class RequestUtils {
   //   }
   // }
 
-  static Future insertCreatedDyn(result) async {
+  static Future<void> insertCreatedDyn(result) async {
     try {
       dynamic id = result['data']['dyn_id'];
       if (id != null) {
@@ -285,7 +285,7 @@ class RequestUtils {
     }
   }
 
-  static Future checkCreatedDyn({id, dynText, isManual}) async {
+  static Future<void> checkCreatedDyn({id, dynText, isManual}) async {
     if (isManual == true || GStorage.enableCreateDynAntifraud) {
       try {
         if (id != null) {
@@ -310,7 +310,7 @@ class RequestUtils {
   }
 
   // 动态点赞
-  static Future onLikeDynamic(
+  static Future<void> onLikeDynamic(
       DynamicItemModel item, VoidCallback callback) async {
     feedBack();
     String dynamicId = item.idStr!;
@@ -437,7 +437,7 @@ class RequestUtils {
     });
   }
 
-  static Future validate(
+  static Future<void> validate(
       String vVoucher, ValueChanged<String> onSuccess) async {
     final res = await ValidateHttp.gaiaVgateRegister(vVoucher);
     if (!res['status']) {

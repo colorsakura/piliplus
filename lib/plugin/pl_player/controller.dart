@@ -825,7 +825,7 @@ class PlPlayerController {
   }
 
   // 开始播放
-  Future _initializePlayer() async {
+  Future<void> _initializePlayer() async {
     if (_instance == null) return;
     // 设置倍速
     if (videoType.value == 'live') {
@@ -1413,7 +1413,7 @@ class PlPlayerController {
       _statusListeners.remove(listener);
 
   /// 截屏
-  Future screenshot() async {
+  Future<Uint8List?> screenshot() async {
     final Uint8List? screenshot =
         await _videoPlayerController!.screenshot(format: 'image/png');
     return screenshot;
@@ -1428,7 +1428,7 @@ class PlPlayerController {
   }
 
   // 记录播放记录
-  Future makeHeartBeat(
+  Future<void> makeHeartBeat(
     int progress, {
     type = 'playing',
     bool isManual = false,

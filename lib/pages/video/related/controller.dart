@@ -6,13 +6,17 @@ import 'package:get/get.dart';
 
 class RelatedController
     extends CommonListController<List<HotVideoItemModel>?, HotVideoItemModel> {
+  RelatedController([this.autoQuery]);
   // 视频aid
   String bvid = Get.parameters['bvid'] ?? "";
+  final bool? autoQuery;
 
   @override
   void onInit() {
     super.onInit();
-    queryData();
+    if (autoQuery != false) {
+      queryData();
+    }
   }
 
   @override

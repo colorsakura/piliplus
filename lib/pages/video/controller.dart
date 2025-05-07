@@ -664,7 +664,7 @@ class VideoDetailController extends GetxController
     );
   }
 
-  Future _querySponsorBlock() async {
+  Future<void> _querySponsorBlock() async {
     positionSubscription?.cancel();
     videoLabel.value = '';
     segmentList.clear();
@@ -1053,7 +1053,7 @@ class VideoDetailController extends GetxController
     playerInit();
   }
 
-  Future playerInit({
+  Future<void> playerInit({
     video,
     audio,
     seekToTime,
@@ -1115,7 +1115,7 @@ class VideoDetailController extends GetxController
 
   bool isQuerying = false;
   // 视频链接
-  Future queryVideoUrl([Duration? defaultST]) async {
+  Future<void> queryVideoUrl([Duration? defaultST]) async {
     if (isQuerying) {
       return;
     }
@@ -1427,7 +1427,7 @@ class VideoDetailController extends GetxController
 
   late bool continuePlayingPart = GStorage.continuePlayingPart;
 
-  Future _querySubtitles() async {
+  Future<void> _querySubtitles() async {
     var res = await VideoHttp.subtitlesJson(bvid: bvid, cid: cid.value);
     if (res['status']) {
       // interactive video

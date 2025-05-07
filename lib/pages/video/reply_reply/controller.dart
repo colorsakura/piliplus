@@ -51,7 +51,7 @@ class VideoReplyReplyController extends ReplyController
   }
 
   @override
-  Future onRefresh() {
+  Future<void> onRefresh() {
     paginationReply = null;
     return super.onRefresh();
   }

@@ -54,7 +54,7 @@ class WebDav {
         : 'piliplus_settings_phone.json';
   }
 
-  Future backup() async {
+  Future<void> backup() async {
     if (_client == null) {
       final res = await init();
       if (res.first == false) {
@@ -76,7 +76,7 @@ class WebDav {
     }
   }
 
-  Future restore() async {
+  Future<void> restore() async {
     if (_client == null) {
       final res = await init();
       if (res.first == false) {

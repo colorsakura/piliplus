@@ -31,7 +31,7 @@ class _ActionPanelState extends State<ActionPanel> {
   }
 
   // 动态点赞
-  Future onLikeDynamic() async {
+  Future<void> onLikeDynamic() async {
     feedBack();
     final item = widget.item;
     String dynamicId = item.idStr!;

@@ -77,7 +77,7 @@ class LiveRoomController extends GetxController {
 
   final RxBool isPortrait = false.obs;
 
-  Future queryLiveInfo() async {
+  Future<void> queryLiveInfo() async {
     if (currentQn == null) {
       await Connectivity().checkConnectivity().then((res) {
         currentQn = res.contains(ConnectivityResult.wifi)
@@ -122,7 +122,7 @@ class LiveRoomController extends GetxController {
     }
   }
 
-  Future queryLiveInfoH5() async {
+  Future<void> queryLiveInfoH5() async {
     var res = await LiveHttp.liveRoomInfoH5(roomId: roomId);
     if (res['status']) {
       roomInfoH5.value = res['data'];

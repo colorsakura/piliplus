@@ -39,7 +39,7 @@ class LikeMeController extends CommonDataController<MsgFeedLikeMe, dynamic> {
   }
 
   @override
-  Future onRefresh() {
+  Future<void> onRefresh() {
     cursor = -1;
     cursorTime = -1;
     return super.onRefresh();
@@ -49,7 +49,7 @@ class LikeMeController extends CommonDataController<MsgFeedLikeMe, dynamic> {
   Future<LoadingState<MsgFeedLikeMe>> customGetData() =>
       MsgHttp.msgFeedLikeMe(cursor: cursor, cursorTime: cursorTime);
 
-  Future onRemove(dynamic id, int index, bool isLatest) async {
+  Future<void> onRemove(dynamic id, int index, bool isLatest) async {
     try {
       var res = await MsgHttp.delMsgfeed(0, id);
       if (res['status']) {

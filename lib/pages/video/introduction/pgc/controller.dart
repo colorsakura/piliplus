@@ -95,12 +95,12 @@ class BangumiIntroController
   }
 
   @override
-  Future queryData([bool isRefresh = true]) async {
+  Future<void> queryData([bool isRefresh = true]) async {
     await queryVideoTags();
     return super.queryData(isRefresh);
   }
 
-  Future queryVideoTags() async {
+  Future<void> queryVideoTags() async {
     var result = await UserHttp.videoTags(bvid: bvid);
     if (result['status']) {
       videoTags = result['data'];
@@ -120,7 +120,7 @@ class BangumiIntroController
       SearchHttp.bangumiInfoNew(seasonId: seasonId, epId: epId);
 
   // 获取点赞/投币/收藏状态
-  Future queryBangumiLikeCoinFav() async {
+  Future<void> queryBangumiLikeCoinFav() async {
     var result = await VideoHttp.bangumiLikeCoinFav(epId: epId);
     if (result['status']) {
       hasLike.value = result["data"]['like'] == 1;
@@ -132,7 +132,7 @@ class BangumiIntroController
   }
 
   // （取消）点赞
-  Future actionLikeVideo() async {
+  Future<void> actionLikeVideo() async {
     var result = await VideoHttp.likeVideo(bvid: bvid, type: !hasLike.value);
     if (result['status']) {
       SmartDialog.showToast(!hasLike.value ? result['data']['toast'] : '取消赞');
@@ -167,7 +167,7 @@ class BangumiIntroController
   }
 
   // 投币
-  Future actionCoinVideo() async {
+  Future<void> actionCoinVideo() async {
     if (userInfo == null) {
       SmartDialog.showToast('账号未登录');
       return;
@@ -190,7 +190,7 @@ class BangumiIntroController
   }
 
   // （取消）收藏 bangumi
-  Future actionFavVideo({type = 'choose'}) async {
+  Future<void> actionFavVideo({type = 'choose'}) async {
     // 收藏至默认文件夹
     if (type == 'default') {
       SmartDialog.showLoading(msg: '请求中');
@@ -438,7 +438,7 @@ class BangumiIntroController
   }
 
   // 追番
-  Future bangumiAdd() async {
+  Future<void> bangumiAdd() async {
     var result = await VideoHttp.bangumiAdd(
         seasonId: (loadingState.value as Success).response.seasonId);
     if (result['status']) {
@@ -449,7 +449,7 @@ class BangumiIntroController
   }
 
   // 取消追番
-  Future bangumiDel() async {
+  Future<void> bangumiDel() async {
     var result = await VideoHttp.bangumiDel(
         seasonId: (loadingState.value as Success).response.seasonId);
     if (result['status']) {
@@ -458,7 +458,7 @@ class BangumiIntroController
     SmartDialog.showToast(result['msg']);
   }
 
-  Future bangumiUpdate(status) async {
+  Future<void> bangumiUpdate(status) async {
     var result = await VideoHttp.bangumiUpdate(
       seasonId: [(loadingState.value as Success).response.seasonId],
       status: status,
@@ -562,7 +562,7 @@ class BangumiIntroController
   }
 
   // 一键三连
-  Future actionOneThree() async {
+  Future<void> actionOneThree() async {
     feedBack();
     if (userInfo == null) {
       SmartDialog.showToast('账号未登录');
@@ -590,7 +590,7 @@ class BangumiIntroController
   RxBool isFollowed = false.obs;
   RxInt followStatus = (-1).obs;
 
-  Future queryIsFollowed() async {
+  Future<void> queryIsFollowed() async {
     try {
       dynamic result = await Request().get(
         'https://www.bilibili.com/bangumi/play/ss$seasonId',

@@ -188,7 +188,7 @@ class _ReplyPageState extends CommonPublishPageState<LiveSendDmPanel> {
   }
 
   @override
-  Future onCustomPublish({
+  Future<void> onCustomPublish({
     required String message,
     List? pictures,
     int? dmType,

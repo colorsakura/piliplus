@@ -54,7 +54,7 @@ abstract class CommonController<R, T> extends GetxController
 
   void checkIsEnd(int length) {}
 
-  Future queryData([bool isRefresh = true]) async {
+  Future<void> queryData([bool isRefresh = true]) async {
     if (isLoading || (isRefresh.not && isEnd)) return;
     isLoading = true;
     LoadingState<R> response = await customGetData();

@@ -17,7 +17,7 @@ class HistorySearchController
     return response.list;
   }
 
-  Future onDelHistory(index, kid, business) async {
+  Future<void> onDelHistory(index, kid, business) async {
     String resKid = 'archive_$kid';
     if (business == 'live') {
       resKid = 'live_$kid';

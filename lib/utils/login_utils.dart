@@ -25,7 +25,7 @@ import 'package:webview_cookie_manager/webview_cookie_manager.dart';
 class LoginUtils {
   static final random = Random();
 
-  static Future onLoginMain() async {
+  static Future<void> onLoginMain() async {
     final account = Accounts.main;
     GrpcRepo.updateHeaders(account.accessKey);
     try {
@@ -112,7 +112,7 @@ class LoginUtils {
     }
   }
 
-  static Future onLogoutMain() async {
+  static Future<void> onLogoutMain() async {
     GrpcRepo.updateHeaders(null);
 
     await Future.wait([

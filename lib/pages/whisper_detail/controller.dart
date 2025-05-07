@@ -61,7 +61,7 @@ class WhisperDetailController
   }
 
   // 消息标记已读
-  Future ackSessionMsg(int? msgSeqno) async {
+  Future<void> ackSessionMsg(int? msgSeqno) async {
     var res = await MsgHttp.ackSessionMsg(
       talkerId: talkerId,
       ackSeqno: msgSeqno,
@@ -71,7 +71,7 @@ class WhisperDetailController
     }
   }
 
-  Future sendMsg({
+  Future<void> sendMsg({
     required String message,
     Map? picMsg,
     required VoidCallback onClearText,

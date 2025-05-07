@@ -43,12 +43,12 @@ class _AboutPageState extends State<AboutPage> {
     getCurrentApp();
   }
 
-  Future getCacheSize() async {
+  Future<void> getCacheSize() async {
     cacheSize.value =
         CacheManage.formatSize(await CacheManage().loadApplicationCache());
   }
 
-  Future getCurrentApp() async {
+  Future<void> getCurrentApp() async {
     var currentInfo = await PackageInfo.fromPlatform();
     String buildNumber = currentInfo.buildNumber;
     currentVersion.value = "${currentInfo.version}+$buildNumber";

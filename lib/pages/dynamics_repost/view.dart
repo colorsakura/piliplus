@@ -342,7 +342,8 @@ class _RepostPanelState extends CommonPublishPageState<RepostPanel> {
   Widget? get customPanel => EmotePanel(onChoose: onChooseEmote);
 
   @override
-  Future onCustomPublish({required String message, List? pictures}) async {
+  Future<void> onCustomPublish(
+      {required String message, List? pictures}) async {
     dynamic result = await MsgHttp.createDynamic(
       mid: Accounts.main.mid,
       dynIdStr: widget.item?.idStr ?? widget.dynIdStr,

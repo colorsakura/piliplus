@@ -240,7 +240,8 @@ class _ReplyPageState extends CommonPublishPageState<ReplyPage> {
   }
 
   @override
-  Future onCustomPublish({required String message, List? pictures}) async {
+  Future<void> onCustomPublish(
+      {required String message, List? pictures}) async {
     var result = await VideoHttp.replyAdd(
       type: widget.replyType ?? ReplyType.video,
       oid: widget.oid!,

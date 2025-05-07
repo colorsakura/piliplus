@@ -73,7 +73,7 @@ class DynamicsController extends GetxController
     initialValue.value = value;
   }
 
-  Future queryFollowing2() async {
+  Future<void> queryFollowing2() async {
     if (upData.value.upList != null &&
         upData.value.upList!.length >= allFollowedUpsTotal) {
       return;
@@ -108,7 +108,7 @@ class DynamicsController extends GetxController
   }
 
   late bool isQuerying = false;
-  Future queryFollowUp({type = 'init'}) async {
+  Future<void> queryFollowUp({type = 'init'}) async {
     if (isQuerying) return;
     isQuerying = true;
     if (!isLogin.value) {

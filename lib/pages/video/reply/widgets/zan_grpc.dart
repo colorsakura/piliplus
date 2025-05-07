@@ -24,7 +24,7 @@ class ZanButtonGrpc extends StatefulWidget {
 }
 
 class _ZanButtonGrpcState extends State<ZanButtonGrpc> {
-  Future onHateReply() async {
+  Future<void> onHateReply() async {
     feedBack();
     final int oid = widget.replyItem.oid.toInt();
     final int rpid = widget.replyItem.id.toInt();
@@ -57,7 +57,7 @@ class _ZanButtonGrpcState extends State<ZanButtonGrpc> {
   }
 
   // 评论点赞
-  Future onLikeReply() async {
+  Future<void> onLikeReply() async {
     feedBack();
     final int oid = widget.replyItem.oid.toInt();
     final int rpid = widget.replyItem.id.toInt();

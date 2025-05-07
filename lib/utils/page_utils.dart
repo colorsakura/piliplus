@@ -261,7 +261,7 @@ class PageUtils {
     );
   }
 
-  static Future pushDynFromId({id, rid, bool off = false}) async {
+  static Future<void> pushDynFromId({id, rid, bool off = false}) async {
     SmartDialog.showLoading();
     dynamic res = await DynamicsHttp.dynamicDetail(
       id: id,

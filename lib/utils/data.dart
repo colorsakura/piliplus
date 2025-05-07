@@ -2,11 +2,7 @@ import 'package:PiliPlus/http/user.dart';
 import 'package:PiliPlus/utils/storage.dart';
 
 class Data {
-  static Future init() async {
-    await historyStatus();
-  }
-
-  static Future historyStatus() async {
+  static Future<void> init() async {
     if (!Accounts.main.isLogin) {
       return;
     }

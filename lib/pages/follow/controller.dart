@@ -30,7 +30,7 @@ class FollowController extends GetxController with GetTickerProviderStateMixin {
     }
   }
 
-  Future queryFollowUpTags() async {
+  Future<void> queryFollowUpTags() async {
     var res = await MemberHttp.followUpTags();
     if (res['status']) {
       tabs
@@ -59,7 +59,7 @@ class FollowController extends GetxController with GetTickerProviderStateMixin {
     super.onClose();
   }
 
-  Future onCreateTag(String tagName) async {
+  Future<void> onCreateTag(String tagName) async {
     final res = await MemberHttp.createFollowTag(tagName);
     if (res['status']) {
       followState.value = LoadingState.loading();
@@ -70,7 +70,7 @@ class FollowController extends GetxController with GetTickerProviderStateMixin {
     }
   }
 
-  Future onUpdateTag(int index, tagid, String tagName) async {
+  Future<void> onUpdateTag(int index, tagid, String tagName) async {
     final res = await MemberHttp.updateFollowTag(tagid, tagName);
     if (res['status']) {
       tabs[index].name = tagName;
@@ -81,7 +81,7 @@ class FollowController extends GetxController with GetTickerProviderStateMixin {
     }
   }
 
-  Future onDelTag(tagid) async {
+  Future<void> onDelTag(tagid) async {
     final res = await MemberHttp.delFollowTag(tagid);
     if (res['status']) {
       followState.value = LoadingState.loading();

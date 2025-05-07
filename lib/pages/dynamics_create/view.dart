@@ -459,7 +459,8 @@ class _CreateDynPanelState extends CommonPublishPageState<CreateDynPanel> {
   Widget? get customPanel => EmotePanel(onChoose: onChooseEmote);
 
   @override
-  Future onCustomPublish({required String message, List? pictures}) async {
+  Future<void> onCustomPublish(
+      {required String message, List? pictures}) async {
     SmartDialog.showLoading(msg: '正在发布');
     dynamic result = await MsgHttp.createDynamic(
       mid: Accounts.main.mid,

@@ -91,7 +91,7 @@ abstract class ReplyController<R> extends CommonListController<R, ReplyInfo> {
   }
 
   @override
-  Future onRefresh() {
+  Future<void> onRefresh() {
     cursorNext = null;
     paginationReply = null;
     return super.onRefresh();

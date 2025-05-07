@@ -50,9 +50,9 @@ class MineController extends GetxController {
     }
   }
 
-  Future queryUserInfo() async {
+  Future<void> queryUserInfo() async {
     if (!isLogin.value) {
-      return {'status': false};
+      return;
     }
     var res = await UserHttp.userInfo();
     if (res['status']) {
@@ -74,7 +74,7 @@ class MineController extends GetxController {
     queryUserStatOwner();
   }
 
-  Future queryUserStatOwner() async {
+  Future<void> queryUserStatOwner() async {
     var res = await UserHttp.userStatOwner();
     if (res['status']) {
       userStat.value = res['data'];

@@ -72,7 +72,7 @@ class SearchPanelController<R extends SearchNumData<T>, T>
       );
 
   @override
-  Future onReload() {
+  Future<void> onReload() {
     scrollController.jumpToTop();
     return super.onReload();
   }

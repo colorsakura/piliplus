@@ -32,7 +32,7 @@ class ReplyMeController
   }
 
   @override
-  Future onRefresh() {
+  Future<void> onRefresh() {
     cursor = -1;
     cursorTime = -1;
     return super.onRefresh();
@@ -42,7 +42,7 @@ class ReplyMeController
   Future<LoadingState<MsgFeedReplyMe>> customGetData() =>
       MsgHttp.msgFeedReplyMe(cursor: cursor, cursorTime: cursorTime);
 
-  Future onRemove(dynamic id, int index) async {
+  Future<void> onRemove(dynamic id, int index) async {
     try {
       var res = await MsgHttp.delMsgfeed(1, id);
       if (res['status']) {

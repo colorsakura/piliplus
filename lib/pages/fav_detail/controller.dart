@@ -173,7 +173,7 @@ class FavDetailController
   }
 
   @override
-  Future onReload() {
+  Future<void> onReload() {
     scrollController.jumpToTop();
     return super.onReload();
   }

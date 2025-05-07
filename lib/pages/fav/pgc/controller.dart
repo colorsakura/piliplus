@@ -54,7 +54,7 @@ class FavPgcController
   }
 
   // 取消追番
-  Future bangumiDel(index, seasonId) async {
+  Future<void> bangumiDel(index, seasonId) async {
     var result = await VideoHttp.bangumiDel(seasonId: seasonId);
     if (result['status']) {
       loadingState.value.data!.removeAt(index);
@@ -63,7 +63,7 @@ class FavPgcController
     SmartDialog.showToast(result['msg']);
   }
 
-  Future onUpdateList(followStatus) async {
+  Future<void> onUpdateList(followStatus) async {
     List<BangumiListItemModel> dataList =
         (loadingState.value as Success).response as List<BangumiListItemModel>;
     Set<BangumiListItemModel> updateList =
@@ -92,7 +92,7 @@ class FavPgcController
     SmartDialog.showToast(res['msg']);
   }
 
-  Future onUpdate(index, followStatus, seasonId) async {
+  Future<void> onUpdate(index, followStatus, seasonId) async {
     var result = await VideoHttp.bangumiUpdate(
       seasonId: [seasonId],
       status: followStatus,

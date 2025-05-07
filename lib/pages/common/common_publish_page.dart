@@ -159,7 +159,7 @@ abstract class CommonPublishPageState<T extends CommonPublishPage>
     return false;
   }
 
-  Future onPublish() async {
+  Future<void> onPublish() async {
     feedBack();
     List<Map<String, dynamic>>? pictures;
     if (pathList.isNotEmpty) {
@@ -194,7 +194,7 @@ abstract class CommonPublishPageState<T extends CommonPublishPage>
     onCustomPublish(message: editController.text, pictures: pictures);
   }
 
-  Future onCustomPublish({required String message, List? pictures});
+  Future<void> onCustomPublish({required String message, List? pictures});
 
   void onChooseEmote(emote) {
     enablePublish.value = true;

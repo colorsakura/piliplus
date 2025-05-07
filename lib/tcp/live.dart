@@ -194,7 +194,7 @@ class LiveMessageStream {
       Future<WebSocket> getSocket() async {
         for (final server in servers) {
           try {
-            return await WebSocket.connect(
+            return WebSocket.connect(
               server,
               headers: MineController.anonymity.value ? {'cookie': ''} : null,
             );

@@ -22,7 +22,7 @@ class LaterSearchController
     return response['list'];
   }
 
-  Future toViewDel(BuildContext context, int index, aid) async {
+  Future<void> toViewDel(BuildContext context, int index, aid) async {
     var res = await UserHttp.toViewDel(aids: [aid]);
     if (res['status']) {
       loadingState.value.data!.removeAt(index);

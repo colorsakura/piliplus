@@ -321,7 +321,7 @@ class _WhisperDetailPageState
   Widget? get customPanel => EmotePanel(onChoose: onChooseEmote);
 
   @override
-  Future onCustomPublish({required String message, List? pictures}) {
+  Future<void> onCustomPublish({required String message, List? pictures}) {
     throw UnimplementedError();
   }
 }

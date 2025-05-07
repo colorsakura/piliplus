@@ -20,13 +20,13 @@ class MemberDynamicsController
   }
 
   @override
-  Future onRefresh() {
+  Future<void> onRefresh() {
     offset = '';
     return super.onRefresh();
   }
 
   @override
-  Future queryData([bool isRefresh = true]) {
+  Future<void> queryData([bool isRefresh = true]) {
     if (isRefresh.not && (isEnd || offset == '-1')) {
       return Future.value();
     }
@@ -56,7 +56,7 @@ class MemberDynamicsController
         mid: mid,
       );
 
-  Future onRemove(dynamicId) async {
+  Future<void> onRemove(dynamicId) async {
     var res = await MsgHttp.removeDynamic(dynIdStr: dynamicId);
     if (res['status']) {
       loadingState.value.data!.removeWhere((item) => item.idStr == dynamicId);
@@ -67,7 +67,7 @@ class MemberDynamicsController
     }
   }
 
-  Future onSetTop(bool isTop, dynamic dynamicId) async {
+  Future<void> onSetTop(bool isTop, dynamic dynamicId) async {
     var res = await DynamicsHttp.setTop(dynamicId: dynamicId);
     if (res['status']) {
       List<DynamicItemModel> list = (loadingState.value as Success).response;

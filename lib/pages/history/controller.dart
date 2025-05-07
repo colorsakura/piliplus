@@ -30,7 +30,7 @@ class HistoryController extends MultiSelectController<HistoryData, HisListItem>
   }
 
   @override
-  Future onRefresh() {
+  Future<void> onRefresh() {
     max = null;
     viewAt = null;
     return super.onRefresh();
@@ -91,7 +91,7 @@ class HistoryController extends MultiSelectController<HistoryData, HisListItem>
   }
 
   // 观看历史暂停状态
-  Future historyStatus() async {
+  Future<void> historyStatus() async {
     var res = await UserHttp.historyStatus();
     if (res['status']) {
       baseCtr.pauseStatus.value = res['data'];
@@ -194,7 +194,7 @@ class HistoryController extends MultiSelectController<HistoryData, HisListItem>
   }
 
   @override
-  Future onReload() {
+  Future<void> onReload() {
     scrollController.jumpToTop();
     return super.onReload();
   }

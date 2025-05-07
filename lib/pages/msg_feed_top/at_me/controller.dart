@@ -31,7 +31,7 @@ class AtMeController extends CommonListController<MsgFeedAtMe, AtMeItems> {
   }
 
   @override
-  Future onRefresh() {
+  Future<void> onRefresh() {
     cursor = -1;
     cursorTime = -1;
     return super.onRefresh();
@@ -41,7 +41,7 @@ class AtMeController extends CommonListController<MsgFeedAtMe, AtMeItems> {
   Future<LoadingState<MsgFeedAtMe>> customGetData() =>
       MsgHttp.msgFeedAtMe(cursor: cursor, cursorTime: cursorTime);
 
-  Future onRemove(dynamic id, int index) async {
+  Future<void> onRemove(dynamic id, int index) async {
     try {
       var res = await MsgHttp.delMsgfeed(2, id);
       if (res['status']) {

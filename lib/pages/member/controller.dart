@@ -225,7 +225,7 @@ class MemberController extends CommonDataController<SpaceData, SpaceData?>
     super.onClose();
   }
 
-  Future onRemoveFan() async {
+  Future<void> onRemoveFan() async {
     final res = await VideoHttp.relationMod(
       mid: mid,
       act: 7,

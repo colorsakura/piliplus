@@ -149,7 +149,7 @@ class ArticleController extends ReplyController<MainListReply> {
   }
 
   // 请求动态内容
-  Future _queryContent() async {
+  Future<void> _queryContent() async {
     if (type != 'read') {
       isLoaded.value = await queryOpus(id);
     } else {
@@ -182,7 +182,7 @@ class ArticleController extends ReplyController<MainListReply> {
     );
   }
 
-  Future onFav() async {
+  Future<void> onFav() async {
     bool isFav = stats.value?.favorite?.status == true;
     final res = type == 'read'
         ? isFav
@@ -204,7 +204,7 @@ class ArticleController extends ReplyController<MainListReply> {
     }
   }
 
-  Future onLike() async {
+  Future<void> onLike() async {
     bool isLike = stats.value?.like?.status == true;
     final res = await DynamicsHttp.thumbDynamic(
         dynamicId: opusData?.idStr ?? articleData?.dynIdStr,

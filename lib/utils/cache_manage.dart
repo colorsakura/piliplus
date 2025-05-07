@@ -76,7 +76,7 @@ class CacheManage {
   }
 
   /// 清除 Documents 目录下的 DioCache.db
-  Future clearApplicationCache() async {
+  Future<void> clearApplicationCache() async {
     Directory directory = await getApplicationDocumentsDirectory();
     if (directory.existsSync()) {
       String dioCacheFileName =
@@ -89,7 +89,7 @@ class CacheManage {
   }
 
   // 清除 Library/Caches 目录及文件缓存
-  static Future clearLibraryCache() async {
+  static Future<void> clearLibraryCache() async {
     var appDocDir = await getTemporaryDirectory();
     if (appDocDir.existsSync()) {
       // await appDocDir.delete(recursive: true);
@@ -102,7 +102,7 @@ class CacheManage {
   }
 
   /// 递归方式删除目录及文件
-  Future deleteDirectory(FileSystemEntity file) async {
+  Future<void> deleteDirectory(FileSystemEntity file) async {
     if (file is Directory) {
       final List<FileSystemEntity> children = file.listSync();
       for (final FileSystemEntity child in children) {

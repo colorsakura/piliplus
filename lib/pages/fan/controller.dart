@@ -31,7 +31,7 @@ class FansController
         orderType: 'attention',
       );
 
-  Future onRemoveFan(int index, int mid) async {
+  Future<void> onRemoveFan(int index, int mid) async {
     final res = await VideoHttp.relationMod(
       mid: mid,
       act: 7,

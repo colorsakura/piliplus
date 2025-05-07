@@ -24,7 +24,7 @@ class HorizontalMemberPageController extends CommonDataController {
     queryData();
   }
 
-  Future getUserInfo() async {
+  Future<void> getUserInfo() async {
     dynamic res = await MemberHttp.memberInfo(mid: mid);
     if (res['status']) {
       userState.value = LoadingState.success(res['data']);
@@ -34,7 +34,7 @@ class HorizontalMemberPageController extends CommonDataController {
     }
   }
 
-  Future getMemberStat() async {
+  Future<void> getMemberStat() async {
     var res = await MemberHttp.memberStat(mid: mid);
     if (res['status']) {
       userStat.value = res['data'];
@@ -42,7 +42,7 @@ class HorizontalMemberPageController extends CommonDataController {
     }
   }
 
-  Future getMemberView() async {
+  Future<void> getMemberView() async {
     var res = await MemberHttp.memberView(mid: mid);
     if (res['status']) {
       userStat.addAll(res['data']);
@@ -97,7 +97,7 @@ class HorizontalMemberPageController extends CommonDataController {
       );
 
   @override
-  Future onRefresh() {
+  Future<void> onRefresh() {
     currentPage = 0;
     hasPrev = true;
     hasNext = true;

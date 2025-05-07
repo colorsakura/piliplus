@@ -19,7 +19,7 @@ class PgcIndexController extends CommonListController {
     getPgcIndexCondition();
   }
 
-  Future getPgcIndexCondition() async {
+  Future<void> getPgcIndexCondition() async {
     dynamic res = await BangumiHttp.pgcIndexCondition(
       seasonType: indexType == null ? 1 : null,
       type: 0,

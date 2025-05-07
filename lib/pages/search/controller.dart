@@ -129,11 +129,11 @@ class SSearchController extends GetxController {
   }
 
   // 获取热搜关键词
-  Future queryHotSearchList() async {
+  Future<void> queryHotSearchList() async {
     loadingState.value = await SearchHttp.searchTrending(limit: 10);
   }
 
-  Future queryRecommendList() async {
+  Future<void> queryRecommendList() async {
     recommendData.value = await SearchHttp.searchRecommend();
   }
 
@@ -145,7 +145,7 @@ class SSearchController extends GetxController {
     submit();
   }
 
-  Future querySearchSuggest(String value) async {
+  Future<void> querySearchSuggest(String value) async {
     var result = await SearchHttp.searchSuggest(term: value);
     if (result['status']) {
       if (result['data'] is SearchSuggestModel) {

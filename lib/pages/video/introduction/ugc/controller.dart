@@ -8,7 +8,6 @@ import 'package:PiliPlus/http/member.dart';
 import 'package:PiliPlus/http/search.dart';
 import 'package:PiliPlus/http/user.dart';
 import 'package:PiliPlus/http/video.dart';
-import 'package:PiliPlus/models/model_hot_video_item.dart';
 import 'package:PiliPlus/models/user/fav_folder.dart';
 import 'package:PiliPlus/models/video/ai.dart';
 import 'package:PiliPlus/models/video_detail_res.dart';
@@ -136,7 +135,7 @@ class VideoIntroController extends GetxController {
   }
 
   // 获取视频简介&分p
-  Future queryVideoIntro() async {
+  Future<void> queryVideoIntro() async {
     queryVideoTags();
     var result = await VideoHttp.videoIntro(bvid: bvid);
     if (result['status']) {
@@ -187,7 +186,7 @@ class VideoIntroController extends GetxController {
     }
   }
 
-  Future queryVideoTags() async {
+  Future<void> queryVideoTags() async {
     var result = await UserHttp.videoTags(bvid: bvid);
     if (result['status']) {
       videoTags = result['data'];
@@ -195,7 +194,7 @@ class VideoIntroController extends GetxController {
   }
 
   // 获取up主粉丝数
-  Future queryUserStat() async {
+  Future<void> queryUserStat() async {
     if (videoItem['staff']?.isNotEmpty == true) {
       Request().get(
         Api.relations,
@@ -236,7 +235,7 @@ class VideoIntroController extends GetxController {
   }
 
   // 一键三连
-  Future actionOneThree() async {
+  Future<void> actionOneThree() async {
     feedBack();
     if (userInfo == null) {
       SmartDialog.showToast('账号未登录');
@@ -262,7 +261,7 @@ class VideoIntroController extends GetxController {
   }
 
   // （取消）点赞
-  Future actionLikeVideo() async {
+  Future<void> actionLikeVideo() async {
     if (userInfo == null) {
       SmartDialog.showToast('账号未登录');
       return;
@@ -287,7 +286,7 @@ class VideoIntroController extends GetxController {
     }
   }
 
-  Future actionDislikeVideo() async {
+  Future<void> actionDislikeVideo() async {
     if (userInfo == null) {
       SmartDialog.showToast('账号未登录');
       return;
@@ -308,7 +307,7 @@ class VideoIntroController extends GetxController {
     }
   }
 
-  Future viewLater() async {
+  Future<void> viewLater() async {
     var res = await (hasLater.value
         ? UserHttp.toViewDel(aids: [IdUtils.bv2av(bvid)])
         : await UserHttp.toViewLater(bvid: bvid));
@@ -316,7 +315,7 @@ class VideoIntroController extends GetxController {
     SmartDialog.showToast(res['msg']);
   }
 
-  Future coinVideo(int coin, [bool selectLike = false]) async {
+  Future<void> coinVideo(int coin, [bool selectLike = false]) async {
     if (videoDetail.value.stat?.coin == null) {
       // not init
       return;
@@ -341,7 +340,7 @@ class VideoIntroController extends GetxController {
   }
 
   // 投币
-  Future actionCoinVideo() async {
+  Future<void> actionCoinVideo() async {
     if (userInfo == null) {
       SmartDialog.showToast('账号未登录');
       return;
@@ -367,7 +366,7 @@ class VideoIntroController extends GetxController {
   }
 
   // （取消）收藏
-  Future actionFavVideo({type = 'choose'}) async {
+  Future<void> actionFavVideo({type = 'choose'}) async {
     // 收藏至默认文件夹
     if (type == 'default') {
       SmartDialog.showLoading(msg: '请求中');
@@ -559,7 +558,7 @@ class VideoIntroController extends GetxController {
   }
 
   // 查询关注状态
-  Future queryFollowStatus() async {
+  Future<void> queryFollowStatus() async {
     if (videoDetail.value.owner == null) {
       return;
     }
@@ -572,7 +571,7 @@ class VideoIntroController extends GetxController {
   }
 
   // 关注/取关up
-  Future actionRelationMod(BuildContext context) async {
+  Future<void> actionRelationMod(BuildContext context) async {
     if (userInfo == null) {
       SmartDialog.showToast('账号未登录');
       return;
@@ -682,7 +681,7 @@ class VideoIntroController extends GetxController {
   }
 
   // 查看同时在看人数
-  Future queryOnlineTotal() async {
+  Future<void> queryOnlineTotal() async {
     if (isShowOnlineTotal.not) {
       return;
     }
@@ -843,46 +842,44 @@ class VideoIntroController extends GetxController {
   }
 
   bool playRelated() {
-    late RelatedController relatedCtr;
-    try {
+    RelatedController relatedCtr;
+    if (Get.isRegistered<RelatedController>(tag: heroTag)) {
       relatedCtr = Get.find<RelatedController>(tag: heroTag);
-      if (relatedCtr.loadingState.value is! Success) {
-        return false;
-      }
-      if ((relatedCtr.loadingState.value as Success).response.isEmpty == true) {
-        SmartDialog.showToast('暂无相关视频，停止连播');
-        return false;
-      }
-    } catch (_) {
-      relatedCtr = Get.put(RelatedController(), tag: heroTag);
-      relatedCtr.queryData().then((value) {
-        if (value['status']) {
+    } else {
+      relatedCtr = Get.put(RelatedController(false), tag: heroTag)
+        ..queryData().then((_) {
           playRelated();
-        }
-      });
+        });
       return false;
     }
 
-    final HotVideoItemModel videoItem =
-        (relatedCtr.loadingState.value as Success).response[0];
+    if (relatedCtr.loadingState.value is! Success) {
+      return false;
+    }
+
+    if (relatedCtr.loadingState.value.data.isNullOrEmpty) {
+      SmartDialog.showToast('暂无相关视频，停止连播');
+      return false;
+    }
+
+    final firstItem = relatedCtr.loadingState.value.data!.first;
     try {
-      if (videoItem.cid != null) {
+      if (firstItem.cid != null) {
         changeSeasonOrbangu(
           null,
-          videoItem.bvid,
-          videoItem.cid,
-          videoItem.aid,
-          videoItem.pic,
+          firstItem.bvid,
+          firstItem.cid,
+          firstItem.aid,
+          firstItem.pic,
         );
       } else {
-        SearchHttp.ab2c(aid: videoItem.aid, bvid: videoItem.bvid).then(
-          (cid) => PageUtils.toVideoPage(
-            'bvid=${videoItem.bvid}&cid=${videoItem.cid}',
-            arguments: {
-              'videoItem': videoItem,
-              'heroTag': heroTag,
-            },
-            off: true,
+        SearchHttp.ab2c(aid: firstItem.aid, bvid: firstItem.bvid).then(
+          (cid) => changeSeasonOrbangu(
+            null,
+            firstItem.bvid,
+            cid,
+            firstItem.aid,
+            firstItem.pic,
           ),
         );
       }

@@ -36,7 +36,7 @@ class BangumiController extends CommonListController<
   }
 
   @override
-  Future onRefresh() {
+  Future<void> onRefresh() {
     if (isLogin.value) {
       followPage = 1;
       followEnd = false;
@@ -61,13 +61,13 @@ class BangumiController extends CommonListController<
   late Rx<LoadingState<List<Result>?>> timelineState =
       LoadingState<List<Result>?>.loading().obs;
 
-  Future queryPgcTimeline() async {
+  Future<void> queryPgcTimeline() async {
     final res = await BangumiHttp.pgcTimeline(types: 1, before: 6, after: 6);
     timelineState.value = res;
   }
 
   // 我的订阅
-  Future queryBangumiFollow([bool isRefresh = true]) async {
+  Future<void> queryBangumiFollow([bool isRefresh = true]) async {
     if (isLogin.value.not || followLoading || (isRefresh.not && followEnd)) {
       return;
     }

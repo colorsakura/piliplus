@@ -78,7 +78,7 @@ class MainController extends GetxController {
     }
   }
 
-  Future queryUnreadMsg() async {
+  Future<void> queryUnreadMsg() async {
     if (isLogin.value.not || homeIndex == -1 || msgUnReadTypes.isEmpty) {
       msgUnReadCount.value = '';
       return;

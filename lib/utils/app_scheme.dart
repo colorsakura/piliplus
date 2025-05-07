@@ -44,7 +44,7 @@ class PiliScheme {
       } else if (RegExp(r'^\S+://').hasMatch(url).not) {
         url = 'https://$url';
       }
-      return await routePush(
+      return routePush(
         Uri.parse(url),
         selfHandle: selfHandle,
         off: off,
@@ -454,7 +454,7 @@ class PiliScheme {
             return false;
         }
       case 'http' || 'https':
-        return await _fullPathPush(
+        return _fullPathPush(
           uri,
           selfHandle: selfHandle,
           off: off,

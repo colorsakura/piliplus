@@ -32,7 +32,7 @@ class MemberFavoriteCtr extends CommonDataController {
   }
 
   @override
-  Future onRefresh() {
+  Future<void> onRefresh() {
     page = 2;
     page1 = 2;
     return super.onRefresh();
@@ -56,7 +56,7 @@ class MemberFavoriteCtr extends CommonDataController {
     return true;
   }
 
-  Future userfavFolder() async {
+  Future<void> userfavFolder() async {
     var res = await Request().get(Api.userFavFolder, queryParameters: {
       'pn': page,
       'ps': 20,
@@ -80,7 +80,7 @@ class MemberFavoriteCtr extends CommonDataController {
     }
   }
 
-  Future userSubFolder() async {
+  Future<void> userSubFolder() async {
     var res = await Request().get(Api.userSubFolder, queryParameters: {
       'up_mid': mid,
       'ps': 20,

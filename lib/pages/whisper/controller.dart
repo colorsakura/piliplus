@@ -55,7 +55,7 @@ class WhisperController
     queryData();
   }
 
-  Future queryMsgFeedUnread() async {
+  Future<void> queryMsgFeedUnread() async {
     var res = await MsgHttp.msgFeedUnread();
     if (res['status']) {
       final data = MsgFeedUnread.fromJson(res['data']);
@@ -83,7 +83,7 @@ class WhisperController
     return super.onRefresh();
   }
 
-  Future onRemove(int index, int? talkerId) async {
+  Future<void> onRemove(int index, int? talkerId) async {
     var res = await MsgHttp.removeMsg(talkerId);
     if (res['status']) {
       loadingState.value.data!.removeAt(index);
@@ -94,7 +94,7 @@ class WhisperController
     }
   }
 
-  Future onSetTop(int index, bool isTop, int? talkerId) async {
+  Future<void> onSetTop(int index, bool isTop, int? talkerId) async {
     var res = await MsgHttp.setTop(
       talkerId: talkerId,
       opType: isTop ? 1 : 0,
