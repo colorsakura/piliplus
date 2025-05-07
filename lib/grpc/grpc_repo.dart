@@ -51,6 +51,7 @@ class GrpcUrl {
   static const sendMsg = '$im/SendMsg';
   static const shareList = '$im/ShareList';
   static const sessionMain = '$im2/SessionMain';
+  static const clearUnread = '$im2/ClearUnread';
 }
 
 class GrpcRepo {
@@ -380,6 +381,20 @@ class GrpcRepo {
         paginationParams: PaginationParams(offsets: offset),
       ),
       SessionMainReply.fromBuffer,
+    );
+  }
+
+  static Future clearUnread({
+    SessionPageType? pageType,
+    SessionId? sessionId,
+  }) async {
+    return await _request(
+      GrpcUrl.clearUnread,
+      ClearUnreadReq(
+        pageType: pageType,
+        sessionId: sessionId,
+      ),
+      ClearUnreadReply.fromBuffer,
     );
   }
 }

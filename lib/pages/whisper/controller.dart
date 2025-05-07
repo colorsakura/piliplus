@@ -1,4 +1,6 @@
-import 'package:PiliPlus/grpc/bilibili/app/im/v1.pb.dart';
+import 'package:PiliPlus/grpc/bilibili/app/im/v1.pb.dart'
+    show SessionMainReply, Session, Offset, SessionPageType;
+import 'package:PiliPlus/grpc/grpc_repo.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/http/msg.dart';
 import 'package:PiliPlus/models/msg/msgfeed_unread.dart';
@@ -115,6 +117,27 @@ class WhisperController
     if (item.hasUnread()) {
       item.clearUnread();
       loadingState.refresh();
+    }
+  }
+
+  Future<void> onClearUnread() async {
+    final res = await GrpcRepo.clearUnread(
+        pageType: SessionPageType.SESSION_PAGE_TYPE_HOME);
+    if (res['status']) {
+      if (loadingState.value is Success) {
+        List<Session>? list = loadingState.value.data;
+        if (list?.isNotEmpty == true) {
+          for (var item in list!) {
+            if (item.hasUnread()) {
+              item.clearUnread();
+            }
+          }
+          loadingState.refresh();
+        }
+      }
+      SmartDialog.showToast('已标记为已读');
+    } else {
+      SmartDialog.showToast(res['msg']);
     }
   }
 }

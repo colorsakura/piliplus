@@ -1,4 +1,5 @@
 import 'package:PiliPlus/common/skeleton/whisper_item.dart';
+import 'package:PiliPlus/common/widgets/dialog/dialog.dart';
 import 'package:PiliPlus/common/widgets/loading_widget/http_error.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/grpc/bilibili/app/im/v1.pb.dart';
@@ -22,7 +23,27 @@ class _WhisperPageState extends State<WhisperPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('消息')),
+      appBar: AppBar(
+        title: const Text('消息'),
+        actions: [
+          IconButton(
+            tooltip: '一键已读',
+            onPressed: () {
+              showConfirmDialog(
+                context: context,
+                title: '一键已读',
+                content: '是否清除全部新消息提醒？',
+                onConfirm: _whisperController.onClearUnread,
+              );
+            },
+            icon: const Icon(
+              size: 20,
+              Icons.cleaning_services,
+            ),
+          ),
+          const SizedBox(width: 16),
+        ],
+      ),
       body: refreshIndicator(
         onRefresh: () async {
           await _whisperController.onRefresh();
