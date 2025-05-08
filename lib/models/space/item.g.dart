@@ -43,6 +43,9 @@ SpaceItem _$ItemFromJson(Map<String, dynamic> json) => SpaceItem(
       viewContent: json['view_content'] as String?,
       iconType: (json['icon_type'] as num?)?.toInt(),
       publishTimeText: json['publish_time_text'] as String?,
+      filter: (json['filter'] as List?)
+          ?.map((e) => SpaceTabFilter.fromJson(e))
+          .toList(),
     );
 
 Map<String, dynamic> _$ItemToJson(SpaceItem instance) => <String, dynamic>{

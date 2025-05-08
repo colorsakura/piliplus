@@ -3,6 +3,7 @@ import 'dart:typed_data';
 
 import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/grpc/bilibili/app/dynamic/v1.pb.dart';
+import 'package:PiliPlus/grpc/bilibili/app/dynamic/v2.pb.dart';
 import 'package:PiliPlus/grpc/bilibili/app/im/v1.pb.dart';
 import 'package:PiliPlus/grpc/bilibili/community/service/dm/v1.pb.dart';
 import 'package:PiliPlus/grpc/bilibili/im/interfaces/v1.pb.dart';
@@ -32,8 +33,12 @@ class GrpcUrl {
   // static const popular = '/bilibili.app.show.v1.Popular/Index';
 
   // dynamic
-  static const dynRed = '/bilibili.app.dynamic.v1.Dynamic/DynRed';
-  // static const dynSpace = '/bilibili.app.dynamic.v2.Dynamic/DynSpace';
+  static const dynV1 = '/bilibili.app.dynamic.v1.Dynamic';
+  static const dynV2 = '/bilibili.app.dynamic.v2.Dynamic';
+  static const opusV2 = '/bilibili.app.dynamic.v2.Opus';
+  static const dynRed = '$dynV1/DynRed';
+  static const opusSpaceFlow = '$opusV2/OpusSpaceFlow';
+  // static const dynSpace = '$dynV2/DynSpace';
 
   // danmaku
   static const dmSegMobile = '/bilibili.community.service.dm.v1.DM/DmSegMobile';
@@ -395,6 +400,25 @@ class GrpcRepo {
         sessionId: sessionId,
       ),
       ClearUnreadReply.fromBuffer,
+    );
+  }
+
+  static Future opusSpaceFlow({
+    required int hostMid,
+    String? next,
+    required String filterType,
+  }) {
+    return _request(
+      GrpcUrl.opusSpaceFlow,
+      OpusSpaceFlowReq(
+        hostMid: Int64(hostMid),
+        pagination: Pagination(
+          pageSize: 20,
+          next: next,
+        ),
+        filterType: filterType,
+      ),
+      OpusSpaceFlowResp.fromBuffer,
     );
   }
 }

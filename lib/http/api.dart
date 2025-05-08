@@ -827,4 +827,6 @@ class Api {
       '${HttpString.appBaseUrl}/x/topic/web/details/top';
 
   static const String topicFeed = '/x/polymer/web-dynamic/v1/feed/topic';
+
+  static const String spaceOpus = '/x/polymer/web-dynamic/v1/opus/feed/space';
 }

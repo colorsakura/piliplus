@@ -261,13 +261,6 @@ class _MemberPageState extends State<MemberPage> {
     );
   }
 
-  Widget _errorWidget(msg) {
-    return errorWidget(
-      errMsg: msg,
-      onReload: _userController.onReload,
-    );
-  }
-
   Widget _buildUserInfo(LoadingState userState, [bool isV = true]) {
     return switch (userState) {
       Loading() => const CircularProgressIndicator(),
@@ -290,7 +283,10 @@ class _MemberPageState extends State<MemberPage> {
               behavior: HitTestBehavior.opaque,
               child: const SizedBox(height: 56, width: double.infinity),
             ),
-      Error() => _errorWidget(userState.errMsg),
+      Error() => scrollErrorWidget(
+          errMsg: userState.errMsg,
+          onReload: _userController.onReload,
+        ),
     };
   }
 }

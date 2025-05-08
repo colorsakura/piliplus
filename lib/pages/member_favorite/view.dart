@@ -1,10 +1,12 @@
-import 'package:PiliPlus/common/widgets/loading_widget/loading_widget.dart';
+import 'package:PiliPlus/common/skeleton/video_card_h.dart';
+import 'package:PiliPlus/common/widgets/loading_widget/http_error.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/space_fav/datum.dart';
 import 'package:PiliPlus/models/space_fav/list.dart';
 import 'package:PiliPlus/pages/member_favorite/controller.dart';
 import 'package:PiliPlus/pages/member_favorite/widget/item.dart';
+import 'package:PiliPlus/utils/grid.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -35,40 +37,48 @@ class _MemberFavoriteState extends State<MemberFavorite>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return Obx(() => _buildBody(_controller.loadingState.value));
+    final theme = Theme.of(context);
+    return refreshIndicator(
+      onRefresh: _controller.onRefresh,
+      child: CustomScrollView(
+        slivers: [Obx(() => _buildBody(theme, _controller.loadingState.value))],
+      ),
+    );
   }
 
-  Widget _buildBody(LoadingState loadingState) {
-    final theme = Theme.of(context);
+  Widget _buildBody(ThemeData theme, LoadingState loadingState) {
     return switch (loadingState) {
-      Loading() => loadingWidget,
+      Loading() => SliverGrid(
+          gridDelegate: Grid.videoCardHDelegate(context),
+          delegate: SliverChildBuilderDelegate(
+            (context, index) {
+              return const VideoCardHSkeleton();
+            },
+            childCount: 10,
+          ),
+        ),
       Success() => (loadingState.response as List?)?.isNotEmpty == true
-          ? refreshIndicator(
-              onRefresh: _controller.onRefresh,
-              child: CustomScrollView(
-                slivers: [
-                  SliverToBoxAdapter(
-                    child: Obx(
-                      () => _buildItem(theme, _controller.first.value, true),
-                    ),
+          ? SliverMainAxisGroup(
+              slivers: [
+                SliverToBoxAdapter(
+                  child: Obx(
+                      () => _buildItem(theme, _controller.first.value, true)),
+                ),
+                SliverToBoxAdapter(
+                  child: Obx(
+                      () => _buildItem(theme, _controller.second.value, false)),
+                ),
+                SliverToBoxAdapter(
+                  child: SizedBox(
+                    height: 80 + MediaQuery.of(context).padding.bottom,
                   ),
-                  SliverToBoxAdapter(
-                    child: Obx(
-                      () => _buildItem(theme, _controller.second.value, false),
-                    ),
-                  ),
-                  SliverToBoxAdapter(
-                    child: SizedBox(
-                      height: 80 + MediaQuery.of(context).padding.bottom,
-                    ),
-                  )
-                ],
-              ),
+                ),
+              ],
             )
-          : scrollErrorWidget(
+          : HttpError(
               onReload: _controller.onReload,
             ),
-      Error() => scrollErrorWidget(
+      Error() => HttpError(
           errMsg: loadingState.errMsg,
           onReload: _controller.onReload,
         ),

@@ -102,12 +102,12 @@ class _WhisperDetailPageState
           children: [
             Expanded(
               child: Listener(
-                child: Obx(() =>
-                    _buildBody(_whisperDetailController.loadingState.value)),
                 onPointerDown: (event) {
-                  // Hide panel when touch ListView.
                   hidePanel();
                 },
+                behavior: HitTestBehavior.opaque,
+                child: Obx(() =>
+                    _buildBody(_whisperDetailController.loadingState.value)),
               ),
             ),
             _buildInputView(theme),

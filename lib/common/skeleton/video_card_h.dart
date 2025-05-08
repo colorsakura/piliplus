@@ -22,7 +22,7 @@ class VideoCardHSkeleton extends StatelessWidget {
               aspectRatio: StyleString.aspectRatio,
               child: LayoutBuilder(
                 builder: (context, boxConstraints) {
-                  return Container(
+                  return DecoratedBox(
                     decoration: BoxDecoration(
                       color: color,
                       borderRadius: StyleString.mdRadius,

@@ -1,5 +1,5 @@
 import 'package:PiliPlus/common/constants.dart';
-import 'package:PiliPlus/common/widgets/loading_widget/loading_widget.dart';
+import 'package:PiliPlus/common/widgets/loading_widget/http_error.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/space_archive/item.dart';
@@ -39,55 +39,54 @@ class _MemberBangumiState extends State<MemberBangumi>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return Obx(() => _buildBody(_controller.loadingState.value));
+    return refreshIndicator(
+      onRefresh: _controller.onRefresh,
+      child: CustomScrollView(
+        slivers: [
+          SliverPadding(
+            padding: EdgeInsets.only(
+              left: StyleString.safeSpace,
+              right: StyleString.safeSpace,
+              top: StyleString.safeSpace,
+              bottom: StyleString.safeSpace +
+                  MediaQuery.of(context).padding.bottom +
+                  80,
+            ),
+            sliver: Obx(
+              () => _buildBody(_controller.loadingState.value),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   Widget _buildBody(LoadingState<List<SpaceArchiveItem>?> loadingState) {
     return switch (loadingState) {
-      Loading() => loadingWidget,
+      Loading() => const SliverToBoxAdapter(),
       Success() => loadingState.response?.isNotEmpty == true
-          ? refreshIndicator(
-              onRefresh: _controller.onRefresh,
-              child: CustomScrollView(
-                slivers: [
-                  SliverPadding(
-                    padding: EdgeInsets.only(
-                      left: StyleString.safeSpace,
-                      right: StyleString.safeSpace,
-                      top: StyleString.safeSpace,
-                      bottom: StyleString.safeSpace +
-                          MediaQuery.of(context).padding.bottom +
-                          80,
-                    ),
-                    sliver: SliverGrid(
-                      gridDelegate: SliverGridDelegateWithExtentAndRatio(
-                        mainAxisSpacing: StyleString.cardSpace,
-                        crossAxisSpacing: StyleString.cardSpace,
-                        maxCrossAxisExtent: Grid.smallCardWidth / 3 * 2,
-                        childAspectRatio: 0.75,
-                        mainAxisExtent:
-                            MediaQuery.textScalerOf(context).scale(52),
-                      ),
-                      delegate: SliverChildBuilderDelegate(
-                        (context, index) {
-                          if (index == loadingState.response!.length - 1) {
-                            _controller.onLoadMore();
-                          }
-                          return BangumiCardVMemberHome(
-                            bangumiItem: loadingState.response![index],
-                          );
-                        },
-                        childCount: loadingState.response!.length,
-                      ),
-                    ),
-                  ),
-                ],
+          ? SliverGrid(
+              gridDelegate: SliverGridDelegateWithExtentAndRatio(
+                mainAxisSpacing: StyleString.cardSpace,
+                crossAxisSpacing: StyleString.cardSpace,
+                maxCrossAxisExtent: Grid.smallCardWidth / 3 * 2,
+                childAspectRatio: 0.75,
+                mainAxisExtent: MediaQuery.textScalerOf(context).scale(52),
+              ),
+              delegate: SliverChildBuilderDelegate(
+                (context, index) {
+                  if (index == loadingState.response!.length - 1) {
+                    _controller.onLoadMore();
+                  }
+                  return BangumiCardVMemberHome(
+                    bangumiItem: loadingState.response![index],
+                  );
+                },
+                childCount: loadingState.response!.length,
               ),
             )
-          : scrollErrorWidget(
-              onReload: _controller.onReload,
-            ),
-      Error() => scrollErrorWidget(
+          : HttpError(onReload: _controller.onReload),
+      Error() => HttpError(
           errMsg: loadingState.errMsg,
           onReload: _controller.onReload,
         ),

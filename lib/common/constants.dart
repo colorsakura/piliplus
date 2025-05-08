@@ -26,6 +26,12 @@ class Constants {
       '{"appId":5,"platform":3,"version":"1.46.2","abtest":""}';
   // 请求时会自动encodeComponent
 
+  // app
+  static const String userAgentApp =
+      'Mozilla/5.0 BiliDroid/8.43.0 (bbcallen@gmail.com) os/android model/android mobi_app/android build/8430300 channel/bili innerVer/8430300 osVer/15 network/2';
+  static const String statisticsApp =
+      '{"appId":5,"platform":3,"version":"8.43.0","abtest":""}';
+
   static const urlPattern =
       r'https?://[-A-Za-z0-9+&@#/%?=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]';
 

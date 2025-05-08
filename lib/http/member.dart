@@ -2,6 +2,9 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:PiliPlus/common/constants.dart';
+import 'package:PiliPlus/grpc/bilibili/app/dynamic/v2.pb.dart'
+    show OpusSpaceFlowResp;
+import 'package:PiliPlus/grpc/grpc_repo.dart';
 import 'package:PiliPlus/http/api.dart';
 import 'package:PiliPlus/http/constants.dart';
 import 'package:PiliPlus/http/init.dart';
@@ -18,6 +21,7 @@ import 'package:PiliPlus/models/space/data.dart';
 import 'package:PiliPlus/models/space_archive/data.dart';
 import 'package:PiliPlus/models/space_article/data.dart';
 import 'package:PiliPlus/models/space_fav/space_fav.dart';
+import 'package:PiliPlus/models/space_opus/data.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:PiliPlus/utils/wbi_sign.dart';
@@ -65,15 +69,15 @@ class MemberHttp {
     required int page,
   }) async {
     Map<String, String> data = {
-      'build': '1462100',
+      'build': '8430300',
       'c_locale': 'zh_CN',
-      'channel': 'yingyongbao',
-      'mobi_app': 'android_hd',
+      'channel': 'bili',
+      'mobi_app': 'android',
       'platform': 'android',
-      'pn': '$page',
+      'pn': page.toString(),
       'ps': '10',
       's_locale': 'zh_CN',
-      'statistics': Constants.statistics,
+      'statistics': Constants.statisticsApp,
       'vmid': mid.toString(),
     };
     dynamic res = await Request().get(
@@ -82,7 +86,7 @@ class MemberHttp {
       options: Options(
         headers: {
           'bili-http-engine': 'cronet',
-          'user-agent': Constants.userAgent,
+          'user-agent': Constants.userAgentApp,
         },
       ),
     );
@@ -97,13 +101,13 @@ class MemberHttp {
     required int mid,
   }) async {
     Map<String, String> data = {
-      'build': '1462100',
+      'build': '8430300',
       'c_locale': 'zh_CN',
-      'channel': 'yingyongbao',
-      'mobi_app': 'android_hd',
+      'channel': 'bili',
+      'mobi_app': 'android',
       'platform': 'android',
       's_locale': 'zh_CN',
-      'statistics': Constants.statistics,
+      'statistics': Constants.statisticsApp,
       'up_mid': mid.toString(),
     };
     dynamic res = await Request().get(
@@ -112,7 +116,7 @@ class MemberHttp {
       options: Options(
         headers: {
           'bili-http-engine': 'cronet',
-          'user-agent': Constants.userAgent,
+          'user-agent': Constants.userAgentApp,
         },
       ),
     );
@@ -156,10 +160,10 @@ class MemberHttp {
   }) async {
     Map<String, String> data = {
       if (aid != null) 'aid': aid.toString(),
-      'build': '1462100',
+      'build': '8430300',
       'c_locale': 'zh_CN',
-      'channel': 'yingyongbao',
-      'mobi_app': 'android_hd',
+      'channel': 'bili',
+      'mobi_app': 'android',
       'platform': 'android',
       's_locale': 'zh_CN',
       'ps': '20',
@@ -171,7 +175,7 @@ class MemberHttp {
       if (order != null) 'order': order,
       if (sort != null) 'sort': sort,
       if (includeCursor != null) 'include_cursor': includeCursor.toString(),
-      'statistics': Constants.statistics,
+      'statistics': Constants.statisticsApp,
       'vmid': mid.toString(),
     };
     dynamic res = await Request().get(
@@ -186,7 +190,7 @@ class MemberHttp {
       options: Options(
         headers: {
           'bili-http-engine': 'cronet',
-          'user-agent': Constants.userAgent,
+          'user-agent': Constants.userAgentApp,
         },
       ),
     );
@@ -213,13 +217,13 @@ class MemberHttp {
       'cid': cid.toString(),
       'contain': contain.toString(),
       'index': index.toString(),
-      'build': '1462100',
+      'build': '8430300',
       'c_locale': 'zh_CN',
-      'channel': 'yingyongbao',
-      'mobi_app': 'android_hd',
+      'channel': 'bili',
+      'mobi_app': 'android',
       'platform': 'android',
       's_locale': 'zh_CN',
-      'statistics': Constants.statistics,
+      'statistics': Constants.statisticsApp,
       'vmid': mid.toString(),
     };
     dynamic res = await Request().get(
@@ -228,7 +232,7 @@ class MemberHttp {
       options: Options(
         headers: {
           'bili-http-engine': 'cronet',
-          'user-agent': Constants.userAgent,
+          'user-agent': Constants.userAgentApp,
         },
       ),
     );
@@ -244,14 +248,14 @@ class MemberHttp {
     dynamic fromViewAid,
   }) async {
     Map<String, String> data = {
-      'build': '1462100',
+      'build': '8430300',
       'c_locale': 'zh_CN',
-      'channel': 'yingyongbao',
-      'mobi_app': 'android_hd',
+      'channel': 'bili',
+      'mobi_app': 'android',
       'platform': 'android',
       's_locale': 'zh_CN',
       if (fromViewAid != null) 'from_view_aid': fromViewAid,
-      'statistics': Constants.statistics,
+      'statistics': Constants.statisticsApp,
       'vmid': mid.toString(),
     };
     dynamic res = await Request().get(
@@ -260,7 +264,7 @@ class MemberHttp {
       options: Options(
         headers: {
           'bili-http-engine': 'cronet',
-          'user-agent': Constants.userAgent,
+          'user-agent': Constants.userAgentApp,
         },
       ),
     );
@@ -839,6 +843,46 @@ class MemberHttp {
     });
     if (res.data['code'] == 0) {
       return LoadingState.success(FollowDataModel.fromJson(res.data['data']));
+    } else {
+      return LoadingState.error(res.data['message']);
+    }
+  }
+
+  static Future<LoadingState<OpusSpaceFlowResp>> opusSpaceFlow({
+    required int hostMid,
+    String? next,
+    required String filterType,
+  }) async {
+    var res = await GrpcRepo.opusSpaceFlow(
+      hostMid: hostMid,
+      next: next,
+      filterType: filterType,
+    );
+    if (res['status']) {
+      return LoadingState.success(res['data']);
+    } else {
+      return LoadingState.error(res['msg']);
+    }
+  }
+
+  static Future<LoadingState<SpaceOpusData>> spaceOpus({
+    required int hostMid,
+    required int page,
+    String offset = '',
+    String type = 'all',
+  }) async {
+    var res = await Request().get(
+      Api.spaceOpus,
+      queryParameters: await WbiSign.makSign({
+        'host_mid': hostMid,
+        'page': page,
+        'offset': offset,
+        'type': type,
+        'web_location': 333.1387,
+      }),
+    );
+    if (res.data['code'] == 0) {
+      return LoadingState.success(SpaceOpusData.fromJson(res.data['data']));
     } else {
       return LoadingState.error(res.data['message']);
     }
