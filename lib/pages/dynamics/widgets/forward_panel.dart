@@ -92,6 +92,22 @@ Widget forWard(
               ],
             ),
             const SizedBox(height: 2),
+            if (item.modules.moduleDynamic?.topic != null)
+              GestureDetector(
+                onTap: () {
+                  Get.toNamed(
+                    '/dynTopic',
+                    parameters: {
+                      'id': item.modules.moduleDynamic!.topic!.id!.toString(),
+                      'name': item.modules.moduleDynamic!.topic!.name!,
+                    },
+                  );
+                },
+                child: Text(
+                  '#${item.modules.moduleDynamic!.topic!.name}',
+                  style: TextStyle(color: theme.colorScheme.primary),
+                ),
+              ),
             if (richNodes != null)
               Text.rich(
                 richNodes,

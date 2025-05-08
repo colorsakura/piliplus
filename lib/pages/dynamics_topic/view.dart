@@ -113,7 +113,7 @@ class _DynTopicPageState extends State<DynTopicPage> {
                                 _controller.onLoadMore();
                               }
                               final item = loadingState.response![index];
-                              if (item.topicType != null) {
+                              if (item.dynamicCardItem != null) {
                                 return DynamicPanel(
                                   item: item.dynamicCardItem!,
                                 );

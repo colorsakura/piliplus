@@ -57,7 +57,10 @@ Widget content(
             },
             child: Text(
               '#${item.modules.moduleDynamic!.topic!.name}',
-              style: TextStyle(color: theme.colorScheme.primary),
+              style: TextStyle(
+                fontSize: 15,
+                color: theme.colorScheme.primary,
+              ),
             ),
           ),
         ],
@@ -65,9 +68,7 @@ Widget content(
           source == 'detail'
               ? SelectableText.rich(
                   richNodes,
-                  style: !isSave
-                      ? const TextStyle(fontSize: 16)
-                      : const TextStyle(fontSize: 15),
+                  style: const TextStyle(fontSize: 15),
                 )
               : Text.rich(
                   style: const TextStyle(fontSize: 15),
