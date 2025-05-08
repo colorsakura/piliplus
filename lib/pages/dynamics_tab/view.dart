@@ -151,22 +151,15 @@ class _DynamicsTabPageState
                             : LastChildLayoutType.none;
                       },
                       children: [
-                        if (dynamicsController.tabController.index == 4 &&
-                            dynamicsController.mid.value != -1) ...[
-                          for (var i in loadingState.response!)
-                            DynamicPanel(
-                              item: i,
-                              onRemove: controller.onRemove,
-                            ),
-                        ] else ...[
-                          for (var i in loadingState.response!)
-                            if (!dynamicsController.tempBannedList
-                                .contains(i.modules.moduleAuthor?.mid))
-                              DynamicPanel(
-                                item: i,
-                                onRemove: controller.onRemove,
-                              ),
-                        ]
+                        for (int index = 0;
+                            index < loadingState.response!.length;
+                            index++)
+                          DynamicPanel(
+                            item: loadingState.response![index],
+                            onRemove: (idStr) =>
+                                controller.onRemove(index, idStr),
+                            onBlock: () => controller.onBlock(index),
+                          )
                       ],
                     )
                   : SliverCrossAxisGroup(
@@ -180,17 +173,12 @@ class _DynamicsTabPageState
                                 controller.onLoadMore();
                               }
                               final item = loadingState.response![index];
-                              if ((dynamicsController.tabController.index ==
-                                          4 &&
-                                      dynamicsController.mid.value != -1) ||
-                                  !dynamicsController.tempBannedList.contains(
-                                      item.modules.moduleAuthor?.mid)) {
-                                return DynamicPanel(
-                                  item: item,
-                                  onRemove: controller.onRemove,
-                                );
-                              }
-                              return const SizedBox.shrink();
+                              return DynamicPanel(
+                                item: item,
+                                onRemove: (idStr) =>
+                                    controller.onRemove(index, idStr),
+                                onBlock: () => controller.onBlock(index),
+                              );
                             },
                             itemCount: loadingState.response!.length,
                           ),

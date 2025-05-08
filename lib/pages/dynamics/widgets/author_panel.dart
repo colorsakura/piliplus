@@ -23,9 +23,10 @@ class AuthorPanel extends StatelessWidget {
   final DynamicItemModel item;
   final Function? addBannedList;
   final String? source;
-  final Function? onRemove;
+  final ValueChanged? onRemove;
   final bool isSave;
   final Function(bool isTop, dynamic dynId)? onSetTop;
+  final VoidCallback? onBlock;
 
   const AuthorPanel({
     super.key,
@@ -35,6 +36,7 @@ class AuthorPanel extends StatelessWidget {
     this.onRemove,
     this.isSave = false,
     this.onSetTop,
+    this.onBlock,
   });
 
   Widget _buildAvatar() {
@@ -364,11 +366,14 @@ class AuthorPanel extends StatelessWidget {
                 leading: const Icon(Icons.visibility_off_outlined, size: 19),
                 onTap: () {
                   Get.back();
-                  Get.find<DynamicsController>()
-                      .tempBannedList
-                      .add(item.modules.moduleAuthor!.mid!);
-                  SmartDialog.showToast(
-                      '已临时屏蔽${item.modules.moduleAuthor?.name}(${item.modules.moduleAuthor!.mid})，重启恢复');
+                  onBlock?.call();
+                  try {
+                    Get.find<DynamicsController>()
+                        .tempBannedList
+                        .add(item.modules.moduleAuthor!.mid!);
+                    SmartDialog.showToast(
+                        '已临时屏蔽${item.modules.moduleAuthor?.name}(${item.modules.moduleAuthor!.mid!})，重启恢复');
+                  } catch (_) {}
                 },
                 minLeadingWidth: 0,
               ),
@@ -424,7 +429,7 @@ class AuthorPanel extends StatelessWidget {
                             TextButton(
                               onPressed: () {
                                 Get.back();
-                                onRemove?.call(item.idStr);
+                                onRemove!(item.idStr);
                               },
                               child: const Text('确定'),
                             ),

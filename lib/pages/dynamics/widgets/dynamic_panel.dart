@@ -12,10 +12,11 @@ import 'package:get/get.dart';
 class DynamicPanel extends StatelessWidget {
   final DynamicItemModel item;
   final String? source;
-  final Function? onRemove;
+  final ValueChanged? onRemove;
   final Function(List<String>, int)? callback;
   final bool isSave;
   final Function(bool isTop, dynamic dynId)? onSetTop;
+  final VoidCallback? onBlock;
 
   const DynamicPanel({
     super.key,
@@ -25,6 +26,7 @@ class DynamicPanel extends StatelessWidget {
     this.callback,
     this.isSave = false,
     this.onSetTop,
+    this.onBlock,
   });
 
   @override
@@ -36,6 +38,7 @@ class DynamicPanel extends StatelessWidget {
       onRemove: onRemove,
       isSave: isSave,
       onSetTop: onSetTop,
+      onBlock: onBlock,
     );
     final child = Material(
       elevation: 0,

@@ -25,7 +25,7 @@ class DynamicsController extends GetxController
   RxInt mid = (-1).obs;
   Rx<UpItem> upInfo = UpItem().obs;
   late TabController tabController;
-  RxList<int> tempBannedList = <int>[].obs;
+  Set<int> tempBannedList = <int>{};
   late List<Widget> tabsPageList;
   RxInt initialValue = 0.obs;
   RxBool isLogin = false.obs;
