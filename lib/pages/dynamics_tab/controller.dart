@@ -87,8 +87,10 @@ class DynamicsTabController
   }
 
   void onBlock(int index) {
-    loadingState
-      ..value.data!.removeAt(index)
-      ..refresh();
+    if (dynamicsType != DynamicsTabType.up) {
+      loadingState
+        ..value.data!.removeAt(index)
+        ..refresh();
+    }
   }
 }
