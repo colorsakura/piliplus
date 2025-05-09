@@ -43,18 +43,9 @@ class _WhisperSecPageState extends State<WhisperSecPage> {
                       .map((e) => PopupMenuItem(
                             onTap: () {
                               e.type.action(
-                                  context: context,
-                                  onConfirm: () {
-                                    switch (e.type) {
-                                      case ThreeDotItemType
-                                            .THREE_DOT_ITEM_TYPE_READ_ALL:
-                                        _controller.onClearUnread();
-                                      case ThreeDotItemType
-                                            .THREE_DOT_ITEM_TYPE_CLEAR_LIST:
-                                        _controller.onDeleteList();
-                                      default:
-                                    }
-                                  });
+                                context: context,
+                                controller: _controller,
+                              );
                             },
                             child: Row(
                               children: [

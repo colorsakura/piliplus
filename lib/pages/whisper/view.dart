@@ -34,17 +34,9 @@ class _WhisperPageState extends State<WhisperPage> {
                   tooltip: e.hasTitle() ? e.title : null,
                   onPressed: () {
                     e.type.action(
-                        context: context,
-                        onConfirm: () {
-                          switch (e.type) {
-                            case ThreeDotItemType.THREE_DOT_ITEM_TYPE_READ_ALL:
-                              _controller.onClearUnread();
-                            case ThreeDotItemType
-                                  .THREE_DOT_ITEM_TYPE_CLEAR_LIST:
-                              _controller.onDeleteList();
-                            default:
-                          }
-                        });
+                      context: context,
+                      controller: _controller,
+                    );
                   },
                   icon: Icon(size: 20, e.type.icon),
                 );
@@ -60,18 +52,9 @@ class _WhisperPageState extends State<WhisperPage> {
                       .map((e) => PopupMenuItem(
                             onTap: () {
                               e.type.action(
-                                  context: context,
-                                  onConfirm: () {
-                                    switch (e.type) {
-                                      case ThreeDotItemType
-                                            .THREE_DOT_ITEM_TYPE_READ_ALL:
-                                        _controller.onClearUnread();
-                                      case ThreeDotItemType
-                                            .THREE_DOT_ITEM_TYPE_CLEAR_LIST:
-                                        _controller.onDeleteList();
-                                      default:
-                                    }
-                                  });
+                                context: context,
+                                controller: _controller,
+                              );
                             },
                             child: Row(
                               children: [
