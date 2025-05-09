@@ -82,8 +82,7 @@ class WhisperSecController
   }
 
   Future<void> onClearUnread() async {
-    final res = await ImGrpc.clearUnread(
-        pageType: SessionPageType.SESSION_PAGE_TYPE_UNFOLLOWED);
+    final res = await ImGrpc.clearUnread(pageType: sessionPageType);
     if (res['status']) {
       if (loadingState.value is Success) {
         List<Session>? list = loadingState.value.data;
@@ -103,8 +102,7 @@ class WhisperSecController
   }
 
   Future<void> onDeleteList() async {
-    var res = await ImGrpc.deleteSessionList(
-        pageType: SessionPageType.SESSION_PAGE_TYPE_UNFOLLOWED);
+    var res = await ImGrpc.deleteSessionList(pageType: sessionPageType);
     if (res['status']) {
       loadingState.value = LoadingState.success(null);
     } else {

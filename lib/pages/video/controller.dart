@@ -1149,7 +1149,7 @@ class VideoDetailController extends GetxController
         _querySponsorBlock();
       }
 
-      if (data.acceptDesc!.isNotEmpty && data.acceptDesc!.contains('试看')) {
+      if (data.acceptDesc?.contains('试看') == true) {
         SmartDialog.showToast(
           '该视频为专属视频，仅提供试看',
           displayTime: const Duration(seconds: 3),
