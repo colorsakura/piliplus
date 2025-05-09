@@ -1,9 +1,16 @@
+import 'package:PiliPlus/common/widgets/dialog/dialog.dart';
 import 'package:PiliPlus/common/widgets/interactiveviewer_gallery/hero_dialog_route.dart';
 import 'package:PiliPlus/common/widgets/interactiveviewer_gallery/interactiveviewer_gallery.dart';
+import 'package:PiliPlus/grpc/bilibili/app/im/v1.pbenum.dart'
+    show IMSettingType, ThreeDotItemType;
 import 'package:PiliPlus/models/common/image_preview_type.dart';
+import 'package:PiliPlus/pages/contact/view.dart';
+import 'package:PiliPlus/pages/whisper_settings/view.dart';
 import 'package:floating/floating.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 extension ImageExtension on num? {
   int? cacheSize(BuildContext context) {
@@ -148,5 +155,59 @@ extension RationalExt on Rational {
     const min = 1 / 2.39;
     const max = 2.39;
     return (min <= aspectRatio) && (aspectRatio <= max);
+  }
+}
+
+extension ThreeDotItemTypeExt on ThreeDotItemType {
+  IconData get icon => switch (this) {
+        ThreeDotItemType.THREE_DOT_ITEM_TYPE_MSG_SETTING => Icons.settings,
+        ThreeDotItemType.THREE_DOT_ITEM_TYPE_READ_ALL =>
+          Icons.cleaning_services,
+        ThreeDotItemType.THREE_DOT_ITEM_TYPE_CLEAR_LIST =>
+          Icons.delete_forever_outlined,
+        ThreeDotItemType.THREE_DOT_ITEM_TYPE_UP_HELPER => Icons.live_tv,
+        ThreeDotItemType.THREE_DOT_ITEM_TYPE_CONTACTS =>
+          Icons.account_box_outlined,
+        ThreeDotItemType.THREE_DOT_ITEM_TYPE_FANS_GROUP_HELPER =>
+          Icons.notifications_none,
+        _ => MdiIcons.circleMedium,
+      };
+
+  void action(
+      {required BuildContext context, required VoidCallback onConfirm}) {
+    switch (this) {
+      case ThreeDotItemType.THREE_DOT_ITEM_TYPE_READ_ALL:
+        showConfirmDialog(
+          context: context,
+          title: '一键已读',
+          content: '是否清除全部新消息提醒？',
+          onConfirm: onConfirm,
+        );
+      case ThreeDotItemType.THREE_DOT_ITEM_TYPE_CLEAR_LIST:
+        showConfirmDialog(
+          context: context,
+          title: '清空列表',
+          content: '清空后所有消息将被删除，无法恢复',
+          onConfirm: onConfirm,
+        );
+      case ThreeDotItemType.THREE_DOT_ITEM_TYPE_MSG_SETTING:
+        Get.to(const WhisperSettingsPage(
+          imSettingType: IMSettingType.SETTING_TYPE_NEED_ALL,
+        ));
+      case ThreeDotItemType.THREE_DOT_ITEM_TYPE_UP_HELPER:
+        Get.toNamed(
+          '/whisperDetail',
+          parameters: {
+            'talkerId': '844424930131966',
+            'name': 'UP主小助手',
+            'face':
+                'https://message.biliimg.com/bfs/im/489a63efadfb202366c2f88853d2217b5ddc7a13.png',
+          },
+        );
+      case ThreeDotItemType.THREE_DOT_ITEM_TYPE_CONTACTS:
+        Get.to(const ContactPage(isFromSelct: false));
+      default:
+        SmartDialog.showToast(name);
+    }
   }
 }

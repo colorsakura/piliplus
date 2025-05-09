@@ -1,11 +1,11 @@
 import 'package:PiliPlus/common/skeleton/whisper_item.dart';
-import 'package:PiliPlus/common/widgets/dialog/dialog.dart';
 import 'package:PiliPlus/common/widgets/loading_widget/http_error.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/grpc/bilibili/app/im/v1.pb.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/pages/whisper/widgets/item.dart';
 import 'package:PiliPlus/pages/whisper_secondary/controller.dart';
+import 'package:PiliPlus/utils/extension.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -35,50 +35,40 @@ class _WhisperSecPageState extends State<WhisperSecPage> {
       appBar: AppBar(
         title: Text(widget.name),
         actions: [
-          PopupMenuButton(
-            itemBuilder: (context) {
-              return [
-                PopupMenuItem(
-                  onTap: () {
-                    showConfirmDialog(
-                      context: context,
-                      title: '一键已读',
-                      content: '是否清除全部新消息提醒？',
-                      onConfirm: _controller.onClearUnread,
-                    );
-                  },
-                  child: const Row(
-                    children: [
-                      Icon(
-                        size: 17,
-                        Icons.cleaning_services,
-                      ),
-                      Text('  一键已读'),
-                    ],
-                  ),
-                ),
-                PopupMenuItem(
-                  onTap: () {
-                    showConfirmDialog(
-                      context: context,
-                      title: '清空列表',
-                      content: '清空后所有消息将被删除，无法恢复',
-                      onConfirm: _controller.onDeleteList,
-                    );
-                  },
-                  child: const Row(
-                    children: [
-                      Icon(
-                        size: 19,
-                        Icons.delete_forever_outlined,
-                      ),
-                      Text('  清空列表'),
-                    ],
-                  ),
-                ),
-              ];
-            },
-          ),
+          Obx(() {
+            if (_controller.threeDotItems.value?.isNotEmpty == true) {
+              return PopupMenuButton(
+                itemBuilder: (context) {
+                  return _controller.threeDotItems.value!
+                      .map((e) => PopupMenuItem(
+                            onTap: () {
+                              e.type.action(
+                                  context: context,
+                                  onConfirm: () {
+                                    switch (e.type) {
+                                      case ThreeDotItemType
+                                            .THREE_DOT_ITEM_TYPE_READ_ALL:
+                                        _controller.onClearUnread();
+                                      case ThreeDotItemType
+                                            .THREE_DOT_ITEM_TYPE_CLEAR_LIST:
+                                        _controller.onDeleteList();
+                                      default:
+                                    }
+                                  });
+                            },
+                            child: Row(
+                              children: [
+                                Icon(size: 17, e.type.icon),
+                                Text('  ${e.title}'),
+                              ],
+                            ),
+                          ))
+                      .toList();
+                },
+              );
+            }
+            return const SizedBox.shrink();
+          }),
         ],
       ),
       body: refreshIndicator(

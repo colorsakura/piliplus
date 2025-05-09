@@ -1,10 +1,17 @@
 import 'package:PiliPlus/grpc/bilibili/app/im/v1.pb.dart'
-    show Offset, Session, SessionId, SessionPageType, SessionSecondaryReply;
+    show
+        Offset,
+        Session,
+        SessionId,
+        SessionPageType,
+        SessionSecondaryReply,
+        ThreeDotItem;
 import 'package:PiliPlus/grpc/im.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/http/msg.dart';
 import 'package:PiliPlus/pages/common/common_list_controller.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
+import 'package:get/get.dart';
 import 'package:protobuf/protobuf.dart' show PbMap;
 
 class WhisperSecController
@@ -15,6 +22,7 @@ class WhisperSecController
 
   PbMap<int, Offset>? offset;
   final SessionPageType sessionPageType;
+  Rx<List<ThreeDotItem>?> threeDotItems = Rx<List<ThreeDotItem>?>(null);
 
   @override
   void onInit() {
@@ -33,7 +41,17 @@ class WhisperSecController
     if (response.paginationParams.hasMore == false) {
       isEnd = true;
     }
+
     return response.sessions;
+  }
+
+  @override
+  bool customHandleResponse(
+      bool isRefresh, Success<SessionSecondaryReply> response) {
+    if (isRefresh) {
+      threeDotItems.value = response.response.threeDotItems;
+    }
+    return false;
   }
 
   @override

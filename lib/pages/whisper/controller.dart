@@ -1,5 +1,11 @@
 import 'package:PiliPlus/grpc/bilibili/app/im/v1.pb.dart'
-    show Offset, Session, SessionId, SessionMainReply, SessionPageType;
+    show
+        Offset,
+        Session,
+        SessionId,
+        SessionMainReply,
+        SessionPageType,
+        ThreeDotItem;
 import 'package:PiliPlus/grpc/im.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/http/msg.dart';
@@ -17,6 +23,9 @@ class WhisperController
   late final RxList<int> unreadCounts;
 
   PbMap<int, Offset>? offset;
+
+  Rx<List<ThreeDotItem>?> threeDotItems = Rx<List<ThreeDotItem>?>(null);
+  Rx<List<ThreeDotItem>?> outsideItem = Rx<List<ThreeDotItem>?>(null);
 
   @override
   void onInit() {
@@ -70,6 +79,16 @@ class WhisperController
     offset = response.paginationParams.offsets;
     isEnd = !response.paginationParams.hasMore;
     return response.sessions;
+  }
+
+  @override
+  bool customHandleResponse(
+      bool isRefresh, Success<SessionMainReply> response) {
+    if (isRefresh) {
+      threeDotItems.value = response.response.threeDotItems;
+      outsideItem.value = response.response.outsideItem;
+    }
+    return false;
   }
 
   @override
@@ -136,6 +155,16 @@ class WhisperController
         }
       }
       SmartDialog.showToast('已标记为已读');
+    } else {
+      SmartDialog.showToast(res['msg']);
+    }
+  }
+
+  Future<void> onDeleteList() async {
+    var res = await ImGrpc.deleteSessionList(
+        pageType: SessionPageType.SESSION_PAGE_TYPE_HOME);
+    if (res['status']) {
+      loadingState.value = LoadingState.success(null);
     } else {
       SmartDialog.showToast(res['msg']);
     }
