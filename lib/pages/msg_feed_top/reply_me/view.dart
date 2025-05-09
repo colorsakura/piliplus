@@ -3,9 +3,12 @@ import 'package:PiliPlus/common/widgets/dialog/dialog.dart';
 import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
 import 'package:PiliPlus/common/widgets/loading_widget/http_error.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
+import 'package:PiliPlus/grpc/bilibili/app/im/v1.pbenum.dart'
+    show IMSettingType;
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/msg/msgfeed_reply_me.dart';
 import 'package:PiliPlus/pages/msg_feed_top/reply_me/controller.dart';
+import 'package:PiliPlus/pages/whisper_settings/view.dart';
 import 'package:PiliPlus/utils/app_scheme.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
@@ -25,7 +28,21 @@ class _ReplyMePageState extends State<ReplyMePage> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Scaffold(
-      appBar: AppBar(title: const Text('回复我的')),
+      appBar: AppBar(
+        title: const Text('回复我的'),
+        actions: [
+          IconButton(
+            onPressed: () {
+              Get.to(
+                const WhisperSettingsPage(
+                    imSettingType: IMSettingType.SETTING_TYPE_OLD_REPLY_ME),
+              );
+            },
+            icon: const Icon(size: 22, Icons.settings),
+          ),
+          const SizedBox(width: 16),
+        ],
+      ),
       body: refreshIndicator(
         onRefresh: _replyMeController.onRefresh,
         child: CustomScrollView(

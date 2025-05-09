@@ -4,8 +4,10 @@ import 'package:PiliPlus/common/widgets/loading_widget/http_error.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/grpc/bilibili/app/im/v1.pb.dart';
 import 'package:PiliPlus/http/loading_state.dart';
+import 'package:PiliPlus/pages/contact/view.dart';
 import 'package:PiliPlus/pages/whisper/controller.dart';
 import 'package:PiliPlus/pages/whisper/widgets/item.dart';
+import 'package:PiliPlus/pages/whisper_settings/view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
@@ -41,7 +43,64 @@ class _WhisperPageState extends State<WhisperPage> {
               Icons.cleaning_services,
             ),
           ),
-          const SizedBox(width: 16),
+          PopupMenuButton(
+            itemBuilder: (context) {
+              return [
+                PopupMenuItem(
+                  onTap: () {
+                    Get.to(const WhisperSettingsPage(
+                      imSettingType: IMSettingType.SETTING_TYPE_NEED_ALL,
+                    ));
+                  },
+                  child: const Row(
+                    children: [
+                      Icon(size: 19, Icons.settings),
+                      Text('  消息设置'),
+                    ],
+                  ),
+                ),
+                PopupMenuItem(
+                  onTap: () {
+                    Get.toNamed(
+                      '/whisperDetail',
+                      parameters: {
+                        'talkerId': '844424930131966',
+                        'name': 'UP主小助手',
+                        'face':
+                            'https://message.biliimg.com/bfs/im/489a63efadfb202366c2f88853d2217b5ddc7a13.png',
+                      },
+                    );
+                  },
+                  child: const Row(
+                    children: [
+                      Icon(size: 18, Icons.live_tv),
+                      Text('  UP主小助手'),
+                    ],
+                  ),
+                ),
+                // PopupMenuItem(
+                //   onTap: () {},
+                //   child: const Row(
+                //     children: [
+                //       Icon(size: 19, Icons.notifications_none),
+                //       Text('  应援团消息助手'),
+                //     ],
+                //   ),
+                // ),
+                PopupMenuItem(
+                  onTap: () {
+                    Get.to(const ContactPage(isFromSelct: false));
+                  },
+                  child: const Row(
+                    children: [
+                      Icon(size: 19, Icons.account_box_outlined),
+                      Text('  通讯录'),
+                    ],
+                  ),
+                ),
+              ];
+            },
+          ),
         ],
       ),
       body: refreshIndicator(

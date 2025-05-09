@@ -53,6 +53,11 @@ class GrpcUrl {
   static const pinSession = '$im2/PinSession';
   static const unpinSession = '$im2/UnpinSession';
   static const deleteSessionList = '$im2/DeleteSessionList';
+  static const getImSettings = '$im2/GetImSettings';
+  static const setImSettings = '$im2/SetImSettings';
+  static const keywordBlockingList = '$im2/KeywordBlockingList';
+  static const keywordBlockingAdd = '$im2/KeywordBlockingAdd';
+  static const keywordBlockingDelete = '$im2/KeywordBlockingDelete';
 }
 
 class GrpcRepo {

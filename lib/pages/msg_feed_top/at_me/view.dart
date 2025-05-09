@@ -3,9 +3,12 @@ import 'package:PiliPlus/common/widgets/dialog/dialog.dart';
 import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
 import 'package:PiliPlus/common/widgets/loading_widget/http_error.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
+import 'package:PiliPlus/grpc/bilibili/app/im/v1.pbenum.dart'
+    show IMSettingType;
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/msg/msgfeed_at_me.dart';
 import 'package:PiliPlus/pages/msg_feed_top/at_me/controller.dart';
+import 'package:PiliPlus/pages/whisper_settings/view.dart';
 import 'package:PiliPlus/utils/app_scheme.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
@@ -27,6 +30,18 @@ class _AtMePageState extends State<AtMePage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('@我的'),
+        actions: [
+          IconButton(
+            onPressed: () {
+              Get.to(
+                const WhisperSettingsPage(
+                    imSettingType: IMSettingType.SETTING_TYPE_OLD_AT_ME),
+              );
+            },
+            icon: const Icon(size: 22, Icons.settings),
+          ),
+          const SizedBox(width: 16),
+        ],
       ),
       body: refreshIndicator(
         onRefresh: _atMeController.onRefresh,

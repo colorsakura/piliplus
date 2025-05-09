@@ -8,7 +8,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class ContactPage extends StatefulWidget {
-  const ContactPage({super.key});
+  const ContactPage({super.key, this.isFromSelct = true});
+
+  final bool isFromSelct;
 
   @override
   State<ContactPage> createState() => _ContactPageState();
@@ -45,7 +47,10 @@ class _ContactPageState extends State<ContactPage>
           IconButton(
             onPressed: () async {
               UserModel? userModel = await Get.dialog(
-                FollowSearchPage(mid: mid),
+                FollowSearchPage(
+                  mid: mid,
+                  isFromSelct: widget.isFromSelct,
+                ),
                 useSafeArea: false,
                 transitionDuration: const Duration(milliseconds: 120),
               );
@@ -61,8 +66,14 @@ class _ContactPageState extends State<ContactPage>
       body: tabBarView(
         controller: _controller,
         children: [
-          FollowChildPage(mid: mid, onSelect: onSelect),
-          FansPage(mid: mid, onSelect: onSelect),
+          FollowChildPage(
+            mid: mid,
+            onSelect: widget.isFromSelct ? onSelect : null,
+          ),
+          FansPage(
+            mid: mid,
+            onSelect: widget.isFromSelct ? onSelect : null,
+          ),
         ],
       ),
     );

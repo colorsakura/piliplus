@@ -49,7 +49,7 @@ class _FansPageState extends State<FansPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: widget.onSelect != null
+      appBar: widget.mid != null
           ? null
           : AppBar(title: Text(isOwner ? '我的粉丝' : '$name的粉丝')),
       body: SafeArea(

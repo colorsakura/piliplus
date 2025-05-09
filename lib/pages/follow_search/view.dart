@@ -7,9 +7,14 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class FollowSearchPage extends CommonSearchPage {
-  const FollowSearchPage({super.key, this.mid});
+  const FollowSearchPage({
+    super.key,
+    this.mid,
+    this.isFromSelct,
+  });
 
   final int? mid;
+  final bool? isFromSelct;
 
   @override
   State<FollowSearchPage> createState() => _FollowSearchPageState();
@@ -37,7 +42,7 @@ class _FollowSearchPageState extends CommonSearchPageState<FollowSearchPage,
           }
           return FollowItem(
             item: list[index],
-            onSelect: widget.mid != null
+            onSelect: widget.mid != null && widget.isFromSelct != false
                 ? (userModel) {
                     Get.back(result: userModel);
                   }

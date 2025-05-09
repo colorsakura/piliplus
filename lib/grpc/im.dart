@@ -143,4 +143,60 @@ class ImGrpc {
       DeleteSessionListReply.fromBuffer,
     );
   }
+
+  static Future<LoadingState<GetImSettingsReply>> getImSettings(
+      {IMSettingType? type}) async {
+    var res = await GrpcRepo.request(
+      GrpcUrl.getImSettings,
+      GetImSettingsReq(
+        type: type,
+      ),
+      GetImSettingsReply.fromBuffer,
+    );
+    if (res['status']) {
+      return LoadingState.success(res['data']);
+    } else {
+      return LoadingState.error(res['msg']);
+    }
+  }
+
+  static Future setImSettings({PbMap<int, Setting>? settings}) {
+    return GrpcRepo.request(
+      GrpcUrl.setImSettings,
+      SetImSettingsReq(
+        settings: settings,
+      ),
+      SetImSettingsReply.fromBuffer,
+    );
+  }
+
+  static Future<LoadingState<KeywordBlockingListReply>>
+      keywordBlockingList() async {
+    var res = await GrpcRepo.request(
+      GrpcUrl.keywordBlockingList,
+      KeywordBlockingListReq(),
+      KeywordBlockingListReply.fromBuffer,
+    );
+    if (res['status']) {
+      return LoadingState.success(res['data']);
+    } else {
+      return LoadingState.error(res['msg']);
+    }
+  }
+
+  static Future keywordBlockingAdd(String keyword) {
+    return GrpcRepo.request(
+      GrpcUrl.keywordBlockingAdd,
+      KeywordBlockingAddReq(keyword: keyword),
+      KeywordBlockingAddReply.fromBuffer,
+    );
+  }
+
+  static Future keywordBlockingDelete(String keyword) {
+    return GrpcRepo.request(
+      GrpcUrl.keywordBlockingDelete,
+      KeywordBlockingDeleteReq(keyword: keyword),
+      KeywordBlockingDeleteReply.fromBuffer,
+    );
+  }
 }
