@@ -136,6 +136,7 @@ class PiliScheme {
                       top: false,
                       bottom: false,
                       child: VideoReplyReplyPanel(
+                        enableSlide: false,
                         oid: int.parse(oid),
                         rpid: rpid,
                         source: 'routePush',
@@ -278,6 +279,7 @@ class PiliScheme {
                     top: false,
                     bottom: false,
                     child: VideoReplyReplyPanel(
+                      enableSlide: false,
                       oid: oid,
                       rpid: rootId,
                       id: rpId,
@@ -328,6 +330,7 @@ class PiliScheme {
                     top: false,
                     bottom: false,
                     child: VideoReplyReplyPanel(
+                      enableSlide: false,
                       oid: oid,
                       rpid: rpId,
                       source: 'routePush',
@@ -392,6 +395,7 @@ class PiliScheme {
                         top: false,
                         bottom: false,
                         child: VideoReplyReplyPanel(
+                          enableSlide: false,
                           oid: oid ?? int.parse(dynId),
                           rpid: rpid,
                           source: 'routePush',

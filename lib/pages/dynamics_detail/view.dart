@@ -161,9 +161,10 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
     EasyThrottle.throttle('replyReply', const Duration(milliseconds: 500), () {
       int oid = replyItem.oid.toInt();
       int rpid = replyItem.id.toInt();
-      Widget replyReplyPage(
-              [bool automaticallyImplyLeading = true,
-              VoidCallback? onDispose]) =>
+      Widget replyReplyPage({
+        bool automaticallyImplyLeading = true,
+        VoidCallback? onDispose,
+      }) =>
           Scaffold(
             resizeToAvoidBottomInset: false,
             appBar: AppBar(
@@ -175,6 +176,7 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
               top: false,
               bottom: false,
               child: VideoReplyReplyPanel(
+                enableSlide: false,
                 id: id,
                 oid: oid,
                 rpid: rpid,
@@ -206,8 +208,8 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
               context: context,
               removeLeft: true,
               child: replyReplyPage(
-                false,
-                () {
+                automaticallyImplyLeading: false,
+                onDispose: () {
                   if (isFabVisible && _imageStatus != true) {
                     _showFab();
                   }

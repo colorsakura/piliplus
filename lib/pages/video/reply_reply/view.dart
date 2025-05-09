@@ -21,6 +21,7 @@ import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 class VideoReplyReplyPanel extends CommonSlidePage {
   const VideoReplyReplyPanel({
     super.key,
+    super.enableSlide,
     this.id,
     required this.oid,
     required this.rpid,
