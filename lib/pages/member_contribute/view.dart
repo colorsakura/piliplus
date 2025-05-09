@@ -107,6 +107,7 @@ class _MemberContributeState extends State<MemberContribute>
           mid: widget.mid,
         ),
       'opus' => MemberOpus(
+          isSingle: _controller.tabs == null,
           heroTag: widget.heroTag,
           mid: widget.mid,
         ),

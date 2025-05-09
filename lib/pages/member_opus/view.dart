@@ -14,10 +14,12 @@ import 'package:waterfall_flow/waterfall_flow.dart';
 class MemberOpus extends StatefulWidget {
   const MemberOpus({
     super.key,
+    this.isSingle = false,
     required this.heroTag,
     required this.mid,
   });
 
+  final bool isSingle;
   final String? heroTag;
   final int mid;
 
@@ -46,6 +48,7 @@ class _MemberOpusState extends State<MemberOpus>
             slivers: [
               SliverPadding(
                 padding: EdgeInsets.only(
+                  top: widget.isSingle ? 12 : 0,
                   left: StyleString.safeSpace,
                   right: StyleString.safeSpace,
                   bottom: MediaQuery.paddingOf(context).bottom + 90,
