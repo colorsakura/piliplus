@@ -7,7 +7,7 @@ import 'package:PiliPlus/common/widgets/radio_widget.dart';
 import 'package:PiliPlus/grpc/bilibili/im/type.pbenum.dart';
 import 'package:PiliPlus/grpc/bilibili/main/community/reply/v1.pb.dart'
     show ReplyInfo;
-import 'package:PiliPlus/grpc/grpc_repo.dart';
+import 'package:PiliPlus/grpc/im.dart';
 import 'package:PiliPlus/http/dynamics.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/http/member.dart';
@@ -53,7 +53,7 @@ class RequestUtils {
     SmartDialog.showLoading();
 
     final ownerMid = Accounts.main.mid;
-    final contentRes = await GrpcRepo.sendMsg(
+    final contentRes = await ImGrpc.sendMsg(
       senderUid: ownerMid,
       receiverId: receiverId,
       content: jsonEncode(content),

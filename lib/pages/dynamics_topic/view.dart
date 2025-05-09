@@ -35,23 +35,20 @@ class _DynTopicPageState extends State<DynTopicPage> {
           Obx(() {
             if (_controller.topicSortByConf.value?.allSortBy?.isNotEmpty ==
                 true) {
-              return Padding(
-                padding: const EdgeInsets.only(right: 16),
-                child: PopupMenuButton(
-                  initialValue: _controller.sortBy,
-                  itemBuilder: (context) {
-                    return _controller.topicSortByConf.value!.allSortBy!
-                        .map<PopupMenuItem>((e) {
-                      return PopupMenuItem(
-                        value: e.sortBy,
-                        child: Text(e.sortName!),
-                        onTap: () {
-                          _controller.onSort(e.sortBy!);
-                        },
-                      );
-                    }).toList();
-                  },
-                ),
+              return PopupMenuButton(
+                initialValue: _controller.sortBy,
+                itemBuilder: (context) {
+                  return _controller.topicSortByConf.value!.allSortBy!
+                      .map<PopupMenuItem>((e) {
+                    return PopupMenuItem(
+                      value: e.sortBy,
+                      child: Text(e.sortName!),
+                      onTap: () {
+                        _controller.onSort(e.sortBy!);
+                      },
+                    );
+                  }).toList();
+                },
               );
             }
             return const SizedBox.shrink();

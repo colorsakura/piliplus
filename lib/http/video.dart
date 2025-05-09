@@ -172,22 +172,6 @@ class VideoHttp {
     }
   }
 
-  // static Future<LoadingState> hotVideoListGrpc({required int idx}) async {
-  //   dynamic res = await GrpcRepo.popular(idx);
-  //   if (res['status']) {
-  //     List<card.Card> list = <card.Card>[];
-  //     Set<int> blackMids = GStorage.blackMids;
-  //     for (card.Card item in res['data']) {
-  //       if (!blackMids.contains(item.smallCoverV5.up.id.toInt())) {
-  //         list.add(item);
-  //       }
-  //     }
-  //     return LoadingState.success(list);
-  //   } else {
-  //     return LoadingState.error(res['msg']);
-  //   }
-  // }
-
   // 视频流
   static Future videoUrl({
     int? avid,

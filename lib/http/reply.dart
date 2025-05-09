@@ -1,6 +1,4 @@
 import 'package:PiliPlus/common/constants.dart';
-import 'package:PiliPlus/grpc/bilibili/main/community/reply/v1.pb.dart';
-import 'package:PiliPlus/grpc/grpc_repo.dart';
 import 'package:PiliPlus/http/api.dart';
 import 'package:PiliPlus/http/init.dart';
 import 'package:PiliPlus/http/loading_state.dart';
@@ -11,7 +9,6 @@ import 'package:PiliPlus/utils/accounts/account.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:dio/dio.dart';
-import 'package:fixnum/fixnum.dart';
 
 class ReplyHttp {
   static Options get _options =>
@@ -124,89 +121,6 @@ class ReplyHttp {
     }
   }
 
-  static Future<LoadingState<MainListReply>> mainList({
-    int type = 1,
-    required int oid,
-    required Mode mode,
-    required String? offset,
-    required Int64? cursorNext,
-    required bool antiGoodsReply,
-  }) async {
-    dynamic res = await GrpcRepo.mainList(
-      type: type,
-      oid: oid,
-      mode: mode,
-      offset: offset,
-      cursorNext: cursorNext,
-    );
-    if (res['status']) {
-      MainListReply mainListReply = res['data'];
-      // keyword filter
-      if (replyRegExp.pattern.isNotEmpty) {
-        // upTop
-        if (mainListReply.hasUpTop() &&
-            replyRegExp.hasMatch(mainListReply.upTop.content.message)) {
-          mainListReply.clearUpTop();
-        }
-
-        // replies
-        if (mainListReply.replies.isNotEmpty) {
-          mainListReply.replies.removeWhere((item) {
-            bool hasMatch = replyRegExp.hasMatch(item.content.message);
-            // remove subreplies
-            if (hasMatch.not) {
-              if (item.replies.isNotEmpty) {
-                item.replies.removeWhere(
-                    (item) => replyRegExp.hasMatch(item.content.message));
-              }
-            }
-            return hasMatch;
-          });
-        }
-      }
-
-      // antiGoodsReply
-      if (antiGoodsReply) {
-        // upTop
-        if (mainListReply.hasUpTop() && needRemoveGrpc(mainListReply.upTop)) {
-          mainListReply.clearUpTop();
-        }
-
-        // replies
-        if (mainListReply.replies.isNotEmpty) {
-          mainListReply.replies.removeWhere((item) {
-            bool hasMatch = needRemoveGrpc(item);
-            // remove subreplies
-            if (hasMatch.not) {
-              if (item.replies.isNotEmpty) {
-                item.replies.removeWhere(needRemoveGrpc);
-              }
-            }
-            return hasMatch;
-          });
-        }
-      }
-      return LoadingState.success(mainListReply);
-    } else {
-      return LoadingState.error(res['msg']);
-    }
-  }
-
-  // ref BiliRoamingX
-  static bool needRemoveGrpc(ReplyInfo reply) {
-    if ((reply.content.urls.isNotEmpty &&
-            reply.content.urls.values.any((url) {
-              return url.hasExtra() &&
-                  (url.extra.goodsCmControl == 1 ||
-                      url.extra.goodsItemId != 0 ||
-                      url.extra.goodsPrefetchedCache.isNotEmpty);
-            })) ||
-        reply.content.message.contains(Constants.goodsUrlPrefix)) {
-      return true;
-    }
-    return false;
-  }
-
   static bool needRemove(ReplyItemModel reply) {
     try {
       if ((reply.content?.jumpUrl?.isNotEmpty == true &&
@@ -266,76 +180,6 @@ class ReplyHttp {
             ? '${res.data['code']}${res.data['message']}'
             : res.data['message'],
       );
-    }
-  }
-
-  static Future<LoadingState> detailList({
-    int type = 1,
-    required int oid,
-    required int root,
-    required int rpid,
-    required Mode mode,
-    required String? offset,
-    required bool antiGoodsReply,
-  }) async {
-    dynamic res = await GrpcRepo.detailList(
-      type: type,
-      oid: oid,
-      root: root,
-      rpid: rpid,
-      mode: mode,
-      offset: offset,
-    );
-    if (res['status']) {
-      DetailListReply detailListReply = res['data'];
-      if (replyRegExp.pattern.isNotEmpty) {
-        if (detailListReply.root.replies.isNotEmpty) {
-          detailListReply.root.replies.removeWhere(
-              (item) => replyRegExp.hasMatch(item.content.message));
-        }
-      }
-      if (antiGoodsReply) {
-        if (detailListReply.root.replies.isNotEmpty) {
-          detailListReply.root.replies.removeWhere(needRemoveGrpc);
-        }
-      }
-      return LoadingState.success(detailListReply);
-    } else {
-      return LoadingState.error(res['msg']);
-    }
-  }
-
-  static Future<LoadingState> dialogList({
-    int type = 1,
-    required int oid,
-    required int root,
-    required int dialog,
-    required String? offset,
-    required bool antiGoodsReply,
-  }) async {
-    dynamic res = await GrpcRepo.dialogList(
-      type: type,
-      oid: oid,
-      root: root,
-      dialog: dialog,
-      offset: offset,
-    );
-    if (res['status']) {
-      DialogListReply dialogListReply = res['data'];
-      if (replyRegExp.pattern.isNotEmpty) {
-        if (dialogListReply.replies.isNotEmpty) {
-          dialogListReply.replies.removeWhere(
-              (item) => replyRegExp.hasMatch(item.content.message));
-        }
-      }
-      if (antiGoodsReply) {
-        if (dialogListReply.replies.isNotEmpty) {
-          dialogListReply.replies.removeWhere(needRemoveGrpc);
-        }
-      }
-      return LoadingState.success(dialogListReply);
-    } else {
-      return LoadingState.error(res['msg']);
     }
   }
 

@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:PiliPlus/grpc/grpc_repo.dart';
+import 'package:PiliPlus/grpc/dyn.dart';
 import 'package:PiliPlus/http/api.dart';
 import 'package:PiliPlus/http/init.dart';
 import 'package:PiliPlus/models/common/dynamic/dynamic_badge_mode.dart';
@@ -175,7 +175,7 @@ class MainController extends GetxController {
     if (!isLogin.value || dynIndex == -1) {
       return;
     }
-    GrpcRepo.dynRed().then((res) {
+    DynGrpc.dynRed().then((res) {
       if (res['status']) {
         setCount(res['data']);
       }

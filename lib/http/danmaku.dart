@@ -1,37 +1,9 @@
-import 'package:PiliPlus/grpc/bilibili/community/service/dm/v1.pb.dart';
-import 'package:PiliPlus/grpc/grpc_repo.dart';
 import 'package:PiliPlus/http/api.dart';
 import 'package:PiliPlus/http/init.dart';
-import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:dio/dio.dart';
 
 class DanmakuHttp {
-  // 获取视频弹幕
-  static Future<LoadingState<DmSegMobileReply>> queryDanmaku({
-    required int cid,
-    required int segmentIndex,
-    int queryCount = 1,
-  }) async {
-    // 构建参数对象
-    final response =
-        await GrpcRepo.dmSegMobile(cid: cid, segmentIndex: segmentIndex);
-    if (!response['status']) {
-      if (queryCount >= 3) {
-        return const Error('');
-      } else {
-        await Future.delayed(const Duration(seconds: 1));
-        return await queryDanmaku(
-          cid: cid,
-          segmentIndex: segmentIndex,
-          queryCount: ++queryCount,
-        );
-      }
-    }
-    DmSegMobileReply data = response['data'];
-    return LoadingState.success(data);
-  }
-
   static Future shootDanmaku({
     int type = 1, //弹幕类选择(1：视频弹幕 2：漫画弹幕)
     required int oid, // 视频cid

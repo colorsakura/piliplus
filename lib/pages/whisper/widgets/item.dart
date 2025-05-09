@@ -3,11 +3,13 @@ import 'dart:convert';
 import 'package:PiliPlus/common/widgets/badge.dart';
 import 'package:PiliPlus/common/widgets/pendant_avatar.dart';
 import 'package:PiliPlus/grpc/bilibili/app/im/v1.pb.dart'
-    show Session, UnreadStyle;
+    show Session, SessionId, SessionPageType, SessionType, UnreadStyle;
 import 'package:PiliPlus/models/common/badge_type.dart';
+import 'package:PiliPlus/pages/whisper_secondary/view.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 
 class WhisperSessionItem extends StatelessWidget {
@@ -20,7 +22,7 @@ class WhisperSessionItem extends StatelessWidget {
   });
 
   final Session item;
-  final Function(bool isTop, int? talkerId) onSetTop;
+  final Function(bool isTop, SessionId id) onSetTop;
   final ValueChanged<int?> onRemove;
   final VoidCallback onTap;
 
@@ -49,27 +51,25 @@ class WhisperSessionItem extends StatelessWidget {
                     dense: true,
                     onTap: () {
                       Get.back();
-                      onSetTop(
-                        item.isPinned,
-                        item.id.privateId.talkerUid.toInt(),
-                      );
+                      onSetTop(item.isPinned, item.id);
                     },
                     title: Text(
                       item.isPinned ? '移除置顶' : '置顶',
                       style: const TextStyle(fontSize: 14),
                     ),
                   ),
-                  ListTile(
-                    dense: true,
-                    onTap: () {
-                      Get.back();
-                      onRemove(item.id.privateId.talkerUid.toInt());
-                    },
-                    title: const Text(
-                      '删除',
-                      style: TextStyle(fontSize: 14),
+                  if (item.id.privateId.hasTalkerUid())
+                    ListTile(
+                      dense: true,
+                      onTap: () {
+                        Get.back();
+                        onRemove(item.id.privateId.talkerUid.toInt());
+                      },
+                      title: const Text(
+                        '删除',
+                        style: TextStyle(fontSize: 14),
+                      ),
                     ),
-                  ),
                 ],
               ),
             );
@@ -78,17 +78,54 @@ class WhisperSessionItem extends StatelessWidget {
       },
       onTap: () {
         onTap();
-        Get.toNamed(
-          '/whisperDetail',
-          parameters: {
-            'talkerId': item.id.privateId.talkerUid.toString(),
-            'name': item.sessionInfo.sessionName,
-            'face': item.sessionInfo.avatar.fallbackLayers.layers.first.resource
-                .resImage.imageSrc.remote.url,
-            if (item.sessionInfo.avatar.hasMid())
-              'mid': item.sessionInfo.avatar.mid.toString(),
-          },
-        );
+        if (item.id.privateId.hasTalkerUid()) {
+          Get.toNamed(
+            '/whisperDetail',
+            parameters: {
+              'talkerId': item.id.privateId.talkerUid.toString(),
+              'name': item.sessionInfo.sessionName,
+              'face': item.sessionInfo.avatar.fallbackLayers.layers.first
+                  .resource.resImage.imageSrc.remote.url,
+              if (item.sessionInfo.avatar.hasMid())
+                'mid': item.sessionInfo.avatar.mid.toString(),
+            },
+          );
+          return;
+        }
+
+        if (item.id.foldId.hasType()) {
+          SessionPageType? sessionPageType = switch (item.id.foldId.type) {
+            SessionType.SESSION_TYPE_UNKNOWN =>
+              SessionPageType.SESSION_PAGE_TYPE_UNKNOWN,
+            SessionType.SESSION_TYPE_GROUP =>
+              SessionPageType.SESSION_PAGE_TYPE_GROUP,
+            SessionType.SESSION_TYPE_GROUP_FOLD =>
+              SessionPageType.SESSION_PAGE_TYPE_GROUP,
+            SessionType.SESSION_TYPE_UNFOLLOWED =>
+              SessionPageType.SESSION_PAGE_TYPE_UNFOLLOWED,
+            SessionType.SESSION_TYPE_STRANGER =>
+              SessionPageType.SESSION_PAGE_TYPE_STRANGER,
+            SessionType.SESSION_TYPE_DUSTBIN =>
+              SessionPageType.SESSION_PAGE_TYPE_DUSTBIN,
+            SessionType.SESSION_TYPE_CUSTOMER_FOLD =>
+              SessionPageType.SESSION_PAGE_TYPE_CUSTOMER,
+            SessionType.SESSION_TYPE_AI_FOLD =>
+              SessionPageType.SESSION_PAGE_TYPE_AI,
+            SessionType.SESSION_TYPE_CUSTOMER_ACCOUNT =>
+              SessionPageType.SESSION_PAGE_TYPE_CUSTOMER,
+            _ => null,
+          };
+          if (sessionPageType != null) {
+            Get.to(
+              WhisperSecPage(
+                name: item.sessionInfo.sessionName,
+                sessionPageType: sessionPageType,
+              ),
+            );
+          } else {
+            SmartDialog.showToast(item.id.foldId.type.name);
+          }
+        }
       },
       leading: Builder(
         builder: (context) {

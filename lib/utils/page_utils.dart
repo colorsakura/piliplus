@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'package:PiliPlus/common/widgets/interactiveviewer_gallery/interactiveviewer_gallery.dart';
-import 'package:PiliPlus/grpc/grpc_repo.dart';
+import 'package:PiliPlus/grpc/im.dart';
 import 'package:PiliPlus/http/dynamics.dart';
 import 'package:PiliPlus/http/search.dart';
 import 'package:PiliPlus/models/bangumi/info.dart';
@@ -36,7 +36,7 @@ class PageUtils {
     int? selectedIndex;
     List<UserModel> userList = <UserModel>[];
 
-    final shareListRes = await GrpcRepo.shareList(size: 3);
+    final shareListRes = await ImGrpc.shareList(size: 3);
     if (shareListRes['status'] && shareListRes['data'].sessionList.isNotEmpty) {
       userList.addAll(shareListRes['data']
           .sessionList

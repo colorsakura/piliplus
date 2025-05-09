@@ -2,9 +2,6 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:PiliPlus/common/constants.dart';
-import 'package:PiliPlus/grpc/bilibili/app/dynamic/v2.pb.dart'
-    show OpusSpaceFlowResp;
-import 'package:PiliPlus/grpc/grpc_repo.dart';
 import 'package:PiliPlus/http/api.dart';
 import 'package:PiliPlus/http/constants.dart';
 import 'package:PiliPlus/http/init.dart';
@@ -51,18 +48,6 @@ class MemberHttp {
       'msg': res.data['message'] ?? res.data['data'],
     };
   }
-
-  // static Future<LoadingState> spaceDynamic({
-  //   required int mid,
-  //   required int page,
-  // }) async {
-  //   dynamic result = await GrpcRepo.dynSpace(uid: mid, page: page);
-  //   if (result['status']) {
-  //     return LoadingState.success(result['data']);
-  //   } else {
-  //     return LoadingState.error(result['msg']);
-  //   }
-  // }
 
   static Future<LoadingState<SpaceArticleData>> spaceArticle({
     required int mid,
@@ -845,23 +830,6 @@ class MemberHttp {
       return LoadingState.success(FollowDataModel.fromJson(res.data['data']));
     } else {
       return LoadingState.error(res.data['message']);
-    }
-  }
-
-  static Future<LoadingState<OpusSpaceFlowResp>> opusSpaceFlow({
-    required int hostMid,
-    String? next,
-    required String filterType,
-  }) async {
-    var res = await GrpcRepo.opusSpaceFlow(
-      hostMid: hostMid,
-      next: next,
-      filterType: filterType,
-    );
-    if (res['status']) {
-      return LoadingState.success(res['data']);
-    } else {
-      return LoadingState.error(res['msg']);
     }
   }
 

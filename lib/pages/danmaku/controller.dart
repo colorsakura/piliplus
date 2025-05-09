@@ -1,5 +1,5 @@
 import 'package:PiliPlus/grpc/bilibili/community/service/dm/v1.pb.dart';
-import 'package:PiliPlus/http/danmaku.dart';
+import 'package:PiliPlus/grpc/dm.dart';
 import 'package:PiliPlus/plugin/pl_player/controller.dart';
 
 class PlDanmakuController {
@@ -31,7 +31,7 @@ class PlDanmakuController {
       return;
     }
     requestedSeg.add(segmentIndex);
-    final result = await DanmakuHttp.queryDanmaku(
+    final result = await DmGrpc.dmSegMobile(
       cid: cid,
       segmentIndex: segmentIndex + 1,
     );

@@ -50,7 +50,13 @@ class _WhisperPageState extends State<WhisperPage> {
           physics: const AlwaysScrollableScrollPhysics(),
           slivers: [
             _buildTopItems,
-            Obx(() => _buildBody(_whisperController.loadingState.value)),
+            SliverPadding(
+              padding: EdgeInsets.only(
+                bottom: MediaQuery.paddingOf(context).bottom + 100,
+              ),
+              sliver:
+                  Obx(() => _buildBody(_whisperController.loadingState.value)),
+            ),
           ],
         ),
       ),
@@ -66,31 +72,26 @@ class _WhisperPageState extends State<WhisperPage> {
           },
         ),
       Success() => loadingState.response?.isNotEmpty == true
-          ? SliverPadding(
-              padding: EdgeInsets.only(
-                bottom: MediaQuery.paddingOf(context).bottom + 100,
-              ),
-              sliver: SliverList.separated(
-                itemCount: loadingState.response!.length,
-                itemBuilder: (context, index) {
-                  if (index == loadingState.response!.length - 1) {
-                    _whisperController.onLoadMore();
-                  }
-                  return WhisperSessionItem(
-                    item: loadingState.response![index],
-                    onSetTop: (isTop, talkerId) =>
-                        _whisperController.onSetTop(index, isTop, talkerId),
-                    onRemove: (talkerId) =>
-                        _whisperController.onRemove(index, talkerId),
-                    onTap: () => _whisperController.onTap(index),
-                  );
-                },
-                separatorBuilder: (context, index) => Divider(
-                  indent: 72,
-                  endIndent: 20,
-                  height: 1,
-                  color: Colors.grey.withOpacity(0.1),
-                ),
+          ? SliverList.separated(
+              itemCount: loadingState.response!.length,
+              itemBuilder: (context, index) {
+                if (index == loadingState.response!.length - 1) {
+                  _whisperController.onLoadMore();
+                }
+                return WhisperSessionItem(
+                  item: loadingState.response![index],
+                  onSetTop: (isTop, id) =>
+                      _whisperController.onSetTop(index, isTop, id),
+                  onRemove: (talkerId) =>
+                      _whisperController.onRemove(index, talkerId),
+                  onTap: () => _whisperController.onTap(index),
+                );
+              },
+              separatorBuilder: (context, index) => Divider(
+                indent: 72,
+                endIndent: 20,
+                height: 1,
+                color: Colors.grey.withOpacity(0.1),
               ),
             )
           : HttpError(

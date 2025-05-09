@@ -1,8 +1,8 @@
 import 'package:PiliPlus/grpc/bilibili/main/community/reply/v1.pb.dart'
     show MainListReply, ReplyInfo;
+import 'package:PiliPlus/grpc/reply.dart';
 import 'package:PiliPlus/http/dynamics.dart';
 import 'package:PiliPlus/http/loading_state.dart';
-import 'package:PiliPlus/http/reply.dart';
 import 'package:PiliPlus/http/user.dart';
 import 'package:PiliPlus/http/video.dart';
 import 'package:PiliPlus/models/dynamics/article_content_model.dart'
@@ -172,7 +172,7 @@ class ArticleController extends ReplyController<MainListReply> {
 
   @override
   Future<LoadingState<MainListReply>> customGetData() {
-    return ReplyHttp.mainList(
+    return ReplyGrpc.mainList(
       type: commentType,
       oid: commentId,
       mode: mode.value,
