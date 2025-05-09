@@ -18,13 +18,11 @@ class WhisperSessionItem extends StatelessWidget {
     required this.item,
     required this.onSetTop,
     required this.onRemove,
-    required this.onTap,
   });
 
   final Session item;
   final Function(bool isTop, SessionId id) onSetTop;
   final ValueChanged<int?> onRemove;
-  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -77,7 +75,12 @@ class WhisperSessionItem extends StatelessWidget {
         );
       },
       onTap: () {
-        onTap();
+        if (item.hasUnread()) {
+          item.clearUnread();
+          if (context.mounted) {
+            (context as Element).markNeedsBuild();
+          }
+        }
         if (item.id.privateId.hasTalkerUid()) {
           Get.toNamed(
             '/whisperDetail',

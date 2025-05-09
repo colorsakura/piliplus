@@ -126,7 +126,6 @@ class _WhisperPageState extends State<WhisperPage> {
                   onSetTop: (isTop, id) =>
                       _controller.onSetTop(index, isTop, id),
                   onRemove: (talkerId) => _controller.onRemove(index, talkerId),
-                  onTap: () => _controller.onTap(index),
                 );
               },
               separatorBuilder: (context, index) => Divider(

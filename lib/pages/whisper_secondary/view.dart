@@ -107,7 +107,6 @@ class _WhisperSecPageState extends State<WhisperSecPage> {
                   onSetTop: (isTop, talkerId) =>
                       _controller.onSetTop(index, isTop, talkerId),
                   onRemove: (talkerId) => _controller.onRemove(index, talkerId),
-                  onTap: () => _controller.onTap(index),
                 );
               },
               separatorBuilder: (context, index) => Divider(
