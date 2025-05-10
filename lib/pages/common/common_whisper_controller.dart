@@ -1,4 +1,5 @@
-import 'package:PiliPlus/grpc/bilibili/app/im/v1.pb.dart';
+import 'package:PiliPlus/grpc/bilibili/app/im/v1.pb.dart'
+    show SessionPageType, SessionId, Session;
 import 'package:PiliPlus/grpc/im.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/http/msg.dart';

@@ -58,7 +58,7 @@ Widget content(
             child: Text(
               '#${item.modules.moduleDynamic!.topic!.name}',
               style: TextStyle(
-                fontSize: 15,
+                fontSize: source == 'detail' && !isSave ? 16 : 15,
                 color: theme.colorScheme.primary,
               ),
             ),
@@ -68,7 +68,9 @@ Widget content(
           source == 'detail'
               ? SelectableText.rich(
                   richNodes,
-                  style: const TextStyle(fontSize: 15),
+                  style: isSave
+                      ? const TextStyle(fontSize: 15)
+                      : const TextStyle(fontSize: 16),
                 )
               : Text.rich(
                   style: const TextStyle(fontSize: 15),
