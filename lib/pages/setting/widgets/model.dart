@@ -2651,7 +2651,7 @@ SettingsModel _getVideoFilterSelectModel({
       );
       if (result != null) {
         if (result == -1 && context.mounted) {
-          showDialog(
+          await showDialog(
             context: context,
             builder: (context) {
               String valueStr = '';
