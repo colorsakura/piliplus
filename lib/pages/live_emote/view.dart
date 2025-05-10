@@ -4,6 +4,7 @@ import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
 import 'package:PiliPlus/common/widgets/loading_widget/loading_widget.dart';
 import 'package:PiliPlus/common/widgets/scroll_physics.dart';
 import 'package:PiliPlus/http/loading_state.dart';
+import 'package:PiliPlus/models/common/image_type.dart';
 import 'package:PiliPlus/models/live/live_emoticons/datum.dart';
 import 'package:PiliPlus/models/live/live_emoticons/emoticon.dart';
 import 'package:PiliPlus/pages/live_emote/controller.dart';
@@ -93,7 +94,7 @@ class _LiveEmotePanelState extends State<LiveEmotePanel>
                                     src: item.emoticons![index].url!,
                                     width: widthFac * 38,
                                     height: heightFac * 38,
-                                    type: 'emote',
+                                    type: ImageType.emote,
                                     quality: item.pkgType == 3 ? null : 80,
                                   ),
                                 ),
@@ -122,7 +123,7 @@ class _LiveEmotePanelState extends State<LiveEmotePanel>
                           child: NetworkImgLayer(
                             width: 24,
                             height: 24,
-                            type: 'emote',
+                            type: ImageType.emote,
                             src: item.currentCover,
                           ),
                         ),

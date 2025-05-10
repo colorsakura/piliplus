@@ -18,7 +18,6 @@ class FavDetailController
   late int mediaId;
   late String heroTag;
   RxBool isOwner = false.obs;
-  RxBool titleCtr = false.obs;
 
   dynamic mid;
 

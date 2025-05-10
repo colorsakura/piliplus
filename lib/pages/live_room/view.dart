@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:ui';
 
 import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
+import 'package:PiliPlus/models/common/image_type.dart';
 import 'package:PiliPlus/models/live/live_room/room_info_h5.dart';
 import 'package:PiliPlus/pages/live_room/controller.dart';
 import 'package:PiliPlus/pages/live_room/send_danmaku/view.dart';
@@ -386,7 +387,7 @@ class _LiveRoomPageState extends State<LiveRoomPage>
                         child: NetworkImgLayer(
                           width: 34,
                           height: 34,
-                          type: 'avatar',
+                          type: ImageType.avatar,
                           src: _liveRoomController
                               .roomInfoH5.value!.anchorInfo!.baseInfo!.face,
                         ),

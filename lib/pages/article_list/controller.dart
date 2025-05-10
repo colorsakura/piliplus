@@ -17,12 +17,12 @@ class ArticleListController
     queryData();
   }
 
-  ArticleList? list;
+  Rx<ArticleList?> list = Rx<ArticleList?>(null);
   Author? author;
 
   @override
   List<Article>? getDataList(ArticleListData response) {
-    list = response.list;
+    list.value = response.list;
     author = response.author;
     return response.articles;
   }

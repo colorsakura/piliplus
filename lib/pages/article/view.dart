@@ -10,6 +10,7 @@ import 'package:PiliPlus/grpc/bilibili/main/community/reply/v1.pb.dart'
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/common/badge_type.dart';
 import 'package:PiliPlus/models/common/image_preview_type.dart';
+import 'package:PiliPlus/models/common/image_type.dart';
 import 'package:PiliPlus/models/common/reply/reply_sort_type.dart';
 import 'package:PiliPlus/models/common/reply/reply_type.dart';
 import 'package:PiliPlus/models/dynamics/result.dart' show DynamicStat;
@@ -486,7 +487,7 @@ class _ArticlePageState extends State<ArticlePage>
                               // TODO Avatar
                               width: 40,
                               height: 40,
-                              type: 'avatar',
+                              type: ImageType.avatar,
                               src: _articleCtr.summary.author?.face,
                             ),
                             const SizedBox(width: 10),

@@ -2,6 +2,7 @@ import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
 import 'package:PiliPlus/common/widgets/scroll_physics.dart';
 import 'package:PiliPlus/models/common/dynamic/dynamic_badge_mode.dart';
+import 'package:PiliPlus/models/common/image_type.dart';
 import 'package:PiliPlus/pages/home/controller.dart';
 import 'package:PiliPlus/pages/main/controller.dart';
 import 'package:PiliPlus/pages/mine/controller.dart';
@@ -98,7 +99,7 @@ class _HomePageState extends State<HomePage>
                     clipBehavior: Clip.none,
                     children: [
                       NetworkImgLayer(
-                        type: 'avatar',
+                        type: ImageType.avatar,
                         width: 34,
                         height: 34,
                         src: _homeController.userFace.value,

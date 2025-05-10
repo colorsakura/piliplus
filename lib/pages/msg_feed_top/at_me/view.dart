@@ -6,6 +6,7 @@ import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/grpc/bilibili/app/im/v1.pbenum.dart'
     show IMSettingType;
 import 'package:PiliPlus/http/loading_state.dart';
+import 'package:PiliPlus/models/common/image_type.dart';
 import 'package:PiliPlus/models/msg/msgfeed_at_me.dart';
 import 'package:PiliPlus/pages/msg_feed_top/at_me/controller.dart';
 import 'package:PiliPlus/pages/whisper_settings/view.dart';
@@ -100,7 +101,7 @@ class _AtMePageState extends State<AtMePage> {
                     child: NetworkImgLayer(
                       width: 45,
                       height: 45,
-                      type: 'avatar',
+                      type: ImageType.avatar,
                       src: item.user?.avatar,
                     ),
                   ),
@@ -147,7 +148,6 @@ class _AtMePageState extends State<AtMePage> {
                       ? NetworkImgLayer(
                           width: 45,
                           height: 45,
-                          type: 'cover',
                           src: item.item?.image,
                         )
                       : null,

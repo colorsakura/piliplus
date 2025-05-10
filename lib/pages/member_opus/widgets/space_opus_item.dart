@@ -1,5 +1,6 @@
 import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
 import 'package:PiliPlus/common/widgets/stat/stat.dart';
+import 'package:PiliPlus/models/common/image_type.dart';
 import 'package:PiliPlus/models/space_opus/item.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:flutter/material.dart';
@@ -38,7 +39,7 @@ class SpaceOpusItem extends StatelessWidget {
                         width: constraints.maxWidth,
                         height: constraints.maxWidth * item.cover!.ratio,
                         src: item.cover!.url,
-                        type: 'emote',
+                        type: ImageType.emote,
                         quality: 60,
                       );
                     },

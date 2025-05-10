@@ -6,6 +6,7 @@ import 'package:PiliPlus/common/widgets/scroll_physics.dart';
 import 'package:PiliPlus/common/widgets/video_card/video_card_h_member_video.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/common/image_preview_type.dart';
+import 'package:PiliPlus/models/common/image_type.dart';
 import 'package:PiliPlus/models/member/info.dart';
 import 'package:PiliPlus/models/space_archive/item.dart';
 import 'package:PiliPlus/pages/video/controller.dart';
@@ -417,7 +418,7 @@ class _HorizontalMemberPageState extends State<HorizontalMemberPage> {
           },
           child: NetworkImgLayer(
             src: face,
-            type: 'avatar',
+            type: ImageType.avatar,
             width: 70,
             height: 70,
           ),

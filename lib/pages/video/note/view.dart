@@ -4,6 +4,7 @@ import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
 import 'package:PiliPlus/common/widgets/loading_widget/http_error.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/http/loading_state.dart';
+import 'package:PiliPlus/models/common/image_type.dart';
 import 'package:PiliPlus/pages/common/common_slide_page.dart';
 import 'package:PiliPlus/pages/video/note/controller.dart';
 import 'package:PiliPlus/pages/webview/view.dart';
@@ -212,7 +213,7 @@ Widget _itemWidget(BuildContext context, ThemeData theme, dynamic item) {
               height: 34,
               width: 34,
               src: item['author']['face'],
-              type: 'avatar',
+              type: ImageType.avatar,
             ),
           ),
           const SizedBox(width: 12),

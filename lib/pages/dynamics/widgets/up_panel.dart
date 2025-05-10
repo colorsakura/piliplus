@@ -1,4 +1,5 @@
 import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
+import 'package:PiliPlus/models/common/image_type.dart';
 import 'package:PiliPlus/models/dynamics/up.dart';
 import 'package:PiliPlus/pages/dynamics/controller.dart';
 import 'package:PiliPlus/utils/extension.dart';
@@ -150,7 +151,7 @@ class _UpPanelState extends State<UpPanel> {
                             width: 38,
                             height: 38,
                             src: data.face,
-                            type: 'avatar',
+                            type: ImageType.avatar,
                           )
                         : const CircleAvatar(
                             backgroundColor: Color(0xFF5CB67B),

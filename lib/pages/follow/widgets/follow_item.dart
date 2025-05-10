@@ -1,4 +1,5 @@
 import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
+import 'package:PiliPlus/models/common/image_type.dart';
 import 'package:PiliPlus/models/follow/result.dart';
 import 'package:PiliPlus/pages/share/view.dart' show UserModel;
 import 'package:PiliPlus/utils/feed_back.dart';
@@ -49,7 +50,7 @@ class FollowItem extends StatelessWidget {
             child: NetworkImgLayer(
               width: 45,
               height: 45,
-              type: 'avatar',
+              type: ImageType.avatar,
               src: item.face,
             ),
           ),

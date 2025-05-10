@@ -11,6 +11,7 @@ import 'package:PiliPlus/grpc/bilibili/main/community/reply/v1.pb.dart'
 import 'package:PiliPlus/http/init.dart';
 import 'package:PiliPlus/http/video.dart';
 import 'package:PiliPlus/models/common/badge_type.dart';
+import 'package:PiliPlus/models/common/image_type.dart';
 import 'package:PiliPlus/pages/dynamics/widgets/vote.dart';
 import 'package:PiliPlus/pages/save_panel/view.dart';
 import 'package:PiliPlus/pages/video/controller.dart';
@@ -656,7 +657,7 @@ class ReplyItemGrpc extends StatelessWidget {
               src: content.emotes[matchStr]?.hasGifUrl() == true
                   ? content.emotes[matchStr]?.gifUrl
                   : content.emotes[matchStr]?.url,
-              type: 'emote',
+              type: ImageType.emote,
               width: size * 20,
               height: size * 20,
               semanticsLabel: matchStr,

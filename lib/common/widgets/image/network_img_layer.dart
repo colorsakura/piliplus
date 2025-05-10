@@ -1,4 +1,5 @@
 import 'package:PiliPlus/common/constants.dart';
+import 'package:PiliPlus/models/common/image_type.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -10,7 +11,7 @@ class NetworkImgLayer extends StatelessWidget {
     this.src,
     required this.width,
     this.height,
-    this.type,
+    this.type = ImageType.def,
     this.fadeOutDuration,
     this.fadeInDuration,
     // 图片质量 默认1%
@@ -27,7 +28,7 @@ class NetworkImgLayer extends StatelessWidget {
   final String? src;
   final double width;
   final double? height;
-  final String? type;
+  final ImageType type;
   final Duration? fadeOutDuration;
   final Duration? fadeInDuration;
   final int? quality;
@@ -42,9 +43,9 @@ class NetworkImgLayer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return src.isNullOrEmpty.not
-        ? type == 'avatar'
+        ? type == ImageType.avatar
             ? ClipOval(child: _buildImage(context))
-            : radius == 0 || type == 'emote'
+            : radius == 0 || type == ImageType.emote
                 ? _buildImage(context)
                 : ClipRRect(
                     borderRadius: radius != null
@@ -86,19 +87,20 @@ class NetworkImgLayer extends StatelessWidget {
       height: height,
       clipBehavior: Clip.antiAlias,
       decoration: BoxDecoration(
-        shape: type == 'avatar' ? BoxShape.circle : BoxShape.rectangle,
+        shape: type == ImageType.avatar ? BoxShape.circle : BoxShape.rectangle,
         color: Theme.of(context).colorScheme.onInverseSurface.withOpacity(0.4),
-        borderRadius: type == 'avatar' || type == 'emote' || radius == 0
-            ? null
-            : radius != null
-                ? BorderRadius.circular(radius!)
-                : StyleString.mdRadius,
+        borderRadius:
+            type == ImageType.avatar || type == ImageType.emote || radius == 0
+                ? null
+                : radius != null
+                    ? BorderRadius.circular(radius!)
+                    : StyleString.mdRadius,
       ),
       child: type == 'bg'
           ? const SizedBox.shrink()
           : Center(
               child: Image.asset(
-                type == 'avatar'
+                type == ImageType.avatar
                     ? 'assets/images/noface.jpeg'
                     : 'assets/images/loading.png',
                 width: width,

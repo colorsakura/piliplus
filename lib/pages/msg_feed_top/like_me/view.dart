@@ -7,6 +7,7 @@ import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/grpc/bilibili/app/im/v1.pbenum.dart'
     show IMSettingType;
 import 'package:PiliPlus/http/loading_state.dart';
+import 'package:PiliPlus/models/common/image_type.dart';
 import 'package:PiliPlus/models/msg/msgfeed_like_me.dart';
 import 'package:PiliPlus/pages/msg_feed_top/like_me/controller.dart';
 import 'package:PiliPlus/pages/whisper_settings/view.dart';
@@ -255,7 +256,7 @@ class _LikeMePageState extends State<LikeMePage> {
                       child: NetworkImgLayer(
                         width: item.users!.length > 1 ? 30 : 45,
                         height: item.users!.length > 1 ? 30 : 45,
-                        type: 'avatar',
+                        type: ImageType.avatar,
                         src: item.users![j].avatar,
                       )),
                 ]
@@ -319,7 +320,6 @@ class _LikeMePageState extends State<LikeMePage> {
             NetworkImgLayer(
               width: 45,
               height: 45,
-              type: 'cover',
               src: item.item!.image,
             ),
           if (item.noticeState == 1)

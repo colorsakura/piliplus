@@ -4,6 +4,7 @@ import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
 import 'package:PiliPlus/common/widgets/loading_widget/http_error.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/http/loading_state.dart';
+import 'package:PiliPlus/models/common/image_type.dart';
 import 'package:PiliPlus/models/dynamics/article_list/article.dart';
 import 'package:PiliPlus/models/dynamics/article_list/list.dart';
 import 'package:PiliPlus/pages/article_list/controller.dart';
@@ -35,6 +36,7 @@ class _ArticleListPageState extends State<ArticleListPage> {
           onRefresh: _controller.onRefresh,
           child: CustomScrollView(
             slivers: [
+              Obx(() => _buildHeader(theme, _controller.list.value)),
               SliverPadding(
                 padding: EdgeInsets.only(
                     bottom: MediaQuery.paddingOf(context).bottom + 80),
@@ -64,31 +66,24 @@ class _ArticleListPageState extends State<ArticleListPage> {
             ),
           ),
         ),
-      Success() => SliverMainAxisGroup(
-          slivers: [
-            if (_controller.list != null)
-              _buildHeader(theme, _controller.list!),
-            if (loadingState.response?.isNotEmpty == true)
-              SliverGrid(
-                gridDelegate: SliverGridDelegateWithExtentAndRatio(
-                  mainAxisSpacing: 2,
-                  maxCrossAxisExtent: Grid.smallCardWidth * 2,
-                  childAspectRatio: StyleString.aspectRatio * 2.6,
-                  minHeight: MediaQuery.textScalerOf(context).scale(90),
-                ),
-                delegate: SliverChildBuilderDelegate(
-                  (context, index) {
-                    return ArticleListItem(
-                      item: loadingState.response![index],
-                    );
-                  },
-                  childCount: loadingState.response!.length,
-                ),
-              )
-            else
-              HttpError(onReload: _controller.onReload),
-          ],
-        ),
+      Success() => loadingState.response?.isNotEmpty == true
+          ? SliverGrid(
+              gridDelegate: SliverGridDelegateWithExtentAndRatio(
+                mainAxisSpacing: 2,
+                maxCrossAxisExtent: Grid.smallCardWidth * 2,
+                childAspectRatio: StyleString.aspectRatio * 2.6,
+                minHeight: MediaQuery.textScalerOf(context).scale(90),
+              ),
+              delegate: SliverChildBuilderDelegate(
+                (context, index) {
+                  return ArticleListItem(
+                    item: loadingState.response![index],
+                  );
+                },
+                childCount: loadingState.response!.length,
+              ),
+            )
+          : HttpError(onReload: _controller.onReload),
       Error() => HttpError(
           errMsg: loadingState.errMsg,
           onReload: _controller.onReload,
@@ -96,7 +91,10 @@ class _ArticleListPageState extends State<ArticleListPage> {
     };
   }
 
-  Widget _buildHeader(ThemeData theme, ArticleList item) {
+  Widget _buildHeader(ThemeData theme, ArticleList? item) {
+    if (item == null) {
+      return const SliverToBoxAdapter();
+    }
     late final style = TextStyle(color: theme.colorScheme.onSurfaceVariant);
     late final divider = TextSpan(
       text: '  |  ',
@@ -105,6 +103,7 @@ class _ArticleListPageState extends State<ArticleListPage> {
     final padding = MediaQuery.paddingOf(context).top + kToolbarHeight;
     return SliverAppBar.medium(
       title: Text(item.name!),
+      pinned: true,
       expandedHeight: kToolbarHeight + 130,
       flexibleSpace: FlexibleSpaceBar(
         background: Container(
@@ -117,14 +116,15 @@ class _ArticleListPageState extends State<ArticleListPage> {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              if (item.imageUrl?.isNotEmpty == true)
+              if (item.imageUrl?.isNotEmpty == true) ...[
                 NetworkImgLayer(
                   width: 91,
                   height: 120,
                   src: item.imageUrl,
                   radius: 6,
                 ),
-              const SizedBox(width: 10),
+                const SizedBox(width: 10),
+              ],
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -149,6 +149,7 @@ class _ArticleListPageState extends State<ArticleListPage> {
                             width: 30,
                             height: 30,
                             src: _controller.author!.face,
+                            type: ImageType.avatar,
                           ),
                           const SizedBox(width: 10),
                           Text(_controller.author!.name!),
@@ -162,9 +163,9 @@ class _ArticleListPageState extends State<ArticleListPage> {
                       children: [
                         TextSpan(text: '${item.articlesCount}篇专栏'),
                         divider,
-                        TextSpan(text: '${item.words}个字'),
+                        TextSpan(text: '${Utils.numFormat(item.words)}个字'),
                         divider,
-                        TextSpan(text: '${item.read}次阅读'),
+                        TextSpan(text: '${Utils.numFormat(item.read)}次阅读'),
                       ],
                       style: style,
                     ),

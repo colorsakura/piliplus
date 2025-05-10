@@ -2,6 +2,7 @@ import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
 import 'package:PiliPlus/common/widgets/loading_widget/loading_widget.dart';
 import 'package:PiliPlus/common/widgets/scroll_physics.dart';
 import 'package:PiliPlus/http/loading_state.dart';
+import 'package:PiliPlus/models/common/image_type.dart';
 import 'package:PiliPlus/models/video/reply/emote.dart';
 import 'package:PiliPlus/pages/emote/controller.dart';
 import 'package:flutter/material.dart';
@@ -78,7 +79,7 @@ class _EmotePanelState extends State<EmotePanel>
                                           width: size * 38,
                                           height: size * 38,
                                           semanticsLabel: e.emote![index].text!,
-                                          type: 'emote',
+                                          type: ImageType.emote,
                                           boxFit: BoxFit.contain,
                                         ),
                                 ),
@@ -107,7 +108,7 @@ class _EmotePanelState extends State<EmotePanel>
                           child: NetworkImgLayer(
                             width: 24,
                             height: 24,
-                            type: 'emote',
+                            type: ImageType.emote,
                             src: e.url,
                           ),
                         ),

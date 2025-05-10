@@ -5,6 +5,7 @@ import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
 import 'package:PiliPlus/common/widgets/pendant_avatar.dart';
 import 'package:PiliPlus/common/widgets/self_sized_horizontal_list.dart';
 import 'package:PiliPlus/common/widgets/stat/stat.dart';
+import 'package:PiliPlus/models/common/image_type.dart';
 import 'package:PiliPlus/models/video_detail_res.dart';
 import 'package:PiliPlus/pages/mine/controller.dart';
 import 'package:PiliPlus/pages/search/widgets/search_text.dart';
@@ -389,7 +390,7 @@ class _VideoInfoState extends State<VideoInfo> {
                                       clipBehavior: Clip.none,
                                       children: [
                                         NetworkImgLayer(
-                                          type: 'avatar',
+                                          type: ImageType.avatar,
                                           src: videoItem['staff'][index].face,
                                           width: 35,
                                           height: 35,

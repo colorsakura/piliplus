@@ -1,4 +1,5 @@
 import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
+import 'package:PiliPlus/models/common/image_type.dart';
 import 'package:PiliPlus/pages/live_room/controller.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/gestures.dart';
@@ -126,7 +127,7 @@ class LiveRoomChat extends StatelessWidget {
             child: ExcludeSemantics(
                 child: NetworkImgLayer(
               src: emote['url'],
-              type: 'emote',
+              type: ImageType.emote,
               width: emote['width'].toDouble(),
               height: emote['height'].toDouble(),
               semanticsLabel: key,

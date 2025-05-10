@@ -1,6 +1,7 @@
 import 'package:PiliPlus/common/skeleton/video_card_h.dart';
 import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
 import 'package:PiliPlus/common/widgets/loading_widget/http_error.dart';
+import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/user/sub_detail.dart';
 import 'package:PiliPlus/models/user/sub_folder.dart';
@@ -23,23 +24,6 @@ class _SubDetailPageState extends State<SubDetailPage> {
     SubDetailController(),
     tag: Utils.makeHeroTag(Get.parameters['id']),
   );
-  final RxBool showTitle = false.obs;
-
-  @override
-  void initState() {
-    super.initState();
-    _subDetailController.scrollController.addListener(listener);
-  }
-
-  void listener() {
-    showTitle.value = _subDetailController.scrollController.offset > 132;
-  }
-
-  @override
-  void dispose() {
-    _subDetailController.scrollController.removeListener(listener);
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -48,14 +32,17 @@ class _SubDetailPageState extends State<SubDetailPage> {
       body: SafeArea(
         top: false,
         bottom: false,
-        child: CustomScrollView(
-          controller: _subDetailController.scrollController,
-          physics: const AlwaysScrollableScrollPhysics(),
-          slivers: [
-            _buildAppBar(theme),
-            _buildCount(theme),
-            Obx(() => _buildBody(_subDetailController.loadingState.value)),
-          ],
+        child: refreshIndicator(
+          onRefresh: _subDetailController.onRefresh,
+          child: CustomScrollView(
+            controller: _subDetailController.scrollController,
+            physics: const AlwaysScrollableScrollPhysics(),
+            slivers: [
+              _buildAppBar(theme),
+              _buildCount(theme),
+              Obx(() => _buildBody(_subDetailController.loadingState.value)),
+            ],
+          ),
         ),
       ),
     );
@@ -105,7 +92,7 @@ class _SubDetailPageState extends State<SubDetailPage> {
           padding: const EdgeInsets.only(top: 12, bottom: 8, left: 14),
           child: Obx(
             () => Text(
-              '共${_subDetailController.mediaCount}条视频',
+              '共${_subDetailController.mediaCount.value}条视频',
               style: TextStyle(
                 fontSize: theme.textTheme.labelMedium!.fontSize,
                 color: theme.colorScheme.outline,
@@ -116,32 +103,25 @@ class _SubDetailPageState extends State<SubDetailPage> {
         ),
       );
 
-  Widget _buildAppBar(ThemeData theme) => SliverAppBar(
+  Widget _buildAppBar(ThemeData theme) => SliverAppBar.medium(
         expandedHeight: kToolbarHeight + 132,
         pinned: true,
-        title: Obx(
-          () {
-            return AnimatedOpacity(
-              opacity: showTitle.value ? 1 : 0,
-              curve: Curves.easeOut,
-              duration: const Duration(milliseconds: 500),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    _subDetailController.item.title!,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: theme.textTheme.titleMedium,
-                  ),
-                  Text(
-                    '共${_subDetailController.mediaCount.value}条视频',
-                    style: theme.textTheme.labelMedium,
-                  )
-                ],
+        title: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              _subDetailController.item.title!,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: theme.textTheme.titleMedium,
+            ),
+            Obx(
+              () => Text(
+                '共${_subDetailController.mediaCount.value}条视频',
+                style: theme.textTheme.labelMedium,
               ),
-            );
-          },
+            ),
+          ],
         ),
         flexibleSpace: FlexibleSpaceBar(
           background: Container(

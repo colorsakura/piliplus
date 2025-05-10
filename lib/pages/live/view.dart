@@ -7,6 +7,7 @@ import 'package:PiliPlus/common/widgets/pair.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/common/widgets/self_sized_horizontal_list.dart';
 import 'package:PiliPlus/http/loading_state.dart';
+import 'package:PiliPlus/models/common/image_type.dart';
 import 'package:PiliPlus/models/live/live_feed_index/card_data_list_item.dart';
 import 'package:PiliPlus/models/live/live_feed_index/card_list.dart';
 import 'package:PiliPlus/pages/common/common_page.dart';
@@ -311,7 +312,7 @@ class _LivePageState extends CommonPageState<LivePage, LiveController>
                       shape: BoxShape.circle,
                     ),
                     child: NetworkImgLayer(
-                      type: 'avatar',
+                      type: ImageType.avatar,
                       width: 45,
                       height: 45,
                       src: item.face,

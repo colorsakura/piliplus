@@ -4,6 +4,7 @@ import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
 import 'package:PiliPlus/common/widgets/loading_widget/http_error.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/http/loading_state.dart';
+import 'package:PiliPlus/models/common/image_type.dart';
 import 'package:PiliPlus/models/fans/result.dart';
 import 'package:PiliPlus/pages/fan/controller.dart';
 import 'package:PiliPlus/pages/share/view.dart' show UserModel;
@@ -132,7 +133,7 @@ class _FansPageState extends State<FansPage> {
                         child: NetworkImgLayer(
                           width: 45,
                           height: 45,
-                          type: 'avatar',
+                          type: ImageType.avatar,
                           src: item.face,
                         ),
                       ),

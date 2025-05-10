@@ -6,6 +6,7 @@ import 'package:PiliPlus/grpc/bilibili/im/interfaces/v1.pb.dart'
 import 'package:PiliPlus/grpc/bilibili/im/type.pb.dart' show Msg, MsgType;
 import 'package:PiliPlus/http/search.dart';
 import 'package:PiliPlus/models/common/image_preview_type.dart';
+import 'package:PiliPlus/models/common/image_type.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/id_utils.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
@@ -598,7 +599,7 @@ class ChatItem extends StatelessWidget {
                   width: emojiMap[emojiKey]!['size'],
                   height: emojiMap[emojiKey]!['size'],
                   src: emojiMap[emojiKey]!['url'],
-                  type: 'emote',
+                  type: ImageType.emote,
                 ),
               ),
             );

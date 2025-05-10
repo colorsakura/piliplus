@@ -3,6 +3,7 @@ import 'package:PiliPlus/common/widgets/badge.dart';
 import 'package:PiliPlus/common/widgets/image/image_save.dart';
 import 'package:PiliPlus/common/widgets/image/image_view.dart';
 import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
+import 'package:PiliPlus/models/common/image_type.dart';
 import 'package:PiliPlus/models/dynamics/result.dart';
 import 'package:PiliPlus/pages/article/widgets/opus_content.dart';
 import 'package:PiliPlus/pages/dynamics/widgets/additional_panel.dart';
@@ -332,7 +333,6 @@ Widget forWard(
           child: Row(
             children: [
               NetworkImgLayer(
-                type: 'cover',
                 radius: 8,
                 width: 45,
                 height: 45,
@@ -382,7 +382,6 @@ Widget forWard(
           child: Row(
             children: [
               NetworkImgLayer(
-                type: 'cover',
                 radius: 8,
                 width: 45,
                 height: 45,
@@ -432,7 +431,7 @@ Widget forWard(
                   NetworkImgLayer(
                     width: 28,
                     height: 28,
-                    type: 'avatar',
+                    type: ImageType.avatar,
                     src: item.modules.moduleAuthor!.face,
                   ),
                   const SizedBox(width: 10),

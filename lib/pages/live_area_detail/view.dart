@@ -2,6 +2,7 @@ import 'package:PiliPlus/common/widgets/button/icon_button.dart';
 import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
 import 'package:PiliPlus/common/widgets/scroll_physics.dart';
 import 'package:PiliPlus/http/loading_state.dart';
+import 'package:PiliPlus/models/common/image_type.dart';
 import 'package:PiliPlus/models/live/live_area_list/area_item.dart';
 import 'package:PiliPlus/pages/live_area_detail/child/view.dart';
 import 'package:PiliPlus/pages/live_area_detail/controller.dart';
@@ -131,7 +132,7 @@ class _LiveAreaDetailPageState extends State<LiveAreaDetailPage> {
             width: 45,
             height: 45,
             src: item.pic,
-            type: 'emote',
+            type: ImageType.emote,
           ),
           const SizedBox(height: 4),
           Text(
