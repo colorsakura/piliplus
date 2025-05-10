@@ -8,8 +8,10 @@ import 'package:PiliPlus/grpc/bilibili/metadata/fawkes.pb.dart';
 import 'package:PiliPlus/grpc/bilibili/metadata/locale.pb.dart';
 import 'package:PiliPlus/grpc/bilibili/metadata/network.pb.dart' as network;
 import 'package:PiliPlus/grpc/bilibili/metadata/restriction.pb.dart';
+import 'package:PiliPlus/grpc/google/rpc/status.pb.dart';
 import 'package:PiliPlus/http/constants.dart';
 import 'package:PiliPlus/http/init.dart';
+import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/utils/login_utils.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/utils.dart';
@@ -152,7 +154,7 @@ class GrpcRepo {
     'x-bili-exps-bin': '',
   };
 
-  static final unprintableRegExp = RegExp(r"[^\u4e00-\u9fa5，。；！？UP]");
+  static final _unprintableRegExp = RegExp(r"[^\u4e00-\u9fa5，。；！？UP]");
 
   static Uint8List compressProtobuf(Uint8List proto) {
     proto = const GZipEncoder().encodeBytes(proto);
@@ -173,15 +175,14 @@ class GrpcRepo {
     }
   }
 
-  static Future<Map<String, dynamic>> request(
-      url, GeneratedMessage request, Function grpcParser,
-      {Function? onSuccess}) async {
+  static Future<LoadingState<T>> request<T>(String url,
+      GeneratedMessage request, T Function(Uint8List) grpcParser) async {
     final response = await Request().post(HttpString.appBaseUrl + url,
         data: compressProtobuf(request.writeToBuffer()),
         options: Options(headers: headers, responseType: ResponseType.bytes));
 
     if (response.data is Map) {
-      return {'status': false, 'msg': response.data['message']};
+      return LoadingState.error(response.data['message']);
     }
 
     if (response.headers.value('Grpc-Status') == '0') {
@@ -189,27 +190,32 @@ class GrpcRepo {
         Uint8List data = response.data;
         data = decompressProtobuf(data);
         final grpcResponse = grpcParser(data);
-        return {
-          'status': true,
-          'data': onSuccess == null ? grpcResponse : onSuccess(grpcResponse),
-        };
+        return LoadingState.success(grpcResponse);
       } catch (e) {
-        return {'status': false, 'msg': e.toString()};
+        return LoadingState.error(e.toString());
       }
     } else {
       try {
         String msg = response.headers.value('Grpc-Status-Details-Bin') ?? '';
-        if (msg != '') {
+        if (msg.isNotEmpty) {
           while (msg.length % 4 != 0) {
             msg += '=';
           }
-          msg = utf8
-              .decode(base64Decode(msg), allowMalformed: true)
-              .replaceAll(unprintableRegExp, '');
+          final msgBytes = base64Decode(msg);
+          try {
+            final grpcMsg = Status.fromBuffer(msgBytes);
+            // UNKNOWN : -400 : msg
+            msg =
+                '${grpcMsg.code} : ${grpcMsg.message} : ${grpcMsg.details.firstOrNull?.status.message}';
+          } catch (e) {
+            msg = utf8
+                .decode(msgBytes, allowMalformed: true)
+                .replaceAll(_unprintableRegExp, '');
+          }
         }
-        return {'status': false, 'msg': msg};
+        return LoadingState.error(msg);
       } catch (e) {
-        return {'status': false, 'msg': e.toString()};
+        return LoadingState.error(e.toString());
       }
     }
   }
