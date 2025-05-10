@@ -114,7 +114,8 @@ class _WhisperDetailPageState
             if (_whisperDetailController.mid != null) ...[
               _buildInputView(theme),
               buildPanelContainer(theme.colorScheme.onInverseSurface),
-            ],
+            ] else
+              SizedBox(height: MediaQuery.paddingOf(context).bottom),
           ],
         ),
       ),
@@ -127,11 +128,11 @@ class _WhisperDetailPageState
       Success() => loadingState.response?.isNotEmpty == true
           ? refreshIndicator(
               onRefresh: _whisperDetailController.onRefresh,
-              child: ListView.builder(
+              child: ListView.separated(
                 shrinkWrap: true,
                 reverse: true,
                 itemCount: loadingState.response!.length,
-                padding: const EdgeInsets.only(bottom: 12),
+                padding: const EdgeInsets.all(12),
                 physics: const AlwaysScrollableScrollPhysics(
                   parent: ClampingScrollPhysics(),
                 ),
@@ -182,6 +183,8 @@ class _WhisperDetailPageState
                         : null,
                   );
                 },
+                separatorBuilder: (BuildContext context, int index) =>
+                    const SizedBox(height: 12),
               ),
             )
           : scrollErrorWidget(

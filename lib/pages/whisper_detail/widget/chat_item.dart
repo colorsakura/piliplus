@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
 import 'package:PiliPlus/grpc/bilibili/im/interfaces/v1.pb.dart'
     show EmotionInfo;
@@ -7,10 +8,12 @@ import 'package:PiliPlus/grpc/bilibili/im/type.pb.dart' show Msg, MsgType;
 import 'package:PiliPlus/http/search.dart';
 import 'package:PiliPlus/models/common/image_preview_type.dart';
 import 'package:PiliPlus/models/common/image_type.dart';
+import 'package:PiliPlus/utils/app_scheme.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/id_utils.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:PiliPlus/utils/utils.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
@@ -63,8 +66,9 @@ class ChatItem extends StatelessWidget {
                   onLongPress?.call();
                 },
                 child: Row(
+                  mainAxisAlignment:
+                      isOwner ? MainAxisAlignment.end : MainAxisAlignment.start,
                   children: [
-                    if (!isOwner) const SizedBox(width: 12) else const Spacer(),
                     Container(
                       constraints: const BoxConstraints(maxWidth: 300.0),
                       decoration: BoxDecoration(
@@ -78,7 +82,6 @@ class ChatItem extends StatelessWidget {
                           bottomRight: Radius.circular(isOwner ? 6 : 16),
                         ),
                       ),
-                      margin: const EdgeInsets.only(top: 12),
                       padding: EdgeInsets.only(
                         top: 8,
                         bottom: 6,
@@ -121,7 +124,6 @@ class ChatItem extends StatelessWidget {
                         ],
                       ),
                     ),
-                    if (!isOwner) const Spacer() else const SizedBox(width: 12),
                   ],
                 ),
               );
@@ -269,7 +271,6 @@ class ChatItem extends StatelessWidget {
           bottomRight: Radius.circular(16),
         ),
       ),
-      margin: const EdgeInsets.all(12),
       padding: const EdgeInsets.all(12),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -559,13 +560,16 @@ class ChatItem extends StatelessWidget {
   }
 
   Widget msgTypeTipMessage_18(ThemeData theme, content) {
-    return Text(
-      jsonDecode(content['content']).map((e) => e['text']).join("\n"),
-      textAlign: TextAlign.center,
-      style: TextStyle(
-        letterSpacing: 0.6,
-        height: 5,
-        color: theme.colorScheme.outline.withOpacity(0.8),
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 10),
+      child: Text(
+        jsonDecode(content['content']).map((e) => e['text']).join("\n"),
+        textAlign: TextAlign.center,
+        style: TextStyle(
+          height: 1.5,
+          letterSpacing: 0.6,
+          color: theme.colorScheme.outline.withOpacity(0.8),
+        ),
       ),
     );
   }
@@ -619,60 +623,115 @@ class ChatItem extends StatelessWidget {
   }
 
   Widget msgTypeNotifyMsg_10(ThemeData theme, content) {
-    return Row(
-      children: [
-        const SizedBox(width: 12),
-        Container(
-          constraints: const BoxConstraints(maxWidth: 300.0),
-          decoration: BoxDecoration(
-            color: theme.colorScheme.secondaryContainer.withOpacity(0.4),
-            borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(16),
-              topRight: Radius.circular(16),
-              bottomLeft: Radius.circular(6),
-              bottomRight: Radius.circular(16),
+    List? modules = content['modules'] as List?;
+    return Center(
+      child: Container(
+        constraints: const BoxConstraints(maxWidth: 400),
+        decoration: BoxDecoration(
+          color: theme.colorScheme.onInverseSurface,
+          borderRadius: const BorderRadius.all(Radius.circular(16)),
+        ),
+        padding: const EdgeInsets.all(12),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SelectableText(
+              content['title'],
+              style: theme.textTheme.titleMedium!.copyWith(
+                fontWeight: FontWeight.bold,
+              ),
             ),
-          ),
-          margin: const EdgeInsets.only(top: 12),
-          padding: const EdgeInsets.all(12),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SelectableText(
-                content['title'],
-                style: theme.textTheme.titleMedium!.copyWith(
-                  fontWeight: FontWeight.bold,
+            Text(
+              Utils.dateFormat(item.timestamp.toInt()),
+              style: theme.textTheme.labelSmall!
+                  .copyWith(color: theme.colorScheme.outline),
+            ),
+            Divider(color: theme.colorScheme.primary.withOpacity(0.05)),
+            SelectableText(content['text']),
+            if (modules?.isNotEmpty == true) ...[
+              const SizedBox(height: 4),
+              Text.rich(
+                TextSpan(
+                  children: modules!.indexed
+                      .map((e) => TextSpan(children: [
+                            TextSpan(
+                                text: e.$2['title'],
+                                style: TextStyle(
+                                    color: theme.colorScheme.outline)),
+                            TextSpan(text: '    ${e.$2['detail']}'),
+                            if (e.$1 != modules.length - 1)
+                              const TextSpan(text: '\n'),
+                          ]))
+                      .toList(),
                 ),
               ),
-              Text(
-                Utils.dateFormat(item.timestamp.toInt()),
-                style: theme.textTheme.labelSmall!
-                    .copyWith(color: theme.colorScheme.outline),
-              ),
-              Divider(color: theme.colorScheme.primary.withOpacity(0.05)),
-              SelectableText(content['text'])
             ],
-          ),
+            if ((content['jump_text'] as String?)?.isNotEmpty == true &&
+                (content['jump_uri'] as String?)?.isNotEmpty == true) ...[
+              Divider(color: theme.colorScheme.primary.withOpacity(0.05)),
+              GestureDetector(
+                behavior: HitTestBehavior.opaque,
+                onTap: () {
+                  PiliScheme.routePushFromUrl(content['jump_uri']);
+                },
+                child: SizedBox(
+                  width: double.infinity,
+                  child: Text(content['jump_text']),
+                ),
+              ),
+            ],
+            if ((content['jump_text_2'] as String?)?.isNotEmpty == true &&
+                (content['jump_uri_2'] as String?)?.isNotEmpty == true) ...[
+              Divider(color: theme.colorScheme.primary.withOpacity(0.05)),
+              GestureDetector(
+                behavior: HitTestBehavior.opaque,
+                onTap: () {
+                  PiliScheme.routePushFromUrl(content['jump_uri_2']);
+                },
+                child: SizedBox(
+                  width: double.infinity,
+                  child: Text(content['jump_text_2']),
+                ),
+              ),
+            ],
+            if ((content['jump_text_3'] as String?)?.isNotEmpty == true &&
+                (content['jump_uri_3'] as String?)?.isNotEmpty == true) ...[
+              Divider(color: theme.colorScheme.primary.withOpacity(0.05)),
+              GestureDetector(
+                behavior: HitTestBehavior.opaque,
+                onTap: () {
+                  PiliScheme.routePushFromUrl(content['jump_uri_3']);
+                },
+                child: SizedBox(
+                  width: double.infinity,
+                  child: Text(content['jump_text_3']),
+                ),
+              ),
+            ],
+          ],
         ),
-      ],
+      ),
     );
   }
 
   Widget msgTypePictureCard_13(content) {
-    return Row(
-      children: [
-        const SizedBox(width: 12),
-        Container(
-          constraints: const BoxConstraints(maxWidth: 300.0),
-          margin: const EdgeInsets.only(top: 12),
-          padding: const EdgeInsets.only(bottom: 6),
-          child: NetworkImgLayer(
-            width: 320,
-            height: 150,
-            src: content['pic_url'],
+    return Center(
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 400.0),
+        child: ClipRRect(
+          borderRadius: StyleString.mdRadius,
+          child: GestureDetector(
+            onTap: content['jump_url'] == null
+                ? null
+                : () {
+                    PiliScheme.routePushFromUrl(content['jump_url']);
+                  },
+            child: CachedNetworkImage(
+              imageUrl: Utils.thumbnailImgUrl(content['pic_url']),
+            ),
           ),
         ),
-      ],
+      ),
     );
   }
 
