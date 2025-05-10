@@ -653,6 +653,17 @@ class PiliScheme {
         launchURL();
         return false;
       case 'read':
+        if (path.contains('readlist')) {
+          String? id = RegExp(r'/rl(\d+)', caseSensitive: false)
+              .firstMatch(path)
+              ?.group(1);
+          if (id != null) {
+            Get.toNamed('/articleList', parameters: {'id': id});
+            return true;
+          }
+          launchURL();
+          return false;
+        }
         debugPrint('专栏');
         String? id =
             RegExp(r'cv(\d+)', caseSensitive: false).firstMatch(path)?.group(1);
