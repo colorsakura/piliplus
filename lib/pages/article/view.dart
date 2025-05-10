@@ -516,6 +516,14 @@ class _ArticlePageState extends State<ArticlePage>
                       ),
                     ),
                   ),
+                  if (_articleCtr.type != 'read' &&
+                      _articleCtr.opusData?.modules.moduleCollection != null)
+                    SliverToBoxAdapter(
+                      child: opusCollection(
+                        theme,
+                        _articleCtr.opusData!.modules.moduleCollection!,
+                      ),
+                    ),
                   content,
                 ],
               );

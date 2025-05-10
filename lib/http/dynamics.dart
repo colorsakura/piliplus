@@ -3,6 +3,7 @@ import 'package:PiliPlus/http/constants.dart';
 import 'package:PiliPlus/http/init.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/common/dynamic/dynamics_type.dart';
+import 'package:PiliPlus/models/dynamics/article_list/data.dart';
 import 'package:PiliPlus/models/dynamics/dyn_topic_feed/topic_card_list.dart';
 import 'package:PiliPlus/models/dynamics/dyn_topic_top/top_details.dart';
 import 'package:PiliPlus/models/dynamics/result.dart';
@@ -300,6 +301,23 @@ class DynamicsHttp {
           ? null
           : TopicCardList.fromJson(res.data['data']['topic_card_list']);
       return LoadingState.success(data);
+    } else {
+      return LoadingState.error(res.data['message']);
+    }
+  }
+
+  static Future<LoadingState<ArticleListData>> articleList({
+    required id,
+  }) async {
+    final res = await Request().get(
+      Api.articleList,
+      queryParameters: {
+        'id': id,
+        'web_location': 333.1400,
+      },
+    );
+    if (res.data['code'] == 0) {
+      return LoadingState.success(ArticleListData.fromJson(res.data['data']));
     } else {
       return LoadingState.error(res.data['message']);
     }

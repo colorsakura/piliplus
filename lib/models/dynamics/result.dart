@@ -98,6 +98,7 @@ class ItemModulesModel {
 
   // 专栏
   ModuleTop? moduleTop;
+  ModuleCollection? moduleCollection;
   List<ModuleTag>? moduleExtend; // opus的tag
   List<ArticleContentModel>? moduleContent;
   ModuleBlocked? moduleBlocked;
@@ -133,6 +134,11 @@ class ItemModulesModel {
               ? null
               : ModuleTag.fromJson(i['module_title']);
           break;
+        case 'MODULE_TYPE_COLLECTION':
+          moduleCollection = i['module_collection'] == null
+              ? null
+              : ModuleCollection.fromJson(i['module_collection']);
+          break;
         case 'MODULE_TYPE_AUTHOR':
           moduleAuthor = i['module_author'] == null
               ? null
@@ -164,6 +170,20 @@ class ItemModulesModel {
         //   debugPrint('unknown type: ${i}');
       }
     }
+  }
+}
+
+class ModuleCollection {
+  String? count;
+  int? id;
+  String? name;
+  String? title;
+
+  ModuleCollection.fromJson(Map<String, dynamic> json) {
+    count = json['count'];
+    id = json['id'];
+    name = json['name'];
+    title = json['title'];
   }
 }
 

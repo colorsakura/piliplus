@@ -1,5 +1,6 @@
 import 'package:PiliPlus/pages/about/view.dart';
 import 'package:PiliPlus/pages/article/view.dart';
+import 'package:PiliPlus/pages/article_list/view.dart';
 import 'package:PiliPlus/pages/blacklist/view.dart';
 import 'package:PiliPlus/pages/danmaku_block/view.dart';
 import 'package:PiliPlus/pages/dynamics/view.dart';
@@ -174,6 +175,7 @@ class Routes {
     CustomGetPage(
         name: '/searchTrending', page: () => const SearchTrendingPage()),
     CustomGetPage(name: '/dynTopic', page: () => const DynTopicPage()),
+    CustomGetPage(name: '/articleList', page: () => const ArticleListPage()),
   ];
 }
 

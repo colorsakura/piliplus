@@ -829,4 +829,6 @@ class Api {
   static const String topicFeed = '/x/polymer/web-dynamic/v1/feed/topic';
 
   static const String spaceOpus = '/x/polymer/web-dynamic/v1/opus/feed/space';
+
+  static const String articleList = '/x/article/list/web/articles';
 }

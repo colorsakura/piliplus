@@ -34,8 +34,6 @@ class Pic {
   num? size;
   String? liveUrl;
 
-  double? calHeight;
-
   Pic.fromJson(Map<String, dynamic> json) {
     url = json['url'];
     width = json['width'];
@@ -44,12 +42,6 @@ class Pic {
     pics = (json['pics'] as List?)?.map((item) => Pic.fromJson(item)).toList();
     style = json['style'];
     liveUrl = json['live_url'];
-  }
-
-  void onCalHeight(double maxWidth) {
-    if (calHeight == null && height != null && width != null) {
-      calHeight = maxWidth * height! / width!;
-    }
   }
 }
 

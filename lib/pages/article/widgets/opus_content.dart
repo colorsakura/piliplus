@@ -126,7 +126,6 @@ class OpusContent extends StatelessWidget {
               return widget;
             case 2 when (element.pic != null):
               if (element.pic!.pics!.length == 1) {
-                element.pic!.pics!.first.onCalHeight(maxWidth);
                 return Hero(
                   tag: element.pic!.pics!.first.url!,
                   child: GestureDetector(
@@ -142,11 +141,20 @@ class OpusContent extends StatelessWidget {
                         );
                       }
                     },
-                    child: NetworkImgLayer(
-                      width: maxWidth,
-                      height: element.pic!.pics!.first.calHeight,
-                      src: element.pic!.pics!.first.url!,
-                      quality: 60,
+                    child: Center(
+                      child: ClipRRect(
+                        borderRadius: StyleString.mdRadius,
+                        child: CachedNetworkImage(
+                          imageUrl: Utils.thumbnailImgUrl(
+                            element.pic!.pics!.first.url!,
+                            60,
+                          ),
+                          fadeInDuration: const Duration(milliseconds: 120),
+                          fadeOutDuration: const Duration(milliseconds: 120),
+                          placeholder: (context, url) =>
+                              Image.asset('assets/images/loading.png'),
+                        ),
+                      ),
                     ),
                   ),
                 );
@@ -667,6 +675,66 @@ Widget moduleBlockedItem(
           ),
         ],
       ],
+    ),
+  );
+}
+
+Widget opusCollection(ThemeData theme, ModuleCollection item) {
+  return Padding(
+    padding: const EdgeInsets.only(bottom: 10),
+    child: Material(
+      borderRadius: const BorderRadius.all(Radius.circular(6)),
+      color: theme.colorScheme.onInverseSurface,
+      child: InkWell(
+        borderRadius: const BorderRadius.all(Radius.circular(6)),
+        onTap: () {
+          Get.toNamed(
+            '/articleList',
+            parameters: {'id': '${item.id}'},
+          );
+        },
+        child: Padding(
+          padding: const EdgeInsets.all(10),
+          child: Row(
+            children: [
+              Expanded(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(item.title!),
+                    Text.rich(
+                      TextSpan(
+                        children: [
+                          WidgetSpan(
+                            alignment: PlaceholderAlignment.middle,
+                            child: Icon(
+                              size: 18,
+                              Icons.article_outlined,
+                              color: theme.colorScheme.outline,
+                            ),
+                          ),
+                          TextSpan(
+                            text: '${item.name} · ${item.count}',
+                            style: TextStyle(
+                              fontSize: 13,
+                              color: theme.colorScheme.outline,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Icon(
+                Icons.keyboard_arrow_right,
+                color: theme.colorScheme.outline,
+              ),
+            ],
+          ),
+        ),
+      ),
     ),
   );
 }
