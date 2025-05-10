@@ -46,9 +46,9 @@ class _ZanButtonGrpcState extends State<ZanButtonGrpc> {
           widget.replyItem.like =
               $fixnum.Int64(widget.replyItem.like.toInt() - 1);
         }
-        widget.replyItem.replyControl.action = $fixnum.Int64(2);
+        widget.replyItem.replyControl.action = $fixnum.Int64.TWO;
       } else {
-        widget.replyItem.replyControl.action = $fixnum.Int64(0);
+        widget.replyItem.replyControl.action = $fixnum.Int64.ZERO;
       }
       setState(() {});
     } else {
@@ -76,11 +76,11 @@ class _ZanButtonGrpcState extends State<ZanButtonGrpc> {
       if (action == 1) {
         widget.replyItem.like =
             $fixnum.Int64(widget.replyItem.like.toInt() + 1);
-        widget.replyItem.replyControl.action = $fixnum.Int64(1);
+        widget.replyItem.replyControl.action = $fixnum.Int64.ONE;
       } else {
         widget.replyItem.like =
             $fixnum.Int64(widget.replyItem.like.toInt() - 1);
-        widget.replyItem.replyControl.action = $fixnum.Int64(0);
+        widget.replyItem.replyControl.action = $fixnum.Int64.ZERO;
       }
       setState(() {});
     } else {

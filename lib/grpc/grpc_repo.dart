@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
+import 'package:PiliPlus/build_config.dart';
 import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/grpc/bilibili/metadata.pb.dart';
 import 'package:PiliPlus/grpc/bilibili/metadata/device.pb.dart';
@@ -60,6 +61,7 @@ class GrpcUrl {
   static const keywordBlockingList = '$im2/KeywordBlockingList';
   static const keywordBlockingAdd = '$im2/KeywordBlockingAdd';
   static const keywordBlockingDelete = '$im2/KeywordBlockingDelete';
+  static const syncFetchSessionMsgs = '$im/SyncFetchSessionMsgs';
 }
 
 class GrpcRepo {
@@ -205,8 +207,11 @@ class GrpcRepo {
           try {
             final grpcMsg = Status.fromBuffer(msgBytes);
             // UNKNOWN : -400 : msg
-            msg =
-                '${grpcMsg.code} : ${grpcMsg.message} : ${grpcMsg.details.firstOrNull?.status.message}';
+            final errMsg =
+                grpcMsg.details.map((e) => e.status.message).join('\n');
+            msg = BuildConfig.isDebug
+                ? 'CODE: ${grpcMsg.code}(${grpcMsg.message})\nMSG: $errMsg'
+                : errMsg;
           } catch (e) {
             msg = utf8
                 .decode(msgBytes, allowMalformed: true)

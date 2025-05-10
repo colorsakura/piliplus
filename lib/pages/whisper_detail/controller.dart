@@ -1,67 +1,70 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:PiliPlus/grpc/bilibili/im/interfaces/v1.pb.dart'
+    show EmotionInfo, RspSessionMsg;
+import 'package:PiliPlus/grpc/bilibili/im/type.pb.dart' show Msg, MsgType;
+import 'package:PiliPlus/grpc/im.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/http/msg.dart';
-import 'package:PiliPlus/models/msg/session.dart';
 import 'package:PiliPlus/pages/common/common_list_controller.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/feed_back.dart';
 import 'package:PiliPlus/utils/storage.dart';
+import 'package:fixnum/fixnum.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 
-class WhisperDetailController
-    extends CommonListController<SessionMsgDataModel, MessageItem> {
+class WhisperDetailController extends CommonListController<RspSessionMsg, Msg> {
   late final ownerMid = Accounts.main.mid;
 
   late int talkerId;
   late String name;
   late String face;
-  String? mid;
+  int? mid;
 
-  int? msgSeqno;
+  Int64? msgSeqno;
 
   //表情转换图片规则
-  List<dynamic>? eInfos;
+  List<EmotionInfo>? eInfos;
 
   @override
   void onInit() {
     super.onInit();
+
     talkerId = int.parse(Get.parameters['talkerId']!);
     name = Get.parameters['name']!;
     face = Get.parameters['face']!;
-    mid = Get.parameters['mid'];
+    mid = Get.parameters['mid'] != null
+        ? int.parse(Get.parameters['mid']!)
+        : null;
 
     queryData();
   }
 
   @override
-  bool customHandleResponse(
-      bool isRefresh, Success<SessionMsgDataModel> response) {
-    List<MessageItem>? messageList = response.response.messages;
-    if (messageList?.isNotEmpty == true) {
-      msgSeqno = messageList!.last.msgSeqno;
-      if (messageList.length == 1 &&
-          messageList.last.msgType == 18 &&
-          messageList.last.msgSource == 18) {
+  bool customHandleResponse(bool isRefresh, Success<RspSessionMsg> response) {
+    List<Msg> msgs = response.response.messages;
+    if (msgs.isNotEmpty) {
+      msgSeqno = msgs.last.msgSeqno;
+      if (msgs.length == 1 &&
+          msgs.last.msgType == 18 &&
+          msgs.last.msgSource == 18) {
         // debugPrint(messageList.last);
         // debugPrint(messageList.last.content);
         //{content: [{"text":"对方主动回复或关注你前，最多发送1条消息","color_day":"#9499A0","color_nig":"#9499A0"}]}
       } else {
-        ackSessionMsg(messageList.last.msgSeqno);
+        ackSessionMsg(msgs.last.msgSeqno.toInt());
       }
-      if (response.response.eInfos != null) {
-        eInfos ??= [];
-        eInfos!.addAll(response.response.eInfos!);
-      }
+      eInfos ??= <EmotionInfo>[];
+      eInfos!.addAll(response.response.eInfos);
     }
     return false;
   }
 
   // 消息标记已读
-  Future<void> ackSessionMsg(int? msgSeqno) async {
+  Future<void> ackSessionMsg(int msgSeqno) async {
     var res = await MsgHttp.ackSessionMsg(
       talkerId: talkerId,
       ackSeqno: msgSeqno,
@@ -79,37 +82,24 @@ class WhisperDetailController
     int? index,
   }) async {
     feedBack();
+    SmartDialog.dismiss();
     if (ownerMid == 0) {
-      SmartDialog.dismiss();
       SmartDialog.showToast('请先登录');
       return;
     }
-    if (mid == null) {
-      SmartDialog.dismiss();
-      SmartDialog.showToast('这里不能发');
-      return;
-    }
-    if (picMsg == null && message == '') {
-      SmartDialog.dismiss();
-      SmartDialog.showToast('请输入内容');
-      return;
-    }
-    var result = await MsgHttp.sendMsg(
+    var result = await ImGrpc.sendMsg(
       senderUid: ownerMid,
-      receiverId: int.parse(mid!),
-      content: msgType == 5
-          ? message
-          : jsonEncode(
-              picMsg ?? {"content": message},
-            ),
-      msgType: msgType ?? (picMsg != null ? 2 : 1),
+      receiverId: mid!,
+      content:
+          msgType == 5 ? message : jsonEncode(picMsg ?? {"content": message}),
+      msgType: MsgType.values[msgType ?? (picMsg != null ? 2 : 1)],
     );
     SmartDialog.dismiss();
-    if (result['status']) {
+    if (result.isSuccess) {
       if (msgType == 5) {
-        List<MessageItem> list = (loadingState.value as Success).response;
-        list[index!].msgStatus = 1;
-        loadingState.refresh();
+        loadingState
+          ..value.data![index!].msgStatus = 1
+          ..refresh();
         SmartDialog.showToast('撤回成功');
       } else {
         onRefresh();
@@ -117,12 +107,12 @@ class WhisperDetailController
         SmartDialog.showToast('发送成功');
       }
     } else {
-      SmartDialog.showToast(result['msg']);
+      result.toast();
     }
   }
 
   @override
-  List<MessageItem>? getDataList(SessionMsgDataModel response) {
+  List<Msg>? getDataList(RspSessionMsg response) {
     if (response.hasMore == 0) {
       isEnd = true;
     }
@@ -138,10 +128,10 @@ class WhisperDetailController
   }
 
   @override
-  Future<LoadingState<SessionMsgDataModel>> customGetData() =>
-      MsgHttp.sessionMsg(
+  Future<LoadingState<RspSessionMsg>> customGetData() =>
+      ImGrpc.syncFetchSessionMsgs(
         talkerId: talkerId,
-        beginSeqno: msgSeqno != null ? 0 : null,
+        beginSeqno: msgSeqno != null ? Int64.ZERO : null,
         endSeqno: msgSeqno,
       );
 }

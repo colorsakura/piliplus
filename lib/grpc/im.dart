@@ -41,8 +41,28 @@ class ImGrpc {
     );
   }
 
-  static Future<LoadingState<SessionMainReply>> sessionMain(
-      {PbMap<int, Offset>? offset}) {
+  static Future<LoadingState<RspSessionMsg>> syncFetchSessionMsgs({
+    required int talkerId,
+    Int64? endSeqno,
+    Int64? beginSeqno,
+  }) {
+    return GrpcRepo.request(
+      GrpcUrl.syncFetchSessionMsgs,
+      ReqSessionMsg(
+        talkerId: Int64(talkerId),
+        sessionType: 1,
+        endSeqno: endSeqno,
+        beginSeqno: beginSeqno,
+        size: 20,
+        devId: '1',
+      ),
+      RspSessionMsg.fromBuffer,
+    );
+  }
+
+  static Future<LoadingState<SessionMainReply>> sessionMain({
+    PbMap<int, Offset>? offset,
+  }) {
     return GrpcRepo.request(
       GrpcUrl.sessionMain,
       SessionMainReq(

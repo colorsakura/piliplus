@@ -3,10 +3,10 @@ import 'dart:async';
 import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
 import 'package:PiliPlus/common/widgets/loading_widget/loading_widget.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
+import 'package:PiliPlus/grpc/bilibili/im/type.pb.dart' show Msg;
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/http/msg.dart';
 import 'package:PiliPlus/models/common/publish_panel_type.dart';
-import 'package:PiliPlus/models/msg/session.dart';
 import 'package:PiliPlus/pages/common/common_publish_page.dart';
 import 'package:PiliPlus/pages/emote/view.dart';
 import 'package:PiliPlus/pages/whisper_detail/controller.dart';
@@ -110,15 +110,17 @@ class _WhisperDetailPageState
                     _buildBody(_whisperDetailController.loadingState.value)),
               ),
             ),
-            _buildInputView(theme),
-            buildPanelContainer(theme.colorScheme.onInverseSurface),
+            if (_whisperDetailController.mid != null) ...[
+              _buildInputView(theme),
+              buildPanelContainer(theme.colorScheme.onInverseSurface),
+            ],
           ],
         ),
       ),
     );
   }
 
-  Widget _buildBody(LoadingState<List<MessageItem>?> loadingState) {
+  Widget _buildBody(LoadingState<List<Msg>?> loadingState) {
     return switch (loadingState) {
       Loading() => loadingWidget,
       Success() => loadingState.response?.isNotEmpty == true
