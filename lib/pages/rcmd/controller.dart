@@ -14,22 +14,20 @@ class RcmdController extends CommonListController {
   @override
   void onInit() {
     super.onInit();
-    currentPage = 0;
+    page = 0;
     queryData();
   }
 
   @override
   Future<LoadingState> customGetData() {
     return appRcmd
-        ? VideoHttp.rcmdVideoListApp(freshIdx: currentPage)
-        : VideoHttp.rcmdVideoList(freshIdx: currentPage, ps: 20);
+        ? VideoHttp.rcmdVideoListApp(freshIdx: page)
+        : VideoHttp.rcmdVideoList(freshIdx: page, ps: 20);
   }
 
   @override
   void handleListResponse(List dataList) {
-    if (enableSaveLastData &&
-        currentPage == 0 &&
-        loadingState.value is Success) {
+    if (enableSaveLastData && page == 0 && loadingState.value is Success) {
       List? currentList = (loadingState.value as Success).response;
       if (currentList?.isNotEmpty == true) {
         if (savedRcmdTip) {
@@ -45,7 +43,7 @@ class RcmdController extends CommonListController {
 
   @override
   Future<void> onRefresh() {
-    currentPage = 0;
+    page = 0;
     isEnd = false;
     return queryData();
   }

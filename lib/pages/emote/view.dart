@@ -33,13 +33,13 @@ class _EmotePanelState extends State<EmotePanel>
   Widget _buildBody(LoadingState<List<Packages>?> loadingState) {
     return switch (loadingState) {
       Loading() => loadingWidget,
-      Success() => loadingState.response?.isNotEmpty == true
+      Success(:var response) => response?.isNotEmpty == true
           ? Column(
               children: [
                 Expanded(
                   child: tabBarView(
                     controller: _emotePanelController.tabController,
-                    children: loadingState.response!.map(
+                    children: response!.map(
                       (e) {
                         int size = e.emote!.first.meta!.size!;
                         int type = e.type!;
@@ -101,7 +101,7 @@ class _EmotePanelState extends State<EmotePanel>
                   dividerColor: Colors.transparent,
                   dividerHeight: 0,
                   isScrollable: true,
-                  tabs: loadingState.response!
+                  tabs: response
                       .map(
                         (e) => Padding(
                           padding: const EdgeInsets.all(8),
@@ -119,7 +119,7 @@ class _EmotePanelState extends State<EmotePanel>
               ],
             )
           : _errorWidget(),
-      Error() => _errorWidget(loadingState.errMsg),
+      Error(:var errMsg) => _errorWidget(errMsg),
     };
   }
 

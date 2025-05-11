@@ -41,5 +41,5 @@ class MemberArticleCtr
 
   @override
   Future<LoadingState<SpaceArticleData>> customGetData() =>
-      MemberHttp.spaceArticle(mid: mid, page: currentPage);
+      MemberHttp.spaceArticle(mid: mid, page: page);
 }

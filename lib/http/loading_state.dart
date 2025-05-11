@@ -1,23 +1,19 @@
-import 'dart:core' hide Error;
-
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 
 sealed class LoadingState<T> {
   const LoadingState();
 
   factory LoadingState.loading() = Loading;
-  factory LoadingState.success(T response) = Success<T>;
-  factory LoadingState.error(String errMsg) = Error;
 
   bool get isSuccess => this is Success<T>;
 
   T get data => switch (this) {
-        Success(response: final res) => res,
+        Success(:var response) => response,
         _ => throw this,
       };
 
   T? get dataOrNull => switch (this) {
-        Success(response: final res) => res,
+        Success(:var response) => response,
         _ => null,
       };
 
@@ -57,7 +53,7 @@ class Success<T> extends LoadingState<T> {
 }
 
 class Error extends LoadingState<Never> {
-  final String errMsg;
+  final String? errMsg;
   const Error(this.errMsg);
 
   @override

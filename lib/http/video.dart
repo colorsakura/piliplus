@@ -60,9 +60,9 @@ class VideoHttp {
           }
         }
       }
-      return LoadingState.success(list);
+      return Success(list);
     } else {
-      return LoadingState.error(res.data['message']);
+      return Error(res.data['message']);
     }
   }
 
@@ -137,9 +137,9 @@ class VideoHttp {
           }
         }
       }
-      return LoadingState.success(list);
+      return Success(list);
     } else {
-      return LoadingState.error(res.data['message']);
+      return Error(res.data['message']);
     }
   }
 
@@ -166,9 +166,9 @@ class VideoHttp {
           list.add(HotVideoItemModel.fromJson(i));
         }
       }
-      return LoadingState.success(list);
+      return Success(list);
     } else {
-      return LoadingState.error(res.data['message']);
+      return Error(res.data['message']);
     }
   }
 
@@ -335,9 +335,9 @@ class VideoHttp {
       final list = RecommendFilter.applyFilterToRelatedVideos
           ? items?.where((i) => !RecommendFilter.filterAll(i)).toList()
           : items?.toList();
-      return LoadingState.success(list);
+      return Success(list);
     } else {
-      return LoadingState.error(res.data['message']);
+      return Error(res.data['message']);
     }
   }
 
@@ -972,9 +972,9 @@ class VideoHttp {
           list.add(HotVideoItemModel.fromJson(i));
         }
       }
-      return LoadingState.success(list);
+      return Success(list);
     } else {
-      return LoadingState.error(res.data['message']);
+      return Error(res.data['message']);
     }
   }
 
@@ -989,11 +989,11 @@ class VideoHttp {
       }),
     );
     if (res.data['code'] == 0) {
-      return LoadingState.success((res.data['result']?['list'] as List?)
+      return Success((res.data['result']?['list'] as List?)
           ?.map((e) => PgcRankItemModel.fromJson(e))
           .toList());
     } else {
-      return LoadingState.error(res.data['message']);
+      return Error(res.data['message']);
     }
   }
 
@@ -1008,11 +1008,11 @@ class VideoHttp {
       }),
     );
     if (res.data['code'] == 0) {
-      return LoadingState.success((res.data['data']?['list'] as List?)
+      return Success((res.data['data']?['list'] as List?)
           ?.map((e) => PgcRankItemModel.fromJson(e))
           .toList());
     } else {
-      return LoadingState.error(res.data['message']);
+      return Error(res.data['message']);
     }
   }
 
@@ -1033,9 +1033,9 @@ class VideoHttp {
       },
     );
     if (res.data['code'] == 0) {
-      return LoadingState.success(res.data['data']);
+      return Success(res.data['data']);
     } else {
-      return LoadingState.error(res.data['message']);
+      return Error(res.data['message']);
     }
   }
 
@@ -1054,9 +1054,9 @@ class VideoHttp {
       List<FavArticleModel>? list = (res.data['data']?['list'] as List?)
           ?.map((e) => FavArticleModel.fromJson(e))
           .toList();
-      return LoadingState.success(list);
+      return Success(list);
     } else {
-      return LoadingState.error(res.data['message']);
+      return Error(res.data['message']);
     }
   }
 
@@ -1075,9 +1075,9 @@ class VideoHttp {
       List<FavArticleModel>? list = (res.data['data']?['list'] as List?)
           ?.map((e) => FavArticleModel.fromJson(e))
           .toList();
-      return LoadingState.success(list);
+      return Success(list);
     } else {
-      return LoadingState.error(res.data['message']);
+      return Error(res.data['message']);
     }
   }
 
@@ -1123,9 +1123,9 @@ class VideoHttp {
       ),
     );
     if (res.data['code'] == 0) {
-      return LoadingState.success(res.data['data']?['list']);
+      return Success(res.data['data']?['list']);
     } else {
-      return LoadingState.error(res.data['message']);
+      return Error(res.data['message']);
     }
   }
 

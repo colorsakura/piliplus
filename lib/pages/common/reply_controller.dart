@@ -178,7 +178,7 @@ abstract class ReplyController<R> extends CommonListController<R, ReplyInfo> {
           if (loadingState.value is Success) {
             List<ReplyInfo>? list = (loadingState.value as Success).response;
             if (list == null) {
-              loadingState.value = LoadingState.success([replyInfo]);
+              loadingState.value = Success([replyInfo]);
             } else {
               if (oid != null) {
                 list.insert(hasUpTop ? 1 : 0, replyInfo);
@@ -188,7 +188,7 @@ abstract class ReplyController<R> extends CommonListController<R, ReplyInfo> {
               loadingState.refresh();
             }
           } else {
-            loadingState.value = LoadingState.success([replyInfo]);
+            loadingState.value = Success([replyInfo]);
           }
           count.value += 1;
 
@@ -382,7 +382,7 @@ abstract class ReplyController<R> extends CommonListController<R, ReplyInfo> {
               // not found
               if (context.mounted) {
                 showReplyCheckResult(
-                  res2.errMsg.startsWith('12022')
+                  res2.errMsg?.startsWith('12022') == true
                       ? '你的评论被shadow ban（仅自己可见）！\n\n你的评论: $message'
                       : '评论不可见(${res2.errMsg}): $message',
                 );

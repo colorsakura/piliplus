@@ -61,14 +61,14 @@ class _SysMsgPageState extends State<SysMsgPage> {
             },
           ),
         ),
-      Success() => loadingState.response?.isNotEmpty == true
+      Success(:var response) => response?.isNotEmpty == true
           ? SliverList.separated(
-              itemCount: loadingState.response!.length,
+              itemCount: response!.length,
               itemBuilder: (context, int index) {
-                if (index == loadingState.response!.length - 1) {
+                if (index == response.length - 1) {
                   _sysMsgController.onLoadMore();
                 }
-                final item = loadingState.response![index];
+                final item = response[index];
                 String? content = item.content;
                 if (content != null) {
                   try {
@@ -131,8 +131,8 @@ class _SysMsgPageState extends State<SysMsgPage> {
               },
             )
           : HttpError(onReload: _sysMsgController.onReload),
-      Error() => HttpError(
-          errMsg: loadingState.errMsg,
+      Error(:var errMsg) => HttpError(
+          errMsg: errMsg,
           onReload: _sysMsgController.onReload,
         ),
     };

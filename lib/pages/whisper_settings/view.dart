@@ -45,21 +45,22 @@ class _WhisperSettingsPageState extends State<WhisperSettingsPage> {
       ThemeData theme, LoadingState<PbMap<int, Setting>> loadingState) {
     return switch (loadingState) {
       Loading() => const SizedBox.shrink(),
-      Success<PbMap<int, Setting>>() => Builder(builder: (context) {
-          final keys = loadingState.response.keys.toList()..sort();
+      Success<PbMap<int, Setting>>(:var response) =>
+        Builder(builder: (context) {
+          final keys = response.keys.toList()..sort();
           return ListView.separated(
             padding: EdgeInsets.only(
                 bottom: MediaQuery.paddingOf(context).bottom + 80),
             itemCount: keys.length,
             itemBuilder: (context, index) {
               final key = keys[index];
-              final item = loadingState.response[key]!;
+              final item = response[key]!;
               return ImSettingsItem(
                 item: item,
                 onSet: () async {
                   PbMap<int, Setting> settings = PbMap<int, Setting>(
-                    loadingState.response.keyFieldType,
-                    loadingState.response.valueFieldType,
+                    response.keyFieldType,
+                    response.valueFieldType,
                   )..[key] = item;
                   final res = await _controller.onSet(settings);
                   if (res) {
@@ -116,8 +117,8 @@ class _WhisperSettingsPageState extends State<WhisperSettingsPage> {
                                       _controller.loadingState.refresh();
                                       PbMap<int, Setting> settings =
                                           PbMap<int, Setting>(
-                                        loadingState.response.keyFieldType,
-                                        loadingState.response.valueFieldType,
+                                        response.keyFieldType,
+                                        response.valueFieldType,
                                       )..[key] = item;
                                       final res =
                                           await _controller.onSet(settings);
@@ -177,8 +178,8 @@ class _WhisperSettingsPageState extends State<WhisperSettingsPage> {
             ),
           );
         }),
-      Error() => scrollErrorWidget(
-          errMsg: loadingState.errMsg,
+      Error(:var errMsg) => scrollErrorWidget(
+          errMsg: errMsg,
           onReload: _controller.onReload,
         ),
     };

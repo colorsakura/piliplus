@@ -35,6 +35,6 @@ class SeasonSeriesController extends CommonListController {
   @override
   Future<LoadingState> customGetData() => MemberHttp.seasonSeriesList(
         mid: mid,
-        pn: currentPage,
+        pn: page,
       );
 }

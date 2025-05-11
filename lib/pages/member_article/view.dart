@@ -62,26 +62,26 @@ class _MemberArticleState extends State<MemberArticle>
             childCount: 10,
           ),
         ),
-      Success() => loadingState.response?.isNotEmpty == true
+      Success(:var response) => response?.isNotEmpty == true
           ? SliverGrid(
               gridDelegate: Grid.videoCardHDelegate(context),
               delegate: SliverChildBuilderDelegate(
                 (context, index) {
-                  if (index == loadingState.response!.length - 1) {
+                  if (index == response.length - 1) {
                     _controller.onLoadMore();
                   }
                   return MemberArticleItem(
-                    item: loadingState.response![index],
+                    item: response[index],
                   );
                 },
-                childCount: loadingState.response!.length,
+                childCount: response!.length,
               ),
             )
           : HttpError(
               onReload: _controller.onReload,
             ),
-      Error() => HttpError(
-          errMsg: loadingState.errMsg,
+      Error(:var errMsg) => HttpError(
+          errMsg: errMsg,
           onReload: _controller.onReload,
         ),
     };

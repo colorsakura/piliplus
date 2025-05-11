@@ -125,23 +125,23 @@ class _WhisperDetailPageState
   Widget _buildBody(LoadingState<List<Msg>?> loadingState) {
     return switch (loadingState) {
       Loading() => loadingWidget,
-      Success() => loadingState.response?.isNotEmpty == true
+      Success(:var response) => response?.isNotEmpty == true
           ? refreshIndicator(
               onRefresh: _whisperDetailController.onRefresh,
               child: ListView.separated(
                 shrinkWrap: true,
                 reverse: true,
-                itemCount: loadingState.response!.length,
+                itemCount: response!.length,
                 padding: const EdgeInsets.all(12),
                 physics: const AlwaysScrollableScrollPhysics(
                   parent: ClampingScrollPhysics(),
                 ),
                 controller: _whisperDetailController.scrollController,
                 itemBuilder: (context, int index) {
-                  if (index == loadingState.response!.length - 1) {
+                  if (index == response.length - 1) {
                     _whisperDetailController.onLoadMore();
                   }
-                  final item = loadingState.response![index];
+                  final item = response[index];
                   return ChatItem(
                     item: item,
                     eInfos: _whisperDetailController.eInfos,
@@ -190,8 +190,8 @@ class _WhisperDetailPageState
           : scrollErrorWidget(
               onReload: _whisperDetailController.onReload,
             ),
-      Error() => scrollErrorWidget(
-          errMsg: loadingState.errMsg,
+      Error(:var errMsg) => scrollErrorWidget(
+          errMsg: errMsg,
           onReload: _whisperDetailController.onReload,
         ),
     };

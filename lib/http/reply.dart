@@ -115,9 +115,9 @@ class ReplyHttp {
           });
         }
       }
-      return LoadingState.success(replyData);
+      return Success(replyData);
     } else {
-      return LoadingState.error(res.data['message']);
+      return Error(res.data['message']);
     }
   }
 
@@ -173,9 +173,9 @@ class ReplyHttp {
           replyData.replies!.removeWhere(needRemove);
         }
       }
-      return LoadingState.success(replyData);
+      return Success(replyData);
     } else {
-      return LoadingState.error(
+      return Error(
         isCheck == true
             ? '${res.data['code']}${res.data['message']}'
             : res.data['message'],
@@ -240,10 +240,9 @@ class ReplyHttp {
       'web_location': '333.1245',
     });
     if (res.data['code'] == 0) {
-      return LoadingState.success(
-          EmoteModelData.fromJson(res.data['data']).packages);
+      return Success(EmoteModelData.fromJson(res.data['data']).packages);
     } else {
-      return LoadingState.error(res.data['message']);
+      return Error(res.data['message']);
     }
   }
 

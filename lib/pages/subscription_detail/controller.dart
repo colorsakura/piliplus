@@ -53,14 +53,14 @@ class SubDetailController
       return UserHttp.favResourceList(
         id: id,
         ps: 20,
-        pn: currentPage,
+        pn: page,
       );
     } else {
       return UserHttp.favSeasonList(
         // item.type! == 21
         id: id,
         ps: 20,
-        pn: currentPage,
+        pn: page,
       );
     }
   }

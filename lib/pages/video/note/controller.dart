@@ -39,6 +39,6 @@ class NoteListPageCtr extends CommonListController {
   Future<LoadingState> customGetData() => VideoHttp.getVideoNoteList(
         oid: oid,
         uperMid: upperMid,
-        page: currentPage,
+        page: page,
       );
 }

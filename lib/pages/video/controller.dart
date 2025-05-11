@@ -1092,7 +1092,7 @@ class VideoDetailController extends GetxController
       subType: videoType == SearchType.media_bangumi ? subType : null,
       callback: () {
         if (videoState.value is! Success) {
-          videoState.value = LoadingState.success(null);
+          videoState.value = Success(null);
         }
         setSubtitle(vttSubtitlesIndex.value);
       },
@@ -1186,7 +1186,7 @@ class VideoDetailController extends GetxController
         SmartDialog.showToast('视频资源不存在');
         autoPlay.value = false;
         isShowCover.value = true;
-        videoState.value = LoadingState.error('视频资源不存在');
+        videoState.value = Error('视频资源不存在');
         if (plPlayerController.isFullScreen.value) {
           plPlayerController.toggleFullScreen(false);
         }
@@ -1297,7 +1297,7 @@ class VideoDetailController extends GetxController
     } else {
       autoPlay.value = false;
       isShowCover.value = true;
-      videoState.value = LoadingState.error(result['msg']);
+      videoState.value = Error(result['msg']);
       if (plPlayerController.isFullScreen.value) {
         plPlayerController.toggleFullScreen(false);
       }

@@ -70,20 +70,20 @@ class LiveController extends CommonListController {
   Future<LoadingState> customGetData() {
     if (areaIndex.value != 0) {
       return LiveHttp.liveSecondList(
-        pn: currentPage,
+        pn: page,
         isLogin: isLogin.value,
         areaId: areaId,
         parentAreaId: parentAreaId,
         sortType: sortType,
       );
     }
-    return LiveHttp.liveFeedIndex(pn: currentPage, isLogin: isLogin.value);
+    return LiveHttp.liveFeedIndex(pn: page, isLogin: isLogin.value);
   }
 
   @override
   Future<void> onRefresh() {
     count = null;
-    currentPage = 1;
+    page = 1;
     isEnd = false;
     if (areaIndex.value != 0) {
       queryTop();
@@ -93,7 +93,7 @@ class LiveController extends CommonListController {
 
   Future<void> queryTop() async {
     final res = await LiveHttp.liveFeedIndex(
-      pn: currentPage,
+      pn: page,
       isLogin: isLogin.value,
       moduleSelect: true,
     );
@@ -124,7 +124,7 @@ class LiveController extends CommonListController {
     parentAreaId = cardLiveItem?.areaV2ParentId;
 
     count = null;
-    currentPage = 1;
+    page = 1;
     isEnd = false;
     queryData();
   }
@@ -134,7 +134,7 @@ class LiveController extends CommonListController {
     this.sortType = sortType;
 
     count = null;
-    currentPage = 1;
+    page = 1;
     isEnd = false;
     queryData();
   }

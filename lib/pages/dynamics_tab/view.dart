@@ -133,7 +133,7 @@ class _DynamicsTabPageState
   Widget _buildBody(LoadingState<List<DynamicItemModel>?> loadingState) {
     return switch (loadingState) {
       Loading() => DynamicsTabPage.dynSkeleton(dynamicsWaterfallFlow),
-      Success() => loadingState.response?.isNotEmpty == true
+      Success(:var response) => response?.isNotEmpty == true
           ? SliverPadding(
               padding: EdgeInsets.only(
                 bottom: MediaQuery.paddingOf(context).bottom + 80,
@@ -143,19 +143,17 @@ class _DynamicsTabPageState
                       maxCrossAxisExtent: Grid.smallCardWidth * 2,
                       crossAxisSpacing: StyleString.cardSpace / 2,
                       lastChildLayoutTypeBuilder: (index) {
-                        if (index == loadingState.response!.length - 1) {
+                        if (index == response.length - 1) {
                           controller.onLoadMore();
                         }
-                        return index == loadingState.response!.length
+                        return index == response.length
                             ? LastChildLayoutType.foot
                             : LastChildLayoutType.none;
                       },
                       children: [
-                        for (int index = 0;
-                            index < loadingState.response!.length;
-                            index++)
+                        for (int index = 0; index < response!.length; index++)
                           DynamicPanel(
-                            item: loadingState.response![index],
+                            item: response[index],
                             onRemove: (idStr) =>
                                 controller.onRemove(index, idStr),
                             onBlock: () => controller.onBlock(index),
@@ -169,10 +167,10 @@ class _DynamicsTabPageState
                           maxExtent: Grid.smallCardWidth * 2,
                           sliver: SliverList.builder(
                             itemBuilder: (context, index) {
-                              if (index == loadingState.response!.length - 1) {
+                              if (index == response.length - 1) {
                                 controller.onLoadMore();
                               }
-                              final item = loadingState.response![index];
+                              final item = response[index];
                               return DynamicPanel(
                                 item: item,
                                 onRemove: (idStr) =>
@@ -180,7 +178,7 @@ class _DynamicsTabPageState
                                 onBlock: () => controller.onBlock(index),
                               );
                             },
-                            itemCount: loadingState.response!.length,
+                            itemCount: response!.length,
                           ),
                         ),
                         const SliverFillRemaining(),
@@ -190,8 +188,8 @@ class _DynamicsTabPageState
           : HttpError(
               onReload: controller.onReload,
             ),
-      Error() => HttpError(
-          errMsg: loadingState.errMsg,
+      Error(:var errMsg) => HttpError(
+          errMsg: errMsg,
           onReload: controller.onReload,
         ),
     };

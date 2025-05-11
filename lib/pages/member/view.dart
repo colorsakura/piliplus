@@ -264,14 +264,14 @@ class _MemberPageState extends State<MemberPage> {
   Widget _buildUserInfo(LoadingState userState, [bool isV = true]) {
     return switch (userState) {
       Loading() => const CircularProgressIndicator(),
-      Success() => userState.response is SpaceData
+      Success(:var response) => response is SpaceData
           ? Obx(
               () => UserInfoCard(
                 isV: isV,
                 isOwner: _userController.mid == _userController.ownerMid,
                 relation: _userController.relation.value,
-                card: userState.response.card,
-                images: userState.response.images,
+                card: response.card!,
+                images: response.images!,
                 onFollow: () => _userController.onFollow(context),
                 live: _userController.live,
                 silence: _userController.silence,
@@ -283,8 +283,8 @@ class _MemberPageState extends State<MemberPage> {
               behavior: HitTestBehavior.opaque,
               child: const SizedBox(height: 56, width: double.infinity),
             ),
-      Error() => scrollErrorWidget(
-          errMsg: userState.errMsg,
+      Error(:var errMsg) => scrollErrorWidget(
+          errMsg: errMsg,
           onReload: _userController.onReload,
         ),
     };

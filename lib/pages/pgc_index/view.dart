@@ -46,8 +46,8 @@ class _PgcIndexPageState extends State<PgcIndexPage>
   Widget _buildBody(ThemeData theme, LoadingState loadingState) {
     return switch (loadingState) {
       Loading() => loadingWidget,
-      Success() => Builder(builder: (context) {
-          PgcIndexCondition data = loadingState.response;
+      Success(:var response) => Builder(builder: (context) {
+          PgcIndexCondition data = response;
           int count = (data.order?.isNotEmpty == true ? 1 : 0) +
               (data.filter?.length ?? 0);
           if (count == 0) return const SizedBox.shrink();
@@ -80,8 +80,8 @@ class _PgcIndexPageState extends State<PgcIndexPage>
             ),
           );
         }),
-      Error() => scrollErrorWidget(
-          errMsg: loadingState.errMsg,
+      Error(:var errMsg) => scrollErrorWidget(
+          errMsg: errMsg,
           onReload: () {
             _ctr.conditionState.value = LoadingState.loading();
             _ctr.getPgcIndexCondition();
@@ -206,7 +206,7 @@ class _PgcIndexPageState extends State<PgcIndexPage>
   Widget _buildList(LoadingState<List<dynamic>?> loadingState) {
     return switch (loadingState) {
       Loading() => const HttpError(errMsg: '加载中'),
-      Success() => loadingState.response?.isNotEmpty == true
+      Success(:var response) => response?.isNotEmpty == true
           ? SliverGrid(
               gridDelegate: SliverGridDelegateWithExtentAndRatio(
                 mainAxisSpacing: StyleString.cardSpace,
@@ -217,18 +217,17 @@ class _PgcIndexPageState extends State<PgcIndexPage>
               ),
               delegate: SliverChildBuilderDelegate(
                 (BuildContext context, int index) {
-                  if (index == loadingState.response!.length - 1) {
+                  if (index == response.length - 1) {
                     _ctr.onLoadMore();
                   }
-                  return BangumiCardVPgcIndex(
-                      bangumiItem: loadingState.response![index]);
+                  return BangumiCardVPgcIndex(bangumiItem: response[index]);
                 },
-                childCount: loadingState.response!.length,
+                childCount: response!.length,
               ),
             )
           : HttpError(onReload: _ctr.onReload),
-      Error() => HttpError(
-          errMsg: loadingState.errMsg,
+      Error(:var errMsg) => HttpError(
+          errMsg: errMsg,
           onReload: _ctr.onReload,
         ),
     };

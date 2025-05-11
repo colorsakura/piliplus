@@ -52,17 +52,17 @@ class _SubPageState extends State<SubPage> {
             childCount: 10,
           ),
         ),
-      Success() => loadingState.response?.isNotEmpty == true
+      Success(:var response) => response?.isNotEmpty == true
           ? SliverGrid(
               gridDelegate: Grid.videoCardHDelegate(context),
               delegate: SliverChildBuilderDelegate(
-                childCount: loadingState.response!.length,
+                childCount: response!.length,
                 (BuildContext context, int index) {
-                  if (index == loadingState.response!.length - 1) {
+                  if (index == response.length - 1) {
                     _subController.onLoadMore();
                   }
                   return SubItem(
-                    subFolderItem: loadingState.response![index],
+                    subFolderItem: response[index],
                     cancelSub: _subController.cancelSub,
                   );
                 },
@@ -71,8 +71,8 @@ class _SubPageState extends State<SubPage> {
           : HttpError(
               onReload: _subController.onReload,
             ),
-      Error() => HttpError(
-          errMsg: loadingState.errMsg,
+      Error(:var errMsg) => HttpError(
+          errMsg: errMsg,
           onReload: _subController.onReload,
         ),
     };

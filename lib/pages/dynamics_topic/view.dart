@@ -74,7 +74,7 @@ class _DynTopicPageState extends State<DynTopicPage> {
   Widget _buildBody(LoadingState<List<TopicCardItem>?> loadingState) {
     return switch (loadingState) {
       Loading() => DynamicsTabPage.dynSkeleton(dynamicsWaterfallFlow),
-      Success() => loadingState.response?.isNotEmpty == true
+      Success(:var response) => response?.isNotEmpty == true
           ? SliverPadding(
               padding: EdgeInsets.only(
                 bottom: MediaQuery.paddingOf(context).bottom + 80,
@@ -84,15 +84,15 @@ class _DynTopicPageState extends State<DynTopicPage> {
                       maxCrossAxisExtent: Grid.smallCardWidth * 2,
                       crossAxisSpacing: StyleString.cardSpace / 2,
                       lastChildLayoutTypeBuilder: (index) {
-                        if (index == loadingState.response!.length - 1) {
+                        if (index == response.length - 1) {
                           _controller.onLoadMore();
                         }
-                        return index == loadingState.response!.length
+                        return index == response.length
                             ? LastChildLayoutType.foot
                             : LastChildLayoutType.none;
                       },
                       children: [
-                        for (var item in loadingState.response!)
+                        for (var item in response!)
                           if (item.dynamicCardItem != null)
                             DynamicPanel(item: item.dynamicCardItem!)
                           else
@@ -106,10 +106,10 @@ class _DynTopicPageState extends State<DynTopicPage> {
                           maxExtent: Grid.smallCardWidth * 2,
                           sliver: SliverList.builder(
                             itemBuilder: (context, index) {
-                              if (index == loadingState.response!.length - 1) {
+                              if (index == response.length - 1) {
                                 _controller.onLoadMore();
                               }
-                              final item = loadingState.response![index];
+                              final item = response[index];
                               if (item.dynamicCardItem != null) {
                                 return DynamicPanel(
                                   item: item.dynamicCardItem!,
@@ -118,7 +118,7 @@ class _DynTopicPageState extends State<DynTopicPage> {
                                 return Text(item.topicType ?? 'err');
                               }
                             },
-                            itemCount: loadingState.response!.length,
+                            itemCount: response!.length,
                           ),
                         ),
                         const SliverFillRemaining(),
@@ -128,8 +128,8 @@ class _DynTopicPageState extends State<DynTopicPage> {
           : HttpError(
               onReload: _controller.onReload,
             ),
-      Error() => HttpError(
-          errMsg: loadingState.errMsg,
+      Error(:var errMsg) => HttpError(
+          errMsg: errMsg,
           onReload: _controller.onReload,
         ),
     };

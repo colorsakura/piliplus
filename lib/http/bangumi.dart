@@ -26,13 +26,13 @@ class BangumiHttp {
       },
     );
     if (res.data['code'] == 0) {
-      return LoadingState.success(res.data['data']);
+      return Success(res.data['data']);
     } else {
-      return LoadingState.error(res.data['message']);
+      return Error(res.data['message']);
     }
   }
 
-  static Future<LoadingState> pgcIndexCondition({
+  static Future<LoadingState<PgcIndexCondition>> pgcIndexCondition({
     seasonType,
     type,
     indexType,
@@ -46,9 +46,9 @@ class BangumiHttp {
       },
     );
     if (res.data['code'] == 0) {
-      return LoadingState.success(PgcIndexCondition.fromJson(res.data['data']));
+      return Success(PgcIndexCondition.fromJson(res.data['data']));
     } else {
-      return LoadingState.error(res.data['message']);
+      return Error(res.data['message']);
     }
   }
 
@@ -63,9 +63,9 @@ class BangumiHttp {
     if (res.data['code'] == 0) {
       BangumiListDataModel data =
           BangumiListDataModel.fromJson(res.data['data']);
-      return LoadingState.success(data.list);
+      return Success(data.list);
     } else {
-      return LoadingState.error(res.data['message']);
+      return Error(res.data['message']);
     }
   }
 
@@ -82,10 +82,9 @@ class BangumiHttp {
       'pn': pn,
     });
     if (res.data['code'] == 0) {
-      return LoadingState.success(
-          BangumiListDataModel.fromJson(res.data['data']));
+      return Success(BangumiListDataModel.fromJson(res.data['data']));
     } else {
-      return LoadingState.error(res.data['message']);
+      return Error(res.data['message']);
     }
   }
 
@@ -103,9 +102,9 @@ class BangumiHttp {
       },
     );
     if (res.data['code'] == 0) {
-      return LoadingState.success(PgcTimeline.fromJson(res.data).result);
+      return Success(PgcTimeline.fromJson(res.data).result);
     } else {
-      return LoadingState.error(res.data['message']);
+      return Error(res.data['message']);
     }
   }
 }

@@ -29,9 +29,9 @@ class MsgHttp {
     });
     if (res.data['code'] == 0) {
       MsgFeedReplyMe data = MsgFeedReplyMe.fromJson(res.data['data']);
-      return LoadingState.success(data);
+      return Success(data);
     } else {
-      return LoadingState.error(res.data['message']);
+      return Error(res.data['message']);
     }
   }
 
@@ -46,9 +46,9 @@ class MsgHttp {
     });
     if (res.data['code'] == 0) {
       MsgFeedAtMe data = MsgFeedAtMe.fromJson(res.data['data']);
-      return LoadingState.success(data);
+      return Success(data);
     } else {
-      return LoadingState.error(res.data['message']);
+      return Error(res.data['message']);
     }
   }
 
@@ -63,9 +63,9 @@ class MsgHttp {
     });
     if (res.data['code'] == 0) {
       MsgFeedLikeMe data = MsgFeedLikeMe.fromJson(res.data['data']);
-      return LoadingState.success(data);
+      return Success(data);
     } else {
-      return LoadingState.error(res.data['message']);
+      return Error(res.data['message']);
     }
   }
 
@@ -79,9 +79,9 @@ class MsgHttp {
       List<SystemNotifyList>? list = (res.data['data'] as List?)
           ?.map((e) => SystemNotifyList.fromJson(e))
           .toList();
-      return LoadingState.success(list);
+      return Success(list);
     } else {
-      return LoadingState.error(res.data['message']);
+      return Error(res.data['message']);
     }
   }
 
@@ -419,14 +419,14 @@ class MsgHttp {
     var res = await Request().get(Api.sessionList, queryParameters: params);
     if (res.data['code'] == 0) {
       try {
-        return LoadingState.success(
+        return Success(
           SessionDataModel.fromJson(res.data['data']).sessionList,
         );
       } catch (err) {
-        return LoadingState.error(err.toString());
+        return Error(err.toString());
       }
     } else {
-      return LoadingState.error(res.data['message']);
+      return Error(res.data['message']);
     }
   }
 
@@ -470,13 +470,12 @@ class MsgHttp {
     var res = await Request().get(Api.sessionMsg, queryParameters: params);
     if (res.data['code'] == 0) {
       try {
-        return LoadingState.success(
-            SessionMsgDataModel.fromJson(res.data['data']));
+        return Success(SessionMsgDataModel.fromJson(res.data['data']));
       } catch (err) {
-        return LoadingState.error(err.toString());
+        return Error(err.toString());
       }
     } else {
-      return LoadingState.error(res.data['message']);
+      return Error(res.data['message']);
     }
   }
 

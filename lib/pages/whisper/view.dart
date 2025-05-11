@@ -97,15 +97,15 @@ class _WhisperPageState extends State<WhisperPage> {
             return const WhisperItemSkeleton();
           },
         ),
-      Success() => loadingState.response?.isNotEmpty == true
+      Success(:var response) => response?.isNotEmpty == true
           ? SliverList.separated(
-              itemCount: loadingState.response!.length,
+              itemCount: response!.length,
               itemBuilder: (context, index) {
-                if (index == loadingState.response!.length - 1) {
+                if (index == response.length - 1) {
                   _controller.onLoadMore();
                 }
                 return WhisperSessionItem(
-                  item: loadingState.response![index],
+                  item: response[index],
                   onSetTop: (isTop, id) =>
                       _controller.onSetTop(index, isTop, id),
                   onRemove: (talkerId) => _controller.onRemove(index, talkerId),
@@ -121,8 +121,8 @@ class _WhisperPageState extends State<WhisperPage> {
           : HttpError(
               onReload: _controller.onReload,
             ),
-      Error() => HttpError(
-          errMsg: loadingState.errMsg,
+      Error(:var errMsg) => HttpError(
+          errMsg: errMsg,
           onReload: _controller.onReload,
         ),
     };

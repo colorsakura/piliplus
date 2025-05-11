@@ -69,9 +69,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
         .then((data) {
       setState(() {
         if (data.data['code'] == 0) {
-          _loadingState = LoadingState.success(data.data['data']);
+          _loadingState = Success(data.data['data']);
         } else {
-          _loadingState = LoadingState.error(data.data['message']);
+          _loadingState = Error(data.data['message']);
         }
       });
     });
@@ -90,7 +90,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
     return switch (loadingState) {
       Loading() => loadingWidget,
-      Success() => ListView(
+      Success(:var response) => ListView(
           children: [
             _item(
               theme: theme,
@@ -99,8 +99,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 padding: const EdgeInsets.symmetric(vertical: 5),
                 child: ClipOval(
                   child: CachedNetworkImage(
-                    imageUrl:
-                        Utils.thumbnailImgUrl(loadingState.response['face']),
+                    imageUrl: Utils.thumbnailImgUrl(response['face']),
                   ),
                 ),
               ),
@@ -115,15 +114,15 @@ class _EditProfilePageState extends State<EditProfilePage> {
             _item(
               theme: theme,
               title: '昵称',
-              text: loadingState.response['name'],
+              text: response['name'],
               onTap: () {
-                if (loadingState.response['coins'] < 6) {
+                if (response['coins'] < 6) {
                   SmartDialog.showToast('硬币不足');
                 } else {
                   _editDialog(
                     type: ProfileType.uname,
                     title: '昵称',
-                    text: loadingState.response['name'],
+                    text: response['name'],
                   );
                 }
               },
@@ -132,12 +131,11 @@ class _EditProfilePageState extends State<EditProfilePage> {
             _item(
               theme: theme,
               title: '性别',
-              text: _sex(loadingState.response['sex']),
+              text: _sex(response['sex']),
               onTap: () {
                 showDialog(
                   context: context,
-                  builder: (context_) =>
-                      _sexDialog(loadingState.response['sex']),
+                  builder: (context_) => _sexDialog(response['sex']),
                 );
               },
             ),
@@ -145,12 +143,11 @@ class _EditProfilePageState extends State<EditProfilePage> {
             _item(
               theme: theme,
               title: '出生年月',
-              text: loadingState.response['birthday'],
+              text: response['birthday'],
               onTap: () {
                 showDatePicker(
                   context: context,
-                  initialDate:
-                      DateTime.parse(loadingState.response['birthday']),
+                  initialDate: DateTime.parse(response['birthday']),
                   firstDate: DateTime(1900, 1, 1),
                   lastDate: DateTime.now(),
                 ).then((date) {
@@ -167,14 +164,12 @@ class _EditProfilePageState extends State<EditProfilePage> {
             _item(
               theme: theme,
               title: '个性签名',
-              text: loadingState.response['sign'].isEmpty
-                  ? '无'
-                  : loadingState.response['sign'],
+              text: response['sign'].isEmpty ? '无' : response['sign'],
               onTap: () {
                 _editDialog(
                   type: ProfileType.sign,
                   title: '个性签名',
-                  text: loadingState.response['sign'],
+                  text: response['sign'],
                 );
               },
             ),
@@ -190,9 +185,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
               theme: theme,
               title: 'UID',
               needIcon: false,
-              text: loadingState.response['mid'].toString(),
-              onTap: () =>
-                  Utils.copyText(loadingState.response['mid'].toString()),
+              text: response['mid'].toString(),
+              onTap: () => Utils.copyText(response['mid'].toString()),
             ),
             divider1,
             _item(
@@ -205,8 +199,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
             SizedBox(height: 25 + MediaQuery.paddingOf(context).bottom),
           ],
         ),
-      Error() => scrollErrorWidget(
-          errMsg: loadingState.errMsg,
+      Error(:var errMsg) => scrollErrorWidget(
+          errMsg: errMsg,
           onReload: _getInfo,
         ),
     };

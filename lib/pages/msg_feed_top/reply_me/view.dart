@@ -70,15 +70,15 @@ class _ReplyMePageState extends State<ReplyMePage> {
             return const MsgFeedTopSkeleton();
           },
         ),
-      Success() => loadingState.response?.isNotEmpty == true
+      Success(:var response) => response?.isNotEmpty == true
           ? SliverList.separated(
-              itemCount: loadingState.response!.length,
+              itemCount: response!.length,
               itemBuilder: (context, int index) {
-                if (index == loadingState.response!.length - 1) {
+                if (index == response.length - 1) {
                   _replyMeController.onLoadMore();
                 }
 
-                ReplyMeItems item = loadingState.response![index];
+                ReplyMeItems item = response[index];
                 return ListTile(
                   onTap: () {
                     String? nativeUri = item.item?.nativeUri;
@@ -176,8 +176,8 @@ class _ReplyMePageState extends State<ReplyMePage> {
               },
             )
           : HttpError(onReload: _replyMeController.onReload),
-      Error() => HttpError(
-          errMsg: loadingState.errMsg,
+      Error(:var errMsg) => HttpError(
+          errMsg: errMsg,
           onReload: _replyMeController.onReload,
         ),
     };

@@ -165,27 +165,27 @@ class _HotPageState extends CommonPageState<HotPage, HotController>
   Widget _buildBody(LoadingState<List<HotVideoItemModel>?> loadingState) {
     return switch (loadingState) {
       Loading() => _buildSkeleton(),
-      Success() => loadingState.response?.isNotEmpty == true
+      Success(:var response) => response?.isNotEmpty == true
           ? SliverGrid(
               gridDelegate: Grid.videoCardHDelegate(context),
               delegate: SliverChildBuilderDelegate(
                 (context, index) {
-                  if (index == loadingState.response!.length - 1) {
+                  if (index == response.length - 1) {
                     controller.onLoadMore();
                   }
                   return VideoCardH(
-                    videoItem: loadingState.response![index],
+                    videoItem: response[index],
                     showPubdate: true,
                   );
                 },
-                childCount: loadingState.response!.length,
+                childCount: response!.length,
               ),
             )
           : HttpError(
               onReload: controller.onReload,
             ),
-      Error() => HttpError(
-          errMsg: loadingState.errMsg,
+      Error(:var errMsg) => HttpError(
+          errMsg: errMsg,
           onReload: controller.onReload,
         ),
     };

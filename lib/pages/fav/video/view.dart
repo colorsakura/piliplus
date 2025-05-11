@@ -59,16 +59,16 @@ class _FavVideoPageState extends State<FavVideoPage>
             childCount: 10,
           ),
         ),
-      Success() => loadingState.response?.isNotEmpty == true
+      Success(:var response) => response?.isNotEmpty == true
           ? SliverGrid(
               gridDelegate: Grid.videoCardHDelegate(context),
               delegate: SliverChildBuilderDelegate(
-                childCount: loadingState.response!.length,
+                childCount: response!.length,
                 (BuildContext context, int index) {
-                  if (index == loadingState.response!.length - 1) {
+                  if (index == response.length - 1) {
                     _favController.onLoadMore();
                   }
-                  final item = loadingState.response![index];
+                  final item = response[index];
                   String heroTag = Utils.makeHeroTag(item.fid);
                   return FavItem(
                     heroTag: heroTag,
@@ -94,8 +94,8 @@ class _FavVideoPageState extends State<FavVideoPage>
           : HttpError(
               onReload: _favController.onReload,
             ),
-      Error() => HttpError(
-          errMsg: loadingState.errMsg,
+      Error(:var errMsg) => HttpError(
+          errMsg: errMsg,
           onReload: _favController.onReload,
         ),
     };

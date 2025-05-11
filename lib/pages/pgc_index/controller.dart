@@ -42,7 +42,7 @@ class PgcIndexController extends CommonListController {
 
   @override
   Future<LoadingState> customGetData() => BangumiHttp.pgcIndexResult(
-        page: currentPage,
+        page: page,
         params: indexParams,
         seasonType: indexType == null ? 1 : null,
         type: 0,

@@ -203,11 +203,11 @@ class _VideoReplyPanelState extends State<VideoReplyPanel>
           },
           itemCount: 5,
         ),
-      Success() => loadingState.response?.isNotEmpty == true
+      Success(:var response) => response?.isNotEmpty == true
           ? SliverList.builder(
               itemBuilder: (context, index) {
                 double bottom = MediaQuery.of(context).padding.bottom;
-                if (index == loadingState.response.length) {
+                if (index == response.length) {
                   _videoReplyController.onLoadMore();
                   return Container(
                     alignment: Alignment.center,
@@ -216,7 +216,7 @@ class _VideoReplyPanelState extends State<VideoReplyPanel>
                     child: Text(
                       _videoReplyController.isEnd.not
                           ? '加载中...'
-                          : loadingState.response.isEmpty
+                          : response.isEmpty
                               ? '还没有评论'
                               : '没有更多了',
                       style: TextStyle(
@@ -227,13 +227,13 @@ class _VideoReplyPanelState extends State<VideoReplyPanel>
                   );
                 } else {
                   return ReplyItemGrpc(
-                    replyItem: loadingState.response[index],
+                    replyItem: response[index],
                     replyLevel: widget.replyLevel,
                     replyReply: widget.replyReply,
                     onReply: () {
                       _videoReplyController.onReply(
                         context,
-                        replyItem: loadingState.response[index],
+                        replyItem: response[index],
                         index: index,
                       );
                     },
@@ -257,14 +257,14 @@ class _VideoReplyPanelState extends State<VideoReplyPanel>
                   );
                 }
               },
-              itemCount: loadingState.response.length + 1,
+              itemCount: response.length + 1,
             )
           : HttpError(
               errMsg: '还没有评论',
               onReload: _videoReplyController.onReload,
             ),
-      Error() => HttpError(
-          errMsg: loadingState.errMsg,
+      Error(:var errMsg) => HttpError(
+          errMsg: errMsg,
           onReload: _videoReplyController.onReload,
         ),
     };

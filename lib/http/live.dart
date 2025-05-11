@@ -50,13 +50,13 @@ class LiveHttp {
       List<LiveItemModel>? list = (res.data['data']?['list'] as List?)
           ?.map<LiveItemModel>((e) => LiveItemModel.fromJson(e))
           .toList();
-      return LoadingState.success(list);
+      return Success(list);
     } else {
       String? vVoucher;
       if (gaiaVtoken == null && res.data['code'] == -352) {
         vVoucher = res.headers['x-bili-gaia-vvoucher']?.firstOrNull;
       }
-      return LoadingState.error(vVoucher ?? res.data['message']);
+      return Error(vVoucher ?? res.data['message']);
     }
   }
 
@@ -167,10 +167,9 @@ class LiveHttp {
       },
     );
     if (res.data['code'] == 0) {
-      return LoadingState.success(
-          LiveEmoteData.fromJson(res.data['data']).data);
+      return Success(LiveEmoteData.fromJson(res.data['data']).data);
     } else {
-      return LoadingState.error(res.data['message']);
+      return Error(res.data['message']);
     }
   }
 
@@ -212,9 +211,9 @@ class LiveHttp {
       queryParameters: params,
     );
     if (res.data['code'] == 0) {
-      return LoadingState.success(LiveIndexData.fromJson(res.data['data']));
+      return Success(LiveIndexData.fromJson(res.data['data']));
     } else {
-      return LoadingState.error(res.data['message']);
+      return Error(res.data['message']);
     }
   }
 
@@ -229,9 +228,9 @@ class LiveHttp {
       },
     );
     if (res.data['code'] == 0) {
-      return LoadingState.success(LiveFollowData.fromJson(res.data['data']));
+      return Success(LiveFollowData.fromJson(res.data['data']));
     } else {
-      return LoadingState.error(res.data['message']);
+      return Error(res.data['message']);
     }
   }
 
@@ -280,9 +279,9 @@ class LiveHttp {
       queryParameters: params,
     );
     if (res.data['code'] == 0) {
-      return LoadingState.success(LiveSecondData.fromJson(res.data['data']));
+      return Success(LiveSecondData.fromJson(res.data['data']));
     } else {
-      return LoadingState.error(res.data['message']);
+      return Error(res.data['message']);
     }
   }
 
@@ -313,11 +312,11 @@ class LiveHttp {
       queryParameters: params,
     );
     if (res.data['code'] == 0) {
-      return LoadingState.success((res.data['data']?['list'] as List?)
+      return Success((res.data['data']?['list'] as List?)
           ?.map((e) => AreaList.fromJson(e))
           .toList());
     } else {
-      return LoadingState.error(res.data['message']);
+      return Error(res.data['message']);
     }
   }
 
@@ -349,12 +348,12 @@ class LiveHttp {
     );
 
     if (res.data['code'] == 0) {
-      return LoadingState.success((res.data['data']?['tags'] as List?)
+      return Success((res.data['data']?['tags'] as List?)
               ?.map((e) => AreaItem.fromJson(e))
               .toList() ??
           <AreaItem>[]);
     } else {
-      return LoadingState.error(res.data['message']);
+      return Error(res.data['message']);
     }
   }
 
@@ -427,11 +426,11 @@ class LiveHttp {
       queryParameters: params,
     );
     if (res.data['code'] == 0) {
-      return LoadingState.success((res.data['data'] as List?)
+      return Success((res.data['data'] as List?)
           ?.map((e) => AreaItem.fromJson(e))
           .toList());
     } else {
-      return LoadingState.error(res.data['message']);
+      return Error(res.data['message']);
     }
   }
 
@@ -469,9 +468,9 @@ class LiveHttp {
       queryParameters: params,
     );
     if (res.data['code'] == 0) {
-      return LoadingState.success(LiveSearchData.fromJson(res.data['data']));
+      return Success(LiveSearchData.fromJson(res.data['data']));
     } else {
-      return LoadingState.error(res.data['message']);
+      return Error(res.data['message']);
     }
   }
 }

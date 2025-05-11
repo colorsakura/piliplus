@@ -45,19 +45,22 @@ class _RelatedVideoPanelState extends State<RelatedVideoPanel>
             childCount: 5,
           ),
         ),
-      Success() => loadingState.response?.isNotEmpty == true
+      Success(:var response) => response?.isNotEmpty == true
           ? SliverGrid(
               gridDelegate: Grid.videoCardHDelegate(context),
-              delegate: SliverChildBuilderDelegate((context, index) {
-                return VideoCardH(
-                  videoItem: loadingState.response![index],
-                  showPubdate: true,
-                );
-              }, childCount: loadingState.response!.length),
+              delegate: SliverChildBuilderDelegate(
+                (context, index) {
+                  return VideoCardH(
+                    videoItem: response[index],
+                    showPubdate: true,
+                  );
+                },
+                childCount: response!.length,
+              ),
             )
           : const SliverToBoxAdapter(),
-      Error() => HttpError(
-          errMsg: loadingState.errMsg,
+      Error(:var errMsg) => HttpError(
+          errMsg: errMsg,
           onReload: _relatedController.onReload,
         ),
     };

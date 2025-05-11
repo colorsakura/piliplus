@@ -223,7 +223,7 @@ class _MemberHomeState extends State<MemberHome>
               ],
             )
           : scrollErrorWidget(),
-      Error() => scrollErrorWidget(),
+      Error(:var errMsg) => scrollErrorWidget(errMsg: errMsg),
     };
   }
 

@@ -21,7 +21,7 @@ class SubController
   @override
   Future<void> queryData([bool isRefresh = true]) {
     if (mid == 0) {
-      loadingState.value = LoadingState.error('账号未登录');
+      loadingState.value = Error('账号未登录');
       return Future.value();
     }
     return super.queryData(isRefresh);
@@ -67,7 +67,7 @@ class SubController
   @override
   Future<LoadingState<List<SubFolderItemData>?>> customGetData() =>
       UserHttp.userSubFolder(
-        pn: currentPage,
+        pn: page,
         ps: 20,
         mid: mid,
       );

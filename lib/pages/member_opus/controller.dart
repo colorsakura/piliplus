@@ -52,7 +52,7 @@ class MemberOpusController
   @override
   Future<LoadingState<SpaceOpusData>> customGetData() => MemberHttp.spaceOpus(
         hostMid: mid,
-        page: currentPage,
+        page: page,
         offset: offset,
         type: type.value.meta,
       );

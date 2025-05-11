@@ -66,7 +66,7 @@ class _ArticleListPageState extends State<ArticleListPage> {
             ),
           ),
         ),
-      Success() => loadingState.response?.isNotEmpty == true
+      Success(:var response) => response?.isNotEmpty == true
           ? SliverGrid(
               gridDelegate: SliverGridDelegateWithExtentAndRatio(
                 mainAxisSpacing: 2,
@@ -77,15 +77,15 @@ class _ArticleListPageState extends State<ArticleListPage> {
               delegate: SliverChildBuilderDelegate(
                 (context, index) {
                   return ArticleListItem(
-                    item: loadingState.response![index],
+                    item: response[index],
                   );
                 },
-                childCount: loadingState.response!.length,
+                childCount: response!.length,
               ),
             )
           : HttpError(onReload: _controller.onReload),
-      Error() => HttpError(
-          errMsg: loadingState.errMsg,
+      Error(:var errMsg) => HttpError(
+          errMsg: errMsg,
           onReload: _controller.onReload,
         ),
     };

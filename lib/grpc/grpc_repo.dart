@@ -184,7 +184,7 @@ class GrpcRepo {
         options: Options(headers: headers, responseType: ResponseType.bytes));
 
     if (response.data is Map) {
-      return LoadingState.error(response.data['message']);
+      return Error(response.data['message']);
     }
 
     if (response.headers.value('Grpc-Status') == '0') {
@@ -192,9 +192,9 @@ class GrpcRepo {
         Uint8List data = response.data;
         data = decompressProtobuf(data);
         final grpcResponse = grpcParser(data);
-        return LoadingState.success(grpcResponse);
+        return Success(grpcResponse);
       } catch (e) {
-        return LoadingState.error(e.toString());
+        return Error(e.toString());
       }
     } else {
       try {
@@ -218,9 +218,9 @@ class GrpcRepo {
                 .replaceAll(_unprintableRegExp, '');
           }
         }
-        return LoadingState.error(msg);
+        return Error(msg);
       } catch (e) {
-        return LoadingState.error(e.toString());
+        return Error(e.toString());
       }
     }
   }

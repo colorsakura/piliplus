@@ -148,7 +148,7 @@ class _LivePageState extends CommonPageState<LivePage, LiveController>
             childCount: 10,
           ),
         ),
-      Success() => SliverMainAxisGroup(
+      Success(:var response) => SliverMainAxisGroup(
           slivers: [
             if (controller.newTags?.isNotEmpty == true)
               SliverToBoxAdapter(
@@ -183,7 +183,7 @@ class _LivePageState extends CommonPageState<LivePage, LiveController>
                   itemCount: controller.newTags!.length,
                 ),
               ),
-            loadingState.response?.isNotEmpty == true
+            response?.isNotEmpty == true
                 ? SliverGrid(
                     gridDelegate: SliverGridDelegateWithExtentAndRatio(
                       mainAxisSpacing: StyleString.cardSpace,
@@ -195,10 +195,10 @@ class _LivePageState extends CommonPageState<LivePage, LiveController>
                     ),
                     delegate: SliverChildBuilderDelegate(
                       (context, index) {
-                        if (index == loadingState.response!.length - 1) {
+                        if (index == response.length - 1) {
                           controller.onLoadMore();
                         }
-                        final item = loadingState.response![index];
+                        final item = response[index];
                         if (item is LiveCardList) {
                           return LiveCardVApp(
                             item: item.cardData!.smallCardV1!,
@@ -206,14 +206,14 @@ class _LivePageState extends CommonPageState<LivePage, LiveController>
                         }
                         return LiveCardVApp(item: item);
                       },
-                      childCount: loadingState.response!.length,
+                      childCount: response!.length,
                     ),
                   )
                 : HttpError(onReload: controller.onReload),
           ],
         ),
-      Error() => HttpError(
-          errMsg: loadingState.errMsg,
+      Error(:var errMsg) => HttpError(
+          errMsg: errMsg,
           onReload: controller.onReload,
         ),
     };

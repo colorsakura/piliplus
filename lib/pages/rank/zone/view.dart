@@ -68,12 +68,12 @@ class _ZonePageState extends CommonPageState<ZonePage, ZoneController>
   Widget _buildBody(LoadingState<List<dynamic>?> loadingState) {
     return switch (loadingState) {
       Loading() => _buildSkeleton(),
-      Success() => loadingState.response?.isNotEmpty == true
+      Success(:var response) => response?.isNotEmpty == true
           ? SliverGrid(
               gridDelegate: Grid.videoCardHDelegate(context),
               delegate: SliverChildBuilderDelegate(
                 (context, index) {
-                  final item = loadingState.response![index];
+                  final item = response[index];
                   if (item is HotVideoItemModel) {
                     return VideoCardH(
                       videoItem: item,
@@ -82,12 +82,12 @@ class _ZonePageState extends CommonPageState<ZonePage, ZoneController>
                   }
                   return PgcRankItem(item: item);
                 },
-                childCount: loadingState.response!.length,
+                childCount: response!.length,
               ),
             )
           : HttpError(onReload: controller.onReload),
-      Error() => HttpError(
-          errMsg: loadingState.errMsg,
+      Error(:var errMsg) => HttpError(
+          errMsg: errMsg,
           onReload: controller.onReload,
         ),
     };

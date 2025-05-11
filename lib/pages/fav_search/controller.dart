@@ -17,7 +17,7 @@ class FavSearchController
   @override
   Future<LoadingState<FavDetailData>> customGetData() =>
       UserHttp.userFavFolderDetail(
-        pn: currentPage,
+        pn: page,
         ps: 20,
         mediaId: mediaId,
         keyword: editController.text,

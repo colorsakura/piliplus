@@ -16,9 +16,9 @@ class BlackHttp {
     });
     if (res.data['code'] == 0) {
       BlackListDataModel data = BlackListDataModel.fromJson(res.data['data']);
-      return LoadingState.success(data);
+      return Success(data);
     } else {
-      return LoadingState.error(res.data['message']);
+      return Error(res.data['message']);
     }
   }
 }

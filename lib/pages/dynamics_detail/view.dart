@@ -780,10 +780,10 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
           },
           itemCount: 8,
         ),
-      Success() => loadingState.response?.isNotEmpty == true
+      Success(:var response) => response?.isNotEmpty == true
           ? SliverList.builder(
               itemBuilder: (context, index) {
-                if (index == loadingState.response!.length) {
+                if (index == response.length) {
                   _dynamicDetailController.onLoadMore();
                   return Container(
                     alignment: Alignment.center,
@@ -793,7 +793,7 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
                     child: Text(
                       _dynamicDetailController.isEnd.not
                           ? '加载中...'
-                          : loadingState.response!.isEmpty
+                          : response.isEmpty
                               ? '还没有评论'
                               : '没有更多了',
                       style: TextStyle(
@@ -804,14 +804,14 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
                   );
                 } else {
                   return ReplyItemGrpc(
-                    replyItem: loadingState.response![index],
+                    replyItem: response[index],
                     replyLevel: '1',
                     replyReply: (replyItem, id) =>
                         replyReply(context, replyItem, id),
                     onReply: () {
                       _dynamicDetailController.onReply(
                         context,
-                        replyItem: loadingState.response![index],
+                        replyItem: response[index],
                         index: index,
                       );
                     },
@@ -832,13 +832,13 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
                   );
                 }
               },
-              itemCount: loadingState.response!.length + 1,
+              itemCount: response!.length + 1,
             )
           : HttpError(
               onReload: _dynamicDetailController.onReload,
             ),
-      Error() => HttpError(
-          errMsg: loadingState.errMsg,
+      Error(:var errMsg) => HttpError(
+          errMsg: errMsg,
           onReload: _dynamicDetailController.onReload,
         ),
     };

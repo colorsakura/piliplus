@@ -152,8 +152,7 @@ class _EpisodePanelState extends CommonSlidePageState<EpisodePanel>
       VideoHttp.videoRelation(bvid: widget.bvid).then((result) {
         if (result['status']) {
           if (result['data']?['season_fav'] is bool) {
-            _favState!.value =
-                LoadingState.success(result['data']['season_fav']);
+            _favState!.value = Success(result['data']['season_fav']);
           }
         }
       });
@@ -519,19 +518,19 @@ class _EpisodePanelState extends CommonSlidePageState<EpisodePanel>
 
   Widget _buildFavBtn(LoadingState loadingState) {
     return switch (loadingState) {
-      Success() => mediumButton(
-          tooltip: loadingState.response ? '取消订阅' : '订阅',
-          icon: loadingState.response
+      Success(:var response) => mediumButton(
+          tooltip: response ? '取消订阅' : '订阅',
+          icon: response
               ? Icons.notifications_off_outlined
               : Icons.notifications_active_outlined,
           onPressed: () async {
             dynamic result = await VideoHttp.seasonFav(
-              isFav: loadingState.response,
+              isFav: response,
               seasonId: widget.seasonId,
             );
             if (result['status']) {
-              SmartDialog.showToast('${loadingState.response ? '取消' : ''}订阅成功');
-              _favState!.value = LoadingState.success(!loadingState.response);
+              SmartDialog.showToast('${response ? '取消' : ''}订阅成功');
+              _favState!.value = Success(!response);
             } else {
               SmartDialog.showToast(result['msg']);
             }

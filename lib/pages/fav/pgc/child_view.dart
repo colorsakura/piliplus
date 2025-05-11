@@ -161,7 +161,7 @@ class _FavPgcChildPageState extends State<FavPgcChildPage>
             childCount: 10,
           ),
         ),
-      Success() => loadingState.response?.isNotEmpty == true
+      Success(:var response) => response?.isNotEmpty == true
           ? SliverPadding(
               padding: EdgeInsets.only(
                   bottom: MediaQuery.paddingOf(context).bottom + 80),
@@ -169,10 +169,10 @@ class _FavPgcChildPageState extends State<FavPgcChildPage>
                 gridDelegate: Grid.videoCardHDelegate(context),
                 delegate: SliverChildBuilderDelegate(
                   (context, index) {
-                    if (index == loadingState.response!.length - 1) {
+                    if (index == response.length - 1) {
                       _favPgcController.onLoadMore();
                     }
-                    final item = loadingState.response![index];
+                    final item = response[index];
                     return FavPgcItem(
                       item: item,
                       ctr: _favPgcController,
@@ -202,13 +202,13 @@ class _FavPgcChildPageState extends State<FavPgcChildPage>
                       },
                     );
                   },
-                  childCount: loadingState.response!.length,
+                  childCount: response!.length,
                 ),
               ),
             )
           : HttpError(onReload: _favPgcController.onReload),
-      Error() => HttpError(
-          errMsg: loadingState.errMsg,
+      Error(:var errMsg) => HttpError(
+          errMsg: errMsg,
           onReload: _favPgcController.onReload,
         ),
     };

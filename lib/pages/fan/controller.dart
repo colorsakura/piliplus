@@ -26,7 +26,7 @@ class FansController
   @override
   Future<LoadingState<FansDataModel>> customGetData() => FanHttp.fans(
         vmid: mid,
-        pn: currentPage,
+        pn: page,
         ps: ps,
         orderType: 'attention',
       );

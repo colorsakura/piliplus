@@ -47,9 +47,9 @@ class FollowController extends GetxController with GetTickerProviderStateMixin {
         length: tabs.length,
         vsync: this,
       );
-      followState.value = LoadingState.success(tabs.hashCode);
+      followState.value = Success(tabs.hashCode);
     } else {
-      followState.value = LoadingState.error(res['msg']);
+      followState.value = Error(res['msg']);
     }
   }
 

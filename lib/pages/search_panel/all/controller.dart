@@ -40,7 +40,7 @@ class SearchAllController
   @override
   Future<LoadingState<SearchAllModel>> customGetData() => SearchHttp.searchAll(
         keyword: keyword,
-        page: currentPage,
+        page: page,
         order: order.value,
         duration: searchType == SearchType.video ? duration.value : null,
         tids: tids,

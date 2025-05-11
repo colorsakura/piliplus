@@ -54,7 +54,7 @@ class _RcmdPageState extends CommonPageState<RcmdPage, RcmdController>
   Widget _buildBody(LoadingState<List<dynamic>?> loadingState) {
     return switch (loadingState) {
       Loading() => _buildSkeleton(),
-      Success() => loadingState.response?.isNotEmpty == true
+      Success(:var response) => response?.isNotEmpty == true
           ? SliverGrid(
               gridDelegate: SliverGridDelegateWithExtentAndRatio(
                 mainAxisSpacing: StyleString.cardSpace,
@@ -65,7 +65,7 @@ class _RcmdPageState extends CommonPageState<RcmdPage, RcmdController>
               ),
               delegate: SliverChildBuilderDelegate(
                 (BuildContext context, int index) {
-                  if (index == loadingState.response!.length - 1) {
+                  if (index == response.length - 1) {
                     controller.onLoadMore();
                   }
                   if (controller.lastRefreshAt != null) {
@@ -100,7 +100,7 @@ class _RcmdPageState extends CommonPageState<RcmdPage, RcmdController>
                             ? index - 1
                             : index;
                     return VideoCardV(
-                      videoItem: loadingState.response![actualIndex],
+                      videoItem: response[actualIndex],
                       onRemove: () {
                         if (controller.lastRefreshAt != null &&
                             actualIndex < controller.lastRefreshAt!) {
@@ -115,7 +115,7 @@ class _RcmdPageState extends CommonPageState<RcmdPage, RcmdController>
                     );
                   } else {
                     return VideoCardV(
-                      videoItem: loadingState.response![index],
+                      videoItem: response[index],
                       onRemove: () {
                         ((controller.loadingState.value as Success).response
                                 as List)
@@ -126,13 +126,13 @@ class _RcmdPageState extends CommonPageState<RcmdPage, RcmdController>
                   }
                 },
                 childCount: controller.lastRefreshAt != null
-                    ? loadingState.response!.length + 1
-                    : loadingState.response!.length,
+                    ? response!.length + 1
+                    : response!.length,
               ),
             )
           : HttpError(onReload: controller.onReload),
-      Error() => HttpError(
-          errMsg: loadingState.errMsg,
+      Error(:var errMsg) => HttpError(
+          errMsg: errMsg,
           onReload: controller.onReload,
         ),
     };

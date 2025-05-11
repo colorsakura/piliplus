@@ -141,7 +141,7 @@ class MemberController extends CommonDataController<SpaceData, SpaceData?>
     );
     showUname.value = true;
     username = errMsg;
-    loadingState.value = LoadingState<SpaceData?>.success(null);
+    loadingState.value = const Success(null);
     return true;
   }
 

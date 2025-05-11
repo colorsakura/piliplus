@@ -79,7 +79,7 @@ class FavDetailController
   @override
   Future<LoadingState<FavDetailData>> customGetData() =>
       UserHttp.userFavFolderDetail(
-        pn: currentPage,
+        pn: page,
         ps: 20,
         mediaId: mediaId,
       );
@@ -120,7 +120,7 @@ class FavDetailController
                   item.value.mediaCount = item.value.mediaCount! - list.length;
                   item.refresh();
                   if (remainList.isNotEmpty) {
-                    loadingState.value = LoadingState.success(remainList);
+                    loadingState.value = Success(remainList);
                   } else {
                     onReload();
                   }

@@ -91,7 +91,7 @@ class _MemberVideoState extends State<MemberVideo>
                   _controller
                     ..isLocating = true
                     ..lastAid = _controller.fromViewAid
-                    ..currentPage = 0
+                    ..page = 0
                     ..loadingState.value = LoadingState.loading()
                     ..queryData();
                 },
@@ -115,7 +115,7 @@ class _MemberVideoState extends State<MemberVideo>
             childCount: 10,
           ),
         ),
-      Success() => loadingState.response?.isNotEmpty == true
+      Success(:var response) => response?.isNotEmpty == true
           ? SliverMainAxisGroup(
               slivers: [
                 SliverPersistentHeader(
@@ -205,18 +205,17 @@ class _MemberVideoState extends State<MemberVideo>
                   delegate: SliverChildBuilderDelegate(
                     (context, index) {
                       if (widget.type != ContributeType.season &&
-                          index == loadingState.response!.length - 1) {
+                          index == response.length - 1) {
                         _controller.onLoadMore();
                       }
-                      final SpaceArchiveItem item =
-                          loadingState.response![index];
+                      final SpaceArchiveItem item = response[index];
                       return VideoCardHMemberVideo(
                         key: ValueKey('${item.param}'),
                         videoItem: item,
                         fromViewAid: _controller.fromViewAid,
                       );
                     },
-                    childCount: loadingState.response!.length,
+                    childCount: response!.length,
                   ),
                 ),
               ],
@@ -224,8 +223,8 @@ class _MemberVideoState extends State<MemberVideo>
           : HttpError(
               onReload: _controller.onReload,
             ),
-      Error() => HttpError(
-          errMsg: loadingState.errMsg,
+      Error(:var errMsg) => HttpError(
+          errMsg: errMsg,
           onReload: _controller.onReload,
         ),
     };

@@ -170,80 +170,82 @@ class _MediaPageState extends CommonPageState<MediaPage, MediaController>
   }
 
   Widget _buildBody(ThemeData theme, LoadingState loadingState) {
-    if (loadingState is Success) {
-      List<FavFolderItemData>? favFolderList = loadingState.response.list;
-      if (favFolderList.isNullOrEmpty) {
-        return const SizedBox.shrink();
-      }
-      bool flag = controller.count.value > favFolderList!.length;
-      return ListView.builder(
-        itemCount: loadingState.response.list.length + (flag ? 1 : 0),
-        itemBuilder: (context, index) {
-          if (flag && index == favFolderList.length) {
-            return Padding(
-              padding: const EdgeInsets.only(right: 14, bottom: 35),
-              child: Center(
-                child: IconButton(
-                  tooltip: '查看更多',
-                  style: ButtonStyle(
-                    padding: WidgetStateProperty.all(EdgeInsets.zero),
-                    backgroundColor: WidgetStateProperty.resolveWith((states) {
-                      return theme.colorScheme.primaryContainer
-                          .withOpacity(0.5);
-                    }),
-                  ),
-                  onPressed: () async {
-                    await Get.toNamed('/fav');
-                    Future.delayed(const Duration(milliseconds: 150), () {
-                      controller.onRefresh();
-                    });
-                  },
-                  icon: Icon(
-                    Icons.arrow_forward_ios,
-                    size: 18,
-                    color: theme.colorScheme.primary,
-                  ),
-                ),
-              ),
-            );
-          } else {
-            String heroTag =
-                Utils.makeHeroTag(loadingState.response.list[index].fid);
-            return FavFolderItem(
-              heroTag: heroTag,
-              item: loadingState.response.list[index],
-              index: index,
-              onTap: () async {
-                await Get.toNamed(
-                  '/favDetail',
-                  arguments: loadingState.response.list[index],
-                  parameters: {
-                    'mediaId': loadingState.response.list[index].id.toString(),
-                    'heroTag': heroTag,
-                  },
-                );
-                Future.delayed(const Duration(milliseconds: 150), () {
-                  controller.onRefresh();
-                });
+    return switch (loadingState) {
+      Loading() => const SizedBox.shrink(),
+      Success(:var response) => Builder(
+          builder: (context) {
+            List<FavFolderItemData>? favFolderList = response.list;
+            if (favFolderList.isNullOrEmpty) {
+              return const SizedBox.shrink();
+            }
+            bool flag = controller.count.value > favFolderList!.length;
+            return ListView.builder(
+              itemCount: response.list.length + (flag ? 1 : 0),
+              itemBuilder: (context, index) {
+                if (flag && index == favFolderList.length) {
+                  return Padding(
+                    padding: const EdgeInsets.only(right: 14, bottom: 35),
+                    child: Center(
+                      child: IconButton(
+                        tooltip: '查看更多',
+                        style: ButtonStyle(
+                          padding: WidgetStateProperty.all(EdgeInsets.zero),
+                          backgroundColor:
+                              WidgetStateProperty.resolveWith((states) {
+                            return theme.colorScheme.primaryContainer
+                                .withOpacity(0.5);
+                          }),
+                        ),
+                        onPressed: () async {
+                          await Get.toNamed('/fav');
+                          Future.delayed(const Duration(milliseconds: 150), () {
+                            controller.onRefresh();
+                          });
+                        },
+                        icon: Icon(
+                          Icons.arrow_forward_ios,
+                          size: 18,
+                          color: theme.colorScheme.primary,
+                        ),
+                      ),
+                    ),
+                  );
+                } else {
+                  String heroTag = Utils.makeHeroTag(response.list[index].fid);
+                  return FavFolderItem(
+                    heroTag: heroTag,
+                    item: response.list[index],
+                    index: index,
+                    onTap: () async {
+                      await Get.toNamed(
+                        '/favDetail',
+                        arguments: response.list[index],
+                        parameters: {
+                          'mediaId': response.list[index].id.toString(),
+                          'heroTag': heroTag,
+                        },
+                      );
+                      Future.delayed(const Duration(milliseconds: 150), () {
+                        controller.onRefresh();
+                      });
+                    },
+                  );
+                }
               },
+              scrollDirection: Axis.horizontal,
             );
-          }
-        },
-        scrollDirection: Axis.horizontal,
-      );
-    }
-    if (loadingState is Error) {
-      return SizedBox(
-        height: 160,
-        child: Center(
-          child: Text(
-            loadingState.errMsg,
-            textAlign: TextAlign.center,
+          },
+        ),
+      Error(:var errMsg) => SizedBox(
+          height: 160,
+          child: Center(
+            child: Text(
+              errMsg ?? '',
+              textAlign: TextAlign.center,
+            ),
           ),
         ),
-      );
-    }
-    return const SizedBox.shrink();
+    };
   }
 }
 

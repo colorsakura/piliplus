@@ -84,15 +84,15 @@ class _FollowChildPageState extends State<FollowChildPage>
             return const MsgFeedTopSkeleton();
           },
         ),
-      Success() => loadingState.response?.isNotEmpty == true
+      Success(:var response) => response?.isNotEmpty == true
           ? SliverList.builder(
-              itemCount: loadingState.response!.length,
+              itemCount: response!.length,
               itemBuilder: (context, index) {
-                if (index == loadingState.response!.length - 1) {
+                if (index == response.length - 1) {
                   _followController.onLoadMore();
                 }
                 return FollowItem(
-                  item: loadingState.response![index],
+                  item: response[index],
                   isOwner: widget.controller?.isOwner,
                   onSelect: widget.onSelect,
                   callback: (attr) {
@@ -105,11 +105,9 @@ class _FollowChildPageState extends State<FollowChildPage>
                 );
               },
             )
-          : HttpError(
-              onReload: _followController.onReload,
-            ),
-      Error() => HttpError(
-          errMsg: loadingState.errMsg,
+          : HttpError(onReload: _followController.onReload),
+      Error(:var errMsg) => HttpError(
+          errMsg: errMsg,
           onReload: _followController.onReload,
         ),
     };

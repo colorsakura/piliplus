@@ -30,8 +30,8 @@ class FavNoteController
   @override
   Future<LoadingState<List<FavArticleModel>?>> customGetData() {
     return isPublish
-        ? VideoHttp.userNoteList(page: currentPage)
-        : VideoHttp.noteList(page: currentPage);
+        ? VideoHttp.userNoteList(page: page)
+        : VideoHttp.noteList(page: page);
   }
 
   Future<void> onRemove() async {
@@ -47,7 +47,7 @@ class FavNoteController
     if (res['status']) {
       List<FavArticleModel> remainList =
           dataList.toSet().difference(removeList).toList();
-      loadingState.value = LoadingState.success(remainList);
+      loadingState.value = Success(remainList);
       enableMultiSelect.value = false;
       SmartDialog.showToast('删除成功');
     } else {

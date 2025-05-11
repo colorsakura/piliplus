@@ -87,7 +87,7 @@ class _HorizontalMemberPageState extends State<HorizontalMemberPage> {
   Widget _buildUserPage(ThemeData theme, LoadingState userState) {
     return switch (userState) {
       Loading() => loadingWidget,
-      Success() => Column(
+      Success(:var response) => Column(
           children: [
             const SizedBox(height: 4),
             Row(
@@ -103,7 +103,7 @@ class _HorizontalMemberPageState extends State<HorizontalMemberPage> {
                 const SizedBox(width: 16),
               ],
             ),
-            _buildUserInfo(theme, userState.response),
+            _buildUserInfo(theme, response),
             const SizedBox(height: 5),
             Expanded(
               child: Obx(
@@ -111,11 +111,12 @@ class _HorizontalMemberPageState extends State<HorizontalMemberPage> {
             ),
           ],
         ),
-      Error() => scrollErrorWidget(
+      Error(:var errMsg) => scrollErrorWidget(
           controller: _controller.scrollController,
-          errMsg: userState.errMsg,
+          errMsg: errMsg,
           onReload: () {
-            _controller.userState.value = LoadingState.loading();
+            _controller.userState.value =
+                LoadingState<MemberInfoModel>.loading();
             _controller.getUserInfo();
           },
         ),
@@ -178,7 +179,7 @@ class _HorizontalMemberPageState extends State<HorizontalMemberPage> {
   Widget _buildVideoList(ThemeData theme, LoadingState loadingState) {
     return switch (loadingState) {
       Loading() => loadingWidget,
-      Success() => Material(
+      Success(:var response) => Material(
           color: Colors.transparent,
           child: CustomScrollView(
             controller: _controller.scrollController,
@@ -196,12 +197,10 @@ class _HorizontalMemberPageState extends State<HorizontalMemberPage> {
                   gridDelegate: Grid.videoCardHDelegate(context),
                   delegate: SliverChildBuilderDelegate(
                     (context, index) {
-                      if (index == loadingState.response.length - 1 &&
-                          _controller.hasNext) {
+                      if (index == response.length - 1 && _controller.hasNext) {
                         _controller.onLoadMore();
                       }
-                      final SpaceArchiveItem videoItem =
-                          loadingState.response[index];
+                      final SpaceArchiveItem videoItem = response[index];
                       return VideoCardHMemberVideo(
                         key: ValueKey('${videoItem.param}'),
                         videoItem: videoItem,
@@ -222,16 +221,16 @@ class _HorizontalMemberPageState extends State<HorizontalMemberPage> {
                         },
                       );
                     },
-                    childCount: loadingState.response.length,
+                    childCount: response.length,
                   ),
                 ),
               ),
             ],
           ),
         ),
-      Error() => scrollErrorWidget(
+      Error(:var errMsg) => scrollErrorWidget(
           controller: _controller.scrollController,
-          errMsg: loadingState.errMsg,
+          errMsg: errMsg,
           onReload: _controller.onReload,
         ),
     };

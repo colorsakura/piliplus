@@ -50,7 +50,7 @@ class LiveAreaChildController
   @override
   Future<LoadingState<LiveSecondData>> customGetData() =>
       LiveHttp.liveSecondList(
-        pn: currentPage,
+        pn: page,
         isLogin: isLogin,
         areaId: areaId,
         parentAreaId: parentAreaId,

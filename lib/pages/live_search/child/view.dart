@@ -91,7 +91,7 @@ class _LiveSearchChildPageState extends State<LiveSearchChildPage>
   Widget _buildBody(LoadingState<List?> loadingState) {
     return switch (loadingState) {
       Loading() => _buildLoading,
-      Success() => loadingState.response?.isNotEmpty == true
+      Success(:var response) => response?.isNotEmpty == true
           ? Builder(
               builder: (context) {
                 return switch (widget.searchType) {
@@ -106,14 +106,14 @@ class _LiveSearchChildPageState extends State<LiveSearchChildPage>
                       ),
                       delegate: SliverChildBuilderDelegate(
                         (context, index) {
-                          if (index == loadingState.response!.length - 1) {
+                          if (index == response.length - 1) {
                             _controller.onLoadMore();
                           }
                           return LiveCardVSearch(
-                            item: loadingState.response![index],
+                            item: response[index],
                           );
                         },
-                        childCount: loadingState.response!.length,
+                        childCount: response!.length,
                       ),
                     ),
                   LiveSearchType.user => SliverGrid(
@@ -123,14 +123,14 @@ class _LiveSearchChildPageState extends State<LiveSearchChildPage>
                       ),
                       delegate: SliverChildBuilderDelegate(
                         (BuildContext context, int index) {
-                          if (index == loadingState.response!.length - 1) {
+                          if (index == response.length - 1) {
                             _controller.onLoadMore();
                           }
                           return LiveSearchUserItem(
-                            item: loadingState.response![index],
+                            item: response[index],
                           );
                         },
-                        childCount: loadingState.response!.length,
+                        childCount: response!.length,
                       ),
                     ),
                 };
@@ -139,8 +139,8 @@ class _LiveSearchChildPageState extends State<LiveSearchChildPage>
           : HttpError(
               onReload: _controller.onReload,
             ),
-      Error() => HttpError(
-          errMsg: loadingState.errMsg,
+      Error(:var errMsg) => HttpError(
+          errMsg: errMsg,
           onReload: _controller.onReload,
         ),
     };

@@ -44,12 +44,12 @@ class DynamicsHttp {
                     'ADDITIONAL_TYPE_GOODS',
           );
         }
-        return LoadingState.success(data);
+        return Success(data);
       } catch (err) {
-        return LoadingState.error(err.toString());
+        return Error(err.toString());
       }
     } else {
-      return LoadingState.error(res.data['message']);
+      return Error(res.data['message']);
     }
   }
 
@@ -203,10 +203,11 @@ class DynamicsHttp {
         'web_location': '333.976',
       }),
     );
-
-    return res.data['code'] == 0
-        ? LoadingState.success(SpaceArticleItem.fromJson(res.data['data']))
-        : LoadingState.error(res.data['message']);
+    if (res.data['code'] == 0) {
+      return Success(SpaceArticleItem.fromJson(res.data['data']));
+    } else {
+      return Error(res.data['message']);
+    }
   }
 
   static Future<LoadingState<DynamicItemModel>> opusDetail(
@@ -219,19 +220,21 @@ class DynamicsHttp {
         'id': opusId,
       }),
     );
-
-    return res.data['code'] == 0
-        ? LoadingState.success(DynamicItemModel.fromOpusJson(res.data['data']))
-        : LoadingState.error(res.data['message']);
+    if (res.data['code'] == 0) {
+      return Success(DynamicItemModel.fromOpusJson(res.data['data']));
+    } else {
+      return Error(res.data['message']);
+    }
   }
 
   static Future<LoadingState<VoteInfo>> voteInfo(dynamic voteId) async {
     final res =
         await Request().get(Api.voteInfo, queryParameters: {'vote_id': voteId});
-
-    return res.data['code'] == 0
-        ? LoadingState.success(VoteInfo.fromSeparatedJson(res.data['data']))
-        : LoadingState.error(res.data['message']);
+    if (res.data['code'] == 0) {
+      return Success(VoteInfo.fromSeparatedJson(res.data['data']));
+    } else {
+      return Error(res.data['message']);
+    }
   }
 
   static Future<LoadingState<VoteInfo>> doVote({
@@ -255,10 +258,11 @@ class DynamicsHttp {
         queryParameters: {'csrf': csrf},
         data: data,
         options: Options(contentType: Headers.jsonContentType));
-
-    return res.data['code'] == 0
-        ? LoadingState.success(VoteInfo.fromJson(res.data['data']['vote_info']))
-        : LoadingState.error(res.data['message']);
+    if (res.data['code'] == 0) {
+      return Success(VoteInfo.fromJson(res.data['data']['vote_info']));
+    } else {
+      return Error(res.data['message']);
+    }
   }
 
   static Future<LoadingState<TopDetails?>> topicTop({required topicId}) async {
@@ -273,9 +277,9 @@ class DynamicsHttp {
       TopDetails? data = res.data['data']?['top_details'] == null
           ? null
           : TopDetails.fromJson(res.data['data']['top_details']);
-      return LoadingState.success(data);
+      return Success(data);
     } else {
-      return LoadingState.error(res.data['message']);
+      return Error(res.data['message']);
     }
   }
 
@@ -300,9 +304,9 @@ class DynamicsHttp {
       TopicCardList? data = res.data['data']?['topic_card_list'] == null
           ? null
           : TopicCardList.fromJson(res.data['data']['topic_card_list']);
-      return LoadingState.success(data);
+      return Success(data);
     } else {
-      return LoadingState.error(res.data['message']);
+      return Error(res.data['message']);
     }
   }
 
@@ -317,9 +321,9 @@ class DynamicsHttp {
       },
     );
     if (res.data['code'] == 0) {
-      return LoadingState.success(ArticleListData.fromJson(res.data['data']));
+      return Success(ArticleListData.fromJson(res.data['data']));
     } else {
-      return LoadingState.error(res.data['message']);
+      return Error(res.data['message']);
     }
   }
 }

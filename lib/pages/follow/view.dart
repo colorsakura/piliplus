@@ -4,11 +4,11 @@ import 'package:PiliPlus/common/widgets/scroll_physics.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/member/tags.dart';
 import 'package:PiliPlus/pages/follow/child_view.dart';
+import 'package:PiliPlus/pages/follow/controller.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:PiliPlus/pages/follow/controller.dart';
 
 class FollowPage extends StatefulWidget {
   const FollowPage({super.key});
@@ -146,7 +146,9 @@ class _FollowPageState extends State<FollowPage> {
           ],
         ),
       Error() => FollowChildPage(
-          controller: _followController, mid: _followController.mid),
+          controller: _followController,
+          mid: _followController.mid,
+        ),
     };
   }
 

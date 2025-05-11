@@ -69,10 +69,9 @@ class _LikeMePageState extends State<LikeMePage> {
             return const MsgFeedTopSkeleton();
           },
         ),
-      Success() => () {
+      Success(:var response) => () {
           final theme = Theme.of(context);
-          Pair<List<LikeMeItems>, List<LikeMeItems>> pair =
-              loadingState.response;
+          Pair<List<LikeMeItems>, List<LikeMeItems>> pair = response;
           List<LikeMeItems> latest = pair.first;
           List<LikeMeItems> total = pair.second;
           if (latest.isNotEmpty || total.isNotEmpty) {
@@ -143,8 +142,8 @@ class _LikeMePageState extends State<LikeMePage> {
           }
           return HttpError(onReload: _likeMeController.onReload);
         }(),
-      Error() => HttpError(
-          errMsg: loadingState.errMsg,
+      Error(:var errMsg) => HttpError(
+          errMsg: errMsg,
           onReload: _likeMeController.onReload,
         ),
     };

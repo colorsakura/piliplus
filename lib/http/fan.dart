@@ -14,9 +14,9 @@ class FanHttp {
       'order_type': orderType,
     });
     if (res.data['code'] == 0) {
-      return LoadingState.success(FansDataModel.fromJson(res.data['data']));
+      return Success(FansDataModel.fromJson(res.data['data']));
     } else {
-      return LoadingState.error(res.data['message']);
+      return Error(res.data['message']);
     }
   }
 }

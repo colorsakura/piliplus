@@ -12,6 +12,8 @@ class HorizontalMemberPageController extends CommonDataController {
 
   dynamic mid;
 
+  int currentPage = 0;
+
   Rx<LoadingState<MemberInfoModel>> userState =
       LoadingState<MemberInfoModel>.loading().obs;
   RxMap userStat = {}.obs;
@@ -19,7 +21,6 @@ class HorizontalMemberPageController extends CommonDataController {
   @override
   void onInit() {
     super.onInit();
-    currentPage = 0;
     getUserInfo();
     queryData();
   }
@@ -27,10 +28,10 @@ class HorizontalMemberPageController extends CommonDataController {
   Future<void> getUserInfo() async {
     dynamic res = await MemberHttp.memberInfo(mid: mid);
     if (res['status']) {
-      userState.value = LoadingState.success(res['data']);
+      userState.value = Success(res['data']);
       getMemberStat();
     } else {
-      userState.value = LoadingState.error(res['msg']);
+      userState.value = Error(res['msg']);
     }
   }
 
@@ -69,7 +70,7 @@ class HorizontalMemberPageController extends CommonDataController {
     }
     firstAid = data.item?.firstOrNull?.param;
     lastAid = data.item?.lastOrNull?.param;
-    loadingState.value = LoadingState.success(data.item);
+    loadingState.value = Success(data.item);
     isLoadPrevious = false;
     return true;
   }

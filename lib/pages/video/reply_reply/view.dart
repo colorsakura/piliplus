@@ -402,8 +402,8 @@ class _VideoReplyReplyPanelState
             ],
           ),
         ),
-      Success() => () {
-          if (index == loadingState.response.length) {
+      Success(:var response) => () {
+          if (index == response.length) {
             _videoReplyReplyController.onLoadMore();
             return Container(
               alignment: Alignment.center,
@@ -413,7 +413,7 @@ class _VideoReplyReplyPanelState
               child: Text(
                 _videoReplyReplyController.isEnd.not
                     ? '加载中...'
-                    : loadingState.response.isEmpty
+                    : response.isEmpty
                         ? '还没有评论'
                         : '没有更多了',
                 style: TextStyle(
@@ -435,16 +435,16 @@ class _VideoReplyReplyPanelState
                   return ColoredBox(
                     color: colorAnimation!.value ??
                         theme.colorScheme.onInverseSurface,
-                    child: _replyItem(loadingState.response[index], index),
+                    child: _replyItem(response[index], index),
                   );
                 },
               );
             }
-            return _replyItem(loadingState.response[index], index);
+            return _replyItem(response[index], index);
           }
         }(),
-      Error() => errorWidget(
-          errMsg: loadingState.errMsg,
+      Error(:var errMsg) => errorWidget(
+          errMsg: errMsg,
           onReload: _videoReplyReplyController.onReload,
         ),
     };

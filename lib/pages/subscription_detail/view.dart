@@ -57,7 +57,7 @@ class _SubDetailPageState extends State<SubDetailPage> {
             childCount: 10,
           ),
         ),
-      Success() => loadingState.response?.isNotEmpty == true
+      Success(:var response) => response?.isNotEmpty == true
           ? SliverPadding(
               padding: EdgeInsets.only(
                 bottom: MediaQuery.paddingOf(context).bottom + 80,
@@ -65,13 +65,13 @@ class _SubDetailPageState extends State<SubDetailPage> {
               sliver: SliverGrid(
                 gridDelegate: Grid.videoCardHDelegate(context),
                 delegate: SliverChildBuilderDelegate(
-                  childCount: loadingState.response!.length,
+                  childCount: response!.length,
                   (context, index) {
-                    if (index == loadingState.response!.length - 1) {
+                    if (index == response.length - 1) {
                       _subDetailController.onLoadMore();
                     }
                     return SubVideoCardH(
-                      videoItem: loadingState.response![index],
+                      videoItem: response[index],
                     );
                   },
                 ),
@@ -80,8 +80,8 @@ class _SubDetailPageState extends State<SubDetailPage> {
           : HttpError(
               onReload: _subDetailController.onReload,
             ),
-      Error() => HttpError(
-          errMsg: loadingState.errMsg,
+      Error(:var errMsg) => HttpError(
+          errMsg: errMsg,
           onReload: _subDetailController.onReload,
         ),
     };

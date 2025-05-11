@@ -56,5 +56,5 @@ class BlackListController
 
   @override
   Future<LoadingState<BlackListDataModel>> customGetData() =>
-      BlackHttp.blackList(pn: currentPage, ps: pageSize);
+      BlackHttp.blackList(pn: page, ps: pageSize);
 }

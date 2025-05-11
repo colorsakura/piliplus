@@ -76,7 +76,7 @@ class SearchHttp {
       queryParameters: params,
     );
     if (res.data is! Map) {
-      return LoadingState.error('没有相关数据');
+      return Error('没有相关数据');
     }
     if (res.data['code'] == 0) {
       dynamic data;
@@ -105,13 +105,13 @@ class SearchHttp {
             data = SearchArticleModel.fromJson(res.data['data']);
             break;
         }
-        return LoadingState.success(data);
+        return Success(data);
       } catch (err) {
         debugPrint(err.toString());
-        return LoadingState.error(err.toString());
+        return Error(err.toString());
       }
     } else {
-      return LoadingState.error(res.data['message'] ?? '没有相关数据');
+      return Error(res.data['message'] ?? '没有相关数据');
     }
   }
 
@@ -144,17 +144,17 @@ class SearchHttp {
       queryParameters: params,
     );
     if (res.data is! Map) {
-      return LoadingState.error('没有相关数据');
+      return Error('没有相关数据');
     }
     if (res.data['code'] == 0) {
       try {
-        return LoadingState.success(SearchAllModel.fromJson(res.data['data']));
+        return Success(SearchAllModel.fromJson(res.data['data']));
       } catch (err) {
         debugPrint(err.toString());
-        return LoadingState.error(err.toString());
+        return Error(err.toString());
       }
     } else {
-      return LoadingState.error(res.data['message'] ?? '没有相关数据');
+      return Error(res.data['message'] ?? '没有相关数据');
     }
   }
 
@@ -187,10 +187,9 @@ class SearchHttp {
       },
     );
     if (res.data['code'] == 0) {
-      return LoadingState.success(
-          BangumiInfoModel.fromJson(res.data['result']));
+      return Success(BangumiInfoModel.fromJson(res.data['result']));
     } else {
-      return LoadingState.error(res.data['message']);
+      return Error(res.data['message']);
     }
   }
 
@@ -202,9 +201,9 @@ class SearchHttp {
       },
     );
     if (res.data['code'] == 0) {
-      return LoadingState.success(res.data['data']);
+      return Success(res.data['data']);
     } else {
-      return LoadingState.error(res.data['message']);
+      return Error(res.data['message']);
     }
   }
 
@@ -240,9 +239,9 @@ class SearchHttp {
       },
     );
     if (res.data['code'] == 0) {
-      return LoadingState.success(TrendingData.fromJson(res.data['data']));
+      return Success(TrendingData.fromJson(res.data['data']));
     } else {
-      return LoadingState.error(res.data['message']);
+      return Error(res.data['message']);
     }
   }
 
@@ -254,8 +253,10 @@ class SearchHttp {
       'platform': 'android',
       's_locale': 'zh_CN',
     });
-    return res.data['code'] == 0
-        ? LoadingState.success(SearchKeywordData.fromJson(res.data['data']))
-        : LoadingState.error(res.data['message']);
+    if (res.data['code'] == 0) {
+      return Success(SearchKeywordData.fromJson(res.data['data']));
+    } else {
+      return Error(res.data['message']);
+    }
   }
 }

@@ -25,9 +25,9 @@ class MemberBangumiCtr
     super.onInit();
     dynamic response = (_ctr.loadingState.value as Success).response;
     if (response is SpaceData) {
-      currentPage = 2;
+      page = 2;
       dynamic res = response.season;
-      loadingState.value = LoadingState.success(res.item);
+      loadingState.value = Success(res.item);
       count = res.count;
       isEnd = res.item!.length >= count;
     } else {
@@ -52,6 +52,6 @@ class MemberBangumiCtr
       MemberHttp.spaceArchive(
         type: ContributeType.bangumi,
         mid: mid,
-        pn: currentPage,
+        pn: page,
       );
 }

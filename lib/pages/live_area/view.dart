@@ -68,22 +68,20 @@ class _LiveAreaPageState extends State<LiveAreaPage> {
       ThemeData theme, LoadingState<List<AreaList>?> loadingState) {
     return switch (loadingState) {
       Loading() => const SizedBox.shrink(),
-      Success() => loadingState.response?.isNotEmpty == true
+      Success(:var response) => response?.isNotEmpty == true
           ? DefaultTabController(
-              length: loadingState.response!.length,
+              length: response!.length,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   TabBar(
                     isScrollable: true,
                     tabAlignment: TabAlignment.start,
-                    tabs: loadingState.response!
-                        .map((e) => Tab(text: e.name))
-                        .toList(),
+                    tabs: response.map((e) => Tab(text: e.name)).toList(),
                   ),
                   Expanded(
                     child: tabBarView(
-                        children: loadingState.response!
+                        children: response
                             .map(
                               (e) => KeepAliveWrapper(
                                 builder: (context) {
@@ -144,8 +142,8 @@ class _LiveAreaPageState extends State<LiveAreaPage> {
               ),
             )
           : scrollErrorWidget(onReload: _controller.onReload),
-      Error() => scrollErrorWidget(
-          errMsg: loadingState.errMsg,
+      Error(:var errMsg) => scrollErrorWidget(
+          errMsg: errMsg,
           onReload: _controller.onReload,
         ),
     };

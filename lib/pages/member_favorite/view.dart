@@ -57,7 +57,7 @@ class _MemberFavoriteState extends State<MemberFavorite>
             childCount: 10,
           ),
         ),
-      Success() => (loadingState.response as List?)?.isNotEmpty == true
+      Success(:var response) => (response as List?)?.isNotEmpty == true
           ? SliverMainAxisGroup(
               slivers: [
                 SliverToBoxAdapter(
@@ -78,8 +78,8 @@ class _MemberFavoriteState extends State<MemberFavorite>
           : HttpError(
               onReload: _controller.onReload,
             ),
-      Error() => HttpError(
-          errMsg: loadingState.errMsg,
+      Error(:var errMsg) => HttpError(
+          errMsg: errMsg,
           onReload: _controller.onReload,
         ),
     };

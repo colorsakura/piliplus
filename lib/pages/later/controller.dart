@@ -24,7 +24,7 @@ class LaterController extends MultiSelectController<Map, HotVideoItemModel> {
 
   @override
   Future<LoadingState<Map>> customGetData() => UserHttp.seeYouLater(
-        page: currentPage,
+        page: page,
         viewed: laterViewType.type,
         asc: asc.value,
       );
@@ -191,7 +191,7 @@ class LaterController extends MultiSelectController<Map, HotVideoItemModel> {
               .difference(result.toSet());
       baseCtr.counts[laterViewType] =
           baseCtr.counts[laterViewType]! - aids.length;
-      loadingState.value = LoadingState.success(remainList.toList());
+      loadingState.value = Success(remainList.toList());
       if (baseCtr.enableMultiSelect.value) {
         baseCtr.checkedCount.value = 0;
         baseCtr.enableMultiSelect.value = false;

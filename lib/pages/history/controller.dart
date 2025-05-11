@@ -134,7 +134,7 @@ class HistoryController extends MultiSelectController<HistoryData, HisListItem>
               .difference(result.toSet())
               .toList();
       if (remainList.isNotEmpty) {
-        loadingState.value = LoadingState.success(remainList);
+        loadingState.value = Success(remainList);
       } else {
         onReload();
       }

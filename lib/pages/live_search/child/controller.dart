@@ -47,7 +47,7 @@ class LiveSearchChildController
   Future<LoadingState<LiveSearchData>> customGetData() {
     return LiveHttp.liveSearch(
       isLogin: isLogin,
-      page: currentPage,
+      page: page,
       keyword: controller.editingController.text,
       type: searchType,
     );

@@ -10,6 +10,8 @@ class LikeMeController extends CommonDataController<MsgFeedLikeMe, dynamic> {
   int cursor = -1;
   int cursorTime = -1;
 
+  bool isEnd = false;
+
   @override
   void onInit() {
     super.onInit();
@@ -27,14 +29,12 @@ class LikeMeController extends CommonDataController<MsgFeedLikeMe, dynamic> {
     cursorTime = data.total?.cursor?.time ?? -1;
     List<LikeMeItems> latest = data.latest?.items ?? [];
     List<LikeMeItems> total = data.total?.items ?? [];
-    if (currentPage != 1 && loadingState.value is Success) {
-      Pair<List<LikeMeItems>, List<LikeMeItems>> pair =
-          (loadingState.value as Success).response;
+    if (!isRefresh && loadingState.value is Success) {
+      Pair<List<LikeMeItems>, List<LikeMeItems>> pair = loadingState.value.data;
       latest.insertAll(0, pair.first);
       total.insertAll(0, pair.second);
     }
-    loadingState.value =
-        LoadingState.success(Pair(first: latest, second: total));
+    loadingState.value = Success(Pair(first: latest, second: total));
     return true;
   }
 

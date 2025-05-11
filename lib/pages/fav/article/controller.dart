@@ -24,8 +24,7 @@ class FavArticleController extends CommonListController {
   }
 
   @override
-  Future<LoadingState> customGetData() =>
-      UserHttp.favArticle(page: currentPage);
+  Future<LoadingState> customGetData() => UserHttp.favArticle(page: page);
 
   Future<void> onRemove(index, id) async {
     final res = await UserHttp.communityAction(opusId: id, action: 4);

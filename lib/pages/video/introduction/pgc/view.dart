@@ -87,19 +87,19 @@ class _BangumiIntroPanelState extends State<BangumiIntroPanel>
           showEpisodes: widget.showEpisodes,
           showIntroDetail: () {},
         ),
-      Success() => BangumiInfo(
+      Success(:var response) => BangumiInfo(
           heroTag: widget.heroTag,
           isLoading: false,
-          bangumiDetail: loadingState.response,
+          bangumiDetail: response,
           cid: cid,
           showEpisodes: widget.showEpisodes,
           showIntroDetail: () => widget.showIntroDetail(
-            loadingState.response,
+            response,
             bangumiIntroController.videoTags,
           ),
         ),
-      Error() => HttpError(
-          errMsg: loadingState.errMsg,
+      Error(:var errMsg) => HttpError(
+          errMsg: errMsg,
           onReload: bangumiIntroController.onReload,
         ),
     };

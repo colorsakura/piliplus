@@ -13,7 +13,7 @@ class LaterSearchController
 
   @override
   Future<LoadingState<Map>> customGetData() => UserHttp.seeYouLater(
-        page: currentPage,
+        page: page,
         keyword: editController.value.text,
       );
 

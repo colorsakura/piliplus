@@ -18,7 +18,7 @@ class HotController
   @override
   Future<LoadingState<List<HotVideoItemModel>>> customGetData() =>
       VideoHttp.hotVideoList(
-        pn: currentPage,
+        pn: page,
         ps: 20,
       );
 }

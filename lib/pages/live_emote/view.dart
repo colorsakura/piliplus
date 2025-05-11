@@ -46,13 +46,13 @@ class _LiveEmotePanelState extends State<LiveEmotePanel>
   Widget _buildBody(LoadingState<List<LiveEmoteDatum>?> loadingState) {
     return switch (loadingState) {
       Loading() => loadingWidget,
-      Success() => loadingState.response?.isNotEmpty == true
+      Success(:var response) => response?.isNotEmpty == true
           ? Column(
               children: [
                 Expanded(
                   child: tabBarView(
                     controller: _emotePanelController.tabController,
-                    children: loadingState.response!.map(
+                    children: response!.map(
                       (item) {
                         if (item.emoticons.isNullOrEmpty) {
                           return const SizedBox.shrink();
@@ -116,7 +116,7 @@ class _LiveEmotePanelState extends State<LiveEmotePanel>
                   dividerColor: Colors.transparent,
                   dividerHeight: 0,
                   isScrollable: true,
-                  tabs: loadingState.response!
+                  tabs: response
                       .map(
                         (item) => Padding(
                           padding: const EdgeInsets.all(8),
@@ -134,7 +134,7 @@ class _LiveEmotePanelState extends State<LiveEmotePanel>
               ],
             )
           : _errorWidget(),
-      Error() => _errorWidget(loadingState.errMsg),
+      Error(:var errMsg) => _errorWidget(errMsg),
     };
   }
 

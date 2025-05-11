@@ -76,9 +76,9 @@ class MemberHttp {
       ),
     );
     if (res.data['code'] == 0) {
-      return LoadingState.success(SpaceArticleData.fromJson(res.data['data']));
+      return Success(SpaceArticleData.fromJson(res.data['data']));
     } else {
-      return LoadingState.error(res.data['message']);
+      return Error(res.data['message']);
     }
   }
 
@@ -106,9 +106,9 @@ class MemberHttp {
       ),
     );
     if (res.data['code'] == 0) {
-      return LoadingState.success(SpaceFav.fromJson(res.data).data);
+      return Success(SpaceFav.fromJson(res.data).data);
     } else {
-      return LoadingState.error(res.data['message']);
+      return Error(res.data['message']);
     }
   }
 
@@ -125,9 +125,9 @@ class MemberHttp {
       },
     );
     if (res.data['code'] == 0) {
-      return LoadingState.success(res.data['data']?['items_lists']);
+      return Success(res.data['data']?['items_lists']);
     } else {
-      return LoadingState.error(res.data['message']);
+      return Error(res.data['message']);
     }
   }
 
@@ -180,9 +180,9 @@ class MemberHttp {
       ),
     );
     if (res.data['code'] == 0) {
-      return LoadingState.success(SpaceArchiveData.fromJson(res.data['data']));
+      return Success(SpaceArchiveData.fromJson(res.data['data']));
     } else {
-      return LoadingState.error(res.data['message']);
+      return Error(res.data['message']);
     }
   }
 
@@ -222,9 +222,9 @@ class MemberHttp {
       ),
     );
     if (res.data['code'] == 0) {
-      return LoadingState.success(res.data['data']);
+      return Success(res.data['data']);
     } else {
-      return LoadingState.error(res.data['message']);
+      return Error(res.data['message']);
     }
   }
 
@@ -254,9 +254,9 @@ class MemberHttp {
       ),
     );
     if (res.data['code'] == 0) {
-      return LoadingState.success(SpaceData.fromJson(res.data['data']));
+      return Success(SpaceData.fromJson(res.data['data']));
     } else {
-      return LoadingState.error(res.data['message']);
+      return Error(res.data['message']);
     }
   }
 
@@ -408,14 +408,12 @@ class MemberHttp {
       }),
     );
     if (res.data['code'] == 0) {
-      return LoadingState.success(
-          MemberArchiveDataModel.fromJson(res.data['data']));
+      return Success(MemberArchiveDataModel.fromJson(res.data['data']));
     } else {
       Map errMap = {
         -352: '风控校验失败，请检查登录状态',
       };
-      return LoadingState.error(
-          errMap[res.data['code']] ?? res.data['message']);
+      return Error(errMap[res.data['code']] ?? res.data['message']);
     }
   }
 
@@ -450,13 +448,12 @@ class MemberHttp {
             item.modules.moduleDynamic?.additional?.type ==
                 'ADDITIONAL_TYPE_GOODS');
       }
-      return LoadingState.success(data);
+      return Success(data);
     } else {
       Map errMap = {
         -352: '风控校验失败，请检查登录状态',
       };
-      return LoadingState.error(
-          errMap[res.data['code']] ?? res.data['message']);
+      return Error(errMap[res.data['code']] ?? res.data['message']);
     }
   }
 
@@ -509,9 +506,9 @@ class MemberHttp {
       },
     );
     if (res.data['code'] == 0) {
-      return LoadingState.success(DynamicsDataModel.fromJson(res.data['data']));
+      return Success(DynamicsDataModel.fromJson(res.data['data']));
     } else {
-      return LoadingState.error(res.data['message']);
+      return Error(res.data['message']);
     }
   }
 
@@ -596,12 +593,12 @@ class MemberHttp {
       },
     );
     if (res.data['code'] == 0) {
-      return LoadingState.success(FollowDataModel(
+      return Success(FollowDataModel(
           list: (res.data['data'] as List?)
               ?.map<FollowItemModel>((e) => FollowItemModel.fromJson(e))
               .toList()));
     } else {
-      return LoadingState.error(res.data['message']);
+      return Error(res.data['message']);
     }
   }
 
@@ -726,9 +723,9 @@ class MemberHttp {
       List<MemberCoinsDataModel>? list = (res.data['data'] as List?)
           ?.map<MemberCoinsDataModel>((e) => MemberCoinsDataModel.fromJson(e))
           .toList();
-      return LoadingState.success(list);
+      return Success(list);
     } else {
-      return LoadingState.error(res.data['message']);
+      return Error(res.data['message']);
     }
   }
 
@@ -754,9 +751,9 @@ class MemberHttp {
       List<MemberCoinsDataModel>? list = (res.data['data']?['list'] as List?)
           ?.map<MemberCoinsDataModel>((e) => MemberCoinsDataModel.fromJson(e))
           .toList();
-      return LoadingState.success(list);
+      return Success(list);
     } else {
-      return LoadingState.error(res.data['message']);
+      return Error(res.data['message']);
     }
   }
 
@@ -827,9 +824,9 @@ class MemberHttp {
       'wts': params['wts'],
     });
     if (res.data['code'] == 0) {
-      return LoadingState.success(FollowDataModel.fromJson(res.data['data']));
+      return Success(FollowDataModel.fromJson(res.data['data']));
     } else {
-      return LoadingState.error(res.data['message']);
+      return Error(res.data['message']);
     }
   }
 
@@ -850,9 +847,9 @@ class MemberHttp {
       }),
     );
     if (res.data['code'] == 0) {
-      return LoadingState.success(SpaceOpusData.fromJson(res.data['data']));
+      return Success(SpaceOpusData.fromJson(res.data['data']));
     } else {
-      return LoadingState.error(res.data['message']);
+      return Error(res.data['message']);
     }
   }
 }

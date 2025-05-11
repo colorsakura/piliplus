@@ -74,7 +74,7 @@ class _MemberCoinPageState extends State<MemberCoinPage> {
             return const VideoCardVSkeleton();
           },
         ),
-      Success() => loadingState.response?.isNotEmpty == true
+      Success(:var response) => response?.isNotEmpty == true
           ? SliverGrid.builder(
               gridDelegate: SliverGridDelegateWithExtentAndRatio(
                 mainAxisSpacing: StyleString.cardSpace,
@@ -83,14 +83,14 @@ class _MemberCoinPageState extends State<MemberCoinPage> {
                 childAspectRatio: StyleString.aspectRatio,
                 mainAxisExtent: MediaQuery.textScalerOf(context).scale(75),
               ),
-              itemCount: loadingState.response!.length,
+              itemCount: response!.length,
               itemBuilder: (context, index) {
-                return MemberCoinsItem(coinItem: loadingState.response![index]);
+                return MemberCoinsItem(coinItem: response[index]);
               },
             )
           : HttpError(onReload: _ctr.onReload),
-      Error() => HttpError(
-          errMsg: loadingState.errMsg,
+      Error(:var errMsg) => HttpError(
+          errMsg: errMsg,
           onReload: _ctr.onReload,
         ),
     };

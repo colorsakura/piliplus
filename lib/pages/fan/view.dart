@@ -83,7 +83,7 @@ class _FansPageState extends State<FansPage> {
             childCount: 16,
           ),
         ),
-      Success() => loadingState.response?.isNotEmpty == true
+      Success(:var response) => response?.isNotEmpty == true
           ? SliverPadding(
               padding: EdgeInsets.only(
                   bottom: MediaQuery.paddingOf(context).bottom + 80),
@@ -94,10 +94,10 @@ class _FansPageState extends State<FansPage> {
                 ),
                 delegate: SliverChildBuilderDelegate(
                   (BuildContext context, int index) {
-                    if (index == loadingState.response!.length - 1) {
+                    if (index == response.length - 1) {
                       _fansController.onLoadMore();
                     }
-                    final item = loadingState.response![index];
+                    final item = response[index];
                     String heroTag = Utils.makeHeroTag(item.mid);
                     return ListTile(
                       onTap: () {
@@ -150,15 +150,15 @@ class _FansPageState extends State<FansPage> {
                       trailing: const SizedBox(width: 6),
                     );
                   },
-                  childCount: loadingState.response!.length,
+                  childCount: response!.length,
                 ),
               ),
             )
           : HttpError(
               onReload: _fansController.onReload,
             ),
-      Error() => HttpError(
-          errMsg: loadingState.errMsg,
+      Error(:var errMsg) => HttpError(
+          errMsg: errMsg,
           onReload: _fansController.onReload,
         ),
     };

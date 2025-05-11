@@ -30,15 +30,12 @@ abstract class CommonController<R, T> extends GetxController
   @override
   final ScrollController scrollController = ScrollController();
 
-  late int currentPage = 1;
   bool isLoading = false;
-  late bool isEnd = false;
   Rx<LoadingState> get loadingState;
-  bool? hasFooter;
 
   Future<LoadingState<R>> customGetData();
 
-  void handleListResponse(List<T> dataList) {}
+  Future<void> queryData([bool isRefresh = true]);
 
   bool customHandleResponse(bool isRefresh, Success<R> response) {
     return false;
@@ -48,53 +45,8 @@ abstract class CommonController<R, T> extends GetxController
     return false;
   }
 
-  List<T>? getDataList(R response) {
-    return response as List<T>?;
-  }
-
-  void checkIsEnd(int length) {}
-
-  Future<void> queryData([bool isRefresh = true]) async {
-    if (isLoading || (isRefresh.not && isEnd)) return;
-    isLoading = true;
-    LoadingState<R> response = await customGetData();
-    if (response is Success<R>) {
-      if (!customHandleResponse(isRefresh, response)) {
-        List<T>? dataList = getDataList(response.response);
-        if (dataList.isNullOrEmpty) {
-          isEnd = true;
-          if (isRefresh) {
-            loadingState.value = LoadingState<List<T>?>.success(dataList);
-          } else if (hasFooter == true) {
-            loadingState.refresh();
-          }
-          isLoading = false;
-          return;
-        }
-        handleListResponse(dataList!);
-        if (isRefresh) {
-          checkIsEnd(dataList.length);
-          loadingState.value = LoadingState<List<T>?>.success(dataList);
-        } else if (loadingState.value is Success) {
-          final list = (loadingState.value.data! as List<T>)..addAll(dataList);
-          checkIsEnd(list.length);
-          loadingState.refresh();
-        }
-      }
-      currentPage++;
-    } else {
-      if (isRefresh &&
-          handleError(response is Error ? response.errMsg : null).not) {
-        loadingState.value = response;
-      }
-    }
-    isLoading = false;
-  }
-
   @override
   Future<void> onRefresh() {
-    currentPage = 1;
-    isEnd = false;
     return queryData();
   }
 
@@ -103,7 +55,6 @@ abstract class CommonController<R, T> extends GetxController
   }
 
   Future<void> onReload() {
-    loadingState.value = LoadingState.loading();
     return onRefresh();
   }
 

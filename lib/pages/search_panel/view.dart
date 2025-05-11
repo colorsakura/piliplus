@@ -104,13 +104,13 @@ abstract class CommonSearchPanelState<
               sliver: _builLoading,
             )
           : _builLoading,
-      Success() => loadingState.response?.isNotEmpty == true
-          ? buildList(theme, loadingState.response!)
+      Success(:var response) => response?.isNotEmpty == true
+          ? buildList(theme, response!)
           : HttpError(
               onReload: controller.onReload,
             ),
-      Error() => HttpError(
-          errMsg: loadingState.errMsg,
+      Error(:var errMsg) => HttpError(
+          errMsg: errMsg,
           onReload: controller.onReload,
         ),
     };

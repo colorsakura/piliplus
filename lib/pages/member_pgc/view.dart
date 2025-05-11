@@ -64,7 +64,7 @@ class _MemberBangumiState extends State<MemberBangumi>
   Widget _buildBody(LoadingState<List<SpaceArchiveItem>?> loadingState) {
     return switch (loadingState) {
       Loading() => const SliverToBoxAdapter(),
-      Success() => loadingState.response?.isNotEmpty == true
+      Success(:var response) => response?.isNotEmpty == true
           ? SliverGrid(
               gridDelegate: SliverGridDelegateWithExtentAndRatio(
                 mainAxisSpacing: StyleString.cardSpace,
@@ -75,19 +75,19 @@ class _MemberBangumiState extends State<MemberBangumi>
               ),
               delegate: SliverChildBuilderDelegate(
                 (context, index) {
-                  if (index == loadingState.response!.length - 1) {
+                  if (index == response.length - 1) {
                     _controller.onLoadMore();
                   }
                   return BangumiCardVMemberHome(
-                    bangumiItem: loadingState.response![index],
+                    bangumiItem: response[index],
                   );
                 },
-                childCount: loadingState.response!.length,
+                childCount: response!.length,
               ),
             )
           : HttpError(onReload: _controller.onReload),
-      Error() => HttpError(
-          errMsg: loadingState.errMsg,
+      Error(:var errMsg) => HttpError(
+          errMsg: errMsg,
           onReload: _controller.onReload,
         ),
     };

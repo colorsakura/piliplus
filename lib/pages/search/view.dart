@@ -343,17 +343,17 @@ class _SearchPageState extends State<SearchPage> {
   Widget _buildHotKey(
       LoadingState<SearchKeywordData> loadingState, bool isHot) {
     return switch (loadingState) {
-      Success() => loadingState.response.list?.isNotEmpty == true
+      Success(:var response) => response.list?.isNotEmpty == true
           ? LayoutBuilder(
               builder: (context, constraints) => HotKeyword(
                 width: constraints.maxWidth,
-                hotSearchList: loadingState.response.list!,
+                hotSearchList: response.list!,
                 onClick: _searchController.onClickKeyword,
               ),
             )
           : const SizedBox.shrink(),
-      Error() => errorWidget(
-          errMsg: loadingState.errMsg,
+      Error(:var errMsg) => errorWidget(
+          errMsg: errMsg,
           onReload: isHot
               ? _searchController.queryHotSearchList
               : _searchController.queryRecommendList,

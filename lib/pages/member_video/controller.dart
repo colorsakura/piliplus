@@ -55,7 +55,7 @@ class MemberVideoCtr
       lastAid = null;
       next = null;
       isEnd = false;
-      currentPage = 0;
+      page = 0;
       await queryData();
     }
   }
@@ -66,7 +66,7 @@ class MemberVideoCtr
     if (type == ContributeType.video) {
       fromViewAid = Get.parameters['from_view_aid'];
     }
-    currentPage = 0;
+    page = 0;
     queryData();
   }
 
@@ -78,10 +78,10 @@ class MemberVideoCtr
       ..value = data.episodicButton ?? EpisodicButton()
       ..refresh();
     next = data.next;
-    if (currentPage == 0 || isLoadPrevious == true) {
+    if (page == 0 || isLoadPrevious == true) {
       hasPrev = data.hasPrev;
     }
-    if (currentPage == 0 || isLoadPrevious != true) {
+    if (page == 0 || isLoadPrevious != true) {
       if ((type == ContributeType.video
               ? data.hasNext == false
               : data.next == 0) ||
@@ -92,7 +92,7 @@ class MemberVideoCtr
     count.value = type == ContributeType.season
         ? (data.item?.length ?? -1)
         : (data.count ?? -1);
-    if (currentPage != 0 && loadingState.value is Success) {
+    if (page != 0 && loadingState.value is Success) {
       data.item ??= <SpaceArchiveItem>[];
       if (isLoadPrevious == true) {
         data.item!.addAll((loadingState.value as Success).response);
@@ -103,7 +103,7 @@ class MemberVideoCtr
     firstAid = data.item?.firstOrNull?.param;
     lastAid = data.item?.lastOrNull?.param;
     isLoadPrevious = null;
-    loadingState.value = LoadingState.success(data.item);
+    loadingState.value = Success(data.item);
     return true;
   }
 
@@ -123,11 +123,11 @@ class MemberVideoCtr
                 ? 'asc'
                 : null
             : sort.value,
-        pn: type == ContributeType.charging ? currentPage : null,
+        pn: type == ContributeType.charging ? page : null,
         next: next,
         seasonId: seasonId,
         seriesId: seriesId,
-        includeCursor: isLocating == true && currentPage == 0 ? true : null,
+        includeCursor: isLocating == true && page == 0 ? true : null,
       );
 
   void queryBySort() {

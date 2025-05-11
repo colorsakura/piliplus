@@ -364,7 +364,7 @@ class _FavDetailPageState extends State<FavDetailPage> {
             childCount: 10,
           ),
         ),
-      Success() => loadingState.response?.isNotEmpty == true
+      Success(:var response) => response?.isNotEmpty == true
           ? SliverPadding(
               padding: EdgeInsets.only(
                 bottom: MediaQuery.of(context).padding.bottom + 85,
@@ -373,7 +373,7 @@ class _FavDetailPageState extends State<FavDetailPage> {
                 gridDelegate: Grid.videoCardHDelegate(context),
                 delegate: SliverChildBuilderDelegate(
                   (context, index) {
-                    if (index == loadingState.response!.length) {
+                    if (index == response.length) {
                       _favDetailController.onLoadMore();
                       return Container(
                         height: 60,
@@ -387,7 +387,7 @@ class _FavDetailPageState extends State<FavDetailPage> {
                         ),
                       );
                     }
-                    FavDetailItemData item = loadingState.response![index];
+                    FavDetailItemData item = response[index];
                     return Stack(
                       clipBehavior: Clip.none,
                       children: [
@@ -492,15 +492,15 @@ class _FavDetailPageState extends State<FavDetailPage> {
                       ],
                     );
                   },
-                  childCount: loadingState.response!.length + 1,
+                  childCount: response!.length + 1,
                 ),
               ),
             )
           : HttpError(
               onReload: _favDetailController.onReload,
             ),
-      Error() => HttpError(
-          errMsg: loadingState.errMsg,
+      Error(:var errMsg) => HttpError(
+          errMsg: errMsg,
           onReload: _favDetailController.onReload,
         ),
     };

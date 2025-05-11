@@ -138,7 +138,7 @@ class _FavNoteChildPageState extends State<FavNoteChildPage>
             childCount: 10,
           ),
         ),
-      Success() => loadingState.response?.isNotEmpty == true
+      Success(:var response) => response?.isNotEmpty == true
           ? SliverPadding(
               padding: EdgeInsets.only(
                   bottom: MediaQuery.paddingOf(context).bottom + 80),
@@ -146,24 +146,24 @@ class _FavNoteChildPageState extends State<FavNoteChildPage>
                 gridDelegate: Grid.videoCardHDelegate(context),
                 delegate: SliverChildBuilderDelegate(
                   (context, index) {
-                    if (index == loadingState.response!.length - 1) {
+                    if (index == response.length - 1) {
                       _favNoteController.onLoadMore();
                     }
                     return FavNoteItem(
-                      item: loadingState.response![index],
+                      item: response[index],
                       ctr: _favNoteController,
                       onSelect: () {
                         _favNoteController.onSelect(index);
                       },
                     );
                   },
-                  childCount: loadingState.response!.length,
+                  childCount: response!.length,
                 ),
               ),
             )
           : HttpError(onReload: _favNoteController.onReload),
-      Error() => HttpError(
-          errMsg: loadingState.errMsg,
+      Error(:var errMsg) => HttpError(
+          errMsg: errMsg,
           onReload: _favNoteController.onReload,
         ),
     };

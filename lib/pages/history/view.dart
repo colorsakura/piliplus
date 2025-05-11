@@ -90,17 +90,16 @@ class _HistoryPageState extends State<HistoryPage>
                                     _historyController.baseCtr
                                         .onClearHistory(context, () {
                                       _historyController.loadingState.value =
-                                          LoadingState.success(null);
+                                          Success(null);
                                       if (_historyController.tabController !=
                                           null) {
                                         for (final item
                                             in _historyController.tabs) {
                                           try {
                                             Get.find<HistoryController>(
-                                                        tag: item.type)
-                                                    .loadingState
-                                                    .value =
-                                                LoadingState.success(null);
+                                                    tag: item.type)
+                                                .loadingState
+                                                .value = Success(null);
                                           } catch (_) {}
                                         }
                                       }
@@ -266,15 +265,15 @@ class _HistoryPageState extends State<HistoryPage>
             childCount: 10,
           ),
         ),
-      Success() => loadingState.response?.isNotEmpty == true
+      Success(:var response) => response?.isNotEmpty == true
           ? SliverGrid(
               gridDelegate: Grid.videoCardHDelegate(context),
               delegate: SliverChildBuilderDelegate(
                 (context, index) {
-                  if (index == loadingState.response!.length - 1) {
+                  if (index == response.length - 1) {
                     _historyController.onLoadMore();
                   }
-                  final item = loadingState.response![index];
+                  final item = response[index];
                   return HistoryItem(
                     videoItem: item,
                     ctr: _historyController.baseCtr,
@@ -283,14 +282,14 @@ class _HistoryPageState extends State<HistoryPage>
                         _historyController.delHistory(item),
                   );
                 },
-                childCount: loadingState.response!.length,
+                childCount: response!.length,
               ),
             )
           : HttpError(
               onReload: _historyController.onReload,
             ),
-      Error() => HttpError(
-          errMsg: loadingState.errMsg,
+      Error(:var errMsg) => HttpError(
+          errMsg: errMsg,
           onReload: _historyController.onReload,
         ),
     };

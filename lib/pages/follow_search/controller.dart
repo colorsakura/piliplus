@@ -13,7 +13,7 @@ class FollowSearchController
       MemberHttp.getfollowSearch(
         mid: mid,
         ps: 20,
-        pn: currentPage,
+        pn: page,
         name: editController.value.text,
       );
 

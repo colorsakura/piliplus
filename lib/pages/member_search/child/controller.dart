@@ -53,13 +53,13 @@ class MemberSearchChildController extends CommonListController {
     return switch (searchType) {
       MemberSearchType.archive => MemberHttp.memberArchiveNew(
           mid: controller.mid,
-          pn: currentPage,
+          pn: page,
           keyword: controller.editingController.text,
           order: 'pubdate',
         ),
       MemberSearchType.dynamic => MemberHttp.memberDynamicSearchNew(
           mid: controller.mid,
-          pn: currentPage,
+          pn: page,
           offset: offset ?? '',
           keyword: controller.editingController.text,
         ),

@@ -61,14 +61,14 @@ class _BlackListPageState extends State<BlackListPage> {
             return const MsgFeedTopSkeleton();
           },
         ),
-      Success() => loadingState.response?.isNotEmpty == true
+      Success(:var response) => response?.isNotEmpty == true
           ? SliverList.builder(
-              itemCount: loadingState.response!.length,
+              itemCount: response!.length,
               itemBuilder: (BuildContext context, int index) {
-                if (index == loadingState.response!.length - 1) {
+                if (index == response.length - 1) {
                   _blackListController.onLoadMore();
                 }
-                final item = loadingState.response![index];
+                final item = response[index];
                 return ListTile(
                   onTap: () {
                     Get.toNamed('/member?mid=${item.mid}');
@@ -105,11 +105,9 @@ class _BlackListPageState extends State<BlackListPage> {
                 );
               },
             )
-          : HttpError(
-              onReload: _blackListController.onReload,
-            ),
-      Error() => HttpError(
-          errMsg: loadingState.errMsg,
+          : HttpError(onReload: _blackListController.onReload),
+      Error(:var errMsg) => HttpError(
+          errMsg: errMsg,
           onReload: _blackListController.onReload,
         ),
     };

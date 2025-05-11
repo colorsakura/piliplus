@@ -125,28 +125,27 @@ class _MemberOpusState extends State<MemberOpus>
           crossAxisSpacing: StyleString.safeSpace,
           children: List.generate(10, (_) => const SpaceOpusSkeleton()),
         ),
-      Success() => loadingState.response?.isNotEmpty == true
+      Success(:var response) => response?.isNotEmpty == true
           ? SliverWaterfallFlow.extent(
               maxCrossAxisExtent: Grid.smallCardWidth,
               mainAxisSpacing: StyleString.safeSpace,
               crossAxisSpacing: StyleString.safeSpace,
               lastChildLayoutTypeBuilder: (index) {
-                if (index == loadingState.response!.length - 1) {
+                if (index == response.length - 1) {
                   _controller.onLoadMore();
                 }
-                return index == loadingState.response!.length
+                return index == response.length
                     ? LastChildLayoutType.foot
                     : LastChildLayoutType.none;
               },
-              children: loadingState.response!
-                  .map((item) => SpaceOpusItem(item: item))
-                  .toList(),
+              children:
+                  response!.map((item) => SpaceOpusItem(item: item)).toList(),
             )
           : HttpError(
               onReload: _controller.onReload,
             ),
-      Error() => HttpError(
-          errMsg: loadingState.errMsg,
+      Error(:var errMsg) => HttpError(
+          errMsg: errMsg,
           onReload: _controller.onReload,
         ),
     };

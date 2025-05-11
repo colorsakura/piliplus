@@ -130,7 +130,7 @@ class _VotePanelState extends State<VotePanel> {
                             });
                           }
                         } else {
-                          SmartDialog.showToast((res as Error).errMsg);
+                          SmartDialog.showToast((res as Error).errMsg ?? '');
                         }
                       }
                     : null,
@@ -386,7 +386,7 @@ Future showVoteDialog(BuildContext context, int voteId,
                 ),
               ));
     } else {
-      SmartDialog.showToast((voteInfo as Error).errMsg);
+      SmartDialog.showToast((voteInfo as Error).errMsg ?? '');
     }
   }
 }

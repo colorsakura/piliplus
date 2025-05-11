@@ -148,7 +148,7 @@ class _NoteListPageState extends CommonSlidePageState<NoteListPage> {
             )
           ],
         ),
-      Success() => loadingState.response?.isNotEmpty == true
+      Success(:var response) => response?.isNotEmpty == true
           ? refreshIndicator(
               onRefresh: _controller.onRefresh,
               child: CustomScrollView(
@@ -157,13 +157,12 @@ class _NoteListPageState extends CommonSlidePageState<NoteListPage> {
                 slivers: [
                   SliverList.separated(
                     itemBuilder: (context, index) {
-                      if (index == loadingState.response!.length - 1) {
+                      if (index == response.length - 1) {
                         _controller.onLoadMore();
                       }
-                      return _itemWidget(
-                          context, theme, loadingState.response![index]);
+                      return _itemWidget(context, theme, response[index]);
                     },
-                    itemCount: loadingState.response!.length,
+                    itemCount: response!.length,
                     separatorBuilder: (context, index) => Divider(
                       height: 1,
                       color: theme.colorScheme.outline.withOpacity(0.1),
@@ -178,7 +177,7 @@ class _NoteListPageState extends CommonSlidePageState<NoteListPage> {
               ),
             )
           : errWidget(),
-      Error() => errWidget(loadingState.errMsg),
+      Error(:var errMsg) => errWidget(errMsg),
     };
   }
 

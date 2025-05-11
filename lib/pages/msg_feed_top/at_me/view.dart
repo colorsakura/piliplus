@@ -70,14 +70,14 @@ class _AtMePageState extends State<AtMePage> {
             return const MsgFeedTopSkeleton();
           },
         ),
-      Success() => loadingState.response?.isNotEmpty == true
+      Success(:var response) => response?.isNotEmpty == true
           ? SliverList.separated(
-              itemCount: loadingState.response!.length,
+              itemCount: response!.length,
               itemBuilder: (context, int index) {
-                if (index == loadingState.response!.length - 1) {
+                if (index == response.length - 1) {
                   _atMeController.onLoadMore();
                 }
-                final item = loadingState.response![index];
+                final item = response[index];
                 return ListTile(
                   onTap: () {
                     String? nativeUri = item.item?.nativeUri;
@@ -163,8 +163,8 @@ class _AtMePageState extends State<AtMePage> {
               },
             )
           : HttpError(onReload: _atMeController.onReload),
-      Error() => HttpError(
-          errMsg: loadingState.errMsg,
+      Error(:var errMsg) => HttpError(
+          errMsg: errMsg,
           onReload: _atMeController.onReload,
         ),
     };

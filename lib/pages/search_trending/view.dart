@@ -144,14 +144,14 @@ class _SearchTrendingPageState extends State<SearchTrendingPage> {
       ThemeData theme, LoadingState<List<SearchKeywordList>?> loadingState) {
     return switch (loadingState) {
       Loading() => const SliverToBoxAdapter(child: LinearProgressIndicator()),
-      Success() => loadingState.response?.isNotEmpty == true
+      Success(:var response) => response?.isNotEmpty == true
           ? SliverPadding(
               padding: EdgeInsets.only(
                   bottom: MediaQuery.paddingOf(context).bottom + 100),
               sliver: SliverList.separated(
-                itemCount: loadingState.response!.length,
+                itemCount: response!.length,
                 itemBuilder: (context, index) {
-                  final item = loadingState.response![index];
+                  final item = response[index];
                   return ListTile(
                     dense: true,
                     onTap: () {
@@ -221,8 +221,8 @@ class _SearchTrendingPageState extends State<SearchTrendingPage> {
           : HttpError(
               onReload: _controller.onReload,
             ),
-      Error() => HttpError(
-          errMsg: loadingState.errMsg,
+      Error(:var errMsg) => HttpError(
+          errMsg: errMsg,
           onReload: _controller.onReload,
         ),
     };

@@ -277,7 +277,7 @@ class RequestUtils {
               return;
             }
           }
-          ctr.loadingState.value = LoadingState.success([res['data']]);
+          ctr.loadingState.value = Success([res['data']]);
         }
       }
     } catch (e) {
@@ -412,8 +412,7 @@ class RequestUtils {
                                 .toSet()
                                 .difference(resources.toSet())
                                 .toList();
-                            ctr.loadingState.value =
-                                LoadingState.success(remainList);
+                            ctr.loadingState.value = Success(remainList);
                           }
                           SmartDialog.dismiss();
                           SmartDialog.showToast('${isCopy ? '复制' : '移动'}成功');

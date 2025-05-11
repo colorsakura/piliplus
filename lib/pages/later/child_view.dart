@@ -69,15 +69,15 @@ class _LaterViewChildPageState extends State<LaterViewChildPage>
             childCount: 10,
           ),
         ),
-      Success() => loadingState.response?.isNotEmpty == true
+      Success(:var response) => response?.isNotEmpty == true
           ? SliverGrid(
               gridDelegate: Grid.videoCardHDelegate(context),
               delegate: SliverChildBuilderDelegate(
                 (context, index) {
-                  if (index == loadingState.response!.length - 1) {
+                  if (index == response.length - 1) {
                     _laterController.onLoadMore();
                   }
-                  var videoItem = loadingState.response![index];
+                  var videoItem = response[index];
                   return Stack(
                     clipBehavior: Clip.none,
                     children: [
@@ -188,14 +188,14 @@ class _LaterViewChildPageState extends State<LaterViewChildPage>
                     ],
                   );
                 },
-                childCount: loadingState.response!.length,
+                childCount: response!.length,
               ),
             )
           : HttpError(
               onReload: _laterController.onReload,
             ),
-      Error() => HttpError(
-          errMsg: loadingState.errMsg,
+      Error(:var errMsg) => HttpError(
+          errMsg: errMsg,
           onReload: _laterController.onReload,
         ),
     };

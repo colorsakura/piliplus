@@ -72,15 +72,13 @@ class _BangumiPageState extends CommonPageState<BangumiPage, BangumiController>
           ThemeData theme, LoadingState<List<Result>?> loadingState) =>
       switch (loadingState) {
         Loading() => loadingWidget,
-        Success() => loadingState.response?.isNotEmpty == true
+        Success(:var response) => response?.isNotEmpty == true
             ? Builder(builder: (context) {
-                final initialIndex = max(
-                    0,
-                    loadingState.response!
-                        .indexWhere((item) => item.isToday == 1));
+                final initialIndex =
+                    max(0, response!.indexWhere((item) => item.isToday == 1));
                 return DefaultTabController(
                   initialIndex: initialIndex,
-                  length: loadingState.response!.length,
+                  length: response.length,
                   child: Column(
                     children: [
                       Row(
@@ -119,7 +117,7 @@ class _BangumiPageState extends CommonPageState<BangumiPage, BangumiController>
                                         ?.copyWith(fontSize: 14) ??
                                     const TextStyle(fontSize: 14),
                                 dividerColor: Colors.transparent,
-                                tabs: loadingState.response!.map(
+                                tabs: response.map(
                                   (item) {
                                     return Tab(
                                       text:
@@ -147,7 +145,7 @@ class _BangumiPageState extends CommonPageState<BangumiPage, BangumiController>
                               context.orientation == Orientation.landscape,
                           child: TabBarView(
                               physics: const NeverScrollableScrollPhysics(),
-                              children: loadingState.response!.map((item) {
+                              children: response.map((item) {
                                 if (item.episodes!.isNullOrEmpty) {
                                   return const SizedBox.shrink();
                                 }
@@ -180,14 +178,14 @@ class _BangumiPageState extends CommonPageState<BangumiPage, BangumiController>
                 );
               })
             : const SizedBox.shrink(),
-        Error() => GestureDetector(
+        Error(:var errMsg) => GestureDetector(
             behavior: HitTestBehavior.opaque,
             onTap: controller.queryPgcTimeline,
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               alignment: Alignment.center,
               child: Text(
-                loadingState.errMsg,
+                errMsg ?? '',
                 textAlign: TextAlign.center,
               ),
             ),
@@ -293,7 +291,7 @@ class _BangumiPageState extends CommonPageState<BangumiPage, BangumiController>
       LoadingState<List<BangumiListItemModel>?> loadingState) {
     return switch (loadingState) {
       Loading() => const SliverToBoxAdapter(),
-      Success() => loadingState.response?.isNotEmpty == true
+      Success(:var response) => response?.isNotEmpty == true
           ? SliverGrid(
               gridDelegate: SliverGridDelegateWithExtentAndRatio(
                 // 行间距
@@ -307,20 +305,19 @@ class _BangumiPageState extends CommonPageState<BangumiPage, BangumiController>
               ),
               delegate: SliverChildBuilderDelegate(
                 (BuildContext context, int index) {
-                  if (index == loadingState.response!.length - 1) {
+                  if (index == response.length - 1) {
                     controller.onLoadMore();
                   }
-                  return BangumiCardV(
-                      bangumiItem: loadingState.response![index]);
+                  return BangumiCardV(bangumiItem: response[index]);
                 },
-                childCount: loadingState.response!.length,
+                childCount: response!.length,
               ),
             )
           : HttpError(
               onReload: controller.onReload,
             ),
-      Error() => HttpError(
-          errMsg: loadingState.errMsg,
+      Error(:var errMsg) => HttpError(
+          errMsg: errMsg,
           onReload: controller.onReload,
         ),
     };
@@ -415,28 +412,28 @@ class _BangumiPageState extends CommonPageState<BangumiPage, BangumiController>
       LoadingState<List<BangumiListItemModel>?> loadingState) {
     return switch (loadingState) {
       Loading() => loadingWidget,
-      Success() => loadingState.response?.isNotEmpty == true
+      Success(:var response) => response?.isNotEmpty == true
           ? MediaQuery.removePadding(
               context: context,
               removeLeft: context.orientation == Orientation.landscape,
               child: ListView.builder(
                 controller: controller.followController,
                 scrollDirection: Axis.horizontal,
-                itemCount: loadingState.response!.length,
+                itemCount: response!.length,
                 itemBuilder: (context, index) {
-                  if (index == loadingState.response!.length - 1) {
+                  if (index == response.length - 1) {
                     controller.queryBangumiFollow(false);
                   }
                   return Container(
                     width: Grid.smallCardWidth / 2,
                     margin: EdgeInsets.only(
                       left: StyleString.safeSpace,
-                      right: index == loadingState.response!.length - 1
+                      right: index == response.length - 1
                           ? StyleString.safeSpace
                           : 0,
                     ),
                     child: BangumiCardV(
-                      bangumiItem: loadingState.response![index],
+                      bangumiItem: response[index],
                     ),
                   );
                 },
@@ -445,11 +442,11 @@ class _BangumiPageState extends CommonPageState<BangumiPage, BangumiController>
           : Center(
               child: Text(
                   '还没有${widget.tabType == HomeTabType.bangumi ? '追番' : '追剧'}')),
-      Error() => Container(
+      Error(:var errMsg) => Container(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           alignment: Alignment.center,
           child: Text(
-            loadingState.errMsg,
+            errMsg ?? '',
             textAlign: TextAlign.center,
           ),
         ),

@@ -74,7 +74,7 @@ class _LiveAreaChildPageState extends State<LiveAreaChildPage>
             childCount: 10,
           ),
         ),
-      Success() => SliverMainAxisGroup(
+      Success(:var response) => SliverMainAxisGroup(
           slivers: [
             if (_controller.newTags?.isNotEmpty == true)
               SliverToBoxAdapter(
@@ -111,7 +111,7 @@ class _LiveAreaChildPageState extends State<LiveAreaChildPage>
                   ),
                 ),
               ),
-            loadingState.response?.isNotEmpty == true
+            response?.isNotEmpty == true
                 ? SliverGrid(
                     gridDelegate: SliverGridDelegateWithExtentAndRatio(
                       mainAxisSpacing: StyleString.cardSpace,
@@ -123,13 +123,12 @@ class _LiveAreaChildPageState extends State<LiveAreaChildPage>
                     ),
                     delegate: SliverChildBuilderDelegate(
                       (context, index) {
-                        if (index == loadingState.response!.length - 1) {
+                        if (index == response.length - 1) {
                           _controller.onLoadMore();
                         }
-                        return LiveCardVApp(
-                            item: loadingState.response![index]);
+                        return LiveCardVApp(item: response[index]);
                       },
-                      childCount: loadingState.response!.length,
+                      childCount: response!.length,
                     ),
                   )
                 : HttpError(
@@ -137,8 +136,8 @@ class _LiveAreaChildPageState extends State<LiveAreaChildPage>
                   ),
           ],
         ),
-      Error() => HttpError(
-          errMsg: loadingState.errMsg,
+      Error(:var errMsg) => HttpError(
+          errMsg: errMsg,
           onReload: _controller.onReload,
         ),
     };

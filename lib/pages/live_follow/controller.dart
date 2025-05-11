@@ -30,5 +30,5 @@ class LiveFollowController
 
   @override
   Future<LoadingState<LiveFollowData>> customGetData() =>
-      LiveHttp.liveFollow(currentPage);
+      LiveHttp.liveFollow(page);
 }

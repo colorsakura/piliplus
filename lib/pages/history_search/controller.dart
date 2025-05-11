@@ -8,7 +8,7 @@ class HistorySearchController
     extends CommonSearchController<HistoryData, HisListItem> {
   @override
   Future<LoadingState<HistoryData>> customGetData() => UserHttp.searchHistory(
-        pn: currentPage,
+        pn: page,
         keyword: editController.value.text,
       );
 

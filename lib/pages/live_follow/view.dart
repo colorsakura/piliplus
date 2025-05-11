@@ -69,7 +69,7 @@ class _LiveFollowPageState extends State<LiveFollowPage> {
             childCount: 10,
           ),
         ),
-      Success() => loadingState.response?.isNotEmpty == true
+      Success(:var response) => response?.isNotEmpty == true
           ? SliverGrid(
               gridDelegate: SliverGridDelegateWithExtentAndRatio(
                 mainAxisSpacing: StyleString.cardSpace,
@@ -80,19 +80,19 @@ class _LiveFollowPageState extends State<LiveFollowPage> {
               ),
               delegate: SliverChildBuilderDelegate(
                 (context, index) {
-                  if (index == loadingState.response!.length - 1) {
+                  if (index == response.length - 1) {
                     _controller.onLoadMore();
                   }
                   return LiveCardVFollow(
-                    liveItem: loadingState.response![index],
+                    liveItem: response[index],
                   );
                 },
-                childCount: loadingState.response!.length,
+                childCount: response!.length,
               ),
             )
           : HttpError(onReload: _controller.onReload),
-      Error() => HttpError(
-          errMsg: loadingState.errMsg,
+      Error(:var errMsg) => HttpError(
+          errMsg: errMsg,
           onReload: _controller.onReload,
         ),
     };

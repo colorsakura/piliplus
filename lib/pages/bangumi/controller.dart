@@ -89,7 +89,7 @@ class BangumiController extends CommonListController<
       if (list.isNullOrEmpty) {
         followEnd = true;
         if (isRefresh) {
-          followState.value = LoadingState.success(list);
+          followState.value = Success(list);
         }
         followLoading = false;
         return;
@@ -99,7 +99,7 @@ class BangumiController extends CommonListController<
         if (list!.length >= followCount.value) {
           followEnd = true;
         }
-        followState.value = LoadingState.success(list);
+        followState.value = Success(list);
         followController?.animToTop();
       } else if (followState.value is Success) {
         final currentList = followState.value.data!..addAll(list!);
@@ -118,7 +118,7 @@ class BangumiController extends CommonListController<
   @override
   Future<LoadingState<List<BangumiListItemModel>?>> customGetData() =>
       BangumiHttp.bangumiList(
-        page: currentPage,
+        page: page,
         indexType: tabType == HomeTabType.cinema ? 102 : null, // TODO: sort
       );
 

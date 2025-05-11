@@ -35,7 +35,7 @@ class _WhisperBlockPageState extends State<WhisperBlockPage> {
       ThemeData theme, LoadingState<List<KeywordBlockingItem>?> loadingState) {
     return switch (loadingState) {
       Loading() => loadingWidget,
-      Success() => loadingState.response?.isNotEmpty == true
+      Success(:var response) => response?.isNotEmpty == true
           ? Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -71,7 +71,7 @@ class _WhisperBlockPageState extends State<WhisperBlockPage> {
                       child: Wrap(
                         spacing: 12,
                         runSpacing: 12,
-                        children: loadingState.response!
+                        children: response!
                             .map((e) => SearchText(
                                   text: e.keyword,
                                   onTap: (keyword) {
@@ -135,8 +135,8 @@ class _WhisperBlockPageState extends State<WhisperBlockPage> {
                 ],
               ),
             ),
-      Error() => scrollErrorWidget(
-          errMsg: loadingState.errMsg,
+      Error(:var errMsg) => scrollErrorWidget(
+          errMsg: errMsg,
           onReload: _controller.onReload,
         ),
     };

@@ -65,13 +65,13 @@ abstract class CommonSearchPageState<S extends CommonSearchPage, R, T>
   Widget _buildBody(LoadingState<List<T>?> loadingState) {
     return switch (loadingState) {
       Loading() => const HttpError(),
-      Success() => loadingState.response?.isNotEmpty == true
-          ? buildList(loadingState.response!)
+      Success(:var response) => response?.isNotEmpty == true
+          ? buildList(response!)
           : HttpError(
               onReload: controller.onReload,
             ),
-      Error() => HttpError(
-          errMsg: loadingState.errMsg,
+      Error(:var errMsg) => HttpError(
+          errMsg: errMsg,
           onReload: controller.onReload,
         ),
     };
