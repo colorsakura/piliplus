@@ -3,13 +3,10 @@ import 'dart:convert';
 
 import 'package:PiliPlus/http/constants.dart';
 import 'package:PiliPlus/http/init.dart';
-import 'package:PiliPlus/http/loading_state.dart';
-import 'package:PiliPlus/http/search.dart';
 import 'package:PiliPlus/http/user.dart';
 import 'package:PiliPlus/http/video.dart';
 import 'package:PiliPlus/models/bangumi/info.dart';
 import 'package:PiliPlus/models/user/fav_folder.dart';
-import 'package:PiliPlus/pages/common/common_data_controller.dart';
 import 'package:PiliPlus/pages/dynamics_repost/view.dart';
 import 'package:PiliPlus/pages/video/controller.dart';
 import 'package:PiliPlus/pages/video/introduction/ugc/controller.dart';
@@ -28,8 +25,7 @@ import 'package:get/get.dart';
 import 'package:html/dom.dart' as dom;
 import 'package:html/parser.dart' as html_parser;
 
-class BangumiIntroController
-    extends CommonDataController<BangumiInfoModel, BangumiInfoModel> {
+class BangumiIntroController extends GetxController {
   // 视频bvid
   String bvid = Get.parameters['bvid'] ?? '';
   var seasonId = Get.parameters['seasonId'] != null
@@ -44,15 +40,7 @@ class BangumiIntroController
           ? '追番'
           : '追剧';
 
-  // 是否预渲染 骨架屏
-  bool preRender = false;
-
-  // 视频详情 上个页面传入
-  Map? videoItem = {};
-  BangumiInfoModel? bangumiItem;
-
-  // up主粉丝数
-  Map userStat = {'follower': '-'};
+  BangumiInfoModel bangumiItem = Get.arguments['bangumiItem'];
 
   // 是否点赞
   RxBool hasLike = false.obs;
@@ -62,11 +50,14 @@ class BangumiIntroController
   bool get hasCoin => _coinNum.value != 0;
   // 是否收藏
   RxBool hasFav = false.obs;
+
   dynamic videoTags;
-  bool isLogin = false;
-  Rx<FavFolderData> favFolderData = FavFolderData().obs;
+
   List? favIds;
-  dynamic userInfo;
+  Rx<FavFolderData> favFolderData = FavFolderData().obs;
+
+  bool isLogin = Accounts.main.isLogin;
+  int mid = Accounts.main.mid;
 
   late final enableQuickFav =
       GStorage.setting.get(SettingBoxKey.enableQuickFav, defaultValue: false);
@@ -74,30 +65,15 @@ class BangumiIntroController
   @override
   void onInit() {
     super.onInit();
-    if (Get.arguments.isNotEmpty as bool) {
-      if (Get.arguments.containsKey('bangumiItem') as bool) {
-        preRender = true;
-        bangumiItem = Get.arguments['bangumiItem'];
+    if (isLogin) {
+      if (seasonId != null) {
+        queryIsFollowed();
+      }
+      if (epId != null) {
+        queryBangumiLikeCoinFav();
       }
     }
-    userInfo = GStorage.userInfo.get('userInfoCache');
-    isLogin = userInfo != null;
-
-    if (isLogin && epId != null) {
-      queryBangumiLikeCoinFav();
-    }
-
-    queryData();
-
-    if (isLogin && seasonId != null) {
-      queryIsFollowed();
-    }
-  }
-
-  @override
-  Future<void> queryData([bool isRefresh = true]) async {
-    await queryVideoTags();
-    return super.queryData(isRefresh);
+    queryVideoTags();
   }
 
   Future<void> queryVideoTags() async {
@@ -106,18 +82,6 @@ class BangumiIntroController
       videoTags = result['data'];
     }
   }
-
-  @override
-  bool customHandleResponse(
-      bool isRefresh, Success<BangumiInfoModel> response) {
-    epId ??= response.response.episodes?.firstOrNull?.id;
-    loadingState.value = response;
-    return true;
-  }
-
-  @override
-  Future<LoadingState<BangumiInfoModel>> customGetData() =>
-      SearchHttp.bangumiInfoNew(seasonId: seasonId, epId: epId);
 
   // 获取点赞/投币/收藏状态
   Future<void> queryBangumiLikeCoinFav() async {
@@ -136,9 +100,8 @@ class BangumiIntroController
     var result = await VideoHttp.likeVideo(bvid: bvid, type: !hasLike.value);
     if (result['status']) {
       SmartDialog.showToast(!hasLike.value ? result['data']['toast'] : '取消赞');
-      BangumiInfoModel bangumiDetail = (loadingState.value as Success).response;
-      bangumiDetail.stat!['likes'] =
-          bangumiDetail.stat!['likes'] + (!hasLike.value ? 1 : -1);
+      bangumiItem.stat!['likes'] =
+          bangumiItem.stat!['likes'] + (!hasLike.value ? 1 : -1);
       hasLike.value = !hasLike.value;
     } else {
       SmartDialog.showToast(result['msg']);
@@ -153,11 +116,10 @@ class BangumiIntroController
     );
     if (res['status']) {
       SmartDialog.showToast('投币成功');
-      BangumiInfoModel bangumiDetail = (loadingState.value as Success).response;
-      bangumiDetail.stat!['coins'] = bangumiDetail.stat!['coins'] + coin;
+      bangumiItem.stat!['coins'] = bangumiItem.stat!['coins'] + coin;
       if (selectLike && hasLike.value.not) {
         hasLike.value = true;
-        bangumiDetail.stat!['likes'] = bangumiDetail.stat!['likes'] + 1;
+        bangumiItem.stat!['likes'] = bangumiItem.stat!['likes'] + 1;
       }
       _coinNum.value += coin;
       GlobalData().afterCoin(coin);
@@ -168,7 +130,7 @@ class BangumiIntroController
 
   // 投币
   Future<void> actionCoinVideo() async {
-    if (userInfo == null) {
+    if (!isLogin) {
       SmartDialog.showToast('账号未登录');
       return;
     }
@@ -306,7 +268,7 @@ class BangumiIntroController
                   ),
                   onTap: () {
                     Get.back();
-                    EpisodeItem? item = bangumiItem?.episodes
+                    EpisodeItem? item = bangumiItem.episodes
                         ?.firstWhereOrNull((item) => item.epId == epId);
                     showModalBottomSheet(
                       context: context,
@@ -331,9 +293,9 @@ class BangumiIntroController
                           '5' || '7' => 4099,
                           _ => -1,
                         },
-                        pic: bangumiItem?.cover,
+                        pic: bangumiItem.cover,
                         title:
-                            '${bangumiItem?.title}${item != null ? '\n${item.showTitle}' : ''}',
+                            '${bangumiItem.title}${item != null ? '\n${item.showTitle}' : ''}',
                         uname: '',
                       ),
                     );
@@ -348,9 +310,9 @@ class BangumiIntroController
                   onTap: () {
                     Get.back();
                     try {
-                      EpisodeItem item = bangumiItem!.episodes!
+                      EpisodeItem item = bangumiItem.episodes!
                           .firstWhere((item) => item.epId == epId);
-                      final title = '${bangumiItem!.title!} ${item.showTitle}';
+                      final title = '${bangumiItem.title!} ${item.showTitle}';
                       PageUtils.pmShare(
                         context,
                         content: {
@@ -360,7 +322,7 @@ class BangumiIntroController
                           "headline": title,
                           "source": 16,
                           "thumb": item.cover,
-                          "source_desc": switch (bangumiItem!.type) {
+                          "source_desc": switch (bangumiItem.type) {
                             1 => '番剧',
                             2 => '电影',
                             3 => '纪录片',
@@ -439,8 +401,7 @@ class BangumiIntroController
 
   // 追番
   Future<void> bangumiAdd() async {
-    var result = await VideoHttp.bangumiAdd(
-        seasonId: (loadingState.value as Success).response.seasonId);
+    var result = await VideoHttp.bangumiAdd(seasonId: bangumiItem.seasonId);
     if (result['status']) {
       isFollowed.value = true;
       followStatus.value = 2;
@@ -450,8 +411,7 @@ class BangumiIntroController
 
   // 取消追番
   Future<void> bangumiDel() async {
-    var result = await VideoHttp.bangumiDel(
-        seasonId: (loadingState.value as Success).response.seasonId);
+    var result = await VideoHttp.bangumiDel(seasonId: bangumiItem.seasonId);
     if (result['status']) {
       isFollowed.value = false;
     }
@@ -460,7 +420,7 @@ class BangumiIntroController
 
   Future<void> bangumiUpdate(status) async {
     var result = await VideoHttp.bangumiUpdate(
-      seasonId: [(loadingState.value as Success).response.seasonId],
+      seasonId: [bangumiItem.seasonId],
       status: status,
     );
     if (result['status']) {
@@ -472,7 +432,7 @@ class BangumiIntroController
   Future queryVideoInFolder() async {
     favIds = null;
     var result = await VideoHttp.videoInFolder(
-      mid: userInfo.mid,
+      mid: mid,
       rid: epId, // bangumi
       type: 24, // bangumi
     );
@@ -487,10 +447,7 @@ class BangumiIntroController
   }
 
   bool prevPlay() {
-    late List episodes;
-    if ((loadingState.value as Success).response.episodes != null) {
-      episodes = (loadingState.value as Success).response.episodes!;
-    }
+    List episodes = bangumiItem.episodes!;
     VideoDetailController videoDetailCtr =
         Get.find<VideoDetailController>(tag: Get.arguments['heroTag']);
     int currentIndex =
@@ -516,21 +473,11 @@ class BangumiIntroController
   /// 列表循环或者顺序播放时，自动播放下一个；自动连播时，播放相关视频
   bool nextPlay() {
     try {
-      late List episodes;
+      List episodes = bangumiItem.episodes!;
       VideoDetailController videoDetailCtr =
           Get.find<VideoDetailController>(tag: Get.arguments['heroTag']);
       PlayRepeat playRepeat = videoDetailCtr.plPlayerController.playRepeat;
 
-      if ((loadingState.value as Success<BangumiInfoModel>).response.episodes !=
-          null) {
-        episodes = (loadingState.value as Success<BangumiInfoModel>)
-            .response
-            .episodes!;
-      } else {
-        if (playRepeat == PlayRepeat.autoPlayRelated) {
-          return playRelated();
-        }
-      }
       int currentIndex =
           episodes.indexWhere((e) => e.cid == videoDetailCtr.cid.value);
       int nextIndex = currentIndex + 1;
@@ -539,7 +486,7 @@ class BangumiIntroController
         if (playRepeat == PlayRepeat.listCycle) {
           nextIndex = 0;
         } else if (playRepeat == PlayRepeat.autoPlayRelated) {
-          return playRelated();
+          return false;
         } else {
           return false;
         }
@@ -556,15 +503,10 @@ class BangumiIntroController
     }
   }
 
-  bool playRelated() {
-    SmartDialog.showToast('番剧暂无相关视频');
-    return false;
-  }
-
   // 一键三连
   Future<void> actionOneThree() async {
     feedBack();
-    if (userInfo == null) {
+    if (!isLogin) {
       SmartDialog.showToast('账号未登录');
       return;
     }
@@ -610,7 +552,7 @@ class BangumiIntroController
 
   // 收藏
   void showFavBottomSheet(BuildContext context, {type = 'tap'}) {
-    if (userInfo == null) {
+    if (!isLogin) {
       SmartDialog.showToast('账号未登录');
       return;
     }

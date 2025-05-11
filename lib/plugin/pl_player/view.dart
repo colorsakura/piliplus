@@ -5,7 +5,6 @@ import 'dart:math';
 import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/common/widgets/progress_bar/audio_video_progress_bar.dart';
 import 'package:PiliPlus/common/widgets/progress_bar/segment_progress_bar.dart';
-import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/common/super_resolution_type.dart';
 import 'package:PiliPlus/models/video_detail_res.dart';
 import 'package:PiliPlus/pages/video/controller.dart';
@@ -266,7 +265,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
     bool isSeason = videoIntroController?.videoDetail.value.ugcSeason != null;
     bool isPage = videoIntroController?.videoDetail.value.pages != null &&
         videoIntroController!.videoDetail.value.pages!.length > 1;
-    bool isBangumi = bangumiIntroController?.loadingState.value is Success;
+    bool isBangumi = bangumiIntroController != null;
     bool anySeason = isSeason || isPage || isBangumi;
     double widgetWidth =
         isFullScreen && context.orientation == Orientation.landscape ? 42 : 35;
@@ -508,9 +507,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                   videoIntroController!.videoDetail.value.pages!;
               episodes = pages;
             } else if (isBangumi) {
-              episodes = (bangumiIntroController!.loadingState.value as Success)
-                  .response
-                  .episodes!;
+              episodes = bangumiIntroController!.bangumiItem.episodes!;
             }
             widget.showEpisodes?.call(
               index,

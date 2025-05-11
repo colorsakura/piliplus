@@ -10,7 +10,6 @@ import 'package:PiliPlus/grpc/bilibili/main/community/reply/v1.pb.dart'
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/main.dart';
 import 'package:PiliPlus/models/bangumi/info.dart' as bangumi;
-import 'package:PiliPlus/models/bangumi/info.dart';
 import 'package:PiliPlus/models/common/episode_panel_type.dart';
 import 'package:PiliPlus/models/common/reply/reply_type.dart';
 import 'package:PiliPlus/models/common/search_type.dart';
@@ -103,8 +102,6 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
       videoDetailController.plPlayerController.horizontalPreview;
 
   StreamSubscription? _listenerDetail;
-  StreamSubscription? _listenerLoadingState;
-  StreamSubscription? _listenerCid;
   StreamSubscription? _listenerFS;
 
   Box get setting => GStorage.setting;
@@ -137,23 +134,6 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
     });
     if (videoDetailController.videoType == SearchType.media_bangumi) {
       bangumiIntroController = Get.put(BangumiIntroController(), tag: heroTag);
-      _listenerLoadingState =
-          bangumiIntroController.loadingState.listen((value) {
-        if (!context.mounted) return;
-        if (value is Success<BangumiInfoModel>) {
-          videoPlayerServiceHandler.onVideoDetailChange(
-              value.response, videoDetailController.cid.value, heroTag);
-        }
-      });
-      _listenerCid = videoDetailController.cid.listen((p0) {
-        if (!context.mounted) return;
-        if (bangumiIntroController.loadingState.value is Success) {
-          videoPlayerServiceHandler.onVideoDetailChange(
-              (bangumiIntroController.loadingState.value as Success).response,
-              p0,
-              heroTag);
-        }
-      });
     }
     autoExitFullscreen =
         setting.get(SettingBoxKey.enableAutoExit, defaultValue: true);
@@ -337,8 +317,6 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
   @override
   void dispose() {
     _listenerDetail?.cancel();
-    _listenerLoadingState?.cancel();
-    _listenerCid?.cancel();
     _listenerFS?.cancel();
 
     videoDetailController.skipTimer?.cancel();

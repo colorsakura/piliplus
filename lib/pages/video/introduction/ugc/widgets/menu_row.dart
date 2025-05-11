@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 class MenuRow extends StatelessWidget {
   const MenuRow({
     super.key,
-    this.loadingStatus,
+    this.isLoading,
   });
-  final bool? loadingStatus;
+  final bool? isLoading;
 
   @override
   Widget build(BuildContext context) {
@@ -20,28 +20,28 @@ class MenuRow extends StatelessWidget {
         child: Row(children: [
           ActionRowLineItem(
             onTap: () => {},
-            loadingStatus: loadingStatus,
+            isLoading: isLoading,
             text: '推荐',
             selectStatus: false,
           ),
           const SizedBox(width: 8),
           ActionRowLineItem(
             onTap: () => {},
-            loadingStatus: loadingStatus,
+            isLoading: isLoading,
             text: '弹幕',
             selectStatus: false,
           ),
           const SizedBox(width: 8),
           ActionRowLineItem(
             onTap: () => {},
-            loadingStatus: loadingStatus,
+            isLoading: isLoading,
             text: '评论列表',
             selectStatus: false,
           ),
           const SizedBox(width: 8),
           ActionRowLineItem(
             onTap: () => {},
-            loadingStatus: loadingStatus,
+            isLoading: isLoading,
             text: '播放列表',
             selectStatus: false,
           ),
@@ -51,7 +51,7 @@ class MenuRow extends StatelessWidget {
   }
 
   Widget actionRowLineItem(
-      ThemeData theme, Function? onTap, bool? loadingStatus, String? text,
+      ThemeData theme, Function? onTap, bool? isLoading, String? text,
       {bool selectStatus = false}) {
     return Material(
       color: selectStatus
@@ -78,7 +78,7 @@ class MenuRow extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               AnimatedOpacity(
-                opacity: loadingStatus! ? 0 : 1,
+                opacity: isLoading! ? 0 : 1,
                 duration: const Duration(milliseconds: 200),
                 child: Text(
                   text!,
@@ -103,13 +103,13 @@ class ActionRowLineItem extends StatelessWidget {
     required this.selectStatus,
     this.onTap,
     this.text,
-    this.loadingStatus = false,
+    this.isLoading = false,
     this.iconData,
     this.icon,
   });
   final bool selectStatus;
   final Function? onTap;
-  final bool? loadingStatus;
+  final bool? isLoading;
   final String? text;
   final IconData? iconData;
   final Widget? icon;
@@ -152,7 +152,7 @@ class ActionRowLineItem extends StatelessWidget {
               else if (icon != null)
                 icon!,
               AnimatedOpacity(
-                opacity: loadingStatus! ? 0 : 1,
+                opacity: isLoading! ? 0 : 1,
                 duration: const Duration(milliseconds: 200),
                 child: Text(
                   text!,

@@ -71,7 +71,7 @@ class _VideoIntroPanelState extends State<VideoIntroPanel>
     return Obx(
       () => videoIntroController.videoDetail.value.title == null
           ? VideoInfo(
-              loadingStatus: true,
+              isLoading: true,
               videoIntroController: videoIntroController,
               heroTag: widget.heroTag,
               showAiBottomSheet: widget.showAiBottomSheet,
@@ -80,7 +80,7 @@ class _VideoIntroPanelState extends State<VideoIntroPanel>
             )
           : VideoInfo(
               key: ValueKey(widget.heroTag),
-              loadingStatus: false,
+              isLoading: false,
               videoIntroController: videoIntroController,
               heroTag: widget.heroTag,
               showAiBottomSheet: widget.showAiBottomSheet,
@@ -92,7 +92,7 @@ class _VideoIntroPanelState extends State<VideoIntroPanel>
 }
 
 class VideoInfo extends StatefulWidget {
-  final bool loadingStatus;
+  final bool isLoading;
   final String heroTag;
   final Function showAiBottomSheet;
   final Function showEpisodes;
@@ -101,7 +101,7 @@ class VideoInfo extends StatefulWidget {
 
   const VideoInfo({
     super.key,
-    this.loadingStatus = false,
+    this.isLoading = false,
     required this.heroTag,
     required this.showAiBottomSheet,
     required this.showEpisodes,
@@ -236,7 +236,7 @@ class _VideoInfoState extends State<VideoInfo> {
 
   // 视频介绍
   void showIntroDetail() {
-    if (widget.loadingStatus) {
+    if (widget.isLoading) {
       return;
     }
     feedBack();
@@ -246,9 +246,8 @@ class _VideoInfoState extends State<VideoInfo> {
   // 用户主页
   void onPushMember() {
     feedBack();
-    int? mid = !widget.loadingStatus
-        ? videoDetail.owner?.mid
-        : videoItem['owner']?.mid;
+    int? mid =
+        !widget.isLoading ? videoDetail.owner?.mid : videoItem['owner']?.mid;
     if (mid != null) {
       if (context.orientation == Orientation.landscape &&
           _horizontalMemberPage) {
@@ -369,7 +368,7 @@ class _VideoInfoState extends State<VideoInfo> {
                               childBuilder: (index) => GestureDetector(
                                 behavior: HitTestBehavior.opaque,
                                 onTap: () {
-                                  int? ownerMid = !widget.loadingStatus
+                                  int? ownerMid = !widget.isLoading
                                       ? videoDetail.owner?.mid
                                       : videoItem['owner']?.mid;
                                   if (videoItem['staff'][index].mid ==
@@ -557,7 +556,7 @@ class _VideoInfoState extends State<VideoInfo> {
                           StatView(
                             context: context,
                             theme: 'gray',
-                            value: Utils.numFormat(!widget.loadingStatus
+                            value: Utils.numFormat(!widget.isLoading
                                 ? videoDetail.stat?.view ?? '-'
                                 : videoItem['stat']?.view ?? '-'),
                             textColor: theme.colorScheme.outline,
@@ -566,7 +565,7 @@ class _VideoInfoState extends State<VideoInfo> {
                           StatDanMu(
                             context: context,
                             theme: 'gray',
-                            value: Utils.numFormat(!widget.loadingStatus
+                            value: Utils.numFormat(!widget.isLoading
                                 ? videoDetail.stat?.danmaku ?? '-'
                                 : videoItem['stat']?.danmu ?? '-'),
                             textColor: theme.colorScheme.outline,
@@ -574,7 +573,7 @@ class _VideoInfoState extends State<VideoInfo> {
                           const SizedBox(width: 10),
                           Text(
                             Utils.dateFormat(
-                                !widget.loadingStatus
+                                !widget.isLoading
                                     ? videoDetail.pubdate
                                     : videoItem['pubdate'],
                                 formatType: 'detail'),
@@ -769,7 +768,7 @@ class _VideoInfoState extends State<VideoInfo> {
                     actionGrid(context, videoIntroController),
                   ],
                   // 合集
-                  if (!widget.loadingStatus &&
+                  if (!widget.isLoading &&
                       videoDetail.ugcSeason != null &&
                       (context.orientation != Orientation.landscape ||
                           (context.orientation == Orientation.landscape &&
@@ -784,7 +783,7 @@ class _VideoInfoState extends State<VideoInfo> {
                         videoIntroController: videoIntroController,
                       ),
                     ),
-                  if (!widget.loadingStatus &&
+                  if (!widget.isLoading &&
                       videoDetail.pages != null &&
                       videoDetail.pages!.length > 1 &&
                       (context.orientation != Orientation.landscape ||
@@ -857,9 +856,9 @@ class _VideoInfoState extends State<VideoInfo> {
               onLongPress: () =>
                   handleState(videoIntroController.actionOneThree),
               selectStatus: videoIntroController.hasLike.value,
-              loadingStatus: widget.loadingStatus,
+              isLoading: widget.isLoading,
               semanticsLabel: '点赞',
-              text: !widget.loadingStatus
+              text: !widget.isLoading
                   ? Utils.numFormat(videoDetail.stat!.like!)
                   : '-',
               needAnim: true,
@@ -884,7 +883,7 @@ class _VideoInfoState extends State<VideoInfo> {
               selectIcon: const Icon(FontAwesomeIcons.solidThumbsDown),
               onTap: () => handleState(videoIntroController.actionDislikeVideo),
               selectStatus: videoIntroController.hasDislike.value,
-              loadingStatus: widget.loadingStatus,
+              isLoading: widget.isLoading,
               semanticsLabel: '点踩',
               text: "点踩",
             ),
@@ -896,9 +895,9 @@ class _VideoInfoState extends State<VideoInfo> {
               selectIcon: const Icon(FontAwesomeIcons.b),
               onTap: () => handleState(videoIntroController.actionCoinVideo),
               selectStatus: videoIntroController.hasCoin,
-              loadingStatus: widget.loadingStatus,
+              isLoading: widget.isLoading,
               semanticsLabel: '投币',
-              text: !widget.loadingStatus
+              text: !widget.isLoading
                   ? Utils.numFormat(videoDetail.stat!.coin!)
                   : '-',
               needAnim: true,
@@ -913,9 +912,9 @@ class _VideoInfoState extends State<VideoInfo> {
               onLongPress: () => videoIntroController
                   .showFavBottomSheet(context, type: 'longPress'),
               selectStatus: videoIntroController.hasFav.value,
-              loadingStatus: widget.loadingStatus,
+              isLoading: widget.isLoading,
               semanticsLabel: '收藏',
-              text: !widget.loadingStatus
+              text: !widget.isLoading
                   ? Utils.numFormat(videoDetail.stat!.favorite!)
                   : '-',
               needAnim: true,
@@ -927,7 +926,7 @@ class _VideoInfoState extends State<VideoInfo> {
               selectIcon: const Icon(FontAwesomeIcons.solidClock),
               onTap: () => handleState(videoIntroController.viewLater),
               selectStatus: videoIntroController.hasLater.value,
-              loadingStatus: widget.loadingStatus,
+              isLoading: widget.isLoading,
               semanticsLabel: '再看',
               text: '再看',
             ),
@@ -936,9 +935,9 @@ class _VideoInfoState extends State<VideoInfo> {
             icon: const Icon(FontAwesomeIcons.shareFromSquare),
             onTap: () => videoIntroController.actionShareVideo(context),
             selectStatus: false,
-            loadingStatus: widget.loadingStatus,
+            isLoading: widget.isLoading,
             semanticsLabel: '分享',
-            text: !widget.loadingStatus
+            text: !widget.isLoading
                 ? Utils.numFormat(videoDetail.stat!.share!)
                 : '分享',
           ),
@@ -958,9 +957,8 @@ class _VideoInfoState extends State<VideoInfo> {
           icon: const Icon(FontAwesomeIcons.thumbsUp),
           onTap: () => handleState(videoIntroController.actionLikeVideo),
           selectStatus: videoIntroController.hasLike.value,
-          loadingStatus: widget.loadingStatus,
-          text:
-              !widget.loadingStatus ? videoDetail.stat!.like!.toString() : '-',
+          isLoading: widget.isLoading,
+          text: !widget.isLoading ? videoDetail.stat!.like!.toString() : '-',
         ),
       ),
       const SizedBox(width: 8),
@@ -969,9 +967,8 @@ class _VideoInfoState extends State<VideoInfo> {
           icon: const Icon(FontAwesomeIcons.b),
           onTap: () => handleState(videoIntroController.actionCoinVideo),
           selectStatus: videoIntroController.hasCoin,
-          loadingStatus: widget.loadingStatus,
-          text:
-              !widget.loadingStatus ? videoDetail.stat!.coin!.toString() : '-',
+          isLoading: widget.isLoading,
+          text: !widget.isLoading ? videoDetail.stat!.coin!.toString() : '-',
         ),
       ),
       const SizedBox(width: 8),
@@ -982,10 +979,9 @@ class _VideoInfoState extends State<VideoInfo> {
           onLongPress: () => videoIntroController.showFavBottomSheet(context,
               type: 'longPress'),
           selectStatus: videoIntroController.hasFav.value,
-          loadingStatus: widget.loadingStatus,
-          text: !widget.loadingStatus
-              ? videoDetail.stat!.favorite!.toString()
-              : '-',
+          isLoading: widget.isLoading,
+          text:
+              !widget.isLoading ? videoDetail.stat!.favorite!.toString() : '-',
         ),
       ),
       const SizedBox(width: 8),
@@ -995,15 +991,15 @@ class _VideoInfoState extends State<VideoInfo> {
           videoDetailCtr.tabCtr.animateTo(1);
         },
         selectStatus: false,
-        loadingStatus: widget.loadingStatus,
-        text: !widget.loadingStatus ? videoDetail.stat!.reply!.toString() : '-',
+        isLoading: widget.isLoading,
+        text: !widget.isLoading ? videoDetail.stat!.reply!.toString() : '-',
       ),
       const SizedBox(width: 8),
       ActionRowItem(
         icon: const Icon(FontAwesomeIcons.share),
         onTap: () => videoIntroController.actionShareVideo(context),
         selectStatus: false,
-        loadingStatus: widget.loadingStatus,
+        isLoading: widget.isLoading,
         text: '转发',
       ),
     ]);

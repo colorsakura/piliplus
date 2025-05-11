@@ -12,7 +12,7 @@ class ActionItem extends StatefulWidget {
   final Icon? selectIcon;
   final Function? onTap;
   final Function? onLongPress;
-  final bool? loadingStatus;
+  final bool? isLoading;
   final String? text;
   final bool selectStatus;
   final String semanticsLabel;
@@ -27,7 +27,7 @@ class ActionItem extends StatefulWidget {
     this.selectIcon,
     this.onTap,
     this.onLongPress,
-    this.loadingStatus,
+    this.isLoading,
     this.text,
     this.selectStatus = false,
     this.needAnim = false,
@@ -183,7 +183,7 @@ class ActionItemState extends State<ActionItem>
               ),
               if (widget.text != null)
                 AnimatedOpacity(
-                  opacity: widget.loadingStatus! ? 0 : 1,
+                  opacity: widget.isLoading! ? 0 : 1,
                   duration: const Duration(milliseconds: 200),
                   child: AnimatedSwitcher(
                     duration: const Duration(milliseconds: 300),
