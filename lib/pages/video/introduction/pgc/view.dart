@@ -46,7 +46,7 @@ class _BangumiIntroPanelState extends State<BangumiIntroPanel>
   late final _favKey = GlobalKey<ActionItemState>();
 
   bool isProcessing = false;
-  Future<void> handleState(Future Function() action) async {
+  Future<void> handleState(FutureOr Function() action) async {
     if (isProcessing.not) {
       isProcessing = true;
       await action();
