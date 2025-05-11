@@ -9,7 +9,6 @@ import 'package:PiliPlus/pages/common/common_slide_page.dart';
 import 'package:PiliPlus/pages/video/reply/widgets/reply_item_grpc.dart';
 import 'package:PiliPlus/pages/video/reply_new/view.dart';
 import 'package:PiliPlus/pages/video/reply_reply/controller.dart';
-import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:PiliPlus/utils/request_utils.dart';
 import 'package:PiliPlus/utils/utils.dart';
@@ -411,11 +410,7 @@ class _VideoReplyReplyPanelState
                   bottom: MediaQuery.of(context).padding.bottom),
               height: 125,
               child: Text(
-                _videoReplyReplyController.isEnd.not
-                    ? '加载中...'
-                    : response.isEmpty
-                        ? '还没有评论'
-                        : '没有更多了',
+                _videoReplyReplyController.isEnd ? '没有更多了' : '加载中...',
                 style: TextStyle(
                   fontSize: 12,
                   color: theme.colorScheme.outline,

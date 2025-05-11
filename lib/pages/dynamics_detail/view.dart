@@ -791,11 +791,7 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
                         bottom: MediaQuery.of(context).padding.bottom),
                     height: 125,
                     child: Text(
-                      _dynamicDetailController.isEnd.not
-                          ? '加载中...'
-                          : response.isEmpty
-                              ? '还没有评论'
-                              : '没有更多了',
+                      _dynamicDetailController.isEnd ? '没有更多了' : '加载中...',
                       style: TextStyle(
                         fontSize: 12,
                         color: theme.colorScheme.outline,

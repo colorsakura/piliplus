@@ -9,7 +9,6 @@ import 'package:PiliPlus/models/common/reply/reply_sort_type.dart';
 import 'package:PiliPlus/models/common/reply/reply_type.dart';
 import 'package:PiliPlus/pages/video/reply/controller.dart';
 import 'package:PiliPlus/pages/video/reply/widgets/reply_item_grpc.dart';
-import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/feed_back.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -214,11 +213,7 @@ class _VideoReplyPanelState extends State<VideoReplyPanel>
                     padding: EdgeInsets.only(bottom: bottom),
                     height: bottom + 100,
                     child: Text(
-                      _videoReplyController.isEnd.not
-                          ? '加载中...'
-                          : response.isEmpty
-                              ? '还没有评论'
-                              : '没有更多了',
+                      _videoReplyController.isEnd ? '没有更多了' : '加载中...',
                       style: TextStyle(
                         fontSize: 12,
                         color: theme.colorScheme.outline,

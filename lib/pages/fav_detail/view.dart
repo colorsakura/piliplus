@@ -379,7 +379,7 @@ class _FavDetailPageState extends State<FavDetailPage> {
                         height: 60,
                         alignment: Alignment.center,
                         child: Text(
-                          _favDetailController.isEnd.not ? '加载中...' : '没有更多了',
+                          _favDetailController.isEnd ? '没有更多了' : '加载中...',
                           style: TextStyle(
                             color: theme.colorScheme.outline,
                             fontSize: 13,

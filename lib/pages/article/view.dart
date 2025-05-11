@@ -556,7 +556,7 @@ class _ArticlePageState extends State<ArticlePage>
                         bottom: MediaQuery.of(context).padding.bottom),
                     height: 125,
                     child: Text(
-                      _articleCtr.isEnd.not ? '加载中...' : '没有更多了',
+                      _articleCtr.isEnd ? '没有更多了' : '加载中...',
                       style: TextStyle(
                         fontSize: 12,
                         color: theme.colorScheme.outline,
