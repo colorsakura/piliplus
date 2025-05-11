@@ -8,9 +8,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class ContactPage extends StatefulWidget {
-  const ContactPage({super.key, this.isFromSelct = true});
+  const ContactPage({super.key, this.isFromSelect = true});
 
-  final bool isFromSelct;
+  final bool isFromSelect;
 
   @override
   State<ContactPage> createState() => _ContactPageState();
@@ -49,7 +49,7 @@ class _ContactPageState extends State<ContactPage>
               UserModel? userModel = await Get.dialog(
                 FollowSearchPage(
                   mid: mid,
-                  isFromSelct: widget.isFromSelct,
+                  isFromSelect: widget.isFromSelect,
                 ),
                 useSafeArea: false,
                 transitionDuration: const Duration(milliseconds: 120),
@@ -68,11 +68,11 @@ class _ContactPageState extends State<ContactPage>
         children: [
           FollowChildPage(
             mid: mid,
-            onSelect: widget.isFromSelct ? onSelect : null,
+            onSelect: widget.isFromSelect ? onSelect : null,
           ),
           FansPage(
             mid: mid,
-            onSelect: widget.isFromSelct ? onSelect : null,
+            onSelect: widget.isFromSelect ? onSelect : null,
           ),
         ],
       ),

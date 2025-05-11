@@ -180,9 +180,9 @@ extension ThreeDotItemTypeExt on ThreeDotItemType {
           },
         );
       case ThreeDotItemType.THREE_DOT_ITEM_TYPE_CONTACTS:
-        Get.to(const ContactPage(isFromSelct: false));
+        Get.to(const ContactPage(isFromSelect: false));
       default:
-        SmartDialog.showToast(name);
+        SmartDialog.showToast('TODO: $name');
     }
   }
 }

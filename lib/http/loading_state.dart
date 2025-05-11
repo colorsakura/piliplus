@@ -72,6 +72,6 @@ class Error extends LoadingState<Never> {
 
   @override
   String toString() {
-    return 'ApiException: $errMsg';
+    return errMsg ?? '';
   }
 }
