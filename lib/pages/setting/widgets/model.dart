@@ -1434,7 +1434,9 @@ List<SettingsModel> get recommendSettings => [
         leading: const Icon(Icons.favorite_border_outlined),
         setKey: SettingBoxKey.exemptFilterForFollowed,
         defaultVal: true,
-        onChanged: (_) => {RecommendFilter.update},
+        onChanged: (value) {
+          RecommendFilter.exemptFilterForFollowed = value;
+        },
       ),
       SettingsModel(
         settingsType: SettingsType.sw1tch,
@@ -1443,7 +1445,9 @@ List<SettingsModel> get recommendSettings => [
         leading: const Icon(Icons.explore_outlined),
         setKey: SettingBoxKey.applyFilterToRelatedVideos,
         defaultVal: true,
-        onChanged: (_) => {RecommendFilter.update},
+        onChanged: (value) {
+          RecommendFilter.applyFilterToRelatedVideos = value;
+        },
       ),
     ];
 
