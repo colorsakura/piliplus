@@ -453,9 +453,7 @@ class _VideoReplyReplyPanelState
         _onReply(replyItem, index);
       },
       onDelete: (subIndex) {
-        _videoReplyReplyController.loadingState.value.data!.removeAt(index);
-        _videoReplyReplyController.count.value -= 1;
-        _videoReplyReplyController.loadingState.refresh();
+        _videoReplyReplyController.onRemove(index, null);
       },
       upMid: _videoReplyReplyController.upMid,
       showDialogue: () {
