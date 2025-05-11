@@ -5,8 +5,8 @@ import 'package:PiliPlus/http/member.dart';
 import 'package:PiliPlus/http/video.dart';
 import 'package:PiliPlus/models/common/member/tab_type.dart';
 import 'package:PiliPlus/models/space/data.dart';
-import 'package:PiliPlus/models/space/item.dart';
 import 'package:PiliPlus/models/space/tab2.dart';
+import 'package:PiliPlus/models/space/tab_item.dart';
 import 'package:PiliPlus/pages/common/common_data_controller.dart';
 import 'package:PiliPlus/utils/request_utils.dart';
 import 'package:PiliPlus/utils/storage.dart';
@@ -123,12 +123,12 @@ class MemberController extends CommonDataController<SpaceData, SpaceData?>
 
   @override
   bool handleError(String? errMsg) {
-    tab2 = [
+    tab2 = const [
       Tab2(title: '动态', param: 'dynamic'),
       Tab2(
         title: '投稿',
         param: 'contribute',
-        items: [SpaceItem(title: '视频', param: 'video')],
+        items: [SpaceTabItem(title: '视频', param: 'video')],
       ),
       Tab2(title: '收藏', param: 'favorite'),
       Tab2(title: '追番', param: 'bangumi'),

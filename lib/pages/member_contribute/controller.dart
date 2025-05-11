@@ -1,8 +1,8 @@
 import 'dart:math';
 
 import 'package:PiliPlus/http/loading_state.dart';
-import 'package:PiliPlus/models/space/item.dart';
 import 'package:PiliPlus/models/space/tab2.dart';
+import 'package:PiliPlus/models/space/tab_item.dart';
 import 'package:PiliPlus/pages/common/common_data_controller.dart';
 import 'package:PiliPlus/pages/member/controller.dart';
 import 'package:PiliPlus/utils/extension.dart';
@@ -21,7 +21,7 @@ class MemberContributeCtr extends CommonDataController
   TabController? tabController;
   List<Tab>? tabs;
   late final _ctr = Get.find<MemberController>(tag: heroTag);
-  List<SpaceItem>? items;
+  List<SpaceTabItem>? items;
 
   @override
   void onInit() {
@@ -34,7 +34,7 @@ class MemberContributeCtr extends CommonDataController
         // show if exist
         if (_ctr.hasSeasonOrSeries == true) {
           items!.add(
-            SpaceItem(
+            const SpaceTabItem(
               param: 'ugcSeason',
               title: '全部合集/列表',
             ),

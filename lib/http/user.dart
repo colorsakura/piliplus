@@ -241,7 +241,7 @@ class UserHttp {
     );
     if (res.data['code'] == 0) {
       if (res.data['data']['count'] == 0) {
-        return Success({'count': 0});
+        return const Success({'count': 0});
       }
       List<HotVideoItemModel> list = <HotVideoItemModel>[];
       if (res.data['data']?['list'] != null) {

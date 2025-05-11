@@ -21,7 +21,7 @@ class SubController
   @override
   Future<void> queryData([bool isRefresh = true]) {
     if (mid == 0) {
-      loadingState.value = Error('账号未登录');
+      loadingState.value = const Error('账号未登录');
       return Future.value();
     }
     return super.queryData(isRefresh);

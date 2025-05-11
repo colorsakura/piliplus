@@ -1,4 +1,3 @@
-import 'package:PiliPlus/models/space/filter.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'item.g.dart';
@@ -47,8 +46,6 @@ class SpaceItem {
   bool? state;
   String? bvid;
   int? videos;
-  // @JsonKey(name: 'three_point')
-  // List<ThreePoint>? threePoint;
   @JsonKey(name: 'first_cid')
   int? firstCid;
   @JsonKey(name: 'view_content')
@@ -57,7 +54,6 @@ class SpaceItem {
   int? iconType;
   @JsonKey(name: 'publish_time_text')
   String? publishTimeText;
-  List<SpaceTabFilter>? filter;
 
   SpaceItem({
     this.title,
@@ -89,12 +85,10 @@ class SpaceItem {
     this.state,
     this.bvid,
     this.videos,
-    // this.threePoint,
     this.firstCid,
     this.viewContent,
     this.iconType,
     this.publishTimeText,
-    this.filter,
   });
 
   factory SpaceItem.fromJson(Map<String, dynamic> json) => _$ItemFromJson(json);

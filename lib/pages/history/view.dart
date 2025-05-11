@@ -90,7 +90,7 @@ class _HistoryPageState extends State<HistoryPage>
                                     _historyController.baseCtr
                                         .onClearHistory(context, () {
                                       _historyController.loadingState.value =
-                                          Success(null);
+                                          const Success(null);
                                       if (_historyController.tabController !=
                                           null) {
                                         for (final item
@@ -99,7 +99,7 @@ class _HistoryPageState extends State<HistoryPage>
                                             Get.find<HistoryController>(
                                                     tag: item.type)
                                                 .loadingState
-                                                .value = Success(null);
+                                                .value = const Success(null);
                                           } catch (_) {}
                                         }
                                       }

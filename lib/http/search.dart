@@ -76,7 +76,7 @@ class SearchHttp {
       queryParameters: params,
     );
     if (res.data is! Map) {
-      return Error('没有相关数据');
+      return const Error('没有相关数据');
     }
     if (res.data['code'] == 0) {
       dynamic data;
@@ -144,7 +144,7 @@ class SearchHttp {
       queryParameters: params,
     );
     if (res.data is! Map) {
-      return Error('没有相关数据');
+      return const Error('没有相关数据');
     }
     if (res.data['code'] == 0) {
       try {

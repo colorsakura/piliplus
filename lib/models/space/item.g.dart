@@ -36,16 +36,10 @@ SpaceItem _$ItemFromJson(Map<String, dynamic> json) => SpaceItem(
       state: json['state'] as bool?,
       bvid: json['bvid'] as String?,
       videos: (json['videos'] as num?)?.toInt(),
-      // threePoint: (json['three_point'] as List<dynamic>?)
-      //     ?.map((e) => ThreePoint.fromJson(e as Map<String, dynamic>))
-      //     .toList(),
       firstCid: (json['first_cid'] as num?)?.toInt(),
       viewContent: json['view_content'] as String?,
       iconType: (json['icon_type'] as num?)?.toInt(),
       publishTimeText: json['publish_time_text'] as String?,
-      filter: (json['filter'] as List?)
-          ?.map((e) => SpaceTabFilter.fromJson(e))
-          .toList(),
     );
 
 Map<String, dynamic> _$ItemToJson(SpaceItem instance) => <String, dynamic>{
@@ -78,7 +72,6 @@ Map<String, dynamic> _$ItemToJson(SpaceItem instance) => <String, dynamic>{
       'state': instance.state,
       'bvid': instance.bvid,
       'videos': instance.videos,
-      // 'three_point': instance.threePoint,
       'first_cid': instance.firstCid,
       'view_content': instance.viewContent,
       'icon_type': instance.iconType,

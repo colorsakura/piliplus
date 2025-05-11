@@ -63,7 +63,7 @@ abstract class CommonWhisperController<R>
   Future<void> onDeleteList() async {
     var res = await ImGrpc.deleteSessionList(pageType: sessionPageType);
     if (res.isSuccess) {
-      loadingState.value = Success(null);
+      loadingState.value = const Success(null);
     } else {
       res.toast();
     }

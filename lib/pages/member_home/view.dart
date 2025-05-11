@@ -5,7 +5,7 @@ import 'package:PiliPlus/common/widgets/loading_widget/loading_widget.dart';
 import 'package:PiliPlus/common/widgets/video_card/video_card_v_member_home.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/space/data.dart';
-import 'package:PiliPlus/models/space/item.dart';
+import 'package:PiliPlus/models/space/tab_item.dart';
 import 'package:PiliPlus/pages/bangumi/widgets/bangumi_card_v_member_home.dart';
 import 'package:PiliPlus/pages/member/controller.dart';
 import 'package:PiliPlus/pages/member_article/widget/item.dart';
@@ -257,7 +257,7 @@ class _MemberHomeState extends State<MemberHome>
                     _ctr.tab2!.indexWhere((item) => item.param == param);
                 if (index != -1) {
                   if (['video', 'article', 'audio'].contains(param1)) {
-                    List<SpaceItem> items = _ctr.tab2!
+                    List<SpaceTabItem> items = _ctr.tab2!
                         .firstWhere((item) => item.param == param)
                         .items!;
                     int index1 =
