@@ -2,7 +2,6 @@ import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
 import 'package:PiliPlus/models/common/image_type.dart';
 import 'package:PiliPlus/models/dynamics/up.dart';
 import 'package:PiliPlus/pages/dynamics/controller.dart';
-import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/feed_back.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
@@ -20,16 +19,14 @@ class UpPanel extends StatefulWidget {
 }
 
 class _UpPanelState extends State<UpPanel> {
-  List<UpItem> get upList =>
-      widget.dynamicsController.upData.value.upList ?? <UpItem>[];
-  List<LiveUserItem> get liveList =>
-      widget.dynamicsController.upData.value.liveUsers?.items ??
-      <LiveUserItem>[];
+  List<UpItem>? get upList => widget.dynamicsController.upData.value.upList;
+  List<LiveUserItem>? get liveList =>
+      widget.dynamicsController.upData.value.liveUsers?.items;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    if (widget.dynamicsController.isLogin.value.not) {
+    if (!widget.dynamicsController.isLogin.value) {
       return const SizedBox.shrink();
     }
     return CustomScrollView(
@@ -47,12 +44,8 @@ class _UpPanelState extends State<UpPanel> {
                 children: [
                   const SizedBox(height: 12),
                   Text(
-                    'Live(${liveList.length})',
-                    style: const TextStyle(
-                      fontSize: 13,
-                    ),
-                    semanticsLabel:
-                        '${widget.dynamicsController.showLiveItems ? '展开' : '收起'}直播中的${liveList.length}个Up',
+                    'Live(${widget.dynamicsController.upData.value.liveUsers?.count})',
+                    style: const TextStyle(fontSize: 13),
                   ),
                   Icon(
                     widget.dynamicsController.showLiveItems
@@ -72,11 +65,12 @@ class _UpPanelState extends State<UpPanel> {
           ),
         ),
         const SliverToBoxAdapter(child: SizedBox(height: 10)),
-        if (widget.dynamicsController.showLiveItems && liveList.isNotEmpty)
+        if (widget.dynamicsController.showLiveItems &&
+            liveList?.isNotEmpty == true)
           SliverList.builder(
-            itemCount: liveList.length,
+            itemCount: liveList!.length,
             itemBuilder: (context, index) {
-              return upItemBuild(theme, liveList[index]);
+              return upItemBuild(theme, liveList![index]);
             },
           ),
         SliverToBoxAdapter(
@@ -92,11 +86,11 @@ class _UpPanelState extends State<UpPanel> {
             ),
           ),
         ),
-        if (upList.isNotEmpty)
+        if (upList?.isNotEmpty == true)
           SliverList.builder(
-            itemCount: upList.length,
+            itemCount: upList!.length,
             itemBuilder: (context, index) {
-              return upItemBuild(theme, upList[index]);
+              return upItemBuild(theme, upList![index]);
             },
           ),
         const SliverToBoxAdapter(child: SizedBox(height: 200)),

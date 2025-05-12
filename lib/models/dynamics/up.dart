@@ -30,7 +30,7 @@ class LiveUsers {
   List<LiveUserItem>? items;
 
   LiveUsers.fromJson(Map<String, dynamic> json) {
-    count = json['count'];
+    count = json['count'] ?? 0;
     group = json['group'];
     items = (json['items'] as List?)
         ?.map<LiveUserItem>((e) => LiveUserItem.fromJson(e))
