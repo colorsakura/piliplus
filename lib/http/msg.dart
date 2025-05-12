@@ -581,4 +581,30 @@ class MsgHttp {
       return {'status': false, 'msg': res.data['message']};
     }
   }
+
+  static Future setMsgDnd({
+    required uid,
+    required int setting,
+    required dndUid,
+  }) async {
+    final csrf = Accounts.main.csrf;
+    var res = await Request().post(
+      Api.setMsgDnd,
+      data: {
+        'uid': uid,
+        'setting': setting,
+        'dnd_uid': dndUid,
+        'build': 0,
+        'mobi_app': 'web',
+        'csrf_token': csrf,
+        'csrf': csrf,
+      },
+      options: Options(contentType: Headers.formUrlEncodedContentType),
+    );
+    if (res.data['code'] == 0) {
+      return {'status': true};
+    } else {
+      return {'status': false, 'msg': res.data['message']};
+    }
+  }
 }

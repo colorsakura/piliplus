@@ -321,12 +321,14 @@ class _LikeMePageState extends State<LikeMePage> {
               height: 45,
               src: item.item!.image,
             ),
-          if (item.noticeState == 1)
+          if (item.noticeState == 1) ...[
+            if (item.item?.image?.isNotEmpty == true) const SizedBox(width: 4),
             Icon(
               size: 18,
               Icons.notifications_off,
               color: theme.colorScheme.outline,
             ),
+          ],
         ],
       ),
     );

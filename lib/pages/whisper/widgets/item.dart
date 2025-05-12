@@ -8,6 +8,7 @@ import 'package:PiliPlus/models/common/badge_type.dart';
 import 'package:PiliPlus/pages/whisper_secondary/view.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/utils.dart';
+import 'package:fixnum/fixnum.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
@@ -17,11 +18,13 @@ class WhisperSessionItem extends StatelessWidget {
     super.key,
     required this.item,
     required this.onSetTop,
+    required this.onSetMute,
     required this.onRemove,
   });
 
   final Session item;
   final Function(bool isTop, SessionId id) onSetTop;
+  final Function(bool isMuted, Int64 talkerUid) onSetMute;
   final ValueChanged<int?> onRemove;
 
   @override
@@ -42,33 +45,39 @@ class WhisperSessionItem extends StatelessWidget {
             return AlertDialog(
               clipBehavior: Clip.hardEdge,
               contentPadding: const EdgeInsets.symmetric(vertical: 12),
-              content: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  ListTile(
-                    dense: true,
-                    onTap: () {
-                      Get.back();
-                      onSetTop(item.isPinned, item.id);
-                    },
-                    title: Text(
-                      item.isPinned ? '移除置顶' : '置顶',
-                      style: const TextStyle(fontSize: 14),
-                    ),
-                  ),
-                  if (item.id.privateId.hasTalkerUid())
+              content: DefaultTextStyle(
+                style: const TextStyle(fontSize: 14),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
                     ListTile(
                       dense: true,
                       onTap: () {
                         Get.back();
-                        onRemove(item.id.privateId.talkerUid.toInt());
+                        onSetTop(item.isPinned, item.id);
                       },
-                      title: const Text(
-                        '删除',
-                        style: TextStyle(fontSize: 14),
-                      ),
+                      title: Text(item.isPinned ? '移除置顶' : '置顶'),
                     ),
-                ],
+                    if (item.id.privateId.hasTalkerUid())
+                      ListTile(
+                        dense: true,
+                        onTap: () {
+                          Get.back();
+                          onSetMute(item.isMuted, item.id.privateId.talkerUid);
+                        },
+                        title: Text('${item.isMuted ? '关闭' : '开启'}免打扰'),
+                      ),
+                    if (item.id.privateId.hasTalkerUid())
+                      ListTile(
+                        dense: true,
+                        onTap: () {
+                          Get.back();
+                          onRemove(item.id.privateId.talkerUid.toInt());
+                        },
+                        title: const Text('删除'),
+                      ),
+                  ],
+                ),
               ),
             );
           },
@@ -216,16 +225,28 @@ class WhisperSessionItem extends StatelessWidget {
         style: theme.textTheme.labelMedium!
             .copyWith(color: theme.colorScheme.outline),
       ),
-      trailing: item.hasTimestamp()
-          ? Text(
+      trailing: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (item.isMuted) ...[
+            Icon(
+              size: 16,
+              Icons.notifications_off,
+              color: theme.colorScheme.outline,
+            ),
+            if (item.hasTimestamp()) const SizedBox(width: 4),
+          ],
+          if (item.hasTimestamp())
+            Text(
               Utils.dateFormat((item.timestamp ~/ 1000000).toInt(),
                   formatType: "day"),
               style: TextStyle(
                 fontSize: 12,
                 color: theme.colorScheme.outline,
               ),
-            )
-          : null,
+            ),
+        ],
+      ),
     );
   }
 }

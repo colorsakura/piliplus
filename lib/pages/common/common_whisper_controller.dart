@@ -4,6 +4,8 @@ import 'package:PiliPlus/grpc/im.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/http/msg.dart';
 import 'package:PiliPlus/pages/common/common_list_controller.dart';
+import 'package:PiliPlus/utils/storage.dart';
+import 'package:fixnum/fixnum.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 
 abstract class CommonWhisperController<R>
@@ -37,6 +39,22 @@ abstract class CommonWhisperController<R>
       SmartDialog.showToast('${isTop ? '移除' : ''}置顶成功');
     } else {
       res.toast();
+    }
+  }
+
+  Future<void> onSetMute(int index, bool isMuted, Int64 talkerUid) async {
+    var res = await MsgHttp.setMsgDnd(
+      uid: Accounts.main.mid,
+      setting: isMuted ? 0 : 1,
+      dndUid: talkerUid,
+    );
+    if (res['status']) {
+      loadingState
+        ..value.data![index].isMuted = !isMuted
+        ..refresh();
+      SmartDialog.showToast('操作成功');
+    } else {
+      SmartDialog.showToast(res['msg']);
     }
   }
 

@@ -18,8 +18,8 @@ class _NavigationbarSetPageState extends State<NavigationBarSetPage> {
   void initState() {
     super.initState();
     defaultNavTabs = defaultNavigationBars;
-    navBarSort =
-        GStorage.setting.get(SettingBoxKey.navBarSort, defaultValue: [0, 1, 2]);
+    navBarSort = List<int>.from(GStorage.setting
+        .get(SettingBoxKey.navBarSort, defaultValue: [0, 1, 2]));
     // 对 tabData 进行排序
     defaultNavTabs.sort((a, b) {
       int indexA = navBarSort.indexOf(a['id']);

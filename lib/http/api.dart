@@ -831,4 +831,7 @@ class Api {
   static const String spaceOpus = '/x/polymer/web-dynamic/v1/opus/feed/space';
 
   static const String articleList = '/x/article/list/web/articles';
+
+  static const String setMsgDnd =
+      '${HttpString.tUrl}/link_setting/v1/link_setting/set_msg_dnd';
 }

@@ -108,6 +108,8 @@ class _WhisperPageState extends State<WhisperPage> {
                   item: response[index],
                   onSetTop: (isTop, id) =>
                       _controller.onSetTop(index, isTop, id),
+                  onSetMute: (isMuted, talkerUid) =>
+                      _controller.onSetMute(index, isMuted, talkerUid),
                   onRemove: (talkerId) => _controller.onRemove(index, talkerId),
                 );
               },
