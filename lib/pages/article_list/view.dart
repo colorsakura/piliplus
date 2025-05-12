@@ -195,7 +195,7 @@ class _ArticleListPageState extends State<ArticleListPage> {
           tooltip: '浏览器打开',
           onPressed: () {
             PageUtils.inAppWebview(
-                '${HttpString.baseUrl}/read/readlist/rl${_controller.id}');
+                '${HttpString.baseUrl}/read/mobile-readlist/rl${_controller.id}');
           },
           icon: const Icon(Icons.open_in_browser_outlined, size: 19),
         )

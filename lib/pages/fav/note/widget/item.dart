@@ -55,29 +55,28 @@ class FavNoteItem extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Expanded(
-                      child: Text(
-                        item.title ?? '',
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                          height: 1.4,
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
-                        ),
+                    Text(
+                      item.title ?? '',
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                        height: 1.4,
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
+                    const Spacer(),
                     Text(
                       item.summary ?? '',
                       maxLines: 1,
                       style: TextStyle(
-                        fontSize: 13,
+                        fontSize: 14,
                         height: 1,
                         color: theme.colorScheme.outline,
                         overflow: TextOverflow.clip,
                       ),
                     ),
-                    const SizedBox(height: 3),
+                    const Spacer(),
                     Text(
                       item.message ?? '',
                       maxLines: 1,
