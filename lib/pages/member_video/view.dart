@@ -63,7 +63,7 @@ class _MemberVideoState extends State<MemberVideo>
           onRefresh: _controller.onRefresh,
           child: CustomScrollView(
             // physics: PositionRetainedScrollPhysics(
-            //   shouldRetain: _controller.isLocating == true,
+            //   shouldRetain: _controller.isLocating.value == true,
             //   parent: const ClampingScrollPhysics(),
             // ),
             slivers: [
@@ -78,26 +78,29 @@ class _MemberVideoState extends State<MemberVideo>
           ),
         ),
         if (widget.type == ContributeType.video &&
-            _controller.fromViewAid?.isNotEmpty == true &&
-            _controller.isLocating != true)
-          Positioned(
-            right: 15,
-            bottom: 15,
-            child: SafeArea(
-              top: false,
-              left: false,
-              child: FloatingActionButton.extended(
-                onPressed: () {
-                  _controller
-                    ..isLocating = true
-                    ..lastAid = _controller.fromViewAid
-                    ..page = 0
-                    ..loadingState.value = LoadingState.loading()
-                    ..queryData();
-                },
-                label: const Text('定位至上次观看'),
-              ),
-            ),
+            _controller.fromViewAid?.isNotEmpty == true)
+          Obx(
+            () => _controller.isLocating.value != true
+                ? Positioned(
+                    right: 15,
+                    bottom: 15,
+                    child: SafeArea(
+                      top: false,
+                      left: false,
+                      child: FloatingActionButton.extended(
+                        onPressed: () {
+                          _controller
+                            ..isLocating.value = true
+                            ..lastAid = _controller.fromViewAid
+                            ..page = 0
+                            ..loadingState.value = LoadingState.loading()
+                            ..queryData();
+                        },
+                        label: const Text('定位至上次观看'),
+                      ),
+                    ),
+                  )
+                : const SizedBox.shrink(),
           ),
       ],
     );

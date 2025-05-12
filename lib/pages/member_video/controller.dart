@@ -39,13 +39,13 @@ class MemberVideoCtr
   String? firstAid;
   String? lastAid;
   String? fromViewAid;
-  bool? isLocating;
+  Rx<bool?> isLocating = Rx<bool?>(null);
   bool? isLoadPrevious;
   bool? hasPrev;
 
   @override
   Future<void> onRefresh() async {
-    if (isLocating == true) {
+    if (isLocating.value == true) {
       if (hasPrev == true) {
         isLoadPrevious = true;
         await queryData();
@@ -127,12 +127,12 @@ class MemberVideoCtr
         next: next,
         seasonId: seasonId,
         seriesId: seriesId,
-        includeCursor: isLocating == true && page == 0 ? true : null,
+        includeCursor: isLocating.value == true && page == 0 ? true : null,
       );
 
   void queryBySort() {
     if (type == ContributeType.video) {
-      isLocating = null;
+      isLocating.value = null;
       order.value = order.value == 'pubdate' ? 'click' : 'pubdate';
     } else {
       sort.value = sort.value == 'desc' ? 'asc' : 'desc';
@@ -221,7 +221,7 @@ class MemberVideoCtr
 
   @override
   Future<void> onReload() {
-    isLocating = null;
+    isLocating.value = null;
     return super.onReload();
   }
 }
