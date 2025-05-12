@@ -6,11 +6,14 @@ import 'package:PiliPlus/http/init.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/common/reply/reply_option_type.dart';
 import 'package:PiliPlus/models/msg/account.dart';
+import 'package:PiliPlus/models/msg/im_user_infos/datum.dart';
+import 'package:PiliPlus/models/msg/msg_dnd/uid_setting.dart';
 import 'package:PiliPlus/models/msg/msgfeed_at_me.dart';
 import 'package:PiliPlus/models/msg/msgfeed_like_me.dart';
 import 'package:PiliPlus/models/msg/msgfeed_reply_me.dart';
 import 'package:PiliPlus/models/msg/msgfeed_sys_msg.dart';
 import 'package:PiliPlus/models/msg/session.dart';
+import 'package:PiliPlus/models/msg/session_ss/data.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/wbi_sign.dart';
 import 'package:dio/dio.dart';
@@ -605,6 +608,98 @@ class MsgHttp {
       return {'status': true};
     } else {
       return {'status': false, 'msg': res.data['message']};
+    }
+  }
+
+  static Future setPushSs({
+    required int setting,
+    required talkerUid,
+  }) async {
+    final csrf = Accounts.main.csrf;
+    var res = await Request().post(
+      Api.setPushSs,
+      data: {
+        'setting': setting,
+        'talker_uid': talkerUid,
+        'build': 0,
+        'mobi_app': 'web',
+        'csrf_token': csrf,
+        'csrf': csrf,
+      },
+      options: Options(contentType: Headers.formUrlEncodedContentType),
+    );
+    if (res.data['code'] == 0) {
+      return {'status': true};
+    } else {
+      return {'status': false, 'msg': res.data['message']};
+    }
+  }
+
+  static Future<LoadingState<List<ImUserInfosData>?>> imUserInfos({
+    required List uids,
+  }) async {
+    final csrf = Accounts.main.csrf;
+    var res = await Request().get(
+      Api.imUserInfos,
+      queryParameters: {
+        'uids': uids.join(','),
+        'build': 0,
+        'mobi_app': 'web',
+        'csrf_token': csrf,
+        'csrf': csrf,
+      },
+    );
+    if (res.data['code'] == 0) {
+      return Success((res.data['data'] as List?)
+          ?.map((e) => ImUserInfosData.fromJson(e))
+          .toList());
+    } else {
+      return Error(res.data['message']);
+    }
+  }
+
+  static Future<LoadingState<SessionSsData>> getSessionSs({
+    required talkerUid,
+  }) async {
+    final csrf = Accounts.main.csrf;
+    var res = await Request().get(
+      Api.getSessionSs,
+      queryParameters: {
+        'talker_uid': talkerUid,
+        'build': 0,
+        'mobi_app': 'web',
+        'csrf_token': csrf,
+        'csrf': csrf,
+      },
+    );
+    if (res.data['code'] == 0) {
+      return Success(SessionSsData.fromJson(res.data['data']));
+    } else {
+      return Error(res.data['message']);
+    }
+  }
+
+  static Future<LoadingState<List<UidSetting>?>> getMsgDnd({
+    required uidsStr,
+  }) async {
+    final csrf = Accounts.main.csrf;
+    var res = await Request().get(
+      Api.getMsgDnd,
+      queryParameters: {
+        'own_uid': Accounts.main.mid,
+        'uids_str': uidsStr,
+        'build': 0,
+        'mobi_app': 'web',
+        'csrf_token': csrf,
+        'csrf': csrf,
+      },
+    );
+    if (res.data['code'] == 0) {
+      return Success((res.data['data']?['uid_settings'] as List?)
+          ?.map((e) => UidSetting.fromJson(e))
+          .toList());
+    } else {
+      return Error(res.data['message']);
     }
   }
 }

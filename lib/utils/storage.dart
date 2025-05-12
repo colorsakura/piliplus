@@ -496,6 +496,10 @@ class GStorage {
     GStorage.localCache.put(LocalCacheKey.blackMids, blackMids..add(mid));
   }
 
+  static void removeBlackMid(int mid) {
+    GStorage.localCache.put(LocalCacheKey.blackMids, blackMids..remove(mid));
+  }
+
   static MemberTabType get memberTab => MemberTabType
       .values[setting.get(SettingBoxKey.memberTab, defaultValue: 0)];
 

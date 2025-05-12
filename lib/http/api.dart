@@ -834,4 +834,15 @@ class Api {
 
   static const String setMsgDnd =
       '${HttpString.tUrl}/link_setting/v1/link_setting/set_msg_dnd';
+
+  static const String imUserInfos = '${HttpString.tUrl}/x/im/user_infos';
+
+  static const String getSessionSs =
+      '${HttpString.tUrl}/link_setting/v1/link_setting/get_session_ss';
+
+  static const String getMsgDnd =
+      '${HttpString.tUrl}/link_setting/v1/link_setting/get_msg_dnd';
+
+  static const String setPushSs =
+      '${HttpString.tUrl}/link_setting/v1/link_setting/set_push_ss';
 }

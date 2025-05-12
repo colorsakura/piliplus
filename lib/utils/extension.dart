@@ -172,8 +172,8 @@ extension ThreeDotItemTypeExt on ThreeDotItemType {
       case ThreeDotItemType.THREE_DOT_ITEM_TYPE_UP_HELPER:
         Get.toNamed(
           '/whisperDetail',
-          parameters: {
-            'talkerId': '844424930131966',
+          arguments: {
+            'talkerId': 844424930131966,
             'name': 'UP主小助手',
             'face':
                 'https://message.biliimg.com/bfs/im/489a63efadfb202366c2f88853d2217b5ddc7a13.png',

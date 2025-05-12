@@ -12,6 +12,7 @@ import 'package:PiliPlus/pages/common/common_publish_page.dart';
 import 'package:PiliPlus/pages/emote/view.dart';
 import 'package:PiliPlus/pages/whisper_detail/controller.dart';
 import 'package:PiliPlus/pages/whisper_detail/widget/chat_item.dart';
+import 'package:PiliPlus/pages/whisper_link_setting/view.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/feed_back.dart';
 import 'package:PiliPlus/utils/utils.dart';
@@ -95,6 +96,21 @@ class _WhisperDetailPageState
             ],
           ),
         ),
+        actions: [
+          IconButton(
+            onPressed: () {
+              Get.to(WhisperLinkSettingPage(
+                talkerUid: _whisperDetailController.talkerId,
+              ));
+            },
+            icon: Icon(
+              size: 20,
+              Icons.settings,
+              color: theme.colorScheme.onSurfaceVariant.withOpacity(0.8),
+            ),
+          ),
+          const SizedBox(width: 10),
+        ],
       ),
       body: SafeArea(
         top: false,

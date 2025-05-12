@@ -39,9 +39,13 @@ class _ReplyMePageState extends State<ReplyMePage> {
                     imSettingType: IMSettingType.SETTING_TYPE_OLD_REPLY_ME),
               );
             },
-            icon: const Icon(size: 22, Icons.settings),
+            icon: Icon(
+              size: 20,
+              Icons.settings,
+              color: theme.colorScheme.onSurfaceVariant.withOpacity(0.8),
+            ),
           ),
-          const SizedBox(width: 16),
+          const SizedBox(width: 10),
         ],
       ),
       body: refreshIndicator(

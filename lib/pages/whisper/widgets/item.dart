@@ -93,13 +93,13 @@ class WhisperSessionItem extends StatelessWidget {
         if (item.id.privateId.hasTalkerUid()) {
           Get.toNamed(
             '/whisperDetail',
-            parameters: {
-              'talkerId': item.id.privateId.talkerUid.toString(),
+            arguments: {
+              'talkerId': item.id.privateId.talkerUid.toInt(),
               'name': item.sessionInfo.sessionName,
               'face': item.sessionInfo.avatar.fallbackLayers.layers.first
                   .resource.resImage.imageSrc.remote.url,
               if (item.sessionInfo.avatar.hasMid())
-                'mid': item.sessionInfo.avatar.mid.toString(),
+                'mid': item.sessionInfo.avatar.mid.toInt(),
             },
           );
           return;

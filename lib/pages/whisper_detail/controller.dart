@@ -19,10 +19,10 @@ import 'package:get/get.dart';
 class WhisperDetailController extends CommonListController<RspSessionMsg, Msg> {
   late final ownerMid = Accounts.main.mid;
 
-  late int talkerId;
-  late String name;
-  late String face;
-  int? mid;
+  final int talkerId = Get.arguments['talkerId'];
+  final String name = Get.arguments['name'];
+  final String face = Get.arguments['face'];
+  final int? mid = Get.arguments['mid'];
 
   Int64? msgSeqno;
 
@@ -32,14 +32,6 @@ class WhisperDetailController extends CommonListController<RspSessionMsg, Msg> {
   @override
   void onInit() {
     super.onInit();
-
-    talkerId = int.parse(Get.parameters['talkerId']!);
-    name = Get.parameters['name']!;
-    face = Get.parameters['face']!;
-    mid = Get.parameters['mid'] != null
-        ? int.parse(Get.parameters['mid']!)
-        : null;
-
     queryData();
   }
 

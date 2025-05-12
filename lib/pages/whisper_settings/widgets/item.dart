@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:PiliPlus/grpc/bilibili/app/im/v1.pb.dart'
     show SelectItem, Setting, SettingSwitch;
 import 'package:flutter/material.dart';
@@ -120,43 +122,55 @@ class ImSettingsItem extends StatelessWidget {
 
     if (item.hasSelect()) {
       String? selected;
+      late final divider = Divider(
+        height: 1,
+        indent: 16,
+        color: outline.withOpacity(0.1),
+      );
       return Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: item.select.item.map((e) {
-          if (e.selected) {
-            selected ??= e.text;
-          }
-          return ListTile(
-            dense: true,
-            onTap: () async {
-              if (!e.selected) {
-                for (var i in item.select.item) {
-                  i.selected = false;
-                }
-                e.selected = true;
-                rebuild();
-
-                if (await onSet()) {
-                  selected = e.text;
-                } else {
+        children: List.generate(
+          max(0, item.select.item.length * 2 - 1),
+          (index) {
+            if (index.isOdd) {
+              return divider;
+            }
+            final e = item.select.item[index ~/ 2];
+            if (e.selected) {
+              selected ??= e.text;
+            }
+            return ListTile(
+              dense: true,
+              onTap: () async {
+                if (!e.selected) {
                   for (var i in item.select.item) {
-                    i.selected = i.text == selected;
+                    i.selected = false;
                   }
+                  e.selected = true;
                   rebuild();
+
+                  if (await onSet()) {
+                    selected = e.text;
+                  } else {
+                    for (var i in item.select.item) {
+                      i.selected = i.text == selected;
+                    }
+                    rebuild();
+                  }
                 }
-              }
-            },
-            title: Text(e.text, style: titleStyle),
-            trailing: e.selected
-                ? Icon(
-                    size: 20,
-                    Icons.check,
-                    color: theme.colorScheme.primary,
-                  )
-                : null,
-          );
-        }).toList(),
+              },
+              title: Text(e.text, style: titleStyle),
+              trailing: e.selected
+                  ? Icon(
+                      size: 20,
+                      Icons.check,
+                      color: theme.colorScheme.primary,
+                    )
+                  : null,
+            );
+          },
+        ),
       );
     }
 

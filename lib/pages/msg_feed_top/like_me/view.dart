@@ -28,6 +28,7 @@ class _LikeMePageState extends State<LikeMePage> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(
         title: const Text('收到的赞'),
@@ -39,9 +40,13 @@ class _LikeMePageState extends State<LikeMePage> {
                     imSettingType: IMSettingType.SETTING_TYPE_OLD_RECEIVE_LIKE),
               );
             },
-            icon: const Icon(size: 22, Icons.settings),
+            icon: Icon(
+              size: 20,
+              Icons.settings,
+              color: theme.colorScheme.onSurfaceVariant.withOpacity(0.8),
+            ),
           ),
-          const SizedBox(width: 16),
+          const SizedBox(width: 10),
         ],
       ),
       body: refreshIndicator(
@@ -52,8 +57,8 @@ class _LikeMePageState extends State<LikeMePage> {
             SliverPadding(
               padding: EdgeInsets.only(
                   bottom: MediaQuery.paddingOf(context).bottom + 80),
-              sliver:
-                  Obx(() => _buildBody(_likeMeController.loadingState.value)),
+              sliver: Obx(() =>
+                  _buildBody(theme, _likeMeController.loadingState.value)),
             ),
           ],
         ),
@@ -61,7 +66,7 @@ class _LikeMePageState extends State<LikeMePage> {
     );
   }
 
-  Widget _buildBody(LoadingState loadingState) {
+  Widget _buildBody(ThemeData theme, LoadingState loadingState) {
     return switch (loadingState) {
       Loading() => SliverList.builder(
           itemCount: 12,
@@ -70,7 +75,6 @@ class _LikeMePageState extends State<LikeMePage> {
           },
         ),
       Success(:var response) => () {
-          final theme = Theme.of(context);
           Pair<List<LikeMeItems>, List<LikeMeItems>> pair = response;
           List<LikeMeItems> latest = pair.first;
           List<LikeMeItems> total = pair.second;

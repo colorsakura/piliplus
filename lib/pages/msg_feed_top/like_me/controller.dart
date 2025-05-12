@@ -19,6 +19,14 @@ class LikeMeController extends CommonDataController<MsgFeedLikeMe, dynamic> {
   }
 
   @override
+  Future<void> queryData([bool isRefresh = true]) {
+    if (!isRefresh && isEnd) {
+      return Future.value();
+    }
+    return super.queryData(isRefresh);
+  }
+
+  @override
   bool customHandleResponse(bool isRefresh, Success<MsgFeedLikeMe> response) {
     MsgFeedLikeMe data = response.response;
     if (data.total?.cursor?.isEnd == true ||

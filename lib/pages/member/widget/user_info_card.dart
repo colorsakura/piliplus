@@ -343,11 +343,11 @@ class UserInfoCard extends StatelessWidget {
                     if (GStorage.userInfo.get('userInfoCache') != null) {
                       Get.toNamed(
                         '/whisperDetail',
-                        parameters: {
-                          'talkerId': card.mid ?? '',
-                          'name': card.name ?? '',
-                          'face': card.face ?? '',
-                          'mid': card.mid ?? '',
+                        arguments: {
+                          'talkerId': int.parse(card.mid!),
+                          'name': card.name,
+                          'face': card.face,
+                          'mid': card.mid,
                         },
                       );
                     }
