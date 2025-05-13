@@ -164,16 +164,29 @@ class _VotePanelState extends State<VotePanel> {
 
   Widget _buildOptions(int index) {
     final opt = _voteInfo.options[index];
+    final selected = groupValue.contains(opt.optidx);
     return Padding(
-        padding: const EdgeInsets.symmetric(vertical: 4),
-        child: PercentageChip<int>(
-          label: opt.optdesc!,
-          value: opt.optidx!,
-          groupValue: groupValue,
-          disabled: groupValue.length >= _maxCnt,
-          percentage: _showPercentage ? _percentage[index] : null,
-          callback: _enabled ? _toggleSelection : null,
-        ));
+      padding: const EdgeInsets.symmetric(vertical: 4),
+      child: PercentageChip<int>(
+        label: opt.optdesc!,
+        percentage: _showPercentage ? _percentage[index] : null,
+        selected: selected,
+        onSelected: !_enabled || (groupValue.length >= _maxCnt && !selected)
+            ? null
+            : (value) => _onSelected(value, opt.optidx!),
+      ),
+    );
+  }
+
+  void _onSelected(bool value, int optidx) {
+    if (value) {
+      groupValue.add(optidx);
+    } else {
+      groupValue.remove(optidx);
+    }
+    _selectedNum.value = groupValue.length;
+    _canVote.value = groupValue.isNotEmpty;
+    setState(() {});
   }
 
   Widget _buildContext() {
@@ -204,51 +217,21 @@ class _VotePanelState extends State<VotePanel> {
         ? List<double>.filled(options.length, 0)
         : options.map((i) => i.cnt / total).toList(growable: false);
   }
-
-  bool _toggleSelection(bool val) {
-    _selectedNum.value = groupValue.length;
-    _canVote.value = groupValue.isNotEmpty;
-    if (groupValue.length >= _maxCnt ||
-        (!val && groupValue.length + 1 == _maxCnt)) {
-      setState(() {});
-      return true;
-    }
-    return false;
-  }
 }
 
-class PercentageChip<T> extends StatefulWidget {
+class PercentageChip<T> extends StatelessWidget {
   final String label;
-  final T value;
-  final Set<T> groupValue;
   final double? percentage;
-  final bool disabled;
-  final bool? Function(bool)? callback;
+  final bool selected;
+  final ValueChanged<bool>? onSelected;
 
   const PercentageChip({
     super.key,
     required this.label,
-    required this.value,
-    required this.groupValue,
-    this.disabled = false,
+    required this.selected,
+    required this.onSelected,
     this.percentage,
-    this.callback,
   });
-
-  @override
-  State<PercentageChip<T>> createState() => _PercentageChipState<T>();
-}
-
-class _PercentageChipState<T> extends State<PercentageChip<T>> {
-  late Set<T> groupValue;
-
-  @override
-  void initState() {
-    super.initState();
-    groupValue = widget.groupValue;
-  }
-
-  bool get selected => groupValue.contains(widget.value);
 
   @override
   Widget build(BuildContext context) {
@@ -262,12 +245,12 @@ class _PercentageChipState<T> extends State<PercentageChip<T>> {
         clipBehavior: Clip.none,
         alignment: Alignment.center,
         children: [
-          if (widget.percentage != null)
+          if (percentage != null)
             Positioned.fill(
               left: 0,
               child: FractionallySizedBox(
                 alignment: Alignment.centerLeft,
-                widthFactor: widget.percentage,
+                widthFactor: percentage,
                 child: ColoredBox(
                   color: selected
                       ? colorScheme.inversePrimary
@@ -284,7 +267,7 @@ class _PercentageChipState<T> extends State<PercentageChip<T>> {
                 Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Text(widget.label),
+                    Text(label),
                     if (selected)
                       Padding(
                         padding: const EdgeInsets.only(left: 4),
@@ -296,22 +279,15 @@ class _PercentageChipState<T> extends State<PercentageChip<T>> {
                       ),
                   ],
                 ),
-                if (widget.percentage != null)
-                  Text('${(widget.percentage! * 100).toStringAsFixed(0)}%'),
+                if (percentage != null)
+                  Text('${(percentage! * 100).toStringAsFixed(0)}%'),
               ],
             ),
           ),
         ],
       ),
       selected: selected,
-      onSelected: widget.disabled && (!selected || widget.callback == null)
-          ? null
-          : (value) {
-              value
-                  ? groupValue.add(widget.value)
-                  : groupValue.remove(widget.value);
-              if (widget.callback?.call(value) == true) setState(() {});
-            },
+      onSelected: onSelected,
     );
   }
 }
