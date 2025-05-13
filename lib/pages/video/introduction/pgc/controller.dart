@@ -220,7 +220,7 @@ class BangumiIntroController extends GetxController {
     showDialog(
         context: context,
         builder: (_) {
-          String videoUrl = '${HttpString.baseUrl}/video/$bvid';
+          String videoUrl = '${HttpString.baseUrl}/bangumi/play/ep$epId';
           return AlertDialog(
             clipBehavior: Clip.hardEdge,
             contentPadding: const EdgeInsets.symmetric(vertical: 12),
