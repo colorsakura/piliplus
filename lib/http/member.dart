@@ -323,7 +323,7 @@ class MemberHttp {
 
   static Future memberArchive({
     required int mid,
-    int ps = 25,
+    int ps = 30,
     int tid = 0,
     int? pn,
     String? keyword,
@@ -340,7 +340,7 @@ class MemberHttp {
       if (keyword != null) 'keyword': keyword,
       'order': order,
       'platform': 'web',
-      'web_location': '333.1387',
+      'web_location': '1550101',
       'order_avoided': orderAvoided,
       'dm_img_list': '[]',
       'dm_img_str': dmImgStr,
@@ -374,7 +374,7 @@ class MemberHttp {
 
   static Future<LoadingState> memberArchiveNew({
     required mid,
-    int ps = 25,
+    int ps = 30,
     int tid = 0,
     int? pn,
     String? keyword,
@@ -391,7 +391,7 @@ class MemberHttp {
       if (keyword != null) 'keyword': keyword,
       'order': order,
       'platform': 'web',
-      'web_location': '333.1387',
+      'web_location': '1550101',
       'order_avoided': orderAvoided,
       'dm_img_list': '[]',
       'dm_img_str': dmImgStr,
