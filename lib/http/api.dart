@@ -845,4 +845,6 @@ class Api {
 
   static const String setPushSs =
       '${HttpString.tUrl}/link_setting/v1/link_setting/set_push_ss';
+
+  static const String dynReserve = '/x/dynamic/feed/reserve/click';
 }

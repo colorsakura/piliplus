@@ -3,6 +3,7 @@ import 'package:PiliPlus/common/widgets/badge.dart';
 import 'package:PiliPlus/common/widgets/button/icon_button.dart';
 import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
 import 'package:PiliPlus/models/bangumi/list.dart';
+import 'package:PiliPlus/models/common/badge_type.dart';
 import 'package:PiliPlus/pages/common/multi_select_controller.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:flutter/material.dart';
@@ -70,6 +71,7 @@ class FavPgcItem extends StatelessWidget {
                               right: 4,
                               top: 4,
                               text: item.badge,
+                              size: PBadgeSize.small,
                               fontSize: 10,
                               padding: const EdgeInsets.symmetric(
                                 horizontal: 2,

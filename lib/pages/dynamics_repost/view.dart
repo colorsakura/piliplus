@@ -82,16 +82,14 @@ class _RepostPanelState extends CommonPublishPageState<RepostPanel> {
         children: [
           SizedBox(height: _isMax ? 16 : 10),
           _buildAppBar(theme),
-          if (_isMax)
-            Expanded(child: _buildEditPanel(theme))
-          else
-            _buildEditPanel(theme),
-          if (_isMax.not)
-            ..._biuldDismiss(theme)
-          else ...[
+          if (_isMax) ...[
+            Expanded(child: _buildEditPanel(theme)),
             _buildToolbar,
             buildPanelContainer(Colors.transparent),
-          ]
+          ] else ...[
+            _buildEditPanel(theme),
+            ..._biuldDismiss(theme),
+          ],
         ],
       ),
     );

@@ -459,9 +459,9 @@ class Reserve {
     this.upMid,
   });
 
-  Map? button;
-  Map? desc1;
-  Map? desc2;
+  ReserveBtn? button;
+  Desc? desc1;
+  Desc? desc2;
   String? jumpUrl;
   int? reserveTotal;
   int? rid;
@@ -471,9 +471,10 @@ class Reserve {
   int? upMid;
 
   Reserve.fromJson(Map<String, dynamic> json) {
-    button = json['button'];
-    desc1 = json['desc1'];
-    desc2 = json['desc2'];
+    button =
+        json['button'] == null ? null : ReserveBtn.fromJson(json['button']);
+    desc1 = json['desc1'] == null ? null : Desc.fromJson(json['desc1']);
+    desc2 = json['desc2'] == null ? null : Desc.fromJson(json['desc2']);
     jumpUrl = json['jump_url'];
     reserveTotal = json['reserve_total'];
     rid = json['rid'];
@@ -482,6 +483,47 @@ class Reserve {
     stype = json['stype'];
     title = json['title'];
     upMid = json['up_mid'];
+  }
+}
+
+class ReserveBtn {
+  ReserveBtn({
+    this.status,
+    this.type,
+    this.checkText,
+    this.uncheckText,
+  });
+
+  int? status;
+  int? type;
+  String? checkText;
+  String? uncheckText;
+  int? disable;
+
+  ReserveBtn.fromJson(Map<String, dynamic> json) {
+    status = json['status'];
+    type = json['type'];
+    checkText = json['check']?['text'] ?? '已预约';
+    uncheckText = json['uncheck']?['text'] ?? '预约';
+    disable = json['uncheck']?['disable'];
+  }
+}
+
+class Desc {
+  Desc({
+    this.style,
+    this.text,
+    this.visible,
+  });
+
+  int? style;
+  String? text;
+  bool? visible;
+
+  Desc.fromJson(Map<String, dynamic> json) {
+    style = json['style'];
+    text = json['text'];
+    visible = json['visible'];
   }
 }
 

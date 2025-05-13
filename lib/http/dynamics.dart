@@ -326,4 +326,29 @@ class DynamicsHttp {
       return Error(res.data['message']);
     }
   }
+
+  static Future dynReserve({
+    required reserveId,
+    required curBtnStatus,
+    required dynamicIdStr,
+    required reserveTotal,
+  }) async {
+    var res = await Request().post(
+      Api.dynReserve,
+      queryParameters: {
+        'csrf': Accounts.main.csrf,
+      },
+      data: {
+        'reserve_id': reserveId,
+        'cur_btn_status': curBtnStatus,
+        'dynamic_id_str': dynamicIdStr,
+        'reserve_total': reserveTotal,
+      },
+    );
+    if (res.data['code'] == 0) {
+      return {'status': true, 'data': res.data['data']};
+    } else {
+      return {'status': false, 'msg': res.data['message']};
+    }
+  }
 }
