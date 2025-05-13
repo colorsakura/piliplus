@@ -341,13 +341,14 @@ class UserInfoCard extends StatelessWidget {
                 IconButton.outlined(
                   onPressed: () {
                     if (GStorage.userInfo.get('userInfoCache') != null) {
+                      int mid = int.parse(card.mid!);
                       Get.toNamed(
                         '/whisperDetail',
                         arguments: {
-                          'talkerId': int.parse(card.mid!),
+                          'talkerId': mid,
                           'name': card.name,
                           'face': card.face,
-                          'mid': card.mid,
+                          'mid': mid,
                         },
                       );
                     }
