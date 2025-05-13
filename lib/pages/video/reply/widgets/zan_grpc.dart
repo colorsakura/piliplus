@@ -47,7 +47,9 @@ class _ZanButtonGrpcState extends State<ZanButtonGrpc> {
       } else {
         widget.replyItem.replyControl.action = $fixnum.Int64.ZERO;
       }
-      setState(() {});
+      if (mounted) {
+        setState(() {});
+      }
     } else {
       SmartDialog.showToast(res['msg']);
     }
@@ -75,7 +77,9 @@ class _ZanButtonGrpcState extends State<ZanButtonGrpc> {
         widget.replyItem.like -= $fixnum.Int64.ONE;
         widget.replyItem.replyControl.action = $fixnum.Int64.ZERO;
       }
-      setState(() {});
+      if (mounted) {
+        setState(() {});
+      }
     } else {
       SmartDialog.showToast(res['msg']);
     }
