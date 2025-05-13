@@ -42,7 +42,7 @@ class ChatItem extends StatelessWidget {
     bool isSystem = item.msgType == MsgType.EN_MSG_TYPE_TIP_MESSAGE.value ||
         item.msgType == MsgType.EN_MSG_TYPE_NOTIFY_MSG.value ||
         item.msgType == MsgType.EN_MSG_TYPE_PICTURE_CARD.value ||
-        item.msgType == MsgType.EN_MSG_TYPE_SYS_GROUP_AUTO_CREATED.value;
+        item.msgType == 16;
 
     late final ThemeData theme = Theme.of(context);
     late final Color textColor = isOwner
@@ -150,13 +150,14 @@ class ChatItem extends StatelessWidget {
           return msgTypeShareV2_7(content, textColor);
         case MsgType.EN_MSG_TYPE_VIDEO_CARD:
           return msgTypeVideoCard_11(content, textColor);
-        case MsgType.EN_MSG_TYPE_SYS_GROUP_AUTO_CREATED:
-          return msgTypeSysGroupAutoCreated_208(theme, content, textColor);
         case MsgType.EN_MSG_TYPE_ARTICLE_CARD:
           return msgTypeArticleCard_12(content, textColor);
         case MsgType.EN_MSG_TYPE_COMMON_SHARE_CARD:
           return msgTypeCommonShareCard_14(content, textColor);
         default:
+          if (item.msgType == 16) {
+            return msgType_16(theme, content, textColor);
+          }
           return def(textColor);
       }
     } catch (err) {
@@ -257,8 +258,7 @@ class ChatItem extends StatelessWidget {
     );
   }
 
-  Widget msgTypeSysGroupAutoCreated_208(
-      ThemeData theme, content, Color textColor) {
+  Widget msgType_16(ThemeData theme, content, Color textColor) {
     return Center(
       child: Container(
         constraints: const BoxConstraints(maxWidth: 400),
