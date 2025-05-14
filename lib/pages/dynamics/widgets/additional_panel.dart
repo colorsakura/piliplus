@@ -111,10 +111,12 @@ Widget addWidget(
                                 return FilledButton.tonal(
                                   style: FilledButton.styleFrom(
                                     foregroundColor: isReserved
-                                        ? theme.colorScheme.onSurfaceVariant
+                                        ? theme.colorScheme.onSurface
+                                            .withOpacity(0.38)
                                         : null,
                                     backgroundColor: isReserved
-                                        ? theme.colorScheme.onInverseSurface
+                                        ? theme.colorScheme.onSurface
+                                            .withOpacity(0.12)
                                         : null,
                                     visualDensity: VisualDensity.compact,
                                     padding: const EdgeInsets.symmetric(
