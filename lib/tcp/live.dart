@@ -289,7 +289,7 @@ class LiveMessageStream {
     eventListeners.add(func);
   }
 
-  Future<void> close() async {
+  void close() {
     heartBeat = false;
     eventListeners.clear();
     _socketSubscription?.cancel();
