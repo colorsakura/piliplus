@@ -7,6 +7,7 @@ enum PBadgeType {
   error,
   line_primary,
   line_secondary,
+  free,
 }
 
 enum PBadgeSize { medium, small }

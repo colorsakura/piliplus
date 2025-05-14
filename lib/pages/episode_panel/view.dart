@@ -430,6 +430,17 @@ class _EpisodePanelState extends CommonSlidePageState<EpisodePanel>
                                 bottom: 6.0,
                                 type: PBadgeType.gray,
                               ),
+                            if (episode.badge != null)
+                              PBadge(
+                                text: episode.badge,
+                                top: 6,
+                                right: 6,
+                                type: switch (episode.badge) {
+                                  '会员' => PBadgeType.primary,
+                                  '限免' => PBadgeType.free,
+                                  _ => PBadgeType.gray,
+                                },
+                              ),
                           ],
                         );
                       },
@@ -497,17 +508,6 @@ class _EpisodePanelState extends CommonSlidePageState<EpisodePanel>
                     ],
                   ),
                 ),
-                if (episode.badge != null) ...[
-                  if (episode.badge == '会员')
-                    Image.asset(
-                      'assets/images/big-vip.png',
-                      height: 20,
-                      semanticLabel: "大会员",
-                    )
-                  else
-                    Text(episode.badge),
-                  const SizedBox(width: 10),
-                ],
               ],
             ),
           ),
