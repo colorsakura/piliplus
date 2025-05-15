@@ -108,52 +108,66 @@ Widget addWidget(
                               builder: (context) {
                                 final btn = content.button!;
                                 final isReserved = btn.status == btn.type;
+                                final bool canJump = btn.jumpUrl != null;
                                 return FilledButton.tonal(
                                   style: FilledButton.styleFrom(
-                                    foregroundColor: isReserved
-                                        ? theme.colorScheme.onSurface
-                                            .withOpacity(0.38)
-                                        : null,
-                                    backgroundColor: isReserved
-                                        ? theme.colorScheme.onSurface
-                                            .withOpacity(0.12)
-                                        : null,
+                                    foregroundColor: canJump
+                                        ? null
+                                        : isReserved
+                                            ? theme.colorScheme.onSurface
+                                                .withOpacity(0.38)
+                                            : null,
+                                    backgroundColor: canJump
+                                        ? null
+                                        : isReserved
+                                            ? theme.colorScheme.onSurface
+                                                .withOpacity(0.12)
+                                            : null,
                                     visualDensity: VisualDensity.compact,
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: 16),
                                     tapTargetSize:
                                         MaterialTapTargetSize.shrinkWrap,
                                   ),
-                                  onPressed: btn.disable == 1
-                                      ? null
-                                      : () async {
-                                          var res =
-                                              await DynamicsHttp.dynReserve(
-                                            reserveId: content.rid,
-                                            curBtnStatus: btn.status,
-                                            dynamicIdStr: item.idStr,
-                                            reserveTotal: content.reserveTotal,
-                                          );
-                                          if (res['status']) {
-                                            content
-                                              ..desc2?.text =
-                                                  res['data']['desc_update']
-                                              ..reserveTotal =
-                                                  res['data']['reserve_update']
-                                              ..button!.status = res['data']
-                                                  ['final_btn_status'];
-                                            if (context.mounted) {
-                                              (context as Element?)
-                                                  ?.markNeedsBuild();
-                                            }
-                                          } else {
-                                            SmartDialog.showToast(res['msg']);
-                                          }
-                                        },
+                                  onPressed: canJump
+                                      ? () {
+                                          PiliScheme.routePushFromUrl(
+                                              btn.jumpUrl!);
+                                        }
+                                      : btn.disable == 1
+                                          ? null
+                                          : () async {
+                                              var res =
+                                                  await DynamicsHttp.dynReserve(
+                                                reserveId: content.rid,
+                                                curBtnStatus: btn.status,
+                                                dynamicIdStr: item.idStr,
+                                                reserveTotal:
+                                                    content.reserveTotal,
+                                              );
+                                              if (res['status']) {
+                                                content
+                                                  ..desc2?.text =
+                                                      res['data']['desc_update']
+                                                  ..reserveTotal = res['data']
+                                                      ['reserve_update']
+                                                  ..button!.status = res['data']
+                                                      ['final_btn_status'];
+                                                if (context.mounted) {
+                                                  (context as Element?)
+                                                      ?.markNeedsBuild();
+                                                }
+                                              } else {
+                                                SmartDialog.showToast(
+                                                    res['msg']);
+                                              }
+                                            },
                                   child: Text(
-                                    isReserved
-                                        ? btn.checkText!
-                                        : btn.uncheckText!,
+                                    btn.jumpText != null
+                                        ? btn.jumpText!
+                                        : isReserved
+                                            ? btn.checkText!
+                                            : btn.uncheckText!,
                                   ),
                                 );
                               },

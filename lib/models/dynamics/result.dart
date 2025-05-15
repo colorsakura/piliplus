@@ -499,6 +499,8 @@ class ReserveBtn {
   String? checkText;
   String? uncheckText;
   int? disable;
+  String? jumpText;
+  String? jumpUrl;
 
   ReserveBtn.fromJson(Map<String, dynamic> json) {
     status = json['status'];
@@ -506,6 +508,8 @@ class ReserveBtn {
     checkText = json['check']?['text'] ?? '已预约';
     uncheckText = json['uncheck']?['text'] ?? '预约';
     disable = json['uncheck']?['disable'];
+    jumpText = json['jump_style']?['text'];
+    jumpUrl = json['jump_url'];
   }
 }
 
