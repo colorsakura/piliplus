@@ -130,7 +130,12 @@ class DynamicsHttp {
         if (id != null) 'id': id,
         if (rid != null) 'rid': rid,
         if (type != null) 'type': type,
-        'features': 'itemOpusStyle,listOnlyfans',
+        'features': 'itemOpusStyle',
+        'gaia_source': 'Athena',
+        'web_location': '333.1330',
+        'x-bili-device-req-json':
+            '{"platform":"web","device":"pc","spmid":"333.1330"}',
+        if (Accounts.main.isLogin) 'csrf': Accounts.main.csrf,
       },
       options:
           clearCookie ? Options(extra: {'account': AnonymousAccount()}) : null,
