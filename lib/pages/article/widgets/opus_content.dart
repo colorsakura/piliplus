@@ -208,7 +208,7 @@ class OpusContent extends StatelessWidget {
                         showVoteDialog(
                           context,
                           element.linkCard!.card!.vote?.voteId ??
-                              int.parse(element.linkCard!.card!.oid!),
+                              element.linkCard!.card!.oid,
                         );
                         return;
                       }

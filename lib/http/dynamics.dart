@@ -243,10 +243,10 @@ class DynamicsHttp {
   }
 
   static Future<LoadingState<VoteInfo>> doVote({
-    required int voteId,
+    required voteId,
     required List<int> votes,
     bool anonymity = false,
-    int? dynamicId,
+    dynamicId,
   }) async {
     final csrf = Accounts.main.csrf;
     final data = {

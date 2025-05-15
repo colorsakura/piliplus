@@ -396,8 +396,10 @@ class Vote {
   int? type;
   int? uid;
   int? voteId;
+  String? desc;
 
   Vote.fromJson(Map<String, dynamic> json) {
+    desc = json['desc'];
     choiceCnt = json['choice_cnt'];
     share = json['share'];
     defaultShare = json['default_share'];
@@ -805,6 +807,7 @@ class RichTextNodeItem {
   String? type;
   String? rid;
   List<OpusPicsModel>? pics;
+  String? jumpUrl;
 
   RichTextNodeItem.fromJson(Map<String, dynamic> json) {
     emoji = json['emoji'] != null ? Emoji.fromJson(json['emoji']) : null;
@@ -817,6 +820,7 @@ class RichTextNodeItem {
         : (json['pics'] as List?)
             ?.map((e) => OpusPicsModel.fromJson(e))
             .toList();
+    jumpUrl = json['jump_url'];
   }
 }
 

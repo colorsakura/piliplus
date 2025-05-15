@@ -123,10 +123,7 @@ TextSpan? richNode(
                 ),
                 recognizer: TapGestureRecognizer()
                   ..onTap = () {
-                    final dynIdStr = item.basic?.commentIdStr;
-                    final dynId =
-                        dynIdStr != null ? int.tryParse(dynIdStr) : null;
-                    showVoteDialog(context, int.parse(i.rid!), dynId);
+                    showVoteDialog(context, i.rid, item.basic?.commentIdStr);
                   },
               ),
             );
@@ -175,7 +172,6 @@ TextSpan? richNode(
               );
             break;
 
-          /// TODO 商品
           case 'RICH_TEXT_NODE_TYPE_GOODS':
             spanChildren
               ..add(
@@ -192,6 +188,12 @@ TextSpan? richNode(
                 TextSpan(
                   text: '${i.text} ',
                   style: authorStyle,
+                  recognizer: i.jumpUrl == null
+                      ? null
+                      : (TapGestureRecognizer()
+                        ..onTap = () {
+                          PiliScheme.routePushFromUrl(i.jumpUrl!);
+                        }),
                 ),
               );
             break;
