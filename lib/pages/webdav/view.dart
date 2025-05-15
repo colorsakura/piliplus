@@ -64,7 +64,7 @@ class _WebDavSettingPageState extends State<WebDavSettingPage> {
           const SizedBox(height: 20),
           TextField(
             controller: _passwordCtr,
-            autofillHints: [AutofillHints.password],
+            autofillHints: const [AutofillHints.password],
             decoration: const InputDecoration(
               labelText: '密码',
               border: OutlineInputBorder(),

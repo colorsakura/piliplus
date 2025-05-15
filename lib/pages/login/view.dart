@@ -208,7 +208,7 @@ class _LoginPageState extends State<LoginPage> {
             keyboardType: TextInputType.visiblePassword,
             inputFormatters: [FilteringTextInputFormatter.deny(RegExp(r"\s"))],
             controller: _loginPageCtr.passwordTextController,
-            autofillHints: [AutofillHints.password],
+            autofillHints: const [AutofillHints.password],
             decoration: InputDecoration(
               prefixIcon: const Icon(Icons.password),
               border: const UnderlineInputBorder(),
