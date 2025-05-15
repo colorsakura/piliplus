@@ -283,7 +283,7 @@ List<SettingsModel> get styleSettings => [
         settingsType: SettingsType.normal,
         title: '动态页UP主显示位置',
         leading: const Icon(Icons.person_outlined),
-        getSubtitle: () => '当前：${GStorage.upPanelPosition.labels}',
+        getSubtitle: () => '当前：${GStorage.upPanelPosition.label}',
         onTap: (setState) async {
           UpPanelPosition? result = await showDialog(
             context: Get.context!,
@@ -292,7 +292,7 @@ List<SettingsModel> get styleSettings => [
                 title: '动态页UP主显示位置',
                 value: GStorage.upPanelPosition,
                 values: UpPanelPosition.values.map((e) {
-                  return (e, e.labels);
+                  return (e, e.label);
                 }).toList(),
               );
             },

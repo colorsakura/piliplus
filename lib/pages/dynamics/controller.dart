@@ -39,6 +39,8 @@ class DynamicsController extends GetxController
   late int currentMid = -1;
   late bool showLiveItems = GStorage.expandDynLivePanel;
 
+  final upPanelPosition = GStorage.upPanelPosition;
+
   DynamicsTabController? get controller {
     try {
       return Get.find<DynamicsTabController>(

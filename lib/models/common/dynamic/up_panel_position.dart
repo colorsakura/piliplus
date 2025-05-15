@@ -1,10 +1,10 @@
 enum UpPanelPosition {
-  leftFixed,
-  rightFixed,
-  leftDrawer,
-  rightDrawer,
-}
+  top('顶部'),
+  leftFixed('左侧常驻'),
+  rightFixed('右侧常驻'),
+  leftDrawer('左侧抽屉'),
+  rightDrawer('右侧抽屉');
 
-extension UpPanelPositionExt on UpPanelPosition {
-  String get labels => const ['左侧常驻', '右侧常驻', '左侧抽屉', '右侧抽屉'][index];
+  final String label;
+  const UpPanelPosition(this.label);
 }

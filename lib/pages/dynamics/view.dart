@@ -19,20 +19,12 @@ class DynamicsPage extends StatefulWidget {
 class _DynamicsPageState extends State<DynamicsPage>
     with AutomaticKeepAliveClientMixin {
   final DynamicsController _dynamicsController = Get.put(DynamicsController());
-  late UpPanelPosition upPanelPosition;
-
-  late ThemeData theme;
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    theme = Theme.of(context);
-  }
+  UpPanelPosition get upPanelPosition => _dynamicsController.upPanelPosition;
 
   @override
   bool get wantKeepAlive => true;
 
-  Widget _createDynamicBtn([bool isRight = true]) => Center(
+  Widget _createDynamicBtn(ThemeData theme, [bool isRight = true]) => Center(
         child: Container(
           width: 34,
           height: 34,
@@ -68,8 +60,6 @@ class _DynamicsPageState extends State<DynamicsPage>
   @override
   void initState() {
     super.initState();
-    upPanelPosition = GStorage.upPanelPosition;
-    debugPrint('upPanelPosition: $upPanelPosition');
     if (GStorage.setting
         .get(SettingBoxKey.dynamicsShowAllFollowedUp, defaultValue: false)) {
       _dynamicsController.scrollController.addListener(listener);
@@ -91,33 +81,37 @@ class _DynamicsPageState extends State<DynamicsPage>
     super.dispose();
   }
 
-  Widget upPanelPart() {
-    return Container(
+  Widget upPanelPart(ThemeData theme) {
+    bool isTop = upPanelPosition == UpPanelPosition.top;
+    return Material(
       //抽屉模式增加底色
-      color: upPanelPosition.index > 1
+      color: isTop || upPanelPosition.index > 1
           ? theme.colorScheme.surface
           : Colors.transparent,
-      width: 64,
-      child: Obx(
-        () {
-          if (_dynamicsController.upData.value.upList == null &&
-              _dynamicsController.upData.value.liveUsers == null) {
-            return const SizedBox.shrink();
-          } else if (_dynamicsController.upData.value.errMsg != null) {
-            return Center(
-              child: IconButton(
-                icon: const Icon(Icons.refresh),
-                onPressed: () {
-                  _dynamicsController.queryFollowUp();
-                },
-              ),
-            );
-          } else {
-            return UpPanel(
-              dynamicsController: _dynamicsController,
-            );
-          }
-        },
+      child: SizedBox(
+        width: isTop ? null : 64,
+        height: isTop ? 76 : null,
+        child: Obx(
+          () {
+            if (_dynamicsController.upData.value.upList == null &&
+                _dynamicsController.upData.value.liveUsers == null) {
+              return const SizedBox.shrink();
+            } else if (_dynamicsController.upData.value.errMsg != null) {
+              return Center(
+                child: IconButton(
+                  icon: const Icon(Icons.refresh),
+                  onPressed: () {
+                    _dynamicsController.queryFollowUp();
+                  },
+                ),
+              );
+            } else {
+              return UpPanel(
+                dynamicsController: _dynamicsController,
+              );
+            }
+          },
+        ),
       ),
     );
   }
@@ -125,11 +119,12 @@ class _DynamicsPageState extends State<DynamicsPage>
   @override
   Widget build(BuildContext context) {
     super.build(context);
+    ThemeData theme = Theme.of(context);
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         leading: upPanelPosition == UpPanelPosition.rightDrawer
-            ? _createDynamicBtn(false)
+            ? _createDynamicBtn(theme, false)
             : null,
         leadingWidth: 50,
         toolbarHeight: 50,
@@ -158,26 +153,33 @@ class _DynamicsPageState extends State<DynamicsPage>
         ),
         actions: upPanelPosition == UpPanelPosition.rightDrawer
             ? null
-            : [_createDynamicBtn()],
+            : [_createDynamicBtn(theme)],
       ),
       drawer: upPanelPosition == UpPanelPosition.leftDrawer
-          ? SafeArea(child: upPanelPart())
+          ? SafeArea(child: upPanelPart(theme))
           : null,
       drawerEnableOpenDragGesture: true,
       endDrawer: upPanelPosition == UpPanelPosition.rightDrawer
-          ? SafeArea(child: upPanelPart())
+          ? SafeArea(child: upPanelPart(theme))
           : null,
       endDrawerEnableOpenDragGesture: true,
       body: Row(
         children: [
-          if (upPanelPosition == UpPanelPosition.leftFixed) upPanelPart(),
+          if (upPanelPosition == UpPanelPosition.leftFixed) upPanelPart(theme),
           Expanded(
-            child: tabBarView(
-              controller: _dynamicsController.tabController,
-              children: _dynamicsController.tabsPageList,
+            child: Column(
+              children: [
+                if (upPanelPosition == UpPanelPosition.top) upPanelPart(theme),
+                Expanded(
+                  child: tabBarView(
+                    controller: _dynamicsController.tabController,
+                    children: _dynamicsController.tabsPageList,
+                  ),
+                ),
+              ],
             ),
           ),
-          if (upPanelPosition == UpPanelPosition.rightFixed) upPanelPart(),
+          if (upPanelPosition == UpPanelPosition.rightFixed) upPanelPart(theme),
         ],
       ),
     );
