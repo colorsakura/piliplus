@@ -12,9 +12,8 @@ class RankController extends GetxController
   late TabController tabController;
 
   ZoneController get controller {
-    final item = rankTabsConfig[tabController.index];
-    return Get.find<ZoneController>(
-        tag: '${item['rid']}${item['season_type']}');
+    final item = RankType.values[tabController.index];
+    return Get.find<ZoneController>(tag: '${item.rid}${item.seasonType}');
   }
 
   @override
@@ -23,7 +22,7 @@ class RankController extends GetxController
   @override
   void onInit() {
     super.onInit();
-    tabController = TabController(length: rankTabsConfig.length, vsync: this);
+    tabController = TabController(length: RankType.values.length, vsync: this);
   }
 
   @override
