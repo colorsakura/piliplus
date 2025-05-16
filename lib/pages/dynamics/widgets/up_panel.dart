@@ -48,7 +48,7 @@ class _UpPanelState extends State<UpPanel> {
             child: Container(
               alignment: Alignment.center,
               height: isTop ? 76 : 60,
-              padding: isTop ? const EdgeInsets.symmetric(horizontal: 6) : null,
+              padding: isTop ? const EdgeInsets.only(left: 12, right: 6) : null,
               child: Text.rich(
                 textAlign: TextAlign.center,
                 style: TextStyle(
@@ -128,7 +128,7 @@ class _UpPanelState extends State<UpPanel> {
         widget.dynamicsController.currentMid == -1;
     return SizedBox(
       height: 76,
-      width: isTop ? 65 : null,
+      width: isTop ? 70 : null,
       child: InkWell(
         onTap: () {
           feedBack();
@@ -181,7 +181,7 @@ class _UpPanelState extends State<UpPanel> {
                           ),
                   ),
                   Positioned(
-                    top: data.type == 'live' ? -5 : 0,
+                    top: data.type == 'live' && !isTop ? -5 : 0,
                     right: data.type == 'live' ? -6 : 4,
                     child: Badge(
                       smallSize: 8,
@@ -202,10 +202,8 @@ class _UpPanelState extends State<UpPanel> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 4),
                 child: Text(
-                  data.uname,
-                  overflow: TextOverflow.clip,
-                  maxLines: isTop ? 1 : 2,
-                  softWrap: true,
+                  isTop ? '${data.uname}\n' : data.uname,
+                  maxLines: 2,
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     color: widget.dynamicsController.currentMid == data.mid
