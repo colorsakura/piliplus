@@ -33,12 +33,12 @@ class _WhisperLinkSettingPageState extends State<WhisperLinkSettingPage> {
     final divider = Divider(
       height: 12,
       thickness: 12,
-      color: theme.colorScheme.outline.withOpacity(0.1),
+      color: theme.colorScheme.outline.withValues(alpha: 0.1),
     );
     final divider2 = Divider(
       height: 1,
       indent: 16,
-      color: theme.colorScheme.outline.withOpacity(0.1),
+      color: theme.colorScheme.outline.withValues(alpha: 0.1),
     );
     return Scaffold(
       appBar: AppBar(title: const Text('聊天设置')),

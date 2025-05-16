@@ -36,7 +36,7 @@ class WhisperSessionItem extends StatelessWidget {
     return ListTile(
       tileColor: item.isPinned
           ? theme.colorScheme.onInverseSurface
-              .withOpacity(Get.isDarkMode ? 0.4 : 0.8)
+              .withValues(alpha: Get.isDarkMode ? 0.4 : 0.8)
           : null,
       onLongPress: () {
         showDialog(

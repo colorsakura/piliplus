@@ -161,7 +161,7 @@ class ReplyItemGrpc extends StatelessWidget {
             indent: 55,
             endIndent: 15,
             height: 0.3,
-            color: theme.colorScheme.outline.withOpacity(0.08),
+            color: theme.colorScheme.outline.withValues(alpha: 0.08),
           )
       ],
     );
@@ -357,7 +357,7 @@ class ReplyItemGrpc extends StatelessWidget {
               Icon(
                 Icons.reply,
                 size: 18,
-                color: theme.colorScheme.outline.withOpacity(0.8),
+                color: theme.colorScheme.outline.withValues(alpha: 0.8),
               ),
               const SizedBox(width: 3),
               Text(
@@ -479,8 +479,8 @@ class ReplyItemGrpc extends StatelessWidget {
                       child: Text.rich(
                         style: TextStyle(
                             fontSize: theme.textTheme.bodyMedium!.fontSize,
-                            color:
-                                theme.colorScheme.onSurface.withOpacity(0.85),
+                            color: theme.colorScheme.onSurface
+                                .withValues(alpha: 0.85),
                             height: 1.6),
                         overflow: TextOverflow.ellipsis,
                         maxLines: 2,
@@ -553,8 +553,8 @@ class ReplyItemGrpc extends StatelessWidget {
                           TextSpan(
                             text: 'UP主等人 ',
                             style: TextStyle(
-                              color:
-                                  theme.colorScheme.onSurface.withOpacity(0.85),
+                              color: theme.colorScheme.onSurface
+                                  .withValues(alpha: 0.85),
                             ),
                           ),
                         TextSpan(

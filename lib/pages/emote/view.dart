@@ -97,7 +97,7 @@ class _EmotePanelState extends State<EmotePanel>
                 ),
                 Divider(
                   height: 1,
-                  color: theme.dividerColor.withOpacity(0.1),
+                  color: theme.dividerColor.withValues(alpha: 0.1),
                 ),
                 Row(
                   children: [
@@ -105,8 +105,8 @@ class _EmotePanelState extends State<EmotePanel>
                       padding: const EdgeInsets.symmetric(horizontal: 10),
                       child: iconButton(
                         iconSize: 20,
-                        iconColor:
-                            theme.colorScheme.onSurfaceVariant.withOpacity(0.8),
+                        iconColor: theme.colorScheme.onSurfaceVariant
+                            .withValues(alpha: 0.8),
                         bgColor: Colors.transparent,
                         context: context,
                         onPressed: () {

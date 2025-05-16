@@ -372,14 +372,14 @@ class _SponsorBlockPageState extends State<SponsorBlockPage> {
     final divider = SliverToBoxAdapter(
       child: Divider(
         height: 1,
-        color: theme.colorScheme.outline.withOpacity(0.1),
+        color: theme.colorScheme.outline.withValues(alpha: 0.1),
       ),
     );
 
     final dividerL = SliverToBoxAdapter(
       child: Divider(
         thickness: 16,
-        color: theme.colorScheme.outline.withOpacity(0.1),
+        color: theme.colorScheme.outline.withValues(alpha: 0.1),
       ),
     );
 
@@ -505,7 +505,8 @@ class _SponsorBlockPageState extends State<SponsorBlockPage> {
                               fontSize: 14,
                               color: _blockSettings[index].second ==
                                       SkipType.disable
-                                  ? theme.colorScheme.outline.withOpacity(0.7)
+                                  ? theme.colorScheme.outline
+                                      .withValues(alpha: 0.7)
                                   : theme.colorScheme.secondary,
                             ),
                             strutStyle: const StrutStyle(height: 1, leading: 0),
@@ -515,7 +516,8 @@ class _SponsorBlockPageState extends State<SponsorBlockPage> {
                             size: MediaQuery.textScalerOf(context).scale(14),
                             color:
                                 _blockSettings[index].second == SkipType.disable
-                                    ? theme.colorScheme.outline.withOpacity(0.7)
+                                    ? theme.colorScheme.outline
+                                        .withValues(alpha: 0.7)
                                     : theme.colorScheme.secondary,
                           ),
                         ],
@@ -536,7 +538,7 @@ class _SponsorBlockPageState extends State<SponsorBlockPage> {
             ),
             separatorBuilder: (context, index) => Divider(
               height: 1,
-              color: theme.colorScheme.outline.withOpacity(0.1),
+              color: theme.colorScheme.outline.withValues(alpha: 0.1),
             ),
           ),
           dividerL,

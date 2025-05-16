@@ -68,7 +68,7 @@ class _SearchResultPageState extends State<SearchResultPage>
       appBar: AppBar(
         shape: Border(
           bottom: BorderSide(
-            color: theme.dividerColor.withOpacity(0.08),
+            color: theme.dividerColor.withValues(alpha: 0.08),
             width: 1,
           ),
         ),

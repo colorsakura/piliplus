@@ -100,7 +100,7 @@ class _ArticleListPageState extends State<ArticleListPage> {
     late final style = TextStyle(color: theme.colorScheme.onSurfaceVariant);
     late final divider = TextSpan(
       text: '  |  ',
-      style: TextStyle(color: theme.colorScheme.outline.withOpacity(0.7)),
+      style: TextStyle(color: theme.colorScheme.outline.withValues(alpha: 0.7)),
     );
     final padding = MediaQuery.paddingOf(context).top + kToolbarHeight;
     return SliverAppBar.medium(

@@ -149,7 +149,7 @@ Widget imageView(
                       color: Theme.of(context)
                           .colorScheme
                           .onInverseSurface
-                          .withOpacity(0.4),
+                          .withValues(alpha: 0.4),
                       borderRadius: borderRadius(index),
                     ),
                     child: Center(

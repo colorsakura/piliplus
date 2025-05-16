@@ -509,7 +509,7 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
                                   border: Border(
                                     top: BorderSide(
                                       color: theme.colorScheme.outline
-                                          .withOpacity(0.08),
+                                          .withValues(alpha: 0.08),
                                     ),
                                   ),
                                 ),

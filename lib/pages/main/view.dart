@@ -301,7 +301,7 @@ class _MainAppState extends State<MainApp>
                   width: 1,
                   indent: MediaQuery.of(context).padding.top,
                   endIndent: MediaQuery.of(context).padding.bottom,
-                  color: theme.colorScheme.outline.withOpacity(0.06),
+                  color: theme.colorScheme.outline.withValues(alpha: 0.06),
                 ),
               ],
               Expanded(
@@ -448,7 +448,7 @@ class _MainAppState extends State<MainApp>
                             onTap: () =>
                                 _homeController.showUserInfoDialog(context),
                             splashColor: theme.colorScheme.primaryContainer
-                                .withOpacity(0.3),
+                                .withValues(alpha: 0.3),
                             borderRadius: const BorderRadius.all(
                               Radius.circular(50),
                             ),

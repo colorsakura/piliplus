@@ -70,7 +70,7 @@ class _NoteListPageState extends CommonSlidePageState<NoteListPage> {
             preferredSize: const Size.fromHeight(1),
             child: Divider(
               height: 1,
-              color: theme.colorScheme.outline.withOpacity(0.1),
+              color: theme.colorScheme.outline.withValues(alpha: 0.1),
             ),
           ),
           actions: [
@@ -101,7 +101,7 @@ class _NoteListPageState extends CommonSlidePageState<NoteListPage> {
             border: Border(
               top: BorderSide(
                 width: 0.5,
-                color: theme.colorScheme.outline.withOpacity(0.1),
+                color: theme.colorScheme.outline.withValues(alpha: 0.1),
               ),
             ),
           ),
@@ -165,7 +165,7 @@ class _NoteListPageState extends CommonSlidePageState<NoteListPage> {
                     itemCount: response!.length,
                     separatorBuilder: (context, index) => Divider(
                       height: 1,
-                      color: theme.colorScheme.outline.withOpacity(0.1),
+                      color: theme.colorScheme.outline.withValues(alpha: 0.1),
                     ),
                   ),
                   SliverToBoxAdapter(

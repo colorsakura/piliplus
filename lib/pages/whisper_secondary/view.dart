@@ -106,7 +106,7 @@ class _WhisperSecPageState extends State<WhisperSecPage> {
                 indent: 72,
                 endIndent: 20,
                 height: 1,
-                color: Colors.grey.withOpacity(0.1),
+                color: Colors.grey.withValues(alpha: 0.1),
               ),
             )
           : HttpError(

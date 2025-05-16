@@ -160,7 +160,7 @@ class _GroupPanelState extends State<GroupPanel> {
           ),
           Divider(
             height: 1,
-            color: theme.disabledColor.withOpacity(0.08),
+            color: theme.disabledColor.withValues(alpha: 0.08),
           ),
           Padding(
             padding: EdgeInsets.only(

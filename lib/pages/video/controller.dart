@@ -638,7 +638,7 @@ class VideoDetailController extends GetxController
                                 color: Theme.of(context)
                                     .colorScheme
                                     .onSurface
-                                    .withOpacity(0.7),
+                                    .withValues(alpha: 0.7),
                               ),
                             ),
                           )
@@ -856,7 +856,7 @@ class VideoDetailController extends GetxController
               bgColor: Theme.of(Get.context!)
                   .colorScheme
                   .secondaryContainer
-                  .withOpacity(0.8),
+                  .withValues(alpha: 0.8),
               textColor:
                   Theme.of(Get.context!).colorScheme.onSecondaryContainer,
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
@@ -1472,7 +1472,7 @@ class VideoDetailController extends GetxController
             return Segment(
               start,
               start,
-              Colors.black.withOpacity(0.5),
+              Colors.black.withValues(alpha: 0.5),
               item?['content'],
               item?['imgUrl'],
               item?['from'],

@@ -73,7 +73,7 @@ class BottomControl extends StatelessWidget implements PreferredSizeWidget {
               alignment: Alignment.center,
               child: PopupMenuButton<BoxFit>(
                 initialValue: plPlayerController.videoFit.value,
-                color: Colors.black.withOpacity(0.8),
+                color: Colors.black.withValues(alpha: 0.8),
                 itemBuilder: (BuildContext context) {
                   return BoxFit.values.map((BoxFit boxFit) {
                     return PopupMenuItem<BoxFit>(
@@ -105,7 +105,7 @@ class BottomControl extends StatelessWidget implements PreferredSizeWidget {
               child: PopupMenuButton<int>(
                 padding: EdgeInsets.zero,
                 initialValue: liveRoomCtr.currentQn,
-                color: Colors.black.withOpacity(0.8),
+                color: Colors.black.withValues(alpha: 0.8),
                 child: Text(
                   liveRoomCtr.currentQnDesc.value,
                   style: const TextStyle(color: Colors.white, fontSize: 13),

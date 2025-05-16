@@ -2,7 +2,9 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-import 'package:flutter/foundation.dart';
+import 'dart:ui' show SemanticsRole;
+
+import 'package:flutter/foundation.dart' show clampDouble;
 import 'package:flutter/gestures.dart' show DragStartBehavior;
 import 'package:flutter/material.dart' hide TabBarView;
 
@@ -124,11 +126,8 @@ class _CustomTabBarViewState extends State<CustomTabBarView> {
     _warpUnderwayCount -= 1;
   }
 
-  Future<void> _animateToPage(
-    int page, {
-    required Duration duration,
-    required Curve curve,
-  }) async {
+  Future<void> _animateToPage(int page,
+      {required Duration duration, required Curve curve}) async {
     _warpUnderwayCount += 1;
     await _pageController!
         .animateToPage(page, duration: duration, curve: curve);
@@ -190,7 +189,11 @@ class _CustomTabBarViewState extends State<CustomTabBarView> {
   }
 
   void _updateChildren() {
-    _childrenWithKey = KeyedSubtree.ensureUniqueKeysForList(widget.children);
+    _childrenWithKey = KeyedSubtree.ensureUniqueKeysForList(
+      widget.children.map<Widget>((Widget child) {
+        return Semantics(role: SemanticsRole.tabPanel, child: child);
+      }).toList(),
+    );
   }
 
   void _handleTabControllerAnimationTick() {

@@ -26,8 +26,8 @@ class ActionRowItem extends StatelessWidget {
     final theme = Theme.of(context);
     return Material(
       color: selectStatus
-          ? theme.colorScheme.primaryContainer.withOpacity(0.6)
-          : theme.highlightColor.withOpacity(0.2),
+          ? theme.colorScheme.primaryContainer.withValues(alpha: 0.6)
+          : theme.highlightColor.withValues(alpha: 0.2),
       borderRadius: const BorderRadius.all(Radius.circular(30)),
       clipBehavior: Clip.hardEdge,
       child: InkWell(

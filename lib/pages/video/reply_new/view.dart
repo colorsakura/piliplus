@@ -154,7 +154,7 @@ class _ReplyPageState extends CommonPublishPageState<ReplyPage> {
       ),
       Divider(
         height: 1,
-        color: themeData.dividerColor.withOpacity(0.1),
+        color: themeData.dividerColor.withValues(alpha: 0.1),
       ),
       Container(
         height: 52,

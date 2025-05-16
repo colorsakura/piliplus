@@ -38,8 +38,8 @@ class _IntroDetailState extends CommonCollapseSlidePageState<IntroDetail> {
                 width: 32,
                 height: 3,
                 decoration: BoxDecoration(
-                    color:
-                        theme.colorScheme.onSecondaryContainer.withOpacity(0.5),
+                    color: theme.colorScheme.onSecondaryContainer
+                        .withValues(alpha: 0.5),
                     borderRadius: const BorderRadius.all(Radius.circular(3))),
               ),
             ),

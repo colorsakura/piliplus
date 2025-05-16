@@ -556,8 +556,9 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                           if (shouldShow)
                             AppBar(
                               backgroundColor: themeData.colorScheme.surface
-                                  .withOpacity(
-                                      videoDetailController.scrollRatio.value),
+                                  .withValues(
+                                      alpha: videoDetailController
+                                          .scrollRatio.value),
                               toolbarHeight: 0,
                               systemOverlayStyle: Platform.isAndroid
                                   ? SystemUiOverlayStyle(
@@ -1543,7 +1544,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
         border: Border(
           bottom: BorderSide(
             width: 1,
-            color: themeData.dividerColor.withOpacity(0.1),
+            color: themeData.dividerColor.withValues(alpha: 0.1),
           ),
         ),
       ),
@@ -1748,7 +1749,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                               ),
                               backgroundColor: themeData
                                   .colorScheme.secondaryContainer
-                                  .withOpacity(0.8),
+                                  .withValues(alpha: 0.8),
                               padding: const EdgeInsets.symmetric(
                                 horizontal: 15,
                                 vertical: 10,
@@ -1818,7 +1819,8 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                         height: 1,
                         indent: 12,
                         endIndent: 12,
-                        color: themeData.colorScheme.outline.withOpacity(0.08),
+                        color: themeData.colorScheme.outline
+                            .withValues(alpha: 0.08),
                       ),
                     ),
                   ),
@@ -1873,7 +1875,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   decoration: BoxDecoration(
                     color: themeData.colorScheme.secondaryContainer
-                        .withOpacity(0.95),
+                        .withValues(alpha: 0.95),
                     borderRadius: const BorderRadius.all(Radius.circular(14)),
                   ),
                   child: Row(
@@ -1953,7 +1955,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
               const SizedBox(height: 8),
               Divider(
                 height: 1,
-                color: themeData.colorScheme.outline.withOpacity(0.1),
+                color: themeData.colorScheme.outline.withValues(alpha: 0.1),
               ),
             ],
             Padding(

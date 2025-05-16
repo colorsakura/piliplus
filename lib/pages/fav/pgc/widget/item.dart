@@ -93,7 +93,8 @@ class FavPgcItem extends StatelessWidget {
                                       decoration: BoxDecoration(
                                         borderRadius: const BorderRadius.all(
                                             Radius.circular(4)),
-                                        color: Colors.black.withOpacity(0.6),
+                                        color:
+                                            Colors.black.withValues(alpha: 0.6),
                                       ),
                                       child: SizedBox(
                                         width: 34,
@@ -114,7 +115,7 @@ class FavPgcItem extends StatelessWidget {
                                                 (states) {
                                                   return theme
                                                       .colorScheme.surface
-                                                      .withOpacity(0.8);
+                                                      .withValues(alpha: 0.8);
                                                 },
                                               ),
                                             ),

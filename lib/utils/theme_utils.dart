@@ -90,6 +90,7 @@ class ThemeUtils {
           color: colorScheme.onSurface,
           fontWeight: fontWeight,
         ),
+        backgroundColor: colorScheme.surface,
       ),
       bottomSheetTheme: BottomSheetThemeData(
         backgroundColor: colorScheme.surface,

@@ -20,7 +20,6 @@ import 'package:PiliPlus/utils/storage.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart' as web;
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
-import 'package:webview_cookie_manager/webview_cookie_manager.dart';
 
 class LoginUtils {
   static final random = Random();
@@ -32,7 +31,6 @@ class LoginUtils {
       final cookies = account.cookieJar.toList();
       final webManager = web.CookieManager();
       Future.wait([
-        WebviewCookieManager().setCookies(cookies),
         ...cookies.map((item) => webManager.setCookie(
               url: web.WebUri(item.domain ?? ''),
               name: item.name,

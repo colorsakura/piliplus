@@ -73,7 +73,7 @@ class _AiDetailState extends CommonCollapseSlidePageState<AiDetail> {
             SliverToBoxAdapter(
               child: Divider(
                 height: 20,
-                color: theme.dividerColor.withOpacity(0.1),
+                color: theme.dividerColor.withValues(alpha: 0.1),
                 thickness: 6,
               ),
             ),

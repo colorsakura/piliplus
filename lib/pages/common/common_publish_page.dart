@@ -277,7 +277,7 @@ abstract class CommonPublishPageState<T extends CommonPublishPage>
 
   Widget buildImage(int index, double height) {
     final color =
-        Theme.of(context).colorScheme.secondaryContainer.withOpacity(0.5);
+        Theme.of(context).colorScheme.secondaryContainer.withValues(alpha: 0.5);
 
     void onClear() {
       pathList.removeAt(index);

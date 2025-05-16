@@ -209,7 +209,7 @@ class _EpisodePanelState extends CommonSlidePageState<EpisodePanel>
               isScrollable: true,
               tabs: widget.list.map((item) => Tab(text: item.title)).toList(),
               dividerHeight: 1,
-              dividerColor: theme.dividerColor.withOpacity(0.1),
+              dividerColor: theme.dividerColor.withValues(alpha: 0.1),
             ),
             Expanded(
               child: Material(
@@ -557,7 +557,7 @@ class _EpisodePanelState extends CommonSlidePageState<EpisodePanel>
         decoration: BoxDecoration(
           border: Border(
             bottom: BorderSide(
-              color: theme.dividerColor.withOpacity(0.1),
+              color: theme.dividerColor.withValues(alpha: 0.1),
             ),
           ),
         ),

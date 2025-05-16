@@ -84,16 +84,16 @@ class _PayCoinsPageState extends State<PayCoinsPage>
 
   Color _getColorFilter(int index) {
     if (index == 1 && widget.hasCoin) {
-      return Colors.black.withOpacity(0.4);
+      return Colors.black.withValues(alpha: 0.4);
     }
     if (_coins == null) {
       return Colors.transparent;
     }
     if (index == 0 && _coins == 0) {
-      return Colors.black.withOpacity(0.4);
+      return Colors.black.withValues(alpha: 0.4);
     }
     if (index == 1 && _coins! < 2) {
-      return Colors.black.withOpacity(0.4);
+      return Colors.black.withValues(alpha: 0.4);
     }
     return Colors.transparent;
   }

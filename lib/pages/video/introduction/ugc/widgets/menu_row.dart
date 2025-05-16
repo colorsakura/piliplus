@@ -55,7 +55,7 @@ class MenuRow extends StatelessWidget {
       {bool selectStatus = false}) {
     return Material(
       color: selectStatus
-          ? theme.highlightColor.withOpacity(0.2)
+          ? theme.highlightColor.withValues(alpha: 0.2)
           : Colors.transparent,
       borderRadius: const BorderRadius.all(Radius.circular(30)),
       clipBehavior: Clip.hardEdge,
@@ -71,7 +71,7 @@ class MenuRow extends StatelessWidget {
             border: Border.all(
               color: selectStatus
                   ? Colors.transparent
-                  : theme.highlightColor.withOpacity(0.2),
+                  : theme.highlightColor.withValues(alpha: 0.2),
             ),
           ),
           child: Row(

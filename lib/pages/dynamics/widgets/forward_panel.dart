@@ -209,7 +209,7 @@ Widget forWard(
               },
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
-          color: theme.dividerColor.withOpacity(0.08),
+          color: theme.dividerColor.withValues(alpha: 0.08),
           child: forWard(theme, isSave, item.orig!, context, source, callback,
               floor: floor + 1),
         ),
@@ -329,7 +329,7 @@ Widget forWard(
           width: double.infinity,
           padding:
               const EdgeInsets.only(left: 12, top: 10, right: 12, bottom: 10),
-          color: theme.dividerColor.withOpacity(0.08),
+          color: theme.dividerColor.withValues(alpha: 0.08),
           child: Row(
             children: [
               NetworkImgLayer(
@@ -378,7 +378,7 @@ Widget forWard(
           width: double.infinity,
           padding:
               const EdgeInsets.only(left: 12, top: 10, right: 12, bottom: 10),
-          color: theme.dividerColor.withOpacity(0.08),
+          color: theme.dividerColor.withValues(alpha: 0.08),
           child: Row(
             children: [
               NetworkImgLayer(

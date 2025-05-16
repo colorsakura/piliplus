@@ -46,7 +46,7 @@ void imageSaveDialog({
                     width: 30,
                     height: 30,
                     decoration: BoxDecoration(
-                      color: Colors.black.withOpacity(0.3),
+                      color: Colors.black.withValues(alpha: 0.3),
                       shape: BoxShape.circle,
                     ),
                     child: IconButton(

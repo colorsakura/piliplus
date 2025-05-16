@@ -192,7 +192,7 @@ class _UpPanelState extends State<UpPanel> {
                           (data.type == 'up' && (data.hasUpdate ?? false)),
                       backgroundColor: data.type == 'live'
                           ? theme.colorScheme.secondaryContainer
-                              .withOpacity(0.75)
+                              .withValues(alpha: 0.75)
                           : theme.colorScheme.primary,
                     ),
                   ),

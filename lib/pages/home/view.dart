@@ -111,7 +111,7 @@ class _HomePageState extends State<HomePage>
                             onTap: () =>
                                 _homeController.showUserInfoDialog(context),
                             splashColor: theme.colorScheme.primaryContainer
-                                .withOpacity(0.3),
+                                .withValues(alpha: 0.3),
                             borderRadius: const BorderRadius.all(
                               Radius.circular(50),
                             ),
@@ -187,9 +187,10 @@ class _HomePageState extends State<HomePage>
           borderRadius: BorderRadius.all(Radius.circular(25)),
         ),
         child: Material(
-          color: theme.colorScheme.onSecondaryContainer.withOpacity(0.05),
+          color: theme.colorScheme.onSecondaryContainer.withValues(alpha: 0.05),
           child: InkWell(
-            splashColor: theme.colorScheme.primaryContainer.withOpacity(0.3),
+            splashColor:
+                theme.colorScheme.primaryContainer.withValues(alpha: 0.3),
             onTap: () => Get.toNamed(
               '/search',
               parameters: {

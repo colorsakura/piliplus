@@ -149,7 +149,7 @@ class _SharePanelState extends State<SharePanel> {
                                 height: 50,
                                 decoration: BoxDecoration(
                                   color: theme.colorScheme.primary
-                                      .withOpacity(0.3),
+                                      .withValues(alpha: 0.3),
                                   shape: BoxShape.circle,
                                   border: Border.all(
                                     width: 1.5,

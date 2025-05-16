@@ -78,7 +78,7 @@ class _ViewPointsPageState
           preferredSize: const Size.fromHeight(1),
           child: Divider(
             height: 1,
-            color: theme.dividerColor.withOpacity(0.1),
+            color: theme.dividerColor.withValues(alpha: 0.1),
           ),
         ),
       ),
@@ -160,7 +160,7 @@ class _ViewPointsPageState
       },
       separatorBuilder: (context, index) => Divider(
         height: 1,
-        color: theme.dividerColor.withOpacity(0.1),
+        color: theme.dividerColor.withValues(alpha: 0.1),
       ),
     );
   }

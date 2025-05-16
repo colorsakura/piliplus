@@ -107,9 +107,9 @@ class ChatItem extends StatelessWidget {
                                 style: theme.textTheme.labelSmall!.copyWith(
                                     color: isOwner
                                         ? theme.colorScheme.onSecondaryContainer
-                                            .withOpacity(0.8)
+                                            .withValues(alpha: 0.8)
                                         : theme.colorScheme.onSurfaceVariant
-                                            .withOpacity(0.8)),
+                                            .withValues(alpha: 0.8)),
                               ),
                               if (item.msgStatus == 1)
                                 Text(
@@ -196,7 +196,7 @@ class ChatItem extends StatelessWidget {
             style: TextStyle(
               letterSpacing: 0.6,
               height: 1.5,
-              color: textColor.withOpacity(0.6),
+              color: textColor.withValues(alpha: 0.6),
               fontSize: 12,
             ),
           ),
@@ -247,7 +247,7 @@ class ChatItem extends StatelessWidget {
             style: TextStyle(
               letterSpacing: 0.6,
               height: 1.5,
-              color: textColor.withOpacity(0.6),
+              color: textColor.withValues(alpha: 0.6),
               fontSize: 12,
               overflow: TextOverflow.ellipsis,
             ),
@@ -335,7 +335,7 @@ class ChatItem extends StatelessWidget {
                             style: TextStyle(
                               letterSpacing: 0.6,
                               height: 1.5,
-                              color: textColor.withOpacity(0.6),
+                              color: textColor.withValues(alpha: 0.6),
                               fontSize: 12,
                             ),
                           ),
@@ -344,7 +344,7 @@ class ChatItem extends StatelessWidget {
                             style: TextStyle(
                               letterSpacing: 0.6,
                               height: 1.5,
-                              color: textColor.withOpacity(0.6),
+                              color: textColor.withValues(alpha: 0.6),
                               fontSize: 12,
                             ),
                           ),
@@ -407,7 +407,7 @@ class ChatItem extends StatelessWidget {
           style: TextStyle(
             letterSpacing: 0.6,
             height: 1.5,
-            color: textColor.withOpacity(0.6),
+            color: textColor.withValues(alpha: 0.6),
             fontSize: 12,
           ),
         ),
@@ -530,7 +530,7 @@ class ChatItem extends StatelessWidget {
             style: TextStyle(
               letterSpacing: 0.6,
               height: 1.5,
-              color: textColor.withOpacity(0.6),
+              color: textColor.withValues(alpha: 0.6),
               fontSize: 12,
             ),
           ),
@@ -564,7 +564,7 @@ class ChatItem extends StatelessWidget {
         style: TextStyle(
           height: 1.5,
           letterSpacing: 0.6,
-          color: theme.colorScheme.outline.withOpacity(0.8),
+          color: theme.colorScheme.outline.withValues(alpha: 0.8),
         ),
       ),
     );
@@ -642,7 +642,7 @@ class ChatItem extends StatelessWidget {
               style: theme.textTheme.labelSmall!
                   .copyWith(color: theme.colorScheme.outline),
             ),
-            Divider(color: theme.colorScheme.primary.withOpacity(0.05)),
+            Divider(color: theme.colorScheme.primary.withValues(alpha: 0.05)),
             SelectableText(content['text']),
             if (modules?.isNotEmpty == true) ...[
               const SizedBox(height: 4),
@@ -664,7 +664,7 @@ class ChatItem extends StatelessWidget {
             ],
             if ((content['jump_text'] as String?)?.isNotEmpty == true &&
                 (content['jump_uri'] as String?)?.isNotEmpty == true) ...[
-              Divider(color: theme.colorScheme.primary.withOpacity(0.05)),
+              Divider(color: theme.colorScheme.primary.withValues(alpha: 0.05)),
               GestureDetector(
                 behavior: HitTestBehavior.opaque,
                 onTap: () {
@@ -678,7 +678,7 @@ class ChatItem extends StatelessWidget {
             ],
             if ((content['jump_text_2'] as String?)?.isNotEmpty == true &&
                 (content['jump_uri_2'] as String?)?.isNotEmpty == true) ...[
-              Divider(color: theme.colorScheme.primary.withOpacity(0.05)),
+              Divider(color: theme.colorScheme.primary.withValues(alpha: 0.05)),
               GestureDetector(
                 behavior: HitTestBehavior.opaque,
                 onTap: () {
@@ -692,7 +692,7 @@ class ChatItem extends StatelessWidget {
             ],
             if ((content['jump_text_3'] as String?)?.isNotEmpty == true &&
                 (content['jump_uri_3'] as String?)?.isNotEmpty == true) ...[
-              Divider(color: theme.colorScheme.primary.withOpacity(0.05)),
+              Divider(color: theme.colorScheme.primary.withValues(alpha: 0.05)),
               GestureDetector(
                 behavior: HitTestBehavior.opaque,
                 onTap: () {

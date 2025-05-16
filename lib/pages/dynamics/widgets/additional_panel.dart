@@ -13,7 +13,7 @@ Widget addWidget(
     ThemeData theme, DynamicItemModel item, BuildContext context, type,
     {floor = 1}) {
   late final Color bgColor = floor == 1
-      ? theme.dividerColor.withOpacity(0.08)
+      ? theme.dividerColor.withValues(alpha: 0.08)
       : theme.colorScheme.surface;
   try {
     switch (type) {
@@ -131,13 +131,13 @@ Widget addWidget(
                                             ? null
                                             : isReserved
                                                 ? theme.colorScheme.onSurface
-                                                    .withOpacity(0.38)
+                                                    .withValues(alpha: 0.38)
                                                 : null,
                                         backgroundColor: canJump
                                             ? null
                                             : isReserved
                                                 ? theme.colorScheme.onSurface
-                                                    .withOpacity(0.12)
+                                                    .withValues(alpha: 0.12)
                                                 : null,
                                         visualDensity: VisualDensity.compact,
                                         padding: const EdgeInsets.symmetric(
@@ -322,7 +322,7 @@ Widget addWidget(
                       decoration: BoxDecoration(
                         color: floor == 1
                             ? theme.colorScheme.surface
-                            : theme.dividerColor.withOpacity(0.08),
+                            : theme.dividerColor.withValues(alpha: 0.08),
                         borderRadius:
                             const BorderRadius.all(Radius.circular(8)),
                       ),

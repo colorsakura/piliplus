@@ -58,7 +58,7 @@ class _FavNoteChildPageState extends State<FavNoteChildPage>
                     border: Border(
                       top: BorderSide(
                         width: 0.5,
-                        color: theme.colorScheme.outline.withOpacity(0.5),
+                        color: theme.colorScheme.outline.withValues(alpha: 0.5),
                       ),
                     ),
                   ),

@@ -263,7 +263,7 @@ class _ArticlePageState extends State<ArticlePage>
                           SliverToBoxAdapter(
                             child: Divider(
                               thickness: 8,
-                              color: theme.dividerColor.withOpacity(0.05),
+                              color: theme.dividerColor.withValues(alpha: 0.05),
                             ),
                           ),
                           _buildReplyHeader,
@@ -303,7 +303,7 @@ class _ArticlePageState extends State<ArticlePage>
                       ),
                       VerticalDivider(
                         thickness: 8,
-                        color: theme.dividerColor.withOpacity(0.05),
+                        color: theme.dividerColor.withValues(alpha: 0.05),
                       ),
                       Expanded(
                         flex: _ratio[1].toInt(),
@@ -847,7 +847,7 @@ class _ArticlePageState extends State<ArticlePage>
                                     border: Border(
                                       top: BorderSide(
                                         color: theme.colorScheme.outline
-                                            .withOpacity(0.08),
+                                            .withValues(alpha: 0.08),
                                       ),
                                     ),
                                   ),

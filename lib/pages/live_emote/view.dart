@@ -108,7 +108,7 @@ class _LiveEmotePanelState extends State<LiveEmotePanel>
                 ),
                 Divider(
                   height: 1,
-                  color: Theme.of(context).dividerColor.withOpacity(0.1),
+                  color: Theme.of(context).dividerColor.withValues(alpha: 0.1),
                 ),
                 TabBar(
                   controller: _emotePanelController.tabController,

@@ -40,7 +40,7 @@ class LiveRoomChat extends StatelessWidget {
                       const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                   decoration: BoxDecoration(
                     color: isPP == true
-                        ? Colors.black.withOpacity(0.3)
+                        ? Colors.black.withValues(alpha: 0.3)
                         : const Color(0x15FFFFFF),
                     borderRadius: const BorderRadius.all(Radius.circular(18)),
                   ),
@@ -51,7 +51,7 @@ class LiveRoomChat extends StatelessWidget {
                           text:
                               '${liveRoomController.messages[index]['name']}: ',
                           style: TextStyle(
-                            color: Colors.white.withOpacity(0.6),
+                            color: Colors.white.withValues(alpha: 0.6),
                             fontSize: 14,
                           ),
                           recognizer: TapGestureRecognizer()

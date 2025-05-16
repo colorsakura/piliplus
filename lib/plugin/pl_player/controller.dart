@@ -328,7 +328,7 @@ class PlPlayerController {
         fontWeight: FontWeight.values[subtitleFontWeight],
         backgroundColor: subtitleBgOpaticy == 0
             ? null
-            : Colors.black.withOpacity(subtitleBgOpaticy),
+            : Colors.black.withValues(alpha: subtitleBgOpaticy),
       );
 
   SubtitleViewConfiguration get subtitleViewConfiguration =>

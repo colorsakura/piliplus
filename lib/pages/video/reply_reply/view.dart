@@ -127,7 +127,7 @@ class _VideoReplyReplyPanelState
                     border: Border(
                       bottom: BorderSide(
                         width: 1,
-                        color: theme.dividerColor.withOpacity(0.1),
+                        color: theme.dividerColor.withValues(alpha: 0.1),
                       ),
                     ),
                   ),
@@ -146,7 +146,7 @@ class _VideoReplyReplyPanelState
                 )
               : Divider(
                   height: 1,
-                  color: theme.dividerColor.withOpacity(0.1),
+                  color: theme.dividerColor.withValues(alpha: 0.1),
                 ),
           Expanded(
             child: enableSlide ? slideList(theme) : buildList(theme),
@@ -203,7 +203,7 @@ class _VideoReplyReplyPanelState
                     } else if (index == 1) {
                       return Divider(
                         height: 20,
-                        color: theme.dividerColor.withOpacity(0.1),
+                        color: theme.dividerColor.withValues(alpha: 0.1),
                         thickness: 6,
                       );
                     } else if (index == 2) {

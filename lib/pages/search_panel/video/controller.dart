@@ -202,11 +202,11 @@ class SearchVideoController
               bgColor: currentPubTimeFilter == -1 &&
                       (isFirst ? customPubBeginDate : customPubEndDate)
                   ? theme.colorScheme.secondaryContainer
-                  : theme.colorScheme.outline.withOpacity(0.1),
+                  : theme.colorScheme.outline.withValues(alpha: 0.1),
               textColor: currentPubTimeFilter == -1 &&
                       (isFirst ? customPubBeginDate : customPubEndDate)
                   ? theme.colorScheme.onSecondaryContainer
-                  : theme.colorScheme.outline.withOpacity(0.8),
+                  : theme.colorScheme.outline.withValues(alpha: 0.8),
             );
           }
 

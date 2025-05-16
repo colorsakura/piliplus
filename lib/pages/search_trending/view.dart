@@ -79,8 +79,8 @@ class _SearchTrendingPageState extends State<SearchTrendingPage> {
                     ),
                   ),
                 ),
-                backgroundColor:
-                    theme.colorScheme.surface.withOpacity(_scrollRatio.value),
+                backgroundColor: theme.colorScheme.surface
+                    .withValues(alpha: _scrollRatio.value),
                 foregroundColor: flag ? null : Colors.white,
                 systemOverlayStyle: flag
                     ? null
@@ -93,7 +93,8 @@ class _SearchTrendingPageState extends State<SearchTrendingPage> {
                         preferredSize: const Size.fromHeight(1),
                         child: Divider(
                           height: 1,
-                          color: theme.colorScheme.outline.withOpacity(0.1),
+                          color:
+                              theme.colorScheme.outline.withValues(alpha: 0.1),
                         ),
                       )
                     : null,
@@ -214,7 +215,7 @@ class _SearchTrendingPageState extends State<SearchTrendingPage> {
                 separatorBuilder: (context, index) => Divider(
                   height: 1,
                   indent: 48,
-                  color: theme.colorScheme.outline.withOpacity(0.1),
+                  color: theme.colorScheme.outline.withValues(alpha: 0.1),
                 ),
               ),
             )

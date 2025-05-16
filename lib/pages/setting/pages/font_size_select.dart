@@ -67,7 +67,8 @@ class _FontSizeSelectPageState extends State<FontSizeSelectPage> {
               decoration: BoxDecoration(
                 border: Border(
                     top: BorderSide(
-                        color: theme.colorScheme.primary.withOpacity(0.3))),
+                        color:
+                            theme.colorScheme.primary.withValues(alpha: 0.3))),
                 color: theme.colorScheme.surface,
               ),
               child: Row(

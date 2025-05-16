@@ -53,7 +53,7 @@ class PBadge extends StatelessWidget {
         bgColor = theme.primary;
         color = theme.onPrimary;
       case PBadgeType.secondary:
-        bgColor = theme.secondaryContainer.withOpacity(0.5);
+        bgColor = theme.secondaryContainer.withValues(alpha: 0.5);
         color = theme.onSecondaryContainer;
       case PBadgeType.gray:
         bgColor = Colors.black45;

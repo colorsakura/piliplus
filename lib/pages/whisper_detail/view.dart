@@ -106,7 +106,7 @@ class _WhisperDetailPageState
             icon: Icon(
               size: 20,
               Icons.settings,
-              color: theme.colorScheme.onSurfaceVariant.withOpacity(0.8),
+              color: theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.8),
             ),
           ),
           const SizedBox(width: 10),

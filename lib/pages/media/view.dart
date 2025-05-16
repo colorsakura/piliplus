@@ -111,7 +111,7 @@ class _MediaPageState extends CommonPageState<MediaPage, MediaController>
       children: [
         Divider(
           height: 20,
-          color: theme.dividerColor.withOpacity(0.1),
+          color: theme.dividerColor.withValues(alpha: 0.1),
         ),
         ListTile(
           onTap: () async {
@@ -193,7 +193,7 @@ class _MediaPageState extends CommonPageState<MediaPage, MediaController>
                           backgroundColor:
                               WidgetStateProperty.resolveWith((states) {
                             return theme.colorScheme.primaryContainer
-                                .withOpacity(0.5);
+                                .withValues(alpha: 0.5);
                           }),
                         ),
                         onPressed: () async {
@@ -282,10 +282,12 @@ class FavFolderItem extends StatelessWidget {
               clipBehavior: Clip.hardEdge,
               decoration: BoxDecoration(
                 borderRadius: const BorderRadius.all(Radius.circular(12)),
-                color: theme.colorScheme.onInverseSurface.withOpacity(0.4),
+                color:
+                    theme.colorScheme.onInverseSurface.withValues(alpha: 0.4),
                 boxShadow: [
                   BoxShadow(
-                    color: theme.colorScheme.onInverseSurface.withOpacity(0.4),
+                    color: theme.colorScheme.onInverseSurface
+                        .withValues(alpha: 0.4),
                     offset: const Offset(4, -12),
                     blurRadius: 0.0,
                     spreadRadius: 0.0,

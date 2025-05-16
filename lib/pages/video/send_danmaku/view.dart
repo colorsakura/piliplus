@@ -183,7 +183,7 @@ class _SendDanmakuPanelState extends CommonPublishPageState<SendDanmakuPanel> {
         decoration: BoxDecoration(
           border: Border(
             top: BorderSide(
-              color: themeData.colorScheme.outline.withOpacity(0.1),
+              color: themeData.colorScheme.outline.withValues(alpha: 0.1),
             ),
           ),
         ),

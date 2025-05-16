@@ -122,14 +122,16 @@ class _LoginPageState extends State<LoginPage> {
                     const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
                 child: Text(_loginPageCtr.codeInfo['data']?['url'] ?? "",
                     style: theme.textTheme.labelSmall!.copyWith(
-                        color: theme.colorScheme.onSurface.withOpacity(0.4))),
+                        color: theme.colorScheme.onSurface
+                            .withValues(alpha: 0.4))),
               ),
             )),
         Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Text('请务必在 PiliPlus 开源仓库等可信渠道下载安装。',
                 style: theme.textTheme.labelSmall!.copyWith(
-                    color: theme.colorScheme.onSurface.withOpacity(0.4)))),
+                    color:
+                        theme.colorScheme.onSurface.withValues(alpha: 0.4)))),
       ],
     );
   }
@@ -313,7 +315,8 @@ class _LoginPageState extends State<LoginPage> {
                 '请务必在 PiliPlus 开源仓库等可信渠道下载安装。',
                 textAlign: TextAlign.center,
                 style: theme.textTheme.labelSmall!.copyWith(
-                    color: theme.colorScheme.onSurface.withOpacity(0.4)))),
+                    color:
+                        theme.colorScheme.onSurface.withValues(alpha: 0.4)))),
       ],
     );
   }
@@ -329,7 +332,7 @@ class _LoginPageState extends State<LoginPage> {
             child: DecoratedBox(
               decoration: UnderlineTabIndicator(
                 borderSide: BorderSide(
-                    color: theme.colorScheme.outline.withOpacity(0.4)),
+                    color: theme.colorScheme.outline.withValues(alpha: 0.4)),
               ),
               child: Row(
                 children: [
@@ -370,7 +373,7 @@ class _LoginPageState extends State<LoginPage> {
                   SizedBox(
                     height: 24,
                     child: VerticalDivider(
-                      color: theme.colorScheme.outline.withOpacity(0.5),
+                      color: theme.colorScheme.outline.withValues(alpha: 0.5),
                     ),
                   ),
                   const SizedBox(width: 6),
@@ -398,7 +401,7 @@ class _LoginPageState extends State<LoginPage> {
             child: DecoratedBox(
               decoration: UnderlineTabIndicator(
                 borderSide: BorderSide(
-                    color: theme.colorScheme.outline.withOpacity(0.4)),
+                    color: theme.colorScheme.outline.withValues(alpha: 0.4)),
               ),
               child: Row(
                 children: [
@@ -443,7 +446,8 @@ class _LoginPageState extends State<LoginPage> {
                 '请务必在 PiliPlus 开源仓库等可信渠道下载安装。',
                 textAlign: TextAlign.center,
                 style: theme.textTheme.labelSmall!.copyWith(
-                    color: theme.colorScheme.onSurface.withOpacity(0.4)))),
+                    color:
+                        theme.colorScheme.onSurface.withValues(alpha: 0.4)))),
       ],
     );
   }

@@ -411,7 +411,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
               child: PopupMenuButton<SuperResolutionType>(
                 initialValue: SuperResolutionType
                     .values[plPlayerController.superResolutionType],
-                color: Colors.black.withOpacity(0.8),
+                color: Colors.black.withValues(alpha: 0.8),
                 itemBuilder: (BuildContext context) {
                   return SuperResolutionType.values
                       .map((SuperResolutionType type) {
@@ -532,7 +532,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
         alignment: Alignment.center,
         child: PopupMenuButton<BoxFit>(
           initialValue: plPlayerController.videoFit.value,
-          color: Colors.black.withOpacity(0.8),
+          color: Colors.black.withValues(alpha: 0.8),
           itemBuilder: (BuildContext context) {
             return BoxFit.values.map((BoxFit boxFit) {
               return PopupMenuItem<BoxFit>(
@@ -567,7 +567,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                   initialValue: widget
                       .videoDetailController!.vttSubtitlesIndex.value
                       .clamp(0, widget.videoDetailController!.subtitles.length),
-                  color: Colors.black.withOpacity(0.8),
+                  color: Colors.black.withValues(alpha: 0.8),
                   itemBuilder: (BuildContext context) {
                     return [
                       PopupMenuItem<int>(
@@ -623,7 +623,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
           alignment: Alignment.center,
           child: PopupMenuButton<double>(
             initialValue: plPlayerController.playbackSpeed,
-            color: Colors.black.withOpacity(0.8),
+            color: Colors.black.withValues(alpha: 0.8),
             itemBuilder: (BuildContext context) {
               return plPlayerController.speedList.map((double speed) {
                 return PopupMenuItem<double>(
@@ -1328,7 +1328,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                       style: FilledButton.styleFrom(
                         tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                         backgroundColor: theme.colorScheme.secondaryContainer
-                            .withOpacity(0.8),
+                            .withValues(alpha: 0.8),
                         visualDensity: VisualDensity.compact,
                         padding: const EdgeInsets.all(15),
                         shape: const RoundedRectangleBorder(
@@ -1418,8 +1418,8 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                           buffered: Duration(seconds: buffer),
                           total: Duration(seconds: max),
                           progressBarColor: primary,
-                          baseBarColor: Colors.white.withOpacity(0.2),
-                          bufferedBarColor: primary.withOpacity(0.4),
+                          baseBarColor: Colors.white.withValues(alpha: 0.2),
+                          bufferedBarColor: primary.withValues(alpha: 0.4),
                           timeLabelLocation: TimeLabelLocation.none,
                           thumbColor: primary,
                           barHeight: 3.5,
@@ -1794,7 +1794,7 @@ Widget buildDmChart(
               dotData: const FlDotData(show: false),
               belowBarData: BarAreaData(
                 show: true,
-                color: color.withOpacity(0.4),
+                color: color.withValues(alpha: 0.4),
               ),
             ),
           ],

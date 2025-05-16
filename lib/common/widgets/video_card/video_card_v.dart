@@ -261,7 +261,7 @@ class VideoCardV extends StatelessWidget {
             TextSpan(
                 style: TextStyle(
                   fontSize: theme.textTheme.labelSmall!.fontSize,
-                  color: theme.colorScheme.outline.withOpacity(0.8),
+                  color: theme.colorScheme.outline.withValues(alpha: 0.8),
                 ),
                 text: Utils.formatTimestampToRelativeTime(videoItem.pubdate)),
           ),
@@ -275,7 +275,7 @@ class VideoCardV extends StatelessWidget {
             TextSpan(
                 style: TextStyle(
                   fontSize: theme.textTheme.labelSmall!.fontSize,
-                  color: theme.colorScheme.outline.withOpacity(0.8),
+                  color: theme.colorScheme.outline.withValues(alpha: 0.8),
                 ),
                 text: Utils.shortenChineseDateString(
                     videoItem.desc!.split(' · ').last)),

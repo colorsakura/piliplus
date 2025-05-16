@@ -33,7 +33,7 @@ class _SearchPageState extends State<SearchPage> {
       appBar: AppBar(
         shape: Border(
           bottom: BorderSide(
-            color: theme.dividerColor.withOpacity(0.08),
+            color: theme.dividerColor.withValues(alpha: 0.08),
             width: 1,
           ),
         ),
@@ -338,7 +338,7 @@ class _SearchPageState extends State<SearchPage> {
   }
 
   Icon historyIcon(ThemeData theme) => Icon(Icons.history,
-      color: theme.colorScheme.onSurfaceVariant.withOpacity(0.8));
+      color: theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.8));
 
   Widget _buildHotKey(
       LoadingState<SearchKeywordData> loadingState, bool isHot) {

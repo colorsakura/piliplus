@@ -21,8 +21,8 @@ class RecommendSetting extends StatelessWidget {
               '* 其它（如热门视频、手动搜索、链接跳转等）均不受过滤器影响。\n'
               '* 设定较严苛的条件可导致推荐项数锐减或多次请求，请酌情选择。\n'
               '* 后续可能会增加更多过滤条件，敬请期待。',
-              style: theme.textTheme.labelSmall!
-                  .copyWith(color: theme.colorScheme.outline.withOpacity(0.7)),
+              style: theme.textTheme.labelSmall!.copyWith(
+                  color: theme.colorScheme.outline.withValues(alpha: 0.7)),
             ),
           ),
           SizedBox(height: MediaQuery.paddingOf(context).bottom + 80),

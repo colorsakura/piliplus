@@ -1,22 +1,33 @@
 allprojects {
     repositories {
-        maven { url "https://maven.aliyun.com/repository/google" }
-        maven { url "https://maven.aliyun.com/repository/central" }
-        maven { url "https://maven.aliyun.com/repository/jcenter" }
-        maven { url "https://maven.aliyun.com/repository/public" }
-        maven { url "http://download.flutter.io"
-            allowInsecureProtocol = true
-        }
         google()
         mavenCentral()
-        maven { url 'https://jitpack.io' }
     }
 }
 
 rootProject.buildDir = '../build'
 subprojects {
     afterEvaluate { project ->
-        if (project.extensions.findByName("android") != null) {
+         if (project.hasProperty('android')) {
+            project.android {
+                if (namespace == null) {
+                    namespace project.group
+                }
+            }
+
+            android {
+                compileOptions {
+                    sourceCompatibility JavaVersion.VERSION_17
+                    targetCompatibility JavaVersion.VERSION_17
+                }
+
+                tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
+                    kotlinOptions {
+                        jvmTarget = '17'
+                    }
+                }
+            }
+
             Integer pluginCompileSdk = project.android.compileSdk
             if (pluginCompileSdk != null) {
                 if (pluginCompileSdk < 31) {
@@ -32,18 +43,6 @@ subprojects {
                     )
                     project.android {
                         compileSdk 31
-                    }
-                }
-                if (pluginCompileSdk > 34) {
-                    project.logger.error(
-                        "Warning: Overriding compileSdk version in Flutter plugin: "
-                            + project.name
-                            + " from "
-                            + pluginCompileSdk
-                            + " to 34"
-                    )
-                    project.android {
-                        compileSdk 34
                     }
                 }
             }

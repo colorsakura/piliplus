@@ -9,7 +9,6 @@ import 'package:PiliPlus/utils/feed_back.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
-import 'package:nil/nil.dart';
 
 class BottomControl extends StatelessWidget implements PreferredSizeWidget {
   final PlPlayerController controller;
@@ -41,7 +40,7 @@ class BottomControl extends StatelessWidget implements PreferredSizeWidget {
               final int max = controller.durationSeconds.value.inSeconds;
               final int buffer = controller.bufferedSeconds.value;
               if (value > max || max <= 0) {
-                return nil;
+                return const SizedBox.shrink();
               }
               return Padding(
                 padding: const EdgeInsets.only(left: 10, right: 10, bottom: 7),
@@ -62,8 +61,8 @@ class BottomControl extends StatelessWidget implements PreferredSizeWidget {
                         buffered: Duration(seconds: buffer),
                         total: Duration(seconds: max),
                         progressBarColor: colorTheme,
-                        baseBarColor: Colors.white.withOpacity(0.2),
-                        bufferedBarColor: colorTheme.withOpacity(0.4),
+                        baseBarColor: Colors.white.withValues(alpha: 0.2),
+                        bufferedBarColor: colorTheme.withValues(alpha: 0.4),
                         timeLabelLocation: TimeLabelLocation.none,
                         thumbColor: colorTheme,
                         barHeight: 3.5,

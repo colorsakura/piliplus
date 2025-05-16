@@ -127,7 +127,7 @@ class _SettingPageState extends State<SettingPage> {
                 ),
                 VerticalDivider(
                   width: 1,
-                  color: theme.colorScheme.outline.withOpacity(0.1),
+                  color: theme.colorScheme.outline.withValues(alpha: 0.1),
                 ),
                 Expanded(
                   flex: 6,

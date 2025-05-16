@@ -118,7 +118,8 @@ class _ColorSelectPageState extends State<ColorSelectPage> {
                               height: 1,
                               fontSize: 13,
                               color: ctr.type.value == 0
-                                  ? theme.colorScheme.outline.withOpacity(0.8)
+                                  ? theme.colorScheme.outline
+                                      .withValues(alpha: 0.8)
                                   : theme.colorScheme.secondary,
                             ),
                             strutStyle: const StrutStyle(leading: 0, height: 1),
@@ -127,7 +128,8 @@ class _ColorSelectPageState extends State<ColorSelectPage> {
                             size: 20,
                             Icons.keyboard_arrow_right,
                             color: ctr.type.value == 0
-                                ? theme.colorScheme.outline.withOpacity(0.8)
+                                ? theme.colorScheme.outline
+                                    .withValues(alpha: 0.8)
                                 : theme.colorScheme.secondary,
                           )
                         ],
@@ -201,14 +203,14 @@ class _ColorSelectPageState extends State<ColorSelectPage> {
                                     width: 46,
                                     height: 46,
                                     decoration: BoxDecoration(
-                                      color: e['color'].withOpacity(0.8),
+                                      color: e['color'].withValues(alpha: 0.8),
                                       borderRadius: const BorderRadius.all(
                                           Radius.circular(50)),
                                       border: Border.all(
                                         width: 2,
                                         color: ctr.currentColor.value == index
                                             ? Colors.black
-                                            : e['color'].withOpacity(0.8),
+                                            : e['color'].withValues(alpha: 0.8),
                                       ),
                                     ),
                                     child: AnimatedOpacity(

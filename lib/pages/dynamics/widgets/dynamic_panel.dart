@@ -86,7 +86,7 @@ class DynamicPanel extends StatelessWidget {
         border: Border(
           bottom: BorderSide(
             width: 8,
-            color: theme.dividerColor.withOpacity(0.05),
+            color: theme.dividerColor.withValues(alpha: 0.05),
           ),
         ),
       ),

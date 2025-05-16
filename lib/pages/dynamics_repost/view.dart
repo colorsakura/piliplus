@@ -321,7 +321,7 @@ class _RepostPanelState extends CommonPublishPageState<RepostPanel> {
         const SizedBox(height: 10),
         Divider(
           height: 1,
-          color: theme.colorScheme.outline.withOpacity(0.1),
+          color: theme.colorScheme.outline.withValues(alpha: 0.1),
         ),
         ListTile(
           dense: true,

@@ -43,7 +43,7 @@ class _LikeMePageState extends State<LikeMePage> {
             icon: Icon(
               size: 20,
               Icons.settings,
-              color: theme.colorScheme.onSurfaceVariant.withOpacity(0.8),
+              color: theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.8),
             ),
           ),
           const SizedBox(width: 10),
@@ -106,7 +106,7 @@ class _LikeMePageState extends State<LikeMePage> {
                         indent: 72,
                         endIndent: 20,
                         height: 6,
-                        color: Colors.grey.withOpacity(0.1),
+                        color: Colors.grey.withValues(alpha: 0.1),
                       );
                     },
                   ),
@@ -136,7 +136,7 @@ class _LikeMePageState extends State<LikeMePage> {
                         indent: 72,
                         endIndent: 20,
                         height: 6,
-                        color: Colors.grey.withOpacity(0.1),
+                        color: Colors.grey.withValues(alpha: 0.1),
                       );
                     },
                   ),
