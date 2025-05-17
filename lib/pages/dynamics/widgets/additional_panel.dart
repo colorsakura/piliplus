@@ -327,8 +327,11 @@ Widget addWidget(
                             const BorderRadius.all(Radius.circular(8)),
                       ),
                       width: 70,
-                      height: 56,
-                      child: const Icon(Icons.bar_chart_rounded),
+                      height: 50,
+                      child: Icon(
+                        Icons.bar_chart_rounded,
+                        color: theme.colorScheme.onSurfaceVariant,
+                      ),
                     ),
                     const SizedBox(width: 10),
                     Expanded(

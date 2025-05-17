@@ -220,7 +220,7 @@ class Goods {
 class GoodsItem {
   String? brief;
   String? cover;
-  int? id;
+  dynamic id;
   String? jumpDesc;
   String? jumpUrl;
   String? name;

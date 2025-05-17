@@ -201,37 +201,38 @@ class OpusContent extends StatelessWidget {
                 ),
                 color: colorScheme.onInverseSurface,
                 child: InkWell(
-                  onTap: () {
-                    try {
-                      if (element.linkCard!.card!.type ==
-                          'LINK_CARD_TYPE_VOTE') {
-                        showVoteDialog(
-                          context,
-                          element.linkCard!.card!.vote?.voteId ??
-                              element.linkCard!.card!.oid,
-                        );
-                        return;
-                      }
-                      String? url = switch (element.linkCard!.card!.type) {
-                        'LINK_CARD_TYPE_UGC' =>
-                          element.linkCard!.card!.ugc!.jumpUrl,
-                        'LINK_CARD_TYPE_COMMON' =>
-                          element.linkCard!.card!.common!.jumpUrl,
-                        'LINK_CARD_TYPE_LIVE' =>
-                          element.linkCard!.card!.live!.jumpUrl,
-                        'LINK_CARD_TYPE_OPUS' =>
-                          element.linkCard!.card!.opus!.jumpUrl,
-                        'LINK_CARD_TYPE_MUSIC' =>
-                          element.linkCard!.card!.music!.jumpUrl,
-                        'LINK_CARD_TYPE_GOODS' =>
-                          element.linkCard!.card!.goods!.jumpUrl,
-                        _ => null,
-                      };
-                      if (url != null) {
-                        PiliScheme.routePushFromUrl(url);
-                      }
-                    } catch (_) {}
-                  },
+                  onTap: element.linkCard!.card!.type == 'LINK_CARD_TYPE_GOODS'
+                      ? null
+                      : () {
+                          try {
+                            if (element.linkCard!.card!.type ==
+                                'LINK_CARD_TYPE_VOTE') {
+                              showVoteDialog(
+                                context,
+                                element.linkCard!.card!.vote?.voteId ??
+                                    element.linkCard!.card!.oid,
+                              );
+                              return;
+                            }
+                            String? url =
+                                switch (element.linkCard!.card!.type) {
+                              'LINK_CARD_TYPE_UGC' =>
+                                element.linkCard!.card!.ugc!.jumpUrl,
+                              'LINK_CARD_TYPE_COMMON' =>
+                                element.linkCard!.card!.common!.jumpUrl,
+                              'LINK_CARD_TYPE_LIVE' =>
+                                element.linkCard!.card!.live!.jumpUrl,
+                              'LINK_CARD_TYPE_OPUS' =>
+                                element.linkCard!.card!.opus!.jumpUrl,
+                              'LINK_CARD_TYPE_MUSIC' =>
+                                element.linkCard!.card!.music!.jumpUrl,
+                              _ => null,
+                            };
+                            if (url?.isNotEmpty == true) {
+                              PiliScheme.routePushFromUrl(url!);
+                            }
+                          } catch (_) {}
+                        },
                   borderRadius: const BorderRadius.all(Radius.circular(8)),
                   child: Padding(
                     padding: const EdgeInsets.all(8),
@@ -381,12 +382,12 @@ class OpusContent extends StatelessWidget {
                                 ),
                                 color: colorScheme.secondaryContainer,
                               ),
-                              width: 75,
+                              width: 70,
                               height: 50,
                               alignment: Alignment.center,
                               child: Icon(
                                 Icons.bar_chart_rounded,
-                                color: colorScheme.onSecondaryContainer,
+                                color: colorScheme.onSurfaceVariant,
                               ),
                             ),
                             const SizedBox(width: 10),
@@ -435,47 +436,53 @@ class OpusContent extends StatelessWidget {
                             ),
                           ],
                         ),
-                      'LINK_CARD_TYPE_GOODS' => Row(
-                          children: [
-                            NetworkImgLayer(
-                              radius: 6,
-                              width: 65 * StyleString.aspectRatio,
-                              height: 65,
-                              src: element
-                                  .linkCard!.card!.goods!.items!.first.cover,
-                            ),
-                            const SizedBox(width: 10),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
+                      'LINK_CARD_TYPE_GOODS' => Column(
+                          children:
+                              element.linkCard!.card!.goods!.items!.map((e) {
+                            return GestureDetector(
+                              onTap: () {
+                                if (e.jumpUrl?.isNotEmpty == true) {
+                                  PiliScheme.routePushFromUrl(e.jumpUrl!);
+                                }
+                              },
+                              child: Row(
                                 children: [
-                                  Text(element.linkCard!.card!.goods!.items!
-                                      .first.name!),
-                                  if (element.linkCard!.card!.goods!.items!
-                                          .first.brief !=
-                                      null)
-                                    Text(
-                                      element.linkCard!.card!.goods!.items!
-                                          .first.brief!,
-                                      style: TextStyle(
-                                        fontSize: 13,
-                                        color: colorScheme.outline,
-                                      ),
+                                  NetworkImgLayer(
+                                    radius: 6,
+                                    width: 65 * StyleString.aspectRatio,
+                                    height: 65,
+                                    src: e.cover,
+                                  ),
+                                  const SizedBox(width: 10),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(e.name!),
+                                        if (e.brief?.isNotEmpty == true)
+                                          Text(
+                                            e.brief!,
+                                            style: TextStyle(
+                                              fontSize: 13,
+                                              color: colorScheme.outline,
+                                            ),
+                                          ),
+                                        if (e.price?.isNotEmpty == true)
+                                          Text(
+                                            '${e.price!}起',
+                                            style: TextStyle(
+                                              fontSize: 13,
+                                              color: colorScheme.outline,
+                                            ),
+                                          ),
+                                      ],
                                     ),
-                                  if (element.linkCard!.card!.goods!.items!
-                                          .first.price !=
-                                      null)
-                                    Text(
-                                      '${element.linkCard!.card!.goods!.items!.first.price!}起',
-                                      style: TextStyle(
-                                        fontSize: 13,
-                                        color: colorScheme.outline,
-                                      ),
-                                    ),
+                                  ),
                                 ],
                               ),
-                            ),
-                          ],
+                            );
+                          }).toList(),
                         ),
                       _ => throw UnimplementedError(
                           '\nparaType: ${element.paraType},\ncard type: ${element.linkCard?.card?.type}',
@@ -586,14 +593,14 @@ Widget moduleBlockedItem(
         shape: shape,
       ),
       onPressed: () {
-        if (moduleBlocked.button!.jumpUrl != null) {
+        if (moduleBlocked.button!.jumpUrl?.isNotEmpty == true) {
           PiliScheme.routePushFromUrl(moduleBlocked.button!.jumpUrl!);
         }
       },
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          if (moduleBlocked.button!.icon != null)
+          if (moduleBlocked.button!.icon?.isNotEmpty == true)
             CachedNetworkImage(
               height: 16,
               color: Colors.white,
@@ -618,7 +625,7 @@ Widget moduleBlockedItem(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             if (moduleBlocked.icon != null) icon(max(40, maxWidth / 7)),
-            if (moduleBlocked.hintMessage != null) ...[
+            if (moduleBlocked.hintMessage?.isNotEmpty == true) ...[
               const SizedBox(height: 5),
               Text(
                 moduleBlocked.hintMessage!,
@@ -651,8 +658,9 @@ Widget moduleBlockedItem(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
-              if (moduleBlocked.title != null) Text(moduleBlocked.title!),
-              if (moduleBlocked.hintMessage != null) ...[
+              if (moduleBlocked.title?.isNotEmpty == true)
+                Text(moduleBlocked.title!),
+              if (moduleBlocked.hintMessage?.isNotEmpty == true) ...[
                 const SizedBox(height: 2),
                 Text(
                   moduleBlocked.hintMessage!,
@@ -684,10 +692,10 @@ Widget opusCollection(ThemeData theme, ModuleCollection item) {
   return Padding(
     padding: const EdgeInsets.only(bottom: 10),
     child: Material(
-      borderRadius: const BorderRadius.all(Radius.circular(6)),
+      borderRadius: const BorderRadius.all(Radius.circular(8)),
       color: theme.colorScheme.onInverseSurface,
       child: InkWell(
-        borderRadius: const BorderRadius.all(Radius.circular(6)),
+        borderRadius: const BorderRadius.all(Radius.circular(8)),
         onTap: () {
           Get.toNamed(
             '/articleList',

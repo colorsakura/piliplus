@@ -244,7 +244,7 @@ class VideoHttp {
         };
       }
     } catch (err) {
-      return {'status': false, 'msg': err};
+      return {'status': false, 'msg': err.toString()};
     }
   }
 

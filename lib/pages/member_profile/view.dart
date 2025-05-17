@@ -91,7 +91,10 @@ class _EditProfilePageState extends State<EditProfilePage> {
     return switch (loadingState) {
       Loading() => loadingWidget,
       Success(:var response) => ListView(
+          padding: EdgeInsets.only(
+              bottom: MediaQuery.paddingOf(context).bottom + 25),
           children: [
+            divider1,
             _item(
               theme: theme,
               title: '头像',
@@ -177,7 +180,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
             _item(
               theme: theme,
               title: '头像挂件',
-              onTap: () => PageUtils.launchURL(
+              onTap: () => PageUtils.inAppWebview(
                   'https://www.bilibili.com/h5/mall/pendant/home'),
             ),
             divider1,
@@ -192,11 +195,10 @@ class _EditProfilePageState extends State<EditProfilePage> {
             _item(
               theme: theme,
               title: '哔哩哔哩认证',
-              onTap: () => PageUtils.launchURL(
+              onTap: () => PageUtils.inAppWebview(
                   'https://account.bilibili.com/official/mobile/home'),
             ),
-            divider,
-            SizedBox(height: 25 + MediaQuery.paddingOf(context).bottom),
+            divider1,
           ],
         ),
       Error(:var errMsg) => scrollErrorWidget(
