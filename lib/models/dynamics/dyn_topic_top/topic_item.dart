@@ -3,7 +3,8 @@ class TopicItem {
   String? name;
   int? view;
   int? discuss;
-  int? fav;
+  late int fav;
+  late int like;
   int? dynamics;
   String? jumpUrl;
   String? backColor;
@@ -12,13 +13,16 @@ class TopicItem {
   String? shareUrl;
   int? ctime;
   bool? showInteractData;
+  bool? isFav;
+  bool? isLike;
 
   TopicItem({
     this.id,
     this.name,
     this.view,
     this.discuss,
-    this.fav,
+    required this.fav,
+    required this.like,
     this.dynamics,
     this.jumpUrl,
     this.backColor,
@@ -27,14 +31,17 @@ class TopicItem {
     this.shareUrl,
     this.ctime,
     this.showInteractData,
+    this.isFav,
+    this.isLike,
   });
 
   factory TopicItem.fromJson(Map<String, dynamic> json) => TopicItem(
         id: json['id'] as int?,
         name: json['name'] as String?,
-        view: json['view'] as int?,
-        discuss: json['discuss'] as int?,
-        fav: json['fav'] as int?,
+        view: json['view'] as int? ?? 0,
+        discuss: json['discuss'] as int? ?? 0,
+        fav: json['fav'] as int? ?? 0,
+        like: json['like'] as int? ?? 0,
         dynamics: json['dynamics'] as int?,
         jumpUrl: json['jump_url'] as String?,
         backColor: json['back_color'] as String?,
@@ -43,6 +50,8 @@ class TopicItem {
         shareUrl: json['share_url'] as String?,
         ctime: json['ctime'] as int?,
         showInteractData: json['show_interact_data'] as bool?,
+        isFav: json['is_fav'] as bool?,
+        isLike: json['is_like'] as bool?,
       );
 
   Map<String, dynamic> toJson() => {

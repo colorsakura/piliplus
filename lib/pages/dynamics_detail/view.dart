@@ -40,7 +40,8 @@ class DynamicDetailPage extends StatefulWidget {
 class _DynamicDetailPageState extends State<DynamicDetailPage>
     with TickerProviderStateMixin {
   late DynamicDetailController _dynamicDetailController;
-  AnimationController? _fabAnimationCtr;
+  late final AnimationController _fabAnimationCtr;
+  late final Animation<Offset> _anim;
   final RxBool _visibleTitle = false.obs;
   // 回复类型
   late int replyType;
@@ -109,7 +110,14 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
       vsync: this,
       duration: const Duration(milliseconds: 300),
     );
-    _fabAnimationCtr?.forward();
+    _anim = Tween<Offset>(
+      begin: const Offset(0, 1),
+      end: Offset.zero,
+    ).animate(CurvedAnimation(
+      parent: _fabAnimationCtr,
+      curve: Curves.easeInOut,
+    ));
+    _fabAnimationCtr.forward();
     _dynamicDetailController.scrollController.addListener(listener);
   }
 
@@ -264,21 +272,20 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
   void _showFab() {
     if (!_isFabVisible) {
       _isFabVisible = true;
-      _fabAnimationCtr?.forward();
+      _fabAnimationCtr.forward();
     }
   }
 
   void _hideFab() {
     if (_isFabVisible) {
       _isFabVisible = false;
-      _fabAnimationCtr?.reverse();
+      _fabAnimationCtr.reverse();
     }
   }
 
   @override
   void dispose() {
-    _fabAnimationCtr?.dispose();
-    _fabAnimationCtr = null;
+    _fabAnimationCtr.dispose();
     _dynamicDetailController.scrollController.removeListener(listener);
     super.dispose();
   }
@@ -454,161 +461,110 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
               }
             },
           ),
-          if (_fabAnimationCtr != null)
-            Positioned(
-              left: 0,
-              right: 0,
-              bottom: 0,
-              child: SlideTransition(
-                position: Tween<Offset>(
-                  begin: const Offset(0, 1),
-                  end: Offset.zero,
-                ).animate(CurvedAnimation(
-                  parent: _fabAnimationCtr!,
-                  curve: Curves.easeInOut,
-                )),
-                child: Builder(
-                  builder: (context) {
-                    Widget button() => FloatingActionButton(
-                          heroTag: null,
-                          onPressed: () {
-                            feedBack();
-                            _dynamicDetailController.onReply(
-                              context,
-                              oid: _dynamicDetailController.oid,
-                              replyType: ReplyType.values[replyType],
-                            );
-                          },
-                          tooltip: '评论动态',
-                          child: const Icon(Icons.reply),
-                        );
-                    return _dynamicDetailController.showDynActionBar.not
-                        ? Align(
-                            alignment: Alignment.bottomRight,
-                            child: Padding(
-                              padding: EdgeInsets.only(
-                                right: 14,
-                                bottom:
-                                    MediaQuery.paddingOf(context).bottom + 14,
-                              ),
+          Positioned(
+            left: 0,
+            right: 0,
+            bottom: 0,
+            child: SlideTransition(
+              position: _anim,
+              child: Builder(
+                builder: (context) {
+                  Widget button() => FloatingActionButton(
+                        heroTag: null,
+                        onPressed: () {
+                          feedBack();
+                          _dynamicDetailController.onReply(
+                            context,
+                            oid: _dynamicDetailController.oid,
+                            replyType: ReplyType.values[replyType],
+                          );
+                        },
+                        tooltip: '评论动态',
+                        child: const Icon(Icons.reply),
+                      );
+                  return _dynamicDetailController.showDynActionBar.not
+                      ? Align(
+                          alignment: Alignment.bottomRight,
+                          child: Padding(
+                            padding: EdgeInsets.only(
+                              right: 14,
+                              bottom: MediaQuery.paddingOf(context).bottom + 14,
+                            ),
+                            child: button(),
+                          ),
+                        )
+                      : Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            Padding(
+                              padding:
+                                  const EdgeInsets.only(right: 14, bottom: 14),
                               child: button(),
                             ),
-                          )
-                        : Column(
-                            mainAxisSize: MainAxisSize.min,
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.only(
-                                    right: 14, bottom: 14),
-                                child: button(),
-                              ),
-                              Container(
-                                decoration: BoxDecoration(
-                                  color: theme.colorScheme.surface,
-                                  border: Border(
-                                    top: BorderSide(
-                                      color: theme.colorScheme.outline
-                                          .withValues(alpha: 0.08),
-                                    ),
+                            Container(
+                              decoration: BoxDecoration(
+                                color: theme.colorScheme.surface,
+                                border: Border(
+                                  top: BorderSide(
+                                    color: theme.colorScheme.outline
+                                        .withValues(alpha: 0.08),
                                   ),
                                 ),
-                                padding: EdgeInsets.only(
-                                    bottom:
-                                        MediaQuery.paddingOf(context).bottom),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
-                                  children: [
-                                    Expanded(
-                                      child: Builder(
-                                        builder: (btnContext) =>
-                                            TextButton.icon(
-                                          onPressed: () {
-                                            showModalBottomSheet(
-                                              context: context,
-                                              isScrollControlled: true,
-                                              useSafeArea: true,
-                                              builder: (context) => RepostPanel(
-                                                item: _dynamicDetailController
-                                                    .item,
-                                                callback: () {
-                                                  int count =
-                                                      _dynamicDetailController
-                                                              .item
-                                                              .modules
-                                                              .moduleStat
-                                                              ?.forward
-                                                              ?.count ??
-                                                          0;
-                                                  _dynamicDetailController
-                                                          .item
-                                                          .modules
-                                                          .moduleStat ??=
-                                                      ModuleStatModel();
-                                                  _dynamicDetailController
-                                                          .item
-                                                          .modules
-                                                          .moduleStat
-                                                          ?.forward ??=
-                                                      DynamicStat();
-                                                  _dynamicDetailController
-                                                      .item
-                                                      .modules
-                                                      .moduleStat!
-                                                      .forward!
-                                                      .count = count + 1;
-                                                  if (btnContext.mounted) {
-                                                    (btnContext as Element?)
-                                                        ?.markNeedsBuild();
-                                                  }
-                                                },
-                                              ),
-                                            );
-                                          },
-                                          icon: Icon(
-                                            FontAwesomeIcons.shareFromSquare,
-                                            size: 16,
-                                            color: theme.colorScheme.outline,
-                                            semanticLabel: "转发",
-                                          ),
-                                          style: TextButton.styleFrom(
-                                            padding: const EdgeInsets.fromLTRB(
-                                                15, 0, 15, 0),
-                                            foregroundColor:
-                                                theme.colorScheme.outline,
-                                          ),
-                                          label: Text(
-                                            _dynamicDetailController
-                                                        .item
-                                                        .modules
-                                                        .moduleStat
-                                                        ?.forward
-                                                        ?.count !=
-                                                    null
-                                                ? Utils.numFormat(
-                                                    _dynamicDetailController
-                                                        .item
-                                                        .modules
-                                                        .moduleStat!
-                                                        .forward!
-                                                        .count)
-                                                : '转发',
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    Expanded(
-                                      child: TextButton.icon(
+                              ),
+                              padding: EdgeInsets.only(
+                                  bottom: MediaQuery.paddingOf(context).bottom),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
+                                children: [
+                                  Expanded(
+                                    child: Builder(
+                                      builder: (btnContext) => TextButton.icon(
                                         onPressed: () {
-                                          Utils.shareText(
-                                              '${HttpString.dynamicShareBaseUrl}/${_dynamicDetailController.item.idStr}');
+                                          showModalBottomSheet(
+                                            context: context,
+                                            isScrollControlled: true,
+                                            useSafeArea: true,
+                                            builder: (context) => RepostPanel(
+                                              item:
+                                                  _dynamicDetailController.item,
+                                              callback: () {
+                                                int count =
+                                                    _dynamicDetailController
+                                                            .item
+                                                            .modules
+                                                            .moduleStat
+                                                            ?.forward
+                                                            ?.count ??
+                                                        0;
+                                                _dynamicDetailController.item
+                                                        .modules.moduleStat ??=
+                                                    ModuleStatModel();
+                                                _dynamicDetailController
+                                                    .item
+                                                    .modules
+                                                    .moduleStat
+                                                    ?.forward ??= DynamicStat();
+                                                _dynamicDetailController
+                                                    .item
+                                                    .modules
+                                                    .moduleStat!
+                                                    .forward!
+                                                    .count = count + 1;
+                                                if (btnContext.mounted) {
+                                                  (btnContext as Element?)
+                                                      ?.markNeedsBuild();
+                                                }
+                                              },
+                                            ),
+                                          );
                                         },
                                         icon: Icon(
-                                          FontAwesomeIcons.shareNodes,
+                                          FontAwesomeIcons.shareFromSquare,
                                           size: 16,
                                           color: theme.colorScheme.outline,
-                                          semanticLabel: "分享",
+                                          semanticLabel: "转发",
                                         ),
                                         style: TextButton.styleFrom(
                                           padding: const EdgeInsets.fromLTRB(
@@ -616,109 +572,146 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
                                           foregroundColor:
                                               theme.colorScheme.outline,
                                         ),
-                                        label: const Text('分享'),
+                                        label: Text(
+                                          _dynamicDetailController
+                                                      .item
+                                                      .modules
+                                                      .moduleStat
+                                                      ?.forward
+                                                      ?.count !=
+                                                  null
+                                              ? Utils.numFormat(
+                                                  _dynamicDetailController
+                                                      .item
+                                                      .modules
+                                                      .moduleStat!
+                                                      .forward!
+                                                      .count)
+                                              : '转发',
+                                        ),
                                       ),
                                     ),
-                                    Expanded(
-                                      child: Builder(
-                                        builder: (context) => TextButton.icon(
-                                          onPressed: () =>
-                                              RequestUtils.onLikeDynamic(
-                                            _dynamicDetailController.item,
-                                            () {
-                                              if (context.mounted) {
-                                                (context as Element?)
-                                                    ?.markNeedsBuild();
-                                              }
-                                            },
-                                          ),
-                                          icon: Icon(
-                                            _dynamicDetailController
-                                                        .item
-                                                        .modules
-                                                        .moduleStat
-                                                        ?.like
-                                                        ?.status ==
-                                                    true
-                                                ? FontAwesomeIcons.solidThumbsUp
-                                                : FontAwesomeIcons.thumbsUp,
-                                            size: 16,
-                                            color: _dynamicDetailController
-                                                        .item
-                                                        .modules
-                                                        .moduleStat
-                                                        ?.like
-                                                        ?.status ==
-                                                    true
-                                                ? theme.colorScheme.primary
-                                                : theme.colorScheme.outline,
-                                            semanticLabel:
-                                                _dynamicDetailController
-                                                            .item
-                                                            .modules
-                                                            .moduleStat
-                                                            ?.like
-                                                            ?.status ==
-                                                        true
-                                                    ? "已赞"
-                                                    : "点赞",
-                                          ),
-                                          style: TextButton.styleFrom(
-                                            padding: const EdgeInsets.fromLTRB(
-                                                15, 0, 15, 0),
-                                            foregroundColor:
-                                                theme.colorScheme.outline,
-                                          ),
-                                          label: AnimatedSwitcher(
-                                            duration: const Duration(
-                                                milliseconds: 400),
-                                            transitionBuilder: (Widget child,
-                                                Animation<double> animation) {
-                                              return ScaleTransition(
-                                                  scale: animation,
-                                                  child: child);
-                                            },
-                                            child: Text(
+                                  ),
+                                  Expanded(
+                                    child: TextButton.icon(
+                                      onPressed: () {
+                                        Utils.shareText(
+                                            '${HttpString.dynamicShareBaseUrl}/${_dynamicDetailController.item.idStr}');
+                                      },
+                                      icon: Icon(
+                                        FontAwesomeIcons.shareNodes,
+                                        size: 16,
+                                        color: theme.colorScheme.outline,
+                                        semanticLabel: "分享",
+                                      ),
+                                      style: TextButton.styleFrom(
+                                        padding: const EdgeInsets.fromLTRB(
+                                            15, 0, 15, 0),
+                                        foregroundColor:
+                                            theme.colorScheme.outline,
+                                      ),
+                                      label: const Text('分享'),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: Builder(
+                                      builder: (context) => TextButton.icon(
+                                        onPressed: () =>
+                                            RequestUtils.onLikeDynamic(
+                                          _dynamicDetailController.item,
+                                          () {
+                                            if (context.mounted) {
+                                              (context as Element?)
+                                                  ?.markNeedsBuild();
+                                            }
+                                          },
+                                        ),
+                                        icon: Icon(
+                                          _dynamicDetailController
+                                                      .item
+                                                      .modules
+                                                      .moduleStat
+                                                      ?.like
+                                                      ?.status ==
+                                                  true
+                                              ? FontAwesomeIcons.solidThumbsUp
+                                              : FontAwesomeIcons.thumbsUp,
+                                          size: 16,
+                                          color: _dynamicDetailController
+                                                      .item
+                                                      .modules
+                                                      .moduleStat
+                                                      ?.like
+                                                      ?.status ==
+                                                  true
+                                              ? theme.colorScheme.primary
+                                              : theme.colorScheme.outline,
+                                          semanticLabel:
                                               _dynamicDetailController
                                                           .item
                                                           .modules
                                                           .moduleStat
                                                           ?.like
-                                                          ?.count !=
-                                                      null
-                                                  ? Utils.numFormat(
-                                                      _dynamicDetailController
+                                                          ?.status ==
+                                                      true
+                                                  ? "已赞"
+                                                  : "点赞",
+                                        ),
+                                        style: TextButton.styleFrom(
+                                          padding: const EdgeInsets.fromLTRB(
+                                              15, 0, 15, 0),
+                                          foregroundColor:
+                                              theme.colorScheme.outline,
+                                        ),
+                                        label: AnimatedSwitcher(
+                                          duration:
+                                              const Duration(milliseconds: 400),
+                                          transitionBuilder: (Widget child,
+                                              Animation<double> animation) {
+                                            return ScaleTransition(
+                                                scale: animation, child: child);
+                                          },
+                                          child: Text(
+                                            _dynamicDetailController
+                                                        .item
+                                                        .modules
+                                                        .moduleStat
+                                                        ?.like
+                                                        ?.count !=
+                                                    null
+                                                ? Utils.numFormat(
+                                                    _dynamicDetailController
+                                                        .item
+                                                        .modules
+                                                        .moduleStat!
+                                                        .like!
+                                                        .count)
+                                                : '点赞',
+                                            style: TextStyle(
+                                              color: _dynamicDetailController
                                                           .item
                                                           .modules
-                                                          .moduleStat!
-                                                          .like!
-                                                          .count)
-                                                  : '点赞',
-                                              style: TextStyle(
-                                                color: _dynamicDetailController
-                                                            .item
-                                                            .modules
-                                                            .moduleStat
-                                                            ?.like
-                                                            ?.status ==
-                                                        true
-                                                    ? theme.colorScheme.primary
-                                                    : theme.colorScheme.outline,
-                                              ),
+                                                          .moduleStat
+                                                          ?.like
+                                                          ?.status ==
+                                                      true
+                                                  ? theme.colorScheme.primary
+                                                  : theme.colorScheme.outline,
                                             ),
                                           ),
                                         ),
                                       ),
                                     ),
-                                  ],
-                                ),
+                                  ),
+                                ],
                               ),
-                            ],
-                          );
-                  },
-                ),
+                            ),
+                          ],
+                        );
+                },
               ),
             ),
+          ),
         ],
       );
 
@@ -739,7 +732,7 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
                     return ScaleTransition(scale: animation, child: child);
                   },
                   child: Text(
-                    '${_dynamicDetailController.count.value != -1 ? _dynamicDetailController.count.value : 0}条回复',
+                    '${_dynamicDetailController.count.value == -1 ? 0 : Utils.numFormat(_dynamicDetailController.count.value)}条回复',
                     key: ValueKey<int>(_dynamicDetailController.count.value),
                   ),
                 ),

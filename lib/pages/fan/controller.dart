@@ -38,8 +38,9 @@ class FansController
       reSrc: 11,
     );
     if (res['status']) {
-      loadingState.value.data!.removeAt(index);
-      loadingState.refresh();
+      loadingState
+        ..value.data!.removeAt(index)
+        ..refresh();
       SmartDialog.showToast('移除成功');
     } else {
       SmartDialog.showToast(res['msg']);

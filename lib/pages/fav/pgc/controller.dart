@@ -57,8 +57,9 @@ class FavPgcController
   Future<void> bangumiDel(index, seasonId) async {
     var result = await VideoHttp.bangumiDel(seasonId: seasonId);
     if (result['status']) {
-      loadingState.value.data!.removeAt(index);
-      loadingState.refresh();
+      loadingState
+        ..value.data!.removeAt(index)
+        ..refresh();
     }
     SmartDialog.showToast(result['msg']);
   }

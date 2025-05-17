@@ -167,13 +167,7 @@ class _VideoReplyPanelState extends State<VideoReplyPanel>
             bottom: MediaQuery.of(context).padding.bottom + 14,
             right: 14,
             child: SlideTransition(
-              position: Tween<Offset>(
-                begin: const Offset(0, 2),
-                end: Offset.zero,
-              ).animate(CurvedAnimation(
-                parent: _videoReplyController.fabAnimationCtr,
-                curve: Curves.easeInOut,
-              )),
+              position: _videoReplyController.anim,
               child: FloatingActionButton(
                 heroTag: null,
                 onPressed: () {

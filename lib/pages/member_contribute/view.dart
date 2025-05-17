@@ -95,6 +95,7 @@ class _MemberContributeState extends State<MemberContribute>
           heroTag: widget.heroTag,
           mid: widget.mid,
           title: item.title,
+          isSingle: _controller.tabs == null,
         ),
       'charging_video' => MemberVideo(
           type: ContributeType.charging,

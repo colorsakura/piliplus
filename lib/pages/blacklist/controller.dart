@@ -45,9 +45,10 @@ class BlackListController
       onConfirm: () async {
         var result = await VideoHttp.relationMod(mid: mid, act: 6, reSrc: 11);
         if (result['status']) {
-          loadingState.value.data!.removeAt(index);
+          loadingState
+            ..value.data!.removeAt(index)
+            ..refresh();
           total.value -= 1;
-          loadingState.refresh();
           SmartDialog.showToast('操作成功');
         }
       },

@@ -90,8 +90,7 @@ class HeaderControlState extends State<HeaderControl> {
     if (videoDetailCtr.videoType != SearchType.video) {
       bangumiIntroController = Get.find<BangumiIntroController>(tag: heroTag);
     }
-    horizontalScreen =
-        setting.get(SettingBoxKey.horizontalScreen, defaultValue: false);
+    horizontalScreen = GStorage.horizontalScreen;
     defaultCDNService = setting.get(SettingBoxKey.CDNService,
         defaultValue: CDNService.backupUrl.code);
   }

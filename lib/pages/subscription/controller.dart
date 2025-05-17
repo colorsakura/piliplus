@@ -49,8 +49,9 @@ class SubController
               var res = await UserHttp.cancelSub(
                   id: subFolderItem.id!, type: subFolderItem.type!);
               if (res['status']) {
-                loadingState.value.data!.remove(subFolderItem);
-                loadingState.refresh();
+                loadingState
+                  ..value.data!.remove(subFolderItem)
+                  ..refresh();
                 SmartDialog.showToast('取消订阅成功');
               } else {
                 SmartDialog.showToast(res['msg']);

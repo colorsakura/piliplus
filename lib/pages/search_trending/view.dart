@@ -115,18 +115,10 @@ class _SearchTrendingPageState extends State<SearchTrendingPage> {
                   controller: _controller.scrollController,
                   slivers: [
                     SliverToBoxAdapter(
-                      child: CachedNetworkImage(
+                      child: Image.asset(
+                        'assets/images/trending_banner.png',
                         fit: BoxFit.fitWidth,
-                        fadeInDuration: const Duration(milliseconds: 120),
-                        fadeOutDuration: const Duration(milliseconds: 120),
-                        imageUrl:
-                            'https://activity.hdslb.com/blackboard/activity59158/img/hot_banner.fbb081df.png',
-                        placeholder: (context, url) {
-                          return AspectRatio(
-                            aspectRatio: 1125 / 528,
-                            child: Image.asset('assets/images/loading.png'),
-                          );
-                        },
+                        filterQuality: FilterQuality.low,
                       ),
                     ),
                     Obx(() =>

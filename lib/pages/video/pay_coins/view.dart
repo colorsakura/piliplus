@@ -107,11 +107,16 @@ class _PayCoinsPageState extends State<PayCoinsPage>
         : 'assets/images/paycoins/ic_22_gun_sister.png';
   }
 
-  late AnimationController _slide22Controller;
-  late AnimationController _scale22Controller;
-  late AnimationController _coinSlideController;
-  late AnimationController _coinFadeController;
-  late AnimationController _boxAnimController;
+  late final AnimationController _slide22Controller;
+  late final Animation<Offset> _slide22Anim;
+  late final AnimationController _scale22Controller;
+  late final Animation<double> _scale22Anim;
+  late final AnimationController _coinSlideController;
+  late final Animation<Offset> _coinSlideAnim;
+  late final AnimationController _coinFadeController;
+  late final Animation<double> _coinFadeAnim;
+  late final AnimationController _boxAnimController;
+  late final Animation<Offset> _boxAnim;
 
   final List<String> _images = const [
     'assets/images/paycoins/ic_thunder_1.png',
@@ -129,21 +134,44 @@ class _PayCoinsPageState extends State<PayCoinsPage>
       vsync: this,
       duration: const Duration(milliseconds: 50),
     );
+    _slide22Anim = _slide22Controller.drive(
+      Tween(
+        begin: Offset.zero,
+        end: const Offset(0.0, -0.2),
+      ),
+    );
     _scale22Controller = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 50),
+    );
+    _scale22Anim = _scale22Controller.drive(
+      Tween(begin: 1, end: 1.1),
     );
     _coinSlideController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 200),
     );
+    _coinSlideAnim = _coinSlideController.drive(
+      Tween(
+        begin: Offset.zero,
+        end: const Offset(0.0, -2),
+      ),
+    );
     _coinFadeController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 100),
     );
+    _coinFadeAnim =
+        Tween<double>(begin: 1, end: 0).animate(_coinFadeController);
     _boxAnimController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 50),
+    );
+    _boxAnim = _boxAnimController.drive(
+      Tween(
+        begin: Offset.zero,
+        end: const Offset(0.0, -0.2),
+      ),
     );
     _scale();
   }
@@ -273,31 +301,15 @@ class _PayCoinsPageState extends State<PayCoinsPage>
                                             alignment: Alignment.center,
                                             children: [
                                               SlideTransition(
-                                                position:
-                                                    _boxAnimController.drive(
-                                                  Tween(
-                                                    begin: Offset.zero,
-                                                    end:
-                                                        const Offset(0.0, -0.2),
-                                                  ),
-                                                ),
+                                                position: _boxAnim,
                                                 child: Image.asset(
                                                   'assets/images/paycoins/ic_pay_coins_box.png',
                                                 ),
                                               ),
                                               SlideTransition(
-                                                position:
-                                                    _coinSlideController.drive(
-                                                  Tween(
-                                                    begin: Offset.zero,
-                                                    end: const Offset(0.0, -2),
-                                                  ),
-                                                ),
+                                                position: _coinSlideAnim,
                                                 child: FadeTransition(
-                                                  opacity: Tween<double>(
-                                                          begin: 1, end: 0)
-                                                      .animate(
-                                                          _coinFadeController),
+                                                  opacity: _coinFadeAnim,
                                                   child: Image.asset(
                                                     height: 35 + (factor * 15),
                                                     width: 35 + (factor * 15),
@@ -357,16 +369,9 @@ class _PayCoinsPageState extends State<PayCoinsPage>
                           onPanUpdate:
                               _canPay ? (e) => _handlePanUpdate(e, true) : null,
                           child: ScaleTransition(
-                            scale: _scale22Controller.drive(
-                              Tween(begin: 1, end: 1.1),
-                            ),
+                            scale: _scale22Anim,
                             child: SlideTransition(
-                              position: _slide22Controller.drive(
-                                Tween(
-                                  begin: Offset.zero,
-                                  end: const Offset(0.0, -0.2),
-                                ),
-                              ),
+                              position: _slide22Anim,
                               child: SizedBox(
                                 width: 110,
                                 height: 155,

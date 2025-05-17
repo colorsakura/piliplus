@@ -262,17 +262,19 @@ class _MemberHomeState extends State<MemberHome>
                         .items!;
                     int index1 =
                         items.indexWhere((item) => item.param == param1);
-                    try {
-                      final contributeCtr =
-                          Get.find<MemberContributeCtr>(tag: widget.heroTag);
-                      // contributeCtr.tabController?.animateTo(index1);
-                      if (contributeCtr.tabController?.index != index1) {
-                        contributeCtr.tabController?.index = index1;
+                    if (index1 != -1) {
+                      try {
+                        final contributeCtr =
+                            Get.find<MemberContributeCtr>(tag: widget.heroTag);
+                        // contributeCtr.tabController?.animateTo(index1);
+                        if (contributeCtr.tabController?.index != index1) {
+                          contributeCtr.tabController?.index = index1;
+                        }
+                        debugPrint('initialized');
+                      } catch (e) {
+                        _ctr.contributeInitialIndex.value = index1;
+                        debugPrint('not initialized');
                       }
-                      debugPrint('initialized');
-                    } catch (e) {
-                      _ctr.contributeInitialIndex.value = index1;
-                      debugPrint('not initialized');
                     }
                   }
                   _ctr.tabController?.animateTo(index);

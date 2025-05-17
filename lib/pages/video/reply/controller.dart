@@ -21,6 +21,14 @@ class VideoReplyController extends ReplyController<MainListReply>
       vsync: this, duration: const Duration(milliseconds: 100))
     ..forward();
 
+  late final anim = Tween<Offset>(
+    begin: const Offset(0, 2),
+    end: Offset.zero,
+  ).animate(CurvedAnimation(
+    parent: fabAnimationCtr,
+    curve: Curves.easeInOut,
+  ));
+
   void showFab() {
     if (!_isFabVisible) {
       _isFabVisible = true;

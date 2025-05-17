@@ -533,7 +533,7 @@ class UserInfoCard extends StatelessWidget {
         children: [
           // _buildHeader(context),
           SizedBox(
-            height: Get.mediaQuery.padding.bottom + 56,
+            height: Get.mediaQuery.padding.top + 56,
           ),
           SafeArea(
             top: false,
@@ -548,6 +548,7 @@ class UserInfoCard extends StatelessWidget {
                   ),
                   child: _buildAvatar(context),
                 ),
+                const SizedBox(width: 10),
                 Expanded(
                   child: Column(
                     mainAxisSize: MainAxisSize.min,

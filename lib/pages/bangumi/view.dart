@@ -8,6 +8,7 @@ import 'package:PiliPlus/common/widgets/scroll_physics.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/bangumi/list.dart';
 import 'package:PiliPlus/models/bangumi/pgc_timeline/result.dart';
+import 'package:PiliPlus/models/common/fav_type.dart';
 import 'package:PiliPlus/models/common/home_tab_type.dart';
 import 'package:PiliPlus/pages/bangumi/controller.dart';
 import 'package:PiliPlus/pages/bangumi/widgets/bangumi_card_v.dart';
@@ -375,8 +376,9 @@ class _BangumiPageState extends CommonPageState<BangumiPage, BangumiController>
                         onTap: () {
                           Get.toNamed(
                             '/fav',
-                            arguments:
-                                widget.tabType == HomeTabType.bangumi ? 1 : 2,
+                            arguments: widget.tabType == HomeTabType.bangumi
+                                ? FavTabType.bangumi.index
+                                : FavTabType.cinema.index,
                           );
                         },
                         child: Padding(

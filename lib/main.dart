@@ -42,8 +42,7 @@ void main() async {
       }
     }
   }
-  if (GStorage.setting
-      .get(SettingBoxKey.horizontalScreen, defaultValue: false)) {
+  if (GStorage.horizontalScreen) {
     await SystemChrome.setPreferredOrientations(
       //支持竖屏与横屏
       [

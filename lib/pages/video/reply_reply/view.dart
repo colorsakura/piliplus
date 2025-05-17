@@ -50,8 +50,7 @@ class VideoReplyReplyPanel extends CommonSlidePage {
 }
 
 class _VideoReplyReplyPanelState
-    extends CommonSlidePageState<VideoReplyReplyPanel>
-    with TickerProviderStateMixin {
+    extends CommonSlidePageState<VideoReplyReplyPanel> {
   late VideoReplyReplyController _videoReplyReplyController;
   late final _savedReplies = <int, String>{};
   late final itemPositionsListener = ItemPositionsListener.create();
@@ -256,7 +255,7 @@ class _VideoReplyReplyPanelState
             Obx(
               () => _videoReplyReplyController.count.value != -1
                   ? Text(
-                      '相关回复共${_videoReplyReplyController.count.value}条',
+                      '相关回复共${Utils.numFormat(_videoReplyReplyController.count.value)}条',
                       style: const TextStyle(fontSize: 13),
                     )
                   : const SizedBox.shrink(),

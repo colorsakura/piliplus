@@ -450,6 +450,19 @@ class PiliScheme {
               return true;
             }
             return false;
+          case 'm.bilibili.com':
+            // bilibili://m.bilibili.com/topic-detail?topic_id=1028161&frommodule=H5&h5awaken=xxx
+            final id =
+                RegExp(r'topic_id=(\d+)').firstMatch(uri.query)?.group(1);
+            if (id != null) {
+              PageUtils.toDupNamed(
+                '/dynTopic',
+                parameters: {'id': id},
+                off: off,
+              );
+              return true;
+            }
+            return false;
           default:
             if (selfHandle.not) {
               debugPrint('$uri');
@@ -629,9 +642,10 @@ class PiliScheme {
           bool isSeason = id.startsWith('ss');
           id = id.substring(2);
           PageUtils.viewBangumi(
-              seasonId: isSeason ? id : null,
-              epId: isSeason ? null : id,
-              progress: uri.queryParameters['start_progress']);
+            seasonId: isSeason ? id : null,
+            epId: isSeason ? null : id,
+            progress: uri.queryParameters['start_progress'],
+          );
           return true;
         }
         launchURL();
@@ -658,7 +672,11 @@ class PiliScheme {
               .firstMatch(path)
               ?.group(1);
           if (id != null) {
-            Get.toNamed('/articleList', parameters: {'id': id});
+            PageUtils.toDupNamed(
+              '/articleList',
+              parameters: {'id': id},
+              off: off,
+            );
             return true;
           }
           launchURL();
@@ -701,6 +719,18 @@ class PiliScheme {
               'mediaId': mediaId,
               'heroTag': Utils.makeHeroTag(mediaId),
             },
+            off: off,
+          );
+          return true;
+        }
+        launchURL();
+        return false;
+      case 'topic-detail':
+        String? id = RegExp(r'topic_id=(\d+)').firstMatch(uri.query)?.group(1);
+        if (id != null) {
+          PageUtils.toDupNamed(
+            '/dynTopic',
+            parameters: {'id': id},
             off: off,
           );
           return true;

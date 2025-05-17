@@ -101,14 +101,14 @@ dependencies:
   encrypt: ^5.0.3
 
   # 视频播放器
-  media_kit: ^1.1.11 # Primary package.
+  media_kit: 1.1.11 # Primary package.
   # media_kit_video: ^1.2.5 # For video rendering.
   media_kit_video:
     git:
       url: https://github.com/bggRGjQaUbCoE/media-kit.git
       path: media_kit_video
       ref: version_1.2.5
-  media_kit_libs_video: ^1.0.5
+  media_kit_libs_video: 1.0.5
 
   # 媒体通知
   audio_service: ^0.18.15
@@ -208,9 +208,7 @@ dependencies:
 
 dependency_overrides:
   screen_brightness: ^2.0.1
-  path: 1.9.1
-  # mime:
-  #   git: https://github.com/orz12/mime.git
+  path: ^1.9.1
   mime: ^2.0.0
   fading_edge_scrollview: ^4.1.1
   rxdart: ^0.28.0
@@ -226,10 +224,6 @@ dev_dependencies:
   # rules and activating additional ones.
   flutter_lints: ^5.0.0
   flutter_launcher_icons: ^0.14.1
-  # flutter_launcher_icons:
-  #   git:
-  #     url: https://github.com/nvi9/flutter_launcher_icons.git
-  #     ref: e045d40
   hive_generator: ^2.0.1
   build_runner: ^2.4.13
   flutter_native_splash: ^2.4.3

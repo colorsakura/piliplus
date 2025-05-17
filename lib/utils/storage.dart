@@ -37,7 +37,7 @@ import 'package:PiliPlus/utils/login_utils.dart';
 import 'package:PiliPlus/utils/set_int_adapter.dart';
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get_navigation/src/routes/transitions_type.dart';
+import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:uuid/uuid.dart';
@@ -478,6 +478,20 @@ class GStorage {
 
   static bool get optTabletNav =>
       GStorage.setting.get(SettingBoxKey.optTabletNav, defaultValue: true);
+
+  static bool get horizontalScreen {
+    bool isTablet;
+    if (Get.context != null) {
+      isTablet = Get.context!.isTablet;
+    } else {
+      final view = WidgetsBinding.instance.platformDispatcher.views.first;
+      final screenSize = view.physicalSize / view.devicePixelRatio;
+      final shortestSide = min(screenSize.width.abs(), screenSize.height.abs());
+      isTablet = shortestSide >= 600;
+    }
+    return GStorage.setting
+        .get(SettingBoxKey.horizontalScreen, defaultValue: isTablet);
+  }
 
   static List<double> get dynamicDetailRatio => List<double>.from(setting
       .get(SettingBoxKey.dynamicDetailRatio, defaultValue: const [60.0, 40.0]));

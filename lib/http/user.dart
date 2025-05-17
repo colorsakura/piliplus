@@ -5,6 +5,7 @@ import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/model_hot_video_item.dart';
 import 'package:PiliPlus/models/user/fav_detail.dart';
 import 'package:PiliPlus/models/user/fav_folder.dart';
+import 'package:PiliPlus/models/user/fav_topic/data.dart';
 import 'package:PiliPlus/models/user/history.dart';
 import 'package:PiliPlus/models/user/info.dart';
 import 'package:PiliPlus/models/user/stat.dart';
@@ -479,13 +480,85 @@ class UserHttp {
     }
   }
 
+  static Future<LoadingState<FavTopicData>> favTopic({
+    required int page,
+  }) async {
+    var res = await Request().get(
+      Api.favTopicList,
+      queryParameters: {
+        'page_size': 24,
+        'page_num': page,
+        'web_location': 333.1387,
+      },
+    );
+    if (res.data['code'] == 0) {
+      return Success(FavTopicData.fromJson(res.data['data']));
+    } else {
+      return Error(res.data['message']);
+    }
+  }
+
+  static Future addFavTopic(topicId) async {
+    var res = await Request().post(
+      Api.addFavTopic,
+      data: {
+        'topic_id': topicId,
+        'csrf': Accounts.main.csrf,
+      },
+      options: Options(contentType: Headers.formUrlEncodedContentType),
+    );
+    if (res.data['code'] == 0) {
+      return {'status': true};
+    } else {
+      return {'status': false, 'msg': res.data['message']};
+    }
+  }
+
+  static Future delFavTopic(topicId) async {
+    var res = await Request().post(
+      Api.delFavTopic,
+      data: {
+        'topic_id': topicId,
+        'csrf': Accounts.main.csrf,
+      },
+      options: Options(contentType: Headers.formUrlEncodedContentType),
+    );
+    if (res.data['code'] == 0) {
+      return {'status': true};
+    } else {
+      return {'status': false, 'msg': res.data['message']};
+    }
+  }
+
+  static Future likeTopic(topicId, bool isLike) async {
+    var res = await Request().post(
+      Api.likeTopic,
+      data: {
+        'action': isLike ? 'cancel_like' : 'like',
+        'up_mid': Accounts.main.mid,
+        'topic_id': topicId,
+        'csrf': Accounts.main.csrf,
+        'business': 'topic',
+      },
+      options: Options(contentType: Headers.formUrlEncodedContentType),
+    );
+    if (res.data['code'] == 0) {
+      return {'status': true};
+    } else {
+      return {'status': false, 'msg': res.data['message']};
+    }
+  }
+
   static Future<LoadingState> favArticle({
     required int page,
   }) async {
-    var res = await Request().get(Api.favArticle, queryParameters: {
-      'page_size': 20,
-      'page': page,
-    });
+    var res = await Request().get(
+      Api.favArticle,
+      queryParameters: {
+        'page_size': 20,
+        'page': page,
+      },
+    );
     if (res.data['code'] == 0) {
       return Success(res.data['data']);
     } else {

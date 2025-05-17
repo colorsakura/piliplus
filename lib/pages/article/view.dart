@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:PiliPlus/common/skeleton/video_reply.dart';
 import 'package:PiliPlus/common/widgets/badge.dart';
+import 'package:PiliPlus/common/widgets/custom_sliver_persistent_header_delegate.dart';
 import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
 import 'package:PiliPlus/common/widgets/loading_widget/http_error.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
@@ -51,7 +52,8 @@ class _ArticlePageState extends State<ArticlePage>
   );
   bool _isFabVisible = true;
   bool? _imageStatus;
-  late AnimationController fabAnimationCtr;
+  late final AnimationController fabAnimationCtr;
+  late final Animation<Offset> _anim;
 
   late final List<double> _ratio = GStorage.dynamicDetailRatio;
 
@@ -109,6 +111,13 @@ class _ArticlePageState extends State<ArticlePage>
       vsync: this,
       duration: const Duration(milliseconds: 300),
     );
+    _anim = Tween<Offset>(
+      begin: const Offset(0, 1),
+      end: Offset.zero,
+    ).animate(CurvedAnimation(
+      parent: fabAnimationCtr,
+      curve: Curves.easeInOut,
+    ));
     fabAnimationCtr.forward();
     _articleCtr.scrollController.addListener(listener);
   }
@@ -267,7 +276,7 @@ class _ArticlePageState extends State<ArticlePage>
                               color: theme.dividerColor.withValues(alpha: 0.05),
                             ),
                           ),
-                          _buildReplyHeader,
+                          _buildReplyHeader(theme),
                           Obx(() => _buildReplyList(
                               theme, _articleCtr.loadingState.value)),
                         ],
@@ -319,7 +328,7 @@ class _ArticlePageState extends State<ArticlePage>
                                 controller: _articleCtr.scrollController,
                                 physics: const AlwaysScrollableScrollPhysics(),
                                 slivers: [
-                                  _buildReplyHeader,
+                                  _buildReplyHeader(theme),
                                   Obx(() => _buildReplyList(
                                       theme, _articleCtr.loadingState.value)),
                                 ],
@@ -606,29 +615,35 @@ class _ArticlePageState extends State<ArticlePage>
     };
   }
 
-  Widget get _buildReplyHeader {
-    return SliverToBoxAdapter(
-      child: Container(
-        height: 45,
-        padding: const EdgeInsets.only(left: 12, right: 6),
-        child: Row(
-          children: [
-            const Text('回复'),
-            const Spacer(),
-            SizedBox(
-              height: 35,
-              child: TextButton.icon(
-                onPressed: () => _articleCtr.queryBySort(),
-                icon: const Icon(Icons.sort, size: 16),
-                label: Obx(
-                  () => Text(
-                    _articleCtr.sortType.value.label,
-                    style: const TextStyle(fontSize: 13),
+  Widget _buildReplyHeader(ThemeData theme) {
+    return SliverPersistentHeader(
+      pinned: true,
+      delegate: CustomSliverPersistentHeaderDelegate(
+        extent: 40,
+        bgColor: theme.colorScheme.surface,
+        child: Container(
+          height: 45,
+          padding: const EdgeInsets.only(left: 12, right: 6),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Obx(() => Text(
+                  '${_articleCtr.count.value == -1 ? 0 : Utils.numFormat(_articleCtr.count.value)}条回复')),
+              SizedBox(
+                height: 35,
+                child: TextButton.icon(
+                  onPressed: () => _articleCtr.queryBySort(),
+                  icon: const Icon(Icons.sort, size: 16),
+                  label: Obx(
+                    () => Text(
+                      _articleCtr.sortType.value.label,
+                      style: const TextStyle(fontSize: 13),
+                    ),
                   ),
                 ),
-              ),
-            )
-          ],
+              )
+            ],
+          ),
         ),
       ),
     );
@@ -768,13 +783,7 @@ class _ArticlePageState extends State<ArticlePage>
         bottom: 0,
         right: 0,
         child: SlideTransition(
-          position: Tween<Offset>(
-            begin: const Offset(0, 1),
-            end: Offset.zero,
-          ).animate(CurvedAnimation(
-            parent: fabAnimationCtr,
-            curve: Curves.easeInOut,
-          )),
+          position: _anim,
           child: Builder(
             builder: (context) {
               Widget button() => FloatingActionButton(

@@ -21,6 +21,7 @@ class MemberVideo extends StatefulWidget {
     this.seasonId,
     this.seriesId,
     this.title,
+    this.isSingle = false,
   });
 
   final ContributeType type;
@@ -29,6 +30,7 @@ class MemberVideo extends StatefulWidget {
   final int? seasonId;
   final int? seriesId;
   final String? title;
+  final bool isSingle;
 
   @override
   State<MemberVideo> createState() => _MemberVideoState();
@@ -109,13 +111,17 @@ class _MemberVideoState extends State<MemberVideo>
   Widget _buildBody(
       ThemeData theme, LoadingState<List<SpaceArchiveItem>?> loadingState) {
     return switch (loadingState) {
-      Loading() => SliverGrid(
-          gridDelegate: Grid.videoCardHDelegate(context),
-          delegate: SliverChildBuilderDelegate(
-            (context, index) {
-              return const VideoCardHSkeleton();
-            },
-            childCount: 10,
+      Loading() => SliverPadding(
+          padding:
+              widget.isSingle ? const EdgeInsets.only(top: 7) : EdgeInsets.zero,
+          sliver: SliverGrid(
+            gridDelegate: Grid.videoCardHDelegate(context),
+            delegate: SliverChildBuilderDelegate(
+              (context, index) {
+                return const VideoCardHSkeleton();
+              },
+              childCount: 10,
+            ),
           ),
         ),
       Success(:var response) => response?.isNotEmpty == true

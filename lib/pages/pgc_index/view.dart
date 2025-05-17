@@ -205,7 +205,7 @@ class _PgcIndexPageState extends State<PgcIndexPage>
 
   Widget _buildList(LoadingState<List<dynamic>?> loadingState) {
     return switch (loadingState) {
-      Loading() => const HttpError(errMsg: '加载中'),
+      Loading() => const SliverToBoxAdapter(child: LinearProgressIndicator()),
       Success(:var response) => response?.isNotEmpty == true
           ? SliverGrid(
               gridDelegate: SliverGridDelegateWithExtentAndRatio(

@@ -116,6 +116,8 @@ class _FavPageState extends State<FavPage> with SingleTickerProviderStateMixin {
         ],
         bottom: TabBar(
           controller: _tabController,
+          isScrollable: true,
+          tabAlignment: TabAlignment.start,
           tabs: FavTabType.values.map((item) => Tab(text: item.title)).toList(),
         ),
       ),

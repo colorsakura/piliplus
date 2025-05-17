@@ -847,4 +847,12 @@ class Api {
       '${HttpString.tUrl}/link_setting/v1/link_setting/set_push_ss';
 
   static const String dynReserve = '/x/dynamic/feed/reserve/click';
+
+  static const String favTopicList = '/x/topic/web/fav/list';
+
+  static const String addFavTopic = '/x/topic/fav/sub/add';
+
+  static const String delFavTopic = '/x/topic/fav/sub/cancel';
+
+  static const String likeTopic = '/x/topic/like';
 }
