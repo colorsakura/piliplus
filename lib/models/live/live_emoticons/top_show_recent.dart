@@ -2,22 +2,22 @@ import 'package:PiliPlus/models/live/live_emoticons/top_left.dart';
 import 'package:PiliPlus/models/live/live_emoticons/top_right.dart';
 
 class TopShowRecent {
-	TopLeft? topLeft;
-	TopRight? topRight;
+  TopLeft? topLeft;
+  TopRight? topRight;
 
-	TopShowRecent({this.topLeft, this.topRight});
+  TopShowRecent({this.topLeft, this.topRight});
 
-	factory TopShowRecent.fromJson(Map<String, dynamic> json) => TopShowRecent(
-				topLeft: json['top_left'] == null
-						? null
-						: TopLeft.fromJson(json['top_left'] as Map<String, dynamic>),
-				topRight: json['top_right'] == null
-						? null
-						: TopRight.fromJson(json['top_right'] as Map<String, dynamic>),
-			);
+  factory TopShowRecent.fromJson(Map<String, dynamic> json) => TopShowRecent(
+        topLeft: json['top_left'] == null
+            ? null
+            : TopLeft.fromJson(json['top_left'] as Map<String, dynamic>),
+        topRight: json['top_right'] == null
+            ? null
+            : TopRight.fromJson(json['top_right'] as Map<String, dynamic>),
+      );
 
-	Map<String, dynamic> toJson() => {
-				'top_left': topLeft?.toJson(),
-				'top_right': topRight?.toJson(),
-			};
+  Map<String, dynamic> toJson() => {
+        'top_left': topLeft?.toJson(),
+        'top_right': topRight?.toJson(),
+      };
 }

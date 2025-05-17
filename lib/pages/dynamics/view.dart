@@ -171,7 +171,7 @@ class _DynamicsPageState extends State<DynamicsPage>
               children: [
                 if (upPanelPosition == UpPanelPosition.top) upPanelPart(theme),
                 Expanded(
-                  child: tabBarView(
+                  child: videoTabBarView(
                     controller: _dynamicsController.tabController,
                     children: _dynamicsController.tabsPageList,
                   ),

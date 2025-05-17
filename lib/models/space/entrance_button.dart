@@ -4,14 +4,14 @@ part 'entrance_button.g.dart';
 
 @JsonSerializable()
 class EntranceButton {
-	String? uri;
-	String? title;
+  String? uri;
+  String? title;
 
-	EntranceButton({this.uri, this.title});
+  EntranceButton({this.uri, this.title});
 
-	factory EntranceButton.fromJson(Map<String, dynamic> json) {
-		return _$EntranceButtonFromJson(json);
-	}
+  factory EntranceButton.fromJson(Map<String, dynamic> json) {
+    return _$EntranceButtonFromJson(json);
+  }
 
-	Map<String, dynamic> toJson() => _$EntranceButtonToJson(this);
+  Map<String, dynamic> toJson() => _$EntranceButtonToJson(this);
 }

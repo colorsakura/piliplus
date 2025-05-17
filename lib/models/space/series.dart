@@ -4,13 +4,13 @@ part 'series.g.dart';
 
 @JsonSerializable()
 class Series {
-	List<dynamic>? item;
+  List<dynamic>? item;
 
-	Series({this.item});
+  Series({this.item});
 
-	factory Series.fromJson(Map<String, dynamic> json) {
-		return _$SeriesFromJson(json);
-	}
+  factory Series.fromJson(Map<String, dynamic> json) {
+    return _$SeriesFromJson(json);
+  }
 
-	Map<String, dynamic> toJson() => _$SeriesToJson(this);
+  Map<String, dynamic> toJson() => _$SeriesToJson(this);
 }

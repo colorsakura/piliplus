@@ -4,11 +4,11 @@ part 'night.g.dart';
 
 @JsonSerializable()
 class Night {
-	String? argb;
+  String? argb;
 
-	Night({this.argb});
+  Night({this.argb});
 
-	factory Night.fromJson(Map<String, dynamic> json) => _$NightFromJson(json);
+  factory Night.fromJson(Map<String, dynamic> json) => _$NightFromJson(json);
 
-	Map<String, dynamic> toJson() => _$NightToJson(this);
+  Map<String, dynamic> toJson() => _$NightToJson(this);
 }

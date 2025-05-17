@@ -1,13 +1,13 @@
 class Stat {
-	String? like;
+  String? like;
 
-	Stat({this.like});
+  Stat({this.like});
 
-	factory Stat.fromJson(Map<String, dynamic> json) => Stat(
-				like: json['like'] as String?,
-			);
+  factory Stat.fromJson(Map<String, dynamic> json) => Stat(
+        like: json['like'] as String?,
+      );
 
-	Map<String, dynamic> toJson() => {
-				'like': like,
-			};
+  Map<String, dynamic> toJson() => {
+        'like': like,
+      };
 }

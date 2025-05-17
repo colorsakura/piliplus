@@ -6,14 +6,14 @@ part 'res_native_draw.g.dart';
 
 @JsonSerializable()
 class ResNativeDraw {
-	@JsonKey(name: 'draw_src') 
-	DrawSrc? drawSrc;
+  @JsonKey(name: 'draw_src')
+  DrawSrc? drawSrc;
 
-	ResNativeDraw({this.drawSrc});
+  ResNativeDraw({this.drawSrc});
 
-	factory ResNativeDraw.fromJson(Map<String, dynamic> json) {
-		return _$ResNativeDrawFromJson(json);
-	}
+  factory ResNativeDraw.fromJson(Map<String, dynamic> json) {
+    return _$ResNativeDrawFromJson(json);
+  }
 
-	Map<String, dynamic> toJson() => _$ResNativeDrawToJson(this);
+  Map<String, dynamic> toJson() => _$ResNativeDrawToJson(this);
 }

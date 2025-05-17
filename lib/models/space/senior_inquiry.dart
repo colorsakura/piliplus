@@ -4,16 +4,16 @@ part 'senior_inquiry.g.dart';
 
 @JsonSerializable()
 class SeniorInquiry {
-	@JsonKey(name: 'inquiry_text') 
-	String? inquiryText;
-	@JsonKey(name: 'inquiry_url') 
-	String? inquiryUrl;
+  @JsonKey(name: 'inquiry_text')
+  String? inquiryText;
+  @JsonKey(name: 'inquiry_url')
+  String? inquiryUrl;
 
-	SeniorInquiry({this.inquiryText, this.inquiryUrl});
+  SeniorInquiry({this.inquiryText, this.inquiryUrl});
 
-	factory SeniorInquiry.fromJson(Map<String, dynamic> json) {
-		return _$SeniorInquiryFromJson(json);
-	}
+  factory SeniorInquiry.fromJson(Map<String, dynamic> json) {
+    return _$SeniorInquiryFromJson(json);
+  }
 
-	Map<String, dynamic> toJson() => _$SeniorInquiryToJson(this);
+  Map<String, dynamic> toJson() => _$SeniorInquiryToJson(this);
 }

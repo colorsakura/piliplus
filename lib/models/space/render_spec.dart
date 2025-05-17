@@ -4,13 +4,13 @@ part 'render_spec.g.dart';
 
 @JsonSerializable()
 class RenderSpec {
-	int? opacity;
+  int? opacity;
 
-	RenderSpec({this.opacity});
+  RenderSpec({this.opacity});
 
-	factory RenderSpec.fromJson(Map<String, dynamic> json) {
-		return _$RenderSpecFromJson(json);
-	}
+  factory RenderSpec.fromJson(Map<String, dynamic> json) {
+    return _$RenderSpecFromJson(json);
+  }
 
-	Map<String, dynamic> toJson() => _$RenderSpecToJson(this);
+  Map<String, dynamic> toJson() => _$RenderSpecToJson(this);
 }

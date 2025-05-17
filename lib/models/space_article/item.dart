@@ -1,5 +1,7 @@
-import 'package:PiliPlus/models/dynamics/article_content_model.dart';
+import 'dart:convert';
 
+import 'package:PiliPlus/models/dynamics/article_content_model.dart';
+import 'package:PiliPlus/models/dynamics/article_opus/opus.dart';
 import 'package:PiliPlus/models/space_article/author.dart';
 import 'package:PiliPlus/models/space_article/category.dart';
 import 'package:PiliPlus/models/space_article/media.dart';
@@ -55,6 +57,7 @@ class SpaceArticleItem {
   int? versionId;
   String? dynIdStr;
   int? totalArtNum;
+  List<ReadOpusModel>? ops;
 
   SpaceArticleItem.fromJson(Map<String, dynamic> json) {
     id = json["id"];
@@ -105,8 +108,13 @@ class SpaceArticleItem {
     keywords = json["keywords"];
     if (json['opus'] != null) opus = Opus.fromJson(json['opus']);
     versionId = json["version_id"];
-    dynIdStr = json["dyn_id_str"];
+    dynIdStr = json["dyn_id_str"] == '' ? null : json["dyn_id_str"];
     totalArtNum = json["total_art_num"];
+    if (type == 3 && content != null) {
+      ops = (jsonDecode(content!)['ops'] as List?)
+          ?.map((e) => ReadOpusModel.fromJson(e))
+          .toList();
+    }
   }
 }
 

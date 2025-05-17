@@ -6,15 +6,15 @@ part 'fallback_layers.g.dart';
 
 @JsonSerializable()
 class FallbackLayers {
-	List<Layer>? layers;
-	@JsonKey(name: 'is_critical_group') 
-	bool? isCriticalGroup;
+  List<Layer>? layers;
+  @JsonKey(name: 'is_critical_group')
+  bool? isCriticalGroup;
 
-	FallbackLayers({this.layers, this.isCriticalGroup});
+  FallbackLayers({this.layers, this.isCriticalGroup});
 
-	factory FallbackLayers.fromJson(Map<String, dynamic> json) {
-		return _$FallbackLayersFromJson(json);
-	}
+  factory FallbackLayers.fromJson(Map<String, dynamic> json) {
+    return _$FallbackLayersFromJson(json);
+  }
 
-	Map<String, dynamic> toJson() => _$FallbackLayersToJson(this);
+  Map<String, dynamic> toJson() => _$FallbackLayersToJson(this);
 }

@@ -6,15 +6,15 @@ part 'draw_src.g.dart';
 
 @JsonSerializable()
 class DrawSrc {
-	@JsonKey(name: 'src_type') 
-	int? srcType;
-	Draw? draw;
+  @JsonKey(name: 'src_type')
+  int? srcType;
+  Draw? draw;
 
-	DrawSrc({this.srcType, this.draw});
+  DrawSrc({this.srcType, this.draw});
 
-	factory DrawSrc.fromJson(Map<String, dynamic> json) {
-		return _$DrawSrcFromJson(json);
-	}
+  factory DrawSrc.fromJson(Map<String, dynamic> json) {
+    return _$DrawSrcFromJson(json);
+  }
 
-	Map<String, dynamic> toJson() => _$DrawSrcToJson(this);
+  Map<String, dynamic> toJson() => _$DrawSrcToJson(this);
 }

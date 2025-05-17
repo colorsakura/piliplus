@@ -4,14 +4,14 @@ part 'audios.g.dart';
 
 @JsonSerializable()
 class Audios {
-	int? count;
-	List<dynamic>? item;
+  int? count;
+  List<dynamic>? item;
 
-	Audios({this.count, this.item});
+  Audios({this.count, this.item});
 
-	factory Audios.fromJson(Map<String, dynamic> json) {
-		return _$AudiosFromJson(json);
-	}
+  factory Audios.fromJson(Map<String, dynamic> json) {
+    return _$AudiosFromJson(json);
+  }
 
-	Map<String, dynamic> toJson() => _$AudiosToJson(this);
+  Map<String, dynamic> toJson() => _$AudiosToJson(this);
 }

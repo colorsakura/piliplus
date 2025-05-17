@@ -6,14 +6,14 @@ part 'honours.g.dart';
 
 @JsonSerializable()
 class Honours {
-	Colour? colour;
-	List<dynamic>? tags;
+  Colour? colour;
+  List<dynamic>? tags;
 
-	Honours({this.colour, this.tags});
+  Honours({this.colour, this.tags});
 
-	factory Honours.fromJson(Map<String, dynamic> json) {
-		return _$HonoursFromJson(json);
-	}
+  factory Honours.fromJson(Map<String, dynamic> json) {
+    return _$HonoursFromJson(json);
+  }
 
-	Map<String, dynamic> toJson() => _$HonoursToJson(this);
+  Map<String, dynamic> toJson() => _$HonoursToJson(this);
 }

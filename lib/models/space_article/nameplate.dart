@@ -4,26 +4,26 @@ part 'nameplate.g.dart';
 
 @JsonSerializable()
 class Nameplate {
-	int? nid;
-	String? name;
-	String? image;
-	@JsonKey(name: 'image_small') 
-	String? imageSmall;
-	String? level;
-	String? condition;
+  int? nid;
+  String? name;
+  String? image;
+  @JsonKey(name: 'image_small')
+  String? imageSmall;
+  String? level;
+  String? condition;
 
-	Nameplate({
-		this.nid, 
-		this.name, 
-		this.image, 
-		this.imageSmall, 
-		this.level, 
-		this.condition, 
-	});
+  Nameplate({
+    this.nid,
+    this.name,
+    this.image,
+    this.imageSmall,
+    this.level,
+    this.condition,
+  });
 
-	factory Nameplate.fromJson(Map<String, dynamic> json) {
-		return _$NameplateFromJson(json);
-	}
+  factory Nameplate.fromJson(Map<String, dynamic> json) {
+    return _$NameplateFromJson(json);
+  }
 
-	Map<String, dynamic> toJson() => _$NameplateToJson(this);
+  Map<String, dynamic> toJson() => _$NameplateToJson(this);
 }

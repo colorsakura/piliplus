@@ -4,12 +4,12 @@ part 'order.g.dart';
 
 @JsonSerializable()
 class Order {
-	String? title;
-	String? value;
+  String? title;
+  String? value;
 
-	Order({this.title, this.value});
+  Order({this.title, this.value});
 
-	factory Order.fromJson(Map<String, dynamic> json) => _$OrderFromJson(json);
+  factory Order.fromJson(Map<String, dynamic> json) => _$OrderFromJson(json);
 
-	Map<String, dynamic> toJson() => _$OrderToJson(this);
+  Map<String, dynamic> toJson() => _$OrderToJson(this);
 }
