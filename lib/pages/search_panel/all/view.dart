@@ -37,69 +37,64 @@ class _SearchAllPanelState
 
   @override
   Widget buildList(ThemeData theme, List<dynamic> list) {
-    return SliverPadding(
-      padding: EdgeInsets.only(
-        bottom: MediaQuery.paddingOf(context).bottom + 80,
-      ),
-      sliver: SliverWaterfallFlow.extent(
-        maxCrossAxisExtent: Grid.smallCardWidth * 2,
-        crossAxisSpacing: StyleString.safeSpace,
-        lastChildLayoutTypeBuilder: (index) {
-          if (index == list.length - 1) {
-            controller.onLoadMore();
-          }
-          return index == list.length
-              ? LastChildLayoutType.foot
-              : LastChildLayoutType.none;
-        },
-        children: list
-            .map(
-              (item) => switch (item) {
-                SearchVideoItemModel() => SizedBox(
-                    height: 120,
-                    child: VideoCardH(
-                      videoItem: item,
-                      showPubdate: true,
-                    ),
+    return SliverWaterfallFlow.extent(
+      maxCrossAxisExtent: Grid.smallCardWidth * 2,
+      crossAxisSpacing: StyleString.safeSpace,
+      lastChildLayoutTypeBuilder: (index) {
+        if (index == list.length - 1) {
+          controller.onLoadMore();
+        }
+        return index == list.length
+            ? LastChildLayoutType.foot
+            : LastChildLayoutType.none;
+      },
+      children: list
+          .map(
+            (item) => switch (item) {
+              SearchVideoItemModel() => SizedBox(
+                  height: 120,
+                  child: VideoCardH(
+                    videoItem: item,
+                    showPubdate: true,
                   ),
-                List<SearchMBangumiItemModel>() => item.length == 1
-                    ? SizedBox(
-                        height: 160,
-                        child: SearchPgcItem(item: item.first),
-                      )
-                    : SizedBox(
-                        height: Grid.smallCardWidth / 2 / 0.75 +
-                            MediaQuery.textScalerOf(context).scale(60),
-                        child: ListView.builder(
-                          padding: const EdgeInsets.only(bottom: 7),
-                          physics: const AlwaysScrollableScrollPhysics(),
-                          scrollDirection: Axis.horizontal,
-                          itemCount: item.length,
-                          itemBuilder: (context, index) {
-                            return Container(
-                              width: Grid.smallCardWidth / 2,
-                              margin: EdgeInsets.only(
-                                left: StyleString.safeSpace,
-                                right: index == item.length - 1
-                                    ? StyleString.safeSpace
-                                    : 0,
-                              ),
-                              child: BangumiCardVSearch(item: item[index]),
-                            );
-                          },
-                        ),
+                ),
+              List<SearchMBangumiItemModel>() => item.length == 1
+                  ? SizedBox(
+                      height: 160,
+                      child: SearchPgcItem(item: item.first),
+                    )
+                  : SizedBox(
+                      height: Grid.smallCardWidth / 2 / 0.75 +
+                          MediaQuery.textScalerOf(context).scale(60),
+                      child: ListView.builder(
+                        padding: const EdgeInsets.only(bottom: 7),
+                        physics: const AlwaysScrollableScrollPhysics(),
+                        scrollDirection: Axis.horizontal,
+                        itemCount: item.length,
+                        itemBuilder: (context, index) {
+                          return Container(
+                            width: Grid.smallCardWidth / 2,
+                            margin: EdgeInsets.only(
+                              left: StyleString.safeSpace,
+                              right: index == item.length - 1
+                                  ? StyleString.safeSpace
+                                  : 0,
+                            ),
+                            child: BangumiCardVSearch(item: item[index]),
+                          );
+                        },
                       ),
-                SearchUserItemModel() => Padding(
-                    padding: const EdgeInsets.only(bottom: 5),
-                    child: SearchUserItem(
-                      item: item,
                     ),
+              SearchUserItemModel() => Padding(
+                  padding: const EdgeInsets.only(bottom: 5),
+                  child: SearchUserItem(
+                    item: item,
                   ),
-                _ => const SizedBox.shrink(),
-              },
-            )
-            .toList(),
-      ),
+                ),
+              _ => const SizedBox.shrink(),
+            },
+          )
+          .toList(),
     );
   }
 }

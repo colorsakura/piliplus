@@ -2,7 +2,7 @@
 enum SearchType {
   // all,
   // 视频：video
-  video('视频'),
+  video('视频', hasHeader: true),
   // 番剧：media_bangumi,
   media_bangumi('番剧'),
   // 影视：media_ft
@@ -16,14 +16,15 @@ enum SearchType {
   // 话题：topic
   // topic,
   // 用户：bili_user
-  bili_user('用户'),
+  bili_user('用户', hasHeader: true),
   // 专栏：article
-  article('专栏');
+  article('专栏', hasHeader: true);
   // 相簿：photo
   // photo
 
+  final bool hasHeader;
   final String label;
-  const SearchType(this.label);
+  const SearchType(this.label, {this.hasHeader = false});
 }
 
 // 搜索类型为视频、专栏及相簿时

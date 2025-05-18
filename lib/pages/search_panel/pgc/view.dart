@@ -32,23 +32,19 @@ class _SearchPgcPanelState extends CommonSearchPanelState<SearchPgcPanel,
 
   @override
   Widget buildList(ThemeData theme, List<SearchMBangumiItemModel> list) {
-    return SliverPadding(
-      padding:
-          EdgeInsets.only(bottom: MediaQuery.paddingOf(context).bottom + 80),
-      sliver: SliverGrid(
-        gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-          maxCrossAxisExtent: Grid.smallCardWidth * 2,
-          mainAxisExtent: 160,
-        ),
-        delegate: SliverChildBuilderDelegate(
-          (BuildContext context, int index) {
-            if (index == list.length - 1) {
-              controller.onLoadMore();
-            }
-            return SearchPgcItem(item: list[index]);
-          },
-          childCount: list.length,
-        ),
+    return SliverGrid(
+      gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+        maxCrossAxisExtent: Grid.smallCardWidth * 2,
+        mainAxisExtent: 160,
+      ),
+      delegate: SliverChildBuilderDelegate(
+        (BuildContext context, int index) {
+          if (index == list.length - 1) {
+            controller.onLoadMore();
+          }
+          return SearchPgcItem(item: list[index]);
+        },
+        childCount: list.length,
       ),
     );
   }

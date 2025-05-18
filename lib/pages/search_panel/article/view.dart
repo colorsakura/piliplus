@@ -32,77 +32,72 @@ class _SearchArticlePanelState extends CommonSearchPanelState<
   );
 
   @override
-  Widget buildList(ThemeData theme, List<SearchArticleItemModel> list) {
-    return SliverMainAxisGroup(
-      slivers: [
-        SliverPersistentHeader(
-          pinned: false,
-          floating: true,
-          delegate: CustomSliverPersistentHeaderDelegate(
-            extent: 40,
-            bgColor: theme.colorScheme.surface,
-            child: Container(
-              height: 40,
-              padding: const EdgeInsets.only(left: 25, right: 12),
-              child: Row(
-                children: [
-                  Obx(
-                    () => Text(
-                      '排序: ${controller.orderFiltersList[controller.currentOrderFilterval.value]['label']}',
-                      maxLines: 1,
-                      style: TextStyle(color: theme.colorScheme.outline),
-                    ),
-                  ),
-                  const Spacer(),
-                  Obx(
-                    () => Text(
-                      '分区: ${controller.zoneFiltersList[controller.currentZoneFilterval.value]['label']}',
-                      maxLines: 1,
-                      style: TextStyle(color: theme.colorScheme.outline),
-                    ),
-                  ),
-                  const Spacer(),
-                  SizedBox(
-                    width: 32,
-                    height: 32,
-                    child: IconButton(
-                      tooltip: '筛选',
-                      style: ButtonStyle(
-                        padding: WidgetStateProperty.all(EdgeInsets.zero),
-                      ),
-                      onPressed: () {
-                        controller.onShowFilterDialog(context);
-                      },
-                      icon: Icon(
-                        Icons.filter_list_outlined,
-                        size: 18,
-                        color: theme.colorScheme.primary,
-                      ),
-                    ),
-                  ),
-                ],
+  Widget buildHeader(ThemeData theme) {
+    return SliverPersistentHeader(
+      pinned: false,
+      floating: true,
+      delegate: CustomSliverPersistentHeaderDelegate(
+        extent: 40,
+        bgColor: theme.colorScheme.surface,
+        child: Container(
+          height: 40,
+          padding: const EdgeInsets.only(left: 25, right: 12),
+          child: Row(
+            children: [
+              Obx(
+                () => Text(
+                  '排序: ${controller.orderFiltersList[controller.currentOrderFilterval.value]['label']}',
+                  maxLines: 1,
+                  style: TextStyle(color: theme.colorScheme.outline),
+                ),
               ),
-            ),
+              const Spacer(),
+              Obx(
+                () => Text(
+                  '分区: ${controller.zoneFiltersList[controller.currentZoneFilterval.value]['label']}',
+                  maxLines: 1,
+                  style: TextStyle(color: theme.colorScheme.outline),
+                ),
+              ),
+              const Spacer(),
+              SizedBox(
+                width: 32,
+                height: 32,
+                child: IconButton(
+                  tooltip: '筛选',
+                  style: ButtonStyle(
+                    padding: WidgetStateProperty.all(EdgeInsets.zero),
+                  ),
+                  onPressed: () {
+                    controller.onShowFilterDialog(context);
+                  },
+                  icon: Icon(
+                    Icons.filter_list_outlined,
+                    size: 18,
+                    color: theme.colorScheme.primary,
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
-        SliverPadding(
-          padding: EdgeInsets.only(
-            bottom: MediaQuery.paddingOf(context).bottom + 80,
-          ),
-          sliver: SliverGrid(
-            gridDelegate: Grid.videoCardHDelegate(context),
-            delegate: SliverChildBuilderDelegate(
-              (BuildContext context, int index) {
-                if (index == list.length - 1) {
-                  controller.onLoadMore();
-                }
-                return SearchArticleItem(item: list[index]);
-              },
-              childCount: list.length,
-            ),
-          ),
-        ),
-      ],
+      ),
+    );
+  }
+
+  @override
+  Widget buildList(ThemeData theme, List<SearchArticleItemModel> list) {
+    return SliverGrid(
+      gridDelegate: Grid.videoCardHDelegate(context),
+      delegate: SliverChildBuilderDelegate(
+        (BuildContext context, int index) {
+          if (index == list.length - 1) {
+            controller.onLoadMore();
+          }
+          return SearchArticleItem(item: list[index]);
+        },
+        childCount: list.length,
+      ),
     );
   }
 }

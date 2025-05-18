@@ -34,93 +34,89 @@ class _SearchVideoPanelState extends CommonSearchPanelState<SearchVideoPanel,
   );
 
   @override
-  Widget buildList(ThemeData theme, List<SearchVideoItemModel> list) {
-    return SliverMainAxisGroup(
-      slivers: [
-        SliverPersistentHeader(
-          pinned: false,
-          floating: true,
-          delegate: CustomSliverPersistentHeaderDelegate(
-            extent: 34,
-            bgColor: theme.colorScheme.surface,
-            child: Container(
-              height: 34,
-              padding: const EdgeInsets.symmetric(horizontal: 12),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: Wrap(
-                        children: [
-                          for (var i in controller.filterList) ...[
-                            Obx(
-                              () => SearchText(
-                                fontSize: 13,
-                                text: i['label'],
-                                bgColor: Colors.transparent,
-                                textColor:
-                                    controller.selectedType.value == i['type']
-                                        ? theme.colorScheme.primary
-                                        : theme.colorScheme.outline,
-                                onTap: (value) async {
-                                  controller.selectedType.value = i['type'];
-                                  controller.order.value =
-                                      i['type'].toString().split('.').last;
-                                  SmartDialog.showLoading(msg: 'loading');
-                                  await controller.onReload();
-                                  SmartDialog.dismiss();
-                                },
-                              ),
-                            ),
-                          ]
-                        ],
-                      ),
-                    ),
+  Widget buildHeader(ThemeData theme) {
+    return SliverPersistentHeader(
+      pinned: false,
+      floating: true,
+      delegate: CustomSliverPersistentHeaderDelegate(
+        extent: 34,
+        bgColor: theme.colorScheme.surface,
+        child: Container(
+          height: 34,
+          padding: const EdgeInsets.symmetric(horizontal: 12),
+          child: Row(
+            children: [
+              Expanded(
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Wrap(
+                    children: [
+                      for (var i in controller.filterList) ...[
+                        Obx(
+                          () => SearchText(
+                            fontSize: 13,
+                            text: i['label'],
+                            bgColor: Colors.transparent,
+                            textColor:
+                                controller.selectedType.value == i['type']
+                                    ? theme.colorScheme.primary
+                                    : theme.colorScheme.outline,
+                            onTap: (value) async {
+                              controller.selectedType.value = i['type'];
+                              controller.order.value =
+                                  i['type'].toString().split('.').last;
+                              SmartDialog.showLoading(msg: 'loading');
+                              await controller.onReload();
+                              SmartDialog.dismiss();
+                            },
+                          ),
+                        ),
+                      ]
+                    ],
                   ),
-                  const VerticalDivider(indent: 7, endIndent: 8),
-                  const SizedBox(width: 3),
-                  SizedBox(
-                    width: 32,
-                    height: 32,
-                    child: IconButton(
-                      tooltip: '筛选',
-                      style: ButtonStyle(
-                        padding: WidgetStateProperty.all(EdgeInsets.zero),
-                      ),
-                      onPressed: () => controller.onShowFilterDialog(context),
-                      icon: Icon(
-                        Icons.filter_list_outlined,
-                        size: 18,
-                        color: theme.colorScheme.primary,
-                      ),
-                    ),
-                  ),
-                ],
+                ),
               ),
-            ),
+              const VerticalDivider(indent: 7, endIndent: 8),
+              const SizedBox(width: 3),
+              SizedBox(
+                width: 32,
+                height: 32,
+                child: IconButton(
+                  tooltip: '筛选',
+                  style: ButtonStyle(
+                    padding: WidgetStateProperty.all(EdgeInsets.zero),
+                  ),
+                  onPressed: () => controller.onShowFilterDialog(context),
+                  icon: Icon(
+                    Icons.filter_list_outlined,
+                    size: 18,
+                    color: theme.colorScheme.primary,
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
-        SliverPadding(
-          padding: EdgeInsets.only(
-              bottom: MediaQuery.paddingOf(context).bottom + 80),
-          sliver: SliverGrid(
-            gridDelegate: Grid.videoCardHDelegate(context),
-            delegate: SliverChildBuilderDelegate(
-              (context, index) {
-                if (index == list.length - 1) {
-                  controller.onLoadMore();
-                }
-                return VideoCardH(
-                  videoItem: list[index],
-                  showPubdate: true,
-                );
-              },
-              childCount: list.length,
-            ),
-          ),
-        ),
-      ],
+      ),
+    );
+  }
+
+  @override
+  Widget buildList(ThemeData theme, List<SearchVideoItemModel> list) {
+    return SliverGrid(
+      gridDelegate: Grid.videoCardHDelegate(context),
+      delegate: SliverChildBuilderDelegate(
+        (context, index) {
+          if (index == list.length - 1) {
+            controller.onLoadMore();
+          }
+          return VideoCardH(
+            videoItem: list[index],
+            showPubdate: true,
+          );
+        },
+        childCount: list.length,
+      ),
     );
   }
 }

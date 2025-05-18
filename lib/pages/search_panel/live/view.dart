@@ -34,10 +34,9 @@ class _SearchLivePanelState extends CommonSearchPanelState<SearchLivePanel,
   @override
   Widget buildList(ThemeData theme, List<SearchLiveItemModel> list) {
     return SliverPadding(
-      padding: EdgeInsets.only(
+      padding: const EdgeInsets.only(
         left: StyleString.safeSpace,
         right: StyleString.safeSpace,
-        bottom: MediaQuery.paddingOf(context).bottom + 80,
       ),
       sliver: SliverGrid(
         gridDelegate: SliverGridDelegateWithExtentAndRatio(
