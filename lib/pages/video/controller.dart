@@ -220,11 +220,11 @@ class VideoDetailController extends GetxController
   late RxList<MediaVideoItemModel> mediaList = <MediaVideoItemModel>[].obs;
   late String watchLaterTitle = '';
   bool get isPlayAll =>
-      const ['watchLater', 'fav', 'archive'].contains(sourceType);
+      const ['watchLater', 'fav', 'archive', 'playlist'].contains(sourceType);
   int get _mediaType => switch (sourceType) {
         'archive' => 1,
         'watchLater' => 2,
-        'fav' => 3,
+        'fav' || 'playlist' => 3,
         _ => -1,
       };
 

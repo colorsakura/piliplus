@@ -25,7 +25,6 @@ class PiliScheme {
 
     listener?.cancel();
     listener = appLinks.uriLinkStream.listen((uri) {
-      debugPrint('onAppLink: $uri');
       routePush(uri);
     });
   }
@@ -66,6 +65,8 @@ class PiliScheme {
     int? businessId,
     int? oid,
   }) async {
+    // debugPrint('onAppLink: $uri');
+
     final String scheme = uri.scheme;
     final String host = uri.host;
     final String path = uri.path;
@@ -624,12 +625,32 @@ class PiliScheme {
         }
         return hasMatch;
       case 'playlist':
+        // http://m.bilibili.com/playlist/pl12345678?bvid=BVxxxxxxxx&page_type=4
+        String? mediaId = RegExp(r'/pl(\d+)', caseSensitive: false)
+            .firstMatch(path)
+            ?.group(1);
         String? bvid = uri.queryParameters['bvid'] ??
             RegExp(r'/(BV[a-z\d]{10})', caseSensitive: false)
                 .firstMatch(path)
                 ?.group(1);
         if (bvid != null) {
-          videoPush(null, bvid, off: off);
+          if (mediaId != null) {
+            final int cid = await SearchHttp.ab2c(bvid: bvid);
+            PageUtils.toVideoPage(
+              'bvid=$bvid&cid=$cid',
+              arguments: {
+                'heroTag': Utils.makeHeroTag(bvid),
+                'sourceType': 'playlist',
+                'favTitle': '播放列表',
+                'mediaId': mediaId,
+                'mediaType': 3,
+                'desc': true,
+                'isContinuePlaying': true,
+              },
+            );
+          } else {
+            videoPush(null, bvid, off: off);
+          }
           return true;
         }
         launchURL();

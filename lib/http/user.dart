@@ -688,7 +688,7 @@ class UserHttp {
   // 稍后再看列表
   static Future getMediaList({
     required dynamic type,
-    required int bizId,
+    required bizId,
     required int ps,
     dynamic oid,
     int? otype,
