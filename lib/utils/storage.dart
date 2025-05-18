@@ -57,14 +57,12 @@ class GStorage {
       );
 
   static List<String> get tabbarSort =>
-      List<String>.from(setting.get(SettingBoxKey.tabbarSort,
-          defaultValue: HomeTabType.values.map((item) => item.name).toList()));
+      List<String>.from(setting.get(SettingBoxKey.tabbarSort) ??
+          HomeTabType.values.map((item) => item.name).toList());
 
   static List<Pair<SegmentType, SkipType>> get blockSettings {
-    List<int> list = List<int>.from(setting.get(
-      SettingBoxKey.blockSettings,
-      defaultValue: List.generate(SegmentType.values.length, (_) => 1),
-    ));
+    List<int> list = List<int>.from(setting.get(SettingBoxKey.blockSettings) ??
+        List.generate(SegmentType.values.length, (_) => 1));
     return SegmentType.values
         .map((item) => Pair<SegmentType, SkipType>(
               first: item,
@@ -74,10 +72,9 @@ class GStorage {
   }
 
   static List<Color> get blockColor {
-    List<String> list = List<String>.from(setting.get(
-      SettingBoxKey.blockColor,
-      defaultValue: List.generate(SegmentType.values.length, (_) => ''),
-    ));
+    List<String> list = List<String>.from(
+        setting.get(SettingBoxKey.blockColor) ??
+            List.generate(SegmentType.values.length, (_) => ''));
     return SegmentType.values
         .map((item) => list[item.index].isNotEmpty
             ? Color(
@@ -473,13 +470,17 @@ class GStorage {
       SettingBoxKey.pageTransition,
       defaultValue: Transition.native.index)];
 
-  static num get maxCacheSize => GStorage.setting
-      .get(SettingBoxKey.maxCacheSize, defaultValue: pow(1024, 3));
+  static num get maxCacheSize =>
+      GStorage.setting.get(SettingBoxKey.maxCacheSize) ?? pow(1024, 3);
 
   static bool get optTabletNav =>
       GStorage.setting.get(SettingBoxKey.optTabletNav, defaultValue: true);
 
   static bool get horizontalScreen {
+    return GStorage.setting.get(SettingBoxKey.horizontalScreen) ?? isTablet;
+  }
+
+  static bool get isTablet {
     bool isTablet;
     if (Get.context != null) {
       isTablet = Get.context!.isTablet;
@@ -489,15 +490,14 @@ class GStorage {
       final shortestSide = min(screenSize.width.abs(), screenSize.height.abs());
       isTablet = shortestSide >= 600;
     }
-    return GStorage.setting
-        .get(SettingBoxKey.horizontalScreen, defaultValue: isTablet);
+    return isTablet;
   }
 
   static List<double> get dynamicDetailRatio => List<double>.from(setting
       .get(SettingBoxKey.dynamicDetailRatio, defaultValue: const [60.0, 40.0]));
 
-  static Set<int> get blackMids =>
-      GStorage.localCache.get(LocalCacheKey.blackMids, defaultValue: <int>{});
+  static Set<int> get blackMids => GStorage.localCache
+      .get(LocalCacheKey.blackMids, defaultValue: const <int>{});
 
   static set blackMids(Set<int> blackMidsSet) {
     GStorage.localCache.put(LocalCacheKey.blackMids, blackMidsSet);
@@ -535,10 +535,8 @@ class GStorage {
   // );
   // damping = ratio * 2.0 * math.sqrt(mass * stiffness)
   static final List<double> springDescription = List<double>.from(
-    setting.get(
-      SettingBoxKey.springDescription, // [mass, stiffness, damping]
-      defaultValue: [0.5, 100.0, 2.2 * sqrt(50)],
-    ),
+    setting.get(SettingBoxKey.springDescription) ??
+        [0.5, 100.0, 2.2 * sqrt(50)], // [mass, stiffness, damping]
   );
 
   // static Brightness get brightness {
