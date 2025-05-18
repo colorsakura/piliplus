@@ -6,7 +6,6 @@ import 'package:PiliPlus/models/space_archive/data.dart';
 import 'package:PiliPlus/models/space_archive/episodic_button.dart';
 import 'package:PiliPlus/models/space_archive/item.dart';
 import 'package:PiliPlus/pages/common/common_list_controller.dart';
-import 'package:PiliPlus/pages/member/controller.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/id_utils.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
@@ -46,7 +45,7 @@ class MemberVideoCtr
   bool? hasPrev;
 
   String? heroTag;
-  late final MemberController _ctr = Get.find<MemberController>(tag: heroTag);
+  // late final MemberController _ctr = Get.find<MemberController>(tag: heroTag);
 
   @override
   Future<void> onRefresh() async {
@@ -227,11 +226,10 @@ class MemberVideoCtr
   @override
   Future<void> onReload() {
     isLocating.value = null;
-    if (_ctr.key.currentState?.outerController.hasClients == true) {
-      if (_ctr.key.currentState!.outerController.offset > _ctr.offset) {
-        _ctr.key.currentState!.outerController.jumpTo(_ctr.offset.toDouble());
-      }
-    }
+    // if (_ctr.key.currentState?.outerController.hasClients == true) {
+    //   _ctr.key.currentState!.outerController
+    //       .jumpTo(_ctr.key.currentState!.outerController.offset);
+    // }
     return super.onReload();
   }
 }

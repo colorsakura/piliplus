@@ -131,6 +131,16 @@ class VideoDetailController extends GetxController
       max(max(Get.height, Get.width) * 0.65, min(Get.height, Get.width));
   late double videoHeight = minVideoHeight;
 
+  void animToTop() {
+    if (scrollKey.currentState?.outerController.hasClients == true) {
+      scrollKey.currentState!.outerController.animateTo(
+        scrollKey.currentState!.outerController.offset,
+        duration: const Duration(milliseconds: 500),
+        curve: Curves.easeInOut,
+      );
+    }
+  }
+
   void setVideoHeight() {
     String direction = firstVideo.width != null && firstVideo.height != null
         ? firstVideo.width! > firstVideo.height!

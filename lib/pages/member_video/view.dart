@@ -121,7 +121,7 @@ class _MemberVideoState extends State<MemberVideo>
               (context, index) {
                 return const VideoCardHSkeleton();
               },
-              childCount: 10,
+              childCount: 4,
             ),
           ),
         ),

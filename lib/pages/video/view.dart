@@ -925,11 +925,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                 children: [
                   buildTabbar(
                     showReply: videoDetailController.showReply,
-                    onTap: () {
-                      videoDetailController
-                          .scrollKey.currentState?.outerController
-                          .animToTop();
-                    },
+                    onTap: videoDetailController.animToTop,
                   ),
                   Expanded(
                     child: videoTabBarView(
