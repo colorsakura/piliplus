@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -58,7 +60,7 @@ abstract class CommonSlidePageState<T extends CommonSlidePage> extends State<T>
 
           void onDismiss() {
             if (isSliding == true) {
-              if (_animController!.value * maxWidth >= 100) {
+              if (_animController!.value * maxWidth + downPos!.dx >= 100) {
                 Get.back();
               } else {
                 _animController!.reverse();
@@ -82,11 +84,11 @@ abstract class CommonSlidePageState<T extends CommonSlidePage> extends State<T>
                 }
               }
             } else if (isSliding == true) {
-              if (localPosition.dx < downPos!.dx) {
+              if (localPosition.dx < 0) {
                 return;
               }
               _animController!.value =
-                  (localPosition.dx - downPos!.dx) / maxWidth;
+                  max(0, (localPosition.dx - downPos!.dx)) / maxWidth;
             }
           }
 
