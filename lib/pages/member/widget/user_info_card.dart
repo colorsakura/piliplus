@@ -54,9 +54,7 @@ class UserInfoCard extends StatelessWidget {
         children: [
           Text(
             Utils.numFormat(count),
-            style: const TextStyle(
-              fontSize: 14,
-            ),
+            style: const TextStyle(fontSize: 14),
           ),
           Text(
             title,
@@ -440,7 +438,10 @@ class UserInfoCard extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   _buildHeader(context, theme),
-                  const SizedBox(width: double.infinity, height: 85)
+                  SizedBox(
+                    width: double.infinity,
+                    height: MediaQuery.textScalerOf(context).scale(30) + 55,
+                  )
                 ],
               ),
               Positioned(
@@ -449,18 +450,11 @@ class UserInfoCard extends StatelessWidget {
                 child: _buildAvatar(context),
               ),
               Positioned(
-                left: 120,
+                left: 140,
                 top: 140,
                 right: 20,
                 bottom: 0,
-                child: LayoutBuilder(
-                  builder: (_, constraints) => FittedBox(
-                    child: SizedBox(
-                      width: constraints.maxWidth,
-                      child: _buildRight(context, theme),
-                    ),
-                  ),
-                ),
+                child: _buildRight(context, theme),
               ),
             ],
           ),
