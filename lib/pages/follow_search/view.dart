@@ -30,26 +30,21 @@ class _FollowSearchPageState extends CommonSearchPageState<FollowSearchPage,
 
   @override
   Widget buildList(List<FollowItemModel> list) {
-    return SliverPadding(
-      padding: EdgeInsets.only(
-        bottom: MediaQuery.of(context).padding.bottom + 80,
-      ),
-      sliver: SliverList.builder(
-        itemCount: list.length,
-        itemBuilder: ((context, index) {
-          if (index == list.length - 1) {
-            controller.onLoadMore();
-          }
-          return FollowItem(
-            item: list[index],
-            onSelect: widget.mid != null && widget.isFromSelect != false
-                ? (userModel) {
-                    Get.back(result: userModel);
-                  }
-                : null,
-          );
-        }),
-      ),
+    return SliverList.builder(
+      itemCount: list.length,
+      itemBuilder: ((context, index) {
+        if (index == list.length - 1) {
+          controller.onLoadMore();
+        }
+        return FollowItem(
+          item: list[index],
+          onSelect: widget.mid != null && widget.isFromSelect != false
+              ? (userModel) {
+                  Get.back(result: userModel);
+                }
+              : null,
+        );
+      }),
     );
   }
 }

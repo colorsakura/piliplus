@@ -24,29 +24,24 @@ class _HistorySearchPageState
 
   @override
   Widget buildList(List<HisListItem> list) {
-    return SliverPadding(
-      padding: EdgeInsets.only(
-        bottom: MediaQuery.of(context).padding.bottom + 80,
-      ),
-      sliver: SliverGrid(
-        gridDelegate: Grid.videoCardHDelegate(context, minHeight: 110),
-        delegate: SliverChildBuilderDelegate(
-          childCount: list.length,
-          (context, index) {
-            if (index == list.length - 1) {
-              controller.onLoadMore();
-            }
-            final item = list[index];
-            return HistoryItem(
-              videoItem: item,
-              ctr: controller,
-              onChoose: null,
-              onDelete: (kid, business) {
-                controller.onDelHistory(index, kid, business);
-              },
-            );
-          },
-        ),
+    return SliverGrid(
+      gridDelegate: Grid.videoCardHDelegate(context, minHeight: 110),
+      delegate: SliverChildBuilderDelegate(
+        childCount: list.length,
+        (context, index) {
+          if (index == list.length - 1) {
+            controller.onLoadMore();
+          }
+          final item = list[index];
+          return HistoryItem(
+            videoItem: item,
+            ctr: controller,
+            onChoose: null,
+            onDelete: (kid, business) {
+              controller.onDelHistory(index, kid, business);
+            },
+          );
+        },
       ),
     );
   }

@@ -37,7 +37,12 @@ class _FavNoteChildPageState extends State<FavNoteChildPage>
             onRefresh: _favNoteController.onRefresh,
             child: CustomScrollView(
               slivers: [
-                Obx(() => _buildBody(_favNoteController.loadingState.value)),
+                SliverPadding(
+                  padding: EdgeInsets.only(
+                      bottom: MediaQuery.paddingOf(context).bottom + 80),
+                  sliver: Obx(
+                      () => _buildBody(_favNoteController.loadingState.value)),
+                ),
               ],
             ),
           ),
@@ -139,26 +144,22 @@ class _FavNoteChildPageState extends State<FavNoteChildPage>
           ),
         ),
       Success(:var response) => response?.isNotEmpty == true
-          ? SliverPadding(
-              padding: EdgeInsets.only(
-                  bottom: MediaQuery.paddingOf(context).bottom + 80),
-              sliver: SliverGrid(
-                gridDelegate: Grid.videoCardHDelegate(context),
-                delegate: SliverChildBuilderDelegate(
-                  (context, index) {
-                    if (index == response.length - 1) {
-                      _favNoteController.onLoadMore();
-                    }
-                    return FavNoteItem(
-                      item: response[index],
-                      ctr: _favNoteController,
-                      onSelect: () {
-                        _favNoteController.onSelect(index);
-                      },
-                    );
-                  },
-                  childCount: response!.length,
-                ),
+          ? SliverGrid(
+              gridDelegate: Grid.videoCardHDelegate(context),
+              delegate: SliverChildBuilderDelegate(
+                (context, index) {
+                  if (index == response.length - 1) {
+                    _favNoteController.onLoadMore();
+                  }
+                  return FavNoteItem(
+                    item: response[index],
+                    ctr: _favNoteController,
+                    onSelect: () {
+                      _favNoteController.onSelect(index);
+                    },
+                  );
+                },
+                childCount: response!.length,
               ),
             )
           : HttpError(onReload: _favNoteController.onReload),

@@ -123,8 +123,11 @@ class _WhisperDetailPageState
                   hidePanel();
                 },
                 behavior: HitTestBehavior.opaque,
-                child: Obx(() =>
-                    _buildBody(_whisperDetailController.loadingState.value)),
+                child: refreshIndicator(
+                  onRefresh: _whisperDetailController.onRefresh,
+                  child: Obx(() =>
+                      _buildBody(_whisperDetailController.loadingState.value)),
+                ),
               ),
             ),
             if (_whisperDetailController.mid != null) ...[
@@ -142,66 +145,63 @@ class _WhisperDetailPageState
     return switch (loadingState) {
       Loading() => loadingWidget,
       Success(:var response) => response?.isNotEmpty == true
-          ? refreshIndicator(
-              onRefresh: _whisperDetailController.onRefresh,
-              child: ListView.separated(
-                shrinkWrap: true,
-                reverse: true,
-                itemCount: response!.length,
-                padding: const EdgeInsets.all(12),
-                physics: const AlwaysScrollableScrollPhysics(
-                  parent: ClampingScrollPhysics(),
-                ),
-                controller: _whisperDetailController.scrollController,
-                itemBuilder: (context, int index) {
-                  if (index == response.length - 1) {
-                    _whisperDetailController.onLoadMore();
-                  }
-                  final item = response[index];
-                  return ChatItem(
-                    item: item,
-                    eInfos: _whisperDetailController.eInfos,
-                    onLongPress: item.senderUid ==
-                            _whisperDetailController.ownerMid
-                        ? () {
-                            showDialog(
-                              context: context,
-                              builder: (context) {
-                                return AlertDialog(
-                                  clipBehavior: Clip.hardEdge,
-                                  contentPadding:
-                                      const EdgeInsets.symmetric(vertical: 12),
-                                  content: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      ListTile(
-                                        onTap: () {
-                                          Get.back();
-                                          _whisperDetailController.sendMsg(
-                                            message: '${item.msgKey}',
-                                            onClearText: editController.clear,
-                                            msgType: 5,
-                                            index: index,
-                                          );
-                                        },
-                                        dense: true,
-                                        title: const Text(
-                                          '撤回',
-                                          style: TextStyle(fontSize: 14),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                );
-                              },
-                            );
-                          }
-                        : null,
-                  );
-                },
-                separatorBuilder: (BuildContext context, int index) =>
-                    const SizedBox(height: 12),
+          ? ListView.separated(
+              shrinkWrap: true,
+              reverse: true,
+              itemCount: response!.length,
+              padding: const EdgeInsets.all(12),
+              physics: const AlwaysScrollableScrollPhysics(
+                parent: ClampingScrollPhysics(),
               ),
+              controller: _whisperDetailController.scrollController,
+              itemBuilder: (context, int index) {
+                if (index == response.length - 1) {
+                  _whisperDetailController.onLoadMore();
+                }
+                final item = response[index];
+                return ChatItem(
+                  item: item,
+                  eInfos: _whisperDetailController.eInfos,
+                  onLongPress: item.senderUid ==
+                          _whisperDetailController.ownerMid
+                      ? () {
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return AlertDialog(
+                                clipBehavior: Clip.hardEdge,
+                                contentPadding:
+                                    const EdgeInsets.symmetric(vertical: 12),
+                                content: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    ListTile(
+                                      onTap: () {
+                                        Get.back();
+                                        _whisperDetailController.sendMsg(
+                                          message: '${item.msgKey}',
+                                          onClearText: editController.clear,
+                                          msgType: 5,
+                                          index: index,
+                                        );
+                                      },
+                                      dense: true,
+                                      title: const Text(
+                                        '撤回',
+                                        style: TextStyle(fontSize: 14),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
+                          );
+                        }
+                      : null,
+                );
+              },
+              separatorBuilder: (BuildContext context, int index) =>
+                  const SizedBox(height: 12),
             )
           : scrollErrorWidget(
               onReload: _whisperDetailController.onReload,

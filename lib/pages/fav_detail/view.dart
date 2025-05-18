@@ -70,8 +70,13 @@ class _FavDetailPageState extends State<FavDetailPage> {
                 controller: _favDetailController.scrollController,
                 slivers: [
                   _buildHeader(theme),
-                  Obx(() => _buildBody(
-                      theme, _favDetailController.loadingState.value)),
+                  SliverPadding(
+                    padding: EdgeInsets.only(
+                      bottom: MediaQuery.of(context).padding.bottom + 85,
+                    ),
+                    sliver: Obx(() => _buildBody(
+                        theme, _favDetailController.loadingState.value)),
+                  ),
                 ],
               ),
             ),
@@ -365,122 +370,115 @@ class _FavDetailPageState extends State<FavDetailPage> {
           ),
         ),
       Success(:var response) => response?.isNotEmpty == true
-          ? SliverPadding(
-              padding: EdgeInsets.only(
-                bottom: MediaQuery.of(context).padding.bottom + 85,
-              ),
-              sliver: SliverGrid(
-                gridDelegate: Grid.videoCardHDelegate(context),
-                delegate: SliverChildBuilderDelegate(
-                  (context, index) {
-                    if (index == response.length) {
-                      _favDetailController.onLoadMore();
-                      return Container(
-                        height: 60,
-                        alignment: Alignment.center,
-                        child: Text(
-                          _favDetailController.isEnd ? '没有更多了' : '加载中...',
-                          style: TextStyle(
-                            color: theme.colorScheme.outline,
-                            fontSize: 13,
-                          ),
+          ? SliverGrid(
+              gridDelegate: Grid.videoCardHDelegate(context),
+              delegate: SliverChildBuilderDelegate(
+                (context, index) {
+                  if (index == response.length) {
+                    _favDetailController.onLoadMore();
+                    return Container(
+                      height: 60,
+                      alignment: Alignment.center,
+                      child: Text(
+                        _favDetailController.isEnd ? '没有更多了' : '加载中...',
+                        style: TextStyle(
+                          color: theme.colorScheme.outline,
+                          fontSize: 13,
                         ),
-                      );
-                    }
-                    FavDetailItemData item = response[index];
-                    return Stack(
-                      clipBehavior: Clip.none,
-                      children: [
-                        Positioned.fill(
-                          child: FavVideoCardH(
-                            videoItem: item,
-                            onDelFav: _favDetailController.isOwner.value
-                                ? () => _favDetailController.onCancelFav(
-                                      index,
-                                      item.id!,
-                                      item.type!,
-                                    )
-                                : null,
-                            onViewFav: () {
-                              PageUtils.toVideoPage(
-                                'bvid=${item.bvid}&cid=${item.cid}',
-                                arguments: {
-                                  'videoItem': item,
-                                  'heroTag': Utils.makeHeroTag(item.bvid),
-                                  'sourceType': 'fav',
-                                  'mediaId': _favDetailController.item.value.id,
-                                  'oid': item.id,
-                                  'favTitle':
-                                      _favDetailController.item.value.title,
-                                  'count': _favDetailController
-                                      .item.value.mediaCount,
-                                  'desc': true,
-                                  'isContinuePlaying': index != 0,
-                                  'isOwner': _favDetailController.isOwner.value,
-                                },
-                              );
-                            },
-                            onTap: _favDetailController.enableMultiSelect.value
-                                ? () {
+                      ),
+                    );
+                  }
+                  FavDetailItemData item = response[index];
+                  return Stack(
+                    clipBehavior: Clip.none,
+                    children: [
+                      Positioned.fill(
+                        child: FavVideoCardH(
+                          videoItem: item,
+                          onDelFav: _favDetailController.isOwner.value
+                              ? () => _favDetailController.onCancelFav(
+                                    index,
+                                    item.id!,
+                                    item.type!,
+                                  )
+                              : null,
+                          onViewFav: () {
+                            PageUtils.toVideoPage(
+                              'bvid=${item.bvid}&cid=${item.cid}',
+                              arguments: {
+                                'videoItem': item,
+                                'heroTag': Utils.makeHeroTag(item.bvid),
+                                'sourceType': 'fav',
+                                'mediaId': _favDetailController.item.value.id,
+                                'oid': item.id,
+                                'favTitle':
+                                    _favDetailController.item.value.title,
+                                'count':
+                                    _favDetailController.item.value.mediaCount,
+                                'desc': true,
+                                'isContinuePlaying': index != 0,
+                                'isOwner': _favDetailController.isOwner.value,
+                              },
+                            );
+                          },
+                          onTap: _favDetailController.enableMultiSelect.value
+                              ? () {
+                                  _favDetailController.onSelect(index);
+                                }
+                              : null,
+                          onLongPress: _favDetailController.isOwner.value
+                              ? () {
+                                  if (_favDetailController
+                                      .enableMultiSelect.value.not) {
+                                    _favDetailController
+                                        .enableMultiSelect.value = true;
                                     _favDetailController.onSelect(index);
                                   }
-                                : null,
-                            onLongPress: _favDetailController.isOwner.value
-                                ? () {
-                                    if (_favDetailController
-                                        .enableMultiSelect.value.not) {
-                                      _favDetailController
-                                          .enableMultiSelect.value = true;
-                                      _favDetailController.onSelect(index);
-                                    }
-                                  }
-                                : null,
-                          ),
+                                }
+                              : null,
                         ),
-                        Positioned(
-                          top: 5,
-                          left: 12,
-                          bottom: 5,
-                          child: IgnorePointer(
-                            child: LayoutBuilder(
-                              builder: (context, constraints) =>
-                                  AnimatedOpacity(
-                                opacity: item.checked == true ? 1 : 0,
-                                duration: const Duration(milliseconds: 200),
-                                child: Container(
-                                  alignment: Alignment.center,
-                                  height: constraints.maxHeight,
-                                  width: constraints.maxHeight *
-                                      StyleString.aspectRatio,
-                                  decoration: BoxDecoration(
-                                    borderRadius: StyleString.mdRadius,
-                                    color: Colors.black.withValues(alpha: 0.6),
-                                  ),
-                                  child: SizedBox(
-                                    width: 34,
-                                    height: 34,
-                                    child: AnimatedScale(
-                                      scale: item.checked == true ? 1 : 0,
-                                      duration:
-                                          const Duration(milliseconds: 250),
-                                      curve: Curves.easeInOut,
-                                      child: IconButton(
-                                        style: ButtonStyle(
-                                          padding: WidgetStateProperty.all(
-                                              EdgeInsets.zero),
-                                          backgroundColor:
-                                              WidgetStateProperty.resolveWith(
-                                            (states) {
-                                              return theme.colorScheme.surface
-                                                  .withValues(alpha: 0.8);
-                                            },
-                                          ),
+                      ),
+                      Positioned(
+                        top: 5,
+                        left: 12,
+                        bottom: 5,
+                        child: IgnorePointer(
+                          child: LayoutBuilder(
+                            builder: (context, constraints) => AnimatedOpacity(
+                              opacity: item.checked == true ? 1 : 0,
+                              duration: const Duration(milliseconds: 200),
+                              child: Container(
+                                alignment: Alignment.center,
+                                height: constraints.maxHeight,
+                                width: constraints.maxHeight *
+                                    StyleString.aspectRatio,
+                                decoration: BoxDecoration(
+                                  borderRadius: StyleString.mdRadius,
+                                  color: Colors.black.withValues(alpha: 0.6),
+                                ),
+                                child: SizedBox(
+                                  width: 34,
+                                  height: 34,
+                                  child: AnimatedScale(
+                                    scale: item.checked == true ? 1 : 0,
+                                    duration: const Duration(milliseconds: 250),
+                                    curve: Curves.easeInOut,
+                                    child: IconButton(
+                                      style: ButtonStyle(
+                                        padding: WidgetStateProperty.all(
+                                            EdgeInsets.zero),
+                                        backgroundColor:
+                                            WidgetStateProperty.resolveWith(
+                                          (states) {
+                                            return theme.colorScheme.surface
+                                                .withValues(alpha: 0.8);
+                                          },
                                         ),
-                                        onPressed: null,
-                                        icon: Icon(
-                                          Icons.done_all_outlined,
-                                          color: theme.colorScheme.primary,
-                                        ),
+                                      ),
+                                      onPressed: null,
+                                      icon: Icon(
+                                        Icons.done_all_outlined,
+                                        color: theme.colorScheme.primary,
                                       ),
                                     ),
                                   ),
@@ -489,11 +487,11 @@ class _FavDetailPageState extends State<FavDetailPage> {
                             ),
                           ),
                         ),
-                      ],
-                    );
-                  },
-                  childCount: response!.length + 1,
-                ),
+                      ),
+                    ],
+                  );
+                },
+                childCount: response!.length + 1,
               ),
             )
           : HttpError(

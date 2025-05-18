@@ -387,17 +387,13 @@ class _VideoReplyReplyPanelState
       ThemeData theme, LoadingState<List<ReplyInfo>?> loadingState, int index) {
     return switch (loadingState) {
       Loading() => IgnorePointer(
-          child: CustomScrollView(
+          child: ListView.builder(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
-            slivers: [
-              SliverList.builder(
-                itemBuilder: (context, index) {
-                  return const VideoReplySkeleton();
-                },
-                itemCount: 8,
-              )
-            ],
+            itemBuilder: (context, index) {
+              return const VideoReplySkeleton();
+            },
+            itemCount: 8,
           ),
         ),
       Success(:var response) => () {

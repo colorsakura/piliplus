@@ -44,7 +44,12 @@ class _FavPgcChildPageState extends State<FavPgcChildPage>
             onRefresh: _favPgcController.onRefresh,
             child: CustomScrollView(
               slivers: [
-                Obx(() => _buildBody(_favPgcController.loadingState.value)),
+                SliverPadding(
+                  padding: EdgeInsets.only(
+                      bottom: MediaQuery.paddingOf(context).bottom + 80),
+                  sliver: Obx(
+                      () => _buildBody(_favPgcController.loadingState.value)),
+                ),
               ],
             ),
           ),
@@ -162,48 +167,44 @@ class _FavPgcChildPageState extends State<FavPgcChildPage>
           ),
         ),
       Success(:var response) => response?.isNotEmpty == true
-          ? SliverPadding(
-              padding: EdgeInsets.only(
-                  bottom: MediaQuery.paddingOf(context).bottom + 80),
-              sliver: SliverGrid(
-                gridDelegate: Grid.videoCardHDelegate(context),
-                delegate: SliverChildBuilderDelegate(
-                  (context, index) {
-                    if (index == response.length - 1) {
-                      _favPgcController.onLoadMore();
-                    }
-                    final item = response[index];
-                    return FavPgcItem(
-                      item: item,
-                      ctr: _favPgcController,
-                      onSelect: () {
-                        _favPgcController.onSelect(index);
-                      },
-                      onUpdateStatus: () {
-                        showPgcFollowDialog(
-                          context: context,
-                          type: widget.type == 0 ? '追番' : '追剧',
-                          followStatus: widget.followStatus,
-                          onUpdateStatus: (followStatus) {
-                            if (followStatus == -1) {
-                              _favPgcController.bangumiDel(
-                                index,
-                                item.seasonId,
-                              );
-                            } else {
-                              _favPgcController.onUpdate(
-                                index,
-                                followStatus,
-                                item.seasonId,
-                              );
-                            }
-                          },
-                        );
-                      },
-                    );
-                  },
-                  childCount: response!.length,
-                ),
+          ? SliverGrid(
+              gridDelegate: Grid.videoCardHDelegate(context),
+              delegate: SliverChildBuilderDelegate(
+                (context, index) {
+                  if (index == response.length - 1) {
+                    _favPgcController.onLoadMore();
+                  }
+                  final item = response[index];
+                  return FavPgcItem(
+                    item: item,
+                    ctr: _favPgcController,
+                    onSelect: () {
+                      _favPgcController.onSelect(index);
+                    },
+                    onUpdateStatus: () {
+                      showPgcFollowDialog(
+                        context: context,
+                        type: widget.type == 0 ? '追番' : '追剧',
+                        followStatus: widget.followStatus,
+                        onUpdateStatus: (followStatus) {
+                          if (followStatus == -1) {
+                            _favPgcController.bangumiDel(
+                              index,
+                              item.seasonId,
+                            );
+                          } else {
+                            _favPgcController.onUpdate(
+                              index,
+                              followStatus,
+                              item.seasonId,
+                            );
+                          }
+                        },
+                      );
+                    },
+                  );
+                },
+                childCount: response!.length,
               ),
             )
           : HttpError(onReload: _favPgcController.onReload),

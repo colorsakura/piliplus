@@ -196,8 +196,11 @@ class _BangumiPageState extends CommonPageState<BangumiPage, BangumiController>
   List<Widget> _buildRcmd(ThemeData theme) => [
         _buildRcmdTitle(theme),
         SliverPadding(
-          padding: const EdgeInsets.fromLTRB(
-              StyleString.safeSpace, 0, StyleString.safeSpace, 0),
+          padding: EdgeInsets.only(
+            left: StyleString.safeSpace,
+            right: StyleString.safeSpace,
+            bottom: MediaQuery.paddingOf(context).bottom + 80,
+          ),
           sliver: Obx(
             () => _buildRcmdBody(controller.loadingState.value),
           ),
@@ -330,11 +333,15 @@ class _BangumiPageState extends CommonPageState<BangumiPage, BangumiController>
               ? Column(
                   children: [
                     _buildFollowTitle(theme),
-                    SizedBox(
-                      height: Grid.smallCardWidth / 2 / 0.75 +
-                          MediaQuery.textScalerOf(context).scale(50),
-                      child: Obx(
-                        () => _buildFollowBody(controller.followState.value),
+                    MediaQuery.removePadding(
+                      context: context,
+                      removeLeft: context.orientation == Orientation.landscape,
+                      child: SizedBox(
+                        height: Grid.smallCardWidth / 2 / 0.75 +
+                            MediaQuery.textScalerOf(context).scale(50),
+                        child: Obx(
+                          () => _buildFollowBody(controller.followState.value),
+                        ),
                       ),
                     ),
                   ],
@@ -415,31 +422,27 @@ class _BangumiPageState extends CommonPageState<BangumiPage, BangumiController>
     return switch (loadingState) {
       Loading() => loadingWidget,
       Success(:var response) => response?.isNotEmpty == true
-          ? MediaQuery.removePadding(
-              context: context,
-              removeLeft: context.orientation == Orientation.landscape,
-              child: ListView.builder(
-                controller: controller.followController,
-                scrollDirection: Axis.horizontal,
-                itemCount: response!.length,
-                itemBuilder: (context, index) {
-                  if (index == response.length - 1) {
-                    controller.queryBangumiFollow(false);
-                  }
-                  return Container(
-                    width: Grid.smallCardWidth / 2,
-                    margin: EdgeInsets.only(
-                      left: StyleString.safeSpace,
-                      right: index == response.length - 1
-                          ? StyleString.safeSpace
-                          : 0,
-                    ),
-                    child: BangumiCardV(
-                      bangumiItem: response[index],
-                    ),
-                  );
-                },
-              ),
+          ? ListView.builder(
+              controller: controller.followController,
+              scrollDirection: Axis.horizontal,
+              itemCount: response!.length,
+              itemBuilder: (context, index) {
+                if (index == response.length - 1) {
+                  controller.queryBangumiFollow(false);
+                }
+                return Container(
+                  width: Grid.smallCardWidth / 2,
+                  margin: EdgeInsets.only(
+                    left: StyleString.safeSpace,
+                    right: index == response.length - 1
+                        ? StyleString.safeSpace
+                        : 0,
+                  ),
+                  child: BangumiCardV(
+                    bangumiItem: response[index],
+                  ),
+                );
+              },
             )
           : Center(
               child: Text(

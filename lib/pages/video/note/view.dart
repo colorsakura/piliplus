@@ -10,7 +10,7 @@ import 'package:PiliPlus/pages/video/note/controller.dart';
 import 'package:PiliPlus/pages/webview/view.dart';
 import 'package:PiliPlus/utils/app_scheme.dart';
 import 'package:PiliPlus/utils/extension.dart';
-import 'package:PiliPlus/utils/storage.dart';
+import 'package:PiliPlus/utils/storage.dart' show Accounts;
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
@@ -84,52 +84,73 @@ class _NoteListPageState extends CommonSlidePageState<NoteListPage> {
             const SizedBox(width: 16),
           ],
         ),
-        body: enableSlide
-            ? slideList(theme,
-                Obx(() => _buildBody(theme, _controller.loadingState.value)))
-            : Obx(() => _buildBody(theme, _controller.loadingState.value)),
-        bottomNavigationBar: Container(
-          padding: EdgeInsets.only(
-            left: 12,
-            right: 12,
-            top: 6,
-            bottom: MediaQuery.paddingOf(context).bottom + 6,
-          ),
-          width: double.infinity,
-          decoration: BoxDecoration(
-            color: theme.colorScheme.onInverseSurface,
-            border: Border(
-              top: BorderSide(
-                width: 0.5,
-                color: theme.colorScheme.outline.withValues(alpha: 0.1),
-              ),
-            ),
-          ),
-          child: FilledButton.tonal(
-            style: FilledButton.styleFrom(
-              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-              padding: EdgeInsets.zero,
-              shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(6)),
-              ),
-            ),
-            onPressed: () {
-              if (!Accounts.main.isLogin) {
-                SmartDialog.showToast('账号未登录');
-                return;
-              }
-              _key.currentState?.showBottomSheet(
-                (context) => WebviewPage(
-                  oid: widget.oid,
-                  title: widget.title,
-                  url:
-                      'https://www.bilibili.com/h5/note-app?oid=${widget.oid}&pagefrom=ugcvideo&is_stein_gate=${widget.isStein ? 1 : 0}',
+        body: enableSlide ? slideList(theme) : buildList(theme),
+      ),
+    );
+  }
+
+  @override
+  Widget buildList(ThemeData theme) {
+    return refreshIndicator(
+      onRefresh: _controller.onRefresh,
+      child: Column(
+        children: [
+          Expanded(
+            child: CustomScrollView(
+              controller: _controller.scrollController,
+              physics: const AlwaysScrollableScrollPhysics(),
+              slivers: [
+                SliverPadding(
+                  padding: const EdgeInsets.only(bottom: 80),
+                  sliver: Obx(
+                      () => _buildBody(theme, _controller.loadingState.value)),
                 ),
-              );
-            },
-            child: const Text('开始记笔记'),
+              ],
+            ),
           ),
-        ),
+          Container(
+            padding: EdgeInsets.only(
+              left: 12,
+              right: 12,
+              top: 6,
+              bottom: MediaQuery.paddingOf(context).bottom + 6,
+            ),
+            width: double.infinity,
+            decoration: BoxDecoration(
+              color: theme.colorScheme.onInverseSurface,
+              border: Border(
+                top: BorderSide(
+                  width: 0.5,
+                  color: theme.colorScheme.outline.withValues(alpha: 0.1),
+                ),
+              ),
+            ),
+            child: FilledButton.tonal(
+              style: FilledButton.styleFrom(
+                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                padding: EdgeInsets.zero,
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(6)),
+                ),
+              ),
+              onPressed: () {
+                if (!Accounts.main.isLogin) {
+                  SmartDialog.showToast('账号未登录');
+                  return;
+                }
+                _key.currentState?.showBottomSheet(
+                  (context) => WebviewPage(
+                    oid: widget.oid,
+                    title: widget.title,
+                    url:
+                        'https://www.bilibili.com/h5/note-app?oid=${widget.oid}&pagefrom=ugcvideo&is_stein_gate=${widget.isStein ? 1 : 0}',
+                  ),
+                );
+              },
+              child: const Text('开始记笔记'),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -137,59 +158,37 @@ class _NoteListPageState extends CommonSlidePageState<NoteListPage> {
   Widget _buildBody(
       ThemeData theme, LoadingState<List<dynamic>?> loadingState) {
     return switch (loadingState) {
-      Loading() => CustomScrollView(
-          physics: const NeverScrollableScrollPhysics(),
-          slivers: [
-            SliverList.builder(
-              itemBuilder: (context, index) {
-                return const VideoReplySkeleton();
-              },
-              itemCount: 8,
-            )
-          ],
+      Loading() => SliverToBoxAdapter(
+          child: ListView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemBuilder: (context, index) {
+              return const VideoReplySkeleton();
+            },
+            itemCount: 8,
+          ),
         ),
       Success(:var response) => response?.isNotEmpty == true
-          ? refreshIndicator(
-              onRefresh: _controller.onRefresh,
-              child: CustomScrollView(
-                controller: _controller.scrollController,
-                physics: const AlwaysScrollableScrollPhysics(),
-                slivers: [
-                  SliverList.separated(
-                    itemBuilder: (context, index) {
-                      if (index == response.length - 1) {
-                        _controller.onLoadMore();
-                      }
-                      return _itemWidget(context, theme, response[index]);
-                    },
-                    itemCount: response!.length,
-                    separatorBuilder: (context, index) => Divider(
-                      height: 1,
-                      color: theme.colorScheme.outline.withValues(alpha: 0.1),
-                    ),
-                  ),
-                  SliverToBoxAdapter(
-                    child: SizedBox(
-                      height: MediaQuery.paddingOf(context).bottom + 80,
-                    ),
-                  ),
-                ],
+          ? SliverList.separated(
+              itemBuilder: (context, index) {
+                if (index == response.length - 1) {
+                  _controller.onLoadMore();
+                }
+                return _itemWidget(context, theme, response[index]);
+              },
+              itemCount: response!.length,
+              separatorBuilder: (context, index) => Divider(
+                height: 1,
+                color: theme.colorScheme.outline.withValues(alpha: 0.1),
               ),
             )
-          : errWidget(),
-      Error(:var errMsg) => errWidget(errMsg),
+          : HttpError(onReload: _controller.onReload),
+      Error(:var errMsg) => HttpError(
+          errMsg: errMsg,
+          onReload: _controller.onReload,
+        ),
     };
   }
-
-  Widget errWidget([errMsg]) => CustomScrollView(
-        controller: _controller.scrollController,
-        slivers: [
-          HttpError(
-            errMsg: errMsg,
-            onReload: _controller.onReload,
-          )
-        ],
-      );
 }
 
 Widget _itemWidget(BuildContext context, ThemeData theme, dynamic item) {

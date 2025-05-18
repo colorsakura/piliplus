@@ -55,7 +55,12 @@ abstract class CommonSearchPageState<S extends CommonSearchPage, R, T>
           physics: const AlwaysScrollableScrollPhysics(),
           controller: controller.scrollController,
           slivers: [
-            Obx(() => _buildBody(controller.loadingState.value)),
+            SliverPadding(
+              padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).padding.bottom + 80,
+              ),
+              sliver: Obx(() => _buildBody(controller.loadingState.value)),
+            ),
           ],
         ),
       ),

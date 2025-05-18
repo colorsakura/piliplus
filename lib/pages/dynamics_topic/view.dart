@@ -109,7 +109,12 @@ class _DynTopicPageState extends State<DynTopicPage> {
                 }
                 return const SliverToBoxAdapter();
               }),
-              Obx(() => _buildBody(_controller.loadingState.value)),
+              SliverPadding(
+                padding: EdgeInsets.only(
+                  bottom: MediaQuery.paddingOf(context).bottom + 80,
+                ),
+                sliver: Obx(() => _buildBody(_controller.loadingState.value)),
+              ),
             ],
           ),
         ),
@@ -302,56 +307,51 @@ class _DynTopicPageState extends State<DynTopicPage> {
     return switch (loadingState) {
       Loading() => DynamicsTabPage.dynSkeleton(dynamicsWaterfallFlow),
       Success(:var response) => response?.isNotEmpty == true
-          ? SliverPadding(
-              padding: EdgeInsets.only(
-                bottom: MediaQuery.paddingOf(context).bottom + 80,
-              ),
-              sliver: dynamicsWaterfallFlow
-                  ? SliverWaterfallFlow.extent(
-                      maxCrossAxisExtent: Grid.smallCardWidth * 2,
-                      crossAxisSpacing: StyleString.cardSpace / 2,
-                      lastChildLayoutTypeBuilder: (index) {
-                        if (index == response.length - 1) {
-                          _controller.onLoadMore();
-                        }
-                        return index == response.length
-                            ? LastChildLayoutType.foot
-                            : LastChildLayoutType.none;
-                      },
-                      children: [
-                        for (var item in response!)
-                          if (item.dynamicCardItem != null)
-                            DynamicPanel(item: item.dynamicCardItem!)
-                          else
-                            Text(item.topicType ?? 'err'),
-                      ],
-                    )
-                  : SliverCrossAxisGroup(
-                      slivers: [
-                        const SliverFillRemaining(),
-                        SliverConstrainedCrossAxis(
-                          maxExtent: Grid.smallCardWidth * 2,
-                          sliver: SliverList.builder(
-                            itemBuilder: (context, index) {
-                              if (index == response.length - 1) {
-                                _controller.onLoadMore();
-                              }
-                              final item = response[index];
-                              if (item.dynamicCardItem != null) {
-                                return DynamicPanel(
-                                  item: item.dynamicCardItem!,
-                                );
-                              } else {
-                                return Text(item.topicType ?? 'err');
-                              }
-                            },
-                            itemCount: response!.length,
-                          ),
-                        ),
-                        const SliverFillRemaining(),
-                      ],
+          ? dynamicsWaterfallFlow
+              ? SliverWaterfallFlow.extent(
+                  maxCrossAxisExtent: Grid.smallCardWidth * 2,
+                  crossAxisSpacing: StyleString.cardSpace / 2,
+                  lastChildLayoutTypeBuilder: (index) {
+                    if (index == response.length - 1) {
+                      _controller.onLoadMore();
+                    }
+                    return index == response.length
+                        ? LastChildLayoutType.foot
+                        : LastChildLayoutType.none;
+                  },
+                  children: [
+                    for (var item in response!)
+                      if (item.dynamicCardItem != null)
+                        DynamicPanel(item: item.dynamicCardItem!)
+                      else
+                        Text(item.topicType ?? 'err'),
+                  ],
+                )
+              : SliverCrossAxisGroup(
+                  slivers: [
+                    const SliverFillRemaining(),
+                    SliverConstrainedCrossAxis(
+                      maxExtent: Grid.smallCardWidth * 2,
+                      sliver: SliverList.builder(
+                        itemBuilder: (context, index) {
+                          if (index == response.length - 1) {
+                            _controller.onLoadMore();
+                          }
+                          final item = response[index];
+                          if (item.dynamicCardItem != null) {
+                            return DynamicPanel(
+                              item: item.dynamicCardItem!,
+                            );
+                          } else {
+                            return Text(item.topicType ?? 'err');
+                          }
+                        },
+                        itemCount: response!.length,
+                      ),
                     ),
-            )
+                    const SliverFillRemaining(),
+                  ],
+                )
           : HttpError(
               onReload: _controller.onReload,
             ),

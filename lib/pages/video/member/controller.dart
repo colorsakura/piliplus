@@ -4,15 +4,15 @@ import 'package:PiliPlus/models/common/member/contribute_type.dart';
 import 'package:PiliPlus/models/member/info.dart';
 import 'package:PiliPlus/models/space_archive/data.dart';
 import 'package:PiliPlus/models/space_archive/item.dart';
-import 'package:PiliPlus/pages/common/common_data_controller.dart';
+import 'package:PiliPlus/pages/common/common_list_controller.dart';
+import 'package:PiliPlus/utils/extension.dart';
 import 'package:get/get.dart';
 
-class HorizontalMemberPageController extends CommonDataController {
-  HorizontalMemberPageController({this.mid, required this.lastAid});
+class HorizontalMemberPageController
+    extends CommonListController<SpaceArchiveData, SpaceArchiveItem> {
+  HorizontalMemberPageController({this.mid, required this.currAid});
 
   dynamic mid;
-
-  int currentPage = 0;
 
   Rx<LoadingState<MemberInfoModel>> userState =
       LoadingState<MemberInfoModel>.loading().obs;
@@ -54,27 +54,29 @@ class HorizontalMemberPageController extends CommonDataController {
   bool customHandleResponse(bool isRefresh, Success response) {
     SpaceArchiveData data = response.response;
     count.value = data.count ?? -1;
-    if (currentPage == 0 || isLoadPrevious) {
-      hasPrev = data.hasPrev ?? false;
-    }
-    if (currentPage == 0 || !isLoadPrevious) {
-      hasNext = data.hasNext ?? false;
-    }
-    if (currentPage != 0 && loadingState.value is Success) {
-      data.item ??= <SpaceArchiveItem>[];
+    if (isRefresh) {
       if (isLoadPrevious) {
-        data.item!.addAll((loadingState.value as Success).response);
+        hasPrev = data.hasPrev ?? false;
       } else {
-        data.item!.insertAll(0, (loadingState.value as Success).response);
+        hasNext = data.hasNext ?? false;
       }
+    }
+    if (isLoadPrevious && loadingState.value is Success) {
+      data.item ??= <SpaceArchiveItem>[];
+      data.item!.addAll((loadingState.value as Success).response);
+    } else if (!isRefresh && loadingState.value is Success) {
+      data.item ??= <SpaceArchiveItem>[];
+      data.item!.insertAll(0, (loadingState.value as Success).response);
     }
     firstAid = data.item?.firstOrNull?.param;
     lastAid = data.item?.lastOrNull?.param;
     loadingState.value = Success(data.item);
     isLoadPrevious = false;
+    page++;
     return true;
   }
 
+  String? currAid;
   String? firstAid;
   String? lastAid;
   RxString order = 'pubdate'.obs;
@@ -84,25 +86,43 @@ class HorizontalMemberPageController extends CommonDataController {
   bool hasNext = true;
 
   @override
-  Future<LoadingState> customGetData() => MemberHttp.spaceArchive(
+  Future<LoadingState<SpaceArchiveData>> customGetData() =>
+      MemberHttp.spaceArchive(
         type: ContributeType.video,
         mid: mid,
-        aid: isLoadPrevious ? firstAid : lastAid,
+        aid: page == 1
+            ? currAid
+            : isLoadPrevious
+                ? firstAid
+                : lastAid,
         order: order.value,
-        sort: isLoadPrevious ? 'asc' : null,
+        sort: page != 1 && isLoadPrevious ? 'asc' : null,
         pn: null,
         next: null,
         seasonId: null,
         seriesId: null,
-        includeCursor: currentPage == 0 ? true : null,
+        includeCursor: page == 1 ? true : null,
       );
 
   @override
   Future<void> onRefresh() {
-    currentPage = 0;
-    hasPrev = true;
-    hasNext = true;
+    if (!hasPrev) {
+      return Future.value();
+    }
+    isLoadPrevious = true;
     return queryData();
+  }
+
+  @override
+  Future<void> onReload() {
+    firstAid = null;
+    lastAid = null;
+    hasNext = true;
+    hasPrev = true;
+    isEnd = false;
+    page = 1;
+    scrollController.jumpToTop();
+    return super.onReload();
   }
 
   void queryBySort() {

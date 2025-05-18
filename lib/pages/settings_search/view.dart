@@ -82,20 +82,20 @@ class _SettingsSearchPageState extends State<SettingsSearchPage> {
         bottom: false,
         child: CustomScrollView(
           slivers: [
-            Obx(
-              () => _list.isEmpty
-                  ? const HttpError()
-                  : SliverPadding(
-                      padding: EdgeInsets.only(
-                        bottom: MediaQuery.paddingOf(context).bottom + 80,
-                      ),
-                      sliver: SliverWaterfallFlow.extent(
+            SliverPadding(
+              padding: EdgeInsets.only(
+                bottom: MediaQuery.paddingOf(context).bottom + 80,
+              ),
+              sliver: Obx(
+                () => _list.isEmpty
+                    ? const HttpError()
+                    : SliverWaterfallFlow.extent(
                         maxCrossAxisExtent: Grid.smallCardWidth * 2,
                         children: [
                           ..._list.map((item) => item.widget),
                         ],
                       ),
-                    ),
+              ),
             ),
           ],
         ),

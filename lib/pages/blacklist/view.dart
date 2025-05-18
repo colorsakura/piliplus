@@ -46,7 +46,12 @@ class _BlackListPageState extends State<BlackListPage> {
           physics: const AlwaysScrollableScrollPhysics(),
           controller: _blackListController.scrollController,
           slivers: [
-            Obx(() => _buildBody(_blackListController.loadingState.value))
+            SliverPadding(
+              padding: EdgeInsets.only(
+                  bottom: MediaQuery.paddingOf(context).bottom + 80),
+              sliver: Obx(
+                  () => _buildBody(_blackListController.loadingState.value)),
+            )
           ],
         ),
       ),

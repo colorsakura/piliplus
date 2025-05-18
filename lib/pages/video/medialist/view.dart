@@ -155,7 +155,7 @@ class _MediaListPanelState
                 widget.loadMoreMedia();
               }
               return SizedBox(
-                key: ValueKey('${item.aid}'),
+                // key: ValueKey('${item.aid}'),
                 height: 98,
                 child: InkWell(
                   onTap: () async {

@@ -41,7 +41,14 @@ class _MemberFavoriteState extends State<MemberFavorite>
     return refreshIndicator(
       onRefresh: _controller.onRefresh,
       child: CustomScrollView(
-        slivers: [Obx(() => _buildBody(theme, _controller.loadingState.value))],
+        slivers: [
+          SliverPadding(
+            padding: EdgeInsets.only(
+                bottom: MediaQuery.paddingOf(context).bottom + 80),
+            sliver:
+                Obx(() => _buildBody(theme, _controller.loadingState.value)),
+          ),
+        ],
       ),
     );
   }
@@ -67,11 +74,6 @@ class _MemberFavoriteState extends State<MemberFavorite>
                 SliverToBoxAdapter(
                   child: Obx(
                       () => _buildItem(theme, _controller.second.value, false)),
-                ),
-                SliverToBoxAdapter(
-                  child: SizedBox(
-                    height: 80 + MediaQuery.of(context).padding.bottom,
-                  ),
                 ),
               ],
             )

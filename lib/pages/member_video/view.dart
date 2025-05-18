@@ -219,7 +219,7 @@ class _MemberVideoState extends State<MemberVideo>
                       }
                       final SpaceArchiveItem item = response[index];
                       return VideoCardHMemberVideo(
-                        key: ValueKey('${item.param}'),
+                        // key: ValueKey('${item.param}'),
                         videoItem: item,
                         fromViewAid: _controller.fromViewAid,
                       );

@@ -26,64 +26,59 @@ class _LaterSearchPageState
 
   @override
   Widget buildList(List<HotVideoItemModel> list) {
-    return SliverPadding(
-      padding: EdgeInsets.only(
-        bottom: MediaQuery.of(context).padding.bottom + 80,
-      ),
-      sliver: SliverGrid(
-        gridDelegate: Grid.videoCardHDelegate(context, minHeight: 110),
-        delegate: SliverChildBuilderDelegate(
-          childCount: list.length,
-          (context, index) {
-            if (index == list.length - 1) {
-              controller.onLoadMore();
-            }
-            final item = list[index];
-            return Stack(
-              clipBehavior: Clip.none,
-              children: [
-                VideoCardH(
-                  videoItem: item,
-                  source: 'later',
-                  onViewLater: (cid) {
-                    PageUtils.toVideoPage(
-                      'bvid=${item.bvid}&cid=$cid',
-                      arguments: {
-                        'videoItem': item,
-                        'oid': item.aid,
-                        'heroTag': Utils.makeHeroTag(item.bvid),
-                        'sourceType': 'watchLater',
-                        'count': controller.count,
-                        'favTitle': '稍后再看',
-                        'mediaId': controller.mid,
-                        'desc': false,
-                        'isContinuePlaying': index != 0,
-                      },
+    return SliverGrid(
+      gridDelegate: Grid.videoCardHDelegate(context, minHeight: 110),
+      delegate: SliverChildBuilderDelegate(
+        childCount: list.length,
+        (context, index) {
+          if (index == list.length - 1) {
+            controller.onLoadMore();
+          }
+          final item = list[index];
+          return Stack(
+            clipBehavior: Clip.none,
+            children: [
+              VideoCardH(
+                videoItem: item,
+                source: 'later',
+                onViewLater: (cid) {
+                  PageUtils.toVideoPage(
+                    'bvid=${item.bvid}&cid=$cid',
+                    arguments: {
+                      'videoItem': item,
+                      'oid': item.aid,
+                      'heroTag': Utils.makeHeroTag(item.bvid),
+                      'sourceType': 'watchLater',
+                      'count': controller.count,
+                      'favTitle': '稍后再看',
+                      'mediaId': controller.mid,
+                      'desc': false,
+                      'isContinuePlaying': index != 0,
+                    },
+                  );
+                },
+              ),
+              Positioned(
+                right: 12,
+                bottom: 0,
+                child: iconButton(
+                  tooltip: '移除',
+                  context: context,
+                  onPressed: () {
+                    controller.toViewDel(
+                      context,
+                      index,
+                      item.aid,
                     );
                   },
+                  icon: Icons.clear,
+                  iconColor: Theme.of(context).colorScheme.onSurfaceVariant,
+                  bgColor: Colors.transparent,
                 ),
-                Positioned(
-                  right: 12,
-                  bottom: 0,
-                  child: iconButton(
-                    tooltip: '移除',
-                    context: context,
-                    onPressed: () {
-                      controller.toViewDel(
-                        context,
-                        index,
-                        item.aid,
-                      );
-                    },
-                    icon: Icons.clear,
-                    iconColor: Theme.of(context).colorScheme.onSurfaceVariant,
-                    bgColor: Colors.transparent,
-                  ),
-                ),
-              ],
-            );
-          },
-        ),
+              ),
+            ],
+          );
+        },
       ),
     );
   }
