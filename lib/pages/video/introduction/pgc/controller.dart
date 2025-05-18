@@ -1,8 +1,9 @@
 import 'dart:async';
-import 'dart:convert';
 
+import 'package:PiliPlus/grpc/bilibili/app/viewunite/pgcanymodel.pb.dart'
+    show ViewPgcAny;
+import 'package:PiliPlus/grpc/view.dart';
 import 'package:PiliPlus/http/constants.dart';
-import 'package:PiliPlus/http/init.dart';
 import 'package:PiliPlus/http/user.dart';
 import 'package:PiliPlus/http/video.dart';
 import 'package:PiliPlus/models/bangumi/info.dart';
@@ -22,8 +23,6 @@ import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
-import 'package:html/dom.dart' as dom;
-import 'package:html/parser.dart' as html_parser;
 
 class BangumiIntroController extends GetxController {
   // 视频bvid
@@ -533,21 +532,28 @@ class BangumiIntroController extends GetxController {
   RxInt followStatus = (-1).obs;
 
   Future<void> queryIsFollowed() async {
-    try {
-      dynamic result = await Request().get(
-        'https://www.bilibili.com/bangumi/play/ss$seasonId',
-      );
-      dom.Document document = html_parser.parse(result.data);
-      dom.Element? scriptElement =
-          document.querySelector('script#__NEXT_DATA__');
-      if (scriptElement != null) {
-        dynamic scriptContent = jsonDecode(scriptElement.text);
-        isFollowed.value =
-            scriptContent['props']['pageProps']['followState']['isFollowed'];
-        followStatus.value =
-            scriptContent['props']['pageProps']['followState']['followStatus'];
+    // try {
+    //   dynamic result = await Request().get(
+    //     'https://www.bilibili.com/bangumi/play/ss$seasonId',
+    //   );
+    //   dom.Document document = html_parser.parse(result.data);
+    //   dom.Element? scriptElement =
+    //       document.querySelector('script#__NEXT_DATA__');
+    //   if (scriptElement != null) {
+    //     dynamic scriptContent = jsonDecode(scriptElement.text);
+    //     isFollowed.value =
+    //         scriptContent['props']['pageProps']['followState']['isFollowed'];
+    //     followStatus.value =
+    //         scriptContent['props']['pageProps']['followState']['followStatus'];
+    //   }
+    // } catch (_) {}
+    ViewGrpc.view(bvid: bvid).then((res) {
+      if (res.isSuccess) {
+        ViewPgcAny view = ViewPgcAny.fromBuffer(res.data.supplement.value);
+        isFollowed.value = view.ogvData.userStatus.follow == 1;
+        followStatus.value = view.ogvData.userStatus.followStatus;
       }
-    } catch (_) {}
+    });
   }
 
   // 收藏

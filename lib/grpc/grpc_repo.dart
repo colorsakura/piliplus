@@ -63,6 +63,10 @@ class GrpcUrl {
   static const keywordBlockingDelete = '$im2/KeywordBlockingDelete';
   static const syncFetchSessionMsgs = '$im/SyncFetchSessionMsgs';
   static const getTotalUnread = '$im/GetTotalUnread';
+
+  // view
+  static const viewunite = '/bilibili.app.viewunite.v1.View';
+  static const view = '$viewunite/View';
 }
 
 class GrpcRepo {
