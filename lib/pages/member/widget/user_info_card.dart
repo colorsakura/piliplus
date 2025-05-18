@@ -5,7 +5,7 @@ import 'package:PiliPlus/models/space/card.dart';
 import 'package:PiliPlus/models/space/images.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
-import 'package:PiliPlus/utils/storage.dart';
+import 'package:PiliPlus/utils/storage.dart' show Accounts;
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -59,8 +59,8 @@ class UserInfoCard extends StatelessWidget {
           Text(
             title,
             style: TextStyle(
-              height: 1,
-              fontSize: 11,
+              height: 1.2,
+              fontSize: 12,
               color: theme.colorScheme.outline,
             ),
           ),
@@ -108,7 +108,7 @@ class UserInfoCard extends StatelessWidget {
 
   List<Widget> _buildLeft(BuildContext context, ThemeData theme) => [
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
+          padding: const EdgeInsets.only(left: 20, right: 20, top: 5),
           child: Wrap(
             spacing: 8,
             runSpacing: 8,
@@ -302,7 +302,6 @@ class UserInfoCard extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: List.generate(
               5,
               (index) => index % 2 == 0
@@ -323,10 +322,12 @@ class UserInfoCard extends StatelessWidget {
                         }
                       },
                     )
-                  : const SizedBox(
-                      height: 15,
-                      width: 1,
-                      child: VerticalDivider(),
+                  : const Expanded(
+                      child: SizedBox(
+                        height: 15,
+                        width: 1,
+                        child: VerticalDivider(),
+                      ),
                     ),
             ),
           ),
@@ -334,11 +335,10 @@ class UserInfoCard extends StatelessWidget {
           Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const SizedBox(width: 20),
               if (!isOwner) ...[
                 IconButton.outlined(
                   onPressed: () {
-                    if (GStorage.userInfo.get('userInfoCache') != null) {
+                    if (Accounts.main.isLogin) {
                       int mid = int.parse(card.mid!);
                       Get.toNamed(
                         '/whisperDetail',
@@ -355,7 +355,7 @@ class UserInfoCard extends StatelessWidget {
                   style: IconButton.styleFrom(
                     side: BorderSide(
                       width: 1.0,
-                      color: theme.colorScheme.outline.withValues(alpha: 0.5),
+                      color: theme.colorScheme.outline.withValues(alpha: 0.3),
                     ),
                     padding: EdgeInsets.zero,
                     tapTargetSize: MaterialTapTargetSize.shrinkWrap,
@@ -371,7 +371,7 @@ class UserInfoCard extends StatelessWidget {
                     backgroundColor: relation != 0
                         ? theme.colorScheme.onInverseSurface
                         : null,
-                    visualDensity: VisualDensity.compact,
+                    visualDensity: const VisualDensity(vertical: -1.8),
                   ),
                   child: Text.rich(
                     style: TextStyle(
@@ -379,7 +379,7 @@ class UserInfoCard extends StatelessWidget {
                     ),
                     TextSpan(
                       children: [
-                        if (relation != 0 && relation != 128)
+                        if (relation != 0 && relation != 128) ...[
                           WidgetSpan(
                             alignment: PlaceholderAlignment.top,
                             child: Icon(
@@ -388,25 +388,27 @@ class UserInfoCard extends StatelessWidget {
                               color: theme.colorScheme.outline,
                             ),
                           ),
+                          const TextSpan(text: ' '),
+                        ],
                         TextSpan(
-                            text: isOwner
-                                ? '编辑资料'
-                                : switch (relation) {
-                                    0 => '关注',
-                                    1 => '悄悄关注',
-                                    2 => '已关注',
-                                    // 3 => '回关',
-                                    4 || 6 => '已互关',
-                                    128 => '移除黑名单',
-                                    -10 => '特别关注', // 该状态码并不是官方状态码
-                                    _ => relation.toString(),
-                                  }),
+                          text: isOwner
+                              ? '编辑资料'
+                              : switch (relation) {
+                                  0 => '关注',
+                                  1 => '悄悄关注',
+                                  2 => '已关注',
+                                  // 3 => '回关',
+                                  4 || 6 => '已互关',
+                                  128 => '移除黑名单',
+                                  -10 => '特别关注', // 该状态码并不是官方状态码
+                                  _ => relation.toString(),
+                                },
+                        ),
                       ],
                     ),
                   ),
                 ),
               ),
-              const SizedBox(width: 20),
             ],
           ),
         ],
@@ -440,7 +442,7 @@ class UserInfoCard extends StatelessWidget {
                   _buildHeader(context, theme),
                   SizedBox(
                     width: double.infinity,
-                    height: MediaQuery.textScalerOf(context).scale(30) + 55,
+                    height: MediaQuery.textScalerOf(context).scale(30) + 60,
                   )
                 ],
               ),
@@ -450,9 +452,9 @@ class UserInfoCard extends StatelessWidget {
                 child: _buildAvatar(context),
               ),
               Positioned(
-                left: 140,
+                left: 160,
                 top: 140,
-                right: 20,
+                right: 15,
                 bottom: 0,
                 child: _buildRight(context, theme),
               ),
@@ -544,6 +546,7 @@ class UserInfoCard extends StatelessWidget {
                 ),
                 const SizedBox(width: 10),
                 Expanded(
+                  flex: 5,
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -554,7 +557,11 @@ class UserInfoCard extends StatelessWidget {
                     ],
                   ),
                 ),
-                Expanded(child: _buildRight(context, theme)),
+                Expanded(
+                  flex: 3,
+                  child: _buildRight(context, theme),
+                ),
+                const SizedBox(width: 20),
               ],
             ),
           ),

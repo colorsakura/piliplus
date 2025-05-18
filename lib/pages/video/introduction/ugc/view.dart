@@ -816,7 +816,8 @@ class _VideoInfoState extends State<VideoInfo> {
         return TextButton(
           onPressed: () => videoIntroController.actionRelationMod(context),
           style: TextButton.styleFrom(
-            visualDensity: const VisualDensity(vertical: -3),
+            padding: const EdgeInsets.symmetric(horizontal: 18),
+            visualDensity: const VisualDensity(vertical: -2.8),
             foregroundColor: attr != 0
                 ? t.colorScheme.outline
                 : t.colorScheme.onSecondaryContainer,
@@ -833,7 +834,7 @@ class _VideoInfoState extends State<VideoInfo> {
               -10 => '特别关注',
               _ => '关注'
             },
-            style: TextStyle(fontSize: t.textTheme.labelMedium!.fontSize),
+            style: const TextStyle(fontSize: 13),
           ),
         );
       },

@@ -28,6 +28,7 @@ class VideoCardHMemberVideo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Stack(
       clipBehavior: Clip.none,
       children: [
@@ -99,7 +100,7 @@ class VideoCardHMemberVideo extends StatelessWidget {
                                         style: TextStyle(
                                           color: Colors.white,
                                           fontSize: 15,
-                                          letterSpacing: 1.5,
+                                          letterSpacing: 5,
                                         ),
                                       ),
                                     ),
@@ -166,7 +167,7 @@ class VideoCardHMemberVideo extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(width: 10),
-                    videoContent(context),
+                    videoContent(context, theme),
                   ],
                 );
               },
@@ -186,8 +187,9 @@ class VideoCardHMemberVideo extends StatelessWidget {
     );
   }
 
-  Widget videoContent(context) {
-    final theme = Theme.of(context);
+  Widget videoContent(BuildContext context, ThemeData theme) {
+    final isCurr = fromViewAid == videoItem.param ||
+        (videoItem.bvid != null && videoItem.bvid == bvid);
     return Expanded(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -197,15 +199,11 @@ class VideoCardHMemberVideo extends StatelessWidget {
               videoItem.title,
               textAlign: TextAlign.start,
               style: TextStyle(
-                fontWeight: videoItem.bvid != null && videoItem.bvid == bvid
-                    ? FontWeight.bold
-                    : null,
+                fontWeight: isCurr ? FontWeight.bold : null,
                 fontSize: theme.textTheme.bodyMedium!.fontSize,
                 height: 1.42,
                 letterSpacing: 0.3,
-                color: videoItem.bvid != null && videoItem.bvid == bvid
-                    ? theme.colorScheme.primary
-                    : null,
+                color: isCurr ? theme.colorScheme.primary : null,
               ),
               maxLines: 2,
               overflow: TextOverflow.ellipsis,

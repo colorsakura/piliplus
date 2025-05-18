@@ -102,14 +102,10 @@ class _MemberOpusState extends State<MemberOpus>
                   },
                 );
               },
-              label: Row(
-                children: [
-                  const Icon(size: 20, Icons.sort),
-                  Obx(
-                    () => Text(_controller.type.value.text ??
-                        _controller.type.value.tabName!),
-                  ),
-                ],
+              icon: const Icon(size: 20, Icons.sort),
+              label: Obx(
+                () => Text(_controller.type.value.text ??
+                    _controller.type.value.tabName!),
               ),
             ),
           ),
