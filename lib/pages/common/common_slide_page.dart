@@ -75,14 +75,18 @@ abstract class CommonSlidePageState<T extends CommonSlidePage> extends State<T>
               if (downPos != null) {
                 Offset cumulativeDelta = localPosition - downPos!;
                 if (cumulativeDelta.dx.abs() >= cumulativeDelta.dy.abs()) {
+                  downPos = localPosition;
                   isSliding = true;
-                  _animController!.value = localPosition.dx.abs() / maxWidth;
                 } else {
                   isSliding = false;
                 }
               }
             } else if (isSliding == true) {
-              _animController!.value = localPosition.dx.abs() / maxWidth;
+              if (localPosition.dx < downPos!.dx) {
+                return;
+              }
+              _animController!.value =
+                  (localPosition.dx - downPos!.dx) / maxWidth;
             }
           }
 
