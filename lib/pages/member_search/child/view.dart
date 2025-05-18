@@ -40,6 +40,7 @@ class _MemberSearchChildPageState extends State<MemberSearchChildPage>
     return refreshIndicator(
       onRefresh: _controller.onRefresh,
       child: CustomScrollView(
+        controller: _controller.scrollController,
         slivers: [
           SliverPadding(
             padding: EdgeInsets.only(
