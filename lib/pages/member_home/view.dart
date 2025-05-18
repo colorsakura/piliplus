@@ -160,7 +160,7 @@ class _MemberHomeState extends State<MemberHome>
                   _videoHeader(
                     title: '专栏',
                     param: 'contribute',
-                    param1: 'article',
+                    param1: 'opus',
                     count: res.article!.count!,
                   ),
                   SliverGrid(
@@ -256,7 +256,7 @@ class _MemberHomeState extends State<MemberHome>
                 int index =
                     _ctr.tab2!.indexWhere((item) => item.param == param);
                 if (index != -1) {
-                  if (['video', 'article', 'audio'].contains(param1)) {
+                  if (const ['video', 'opus', 'audio'].contains(param1)) {
                     List<SpaceTabItem> items = _ctr.tab2!
                         .firstWhere((item) => item.param == param)
                         .items!;
