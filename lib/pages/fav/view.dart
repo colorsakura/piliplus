@@ -5,6 +5,7 @@ import 'package:PiliPlus/models/user/fav_folder.dart';
 import 'package:PiliPlus/pages/fav/video/controller.dart';
 import 'package:PiliPlus/pages/fav_folder_sort/view.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 
 class FavPage extends StatefulWidget {
@@ -77,6 +78,10 @@ class _FavPageState extends State<FavPage> with SingleTickerProviderStateMixin {
             () => _showVideoFavMenu.value
                 ? IconButton(
                     onPressed: () {
+                      if (!_favController.isEnd) {
+                        SmartDialog.showToast('加载全部收藏夹再排序');
+                        return;
+                      }
                       Get.to(FavFolderSortPage(favController: _favController));
                     },
                     icon: const Icon(Icons.sort),

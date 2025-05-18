@@ -1,19 +1,19 @@
 class SpaceTabFilter {
-  SpaceTabFilter({
+  const SpaceTabFilter({
     this.text,
     required this.meta,
     this.tabName,
   });
 
-  String? text;
-  late String meta;
-  String? tabName;
+  final String? text;
+  final String meta;
+  final String? tabName;
 
-  SpaceTabFilter.fromJson(Map<String, dynamic> json) {
-    text = json['text'];
-    meta = json['meta'] ?? 'all';
-    tabName = json['tab_ame'];
-  }
+  factory SpaceTabFilter.fromJson(Map<String, dynamic> json) => SpaceTabFilter(
+        text: json['text'],
+        meta: json['meta'] ?? 'all',
+        tabName: json['tab_ame'],
+      );
 
   @override
   bool operator ==(Object other) {

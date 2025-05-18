@@ -19,7 +19,7 @@ class MemberOpusController
 
   String offset = '';
   Rx<SpaceTabFilter> type =
-      SpaceTabFilter(text: "全部图文", meta: "all", tabName: "图文").obs;
+      const SpaceTabFilter(text: "全部图文", meta: "all", tabName: "图文").obs;
   List<SpaceTabFilter>? filter;
 
   @override

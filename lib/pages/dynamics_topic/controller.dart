@@ -20,6 +20,8 @@ class DynTopicController
   String offset = '';
   Rx<TopicSortByConf?> topicSortByConf = Rx<TopicSortByConf?>(null);
 
+  double? appbarOffset;
+
   // top
   final isLogin = Accounts.main.isLogin;
   Rx<bool?> isFav = Rx<bool?>(null);
@@ -63,7 +65,14 @@ class DynTopicController
 
   @override
   Future<void> onReload() {
-    scrollController.jumpToTop();
+    if (appbarOffset != null) {
+      if (scrollController.hasClients &&
+          scrollController.offset > appbarOffset!) {
+        scrollController.jumpTo(appbarOffset!);
+      }
+    } else {
+      scrollController.jumpToTop();
+    }
     return super.onReload();
   }
 

@@ -123,11 +123,14 @@ class _DynTopicPageState extends State<DynTopicPage> {
   }
 
   Widget _buildAppBar(ThemeData theme, LoadingState<TopDetails?> topState) {
+    late final paddingTop = MediaQuery.paddingOf(context).top;
     return switch (topState) {
       Loading() => const SliverAppBar(),
       Success(:var response) when (topState.dataOrNull != null) =>
         DynamicSliverAppBarMedium(
           pinned: true,
+          callback: (value) => _controller.appbarOffset =
+              value - kToolbarHeight - paddingTop - 7,
           title: IgnorePointer(child: Text(response!.topicItem!.name!)),
           flexibleSpace: Container(
             decoration: BoxDecoration(
@@ -140,7 +143,7 @@ class _DynTopicPageState extends State<DynTopicPage> {
               ),
             ),
             padding: EdgeInsets.only(
-              top: MediaQuery.paddingOf(context).top,
+              top: paddingTop,
               left: 12,
               right: 12,
             ),

@@ -43,8 +43,10 @@ class DynamicSliverAppBarMedium extends StatefulWidget {
     this.forceMaterialTransparency = false,
     this.clipBehavior,
     this.appBarClipper,
+    this.callback,
   });
 
+  final ValueChanged<double>? callback;
   final Widget? flexibleSpace;
   final Widget? leading;
   final bool automaticallyImplyLeading;
@@ -112,6 +114,7 @@ class _DynamicSliverAppBarMediumState extends State<DynamicSliverAppBarMedium> {
         _height = (_childKey.currentContext!.findRenderObject()! as RenderBox)
             .size
             .height;
+        widget.callback?.call(_height);
       });
     });
   }

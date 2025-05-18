@@ -28,8 +28,6 @@ class _MemberPageState extends State<MemberPage> {
   late final int _mid;
   late final String _heroTag;
   late final MemberController _userController;
-  final _key = GlobalKey<ExtendedNestedScrollViewState>();
-  int _offset = 120;
 
   @override
   void initState() {
@@ -46,7 +44,7 @@ class _MemberPageState extends State<MemberPage> {
   void listener() {
     if (_userController.scrollController.hasClients) {
       _userController.showUname.value =
-          _userController.scrollController.offset >= _offset;
+          _userController.scrollController.offset >= _userController.offset;
     }
   }
 
@@ -169,7 +167,7 @@ class _MemberPageState extends State<MemberPage> {
             ? LayoutBuilder(
                 builder: (context, constraints) {
                   return ExtendedNestedScrollView(
-                    key: _key,
+                    key: _userController.key,
                     controller: _userController.scrollController,
                     onlyOneScrollInBody: true,
                     pinnedHeaderSliverHeightBuilder: () {
@@ -213,7 +211,7 @@ class _MemberPageState extends State<MemberPage> {
           tabs: _userController.tabs,
           onTap: (value) {
             if (_userController.tabController?.indexIsChanging == false) {
-              _key.currentState?.outerController.animToTop();
+              _userController.key.currentState?.outerController.animToTop();
             }
           },
         ),
@@ -253,7 +251,8 @@ class _MemberPageState extends State<MemberPage> {
       toolbarHeight: kToolbarHeight + MediaQuery.paddingOf(context).top,
       flexibleSpace: _buildUserInfo(_userController.loadingState.value, isV),
       callback: (value) {
-        _offset = (value - 56 - MediaQuery.paddingOf(context).top).toInt();
+        _userController.offset =
+            (value - 56 - MediaQuery.paddingOf(context).top).toInt();
         listener();
       },
     );

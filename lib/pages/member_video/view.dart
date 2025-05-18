@@ -49,6 +49,7 @@ class _MemberVideoState extends State<MemberVideo>
       seriesId: widget.seriesId,
       username: Get.find<MemberController>(tag: widget.heroTag).username,
       title: widget.title,
+      heroTag: widget.heroTag,
     ),
     tag:
         '${widget.heroTag}${widget.type.name}${widget.seasonId}${widget.seriesId}',

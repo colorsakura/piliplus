@@ -11,6 +11,8 @@ import 'package:PiliPlus/pages/common/common_data_controller.dart';
 import 'package:PiliPlus/utils/request_utils.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/utils.dart';
+import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart'
+    show ExtendedNestedScrollViewState;
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
@@ -47,6 +49,9 @@ class MemberController extends CommonDataController<SpaceData, SpaceData?>
   bool? hasSeasonOrSeries;
 
   final fromViewAid = Get.parameters['from_view_aid'];
+
+  final key = GlobalKey<ExtendedNestedScrollViewState>();
+  int offset = 120;
 
   @override
   void onInit() {
