@@ -138,7 +138,7 @@ class _RepostPanelState extends CommonPublishPageState<RepostPanel> {
           children: [
             if (_pic != null) ...[
               NetworkImgLayer(
-                radius: 8,
+                radius: 6,
                 width: 40,
                 height: 40,
                 src: _pic,

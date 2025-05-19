@@ -157,9 +157,7 @@ Widget videoSeasonWidget(
                 arguments: {'face': item.modules.moduleAuthor!.face},
               ),
               child: Text(
-                item.modules.moduleAuthor?.type == null
-                    ? '@${item.modules.moduleAuthor!.name}'
-                    : item.modules.moduleAuthor!.name!,
+                '@${item.modules.moduleAuthor!.name}',
                 style: TextStyle(color: theme.colorScheme.primary),
               ),
             ),

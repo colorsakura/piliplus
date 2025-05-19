@@ -816,7 +816,7 @@ class _VideoInfoState extends State<VideoInfo> {
         return TextButton(
           onPressed: () => videoIntroController.actionRelationMod(context),
           style: TextButton.styleFrom(
-            padding: const EdgeInsets.symmetric(horizontal: 18),
+            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
             visualDensity: const VisualDensity(vertical: -2.8),
             foregroundColor: attr != 0
                 ? t.colorScheme.outline
@@ -832,7 +832,7 @@ class _VideoInfoState extends State<VideoInfo> {
               4 || 6 => '已互关',
               128 => '已拉黑',
               -10 => '特别关注',
-              _ => '关注'
+              _ => ' 关注 '
             },
             style: const TextStyle(fontSize: 13),
           ),
