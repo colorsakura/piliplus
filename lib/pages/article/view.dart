@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:PiliPlus/common/skeleton/video_reply.dart';
 import 'package:PiliPlus/common/widgets/badge.dart';
+import 'package:PiliPlus/common/widgets/custom_icon.dart';
 import 'package:PiliPlus/common/widgets/custom_sliver_persistent_header_delegate.dart';
 import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
 import 'package:PiliPlus/common/widgets/loading_widget/http_error.dart';
@@ -951,7 +952,7 @@ class _ArticlePageState extends State<ArticlePage>
                                       Expanded(
                                           child: textIconButton(
                                         text: '分享',
-                                        icon: FontAwesomeIcons.shareNodes,
+                                        icon: CustomIcon.share_node,
                                         stat: null,
                                         callback: () =>
                                             Utils.shareText(_articleCtr.url),

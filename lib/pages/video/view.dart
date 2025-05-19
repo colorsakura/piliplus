@@ -760,6 +760,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                                                   null
                                               ? PopupMenuButton<String>(
                                                   icon: Icon(
+                                                    size: 22,
                                                     Icons.more_vert,
                                                     color: themeData
                                                         .colorScheme.onSurface,
@@ -1311,6 +1312,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                   actions: [
                     PopupMenuButton<String>(
                       icon: const Icon(
+                        size: 22,
                         Icons.more_vert,
                         color: Colors.white,
                         shadows: [
@@ -1591,6 +1593,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                                   .plPlayerController.isOpenDanmu.value);
                         },
                         icon: Icon(
+                          size: 22,
                           videoDetailController
                                   .plPlayerController.isOpenDanmu.value
                               ? CustomIcon.dm_on

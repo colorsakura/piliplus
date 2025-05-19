@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:PiliPlus/common/skeleton/video_reply.dart';
+import 'package:PiliPlus/common/widgets/custom_icon.dart';
 import 'package:PiliPlus/common/widgets/custom_sliver_persistent_header_delegate.dart';
 import 'package:PiliPlus/common/widgets/loading_widget/http_error.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
@@ -599,7 +600,7 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
                                             '${HttpString.dynamicShareBaseUrl}/${_dynamicDetailController.item.idStr}');
                                       },
                                       icon: Icon(
-                                        FontAwesomeIcons.shareNodes,
+                                        CustomIcon.share_node,
                                         size: 16,
                                         color: theme.colorScheme.outline,
                                         semanticLabel: "分享",

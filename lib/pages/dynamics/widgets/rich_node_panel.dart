@@ -19,7 +19,7 @@ TextSpan? richNode(
   BuildContext context,
 ) {
   try {
-    late final authorStyle = TextStyle(color: theme.colorScheme.primary);
+    late final style = TextStyle(color: theme.colorScheme.primary);
     List<InlineSpan> spanChildren = [];
 
     List<RichTextNodeItem>? richTextNodes;
@@ -57,7 +57,7 @@ TextSpan? richNode(
             spanChildren.add(
               TextSpan(
                 text: ' ${i.text}',
-                style: authorStyle,
+                style: style,
                 recognizer: TapGestureRecognizer()
                   ..onTap = () {
                     Get.toNamed('/member?mid=${i.rid}');
@@ -70,7 +70,7 @@ TextSpan? richNode(
             spanChildren.add(
               TextSpan(
                 text: i.origText!,
-                style: authorStyle,
+                style: style,
                 recognizer: TapGestureRecognizer()
                   ..onTap = () {
                     Get.toNamed(
@@ -100,7 +100,7 @@ TextSpan? richNode(
               ..add(
                 TextSpan(
                   text: i.text ?? '',
-                  style: authorStyle,
+                  style: style,
                   recognizer: TapGestureRecognizer()
                     ..onTap = () {
                       String? url = i.origText;
@@ -115,21 +115,30 @@ TextSpan? richNode(
             break;
           // 投票
           case 'RICH_TEXT_NODE_TYPE_VOTE':
-            spanChildren.add(
-              TextSpan(
-                text: '投票：${i.text}',
-                style: TextStyle(
-                  color: theme.colorScheme.primary,
+            spanChildren
+              ..add(
+                WidgetSpan(
+                  alignment: PlaceholderAlignment.middle,
+                  child: Icon(
+                    size: 20,
+                    Icons.bar_chart_rounded,
+                    color: theme.colorScheme.primary,
+                  ),
                 ),
-                recognizer: TapGestureRecognizer()
-                  ..onTap = () {
-                    final dynIdStr = item.basic?.commentIdStr;
-                    final dynId =
-                        dynIdStr != null ? int.tryParse(dynIdStr) : null;
-                    showVoteDialog(context, int.parse(i.rid!), dynId);
-                  },
-              ),
-            );
+              )
+              ..add(
+                TextSpan(
+                  text: '投票：${i.text}',
+                  style: style,
+                  recognizer: TapGestureRecognizer()
+                    ..onTap = () {
+                      final dynIdStr = item.basic?.commentIdStr;
+                      final dynId =
+                          dynIdStr != null ? int.tryParse(dynIdStr) : null;
+                      showVoteDialog(context, int.parse(i.rid!), dynId);
+                    },
+                ),
+              );
             break;
           // 表情
           case 'RICH_TEXT_NODE_TYPE_EMOJI' when (i.emoji != null):
@@ -161,7 +170,7 @@ TextSpan? richNode(
               ..add(
                 TextSpan(
                   text: '${i.origText} ',
-                  style: authorStyle,
+                  style: style,
                   recognizer: TapGestureRecognizer()
                     ..onTap = () {
                       Get.toNamed(
@@ -191,7 +200,7 @@ TextSpan? richNode(
               ..add(
                 TextSpan(
                   text: '${i.text} ',
-                  style: authorStyle,
+                  style: style,
                   recognizer: i.jumpUrl == null
                       ? null
                       : (TapGestureRecognizer()
@@ -217,7 +226,7 @@ TextSpan? richNode(
               ..add(
                 TextSpan(
                   text: '${i.text} ',
-                  style: authorStyle,
+                  style: style,
                   recognizer: TapGestureRecognizer()
                     ..onTap = () async {
                       try {
@@ -262,7 +271,7 @@ TextSpan? richNode(
             spanChildren.add(
               TextSpan(
                 text: '${i.text}',
-                style: authorStyle,
+                style: style,
               ),
             );
             break;
