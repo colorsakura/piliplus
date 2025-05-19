@@ -234,7 +234,9 @@ class _LiveAreaPageState extends State<LiveAreaPage> {
       behavior: HitTestBehavior.opaque,
       onTap: () {
         if (_controller.isEditing.value) {
-          onPressed();
+          if (item.id != 0) {
+            onPressed();
+          }
           return;
         }
 
@@ -268,35 +270,38 @@ class _LiveAreaPageState extends State<LiveAreaPage> {
               ),
             ],
           ),
-          Positioned(
-            top: 0,
-            right: 16,
-            child: Obx(() {
-              if (_controller.isEditing.value &&
-                  _controller.favState.value is Success) {
-                // init isFav
-                item.isFav ??= _controller.favState.value.data.contains(item);
+          if (item.id != 0)
+            Positioned(
+              top: 0,
+              right: 16,
+              child: Obx(() {
+                if (_controller.isEditing.value &&
+                    _controller.favState.value is Success) {
+                  // init isFav
+                  item.isFav ??= _controller.favState.value.data.contains(item);
 
-                return Builder(
-                  builder: (context) {
-                    return iconButton(
-                      size: 17,
-                      iconSize: 13,
-                      context: context,
-                      icon: item.isFav == true ? MdiIcons.check : MdiIcons.plus,
-                      bgColor: item.isFav == true
-                          ? theme.colorScheme.onInverseSurface
-                          : null,
-                      iconColor:
-                          item.isFav == true ? theme.colorScheme.outline : null,
-                      onPressed: onPressed,
-                    );
-                  },
-                );
-              }
-              return const SizedBox.shrink();
-            }),
-          ),
+                  return Builder(
+                    builder: (context) {
+                      return iconButton(
+                        size: 17,
+                        iconSize: 13,
+                        context: context,
+                        icon:
+                            item.isFav == true ? MdiIcons.check : MdiIcons.plus,
+                        bgColor: item.isFav == true
+                            ? theme.colorScheme.onInverseSurface
+                            : null,
+                        iconColor: item.isFav == true
+                            ? theme.colorScheme.outline
+                            : null,
+                        onPressed: onPressed,
+                      );
+                    },
+                  );
+                }
+                return const SizedBox.shrink();
+              }),
+            ),
         ],
       ),
     );
