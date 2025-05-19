@@ -1,3 +1,4 @@
+import 'package:PiliPlus/models/dynamics/result.dart';
 import 'package:PiliPlus/models/dynamics/vote_model.dart';
 
 class ArticleContentModel {
@@ -33,6 +34,7 @@ class Pic {
   num? height;
   num? size;
   String? liveUrl;
+  bool? isLongPic;
 
   Pic.fromJson(Map<String, dynamic> json) {
     url = json['url'];
@@ -42,6 +44,9 @@ class Pic {
     pics = (json['pics'] as List?)?.map((item) => Pic.fromJson(item)).toList();
     style = json['style'];
     liveUrl = json['live_url'];
+    if (width != null && height != null) {
+      isLongPic = (height! / width!) > 22 / 9;
+    }
   }
 }
 
@@ -71,26 +76,28 @@ class Text {
   Text({
     this.nodes,
   });
-  List<Nodes>? nodes;
+  List<Node>? nodes;
 
   Text.fromJson(Map<String, dynamic> json) {
     nodes =
-        (json['nodes'] as List?)?.map((item) => Nodes.fromJson(item)).toList();
+        (json['nodes'] as List?)?.map((item) => Node.fromJson(item)).toList();
   }
 }
 
-class Nodes {
+class Node {
   int? nodeType;
   Word? word;
   Rich? rich;
   Formula? formula;
+  String? type;
 
-  Nodes.fromJson(Map<String, dynamic> json) {
+  Node.fromJson(Map<String, dynamic> json) {
     nodeType = json['node_type'];
     word = json['word'] == null ? null : Word.fromJson(json['word']);
     rich = json['rich'] == null ? null : Rich.fromJson(json['rich']);
     formula =
         json['formula'] == null ? null : Formula.fromJson(json['formula']);
+    type = json['type'];
   }
 }
 
@@ -143,12 +150,18 @@ class Rich {
   String? jumpUrl;
   String? origText;
   String? text;
+  String? type;
+  String? rid;
+  Emoji? emoji;
 
   Rich.fromJson(Map<String, dynamic> json) {
     style = json['style'] == null ? null : Style.fromJson(json['style']);
     jumpUrl = json['jump_url'];
     origText = json['orig_text'];
     text = json['text'];
+    type = json['type'];
+    rid = json['rid'];
+    emoji = json['emoji'] == null ? null : Emoji.fromJson(json['emoji']);
   }
 }
 
@@ -368,12 +381,12 @@ class L1st {
 class Item {
   int? level;
   int? order;
-  List<Nodes>? nodes;
+  List<Node>? nodes;
 
   Item.fromJson(Map<String, dynamic> json) {
     level = json['level'];
     order = json['order'];
-    nodes = (json['nodes'] as List?)?.map((e) => Nodes.fromJson(e)).toList();
+    nodes = (json['nodes'] as List?)?.map((e) => Node.fromJson(e)).toList();
   }
 }
 

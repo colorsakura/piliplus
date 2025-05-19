@@ -444,8 +444,9 @@ class _ArticlePageState extends State<ArticlePage>
                                   },
                                   itemCount: length,
                                   itemBuilder: (context, index) {
-                                    final url = pics[0].url!;
+                                    final pic = pics[index];
                                     return GestureDetector(
+                                      behavior: HitTestBehavior.opaque,
                                       onTap: () {
                                         context.imageView(
                                           imgList: pics
@@ -456,10 +457,28 @@ class _ArticlePageState extends State<ArticlePage>
                                         );
                                       },
                                       child: Hero(
-                                        tag: url,
-                                        child: CachedNetworkImage(
-                                          imageUrl:
-                                              Utils.thumbnailImgUrl(url, 60),
+                                        tag: pic.url!,
+                                        child: Stack(
+                                          clipBehavior: Clip.none,
+                                          alignment: Alignment.center,
+                                          children: [
+                                            Positioned.fill(
+                                              child: CachedNetworkImage(
+                                                fit: pic.isLongPic == true
+                                                    ? BoxFit.cover
+                                                    : null,
+                                                imageUrl: Utils.thumbnailImgUrl(
+                                                    pic.url, 60),
+                                              ),
+                                            ),
+                                            if (pic.isLongPic == true)
+                                              PBadge(
+                                                text: '长图',
+                                                type: PBadgeType.primary,
+                                                right: paddingRight,
+                                                bottom: 12,
+                                              ),
+                                          ],
                                         ),
                                       ),
                                     );

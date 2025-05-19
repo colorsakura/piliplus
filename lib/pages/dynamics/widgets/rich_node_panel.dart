@@ -130,13 +130,14 @@ TextSpan? richNode(
             break;
           // 表情
           case 'RICH_TEXT_NODE_TYPE_EMOJI' when (i.emoji != null):
+            final size = i.emoji!.size * 20.0;
             spanChildren.add(
               WidgetSpan(
                 child: NetworkImgLayer(
-                  src: i.emoji!.webpUrl ?? i.emoji!.gifUrl ?? i.emoji!.iconUrl,
+                  src: i.emoji!.url,
                   type: ImageType.emote,
-                  width: (i.emoji!.size ?? 1) * 20,
-                  height: (i.emoji!.size ?? 1) * 20,
+                  width: size,
+                  height: size,
                 ),
               ),
             );

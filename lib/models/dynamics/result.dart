@@ -825,24 +825,20 @@ class RichTextNodeItem {
 }
 
 class Emoji {
-  Emoji({
-    this.iconUrl,
-    this.size,
-    this.text,
-    this.type,
-  });
-
-  String? iconUrl;
-  String? webpUrl;
-  String? gifUrl;
-  double? size;
+  // String? iconUrl;
+  // String? webpUrl;
+  // String? gifUrl;
+  String? url;
+  late num size;
   String? text;
-  int? type;
+  num? type;
+
   Emoji.fromJson(Map<String, dynamic> json) {
-    iconUrl = json['icon_url'];
-    webpUrl = json['webp_url'];
-    gifUrl = json['gif_url'];
-    size = json['size'].toDouble();
+    // iconUrl = json['icon_url'];
+    // webpUrl = json['webp_url'];
+    // gifUrl = json['gif_url'];
+    url = json['webp_url'] ?? json['gif_url'] ?? json['icon_url'];
+    size = json['size'] ?? 1;
     text = json['text'];
     type = json['type'];
   }

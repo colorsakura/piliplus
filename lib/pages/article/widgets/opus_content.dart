@@ -4,8 +4,9 @@ import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/common/widgets/image/image_view.dart';
 import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
 import 'package:PiliPlus/models/common/image_preview_type.dart';
+import 'package:PiliPlus/models/common/image_type.dart';
 import 'package:PiliPlus/models/dynamics/article_content_model.dart'
-    show ArticleContentModel, Style, Word;
+    show ArticleContentModel, Rich, Style, Word;
 import 'package:PiliPlus/models/dynamics/result.dart';
 import 'package:PiliPlus/pages/dynamics/widgets/vote.dart';
 import 'package:PiliPlus/utils/app_scheme.dart';
@@ -68,46 +69,78 @@ class OpusContent extends StatelessWidget {
           switch (element.paraType) {
             case 1 || 4:
               final isQuote = element.paraType == 4;
-              Widget widget = SelectableText.rich(
-                textAlign: element.align == 1 ? TextAlign.center : null,
-                TextSpan(
-                    children: element.text?.nodes?.map<TextSpan>((item) {
-                  if (item.rich != null) {
-                    return TextSpan(
-                      text: '\u{1F517}${item.rich!.text}',
-                      style: _getStyle(item.rich!.style, colorScheme.primary),
-                      recognizer: item.rich!.jumpUrl == null
-                          ? null
-                          : (TapGestureRecognizer()
-                            ..onTap = () {
-                              PiliScheme.routePushFromUrl(item.rich!.jumpUrl!);
-                            }),
-                    );
-                  } else if (item.formula != null) {
-                    // TEXT_NODE_TYPE_FORMULA
-                    return TextSpan(
-                      children: [
-                        WidgetSpan(
-                          child: SizedBox(
-                            height: 65,
-                            child: CachedNetworkSVGImage(
-                              'https://api.bilibili.com/x/web-frontend/mathjax/tex?formula=${Uri.encodeComponent(item.formula!.latexContent!)}',
-                              colorFilter: ColorFilter.mode(
-                                colorScheme.onSurfaceVariant,
-                                BlendMode.srcIn,
+              Widget widget = SelectionArea(
+                child: Text.rich(
+                  textAlign: element.align == 1 ? TextAlign.center : null,
+                  TextSpan(
+                      children: element.text?.nodes?.map((item) {
+                    switch (item.type) {
+                      case 'TEXT_NODE_TYPE_RICH' when (item.rich != null):
+                        Rich rich = item.rich!;
+                        switch (rich.type) {
+                          case 'RICH_TEXT_NODE_TYPE_EMOJI':
+                            Emoji emoji = rich.emoji!;
+                            final size = 20.0 * emoji.size;
+                            return WidgetSpan(
+                              child: NetworkImgLayer(
+                                width: size,
+                                height: size,
+                                src: emoji.url,
+                                type: ImageType.emote,
                               ),
-                              alignment: Alignment.centerLeft,
-                              placeholderBuilder: (context) =>
-                                  const SizedBox.shrink(),
+                            );
+                          default:
+                            return TextSpan(
+                              text:
+                                  '${rich.type == 'RICH_TEXT_NODE_TYPE_WEB' ? '\u{1F517}' : ''}${item.rich!.text}',
+                              style: _getStyle(
+                                rich.style,
+                                rich.type == 'RICH_TEXT_NODE_TYPE_TEXT'
+                                    ? null
+                                    : colorScheme.primary,
+                              ),
+                              recognizer: TapGestureRecognizer()
+                                ..onTap = () {
+                                  switch (rich.type) {
+                                    case 'RICH_TEXT_NODE_TYPE_AT':
+                                      Get.toNamed('/member?mid=${rich.rid}');
+                                    // case 'RICH_TEXT_NODE_TYPE_TOPIC':
+                                    default:
+                                      if (rich.jumpUrl != null) {
+                                        PiliScheme.routePushFromUrl(
+                                          rich.jumpUrl!,
+                                        );
+                                      }
+                                  }
+                                },
+                            );
+                        }
+                      case 'TEXT_NODE_TYPE_FORMULA' when (item.formula != null):
+                        return TextSpan(
+                          children: [
+                            WidgetSpan(
+                              child: CachedNetworkSVGImage(
+                                height: 65,
+                                'https://api.bilibili.com/x/web-frontend/mathjax/tex?formula=${Uri.encodeComponent(item.formula!.latexContent!)}',
+                                colorFilter: ColorFilter.mode(
+                                  colorScheme.onSurfaceVariant,
+                                  BlendMode.srcIn,
+                                ),
+                                alignment: Alignment.centerLeft,
+                                placeholderBuilder: (_) =>
+                                    const SizedBox.shrink(),
+                              ),
                             ),
-                          ),
-                        ),
-                      ],
-                    );
-                  }
-                  return _getSpan(
-                      item.word, isQuote ? colorScheme.onSurfaceVariant : null);
-                }).toList()),
+                          ],
+                        );
+                      default:
+                        return _getSpan(
+                          item.word,
+                          isQuote ? colorScheme.onSurfaceVariant : null,
+                        );
+                    }
+                  }).toList()),
+                ),
               );
               if (isQuote) {
                 widget = Container(
@@ -175,23 +208,25 @@ class OpusContent extends StatelessWidget {
                 imageUrl: Utils.thumbnailImgUrl(element.line!.pic!.url!),
               );
             case 5 when (element.list != null):
-              return SelectableText.rich(
-                TextSpan(
-                  children: element.list!.items?.indexed.map((entry) {
-                    return TextSpan(
-                      children: [
-                        WidgetSpan(
-                          child: Icon(MdiIcons.circleMedium),
-                          alignment: PlaceholderAlignment.middle,
-                        ),
-                        ...entry.$2.nodes!.map((item) {
-                          return _getSpan(item.word);
-                        }),
-                        if (entry.$1 < element.list!.items!.length - 1)
-                          const TextSpan(text: '\n'),
-                      ],
-                    );
-                  }).toList(),
+              return SelectionArea(
+                child: Text.rich(
+                  TextSpan(
+                    children: element.list!.items?.indexed.map((entry) {
+                      return TextSpan(
+                        children: [
+                          WidgetSpan(
+                            child: Icon(MdiIcons.circleMedium),
+                            alignment: PlaceholderAlignment.middle,
+                          ),
+                          ...entry.$2.nodes!.map((item) {
+                            return _getSpan(item.word);
+                          }),
+                          if (entry.$1 < element.list!.items!.length - 1)
+                            const TextSpan(text: '\n'),
+                        ],
+                      );
+                    }).toList(),
+                  ),
                 ),
               );
             case 6:
@@ -513,32 +548,42 @@ class OpusContent extends StatelessWidget {
                   color: colorScheme.onInverseSurface,
                 ),
                 width: double.infinity,
-                child: SelectableText.rich(renderer.span!),
+                child: SelectionArea(child: Text.rich(renderer.span!)),
               );
             default:
               debugPrint('unknown type ${element.paraType}');
               if (element.text?.nodes?.isNotEmpty == true) {
-                return SelectableText.rich(
-                  textAlign: element.align == 1 ? TextAlign.center : null,
-                  TextSpan(
-                      children: element.text!.nodes!
-                          .map<TextSpan>((item) => _getSpan(item.word))
-                          .toList()),
+                return SelectionArea(
+                  child: Text.rich(
+                    textAlign: element.align == 1 ? TextAlign.center : null,
+                    TextSpan(
+                        children: element.text!.nodes!
+                            .map<TextSpan>((item) => _getSpan(item.word))
+                            .toList()),
+                  ),
                 );
               }
 
-              return SelectableText('不支持的类型 (${element.paraType})',
+              return SelectionArea(
+                child: Text(
+                  '不支持的类型 (${element.paraType})',
                   style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     color: Colors.red,
-                  ));
+                  ),
+                ),
+              );
           }
         } catch (e) {
-          return SelectableText('错误的类型 $e',
+          return SelectionArea(
+            child: Text(
+              '错误的类型 $e',
               style: const TextStyle(
                 fontWeight: FontWeight.bold,
                 color: Colors.red,
-              ));
+              ),
+            ),
+          );
         }
       },
       separatorBuilder: (context, index) => const SizedBox(height: 10),

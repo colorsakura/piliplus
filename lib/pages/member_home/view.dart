@@ -158,7 +158,7 @@ class _MemberHomeState extends State<MemberHome>
                 ],
                 if (res.article?.item?.isNotEmpty == true) ...[
                   _videoHeader(
-                    title: '专栏',
+                    title: '图文',
                     param: 'contribute',
                     param1: 'opus',
                     count: res.article!.count!,
