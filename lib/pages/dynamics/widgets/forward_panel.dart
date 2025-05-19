@@ -1,5 +1,6 @@
 // 转发
 import 'package:PiliPlus/common/widgets/badge.dart';
+import 'package:PiliPlus/common/widgets/custom_icon.dart';
 import 'package:PiliPlus/common/widgets/image/image_save.dart';
 import 'package:PiliPlus/common/widgets/image/image_view.dart';
 import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
@@ -92,8 +93,8 @@ Widget forWard(
                 ),
               ],
             ),
-            const SizedBox(height: 2),
-            if (item.modules.moduleDynamic?.topic != null)
+            const SizedBox(height: 5),
+            if (item.modules.moduleDynamic?.topic != null) ...[
               GestureDetector(
                 onTap: () {
                   Get.toNamed(
@@ -104,11 +105,28 @@ Widget forWard(
                     },
                   );
                 },
-                child: Text(
-                  '#${item.modules.moduleDynamic!.topic!.name}',
+                child: Text.rich(
+                  TextSpan(
+                    children: [
+                      WidgetSpan(
+                        alignment: PlaceholderAlignment.bottom,
+                        child: Padding(
+                          padding: const EdgeInsets.only(right: 4),
+                          child: Icon(
+                            size: 18,
+                            CustomIcon.topic_tag,
+                            color: theme.colorScheme.primary,
+                          ),
+                        ),
+                      ),
+                      TextSpan(text: item.modules.moduleDynamic!.topic!.name),
+                    ],
+                  ),
                   style: TextStyle(color: theme.colorScheme.primary),
                 ),
               ),
+              const SizedBox(height: 5),
+            ],
             if (richNodes != null)
               Text.rich(
                 richNodes,

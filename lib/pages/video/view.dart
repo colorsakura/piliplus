@@ -4,6 +4,7 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:PiliPlus/common/constants.dart';
+import 'package:PiliPlus/common/widgets/custom_icon.dart';
 import 'package:PiliPlus/common/widgets/scroll_physics.dart';
 import 'package:PiliPlus/grpc/bilibili/main/community/reply/v1.pb.dart'
     show ReplyInfo;
@@ -56,7 +57,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
@@ -1590,18 +1590,15 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                               videoDetailController
                                   .plPlayerController.isOpenDanmu.value);
                         },
-                        icon: SvgPicture.asset(
+                        icon: Icon(
                           videoDetailController
                                   .plPlayerController.isOpenDanmu.value
-                              ? 'assets/images/video/danmu_open.svg'
-                              : 'assets/images/video/danmu_close.svg',
-                          colorFilter: ColorFilter.mode(
-                            videoDetailController
-                                    .plPlayerController.isOpenDanmu.value
-                                ? themeData.colorScheme.secondary
-                                : themeData.colorScheme.outline,
-                            BlendMode.srcIn,
-                          ),
+                              ? CustomIcon.dm_on
+                              : CustomIcon.dm_off,
+                          color: videoDetailController
+                                  .plPlayerController.isOpenDanmu.value
+                              ? themeData.colorScheme.secondary
+                              : themeData.colorScheme.outline,
                         ),
                       ),
                     ),

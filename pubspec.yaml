@@ -285,6 +285,9 @@ flutter:
     - family: digital_id_num
       fonts:
         - asset: assets/fonts/digital_id_num.ttf
+    - family: custom_icon
+      fonts:
+        - asset: assets/fonts/custom_icon.ttf
   #   - family: Jura-Bold
   #     fonts:
   #       - asset: assets/fonts/Jura-Bold.ttf
