@@ -22,7 +22,6 @@ class MemberVideoCtr
     required this.seriesId,
     this.username,
     this.title,
-    this.heroTag,
   });
 
   ContributeType type;
@@ -43,9 +42,6 @@ class MemberVideoCtr
   Rx<bool?> isLocating = Rx<bool?>(null);
   bool? isLoadPrevious;
   bool? hasPrev;
-
-  String? heroTag;
-  // late final MemberController _ctr = Get.find<MemberController>(tag: heroTag);
 
   @override
   Future<void> onRefresh() async {
@@ -226,10 +222,6 @@ class MemberVideoCtr
   @override
   Future<void> onReload() {
     isLocating.value = null;
-    // if (_ctr.key.currentState?.outerController.hasClients == true) {
-    //   _ctr.key.currentState!.outerController
-    //       .jumpTo(_ctr.key.currentState!.outerController.offset);
-    // }
     return super.onReload();
   }
 }

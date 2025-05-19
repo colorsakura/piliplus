@@ -45,14 +45,13 @@ class CustomTabBarViewClampingScrollPhysics extends ClampingScrollPhysics {
   SpringDescription get spring => CustomSpringDescription();
 }
 
-class PositionRetainedScrollPhysics extends AlwaysScrollableScrollPhysics {
-  const PositionRetainedScrollPhysics({super.parent, this.shouldRetain = true});
-
-  final bool shouldRetain;
+class MemberVideoScrollPhysics extends AlwaysScrollableScrollPhysics {
+  const MemberVideoScrollPhysics(
+      {super.parent = const ClampingScrollPhysics()});
 
   @override
-  PositionRetainedScrollPhysics applyTo(ScrollPhysics? ancestor) {
-    return PositionRetainedScrollPhysics(parent: buildParent(ancestor));
+  MemberVideoScrollPhysics applyTo(ScrollPhysics? ancestor) {
+    return MemberVideoScrollPhysics(parent: buildParent(ancestor));
   }
 
   @override
@@ -62,20 +61,15 @@ class PositionRetainedScrollPhysics extends AlwaysScrollableScrollPhysics {
     required bool isScrolling,
     required double velocity,
   }) {
-    final position = super.adjustPositionForNewDimensions(
+    if (newPosition.maxScrollExtent < oldPosition.maxScrollExtent) {
+      return 0;
+    }
+    return super.adjustPositionForNewDimensions(
       oldPosition: oldPosition,
       newPosition: newPosition,
       isScrolling: isScrolling,
       velocity: velocity,
     );
-
-    late final diff = newPosition.maxScrollExtent - oldPosition.maxScrollExtent;
-
-    if (shouldRetain && oldPosition.pixels == 0 && diff > 0) {
-      return position + diff;
-    } else {
-      return position;
-    }
   }
 }
 

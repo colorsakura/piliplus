@@ -2,6 +2,7 @@ import 'package:PiliPlus/common/skeleton/video_card_h.dart';
 import 'package:PiliPlus/common/widgets/custom_sliver_persistent_header_delegate.dart';
 import 'package:PiliPlus/common/widgets/loading_widget/http_error.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
+import 'package:PiliPlus/common/widgets/scroll_physics.dart';
 import 'package:PiliPlus/common/widgets/video_card/video_card_h_member_video.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/common/member/contribute_type.dart';
@@ -49,7 +50,6 @@ class _MemberVideoState extends State<MemberVideo>
       seriesId: widget.seriesId,
       username: Get.find<MemberController>(tag: widget.heroTag).username,
       title: widget.title,
-      heroTag: widget.heroTag,
     ),
     tag:
         '${widget.heroTag}${widget.type.name}${widget.seasonId}${widget.seriesId}',
@@ -65,10 +65,7 @@ class _MemberVideoState extends State<MemberVideo>
         refreshIndicator(
           onRefresh: _controller.onRefresh,
           child: CustomScrollView(
-            // physics: PositionRetainedScrollPhysics(
-            //   shouldRetain: _controller.isLocating.value == true,
-            //   parent: const ClampingScrollPhysics(),
-            // ),
+            physics: const MemberVideoScrollPhysics(),
             slivers: [
               SliverPadding(
                 padding: EdgeInsets.only(
@@ -121,7 +118,7 @@ class _MemberVideoState extends State<MemberVideo>
               (context, index) {
                 return const VideoCardHSkeleton();
               },
-              childCount: 4,
+              childCount: 10,
             ),
           ),
         ),
