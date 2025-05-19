@@ -46,8 +46,7 @@ class CustomTabBarViewClampingScrollPhysics extends ClampingScrollPhysics {
 }
 
 class MemberVideoScrollPhysics extends AlwaysScrollableScrollPhysics {
-  const MemberVideoScrollPhysics(
-      {super.parent = const ClampingScrollPhysics()});
+  const MemberVideoScrollPhysics({super.parent});
 
   @override
   MemberVideoScrollPhysics applyTo(ScrollPhysics? ancestor) {
