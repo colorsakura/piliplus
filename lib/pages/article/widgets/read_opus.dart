@@ -50,7 +50,7 @@ class ReadOpus extends StatelessWidget {
                       }
                     case 'vote-card card':
                       if (card.id != null) {
-                        showVoteDialog(context, card.id);
+                        showVoteDialog(context, int.parse(card.id!));
                       }
                   }
                 },

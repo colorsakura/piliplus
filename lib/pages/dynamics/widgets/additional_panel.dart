@@ -309,8 +309,12 @@ Widget addWidget(
               onTap: () {
                 showVoteDialog(
                   context,
-                  vote.voteId,
-                  item.idStr,
+                  vote.voteId!,
+                  item.idStr is int
+                      ? item.idStr
+                      : item.idStr is String
+                          ? int.parse(item.idStr)
+                          : null,
                 );
               },
               child: Padding(
@@ -358,8 +362,12 @@ Widget addWidget(
                       onPressed: () {
                         showVoteDialog(
                           context,
-                          vote.voteId,
-                          item.idStr,
+                          vote.voteId!,
+                          item.idStr is int
+                              ? item.idStr
+                              : item.idStr is String
+                                  ? int.parse(item.idStr)
+                                  : null,
                         );
                       },
                       style: FilledButton.styleFrom(

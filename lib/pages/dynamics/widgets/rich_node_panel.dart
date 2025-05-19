@@ -123,7 +123,10 @@ TextSpan? richNode(
                 ),
                 recognizer: TapGestureRecognizer()
                   ..onTap = () {
-                    showVoteDialog(context, i.rid, item.basic?.commentIdStr);
+                    final dynIdStr = item.basic?.commentIdStr;
+                    final dynId =
+                        dynIdStr != null ? int.tryParse(dynIdStr) : null;
+                    showVoteDialog(context, int.parse(i.rid!), dynId);
                   },
               ),
             );
