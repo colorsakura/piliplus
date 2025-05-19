@@ -30,16 +30,16 @@ class Pic {
   List<Pic>? pics;
   int? style;
   String? url;
-  num? width;
-  num? height;
+  double? width;
+  double? height;
   num? size;
   String? liveUrl;
   bool? isLongPic;
 
   Pic.fromJson(Map<String, dynamic> json) {
     url = json['url'];
-    width = json['width'];
-    height = json['height'];
+    width = (json['width'] as num?)?.toDouble();
+    height = (json['height'] as num?)?.toDouble();
     size = json['size'];
     pics = (json['pics'] as List?)?.map((item) => Pic.fromJson(item)).toList();
     style = json['style'];

@@ -160,34 +160,35 @@ class OpusContent extends StatelessWidget {
               return widget;
             case 2 when (element.pic != null):
               if (element.pic!.pics!.length == 1) {
+                final pic = element.pic!.pics!.first;
+                final width = pic.width == null
+                    ? null
+                    : min(maxWidth.toDouble(), pic.width!);
+                final height = width == null || pic.height == null
+                    ? null
+                    : width * pic.height! / pic.width!;
                 return Hero(
-                  tag: element.pic!.pics!.first.url!,
+                  tag: pic.url!,
                   child: GestureDetector(
                     onTap: () {
                       if (callback != null) {
-                        callback!([element.pic!.pics!.first.url!], 0);
+                        callback!([pic.url!], 0);
                       } else {
                         context.imageView(
                           initialPage: 0,
-                          imgList: [
-                            SourceModel(url: element.pic!.pics!.first.url!)
-                          ],
+                          imgList: [SourceModel(url: pic.url!)],
                         );
                       }
                     },
                     child: Center(
-                      child: ClipRRect(
-                        borderRadius: StyleString.mdRadius,
-                        child: CachedNetworkImage(
-                          imageUrl: Utils.thumbnailImgUrl(
-                            element.pic!.pics!.first.url!,
-                            60,
-                          ),
-                          fadeInDuration: const Duration(milliseconds: 120),
-                          fadeOutDuration: const Duration(milliseconds: 120),
-                          placeholder: (context, url) =>
-                              Image.asset('assets/images/loading.png'),
-                        ),
+                      child: CachedNetworkImage(
+                        width: width,
+                        height: height,
+                        imageUrl: Utils.thumbnailImgUrl(pic.url!, 60),
+                        fadeInDuration: const Duration(milliseconds: 120),
+                        fadeOutDuration: const Duration(milliseconds: 120),
+                        placeholder: (context, url) =>
+                            Image.asset('assets/images/loading.png'),
                       ),
                     ),
                   ),

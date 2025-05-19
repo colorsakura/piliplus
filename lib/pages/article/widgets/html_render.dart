@@ -1,4 +1,3 @@
-import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
 import 'package:PiliPlus/models/common/image_preview_type.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/utils.dart';
@@ -46,6 +45,7 @@ Widget htmlRender({
               fit: BoxFit.contain,
             );
           }
+          final size = isEmote ? 22.0 : null;
           return Hero(
             tag: imgUrl,
             child: GestureDetector(
@@ -58,10 +58,14 @@ Widget htmlRender({
                   );
                 }
               },
-              child: NetworkImgLayer(
-                width: isEmote ? 22 : maxWidth,
-                height: isEmote ? 22 : null,
-                src: imgUrl,
+              child: CachedNetworkImage(
+                width: size,
+                height: size,
+                imageUrl: Utils.thumbnailImgUrl(imgUrl, 60),
+                fadeInDuration: const Duration(milliseconds: 120),
+                fadeOutDuration: const Duration(milliseconds: 120),
+                placeholder: (context, url) =>
+                    Image.asset('assets/images/loading.png'),
               ),
             ),
           );
