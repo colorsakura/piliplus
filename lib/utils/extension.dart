@@ -132,18 +132,20 @@ extension RationalExt on Rational {
 }
 
 extension ThreeDotItemTypeExt on ThreeDotItemType {
-  IconData get icon => switch (this) {
-        ThreeDotItemType.THREE_DOT_ITEM_TYPE_MSG_SETTING => Icons.settings,
+  Icon get icon => switch (this) {
+        ThreeDotItemType.THREE_DOT_ITEM_TYPE_MSG_SETTING =>
+          const Icon(Icons.settings, size: 20),
         ThreeDotItemType.THREE_DOT_ITEM_TYPE_READ_ALL =>
-          Icons.cleaning_services,
+          const Icon(Icons.cleaning_services, size: 20),
         ThreeDotItemType.THREE_DOT_ITEM_TYPE_CLEAR_LIST =>
-          Icons.delete_forever_outlined,
-        ThreeDotItemType.THREE_DOT_ITEM_TYPE_UP_HELPER => Icons.live_tv,
+          const Icon(Icons.delete_forever_outlined, size: 20),
+        ThreeDotItemType.THREE_DOT_ITEM_TYPE_UP_HELPER =>
+          const Icon(Icons.live_tv, size: 20),
         ThreeDotItemType.THREE_DOT_ITEM_TYPE_CONTACTS =>
-          Icons.account_box_outlined,
+          const Icon(Icons.account_box_outlined, size: 20),
         ThreeDotItemType.THREE_DOT_ITEM_TYPE_FANS_GROUP_HELPER =>
-          Icons.notifications_none,
-        _ => MdiIcons.circleMedium,
+          const Icon(Icons.notifications_none, size: 20),
+        _ => const Icon(MdiIcons.circleMedium, size: 20),
       };
 
   void action({

@@ -80,7 +80,7 @@ class _SettingPageState extends State<SettingPage> {
       subtitle: '震动、搜索、收藏、ai、评论、动态、代理、更新检查等',
       icon: Icons.extension_outlined,
     ),
-    _SettingsModel(
+    const _SettingsModel(
       name: 'webdavSetting',
       title: 'WebDAV 设置',
       icon: MdiIcons.databaseCogOutline,

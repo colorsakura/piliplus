@@ -33,7 +33,7 @@ class VideoCustomActions {
         VideoCustomAction(
           videoItem.bvid!,
           'copy',
-          Stack(
+          const Stack(
             clipBehavior: Clip.none,
             children: [
               Icon(MdiIcons.identifier, size: 16),
@@ -47,7 +47,7 @@ class VideoCustomActions {
         VideoCustomAction(
           '稍后再看',
           'pause',
-          Icon(MdiIcons.clockTimeEightOutline, size: 16),
+          const Icon(MdiIcons.clockTimeEightOutline, size: 16),
           () async {
             var res = await UserHttp.toViewLater(bvid: videoItem.bvid);
             SmartDialog.showToast(res['msg']);
@@ -58,7 +58,7 @@ class VideoCustomActions {
         VideoCustomAction(
           '访问：${videoItem.owner.name}',
           'visit',
-          Icon(MdiIcons.accountCircleOutline, size: 16),
+          const Icon(MdiIcons.accountCircleOutline, size: 16),
           () {
             Get.toNamed('/member?mid=${videoItem.owner.mid}', arguments: {
               'heroTag': '${videoItem.owner.mid}',
@@ -69,7 +69,7 @@ class VideoCustomActions {
         VideoCustomAction(
           '不感兴趣',
           'dislike',
-          Icon(MdiIcons.thumbDownOutline, size: 16),
+          const Icon(MdiIcons.thumbDownOutline, size: 16),
           () {
             String? accessKey = Accounts.get(AccountType.recommend).accessKey;
             if (accessKey == null || accessKey == "") {
@@ -233,7 +233,7 @@ class VideoCustomActions {
         VideoCustomAction(
           '拉黑：${videoItem.owner.name}',
           'block',
-          Icon(MdiIcons.cancel, size: 16),
+          const Icon(MdiIcons.cancel, size: 16),
           () {
             showDialog(
               context: context,
@@ -274,12 +274,9 @@ class VideoCustomActions {
       VideoCustomAction(
         "${MineController.anonymity.value ? '退出' : '进入'}无痕模式",
         'anonymity',
-        Icon(
-          MineController.anonymity.value
-              ? MdiIcons.incognitoOff
-              : MdiIcons.incognito,
-          size: 16,
-        ),
+        MineController.anonymity.value
+            ? const Icon(MdiIcons.incognitoOff, size: 16)
+            : const Icon(MdiIcons.incognito, size: 16),
         () => MineController.onChangeAnonymity(context),
       )
     ];

@@ -212,7 +212,7 @@ List<SettingsModel> get styleSettings => [
       SettingsModel(
         settingsType: SettingsType.sw1tch,
         title: '优化平板导航栏',
-        leading: Icon(MdiIcons.soundbar),
+        leading: const Icon(MdiIcons.soundbar),
         setKey: SettingBoxKey.optTabletNav,
         defaultVal: true,
         needReboot: true,
@@ -383,7 +383,7 @@ List<SettingsModel> get styleSettings => [
           }
         },
         title: '消息未读标记',
-        leading: Icon(MdiIcons.bellBadgeOutline),
+        leading: const Icon(MdiIcons.bellBadgeOutline),
         getSubtitle: () => '当前标记样式：${GStorage.msgBadgeMode.description}',
       ),
       SettingsModel(
@@ -412,7 +412,7 @@ List<SettingsModel> get styleSettings => [
           }
         },
         title: '消息未读类型',
-        leading: Icon(MdiIcons.bellCogOutline),
+        leading: const Icon(MdiIcons.bellCogOutline),
         getSubtitle: () =>
             '当前消息类型：${GStorage.msgUnReadTypeV2.map((item) => item.title).join('、')}',
       ),
@@ -778,14 +778,14 @@ List<SettingsModel> get playSettings => [
       SettingsModel(
         settingsType: SettingsType.sw1tch,
         title: '左右侧滑动调节亮度/音量',
-        leading: Icon(MdiIcons.tuneVerticalVariant),
+        leading: const Icon(MdiIcons.tuneVerticalVariant),
         setKey: SettingBoxKey.enableSlideVolumeBrightness,
         defaultVal: true,
       ),
       SettingsModel(
         settingsType: SettingsType.sw1tch,
         title: '中间滑动进入/退出全屏',
-        leading: Icon(MdiIcons.panVertical),
+        leading: const Icon(MdiIcons.panVertical),
         setKey: SettingBoxKey.enableSlideFS,
         defaultVal: true,
       ),
@@ -1029,7 +1029,7 @@ List<SettingsModel> get videoSettings => [
       SettingsModel(
         settingsType: SettingsType.normal,
         title: 'CDN 设置',
-        leading: Icon(MdiIcons.cloudPlusOutline),
+        leading: const Icon(MdiIcons.cloudPlusOutline),
         getSubtitle: () =>
             '当前使用：${CDNService.fromCode(GStorage.defaultCDNService).description}，部分 CDN 可能失效，如无法播放请尝试切换',
         onTap: (setState) async {
@@ -1057,7 +1057,7 @@ List<SettingsModel> get videoSettings => [
         settingsType: SettingsType.sw1tch,
         title: '音频不跟随 CDN 设置',
         subtitle: '直接采用备用 URL，可解决部分视频无声',
-        leading: Icon(MdiIcons.musicNotePlus),
+        leading: const Icon(MdiIcons.musicNotePlus),
         setKey: SettingBoxKey.disableAudioCDN,
         defaultVal: true,
       ),
@@ -1585,7 +1585,7 @@ List<SettingsModel> get extraSettings => [
         title: '显示视频分段信息',
         leading: Transform.rotate(
           angle: pi / 2,
-          child: Icon(MdiIcons.viewHeadline),
+          child: const Icon(MdiIcons.viewHeadline),
         ),
         setKey: SettingBoxKey.showViewPoints,
         defaultVal: true,
@@ -1593,21 +1593,21 @@ List<SettingsModel> get extraSettings => [
       SettingsModel(
         settingsType: SettingsType.sw1tch,
         title: '视频页显示相关视频',
-        leading: Icon(MdiIcons.motionPlayOutline),
+        leading: const Icon(MdiIcons.motionPlayOutline),
         setKey: SettingBoxKey.showRelatedVideo,
         defaultVal: true,
       ),
       SettingsModel(
         settingsType: SettingsType.sw1tch,
         title: '显示视频评论',
-        leading: Icon(MdiIcons.commentTextOutline),
+        leading: const Icon(MdiIcons.commentTextOutline),
         setKey: SettingBoxKey.showVideoReply,
         defaultVal: true,
       ),
       SettingsModel(
         settingsType: SettingsType.sw1tch,
         title: '显示番剧评论',
-        leading: Icon(MdiIcons.commentTextOutline),
+        leading: const Icon(MdiIcons.commentTextOutline),
         setKey: SettingBoxKey.showBangumiReply,
         defaultVal: true,
       ),
@@ -1768,7 +1768,7 @@ List<SettingsModel> get extraSettings => [
         settingsType: SettingsType.sw1tch,
         title: '分P/合集：倒序播放从首集开始播放',
         subtitle: '开启则自动切换为倒序首集，否则保持当前集',
-        leading: Icon(MdiIcons.sort),
+        leading: const Icon(MdiIcons.sort),
         setKey: SettingBoxKey.reverseFromFirst,
         defaultVal: true,
       ),
@@ -1878,14 +1878,14 @@ List<SettingsModel> get extraSettings => [
       SettingsModel(
         settingsType: SettingsType.sw1tch,
         title: '显示会员彩色弹幕',
-        leading: Icon(MdiIcons.gradientHorizontal),
+        leading: const Icon(MdiIcons.gradientHorizontal),
         setKey: SettingBoxKey.showVipDanmaku,
         defaultVal: true,
       ),
       SettingsModel(
         settingsType: SettingsType.sw1tch,
         title: '显示高级弹幕',
-        leading: Icon(MdiIcons.paletteAdvanced),
+        leading: const Icon(MdiIcons.paletteAdvanced),
         setKey: SettingBoxKey.showSpecialDanmaku,
         defaultVal: false,
       ),
@@ -2049,7 +2049,7 @@ List<SettingsModel> get extraSettings => [
       SettingsModel(
         settingsType: SettingsType.sw1tch,
         title: '展示头像/评论/动态装饰',
-        leading: Icon(MdiIcons.stickerCircleOutline),
+        leading: const Icon(MdiIcons.stickerCircleOutline),
         setKey: SettingBoxKey.showDynDecorate,
         defaultVal: true,
         onChanged: (value) => PendantAvatar.showDynDecorate = value,
@@ -2165,7 +2165,7 @@ List<SettingsModel> get extraSettings => [
       SettingsModel(
         settingsType: SettingsType.sw1tch,
         title: '全屏展示点赞/投币/收藏等操作按钮',
-        leading: Icon(MdiIcons.dotsHorizontalCircleOutline),
+        leading: const Icon(MdiIcons.dotsHorizontalCircleOutline),
         setKey: SettingBoxKey.showFSActionItem,
         defaultVal: true,
       ),
@@ -2186,14 +2186,14 @@ List<SettingsModel> get extraSettings => [
       SettingsModel(
         settingsType: SettingsType.sw1tch,
         title: '启用拖拽字幕调整底部边距',
-        leading: Icon(MdiIcons.dragVariant),
+        leading: const Icon(MdiIcons.dragVariant),
         setKey: SettingBoxKey.enableDragSubtitle,
         defaultVal: false,
       ),
       SettingsModel(
         settingsType: SettingsType.sw1tch,
         title: '展示追番时间表',
-        leading: Icon(MdiIcons.chartTimelineVariantShimmer),
+        leading: const Icon(MdiIcons.chartTimelineVariantShimmer),
         setKey: SettingBoxKey.showPgcTimeline,
         defaultVal: true,
         needReboot: true,

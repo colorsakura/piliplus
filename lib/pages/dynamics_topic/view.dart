@@ -271,7 +271,7 @@ class _DynTopicPageState extends State<DynTopicPage> {
                 Utils.shareText(
                     '${_controller.topicName} https://m.bilibili.com/topic-detail?topic_id=${_controller.topicId}');
               },
-              icon: Icon(MdiIcons.share),
+              icon: const Icon(MdiIcons.share),
             ),
             PopupMenuButton(
               itemBuilder: (context) {

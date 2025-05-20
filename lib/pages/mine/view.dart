@@ -45,12 +45,9 @@ class _MinePageState extends State<MinePage> {
                 MineController.onChangeAnonymity(context);
                 setState(() {});
               },
-              icon: Icon(
-                MineController.anonymity.value
-                    ? MdiIcons.incognito
-                    : MdiIcons.incognitoOff,
-                size: 24,
-              ),
+              icon: MineController.anonymity.value
+                  ? const Icon(MdiIcons.incognito, size: 24)
+                  : const Icon(MdiIcons.incognitoOff, size: 24),
             ),
             Obx(
               () {
@@ -62,10 +59,7 @@ class _MinePageState extends State<MinePage> {
                   ),
                   tooltip: '切换至${_mineController.nextThemeType.description}主题',
                   onPressed: _mineController.onChangeTheme,
-                  icon: Icon(
-                    _mineController.themeType.value.iconData,
-                    size: 24,
-                  ),
+                  icon: _mineController.themeType.value.icon,
                 );
               },
             ),
@@ -80,10 +74,7 @@ class _MinePageState extends State<MinePage> {
                 Get.back(),
                 Get.toNamed('/setting', preventDuplicates: false),
               },
-              icon: Icon(
-                MdiIcons.cogs,
-                size: 24,
-              ),
+              icon: const Icon(MdiIcons.cogs, size: 24),
             ),
             const SizedBox(width: 10),
           ],

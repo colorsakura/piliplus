@@ -18,9 +18,9 @@ extension ThemeTypeExt on ThemeType {
         ThemeType.system => ThemeMode.system,
       };
 
-  IconData get iconData => switch (this) {
-        ThemeType.light => MdiIcons.weatherSunny,
-        ThemeType.dark => MdiIcons.weatherNight,
-        ThemeType.system => MdiIcons.themeLightDark,
+  Icon get icon => switch (this) {
+        ThemeType.light => const Icon(MdiIcons.weatherSunny, size: 24),
+        ThemeType.dark => const Icon(MdiIcons.weatherNight, size: 24),
+        ThemeType.system => const Icon(MdiIcons.themeLightDark, size: 24),
       };
 }

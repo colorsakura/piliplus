@@ -52,13 +52,17 @@ class LiveHeaderControl extends StatelessWidget implements PreferredSizeWidget {
           Obx(
             () => IconButton(
               onPressed: plPlayerController.setOnlyPlayAudio,
-              icon: Icon(
-                size: 18,
-                plPlayerController.onlyPlayAudio.value
-                    ? MdiIcons.musicCircle
-                    : MdiIcons.musicCircleOutline,
-                color: Colors.white,
-              ),
+              icon: plPlayerController.onlyPlayAudio.value
+                  ? const Icon(
+                      size: 18,
+                      MdiIcons.musicCircle,
+                      color: Colors.white,
+                    )
+                  : const Icon(
+                      size: 18,
+                      MdiIcons.musicCircleOutline,
+                      color: Colors.white,
+                    ),
             ),
           ),
           const SizedBox(width: 10),

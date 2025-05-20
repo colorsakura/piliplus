@@ -3,27 +3,25 @@
 import 'package:flutter/widgets.dart';
 
 class CustomIcon {
-  static const _kFontFam = 'custom_icon';
+  static const IconData coin = _CustomIconData(0xe800);
+  static const IconData dm_off = _CustomIconData(0xe801);
+  static const IconData dm_on = _CustomIconData(0xe802);
+  static const IconData dm_settings = _CustomIconData(0xe803);
+  static const IconData dyn = _CustomIconData(0xe804);
+  static const IconData fav = _CustomIconData(0xe805);
+  static const IconData share = _CustomIconData(0xe806);
+  static const IconData share_line = _CustomIconData(0xe807);
+  static const IconData share_node = _CustomIconData(0xe808);
+  static const IconData star_favorite_line = _CustomIconData(0xe809);
+  static const IconData thumbs_down = _CustomIconData(0xe80a);
+  static const IconData thumbs_down_outline = _CustomIconData(0xe80b);
+  static const IconData thumbs_up = _CustomIconData(0xe80c);
+  static const IconData thumbs_up_line = _CustomIconData(0xe80d);
+  static const IconData thumbs_up_outline = _CustomIconData(0xe80e);
+  static const IconData topic_tag = _CustomIconData(0xe80f);
+  static const IconData watch_later = _CustomIconData(0xe810);
+}
 
-  static const IconData coin = IconData(0xe800, fontFamily: _kFontFam);
-  static const IconData dm_off = IconData(0xe801, fontFamily: _kFontFam);
-  static const IconData dm_on = IconData(0xe802, fontFamily: _kFontFam);
-  static const IconData dm_settings = IconData(0xe803, fontFamily: _kFontFam);
-  static const IconData dyn = IconData(0xe804, fontFamily: _kFontFam);
-  static const IconData fav = IconData(0xe805, fontFamily: _kFontFam);
-  static const IconData share = IconData(0xe806, fontFamily: _kFontFam);
-  static const IconData share_line = IconData(0xe807, fontFamily: _kFontFam);
-  static const IconData share_node = IconData(0xe808, fontFamily: _kFontFam);
-  static const IconData star_favorite_line =
-      IconData(0xe809, fontFamily: _kFontFam);
-  static const IconData thumbs_down = IconData(0xe80a, fontFamily: _kFontFam);
-  static const IconData thumbs_down_outline =
-      IconData(0xe80b, fontFamily: _kFontFam);
-  static const IconData thumbs_up = IconData(0xe80c, fontFamily: _kFontFam);
-  static const IconData thumbs_up_line =
-      IconData(0xe80d, fontFamily: _kFontFam);
-  static const IconData thumbs_up_outline =
-      IconData(0xe80e, fontFamily: _kFontFam);
-  static const IconData topic_tag = IconData(0xe80f, fontFamily: _kFontFam);
-  static const IconData watch_later = IconData(0xe810, fontFamily: _kFontFam);
+class _CustomIconData extends IconData {
+  const _CustomIconData(super.codePoint) : super(fontFamily: 'custom_icon');
 }

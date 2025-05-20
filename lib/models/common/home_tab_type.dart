@@ -76,7 +76,7 @@ List get homeTabsConfig => [
         'page': const BangumiPage(tabType: HomeTabType.bangumi),
       },
       {
-        'icon': Icon(
+        'icon': const Icon(
           MdiIcons.theater,
           size: 15,
         ),

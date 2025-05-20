@@ -109,9 +109,7 @@ class MineController extends GetxController {
                 children: <Widget>[
                   Row(
                     children: <Widget>[
-                      Icon(
-                        MdiIcons.incognito,
-                      ),
+                      const Icon(MdiIcons.incognito),
                       const SizedBox(width: 10),
                       Text('已进入无痕模式', style: theme.textTheme.titleMedium)
                     ],
@@ -183,9 +181,7 @@ class MineController extends GetxController {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Icon(
-                    MdiIcons.incognitoOff,
-                  ),
+                  const Icon(MdiIcons.incognitoOff),
                   const SizedBox(width: 10),
                   Text('已退出无痕模式', style: theme.textTheme.titleMedium),
                 ],

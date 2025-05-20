@@ -215,7 +215,7 @@ class OpusContent extends StatelessWidget {
                     children: element.list!.items?.indexed.map((entry) {
                       return TextSpan(
                         children: [
-                          WidgetSpan(
+                          const WidgetSpan(
                             child: Icon(MdiIcons.circleMedium),
                             alignment: PlaceholderAlignment.middle,
                           ),

@@ -450,7 +450,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                 child: ComBtn(
                   icon: Transform.rotate(
                     angle: pi / 2,
-                    child: Icon(
+                    child: const Icon(
                       MdiIcons.viewHeadline,
                       semanticLabel: '分段信息',
                       size: 22,

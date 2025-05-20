@@ -251,7 +251,7 @@ class HeaderControlState extends State<HeaderControl> {
                 ListTile(
                   dense: true,
                   title: const Text('CDN 设置', style: titleStyle),
-                  leading: Icon(MdiIcons.cloudPlusOutline, size: 20),
+                  leading: const Icon(MdiIcons.cloudPlusOutline, size: 20),
                   subtitle: Text(
                     '当前：${CDNService.fromCode(defaultCDNService).description}，无法播放请切换',
                     style: subTitleStyle,
@@ -2068,7 +2068,7 @@ class HeaderControlState extends State<HeaderControl> {
                             ),
                             onPressed: () =>
                                 videoDetailCtr.showSBDetail(context),
-                            icon: Icon(
+                            icon: const Icon(
                               MdiIcons.advertisements,
                               size: 19,
                               color: Colors.white,

@@ -1155,11 +1155,12 @@ packages:
   material_design_icons_flutter:
     dependency: "direct main"
     description:
-      name: material_design_icons_flutter
-      sha256: "6f986b7a51f3ad4c00e33c5c84e8de1bdd140489bbcdc8b66fc1283dad4dea5a"
-      url: "https://pub.dev"
-    source: hosted
-    version: "7.0.7296"
+      path: "."
+      ref: const
+      resolved-ref: c11f18c031f1045900dc3e817f7519eb863c2550
+      url: "https://github.com/bggRGjQaUbCoE/material_design_icons_flutter.git"
+    source: git
+    version: "7.0.7447"
   media_kit:
     dependency: "direct main"
     description:
