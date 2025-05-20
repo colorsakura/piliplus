@@ -486,6 +486,7 @@ class PageUtils {
         }
         break;
 
+      // case 'DYNAMIC_TYPE_COURSES_SEASON':
       // 纯文字动态查看
       // case 'DYNAMIC_TYPE_WORD':
       // # 装扮/剧集点评/普通分享
@@ -495,13 +496,18 @@ class PageUtils {
       // 图文动态查看
       // case 'DYNAMIC_TYPE_DRAW':
       default:
-        toDupNamed(
-          '/dynamicDetail',
-          arguments: {
-            'item': item,
-            'floor': floor,
-          },
-        );
+        if (item.basic?.commentIdStr?.isNotEmpty == true) {
+          toDupNamed(
+            '/dynamicDetail',
+            arguments: {
+              'item': item,
+              'floor': floor,
+            },
+          );
+        } else {
+          pushDynFromId(id: item.idStr);
+        }
+
         break;
     }
   }
