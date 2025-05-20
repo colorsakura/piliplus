@@ -320,16 +320,16 @@ Widget forWard(
       );
     // 课堂
     case 'DYNAMIC_TYPE_COURSES_SEASON':
-      return Row(
-        children: [
-          Expanded(
-            child: Text(
-              "课堂💪：${item.modules.moduleDynamic!.major!.courses!['title']}",
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-            ),
-          )
-        ],
+      return SizedBox(
+        width: double.infinity,
+        child: Padding(
+          padding: floor == 1
+              ? const EdgeInsets.symmetric(horizontal: 12)
+              : EdgeInsets.zero,
+          child: Text(
+            "课堂：${item.modules.moduleDynamic!.major!.courses!['title']}",
+          ),
+        ),
       );
     // 活动
     case 'DYNAMIC_TYPE_COMMON_SQUARE':

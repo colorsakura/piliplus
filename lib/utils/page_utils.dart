@@ -284,8 +284,6 @@ class PageUtils {
           '/dynamicDetail',
           arguments: {
             'item': res['data'],
-            'floor': 1,
-            'action': 'detail',
           },
           off: off,
         );
@@ -350,16 +348,25 @@ class PageUtils {
       {action = 'all'}) async {
     feedBack();
 
+    void push() {
+      var commentType = item.basic?.commentType;
+      if (commentType != null &&
+          commentType != 0 &&
+          item.basic?.commentIdStr?.isNotEmpty == true) {
+        toDupNamed(
+          '/dynamicDetail',
+          arguments: {
+            'item': item,
+          },
+        );
+      } else {
+        pushDynFromId(id: item.idStr);
+      }
+    }
+
     /// 点击评论action 直接查看评论
     if (action == 'comment') {
-      toDupNamed(
-        '/dynamicDetail',
-        arguments: {
-          'item': item,
-          'floor': floor,
-          'action': action,
-        },
-      );
+      push();
       return;
     }
 
@@ -496,18 +503,7 @@ class PageUtils {
       // 图文动态查看
       // case 'DYNAMIC_TYPE_DRAW':
       default:
-        if (item.basic?.commentIdStr?.isNotEmpty == true) {
-          toDupNamed(
-            '/dynamicDetail',
-            arguments: {
-              'item': item,
-              'floor': floor,
-            },
-          );
-        } else {
-          pushDynFromId(id: item.idStr);
-        }
-
+        push();
         break;
     }
   }
