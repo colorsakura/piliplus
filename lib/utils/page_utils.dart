@@ -349,18 +349,21 @@ class PageUtils {
     feedBack();
 
     void push() {
-      var commentType = item.basic?.commentType;
-      if (commentType != null &&
-          commentType != 0 &&
-          item.basic?.commentIdStr?.isNotEmpty == true) {
+      if (item.basic?.commentType == 12) {
+        toDupNamed(
+          '/articlePage',
+          parameters: {
+            'id': item.idStr,
+            'type': 'opus',
+          },
+        );
+      } else {
         toDupNamed(
           '/dynamicDetail',
           arguments: {
             'item': item,
           },
         );
-      } else {
-        pushDynFromId(id: item.idStr);
       }
     }
 
@@ -370,7 +373,7 @@ class PageUtils {
       return;
     }
 
-    debugPrint('pushDynDetail: ${item.type}');
+    // debugPrint('pushDynDetail: ${item.type}');
 
     switch (item.type) {
       case 'DYNAMIC_TYPE_AV':
