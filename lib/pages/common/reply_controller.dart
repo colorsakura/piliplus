@@ -4,7 +4,6 @@ import 'package:PiliPlus/grpc/bilibili/pagination.pb.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/http/reply.dart';
 import 'package:PiliPlus/models/common/reply/reply_sort_type.dart';
-import 'package:PiliPlus/models/common/reply/reply_type.dart';
 import 'package:PiliPlus/pages/common/common_list_controller.dart';
 import 'package:PiliPlus/pages/video/reply_new/view.dart';
 import 'package:PiliPlus/utils/feed_back.dart';
@@ -111,11 +110,12 @@ abstract class ReplyController<R> extends CommonListController<R, ReplyInfo> {
 
   void onReply(
     BuildContext context, {
-    dynamic oid,
-    dynamic replyItem,
+    int? oid,
+    ReplyInfo? replyItem,
     int index = 0,
-    ReplyType? replyType,
+    int? replyType,
   }) {
+    assert(replyItem != null || (oid != null && replyType != null));
     String? hint;
     try {
       if (loadingState.value is Success) {
@@ -128,18 +128,16 @@ abstract class ReplyController<R> extends CommonListController<R, ReplyInfo> {
         }
       }
     } catch (_) {}
-    dynamic key = oid ?? replyItem.oid + replyItem.id;
+    dynamic key = oid ?? replyItem!.oid + replyItem.id;
     Navigator.of(context)
         .push(
       GetDialogRoute(
         pageBuilder: (buildContext, animation, secondaryAnimation) {
           return ReplyPage(
-            oid: oid ?? replyItem.oid.toInt(),
-            root: oid != null ? 0 : replyItem.id.toInt(),
-            parent: oid != null ? 0 : replyItem.id.toInt(),
-            replyType: replyItem != null
-                ? ReplyType.values[replyItem.type.toInt()]
-                : replyType,
+            oid: oid ?? replyItem!.oid.toInt(),
+            root: oid != null ? 0 : replyItem!.id.toInt(),
+            parent: oid != null ? 0 : replyItem!.id.toInt(),
+            replyType: replyItem?.type.toInt() ?? replyType!,
             replyItem: replyItem,
             initialValue: savedReplies[key],
             onSave: (reply) {

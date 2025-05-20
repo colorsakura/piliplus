@@ -6,7 +6,6 @@ import 'package:PiliPlus/grpc/bilibili/main/community/reply/v1.pb.dart'
     show ReplyInfo;
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/common/reply/reply_sort_type.dart';
-import 'package:PiliPlus/models/common/reply/reply_type.dart';
 import 'package:PiliPlus/pages/video/reply/controller.dart';
 import 'package:PiliPlus/pages/video/reply/widgets/reply_item_grpc.dart';
 import 'package:PiliPlus/utils/feed_back.dart';
@@ -175,7 +174,7 @@ class _VideoReplyPanelState extends State<VideoReplyPanel>
                   _videoReplyController.onReply(
                     context,
                     oid: _videoReplyController.aid,
-                    replyType: ReplyType.video,
+                    replyType: 1,
                   );
                 },
                 tooltip: '发表评论',
@@ -239,7 +238,7 @@ class _VideoReplyPanelState extends State<VideoReplyPanel>
                         _videoReplyController.onToggleTop(
                       index,
                       _videoReplyController.aid,
-                      ReplyType.video.index,
+                      1,
                       isUpTop,
                       rpid,
                     ),

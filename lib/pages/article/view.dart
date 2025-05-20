@@ -14,7 +14,6 @@ import 'package:PiliPlus/models/common/badge_type.dart';
 import 'package:PiliPlus/models/common/image_preview_type.dart';
 import 'package:PiliPlus/models/common/image_type.dart';
 import 'package:PiliPlus/models/common/reply/reply_sort_type.dart';
-import 'package:PiliPlus/models/common/reply/reply_type.dart';
 import 'package:PiliPlus/models/dynamics/result.dart' show DynamicStat;
 import 'package:PiliPlus/pages/article/controller.dart';
 import 'package:PiliPlus/pages/article/widgets/html_render.dart';
@@ -195,7 +194,7 @@ class _ArticlePageState extends State<ArticlePage>
                 oid: oid,
                 rpid: rpid,
                 source: 'dynamic',
-                replyType: ReplyType.values[_articleCtr.commentType],
+                replyType: _articleCtr.commentType,
                 firstFloor: replyItem,
                 onDispose: onDispose,
               ),
@@ -813,7 +812,7 @@ class _ArticlePageState extends State<ArticlePage>
                       _articleCtr.onReply(
                         context,
                         oid: _articleCtr.commentId,
-                        replyType: ReplyType.values[_articleCtr.commentType],
+                        replyType: _articleCtr.commentType,
                       );
                     },
                     tooltip: '评论动态',

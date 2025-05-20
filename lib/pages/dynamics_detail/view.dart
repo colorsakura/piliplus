@@ -10,7 +10,6 @@ import 'package:PiliPlus/grpc/bilibili/main/community/reply/v1.pb.dart'
 import 'package:PiliPlus/http/constants.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/common/reply/reply_sort_type.dart';
-import 'package:PiliPlus/models/common/reply/reply_type.dart';
 import 'package:PiliPlus/models/dynamics/result.dart';
 import 'package:PiliPlus/pages/dynamics/widgets/author_panel.dart';
 import 'package:PiliPlus/pages/dynamics/widgets/dynamic_panel.dart';
@@ -190,7 +189,7 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
                 oid: oid,
                 rpid: rpid,
                 source: 'dynamic',
-                replyType: ReplyType.values[replyType],
+                replyType: replyType,
                 firstFloor: replyItem,
                 onDispose: onDispose,
               ),
@@ -477,7 +476,7 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
                           _dynamicDetailController.onReply(
                             context,
                             oid: _dynamicDetailController.oid,
-                            replyType: ReplyType.values[replyType],
+                            replyType: replyType,
                           );
                         },
                         tooltip: '评论动态',

@@ -3,7 +3,6 @@ import 'package:PiliPlus/grpc/bilibili/main/community/reply/v1.pb.dart'
 import 'package:PiliPlus/grpc/reply.dart';
 import 'package:PiliPlus/http/dynamics.dart';
 import 'package:PiliPlus/http/loading_state.dart';
-import 'package:PiliPlus/models/common/reply/reply_type.dart';
 import 'package:PiliPlus/models/dynamics/result.dart';
 import 'package:PiliPlus/pages/common/reply_controller.dart';
 import 'package:PiliPlus/utils/id_utils.dart';
@@ -21,8 +20,7 @@ class DynamicDetailController extends ReplyController<MainListReply> {
   late final showDynActionBar = GStorage.showDynActionBar;
 
   @override
-  dynamic get sourceId =>
-      type == ReplyType.video.index ? IdUtils.av2bv(oid) : oid;
+  dynamic get sourceId => type == 1 ? IdUtils.av2bv(oid) : oid;
 
   @override
   void onInit() {

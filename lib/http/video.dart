@@ -8,7 +8,6 @@ import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/http/login.dart';
 import 'package:PiliPlus/models/bangumi/pgc_rank/pgc_rank_item_model.dart';
 import 'package:PiliPlus/models/common/account_type.dart';
-import 'package:PiliPlus/models/common/reply/reply_type.dart';
 import 'package:PiliPlus/models/home/rcmd/result.dart';
 import 'package:PiliPlus/models/member/article.dart';
 import 'package:PiliPlus/models/model_hot_video_item.dart';
@@ -643,7 +642,7 @@ class VideoHttp {
   // message	str	发送评论内容	必要	最大1000字符
   // plat	num	发送平台标识	非必要	1：web端 2：安卓客户端  3：ios客户端  4：wp客户端
   static Future replyAdd({
-    required ReplyType type,
+    required int type,
     required int oid,
     required String message,
     int? root,
@@ -655,7 +654,7 @@ class VideoHttp {
       return {'status': false, 'msg': '请输入评论内容'};
     }
     Map<String, dynamic> data = {
-      'type': type.index,
+      'type': type,
       'oid': oid,
       if (root != null && root != 0) 'root': root,
       if (parent != null && parent != 0) 'parent': parent,

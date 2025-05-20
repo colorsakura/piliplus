@@ -2,7 +2,6 @@ import 'package:PiliPlus/grpc/bilibili/main/community/reply/v1.pb.dart'
     show ReplyInfo, DetailListReply, Mode;
 import 'package:PiliPlus/grpc/reply.dart';
 import 'package:PiliPlus/http/loading_state.dart';
-import 'package:PiliPlus/models/common/reply/reply_type.dart';
 import 'package:PiliPlus/pages/common/reply_controller.dart';
 import 'package:PiliPlus/utils/id_utils.dart';
 import 'package:PiliPlus/utils/storage.dart';
@@ -30,7 +29,7 @@ class VideoReplyReplyController extends ReplyController
   int oid;
   // rpid 请求楼中楼回复
   int rpid;
-  ReplyType replyType; // = ReplyType.video;
+  int replyType; // = ReplyType.video;
 
   ReplyInfo? firstFloor;
 
@@ -40,8 +39,7 @@ class VideoReplyReplyController extends ReplyController
   late final horizontalPreview = GStorage.horizontalPreview;
 
   @override
-  dynamic get sourceId =>
-      replyType == ReplyType.video ? IdUtils.av2bv(oid) : oid;
+  dynamic get sourceId => replyType == 1 ? IdUtils.av2bv(oid) : oid;
 
   @override
   void onInit() {
@@ -108,7 +106,7 @@ class VideoReplyReplyController extends ReplyController
   @override
   Future<LoadingState> customGetData() => isDialogue
       ? ReplyGrpc.dialogList(
-          type: replyType.index,
+          type: replyType,
           oid: oid,
           root: rpid,
           dialog: dialog!,
@@ -116,7 +114,7 @@ class VideoReplyReplyController extends ReplyController
           antiGoodsReply: antiGoodsReply,
         )
       : ReplyGrpc.detailList(
-          type: replyType.index,
+          type: replyType,
           oid: oid,
           root: rpid,
           rpid: id ?? 0,

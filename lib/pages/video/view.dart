@@ -12,7 +12,6 @@ import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/main.dart';
 import 'package:PiliPlus/models/bangumi/info.dart' as bangumi;
 import 'package:PiliPlus/models/common/episode_panel_type.dart';
-import 'package:PiliPlus/models/common/reply/reply_type.dart';
 import 'package:PiliPlus/models/common/search_type.dart';
 import 'package:PiliPlus/models/video_detail_res.dart' as video;
 import 'package:PiliPlus/pages/danmaku/view.dart';
@@ -2060,7 +2059,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
           oid: oid,
           rpid: rpid,
           firstFloor: replyItem,
-          replyType: ReplyType.video,
+          replyType: 1,
           source: 'videoDetail',
           onViewImage: videoDetailController.onViewImage,
           onDismissed: videoDetailController.onDismissed,

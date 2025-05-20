@@ -4,7 +4,6 @@ import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/grpc/bilibili/main/community/reply/v1.pb.dart'
     show ReplyInfo, Mode;
 import 'package:PiliPlus/http/loading_state.dart';
-import 'package:PiliPlus/models/common/reply/reply_type.dart';
 import 'package:PiliPlus/pages/common/common_slide_page.dart';
 import 'package:PiliPlus/pages/video/reply/widgets/reply_item_grpc.dart';
 import 'package:PiliPlus/pages/video/reply_new/view.dart';
@@ -39,7 +38,7 @@ class VideoReplyReplyPanel extends CommonSlidePage {
   final int? dialog;
   final ReplyInfo? firstFloor;
   final String? source;
-  final ReplyType replyType;
+  final int replyType;
   final bool isDialogue;
   final VoidCallback? onViewImage;
   final ValueChanged<int>? onDismissed;
@@ -194,7 +193,7 @@ class _VideoReplyReplyPanelState
                             _videoReplyReplyController.onToggleTop(
                           index,
                           _videoReplyReplyController.oid,
-                          _videoReplyReplyController.replyType.index,
+                          _videoReplyReplyController.replyType,
                           isUpTop,
                           rpid,
                         ),
@@ -457,7 +456,7 @@ class _VideoReplyReplyPanelState
       onToggleTop: (isUpTop, rpid) => _videoReplyReplyController.onToggleTop(
         index,
         _videoReplyReplyController.oid,
-        _videoReplyReplyController.replyType.index,
+        _videoReplyReplyController.replyType,
         isUpTop,
         rpid,
       ),

@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:PiliPlus/http/search.dart';
-import 'package:PiliPlus/models/common/reply/reply_type.dart';
 import 'package:PiliPlus/pages/video/reply_reply/view.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/id_utils.dart';
@@ -114,7 +113,7 @@ class PiliScheme {
                   arguments: {
                     'oid': oid,
                     'rpid': rpid,
-                    'type': ReplyType.video.index,
+                    'type': 1,
                     'id': queryParameters['comment_secondary_id'],
                   },
                   () => Scaffold(
@@ -141,7 +140,7 @@ class PiliScheme {
                         oid: int.parse(oid),
                         rpid: rpid,
                         source: 'routePush',
-                        replyType: ReplyType.video,
+                        replyType: 1,
                         firstFloor: null,
                         id: queryParameters['comment_secondary_id'] != null
                             ? int.tryParse(
@@ -285,7 +284,7 @@ class PiliScheme {
                       rpid: rootId,
                       id: rpId,
                       source: 'routePush',
-                      replyType: ReplyType.values[type],
+                      replyType: type,
                       firstFloor: null,
                     ),
                   ),
@@ -335,7 +334,7 @@ class PiliScheme {
                       oid: oid,
                       rpid: rpId,
                       source: 'routePush',
-                      replyType: ReplyType.values[type],
+                      replyType: type,
                       firstFloor: null,
                     ),
                   ),
@@ -375,7 +374,7 @@ class PiliScheme {
                     arguments: {
                       'oid': oid ?? dynId,
                       'rpid': rpid,
-                      'type': businessId ?? ReplyType.dynamics.index,
+                      'type': businessId ?? 17,
                       'id': queryParameters['comment_secondary_id'],
                     },
                     () => Scaffold(
@@ -400,9 +399,7 @@ class PiliScheme {
                           oid: oid ?? int.parse(dynId),
                           rpid: rpid,
                           source: 'routePush',
-                          replyType: businessId != null
-                              ? ReplyType.values[businessId]
-                              : ReplyType.dynamics,
+                          replyType: businessId ?? 17,
                           firstFloor: null,
                           id: queryParameters['comment_secondary_id'] != null
                               ? int.tryParse(

@@ -1,10 +1,11 @@
 import 'dart:async';
 
 import 'package:PiliPlus/common/widgets/button/toolbar_icon_button.dart';
+import 'package:PiliPlus/grpc/bilibili/main/community/reply/v1.pb.dart'
+    show ReplyInfo;
 import 'package:PiliPlus/http/video.dart';
 import 'package:PiliPlus/main.dart';
 import 'package:PiliPlus/models/common/publish_panel_type.dart';
-import 'package:PiliPlus/models/common/reply/reply_type.dart';
 import 'package:PiliPlus/pages/common/common_publish_page.dart';
 import 'package:PiliPlus/pages/emote/view.dart';
 import 'package:PiliPlus/utils/storage.dart';
@@ -13,11 +14,11 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 
 class ReplyPage extends CommonPublishPage {
-  final int? oid;
-  final int? root;
-  final int? parent;
-  final ReplyType? replyType;
-  final dynamic replyItem;
+  final int oid;
+  final int root;
+  final int parent;
+  final int replyType;
+  final ReplyInfo? replyItem;
   final String? hint;
 
   const ReplyPage({
@@ -25,10 +26,10 @@ class ReplyPage extends CommonPublishPage {
     super.initialValue,
     super.imageLengthLimit,
     super.onSave,
-    this.oid,
-    this.root,
-    this.parent,
-    this.replyType,
+    required this.oid,
+    required this.root,
+    required this.parent,
+    required this.replyType,
     this.replyItem,
     this.hint,
   });
@@ -243,12 +244,12 @@ class _ReplyPageState extends CommonPublishPageState<ReplyPage> {
   Future<void> onCustomPublish(
       {required String message, List? pictures}) async {
     var result = await VideoHttp.replyAdd(
-      type: widget.replyType ?? ReplyType.video,
-      oid: widget.oid!,
-      root: widget.root!,
-      parent: widget.parent!,
-      message: widget.replyItem != null && widget.replyItem.root != 0
-          ? ' 回复 @${widget.replyItem.member.name} : $message'
+      type: widget.replyType,
+      oid: widget.oid,
+      root: widget.root,
+      parent: widget.parent,
+      message: widget.replyItem != null && widget.replyItem!.root != 0
+          ? ' 回复 @${widget.replyItem!.member.name} : $message'
           : message,
       pictures: pictures,
       syncToDynamic: _syncToDynamic.value,
