@@ -362,7 +362,7 @@ class _VideoReplyReplyPanelState
         _videoReplyReplyController.count.value += 1;
         _videoReplyReplyController.loadingState.refresh();
         if (_videoReplyReplyController.enableCommAntifraud && mounted) {
-          _videoReplyReplyController.onCheckReply(context, item);
+          _videoReplyReplyController.onCheckReply(context, replyInfo);
         }
       }
     });

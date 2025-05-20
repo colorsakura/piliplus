@@ -212,10 +212,10 @@ abstract class ReplyController<R> extends CommonListController<R, ReplyInfo> {
     loadingState.refresh();
   }
 
-  void onCheckReply(BuildContext context, ReplyInfo item) {
+  void onCheckReply(BuildContext context, ReplyInfo replyInfo) {
     ReplyUtils.onCheckReply(
       context: context,
-      replyInfo: item,
+      replyInfo: replyInfo,
       biliSendCommAntifraud: _biliSendCommAntifraud,
       sourceId: sourceId,
       isManual: true,
