@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:PiliPlus/common/widgets/button/icon_button.dart';
+import 'package:PiliPlus/common/widgets/custom_icon.dart';
 import 'package:PiliPlus/common/widgets/self_sized_horizontal_list.dart';
 import 'package:PiliPlus/models/common/search_type.dart';
 import 'package:PiliPlus/models/common/super_resolution_type.dart';
@@ -378,10 +379,7 @@ class HeaderControlState extends State<HeaderControl> {
                 ListTile(
                   dense: true,
                   onTap: () => {Get.back(), showSetDanmaku()},
-                  leading: Transform.rotate(
-                    angle: pi,
-                    child: const Icon(Icons.subtitles_outlined, size: 20),
-                  ),
+                  leading: const Icon(CustomIcon.dm_settings, size: 20),
                   title: const Text('弹幕设置', style: titleStyle),
                 ),
                 ListTile(
@@ -413,7 +411,7 @@ class HeaderControlState extends State<HeaderControl> {
                         return AlertDialog(
                           title: const Text('播放信息'),
                           content: SizedBox(
-                            width: double.maxFinite,
+                            width: double.infinity,
                             child: ListView(
                               children: [
                                 ListTile(
@@ -1039,7 +1037,7 @@ class HeaderControlState extends State<HeaderControl> {
             color: theme.colorScheme.surface,
             borderRadius: const BorderRadius.all(Radius.circular(12)),
             child: Padding(
-              padding: const EdgeInsets.only(left: 14, right: 14),
+              padding: const EdgeInsets.symmetric(horizontal: 14),
               child: ListView(
                 padding: EdgeInsets.zero,
                 children: [
@@ -1444,7 +1442,7 @@ class HeaderControlState extends State<HeaderControl> {
             color: theme.colorScheme.surface,
             borderRadius: const BorderRadius.all(Radius.circular(12)),
             child: Padding(
-              padding: const EdgeInsets.only(left: 14, right: 14),
+              padding: const EdgeInsets.symmetric(horizontal: 14),
               child: ListView(
                 padding: EdgeInsets.zero,
                 children: [

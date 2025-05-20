@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:math';
 
+import 'package:PiliPlus/common/widgets/custom_icon.dart';
 import 'package:PiliPlus/common/widgets/pendant_avatar.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart'
     show kDragContainerExtentPercentage, displacement;
@@ -747,7 +748,7 @@ List<SettingsModel> get playSettings => [
         settingsType: SettingsType.sw1tch,
         title: '弹幕开关',
         subtitle: '是否展示弹幕',
-        leading: const Icon(Icons.subtitles_outlined),
+        leading: const Icon(CustomIcon.dm_settings),
         setKey: SettingBoxKey.enableShowDanmaku,
         defaultVal: true,
       ),

@@ -1,6 +1,3 @@
-import 'dart:convert';
-import 'dart:io';
-
 import 'package:PiliPlus/grpc/bilibili/main/community/reply/v1.pb.dart'
     show MainListReply, ReplyInfo, SubjectControl, Mode;
 import 'package:PiliPlus/grpc/bilibili/pagination.pb.dart';
@@ -8,15 +5,12 @@ import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/http/reply.dart';
 import 'package:PiliPlus/models/common/reply/reply_sort_type.dart';
 import 'package:PiliPlus/models/common/reply/reply_type.dart';
-import 'package:PiliPlus/models/video/reply/data.dart';
 import 'package:PiliPlus/pages/common/common_list_controller.dart';
 import 'package:PiliPlus/pages/video/reply_new/view.dart';
-import 'package:PiliPlus/utils/accounts/account.dart';
-import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/feed_back.dart';
+import 'package:PiliPlus/utils/reply_utils.dart';
 import 'package:PiliPlus/utils/request_utils.dart';
 import 'package:PiliPlus/utils/storage.dart';
-import 'package:PiliPlus/utils/utils.dart';
 import 'package:easy_debounce/easy_throttle.dart';
 import 'package:fixnum/fixnum.dart';
 import 'package:flutter/material.dart';
@@ -194,23 +188,12 @@ abstract class ReplyController<R> extends CommonListController<R, ReplyInfo> {
 
           // check reply
           if (enableCommAntifraud && context.mounted) {
-            checkReply(
+            ReplyUtils.onCheckReply(
               context: context,
-              oid: oid ?? replyItem.oid.toInt(),
-              rpid: replyItem?.id.toInt(),
-              replyType: replyItem?.type.toInt() ??
-                  replyType?.index ??
-                  ReplyType.video.index,
-              replyId: replyInfo.id.toInt(),
-              message: replyInfo.content.message,
-              //
-              root: replyInfo.root.toInt(),
-              parent: replyInfo.parent.toInt(),
-              ctime: replyInfo.ctime.toInt(),
-              pictures: replyInfo.content.pictures
-                  .map((item) => item.toProto3Json())
-                  .toList(),
-              mid: replyInfo.mid.toInt(),
+              replyInfo: replyInfo,
+              biliSendCommAntifraud: _biliSendCommAntifraud,
+              sourceId: sourceId,
+              isManual: false,
             );
           }
         }
@@ -229,257 +212,14 @@ abstract class ReplyController<R> extends CommonListController<R, ReplyInfo> {
     loadingState.refresh();
   }
 
-  void onCheckReply(context, item) {
-    try {
-      checkReply(
-        context: context,
-        oid: item.oid.toInt(),
-        rpid: item.hasRoot() ? item.root.toInt() : null,
-        replyType: item.type.toInt(),
-        replyId: item.id.toInt(),
-        message: item.content.message,
-        //
-        root: item.root.toInt(),
-        parent: item.parent.toInt(),
-        ctime: item.ctime.toInt(),
-        pictures:
-            item.content.pictures.map((item) => item.toProto3Json()).toList(),
-        mid: item.mid.toInt(),
-        //
-        isManual: true,
-      );
-    } catch (e) {
-      SmartDialog.showToast(e.toString());
-    }
-  }
-
-  // ref https://github.com/freedom-introvert/biliSendCommAntifraud
-  Future<void> checkReply({
-    required BuildContext context,
-    required int oid,
-    required int? rpid,
-    required int replyType,
-    required int replyId,
-    required String message,
-    dynamic root,
-    dynamic parent,
-    dynamic ctime,
-    List? pictures,
-    dynamic mid,
-    bool isManual = false,
-  }) async {
-    // biliSendCommAntifraud
-    if (Platform.isAndroid && _biliSendCommAntifraud) {
-      try {
-        final String cookieString = Accounts.main.cookieJar
-            .toJson()
-            .entries
-            .map((i) => '${i.key}=${i.value}')
-            .join(';');
-        Utils.channel.invokeMethod(
-          'biliSendCommAntifraud',
-          {
-            'action': 0,
-            'oid': oid,
-            'type': replyType,
-            'rpid': replyId,
-            'root': root,
-            'parent': parent,
-            'ctime': ctime,
-            'comment_text': message,
-            if (pictures?.isNotEmpty == true) 'pictures': jsonEncode(pictures),
-            'source_id': '$sourceId',
-            'uid': mid,
-            'cookies': [cookieString],
-          },
-        );
-      } catch (e) {
-        debugPrint('biliSendCommAntifraud: $e');
-      }
-      return;
-    }
-
-    // CommAntifraud
-    if (isManual.not) {
-      await Future.delayed(const Duration(seconds: 5));
-    }
-    void showReplyCheckResult(String message) {
-      showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          title: const Text('评论检查结果'),
-          content: SelectableText(message),
-        ),
-      );
-    }
-
-    if (context.mounted.not) return;
-    // root reply
-    if (rpid == null) {
-      // no cookie check
-      dynamic res = await ReplyHttp.replyList(
-        isLogin: false,
-        oid: oid,
-        nextOffset: '',
-        type: replyType,
-        sort: ReplySortType.time.index,
-        page: 1,
-        enableFilter: false,
-        antiGoodsReply: false,
-      );
-      if (context.mounted.not) return;
-      if (res is Error) {
-        SmartDialog.showToast('获取评论主列表时发生错误：${res.errMsg}');
-        return;
-      } else if (res is Success) {
-        ReplyData replies = res.response;
-        int index =
-            replies.replies?.indexWhere((item) => item.rpid == replyId) ?? -1;
-        if (index != -1) {
-          // found
-          if (context.mounted) {
-            showReplyCheckResult(
-              '无账号状态下找到了你的评论，评论正常！\n\n你的评论：$message',
-            );
-          }
-        } else {
-          // not found
-          if (context.mounted.not) return;
-          // cookie check
-          final res1 = await ReplyHttp.replyReplyList(
-            isLogin: isLogin,
-            oid: oid,
-            root: rpid ?? replyId,
-            pageNum: 1,
-            type: replyType,
-            filterBanWord: false,
-            antiGoodsReply: false,
-          );
-          if (context.mounted.not) return;
-          if (res1 is Error) {
-            // not found
-            if (context.mounted) {
-              showReplyCheckResult(
-                '无法找到你的评论。\n\n你的评论：$message',
-              );
-            }
-          } else {
-            // found
-            if (context.mounted.not) return;
-            // no cookie check
-            final res2 = await ReplyHttp.replyReplyList(
-              isLogin: false,
-              oid: oid,
-              root: rpid ?? replyId,
-              pageNum: 1,
-              type: replyType,
-              filterBanWord: false,
-              isCheck: true,
-              antiGoodsReply: false,
-            );
-            if (context.mounted.not) return;
-            if (res2 is Error) {
-              // not found
-              if (context.mounted) {
-                showReplyCheckResult(
-                  res2.errMsg?.startsWith('12022') == true
-                      ? '你的评论被shadow ban（仅自己可见）！\n\n你的评论: $message'
-                      : '评论不可见(${res2.errMsg}): $message',
-                );
-              }
-            } else {
-              // found
-              if (context.mounted) {
-                showReplyCheckResult(isManual
-                    ? '无账号状态下找到了你的评论，评论正常！\n\n你的评论：$message'
-                    : '''
-你评论状态有点可疑，虽然无账号翻找评论区获取不到你的评论，但是无账号可通过
-https://api.bilibili.com/x/v2/reply/reply?oid=$oid&pn=1&ps=20&root=${rpid ?? replyId}&type=$replyType
-获取你的评论，疑似评论区被戒严或者这是你的视频。
-
-你的评论：$message''');
-              }
-            }
-          }
-        }
-      }
-    } else {
-      for (int i = 1;; i++) {
-        if (context.mounted.not) return;
-        final res3 = await ReplyHttp.replyReplyList(
-          isLogin: false,
-          oid: oid,
-          root: rpid,
-          pageNum: i,
-          type: replyType,
-          filterBanWord: false,
-          isCheck: true,
-          antiGoodsReply: false,
-        );
-        if (res3 is Error) {
-          break;
-        } else {
-          final data = res3.data;
-          if (data.replies.isNullOrEmpty) {
-            break;
-          }
-          int index =
-              data.replies?.indexWhere((item) => item.rpid == replyId) ?? -1;
-          if (index == -1) {
-            // not found
-          } else {
-            // found
-            if (context.mounted) {
-              showReplyCheckResult(
-                '无账号状态下找到了你的评论，评论正常！\n\n你的评论：$message',
-              );
-            }
-            return;
-          }
-        }
-      }
-
-      for (int i = 1;; i++) {
-        if (context.mounted.not) return;
-        final res4 = await ReplyHttp.replyReplyList(
-          isLogin: true,
-          oid: oid,
-          root: rpid,
-          pageNum: i,
-          type: replyType,
-          filterBanWord: false,
-          isCheck: true,
-          antiGoodsReply: false,
-        );
-        if (res4 is Error) {
-          break;
-        } else {
-          final data = res4.data;
-          if (data.replies.isNullOrEmpty) {
-            break;
-          }
-          int index =
-              data.replies?.indexWhere((item) => item.rpid == replyId) ?? -1;
-          if (index == -1) {
-            // not found
-          } else {
-            // found
-            if (context.mounted) {
-              showReplyCheckResult(
-                '你的评论被shadow ban（仅自己可见）！\n\n你的评论: $message',
-              );
-            }
-            return;
-          }
-        }
-      }
-
-      if (context.mounted) {
-        showReplyCheckResult(
-          '评论不可见: $message',
-        );
-      }
-    }
+  void onCheckReply(BuildContext context, ReplyInfo item) {
+    ReplyUtils.onCheckReply(
+      context: context,
+      replyInfo: item,
+      biliSendCommAntifraud: _biliSendCommAntifraud,
+      sourceId: sourceId,
+      isManual: true,
+    );
   }
 
   Future<void> onToggleTop(index, oid, int type, bool isUpTop, int rpid) async {

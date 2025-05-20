@@ -362,22 +362,7 @@ class _VideoReplyReplyPanelState
         _videoReplyReplyController.count.value += 1;
         _videoReplyReplyController.loadingState.refresh();
         if (_videoReplyReplyController.enableCommAntifraud && mounted) {
-          _videoReplyReplyController.checkReply(
-            context: context,
-            oid: oid,
-            rpid: root,
-            replyType: widget.replyType.index,
-            replyId: replyInfo.id.toInt(),
-            message: replyInfo.content.message,
-            //
-            root: replyInfo.root.toInt(),
-            parent: replyInfo.parent.toInt(),
-            ctime: replyInfo.ctime.toInt(),
-            pictures: replyInfo.content.pictures
-                .map((item) => item.toProto3Json())
-                .toList(),
-            mid: replyInfo.mid.toInt(),
-          );
+          _videoReplyReplyController.onCheckReply(context, item);
         }
       }
     });
