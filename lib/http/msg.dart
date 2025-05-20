@@ -117,12 +117,11 @@ class MsgHttp {
     ReplyOptionType? replyOption,
     int? privatePub,
   }) async {
-    String csrf = Accounts.main.csrf;
     var res = await Request().post(
       Api.createDynamic,
       queryParameters: {
         'platform': 'web',
-        'csrf': csrf,
+        'csrf': Accounts.main.csrf,
         'x-bili-device-req-json': {"platform": "web", "device": "pc"},
         'x-bili-web-req-json': {"spm_id": "333.999"},
       },
