@@ -71,51 +71,51 @@ class AuthorPanel extends StatelessWidget {
       children: [
         Align(
           alignment: Alignment.centerLeft,
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              (item.modules.moduleAuthor!.type == 'AUTHOR_TYPE_PGC' ||
-                      item.modules.moduleAuthor!.type ==
-                          'AUTHOR_TYPE_UGC_SEASON')
-                  ? _buildAvatar() // 番剧
-                  : GestureDetector(
-                      onTap: () {
-                        feedBack();
-                        Get.toNamed(
-                          '/member?mid=${item.modules.moduleAuthor!.mid}',
-                          arguments: {
-                            'face': item.modules.moduleAuthor!.face,
-                          },
-                        );
+          child: GestureDetector(
+            behavior: HitTestBehavior.opaque,
+            onTap: item.modules.moduleAuthor!.type == 'AUTHOR_TYPE_PGC' ||
+                    item.modules.moduleAuthor!.type == 'AUTHOR_TYPE_UGC_SEASON'
+                ? null
+                : () {
+                    feedBack();
+                    Get.toNamed(
+                      '/member?mid=${item.modules.moduleAuthor!.mid}',
+                      arguments: {
+                        'face': item.modules.moduleAuthor!.face,
                       },
-                      child: _buildAvatar(),
-                    ),
-              const SizedBox(width: 10),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    item.modules.moduleAuthor?.name ?? '',
-                    style: TextStyle(
-                      color: item.modules.moduleAuthor!.vip != null &&
-                              item.modules.moduleAuthor!.vip!.status > 0 &&
-                              item.modules.moduleAuthor!.vip!.type == 2
-                          ? context.vipColor
-                          : theme.colorScheme.onSurface,
-                      fontSize: theme.textTheme.titleSmall!.fontSize,
-                    ),
-                  ),
-                  if (pubTime != null)
+                    );
+                  },
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                _buildAvatar(),
+                const SizedBox(width: 10),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
                     Text(
-                      '$pubTime${item.modules.moduleAuthor?.pubAction != null ? ' ${item.modules.moduleAuthor!.pubAction}' : ''}',
+                      item.modules.moduleAuthor?.name ?? '',
                       style: TextStyle(
-                        color: theme.colorScheme.outline,
-                        fontSize: theme.textTheme.labelSmall!.fontSize,
+                        color: item.modules.moduleAuthor!.vip != null &&
+                                item.modules.moduleAuthor!.vip!.status > 0 &&
+                                item.modules.moduleAuthor!.vip!.type == 2
+                            ? context.vipColor
+                            : theme.colorScheme.onSurface,
+                        fontSize: theme.textTheme.titleSmall!.fontSize,
                       ),
                     ),
-                ],
-              ),
-            ],
+                    if (pubTime != null)
+                      Text(
+                        '$pubTime${item.modules.moduleAuthor?.pubAction != null ? ' ${item.modules.moduleAuthor!.pubAction}' : ''}',
+                        style: TextStyle(
+                          color: theme.colorScheme.outline,
+                          fontSize: theme.textTheme.labelSmall!.fontSize,
+                        ),
+                      ),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
         Align(
