@@ -90,10 +90,8 @@ class _FavNoteChildPageState extends State<FavNoteChildPage>
                       ),
                       GestureDetector(
                         behavior: HitTestBehavior.opaque,
-                        onTap: () {
-                          _favNoteController.handleSelect(
-                              !_favNoteController.allSelected.value);
-                        },
+                        onTap: () => _favNoteController.handleSelect(
+                            !_favNoteController.allSelected.value),
                         child: const Padding(
                           padding: EdgeInsets.only(
                             top: 14,
@@ -154,9 +152,7 @@ class _FavNoteChildPageState extends State<FavNoteChildPage>
                   return FavNoteItem(
                     item: response[index],
                     ctr: _favNoteController,
-                    onSelect: () {
-                      _favNoteController.onSelect(index);
-                    },
+                    onSelect: () => _favNoteController.onSelect(index),
                   );
                 },
                 childCount: response!.length,

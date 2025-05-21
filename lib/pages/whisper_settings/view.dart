@@ -41,6 +41,108 @@ class _WhisperSettingsPageState extends State<WhisperSettingsPage> {
     );
   }
 
+  Future<bool> onSet(
+      int key, PbMap<int, Setting> response, Setting item) async {
+    PbMap<int, Setting> settings = PbMap<int, Setting>(
+      response.keyFieldType,
+      response.valueFieldType,
+    )..[key] = item;
+    final res = await _controller.onSet(settings);
+    if (res) {
+      widget.onUpdate?.call(settings);
+    }
+    return res;
+  }
+
+  void onRedirect(
+      ThemeData theme, int key, PbMap<int, Setting> response, Setting item) {
+    if (item.redirect.settingPage.hasParentSettingType()) {
+      Get.to(
+        WhisperSettingsPage(
+          imSettingType: item.redirect.settingPage.parentSettingType,
+          onUpdate: (value) {
+            _controller.loadingState
+              ..value.data[key]?.redirect.settingPage.subSettings.addAll(value)
+              ..refresh();
+          },
+        ),
+        preventDuplicates: false,
+      );
+    } else if (item.redirect.hasWindowSelect()) {
+      String? selected;
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            clipBehavior: Clip.hardEdge,
+            contentPadding: const EdgeInsets.symmetric(vertical: 12),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: item.redirect.windowSelect.item.map(
+                (e) {
+                  if (e.selected) {
+                    selected ??= e.text;
+                  }
+                  return ListTile(
+                    dense: true,
+                    onTap: () async {
+                      if (!e.selected) {
+                        Get.back();
+                        for (var j in item.redirect.windowSelect.item) {
+                          j.selected = false;
+                        }
+                        item.redirect.selectedSummary = e.text;
+                        e.selected = true;
+                        _controller.loadingState.refresh();
+                        PbMap<int, Setting> settings = PbMap<int, Setting>(
+                          response.keyFieldType,
+                          response.valueFieldType,
+                        )..[key] = item;
+                        final res = await _controller.onSet(settings);
+                        if (!res) {
+                          for (var j in item.redirect.windowSelect.item) {
+                            j.selected = j.text == selected;
+                          }
+                          item.redirect.selectedSummary = selected!;
+                          _controller.loadingState.refresh();
+                        }
+                      }
+                    },
+                    title: Text(
+                      e.text,
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: e.selected ? theme.colorScheme.primary : null,
+                      ),
+                    ),
+                  );
+                },
+              ).toList(),
+            ),
+          );
+        },
+      );
+    } else if (item.redirect.otherPage.hasUrl()) {
+      if (item.redirect.title == '黑名单') {
+        Get.toNamed('/blackListPage');
+      } else if (item.redirect.otherPage.url.startsWith('http')) {
+        Get.toNamed('/webview',
+            parameters: {'url': item.redirect.otherPage.url});
+      } else {
+        SmartDialog.showToast(item.redirect.otherPage.url);
+      }
+    } else if (item.redirect.settingPage.hasUrl()) {
+      if (item.redirect.title == '消息屏蔽词') {
+        Get.to(const WhisperBlockPage());
+      } else if (item.redirect.settingPage.url.startsWith('http')) {
+        Get.toNamed('/webview',
+            parameters: {'url': item.redirect.settingPage.url});
+      } else {
+        SmartDialog.showToast(item.redirect.settingPage.url);
+      }
+    }
+  }
+
   Widget _buildBody(
       ThemeData theme, LoadingState<PbMap<int, Setting>> loadingState) {
     return switch (loadingState) {
@@ -57,119 +159,8 @@ class _WhisperSettingsPageState extends State<WhisperSettingsPage> {
               final item = response[key]!;
               return ImSettingsItem(
                 item: item,
-                onSet: () async {
-                  PbMap<int, Setting> settings = PbMap<int, Setting>(
-                    response.keyFieldType,
-                    response.valueFieldType,
-                  )..[key] = item;
-                  final res = await _controller.onSet(settings);
-                  if (res) {
-                    widget.onUpdate?.call(settings);
-                  }
-                  return res;
-                },
-                onRedirect: () {
-                  if (item.redirect.settingPage.hasParentSettingType()) {
-                    Get.to(
-                      WhisperSettingsPage(
-                        imSettingType:
-                            item.redirect.settingPage.parentSettingType,
-                        onUpdate: (value) {
-                          _controller.loadingState
-                            ..value
-                                .data[key]
-                                ?.redirect
-                                .settingPage
-                                .subSettings
-                                .addAll(value)
-                            ..refresh();
-                        },
-                      ),
-                      preventDuplicates: false,
-                    );
-                  } else if (item.redirect.hasWindowSelect()) {
-                    String? selected;
-                    showDialog(
-                      context: context,
-                      builder: (context) {
-                        return AlertDialog(
-                          clipBehavior: Clip.hardEdge,
-                          contentPadding:
-                              const EdgeInsets.symmetric(vertical: 12),
-                          content: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: item.redirect.windowSelect.item.map(
-                              (e) {
-                                if (e.selected) {
-                                  selected ??= e.text;
-                                }
-                                return ListTile(
-                                  dense: true,
-                                  onTap: () async {
-                                    if (!e.selected) {
-                                      Get.back();
-                                      for (var j
-                                          in item.redirect.windowSelect.item) {
-                                        j.selected = false;
-                                      }
-                                      item.redirect.selectedSummary = e.text;
-                                      e.selected = true;
-                                      _controller.loadingState.refresh();
-                                      PbMap<int, Setting> settings =
-                                          PbMap<int, Setting>(
-                                        response.keyFieldType,
-                                        response.valueFieldType,
-                                      )..[key] = item;
-                                      final res =
-                                          await _controller.onSet(settings);
-                                      if (!res) {
-                                        for (var j in item
-                                            .redirect.windowSelect.item) {
-                                          j.selected = j.text == selected;
-                                        }
-                                        item.redirect.selectedSummary =
-                                            selected!;
-                                        _controller.loadingState.refresh();
-                                      }
-                                    }
-                                  },
-                                  title: Text(
-                                    e.text,
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      color: e.selected
-                                          ? theme.colorScheme.primary
-                                          : null,
-                                    ),
-                                  ),
-                                );
-                              },
-                            ).toList(),
-                          ),
-                        );
-                      },
-                    );
-                  } else if (item.redirect.otherPage.hasUrl()) {
-                    if (item.redirect.title == '黑名单') {
-                      Get.toNamed('/blackListPage');
-                    } else if (item.redirect.otherPage.url.startsWith('http')) {
-                      Get.toNamed('/webview',
-                          parameters: {'url': item.redirect.otherPage.url});
-                    } else {
-                      SmartDialog.showToast(item.redirect.otherPage.url);
-                    }
-                  } else if (item.redirect.settingPage.hasUrl()) {
-                    if (item.redirect.title == '消息屏蔽词') {
-                      Get.to(const WhisperBlockPage());
-                    } else if (item.redirect.settingPage.url
-                        .startsWith('http')) {
-                      Get.toNamed('/webview',
-                          parameters: {'url': item.redirect.settingPage.url});
-                    } else {
-                      SmartDialog.showToast(item.redirect.settingPage.url);
-                    }
-                  }
-                },
+                onSet: () => onSet(key, response, item),
+                onRedirect: () => onRedirect(theme, key, response, item),
               );
             },
             separatorBuilder: (context, index) => Divider(

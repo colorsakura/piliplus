@@ -437,21 +437,19 @@ class _VideoInfoState extends State<VideoInfo> {
                                                   child: InkWell(
                                                     customBorder:
                                                         const CircleBorder(),
-                                                    onTap: () {
-                                                      RequestUtils
-                                                          .actionRelationMod(
-                                                        context: context,
-                                                        mid: videoItem['staff']
-                                                                [index]
-                                                            .mid,
-                                                        isFollow: false,
-                                                        callback: (val) {
-                                                          videoIntroController
-                                                                  .staffRelations[
-                                                              '${videoItem['staff'][index].mid}'] = true;
-                                                        },
-                                                      );
-                                                    },
+                                                    onTap: () => RequestUtils
+                                                        .actionRelationMod(
+                                                      context: context,
+                                                      mid: videoItem['staff']
+                                                              [index]
+                                                          .mid,
+                                                      isFollow: false,
+                                                      callback: (val) {
+                                                        videoIntroController
+                                                                .staffRelations[
+                                                            '${videoItem['staff'][index].mid}'] = true;
+                                                      },
+                                                    ),
                                                     child: Ink(
                                                       padding:
                                                           const EdgeInsets.all(
@@ -674,10 +672,8 @@ class _VideoInfoState extends State<VideoInfo> {
                       children: [
                         const SizedBox(height: 8),
                         GestureDetector(
-                          onTap: () {
-                            Utils.copyText(
-                                '${videoIntroController.videoDetail.value.bvid}');
-                          },
+                          onTap: () => Utils.copyText(
+                              '${videoIntroController.videoDetail.value.bvid}'),
                           child: Text(
                             videoIntroController.videoDetail.value.bvid ?? '',
                             style: TextStyle(
@@ -988,9 +984,7 @@ class _VideoInfoState extends State<VideoInfo> {
       const SizedBox(width: 8),
       ActionRowItem(
         icon: const Icon(FontAwesomeIcons.comment),
-        onTap: () {
-          videoDetailCtr.tabCtr.animateTo(1);
-        },
+        onTap: () => videoDetailCtr.tabCtr.animateTo(1),
         selectStatus: false,
         isLoading: widget.isLoading,
         text: !widget.isLoading ? videoDetail.stat!.reply!.toString() : '-',
@@ -1034,9 +1028,7 @@ class _VideoInfoState extends State<VideoInfo> {
                       text: matchStr,
                       style: TextStyle(color: theme.colorScheme.primary),
                       recognizer: TapGestureRecognizer()
-                        ..onTap = () {
-                          PiliScheme.videoPush(aid, null);
-                        },
+                        ..onTap = () => PiliScheme.videoPush(aid, null),
                     ),
                   );
                 } catch (e) {
@@ -1051,9 +1043,7 @@ class _VideoInfoState extends State<VideoInfo> {
                       text: matchStr,
                       style: TextStyle(color: theme.colorScheme.primary),
                       recognizer: TapGestureRecognizer()
-                        ..onTap = () {
-                          PiliScheme.videoPush(null, matchStr);
-                        },
+                        ..onTap = () => PiliScheme.videoPush(null, matchStr),
                     ),
                   );
                 } catch (e) {
@@ -1090,12 +1080,10 @@ class _VideoInfoState extends State<VideoInfo> {
             text: '@${currentDesc.rawText}',
             style: TextStyle(color: colorSchemePrimary),
             recognizer: TapGestureRecognizer()
-              ..onTap = () {
-                Get.toNamed(
-                  '/member?mid=${currentDesc.bizId}',
-                  arguments: {'face': '', 'heroTag': heroTag},
-                );
-              },
+              ..onTap = () => Get.toNamed(
+                    '/member?mid=${currentDesc.bizId}',
+                    arguments: {'face': '', 'heroTag': heroTag},
+                  ),
           );
         default:
           return const TextSpan();

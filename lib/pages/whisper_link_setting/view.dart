@@ -110,9 +110,7 @@ class _WhisperLinkSettingPageState extends State<WhisperLinkSettingPage> {
                   builder: (context) {
                     final ImUserInfosData item = response!.first;
                     return ListTile(
-                      onTap: () {
-                        Get.toNamed('/member?mid=${item.mid}');
-                      },
+                      onTap: () => Get.toNamed('/member?mid=${item.mid}'),
                       leading: PendantAvatar(
                         avatar: item.face,
                         size: 42,

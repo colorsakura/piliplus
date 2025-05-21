@@ -60,7 +60,7 @@ abstract class CommonPublishPageState<T extends CommonPublishPage>
     }
 
     if (widget.autofocus) {
-      Future.delayed(const Duration(milliseconds: 300)).then((_) {
+      Future.delayed(const Duration(milliseconds: 300)).whenComplete(() {
         if (mounted) {
           focusNode.requestFocus();
         }
@@ -319,9 +319,7 @@ abstract class CommonPublishPageState<T extends CommonPublishPage>
           child: iconButton(
             context: context,
             icon: Icons.edit,
-            onPressed: () {
-              onCropImage(index);
-            },
+            onPressed: () => onCropImage(index),
             size: 24,
             iconSize: 14,
             bgColor: color,

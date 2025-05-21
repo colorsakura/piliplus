@@ -116,9 +116,8 @@ class _DanmakuBlockPageState extends State<DanmakuBlockPage> {
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          _showAddDialog(_danmakuBlockController.tabController.index);
-        },
+        onPressed: () =>
+            _showAddDialog(_danmakuBlockController.tabController.index),
         child: const Icon(Icons.add),
       ),
     );
@@ -131,14 +130,16 @@ class _DanmakuBlockPageState extends State<DanmakuBlockPage> {
       padding: const EdgeInsets.only(bottom: 100),
       itemBuilder: (BuildContext context, int listIndex) {
         return ListTile(
-            title: Text(
-              list[listIndex].value,
-              style: Theme.of(context).textTheme.bodyMedium,
-            ),
-            trailing: IconButton(
-                icon: const Icon(Icons.delete),
-                onPressed: () => _danmakuBlockController.danmakuFilterDel(
-                    tabIndex, list[listIndex].key)));
+          title: Text(
+            list[listIndex].value,
+            style: Theme.of(context).textTheme.bodyMedium,
+          ),
+          trailing: IconButton(
+            icon: const Icon(Icons.delete),
+            onPressed: () => _danmakuBlockController.danmakuFilterDel(
+                tabIndex, list[listIndex].key),
+          ),
+        );
       },
     );
   }

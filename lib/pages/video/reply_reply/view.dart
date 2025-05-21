@@ -180,9 +180,7 @@ class _VideoReplyReplyPanelState
                         replyItem: firstFloor!,
                         replyLevel: '2',
                         needDivider: false,
-                        onReply: () {
-                          _onReply(firstFloor!, -1);
-                        },
+                        onReply: () => _onReply(firstFloor!, -1),
                         upMid: _videoReplyReplyController.upMid,
                         onViewImage: widget.onViewImage,
                         onDismissed: widget.onDismissed,
@@ -428,26 +426,22 @@ class _VideoReplyReplyPanelState
     return ReplyItemGrpc(
       replyItem: replyItem,
       replyLevel: widget.isDialogue ? '3' : '2',
-      onReply: () {
-        _onReply(replyItem, index);
-      },
+      onReply: () => _onReply(replyItem, index),
       onDelete: (subIndex) {
         _videoReplyReplyController.onRemove(index, null);
       },
       upMid: _videoReplyReplyController.upMid,
-      showDialogue: () {
-        _key.currentState?.showBottomSheet(
-          backgroundColor: Colors.transparent,
-          (context) => VideoReplyReplyPanel(
-            oid: replyItem.oid.toInt(),
-            rpid: replyItem.root.toInt(),
-            dialog: replyItem.dialog.toInt(),
-            replyType: widget.replyType,
-            source: 'videoDetail',
-            isDialogue: true,
-          ),
-        );
-      },
+      showDialogue: () => _key.currentState?.showBottomSheet(
+        backgroundColor: Colors.transparent,
+        (context) => VideoReplyReplyPanel(
+          oid: replyItem.oid.toInt(),
+          rpid: replyItem.root.toInt(),
+          dialog: replyItem.dialog.toInt(),
+          replyType: widget.replyType,
+          source: 'videoDetail',
+          isDialogue: true,
+        ),
+      ),
       onViewImage: widget.onViewImage,
       onDismissed: widget.onDismissed,
       callback: _getImageCallback,

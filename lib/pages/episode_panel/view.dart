@@ -131,7 +131,7 @@ class _EpisodePanelState extends CommonSlidePageState<EpisodePanel> {
         widget.initialTabIndex,
         duration: const Duration(milliseconds: 200),
       );
-      Future.delayed(const Duration(milliseconds: 300)).then((_) {
+      Future.delayed(const Duration(milliseconds: 300)).whenComplete(() {
         jumpToCurrent();
       });
     } else {
@@ -544,9 +544,7 @@ class _EpisodePanelState extends CommonSlidePageState<EpisodePanel> {
         icon: widget.isReversed == true
             ? MdiIcons.sortDescending
             : MdiIcons.sortAscending,
-        onPressed: () {
-          widget.onReverse?.call();
-        },
+        onPressed: () => widget.onReverse?.call(),
       );
 
   Widget _buildToolbar(ThemeData theme) => Container(
@@ -631,12 +629,10 @@ class _EpisodePanelState extends CommonSlidePageState<EpisodePanel> {
                 icon: !_isReversed[_currentTabIndex.value]
                     ? MdiIcons.sortNumericAscending
                     : MdiIcons.sortNumericDescending,
-                onPressed: () {
-                  setState(() {
-                    _isReversed[_currentTabIndex.value] =
-                        !_isReversed[_currentTabIndex.value];
-                  });
-                },
+                onPressed: () => setState(() {
+                  _isReversed[_currentTabIndex.value] =
+                      !_isReversed[_currentTabIndex.value];
+                }),
               ),
             ),
             if (widget.onClose != null)

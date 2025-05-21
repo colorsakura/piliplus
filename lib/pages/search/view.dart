@@ -43,10 +43,8 @@ class _SearchPageState extends State<SearchPage> {
                 ? IconButton(
                     tooltip: 'UID搜索用户',
                     icon: const Icon(Icons.person_outline, size: 22),
-                    onPressed: () {
-                      Get.toNamed(
-                          '/member?mid=${_searchController.controller.text}');
-                    },
+                    onPressed: () => Get.toNamed(
+                        '/member?mid=${_searchController.controller.text}'),
                   )
                 : const SizedBox.shrink(),
           ),
@@ -167,12 +165,10 @@ class _SearchPageState extends State<SearchPage> {
                             child: SizedBox(
                               height: 34,
                               child: TextButton.icon(
-                                onPressed: () {
-                                  Get.toNamed(
-                                    '/searchTrending',
-                                    parameters: {'tag': _tag},
-                                  );
-                                },
+                                onPressed: () => Get.toNamed(
+                                  '/searchTrending',
+                                  parameters: {'tag': _tag},
+                                ),
                                 label: Text(
                                   '完整榜单',
                                   style: TextStyle(

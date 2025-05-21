@@ -92,9 +92,7 @@ class ReplyItemGrpc extends StatelessWidget {
               return morePanel(
                 context: context,
                 item: replyItem,
-                onDelete: () {
-                  onDelete?.call(null);
-                },
+                onDelete: () => onDelete?.call(null),
                 isSubReply: false,
               );
             },
@@ -454,9 +452,7 @@ class ReplyItemGrpc extends StatelessWidget {
                         return morePanel(
                           context: context,
                           item: replyItem.replies[i],
-                          onDelete: () {
-                            onDelete?.call(i);
-                          },
+                          onDelete: () => onDelete?.call(i),
                           isSubReply: true,
                         );
                       },
@@ -675,9 +671,7 @@ class ReplyItemGrpc extends StatelessWidget {
                 color: theme.colorScheme.primary,
               ),
               recognizer: TapGestureRecognizer()
-                ..onTap = () {
-                  Get.toNamed('/member?mid=$userId');
-                },
+                ..onTap = () => Get.toNamed('/member?mid=$userId'),
             ),
           );
         } else if (_timeRegExp.hasMatch(matchStr)) {
@@ -831,9 +825,7 @@ class ReplyItemGrpc extends StatelessWidget {
                   color: theme.colorScheme.primary,
                 ),
                 recognizer: TapGestureRecognizer()
-                  ..onTap = () {
-                    PageUtils.handleWebview(matchStr);
-                  },
+                  ..onTap = () => PageUtils.handleWebview(matchStr),
               ),
             );
           } else {
@@ -1046,9 +1038,7 @@ class ReplyItemGrpc extends StatelessWidget {
                 ),
                 actions: <Widget>[
                   TextButton(
-                    onPressed: () {
-                      Get.back(result: false);
-                    },
+                    onPressed: () => Get.back(result: false),
                     child: Text(
                       '取消',
                       style: TextStyle(
@@ -1057,9 +1047,7 @@ class ReplyItemGrpc extends StatelessWidget {
                     ),
                   ),
                   TextButton(
-                    onPressed: () {
-                      Get.back(result: true);
-                    },
+                    onPressed: () => Get.back(result: true),
                     child: const Text('确定'),
                   ),
                 ],

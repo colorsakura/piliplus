@@ -68,22 +68,20 @@ class _ActionPanelState extends State<ActionPanel> {
         Expanded(
           flex: 1,
           child: TextButton.icon(
-            onPressed: () {
-              showModalBottomSheet(
-                context: context,
-                isScrollControlled: true,
-                useSafeArea: true,
-                builder: (context) => RepostPanel(
-                  item: widget.item,
-                  callback: () {
-                    int count =
-                        widget.item.modules.moduleStat?.forward?.count ?? 0;
-                    widget.item.modules.moduleStat!.forward!.count = count + 1;
-                    setState(() {});
-                  },
-                ),
-              );
-            },
+            onPressed: () => showModalBottomSheet(
+              context: context,
+              isScrollControlled: true,
+              useSafeArea: true,
+              builder: (context) => RepostPanel(
+                item: widget.item,
+                callback: () {
+                  int count =
+                      widget.item.modules.moduleStat?.forward?.count ?? 0;
+                  widget.item.modules.moduleStat!.forward!.count = count + 1;
+                  setState(() {});
+                },
+              ),
+            ),
             icon: Icon(
               FontAwesomeIcons.shareFromSquare,
               size: 16,

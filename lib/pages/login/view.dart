@@ -112,11 +112,9 @@ class _LoginPageState extends State<LoginPage> {
               style: TextStyle(color: theme.colorScheme.secondaryFixedDim),
             )),
         Obx(() => GestureDetector(
-              onTap: () {
-                // 复制到剪贴板
-                Utils.copyText(_loginPageCtr.codeInfo['data']?['url'] ?? '',
-                    toastText: '已复制到剪贴板，可粘贴至已登录的app私信处发送，然后点击已发送的链接打开');
-              },
+              onTap: () => Utils.copyText(
+                  _loginPageCtr.codeInfo['data']?['url'] ?? '',
+                  toastText: '已复制到剪贴板，可粘贴至已登录的app私信处发送，然后点击已发送的链接打开'),
               child: Padding(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
@@ -252,44 +250,42 @@ class _LoginPageState extends State<LoginPage> {
                             padding: EdgeInsets.fromLTRB(25, 0, 25, 10),
                             child: Text("试试扫码、手机号登录，或选择")),
                         ListTile(
-                            title: const Text(
-                              '找回密码（手机版）',
-                            ),
-                            leading: const Icon(Icons.smartphone_outlined),
-                            subtitle: const Text(
-                              'https://passport.bilibili.com/h5-app/passport/login/findPassword',
-                            ),
-                            dense: false,
-                            onTap: () async {
-                              Get
-                                ..back()
-                                ..toNamed('/webview', parameters: {
-                                  'url':
-                                      'https://passport.bilibili.com/h5-app/passport/login/findPassword',
-                                  'type': 'url',
-                                  'pageTitle': '忘记密码',
-                                });
+                          title: const Text(
+                            '找回密码（手机版）',
+                          ),
+                          leading: const Icon(Icons.smartphone_outlined),
+                          subtitle: const Text(
+                            'https://passport.bilibili.com/h5-app/passport/login/findPassword',
+                          ),
+                          dense: false,
+                          onTap: () => Get
+                            ..back()
+                            ..toNamed('/webview', parameters: {
+                              'url':
+                                  'https://passport.bilibili.com/h5-app/passport/login/findPassword',
+                              'type': 'url',
+                              'pageTitle': '忘记密码',
                             }),
+                        ),
                         ListTile(
-                            title: const Text(
-                              '找回密码（电脑版）',
-                            ),
-                            leading: const Icon(Icons.desktop_windows_outlined),
-                            subtitle: const Text(
-                              'https://passport.bilibili.com/pc/passport/findPassword',
-                            ),
-                            dense: false,
-                            onTap: () {
-                              Get
-                                ..back()
-                                ..toNamed('/webview', parameters: {
-                                  'url':
-                                      'https://passport.bilibili.com/pc/passport/findPassword',
-                                  'type': 'url',
-                                  'pageTitle': '忘记密码',
-                                  'uaType': 'pc'
-                                });
+                          title: const Text(
+                            '找回密码（电脑版）',
+                          ),
+                          leading: const Icon(Icons.desktop_windows_outlined),
+                          subtitle: const Text(
+                            'https://passport.bilibili.com/pc/passport/findPassword',
+                          ),
+                          dense: false,
+                          onTap: () => Get
+                            ..back()
+                            ..toNamed('/webview', parameters: {
+                              'url':
+                                  'https://passport.bilibili.com/pc/passport/findPassword',
+                              'type': 'url',
+                              'pageTitle': '忘记密码',
+                              'uaType': 'pc'
                             }),
+                        ),
                       ],
                     );
                   },
@@ -353,11 +349,9 @@ class _LoginPageState extends State<LoginPage> {
                         .internationalDialingPrefix
                         .map((Map<String, dynamic> item) {
                       return PopupMenuItem<Map<String, dynamic>>(
-                        onTap: () {
-                          setState(() {
-                            _loginPageCtr.selectedCountryCodeId = item;
-                          });
-                        },
+                        onTap: () => setState(() {
+                          _loginPageCtr.selectedCountryCodeId = item;
+                        }),
                         value: item,
                         child: Row(children: [
                           Text(item['cname']),

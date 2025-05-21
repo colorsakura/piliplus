@@ -20,9 +20,7 @@ class SearchPgcItem extends StatelessWidget {
     final ThemeData theme = Theme.of(context);
     const TextStyle style = TextStyle(fontSize: 13);
     return InkWell(
-      onTap: () {
-        PageUtils.viewBangumi(seasonId: item.seasonId);
-      },
+      onTap: () => PageUtils.viewBangumi(seasonId: item.seasonId),
       onLongPress: () => imageSaveDialog(
         title: item.title?.map((item) => item['text']).join() ?? '',
         cover: item.cover,

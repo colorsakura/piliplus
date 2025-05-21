@@ -65,9 +65,7 @@ class _EmotePanelState extends State<EmotePanel>
                               child: InkWell(
                                 borderRadius:
                                     const BorderRadius.all(Radius.circular(8)),
-                                onTap: () {
-                                  widget.onChoose(e.emote![index]);
-                                },
+                                onTap: () => widget.onChoose(e.emote![index]),
                                 child: Padding(
                                   padding: const EdgeInsets.all(6),
                                   child: type == 4
@@ -109,15 +107,13 @@ class _EmotePanelState extends State<EmotePanel>
                             .withValues(alpha: 0.8),
                         bgColor: Colors.transparent,
                         context: context,
-                        onPressed: () {
-                          Get.toNamed(
-                            '/webview',
-                            parameters: {
-                              'url':
-                                  'https://www.bilibili.com/h5/mall/emoji-package/home?navhide=1&native.theme=1&night=${Get.isDarkMode ? 1 : 0}',
-                            },
-                          );
-                        },
+                        onPressed: () => Get.toNamed(
+                          '/webview',
+                          parameters: {
+                            'url':
+                                'https://www.bilibili.com/h5/mall/emoji-package/home?navhide=1&native.theme=1&night=${Get.isDarkMode ? 1 : 0}',
+                          },
+                        ),
                         icon: Icons.settings,
                       ),
                     ),

@@ -447,15 +447,13 @@ class _ArticlePageState extends State<ArticlePage>
                                     final pic = pics[index];
                                     return GestureDetector(
                                       behavior: HitTestBehavior.opaque,
-                                      onTap: () {
-                                        context.imageView(
-                                          imgList: pics
-                                              .map((e) =>
-                                                  SourceModel(url: e.url!))
-                                              .toList(),
-                                          initialPage: index,
-                                        );
-                                      },
+                                      onTap: () => context.imageView(
+                                        imgList: pics
+                                            .map(
+                                                (e) => SourceModel(url: e.url!))
+                                            .toList(),
+                                        initialPage: index,
+                                      ),
                                       child: Hero(
                                         tag: pic.url!,
                                         child: Stack(
@@ -602,13 +600,11 @@ class _ArticlePageState extends State<ArticlePage>
                     replyLevel: '1',
                     replyReply: (replyItem, id) =>
                         replyReply(context, replyItem, id),
-                    onReply: () {
-                      _articleCtr.onReply(
-                        context,
-                        replyItem: response[index],
-                        index: index,
-                      );
-                    },
+                    onReply: () => _articleCtr.onReply(
+                      context,
+                      replyItem: response[index],
+                      index: index,
+                    ),
                     onDelete: (subIndex) =>
                         _articleCtr.onRemove(index, subIndex),
                     upMid: _articleCtr.upMid,
@@ -680,41 +676,39 @@ class _ArticlePageState extends State<ArticlePage>
           if (context.orientation == Orientation.landscape)
             IconButton(
               tooltip: '页面比例调节',
-              onPressed: () {
-                showDialog(
-                  context: context,
-                  builder: (context) => Align(
-                    alignment: Alignment.topRight,
-                    child: Container(
-                      margin: const EdgeInsets.only(
-                        top: 56,
-                        right: 16,
-                      ),
-                      width: context.width / 4,
-                      height: 32,
-                      child: Builder(
-                        builder: (context) => Slider(
-                          min: 1,
-                          max: 100,
-                          value: _ratio.first,
-                          onChanged: (value) {
-                            if (value >= 10 && value <= 90) {
-                              _ratio[0] = value;
-                              _ratio[1] = 100 - value;
-                              GStorage.setting.put(
-                                SettingBoxKey.dynamicDetailRatio,
-                                _ratio,
-                              );
-                              (context as Element).markNeedsBuild();
-                              setState(() {});
-                            }
-                          },
-                        ),
+              onPressed: () => showDialog(
+                context: context,
+                builder: (context) => Align(
+                  alignment: Alignment.topRight,
+                  child: Container(
+                    margin: const EdgeInsets.only(
+                      top: 56,
+                      right: 16,
+                    ),
+                    width: context.width / 4,
+                    height: 32,
+                    child: Builder(
+                      builder: (context) => Slider(
+                        min: 1,
+                        max: 100,
+                        value: _ratio.first,
+                        onChanged: (value) {
+                          if (value >= 10 && value <= 90) {
+                            _ratio[0] = value;
+                            _ratio[1] = 100 - value;
+                            GStorage.setting.put(
+                              SettingBoxKey.dynamicDetailRatio,
+                              _ratio,
+                            );
+                            (context as Element).markNeedsBuild();
+                            setState(() {});
+                          }
+                        },
                       ),
                     ),
                   ),
-                );
-              },
+                ),
+              ),
               icon: Transform.rotate(
                 angle: pi / 2,
                 child: const Icon(Icons.splitscreen, size: 19),
@@ -722,9 +716,7 @@ class _ArticlePageState extends State<ArticlePage>
             ),
           IconButton(
             tooltip: '浏览器打开',
-            onPressed: () {
-              PageUtils.inAppWebview(_articleCtr.url);
-            },
+            onPressed: () => PageUtils.inAppWebview(_articleCtr.url),
             icon: const Icon(Icons.open_in_browser_outlined, size: 19),
           ),
           PopupMenuButton(

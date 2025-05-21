@@ -90,10 +90,9 @@ class LiveRoomChat extends StatelessWidget {
                       size: 20,
                     ),
                     label: const Text('回到底部'),
-                    onPressed: () {
-                      liveRoomController.disableAutoScroll.value = false;
-                      liveRoomController.scrollToBottom();
-                    },
+                    onPressed: () => liveRoomController
+                      ..disableAutoScroll.value = false
+                      ..scrollToBottom(),
                   ),
                 )
               : const SizedBox.shrink(),

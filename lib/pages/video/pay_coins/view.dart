@@ -247,11 +247,7 @@ class _PayCoinsPageState extends State<PayCoinsPage>
                         maintainAnimation: true,
                         maintainState: true,
                         child: GestureDetector(
-                          onTap: _index == 0
-                              ? null
-                              : () {
-                                  _onScroll(0);
-                                },
+                          onTap: _index == 0 ? null : () => _onScroll(0),
                           child: Padding(
                             padding: const EdgeInsets.only(left: 12),
                             child: Image.asset(
@@ -337,11 +333,7 @@ class _PayCoinsPageState extends State<PayCoinsPage>
                         maintainAnimation: true,
                         maintainState: true,
                         child: GestureDetector(
-                          onTap: _index == 1
-                              ? null
-                              : () {
-                                  _onScroll(1);
-                                },
+                          onTap: _index == 1 ? null : () => _onScroll(1),
                           child: Padding(
                             padding: const EdgeInsets.only(right: 12),
                             child: Image.asset(

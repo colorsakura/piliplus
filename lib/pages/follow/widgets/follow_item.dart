@@ -91,14 +91,12 @@ class FollowItem extends StatelessWidget {
           ? SizedBox(
               height: 34,
               child: FilledButton.tonal(
-                onPressed: () {
-                  RequestUtils.actionRelationMod(
-                    context: context,
-                    mid: item.mid,
-                    isFollow: item.attribute != -1,
-                    callback: callback,
-                  );
-                },
+                onPressed: () => RequestUtils.actionRelationMod(
+                  context: context,
+                  mid: item.mid,
+                  isFollow: item.attribute != -1,
+                  callback: callback,
+                ),
                 style: FilledButton.styleFrom(
                   padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
                   foregroundColor:

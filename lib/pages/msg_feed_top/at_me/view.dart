@@ -33,12 +33,10 @@ class _AtMePageState extends State<AtMePage> {
         title: const Text('@我的'),
         actions: [
           IconButton(
-            onPressed: () {
-              Get.to(
-                const WhisperSettingsPage(
-                    imSettingType: IMSettingType.SETTING_TYPE_OLD_AT_ME),
-              );
-            },
+            onPressed: () => Get.to(
+              const WhisperSettingsPage(
+                  imSettingType: IMSettingType.SETTING_TYPE_OLD_AT_ME),
+            ),
             icon: Icon(
               size: 20,
               Icons.settings,
@@ -89,19 +87,13 @@ class _AtMePageState extends State<AtMePage> {
                       PiliScheme.routePushFromUrl(nativeUri);
                     }
                   },
-                  onLongPress: () {
-                    showConfirmDialog(
-                      context: context,
-                      title: '确定删除该通知?',
-                      onConfirm: () {
-                        _atMeController.onRemove(item.id, index);
-                      },
-                    );
-                  },
+                  onLongPress: () => showConfirmDialog(
+                    context: context,
+                    title: '确定删除该通知?',
+                    onConfirm: () => _atMeController.onRemove(item.id, index),
+                  ),
                   leading: GestureDetector(
-                    onTap: () {
-                      Get.toNamed('/member?mid=${item.user?.mid}');
-                    },
+                    onTap: () => Get.toNamed('/member?mid=${item.user?.mid}'),
                     child: NetworkImgLayer(
                       width: 45,
                       height: 45,

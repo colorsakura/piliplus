@@ -106,12 +106,10 @@ class _EditProfilePageState extends State<EditProfilePage> {
                   ),
                 ),
               ),
-              onTap: () {
-                EasyThrottle.throttle(
-                    'imagePicker', const Duration(milliseconds: 500), () {
-                  _pickImg(theme);
-                });
-              },
+              onTap: () => EasyThrottle.throttle(
+                  'imagePicker', const Duration(milliseconds: 500), () {
+                _pickImg(theme);
+              }),
             ),
             divider,
             _item(
@@ -135,46 +133,40 @@ class _EditProfilePageState extends State<EditProfilePage> {
               theme: theme,
               title: '性别',
               text: _sex(response['sex']),
-              onTap: () {
-                showDialog(
-                  context: context,
-                  builder: (context_) => _sexDialog(response['sex']),
-                );
-              },
+              onTap: () => showDialog(
+                context: context,
+                builder: (context_) => _sexDialog(response['sex']),
+              ),
             ),
             divider,
             _item(
               theme: theme,
               title: '出生年月',
               text: response['birthday'],
-              onTap: () {
-                showDatePicker(
-                  context: context,
-                  initialDate: DateTime.parse(response['birthday']),
-                  firstDate: DateTime(1900, 1, 1),
-                  lastDate: DateTime.now(),
-                ).then((date) {
-                  if (date != null) {
-                    _update(
-                      type: ProfileType.birthday,
-                      datum: DateFormat('yyyy-MM-dd').format(date),
-                    );
-                  }
-                });
-              },
+              onTap: () => showDatePicker(
+                context: context,
+                initialDate: DateTime.parse(response['birthday']),
+                firstDate: DateTime(1900, 1, 1),
+                lastDate: DateTime.now(),
+              ).then((date) {
+                if (date != null) {
+                  _update(
+                    type: ProfileType.birthday,
+                    datum: DateFormat('yyyy-MM-dd').format(date),
+                  );
+                }
+              }),
             ),
             divider,
             _item(
               theme: theme,
               title: '个性签名',
               text: response['sign'].isEmpty ? '无' : response['sign'],
-              onTap: () {
-                _editDialog(
-                  type: ProfileType.sign,
-                  title: '个性签名',
-                  text: response['sign'],
-                );
-              },
+              onTap: () => _editDialog(
+                type: ProfileType.sign,
+                title: '个性签名',
+                text: response['sign'],
+              ),
             ),
             divider1,
             _item(
@@ -299,7 +291,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
           ],
         );
       },
-    ).then((_) {
+    ).whenComplete(() {
       _textController.clear();
     });
   }

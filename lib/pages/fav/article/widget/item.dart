@@ -24,15 +24,13 @@ class FavArticleItem extends StatelessWidget {
         clipBehavior: Clip.none,
         children: [
           InkWell(
-            onTap: () {
-              Get.toNamed(
-                '/articlePage',
-                parameters: {
-                  'id': item['opus_id'],
-                  'type': 'opus',
-                },
-              );
-            },
+            onTap: () => Get.toNamed(
+              '/articlePage',
+              parameters: {
+                'id': item['opus_id'],
+                'type': 'opus',
+              },
+            ),
             child: Padding(
               padding: const EdgeInsets.symmetric(
                 horizontal: StyleString.safeSpace,

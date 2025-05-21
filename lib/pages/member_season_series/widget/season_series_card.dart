@@ -17,12 +17,10 @@ class SeasonSeriesCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onLongPress: () {
-        imageSaveDialog(
-          title: item['meta']['name'],
-          cover: item['meta']['cover'],
-        );
-      },
+      onLongPress: () => imageSaveDialog(
+        title: item['meta']['name'],
+        cover: item['meta']['cover'],
+      ),
       onTap: onTap,
       child: Padding(
         padding: const EdgeInsets.symmetric(

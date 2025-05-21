@@ -47,15 +47,13 @@ Widget content(
       children: [
         if (item.modules.moduleDynamic?.topic != null)
           GestureDetector(
-            onTap: () {
-              Get.toNamed(
-                '/dynTopic',
-                parameters: {
-                  'id': item.modules.moduleDynamic!.topic!.id!.toString(),
-                  'name': item.modules.moduleDynamic!.topic!.name!,
-                },
-              );
-            },
+            onTap: () => Get.toNamed(
+              '/dynTopic',
+              parameters: {
+                'id': item.modules.moduleDynamic!.topic!.id!.toString(),
+                'name': item.modules.moduleDynamic!.topic!.name!,
+              },
+            ),
             child: Text.rich(
               TextSpan(
                 children: [

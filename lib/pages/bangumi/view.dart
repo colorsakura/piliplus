@@ -363,12 +363,10 @@ class _BangumiPageState extends CommonPageState<BangumiPage, BangumiController>
             const Spacer(),
             IconButton(
               tooltip: '刷新',
-              onPressed: () {
-                controller
-                  ..followPage = 1
-                  ..followEnd = false
-                  ..queryBangumiFollow();
-              },
+              onPressed: () => controller
+                ..followPage = 1
+                ..followEnd = false
+                ..queryBangumiFollow(),
               icon: const Icon(
                 Icons.refresh,
                 size: 20,
@@ -380,14 +378,12 @@ class _BangumiPageState extends CommonPageState<BangumiPage, BangumiController>
                       padding: const EdgeInsets.symmetric(horizontal: 10),
                       child: GestureDetector(
                         behavior: HitTestBehavior.opaque,
-                        onTap: () {
-                          Get.toNamed(
-                            '/fav',
-                            arguments: widget.tabType == HomeTabType.bangumi
-                                ? FavTabType.bangumi.index
-                                : FavTabType.cinema.index,
-                          );
-                        },
+                        onTap: () => Get.toNamed(
+                          '/fav',
+                          arguments: widget.tabType == HomeTabType.bangumi
+                              ? FavTabType.bangumi.index
+                              : FavTabType.cinema.index,
+                        ),
                         child: Padding(
                           padding: const EdgeInsets.symmetric(vertical: 8),
                           child: Row(

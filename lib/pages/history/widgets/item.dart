@@ -253,14 +253,12 @@ class HistoryItem extends StatelessWidget {
                   if (videoItem.authorMid != null &&
                       videoItem.authorName?.isNotEmpty == true)
                     PopupMenuItem<String>(
-                      onTap: () {
-                        Get.toNamed(
-                          '/member?mid=${videoItem.authorMid}',
-                          arguments: {
-                            'heroTag': '${videoItem.authorMid}',
-                          },
-                        );
-                      },
+                      onTap: () => Get.toNamed(
+                        '/member?mid=${videoItem.authorMid}',
+                        arguments: {
+                          'heroTag': '${videoItem.authorMid}',
+                        },
+                      ),
                       height: 35,
                       child: Row(
                         children: [

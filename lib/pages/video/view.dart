@@ -840,12 +840,11 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                                                               .all(EdgeInsets
                                                                   .zero),
                                                     ),
-                                                    onPressed: () {
-                                                      videoDetailController
-                                                          .headerCtrKey
-                                                          .currentState
-                                                          ?.showSettingSheet();
-                                                    },
+                                                    onPressed: () =>
+                                                        videoDetailController
+                                                            .headerCtrKey
+                                                            .currentState
+                                                            ?.showSettingSheet(),
                                                     icon: Icon(
                                                       Icons.more_vert_outlined,
                                                       size: 19,
@@ -1934,13 +1933,11 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                     showTitle: false,
                     isSupportReverse: videoDetailController.videoType !=
                         SearchType.media_bangumi,
-                    onReverse: () {
-                      onReversePlay(
-                        bvid: videoDetailController.bvid,
-                        aid: IdUtils.bv2av(videoDetailController.bvid),
-                        isSeason: false,
-                      );
-                    },
+                    onReverse: () => onReversePlay(
+                      bvid: videoDetailController.bvid,
+                      aid: IdUtils.bv2av(videoDetailController.bvid),
+                      isSeason: false,
+                    ),
                   ),
                 ),
               ),
@@ -1991,13 +1988,11 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                   showTitle: false,
                   isSupportReverse: videoDetailController.videoType !=
                       SearchType.media_bangumi,
-                  onReverse: () {
-                    onReversePlay(
-                      bvid: videoDetailController.bvid,
-                      aid: IdUtils.bv2av(videoDetailController.bvid),
-                      isSeason: true,
-                    );
-                  },
+                  onReverse: () => onReversePlay(
+                    bvid: videoDetailController.bvid,
+                    aid: IdUtils.bv2av(videoDetailController.bvid),
+                    isSeason: true,
+                  ),
                 ),
               ),
             ),

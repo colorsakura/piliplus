@@ -104,9 +104,7 @@ class _LaterViewChildPageState extends State<LaterViewChildPage>
                         onTap:
                             _laterController.baseCtr.enableMultiSelect.value.not
                                 ? null
-                                : () {
-                                    _laterController.onSelect(index);
-                                  },
+                                : () => _laterController.onSelect(index),
                         onLongPress: () {
                           if (_laterController
                               .baseCtr.enableMultiSelect.value.not) {
@@ -173,13 +171,11 @@ class _LaterViewChildPageState extends State<LaterViewChildPage>
                         child: iconButton(
                           tooltip: '移除',
                           context: context,
-                          onPressed: () {
-                            _laterController.toViewDel(
-                              context,
-                              index,
-                              videoItem.aid,
-                            );
-                          },
+                          onPressed: () => _laterController.toViewDel(
+                            context,
+                            index,
+                            videoItem.aid,
+                          ),
                           icon: Icons.clear,
                           iconColor: theme.colorScheme.outline,
                           bgColor: Colors.transparent,

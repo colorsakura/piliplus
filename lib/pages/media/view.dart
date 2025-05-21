@@ -68,9 +68,7 @@ class _MediaPageState extends CommonPageState<MediaPage, MediaController>
               ),
               trailing: IconButton(
                 tooltip: '设置',
-                onPressed: () {
-                  Get.toNamed('/setting');
-                },
+                onPressed: () => Get.toNamed('/setting'),
                 icon: const Icon(
                   Icons.settings_outlined,
                   size: 20,

@@ -7,7 +7,6 @@ import 'package:PiliPlus/models/bangumi/pgc_index/condition.dart';
 import 'package:PiliPlus/pages/bangumi/widgets/bangumi_card_v_pgc_index.dart';
 import 'package:PiliPlus/pages/pgc_index/controller.dart';
 import 'package:PiliPlus/pages/search/widgets/search_text.dart';
-import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/grid.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -82,10 +81,9 @@ class _PgcIndexPageState extends State<PgcIndexPage>
         }),
       Error(:var errMsg) => scrollErrorWidget(
           errMsg: errMsg,
-          onReload: () {
-            _ctr.conditionState.value = LoadingState.loading();
-            _ctr.getPgcIndexCondition();
-          },
+          onReload: () => _ctr
+            ..conditionState.value = LoadingState.loading()
+            ..getPgcIndexCondition(),
         ),
     };
   }
@@ -175,9 +173,7 @@ class _PgcIndexPageState extends State<PgcIndexPage>
             const SizedBox(height: 8),
             GestureDetector(
               behavior: HitTestBehavior.opaque,
-              onTap: () {
-                _ctr.isExpand.value = _ctr.isExpand.value.not;
-              },
+              onTap: () => _ctr.isExpand.value = !_ctr.isExpand.value,
               child: Container(
                 alignment: Alignment.center,
                 child: Row(

@@ -365,11 +365,9 @@ class _CreateFavPageState extends State<CreateFavPage> {
               const SizedBox(height: 16),
             ],
             ListTile(
-              onTap: () {
-                setState(() {
-                  _isPublic = !_isPublic;
-                });
-              },
+              onTap: () => setState(() {
+                _isPublic = !_isPublic;
+              }),
               tileColor: theme.colorScheme.onInverseSurface,
               leading: Text(
                 '公开',

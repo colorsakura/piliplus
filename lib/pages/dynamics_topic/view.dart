@@ -156,9 +156,8 @@ class _DynTopicPageState extends State<DynTopicPage> {
                   margin: const EdgeInsets.only(left: 45, right: 78),
                   child: GestureDetector(
                     behavior: HitTestBehavior.opaque,
-                    onTap: () {
-                      Get.toNamed('/member?mid=${response.topicCreator!.uid}');
-                    },
+                    onTap: () => Get.toNamed(
+                        '/member?mid=${response.topicCreator!.uid}'),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
@@ -266,11 +265,10 @@ class _DynTopicPageState extends State<DynTopicPage> {
           ),
           actions: [
             IconButton(
-              onPressed: () {
-                // https://www.bilibili.com/v/topic/detail?topic_id=${_controller.topicId}
-                Utils.shareText(
-                    '${_controller.topicName} https://m.bilibili.com/topic-detail?topic_id=${_controller.topicId}');
-              },
+              onPressed: () => Utils.shareText(
+                  '${_controller.topicName} https://m.bilibili.com/topic-detail?topic_id=${_controller.topicId}')
+              // https://www.bilibili.com/v/topic/detail?topic_id=${_controller.topicId}
+              ,
               icon: const Icon(MdiIcons.share),
             ),
             PopupMenuButton(

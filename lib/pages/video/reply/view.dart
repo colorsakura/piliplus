@@ -218,13 +218,11 @@ class _VideoReplyPanelState extends State<VideoReplyPanel>
                     replyItem: response[index],
                     replyLevel: widget.replyLevel,
                     replyReply: widget.replyReply,
-                    onReply: () {
-                      _videoReplyController.onReply(
-                        context,
-                        replyItem: response[index],
-                        index: index,
-                      );
-                    },
+                    onReply: () => _videoReplyController.onReply(
+                      context,
+                      replyItem: response[index],
+                      index: index,
+                    ),
                     onDelete: (subIndex) =>
                         _videoReplyController.onRemove(index, subIndex),
                     upMid: _videoReplyController.upMid,

@@ -66,9 +66,7 @@ Widget livePanel(
       ],
       GestureDetector(
         behavior: HitTestBehavior.opaque,
-        onTap: () {
-          Get.toNamed('/liveRoom?roomid=${content.live?.id}');
-        },
+        onTap: () => Get.toNamed('/liveRoom?roomid=${content.live?.id}'),
         onLongPress: () {
           Feedback.forLongPress(context);
           imageSaveDialog(

@@ -210,9 +210,7 @@ class _ReplyPageState extends CommonPublishPageState<ReplyPage> {
                       ? themeData.colorScheme.secondary
                       : themeData.colorScheme.outline,
                 ),
-                onPressed: () {
-                  _syncToDynamic.value = !_syncToDynamic.value;
-                },
+                onPressed: () => _syncToDynamic.value = !_syncToDynamic.value,
                 icon: Icon(
                   _syncToDynamic.value
                       ? Icons.check_box

@@ -147,9 +147,7 @@ class _HistoryPageState extends State<HistoryPage>
                         child2: AppBar(
                           leading: IconButton(
                             tooltip: '取消',
-                            onPressed: () {
-                              currCtr().handleSelect();
-                            },
+                            onPressed: currCtr().handleSelect,
                             icon: const Icon(Icons.close_outlined),
                           ),
                           title: Obx(

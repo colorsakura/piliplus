@@ -32,12 +32,10 @@ class _WhisperPageState extends State<WhisperPage> {
                   children: _controller.outsideItem.value!.map((e) {
                 return IconButton(
                   tooltip: e.hasTitle() ? e.title : null,
-                  onPressed: () {
-                    e.type.action(
-                      context: context,
-                      controller: _controller,
-                    );
-                  },
+                  onPressed: () => e.type.action(
+                    context: context,
+                    controller: _controller,
+                  ),
                   icon: e.type.icon,
                 );
               }).toList());
@@ -50,12 +48,10 @@ class _WhisperPageState extends State<WhisperPage> {
                 itemBuilder: (context) {
                   return _controller.threeDotItems.value!
                       .map((e) => PopupMenuItem(
-                            onTap: () {
-                              e.type.action(
-                                context: context,
-                                controller: _controller,
-                              );
-                            },
+                            onTap: () => e.type.action(
+                              context: context,
+                              controller: _controller,
+                            ),
                             child: Row(
                               children: [
                                 e.type.icon,

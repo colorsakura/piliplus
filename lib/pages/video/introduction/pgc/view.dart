@@ -397,9 +397,7 @@ class _BangumiIntroPanelState extends State<BangumiIntroPanel>
         ),
         ActionRowItem(
           icon: const Icon(FontAwesomeIcons.comment),
-          onTap: () {
-            videoDetailCtr.tabCtr.animateTo(1);
-          },
+          onTap: () => videoDetailCtr.tabCtr.animateTo(1),
           selectStatus: false,
           isLoading: false,
           text: bangumiItem.stat!['reply']!.toString(),

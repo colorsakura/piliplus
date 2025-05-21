@@ -98,11 +98,9 @@ class _WhisperDetailPageState
         ),
         actions: [
           IconButton(
-            onPressed: () {
-              Get.to(WhisperLinkSettingPage(
-                talkerUid: _whisperDetailController.talkerId,
-              ));
-            },
+            onPressed: () => Get.to(WhisperLinkSettingPage(
+              talkerUid: _whisperDetailController.talkerId,
+            )),
             icon: Icon(
               size: 20,
               Icons.settings,
@@ -162,42 +160,10 @@ class _WhisperDetailPageState
                 return ChatItem(
                   item: item,
                   eInfos: _whisperDetailController.eInfos,
-                  onLongPress: item.senderUid ==
-                          _whisperDetailController.ownerMid
-                      ? () {
-                          showDialog(
-                            context: context,
-                            builder: (context) {
-                              return AlertDialog(
-                                clipBehavior: Clip.hardEdge,
-                                contentPadding:
-                                    const EdgeInsets.symmetric(vertical: 12),
-                                content: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    ListTile(
-                                      onTap: () {
-                                        Get.back();
-                                        _whisperDetailController.sendMsg(
-                                          message: '${item.msgKey}',
-                                          onClearText: editController.clear,
-                                          msgType: 5,
-                                          index: index,
-                                        );
-                                      },
-                                      dense: true,
-                                      title: const Text(
-                                        '撤回',
-                                        style: TextStyle(fontSize: 14),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              );
-                            },
-                          );
-                        }
-                      : null,
+                  onLongPress:
+                      item.senderUid == _whisperDetailController.ownerMid
+                          ? () => onLongPress(index, item)
+                          : null,
                 );
               },
               separatorBuilder: (BuildContext context, int index) =>
@@ -211,6 +177,39 @@ class _WhisperDetailPageState
           onReload: _whisperDetailController.onReload,
         ),
     };
+  }
+
+  void onLongPress(int index, Msg item) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          clipBehavior: Clip.hardEdge,
+          contentPadding: const EdgeInsets.symmetric(vertical: 12),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ListTile(
+                onTap: () {
+                  Get.back();
+                  _whisperDetailController.sendMsg(
+                    message: '${item.msgKey}',
+                    onClearText: editController.clear,
+                    msgType: 5,
+                    index: index,
+                  );
+                },
+                dense: true,
+                title: const Text(
+                  '撤回',
+                  style: TextStyle(fontSize: 14),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
   }
 
   Widget _buildInputView(theme) {
@@ -227,13 +226,11 @@ class _WhisperDetailPageState
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           IconButton(
-            onPressed: () {
-              updatePanelType(
-                PanelType.emoji == currentPanelType
-                    ? PanelType.keyboard
-                    : PanelType.emoji,
-              );
-            },
+            onPressed: () => updatePanelType(
+              PanelType.emoji == currentPanelType
+                  ? PanelType.keyboard
+                  : PanelType.emoji,
+            ),
             icon: const Icon(Icons.emoji_emotions),
             tooltip: '表情',
           ),

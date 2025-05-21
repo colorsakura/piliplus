@@ -189,34 +189,31 @@ class FavVideoCardH extends StatelessWidget {
                 tooltip: '取消收藏',
                 iconColor: theme.colorScheme.outline,
                 bgColor: Colors.transparent,
-                onPressed: () {
-                  showDialog(
-                    context: Get.context!,
-                    builder: (context) {
-                      return AlertDialog(
-                        title: const Text('提示'),
-                        content: const Text('要取消收藏吗?'),
-                        actions: [
-                          TextButton(
-                            onPressed: Get.back,
-                            child: Text(
-                              '取消',
-                              style:
-                                  TextStyle(color: theme.colorScheme.outline),
-                            ),
+                onPressed: () => showDialog(
+                  context: context,
+                  builder: (context) {
+                    return AlertDialog(
+                      title: const Text('提示'),
+                      content: const Text('要取消收藏吗?'),
+                      actions: [
+                        TextButton(
+                          onPressed: Get.back,
+                          child: Text(
+                            '取消',
+                            style: TextStyle(color: theme.colorScheme.outline),
                           ),
-                          TextButton(
-                            onPressed: () {
-                              Get.back();
-                              onDelFav!();
-                            },
-                            child: const Text('确定取消'),
-                          )
-                        ],
-                      );
-                    },
-                  );
-                },
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            Get.back();
+                            onDelFav!();
+                          },
+                          child: const Text('确定取消'),
+                        )
+                      ],
+                    );
+                  },
+                ),
               ),
             ),
         ],

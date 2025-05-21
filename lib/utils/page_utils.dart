@@ -87,6 +87,53 @@ class PageUtils {
       isFullScreen: () => isFullScreen,
       child: StatefulBuilder(
         builder: (_, setState) {
+          void onTap(int choice) {
+            if (choice == -1) {
+              showDialog(
+                context: context,
+                builder: (context) {
+                  final ThemeData theme = Theme.of(context);
+                  String duration = '';
+                  return AlertDialog(
+                    title: const Text('自定义时长'),
+                    content: TextField(
+                      autofocus: true,
+                      onChanged: (value) => duration = value,
+                      keyboardType: TextInputType.number,
+                      inputFormatters: [
+                        FilteringTextInputFormatter.allow(RegExp(r'\d+')),
+                      ],
+                      decoration: const InputDecoration(suffixText: 'min'),
+                    ),
+                    actions: [
+                      TextButton(
+                        onPressed: Get.back,
+                        child: Text(
+                          '取消',
+                          style: TextStyle(color: theme.colorScheme.outline),
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          Get.back();
+                          int choice = int.tryParse(duration) ?? 0;
+                          shutdownTimerService.scheduledExitInMinutes = choice;
+                          shutdownTimerService.startShutdownTimer();
+                          setState(() {});
+                        },
+                        child: const Text('确定'),
+                      ),
+                    ],
+                  );
+                },
+              );
+            } else {
+              Get.back();
+              shutdownTimerService.scheduledExitInMinutes = choice;
+              shutdownTimerService.startShutdownTimer();
+            }
+          }
+
           final ThemeData theme = Theme.of(context);
           return Theme(
             data: theme,
@@ -120,58 +167,7 @@ class PageUtils {
                     ].map(
                       (choice) => ListTile(
                         dense: true,
-                        onTap: () {
-                          if (choice == -1) {
-                            showDialog(
-                              context: context,
-                              builder: (context) {
-                                String duration = '';
-                                return AlertDialog(
-                                  title: const Text('自定义时长'),
-                                  content: TextField(
-                                    autofocus: true,
-                                    onChanged: (value) => duration = value,
-                                    keyboardType: TextInputType.number,
-                                    inputFormatters: [
-                                      FilteringTextInputFormatter.allow(
-                                          RegExp(r'\d+')),
-                                    ],
-                                    decoration: const InputDecoration(
-                                        suffixText: 'min'),
-                                  ),
-                                  actions: [
-                                    TextButton(
-                                      onPressed: Get.back,
-                                      child: Text(
-                                        '取消',
-                                        style: TextStyle(
-                                            color: theme.colorScheme.outline),
-                                      ),
-                                    ),
-                                    TextButton(
-                                      onPressed: () {
-                                        Get.back();
-                                        int choice =
-                                            int.tryParse(duration) ?? 0;
-                                        shutdownTimerService
-                                            .scheduledExitInMinutes = choice;
-                                        shutdownTimerService
-                                            .startShutdownTimer();
-                                        setState(() {});
-                                      },
-                                      child: const Text('确定'),
-                                    ),
-                                  ],
-                                );
-                              },
-                            );
-                          } else {
-                            Get.back();
-                            shutdownTimerService.scheduledExitInMinutes =
-                                choice;
-                            shutdownTimerService.startShutdownTimer();
-                          }
-                        },
+                        onTap: () => onTap(choice),
                         contentPadding: EdgeInsets.zero,
                         title: Text(choice == -1
                             ? '自定义'

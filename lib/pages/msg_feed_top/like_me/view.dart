@@ -34,12 +34,10 @@ class _LikeMePageState extends State<LikeMePage> {
         title: const Text('收到的赞'),
         actions: [
           IconButton(
-            onPressed: () {
-              Get.to(
-                const WhisperSettingsPage(
-                    imSettingType: IMSettingType.SETTING_TYPE_OLD_RECEIVE_LIKE),
-              );
-            },
+            onPressed: () => Get.to(
+              const WhisperSettingsPage(
+                  imSettingType: IMSettingType.SETTING_TYPE_OLD_RECEIVE_LIKE),
+            ),
             icon: Icon(
               size: 20,
               Icons.settings,
@@ -184,63 +182,57 @@ class _LikeMePageState extends State<LikeMePage> {
           PiliScheme.routePushFromUrl(nativeUri);
         }
       },
-      onLongPress: () {
-        showDialog(
-          context: context,
-          builder: (context) {
-            final isNotice = item.noticeState == 0;
-            return AlertDialog(
-              clipBehavior: Clip.hardEdge,
-              contentPadding: const EdgeInsets.symmetric(vertical: 12),
-              content: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  ListTile(
-                    onTap: () {
-                      Get.back();
+      onLongPress: () => showDialog(
+        context: context,
+        builder: (context) {
+          final isNotice = item.noticeState == 0;
+          return AlertDialog(
+            clipBehavior: Clip.hardEdge,
+            contentPadding: const EdgeInsets.symmetric(vertical: 12),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                ListTile(
+                  onTap: () {
+                    Get.back();
+                    showConfirmDialog(
+                      context: context,
+                      title: '删除',
+                      content: '该条通知删除后，当有新点赞时会重新出现在列表，是否继续？',
+                      onConfirm: () => onRemove(item.id),
+                    );
+                  },
+                  dense: true,
+                  title: const Text(
+                    '删除',
+                    style: TextStyle(fontSize: 14),
+                  ),
+                ),
+                ListTile(
+                  onTap: () {
+                    Get.back();
+                    if (isNotice) {
                       showConfirmDialog(
                         context: context,
-                        title: '删除',
-                        content: '该条通知删除后，当有新点赞时会重新出现在列表，是否继续？',
-                        onConfirm: () {
-                          onRemove(item.id);
-                        },
+                        title: '不再通知',
+                        content: '这条内容的点赞将不再通知，但仍可在列表内查看，是否继续？',
+                        onConfirm: () => onSetNotice(isNotice, item.id),
                       );
-                    },
-                    dense: true,
-                    title: const Text(
-                      '删除',
-                      style: TextStyle(fontSize: 14),
-                    ),
+                    } else {
+                      onSetNotice(isNotice, item.id);
+                    }
+                  },
+                  dense: true,
+                  title: Text(
+                    isNotice ? '不再通知' : '接收通知',
+                    style: const TextStyle(fontSize: 14),
                   ),
-                  ListTile(
-                    onTap: () {
-                      Get.back();
-                      if (isNotice) {
-                        showConfirmDialog(
-                          context: context,
-                          title: '不再通知',
-                          content: '这条内容的点赞将不再通知，但仍可在列表内查看，是否继续？',
-                          onConfirm: () {
-                            onSetNotice(isNotice, item.id);
-                          },
-                        );
-                      } else {
-                        onSetNotice(isNotice, item.id);
-                      }
-                    },
-                    dense: true,
-                    title: Text(
-                      isNotice ? '不再通知' : '接收通知',
-                      style: const TextStyle(fontSize: 14),
-                    ),
-                  ),
-                ],
-              ),
-            );
-          },
-        );
-      },
+                ),
+              ],
+            ),
+          );
+        },
+      ),
       leading: Column(
         children: [
           const Spacer(),

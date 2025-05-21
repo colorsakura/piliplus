@@ -394,10 +394,8 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                           ),
                         ],
                       ),
-                onTap: () {
-                  plPlayerController.showDmTreandChart.value =
-                      !plPlayerController.showDmTreandChart.value;
-                },
+                onTap: () => plPlayerController.showDmTreandChart.value =
+                    !plPlayerController.showDmTreandChart.value,
               ),
             )),
 
@@ -419,9 +417,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                       height: 35,
                       padding: const EdgeInsets.only(left: 30),
                       value: type,
-                      onTap: () {
-                        plPlayerController.setShader(type.index);
-                      },
+                      onTap: () => plPlayerController.setShader(type.index),
                       child: Text(
                         type.title,
                         style:
@@ -539,9 +535,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                 height: 35,
                 padding: const EdgeInsets.only(left: 30),
                 value: boxFit,
-                onTap: () {
-                  plPlayerController.toggleVideoFit(boxFit);
-                },
+                onTap: () => plPlayerController.toggleVideoFit(boxFit),
                 child: Text(
                   boxFit.desc,
                   style: const TextStyle(color: Colors.white, fontSize: 13),
@@ -572,9 +566,8 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                     return [
                       PopupMenuItem<int>(
                         value: 0,
-                        onTap: () {
-                          widget.videoDetailController!.setSubtitle(0);
-                        },
+                        onTap: () =>
+                            widget.videoDetailController!.setSubtitle(0),
                         child: const Text(
                           "关闭字幕",
                           style: TextStyle(color: Colors.white),
@@ -586,10 +579,8 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                           .map((entry) {
                         return PopupMenuItem<int>(
                           value: entry.key + 1,
-                          onTap: () {
-                            widget.videoDetailController!
-                                .setSubtitle(entry.key + 1);
-                          },
+                          onTap: () => widget.videoDetailController!
+                              .setSubtitle(entry.key + 1),
                           child: Text(
                             "${entry.value['lan_doc']}",
                             style: const TextStyle(color: Colors.white),
@@ -630,9 +621,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                   height: 35,
                   padding: const EdgeInsets.only(left: 30),
                   value: speed,
-                  onTap: () {
-                    plPlayerController.setPlaybackSpeed(speed);
-                  },
+                  onTap: () => plPlayerController.setPlaybackSpeed(speed),
                   child: Text(
                     "${speed}X",
                     style: const TextStyle(color: Colors.white, fontSize: 13),
@@ -1633,9 +1622,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
               plPlayerController.isBuffering.value) {
             return Center(
                 child: GestureDetector(
-                    onTap: () {
-                      plPlayerController.refreshPlayer();
-                    },
+                    onTap: plPlayerController.refreshPlayer,
                     child: Container(
                       padding: const EdgeInsets.all(30),
                       decoration: const BoxDecoration(

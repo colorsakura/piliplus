@@ -38,9 +38,7 @@ class _LiveAreaDetailPageState extends State<LiveAreaDetailPage> {
         title: Text(widget.parentName),
         actions: [
           IconButton(
-            onPressed: () {
-              Get.to(const LiveSearchPage());
-            },
+            onPressed: () => Get.to(const LiveSearchPage()),
             icon: const Icon(Icons.search),
           ),
           const SizedBox(width: 16),
@@ -84,9 +82,8 @@ class _LiveAreaDetailPageState extends State<LiveAreaDetailPage> {
                             context: context,
                             icon: Icons.menu,
                             bgColor: Colors.transparent,
-                            onPressed: () {
-                              _showTags(context, theme, response);
-                            },
+                            onPressed: () =>
+                                _showTags(context, theme, response),
                           ),
                         ],
                       ),

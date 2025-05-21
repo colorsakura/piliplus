@@ -30,9 +30,7 @@ Widget addWidget(
               borderRadius: borderRadius,
               onTap: ugc.jumpUrl == null
                   ? null
-                  : () {
-                      PiliScheme.routePushFromUrl(ugc.jumpUrl!);
-                    },
+                  : () => PiliScheme.routePushFromUrl(ugc.jumpUrl!),
               child: Padding(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
@@ -146,10 +144,8 @@ Widget addWidget(
                                             MaterialTapTargetSize.shrinkWrap,
                                       ),
                                       onPressed: canJump
-                                          ? () {
-                                              PiliScheme.routePushFromUrl(
-                                                  btn.jumpUrl!);
-                                            }
+                                          ? () => PiliScheme.routePushFromUrl(
+                                              btn.jumpUrl!)
                                           : btn.disable == 1
                                               ? null
                                               : () async {
@@ -214,9 +210,7 @@ Widget addWidget(
                 children: content.items!.map((e) {
                   return InkWell(
                     borderRadius: borderRadius,
-                    onTap: () {
-                      PiliScheme.routePushFromUrl(e.jumpUrl!);
-                    },
+                    onTap: () => PiliScheme.routePushFromUrl(e.jumpUrl!),
                     child: Padding(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 12, vertical: 8),
@@ -263,9 +257,8 @@ Widget addWidget(
                           if (e.jumpDesc?.isNotEmpty == true) ...[
                             const SizedBox(width: 10),
                             FilledButton.tonal(
-                              onPressed: () {
-                                PiliScheme.routePushFromUrl(e.jumpUrl!);
-                              },
+                              onPressed: () =>
+                                  PiliScheme.routePushFromUrl(e.jumpUrl!),
                               style: FilledButton.styleFrom(
                                 shape: const RoundedRectangleBorder(
                                   borderRadius:
@@ -306,17 +299,15 @@ Widget addWidget(
             borderRadius: borderRadius,
             child: InkWell(
               borderRadius: borderRadius,
-              onTap: () {
-                showVoteDialog(
-                  context,
-                  vote.voteId!,
-                  item.idStr is int
-                      ? item.idStr
-                      : item.idStr is String
-                          ? int.parse(item.idStr)
-                          : null,
-                );
-              },
+              onTap: () => showVoteDialog(
+                context,
+                vote.voteId!,
+                item.idStr is int
+                    ? item.idStr
+                    : item.idStr is String
+                        ? int.parse(item.idStr)
+                        : null,
+              ),
               child: Padding(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
@@ -359,17 +350,15 @@ Widget addWidget(
                     ),
                     const SizedBox(width: 10),
                     FilledButton.tonal(
-                      onPressed: () {
-                        showVoteDialog(
-                          context,
-                          vote.voteId!,
-                          item.idStr is int
-                              ? item.idStr
-                              : item.idStr is String
-                                  ? int.parse(item.idStr)
-                                  : null,
-                        );
-                      },
+                      onPressed: () => showVoteDialog(
+                        context,
+                        vote.voteId!,
+                        item.idStr is int
+                            ? item.idStr
+                            : item.idStr is String
+                                ? int.parse(item.idStr)
+                                : null,
+                      ),
                       style: FilledButton.styleFrom(
                         shape: const RoundedRectangleBorder(
                           borderRadius: BorderRadius.all(Radius.circular(6)),

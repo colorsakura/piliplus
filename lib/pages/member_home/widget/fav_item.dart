@@ -26,12 +26,10 @@ class MemberFavItem extends StatelessWidget {
             );
           }
         },
-        onLongPress: () {
-          imageSaveDialog(
-            title: item['title'],
-            cover: item['cover'],
-          );
-        },
+        onLongPress: () => imageSaveDialog(
+          title: item['title'],
+          cover: item['cover'],
+        ),
         child: Padding(
           padding: const EdgeInsets.symmetric(
             horizontal: StyleString.safeSpace,

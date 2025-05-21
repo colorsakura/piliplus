@@ -88,14 +88,12 @@ class _MemberVideoState extends State<MemberVideo>
                       top: false,
                       left: false,
                       child: FloatingActionButton.extended(
-                        onPressed: () {
-                          _controller
-                            ..isLocating.value = true
-                            ..lastAid = _controller.fromViewAid
-                            ..page = 0
-                            ..loadingState.value = LoadingState.loading()
-                            ..queryData();
-                        },
+                        onPressed: () => _controller
+                          ..isLocating.value = true
+                          ..lastAid = _controller.fromViewAid
+                          ..page = 0
+                          ..loadingState.value = LoadingState.loading()
+                          ..queryData(),
                         label: const Text('定位至上次观看'),
                       ),
                     ),

@@ -171,9 +171,7 @@ class ChatItem extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           GestureDetector(
-            onTap: () {
-              Get.toNamed('/liveRoom?roomid=${content['sourceID']}');
-            },
+            onTap: () => Get.toNamed('/liveRoom?roomid=${content['sourceID']}'),
             child: NetworkImgLayer(
               width: 220,
               height: 220 * 9 / 16,
@@ -209,15 +207,13 @@ class ChatItem extends StatelessWidget {
 
   Widget msgTypeArticleCard_12(content, Color textColor) {
     return GestureDetector(
-      onTap: () {
-        Get.toNamed(
-          '/articlePage',
-          parameters: {
-            'id': '${content['rid']}',
-            'type': "read",
-          },
-        );
-      },
+      onTap: () => Get.toNamed(
+        '/articlePage',
+        parameters: {
+          'id': '${content['rid']}',
+          'type': "read",
+        },
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -292,12 +288,13 @@ class ChatItem extends StatelessWidget {
                     try {
                       SmartDialog.showLoading();
                       final int cid = await SearchHttp.ab2c(bvid: bvid);
-                      SmartDialog.dismiss<dynamic>().then(
-                        (e) => PageUtils.toVideoPage('bvid=$bvid&cid=$cid',
-                            arguments: <String, String?>{
-                              'pic': i['cover_url'],
-                              'heroTag': Utils.makeHeroTag(bvid),
-                            }),
+                      SmartDialog.dismiss();
+                      PageUtils.toVideoPage(
+                        'bvid=$bvid&cid=$cid',
+                        arguments: <String, String?>{
+                          'pic': i['cover_url'],
+                          'heroTag': Utils.makeHeroTag(bvid),
+                        },
                       );
                     } catch (err) {
                       SmartDialog.dismiss();
@@ -370,14 +367,13 @@ class ChatItem extends StatelessWidget {
               SmartDialog.showLoading();
               var bvid = content["bvid"];
               final int cid = await SearchHttp.ab2c(bvid: bvid);
-              SmartDialog.dismiss().then(
-                (_) => PageUtils.toVideoPage(
-                  'bvid=$bvid&cid=$cid',
-                  arguments: {
-                    'pic': content['thumb'],
-                    'heroTag': Utils.makeHeroTag(bvid),
-                  },
-                ),
+              SmartDialog.dismiss();
+              PageUtils.toVideoPage(
+                'bvid=$bvid&cid=$cid',
+                arguments: {
+                  'pic': content['thumb'],
+                  'heroTag': Utils.makeHeroTag(bvid),
+                },
               );
             } catch (err) {
               SmartDialog.dismiss();
@@ -421,9 +417,7 @@ class ChatItem extends StatelessWidget {
       // album
       case 2:
         type = '相簿';
-        onTap = () {
-          PageUtils.pushDynFromId(rid: content['id']);
-        };
+        onTap = () => PageUtils.pushDynFromId(rid: content['id']);
         break;
 
       // video
@@ -441,14 +435,13 @@ class ChatItem extends StatelessWidget {
           bvid ??= IdUtils.av2bv(aid);
           SmartDialog.showLoading();
           final int cid = await SearchHttp.ab2c(bvid: bvid);
-          SmartDialog.dismiss<dynamic>().then(
-            (e) => PageUtils.toVideoPage(
-              'bvid=$bvid&cid=$cid',
-              arguments: <String, String?>{
-                'pic': content['thumb'],
-                'heroTag': Utils.makeHeroTag(bvid),
-              },
-            ),
+          SmartDialog.dismiss();
+          PageUtils.toVideoPage(
+            'bvid=$bvid&cid=$cid',
+            arguments: <String, String?>{
+              'pic': content['thumb'],
+              'heroTag': Utils.makeHeroTag(bvid),
+            },
           );
         };
         break;
@@ -456,37 +449,29 @@ class ChatItem extends StatelessWidget {
       // article
       case 6:
         type = '专栏';
-        onTap = () {
-          Get.toNamed(
-            '/articlePage',
-            parameters: {
-              'id': '${content['id']}',
-              'type': 'read',
-            },
-          );
-        };
+        onTap = () => Get.toNamed(
+              '/articlePage',
+              parameters: {
+                'id': '${content['id']}',
+                'type': 'read',
+              },
+            );
         break;
 
       // dynamic
       case 11:
         type = '动态';
-        onTap = () {
-          PageUtils.pushDynFromId(id: content['id']);
-        };
+        onTap = () => PageUtils.pushDynFromId(id: content['id']);
         break;
 
       // pgc
       case 16:
-        onTap = () {
-          PageUtils.viewBangumi(epId: content['id']);
-        };
+        onTap = () => PageUtils.viewBangumi(epId: content['id']);
         break;
 
       default:
-        onTap = () {
-          SmartDialog.showToast(
-              'unsupported source type: ${content['source']}');
-        };
+        onTap = () => SmartDialog.showToast(
+            'unsupported source type: ${content['source']}');
     }
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -540,9 +525,8 @@ class ChatItem extends StatelessWidget {
 
   Widget msgTypePic_2(BuildContext context, content) {
     return GestureDetector(
-      onTap: () {
-        context.imageView(imgList: [SourceModel(url: content['url'])]);
-      },
+      onTap: () =>
+          context.imageView(imgList: [SourceModel(url: content['url'])]),
       child: Hero(
         tag: content['url'],
         child: NetworkImgLayer(
@@ -666,9 +650,7 @@ class ChatItem extends StatelessWidget {
               Divider(color: theme.colorScheme.primary.withValues(alpha: 0.05)),
               GestureDetector(
                 behavior: HitTestBehavior.opaque,
-                onTap: () {
-                  PiliScheme.routePushFromUrl(content['jump_uri']);
-                },
+                onTap: () => PiliScheme.routePushFromUrl(content['jump_uri']),
                 child: SizedBox(
                   width: double.infinity,
                   child: Text(content['jump_text']),
@@ -680,9 +662,7 @@ class ChatItem extends StatelessWidget {
               Divider(color: theme.colorScheme.primary.withValues(alpha: 0.05)),
               GestureDetector(
                 behavior: HitTestBehavior.opaque,
-                onTap: () {
-                  PiliScheme.routePushFromUrl(content['jump_uri_2']);
-                },
+                onTap: () => PiliScheme.routePushFromUrl(content['jump_uri_2']),
                 child: SizedBox(
                   width: double.infinity,
                   child: Text(content['jump_text_2']),
@@ -694,9 +674,7 @@ class ChatItem extends StatelessWidget {
               Divider(color: theme.colorScheme.primary.withValues(alpha: 0.05)),
               GestureDetector(
                 behavior: HitTestBehavior.opaque,
-                onTap: () {
-                  PiliScheme.routePushFromUrl(content['jump_uri_3']);
-                },
+                onTap: () => PiliScheme.routePushFromUrl(content['jump_uri_3']),
                 child: SizedBox(
                   width: double.infinity,
                   child: Text(content['jump_text_3']),
@@ -718,9 +696,7 @@ class ChatItem extends StatelessWidget {
           child: GestureDetector(
             onTap: content['jump_url'] == null
                 ? null
-                : () {
-                    PiliScheme.routePushFromUrl(content['jump_url']);
-                  },
+                : () => PiliScheme.routePushFromUrl(content['jump_url']),
             child: CachedNetworkImage(
               imageUrl: Utils.thumbnailImgUrl(content['pic_url']),
             ),

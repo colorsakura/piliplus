@@ -37,30 +37,26 @@ class _FavSearchPageState extends CommonSearchPageState<FavSearchPage,
           return FavVideoCardH(
             videoItem: item,
             onDelFav: controller.isOwner == true
-                ? () {
-                    controller.onCancelFav(
+                ? () => controller.onCancelFav(
                       index,
                       item.id!,
                       item.type,
-                    );
-                  }
+                    )
                 : null,
-            onViewFav: () {
-              PageUtils.toVideoPage(
-                'bvid=${item.bvid}&cid=${item.cid}',
-                arguments: {
-                  'videoItem': item,
-                  'heroTag': Utils.makeHeroTag(item.bvid),
-                  'sourceType': 'fav',
-                  'mediaId': controller.mediaId,
-                  'oid': item.id,
-                  'favTitle': controller.title,
-                  'count': controller.count,
-                  'desc': true,
-                  'isContinuePlaying': true,
-                },
-              );
-            },
+            onViewFav: () => PageUtils.toVideoPage(
+              'bvid=${item.bvid}&cid=${item.cid}',
+              arguments: {
+                'videoItem': item,
+                'heroTag': Utils.makeHeroTag(item.bvid),
+                'sourceType': 'fav',
+                'mediaId': controller.mediaId,
+                'oid': item.id,
+                'favTitle': controller.title,
+                'count': controller.count,
+                'desc': true,
+                'isContinuePlaying': true,
+              },
+            ),
           );
         },
       ),

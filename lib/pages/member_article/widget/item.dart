@@ -23,12 +23,10 @@ class MemberArticleItem extends StatelessWidget {
             PiliScheme.routePushFromUrl(item.uri!);
           }
         },
-        onLongPress: () {
-          imageSaveDialog(
-            title: item.title,
-            cover: item.originImageUrls?.firstOrNull,
-          );
-        },
+        onLongPress: () => imageSaveDialog(
+          title: item.title,
+          cover: item.originImageUrls?.firstOrNull,
+        ),
         child: Padding(
           padding: const EdgeInsets.symmetric(
             horizontal: StyleString.safeSpace,

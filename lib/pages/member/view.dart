@@ -11,7 +11,6 @@ import 'package:PiliPlus/pages/member_dynamics/view.dart';
 import 'package:PiliPlus/pages/member_favorite/view.dart';
 import 'package:PiliPlus/pages/member_home/view.dart';
 import 'package:PiliPlus/pages/member_pgc/view.dart';
-import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart';
 import 'package:flutter/material.dart';
@@ -124,22 +123,20 @@ class _MemberPageState extends State<MemberPage> {
                   _userController.mid != _userController.ownerMid) ...[
                 const PopupMenuDivider(),
                 PopupMenuItem(
-                  onTap: () {
-                    showDialog(
-                      context: context,
-                      builder: (context) => AlertDialog(
-                        clipBehavior: Clip.hardEdge,
-                        contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 20,
-                          vertical: 16,
-                        ),
-                        content: MemberReportPanel(
-                          name: _userController.username,
-                          mid: _mid,
-                        ),
+                  onTap: () => showDialog(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                      clipBehavior: Clip.hardEdge,
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 20,
+                        vertical: 16,
                       ),
-                    );
-                  },
+                      content: MemberReportPanel(
+                        name: _userController.username,
+                        mid: _mid,
+                      ),
+                    ),
+                  ),
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
@@ -209,11 +206,7 @@ class _MemberPageState extends State<MemberPage> {
         child: TabBar(
           controller: _userController.tabController,
           tabs: _userController.tabs,
-          onTap: (value) {
-            if (_userController.tabController?.indexIsChanging == false) {
-              _userController.key.currentState?.outerController.animToTop();
-            }
-          },
+          onTap: _userController.onTapTab,
         ),
       );
 

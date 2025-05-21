@@ -36,9 +36,7 @@ class SubController
         content: const Text('确定取消订阅吗？'),
         actions: [
           TextButton(
-            onPressed: () {
-              Get.back();
-            },
+            onPressed: Get.back,
             child: Text(
               '取消',
               style: TextStyle(color: Theme.of(context).colorScheme.outline),

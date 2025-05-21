@@ -536,10 +536,8 @@ class Utils {
                       const SizedBox(height: 8),
                       Text('${res.data[0]['body']}'),
                       TextButton(
-                        onPressed: () {
-                          PageUtils.launchURL(
-                              'https://github.com/bggRGjQaUbCoE/PiliPlus/commits/main');
-                        },
+                        onPressed: () => PageUtils.launchURL(
+                            'https://github.com/bggRGjQaUbCoE/PiliPlus/commits/main'),
                         child: Text(
                           "点此查看完整更新(即commit)内容",
                           style: TextStyle(
@@ -574,9 +572,7 @@ class Utils {
                   ),
                 ),
                 TextButton(
-                  onPressed: () {
-                    onDownload(res.data[0]);
-                  },
+                  onPressed: () => onDownload(res.data[0]),
                   child: const Text('Github'),
                 ),
               ],

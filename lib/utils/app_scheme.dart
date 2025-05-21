@@ -384,9 +384,7 @@ class PiliScheme {
                         actions: [
                           IconButton(
                             tooltip: '前往',
-                            onPressed: () {
-                              _onPushDynDetail(path, off);
-                            },
+                            onPressed: () => _onPushDynDetail(path, off),
                             icon: const Icon(Icons.open_in_new),
                           ),
                         ],

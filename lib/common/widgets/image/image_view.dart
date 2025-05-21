@@ -91,6 +91,31 @@ Widget imageView(
     };
   }
 
+  void onTap(BuildContext context, int index) {
+    if (callback != null) {
+      callback(picArr.map((item) => item.url).toList(), index);
+    } else {
+      onViewImage?.call();
+      context.imageView(
+        initialPage: index,
+        imgList: picArr.map(
+          (item) {
+            bool isLive = item.isLivePhoto && enableLivePhoto;
+            return SourceModel(
+              sourceType:
+                  isLive ? SourceType.livePhoto : SourceType.networkImage,
+              url: item.url,
+              liveUrl: isLive ? item.liveUrl : null,
+              width: isLive ? parseSize(item.width) : null,
+              height: isLive ? parseSize(item.height) : null,
+            );
+          },
+        ).toList(),
+        onDismissed: onDismissed,
+      );
+    }
+  }
+
   return NineGridView(
     type: NineGridType.weiBo,
     margin: const EdgeInsets.only(top: 6),
@@ -103,30 +128,7 @@ Widget imageView(
     itemBuilder: (context, index) => Hero(
       tag: picArr[index].url,
       child: GestureDetector(
-        onTap: () {
-          if (callback != null) {
-            callback(picArr.map((item) => item.url).toList(), index);
-          } else {
-            onViewImage?.call();
-            context.imageView(
-              initialPage: index,
-              imgList: picArr.map(
-                (item) {
-                  bool isLive = item.isLivePhoto && enableLivePhoto;
-                  return SourceModel(
-                    sourceType:
-                        isLive ? SourceType.livePhoto : SourceType.networkImage,
-                    url: item.url,
-                    liveUrl: isLive ? item.liveUrl : null,
-                    width: isLive ? parseSize(item.width) : null,
-                    height: isLive ? parseSize(item.height) : null,
-                  );
-                },
-              ).toList(),
-              onDismissed: onDismissed,
-            );
-          }
-        },
+        onTap: () => onTap(context, index),
         child: Stack(
           clipBehavior: Clip.none,
           alignment: Alignment.center,

@@ -25,9 +25,8 @@ class BangumiCardVTimeline extends StatelessWidget {
           title: item.title,
           cover: item.cover,
         ),
-        onTap: () {
-          PageUtils.viewBangumi(seasonId: item.seasonId, epId: item.episodeId);
-        },
+        onTap: () => PageUtils.viewBangumi(
+            seasonId: item.seasonId, epId: item.episodeId),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

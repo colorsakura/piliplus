@@ -97,7 +97,7 @@ class ShutdownTimerService with WidgetsBindingObserver {
           ],
         );
       },
-    ).then((_) {
+    ).whenComplete(() {
       // Cleanup when the dialog is dismissed
       _autoCloseDialogTimer?.cancel();
     });

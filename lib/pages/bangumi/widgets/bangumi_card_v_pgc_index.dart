@@ -24,9 +24,7 @@ class BangumiCardVPgcIndex extends StatelessWidget {
           title: bangumiItem['title'],
           cover: bangumiItem['cover'],
         ),
-        onTap: () {
-          PageUtils.viewBangumi(seasonId: bangumiItem['season_id']);
-        },
+        onTap: () => PageUtils.viewBangumi(seasonId: bangumiItem['season_id']),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

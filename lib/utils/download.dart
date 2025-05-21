@@ -53,15 +53,13 @@ class DownloadUtils {
       showDialog(
         context: context,
         builder: (context) {
-          return AlertDialog(
-            title: const Text('提示'),
-            content: const Text('存储权限未授权'),
+          return const AlertDialog(
+            title: Text('提示'),
+            content: Text('存储权限未授权'),
             actions: [
               TextButton(
-                onPressed: () {
-                  openAppSettings();
-                },
-                child: const Text('去授权'),
+                onPressed: openAppSettings,
+                child: Text('去授权'),
               )
             ],
           );
@@ -178,9 +176,7 @@ class DownloadUtils {
     SmartDialog.showLoading(
       msg: '正在下载原图',
       clickMaskDismiss: true,
-      onDismiss: () {
-        cancelToken.cancel();
-      },
+      onDismiss: cancelToken.cancel,
     );
     try {
       final isAndroid = Platform.isAndroid;

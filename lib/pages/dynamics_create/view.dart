@@ -104,13 +104,11 @@ class _CreateDynPanelState extends CommonPublishPageState<CreateDynPanel> {
                   borderRadius: const BorderRadius.all(Radius.circular(12)),
                   child: InkWell(
                     borderRadius: const BorderRadius.all(Radius.circular(12)),
-                    onTap: () {
-                      onPickImage(() {
-                        if (pathList.isNotEmpty && !enablePublish.value) {
-                          enablePublish.value = true;
-                        }
-                      });
-                    },
+                    onTap: () => onPickImage(() {
+                      if (pathList.isNotEmpty && !enablePublish.value) {
+                        enablePublish.value = true;
+                      }
+                    }),
                     child: Ink(
                       width: 100,
                       height: 100,
@@ -385,11 +383,7 @@ class _CreateDynPanelState extends CommonPublishPageState<CreateDynPanel> {
             ),
             visualDensity: VisualDensity.compact,
           ),
-          onPressed: () {
-            setState(() {
-              _publishTime = null;
-            });
-          },
+          onPressed: () => setState(() => _publishTime = null),
           label: Text(DateFormat('yyyy-MM-dd HH:mm').format(_publishTime!)),
           icon: const Icon(Icons.clear, size: 20),
           iconAlignment: IconAlignment.end,

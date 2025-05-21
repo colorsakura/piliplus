@@ -593,7 +593,7 @@ class RefreshIndicatorState extends State<RefreshIndicator>
     _positionController
         .animateTo(1.0 / _kDragSizeFactorLimit,
             duration: _kIndicatorSnapDuration)
-        .then<void>((void value) {
+        .whenComplete(() {
       if (mounted && _status == RefreshIndicatorStatus.snap) {
         setState(() {
           // Show the indeterminate progress indicator.

@@ -103,31 +103,27 @@ class _HotPageState extends CommonPageState<HotPage, HotController>
                             iconUrl:
                                 'http://i0.hdslb.com/bfs/archive/552ebe8c4794aeef30ebd1568b59ad35f15e21ad.png',
                             title: '每周必看',
-                            onTap: () {
-                              Get.toNamed(
-                                '/webview',
-                                parameters: {
-                                  'url':
-                                      'https://www.bilibili.com/h5/weekly-recommend'
-                                },
-                                arguments: {'off': false},
-                              );
-                            },
+                            onTap: () => Get.toNamed(
+                              '/webview',
+                              parameters: {
+                                'url':
+                                    'https://www.bilibili.com/h5/weekly-recommend'
+                              },
+                              arguments: {'off': false},
+                            ),
                           ),
                           _buildEntranceItem(
                             iconUrl:
                                 'http://i0.hdslb.com/bfs/archive/3693ec9335b78ca57353ac0734f36a46f3d179a9.png',
                             title: '入站必刷',
-                            onTap: () {
-                              Get.toNamed(
-                                '/webview',
-                                parameters: {
-                                  'url':
-                                      'https://www.bilibili.com/h5/good-history'
-                                },
-                                arguments: {'off': false},
-                              );
-                            },
+                            onTap: () => Get.toNamed(
+                              '/webview',
+                              parameters: {
+                                'url':
+                                    'https://www.bilibili.com/h5/good-history'
+                              },
+                              arguments: {'off': false},
+                            ),
                           ),
                         ],
                       ),

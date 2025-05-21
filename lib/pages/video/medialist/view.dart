@@ -171,12 +171,10 @@ class _MediaListPanelState
                         item.cid ?? await SearchHttp.ab2c(aid: aid, bvid: bvid);
                     widget.changeMediaList?.call(bvid, cid, aid, cover);
                   },
-                  onLongPress: () {
-                    imageSaveDialog(
-                      title: item.title,
-                      cover: item.cover,
-                    );
-                  },
+                  onLongPress: () => imageSaveDialog(
+                    title: item.title,
+                    cover: item.cover,
+                  ),
                   child: Stack(
                     clipBehavior: Clip.none,
                     children: [
@@ -271,13 +269,11 @@ class _MediaListPanelState
                           bottom: -6,
                           child: InkWell(
                             customBorder: const CircleBorder(),
-                            onTap: () {
-                              showConfirmDialog(
-                                context: context,
-                                title: '确定移除该视频？',
-                                onConfirm: () => widget.onDelete!(index),
-                              );
-                            },
+                            onTap: () => showConfirmDialog(
+                              context: context,
+                              title: '确定移除该视频？',
+                              onConfirm: () => widget.onDelete!(index),
+                            ),
                             onLongPress: () => widget.onDelete!(index),
                             child: Padding(
                               padding: const EdgeInsets.all(9),

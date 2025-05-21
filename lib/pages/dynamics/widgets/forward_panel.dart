@@ -96,15 +96,13 @@ Widget forWard(
             const SizedBox(height: 5),
             if (item.modules.moduleDynamic?.topic != null) ...[
               GestureDetector(
-                onTap: () {
-                  Get.toNamed(
-                    '/dynTopic',
-                    parameters: {
-                      'id': item.modules.moduleDynamic!.topic!.id!.toString(),
-                      'name': item.modules.moduleDynamic!.topic!.name!,
-                    },
-                  );
-                },
+                onTap: () => Get.toNamed(
+                  '/dynTopic',
+                  parameters: {
+                    'id': item.modules.moduleDynamic!.topic!.id!.toString(),
+                    'name': item.modules.moduleDynamic!.topic!.name!,
+                  },
+                ),
                 child: Text.rich(
                   TextSpan(
                     children: [
@@ -389,9 +387,7 @@ Widget forWard(
     case 'DYNAMIC_TYPE_MUSIC':
       final Map music = item.modules.moduleDynamic!.major!.music!;
       return InkWell(
-        onTap: () {
-          PageUtils.handleWebview("https:${music['jump_url']}");
-        },
+        onTap: () => PageUtils.handleWebview("https:${music['jump_url']}"),
         child: Container(
           width: double.infinity,
           padding:
@@ -439,11 +435,8 @@ Widget forWard(
         children: [
           if (floor == 2) ...[
             GestureDetector(
-              onTap: () {
-                Get.toNamed(
-                  '/member?mid=${item.modules.moduleAuthor!.mid}',
-                );
-              },
+              onTap: () =>
+                  Get.toNamed('/member?mid=${item.modules.moduleAuthor!.mid}'),
               child: Row(
                 children: [
                   NetworkImgLayer(

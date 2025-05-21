@@ -54,15 +54,13 @@ Widget liveRcmdPanel(
       const SizedBox(height: 4),
       if (item.modules.moduleDynamic?.topic != null) ...[
         GestureDetector(
-          onTap: () {
-            Get.toNamed(
-              '/dynTopic',
-              parameters: {
-                'id': item.modules.moduleDynamic!.topic!.id!.toString(),
-                'name': item.modules.moduleDynamic!.topic!.name!,
-              },
-            );
-          },
+          onTap: () => Get.toNamed(
+            '/dynTopic',
+            parameters: {
+              'id': item.modules.moduleDynamic!.topic!.id!.toString(),
+              'name': item.modules.moduleDynamic!.topic!.name!,
+            },
+          ),
           child: Padding(
             padding:
                 const EdgeInsets.symmetric(horizontal: StyleString.safeSpace),
@@ -83,9 +81,7 @@ Widget liveRcmdPanel(
       Padding(
         padding: const EdgeInsets.symmetric(horizontal: StyleString.safeSpace),
         child: GestureDetector(
-          onTap: () {
-            PageUtils.pushDynDetail(item, floor);
-          },
+          onTap: () => PageUtils.pushDynDetail(item, floor),
           child: LayoutBuilder(
             builder: (context, box) {
               double width = box.maxWidth;

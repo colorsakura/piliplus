@@ -119,16 +119,12 @@ class _FansPageState extends State<FansPage> {
                     onLongPress: widget.onSelect != null
                         ? null
                         : isOwner
-                            ? () {
-                                showConfirmDialog(
+                            ? () => showConfirmDialog(
                                   context: context,
                                   title: '确定移除 ${item.uname} ？',
-                                  onConfirm: () {
-                                    _fansController.onRemoveFan(
-                                        index, item.mid!);
-                                  },
-                                );
-                              }
+                                  onConfirm: () => _fansController.onRemoveFan(
+                                      index, item.mid!),
+                                )
                             : null,
                     leading: Hero(
                       tag: heroTag,

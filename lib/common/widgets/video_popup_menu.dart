@@ -40,9 +40,7 @@ class VideoCustomActions {
               Icon(MdiIcons.circleOutline, size: 16),
             ],
           ),
-          () {
-            Utils.copyText(videoItem.bvid!);
-          },
+          () => Utils.copyText(videoItem.bvid!),
         ),
         VideoCustomAction(
           '稍后再看',
@@ -59,11 +57,9 @@ class VideoCustomActions {
           '访问：${videoItem.owner.name}',
           'visit',
           const Icon(MdiIcons.accountCircleOutline, size: 16),
-          () {
-            Get.toNamed('/member?mid=${videoItem.owner.mid}', arguments: {
-              'heroTag': '${videoItem.owner.mid}',
-            });
-          },
+          () => Get.toNamed('/member?mid=${videoItem.owner.mid}', arguments: {
+            'heroTag': '${videoItem.owner.mid}',
+          }),
         ),
       if (videoItem is! SpaceArchiveItem)
         VideoCustomAction(
@@ -234,42 +230,40 @@ class VideoCustomActions {
           '拉黑：${videoItem.owner.name}',
           'block',
           const Icon(MdiIcons.cancel, size: 16),
-          () {
-            showDialog(
-              context: context,
-              builder: (context) {
-                return AlertDialog(
-                  title: const Text('提示'),
-                  content: Text(
-                      '确定拉黑:${videoItem.owner.name}(${videoItem.owner.mid})?'
-                      '\n\n注：被拉黑的Up可以在隐私设置-黑名单管理中解除'),
-                  actions: [
-                    TextButton(
-                      onPressed: () => Get.back(),
-                      child: Text(
-                        '点错了',
-                        style: TextStyle(
-                            color: Theme.of(context).colorScheme.outline),
-                      ),
+          () => showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                title: const Text('提示'),
+                content:
+                    Text('确定拉黑:${videoItem.owner.name}(${videoItem.owner.mid})?'
+                        '\n\n注：被拉黑的Up可以在隐私设置-黑名单管理中解除'),
+                actions: [
+                  TextButton(
+                    onPressed: Get.back,
+                    child: Text(
+                      '点错了',
+                      style: TextStyle(
+                          color: Theme.of(context).colorScheme.outline),
                     ),
-                    TextButton(
-                      onPressed: () async {
-                        var res = await VideoHttp.relationMod(
-                          mid: videoItem.owner.mid!,
-                          act: 5,
-                          reSrc: 11,
-                        );
-                        GStorage.setBlackMid(videoItem.owner.mid!);
-                        Get.back();
-                        SmartDialog.showToast(res['msg'] ?? '成功');
-                      },
-                      child: const Text('确认'),
-                    )
-                  ],
-                );
-              },
-            );
-          },
+                  ),
+                  TextButton(
+                    onPressed: () async {
+                      var res = await VideoHttp.relationMod(
+                        mid: videoItem.owner.mid!,
+                        act: 5,
+                        reSrc: 11,
+                      );
+                      GStorage.setBlackMid(videoItem.owner.mid!);
+                      Get.back();
+                      SmartDialog.showToast(res['msg'] ?? '成功');
+                    },
+                    child: const Text('确认'),
+                  )
+                ],
+              );
+            },
+          ),
         ),
       VideoCustomAction(
         "${MineController.anonymity.value ? '退出' : '进入'}无痕模式",

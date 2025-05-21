@@ -39,12 +39,10 @@ class _UpPanelState extends State<UpPanel> {
       slivers: [
         SliverToBoxAdapter(
           child: InkWell(
-            onTap: () {
-              setState(() {
-                widget.dynamicsController.showLiveItems =
-                    !widget.dynamicsController.showLiveItems;
-              });
-            },
+            onTap: () => setState(() {
+              widget.dynamicsController.showLiveItems =
+                  !widget.dynamicsController.showLiveItems;
+            }),
             child: Container(
               alignment: Alignment.center,
               height: isTop ? 76 : 60,

@@ -45,14 +45,12 @@ class _FollowChildPageState extends State<FollowChildPage>
         backgroundColor: Colors.transparent,
         body: _child,
         floatingActionButton: FloatingActionButton.extended(
-          onPressed: () {
-            _followController
-              ..orderType.value =
-                  _followController.orderType.value == FollowOrderType.def
-                      ? FollowOrderType.attention
-                      : FollowOrderType.def
-              ..onReload();
-          },
+          onPressed: () => _followController
+            ..orderType.value =
+                _followController.orderType.value == FollowOrderType.def
+                    ? FollowOrderType.attention
+                    : FollowOrderType.def
+            ..onReload(),
           icon: const Icon(Icons.format_list_bulleted, size: 20),
           label: Obx(() => Text(_followController.orderType.value.title)),
         ),

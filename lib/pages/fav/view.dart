@@ -54,21 +54,19 @@ class _FavPageState extends State<FavPage> with SingleTickerProviderStateMixin {
           Obx(
             () => _showVideoFavMenu.value
                 ? IconButton(
-                    onPressed: () {
-                      Get.toNamed('/createFav')?.then(
-                        (data) {
-                          if (data != null) {
-                            List<FavFolderItemData> list = _favController
-                                    .loadingState.value is Success
-                                ? (_favController.loadingState.value as Success)
-                                    .response
-                                : <FavFolderItemData>[];
-                            list.insert(list.isNotEmpty ? 1 : 0, data);
-                            _favController.loadingState.refresh();
-                          }
-                        },
-                      );
-                    },
+                    onPressed: () => Get.toNamed('/createFav')?.then(
+                      (data) {
+                        if (data != null) {
+                          List<FavFolderItemData> list = _favController
+                                  .loadingState.value is Success
+                              ? (_favController.loadingState.value as Success)
+                                  .response
+                              : <FavFolderItemData>[];
+                          list.insert(list.isNotEmpty ? 1 : 0, data);
+                          _favController.loadingState.refresh();
+                        }
+                      },
+                    ),
                     icon: const Icon(Icons.add),
                     tooltip: '新建收藏夹',
                   )

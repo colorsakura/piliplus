@@ -286,10 +286,8 @@ class HeaderControlState extends State<HeaderControl> {
                       0 => Obx(
                           () => ActionRowLineItem(
                             iconData: Icons.flip,
-                            onTap: () {
-                              widget.controller.flipX.value =
-                                  !widget.controller.flipX.value;
-                            },
+                            onTap: () => widget.controller.flipX.value =
+                                !widget.controller.flipX.value,
                             text: " 左右翻转 ",
                             selectStatus: widget.controller.flipX.value,
                           ),
@@ -419,125 +417,105 @@ class HeaderControlState extends State<HeaderControl> {
                                   title: const Text("Resolution"),
                                   subtitle: Text(
                                       '${player.state.width}x${player.state.height}'),
-                                  onTap: () {
-                                    Utils.copyText(
-                                      'Resolution\n${player.state.width}x${player.state.height}',
-                                      needToast: false,
-                                    );
-                                  },
+                                  onTap: () => Utils.copyText(
+                                    'Resolution\n${player.state.width}x${player.state.height}',
+                                    needToast: false,
+                                  ),
                                 ),
                                 ListTile(
                                   dense: true,
                                   title: const Text("VideoParams"),
                                   subtitle:
                                       Text(player.state.videoParams.toString()),
-                                  onTap: () {
-                                    Utils.copyText(
-                                      'VideoParams\n${player.state.videoParams}',
-                                      needToast: false,
-                                    );
-                                  },
+                                  onTap: () => Utils.copyText(
+                                    'VideoParams\n${player.state.videoParams}',
+                                    needToast: false,
+                                  ),
                                 ),
                                 ListTile(
                                   dense: true,
                                   title: const Text("AudioParams"),
                                   subtitle:
                                       Text(player.state.audioParams.toString()),
-                                  onTap: () {
-                                    Utils.copyText(
-                                      'AudioParams\n${player.state.audioParams}',
-                                      needToast: false,
-                                    );
-                                  },
+                                  onTap: () => Utils.copyText(
+                                    'AudioParams\n${player.state.audioParams}',
+                                    needToast: false,
+                                  ),
                                 ),
                                 ListTile(
                                   dense: true,
                                   title: const Text("Media"),
                                   subtitle:
                                       Text(player.state.playlist.toString()),
-                                  onTap: () {
-                                    Utils.copyText(
-                                      'Media\n${player.state.playlist}',
-                                      needToast: false,
-                                    );
-                                  },
+                                  onTap: () => Utils.copyText(
+                                    'Media\n${player.state.playlist}',
+                                    needToast: false,
+                                  ),
                                 ),
                                 ListTile(
                                   dense: true,
                                   title: const Text("AudioTrack"),
                                   subtitle:
                                       Text(player.state.track.audio.toString()),
-                                  onTap: () {
-                                    Utils.copyText(
-                                      'AudioTrack\n${player.state.track.audio}',
-                                      needToast: false,
-                                    );
-                                  },
+                                  onTap: () => Utils.copyText(
+                                    'AudioTrack\n${player.state.track.audio}',
+                                    needToast: false,
+                                  ),
                                 ),
                                 ListTile(
                                   dense: true,
                                   title: const Text("VideoTrack"),
                                   subtitle:
                                       Text(player.state.track.video.toString()),
-                                  onTap: () {
-                                    Utils.copyText(
-                                      'VideoTrack\n${player.state.track.audio}',
-                                      needToast: false,
-                                    );
-                                  },
+                                  onTap: () => Utils.copyText(
+                                    'VideoTrack\n${player.state.track.audio}',
+                                    needToast: false,
+                                  ),
                                 ),
                                 ListTile(
-                                    dense: true,
-                                    title: const Text("pitch"),
-                                    subtitle:
-                                        Text(player.state.pitch.toString()),
-                                    onTap: () {
-                                      Utils.copyText(
-                                        'pitch\n${player.state.pitch}',
-                                        needToast: false,
-                                      );
-                                    }),
+                                  dense: true,
+                                  title: const Text("pitch"),
+                                  subtitle: Text(player.state.pitch.toString()),
+                                  onTap: () => Utils.copyText(
+                                    'pitch\n${player.state.pitch}',
+                                    needToast: false,
+                                  ),
+                                ),
                                 ListTile(
-                                    dense: true,
-                                    title: const Text("rate"),
-                                    subtitle:
-                                        Text(player.state.rate.toString()),
-                                    onTap: () {
-                                      Utils.copyText(
-                                        'rate\n${player.state.rate}',
-                                        needToast: false,
-                                      );
-                                    }),
+                                  dense: true,
+                                  title: const Text("rate"),
+                                  subtitle: Text(player.state.rate.toString()),
+                                  onTap: () => Utils.copyText(
+                                    'rate\n${player.state.rate}',
+                                    needToast: false,
+                                  ),
+                                ),
                                 ListTile(
                                   dense: true,
                                   title: const Text("AudioBitrate"),
                                   subtitle: Text(
                                       player.state.audioBitrate.toString()),
-                                  onTap: () {
-                                    Utils.copyText(
-                                      'AudioBitrate\n${player.state.audioBitrate}',
-                                      needToast: false,
-                                    );
-                                  },
+                                  onTap: () => Utils.copyText(
+                                    'AudioBitrate\n${player.state.audioBitrate}',
+                                    needToast: false,
+                                  ),
                                 ),
                                 ListTile(
                                   dense: true,
                                   title: const Text("Volume"),
                                   subtitle:
                                       Text(player.state.volume.toString()),
-                                  onTap: () {
-                                    Utils.copyText(
-                                      'Volume\n${player.state.volume}',
-                                      needToast: false,
-                                    );
-                                  },
+                                  onTap: () => Utils.copyText(
+                                    'Volume\n${player.state.volume}',
+                                    needToast: false,
+                                  ),
                                 ),
                               ],
                             ),
                           ),
                           actions: [
                             TextButton(
-                              onPressed: () => Get.back(),
+                              onPressed: Get.back,
                               child: Text(
                                 '确定',
                                 style:
@@ -610,10 +588,8 @@ class HeaderControlState extends State<HeaderControl> {
                 SizedBox(
                   height: 45,
                   child: GestureDetector(
-                    onTap: () {
-                      SmartDialog.showToast(
-                          '标灰画质需要bilibili会员（已是会员？请关闭无痕模式）；4k和杜比视界播放效果可能不佳');
-                    },
+                    onTap: () => SmartDialog.showToast(
+                        '标灰画质需要bilibili会员（已是会员？请关闭无痕模式）；4k和杜比视界播放效果可能不佳'),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [

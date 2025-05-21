@@ -142,12 +142,10 @@ class _HorizontalMemberPageState extends State<HorizontalMemberPage> {
               SizedBox(
                 height: 35,
                 child: TextButton.icon(
-                  onPressed: () {
-                    _controller
-                      ..lastAid =
-                          widget.videoDetailController.oid.value.toString()
-                      ..queryBySort();
-                  },
+                  onPressed: () => _controller
+                    ..lastAid =
+                        widget.videoDetailController.oid.value.toString()
+                    ..queryBySort(),
                   icon: Icon(
                     Icons.sort,
                     size: 16,
@@ -249,9 +247,7 @@ class _HorizontalMemberPageState extends State<HorizontalMemberPage> {
           Row(
             children: [
               GestureDetector(
-                onTap: () {
-                  Utils.copyText(memberInfoModel.name ?? '');
-                },
+                onTap: () => Utils.copyText(memberInfoModel.name ?? ''),
                 child: Text(
                   memberInfoModel.name ?? '',
                   style: TextStyle(
@@ -366,9 +362,7 @@ class _HorizontalMemberPageState extends State<HorizontalMemberPage> {
                     padding: EdgeInsets.zero,
                     visualDensity: const VisualDensity(vertical: -2),
                   ),
-                  onPressed: () {
-                    Get.toNamed('/member?mid=${widget.mid}');
-                  },
+                  onPressed: () => Get.toNamed('/member?mid=${widget.mid}'),
                   child: const Text(
                     '查看主页',
                     maxLines: 1,

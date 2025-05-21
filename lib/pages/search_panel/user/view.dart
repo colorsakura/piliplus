@@ -68,9 +68,7 @@ class _SearchUserPanelState extends CommonSearchPanelState<SearchUserPanel,
                   style: ButtonStyle(
                     padding: WidgetStateProperty.all(EdgeInsets.zero),
                   ),
-                  onPressed: () {
-                    controller.onShowFilterDialog(context);
-                  },
+                  onPressed: () => controller.onShowFilterDialog(context),
                   icon: Icon(
                     Icons.filter_list_outlined,
                     size: 18,

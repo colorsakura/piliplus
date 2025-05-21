@@ -37,12 +37,10 @@ abstract class CommonSearchPageState<S extends CommonSearchPage, R, T>
             suffixIcon: IconButton(
               tooltip: '清空',
               icon: const Icon(Icons.clear, size: 22),
-              onPressed: () {
-                controller
-                  ..loadingState.value = LoadingState.loading()
-                  ..onClear()
-                  ..focusNode.requestFocus();
-              },
+              onPressed: () => controller
+                ..loadingState.value = LoadingState.loading()
+                ..onClear()
+                ..focusNode.requestFocus(),
             ),
           ),
           onSubmitted: (value) => controller.onRefresh(),

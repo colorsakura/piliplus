@@ -29,14 +29,8 @@ class SearchText extends StatelessWidget {
       color: bgColor ?? theme.colorScheme.onInverseSurface,
       borderRadius: const BorderRadius.all(Radius.circular(6)),
       child: InkWell(
-        onTap: () {
-          onTap?.call(text);
-        },
-        onLongPress: onLongPress != null
-            ? () {
-                onLongPress!(text);
-              }
-            : null,
+        onTap: () => onTap?.call(text),
+        onLongPress: onLongPress != null ? () => onLongPress!(text) : null,
         borderRadius: const BorderRadius.all(Radius.circular(6)),
         child: Padding(
           padding: padding ??

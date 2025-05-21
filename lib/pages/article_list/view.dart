@@ -142,9 +142,8 @@ class _ArticleListPageState extends State<ArticleListPage> {
                   if (_controller.author != null) ...[
                     const SizedBox(height: 10),
                     GestureDetector(
-                      onTap: () {
-                        Get.toNamed('/member?mid=${_controller.author!.mid}');
-                      },
+                      onTap: () =>
+                          Get.toNamed('/member?mid=${_controller.author!.mid}'),
                       child: Row(
                         children: [
                           NetworkImgLayer(
@@ -193,10 +192,8 @@ class _ArticleListPageState extends State<ArticleListPage> {
       actions: [
         IconButton(
           tooltip: '浏览器打开',
-          onPressed: () {
-            PageUtils.inAppWebview(
-                '${HttpString.baseUrl}/read/mobile-readlist/rl${_controller.id}');
-          },
+          onPressed: () => PageUtils.inAppWebview(
+              '${HttpString.baseUrl}/read/mobile-readlist/rl${_controller.id}'),
           icon: const Icon(Icons.open_in_browser_outlined, size: 19),
         )
       ],

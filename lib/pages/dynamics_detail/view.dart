@@ -265,41 +265,39 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
             ? [
                 IconButton(
                   tooltip: '页面比例调节',
-                  onPressed: () {
-                    showDialog(
-                      context: context,
-                      builder: (context) => Align(
-                        alignment: Alignment.topRight,
-                        child: Container(
-                          margin: const EdgeInsets.only(
-                            top: 56,
-                            right: 16,
-                          ),
-                          width: context.width / 4,
-                          height: 32,
-                          child: Builder(
-                            builder: (context) => Slider(
-                              min: 1,
-                              max: 100,
-                              value: _ratio.first,
-                              onChanged: (value) {
-                                if (value >= 10 && value <= 90) {
-                                  _ratio[0] = value;
-                                  _ratio[1] = 100 - value;
-                                  GStorage.setting.put(
-                                    SettingBoxKey.dynamicDetailRatio,
-                                    _ratio,
-                                  );
-                                  (context as Element).markNeedsBuild();
-                                  setState(() {});
-                                }
-                              },
-                            ),
+                  onPressed: () => showDialog(
+                    context: context,
+                    builder: (context) => Align(
+                      alignment: Alignment.topRight,
+                      child: Container(
+                        margin: const EdgeInsets.only(
+                          top: 56,
+                          right: 16,
+                        ),
+                        width: context.width / 4,
+                        height: 32,
+                        child: Builder(
+                          builder: (context) => Slider(
+                            min: 1,
+                            max: 100,
+                            value: _ratio.first,
+                            onChanged: (value) {
+                              if (value >= 10 && value <= 90) {
+                                _ratio[0] = value;
+                                _ratio[1] = 100 - value;
+                                GStorage.setting.put(
+                                  SettingBoxKey.dynamicDetailRatio,
+                                  _ratio,
+                                );
+                                (context as Element).markNeedsBuild();
+                                setState(() {});
+                              }
+                            },
                           ),
                         ),
                       ),
-                    );
-                  },
+                    ),
+                  ),
                   icon: Transform.rotate(
                     angle: pi / 2,
                     child: const Icon(Icons.splitscreen, size: 19),
@@ -467,43 +465,41 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
                                   Expanded(
                                     child: Builder(
                                       builder: (btnContext) => TextButton.icon(
-                                        onPressed: () {
-                                          showModalBottomSheet(
-                                            context: context,
-                                            isScrollControlled: true,
-                                            useSafeArea: true,
-                                            builder: (context) => RepostPanel(
-                                              item: _controller.dynItem,
-                                              callback: () {
-                                                int count = _controller
-                                                        .dynItem
-                                                        .modules
-                                                        .moduleStat
-                                                        ?.forward
-                                                        ?.count ??
-                                                    0;
-                                                _controller.dynItem.modules
-                                                        .moduleStat ??=
-                                                    ModuleStatModel();
-                                                _controller
-                                                    .dynItem
-                                                    .modules
-                                                    .moduleStat
-                                                    ?.forward ??= DynamicStat();
-                                                _controller
-                                                    .dynItem
-                                                    .modules
-                                                    .moduleStat!
-                                                    .forward!
-                                                    .count = count + 1;
-                                                if (btnContext.mounted) {
-                                                  (btnContext as Element?)
-                                                      ?.markNeedsBuild();
-                                                }
-                                              },
-                                            ),
-                                          );
-                                        },
+                                        onPressed: () => showModalBottomSheet(
+                                          context: context,
+                                          isScrollControlled: true,
+                                          useSafeArea: true,
+                                          builder: (context) => RepostPanel(
+                                            item: _controller.dynItem,
+                                            callback: () {
+                                              int count = _controller
+                                                      .dynItem
+                                                      .modules
+                                                      .moduleStat
+                                                      ?.forward
+                                                      ?.count ??
+                                                  0;
+                                              _controller.dynItem.modules
+                                                      .moduleStat ??=
+                                                  ModuleStatModel();
+                                              _controller
+                                                  .dynItem
+                                                  .modules
+                                                  .moduleStat
+                                                  ?.forward ??= DynamicStat();
+                                              _controller
+                                                  .dynItem
+                                                  .modules
+                                                  .moduleStat!
+                                                  .forward!
+                                                  .count = count + 1;
+                                              if (btnContext.mounted) {
+                                                (btnContext as Element?)
+                                                    ?.markNeedsBuild();
+                                              }
+                                            },
+                                          ),
+                                        ),
                                         icon: Icon(
                                           FontAwesomeIcons.shareFromSquare,
                                           size: 16,
@@ -533,10 +529,8 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
                                   ),
                                   Expanded(
                                     child: TextButton.icon(
-                                      onPressed: () {
-                                        Utils.shareText(
-                                            '${HttpString.dynamicShareBaseUrl}/${_controller.dynItem.idStr}');
-                                      },
+                                      onPressed: () => Utils.shareText(
+                                          '${HttpString.dynamicShareBaseUrl}/${_controller.dynItem.idStr}'),
                                       icon: Icon(
                                         CustomIcon.share_node,
                                         size: 16,
@@ -730,13 +724,11 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
                     replyLevel: '1',
                     replyReply: (replyItem, id) =>
                         replyReply(context, replyItem, id),
-                    onReply: () {
-                      _controller.onReply(
-                        context,
-                        replyItem: response[index],
-                        index: index,
-                      );
-                    },
+                    onReply: () => _controller.onReply(
+                      context,
+                      replyItem: response[index],
+                      index: index,
+                    ),
                     onDelete: (subIndex) =>
                         _controller.onRemove(index, subIndex),
                     upMid: _controller.upMid,

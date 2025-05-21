@@ -22,9 +22,7 @@ class LiveCardVFollow extends StatelessWidget {
       clipBehavior: Clip.hardEdge,
       margin: EdgeInsets.zero,
       child: InkWell(
-        onTap: () {
-          Get.toNamed('/liveRoom?roomid=${liveItem.roomid}');
-        },
+        onTap: () => Get.toNamed('/liveRoom?roomid=${liveItem.roomid}'),
         onLongPress: () => imageSaveDialog(
           title: liveItem.title,
           cover: liveItem.roomCover,

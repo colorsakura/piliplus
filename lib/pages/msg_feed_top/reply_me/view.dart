@@ -33,12 +33,10 @@ class _ReplyMePageState extends State<ReplyMePage> {
         title: const Text('回复我的'),
         actions: [
           IconButton(
-            onPressed: () {
-              Get.to(
-                const WhisperSettingsPage(
-                    imSettingType: IMSettingType.SETTING_TYPE_OLD_REPLY_ME),
-              );
-            },
+            onPressed: () => Get.to(
+              const WhisperSettingsPage(
+                  imSettingType: IMSettingType.SETTING_TYPE_OLD_REPLY_ME),
+            ),
             icon: Icon(
               size: 20,
               Icons.settings,
@@ -94,19 +92,14 @@ class _ReplyMePageState extends State<ReplyMePage> {
                       );
                     }
                   },
-                  onLongPress: () {
-                    showConfirmDialog(
-                      context: context,
-                      title: '确定删除该通知?',
-                      onConfirm: () {
-                        _replyMeController.onRemove(item.id, index);
-                      },
-                    );
-                  },
+                  onLongPress: () => showConfirmDialog(
+                    context: context,
+                    title: '确定删除该通知?',
+                    onConfirm: () =>
+                        _replyMeController.onRemove(item.id, index),
+                  ),
                   leading: GestureDetector(
-                    onTap: () {
-                      Get.toNamed('/member?mid=${item.user?.mid}');
-                    },
+                    onTap: () => Get.toNamed('/member?mid=${item.user?.mid}'),
                     child: NetworkImgLayer(
                       width: 45,
                       height: 45,

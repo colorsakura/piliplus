@@ -10,15 +10,15 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 class ActionItem extends StatefulWidget {
   final Icon icon;
   final Icon? selectIcon;
-  final Function? onTap;
-  final Function? onLongPress;
+  final VoidCallback? onTap;
+  final VoidCallback? onLongPress;
   final bool? isLoading;
   final String? text;
   final bool selectStatus;
   final String semanticsLabel;
   final bool needAnim;
   final bool hasTriple;
-  final Function? callBack;
+  final ValueChanged<bool>? callBack;
   final bool? expand;
 
   const ActionItem({
@@ -145,11 +145,7 @@ class ActionItemState extends State<ActionItem>
                   feedBack();
                   widget.onTap?.call();
                 },
-          onLongPress: _isThumbsUp
-              ? null
-              : () {
-                  widget.onLongPress?.call();
-                },
+          onLongPress: _isThumbsUp ? null : widget.onLongPress,
           onTapDown: (details) => _isThumbsUp ? _startLongPress() : null,
           onTapUp: (details) => _isThumbsUp ? _cancelLongPress() : null,
           onTapCancel: () => _isThumbsUp ? _cancelLongPress(true) : null,

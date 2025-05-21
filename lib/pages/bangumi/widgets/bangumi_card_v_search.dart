@@ -24,9 +24,7 @@ class BangumiCardVSearch extends StatelessWidget {
           title: item.title?.map((e) => e['text']).join(),
           cover: item.cover,
         ),
-        onTap: () {
-          PageUtils.viewBangumi(seasonId: item.seasonId);
-        },
+        onTap: () => PageUtils.viewBangumi(seasonId: item.seasonId),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

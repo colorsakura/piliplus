@@ -156,7 +156,9 @@ class AccountManager extends Interceptor {
     if (path.startsWith(HttpString.appBaseUrl) || _skipCookie(path)) {
       return handler.next(response);
     } else {
-      _saveCookies(response).then((_) => handler.next(response)).catchError(
+      _saveCookies(response)
+          .whenComplete(() => handler.next(response))
+          .catchError(
         (dynamic e, StackTrace s) {
           final error = DioException(
             requestOptions: response.requestOptions,
@@ -176,7 +178,9 @@ class AccountManager extends Interceptor {
     }
     if (err.response != null &&
         !err.response!.requestOptions.path.startsWith(HttpString.appBaseUrl)) {
-      _saveCookies(err.response!).then((_) => handler.next(err)).catchError(
+      _saveCookies(err.response!)
+          .whenComplete(() => handler.next(err))
+          .catchError(
         (dynamic e, StackTrace s) {
           final error = DioException(
             requestOptions: err.response!.requestOptions,

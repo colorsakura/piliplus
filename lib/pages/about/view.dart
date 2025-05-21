@@ -155,9 +155,7 @@ Commit Hash: ${BuildConfig.commitHash}''',
           ),
           if (Platform.isAndroid)
             ListTile(
-              onTap: () {
-                Utils.channel.invokeMethod('linkVerifySettings');
-              },
+              onTap: () => Utils.channel.invokeMethod('linkVerifySettings'),
               leading: const Icon(MdiIcons.linkBoxOutline),
               title: const Text('打开受支持的链接'),
               trailing: Icon(
@@ -167,9 +165,7 @@ Commit Hash: ${BuildConfig.commitHash}''',
               ),
             ),
           ListTile(
-            onTap: () {
-              PageUtils.launchURL('$_sourceCodeUrl/issues');
-            },
+            onTap: () => PageUtils.launchURL('$_sourceCodeUrl/issues'),
             leading: const Icon(Icons.feedback_outlined),
             title: const Text('问题反馈'),
             trailing: Icon(
@@ -179,9 +175,7 @@ Commit Hash: ${BuildConfig.commitHash}''',
             ),
           ),
           ListTile(
-            onTap: () {
-              Get.toNamed('/logs');
-            },
+            onTap: () => Get.toNamed('/logs'),
             onLongPress: clearLogs,
             leading: const Icon(Icons.bug_report_outlined),
             title: const Text('错误日志'),
@@ -189,25 +183,23 @@ Commit Hash: ${BuildConfig.commitHash}''',
             trailing: Icon(Icons.arrow_forward, size: 16, color: outline),
           ),
           ListTile(
-            onTap: () {
-              showConfirmDialog(
-                context: context,
-                title: '提示',
-                content: '该操作将清除图片及网络请求缓存数据，确认清除？',
-                onConfirm: () async {
-                  SmartDialog.showLoading(msg: '正在清除...');
-                  try {
-                    await CacheManage.clearLibraryCache();
-                    SmartDialog.showToast('清除成功');
-                  } catch (err) {
-                    SmartDialog.showToast(err.toString());
-                  } finally {
-                    SmartDialog.dismiss();
-                  }
-                  getCacheSize();
-                },
-              );
-            },
+            onTap: () => showConfirmDialog(
+              context: context,
+              title: '提示',
+              content: '该操作将清除图片及网络请求缓存数据，确认清除？',
+              onConfirm: () async {
+                SmartDialog.showLoading(msg: '正在清除...');
+                try {
+                  await CacheManage.clearLibraryCache();
+                  SmartDialog.showToast('清除成功');
+                } catch (err) {
+                  SmartDialog.showToast(err.toString());
+                } finally {
+                  SmartDialog.dismiss();
+                }
+                getCacheSize();
+              },
+            ),
             leading: const Icon(Icons.delete_outline),
             title: const Text('清除缓存'),
             subtitle: Obx(
@@ -220,28 +212,109 @@ Commit Hash: ${BuildConfig.commitHash}''',
           ListTile(
             title: const Text('导入/导出登录信息'),
             leading: const Icon(Icons.import_export_outlined),
-            onTap: () {
-              showDialog(
-                context: context,
-                builder: (context) => SimpleDialog(
-                  title: const Text('导入/导出登录信息'),
+            onTap: () => showDialog(
+              context: context,
+              builder: (context) => SimpleDialog(
+                title: const Text('导入/导出登录信息'),
+                clipBehavior: Clip.hardEdge,
+                children: [
+                  ListTile(
+                    title: const Text('导出'),
+                    onTap: () {
+                      Get.back();
+                      String res = jsonEncode(Accounts.account.toMap());
+                      Utils.copyText(res);
+                    },
+                  ),
+                  ListTile(
+                    title: const Text('导入'),
+                    onTap: () async {
+                      Get.back();
+                      ClipboardData? data =
+                          await Clipboard.getData('text/plain');
+                      if (data?.text?.isNotEmpty != true) {
+                        SmartDialog.showToast('剪贴板无数据');
+                        return;
+                      }
+                      if (!context.mounted) return;
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                            title: const Text('是否导入以下登录信息？'),
+                            content: SingleChildScrollView(
+                              child: Text(data!.text!),
+                            ),
+                            actions: [
+                              TextButton(
+                                onPressed: Get.back,
+                                child: Text(
+                                  '取消',
+                                  style: TextStyle(color: outline),
+                                ),
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  Get.back();
+                                  try {
+                                    final res = (jsonDecode(data.text!) as Map)
+                                        .map((key, value) => MapEntry(
+                                            key, LoginAccount.fromJson(value)));
+                                    Accounts.account
+                                        .putAll(res)
+                                        .whenComplete(() => Accounts.refresh())
+                                        .whenComplete(() {
+                                      MineController.anonymity.value =
+                                          !Accounts.get(AccountType.heartbeat)
+                                              .isLogin;
+                                      if (Accounts.main.isLogin) {
+                                        return LoginUtils.onLoginMain();
+                                      }
+                                    });
+                                  } catch (e) {
+                                    SmartDialog.showToast('导入失败：$e');
+                                  }
+                                },
+                                child: const Text('确定'),
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    },
+                  ),
+                ],
+              ),
+            ),
+          ),
+          ListTile(
+            title: const Text('导入/导出设置'),
+            dense: false,
+            leading: const Icon(Icons.import_export_outlined),
+            onTap: () => showDialog(
+              context: context,
+              builder: (context) {
+                return SimpleDialog(
                   clipBehavior: Clip.hardEdge,
+                  title: const Text('导入/导出设置'),
                   children: [
                     ListTile(
-                      title: const Text('导出'),
+                      title: const Text('导出设置至剪贴板'),
                       onTap: () {
                         Get.back();
-                        String res = jsonEncode(Accounts.account.toMap());
-                        Utils.copyText(res);
+                        String data = GStorage.exportAllSettings();
+                        Utils.copyText(data);
                       },
                     ),
                     ListTile(
-                      title: const Text('导入'),
+                      title: const Text('从剪贴板导入设置'),
                       onTap: () async {
                         Get.back();
                         ClipboardData? data =
                             await Clipboard.getData('text/plain');
-                        if (data?.text?.isNotEmpty != true) {
+                        if (data == null ||
+                            data.text == null ||
+                            data.text!.isEmpty) {
                           SmartDialog.showToast('剪贴板无数据');
                           return;
                         }
@@ -250,9 +323,9 @@ Commit Hash: ${BuildConfig.commitHash}''',
                           context: context,
                           builder: (context) {
                             return AlertDialog(
-                              title: const Text('是否导入以下登录信息？'),
+                              title: const Text('是否导入如下设置？'),
                               content: SingleChildScrollView(
-                                child: Text(data!.text!),
+                                child: Text(data.text!),
                               ),
                               actions: [
                                 TextButton(
@@ -263,24 +336,12 @@ Commit Hash: ${BuildConfig.commitHash}''',
                                   ),
                                 ),
                                 TextButton(
-                                  onPressed: () {
+                                  onPressed: () async {
                                     Get.back();
                                     try {
-                                      final res = (jsonDecode(data.text!)
-                                              as Map)
-                                          .map((key, value) => MapEntry(key,
-                                              LoginAccount.fromJson(value)));
-                                      Accounts.account
-                                          .putAll(res)
-                                          .then((_) => Accounts.refresh())
-                                          .then((_) {
-                                        MineController.anonymity.value =
-                                            !Accounts.get(AccountType.heartbeat)
-                                                .isLogin;
-                                        if (Accounts.main.isLogin) {
-                                          return LoginUtils.onLoginMain();
-                                        }
-                                      });
+                                      await GStorage.importAllSettings(
+                                          data.text!);
+                                      SmartDialog.showToast('导入成功');
                                     } catch (e) {
                                       SmartDialog.showToast('导入失败：$e');
                                     }
@@ -294,132 +355,54 @@ Commit Hash: ${BuildConfig.commitHash}''',
                       },
                     ),
                   ],
-                ),
-              );
-            },
-          ),
-          ListTile(
-            title: const Text('导入/导出设置'),
-            dense: false,
-            leading: const Icon(Icons.import_export_outlined),
-            onTap: () {
-              showDialog(
-                context: context,
-                builder: (context) {
-                  return SimpleDialog(
-                    clipBehavior: Clip.hardEdge,
-                    title: const Text('导入/导出设置'),
-                    children: [
-                      ListTile(
-                        title: const Text('导出设置至剪贴板'),
-                        onTap: () {
-                          Get.back();
-                          String data = GStorage.exportAllSettings();
-                          Utils.copyText(data);
-                        },
-                      ),
-                      ListTile(
-                        title: const Text('从剪贴板导入设置'),
-                        onTap: () async {
-                          Get.back();
-                          ClipboardData? data =
-                              await Clipboard.getData('text/plain');
-                          if (data == null ||
-                              data.text == null ||
-                              data.text!.isEmpty) {
-                            SmartDialog.showToast('剪贴板无数据');
-                            return;
-                          }
-                          if (!context.mounted) return;
-                          showDialog(
-                            context: context,
-                            builder: (context) {
-                              return AlertDialog(
-                                title: const Text('是否导入如下设置？'),
-                                content: SingleChildScrollView(
-                                  child: Text(data.text!),
-                                ),
-                                actions: [
-                                  TextButton(
-                                    onPressed: Get.back,
-                                    child: Text(
-                                      '取消',
-                                      style: TextStyle(color: outline),
-                                    ),
-                                  ),
-                                  TextButton(
-                                    onPressed: () async {
-                                      Get.back();
-                                      try {
-                                        await GStorage.importAllSettings(
-                                            data.text!);
-                                        SmartDialog.showToast('导入成功');
-                                      } catch (e) {
-                                        SmartDialog.showToast('导入失败：$e');
-                                      }
-                                    },
-                                    child: const Text('确定'),
-                                  ),
-                                ],
-                              );
-                            },
-                          );
-                        },
-                      ),
-                    ],
-                  );
-                },
-              );
-            },
+                );
+              },
+            ),
           ),
           ListTile(
             title: const Text('重置所有设置'),
             leading: const Icon(Icons.settings_backup_restore_outlined),
-            onTap: () {
-              showDialog(
-                context: context,
-                builder: (context) {
-                  return AlertDialog(
-                    title: const Text('重置所有设置'),
-                    content: const Text('是否重置所有设置？'),
-                    actions: [
-                      TextButton(
-                        onPressed: () {
-                          Get.back();
-                        },
-                        child: const Text('取消'),
-                      ),
-                      TextButton(
-                        onPressed: () async {
-                          Get.back();
-                          await Future.wait([
-                            GStorage.setting.clear(),
-                            GStorage.video.clear(),
-                          ]);
-                          SmartDialog.showToast('重置成功');
-                        },
-                        child: const Text('重置可导出的设置'),
-                      ),
-                      TextButton(
-                        onPressed: () async {
-                          Get.back();
-                          await Future.wait([
-                            GStorage.userInfo.clear(),
-                            GStorage.setting.clear(),
-                            GStorage.localCache.clear(),
-                            GStorage.video.clear(),
-                            GStorage.historyWord.clear(),
-                            Accounts.clear(),
-                          ]);
-                          SmartDialog.showToast('重置成功');
-                        },
-                        child: const Text('重置所有数据（含登录信息）'),
-                      ),
-                    ],
-                  );
-                },
-              );
-            },
+            onTap: () => showDialog(
+              context: context,
+              builder: (context) {
+                return AlertDialog(
+                  title: const Text('重置所有设置'),
+                  content: const Text('是否重置所有设置？'),
+                  actions: [
+                    TextButton(
+                      onPressed: Get.back,
+                      child: const Text('取消'),
+                    ),
+                    TextButton(
+                      onPressed: () async {
+                        Get.back();
+                        await Future.wait([
+                          GStorage.setting.clear(),
+                          GStorage.video.clear(),
+                        ]);
+                        SmartDialog.showToast('重置成功');
+                      },
+                      child: const Text('重置可导出的设置'),
+                    ),
+                    TextButton(
+                      onPressed: () async {
+                        Get.back();
+                        await Future.wait([
+                          GStorage.userInfo.clear(),
+                          GStorage.setting.clear(),
+                          GStorage.localCache.clear(),
+                          GStorage.video.clear(),
+                          GStorage.historyWord.clear(),
+                          Accounts.clear(),
+                        ]);
+                        SmartDialog.showToast('重置成功');
+                      },
+                      child: const Text('重置所有数据（含登录信息）'),
+                    ),
+                  ],
+                );
+              },
+            ),
           ),
           const SizedBox(height: 80),
         ],

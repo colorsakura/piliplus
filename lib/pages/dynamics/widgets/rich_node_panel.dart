@@ -59,9 +59,7 @@ TextSpan? richNode(
                 text: ' ${i.text}',
                 style: style,
                 recognizer: TapGestureRecognizer()
-                  ..onTap = () {
-                    Get.toNamed('/member?mid=${i.rid}');
-                  },
+                  ..onTap = () => Get.toNamed('/member?mid=${i.rid}'),
               ),
             );
             break;
@@ -72,15 +70,13 @@ TextSpan? richNode(
                 text: i.origText!,
                 style: style,
                 recognizer: TapGestureRecognizer()
-                  ..onTap = () {
-                    Get.toNamed(
-                      '/searchResult',
-                      parameters: {
-                        'keyword':
-                            i.origText!.substring(1, i.origText!.length - 1),
-                      },
-                    );
-                  },
+                  ..onTap = () => Get.toNamed(
+                        '/searchResult',
+                        parameters: {
+                          'keyword':
+                              i.origText!.substring(1, i.origText!.length - 1),
+                        },
+                      ),
               ),
             );
             break;
@@ -172,15 +168,13 @@ TextSpan? richNode(
                   text: '${i.origText} ',
                   style: style,
                   recognizer: TapGestureRecognizer()
-                    ..onTap = () {
-                      Get.toNamed(
-                        '/webview',
-                        parameters: {
-                          'url':
-                              'https://www.bilibili.com/h5/lottery/result?business_id=${item.idStr}'
-                        },
-                      );
-                    },
+                    ..onTap = () => Get.toNamed(
+                          '/webview',
+                          parameters: {
+                            'url':
+                                'https://www.bilibili.com/h5/lottery/result?business_id=${item.idStr}'
+                          },
+                        ),
                 ),
               );
             break;
@@ -204,9 +198,8 @@ TextSpan? richNode(
                   recognizer: i.jumpUrl == null
                       ? null
                       : (TapGestureRecognizer()
-                        ..onTap = () {
-                          PiliScheme.routePushFromUrl(i.jumpUrl!);
-                        }),
+                        ..onTap =
+                            () => PiliScheme.routePushFromUrl(i.jumpUrl!)),
                 ),
               );
             break;

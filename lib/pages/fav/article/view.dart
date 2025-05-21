@@ -66,18 +66,16 @@ class _FavArticlePageState extends State<FavArticlePage>
                   }
                   return FavArticleItem(
                     item: response[index],
-                    onDelete: () {
-                      showConfirmDialog(
-                        context: context,
-                        title: '确定取消收藏？',
-                        onConfirm: () {
-                          _favArticleController.onRemove(
-                            index,
-                            response[index]['opus_id'],
-                          );
-                        },
-                      );
-                    },
+                    onDelete: () => showConfirmDialog(
+                      context: context,
+                      title: '确定取消收藏？',
+                      onConfirm: () {
+                        _favArticleController.onRemove(
+                          index,
+                          response[index]['opus_id'],
+                        );
+                      },
+                    ),
                   );
                 },
                 childCount: response!.length,

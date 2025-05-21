@@ -100,9 +100,7 @@ class _DynamicsPageState extends State<DynamicsPage>
               return Center(
                 child: IconButton(
                   icon: const Icon(Icons.refresh),
-                  onPressed: () {
-                    _dynamicsController.queryFollowUp();
-                  },
+                  onPressed: _dynamicsController.queryFollowUp,
                 ),
               );
             } else {

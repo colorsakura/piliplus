@@ -33,7 +33,7 @@ class _FavSortPageState extends State<FavSortPage> {
     }
     if (_scrollController.position.pixels >=
         _scrollController.position.maxScrollExtent - 200) {
-      _favDetailController.onLoadMore().then((_) {
+      _favDetailController.onLoadMore().whenComplete(() {
         try {
           if (_favDetailController.loadingState.value is Success) {
             List<FavDetailItemData> list =

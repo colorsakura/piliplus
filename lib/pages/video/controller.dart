@@ -380,9 +380,7 @@ class VideoDetailController extends GetxController
               getMediaList(isReverse: true);
             },
             loadPrevious: Get.arguments['isContinuePlaying'] == true
-                ? () {
-                    return getMediaList(isLoadPrevious: true);
-                  }
+                ? () => getMediaList(isLoadPrevious: true)
                 : null,
             onDelete: sourceType == 'watchLater' ||
                     (sourceType == 'fav' && Get.arguments?['isOwner'] == true)
@@ -744,14 +742,14 @@ class VideoDetailController extends GetxController
                 if (segmentModel.skipType == SkipType.alwaysSkip) {
                   _lastPos = 0;
                   plPlayerController.videoPlayerController!.stream.buffer.first
-                      .then((_) {
+                      .whenComplete(() {
                     onSkip(segmentModel);
                   });
                 } else if (segmentModel.skipType == SkipType.skipOnce) {
                   _lastPos = 0;
                   segmentModel.hasSkipped = true;
                   plPlayerController.videoPlayerController!.stream.buffer.first
-                      .then((_) {
+                      .whenComplete(() {
                     onSkip(segmentModel);
                   });
                 } else if (segmentModel.skipType == SkipType.skipManually) {

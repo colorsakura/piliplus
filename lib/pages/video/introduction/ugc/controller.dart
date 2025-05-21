@@ -852,7 +852,7 @@ class VideoIntroController extends GetxController {
       relatedCtr = Get.find<RelatedController>(tag: heroTag);
     } else {
       relatedCtr = Get.put(RelatedController(false), tag: heroTag)
-        ..queryData().then((_) {
+        ..queryData().whenComplete(() {
           playRelated();
         });
       return false;

@@ -420,21 +420,18 @@ class _LiveRoomPageState extends State<LiveRoomPage>
         actions: [
           IconButton(
             tooltip: '刷新',
-            onPressed: () {
-              _futureBuilderFuture = _liveRoomController.queryLiveInfo();
-            },
+            onPressed: () =>
+                _futureBuilderFuture = _liveRoomController.queryLiveInfo(),
             icon: const Icon(Icons.refresh),
           ),
           PopupMenuButton(
             icon: const Icon(Icons.more_vert, size: 19),
             itemBuilder: (BuildContext context) => <PopupMenuEntry>[
               PopupMenuItem(
-                onTap: () {
-                  PageUtils.inAppWebview(
-                    'https://live.bilibili.com/h5/${_liveRoomController.roomId}',
-                    off: true,
-                  );
-                },
+                onTap: () => PageUtils.inAppWebview(
+                  'https://live.bilibili.com/h5/${_liveRoomController.roomId}',
+                  off: true,
+                ),
                 child: const Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -590,9 +587,7 @@ class _LiveRoomPageState extends State<LiveRoomPage>
               ),
             ),
             IconButton(
-              onPressed: () {
-                onSendDanmaku(true);
-              },
+              onPressed: () => onSendDanmaku(true),
               icon: Icon(Icons.emoji_emotions_outlined, color: _color),
             ),
           ],

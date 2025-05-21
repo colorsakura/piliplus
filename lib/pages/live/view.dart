@@ -118,9 +118,7 @@ class _LivePageState extends CommonPageState<LivePage, LiveController>
                   context: context,
                   tooltip: '全部标签',
                   icon: Icons.widgets,
-                  onPressed: () {
-                    Get.to(const LiveAreaPage());
-                  },
+                  onPressed: () => Get.to(const LiveAreaPage()),
                 ),
               ],
             ),
@@ -250,9 +248,7 @@ class _LivePageState extends CommonPageState<LivePage, LiveController>
             ),
             const Spacer(),
             GestureDetector(
-              onTap: () {
-                Get.to(const LiveFollowPage());
-              },
+              onTap: () => Get.to(const LiveFollowPage()),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -289,9 +285,7 @@ class _LivePageState extends CommonPageState<LivePage, LiveController>
           return SizedBox(
             width: 65,
             child: GestureDetector(
-              onTap: () {
-                Get.toNamed('/liveRoom?roomid=${item.roomid}');
-              },
+              onTap: () => Get.toNamed('/liveRoom?roomid=${item.roomid}'),
               onLongPress: () {
                 Feedback.forLongPress(context);
                 Get.toNamed('/member?mid=${item.uid}');

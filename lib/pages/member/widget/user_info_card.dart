@@ -80,11 +80,9 @@ class UserInfoCard extends StatelessWidget {
     return Hero(
       tag: imgUrl,
       child: GestureDetector(
-        onTap: () {
-          context.imageView(
-            imgList: [SourceModel(url: imgUrl)],
-          );
-        },
+        onTap: () => context.imageView(
+          imgList: [SourceModel(url: imgUrl)],
+        ),
         child: CachedNetworkImage(
           imageUrl: Utils.thumbnailImgUrl(imgUrl),
           width: double.infinity,
@@ -233,9 +231,7 @@ class UserInfoCard extends StatelessWidget {
             crossAxisAlignment: WrapCrossAlignment.end,
             children: [
               GestureDetector(
-                onTap: () {
-                  Utils.copyText(card.mid.toString());
-                },
+                onTap: () => Utils.copyText(card.mid.toString()),
                 child: Text(
                   'UID: ${card.mid}',
                   style: TextStyle(

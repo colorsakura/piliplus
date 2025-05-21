@@ -79,15 +79,11 @@ class _SysMsgPageState extends State<SysMsgPage> {
                   } catch (_) {}
                 }
                 return ListTile(
-                  onLongPress: () {
-                    showConfirmDialog(
-                      context: context,
-                      title: '确定删除该通知?',
-                      onConfirm: () {
-                        _sysMsgController.onRemove(item.id, index);
-                      },
-                    );
-                  },
+                  onLongPress: () => showConfirmDialog(
+                    context: context,
+                    title: '确定删除该通知?',
+                    onConfirm: () => _sysMsgController.onRemove(item.id, index),
+                  ),
                   title: Text(
                     "${item.title}",
                     style: theme.textTheme.titleMedium,

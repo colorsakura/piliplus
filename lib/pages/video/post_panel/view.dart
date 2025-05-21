@@ -375,32 +375,30 @@ class _PostPanelState extends CommonCollapseSlidePageState<PostPanel> {
                 bottom: 16 + MediaQuery.paddingOf(context).bottom,
                 child: FloatingActionButton(
                   tooltip: '提交',
-                  onPressed: () {
-                    showDialog(
-                      context: context,
-                      builder: (context) => AlertDialog(
-                        title: const Text('确定无误再提交'),
-                        actions: [
-                          TextButton(
-                            onPressed: Get.back,
-                            child: Text(
-                              '取消',
-                              style: TextStyle(
-                                color: theme.colorScheme.outline,
-                              ),
+                  onPressed: () => showDialog(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                      title: const Text('确定无误再提交'),
+                      actions: [
+                        TextButton(
+                          onPressed: Get.back,
+                          child: Text(
+                            '取消',
+                            style: TextStyle(
+                              color: theme.colorScheme.outline,
                             ),
                           ),
-                          TextButton(
-                            onPressed: () {
-                              Get.back();
-                              _onPost();
-                            },
-                            child: const Text('确定提交'),
-                          ),
-                        ],
-                      ),
-                    );
-                  },
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            Get.back();
+                            _onPost();
+                          },
+                          child: const Text('确定提交'),
+                        ),
+                      ],
+                    ),
+                  ),
                   child: const Icon(Icons.check),
                 ),
               )

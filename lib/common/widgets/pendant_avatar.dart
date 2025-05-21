@@ -70,9 +70,7 @@ class PendantAvatar extends StatelessWidget {
           Positioned(
             bottom: 0,
             child: InkWell(
-              onTap: () {
-                Get.toNamed('/liveRoom?roomid=$roomId');
-              },
+              onTap: () => Get.toNamed('/liveRoom?roomid=$roomId'),
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1),
                 decoration: BoxDecoration(

@@ -64,13 +64,11 @@ class _LaterSearchPageState
                 child: iconButton(
                   tooltip: '移除',
                   context: context,
-                  onPressed: () {
-                    controller.toViewDel(
-                      context,
-                      index,
-                      item.aid,
-                    );
-                  },
+                  onPressed: () => controller.toViewDel(
+                    context,
+                    index,
+                    item.aid,
+                  ),
                   icon: Icons.clear,
                   iconColor: Theme.of(context).colorScheme.onSurfaceVariant,
                   bgColor: Colors.transparent,

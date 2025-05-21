@@ -21,10 +21,7 @@ class BangumiCardVMemberHome extends StatelessWidget {
       clipBehavior: Clip.hardEdge,
       margin: EdgeInsets.zero,
       child: InkWell(
-        onTap: () {
-          final int seasonId = int.tryParse(bangumiItem.param ?? '') ?? -1;
-          PageUtils.viewBangumi(seasonId: seasonId);
-        },
+        onTap: () => PageUtils.viewBangumi(seasonId: bangumiItem.param),
         onLongPress: () => imageSaveDialog(
           title: bangumiItem.title,
           cover: bangumiItem.cover,

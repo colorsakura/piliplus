@@ -246,4 +246,15 @@ class MemberController extends CommonDataController<SpaceData, SpaceData?>
       SmartDialog.showToast(res['msg']);
     }
   }
+
+  void onTapTab(int value) {
+    if (tabController?.indexIsChanging == false &&
+        key.currentState?.outerController.hasClients == true) {
+      key.currentState!.outerController.animateTo(
+        key.currentState!.outerController.offset,
+        duration: const Duration(milliseconds: 500),
+        curve: Curves.easeInOut,
+      );
+    }
+  }
 }

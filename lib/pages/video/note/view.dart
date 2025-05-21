@@ -204,9 +204,7 @@ Widget _itemWidget(BuildContext context, ThemeData theme, dynamic item) {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           GestureDetector(
-            onTap: () {
-              Get.toNamed('/member?mid=${item['author']['mid']}');
-            },
+            onTap: () => Get.toNamed('/member?mid=${item['author']['mid']}'),
             child: NetworkImgLayer(
               height: 34,
               width: 34,
@@ -221,9 +219,8 @@ Widget _itemWidget(BuildContext context, ThemeData theme, dynamic item) {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 GestureDetector(
-                  onTap: () {
-                    Get.toNamed('/member?mid=${item['author']['mid']}');
-                  },
+                  onTap: () =>
+                      Get.toNamed('/member?mid=${item['author']['mid']}'),
                   child: Row(
                     children: [
                       Text(

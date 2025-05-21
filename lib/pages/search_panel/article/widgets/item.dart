@@ -19,15 +19,13 @@ class SearchArticleItem extends StatelessWidget {
       color: theme.colorScheme.outline,
     );
     return InkWell(
-      onTap: () {
-        Get.toNamed(
-          '/articlePage',
-          parameters: {
-            'id': '${item.id}',
-            'type': 'read',
-          },
-        );
-      },
+      onTap: () => Get.toNamed(
+        '/articlePage',
+        parameters: {
+          'id': '${item.id}',
+          'type': 'read',
+        },
+      ),
       onLongPress: () => imageSaveDialog(
         title: item.title?.map((item) => item['text']).join() ?? '',
         cover: item.imageUrls?.firstOrNull,

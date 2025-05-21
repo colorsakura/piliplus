@@ -50,16 +50,14 @@ class _FavPanelState extends State<FavPanel> {
             title: const Text('添加到收藏夹'),
             actions: [
               TextButton.icon(
-                onPressed: () {
-                  Get.toNamed('/createFav')?.then((data) {
-                    if (data != null) {
-                      (widget.ctr?.favFolderData.value as FavFolderData?)
-                          ?.list
-                          ?.insert(1, data);
-                      widget.ctr?.favFolderData.refresh();
-                    }
-                  });
-                },
+                onPressed: () => Get.toNamed('/createFav')?.then((data) {
+                  if (data != null) {
+                    (widget.ctr?.favFolderData.value as FavFolderData?)
+                        ?.list
+                        ?.insert(1, data);
+                    widget.ctr?.favFolderData.refresh();
+                  }
+                }),
                 icon: Icon(
                   Icons.add,
                   color: theme.colorScheme.primary,

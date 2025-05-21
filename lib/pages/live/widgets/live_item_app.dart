@@ -22,9 +22,7 @@ class LiveCardVApp extends StatelessWidget {
       clipBehavior: Clip.hardEdge,
       margin: EdgeInsets.zero,
       child: InkWell(
-        onTap: () {
-          Get.toNamed('/liveRoom?roomid=${item.roomid}');
-        },
+        onTap: () => Get.toNamed('/liveRoom?roomid=${item.roomid}'),
         onLongPress: () => imageSaveDialog(
           title: item.title,
           cover: item.cover,

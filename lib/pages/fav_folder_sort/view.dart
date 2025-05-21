@@ -32,7 +32,7 @@ class _FavFolderSortPageState extends State<FavFolderSortPage> {
     }
     if (_scrollController.position.pixels >=
         _scrollController.position.maxScrollExtent - 200) {
-      _favController.onLoadMore().then((_) {
+      _favController.onLoadMore().whenComplete(() {
         try {
           if (_favController.loadingState.value is Success) {
             List<FavFolderItemData> list =
@@ -130,11 +130,8 @@ class _FavFolderSortPageState extends State<FavFolderSortPage> {
           child: FavItem(
             heroTag: key,
             favFolderItem: item,
-            onLongPress: index == 0
-                ? () {
-                    SmartDialog.showToast('默认收藏夹不支持排序');
-                  }
-                : null,
+            onLongPress:
+                index == 0 ? () => SmartDialog.showToast('默认收藏夹不支持排序') : null,
           ),
         );
       },

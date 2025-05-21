@@ -39,9 +39,7 @@ class _FollowSearchPageState extends CommonSearchPageState<FollowSearchPage,
         return FollowItem(
           item: list[index],
           onSelect: widget.mid != null && widget.isFromSelect != false
-              ? (userModel) {
-                  Get.back(result: userModel);
-                }
+              ? (userModel) => Get.back(result: userModel)
               : null,
         );
       }),

@@ -80,9 +80,7 @@ class BottomControl extends StatelessWidget implements PreferredSizeWidget {
                       height: 35,
                       padding: const EdgeInsets.only(left: 30),
                       value: boxFit,
-                      onTap: () {
-                        plPlayerController.toggleVideoFit(boxFit);
-                      },
+                      onTap: () => plPlayerController.toggleVideoFit(boxFit),
                       child: Text(
                         boxFit.desc,
                         style:
@@ -116,9 +114,7 @@ class BottomControl extends StatelessWidget implements PreferredSizeWidget {
                       height: 35,
                       padding: const EdgeInsets.only(left: 30),
                       value: e['code'],
-                      onTap: () {
-                        liveRoomCtr.changeQn(e['code']);
-                      },
+                      onTap: () => liveRoomCtr.changeQn(e['code']),
                       child: Text(
                         e['desc'],
                         style:

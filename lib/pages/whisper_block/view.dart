@@ -79,9 +79,7 @@ class _WhisperBlockPageState extends State<WhisperBlockPage> {
                                       context: context,
                                       title: '删除屏蔽词？',
                                       content: '该屏蔽词将不再生效',
-                                      onConfirm: () {
-                                        _controller.onRemove(e);
-                                      },
+                                      onConfirm: () => _controller.onRemove(e),
                                     );
                                   },
                                 ))

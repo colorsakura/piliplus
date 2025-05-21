@@ -109,9 +109,7 @@ class _SendDanmakuPanelState extends CommonPublishPageState<SendDanmakuPanel> {
                 itemBuilder: (context, index) {
                   if (index == length - 1) {
                     return GestureDetector(
-                      onTap: () {
-                        _showColorPicker();
-                      },
+                      onTap: _showColorPicker,
                       child: Container(
                         decoration: BoxDecoration(
                           color: themeData.colorScheme.secondaryContainer,
@@ -230,9 +228,7 @@ class _SendDanmakuPanelState extends CommonPublishPageState<SendDanmakuPanel> {
 
   Widget _buildColorItem(Color color) {
     return GestureDetector(
-      onTap: () {
-        _color.value = color;
-      },
+      onTap: () => _color.value = color,
       child: Container(
         padding: const EdgeInsets.all(2),
         decoration: BoxDecoration(
@@ -284,9 +280,7 @@ class _SendDanmakuPanelState extends CommonPublishPageState<SendDanmakuPanel> {
     return Obx(
       () => Expanded(
         child: GestureDetector(
-          onTap: () {
-            _mode.value = mode;
-          },
+          onTap: () => _mode.value = mode,
           child: Container(
             alignment: Alignment.center,
             decoration: BoxDecoration(
@@ -314,9 +308,7 @@ class _SendDanmakuPanelState extends CommonPublishPageState<SendDanmakuPanel> {
     return Obx(
       () => Expanded(
         child: GestureDetector(
-          onTap: () {
-            _fontsize.value = fontsize;
-          },
+          onTap: () => _fontsize.value = fontsize,
           child: Container(
             alignment: Alignment.center,
             decoration: BoxDecoration(
