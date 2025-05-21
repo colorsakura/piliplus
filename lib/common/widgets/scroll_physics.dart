@@ -87,4 +87,12 @@ class CustomSpringDescription implements SpringDescription {
   static final _instance = CustomSpringDescription._();
 
   factory CustomSpringDescription() => _instance;
+
+  /// Defaults to 0.
+  @override
+  double bounce = 0.0;
+
+  /// Defaults to 0.5 seconds.
+  @override
+  Duration duration = const Duration(milliseconds: 500);
 }

@@ -39,7 +39,7 @@ class ThemeUtils {
               labelSmall: textStyle,
             ),
       tabBarTheme:
-          fontWeight == null ? null : TabBarTheme(labelStyle: textStyle),
+          fontWeight == null ? null : TabBarThemeData(labelStyle: textStyle),
       appBarTheme: AppBarTheme(
         elevation: 0,
         titleSpacing: 0,
@@ -72,7 +72,7 @@ class ThemeUtils {
       popupMenuTheme: PopupMenuThemeData(
         surfaceTintColor: isDynamic ? colorScheme.onSurfaceVariant : null,
       ),
-      cardTheme: CardTheme(
+      cardTheme: CardThemeData(
         elevation: 1,
         surfaceTintColor: isDynamic
             ? colorScheme.onSurfaceVariant
@@ -84,7 +84,7 @@ class ThemeUtils {
       progressIndicatorTheme: ProgressIndicatorThemeData(
         refreshBackgroundColor: colorScheme.onSecondary,
       ),
-      dialogTheme: DialogTheme(
+      dialogTheme: DialogThemeData(
         titleTextStyle: TextStyle(
           fontSize: 18,
           color: colorScheme.onSurface,

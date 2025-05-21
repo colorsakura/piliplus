@@ -297,7 +297,7 @@ class PageUtils {
       context: context,
       useSafeArea: true,
       isScrollControlled: true,
-      sheetAnimationStyle: AnimationStyle(curve: Curves.ease),
+      sheetAnimationStyle: const AnimationStyle(curve: Curves.ease),
       constraints: BoxConstraints(
         maxWidth: min(640, min(Get.width, Get.height)),
       ),
@@ -531,7 +531,7 @@ class PageUtils {
       elevation: 0,
       backgroundColor: Colors.transparent,
       transitionAnimationController: transitionAnimationController,
-      sheetAnimationStyle: AnimationStyle(duration: Duration.zero),
+      sheetAnimationStyle: const AnimationStyle(duration: Duration.zero),
     );
   }
 

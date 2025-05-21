@@ -600,8 +600,7 @@ class RefreshIndicatorState extends State<RefreshIndicator>
           _status = RefreshIndicatorStatus.refresh;
         });
 
-        final Future<void> refreshResult = widget.onRefresh();
-        refreshResult.whenComplete(() {
+        widget.onRefresh().whenComplete(() {
           if (mounted && _status == RefreshIndicatorStatus.refresh) {
             completer.complete();
             _dismiss(RefreshIndicatorStatus.done);
