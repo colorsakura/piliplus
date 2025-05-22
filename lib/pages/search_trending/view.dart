@@ -58,7 +58,8 @@ class _SearchTrendingPageState extends State<SearchTrendingPage> {
       final width = constraints.maxWidth > constraints.maxHeight
           ? min(640.0, maxWidth * 0.6)
           : maxWidth;
-      _offset = width * 528 / 1125 - 56 - Get.mediaQuery.padding.top;
+      final height = width * 528 / 1125;
+      _offset = height - 56 - Get.mediaQuery.padding.top;
       listener();
       final removePadding = maxWidth > width;
       return Scaffold(
@@ -116,8 +117,9 @@ class _SearchTrendingPageState extends State<SearchTrendingPage> {
                   slivers: [
                     SliverToBoxAdapter(
                       child: Image.asset(
+                        width: width,
+                        height: height,
                         'assets/images/trending_banner.png',
-                        fit: BoxFit.fitWidth,
                         filterQuality: FilterQuality.low,
                       ),
                     ),
