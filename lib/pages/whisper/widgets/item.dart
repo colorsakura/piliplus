@@ -139,13 +139,18 @@ class WhisperSessionItem extends StatelessWidget {
       },
       leading: Builder(
         builder: (context) {
-          Widget buildAvatar() {
-            final pendant = item.sessionInfo.avatar.fallbackLayers.layers
-                .getOrNull(1)
-                ?.resource;
-            final offcial = item.sessionInfo.avatar.fallbackLayers.layers
-                .lastOrNull?.resource.resImage.imageSrc;
-            return PendantAvatar(
+          final pendant = item.sessionInfo.avatar.fallbackLayers.layers
+              .getOrNull(1)
+              ?.resource;
+          final offcial = item.sessionInfo.avatar.fallbackLayers.layers
+              .lastOrNull?.resource.resImage.imageSrc;
+
+          return GestureDetector(
+            onTap: item.sessionInfo.avatar.hasMid()
+                ? () =>
+                    Get.toNamed('/member?mid=${item.sessionInfo.avatar.mid}')
+                : null,
+            child: PendantAvatar(
               size: 42,
               badgeSize: 14,
               avatar: item.sessionInfo.avatar.fallbackLayers.layers.first
@@ -162,25 +167,7 @@ class WhisperSessionItem extends StatelessWidget {
                       _ => null,
                     }
                   : null,
-            );
-          }
-
-          return GestureDetector(
-            onTap: item.sessionInfo.avatar.hasMid()
-                ? () => Get.toNamed(
-                      '/member?mid=${item.sessionInfo.avatar.mid}',
-                    )
-                : null,
-            child: item.hasUnread() &&
-                    item.unread.style != UnreadStyle.UNREAD_STYLE_NONE
-                ? Badge(
-                    label: item.unread.style == UnreadStyle.UNREAD_STYLE_NUMBER
-                        ? Text(" ${item.unread.number} ")
-                        : null,
-                    alignment: Alignment.topRight,
-                    child: buildAvatar(),
-                  )
-                : buildAvatar(),
+            ),
           );
         },
       ),
@@ -232,15 +219,30 @@ class WhisperSessionItem extends StatelessWidget {
             ),
             if (item.hasTimestamp()) const SizedBox(width: 4),
           ],
-          if (item.hasTimestamp())
-            Text(
-              Utils.dateFormat((item.timestamp ~/ 1000000).toInt(),
-                  formatType: "day"),
-              style: TextStyle(
-                fontSize: 12,
-                color: theme.colorScheme.outline,
-              ),
-            ),
+          Column(
+            spacing: 10,
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              if (item.hasTimestamp())
+                Text(
+                  Utils.dateFormat((item.timestamp ~/ 1000000).toInt(),
+                      formatType: "day"),
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: theme.colorScheme.outline,
+                  ),
+                ),
+              if (item.hasUnread() &&
+                  item.unread.style != UnreadStyle.UNREAD_STYLE_NONE)
+                Badge(
+                  label: item.unread.style == UnreadStyle.UNREAD_STYLE_NUMBER
+                      ? Text(item.unread.number.toString())
+                      : null,
+                  alignment: Alignment.topRight,
+                )
+            ],
+          ),
         ],
       ),
     );
