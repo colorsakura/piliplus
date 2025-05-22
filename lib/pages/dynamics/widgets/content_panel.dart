@@ -78,7 +78,7 @@ Widget content(
             ),
           ),
         if (richNodes != null)
-          source == 'detail'
+          source == 'detail' && floor == 1
               ? SelectableText.rich(
                   richNodes,
                   style: isSave

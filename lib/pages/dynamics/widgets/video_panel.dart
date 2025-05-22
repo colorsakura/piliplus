@@ -4,6 +4,7 @@ import 'package:PiliPlus/common/widgets/badge.dart';
 import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
 import 'package:PiliPlus/models/common/badge_type.dart';
 import 'package:PiliPlus/models/dynamics/result.dart';
+import 'package:PiliPlus/pages/dynamics/widgets/additional_panel.dart';
 import 'package:PiliPlus/pages/dynamics/widgets/content_panel.dart';
 import 'package:PiliPlus/pages/dynamics/widgets/rich_node_panel.dart';
 import 'package:PiliPlus/utils/utils.dart';
@@ -200,6 +201,14 @@ Widget videoSeasonWidget(
             style: const TextStyle(fontWeight: FontWeight.bold),
             overflow: source == 'detail' ? null : TextOverflow.ellipsis,
           ),
+        ),
+      if (item.modules.moduleDynamic?.additional != null)
+        addWidget(
+          theme,
+          item,
+          context,
+          item.modules.moduleDynamic?.additional?.type,
+          floor: floor,
         ),
     ],
   );
