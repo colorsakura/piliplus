@@ -849,6 +849,8 @@ class DynamicMajorModel {
   ModuleBlocked? blocked;
   Map? medialist;
 
+  SubscriptionNew? subscriptionNew;
+
   DynamicMajorModel.fromJson(Map<String, dynamic> json) {
     archive = json['archive'] != null
         ? DynamicArchiveModel.fromJson(json['archive'])
@@ -877,7 +879,155 @@ class DynamicMajorModel {
         ? null
         : ModuleBlocked.fromJson(json['blocked']);
     medialist = json['medialist'];
+    subscriptionNew = json['subscription_new'] == null
+        ? null
+        : SubscriptionNew.fromJson(json['subscription_new']);
   }
+}
+
+class SubscriptionNew {
+  LiveRcmd? liveRcmd;
+  String? style;
+
+  SubscriptionNew({
+    this.liveRcmd,
+    this.style,
+  });
+
+  factory SubscriptionNew.fromJson(Map<String, dynamic> json) =>
+      SubscriptionNew(
+        liveRcmd: json["live_rcmd"] == null
+            ? null
+            : LiveRcmd.fromJson(json["live_rcmd"]),
+        style: json["style"],
+      );
+}
+
+class LiveRcmd {
+  LiveRcmdContent? content;
+  int? reserveType;
+
+  LiveRcmd({
+    this.content,
+    this.reserveType,
+  });
+
+  factory LiveRcmd.fromJson(Map<String, dynamic> json) => LiveRcmd(
+        content: json["content"] == null
+            ? null
+            : LiveRcmdContent.fromJson(jsonDecode(json["content"])),
+        reserveType: json["reserve_type"],
+      );
+}
+
+class LiveRcmdContent {
+  int? type;
+  LivePlayInfo? livePlayInfo;
+
+  LiveRcmdContent({
+    this.type,
+    this.livePlayInfo,
+  });
+
+  factory LiveRcmdContent.fromJson(Map<String, dynamic> json) =>
+      LiveRcmdContent(
+        type: json["type"],
+        livePlayInfo: json["live_play_info"] == null
+            ? null
+            : LivePlayInfo.fromJson(json["live_play_info"]),
+      );
+}
+
+class LivePlayInfo {
+  int? roomId;
+  int? uid;
+  int? liveStatus;
+  int? roomType;
+  int? playType;
+  String? title;
+  String? cover;
+  int? online;
+  int? areaId;
+  String? areaName;
+  int? parentAreaId;
+  String? parentAreaName;
+  int? liveScreenType;
+  int? liveStartTime;
+  String? link;
+  WatchedShow? watchedShow;
+  int? roomPaidType;
+
+  LivePlayInfo({
+    this.roomId,
+    this.uid,
+    this.liveStatus,
+    this.roomType,
+    this.playType,
+    this.title,
+    this.cover,
+    this.online,
+    this.areaId,
+    this.areaName,
+    this.parentAreaId,
+    this.parentAreaName,
+    this.liveScreenType,
+    this.liveStartTime,
+    this.link,
+    this.watchedShow,
+    this.roomPaidType,
+  });
+
+  factory LivePlayInfo.fromJson(Map<String, dynamic> json) => LivePlayInfo(
+        roomId: json["room_id"],
+        uid: json["uid"],
+        liveStatus: json["live_status"],
+        roomType: json["room_type"],
+        playType: json["play_type"],
+        title: json["title"],
+        cover: json["cover"],
+        online: json["online"],
+        areaId: json["area_id"],
+        areaName: json["area_name"],
+        parentAreaId: json["parent_area_id"],
+        parentAreaName: json["parent_area_name"],
+        liveScreenType: json["live_screen_type"],
+        liveStartTime: json["live_start_time"],
+        link: json["link"],
+        watchedShow: json["watched_show"] == null
+            ? null
+            : WatchedShow.fromJson(json["watched_show"]),
+        roomPaidType: json["room_paid_type"],
+      );
+}
+
+class WatchedShow {
+  bool? watchedShowSwitch;
+  int? num;
+  String? textSmall;
+  String? textLarge;
+  String? icon;
+  String? iconLocation;
+  String? iconWeb;
+
+  WatchedShow({
+    this.watchedShowSwitch,
+    this.num,
+    this.textSmall,
+    this.textLarge,
+    this.icon,
+    this.iconLocation,
+    this.iconWeb,
+  });
+
+  factory WatchedShow.fromJson(Map<String, dynamic> json) => WatchedShow(
+        watchedShowSwitch: json["switch"],
+        num: json["num"],
+        textSmall: json["text_small"],
+        textLarge: json["text_large"],
+        icon: json["icon"],
+        iconLocation: json["icon_location"],
+        iconWeb: json["icon_web"],
+      );
 }
 
 class DynamicTopicModel {
@@ -1129,7 +1279,7 @@ class DynamicLiveModel {
   String? areaName;
   String? title;
   int? liveStartTime;
-  Map? watchedShow;
+  WatchedShow? watchedShow;
 
   DynamicLiveModel.fromJson(Map<String, dynamic> json) {
     content = json['content'];
@@ -1148,7 +1298,9 @@ class DynamicLiveModel {
       areaName = livePlayInfo['area_name'];
       title = livePlayInfo['title'];
       liveStartTime = livePlayInfo['live_start_time'];
-      watchedShow = livePlayInfo['watched_show'];
+      watchedShow = livePlayInfo['watched_show'] == null
+          ? null
+          : WatchedShow.fromJson(livePlayInfo['watched_show']);
     }
   }
 }

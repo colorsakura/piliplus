@@ -4,20 +4,20 @@ import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
 import 'package:PiliPlus/models/common/badge_type.dart';
 import 'package:PiliPlus/models/dynamics/result.dart';
 import 'package:PiliPlus/pages/dynamics/widgets/rich_node_panel.dart';
-import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-Widget liveRcmdPanel(
+Widget livePanelSub(
   ThemeData theme,
   String? source,
   DynamicItemModel item,
   BuildContext context, {
   int floor = 1,
 }) {
-  DynamicLiveModel? liveRcmd = item.modules.moduleDynamic?.major?.liveRcmd;
-  if (liveRcmd == null) {
+  SubscriptionNew? subItem = item.modules.moduleDynamic!.major?.subscriptionNew;
+  LivePlayInfo? content = subItem?.liveRcmd?.content?.livePlayInfo;
+  if (subItem == null || content == null) {
     return const SizedBox.shrink();
   }
   late TextSpan? richNodes = richNode(theme, item, context);
@@ -79,7 +79,7 @@ Widget liveRcmdPanel(
       Padding(
         padding: const EdgeInsets.symmetric(horizontal: StyleString.safeSpace),
         child: GestureDetector(
-          onTap: () => PageUtils.pushDynDetail(item, floor),
+          onTap: () => Get.toNamed('/liveRoom?roomid=${content.roomId}'),
           child: LayoutBuilder(
             builder: (context, box) {
               double width = box.maxWidth;
@@ -87,25 +87,25 @@ Widget liveRcmdPanel(
                 clipBehavior: Clip.none,
                 children: [
                   Hero(
-                    tag: liveRcmd.roomId.toString(),
+                    tag: content.roomId.toString(),
                     child: NetworkImgLayer(
                       width: width,
                       height: width / StyleString.aspectRatio,
-                      src: liveRcmd.cover,
+                      src: content.cover,
                     ),
                   ),
                   PBadge(
-                    text: liveRcmd.watchedShow?.textLarge,
+                    text: content.watchedShow?.textLarge,
                     top: 6,
                     right: 56,
                     type: PBadgeType.gray,
                   ),
                   PBadge(
-                    text: liveRcmd.liveStatus == 1 ? '直播中' : '直播结束',
+                    text: content.liveStatus == 1 ? '直播中' : '直播结束',
                     top: 6,
                     right: 6,
                   ),
-                  if (liveRcmd.areaName != null)
+                  if (content.areaName != null)
                     Positioned(
                       left: 0,
                       right: 0,
@@ -135,7 +135,7 @@ Widget liveRcmdPanel(
                                 ),
                         ),
                         child: Text(
-                          liveRcmd.areaName!,
+                          content.areaName!,
                           style: TextStyle(
                             fontSize: theme.textTheme.labelMedium!.fontSize,
                             color: Colors.white,
@@ -150,12 +150,12 @@ Widget liveRcmdPanel(
         ),
       ),
       const SizedBox(height: 6),
-      if (liveRcmd.title != null)
+      if (content.title != null)
         Padding(
           padding:
               const EdgeInsets.symmetric(horizontal: StyleString.safeSpace),
           child: Text(
-            liveRcmd.title!,
+            content.title!,
             maxLines: source == 'detail' ? null : 1,
             style: const TextStyle(fontWeight: FontWeight.bold),
             overflow: source == 'detail' ? null : TextOverflow.ellipsis,

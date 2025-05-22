@@ -10,6 +10,7 @@ import 'package:PiliPlus/pages/article/widgets/opus_content.dart';
 import 'package:PiliPlus/pages/dynamics/widgets/additional_panel.dart';
 import 'package:PiliPlus/pages/dynamics/widgets/article_panel.dart';
 import 'package:PiliPlus/pages/dynamics/widgets/live_panel.dart';
+import 'package:PiliPlus/pages/dynamics/widgets/live_panel_sub.dart';
 import 'package:PiliPlus/pages/dynamics/widgets/live_rcmd_panel.dart';
 import 'package:PiliPlus/pages/dynamics/widgets/pic_panel.dart';
 import 'package:PiliPlus/pages/dynamics/widgets/rich_node_panel.dart';
@@ -524,10 +525,16 @@ Widget forWard(
         ],
       );
 
+    case 'DYNAMIC_TYPE_SUBSCRIPTION_NEW'
+        when item.modules.moduleDynamic?.major?.type ==
+            'MAJOR_TYPE_SUBSCRIPTION_NEW':
+      return livePanelSub(theme, source, item, context, floor: floor);
     default:
-      return const SizedBox(
-        width: double.infinity,
-        child: Text('🙏 暂未支持的类型，请联系开发者反馈 '),
+      return Padding(
+        padding: floor == 1
+            ? const EdgeInsets.symmetric(horizontal: 12)
+            : EdgeInsets.zero,
+        child: Text('暂未支持的类型: \n${item.idStr}\n${item.type}'),
       );
   }
 }

@@ -18,7 +18,7 @@ Widget livePanel(
     return const SizedBox.shrink();
   }
   late final authorStyle = TextStyle(color: theme.colorScheme.primary);
-  TextSpan? richNodes = richNode(theme, item, context);
+  late TextSpan? richNodes = richNode(theme, item, context);
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
