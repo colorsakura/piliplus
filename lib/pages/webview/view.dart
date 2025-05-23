@@ -42,7 +42,7 @@ class _WebviewPageState extends State<WebviewPage> {
     super.initState();
     if (Get.arguments is Map) {
       _inApp = Get.arguments['inApp'];
-      _off = Get.arguments['off'];
+      _off = Get.arguments['off'] ?? false;
     }
   }
 
