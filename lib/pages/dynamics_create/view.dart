@@ -91,41 +91,44 @@ class _CreateDynPanelState extends CommonPublishPageState<CreateDynPanel> {
   Widget _buildImageList(ThemeData theme) => Obx(
         () => SizedBox(
           height: 100,
-          child: ListView.separated(
+          child: SingleChildScrollView(
             scrollDirection: Axis.horizontal,
-            physics: const AlwaysScrollableScrollPhysics(
-              parent: BouncingScrollPhysics(),
-            ),
             padding: const EdgeInsets.symmetric(horizontal: 16),
-            itemCount: pathList.length == limit ? limit : pathList.length + 1,
-            itemBuilder: (context, index) {
-              if (pathList.length != limit && index == pathList.length) {
-                return Material(
-                  borderRadius: const BorderRadius.all(Radius.circular(12)),
-                  child: InkWell(
-                    borderRadius: const BorderRadius.all(Radius.circular(12)),
-                    onTap: () => onPickImage(() {
-                      if (pathList.isNotEmpty && !enablePublish.value) {
-                        enablePublish.value = true;
-                      }
-                    }),
-                    child: Ink(
-                      width: 100,
-                      height: 100,
-                      decoration: BoxDecoration(
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(12)),
-                        color: theme.colorScheme.secondaryContainer,
-                      ),
-                      child: const Center(child: Icon(Icons.add, size: 35)),
-                    ),
+            child: Row(
+              spacing: 10,
+              children: [
+                ...List.generate(
+                    pathList.length, (index) => buildImage(index, 100)),
+                if (pathList.length != limit)
+                  Builder(
+                    builder: (context) {
+                      const borderRadius =
+                          BorderRadius.all(Radius.circular(10));
+                      return Material(
+                        borderRadius: borderRadius,
+                        child: InkWell(
+                          borderRadius: borderRadius,
+                          onTap: () => onPickImage(() {
+                            if (pathList.isNotEmpty && !enablePublish.value) {
+                              enablePublish.value = true;
+                            }
+                          }),
+                          child: Ink(
+                            width: 100,
+                            height: 100,
+                            decoration: BoxDecoration(
+                              borderRadius: borderRadius,
+                              color: theme.colorScheme.secondaryContainer,
+                            ),
+                            child:
+                                const Center(child: Icon(Icons.add, size: 35)),
+                          ),
+                        ),
+                      );
+                    },
                   ),
-                );
-              } else {
-                return buildImage(index, 100);
-              }
-            },
-            separatorBuilder: (context, index) => const SizedBox(width: 10),
+              ],
+            ),
           ),
         ),
       );

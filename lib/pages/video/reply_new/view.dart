@@ -93,15 +93,16 @@ class _ReplyPageState extends CommonPublishPageState<ReplyPage> {
           return Container(
             height: 85,
             padding: const EdgeInsets.only(bottom: 10),
-            child: ListView.separated(
+            child: SingleChildScrollView(
               scrollDirection: Axis.horizontal,
-              physics: const AlwaysScrollableScrollPhysics(
-                parent: BouncingScrollPhysics(),
-              ),
               padding: const EdgeInsets.symmetric(horizontal: 15),
-              itemCount: pathList.length,
-              itemBuilder: (context, index) => buildImage(index, 75),
-              separatorBuilder: (context, index) => const SizedBox(width: 10),
+              child: Row(
+                spacing: 10,
+                children: List.generate(
+                  pathList.length,
+                  (index) => buildImage(index, 75),
+                ),
+              ),
             ),
           );
         } else {

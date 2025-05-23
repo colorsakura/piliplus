@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:math';
 
-import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/common/widgets/button/icon_button.dart';
 import 'package:PiliPlus/http/msg.dart';
 import 'package:PiliPlus/models/common/image_preview_type.dart';
@@ -304,7 +303,7 @@ abstract class CommonPublishPageState<T extends CommonPublishPage>
           },
           onLongPress: onClear,
           child: ClipRRect(
-            borderRadius: StyleString.mdRadius,
+            borderRadius: const BorderRadius.all(Radius.circular(4)),
             child: Image(
               height: height,
               fit: BoxFit.fitHeight,
