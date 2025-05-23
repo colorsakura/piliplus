@@ -92,12 +92,14 @@ class _ReplyPageState extends CommonPublishPageState<ReplyPage> {
         if (pathList.isNotEmpty) {
           return Container(
             height: 85,
+            width: double.infinity,
             padding: const EdgeInsets.only(bottom: 10),
             child: SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               padding: const EdgeInsets.symmetric(horizontal: 15),
               child: Row(
                 spacing: 10,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: List.generate(
                   pathList.length,
                   (index) => buildImage(index, 75),

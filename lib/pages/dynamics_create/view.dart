@@ -91,11 +91,13 @@ class _CreateDynPanelState extends CommonPublishPageState<CreateDynPanel> {
   Widget _buildImageList(ThemeData theme) => Obx(
         () => SizedBox(
           height: 100,
+          width: double.infinity,
           child: SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Row(
               spacing: 10,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 ...List.generate(
                     pathList.length, (index) => buildImage(index, 100)),
