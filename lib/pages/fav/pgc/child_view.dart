@@ -43,6 +43,8 @@ class _FavPgcChildPageState extends State<FavPgcChildPage>
           refreshIndicator(
             onRefresh: _favPgcController.onRefresh,
             child: CustomScrollView(
+              controller: _favPgcController.scrollController,
+              physics: const AlwaysScrollableScrollPhysics(),
               slivers: [
                 SliverPadding(
                   padding: EdgeInsets.only(

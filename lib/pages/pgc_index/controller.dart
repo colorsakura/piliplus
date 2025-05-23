@@ -7,7 +7,8 @@ import 'package:get/get.dart';
 class PgcIndexController extends CommonListController {
   PgcIndexController(this.indexType);
   int? indexType;
-  Rx<LoadingState> conditionState = LoadingState.loading().obs;
+  Rx<LoadingState<PgcIndexCondition>> conditionState =
+      LoadingState<PgcIndexCondition>.loading().obs;
 
   late final RxBool isExpand = false.obs;
 

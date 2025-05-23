@@ -42,17 +42,18 @@ class _PgcIndexPageState extends State<PgcIndexPage>
         : Obx(() => _buildBody(theme, _ctr.conditionState.value));
   }
 
-  Widget _buildBody(ThemeData theme, LoadingState loadingState) {
+  Widget _buildBody(
+      ThemeData theme, LoadingState<PgcIndexCondition> loadingState) {
     return switch (loadingState) {
       Loading() => loadingWidget,
       Success(:var response) => Builder(builder: (context) {
-          PgcIndexCondition data = response;
-          int count = (data.order?.isNotEmpty == true ? 1 : 0) +
-              (data.filter?.length ?? 0);
+          int count = (response.order?.isNotEmpty == true ? 1 : 0) +
+              (response.filter?.length ?? 0);
           if (count == 0) return const SizedBox.shrink();
           return SafeArea(
             bottom: false,
             child: CustomScrollView(
+              controller: _ctr.scrollController,
               slivers: [
                 if (widget.indexType != null)
                   const SliverToBoxAdapter(child: SizedBox(height: 12)),
@@ -62,8 +63,8 @@ class _PgcIndexPageState extends State<PgcIndexPage>
                     alignment: Alignment.topCenter,
                     duration: const Duration(milliseconds: 200),
                     child: count > 5
-                        ? Obx(() => _buildSortWidget(theme, count, data))
-                        : _buildSortWidget(theme, count, data),
+                        ? Obx(() => _buildSortWidget(theme, count, response))
+                        : _buildSortWidget(theme, count, response),
                   ),
                 ),
                 SliverPadding(

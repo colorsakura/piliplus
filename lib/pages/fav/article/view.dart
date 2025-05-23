@@ -31,6 +31,8 @@ class _FavArticlePageState extends State<FavArticlePage>
     return refreshIndicator(
       onRefresh: _favArticleController.onRefresh,
       child: CustomScrollView(
+        controller: _favArticleController.scrollController,
+        physics: const AlwaysScrollableScrollPhysics(),
         slivers: [
           SliverPadding(
             padding: EdgeInsets.only(

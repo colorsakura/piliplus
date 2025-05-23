@@ -36,6 +36,8 @@ class _FavNoteChildPageState extends State<FavNoteChildPage>
           refreshIndicator(
             onRefresh: _favNoteController.onRefresh,
             child: CustomScrollView(
+              controller: _favNoteController.scrollController,
+              physics: const AlwaysScrollableScrollPhysics(),
               slivers: [
                 SliverPadding(
                   padding: EdgeInsets.only(

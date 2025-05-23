@@ -37,6 +37,7 @@ class _ArticleListPageState extends State<ArticleListPage> {
         child: refreshIndicator(
           onRefresh: _controller.onRefresh,
           child: CustomScrollView(
+            physics: const AlwaysScrollableScrollPhysics(),
             slivers: [
               Obx(() => _buildHeader(theme, _controller.list.value)),
               SliverPadding(
