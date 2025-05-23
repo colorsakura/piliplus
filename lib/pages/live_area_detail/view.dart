@@ -157,57 +157,49 @@ class _LiveAreaDetailPageState extends State<LiveAreaDetailPage> {
           expand: false,
           snapSizes: const [1],
           builder: (_, scrollController) {
-            return NotificationListener<DraggableScrollableNotification>(
-              onNotification: (notification) {
-                if (notification.extent <= 1e-5) {
-                  Get.back();
-                }
-                return false;
-              },
-              child: Column(
-                children: [
-                  AppBar(
-                    centerTitle: true,
-                    backgroundColor: Colors.transparent,
-                    automaticallyImplyLeading: false,
-                    title: Text(widget.parentName),
-                    actions: [
-                      IconButton(
-                        onPressed: Get.back,
-                        icon: const Icon(Icons.clear),
-                      ),
-                      const SizedBox(width: 12),
-                    ],
-                  ),
-                  Expanded(
-                    child: GridView.builder(
-                      controller: scrollController,
-                      padding: EdgeInsets.only(
-                        top: 12,
-                        bottom: MediaQuery.paddingOf(context).bottom + 80,
-                      ),
-                      itemCount: list.length,
-                      gridDelegate:
-                          const SliverGridDelegateWithMaxCrossAxisExtent(
-                        maxCrossAxisExtent: 100,
-                        mainAxisSpacing: 10,
-                        crossAxisSpacing: 10,
-                        mainAxisExtent: 80,
-                      ),
-                      itemBuilder: (_, index) {
-                        return _tagItem(
-                          theme: theme,
-                          item: list[index],
-                          onTap: () {
-                            Get.back();
-                            DefaultTabController.of(context).index = index;
-                          },
-                        );
-                      },
+            return Column(
+              children: [
+                AppBar(
+                  centerTitle: true,
+                  backgroundColor: Colors.transparent,
+                  automaticallyImplyLeading: false,
+                  title: Text(widget.parentName),
+                  actions: [
+                    IconButton(
+                      onPressed: Get.back,
+                      icon: const Icon(Icons.clear),
                     ),
+                    const SizedBox(width: 12),
+                  ],
+                ),
+                Expanded(
+                  child: GridView.builder(
+                    controller: scrollController,
+                    padding: EdgeInsets.only(
+                      top: 12,
+                      bottom: MediaQuery.paddingOf(context).bottom + 80,
+                    ),
+                    itemCount: list.length,
+                    gridDelegate:
+                        const SliverGridDelegateWithMaxCrossAxisExtent(
+                      maxCrossAxisExtent: 100,
+                      mainAxisSpacing: 10,
+                      crossAxisSpacing: 10,
+                      mainAxisExtent: 80,
+                    ),
+                    itemBuilder: (_, index) {
+                      return _tagItem(
+                        theme: theme,
+                        item: list[index],
+                        onTap: () {
+                          Get.back();
+                          DefaultTabController.of(context).index = index;
+                        },
+                      );
+                    },
                   ),
-                ],
-              ),
+                ),
+              ],
             );
           },
         );
