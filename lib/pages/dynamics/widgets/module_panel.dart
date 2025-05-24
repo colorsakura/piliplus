@@ -4,8 +4,8 @@ import 'package:PiliPlus/common/widgets/badge.dart';
 import 'package:PiliPlus/common/widgets/image/image_save.dart';
 import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
 import 'package:PiliPlus/models/dynamics/result.dart';
-import 'package:PiliPlus/pages/article/widgets/opus_content.dart';
 import 'package:PiliPlus/pages/dynamics/widgets/additional_panel.dart';
+import 'package:PiliPlus/pages/dynamics/widgets/blocked_item.dart';
 import 'package:PiliPlus/pages/dynamics/widgets/content_panel.dart';
 import 'package:PiliPlus/pages/dynamics/widgets/live_panel.dart';
 import 'package:PiliPlus/pages/dynamics/widgets/live_panel_sub.dart';
@@ -16,17 +16,6 @@ import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-
-Widget blockedItem(ThemeData theme, ModuleBlocked moduleBlocked) {
-  return Padding(
-    padding: const EdgeInsets.symmetric(horizontal: 13, vertical: 1),
-    child: LayoutBuilder(
-      builder: (context, constraints) {
-        return moduleBlockedItem(theme, moduleBlocked, constraints.maxWidth);
-      },
-    ),
-  );
-}
 
 Widget module(
   ThemeData theme,
@@ -99,33 +88,35 @@ Widget module(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                children: [
-                  GestureDetector(
-                    onTap: () => Get.toNamed(
-                        '/member?mid=${orig.modules.moduleAuthor!.mid}',
-                        arguments: {'face': orig.modules.moduleAuthor!.face}),
-                    child: Text(
-                      '@${orig.modules.moduleAuthor!.name}',
-                      style: TextStyle(color: theme.colorScheme.primary),
+              if (orig.type != 'DYNAMIC_TYPE_NONE') ...[
+                Row(
+                  children: [
+                    GestureDetector(
+                      onTap: () => Get.toNamed(
+                          '/member?mid=${orig.modules.moduleAuthor!.mid}',
+                          arguments: {'face': orig.modules.moduleAuthor!.face}),
+                      child: Text(
+                        '@${orig.modules.moduleAuthor!.name}',
+                        style: TextStyle(color: theme.colorScheme.primary),
+                      ),
                     ),
-                  ),
-                  const SizedBox(width: 6),
-                  Text(
-                    Utils.dateFormat(orig.modules.moduleAuthor!.pubTs),
-                    style: TextStyle(
-                        color: theme.colorScheme.outline,
-                        fontSize: theme.textTheme.labelSmall!.fontSize),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 5),
-              content(theme, isSave, context, orig, source, callback,
-                  floor: floor + 1),
+                    const SizedBox(width: 6),
+                    Text(
+                      Utils.dateFormat(orig.modules.moduleAuthor!.pubTs),
+                      style: TextStyle(
+                          color: theme.colorScheme.outline,
+                          fontSize: theme.textTheme.labelSmall!.fontSize),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 5),
+                content(theme, isSave, context, orig, source, callback,
+                    floor: floor + 1),
+              ],
               module(theme, isSave, orig, context, source, callback,
                   floor: floor + 1),
               if (orig.modules.moduleDynamic?.additional != null)
-                addWidget(theme, orig, context, floor: floor),
+                addWidget(theme, orig, context, floor: floor + 1),
               if (orig.modules.moduleDynamic?.major?.blocked != null)
                 blockedItem(theme, orig.modules.moduleDynamic!.major!.blocked!),
             ],
@@ -150,15 +141,11 @@ Widget module(
       return videoSeasonWidget(
           theme, isSave, source, item, context, 'pgc', callback,
           floor: floor);
-    // 直播结束
     case 'DYNAMIC_TYPE_NONE':
       return Row(
+        spacing: 4,
         children: [
-          const Icon(
-            FontAwesomeIcons.ghost,
-            size: 14,
-          ),
-          const SizedBox(width: 4),
+          const Icon(FontAwesomeIcons.ghost, size: 14),
           Text(item.modules.moduleDynamic!.major!.none!.tips!)
         ],
       );
