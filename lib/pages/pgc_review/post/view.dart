@@ -131,6 +131,7 @@ class _PgcReviewPostPanelState
             decoration: const InputDecoration(
               border: OutlineInputBorder(),
             ),
+            textInputAction: TextInputAction.done,
           ),
         ),
         Padding(
