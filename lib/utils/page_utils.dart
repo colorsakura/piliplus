@@ -17,6 +17,7 @@ import 'package:PiliPlus/services/shutdown_timer_service.dart';
 import 'package:PiliPlus/utils/app_scheme.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/feed_back.dart';
+import 'package:PiliPlus/utils/global_data.dart';
 import 'package:PiliPlus/utils/id_utils.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/url_utils.dart';
@@ -524,6 +525,7 @@ class PageUtils {
             initIndex: index,
             setStatusBar: false,
             onClose: onClose,
+            quality: GlobalData().imgQuality,
           ),
         );
       },
