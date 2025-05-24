@@ -79,9 +79,27 @@ class PgcReviewController
       final item = loadingState.value.data![index];
       item.stat?.disliked = isDislike ? 0 : 1;
       if (!isDislike) {
+        if (item.stat?.liked == 1) {
+          item.stat!.likes = item.stat!.likes! - 1;
+        }
         item.stat?.liked = 0;
       }
       loadingState.refresh();
+    } else {
+      SmartDialog.showToast(res['msg']);
+    }
+  }
+
+  Future<void> onDel(int index, int? reviewId) async {
+    var res = await BangumiHttp.pgcReviewDel(
+      mediaId: mediaId,
+      reviewId: reviewId,
+    );
+    if (res['status']) {
+      loadingState
+        ..value.data!.removeAt(index)
+        ..refresh();
+      SmartDialog.showToast('删除成功');
     } else {
       SmartDialog.showToast(res['msg']);
     }

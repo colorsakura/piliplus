@@ -865,4 +865,8 @@ class Api {
   static const String pgcReviewDislike = '/pgc/review/action/dislike';
 
   static const String pgcReviewPost = '/pgc/review/short/post';
+
+  static const String pgcReviewMod = '/pgc/review/short/modify';
+
+  static const String pgcReviewDel = '/pgc/review/short/del';
 }

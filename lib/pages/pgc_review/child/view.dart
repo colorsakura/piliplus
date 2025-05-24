@@ -9,7 +9,9 @@ import 'package:PiliPlus/models/bangumi/pgc_review/list.dart';
 import 'package:PiliPlus/models/common/image_type.dart';
 import 'package:PiliPlus/models/common/pgc_review_type.dart';
 import 'package:PiliPlus/pages/pgc_review/child/controller.dart';
+import 'package:PiliPlus/pages/pgc_review/post/view.dart';
 import 'package:PiliPlus/utils/extension.dart';
+import 'package:PiliPlus/utils/storage.dart' show Accounts;
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -19,10 +21,12 @@ class PgcReviewChildPage extends StatefulWidget {
   const PgcReviewChildPage({
     super.key,
     required this.type,
+    required this.name,
     required this.mediaId,
   });
 
   final PgcReviewType type;
+  final String name;
   final dynamic mediaId;
 
   @override
@@ -113,15 +117,74 @@ class _PgcReviewChildPageState extends State<PgcReviewChildPage>
           : null,
       onLongPress: isLongReview
           ? null
-          : () => showConfirmDialog(
+          : () => showDialog(
                 context: context,
-                title: '确定举报该点评？',
-                onConfirm: () => Get.toNamed(
-                  '/webview',
-                  parameters: {
-                    'url':
-                        'https://www.bilibili.com/appeal/?reviewId=${item.reviewId}&type=shortComment&mediaId=${widget.mediaId}'
-                  },
+                builder: (context) => AlertDialog(
+                  clipBehavior: Clip.hardEdge,
+                  contentPadding: const EdgeInsets.symmetric(vertical: 12),
+                  content: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      if (item.author!.mid == Accounts.main.mid) ...[
+                        ListTile(
+                          dense: true,
+                          title: const Text(
+                            '编辑',
+                            style: TextStyle(fontSize: 14),
+                          ),
+                          onTap: () {
+                            Get.back();
+                            showModalBottomSheet(
+                              context: context,
+                              useSafeArea: true,
+                              isScrollControlled: true,
+                              builder: (context) {
+                                return PgcReviewPostPanel(
+                                  name: widget.name,
+                                  mediaId: widget.mediaId,
+                                  reviewId: item.reviewId,
+                                  content: item.content,
+                                  score: item.score,
+                                );
+                              },
+                            );
+                          },
+                        ),
+                        ListTile(
+                          dense: true,
+                          title: const Text(
+                            '删除',
+                            style: TextStyle(fontSize: 14),
+                          ),
+                          onTap: () {
+                            Get.back();
+                            showConfirmDialog(
+                              context: context,
+                              title: '删除短评，同时删除评分？',
+                              onConfirm: () =>
+                                  _controller.onDel(index, item.reviewId),
+                            );
+                          },
+                        ),
+                      ],
+                      ListTile(
+                        dense: true,
+                        title: const Text(
+                          '举报',
+                          style: TextStyle(fontSize: 14),
+                        ),
+                        onTap: () => Get
+                          ..back()
+                          ..toNamed(
+                            '/webview',
+                            parameters: {
+                              'url':
+                                  'https://www.bilibili.com/appeal/?reviewId=${item.reviewId}&type=shortComment&mediaId=${widget.mediaId}'
+                            },
+                          ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
       child: Padding(

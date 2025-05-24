@@ -39,7 +39,7 @@ class BangumiIntroController extends GetxController {
           ? '追番'
           : '追剧';
 
-  BangumiInfoModel bangumiItem = Get.arguments['bangumiItem'];
+  final BangumiInfoModel bangumiItem = Get.arguments['bangumiItem'];
 
   // 是否点赞
   RxBool hasLike = false.obs;

@@ -108,6 +108,8 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
   final GlobalKey relatedVideoPanelKey = GlobalKey();
   final GlobalKey videoPlayerKey = GlobalKey();
   final GlobalKey videoReplyPanelKey = GlobalKey();
+  late final GlobalKey ugcPanelKey = GlobalKey();
+  late final GlobalKey pgcPanelKey = GlobalKey();
 
   @override
   void initState() {
@@ -1797,6 +1799,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
             slivers: [
               if (videoDetailController.videoType == SearchType.video) ...[
                 VideoIntroPanel(
+                  key: ugcPanelKey,
                   heroTag: heroTag,
                   showAiBottomSheet: showAiBottomSheet,
                   showEpisodes: showEpisodes,
@@ -1831,6 +1834,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                   SearchType.media_bangumi)
                 Obx(
                   () => BangumiIntroPanel(
+                    key: pgcPanelKey,
                     heroTag: heroTag,
                     cid: videoDetailController.cid.value,
                     showEpisodes: showEpisodes,

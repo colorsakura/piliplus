@@ -87,8 +87,11 @@ class _PgcReviewPageState extends State<PgcReviewPage>
                   controller: _tabController,
                   physics: const NeverScrollableScrollPhysics(),
                   children: PgcReviewType.values
-                      .map((e) =>
-                          PgcReviewChildPage(type: e, mediaId: widget.mediaId))
+                      .map((e) => PgcReviewChildPage(
+                            type: e,
+                            name: widget.name,
+                            mediaId: widget.mediaId,
+                          ))
                       .toList(),
                 ),
               ),

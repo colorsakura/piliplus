@@ -200,4 +200,48 @@ class BangumiHttp {
       return {'status': false, 'msg': res.data['message']};
     }
   }
+
+  static Future pgcReviewMod({
+    required mediaId,
+    required int score,
+    required String content,
+    required reviewId,
+  }) async {
+    var res = await Request().post(
+      Api.pgcReviewMod,
+      data: {
+        'media_id': mediaId,
+        'score': score,
+        'content': content,
+        'review_id': reviewId,
+        'csrf': Accounts.main.csrf,
+      },
+      options: Options(contentType: Headers.formUrlEncodedContentType),
+    );
+    if (res.data['code'] == 0) {
+      return {'status': true};
+    } else {
+      return {'status': false, 'msg': res.data['message']};
+    }
+  }
+
+  static Future pgcReviewDel({
+    required mediaId,
+    required reviewId,
+  }) async {
+    var res = await Request().post(
+      Api.pgcReviewDel,
+      data: {
+        'media_id': mediaId,
+        'review_id': reviewId,
+        'csrf': Accounts.main.csrf,
+      },
+      options: Options(contentType: Headers.formUrlEncodedContentType),
+    );
+    if (res.data['code'] == 0) {
+      return {'status': true};
+    } else {
+      return {'status': false, 'msg': res.data['message']};
+    }
+  }
 }

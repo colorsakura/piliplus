@@ -12,10 +12,17 @@ class PgcReviewPostPanel extends CommonCollapseSlidePage {
     super.key,
     required this.name,
     required this.mediaId,
+    this.reviewId,
+    this.score,
+    this.content,
   });
 
   final String name;
   final dynamic mediaId;
+  // modify
+  final dynamic reviewId;
+  final int? score;
+  final String? content;
 
   @override
   State<PgcReviewPostPanel> createState() => _PgcReviewPostPanelState();
@@ -23,10 +30,11 @@ class PgcReviewPostPanel extends CommonCollapseSlidePage {
 
 class _PgcReviewPostPanelState
     extends CommonCollapseSlidePageState<PgcReviewPostPanel> {
-  final _controller = TextEditingController();
-  final RxInt _score = 0.obs;
-  final RxBool _shareFeed = false.obs;
-  final RxBool _enablePost = false.obs;
+  late final _controller = TextEditingController(text: widget.content);
+  late final RxInt _score = (widget.score ?? 0).obs;
+  late final RxBool _shareFeed = false.obs;
+  late final RxBool _enablePost = _isMod.obs;
+  late final _isMod = widget.reviewId != null;
 
   @override
   void dispose() {
@@ -134,36 +142,37 @@ class _PgcReviewPostPanelState
             textInputAction: TextInputAction.done,
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.only(left: 12, right: 12, bottom: 12),
-          child: GestureDetector(
-            behavior: HitTestBehavior.opaque,
-            onTap: () => _shareFeed.value = !_shareFeed.value,
-            child: Obx(
-              () {
-                Color color = _shareFeed.value
-                    ? theme.colorScheme.primary
-                    : theme.colorScheme.outline;
-                return Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(
-                      size: 22,
-                      _shareFeed.value
-                          ? Icons.check_box_outlined
-                          : Icons.check_box_outline_blank_outlined,
-                      color: color,
-                    ),
-                    Text(
-                      ' 分享到动态',
-                      style: TextStyle(color: color),
-                    ),
-                  ],
-                );
-              },
+        if (!_isMod)
+          Padding(
+            padding: const EdgeInsets.only(left: 12, right: 12, bottom: 12),
+            child: GestureDetector(
+              behavior: HitTestBehavior.opaque,
+              onTap: () => _shareFeed.value = !_shareFeed.value,
+              child: Obx(
+                () {
+                  Color color = _shareFeed.value
+                      ? theme.colorScheme.primary
+                      : theme.colorScheme.outline;
+                  return Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(
+                        size: 22,
+                        _shareFeed.value
+                            ? Icons.check_box_outlined
+                            : Icons.check_box_outline_blank_outlined,
+                        color: color,
+                      ),
+                      Text(
+                        ' 分享到动态',
+                        style: TextStyle(color: color),
+                      ),
+                    ],
+                  );
+                },
+              ),
             ),
           ),
-        ),
         Container(
           padding: EdgeInsets.only(
             left: 12,
@@ -192,31 +201,46 @@ class _PgcReviewPostPanelState
                   borderRadius: BorderRadius.all(Radius.circular(6)),
                 ),
               ),
-              onPressed: _enablePost.value
-                  ? () async {
-                      if (!Accounts.main.isLogin) {
-                        SmartDialog.showToast('账号未登录');
-                        return;
-                      }
-                      var res = await BangumiHttp.pgcReviewPost(
-                        mediaId: widget.mediaId,
-                        score: _score.value * 2,
-                        content: _controller.text,
-                        shareFeed: _shareFeed.value,
-                      );
-                      if (res['status']) {
-                        Get.back();
-                        SmartDialog.showToast('点评成功');
-                      } else {
-                        SmartDialog.showToast(res['msg']);
-                      }
-                    }
-                  : null,
-              child: const Text('发布'),
+              onPressed: _enablePost.value ? _onPost : null,
+              child: _isMod ? const Text('编辑') : const Text('发布'),
             ),
           ),
         ),
       ],
     );
+  }
+
+  Future<void> _onPost() async {
+    if (_isMod) {
+      var res = await BangumiHttp.pgcReviewMod(
+        mediaId: widget.mediaId,
+        score: _score.value * 2,
+        content: _controller.text,
+        reviewId: widget.reviewId,
+      );
+      if (res['status']) {
+        Get.back();
+        SmartDialog.showToast('编辑成功');
+      } else {
+        SmartDialog.showToast(res['msg']);
+      }
+      return;
+    }
+    if (!Accounts.main.isLogin) {
+      SmartDialog.showToast('账号未登录');
+      return;
+    }
+    var res = await BangumiHttp.pgcReviewPost(
+      mediaId: widget.mediaId,
+      score: _score.value * 2,
+      content: _controller.text,
+      shareFeed: _isMod ? false : _shareFeed.value,
+    );
+    if (res['status']) {
+      Get.back();
+      SmartDialog.showToast('点评成功');
+    } else {
+      SmartDialog.showToast(res['msg']);
+    }
   }
 }
