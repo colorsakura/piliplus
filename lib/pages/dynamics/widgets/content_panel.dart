@@ -15,27 +15,6 @@ Widget content(
   Function(List<String>, int)? callback, {
   floor = 1,
 }) {
-  InlineSpan picsNodes() {
-    return WidgetSpan(
-      child: LayoutBuilder(
-        builder: (context, constraints) => imageView(
-          constraints.maxWidth,
-          (item.modules.moduleDynamic!.major!.opus!.pics as List)
-              .map(
-                (item) => ImageModel(
-                  width: item.width,
-                  height: item.height,
-                  url: item.url ?? '',
-                  liveUrl: item.liveUrl,
-                ),
-              )
-              .toList(),
-          callback: callback,
-        ),
-      ),
-    );
-  }
-
   TextSpan? richNodes = richNode(theme, item, context);
 
   return Padding(
@@ -98,7 +77,26 @@ Widget content(
                   overflow: isSave ? null : TextOverflow.ellipsis,
                 ),
         if (item.modules.moduleDynamic?.major?.opus?.pics?.isNotEmpty == true)
-          Text.rich(picsNodes()),
+          Text.rich(
+            WidgetSpan(
+              child: LayoutBuilder(
+                builder: (context, constraints) => imageView(
+                  constraints.maxWidth,
+                  (item.modules.moduleDynamic!.major!.opus!.pics as List)
+                      .map(
+                        (item) => ImageModel(
+                          width: item.width,
+                          height: item.height,
+                          url: item.url ?? '',
+                          liveUrl: item.liveUrl,
+                        ),
+                      )
+                      .toList(),
+                  callback: callback,
+                ),
+              ),
+            ),
+          ),
       ],
     ),
   );

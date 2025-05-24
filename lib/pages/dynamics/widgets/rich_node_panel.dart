@@ -94,17 +94,13 @@ TextSpan? richNode(
               )
               ..add(
                 TextSpan(
-                  text: i.text ?? '',
+                  text: i.text,
                   style: style,
-                  recognizer: TapGestureRecognizer()
-                    ..onTap = () {
-                      String? url = i.origText;
-                      if (url == null) {
-                        SmartDialog.showToast('未获取到链接');
-                        return;
-                      }
-                      PiliScheme.routePushFromUrl(url);
-                    },
+                  recognizer: i.origText == null
+                      ? null
+                      : (TapGestureRecognizer()
+                        ..onTap =
+                            () => PiliScheme.routePushFromUrl(i.origText!)),
                 ),
               );
             break;
@@ -261,10 +257,7 @@ TextSpan? richNode(
             break;
           default:
             spanChildren.add(
-              TextSpan(
-                text: '${i.text}',
-                style: style,
-              ),
+              TextSpan(text: i.text, style: style),
             );
             break;
         }
