@@ -33,8 +33,7 @@ TextSpan? richNode(
         spanChildren.add(
           TextSpan(
             text: '${item.modules.moduleDynamic!.major!.opus!.title!}\n',
-            style: theme.textTheme.titleMedium!
-                .copyWith(fontWeight: FontWeight.bold),
+            style: const TextStyle(fontWeight: FontWeight.bold),
           ),
         );
       }

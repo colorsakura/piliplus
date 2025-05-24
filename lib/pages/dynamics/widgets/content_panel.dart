@@ -72,7 +72,11 @@ Widget content(
                 ],
               ),
               style: TextStyle(
-                fontSize: source == 'detail' && !isSave ? 16 : 15,
+                fontSize: floor != 1
+                    ? 14
+                    : source == 'detail' && !isSave
+                        ? 16
+                        : 15,
                 color: theme.colorScheme.primary,
               ),
             ),
@@ -86,10 +90,12 @@ Widget content(
                       : const TextStyle(fontSize: 16),
                 )
               : Text.rich(
-                  style: const TextStyle(fontSize: 15),
+                  style: floor == 1
+                      ? const TextStyle(fontSize: 15)
+                      : const TextStyle(fontSize: 14),
                   richNodes,
-                  maxLines: 6,
-                  overflow: TextOverflow.ellipsis,
+                  maxLines: isSave ? null : 6,
+                  overflow: isSave ? null : TextOverflow.ellipsis,
                 ),
         if (item.modules.moduleDynamic?.major?.opus?.pics?.isNotEmpty == true)
           Text.rich(picsNodes()),
