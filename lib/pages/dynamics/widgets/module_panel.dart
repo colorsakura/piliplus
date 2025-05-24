@@ -43,6 +43,8 @@ Widget module(
       final orig = item.orig!;
       final isNoneMajor =
           orig.modules.moduleDynamic?.major?.type == 'MAJOR_TYPE_NONE';
+      late final isNormalAuth =
+          orig.modules.moduleAuthor!.type == 'AUTHOR_TYPE_NORMAL';
       return InkWell(
         onTap:
             isNoneMajor ? null : () => PageUtils.pushDynDetail(orig, floor + 1),
@@ -92,11 +94,16 @@ Widget module(
                 Row(
                   children: [
                     GestureDetector(
-                      onTap: () => Get.toNamed(
-                          '/member?mid=${orig.modules.moduleAuthor!.mid}',
-                          arguments: {'face': orig.modules.moduleAuthor!.face}),
+                      onTap: isNormalAuth
+                          ? () => Get.toNamed(
+                                '/member?mid=${orig.modules.moduleAuthor!.mid}',
+                                arguments: {
+                                  'face': orig.modules.moduleAuthor!.face
+                                },
+                              )
+                          : null,
                       child: Text(
-                        '@${orig.modules.moduleAuthor!.name}',
+                        '${isNormalAuth ? '@' : ''}${orig.modules.moduleAuthor!.name}',
                         style: TextStyle(color: theme.colorScheme.primary),
                       ),
                     ),
