@@ -1921,6 +1921,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                 child: Obx(
                   () => EpisodePanel(
                     heroTag: heroTag,
+                    enableSlide: false,
                     videoIntroController: videoIntroController,
                     type: EpisodeType.part,
                     list: [videoIntroController.videoDetail.value.pages!],
@@ -1968,6 +1969,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
               child: Obx(
                 () => EpisodePanel(
                   heroTag: heroTag,
+                  enableSlide: false,
                   videoIntroController: videoIntroController,
                   type: EpisodeType.season,
                   initialTabIndex: videoDetailController.seasonIndex.value,
