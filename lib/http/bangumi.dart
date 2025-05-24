@@ -3,8 +3,12 @@ import 'package:PiliPlus/http/init.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/bangumi/list.dart';
 import 'package:PiliPlus/models/bangumi/pgc_index/condition.dart';
+import 'package:PiliPlus/models/bangumi/pgc_review/data.dart';
 import 'package:PiliPlus/models/bangumi/pgc_timeline/pgc_timeline.dart';
 import 'package:PiliPlus/models/bangumi/pgc_timeline/result.dart';
+import 'package:PiliPlus/models/common/pgc_review_type.dart';
+import 'package:PiliPlus/utils/storage.dart' show Accounts;
+import 'package:dio/dio.dart';
 
 class BangumiHttp {
   static Future<LoadingState> pgcIndexResult({
@@ -105,6 +109,95 @@ class BangumiHttp {
       return Success(PgcTimeline.fromJson(res.data).result);
     } else {
       return Error(res.data['message']);
+    }
+  }
+
+  static Future<LoadingState<PgcReviewData>> pgcReview({
+    required PgcReviewType type,
+    required mediaId,
+    int sort = 0,
+    String? next,
+  }) async {
+    var res = await Request().get(
+      type.api,
+      queryParameters: {
+        'media_id': mediaId,
+        'ps': 20,
+        'sort': sort,
+        if (next != null) 'cursor': next,
+        'web_location': 666.19,
+      },
+    );
+    if (res.data['code'] == 0) {
+      return Success(PgcReviewData.fromJson(res.data['data']));
+    } else {
+      return Error(res.data['message']);
+    }
+  }
+
+  static Future pgcReviewLike({
+    required mediaId,
+    required reviewId,
+  }) async {
+    var res = await Request().post(
+      Api.pgcReviewLike,
+      data: {
+        'media_id': mediaId,
+        'review_type': 2,
+        'review_id': reviewId,
+        'csrf': Accounts.main.csrf,
+      },
+      options: Options(contentType: Headers.formUrlEncodedContentType),
+    );
+    if (res.data['code'] == 0) {
+      return {'status': true};
+    } else {
+      return {'status': false, 'msg': res.data['message']};
+    }
+  }
+
+  static Future pgcReviewDislike({
+    required mediaId,
+    required reviewId,
+  }) async {
+    var res = await Request().post(
+      Api.pgcReviewDislike,
+      data: {
+        'media_id': mediaId,
+        'review_type': 2,
+        'review_id': reviewId,
+        'csrf': Accounts.main.csrf,
+      },
+      options: Options(contentType: Headers.formUrlEncodedContentType),
+    );
+    if (res.data['code'] == 0) {
+      return {'status': true};
+    } else {
+      return {'status': false, 'msg': res.data['message']};
+    }
+  }
+
+  static Future pgcReviewPost({
+    required mediaId,
+    required int score,
+    required String content,
+    bool shareFeed = false,
+  }) async {
+    var res = await Request().post(
+      Api.pgcReviewPost,
+      data: {
+        'media_id': mediaId,
+        'score': score,
+        'content': content,
+        if (shareFeed) 'share_feed': 1,
+        'csrf': Accounts.main.csrf,
+      },
+      options: Options(contentType: Headers.formUrlEncodedContentType),
+    );
+    if (res.data['code'] == 0) {
+      return {'status': true};
+    } else {
+      return {'status': false, 'msg': res.data['message']};
     }
   }
 }

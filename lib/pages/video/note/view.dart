@@ -174,7 +174,7 @@ class _NoteListPageState extends CommonSlidePageState<NoteListPage> {
                 if (index == response.length - 1) {
                   _controller.onLoadMore();
                 }
-                return _itemWidget(context, theme, response[index]);
+                return _itemWidget(theme, response[index]);
               },
               itemCount: response!.length,
               separatorBuilder: (context, index) => Divider(
@@ -189,91 +189,92 @@ class _NoteListPageState extends CommonSlidePageState<NoteListPage> {
         ),
     };
   }
-}
 
-Widget _itemWidget(BuildContext context, ThemeData theme, dynamic item) {
-  return InkWell(
-    onTap: () {
-      if (item['web_url'] != null && item['web_url'] != '') {
-        PiliScheme.routePushFromUrl(item['web_url']);
-      }
-    },
-    child: Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          GestureDetector(
-            onTap: () => Get.toNamed('/member?mid=${item['author']['mid']}'),
-            child: NetworkImgLayer(
-              height: 34,
-              width: 34,
-              src: item['author']['face'],
-              type: ImageType.avatar,
+  Widget _itemWidget(ThemeData theme, dynamic item) {
+    return InkWell(
+      onTap: () {
+        if (item['web_url'] != null && item['web_url'] != '') {
+          PiliScheme.routePushFromUrl(item['web_url']);
+        }
+      },
+      child: Padding(
+        padding: const EdgeInsets.all(12),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            GestureDetector(
+              onTap: () => Get.toNamed('/member?mid=${item['author']['mid']}'),
+              child: NetworkImgLayer(
+                height: 34,
+                width: 34,
+                src: item['author']['face'],
+                type: ImageType.avatar,
+              ),
             ),
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                GestureDetector(
-                  onTap: () =>
-                      Get.toNamed('/member?mid=${item['author']['mid']}'),
-                  child: Row(
-                    children: [
-                      Text(
-                        item['author']['name'],
-                        style: TextStyle(
-                          color: (item['author']?['vip_info']?['status'] ?? 0) >
-                                      0 &&
-                                  item['author']?['vip_info']?['type'] == 2
-                              ? context.vipColor
-                              : theme.colorScheme.outline,
-                          fontSize: 13,
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  GestureDetector(
+                    onTap: () =>
+                        Get.toNamed('/member?mid=${item['author']['mid']}'),
+                    child: Row(
+                      children: [
+                        Text(
+                          item['author']['name'],
+                          style: TextStyle(
+                            color: (item['author']?['vip_info']?['status'] ??
+                                            0) >
+                                        0 &&
+                                    item['author']?['vip_info']?['type'] == 2
+                                ? context.vipColor
+                                : theme.colorScheme.outline,
+                            fontSize: 13,
+                          ),
                         ),
-                      ),
-                      const SizedBox(width: 6),
-                      Image.asset(
-                        'assets/images/lv/lv${item['author']['level']}.png',
-                        height: 11,
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  item['pubtime'],
-                  style: TextStyle(
-                    color: theme.colorScheme.outline,
-                    fontSize: 12,
-                  ),
-                ),
-                if (item['summary'] != null) ...[
-                  const SizedBox(height: 5),
-                  Text(
-                    item['summary'],
-                    style: TextStyle(
-                      height: 1.75,
-                      fontSize: theme.textTheme.bodyMedium!.fontSize,
+                        const SizedBox(width: 6),
+                        Image.asset(
+                          'assets/images/lv/lv${item['author']['level']}.png',
+                          height: 11,
+                        ),
+                      ],
                     ),
                   ),
-                  if (item['web_url'] != null && item['web_url'] != '')
+                  const SizedBox(height: 4),
+                  Text(
+                    item['pubtime'],
+                    style: TextStyle(
+                      color: theme.colorScheme.outline,
+                      fontSize: 12,
+                    ),
+                  ),
+                  if (item['summary'] != null) ...[
+                    const SizedBox(height: 5),
                     Text(
-                      '查看全部',
+                      item['summary'],
                       style: TextStyle(
-                        color: theme.colorScheme.primary,
                         height: 1.75,
                         fontSize: theme.textTheme.bodyMedium!.fontSize,
                       ),
                     ),
+                    if (item['web_url'] != null && item['web_url'] != '')
+                      Text(
+                        '查看全部',
+                        style: TextStyle(
+                          color: theme.colorScheme.primary,
+                          height: 1.75,
+                          fontSize: theme.textTheme.bodyMedium!.fontSize,
+                        ),
+                      ),
+                  ],
                 ],
-              ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
-    ),
-  );
+    );
+  }
 }
