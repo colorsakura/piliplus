@@ -5,6 +5,7 @@ import 'package:PiliPlus/models/pgc/pgc_review/data.dart';
 import 'package:PiliPlus/models/pgc/pgc_review/list.dart';
 import 'package:PiliPlus/pages/common/common_list_controller.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
+import 'package:get/get.dart';
 
 class PgcReviewController
     extends CommonListController<PgcReviewData, PgcReviewItemModel> {
@@ -13,8 +14,9 @@ class PgcReviewController
   final PgcReviewType type;
   final dynamic mediaId;
 
-  int? count;
+  Rx<int?> count = Rx<int?>(null);
   String? next;
+  Rx<PgcReviewSortType> sortType = PgcReviewSortType.def.obs;
 
   @override
   void onInit() {
@@ -24,22 +26,28 @@ class PgcReviewController
 
   @override
   Future<void> onRefresh() {
-    count = null;
+    count.value = null;
     next = null;
     return super.onRefresh();
   }
 
   @override
   void checkIsEnd(int length) {
-    if (count != null && length >= count!) {
+    if (count.value != null && length >= count.value!) {
       isEnd = true;
     }
   }
 
   @override
   List<PgcReviewItemModel>? getDataList(PgcReviewData response) {
-    count = response.count;
+    if (type == PgcReviewType.long &&
+        sortType.value == PgcReviewSortType.latest) {
+      count.value = null;
+    } else {
+      count.value = response.count;
+    }
     next = response.next;
+
     return response.list;
   }
 
@@ -48,6 +56,7 @@ class PgcReviewController
         type: type,
         mediaId: mediaId,
         next: next,
+        sort: sortType.value.sort,
       );
 
   Future<void> onLike(int index, bool isLike, reviewId) async {
@@ -103,5 +112,12 @@ class PgcReviewController
     } else {
       SmartDialog.showToast(res['msg']);
     }
+  }
+
+  void queryBySort() {
+    sortType.value = sortType.value == PgcReviewSortType.def
+        ? PgcReviewSortType.latest
+        : PgcReviewSortType.def;
+    onReload();
   }
 }

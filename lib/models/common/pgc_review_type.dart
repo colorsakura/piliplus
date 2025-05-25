@@ -11,3 +11,12 @@ enum PgcReviewType {
     required this.api,
   });
 }
+
+enum PgcReviewSortType {
+  def('默认', 0),
+  latest('最新', 1);
+
+  final int sort;
+  final String label;
+  const PgcReviewSortType(this.label, this.sort);
+}

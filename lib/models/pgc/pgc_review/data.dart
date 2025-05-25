@@ -12,6 +12,6 @@ class PgcReviewData {
             ?.map((e) => PgcReviewItemModel.fromJson(e as Map<String, dynamic>))
             .toList(),
         next: json['next'] as String?,
-        count: json['count'] as int?,
+        count: json['count'] ?? json['total'],
       );
 }

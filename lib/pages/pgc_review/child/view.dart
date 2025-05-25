@@ -1,5 +1,6 @@
 import 'package:PiliPlus/common/skeleton/video_reply.dart';
 import 'package:PiliPlus/common/widgets/custom_icon.dart';
+import 'package:PiliPlus/common/widgets/custom_sliver_persistent_header_delegate.dart';
 import 'package:PiliPlus/common/widgets/dialog/dialog.dart';
 import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
 import 'package:PiliPlus/common/widgets/loading_widget/http_error.dart';
@@ -58,9 +59,10 @@ class _PgcReviewChildPageState extends State<PgcReviewChildPage>
         controller: _controller.scrollController,
         physics: const AlwaysScrollableScrollPhysics(),
         slivers: [
+          _buildHeader(theme),
           SliverPadding(
             padding: EdgeInsets.only(
-                bottom: MediaQuery.paddingOf(context).bottom + 80),
+                bottom: MediaQuery.paddingOf(context).bottom + 100),
             sliver:
                 Obx(() => _buildBody(theme, _controller.loadingState.value)),
           ),
@@ -355,6 +357,52 @@ class _PgcReviewChildPageState extends State<PgcReviewChildPage>
       ),
     );
   }
+
+  Widget _buildHeader(ThemeData theme) => SliverPersistentHeader(
+        pinned: false,
+        floating: true,
+        delegate: CustomSliverPersistentHeaderDelegate(
+          extent: 40,
+          bgColor: theme.colorScheme.surface,
+          child: Container(
+            height: 40,
+            padding: const EdgeInsets.fromLTRB(12, 0, 6, 0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Obx(
+                  () => _controller.count.value == null
+                      ? const SizedBox.shrink()
+                      : Text(
+                          '${_controller.count.value}条点评',
+                          style: const TextStyle(fontSize: 13),
+                        ),
+                ),
+                SizedBox(
+                  height: 35,
+                  child: TextButton.icon(
+                    onPressed: _controller.queryBySort,
+                    icon: Icon(
+                      Icons.sort,
+                      size: 16,
+                      color: theme.colorScheme.secondary,
+                    ),
+                    label: Obx(
+                      () => Text(
+                        _controller.sortType.value.label,
+                        style: TextStyle(
+                          fontSize: 13,
+                          color: theme.colorScheme.secondary,
+                        ),
+                      ),
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ),
+        ),
+      );
 
   @override
   bool get wantKeepAlive => true;
