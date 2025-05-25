@@ -132,7 +132,7 @@ class _FavNoteChildPageState extends State<FavNoteChildPage>
     );
   }
 
-  Widget _buildBody(LoadingState<List<FavArticleModel>?> loadingState) {
+  Widget _buildBody(LoadingState<List<FavNoteModel>?> loadingState) {
     return switch (loadingState) {
       Loading() => SliverGrid(
           gridDelegate: Grid.videoCardHDelegate(context),

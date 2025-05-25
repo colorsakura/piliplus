@@ -115,7 +115,7 @@ class _MemberFavoriteState extends State<MemberFavorite>
         ),
         controlAffinity: ListTileControlAffinity.leading,
         children: [
-          ...(data.mediaListResponse?.list as List<FavList>).map(
+          ...(data.mediaListResponse?.list as List<SpaceFavItemModel>).map(
             (item) => SizedBox(
               height: 98,
               child: MemberFavItem(

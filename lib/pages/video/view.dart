@@ -10,10 +10,11 @@ import 'package:PiliPlus/grpc/bilibili/main/community/reply/v1.pb.dart'
     show ReplyInfo;
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/main.dart';
-import 'package:PiliPlus/models/bangumi/info.dart' as bangumi;
 import 'package:PiliPlus/models/common/episode_panel_type.dart';
 import 'package:PiliPlus/models/common/search_type.dart';
+import 'package:PiliPlus/models/pgc/info.dart' as bangumi;
 import 'package:PiliPlus/models/video_detail_res.dart' as video;
+import 'package:PiliPlus/models/video_tag/data.dart';
 import 'package:PiliPlus/pages/danmaku/view.dart';
 import 'package:PiliPlus/pages/episode_panel/view.dart';
 import 'package:PiliPlus/pages/video/ai/view.dart';
@@ -2077,7 +2078,8 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
     );
   }
 
-  void showIntroDetail(bangumi.BangumiInfoModel videoDetail, videoTags) {
+  void showIntroDetail(
+      bangumi.BangumiInfoModel videoDetail, List<VideoTagItem>? videoTags) {
     videoDetailController.childKey.currentState?.showBottomSheet(
       backgroundColor: Colors.transparent,
       (context) => bangumi.IntroDetail(

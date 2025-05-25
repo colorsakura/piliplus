@@ -4,6 +4,7 @@ import 'package:PiliPlus/common/widgets/dialog/dialog.dart';
 import 'package:PiliPlus/common/widgets/loading_widget/http_error.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/http/loading_state.dart';
+import 'package:PiliPlus/models/fav_article/item.dart';
 import 'package:PiliPlus/pages/fav/article/controller.dart';
 import 'package:PiliPlus/pages/fav/article/widget/item.dart';
 import 'package:PiliPlus/utils/grid.dart';
@@ -47,7 +48,7 @@ class _FavArticlePageState extends State<FavArticlePage>
     );
   }
 
-  Widget _buildBody(LoadingState<List<dynamic>?> loadingState) {
+  Widget _buildBody(LoadingState<List<FavArticleItemModel>?> loadingState) {
     return switch (loadingState) {
       Loading() => SliverGrid(
           gridDelegate: Grid.videoCardHDelegate(context),
@@ -74,7 +75,7 @@ class _FavArticlePageState extends State<FavArticlePage>
                       onConfirm: () {
                         _favArticleController.onRemove(
                           index,
-                          response[index]['opus_id'],
+                          response[index].opusId,
                         );
                       },
                     ),

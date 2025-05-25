@@ -11,9 +11,9 @@ import 'package:PiliPlus/common/widgets/scroll_physics.dart';
 import 'package:PiliPlus/common/widgets/stat/stat.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/http/video.dart';
-import 'package:PiliPlus/models/bangumi/info.dart' as bangumi;
 import 'package:PiliPlus/models/common/badge_type.dart';
 import 'package:PiliPlus/models/common/episode_panel_type.dart';
+import 'package:PiliPlus/models/pgc/info.dart' as bangumi;
 import 'package:PiliPlus/models/video_detail_res.dart' as video;
 import 'package:PiliPlus/pages/common/common_slide_page.dart';
 import 'package:PiliPlus/pages/video/controller.dart';
@@ -195,7 +195,8 @@ class _EpisodePanelState extends CommonSlidePageState<EpisodePanel> {
 
   @override
   Widget buildPage(ThemeData theme) {
-    final isMutil = widget.type == EpisodeType.season && widget.list.length > 1;
+    final isMulti = widget.type == EpisodeType.season && widget.list.length > 1;
+
     Widget tabbar() => TabBar(
           controller: _tabController,
           padding: const EdgeInsets.only(right: 60),
@@ -205,20 +206,18 @@ class _EpisodePanelState extends CommonSlidePageState<EpisodePanel> {
           dividerColor: theme.dividerColor.withValues(alpha: 0.1),
         );
 
-    if (isMutil && enableSlide) {
+    if (isMulti && enableSlide) {
       return CustomTabBarView(
         controller: _tabController,
         physics: const CustomTabBarViewScrollPhysics(),
         bgColor: theme.colorScheme.surface,
-        header: isMutil
-            ? Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  _buildToolbar(theme),
-                  tabbar(),
-                ],
-              )
-            : _buildToolbar(theme),
+        header: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            _buildToolbar(theme),
+            tabbar(),
+          ],
+        ),
         children: List.generate(
           widget.list.length,
           (index) => _buildBody(
@@ -237,7 +236,7 @@ class _EpisodePanelState extends CommonSlidePageState<EpisodePanel> {
       child: Column(
         children: [
           _buildToolbar(theme),
-          if (isMutil) ...[
+          if (isMulti) ...[
             tabbar(),
             Expanded(
               child: Material(

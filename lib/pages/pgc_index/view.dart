@@ -3,7 +3,8 @@ import 'package:PiliPlus/common/widgets/loading_widget/http_error.dart';
 import 'package:PiliPlus/common/widgets/loading_widget/loading_widget.dart';
 import 'package:PiliPlus/common/widgets/self_sized_horizontal_list.dart';
 import 'package:PiliPlus/http/loading_state.dart';
-import 'package:PiliPlus/models/bangumi/pgc_index/condition.dart';
+import 'package:PiliPlus/models/pgc/pgc_index/condition.dart';
+import 'package:PiliPlus/models/pgc/pgc_index_item/list.dart';
 import 'package:PiliPlus/pages/bangumi/widgets/bangumi_card_v_pgc_index.dart';
 import 'package:PiliPlus/pages/pgc_index/controller.dart';
 import 'package:PiliPlus/pages/search/widgets/search_text.dart';
@@ -200,7 +201,7 @@ class _PgcIndexPageState extends State<PgcIndexPage>
         ],
       );
 
-  Widget _buildList(LoadingState<List<dynamic>?> loadingState) {
+  Widget _buildList(LoadingState<List<PgcIndexItemModel>?> loadingState) {
     return switch (loadingState) {
       Loading() => const SliverToBoxAdapter(child: LinearProgressIndicator()),
       Success(:var response) => response?.isNotEmpty == true

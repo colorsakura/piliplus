@@ -1,4 +1,4 @@
-import 'package:PiliPlus/models/bangumi/pgc_review/list.dart';
+import 'package:PiliPlus/models/pgc/pgc_review/list.dart';
 
 class PgcReviewData {
   List<PgcReviewItemModel>? list;

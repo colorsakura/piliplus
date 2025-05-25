@@ -1,17 +1,18 @@
 import 'package:PiliPlus/http/api.dart';
 import 'package:PiliPlus/http/init.dart';
 import 'package:PiliPlus/http/loading_state.dart';
-import 'package:PiliPlus/models/bangumi/list.dart';
-import 'package:PiliPlus/models/bangumi/pgc_index/condition.dart';
-import 'package:PiliPlus/models/bangumi/pgc_review/data.dart';
-import 'package:PiliPlus/models/bangumi/pgc_timeline/pgc_timeline.dart';
-import 'package:PiliPlus/models/bangumi/pgc_timeline/result.dart';
 import 'package:PiliPlus/models/common/pgc_review_type.dart';
+import 'package:PiliPlus/models/pgc/list.dart';
+import 'package:PiliPlus/models/pgc/pgc_index/condition.dart';
+import 'package:PiliPlus/models/pgc/pgc_index_item/data.dart';
+import 'package:PiliPlus/models/pgc/pgc_review/data.dart';
+import 'package:PiliPlus/models/pgc/pgc_timeline/pgc_timeline.dart';
+import 'package:PiliPlus/models/pgc/pgc_timeline/result.dart';
 import 'package:PiliPlus/utils/storage.dart' show Accounts;
 import 'package:dio/dio.dart';
 
 class BangumiHttp {
-  static Future<LoadingState> pgcIndexResult({
+  static Future<LoadingState<PgcIndexItemData>> pgcIndexResult({
     required int page,
     required Map<String, dynamic> params,
     seasonType,
@@ -30,7 +31,7 @@ class BangumiHttp {
       },
     );
     if (res.data['code'] == 0) {
-      return Success(res.data['data']);
+      return Success(PgcIndexItemData.fromJson(res.data['data']));
     } else {
       return Error(res.data['message']);
     }
