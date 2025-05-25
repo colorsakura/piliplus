@@ -1796,7 +1796,9 @@ Widget buildSeekPreviewWidget(PlPlayerController plPlayerController) {
   return Obx(() {
     if (!plPlayerController.showPreview.value ||
         plPlayerController.videoShot?['status'] != true) {
-      plPlayerController.getVideoShot();
+      if (plPlayerController.videoShot == null) {
+        plPlayerController.getVideoShot();
+      }
       return SizedBox.shrink(
         key: ValueKey(plPlayerController.previewDx.value),
       );

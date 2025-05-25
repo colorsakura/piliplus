@@ -1607,6 +1607,7 @@ class PlPlayerController {
         videoShot = {'status': false};
       }
     } catch (e) {
+      videoShot = {'status': false};
       debugPrint('getVideoShot: $e');
     }
     _isQueryingVideoShot = false;
