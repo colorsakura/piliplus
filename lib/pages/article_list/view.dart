@@ -163,7 +163,8 @@ class _ArticleListPageState extends State<ArticleListPage> {
                   Text.rich(
                     TextSpan(
                       children: [
-                        TextSpan(text: '${item.articlesCount}篇专栏'),
+                        TextSpan(
+                            text: '${Utils.numFormat(item.articlesCount)}篇专栏'),
                         divider,
                         TextSpan(text: '${Utils.numFormat(item.words)}个字'),
                         divider,

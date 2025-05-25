@@ -374,7 +374,7 @@ class _PgcReviewChildPageState extends State<PgcReviewChildPage>
                   () => _controller.count.value == null
                       ? const SizedBox.shrink()
                       : Text(
-                          '${_controller.count.value}条点评',
+                          '${Utils.numFormat(_controller.count.value)}条点评',
                           style: const TextStyle(fontSize: 13),
                         ),
                 ),

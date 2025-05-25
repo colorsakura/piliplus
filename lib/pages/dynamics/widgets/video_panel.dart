@@ -119,9 +119,9 @@ Widget videoSeasonWidget(
                         ),
                         const SizedBox(width: 6),
                       ],
-                      Text('${itemContent.stat?.play}次围观'),
+                      Text('${Utils.numFormat(itemContent.stat?.play)}次围观'),
                       const SizedBox(width: 6),
-                      Text('${itemContent.stat?.danmu}条弹幕'),
+                      Text('${Utils.numFormat(itemContent.stat?.danmu)}条弹幕'),
                       const Spacer(),
                       Image.asset(
                         'assets/images/play.png',
