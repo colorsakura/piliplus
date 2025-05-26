@@ -152,7 +152,7 @@ class _SelectTopicPanelState extends State<SelectTopicPanel> {
         response?.isNotEmpty == true
             ? NotificationListener<ScrollNotification>(
                 onNotification: (notification) {
-                  if (notification is ScrollStartNotification) {
+                  if (notification is UserScrollNotification) {
                     if (_controller.focusNode.hasFocus) {
                       _controller.focusNode.unfocus();
                     }
