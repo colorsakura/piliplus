@@ -869,4 +869,7 @@ class Api {
   static const String pgcReviewMod = '/pgc/review/short/modify';
 
   static const String pgcReviewDel = '/pgc/review/short/del';
+
+  static const String topicPubSearch =
+      '${HttpString.appBaseUrl}/x/topic/pub/search';
 }

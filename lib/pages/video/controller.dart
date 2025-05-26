@@ -127,9 +127,11 @@ class VideoDetailController extends GetxController
     vsync: this,
     duration: const Duration(milliseconds: 200),
   );
-  late final double minVideoHeight = min(Get.height, Get.width) * 9 / 16;
-  late final double maxVideoHeight =
-      max(max(Get.height, Get.width) * 0.65, min(Get.height, Get.width));
+  late final double minVideoHeight = Get.mediaQuery.size.shortestSide * 9 / 16;
+  late final double maxVideoHeight = max(
+    Get.mediaQuery.size.longestSide * 0.65,
+    Get.mediaQuery.size.shortestSide,
+  );
   late double videoHeight = minVideoHeight;
 
   void animToTop() {

@@ -24,7 +24,7 @@ import 'package:PiliPlus/utils/url_utils.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:floating/floating.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:flutter/services.dart' show FilteringTextInputFormatter;
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -300,7 +300,7 @@ class PageUtils {
       isScrollControlled: true,
       sheetAnimationStyle: const AnimationStyle(curve: Curves.ease),
       constraints: BoxConstraints(
-        maxWidth: min(640, min(Get.width, Get.height)),
+        maxWidth: min(640, context.mediaQueryShortestSide),
       ),
       builder: (BuildContext context) {
         return DraggableScrollableSheet(

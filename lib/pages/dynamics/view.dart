@@ -44,7 +44,16 @@ class _DynamicsPageState extends State<DynamicsPage>
                   context: context,
                   useSafeArea: true,
                   isScrollControlled: true,
-                  builder: (context) => const CreateDynPanel(),
+                  builder: (context) => DraggableScrollableSheet(
+                    snap: true,
+                    expand: false,
+                    initialChildSize: 1,
+                    minChildSize: 0,
+                    maxChildSize: 1,
+                    snapSizes: const [1],
+                    builder: (context, scrollController) =>
+                        CreateDynPanel(scrollController: scrollController),
+                  ),
                 );
               }
             },

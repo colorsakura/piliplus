@@ -7,7 +7,7 @@ import 'package:PiliPlus/pages/follow/child_view.dart';
 import 'package:PiliPlus/pages/follow/controller.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:flutter/services.dart' show LengthLimitingTextInputFormatter;
 import 'package:get/get.dart';
 
 class FollowPage extends StatefulWidget {

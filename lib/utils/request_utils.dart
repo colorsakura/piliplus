@@ -160,7 +160,7 @@ class RequestUtils {
                         sheetAnimationStyle:
                             const AnimationStyle(curve: Curves.ease),
                         constraints: BoxConstraints(
-                          maxWidth: min(640, min(Get.width, Get.height)),
+                          maxWidth: min(640, context.mediaQueryShortestSide),
                         ),
                         builder: (BuildContext context) {
                           return DraggableScrollableSheet(

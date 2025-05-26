@@ -17,6 +17,7 @@ import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/feed_back.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart' show LengthLimitingTextInputFormatter;
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
@@ -227,7 +228,7 @@ class _WhisperDetailPageState
         children: [
           IconButton(
             onPressed: () => updatePanelType(
-              PanelType.emoji == currentPanelType
+              panelType.value == PanelType.emoji
                   ? PanelType.keyboard
                   : PanelType.emoji,
             ),
@@ -269,6 +270,7 @@ class _WhisperDetailPageState
                     ),
                     contentPadding: const EdgeInsets.all(10),
                   ),
+                  inputFormatters: [LengthLimitingTextInputFormatter(500)],
                 ),
               ),
             ),

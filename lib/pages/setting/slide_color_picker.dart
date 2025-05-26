@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:flutter/services.dart'
+    show LengthLimitingTextInputFormatter, FilteringTextInputFormatter;
 import 'package:get/get.dart';
 
 class SlideColorPicker extends StatefulWidget {

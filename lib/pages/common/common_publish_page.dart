@@ -40,10 +40,9 @@ abstract class CommonPublishPageState<T extends CommonPublishPage>
   late final controller = ChatBottomPanelContainerController<PanelType>();
   late final editController = TextEditingController(text: widget.initialValue);
 
-  PanelType currentPanelType = PanelType.none;
+  Rx<PanelType> panelType = PanelType.none.obs;
   late final RxBool readOnly = false.obs;
   late final RxBool enablePublish = false.obs;
-  late final RxBool selectKeyboard = true.obs;
 
   late final imagePicker = ImagePicker();
   late final RxList<String> pathList = <String>[].obs;
@@ -83,7 +82,9 @@ abstract class CommonPublishPageState<T extends CommonPublishPage>
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
-      if (mounted && widget.autofocus && selectKeyboard.value) {
+      if (mounted &&
+          widget.autofocus &&
+          panelType.value == PanelType.keyboard) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
           if (focusNode.hasFocus) {
             focusNode.unfocus();
@@ -249,22 +250,22 @@ abstract class CommonPublishPageState<T extends CommonPublishPage>
         }
       },
       onPanelTypeChange: (panelType, data) {
-        debugPrint('panelType: $panelType');
+        // debugPrint('panelType: $panelType');
         switch (panelType) {
           case ChatBottomPanelType.none:
-            currentPanelType = PanelType.none;
+            this.panelType.value = PanelType.none;
             break;
           case ChatBottomPanelType.keyboard:
-            currentPanelType = PanelType.keyboard;
+            this.panelType.value = PanelType.keyboard;
             break;
           case ChatBottomPanelType.other:
             if (data == null) return;
             switch (data) {
               case PanelType.emoji:
-                currentPanelType = PanelType.emoji;
+                this.panelType.value = PanelType.emoji;
                 break;
               default:
-                currentPanelType = PanelType.none;
+                this.panelType.value = PanelType.none;
                 break;
             }
             break;

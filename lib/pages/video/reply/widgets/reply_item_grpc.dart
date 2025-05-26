@@ -86,7 +86,7 @@ class ReplyItemGrpc extends StatelessWidget {
             useSafeArea: true,
             isScrollControlled: true,
             constraints: BoxConstraints(
-              maxWidth: min(640, min(Get.width, Get.height)),
+              maxWidth: min(640, context.mediaQueryShortestSide),
             ),
             builder: (context) {
               return morePanel(
@@ -446,7 +446,7 @@ class ReplyItemGrpc extends StatelessWidget {
                       useSafeArea: true,
                       isScrollControlled: true,
                       constraints: BoxConstraints(
-                        maxWidth: min(640, min(Get.width, Get.height)),
+                        maxWidth: min(640, context.mediaQueryShortestSide),
                       ),
                       builder: (context) {
                         return morePanel(

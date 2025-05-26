@@ -33,7 +33,7 @@ import 'package:dio/dio.dart';
 import 'package:document_file_save_plus/document_file_save_plus_platform_interface.dart';
 import 'package:floating/floating.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:flutter/services.dart' show HapticFeedback;
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
