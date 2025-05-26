@@ -34,6 +34,7 @@ class _SelectTopicPanelState extends State<SelectTopicPanel> {
     if (_controller.loadingState.value is Error) {
       _controller.onReload();
     }
+    offset = widget.scrollController?.initialScrollOffset ?? 0;
   }
 
   @override
