@@ -13,9 +13,11 @@ class SelectTopicPanel extends StatefulWidget {
   const SelectTopicPanel({
     super.key,
     this.scrollController,
+    this.callback,
   });
 
   final ScrollController? scrollController;
+  final ValueChanged<double>? callback;
 
   @override
   State<SelectTopicPanel> createState() => _SelectTopicPanelState();
@@ -23,6 +25,8 @@ class SelectTopicPanel extends StatefulWidget {
 
 class _SelectTopicPanelState extends State<SelectTopicPanel> {
   final _controller = Get.put(SelectTopicController());
+
+  double offset = 0;
 
   @override
   void initState() {
@@ -33,16 +37,19 @@ class _SelectTopicPanelState extends State<SelectTopicPanel> {
   }
 
   @override
+  void dispose() {
+    widget.callback?.call(offset);
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Column(
       children: [
-        InkWell(
+        GestureDetector(
           onTap: Get.back,
-          borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(18),
-            topRight: Radius.circular(18),
-          ),
+          behavior: HitTestBehavior.opaque,
           child: Container(
             height: 35,
             padding: const EdgeInsets.only(bottom: 2),
@@ -76,9 +83,7 @@ class _SelectTopicPanelState extends State<SelectTopicPanel> {
               border: const OutlineInputBorder(
                 gapPadding: 0,
                 borderSide: BorderSide.none,
-                borderRadius: BorderRadius.all(
-                  Radius.circular(25),
-                ),
+                borderRadius: BorderRadius.all(Radius.circular(25)),
               ),
               isDense: true,
               filled: true,
@@ -140,61 +145,66 @@ class _SelectTopicPanelState extends State<SelectTopicPanel> {
       Loading() => loadingWidget,
       Success<List<TopicPubSearchItem>?>(:var response) =>
         response?.isNotEmpty == true
-            ? ListView.builder(
-                padding: EdgeInsets.only(
-                  bottom: MediaQuery.paddingOf(context).bottom +
-                      MediaQuery.viewInsetsOf(context).bottom +
-                      80,
-                ),
-                controller: widget.scrollController,
-                itemBuilder: (context, index) {
-                  if (index == response.length - 1) {
-                    _controller.onLoadMore();
-                  }
-                  final item = response[index];
-                  return ListTile(
-                    dense: true,
-                    onTap: () => Get.back(result: item),
-                    title: Text.rich(
-                      TextSpan(
-                        children: [
-                          const WidgetSpan(
-                            alignment: PlaceholderAlignment.middle,
-                            child: Padding(
-                              padding: EdgeInsets.only(right: 5),
-                              child: Icon(
-                                CustomIcon.topic_tag,
-                                size: 18,
+            ? NotificationListener<ScrollNotification>(
+                onNotification: (notification) {
+                  offset = notification.metrics.pixels;
+                  return false;
+                },
+                child: ListView.builder(
+                  padding: EdgeInsets.only(
+                    bottom: MediaQuery.paddingOf(context).bottom +
+                        MediaQuery.viewInsetsOf(context).bottom +
+                        80,
+                  ),
+                  controller: widget.scrollController,
+                  itemBuilder: (context, index) {
+                    if (index == response.length - 1) {
+                      _controller.onLoadMore();
+                    }
+                    final item = response[index];
+                    return ListTile(
+                      dense: true,
+                      onTap: () => Get.back(result: item),
+                      title: Text.rich(
+                        TextSpan(
+                          children: [
+                            const WidgetSpan(
+                              alignment: PlaceholderAlignment.middle,
+                              child: Padding(
+                                padding: EdgeInsets.only(right: 5),
+                                child: Icon(
+                                  CustomIcon.topic_tag,
+                                  size: 18,
+                                ),
                               ),
                             ),
-                          ),
-                          TextSpan(
-                            text: item.name,
-                            style: const TextStyle(fontSize: 14),
-                          ),
-                        ],
+                            TextSpan(
+                              text: item.name,
+                              style: const TextStyle(fontSize: 14),
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                    subtitle: Padding(
-                      padding: const EdgeInsets.only(left: 23),
-                      child: Text(
-                        '${Utils.numFormat(item.view)}浏览 · ${Utils.numFormat(item.discuss)}讨论',
-                        style: TextStyle(color: theme.colorScheme.outline),
+                      subtitle: Padding(
+                        padding: const EdgeInsets.only(left: 23),
+                        child: Text(
+                          '${Utils.numFormat(item.view)}浏览 · ${Utils.numFormat(item.discuss)}讨论',
+                          style: TextStyle(color: theme.colorScheme.outline),
+                        ),
                       ),
-                    ),
-                  );
-                },
-                itemCount: response!.length,
+                    );
+                  },
+                  itemCount: response!.length,
+                ),
               )
-            : scrollErrorWidget(
-                controller: widget.scrollController,
-                onReload: _controller.onReload,
-              ),
-      Error(:var errMsg) => scrollErrorWidget(
-          errMsg: errMsg,
-          controller: widget.scrollController,
-          onReload: _controller.onReload,
-        ),
+            : _errWidget(),
+      Error(:var errMsg) => _errWidget(errMsg),
     };
   }
+
+  Widget _errWidget([String? errMsg]) => scrollErrorWidget(
+        errMsg: errMsg,
+        controller: widget.scrollController,
+        onReload: _controller.onReload,
+      );
 }

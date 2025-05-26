@@ -3,6 +3,8 @@ import 'dart:math';
 import 'package:PiliPlus/common/widgets/button/icon_button.dart';
 import 'package:PiliPlus/common/widgets/button/toolbar_icon_button.dart';
 import 'package:PiliPlus/common/widgets/custom_icon.dart';
+import 'package:PiliPlus/common/widgets/draggable_scrollable_sheet.dart'
+    show DraggableScrollableSheet;
 import 'package:PiliPlus/common/widgets/pair.dart';
 import 'package:PiliPlus/http/dynamics.dart';
 import 'package:PiliPlus/models/common/publish_panel_type.dart';
@@ -15,7 +17,7 @@ import 'package:PiliPlus/pages/emote/controller.dart';
 import 'package:PiliPlus/pages/emote/view.dart';
 import 'package:PiliPlus/utils/request_utils.dart';
 import 'package:PiliPlus/utils/storage.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide DraggableScrollableSheet;
 import 'package:flutter/services.dart' show LengthLimitingTextInputFormatter;
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
@@ -596,6 +598,7 @@ class _CreateDynPanelState extends CommonPublishPageState<CreateDynPanel> {
     }
   }
 
+  double _offset = 0;
   Future<void> _onSelectTopic() async {
     TopicPubSearchItem? res = await showModalBottomSheet(
       context: context,
@@ -609,10 +612,13 @@ class _CreateDynPanelState extends CommonPublishPageState<CreateDynPanel> {
         snap: true,
         minChildSize: 0,
         maxChildSize: 1,
-        initialChildSize: 0.65,
+        initialChildSize: _offset == 0 ? 0.65 : 1,
+        initialScrollOffset: _offset,
         snapSizes: [0.65],
-        builder: (context, scrollController) =>
-            SelectTopicPanel(scrollController: scrollController),
+        builder: (context, scrollController) => SelectTopicPanel(
+          scrollController: scrollController,
+          callback: (offset) => _offset = offset,
+        ),
       ),
     );
     if (res != null) {
