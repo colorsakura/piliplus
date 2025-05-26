@@ -22,16 +22,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
-/// The signature of a method that provides a [BuildContext] and
-/// [ScrollController] for building a widget that may overflow the draggable
-/// [Axis] of the containing [DraggableScrollableSheet].
-///
-/// Users should apply the [scrollController] to a [ScrollView] subclass, such
-/// as a [SingleChildScrollView], [ListView] or [GridView], to have the whole
-/// sheet be draggable.
-typedef ScrollableWidgetBuilder = Widget Function(
-    BuildContext context, ScrollController scrollController);
-
 /// Controls a [DraggableScrollableSheet].
 ///
 /// Draggable scrollable controllers are typically stored as member variables in
