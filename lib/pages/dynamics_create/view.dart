@@ -504,24 +504,20 @@ class _CreateDynPanelState extends CommonPublishPageState<CreateDynPanel> {
           iconAlignment: IconAlignment.end,
         );
 
-  Widget get _buildToolbar => GestureDetector(
-        onTap: hidePanel,
-        behavior: HitTestBehavior.opaque,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          child: Obx(
-            () => ToolbarIconButton(
-              onPressed: () {
-                updatePanelType(
-                  panelType.value == PanelType.emoji
-                      ? PanelType.keyboard
-                      : PanelType.emoji,
-                );
-              },
-              icon: const Icon(Icons.emoji_emotions, size: 22),
-              tooltip: '表情',
-              selected: panelType.value == PanelType.emoji,
-            ),
+  Widget get _buildToolbar => Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        child: Obx(
+          () => ToolbarIconButton(
+            onPressed: () {
+              updatePanelType(
+                panelType.value == PanelType.emoji
+                    ? PanelType.keyboard
+                    : PanelType.emoji,
+              );
+            },
+            icon: const Icon(Icons.emoji_emotions, size: 22),
+            tooltip: '表情',
+            selected: panelType.value == PanelType.emoji,
           ),
         ),
       );

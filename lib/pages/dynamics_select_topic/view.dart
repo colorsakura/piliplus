@@ -58,20 +58,15 @@ class _SelectTopicPanelState extends State<SelectTopicPanel> {
     final theme = Theme.of(context);
     return Column(
       children: [
-        GestureDetector(
-          onTap: Get.back,
-          behavior: HitTestBehavior.opaque,
-          child: Container(
-            height: 35,
-            padding: const EdgeInsets.only(bottom: 2),
-            child: Center(
-              child: Container(
-                width: 32,
-                height: 3,
-                decoration: BoxDecoration(
-                  color: theme.colorScheme.outline,
-                  borderRadius: const BorderRadius.all(Radius.circular(3)),
-                ),
+        SizedBox(
+          height: 35,
+          child: Center(
+            child: Container(
+              width: 32,
+              height: 3,
+              decoration: BoxDecoration(
+                color: theme.colorScheme.outline,
+                borderRadius: const BorderRadius.all(Radius.circular(3)),
               ),
             ),
           ),

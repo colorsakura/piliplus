@@ -119,7 +119,6 @@ class _RepostPanelState extends CommonPublishPageState<RepostPanel> {
         : AnimatedSize(
             alignment: Alignment.topCenter,
             curve: Curves.ease,
-            onEnd: () => _isExpanded = true,
             duration: const Duration(milliseconds: 300),
             child: child(),
           );
@@ -192,12 +191,14 @@ class _RepostPanelState extends CommonPublishPageState<RepostPanel> {
 
   Widget _buildEditPlaceHolder(ThemeData theme) => GestureDetector(
         behavior: HitTestBehavior.opaque,
-        onTap: () async {
+        onTap: () {
           setState(() => _isMax = true);
-          await Future.delayed(const Duration(milliseconds: 300));
-          if (mounted) {
-            focusNode.requestFocus();
-          }
+          Future.delayed(const Duration(milliseconds: 300), () {
+            _isExpanded = true;
+            if (mounted) {
+              focusNode.requestFocus();
+            }
+          });
         },
         child: SizedBox(
           width: double.infinity,
@@ -319,24 +320,20 @@ class _RepostPanelState extends CommonPublishPageState<RepostPanel> {
           ),
         );
 
-  Widget get _buildToolbar => GestureDetector(
-        onTap: hidePanel,
-        behavior: HitTestBehavior.opaque,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          child: Obx(
-            () => ToolbarIconButton(
-              onPressed: () {
-                updatePanelType(
-                  panelType.value == PanelType.emoji
-                      ? PanelType.keyboard
-                      : PanelType.emoji,
-                );
-              },
-              icon: const Icon(Icons.emoji_emotions, size: 22),
-              tooltip: '表情',
-              selected: panelType.value == PanelType.emoji,
-            ),
+  Widget get _buildToolbar => Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        child: Obx(
+          () => ToolbarIconButton(
+            onPressed: () {
+              updatePanelType(
+                panelType.value == PanelType.emoji
+                    ? PanelType.keyboard
+                    : PanelType.emoji,
+              );
+            },
+            icon: const Icon(Icons.emoji_emotions, size: 22),
+            tooltip: '表情',
+            selected: panelType.value == PanelType.emoji,
           ),
         ),
       );
