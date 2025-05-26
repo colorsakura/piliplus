@@ -27,7 +27,6 @@ class SelectTopicPanel extends StatefulWidget {
 
 class _SelectTopicPanelState extends State<SelectTopicPanel> {
   final _controller = Get.put(SelectTopicController());
-  late double offset;
   final StreamController<String> _ctr = StreamController<String>();
   late StreamSubscription<String> _sub;
 
@@ -37,7 +36,6 @@ class _SelectTopicPanelState extends State<SelectTopicPanel> {
     if (_controller.loadingState.value is Error) {
       _controller.onReload();
     }
-    offset = widget.scrollController?.initialScrollOffset ?? 0;
     _sub = _ctr.stream
         .debounce(const Duration(milliseconds: 300), trailing: true)
         .listen((value) {
@@ -50,7 +48,6 @@ class _SelectTopicPanelState extends State<SelectTopicPanel> {
 
   @override
   void dispose() {
-    widget.callback?.call(offset);
     _sub.cancel();
     _ctr.close();
     super.dispose();
@@ -155,10 +152,13 @@ class _SelectTopicPanelState extends State<SelectTopicPanel> {
         response?.isNotEmpty == true
             ? NotificationListener<ScrollNotification>(
                 onNotification: (notification) {
-                  if (_controller.focusNode.hasFocus) {
-                    _controller.focusNode.unfocus();
+                  if (notification is ScrollStartNotification) {
+                    if (_controller.focusNode.hasFocus) {
+                      _controller.focusNode.unfocus();
+                    }
+                  } else if (notification is ScrollEndNotification) {
+                    widget.callback?.call(notification.metrics.pixels);
                   }
-                  offset = notification.metrics.pixels;
                   return false;
                 },
                 child: ListView.builder(
