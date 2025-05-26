@@ -8,6 +8,7 @@ import 'package:get/get.dart';
 
 class SelectTopicController
     extends CommonListController<TopicPubSearchData, TopicPubSearchItem> {
+  final focusNode = FocusNode();
   final controller = TextEditingController();
 
   final RxBool enableClear = false.obs;
@@ -32,6 +33,7 @@ class SelectTopicController
 
   @override
   void onClose() {
+    focusNode.dispose();
     controller.dispose();
     super.onClose();
   }

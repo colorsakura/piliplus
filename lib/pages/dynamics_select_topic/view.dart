@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:PiliPlus/common/widgets/custom_icon.dart';
 import 'package:PiliPlus/common/widgets/loading_widget/loading_widget.dart';
 import 'package:PiliPlus/http/loading_state.dart';
@@ -5,9 +7,9 @@ import 'package:PiliPlus/models/topic_pub_search/topic_item.dart';
 import 'package:PiliPlus/pages/dynamics_select_topic/controller.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/utils.dart';
-import 'package:easy_debounce/easy_throttle.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:stream_transform/stream_transform.dart';
 
 class SelectTopicPanel extends StatefulWidget {
   const SelectTopicPanel({
@@ -25,8 +27,9 @@ class SelectTopicPanel extends StatefulWidget {
 
 class _SelectTopicPanelState extends State<SelectTopicPanel> {
   final _controller = Get.put(SelectTopicController());
-
-  double offset = 0;
+  late double offset;
+  final StreamController<String> _ctr = StreamController<String>();
+  late StreamSubscription<String> _sub;
 
   @override
   void initState() {
@@ -35,11 +38,21 @@ class _SelectTopicPanelState extends State<SelectTopicPanel> {
       _controller.onReload();
     }
     offset = widget.scrollController?.initialScrollOffset ?? 0;
+    _sub = _ctr.stream
+        .debounce(const Duration(milliseconds: 300), trailing: true)
+        .listen((value) {
+      _controller
+        ..enableClear.value = value.isNotEmpty
+        ..onRefresh().whenComplete(() => WidgetsBinding.instance
+            .addPostFrameCallback((_) => widget.scrollController?.jumpToTop()));
+    });
   }
 
   @override
   void dispose() {
     widget.callback?.call(offset);
+    _sub.cancel();
+    _ctr.close();
     super.dispose();
   }
 
@@ -69,17 +82,9 @@ class _SelectTopicPanelState extends State<SelectTopicPanel> {
         Padding(
           padding: const EdgeInsets.only(left: 16, right: 16, bottom: 5),
           child: TextField(
+            focusNode: _controller.focusNode,
             controller: _controller.controller,
-            onChanged: (value) {
-              EasyThrottle.throttle(
-                'topicPubSearch',
-                const Duration(milliseconds: 300),
-                () => _controller
-                  ..enableClear.value = value.isNotEmpty
-                  ..onRefresh()
-                      .whenComplete(() => widget.scrollController?.jumpToTop()),
-              );
-            },
+            onChanged: _ctr.add,
             decoration: InputDecoration(
               border: const OutlineInputBorder(
                 gapPadding: 0,
@@ -119,8 +124,10 @@ class _SelectTopicPanelState extends State<SelectTopicPanel> {
                           onTap: () => _controller
                             ..enableClear.value = false
                             ..controller.clear()
-                            ..onRefresh().whenComplete(
-                                () => widget.scrollController?.jumpToTop()),
+                            ..onRefresh().whenComplete(() => WidgetsBinding
+                                .instance
+                                .addPostFrameCallback((_) =>
+                                    widget.scrollController?.jumpToTop())),
                         ),
                       )
                     : const SizedBox.shrink(),
@@ -148,6 +155,9 @@ class _SelectTopicPanelState extends State<SelectTopicPanel> {
         response?.isNotEmpty == true
             ? NotificationListener<ScrollNotification>(
                 onNotification: (notification) {
+                  if (_controller.focusNode.hasFocus) {
+                    _controller.focusNode.unfocus();
+                  }
                   offset = notification.metrics.pixels;
                   return false;
                 },

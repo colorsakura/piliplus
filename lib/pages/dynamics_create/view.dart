@@ -614,7 +614,7 @@ class _CreateDynPanelState extends CommonPublishPageState<CreateDynPanel> {
         maxChildSize: 1,
         initialChildSize: _offset == 0 ? 0.65 : 1,
         initialScrollOffset: _offset,
-        snapSizes: [0.65],
+        snapSizes: const [0.65],
         builder: (context, scrollController) => SelectTopicPanel(
           scrollController: scrollController,
           callback: (offset) => _offset = offset,
