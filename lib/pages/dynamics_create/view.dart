@@ -3,7 +3,7 @@ import 'dart:math';
 import 'package:PiliPlus/common/widgets/button/icon_button.dart';
 import 'package:PiliPlus/common/widgets/button/toolbar_icon_button.dart';
 import 'package:PiliPlus/common/widgets/custom_icon.dart';
-import 'package:PiliPlus/common/widgets/draggable_scrollable_sheet.dart'
+import 'package:PiliPlus/common/widgets/draggable_sheet/draggable_scrollable_sheet_topic.dart'
     show DraggableScrollableSheet;
 import 'package:PiliPlus/common/widgets/pair.dart';
 import 'package:PiliPlus/http/dynamics.dart';
