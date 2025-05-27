@@ -553,7 +553,7 @@ class ReplyItemGrpc extends StatelessWidget {
                             ),
                           ),
                         TextSpan(
-                          text: replyItem.replyControl.subReplyEntryText,
+                          text: '共${replyItem.count}条回复',
                           style: TextStyle(
                             color: theme.colorScheme.primary,
                           ),

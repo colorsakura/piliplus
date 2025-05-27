@@ -204,7 +204,9 @@ abstract class ReplyController<R> extends CommonListController<R, ReplyInfo> {
     if (subIndex == null) {
       list.removeAt(index);
     } else {
-      list[index].replies.removeAt(subIndex);
+      list[index]
+        ..count -= 1
+        ..replies.removeAt(subIndex);
     }
     count.value -= 1;
     loadingState.refresh();
