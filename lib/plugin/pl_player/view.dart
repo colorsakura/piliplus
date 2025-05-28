@@ -574,16 +574,14 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                           style: TextStyle(color: Colors.white),
                         ),
                       ),
-                      ...widget.videoDetailController!.subtitles
-                          .asMap()
-                          .entries
-                          .map((entry) {
+                      ...widget.videoDetailController!.subtitles.indexed
+                          .map((e) {
                         return PopupMenuItem<int>(
-                          value: entry.key + 1,
+                          value: e.$1 + 1,
                           onTap: () => widget.videoDetailController!
-                              .setSubtitle(entry.key + 1),
+                              .setSubtitle(e.$1 + 1),
                           child: Text(
-                            "${entry.value['lan_doc']}",
+                            "${e.$2['lan_doc']}",
                             style: const TextStyle(color: Colors.white),
                           ),
                         );
