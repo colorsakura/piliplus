@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:PiliPlus/pages/mine/controller.dart';
 import 'package:PiliPlus/services/loggeer.dart';
 import 'package:brotli/brotli.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -194,18 +193,16 @@ class LiveMessageStream {
       Future<WebSocket> getSocket() async {
         for (final server in servers) {
           try {
-            return WebSocket.connect(
-              server,
-              headers: MineController.anonymity.value ? {'cookie': ''} : null,
-            );
+            return WebSocket.connect(server);
           } catch (_) {}
         }
         throw Exception("all servers connect failed");
       }
 
       socket = await getSocket();
-      // logger.d('$logTag ===> TCP连接建立');
-      // logger.d('$logTag ===> 发送认证包');
+      // logger
+      //   ..d('$logTag ===> TCP连接建立')
+      //   ..d('$logTag ===> 发送认证包');
       _socketSubscription = socket?.listen(
         (data) {
           PackageHeader? header = PackageHeader.fromBytesData(data);

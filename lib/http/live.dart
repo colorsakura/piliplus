@@ -136,11 +136,12 @@ class LiveHttp {
   }
 
   static Future liveRoomDanmaPrefetch({roomId}) async {
-    var res = await Request().get(Api.liveRoomDmPrefetch, queryParameters: {
-      'roomid': roomId,
-    });
+    var res = await Request().get(
+      Api.liveRoomDmPrefetch,
+      queryParameters: {'roomid': roomId},
+    );
     if (res.data['code'] == 0) {
-      return {'status': true, 'data': res.data['data']['room']};
+      return {'status': true, 'data': res.data['data']?['room']};
     } else {
       return {'status': false, 'msg': res.data['message']};
     }
