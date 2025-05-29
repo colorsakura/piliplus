@@ -91,7 +91,7 @@ class _EpisodePanelState extends CommonSlidePageState<EpisodePanel> {
       : widget.list[_currentTabIndex.value];
 
   // item
-  late RxInt _currentItemIndex;
+  late int _currentItemIndex;
   int get _findCurrentItemIndex => max(
         0,
         _getCurrEpisodes.indexWhere((item) => item.cid == widget.cid),
@@ -118,8 +118,8 @@ class _EpisodePanelState extends CommonSlidePageState<EpisodePanel> {
 
     void jumpToCurrent() {
       int newItemIndex = _findCurrentItemIndex;
-      if (_currentItemIndex.value != _findCurrentItemIndex) {
-        _currentItemIndex.value = newItemIndex;
+      if (_currentItemIndex != _findCurrentItemIndex) {
+        _currentItemIndex = newItemIndex;
         try {
           _itemScrollController[_currentTabIndex.value].jumpTo(
             index: newItemIndex,
@@ -161,7 +161,7 @@ class _EpisodePanelState extends CommonSlidePageState<EpisodePanel> {
       );
     }
 
-    _currentItemIndex = _findCurrentItemIndex.obs;
+    _currentItemIndex = _findCurrentItemIndex;
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted) {
         setState(() {
@@ -170,7 +170,7 @@ class _EpisodePanelState extends CommonSlidePageState<EpisodePanel> {
         WidgetsBinding.instance.addPostFrameCallback((_) {
           try {
             _itemScrollController[widget.initialTabIndex]
-                .jumpTo(index: _currentItemIndex.value);
+                .jumpTo(index: _currentItemIndex);
           } catch (_) {}
         });
       }
@@ -272,18 +272,18 @@ class _EpisodePanelState extends CommonSlidePageState<EpisodePanel> {
     );
   }
 
-  Widget _buildBody(ThemeData theme, int index, episodes) {
+  Widget _buildBody(ThemeData theme, int tabIndex, episodes) {
     return KeepAliveWrapper(
       builder: (context) => ScrollablePositionedList.separated(
         padding: EdgeInsets.only(
           top: 7,
           bottom: MediaQuery.of(context).padding.bottom + 80,
         ),
-        reverse: _isReversed[index],
+        reverse: _isReversed[tabIndex],
         itemCount: episodes.length,
         physics: const AlwaysScrollableScrollPhysics(),
-        itemBuilder: (BuildContext context, int index) {
-          final episode = episodes[index];
+        itemBuilder: (BuildContext context, int itemIndex) {
+          final episode = episodes[itemIndex];
           return widget.type == EpisodeType.season &&
                   widget.showTitle != false &&
                   episode.pages.length > 1
@@ -291,17 +291,14 @@ class _EpisodePanelState extends CommonSlidePageState<EpisodePanel> {
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Obx(
-                      () => _buildEpisodeItem(
-                        theme: theme,
-                        episode: episode,
-                        index: index,
-                        length: episodes.length,
-                        isCurrentIndex:
-                            _currentTabIndex.value == widget.initialTabIndex
-                                ? _currentItemIndex.value == index
-                                : false,
-                      ),
+                    _buildEpisodeItem(
+                      theme: theme,
+                      episode: episode,
+                      index: itemIndex,
+                      length: episodes.length,
+                      isCurrentIndex: tabIndex == widget.initialTabIndex
+                          ? itemIndex == _currentItemIndex
+                          : false,
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(
@@ -309,7 +306,7 @@ class _EpisodePanelState extends CommonSlidePageState<EpisodePanel> {
                       child: PagesPanel(
                         list:
                             widget.initialTabIndex == _currentTabIndex.value &&
-                                    index == _currentItemIndex.value
+                                    itemIndex == _currentItemIndex
                                 ? null
                                 : episode.pages,
                         cover: episode.arc?.pic,
@@ -320,20 +317,17 @@ class _EpisodePanelState extends CommonSlidePageState<EpisodePanel> {
                     ),
                   ],
                 )
-              : Obx(
-                  () => _buildEpisodeItem(
-                    theme: theme,
-                    episode: episode,
-                    index: index,
-                    length: episodes.length,
-                    isCurrentIndex:
-                        _currentTabIndex.value == widget.initialTabIndex
-                            ? _currentItemIndex.value == index
-                            : false,
-                  ),
+              : _buildEpisodeItem(
+                  theme: theme,
+                  episode: episode,
+                  index: itemIndex,
+                  length: episodes.length,
+                  isCurrentIndex: tabIndex == widget.initialTabIndex
+                      ? itemIndex == _currentItemIndex
+                      : false,
                 );
         },
-        itemScrollController: _itemScrollController[index],
+        itemScrollController: _itemScrollController[tabIndex],
         separatorBuilder: (context, index) => const SizedBox(height: 2),
       ),
     );
@@ -404,7 +398,7 @@ class _EpisodePanelState extends CommonSlidePageState<EpisodePanel> {
             SmartDialog.showToast('切换到：$title');
             widget.onClose?.call();
             if (widget.showTitle == false) {
-              _currentItemIndex.value = index;
+              _currentItemIndex = index;
             }
             widget.changeFucCall(
               episode is bangumi.EpisodeItem ? episode.epId : null,
@@ -637,7 +631,7 @@ class _EpisodePanelState extends CommonSlidePageState<EpisodePanel> {
                     await Future.delayed(const Duration(milliseconds: 225));
                   }
                   _itemScrollController[_currentTabIndex.value].scrollTo(
-                    index: _currentItemIndex.value,
+                    index: _currentItemIndex,
                     duration: const Duration(milliseconds: 200),
                   );
                 } catch (_) {}
