@@ -28,6 +28,7 @@ abstract class ReplyController<R> extends CommonListController<R, ReplyInfo> {
 
   Int64? upMid;
   Int64? cursorNext;
+  SubjectControl? subjectControl;
   FeedPaginationReply? paginationReply;
   late Rx<Mode> mode = Mode.MAIN_LIST_HOT.obs;
   late bool hasUpTop = false;
@@ -73,6 +74,7 @@ abstract class ReplyController<R> extends CommonListController<R, ReplyInfo> {
     paginationReply = data.paginationReply;
     count.value = data.subjectControl.count.toInt();
     if (isRefresh) {
+      subjectControl = data.subjectControl;
       upMid ??= data.subjectControl.upMid;
       hasUpTop = data.hasUpTop();
       if (data.hasUpTop()) {
@@ -87,6 +89,7 @@ abstract class ReplyController<R> extends CommonListController<R, ReplyInfo> {
   Future<void> onRefresh() {
     cursorNext = null;
     paginationReply = null;
+    subjectControl = null;
     return super.onRefresh();
   }
 
@@ -118,13 +121,11 @@ abstract class ReplyController<R> extends CommonListController<R, ReplyInfo> {
     assert(replyItem != null || (oid != null && replyType != null));
     String? hint;
     try {
-      if (loadingState.value is Success) {
-        SubjectControl subjectControl =
-            (loadingState.value as Success).response.subjectControl;
-        if (subjectControl.hasSwitcherType() &&
-            subjectControl.switcherType != 1 &&
-            subjectControl.hasRootText()) {
-          hint = subjectControl.rootText;
+      if (subjectControl != null) {
+        if (subjectControl!.hasSwitcherType() &&
+            subjectControl!.switcherType != 1 &&
+            subjectControl!.hasRootText()) {
+          hint = subjectControl!.rootText;
         }
       }
     } catch (_) {}
@@ -224,7 +225,13 @@ abstract class ReplyController<R> extends CommonListController<R, ReplyInfo> {
     );
   }
 
-  Future<void> onToggleTop(index, oid, int type, bool isUpTop, int rpid) async {
+  Future<void> onToggleTop(
+    int index,
+    oid,
+    int type,
+    bool isUpTop,
+    int rpid,
+  ) async {
     final res = await ReplyHttp.replyTop(
       oid: oid,
       type: type,
