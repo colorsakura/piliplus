@@ -209,6 +209,7 @@ dependencies:
   mime: any
   universal_platform: any
   path: any
+  collection: any
 
 dependency_overrides:
   screen_brightness: ^2.0.1
