@@ -354,10 +354,10 @@ class _VideoReplyReplyPanelState
       if (res != null) {
         _savedReplies.remove(key);
         ReplyInfo replyInfo = RequestUtils.replyCast(res);
-        _videoReplyReplyController.loadingState.value.dataOrNull
-            ?.insert(index + 1, replyInfo);
-        _videoReplyReplyController.count.value += 1;
-        _videoReplyReplyController.loadingState.refresh();
+        _videoReplyReplyController
+          ..count.value += 1
+          ..loadingState.value.dataOrNull?.insert(index + 1, replyInfo)
+          ..loadingState.refresh();
         if (_videoReplyReplyController.enableCommAntifraud && mounted) {
           _videoReplyReplyController.onCheckReply(context, replyInfo);
         }

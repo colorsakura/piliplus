@@ -104,10 +104,11 @@ class LaterController extends MultiSelectController<Map, HotVideoItemModel> {
                 Get.back();
                 var res = await UserHttp.toViewDel(aids: [aid]);
                 if (res['status']) {
-                  loadingState.value.data!.removeAt(index);
                   baseCtr.counts[laterViewType] =
                       baseCtr.counts[laterViewType]! - 1;
-                  loadingState.refresh();
+                  loadingState
+                    ..value.data!.removeAt(index)
+                    ..refresh();
                 }
                 SmartDialog.showToast(res['msg']);
               },

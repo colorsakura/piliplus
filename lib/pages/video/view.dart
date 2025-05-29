@@ -2179,25 +2179,17 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
 
     if (isSeason) {
       // reverse season
-      videoIntroController.videoDetail.value.ugcSeason!
-              .sections![videoDetailController.seasonIndex.value].isReversed =
-          !videoIntroController.videoDetail.value.ugcSeason!
-              .sections![videoDetailController.seasonIndex.value].isReversed;
-      videoIntroController.videoDetail.value.ugcSeason!
-              .sections![videoDetailController.seasonIndex.value].episodes =
-          videoIntroController
-              .videoDetail
-              .value
-              .ugcSeason!
-              .sections![videoDetailController.seasonIndex.value]
-              .episodes!
-              .reversed
-              .toList();
+      final item = videoIntroController.videoDetail.value.ugcSeason!
+          .sections![videoDetailController.seasonIndex.value];
+      item
+        ..isReversed = !item.isReversed
+        ..episodes = item.episodes!.reversed.toList();
 
       if (videoDetailController.plPlayerController.reverseFromFirst.not) {
         // keep current episode
-        videoDetailController.seasonIndex.refresh();
-        videoDetailController.cid.refresh();
+        videoDetailController
+          ..seasonIndex.refresh()
+          ..cid.refresh();
       } else {
         // switch to first episode
         dynamic episode = videoIntroController.videoDetail.value.ugcSeason!
@@ -2206,16 +2198,17 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
           changeEpisode(episode);
           videoDetailController.seasonCid = episode.cid;
         } else {
-          videoDetailController.seasonIndex.refresh();
-          videoDetailController.cid.refresh();
+          videoDetailController
+            ..seasonIndex.refresh()
+            ..cid.refresh();
         }
       }
     } else {
       // reverse part
-      videoIntroController.videoDetail.value.isPageReversed =
-          !videoIntroController.videoDetail.value.isPageReversed;
-      videoIntroController.videoDetail.value.pages =
-          videoIntroController.videoDetail.value.pages!.reversed.toList();
+      final item = videoIntroController.videoDetail.value;
+      item
+        ..isPageReversed = !item.isPageReversed
+        ..pages = item.pages!.reversed.toList();
       if (videoDetailController.plPlayerController.reverseFromFirst.not) {
         // keep current episode
         videoDetailController.cid.refresh();

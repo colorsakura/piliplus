@@ -108,8 +108,9 @@ class DynamicsController extends GetxController
     if (isQuerying) return;
     isQuerying = true;
     if (!isLogin.value) {
-      upData.value.errMsg = '账号未登录';
-      upData.refresh();
+      upData
+        ..value.errMsg = '账号未登录'
+        ..refresh();
     }
     upData.value.errMsg = null;
     if (GStorage.setting
@@ -125,11 +126,13 @@ class DynamicsController extends GetxController
       final res0 = await f1;
       if (!res0.isSuccess) {
         SmartDialog.showToast("获取关注动态失败：$res0");
-        upData.value.errMsg = (res0 as Error).errMsg;
-        upData.refresh();
+        upData
+          ..value.errMsg = (res0 as Error).errMsg
+          ..refresh();
       } else {
-        upData.value.liveUsers = res0.data.liveUsers;
-        upData.refresh();
+        upData
+          ..value.liveUsers = res0.data.liveUsers
+          ..refresh();
         hasUpdatedUps = res0.data.upList!;
       }
       List<UpItem> allFollowedUps = <UpItem>[];
@@ -151,8 +154,9 @@ class DynamicsController extends GetxController
         allFollowedUpsPage += 1;
         allFollowedUpsTotal = res1.data.total!;
       }
-      upData.value.upList = hasUpdatedUps + allFollowedUps;
-      upData.refresh();
+      upData
+        ..value.upList = hasUpdatedUps + allFollowedUps
+        ..refresh();
     } else {
       var res = await DynamicsHttp.followUp();
       if (res.isSuccess) {
@@ -161,8 +165,9 @@ class DynamicsController extends GetxController
           mid.value = -1;
         }
       } else {
-        upData.value.errMsg = (res as Error).errMsg;
-        upData.refresh();
+        upData
+          ..value.errMsg = (res as Error).errMsg
+          ..refresh();
       }
     }
     isQuerying = false;

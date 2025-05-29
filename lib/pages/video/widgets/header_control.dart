@@ -1911,13 +1911,22 @@ class HeaderControlState extends State<HeaderControl> {
                           builder: (context, constraints) {
                             return Obx(
                               () {
-                                String title = videoIntroController
-                                        .videoDetail.value.pages
-                                        ?.firstWhereOrNull((e) =>
-                                            e.cid == videoDetailCtr.cid.value)
-                                        ?.pagePart ??
-                                    videoIntroController
-                                        .videoDetail.value.title!;
+                                String title;
+
+                                if (videoIntroController
+                                        .videoDetail.value.videos ==
+                                    1) {
+                                  title = videoIntroController
+                                      .videoDetail.value.title!;
+                                } else {
+                                  title = videoIntroController
+                                          .videoDetail.value.pages
+                                          ?.firstWhereOrNull((e) =>
+                                              e.cid == videoDetailCtr.cid.value)
+                                          ?.pagePart ??
+                                      videoIntroController
+                                          .videoDetail.value.title!;
+                                }
                                 final textPainter = TextPainter(
                                   text: TextSpan(
                                     text: title,

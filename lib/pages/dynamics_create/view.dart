@@ -200,14 +200,14 @@ class _CreateDynPanelState extends CommonPublishPageState<CreateDynPanel> {
     );
   }
 
-  Widget _buildImageList(ThemeData theme) => Obx(
-        () => SizedBox(
-          height: 100,
-          width: double.infinity,
-          child: SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Row(
+  Widget _buildImageList(ThemeData theme) => SizedBox(
+        height: 100,
+        width: double.infinity,
+        child: SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Obx(
+            () => Row(
               spacing: 10,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -504,13 +504,11 @@ class _CreateDynPanelState extends CommonPublishPageState<CreateDynPanel> {
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         child: Obx(
           () => ToolbarIconButton(
-            onPressed: () {
-              updatePanelType(
-                panelType.value == PanelType.emoji
-                    ? PanelType.keyboard
-                    : PanelType.emoji,
-              );
-            },
+            onPressed: () => updatePanelType(
+              panelType.value == PanelType.emoji
+                  ? PanelType.keyboard
+                  : PanelType.emoji,
+            ),
             icon: const Icon(Icons.emoji_emotions, size: 22),
             tooltip: '表情',
             selected: panelType.value == PanelType.emoji,

@@ -46,8 +46,9 @@ class DanmakuBlockController extends GetxController
     var result = await DanmakuFilterHttp.danmakuFilterDel(ids: id);
     SmartDialog.dismiss();
     if (result['status']) {
-      ruleTypes[type]!.remove(id);
-      ruleTypes.refresh();
+      ruleTypes
+        ..[type]!.remove(id)
+        ..refresh();
     }
     SmartDialog.showToast(result['msg']);
   }
@@ -60,8 +61,9 @@ class DanmakuBlockController extends GetxController
     SmartDialog.dismiss();
     if (result['status']) {
       SimpleRule rule = result['data'];
-      ruleTypes[type]![rule.id] = rule.filter;
-      ruleTypes.refresh();
+      ruleTypes
+        ..[type]![rule.id] = rule.filter
+        ..refresh();
       SmartDialog.showToast('添加成功');
     } else {
       SmartDialog.showToast(result['msg']);

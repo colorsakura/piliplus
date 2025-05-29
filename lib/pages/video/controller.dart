@@ -938,6 +938,10 @@ class VideoDetailController extends GetxController
 
   /// 发送弹幕
   Future<void> showShootDanmakuSheet() async {
+    if (plPlayerController.dmState.contains(cid.value)) {
+      SmartDialog.showToast('UP主已关闭弹幕');
+      return;
+    }
     bool isPlaying =
         plPlayerController.playerStatus.status.value == PlayerStatus.playing;
     if (isPlaying) {

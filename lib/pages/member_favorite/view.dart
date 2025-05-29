@@ -122,9 +122,9 @@ class _MemberFavoriteState extends State<MemberFavorite>
                 item: item,
                 callback: (res) {
                   if (res == true) {
-                    _controller.first.value.mediaListResponse?.list
-                        ?.remove(item);
-                    _controller.first.refresh();
+                    _controller
+                      ..first.value.mediaListResponse?.list?.remove(item)
+                      ..first.refresh();
                   }
                 },
               ),

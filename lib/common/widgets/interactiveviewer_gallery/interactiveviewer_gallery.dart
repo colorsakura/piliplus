@@ -10,6 +10,7 @@ import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:easy_debounce/easy_throttle.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -295,11 +296,13 @@ class _InteractiveviewerGalleryState extends State<InteractiveviewerGallery>
               final item = widget.sources[index];
               return GestureDetector(
                 behavior: HitTestBehavior.opaque,
-                onTap: onClose,
+                onTap: () => EasyThrottle.throttle(
+                    'preview', const Duration(milliseconds: 555), onClose),
                 onDoubleTapDown: (TapDownDetails details) {
                   _doubleTapLocalPosition = details.localPosition;
                 },
-                onDoubleTap: onDoubleTap,
+                onDoubleTap: () => EasyThrottle.throttle(
+                    'preview', const Duration(milliseconds: 555), onDoubleTap),
                 onLongPress: item.sourceType == SourceType.fileImage
                     ? null
                     : () => onLongPress(item),
@@ -500,14 +503,14 @@ class _InteractiveviewerGalleryState extends State<InteractiveviewerGallery>
       builder: (context) {
         return AlertDialog(
           clipBehavior: Clip.hardEdge,
-          contentPadding: const EdgeInsets.fromLTRB(0, 12, 0, 12),
+          contentPadding: const EdgeInsets.symmetric(vertical: 12),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               ListTile(
                 onTap: () {
-                  DownloadUtils.onShareImg(item.url);
                   Get.back();
+                  DownloadUtils.onShareImg(item.url);
                 },
                 dense: true,
                 title: const Text('分享', style: TextStyle(fontSize: 14)),

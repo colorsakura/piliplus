@@ -83,8 +83,9 @@ class _FavVideoPageState extends State<FavVideoPage>
                         },
                       );
                       if (res == true) {
-                        _favController.loadingState.value.data!.removeAt(index);
-                        _favController.loadingState.refresh();
+                        _favController.loadingState
+                          ..value.data!.removeAt(index)
+                          ..refresh();
                       }
                     },
                   );

@@ -1,4 +1,5 @@
 import 'package:PiliPlus/common/widgets/scroll_physics.dart';
+import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/common/fav_type.dart';
 import 'package:PiliPlus/models/user/fav_folder.dart';
 import 'package:PiliPlus/pages/fav/article/controller.dart';
@@ -59,12 +60,16 @@ class _FavPageState extends State<FavPage> with SingleTickerProviderStateMixin {
                     onPressed: () => Get.toNamed('/createFav')?.then(
                       (data) {
                         if (data != null) {
-                          List<FavFolderItemData> list =
+                          List<FavFolderItemData>? list =
                               _favController.loadingState.value.isSuccess
-                                  ? _favController.loadingState.value.data!
-                                  : <FavFolderItemData>[];
-                          list.insert(list.isNotEmpty ? 1 : 0, data);
-                          _favController.loadingState.refresh();
+                                  ? _favController.loadingState.value.data
+                                  : null;
+                          if (list?.isNotEmpty == true) {
+                            list!.insert(1, data);
+                            _favController.loadingState.refresh();
+                          } else {
+                            _favController.loadingState.value = Success([data]);
+                          }
                         }
                       },
                     ),

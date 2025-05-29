@@ -249,6 +249,7 @@ class PlPlayerController {
   // 关联弹幕控制器
   DanmakuController? danmakuController;
   bool showDanmaku = true;
+  Set<int> dmState = <int>{};
   late final mergeDanmaku = GStorage.mergeDanmaku;
   // 弹幕相关配置
   late Set<int> blockTypes;
@@ -1521,6 +1522,7 @@ class PlPlayerController {
       }
       return;
     }
+    dmState.clear();
     _playerCount.value = 0;
     Utils.channel.setMethodCallHandler(null);
     pause();

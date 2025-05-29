@@ -558,12 +558,10 @@ class VideoIntroController extends GetxController {
   // 选择文件夹
   void onChoose(bool checkValue, int index) {
     feedBack();
-    List<FavFolderItemData> datalist = favFolderData.value.list!;
-    datalist[index].favState = checkValue ? 1 : 0;
-    datalist[index].mediaCount = checkValue
-        ? datalist[index].mediaCount! + 1
-        : datalist[index].mediaCount! - 1;
-    favFolderData.value.list = datalist;
+    FavFolderItemData item = favFolderData.value.list![index];
+    item
+      ..favState = checkValue ? 1 : 0
+      ..mediaCount = checkValue ? item.mediaCount! + 1 : item.mediaCount! - 1;
     favFolderData.refresh();
   }
 

@@ -71,8 +71,9 @@ class MemberFavoriteCtr extends CommonDataController {
                     ?.map((item) => SpaceFavItemModel.fromJson(item))
                     .toList() ??
                 <SpaceFavItemModel>[];
-        first.value.mediaListResponse?.list?.addAll(list);
-        first.refresh();
+        first
+          ..value.mediaListResponse?.list?.addAll(list)
+          ..refresh();
       } else {
         firstEnd.value = true;
       }
@@ -97,8 +98,9 @@ class MemberFavoriteCtr extends CommonDataController {
                     ?.map((item) => SpaceFavItemModel.fromJson(item))
                     .toList() ??
                 <SpaceFavItemModel>[];
-        second.value.mediaListResponse?.list?.addAll(list);
-        second.refresh();
+        second
+          ..value.mediaListResponse?.list?.addAll(list)
+          ..refresh();
       } else {
         secondEnd.value = true;
       }

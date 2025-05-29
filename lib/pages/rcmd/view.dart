@@ -105,17 +105,18 @@ class _RcmdPageState extends CommonPageState<RcmdPage, RcmdController>
                           controller.lastRefreshAt =
                               controller.lastRefreshAt! - 1;
                         }
-                        controller.loadingState.value.data!
-                            .removeAt(actualIndex);
-                        controller.loadingState.refresh();
+                        controller.loadingState
+                          ..value.data!.removeAt(actualIndex)
+                          ..refresh();
                       },
                     );
                   } else {
                     return VideoCardV(
                       videoItem: response[index],
                       onRemove: () {
-                        controller.loadingState.value.data!.removeAt(index);
-                        controller.loadingState.refresh();
+                        controller.loadingState
+                          ..value.data!.removeAt(index)
+                          ..refresh();
                       },
                     );
                   }

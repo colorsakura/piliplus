@@ -35,8 +35,9 @@ class FollowChildController
             tagid == null &&
             isRefresh &&
             controller!.followState.value.isSuccess) {
-          controller!.tabs[0].count = response.response.total;
-          controller!.tabs.refresh();
+          controller!.tabs
+            ..[0].count = response.response.total
+            ..refresh();
         }
       } catch (_) {}
     }

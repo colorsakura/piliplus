@@ -80,9 +80,11 @@ class FavPgcController
       try {
         final ctr = Get.find<FavPgcController>(tag: '$type$followStatus');
         if (ctr.loadingState.value.isSuccess) {
-          ctr.loadingState.value.data!
-              .insertAll(0, updateList.map((item) => item..checked = null));
-          ctr.loadingState.refresh();
+          ctr.loadingState
+            ..value
+                .data!
+                .insertAll(0, updateList.map((item) => item..checked = null))
+            ..refresh();
           ctr.allSelected.value = false;
         }
       } catch (e) {
@@ -104,8 +106,9 @@ class FavPgcController
       try {
         final ctr = Get.find<FavPgcController>(tag: '$type$followStatus');
         if (ctr.loadingState.value.isSuccess) {
-          ctr.loadingState.value.data!.insert(0, item);
-          ctr.loadingState.refresh();
+          ctr.loadingState
+            ..value.data?.insert(0, item)
+            ..refresh();
           ctr.allSelected.value = false;
         }
       } catch (e) {

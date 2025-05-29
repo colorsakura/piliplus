@@ -38,6 +38,9 @@ class PlDanmakuController {
 
     if (result.isSuccess) {
       final data = result.data;
+      if (data.state == 1) {
+        plPlayerController.dmState.add(cid);
+      }
       if (data.elems.isNotEmpty) {
         final Map<String, int> counts = {};
         if (mergeDanmaku) {
