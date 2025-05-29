@@ -35,7 +35,6 @@ class _ViewPointsPageState
   @override
   Widget buildPage(ThemeData theme) {
     return Scaffold(
-      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         automaticallyImplyLeading: false,
         titleSpacing: 16,

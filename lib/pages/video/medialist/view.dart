@@ -259,7 +259,7 @@ class _MediaListPanelState
                           ],
                         ),
                       ),
-                      if (showDelBtn && isCurr)
+                      if (showDelBtn && !isCurr)
                         Positioned(
                           right: 12,
                           bottom: -6,

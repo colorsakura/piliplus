@@ -29,7 +29,6 @@ class _SearchPageState extends State<SearchPage> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Scaffold(
-      resizeToAvoidBottomInset: true,
       appBar: AppBar(
         shape: Border(
           bottom: BorderSide(

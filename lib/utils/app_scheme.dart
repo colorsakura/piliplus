@@ -119,7 +119,6 @@ class PiliScheme {
                     'id': commentSecondaryId,
                   },
                   () => Scaffold(
-                    resizeToAvoidBottomInset: false,
                     appBar: AppBar(
                       title: const Text('评论详情'),
                       actions: [
@@ -257,7 +256,6 @@ class PiliScheme {
                   'enterUri': queryParameters['enterUri'],
                 },
                 () => Scaffold(
-                  resizeToAvoidBottomInset: false,
                   appBar: AppBar(
                     title: const Text('评论详情'),
                     actions: [
@@ -306,7 +304,6 @@ class PiliScheme {
                   'type': type,
                 },
                 () => Scaffold(
-                  resizeToAvoidBottomInset: false,
                   appBar: AppBar(
                     title: const Text('评论详情'),
                     actions: [
@@ -381,7 +378,6 @@ class PiliScheme {
                       'id': commentSecondaryId,
                     },
                     () => Scaffold(
-                      resizeToAvoidBottomInset: false,
                       appBar: AppBar(
                         title: const Text('评论详情'),
                         actions: [
@@ -767,7 +763,6 @@ class PiliScheme {
               'id': commentSecondaryId,
             },
             () => Scaffold(
-              resizeToAvoidBottomInset: false,
               appBar: AppBar(
                 title: const Text('评论详情'),
                 actions: pageType == '1'

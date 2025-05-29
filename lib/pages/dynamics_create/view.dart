@@ -57,152 +57,146 @@ class _CreateDynPanelState extends CommonPublishPageState<CreateDynPanel> {
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
-    return Scaffold(
-      backgroundColor: Colors.transparent,
-      resizeToAvoidBottomInset: false,
-      appBar: _buildAppBar(theme),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Expanded(
-            child: ListView(
-              padding: EdgeInsets.zero,
-              controller: widget.scrollController,
-              physics: const ClampingScrollPhysics(),
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: Obx(
-                    () {
-                      final hasTopic = topic.value != null;
-                      return Row(
-                        spacing: 10,
-                        children: [
-                          TextButton(
-                            style: TextButton.styleFrom(
-                              overlayColor:
-                                  hasTopic ? Colors.transparent : null,
-                              splashFactory:
-                                  hasTopic ? NoSplash.splashFactory : null,
-                              shape: hasTopic
-                                  ? null
-                                  : RoundedRectangleBorder(
-                                      side: BorderSide(
-                                        color: hasTopic
-                                            ? Colors.transparent
-                                            : theme.colorScheme.outline
-                                                .withValues(alpha: 0.2),
-                                      ),
-                                      borderRadius: const BorderRadius.all(
-                                        Radius.circular(25),
-                                      ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _buildAppBar(theme),
+        Expanded(
+          child: ListView(
+            padding: EdgeInsets.zero,
+            controller: widget.scrollController,
+            physics: const ClampingScrollPhysics(),
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Obx(
+                  () {
+                    final hasTopic = topic.value != null;
+                    return Row(
+                      spacing: 10,
+                      children: [
+                        TextButton(
+                          style: TextButton.styleFrom(
+                            overlayColor: hasTopic ? Colors.transparent : null,
+                            splashFactory:
+                                hasTopic ? NoSplash.splashFactory : null,
+                            shape: hasTopic
+                                ? null
+                                : RoundedRectangleBorder(
+                                    side: BorderSide(
+                                      color: hasTopic
+                                          ? Colors.transparent
+                                          : theme.colorScheme.outline
+                                              .withValues(alpha: 0.2),
                                     ),
-                              minimumSize: Size.zero,
-                              padding: hasTopic
-                                  ? const EdgeInsets.symmetric(vertical: 12)
-                                  : const EdgeInsets.all(12),
-                              visualDensity: VisualDensity.compact,
-                              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                            ),
-                            onPressed: _onSelectTopic,
-                            child: Text.rich(
-                              TextSpan(
-                                children: [
-                                  WidgetSpan(
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(right: 5),
-                                      child: Icon(
-                                        CustomIcon.topic_tag,
-                                        size: 18,
-                                        color: hasTopic
-                                            ? null
-                                            : theme.colorScheme.outline,
-                                      ),
+                                    borderRadius: const BorderRadius.all(
+                                      Radius.circular(25),
                                     ),
                                   ),
-                                  TextSpan(
-                                    text:
-                                        hasTopic ? topic.value!.second : '选择话题',
-                                    style: TextStyle(
+                            minimumSize: Size.zero,
+                            padding: hasTopic
+                                ? const EdgeInsets.symmetric(vertical: 12)
+                                : const EdgeInsets.all(12),
+                            visualDensity: VisualDensity.compact,
+                            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                          ),
+                          onPressed: _onSelectTopic,
+                          child: Text.rich(
+                            TextSpan(
+                              children: [
+                                WidgetSpan(
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(right: 5),
+                                    child: Icon(
+                                      CustomIcon.topic_tag,
+                                      size: 18,
                                       color: hasTopic
                                           ? null
                                           : theme.colorScheme.outline,
                                     ),
                                   ),
-                                ],
-                              ),
+                                ),
+                                TextSpan(
+                                  text: hasTopic ? topic.value!.second : '选择话题',
+                                  style: TextStyle(
+                                    color: hasTopic
+                                        ? null
+                                        : theme.colorScheme.outline,
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
-                          if (hasTopic)
-                            iconButton(
-                              size: 22,
-                              iconSize: 16,
-                              context: context,
-                              icon: Icons.clear,
-                              bgColor: theme.colorScheme.onInverseSurface,
-                              iconColor: theme.colorScheme.onSurfaceVariant,
-                              onPressed: () => topic.value = null,
-                            ),
-                        ],
-                      );
-                    },
-                  ),
+                        ),
+                        if (hasTopic)
+                          iconButton(
+                            size: 22,
+                            iconSize: 16,
+                            context: context,
+                            icon: Icons.clear,
+                            bgColor: theme.colorScheme.onInverseSurface,
+                            iconColor: theme.colorScheme.onSurfaceVariant,
+                            onPressed: () => topic.value = null,
+                          ),
+                      ],
+                    );
+                  },
                 ),
-                const SizedBox(height: 5),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: TextField(
-                    controller: _titleEditCtr,
-                    style: const TextStyle(fontWeight: FontWeight.bold),
-                    decoration: InputDecoration(
-                      hintText: '标题，选填20字',
-                      isDense: true,
-                      contentPadding: EdgeInsets.zero,
-                      border: const OutlineInputBorder(
-                        gapPadding: 0,
-                        borderSide: BorderSide.none,
-                      ),
-                      hintStyle: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: theme.colorScheme.outline.withValues(alpha: 0.7),
-                      ),
+              ),
+              const SizedBox(height: 5),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: TextField(
+                  controller: _titleEditCtr,
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                  decoration: InputDecoration(
+                    hintText: '标题，选填20字',
+                    isDense: true,
+                    contentPadding: EdgeInsets.zero,
+                    border: const OutlineInputBorder(
+                      gapPadding: 0,
+                      borderSide: BorderSide.none,
                     ),
-                    inputFormatters: [LengthLimitingTextInputFormatter(20)],
+                    hintStyle: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: theme.colorScheme.outline.withValues(alpha: 0.7),
+                    ),
                   ),
+                  inputFormatters: [LengthLimitingTextInputFormatter(20)],
                 ),
-                const SizedBox(height: 5),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: _buildEditWidget(theme),
+              ),
+              const SizedBox(height: 5),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: _buildEditWidget(theme),
+              ),
+              const SizedBox(height: 16),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Obx(() => _buildPubtimeWidget),
+                    Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Obx(() => _buildReplyOptionWidget(theme)),
+                        const SizedBox(height: 5),
+                        Obx(() => _buildPrivateWidget(theme)),
+                      ],
+                    ),
+                  ],
                 ),
-                const SizedBox(height: 16),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Obx(() => _buildPubtimeWidget),
-                      Column(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Obx(() => _buildReplyOptionWidget(theme)),
-                          const SizedBox(height: 5),
-                          Obx(() => _buildPrivateWidget(theme)),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 10),
-                _buildImageList(theme),
-              ],
-            ),
+              ),
+              const SizedBox(height: 10),
+              _buildImageList(theme),
+            ],
           ),
-          _buildToolbar,
-          buildPanelContainer(Colors.transparent),
-        ],
-      ),
+        ),
+        _buildToolbar,
+        buildPanelContainer(Colors.transparent),
+      ],
     );
   }
 

@@ -54,37 +54,39 @@ class _NoteListPageState extends CommonSlidePageState<NoteListPage> {
   Widget buildPage(ThemeData theme) {
     return Scaffold(
       key: _key,
-      resizeToAvoidBottomInset: false,
-      body: Scaffold(
-        backgroundColor: Colors.transparent,
-        resizeToAvoidBottomInset: false,
-        appBar: AppBar(
-          automaticallyImplyLeading: false,
-          titleSpacing: 16,
-          toolbarHeight: 45,
-          title: Obx(
-            () => Text(
-                '笔记${_controller.count.value == -1 ? '' : '(${_controller.count.value})'}'),
-          ),
-          bottom: PreferredSize(
-            preferredSize: const Size.fromHeight(1),
-            child: Divider(
-              height: 1,
-              color: theme.colorScheme.outline.withValues(alpha: 0.1),
+      body: Column(
+        children: [
+          SizedBox(
+            height: 45,
+            child: AppBar(
+              automaticallyImplyLeading: false,
+              titleSpacing: 16,
+              toolbarHeight: 45,
+              title: Obx(
+                () => Text(
+                    '笔记${_controller.count.value == -1 ? '' : '(${_controller.count.value})'}'),
+              ),
+              bottom: PreferredSize(
+                preferredSize: const Size.fromHeight(1),
+                child: Divider(
+                  height: 1,
+                  color: theme.colorScheme.outline.withValues(alpha: 0.1),
+                ),
+              ),
+              actions: [
+                iconButton(
+                  context: context,
+                  tooltip: '关闭',
+                  icon: Icons.clear,
+                  onPressed: Get.back,
+                  size: 32,
+                ),
+                const SizedBox(width: 16),
+              ],
             ),
           ),
-          actions: [
-            iconButton(
-              context: context,
-              tooltip: '关闭',
-              icon: Icons.clear,
-              onPressed: Get.back,
-              size: 32,
-            ),
-            const SizedBox(width: 16),
-          ],
-        ),
-        body: enableSlide ? slideList(theme) : buildList(theme),
+          Expanded(child: enableSlide ? slideList(theme) : buildList(theme))
+        ],
       ),
     );
   }

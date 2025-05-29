@@ -130,7 +130,6 @@ class _DynamicsPageState extends State<DynamicsPage>
     super.build(context);
     ThemeData theme = Theme.of(context);
     return Scaffold(
-      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         leading: upPanelPosition == UpPanelPosition.rightDrawer
             ? _createDynamicBtn(theme, false)

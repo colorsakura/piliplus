@@ -202,7 +202,6 @@ class _MainAppState extends State<MainApp>
           systemNavigationBarIconBrightness: theme.brightness.reverse,
         ),
         child: Scaffold(
-          resizeToAvoidBottomInset: false,
           extendBody: true,
           body: Row(
             mainAxisAlignment: MainAxisAlignment.center,

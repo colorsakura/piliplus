@@ -179,7 +179,6 @@ class _ArticlePageState extends State<ArticlePage>
         VoidCallback? onDispose,
       }) =>
           Scaffold(
-            resizeToAvoidBottomInset: false,
             appBar: AppBar(
               title: const Text('评论详情'),
               titleSpacing: automaticallyImplyLeading ? null : 12,

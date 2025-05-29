@@ -416,13 +416,14 @@ class _BangumiIntroPanelState extends State<BangumiIntroPanel>
     return Row(
       spacing: 6,
       children: [
-        Text(
-          (bangumiItem.areas!.isNotEmpty ? bangumiItem.areas!.first.name! : ''),
-          style: TextStyle(
-            fontSize: 12,
-            color: theme.colorScheme.outline,
+        if (bangumiItem.areas?.isNotEmpty == true)
+          Text(
+            bangumiItem.areas!.first.name!,
+            style: TextStyle(
+              fontSize: 12,
+              color: theme.colorScheme.outline,
+            ),
           ),
-        ),
         Text(
           bangumiItem.publish!.pubTimeShow!,
           style: TextStyle(

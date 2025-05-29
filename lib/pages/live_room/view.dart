@@ -272,71 +272,65 @@ class _LiveRoomPageState extends State<LiveRoomPage>
     );
   }
 
-  Widget get _buildPH => Scaffold(
-        resizeToAvoidBottomInset: false,
-        appBar: _buildAppBar,
-        backgroundColor: Colors.transparent,
-        body: Column(
-          children: _buildBodyP,
-        ),
+  Widget get _buildPH => Column(
+        children: [
+          _buildAppBar,
+          ..._buildBodyP,
+        ],
       );
 
-  Widget get _buildPP => Scaffold(
-        resizeToAvoidBottomInset: false,
-        backgroundColor: Colors.transparent,
-        body: Stack(
-          clipBehavior: Clip.none,
-          children: [
-            _buildAppBar,
-            Column(
-              children: [
-                Obx(
-                  () => Container(
-                    color: Colors.black,
-                    width: Get.width,
-                    margin: isFullScreen
-                        ? null
-                        : EdgeInsets.only(
-                            top: 56 + MediaQuery.paddingOf(context).top,
-                          ),
-                    height: isFullScreen
-                        ? Get.height -
-                            (context.orientation == Orientation.landscape
-                                ? 0
-                                : MediaQuery.paddingOf(context).top)
-                        : Get.height - 56 - 85 - padding!,
-                    child: videoPlayerPanel(
-                      alignment: isFullScreen ? null : Alignment.topCenter,
-                    ),
+  Widget get _buildPP => Stack(
+        clipBehavior: Clip.none,
+        children: [
+          _buildAppBar,
+          Column(
+            children: [
+              Obx(
+                () => Container(
+                  color: Colors.black,
+                  width: Get.width,
+                  margin: isFullScreen
+                      ? null
+                      : EdgeInsets.only(
+                          top: 56 + MediaQuery.paddingOf(context).top,
+                        ),
+                  height: isFullScreen
+                      ? Get.height -
+                          (context.orientation == Orientation.landscape
+                              ? 0
+                              : MediaQuery.paddingOf(context).top)
+                      : Get.height - 56 - 85 - padding!,
+                  child: videoPlayerPanel(
+                    alignment: isFullScreen ? null : Alignment.topCenter,
                   ),
                 ),
-              ],
-            ),
-            Obx(
-              () => isFullScreen
-                  ? const SizedBox.shrink()
-                  : Positioned(
-                      left: 0,
-                      right: 0,
-                      bottom: 125 + MediaQuery.paddingOf(context).bottom,
-                      child: SizedBox(
-                        height: 125,
-                        child: _buildChatWidget(true),
-                      ),
+              ),
+            ],
+          ),
+          Obx(
+            () => isFullScreen
+                ? const SizedBox.shrink()
+                : Positioned(
+                    left: 0,
+                    right: 0,
+                    bottom: 125 + MediaQuery.paddingOf(context).bottom,
+                    child: SizedBox(
+                      height: 125,
+                      child: _buildChatWidget(true),
                     ),
-            ),
-            Obx(
-              () => isFullScreen
-                  ? const SizedBox.shrink()
-                  : Positioned(
-                      left: 0,
-                      right: 0,
-                      bottom: 0,
-                      child: _buildInputWidget,
-                    ),
-            ),
-          ],
-        ),
+                  ),
+          ),
+          Obx(
+            () => isFullScreen
+                ? const SizedBox.shrink()
+                : Positioned(
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    child: _buildInputWidget,
+                  ),
+          ),
+        ],
       );
 
   @override

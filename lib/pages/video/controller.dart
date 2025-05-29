@@ -357,13 +357,9 @@ class VideoDetailController extends GetxController
             }
           } catch (_) {}
         } else if (isLoadPrevious) {
-          if (data.mediaList?.isNotEmpty == true) {
-            mediaList.insertAll(0, data.mediaList!);
-          }
+          mediaList.insertAll(0, data.mediaList!);
         } else {
-          if (data.mediaList?.isNotEmpty == true) {
-            mediaList.addAll(data.mediaList!);
-          }
+          mediaList.addAll(data.mediaList!);
         }
       }
     } else {
@@ -1477,7 +1473,7 @@ class VideoDetailController extends GetxController
         } catch (_) {}
       }
 
-      if (GStorage.showViewPoints && playInfo.viewPoints?.isNotEmpty == true) {
+      if (playInfo.viewPoints?.isNotEmpty == true && GStorage.showViewPoints) {
         try {
           viewPointList = playInfo.viewPoints!.map((item) {
             double start =
