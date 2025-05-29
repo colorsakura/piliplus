@@ -114,7 +114,7 @@ class ReplyUtils {
     // root reply
     if (rpid == null) {
       // no cookie check
-      dynamic res = await ReplyHttp.replyList(
+      var res = await ReplyHttp.replyList(
         isLogin: false,
         oid: oid,
         nextOffset: '',
@@ -128,8 +128,8 @@ class ReplyUtils {
       if (res is Error) {
         SmartDialog.showToast('获取评论主列表时发生错误：${res.errMsg}');
         return;
-      } else if (res is Success) {
-        ReplyData replies = res.response;
+      } else if (res.isSuccess) {
+        ReplyData replies = res.data;
         int index =
             replies.replies?.indexWhere((item) => item.rpid == replyId) ?? -1;
         if (index != -1) {

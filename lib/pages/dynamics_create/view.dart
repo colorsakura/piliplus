@@ -585,9 +585,10 @@ class _CreateDynPanelState extends CommonPublishPageState<CreateDynPanel> {
     if (result['status']) {
       Get.back();
       SmartDialog.showToast('发布成功');
-      RequestUtils.insertCreatedDyn(result);
+      var id = result['data']?['dyn_id'];
+      RequestUtils.insertCreatedDyn(id);
       RequestUtils.checkCreatedDyn(
-        id: result['data']?['dyn_id'],
+        id: id,
         dynText: editController.text,
       );
     } else {

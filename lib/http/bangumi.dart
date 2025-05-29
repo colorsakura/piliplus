@@ -19,7 +19,7 @@ class BangumiHttp {
     type,
     indexType,
   }) async {
-    dynamic res = await Request().get(
+    var res = await Request().get(
       Api.pgcIndexResult,
       queryParameters: {
         ...params,
@@ -42,7 +42,7 @@ class BangumiHttp {
     type,
     indexType,
   }) async {
-    dynamic res = await Request().get(
+    var res = await Request().get(
       Api.pgcIndexCondition,
       queryParameters: {
         if (seasonType != null) 'season_type': seasonType,

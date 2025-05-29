@@ -50,7 +50,7 @@ class FavVideoCardH extends StatelessWidget {
               String? epId;
               if (videoItem.type == 24) {
                 videoItem.cid = await SearchHttp.ab2c(bvid: bvid);
-                dynamic seasonId = videoItem.ogv!['season_id'];
+                dynamic seasonId = videoItem.ogv!.seasonId;
                 epId = videoItem.epId;
                 PageUtils.viewBangumi(seasonId: seasonId, epId: epId);
                 return;
@@ -111,7 +111,7 @@ class FavVideoCardH extends StatelessWidget {
                         type: PBadgeType.gray,
                       ),
                       PBadge(
-                        text: videoItem.ogv?['type_name'],
+                        text: videoItem.ogv?.typeName,
                         top: 6.0,
                         right: 6.0,
                         bottom: null,

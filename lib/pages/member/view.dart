@@ -160,7 +160,7 @@ class _MemberPageState extends State<MemberPage> {
         ],
       ),
       body: Obx(
-        () => _userController.loadingState.value is Success
+        () => _userController.loadingState.value.isSuccess
             ? LayoutBuilder(
                 builder: (context, constraints) {
                   return ExtendedNestedScrollView(

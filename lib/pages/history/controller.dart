@@ -38,7 +38,7 @@ class HistoryController extends MultiSelectController<HistoryData, HisListItem>
 
   @override
   void onSelect(int index, [bool disableSelect = true]) {
-    List<HisListItem> list = (loadingState.value as Success).response;
+    List<HisListItem> list = loadingState.value.data!;
     list[index].checked = !(list[index].checked ?? false);
     baseCtr.checkedCount.value =
         list.where((item) => item.checked == true).length;
@@ -50,8 +50,8 @@ class HistoryController extends MultiSelectController<HistoryData, HisListItem>
 
   @override
   void handleSelect([bool checked = false, bool disableSelect = true]) {
-    if (loadingState.value is Success) {
-      List<HisListItem>? list = (loadingState.value as Success).response;
+    if (loadingState.value.isSuccess) {
+      List<HisListItem>? list = loadingState.value.data;
       if (list?.isNotEmpty == true) {
         for (HisListItem item in list!) {
           item.checked = checked;
@@ -108,11 +108,9 @@ class HistoryController extends MultiSelectController<HistoryData, HisListItem>
 
   // 删除已看历史记录
   void onDelHistory() {
-    if (loadingState.value is Success) {
+    if (loadingState.value.isSuccess) {
       List<HisListItem> list =
-          ((loadingState.value as Success).response as List<HisListItem>)
-              .where((e) => e.progress == -1)
-              .toList();
+          loadingState.value.data!.where((e) => e.progress == -1).toList();
       if (list.isNotEmpty) {
         _onDelete(list);
       } else {
@@ -126,13 +124,10 @@ class HistoryController extends MultiSelectController<HistoryData, HisListItem>
     List<String> kidList = result.map((item) {
       return '${item.history.business}_${item.kid}';
     }).toList();
-    dynamic response = await UserHttp.delHistory(kidList);
+    var response = await UserHttp.delHistory(kidList);
     if (response['status']) {
       List<HisListItem> remainList =
-          ((loadingState.value as Success).response as List<HisListItem>)
-              .toSet()
-              .difference(result.toSet())
-              .toList();
+          loadingState.value.data!.toSet().difference(result.toSet()).toList();
       if (remainList.isNotEmpty) {
         loadingState.value = Success(remainList);
       } else {
@@ -168,9 +163,8 @@ class HistoryController extends MultiSelectController<HistoryData, HisListItem>
             TextButton(
               onPressed: () {
                 Get.back();
-                if (loadingState.value is Success) {
-                  _onDelete(((loadingState.value as Success).response
-                          as List<HisListItem>)
+                if (loadingState.value.isSuccess) {
+                  _onDelete(loadingState.value.data!
                       .where((e) => e.checked == true)
                       .toList());
                 }

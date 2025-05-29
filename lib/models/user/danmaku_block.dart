@@ -8,7 +8,7 @@ class DanmakuBlockDataModel {
 
   DanmakuBlockDataModel.fromJson(Map<String, dynamic> json) {
     rule = (json['rule'] as List?)?.map((v) => SimpleRule.fromJson(v)).toList();
-    toast = json['toast'];
+    toast = json['toast'] == '' ? null : json['toast'];
     valid = json['valid'];
     ver = json['ver'];
   }

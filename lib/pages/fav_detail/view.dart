@@ -219,11 +219,9 @@ class _FavDetailPageState extends State<FavDetailPage> {
                           ),
                           PopupMenuItem(
                             onTap: () {
-                              if (_favDetailController.loadingState.value
-                                      is Success &&
-                                  ((_favDetailController.loadingState.value
-                                                  as Success)
-                                              .response as List?)
+                              if (_favDetailController
+                                      .loadingState.value.isSuccess &&
+                                  _favDetailController.loadingState.value.data
                                           ?.isNotEmpty ==
                                       true) {
                                 if ((_favDetailController

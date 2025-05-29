@@ -12,11 +12,15 @@ import 'package:PiliPlus/models/member/article.dart';
 import 'package:PiliPlus/models/model_hot_video_item.dart';
 import 'package:PiliPlus/models/model_rec_video_item.dart';
 import 'package:PiliPlus/models/pgc/pgc_rank/pgc_rank_item_model.dart';
+import 'package:PiliPlus/models/pgc_lcf.dart';
+import 'package:PiliPlus/models/play_info/data.dart';
+import 'package:PiliPlus/models/triple/pgc_triple.dart';
 import 'package:PiliPlus/models/user/fav_folder.dart';
 import 'package:PiliPlus/models/video/ai.dart';
 import 'package:PiliPlus/models/video/note_list/data.dart';
 import 'package:PiliPlus/models/video/play/url.dart';
-import 'package:PiliPlus/models/video_detail_res.dart';
+import 'package:PiliPlus/models/video_detail/video_detail_response.dart';
+import 'package:PiliPlus/models/video_relation/data.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/id_utils.dart';
 import 'package:PiliPlus/utils/recommend_filter.dart';
@@ -314,7 +318,7 @@ class VideoHttp {
     if (res.data['code'] == 0) {
       return {
         'status': true,
-        'data': res.data['data'],
+        'data': VideoRelation.fromJson(res.data['data']),
       };
     } else {
       return {
@@ -348,7 +352,7 @@ class VideoHttp {
       queryParameters: {'ep_id': epId},
     );
     if (res.data['code'] == 0) {
-      return {'status': true, 'data': res.data['data']};
+      return {'status': true, 'data': PgcLCF.fromJson(res.data['data'])};
     } else {
       return {'status': false, 'msg': res.data['message']};
     }
@@ -396,7 +400,7 @@ class VideoHttp {
       ),
     );
     if (res.data['code'] == 0) {
-      return {'status': true, 'data': res.data['data']};
+      return {'status': true, 'data': PgcTriple.fromJson(res.data['data'])};
     } else {
       return {'status': false, 'msg': res.data['message']};
     }
@@ -892,11 +896,10 @@ class VideoHttp {
     }
   }
 
-  static Future<Map<String, dynamic>> subtitlesJson(
-      {String? aid, String? bvid, required int cid}) async {
+  static Future playInfo({String? aid, String? bvid, required int cid}) async {
     assert(aid != null || bvid != null);
     var res = await Request().get(
-      Api.subtitleUrl,
+      Api.playInfo,
       queryParameters: {
         if (aid != null) 'aid': aid,
         if (bvid != null) 'bvid': bvid,
@@ -904,20 +907,16 @@ class VideoHttp {
       },
     );
     if (res.data['code'] == 0) {
-      dynamic data = res.data['data'];
       return {
         'status': true,
-        'subtitles': data['subtitle']?['subtitles'],
-        'view_points': data['view_points'],
-        'last_play_cid': data['last_play_cid'],
-        'interaction': data['interaction'],
+        'data': PlayInfoData.fromJson(res.data['data']),
       };
     } else {
       return {'status': false, 'msg': res.data['message']};
     }
   }
 
-  static Future vttSubtitles(Map<String, dynamic> subtile) async {
+  static Future vttSubtitles(String subtitleUrl) async {
     String subtitleTimecode(num seconds) {
       int h = seconds ~/ 3600;
       seconds %= 3600;
@@ -938,7 +937,7 @@ class VideoHttp {
       return sb.toString();
     }
 
-    var res = await Request().get("https:${subtile['subtitle_url']}");
+    var res = await Request().get("https:$subtitleUrl");
 
     if (res.data?['body'] is List) {
       return await compute(processList, res.data['body'] as List);

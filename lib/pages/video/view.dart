@@ -12,8 +12,10 @@ import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/main.dart';
 import 'package:PiliPlus/models/common/episode_panel_type.dart';
 import 'package:PiliPlus/models/common/search_type.dart';
-import 'package:PiliPlus/models/pgc/info.dart' as bangumi;
-import 'package:PiliPlus/models/video_detail_res.dart' as video;
+import 'package:PiliPlus/models/pgc/pgc_info_model/episode.dart' as bangumi;
+import 'package:PiliPlus/models/pgc/pgc_info_model/result.dart';
+import 'package:PiliPlus/models/video_detail/episode.dart';
+import 'package:PiliPlus/models/video_detail/page.dart';
 import 'package:PiliPlus/models/video_tag/data.dart';
 import 'package:PiliPlus/pages/danmaku/view.dart';
 import 'package:PiliPlus/pages/episode_panel/view.dart';
@@ -21,8 +23,7 @@ import 'package:PiliPlus/pages/video/ai/view.dart';
 import 'package:PiliPlus/pages/video/controller.dart';
 import 'package:PiliPlus/pages/video/introduction/pgc/controller.dart';
 import 'package:PiliPlus/pages/video/introduction/pgc/view.dart';
-import 'package:PiliPlus/pages/video/introduction/pgc/widgets/intro_detail.dart'
-    as bangumi;
+import 'package:PiliPlus/pages/video/introduction/pgc/widgets/intro_detail.dart';
 import 'package:PiliPlus/pages/video/introduction/ugc/controller.dart';
 import 'package:PiliPlus/pages/video/introduction/ugc/view.dart';
 import 'package:PiliPlus/pages/video/introduction/ugc/widgets/page.dart';
@@ -236,9 +237,8 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
 
     if (status == PlayerStatus.completed) {
       try {
-        if ((videoDetailController.steinEdgeInfo?['edges']['questions'][0]
-                    ['choices'] as List?)
-                ?.isNotEmpty ==
+        if (videoDetailController.steinEdgeInfo?.edges?.questions?.firstOrNull
+                ?.choices?.isNotEmpty ==
             true) {
           videoDetailController.showSteinEdgeInfo.value = true;
           return;
@@ -1642,12 +1642,10 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                         onTap: handlePlay,
                         child: Obx(
                           () => CachedNetworkImage(
-                            imageUrl:
-                                videoDetailController.videoItem['pic'] != null
-                                    ? (videoDetailController.videoItem['pic']
-                                            as String)
-                                        .http2https
-                                    : '',
+                            imageUrl: (videoDetailController.videoItem['pic']
+                                        as String?)
+                                    ?.http2https ??
+                                '',
                             width: videoWidth,
                             height: videoHeight,
                             fit: BoxFit.cover,
@@ -1735,8 +1733,8 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                       child: Wrap(
                         spacing: 25,
                         runSpacing: 10,
-                        children: (videoDetailController.steinEdgeInfo!['edges']
-                                ['questions'][0]['choices'] as List)
+                        children: videoDetailController
+                            .steinEdgeInfo!.edges!.questions!.first.choices!
                             .map((item) {
                           return FilledButton.tonal(
                             style: FilledButton.styleFrom(
@@ -1758,15 +1756,14 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                               videoIntroController.changeSeasonOrbangu(
                                 null,
                                 videoDetailController.bvid,
-                                item['cid'],
+                                item.cid,
                                 IdUtils.bv2av(videoDetailController.bvid),
                                 null,
                                 true,
                               );
-                              videoDetailController
-                                  .getSteinEdgeInfo(item['id']);
+                              videoDetailController.getSteinEdgeInfo(item.id);
                             },
-                            child: Text(item['option']),
+                            child: Text(item.option!),
                           );
                         }).toList(),
                       ),
@@ -2079,10 +2076,10 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
   }
 
   void showIntroDetail(
-      bangumi.BangumiInfoModel videoDetail, List<VideoTagItem>? videoTags) {
+      BangumiInfoModel videoDetail, List<VideoTagItem>? videoTags) {
     videoDetailController.childKey.currentState?.showBottomSheet(
       backgroundColor: Colors.transparent,
-      (context) => bangumi.IntroDetail(
+      (context) => IntroDetail(
         bangumiDetail: videoDetail,
         videoTags: videoTags,
       ),
@@ -2099,7 +2096,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
           videoIntroController: videoIntroController,
           type: season != null
               ? EpisodeType.season
-              : episodes is List<video.Part>
+              : episodes is List<Part>
                   ? EpisodeType.part
                   : EpisodeType.bangumi,
           cover: videoDetailController.videoItem['pic'],
@@ -2172,7 +2169,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
         episode.runtimeType.toString() == "EpisodeItem" ? episode.bvid : bvid,
         episode.cid,
         episode.runtimeType.toString() == "EpisodeItem" ? episode.aid : aid,
-        episode is video.EpisodeItem
+        episode is EpisodeItem
             ? episode.arc?.pic
             : episode is bangumi.EpisodeItem
                 ? episode.cover

@@ -42,7 +42,7 @@ class LiveAreaController
   }
 
   Future<void> setFavTag() async {
-    if (favState.value is Success) {
+    if (favState.value.isSuccess) {
       final res = await LiveHttp.setLiveFavTag(
           ids: favState.value.data.map((e) => e.id).toList());
       if (res['status']) {

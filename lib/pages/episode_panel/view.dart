@@ -13,8 +13,10 @@ import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/http/video.dart';
 import 'package:PiliPlus/models/common/badge_type.dart';
 import 'package:PiliPlus/models/common/episode_panel_type.dart';
-import 'package:PiliPlus/models/pgc/info.dart' as bangumi;
-import 'package:PiliPlus/models/video_detail_res.dart' as video;
+import 'package:PiliPlus/models/pgc/pgc_info_model/episode.dart' as bangumi;
+import 'package:PiliPlus/models/video_detail/episode.dart' as video;
+import 'package:PiliPlus/models/video_detail/page.dart';
+import 'package:PiliPlus/models/video_relation/data.dart';
 import 'package:PiliPlus/pages/common/common_slide_page.dart';
 import 'package:PiliPlus/pages/video/controller.dart';
 import 'package:PiliPlus/pages/video/introduction/ugc/controller.dart';
@@ -149,13 +151,14 @@ class _EpisodePanelState extends CommonSlidePageState<EpisodePanel> {
 
     if (widget.type == EpisodeType.season && Accounts.main.isLogin) {
       _favState = LoadingState.loading().obs;
-      VideoHttp.videoRelation(bvid: widget.bvid).then((result) {
-        if (result['status']) {
-          if (result['data']?['season_fav'] is bool) {
-            _favState!.value = Success(result['data']['season_fav']);
+      VideoHttp.videoRelation(bvid: widget.bvid).then(
+        (result) {
+          if (result['status']) {
+            VideoRelation data = result['data'];
+            _favState!.value = Success(data.seasonFav ?? false);
           }
-        }
-      });
+        },
+      );
     }
 
     _currentItemIndex = _findCurrentItemIndex.obs;
@@ -351,32 +354,32 @@ class _EpisodePanelState extends CommonSlidePageState<EpisodePanel> {
     int? danmaku;
 
     switch (episode) {
-      case video.Part():
-        cover = episode.firstFrame ?? widget.cover;
-        title = episode.pagePart!;
-        duration = episode.duration;
-        pubdate = episode.ctime;
+      case Part part:
+        cover = part.firstFrame ?? widget.cover;
+        title = part.pagePart!;
+        duration = part.duration;
+        pubdate = part.ctime;
         break;
-      case video.EpisodeItem():
-        title = episode.title!;
-        cover = episode.arc?.pic;
-        duration = episode.arc?.duration;
-        pubdate = episode.arc?.pubdate;
-        view = episode.arc?.stat?.view;
-        danmaku = episode.arc?.stat?.danmaku;
+      case video.EpisodeItem item:
+        title = item.title!;
+        cover = item.arc?.pic;
+        duration = item.arc?.duration;
+        pubdate = item.arc?.pubdate;
+        view = item.arc?.stat?.view;
+        danmaku = item.arc?.stat?.danmaku;
         break;
-      case bangumi.EpisodeItem():
-        if (episode.longTitle != null && episode.longTitle != "") {
-          dynamic leading = episode.title ?? index + 1;
+      case bangumi.EpisodeItem item:
+        if (item.longTitle != null && item.longTitle != "") {
+          dynamic leading = item.title ?? index + 1;
           title =
               "${Utils.isStringNumeric(leading) ? '第$leading话' : leading}  ${episode.longTitle!}";
         } else {
-          title = episode.title!;
+          title = item.title!;
         }
 
-        cover = episode.cover;
-        duration = episode.duration == null ? null : episode.duration! ~/ 1000;
-        pubdate = episode.pubTime;
+        cover = item.cover;
+        duration = item.duration == null ? null : item.duration! ~/ 1000;
+        pubdate = item.pubTime;
         break;
     }
     late final Color primary = theme.colorScheme.primary;

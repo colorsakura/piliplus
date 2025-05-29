@@ -60,12 +60,13 @@ Widget livePanel(
                 ],
               ),
             ),
-            Text(
-              content.live!.badge!['text'],
-              style: TextStyle(
-                fontSize: theme.textTheme.labelMedium!.fontSize,
-              ),
-            )
+            if (content.live!.badge?.text != null)
+              Text(
+                content.live!.badge!.text!,
+                style: TextStyle(
+                  fontSize: theme.textTheme.labelMedium!.fontSize,
+                ),
+              )
           ],
         ),
       ),

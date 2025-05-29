@@ -8,9 +8,16 @@ import 'package:PiliPlus/http/member.dart';
 import 'package:PiliPlus/http/search.dart';
 import 'package:PiliPlus/http/user.dart';
 import 'package:PiliPlus/http/video.dart';
+import 'package:PiliPlus/models/triple/ugc_triple.dart';
 import 'package:PiliPlus/models/user/fav_folder.dart';
 import 'package:PiliPlus/models/video/ai.dart';
-import 'package:PiliPlus/models/video_detail_res.dart';
+import 'package:PiliPlus/models/video_detail/data.dart';
+import 'package:PiliPlus/models/video_detail/episode.dart';
+import 'package:PiliPlus/models/video_detail/page.dart';
+import 'package:PiliPlus/models/video_detail/section.dart';
+import 'package:PiliPlus/models/video_detail/staff.dart';
+import 'package:PiliPlus/models/video_detail/ugc_season.dart';
+import 'package:PiliPlus/models/video_relation/data.dart';
 import 'package:PiliPlus/models/video_tag/data.dart';
 import 'package:PiliPlus/pages/dynamics_repost/view.dart';
 import 'package:PiliPlus/pages/video/controller.dart';
@@ -228,11 +235,11 @@ class VideoIntroController extends GetxController {
   Future<void> queryAllStatus() async {
     var result = await VideoHttp.videoRelation(bvid: bvid);
     if (result['status']) {
-      var data = result['data'];
-      hasLike.value = data['like'];
-      hasDislike.value = data['dislike'];
-      _coinNum.value = data['coin'];
-      hasFav.value = data['favorite'];
+      VideoRelation data = result['data'];
+      hasLike.value = data.like!;
+      hasDislike.value = data.dislike!;
+      _coinNum.value = data.coin!;
+      hasFav.value = data.favorite!;
     }
   }
 
@@ -250,12 +257,13 @@ class VideoIntroController extends GetxController {
     }
     var result = await VideoHttp.oneThree(bvid: bvid);
     if (result['status']) {
-      hasLike.value = result["data"]["like"];
-      if (result["data"]["coin"]) {
+      UgcTriple data = result['data'];
+      hasLike.value = data.like!;
+      if (data.coin == true) {
         _coinNum.value = 2;
         GlobalData().afterCoin(2);
       }
-      hasFav.value = result["data"]["fav"];
+      hasFav.value = data.fav!;
       SmartDialog.showToast('三连成功');
     } else {
       SmartDialog.showToast(result['msg']);
@@ -584,7 +592,7 @@ class VideoIntroController extends GetxController {
     }
     int attr = followStatus['attribute'] ?? 0;
     if (attr == 128) {
-      dynamic res = await VideoHttp.relationMod(
+      var res = await VideoHttp.relationMod(
         mid: mid,
         act: 6,
         reSrc: 11,
@@ -692,7 +700,7 @@ class VideoIntroController extends GetxController {
     if (isShowOnlineTotal.not) {
       return;
     }
-    dynamic result = await VideoHttp.onlineTotal(
+    var result = await VideoHttp.onlineTotal(
       aid: IdUtils.bv2av(bvid),
       bvid: bvid,
       cid: lastPlayCid.value,

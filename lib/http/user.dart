@@ -3,6 +3,8 @@ import 'package:PiliPlus/http/api.dart';
 import 'package:PiliPlus/http/init.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/fav_article/data.dart';
+import 'package:PiliPlus/models/folder_info/data.dart';
+import 'package:PiliPlus/models/media_list/data.dart';
 import 'package:PiliPlus/models/model_hot_video_item.dart';
 import 'package:PiliPlus/models/user/fav_detail.dart';
 import 'package:PiliPlus/models/user/fav_folder.dart';
@@ -12,7 +14,6 @@ import 'package:PiliPlus/models/user/info.dart';
 import 'package:PiliPlus/models/user/stat.dart';
 import 'package:PiliPlus/models/user/sub_detail.dart';
 import 'package:PiliPlus/models/user/sub_folder.dart';
-import 'package:PiliPlus/models/video/later.dart';
 import 'package:PiliPlus/models/video_tag/data.dart';
 import 'package:PiliPlus/utils/global_data.dart';
 import 'package:PiliPlus/utils/storage.dart';
@@ -189,11 +190,14 @@ class UserHttp {
   static Future folderInfo({
     dynamic mediaId,
   }) async {
-    var res = await Request().get(Api.folderInfo, queryParameters: {
-      'media_id': mediaId,
-    });
+    var res = await Request().get(
+      Api.folderInfo,
+      queryParameters: {
+        'media_id': mediaId,
+      },
+    );
     if (res.data['code'] == 0) {
-      return {'status': true, 'data': res.data['data']};
+      return {'status': true, 'data': FolderInfo.fromJson(res.data['data'])};
     } else {
       return {'status': false, 'msg': res.data['message']};
     }
@@ -254,7 +258,7 @@ class UserHttp {
       }
       return Success({
         'list': list,
-        'count': res.data['data']['count'],
+        'count': res.data['data']?['count'] ?? 0,
       });
     } else {
       return Error(res.data['message']);
@@ -341,7 +345,7 @@ class UserHttp {
       'csrf': Accounts.main.csrf,
       'resources': aids.join(',')
     };
-    dynamic res = await Request().post(
+    var res = await Request().post(
       Api.toViewDel,
       data: params,
       options: Options(contentType: Headers.formUrlEncodedContentType),
@@ -651,7 +655,7 @@ class UserHttp {
 
   // 取消订阅
   static Future cancelSub({required int id, required int type}) async {
-    late dynamic res;
+    late Response res;
     if (type == 11) {
       res = await Request().post(
         Api.unfavFolder,
@@ -719,15 +723,7 @@ class UserHttp {
       },
     );
     if (res.data['code'] == 0) {
-      return {
-        'status': true,
-        'data': res.data['data']['media_list'] != null
-            ? res.data['data']['media_list']
-                .map<MediaVideoItemModel>(
-                    (e) => MediaVideoItemModel.fromJson(e))
-                .toList()
-            : <MediaVideoItemModel>[]
-      };
+      return {'status': true, 'data': MediaListData.fromJson(res.data['data'])};
     } else {
       return {'status': false, 'msg': res.data['message']};
     }

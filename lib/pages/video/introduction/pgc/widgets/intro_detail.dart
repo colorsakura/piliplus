@@ -3,7 +3,7 @@ import 'package:PiliPlus/common/widgets/keep_alive_wrapper.dart';
 import 'package:PiliPlus/common/widgets/page/tabs.dart';
 import 'package:PiliPlus/common/widgets/scroll_physics.dart';
 import 'package:PiliPlus/common/widgets/stat/stat.dart';
-import 'package:PiliPlus/models/pgc/info.dart';
+import 'package:PiliPlus/models/pgc/pgc_info_model/result.dart';
 import 'package:PiliPlus/models/video_tag/data.dart';
 import 'package:PiliPlus/pages/common/common_collapse_slide_page.dart';
 import 'package:PiliPlus/pages/pgc_review/view.dart';
@@ -110,13 +110,13 @@ class _IntroDetailState extends CommonCollapseSlidePageState<IntroDetail> {
             StatView(
               context: context,
               theme: 'gray',
-              value: Utils.numFormat(widget.bangumiDetail.stat!['views']),
+              value: Utils.numFormat(widget.bangumiDetail.stat!.views),
             ),
             const SizedBox(width: 6),
             StatDanMu(
               context: context,
               theme: 'gray',
-              value: Utils.numFormat(widget.bangumiDetail.stat!['danmakus']),
+              value: Utils.numFormat(widget.bangumiDetail.stat!.danmakus),
             ),
           ],
         ),
@@ -124,17 +124,17 @@ class _IntroDetailState extends CommonCollapseSlidePageState<IntroDetail> {
         Row(
           children: [
             Text(
-              widget.bangumiDetail.areas!.first['name'],
+              widget.bangumiDetail.areas!.first.name!,
               style: smallTitle,
             ),
             const SizedBox(width: 6),
             Text(
-              widget.bangumiDetail.publish!['pub_time_show'],
+              widget.bangumiDetail.publish!.pubTimeShow!,
               style: smallTitle,
             ),
             const SizedBox(width: 6),
             Text(
-              widget.bangumiDetail.newEp!['desc'],
+              widget.bangumiDetail.newEp!.desc!,
               style: smallTitle,
             ),
           ],

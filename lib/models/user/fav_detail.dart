@@ -31,7 +31,7 @@ class FavDetailItemData extends BaseVideoItemModel with MultiSelectData {
   String? link;
   int? ctime;
   int? favTime;
-  Map? ogv;
+  Ogv? ogv;
   String? epId;
 
   FavDetailItemData.fromJson(Map<String, dynamic> json) {
@@ -51,7 +51,7 @@ class FavDetailItemData extends BaseVideoItemModel with MultiSelectData {
     pubdate = json['pubtime'];
     favTime = json['fav_time'];
     bvid = json['bvid'];
-    ogv = json['ogv'];
+    ogv = json['ogv'] == null ? null : Ogv.fromJson(json['ogv']);
     stat = PlayStat.fromJson(json['cnt_info']);
     cid = json['ugc']?['first_cid'];
     if (json['link'] != null && json['link'].contains('/bangumi')) {
@@ -61,4 +61,22 @@ class FavDetailItemData extends BaseVideoItemModel with MultiSelectData {
 
   static final _digitRegExp = RegExp(r'\d+');
   String resolveEpId(String url) => _digitRegExp.firstMatch(url)!.group(0)!;
+}
+
+class Ogv {
+  String? typeName;
+  int? typeId;
+  int? seasonId;
+
+  Ogv({
+    this.typeName,
+    this.typeId,
+    this.seasonId,
+  });
+
+  factory Ogv.fromJson(Map<String, dynamic> json) => Ogv(
+        typeName: json["type_name"],
+        typeId: json["type_id"],
+        seasonId: json["season_id"],
+      );
 }

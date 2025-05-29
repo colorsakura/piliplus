@@ -244,7 +244,7 @@ class RequestUtils {
 
   // static Future<dynamic> getWwebid(mid) async {
   //   try {
-  //     dynamic response = await Request().get(
+  //     var response = await Request().get(
   //       '${HttpString.spaceBaseUrl}/$mid/dynamic',
   //       options: Options(
   //         extra: {'account': AnonymousAccount()},
@@ -261,17 +261,15 @@ class RequestUtils {
   //   }
   // }
 
-  static Future<void> insertCreatedDyn(result) async {
+  static Future<void> insertCreatedDyn(id) async {
     try {
-      dynamic id = result['data']['dyn_id'];
       if (id != null) {
         await Future.delayed(const Duration(milliseconds: 200));
-        dynamic res = await DynamicsHttp.dynamicDetail(id: id);
+        var res = await DynamicsHttp.dynamicDetail(id: id);
         if (res['status']) {
           final ctr = Get.find<DynamicsTabController>(tag: 'all');
-          if (ctr.loadingState.value is Success) {
-            List<DynamicItemModel>? list =
-                (ctr.loadingState.value as Success).response;
+          if (ctr.loadingState.value.isSuccess) {
+            List<DynamicItemModel>? list = ctr.loadingState.value.data;
             if (list != null) {
               list.insert(0, res['data']);
               ctr.loadingState.refresh();
@@ -293,8 +291,7 @@ class RequestUtils {
           if (isManual != true) {
             await Future.delayed(const Duration(seconds: 5));
           }
-          dynamic res =
-              await DynamicsHttp.dynamicDetail(id: id, clearCookie: true);
+          var res = await DynamicsHttp.dynamicDetail(id: id, clearCookie: true);
           showDialog(
             context: Get.context!,
             builder: (context) => AlertDialog(
@@ -387,8 +384,7 @@ class RequestUtils {
                 TextButton(
                   onPressed: () {
                     if (checkedId != null) {
-                      List resources = ((ctr.loadingState.value as Success)
-                              .response as List<T>)
+                      List resources = ctr.loadingState.value.data!
                           .where((e) => e.checked == true)
                           .toList();
                       SmartDialog.showLoading();
@@ -407,8 +403,7 @@ class RequestUtils {
                         if (res['status']) {
                           ctr.handleSelect(false);
                           if (isCopy.not) {
-                            List<T> dataList =
-                                (ctr.loadingState.value as Success).response;
+                            List<T> dataList = ctr.loadingState.value.data!;
                             List<T> remainList = dataList
                                 .toSet()
                                 .difference(resources.toSet())

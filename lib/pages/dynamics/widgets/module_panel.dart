@@ -182,8 +182,7 @@ Widget module(
           borderRadius: floor == 1 ? null : StyleString.mdRadius,
           onTap: () {
             try {
-              String url =
-                  item.modules.moduleDynamic!.major!.common!['jump_url'];
+              String url = item.modules.moduleDynamic!.major!.common!.jumpUrl!;
               if (url.contains('bangumi/play') &&
                   PageUtils.viewPgcFromUri(url)) {
                 return;
@@ -200,7 +199,7 @@ Widget module(
                   radius: 8,
                   width: 45,
                   height: 45,
-                  src: item.modules.moduleDynamic!.major!.common!['cover'],
+                  src: item.modules.moduleDynamic!.major!.common!.cover,
                 ),
                 const SizedBox(width: 10),
                 Expanded(
@@ -208,7 +207,7 @@ Widget module(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        item.modules.moduleDynamic!.major!.common!['title'],
+                        item.modules.moduleDynamic!.major!.common!.title!,
                         style: TextStyle(
                           color: theme.colorScheme.primary,
                         ),
@@ -217,7 +216,7 @@ Widget module(
                       ),
                       const SizedBox(height: 2),
                       Text(
-                        item.modules.moduleDynamic!.major!.common!['desc'],
+                        item.modules.moduleDynamic!.major!.common!.desc!,
                         style: TextStyle(
                           color: theme.colorScheme.outline,
                           fontSize: theme.textTheme.labelMedium!.fontSize,
@@ -283,26 +282,29 @@ Widget module(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           if (floor == 1) const SizedBox(width: 12),
-          Stack(
-            clipBehavior: Clip.none,
-            children: [
-              Hero(
-                tag: item.modules.moduleDynamic!.major!.medialist!['cover'],
-                child: NetworkImgLayer(
-                  width: 180,
-                  height: 110,
-                  src: item.modules.moduleDynamic!.major!.medialist!['cover'],
+          if (item.modules.moduleDynamic!.major!.medialist!.cover?.isNotEmpty ==
+              true) ...[
+            Stack(
+              clipBehavior: Clip.none,
+              children: [
+                Hero(
+                  tag: item.modules.moduleDynamic!.major!.medialist!.cover!,
+                  child: NetworkImgLayer(
+                    width: 180,
+                    height: 110,
+                    src: item.modules.moduleDynamic!.major!.medialist!.cover,
+                  ),
                 ),
-              ),
-              PBadge(
-                right: 6,
-                top: 6,
-                text: item.modules.moduleDynamic!.major!.medialist!['badge']
-                    ?['text'],
-              )
-            ],
-          ),
-          const SizedBox(width: 14),
+                PBadge(
+                  right: 6,
+                  top: 6,
+                  text:
+                      item.modules.moduleDynamic!.major!.medialist!.badge?.text,
+                )
+              ],
+            ),
+            const SizedBox(width: 14),
+          ],
           Expanded(
             child: SizedBox(
               height: 110,
@@ -313,18 +315,16 @@ Widget module(
                 children: [
                   const SizedBox(height: 4),
                   Text(
-                    item.modules.moduleDynamic!.major!.medialist!['title'],
+                    item.modules.moduleDynamic!.major!.medialist!.title!,
                     style: TextStyle(
                         fontSize: theme.textTheme.titleMedium!.fontSize,
                         fontWeight: FontWeight.bold),
                   ),
-                  if (item.modules.moduleDynamic?.major
-                          ?.medialist?['sub_title'] !=
+                  if (item.modules.moduleDynamic?.major?.medialist?.subTitle !=
                       null) ...[
                     const Spacer(),
                     Text(
-                      item.modules.moduleDynamic!.major!
-                          .medialist!['sub_title'],
+                      item.modules.moduleDynamic!.major!.medialist!.subTitle!,
                       style: TextStyle(
                           fontSize: theme.textTheme.labelLarge!.fontSize,
                           color: theme.colorScheme.outline),

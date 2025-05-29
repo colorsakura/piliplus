@@ -1,3 +1,5 @@
+import 'package:PiliPlus/models/dynamics/result.dart';
+
 class RoomInfoH5Model {
   RoomInfoH5Model({
     this.roomInfo,
@@ -5,15 +7,13 @@ class RoomInfoH5Model {
     this.isRoomFeed,
     this.watchedShow,
     this.likeInfoV3,
-    this.blockInfo,
   });
 
   RoomInfo? roomInfo;
   AnchorInfo? anchorInfo;
   int? isRoomFeed;
-  Map? watchedShow;
+  WatchedShow? watchedShow;
   LikeInfoV3? likeInfoV3;
-  Map? blockInfo;
 
   RoomInfoH5Model.fromJson(Map<String, dynamic> json) {
     roomInfo =
@@ -22,11 +22,12 @@ class RoomInfoH5Model {
         ? null
         : AnchorInfo.fromJson(json['anchor_info']);
     isRoomFeed = json['is_room_feed'];
-    watchedShow = json['watched_show'];
+    watchedShow = json['watched_show'] == null
+        ? null
+        : WatchedShow.fromJson(json['watched_show']);
     likeInfoV3 = json['like_info_v3'] == null
         ? null
         : LikeInfoV3.fromJson(json['like_info_v3']);
-    blockInfo = json['block_info'];
   }
 }
 

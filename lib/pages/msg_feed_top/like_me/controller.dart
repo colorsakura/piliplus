@@ -37,7 +37,7 @@ class LikeMeController extends CommonDataController<MsgFeedLikeMe, dynamic> {
     cursorTime = data.total?.cursor?.time ?? -1;
     List<LikeMeItems> latest = data.latest?.items ?? [];
     List<LikeMeItems> total = data.total?.items ?? [];
-    if (!isRefresh && loadingState.value is Success) {
+    if (!isRefresh && loadingState.value.isSuccess) {
       Pair<List<LikeMeItems>, List<LikeMeItems>> pair = loadingState.value.data;
       latest.insertAll(0, pair.first);
       total.insertAll(0, pair.second);
@@ -62,7 +62,7 @@ class LikeMeController extends CommonDataController<MsgFeedLikeMe, dynamic> {
       var res = await MsgHttp.delMsgfeed(0, id);
       if (res['status']) {
         Pair<List<LikeMeItems>, List<LikeMeItems>> pair =
-            (loadingState.value as Success).response;
+            loadingState.value.data;
         if (isLatest) {
           pair.first.removeAt(index);
         } else {
@@ -81,8 +81,7 @@ class LikeMeController extends CommonDataController<MsgFeedLikeMe, dynamic> {
     int noticeState = isNotice ? 1 : 0;
     var res = await MsgHttp.msgSetNotice(id: id, noticeState: noticeState);
     if (res['status']) {
-      Pair<List<LikeMeItems>, List<LikeMeItems>> pair =
-          (loadingState.value as Success).response;
+      Pair<List<LikeMeItems>, List<LikeMeItems>> pair = loadingState.value.data;
       if (isLatest) {
         pair.first[index].noticeState = noticeState;
       } else {

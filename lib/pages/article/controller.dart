@@ -5,6 +5,7 @@ import 'package:PiliPlus/http/dynamics.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/http/user.dart';
 import 'package:PiliPlus/http/video.dart';
+import 'package:PiliPlus/models/article_info/data.dart';
 import 'package:PiliPlus/models/dynamics/article_content_model.dart'
     show ArticleContentModel;
 import 'package:PiliPlus/models/dynamics/result.dart';
@@ -124,20 +125,21 @@ class ArticleController extends ReplyController<MainListReply> {
   Future<bool> getArticleInfo([bool isGetCover = false]) async {
     final res = await DynamicsHttp.articleInfo(cvId: commentId);
     if (res['status']) {
+      ArticleInfoData data = res['data'];
       summary
-        ..cover ??= (res['data']?['origin_image_urls'] as List?)?.firstOrNull
-        ..title ??= res['data']?['title'];
+        ..cover ??= data.originImageUrls?.firstOrNull
+        ..title ??= data.title;
 
       stats.value ??= ModuleStatModel(
-        comment: DynamicStat(count: res['data']?['stats']?['reply']),
-        forward: DynamicStat(count: res['data']?['stats']?['share']),
+        comment: DynamicStat(count: data.stats?.reply),
+        forward: DynamicStat(count: data.stats?.share),
         like: DynamicStat(
-          count: res['data']?['stats']?['like'],
-          status: res['data']?['like'] == 1,
+          count: data.stats?.like,
+          status: data.stats?.like == 1,
         ),
         favorite: DynamicStat(
-          count: res['data']?['stats']?['reply'],
-          status: res['data']?['favorite'],
+          count: data.stats?.favorite,
+          status: data.favorite,
         ),
       );
       return true;

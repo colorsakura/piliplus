@@ -4,7 +4,7 @@ import 'package:PiliPlus/http/api.dart';
 import 'package:PiliPlus/http/init.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/common/search_type.dart';
-import 'package:PiliPlus/models/pgc/info.dart';
+import 'package:PiliPlus/models/pgc/pgc_info_model/result.dart';
 import 'package:PiliPlus/models/search/result.dart';
 import 'package:PiliPlus/models/search/search_trending/trending_data.dart';
 import 'package:PiliPlus/models/search/suggest.dart';
@@ -166,7 +166,7 @@ class SearchHttp {
     } else if (bvid != null) {
       data['bvid'] = bvid;
     }
-    final dynamic res = await Request().get(Api.ab2c, queryParameters: data);
+    var res = await Request().get(Api.ab2c, queryParameters: data);
     if (res.data['code'] == 0) {
       return part != null
           ? ((res.data['data'] as List).getOrNull(part - 1)?['cid'] ??
@@ -180,7 +180,7 @@ class SearchHttp {
 
   static Future<LoadingState<BangumiInfoModel>> bangumiInfoNew(
       {int? seasonId, int? epId}) async {
-    final dynamic res = await Request().get(
+    var res = await Request().get(
       Api.bangumiInfo,
       queryParameters: {
         if (seasonId != null) 'season_id': seasonId,
@@ -195,7 +195,7 @@ class SearchHttp {
   }
 
   static Future<LoadingState> episodeInfo({int? epId}) async {
-    final dynamic res = await Request().get(
+    var res = await Request().get(
       Api.episodeInfo,
       queryParameters: {
         if (epId != null) 'ep_id': epId,
@@ -218,8 +218,7 @@ class SearchHttp {
     } else if (epId != null) {
       data['ep_id'] = epId;
     }
-    final dynamic res =
-        await Request().get(Api.bangumiInfo, queryParameters: data);
+    var res = await Request().get(Api.bangumiInfo, queryParameters: data);
 
     if (res.data['code'] == 0) {
       return {

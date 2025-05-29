@@ -27,8 +27,8 @@ class RcmdController extends CommonListController {
 
   @override
   void handleListResponse(List dataList) {
-    if (enableSaveLastData && page == 0 && loadingState.value is Success) {
-      List? currentList = (loadingState.value as Success).response;
+    if (enableSaveLastData && page == 0 && loadingState.value.isSuccess) {
+      List? currentList = loadingState.value.data;
       if (currentList?.isNotEmpty == true) {
         if (savedRcmdTip) {
           lastRefreshAt = dataList.length;

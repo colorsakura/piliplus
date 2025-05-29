@@ -9,9 +9,9 @@ import 'package:PiliPlus/http/video.dart';
 import 'package:PiliPlus/models/common/badge_type.dart';
 import 'package:PiliPlus/models/common/history_business_type.dart';
 import 'package:PiliPlus/models/user/history.dart';
+import 'package:PiliPlus/models/video_detail/data.dart';
 import 'package:PiliPlus/pages/common/multi_select_controller.dart';
 import 'package:PiliPlus/pages/history/base_controller.dart';
-import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/feed_back.dart';
 import 'package:PiliPlus/utils/id_utils.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
@@ -70,8 +70,9 @@ class HistoryItem extends StatelessWidget {
           if (bvid != null && bvid != '') {
             var result = await VideoHttp.videoIntro(bvid: bvid);
             if (result['status']) {
-              String bvid = result['data'].bvid!;
-              var epid = result['data'].epId;
+              VideoDetailData data = result['data'];
+              String bvid = data.bvid!;
+              var epid = data.epId;
               if (epid != null) {
                 PageUtils.viewBangumi(epId: epid);
               } else {
@@ -140,9 +141,9 @@ class HistoryItem extends StatelessWidget {
                         clipBehavior: Clip.none,
                         children: [
                           NetworkImgLayer(
-                            src: (videoItem.cover.isNullOrEmpty
-                                ? videoItem.covers?.firstOrNull ?? ''
-                                : videoItem.cover),
+                            src: videoItem.cover?.isNotEmpty == true
+                                ? videoItem.cover
+                                : videoItem.covers?.firstOrNull ?? '',
                             width: maxWidth,
                             height: maxHeight,
                           ),

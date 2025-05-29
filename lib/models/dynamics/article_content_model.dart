@@ -311,6 +311,7 @@ class Live {
 class Common {
   Common({
     this.cover,
+    this.desc,
     this.desc1,
     this.desc2,
     this.headText,
@@ -321,6 +322,7 @@ class Common {
     this.title,
   });
   String? cover;
+  String? desc;
   String? desc1;
   String? desc2;
   String? headText;
@@ -332,6 +334,7 @@ class Common {
 
   Common.fromJson(Map<String, dynamic> json) {
     cover = json['cover'];
+    desc = json['desc'];
     desc1 = json['desc1'];
     desc2 = json['desc2'];
     headText = json['head_text'];

@@ -1,3 +1,5 @@
+import 'package:PiliPlus/models/model_avatar.dart';
+
 class FollowDataModel {
   FollowDataModel({
     this.total,
@@ -37,7 +39,7 @@ class FollowItemModel {
   String? uname;
   String? face;
   String? sign;
-  Map? officialVerify;
+  BaseOfficialVerify? officialVerify;
 
   FollowItemModel.fromJson(Map<String, dynamic> json) {
     mid = json['mid'];
@@ -48,6 +50,8 @@ class FollowItemModel {
     uname = json['uname'];
     face = json['face'];
     sign = json['sign'] == '' ? '还没有签名' : json['sign'];
-    officialVerify = json['official_verify'];
+    officialVerify = json['official_verify'] == null
+        ? null
+        : BaseOfficialVerify.fromJson(json['official_verify']);
   }
 }

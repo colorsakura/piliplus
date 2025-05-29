@@ -225,7 +225,7 @@ class _VideoReplyReplyPanelState
                 },
               ),
               if (!widget.isDialogue &&
-                  _videoReplyReplyController.loadingState.value is Success)
+                  _videoReplyReplyController.loadingState.value.isSuccess)
                 _header(theme),
             ],
           ),

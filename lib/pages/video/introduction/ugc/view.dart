@@ -6,7 +6,7 @@ import 'package:PiliPlus/common/widgets/pendant_avatar.dart';
 import 'package:PiliPlus/common/widgets/self_sized_horizontal_list.dart';
 import 'package:PiliPlus/common/widgets/stat/stat.dart';
 import 'package:PiliPlus/models/common/image_type.dart';
-import 'package:PiliPlus/models/video_detail_res.dart';
+import 'package:PiliPlus/models/video_detail/data.dart';
 import 'package:PiliPlus/pages/mine/controller.dart';
 import 'package:PiliPlus/pages/search/widgets/search_text.dart';
 import 'package:PiliPlus/pages/video/controller.dart';
@@ -397,7 +397,8 @@ class _VideoInfoState extends State<VideoInfo> {
                                           fadeOutDuration: Duration.zero,
                                         ),
                                         if ((videoItem['staff'][index]
-                                                    .official?['type'] ??
+                                                    .official
+                                                    ?.type ??
                                                 -1) !=
                                             -1)
                                           Positioned(
@@ -412,8 +413,8 @@ class _VideoInfoState extends State<VideoInfo> {
                                               child: Icon(
                                                 Icons.offline_bolt,
                                                 color: videoItem['staff'][index]
-                                                                .official?[
-                                                            'type'] ==
+                                                            .official
+                                                            ?.type ==
                                                         0
                                                     ? const Color(0xFFFFCC00)
                                                     : Colors.lightBlueAccent,
@@ -634,8 +635,8 @@ class _VideoInfoState extends State<VideoInfo> {
                         )
                     ],
                   ),
-                  if (videoIntroController
-                              .videoDetail.value.argueMsg?.isNotEmpty ==
+                  if (videoIntroController.videoDetail.value.argueInfo?.argueMsg
+                              ?.isNotEmpty ==
                           true &&
                       videoIntroController.showArgueMsg) ...[
                     const SizedBox(height: 2),
@@ -653,7 +654,7 @@ class _VideoInfoState extends State<VideoInfo> {
                           const WidgetSpan(child: SizedBox(width: 2)),
                           TextSpan(
                             text:
-                                '${videoIntroController.videoDetail.value.argueMsg}',
+                                '${videoIntroController.videoDetail.value.argueInfo!.argueMsg}',
                           )
                         ],
                       ),

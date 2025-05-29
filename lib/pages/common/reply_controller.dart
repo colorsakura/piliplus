@@ -168,8 +168,8 @@ abstract class ReplyController<R> extends CommonListController<R, ReplyInfo> {
         if (res != null) {
           savedReplies[key] = null;
           ReplyInfo replyInfo = RequestUtils.replyCast(res);
-          if (loadingState.value is Success) {
-            List<ReplyInfo>? list = (loadingState.value as Success).response;
+          if (loadingState.value.isSuccess) {
+            List<ReplyInfo>? list = loadingState.value.data;
             if (list == null) {
               loadingState.value = Success([replyInfo]);
             } else {
@@ -203,7 +203,7 @@ abstract class ReplyController<R> extends CommonListController<R, ReplyInfo> {
   }
 
   void onRemove(int index, int? subIndex) {
-    List<ReplyInfo> list = (loadingState.value as Success).response;
+    List<ReplyInfo> list = loadingState.value.data!;
     if (subIndex == null) {
       list.removeAt(index);
     } else {
@@ -239,7 +239,7 @@ abstract class ReplyController<R> extends CommonListController<R, ReplyInfo> {
       isUpTop: isUpTop,
     );
     if (res['status']) {
-      List<ReplyInfo> list = (loadingState.value as Success).response;
+      List<ReplyInfo> list = loadingState.value.data!;
       list[index].replyControl.isUpTop = !isUpTop;
       if (!isUpTop && index != 0) {
         list[0].replyControl.isUpTop = false;

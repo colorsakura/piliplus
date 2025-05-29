@@ -34,7 +34,7 @@ class FollowChildController
         if (controller!.isOwner &&
             tagid == null &&
             isRefresh &&
-            controller!.followState.value is Success) {
+            controller!.followState.value.isSuccess) {
           controller!.tabs[0].count = response.response.total;
           controller!.tabs.refresh();
         }

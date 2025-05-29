@@ -44,7 +44,7 @@ class AuthorPanel extends StatelessWidget {
     Widget avatar = PendantAvatar(
       avatar: item.modules.moduleAuthor?.face,
       size: pendant.isNullOrEmpty ? 40 : 34,
-      isVip: null, // item.modules.moduleAuthor!.vip['status'] > 0
+      isVip: null,
       officialType: null, // 已被注释
       garbPendantImage: pendant,
     );
@@ -161,31 +161,28 @@ class AuthorPanel extends StatelessWidget {
                           children: [
                             CachedNetworkImage(
                               height: 32,
-                              imageUrl: (item.modules.moduleAuthor!
-                                      .decorate!['card_url'] as String)
-                                  .http2https,
+                              imageUrl: item.modules.moduleAuthor!.decorate!
+                                  .cardUrl.http2https,
                             ),
-                            if ((item.modules.moduleAuthor?.decorate?['fan']
-                                        ?['num_str'] as String?)
+                            if (item.modules.moduleAuthor?.decorate?.fan?.numStr
                                     ?.isNotEmpty ==
                                 true)
                               Padding(
                                 padding: const EdgeInsets.only(right: 32),
                                 child: Text(
-                                  '${item.modules.moduleAuthor!.decorate!['fan']['num_str']}',
+                                  '${item.modules.moduleAuthor!.decorate!.fan!.numStr}',
                                   style: TextStyle(
                                     height: 1,
                                     fontSize: 11,
                                     fontFamily: 'digital_id_num',
-                                    color: (item.modules.moduleAuthor!
-                                                        .decorate!['fan']
-                                                    ['color'] as String?)
+                                    color: item.modules.moduleAuthor!.decorate!
+                                                .fan?.color
                                                 ?.startsWith('#') ==
                                             true
                                         ? Color(
                                             int.parse(
                                               item.modules.moduleAuthor!
-                                                  .decorate!['fan']['color']
+                                                  .decorate!.fan!.color!
                                                   .replaceFirst('#', '0xFF'),
                                             ),
                                           )

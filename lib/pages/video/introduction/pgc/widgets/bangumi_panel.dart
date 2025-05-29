@@ -1,6 +1,7 @@
 import 'dart:async';
 
-import 'package:PiliPlus/models/pgc/info.dart';
+import 'package:PiliPlus/models/pgc/pgc_info_model/episode.dart';
+import 'package:PiliPlus/models/pgc/pgc_info_model/new_ep.dart';
 import 'package:PiliPlus/pages/video/controller.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/utils.dart';
@@ -24,7 +25,7 @@ class BangumiPanel extends StatefulWidget {
   final Function changeFuc;
   final Function showEpisodes;
   final String heroTag;
-  final dynamic newEp;
+  final NewEp? newEp;
 
   @override
   State<BangumiPanel> createState() => _BangumiPanelState();
@@ -116,9 +117,9 @@ class _BangumiPanelState extends State<BangumiPanel> {
                     cid,
                   ),
                   child: Text(
-                    widget.newEp?['desc']?.contains('连载') == true
-                        ? '连载中，更新至${Utils.isStringNumeric(widget.newEp['title']) ? '第${widget.newEp?['title']}话' : '${widget.newEp?['title']}'}'
-                        : widget.newEp?['desc'],
+                    widget.newEp?.desc?.contains('连载') == true
+                        ? '连载中，更新至${Utils.isStringNumeric(widget.newEp!.title) ? '第${widget.newEp!.title}话' : '${widget.newEp!.title}'}'
+                        : widget.newEp?.desc ?? '',
                     style: const TextStyle(fontSize: 13),
                   ),
                 ),

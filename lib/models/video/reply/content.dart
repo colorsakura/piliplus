@@ -23,16 +23,16 @@ class ReplyContent {
 
   ReplyContent.fromJson(Map<String, dynamic> json) {
     message = json['message'];
-    atNameToMid = json['at_name_to_mid'] ?? {};
+    atNameToMid = json['at_name_to_mid'];
     members = (json['members'] as List?)
         ?.map<MemberItemModel>((e) => MemberItemModel.fromJson(e))
         .toList();
-    emote = json['emote'] ?? {};
-    jumpUrl = json['jump_url'] ?? {};
-    pictures = json['pictures'] ?? [];
-    vote = json['vote'] ?? {};
-    richText = json['rich_text'] ?? {};
-    topicsMeta = json['topics_meta'] ?? {};
+    emote = json['emote'];
+    jumpUrl = json['jump_url'];
+    pictures = json['pictures'];
+    vote = json['vote'];
+    richText = json['rich_text'];
+    topicsMeta = json['topics_meta'];
   }
 }
 

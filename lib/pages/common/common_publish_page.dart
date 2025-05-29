@@ -4,6 +4,7 @@ import 'dart:math';
 
 import 'package:PiliPlus/common/widgets/button/icon_button.dart';
 import 'package:PiliPlus/http/msg.dart';
+import 'package:PiliPlus/models/bfs_res/data.dart';
 import 'package:PiliPlus/models/common/image_preview_type.dart';
 import 'package:PiliPlus/models/common/publish_panel_type.dart';
 import 'package:PiliPlus/models/live/live_emoticons/emoticon.dart';
@@ -175,11 +176,12 @@ abstract class CommonPublishPageState<T extends CommonPublishPage>
                 cancelToken: cancelToken,
               );
               if (!result['status']) throw HttpException(result['msg']);
+              BfsResData data = result['data'];
               return {
-                'img_width': result['data']['image_width'],
-                'img_height': result['data']['image_height'],
-                'img_size': result['data']['img_size'] / 1024,
-                'img_src': result['data']['image_url'],
+                'img_width': data.imageWidth,
+                'img_height': data.imageHeight,
+                'img_size': data.imgSize,
+                'img_src': data.imageUrl,
               };
             }).toList(),
             eagerError: true);

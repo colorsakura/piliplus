@@ -76,7 +76,7 @@ class _FavNotePageState extends State<FavNotePage>
             // TextButton(
             //   style: TextButton.styleFrom(
             //     foregroundColor: theme.colorScheme.onSurfaceVariant,
-            //     visualDensity: const VisualDensity(horizontal: -2, vertical: -2),
+            //     visualDensity: VisualDensity.compact,
             //     tapTargetSize: MaterialTapTargetSize.shrinkWrap,
             //   ),
             //   onPressed: () async {
@@ -85,10 +85,8 @@ class _FavNotePageState extends State<FavNotePage>
             //     if (favNoteController.enableMultiSelect.value) {
             //       favNoteController.onDisable();
             //     } else {
-            //       if (favNoteController.loadingState.value is Success &&
-            //           ((favNoteController.loadingState.value as Success)
-            //                       .response as List?)
-            //                   ?.isNotEmpty ==
+            //       if (favNoteController.loadingState.value.isSuccess &&
+            //           favNoteController.loadingState.value.data?.isNotEmpty ==
             //               true) {
             //         favNoteController.enableMultiSelect.value = true;
             //       }

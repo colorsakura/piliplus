@@ -113,10 +113,10 @@ class BottomControl extends StatelessWidget implements PreferredSizeWidget {
                     return PopupMenuItem<int>(
                       height: 35,
                       padding: const EdgeInsets.only(left: 30),
-                      value: e['code'],
-                      onTap: () => liveRoomCtr.changeQn(e['code']),
+                      value: e.code,
+                      onTap: () => liveRoomCtr.changeQn(e.code),
                       child: Text(
-                        e['desc'],
+                        e.desc,
                         style:
                             const TextStyle(color: Colors.white, fontSize: 13),
                       ),

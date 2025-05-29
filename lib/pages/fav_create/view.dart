@@ -1,6 +1,7 @@
 import 'package:PiliPlus/common/widgets/loading_widget/http_error.dart';
 import 'package:PiliPlus/http/msg.dart';
 import 'package:PiliPlus/http/user.dart';
+import 'package:PiliPlus/models/folder_info/data.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_debounce/easy_throttle.dart';
@@ -38,15 +39,17 @@ class _CreateFavPageState extends State<CreateFavPage> {
   }
 
   void _getFolderInfo() {
-    UserHttp.folderInfo(mediaId: _mediaId).then((data) {
-      if (data['status']) {
-        _titleController.text = data['data']['title'];
-        _introController.text = data['data']['intro'];
-        _isPublic = Utils.isPublicFav(data['data']['attr']);
-        _cover = data['data']['cover'];
-        _attr = data['data']['attr'];
+    _errMsg = null;
+    UserHttp.folderInfo(mediaId: _mediaId).then((res) {
+      if (res['status']) {
+        FolderInfo data = res['data'];
+        _titleController.text = data.title!;
+        _introController.text = data.intro ?? '';
+        _isPublic = Utils.isPublicFav(data.attr!);
+        _cover = data.cover;
+        _attr = data.attr;
       } else {
-        _errMsg = data['msg'];
+        _errMsg = res['msg'];
       }
       setState(() {});
     });

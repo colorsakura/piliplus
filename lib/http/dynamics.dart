@@ -3,9 +3,11 @@ import 'package:PiliPlus/http/api.dart';
 import 'package:PiliPlus/http/constants.dart';
 import 'package:PiliPlus/http/init.dart';
 import 'package:PiliPlus/http/loading_state.dart';
+import 'package:PiliPlus/models/article_info/data.dart';
 import 'package:PiliPlus/models/common/dynamic/dynamics_type.dart';
 import 'package:PiliPlus/models/common/reply/reply_option_type.dart';
 import 'package:PiliPlus/models/dynamics/article_list/data.dart';
+import 'package:PiliPlus/models/dynamics/dyn_reserve/data.dart';
 import 'package:PiliPlus/models/dynamics/dyn_topic_feed/topic_card_list.dart';
 import 'package:PiliPlus/models/dynamics/dyn_topic_top/top_details.dart';
 import 'package:PiliPlus/models/dynamics/result.dart';
@@ -300,7 +302,10 @@ class DynamicsHttp {
       }),
     );
     if (res.data['code'] == 0) {
-      return {'status': true, 'data': res.data['data']};
+      return {
+        'status': true,
+        'data': ArticleInfoData.fromJson(res.data['data'])
+      };
     } else {
       return {'status': false, 'msg': res.data['message']};
     }
@@ -459,7 +464,10 @@ class DynamicsHttp {
       },
     );
     if (res.data['code'] == 0) {
-      return {'status': true, 'data': res.data['data']};
+      return {
+        'status': true,
+        'data': DynReserveData.fromJson(res.data['data'])
+      };
     } else {
       return {'status': false, 'msg': res.data['message']};
     }

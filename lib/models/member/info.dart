@@ -1,3 +1,4 @@
+import 'package:PiliPlus/models/dynamics/result.dart';
 import 'package:PiliPlus/models/model_avatar.dart';
 
 class MemberInfoModel {
@@ -24,7 +25,7 @@ class MemberInfoModel {
   int? level;
   bool? isFollowed;
   String? topPhoto;
-  Map? official;
+  BaseOfficialVerify? official;
   Vip? vip;
   LiveRoom? liveRoom;
   int? isSeniorMember;
@@ -38,7 +39,9 @@ class MemberInfoModel {
     level = json['level'];
     isFollowed = json['is_followed'];
     topPhoto = json['top_photo'];
-    official = json['official'];
+    official = json['official'] == null
+        ? null
+        : BaseOfficialVerify.fromJson(json['official']);
     vip = Vip.fromJson(json['vip']);
     liveRoom =
         json['live_room'] != null ? LiveRoom.fromJson(json['live_room']) : null;
@@ -65,7 +68,7 @@ class LiveRoom {
   String? cover;
   int? roomId;
   int? roundStatus;
-  Map? watchedShow;
+  WatchedShow? watchedShow;
 
   LiveRoom.fromJson(Map<String, dynamic> json) {
     roomStatus = json['roomStatus'];
@@ -75,6 +78,8 @@ class LiveRoom {
     cover = json['cover'];
     roomId = json['roomid'];
     roundStatus = json['roundStatus'];
-    watchedShow = json['watched_show'];
+    watchedShow = json['watched_show'] == null
+        ? null
+        : WatchedShow.fromJson(json['watched_show']);
   }
 }

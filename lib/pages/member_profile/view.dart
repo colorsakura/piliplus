@@ -4,6 +4,7 @@ import 'package:PiliPlus/http/constants.dart';
 import 'package:PiliPlus/http/init.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/common/member/profile_type.dart';
+import 'package:PiliPlus/models/user_info/data.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:PiliPlus/utils/storage.dart';
@@ -28,7 +29,8 @@ class EditProfilePage extends StatefulWidget {
 }
 
 class _EditProfilePageState extends State<EditProfilePage> {
-  LoadingState _loadingState = LoadingState.loading();
+  LoadingState<UserInfoData> _loadingState =
+      LoadingState<UserInfoData>.loading();
   late final _textController = TextEditingController();
   late final _imagePicker = ImagePicker();
 
@@ -66,18 +68,18 @@ class _EditProfilePageState extends State<EditProfilePage> {
     Request()
         .get('${HttpString.appBaseUrl}/x/v2/account/myinfo',
             queryParameters: data)
-        .then((data) {
+        .then((res) {
       setState(() {
-        if (data.data['code'] == 0) {
-          _loadingState = Success(data.data['data']);
+        if (res.data['code'] == 0) {
+          _loadingState = Success(UserInfoData.fromJson(res.data['data']));
         } else {
-          _loadingState = Error(data.data['message']);
+          _loadingState = Error(res.data['message']);
         }
       });
     });
   }
 
-  Widget _buildBody(ThemeData theme, LoadingState loadingState) {
+  Widget _buildBody(ThemeData theme, LoadingState<UserInfoData> loadingState) {
     late final divider = Divider(
       height: 1,
       color: theme.dividerColor.withValues(alpha: 0.1),
@@ -102,7 +104,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 padding: const EdgeInsets.symmetric(vertical: 5),
                 child: ClipOval(
                   child: CachedNetworkImage(
-                    imageUrl: Utils.thumbnailImgUrl(response['face']),
+                    imageUrl: Utils.thumbnailImgUrl(response.face),
                   ),
                 ),
               ),
@@ -115,15 +117,15 @@ class _EditProfilePageState extends State<EditProfilePage> {
             _item(
               theme: theme,
               title: '昵称',
-              text: response['name'],
+              text: response.name,
               onTap: () {
-                if (response['coins'] < 6) {
+                if (response.coins! < 6) {
                   SmartDialog.showToast('硬币不足');
                 } else {
                   _editDialog(
                     type: ProfileType.uname,
                     title: '昵称',
-                    text: response['name'],
+                    text: response.name!,
                   );
                 }
               },
@@ -132,27 +134,27 @@ class _EditProfilePageState extends State<EditProfilePage> {
             _item(
               theme: theme,
               title: '性别',
-              text: _sex(response['sex']),
+              text: _sex(response.sex!),
               onTap: () => showDialog(
                 context: context,
-                builder: (context_) => _sexDialog(response['sex']),
+                builder: (context_) => _sexDialog(response.sex!),
               ),
             ),
             divider,
             _item(
               theme: theme,
               title: '出生年月',
-              text: response['birthday'],
+              text: response.birthday,
               onTap: () => showDatePicker(
                 context: context,
-                initialDate: DateTime.parse(response['birthday']),
+                initialDate: DateTime.parse(response.birthday!),
                 firstDate: DateTime(1900, 1, 1),
                 lastDate: DateTime.now(),
-              ).then((date) {
-                if (date != null) {
+              ).then((res) {
+                if (res != null) {
                   _update(
                     type: ProfileType.birthday,
-                    datum: DateFormat('yyyy-MM-dd').format(date),
+                    datum: DateFormat('yyyy-MM-dd').format(res),
                   );
                 }
               }),
@@ -161,11 +163,11 @@ class _EditProfilePageState extends State<EditProfilePage> {
             _item(
               theme: theme,
               title: '个性签名',
-              text: response['sign'].isEmpty ? '无' : response['sign'],
+              text: response.sign.isNullOrEmpty ? '无' : response.sign!,
               onTap: () => _editDialog(
                 type: ProfileType.sign,
                 title: '个性签名',
-                text: response['sign'],
+                text: response.sign!,
               ),
             ),
             divider1,
@@ -180,8 +182,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
               theme: theme,
               title: 'UID',
               needIcon: false,
-              text: response['mid'].toString(),
-              onTap: () => Utils.copyText(response['mid'].toString()),
+              text: response.mid.toString(),
+              onTap: () => Utils.copyText(response.mid.toString()),
             ),
             divider1,
             _item(
@@ -333,17 +335,19 @@ class _EditProfilePageState extends State<EditProfilePage> {
         contentType: Headers.formUrlEncodedContentType,
       ),
     )
-        .then((data) {
-      if (data.data['code'] == 0) {
+        .then((res) {
+      if (res.data['code'] == 0) {
+        UserInfoData data = _loadingState.data;
         if (type == ProfileType.uname) {
-          (_loadingState as Success).response['name'] = _textController.text;
-          (_loadingState as Success).response['coins'] -= 6;
+          data
+            ..name = _textController.text
+            ..coins = data.coins! - 6;
         } else if (type == ProfileType.sign) {
-          (_loadingState as Success).response['sign'] = _textController.text;
+          data.sign = _textController.text;
         } else if (type == ProfileType.birthday) {
-          (_loadingState as Success).response['birthday'] = datum;
+          data.birthday = datum;
         } else if (type == ProfileType.sex) {
-          (_loadingState as Success).response['sex'] = datum;
+          data.sex = datum;
         }
         SmartDialog.showToast('修改成功');
         setState(() {});
@@ -351,7 +355,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
           Get.back();
         }
       } else {
-        SmartDialog.showToast(data.data['message']);
+        SmartDialog.showToast(res.data['message']);
       }
     });
   }
@@ -462,13 +466,13 @@ class _EditProfilePageState extends State<EditProfilePage> {
               'face': await MultipartFile.fromFile(croppedFile.path),
             }),
           )
-              .then((data) {
-            if (data.data['code'] == 0) {
-              (_loadingState as Success).response['face'] = data.data['data'];
+              .then((res) {
+            if (res.data['code'] == 0) {
+              _loadingState.data.face = res.data['data'];
               SmartDialog.showToast('修改成功');
               setState(() {});
             } else {
-              SmartDialog.showToast(data.data['message']);
+              SmartDialog.showToast(res.data['message']);
             }
           });
         }

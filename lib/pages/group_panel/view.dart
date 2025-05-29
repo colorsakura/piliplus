@@ -31,7 +31,7 @@ class _GroupPanelState extends State<GroupPanel> {
     super.initState();
     _futureBuilderFuture = MemberHttp.followUpTags();
     () async {
-      dynamic result = await _futureBuilderFuture;
+      var result = await _futureBuilderFuture;
       if (result['status']) {
         tagsList = result['data'];
         tagsList.removeWhere((item) => item.tagid == 0);

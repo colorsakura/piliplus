@@ -417,9 +417,10 @@ class _RepostPanelState extends CommonPublishPageState<RepostPanel> {
       Get.back();
       SmartDialog.showToast('转发成功');
       widget.callback?.call();
-      RequestUtils.insertCreatedDyn(result);
+      var id = result['data']?['dyn_id'];
+      RequestUtils.insertCreatedDyn(id);
       RequestUtils.checkCreatedDyn(
-        id: result['data']?['dyn_id'],
+        id: id,
         dynText: editController.text,
       );
     } else {

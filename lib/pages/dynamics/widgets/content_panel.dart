@@ -82,7 +82,7 @@ Widget content(
               child: LayoutBuilder(
                 builder: (context, constraints) => imageView(
                   constraints.maxWidth,
-                  (item.modules.moduleDynamic!.major!.opus!.pics as List)
+                  item.modules.moduleDynamic!.major!.opus!.pics!
                       .map(
                         (item) => ImageModel(
                           width: item.width,

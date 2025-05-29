@@ -83,7 +83,7 @@ class _MemberReportPanelState extends State<MemberReportPanel> {
                     SmartDialog.showToast('至少选择一项作为举报内容');
                   } else {
                     Get.back();
-                    dynamic result = await MemberHttp.reportMember(
+                    var result = await MemberHttp.reportMember(
                       widget.mid,
                       reason: _reason.join(','),
                       reasonV2: _reasonV2 != null ? _reasonV2! + 1 : null,

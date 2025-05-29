@@ -95,8 +95,7 @@ class _FollowChildPageState extends State<FollowChildPage>
                   onSelect: widget.onSelect,
                   callback: (attr) {
                     List<FollowItemModel> list =
-                        (_followController.loadingState.value as Success)
-                            .response;
+                        _followController.loadingState.value.data!;
                     list[index].attribute = attr == 0 ? -1 : 0;
                     _followController.loadingState.refresh();
                   },

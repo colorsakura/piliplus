@@ -1,3 +1,5 @@
+import 'package:PiliPlus/models/model_avatar.dart';
+
 class FansDataModel {
   FansDataModel({
     this.total,
@@ -36,7 +38,7 @@ class FansItemModel {
   String? uname;
   String? face;
   String? sign;
-  Map? officialVerify;
+  BaseOfficialVerify? officialVerify;
 
   FansItemModel.fromJson(Map<String, dynamic> json) {
     mid = json['mid'];
@@ -47,6 +49,8 @@ class FansItemModel {
     uname = json['uname'];
     face = json['face'];
     sign = json['sign'] == '' ? '还没有签名' : json['sign'];
-    officialVerify = json['official_verify'];
+    officialVerify = json['official_verify'] == null
+        ? null
+        : BaseOfficialVerify.fromJson(json['official_verify']);
   }
 }

@@ -193,7 +193,7 @@ class MemberController extends CommonDataController<SpaceData, SpaceData?>
   }
 
   Future<void> _onBlock() async {
-    dynamic res = await VideoHttp.relationMod(
+    var res = await VideoHttp.relationMod(
       mid: mid,
       act: relation.value != 128 ? 5 : 6,
       reSrc: 11,

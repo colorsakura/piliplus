@@ -8,7 +8,9 @@ import 'package:PiliPlus/models/common/image_preview_type.dart';
 import 'package:PiliPlus/models/common/search_type.dart';
 import 'package:PiliPlus/models/dynamics/result.dart';
 import 'package:PiliPlus/models/live/live_room/item.dart';
-import 'package:PiliPlus/models/pgc/info.dart';
+import 'package:PiliPlus/models/pgc/pgc_info_model/episode.dart';
+import 'package:PiliPlus/models/pgc/pgc_info_model/result.dart';
+import 'package:PiliPlus/models/pgc/pgc_info_model/section.dart';
 import 'package:PiliPlus/pages/contact/view.dart';
 import 'package:PiliPlus/pages/fav_panel/view.dart';
 import 'package:PiliPlus/pages/share/view.dart';
@@ -259,7 +261,7 @@ class PageUtils {
 
   static Future<void> pushDynFromId({id, rid, bool off = false}) async {
     SmartDialog.showLoading();
-    dynamic res = await DynamicsHttp.dynamicDetail(
+    var res = await DynamicsHttp.dynamicDetail(
       id: id,
       rid: rid,
       type: rid != null ? 2 : null,
@@ -476,15 +478,15 @@ class PageUtils {
       case 'DYNAMIC_TYPE_MEDIALIST':
         if (item.modules.moduleDynamic?.major?.medialist != null) {
           final String? url =
-              item.modules.moduleDynamic!.major!.medialist!['jump_url'];
+              item.modules.moduleDynamic!.major!.medialist!.jumpUrl;
           if (url?.contains('medialist/detail/ml') == true) {
             Get.toNamed(
               '/favDetail',
               parameters: {
                 'heroTag':
-                    '${item.modules.moduleDynamic!.major!.medialist!['cover']}',
+                    '${item.modules.moduleDynamic!.major!.medialist!.cover}',
                 'mediaId':
-                    '${item.modules.moduleDynamic!.major!.medialist!['id']}',
+                    '${item.modules.moduleDynamic!.major!.medialist!.id}',
               },
             );
           } else if (url != null) {

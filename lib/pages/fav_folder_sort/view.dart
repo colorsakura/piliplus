@@ -21,8 +21,8 @@ class _FavFolderSortPageState extends State<FavFolderSortPage> {
   FavController get _favController => widget.favController;
 
   final GlobalKey _key = GlobalKey();
-  late List<FavFolderItemData> sortList = List<FavFolderItemData>.from(
-      (_favController.loadingState.value as Success).response);
+  late List<FavFolderItemData> sortList =
+      List<FavFolderItemData>.from(_favController.loadingState.value.data!);
 
   final ScrollController _scrollController = ScrollController();
 
@@ -34,9 +34,9 @@ class _FavFolderSortPageState extends State<FavFolderSortPage> {
         _scrollController.position.maxScrollExtent - 200) {
       _favController.onLoadMore().whenComplete(() {
         try {
-          if (_favController.loadingState.value is Success) {
+          if (_favController.loadingState.value.isSuccess) {
             List<FavFolderItemData> list =
-                (_favController.loadingState.value as Success).response;
+                _favController.loadingState.value.data!;
             sortList.addAll(list.sublist(sortList.length));
             if (mounted) {
               setState(() {});
@@ -71,7 +71,7 @@ class _FavFolderSortPageState extends State<FavFolderSortPage> {
         actions: [
           TextButton(
             onPressed: () async {
-              dynamic res = await UserHttp.sortFavFolder(
+              var res = await UserHttp.sortFavFolder(
                 sort: sortList.map((item) => item.id).toList(),
               );
               if (res['status']) {

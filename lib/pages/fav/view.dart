@@ -1,5 +1,4 @@
 import 'package:PiliPlus/common/widgets/scroll_physics.dart';
-import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/common/fav_type.dart';
 import 'package:PiliPlus/models/user/fav_folder.dart';
 import 'package:PiliPlus/pages/fav/article/controller.dart';
@@ -60,11 +59,10 @@ class _FavPageState extends State<FavPage> with SingleTickerProviderStateMixin {
                     onPressed: () => Get.toNamed('/createFav')?.then(
                       (data) {
                         if (data != null) {
-                          List<FavFolderItemData> list = _favController
-                                  .loadingState.value is Success
-                              ? (_favController.loadingState.value as Success)
-                                  .response
-                              : <FavFolderItemData>[];
+                          List<FavFolderItemData> list =
+                              _favController.loadingState.value.isSuccess
+                                  ? _favController.loadingState.value.data!
+                                  : <FavFolderItemData>[];
                           list.insert(list.isNotEmpty ? 1 : 0, data);
                           _favController.loadingState.refresh();
                         }
@@ -94,12 +92,10 @@ class _FavPageState extends State<FavPage> with SingleTickerProviderStateMixin {
             () => _showVideoFavMenu.value
                 ? IconButton(
                     onPressed: () {
-                      if (_favController.loadingState.value is Success) {
+                      if (_favController.loadingState.value.isSuccess) {
                         try {
                           final item =
-                              (_favController.loadingState.value as Success)
-                                  .response
-                                  .first;
+                              _favController.loadingState.value.data!.first;
                           Get.toNamed(
                             '/favSearch',
                             arguments: {

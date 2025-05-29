@@ -92,12 +92,12 @@ class MemberVideoCtr
     count.value = type == ContributeType.season
         ? (data.item?.length ?? -1)
         : (data.count ?? -1);
-    if (page != 0 && loadingState.value is Success) {
+    if (page != 0 && loadingState.value.isSuccess) {
       data.item ??= <SpaceArchiveItem>[];
       if (isLoadPrevious == true) {
-        data.item!.addAll((loadingState.value as Success).response);
+        data.item!.addAll(loadingState.value.data!);
       } else {
-        data.item!.insertAll(0, (loadingState.value as Success).response);
+        data.item!.insertAll(0, loadingState.value.data!);
       }
     }
     firstAid = data.item?.firstOrNull?.param;
@@ -141,8 +141,8 @@ class MemberVideoCtr
   }
 
   Future<void> toViewPlayAll() async {
-    if (loadingState.value is Success) {
-      List<SpaceArchiveItem>? list = (loadingState.value as Success).response;
+    if (loadingState.value.isSuccess) {
+      List<SpaceArchiveItem>? list = loadingState.value.data;
 
       if (list.isNullOrEmpty) return;
 

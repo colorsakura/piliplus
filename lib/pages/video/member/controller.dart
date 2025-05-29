@@ -26,7 +26,7 @@ class HorizontalMemberPageController
   }
 
   Future<void> getUserInfo() async {
-    dynamic res = await MemberHttp.memberInfo(mid: mid);
+    var res = await MemberHttp.memberInfo(mid: mid);
     if (res['status']) {
       userState.value = Success(res['data']);
       getMemberStat();
@@ -61,12 +61,12 @@ class HorizontalMemberPageController
         hasNext = data.hasNext ?? false;
       }
     }
-    if (isLoadPrevious && loadingState.value is Success) {
+    if (isLoadPrevious && loadingState.value.isSuccess) {
       data.item ??= <SpaceArchiveItem>[];
-      data.item!.addAll((loadingState.value as Success).response);
-    } else if (!isRefresh && loadingState.value is Success) {
+      data.item!.addAll(loadingState.value.data!);
+    } else if (!isRefresh && loadingState.value.isSuccess) {
       data.item ??= <SpaceArchiveItem>[];
-      data.item!.insertAll(0, (loadingState.value as Success).response);
+      data.item!.insertAll(0, loadingState.value.data!);
     }
     firstAid = data.item?.firstOrNull?.param;
     lastAid = data.item?.lastOrNull?.param;

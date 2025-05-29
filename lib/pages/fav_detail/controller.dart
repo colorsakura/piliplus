@@ -64,8 +64,7 @@ class FavDetailController
       delIds: mediaId.toString(),
     );
     if (result['status']) {
-      List<FavDetailItemData> dataList =
-          (loadingState.value as Success).response;
+      List<FavDetailItemData> dataList = loadingState.value.data!;
       item.value.mediaCount = item.value.mediaCount! - 1;
       item.refresh();
       dataList.removeAt(index);
@@ -104,17 +103,15 @@ class FavDetailController
             TextButton(
               onPressed: () async {
                 Get.back();
-                List<FavDetailItemData> list = ((loadingState.value as Success)
-                        .response as List<FavDetailItemData>)
+                List<FavDetailItemData> list = loadingState.value.data!
                     .where((e) => e.checked == true)
                     .toList();
-                dynamic result = await VideoHttp.delFav(
+                var result = await VideoHttp.delFav(
                   ids: list.map((item) => '${item.id}:${item.type}').toList(),
                   delIds: mediaId.toString(),
                 );
                 if (result['status']) {
-                  List<FavDetailItemData> dataList =
-                      (loadingState.value as Success).response;
+                  List<FavDetailItemData> dataList = loadingState.value.data!;
                   List<FavDetailItemData> remainList =
                       dataList.toSet().difference(list.toSet()).toList();
                   item.value.mediaCount = item.value.mediaCount! - list.length;
@@ -140,8 +137,8 @@ class FavDetailController
   }
 
   void toViewPlayAll() {
-    if (loadingState.value is Success) {
-      List<FavDetailItemData>? list = (loadingState.value as Success).response;
+    if (loadingState.value.isSuccess) {
+      List<FavDetailItemData>? list = loadingState.value.data;
       if (list.isNullOrEmpty) return;
 
       for (FavDetailItemData element in list!) {

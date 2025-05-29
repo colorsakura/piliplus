@@ -8,7 +8,7 @@ import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/common/widgets/stat/stat.dart';
 import 'package:PiliPlus/http/search.dart';
 import 'package:PiliPlus/models/common/badge_type.dart';
-import 'package:PiliPlus/models/video/later.dart';
+import 'package:PiliPlus/models/media_list/media_list.dart';
 import 'package:PiliPlus/pages/common/common_collapse_slide_page.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart' hide RefreshCallback;
@@ -32,7 +32,7 @@ class MediaListPanel extends CommonCollapseSlidePage {
     this.onDelete,
   });
 
-  final List<MediaVideoItemModel> mediaList;
+  final List<MediaListItemModel> mediaList;
   final Function? changeMediaList;
   final String? panelTitle;
   final Function getBvId;
@@ -151,8 +151,8 @@ class _MediaListPanelState
                       widget.mediaList.length < widget.count!)) {
                 widget.loadMoreMedia();
               }
+              final isCurr = item.bvid == widget.getBvId();
               return SizedBox(
-                // key: ValueKey('${item.aid}'),
                 height: 98,
                 child: InkWell(
                   onTap: () async {
@@ -162,7 +162,7 @@ class _MediaListPanelState
                     }
                     Get.back();
                     String bvid = item.bvid!;
-                    int? aid = item.id;
+                    int? aid = item.aid;
                     String cover = item.cover ?? '';
                     final int cid =
                         item.cid ?? await SearchHttp.ab2c(aid: aid, bvid: bvid);
@@ -218,10 +218,9 @@ class _MediaListPanelState
                                     maxLines: 2,
                                     overflow: TextOverflow.ellipsis,
                                     style: TextStyle(
-                                      fontWeight: item.bvid == widget.getBvId()
-                                          ? FontWeight.bold
-                                          : null,
-                                      color: item.bvid == widget.getBvId()
+                                      fontWeight:
+                                          isCurr ? FontWeight.bold : null,
+                                      color: isCurr
                                           ? theme.colorScheme.primary
                                           : null,
                                     ),
@@ -243,14 +242,14 @@ class _MediaListPanelState
                                         context: context,
                                         theme: 'gray',
                                         value: Utils.numFormat(
-                                            item.cntInfo!['play']!),
+                                            item.cntInfo!.play!),
                                       ),
                                       const SizedBox(width: 8),
                                       StatDanMu(
                                         context: context,
                                         theme: 'gray',
                                         value: Utils.numFormat(
-                                            item.cntInfo!['danmaku']!),
+                                            item.cntInfo!.danmaku!),
                                       ),
                                     ],
                                   ),
@@ -260,7 +259,7 @@ class _MediaListPanelState
                           ],
                         ),
                       ),
-                      if (showDelBtn && item.bvid != widget.getBvId())
+                      if (showDelBtn && isCurr)
                         Positioned(
                           right: 12,
                           bottom: -6,

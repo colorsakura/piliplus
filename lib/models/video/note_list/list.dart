@@ -37,5 +37,4 @@ class NoteListItemModel {
         likes: json['likes'] as int?,
         hasLike: json['has_like'] as bool?,
       );
-
 }

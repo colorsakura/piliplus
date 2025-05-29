@@ -2,6 +2,7 @@ import 'package:PiliPlus/build_config.dart';
 import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
 import 'package:PiliPlus/http/dynamics.dart';
+import 'package:PiliPlus/models/dynamics/dyn_reserve/data.dart';
 import 'package:PiliPlus/models/dynamics/result.dart';
 import 'package:PiliPlus/pages/dynamics/widgets/vote.dart';
 import 'package:PiliPlus/utils/app_scheme.dart';
@@ -198,16 +199,15 @@ Widget addWidget(ThemeData theme, DynamicItemModel item, BuildContext context,
                                                         reserve.reserveTotal,
                                                   );
                                                   if (res['status']) {
+                                                    DynReserveData data =
+                                                        res['data'];
                                                     reserve
                                                       ..desc2?.text =
-                                                          res['data']
-                                                              ['desc_update']
+                                                          data.descUpdate
                                                       ..reserveTotal =
-                                                          res['data']
-                                                              ['reserve_update']
-                                                      ..button!.status = res[
-                                                              'data']
-                                                          ['final_btn_status'];
+                                                          data.reserveUpdate
+                                                      ..button!.status =
+                                                          data.finalBtnStatus;
                                                     if (context.mounted) {
                                                       (context as Element?)
                                                           ?.markNeedsBuild();

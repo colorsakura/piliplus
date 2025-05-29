@@ -1,3 +1,5 @@
+import 'package:PiliPlus/models/dynamics/result.dart';
+
 class LiveItemModel {
   LiveItemModel({
     this.roomId,
@@ -19,9 +21,6 @@ class LiveItemModel {
     this.sessionId,
     this.groupId,
     this.pkId,
-    this.verify,
-    this.headBox,
-    this.headBoxType,
     this.watchedShow,
   });
 
@@ -44,10 +43,7 @@ class LiveItemModel {
   String? sessionId;
   int? groupId;
   int? pkId;
-  Map? verify;
-  Map? headBox;
-  int? headBoxType;
-  Map? watchedShow;
+  WatchedShow? watchedShow;
 
   LiveItemModel.fromJson(Map<String, dynamic> json) {
     roomId = json['roomid'];
@@ -69,9 +65,6 @@ class LiveItemModel {
     sessionId = json['session_id'];
     groupId = json['group_id'];
     pkId = json['pk_id'];
-    verify = json['verify'];
-    headBox = json['head_box'];
-    headBoxType = json['head_box_type'];
     watchedShow = json['watched_show'];
   }
 }

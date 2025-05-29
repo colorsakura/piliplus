@@ -24,13 +24,13 @@ class PgcIndexController
   }
 
   Future<void> getPgcIndexCondition() async {
-    dynamic res = await BangumiHttp.pgcIndexCondition(
+    var res = await BangumiHttp.pgcIndexCondition(
       seasonType: indexType == null ? 1 : null,
       type: 0,
       indexType: indexType,
     );
-    if (res is Success) {
-      PgcIndexCondition data = res.response;
+    if (res.isSuccess) {
+      PgcIndexCondition data = res.data;
       if (data.order?.isNotEmpty == true) {
         indexParams['order'] = data.order!.first.field;
       }

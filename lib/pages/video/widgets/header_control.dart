@@ -870,14 +870,14 @@ class HeaderControlState extends State<HeaderControl> {
                         Get.back();
                         try {
                           final res = await Dio().get(
-                            (item['subtitle_url'] as String).http2https,
+                            item.subtitleUrl!.http2https,
                             options: Options(
                               responseType: ResponseType.bytes,
                             ),
                           );
                           if (res.statusCode == 200) {
                             final name =
-                                '${videoIntroController.videoDetail.value.title}-${videoDetailCtr.bvid}-${videoDetailCtr.cid.value}-${item['lan_doc']}';
+                                '${videoIntroController.videoDetail.value.title}-${videoDetailCtr.bvid}-${videoDetailCtr.cid.value}-${item.lanDoc}';
                             try {
                               DocumentFileSavePlusPlatform.instance
                                   .saveMultipleFiles(
@@ -908,8 +908,10 @@ class HeaderControlState extends State<HeaderControl> {
                           SmartDialog.showToast(e.toString());
                         }
                       },
-                      title: Text(item['lan_doc'],
-                          style: const TextStyle(fontSize: 14)),
+                      title: Text(
+                        item.lanDoc!,
+                        style: const TextStyle(fontSize: 14),
+                      ),
                     ),
                   )
                   .toList(),

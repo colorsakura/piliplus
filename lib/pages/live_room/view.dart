@@ -369,14 +369,14 @@ class _LiveRoomPageState extends State<LiveRoomPage>
         titleTextStyle: const TextStyle(color: Colors.white),
         title: Obx(
           () {
-            return _liveRoomController.roomInfoH5.value == null
+            RoomInfoH5Model? roomInfoH5 = _liveRoomController.roomInfoH5.value;
+            return roomInfoH5 == null
                 ? const SizedBox.shrink()
                 : Row(
                     children: [
                       GestureDetector(
                         onTap: () {
-                          dynamic uid = _liveRoomController
-                              .roomInfoH5.value!.roomInfo?.uid;
+                          dynamic uid = roomInfoH5.roomInfo?.uid;
                           Get.toNamed(
                             '/member?mid=$uid',
                             arguments: {
@@ -388,8 +388,7 @@ class _LiveRoomPageState extends State<LiveRoomPage>
                           width: 34,
                           height: 34,
                           type: ImageType.avatar,
-                          src: _liveRoomController
-                              .roomInfoH5.value!.anchorInfo!.baseInfo!.face,
+                          src: roomInfoH5.anchorInfo!.baseInfo!.face,
                         ),
                       ),
                       const SizedBox(width: 10),
@@ -397,18 +396,14 @@ class _LiveRoomPageState extends State<LiveRoomPage>
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            _liveRoomController
-                                .roomInfoH5.value!.anchorInfo!.baseInfo!.uname!,
+                            roomInfoH5.anchorInfo!.baseInfo!.uname!,
                             style: const TextStyle(fontSize: 14),
                           ),
                           const SizedBox(height: 1),
-                          if (_liveRoomController
-                                  .roomInfoH5.value!.watchedShow !=
-                              null)
+                          if (roomInfoH5.watchedShow?.textLarge?.isNotEmpty ==
+                              true)
                             Text(
-                              _liveRoomController.roomInfoH5.value!
-                                      .watchedShow!['text_large'] ??
-                                  '',
+                              roomInfoH5.watchedShow!.textLarge!,
                               style: const TextStyle(fontSize: 12),
                             ),
                         ],

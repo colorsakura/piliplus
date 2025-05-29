@@ -2,6 +2,7 @@ import 'package:PiliPlus/http/api.dart';
 import 'package:PiliPlus/http/constants.dart';
 import 'package:PiliPlus/http/init.dart';
 import 'package:PiliPlus/http/loading_state.dart';
+import 'package:PiliPlus/models/bfs_res/data.dart';
 import 'package:PiliPlus/models/msg/account.dart';
 import 'package:PiliPlus/models/msg/im_user_infos/datum.dart';
 import 'package:PiliPlus/models/msg/msg_dnd/uid_setting.dart';
@@ -151,7 +152,7 @@ class MsgHttp {
     if (res.data['code'] == 0) {
       return {
         'status': true,
-        'data': res.data['data']..['img_size'] = file.length,
+        'data': BfsResData.fromJson(res.data['data']),
       };
     } else {
       return {

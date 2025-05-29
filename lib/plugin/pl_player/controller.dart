@@ -1589,7 +1589,7 @@ class PlPlayerController {
     }
     _isQueryingVideoShot = true;
     try {
-      dynamic res = await Request().get(
+      var res = await Request().get(
         '/x/player/videoshot',
         queryParameters: {
           // 'aid': IdUtils.bv2av(_bvid),

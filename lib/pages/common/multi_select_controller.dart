@@ -1,4 +1,3 @@
-import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/pages/common/common_list_controller.dart';
 import 'package:get/get.dart';
 
@@ -13,7 +12,7 @@ abstract class MultiSelectController<R, T extends MultiSelectData>
   late final allSelected = false.obs;
 
   void onSelect(int index, [bool disableSelect = true]) {
-    List<T> list = (loadingState.value as Success).response;
+    List<T> list = loadingState.value.data!;
     list[index].checked = !(list[index].checked ?? false);
     checkedCount.value = list.where((item) => item.checked == true).length;
     loadingState.refresh();
@@ -27,8 +26,8 @@ abstract class MultiSelectController<R, T extends MultiSelectData>
   }
 
   void handleSelect([bool checked = false, bool disableSelect = true]) {
-    if (loadingState.value is Success) {
-      List<T>? list = (loadingState.value as Success).response;
+    if (loadingState.value.isSuccess) {
+      List<T>? list = loadingState.value.data;
       if (list?.isNotEmpty == true) {
         for (T item in list!) {
           item.checked = checked;

@@ -6,6 +6,7 @@ import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/grpc/bilibili/im/type.pb.dart' show Msg;
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/http/msg.dart';
+import 'package:PiliPlus/models/bfs_res/data.dart';
 import 'package:PiliPlus/models/common/image_type.dart';
 import 'package:PiliPlus/models/common/publish_panel_type.dart';
 import 'package:PiliPlus/pages/common/common_publish_page.dart';
@@ -301,13 +302,14 @@ class _WhisperDetailPageState
                                   ?.split('/')
                                   .getOrNull(1) ??
                               'jpg';
+                          BfsResData data = result['data'];
                           Map picMsg = {
-                            'url': result['data']['image_url'],
-                            'height': result['data']['image_height'],
-                            'width': result['data']['image_width'],
+                            'url': data.imageUrl,
+                            'height': data.imageHeight,
+                            'width': data.imageWidth,
                             'imageType': mimeType,
                             'original': 1,
-                            'size': result['data']['img_size'] / 1024,
+                            'size': data.imgSize,
                           };
                           SmartDialog.showLoading(msg: '正在发送');
                           await _whisperDetailController.sendMsg(

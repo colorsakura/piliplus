@@ -65,8 +65,7 @@ class FavPgcController
   }
 
   Future<void> onUpdateList(followStatus) async {
-    List<BangumiListItemModel> dataList =
-        (loadingState.value as Success).response as List<BangumiListItemModel>;
+    List<BangumiListItemModel> dataList = loadingState.value.data!;
     Set<BangumiListItemModel> updateList =
         dataList.where((item) => item.checked == true).toSet();
     final res = await VideoHttp.bangumiUpdate(
@@ -80,7 +79,7 @@ class FavPgcController
       enableMultiSelect.value = false;
       try {
         final ctr = Get.find<FavPgcController>(tag: '$type$followStatus');
-        if (ctr.loadingState.value is Success) {
+        if (ctr.loadingState.value.isSuccess) {
           ctr.loadingState.value.data!
               .insertAll(0, updateList.map((item) => item..checked = null));
           ctr.loadingState.refresh();
@@ -99,13 +98,12 @@ class FavPgcController
       status: followStatus,
     );
     if (result['status']) {
-      List<BangumiListItemModel> list =
-          (loadingState.value as Success).response;
+      List<BangumiListItemModel> list = loadingState.value.data!;
       final item = list.removeAt(index);
       loadingState.refresh();
       try {
         final ctr = Get.find<FavPgcController>(tag: '$type$followStatus');
-        if (ctr.loadingState.value is Success) {
+        if (ctr.loadingState.value.isSuccess) {
           ctr.loadingState.value.data!.insert(0, item);
           ctr.loadingState.refresh();
           ctr.allSelected.value = false;

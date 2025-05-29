@@ -74,7 +74,7 @@ class _FavVideoPageState extends State<FavVideoPage>
                     heroTag: heroTag,
                     favFolderItem: item,
                     onTap: () async {
-                      dynamic res = await Get.toNamed(
+                      var res = await Get.toNamed(
                         '/favDetail',
                         arguments: item,
                         parameters: {

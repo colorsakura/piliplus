@@ -45,8 +45,8 @@ class VideoCardH extends StatelessWidget {
     final int aid = videoItem.aid!;
     final String bvid = videoItem.bvid!;
     String type = 'video';
-    if (videoItem is SearchVideoItemModel) {
-      var typeOrNull = (videoItem as SearchVideoItemModel).type;
+    if (videoItem case SearchVideoItemModel item) {
+      var typeOrNull = item.type;
       if (typeOrNull?.isNotEmpty == true) {
         type = typeOrNull!;
       }
@@ -79,8 +79,8 @@ class VideoCardH extends StatelessWidget {
                   SmartDialog.showToast('课堂视频暂不支持播放');
                   return;
                 } else if (type == 'live_room') {
-                  if (videoItem is SearchVideoItemModel) {
-                    int? roomId = (videoItem as SearchVideoItemModel).id;
+                  if (videoItem case SearchVideoItemModel item) {
+                    int? roomId = item.id;
                     if (roomId != null) {
                       Get.toNamed('/liveRoom?roomid=$roomId');
                     }
@@ -90,11 +90,9 @@ class VideoCardH extends StatelessWidget {
                   }
                   return;
                 }
-                if ((videoItem is HotVideoItemModel) &&
-                    (videoItem as HotVideoItemModel).redirectUrl?.isNotEmpty ==
-                        true) {
-                  if (PageUtils.viewPgcFromUri(
-                      (videoItem as HotVideoItemModel).redirectUrl!)) {
+                if (videoItem case HotVideoItemModel item) {
+                  if (item.redirectUrl?.isNotEmpty == true &&
+                      PageUtils.viewPgcFromUri(item.redirectUrl!)) {
                     return;
                   }
                 }
@@ -132,9 +130,8 @@ class VideoCardH extends StatelessWidget {
                           final double maxWidth = boxConstraints.maxWidth;
                           final double maxHeight = boxConstraints.maxHeight;
                           num? progress;
-                          if (videoItem is HotVideoItemModel) {
-                            progress =
-                                (videoItem as HotVideoItemModel).progress;
+                          if (videoItem case HotVideoItemModel item) {
+                            progress = item.progress;
                           }
 
                           return Stack(
@@ -145,10 +142,9 @@ class VideoCardH extends StatelessWidget {
                                 width: maxWidth,
                                 height: maxHeight,
                               ),
-                              if (videoItem is HotVideoItemModel)
+                              if (videoItem case HotVideoItemModel item)
                                 PBadge(
-                                  text:
-                                      (videoItem as HotVideoItemModel).pgcLabel,
+                                  text: item.pgcLabel,
                                   top: 6.0,
                                   right: 6.0,
                                 ),
@@ -222,32 +218,31 @@ class VideoCardH extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          if ((videoItem is SearchVideoItemModel) &&
-              (videoItem as SearchVideoItemModel).titleList?.isNotEmpty == true)
-            Expanded(
-              child: Text.rich(
-                overflow: TextOverflow.ellipsis,
-                maxLines: 2,
-                TextSpan(
-                  children: [
-                    for (var i
-                        in (videoItem as SearchVideoItemModel).titleList!)
-                      TextSpan(
-                        text: i['text'],
-                        style: TextStyle(
-                          fontSize: theme.textTheme.bodyMedium!.fontSize,
-                          height: 1.42,
-                          letterSpacing: 0.3,
-                          color: i['type'] == 'em'
-                              ? theme.colorScheme.primary
-                              : theme.colorScheme.onSurface,
+          if (videoItem case SearchVideoItemModel item) ...[
+            if (item.titleList?.isNotEmpty == true)
+              Expanded(
+                child: Text.rich(
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 2,
+                  TextSpan(
+                    children: [
+                      for (var i in item.titleList!)
+                        TextSpan(
+                          text: i['text'],
+                          style: TextStyle(
+                            fontSize: theme.textTheme.bodyMedium!.fontSize,
+                            height: 1.42,
+                            letterSpacing: 0.3,
+                            color: i['type'] == 'em'
+                                ? theme.colorScheme.primary
+                                : theme.colorScheme.onSurface,
+                          ),
                         ),
-                      ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-            )
-          else
+              )
+          ] else
             Expanded(
               child: Text(
                 videoItem.title,

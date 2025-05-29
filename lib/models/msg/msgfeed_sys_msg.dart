@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 class SystemNotifyList {
   int? id;
   int? cursor;
@@ -46,7 +48,18 @@ class SystemNotifyList {
         : null;
     type = json['type'];
     title = json['title'];
-    content = json['content'];
+    if (json['content'] != null) {
+      try {
+        dynamic jsonContent = jsonDecode(json['content']);
+        if (jsonContent?['web'] != null) {
+          content = jsonContent['web'];
+        } else {
+          content = json['content'];
+        }
+      } catch (_) {
+        content = json['content'];
+      }
+    }
     source = json['source'] != null ? Source.fromJson(json['source']) : null;
     timeAt = json['time_at'];
     cardType = json['card_type'];

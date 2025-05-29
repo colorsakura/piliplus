@@ -8,10 +8,8 @@ class MyEmote {
     setting =
         json['setting'] != null ? Setting.fromJson(json['setting']) : null;
     if (json['packages'] != null) {
-      packages = <Packages>[];
-      json['packages'].forEach((v) {
-        packages!.add(Packages.fromJson(v));
-      });
+      packages =
+          (json['packages'] as List).map((e) => Packages.fromJson(e)).toList();
     }
   }
 
@@ -89,10 +87,7 @@ class Packages {
     attr = json['attr'];
     meta = json['meta'] != null ? PackagesMeta.fromJson(json['meta']) : null;
     if (json['emote'] != null) {
-      emote = <Emote>[];
-      json['emote'].forEach((v) {
-        emote!.add(Emote.fromJson(v));
-      });
+      emote = (json['emote'] as List).map((e) => Emote.fromJson(e)).toList();
     }
     flags =
         json['flags'] != null ? PackagesFlags.fromJson(json['flags']) : null;

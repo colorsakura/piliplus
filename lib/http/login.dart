@@ -478,7 +478,7 @@ class LoginHttp {
   }
 
   static Future<Map> logout(Account account) async {
-    dynamic res = await Request().post(
+    var res = await Request().post(
       Api.logout,
       data: {'biliCSRF': account.csrf},
       options: Options(

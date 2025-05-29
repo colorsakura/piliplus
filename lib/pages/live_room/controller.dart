@@ -41,7 +41,7 @@ class LiveRoomController extends GetxController {
   bool showDanmaku = true;
 
   int? currentQn;
-  late List<Map> acceptQnList = <Map>[];
+  late List<({int code, String desc})> acceptQnList = [];
   RxString currentQnDesc = ''.obs;
 
   String? savedDanmaku;
@@ -87,20 +87,20 @@ class LiveRoomController extends GetxController {
     }
     var res = await LiveHttp.liveRoomInfo(roomId: roomId, qn: currentQn);
     if (res['status']) {
-      isPortrait.value = res['data'].isPortrait ?? false;
+      RoomInfoModel data = res['data'];
+      isPortrait.value = data.isPortrait ?? false;
       List<CodecItem> codec =
-          res['data'].playurlInfo.playurl.stream.first.format.first.codec;
+          data.playurlInfo!.playurl!.stream!.first.format!.first.codec!;
       CodecItem item = codec.first;
       // 以服务端返回的码率为准
       currentQn = item.currentQn!;
-      List acceptQn = item.acceptQn!;
-      acceptQnList = acceptQn.map((e) {
-        return {
-          'code': e,
-          'desc': LiveQuality.values
+      acceptQnList = item.acceptQn!.map((e) {
+        return (
+          code: e as int,
+          desc: LiveQuality.values
               .firstWhere((element) => element.code == e)
               .description,
-        };
+        );
       }).toList();
       currentQnDesc.value = LiveQuality.values
           .firstWhere((element) => element.code == currentQn)

@@ -1,5 +1,4 @@
 import 'package:PiliPlus/common/widgets/scroll_physics.dart';
-import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/common/later_view_type.dart';
 import 'package:PiliPlus/models/model_hot_video_item.dart';
 import 'package:PiliPlus/pages/history/view.dart' show AppBarWidget;
@@ -69,7 +68,7 @@ class _LaterPageState extends State<LaterPage>
           resizeToAvoidBottomInset: false,
           appBar: _buildAppbar,
           floatingActionButton: Obx(
-            () => currCtr().loadingState.value is Success
+            () => currCtr().loadingState.value.isSuccess
                 ? FloatingActionButton.extended(
                     onPressed: currCtr().toViewPlayAll,
                     label: const Text('播放全部'),

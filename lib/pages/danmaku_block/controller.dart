@@ -26,14 +26,16 @@ class DanmakuBlockController extends GetxController
     var result = await DanmakuFilterHttp.danmakuFilter();
     SmartDialog.dismiss();
     if (result['status']) {
-      if (result['data']?.rule != null) {
-        final List<SimpleRule> filter = result['data']?.rule;
-        for (var rule in filter) {
+      DanmakuBlockDataModel data = result['data'];
+      if (data.rule?.isNotEmpty == true) {
+        for (var rule in data.rule!) {
           ruleTypes[rule.type]![rule.id] = rule.filter;
         }
         ruleTypes.refresh();
       }
-      SmartDialog.showToast(result['data'].toast);
+      if (data.toast != null) {
+        SmartDialog.showToast(data.toast!);
+      }
     } else {
       SmartDialog.showToast(result['msg']);
     }

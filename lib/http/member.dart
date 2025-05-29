@@ -66,7 +66,7 @@ class MemberHttp {
       'statistics': Constants.statisticsApp,
       'vmid': mid.toString(),
     };
-    dynamic res = await Request().get(
+    var res = await Request().get(
       Api.spaceArticle,
       queryParameters: data,
       options: Options(
@@ -96,7 +96,7 @@ class MemberHttp {
       'statistics': Constants.statisticsApp,
       'up_mid': mid.toString(),
     };
-    dynamic res = await Request().get(
+    var res = await Request().get(
       Api.spaceFav,
       queryParameters: data,
       options: Options(
@@ -117,7 +117,7 @@ class MemberHttp {
     required int? mid,
     required int pn,
   }) async {
-    dynamic res = await Request().get(
+    var res = await Request().get(
       Api.seasonSeries,
       queryParameters: {
         'mid': mid,
@@ -165,7 +165,7 @@ class MemberHttp {
       'statistics': Constants.statisticsApp,
       'vmid': mid.toString(),
     };
-    dynamic res = await Request().get(
+    var res = await Request().get(
       switch (type) {
         ContributeType.video => Api.spaceArchive,
         ContributeType.charging => Api.spaceChargingArchive,
@@ -213,7 +213,7 @@ class MemberHttp {
       'statistics': Constants.statisticsApp,
       'vmid': mid.toString(),
     };
-    dynamic res = await Request().get(
+    var res = await Request().get(
       Api.spaceStory,
       queryParameters: data,
       options: Options(
@@ -245,7 +245,7 @@ class MemberHttp {
       'statistics': Constants.statisticsApp,
       'vmid': mid.toString(),
     };
-    dynamic res = await Request().get(
+    var res = await Request().get(
       Api.space,
       queryParameters: data,
       options: Options(

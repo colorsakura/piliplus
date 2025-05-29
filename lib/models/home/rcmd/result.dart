@@ -8,7 +8,6 @@ class RecVideoItemAppModel extends BaseRecVideoItemModel {
   String? talkBack;
 
   String? cardType;
-  Map? adInfo;
   ThreePoint? threePoint;
 
   RecVideoItemAppModel.fromJson(Map<String, dynamic> json) {
@@ -46,7 +45,6 @@ class RecVideoItemAppModel extends BaseRecVideoItemModel {
     }
 
     cardType = json['card_type'];
-    adInfo = json['ad_info'];
     threePoint = json['three_point_v2'] != null
         ? ThreePoint.fromJson(json['three_point_v2'])
         : null;

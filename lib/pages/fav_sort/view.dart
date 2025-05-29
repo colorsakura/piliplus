@@ -22,7 +22,7 @@ class _FavSortPageState extends State<FavSortPage> {
 
   final GlobalKey _key = GlobalKey();
   late List<FavDetailItemData> sortList = List<FavDetailItemData>.from(
-      (_favDetailController.loadingState.value as Success).response);
+      _favDetailController.loadingState.value.data!);
   List<String> sort = <String>[];
 
   final ScrollController _scrollController = ScrollController();
@@ -35,9 +35,9 @@ class _FavSortPageState extends State<FavSortPage> {
         _scrollController.position.maxScrollExtent - 200) {
       _favDetailController.onLoadMore().whenComplete(() {
         try {
-          if (_favDetailController.loadingState.value is Success) {
+          if (_favDetailController.loadingState.value.isSuccess) {
             List<FavDetailItemData> list =
-                (_favDetailController.loadingState.value as Success).response;
+                _favDetailController.loadingState.value.data!;
             sortList.addAll(list.sublist(sortList.length));
             if (mounted) {
               setState(() {});
@@ -76,7 +76,7 @@ class _FavSortPageState extends State<FavSortPage> {
                 Get.back();
                 return;
               }
-              dynamic res = await UserHttp.sortFav(
+              var res = await UserHttp.sortFav(
                 mediaId: _favDetailController.mediaId,
                 sort: sort,
               );

@@ -9,6 +9,7 @@ import 'package:PiliPlus/http/init.dart';
 import 'package:PiliPlus/models/common/sponsor_block/action_type.dart';
 import 'package:PiliPlus/models/common/sponsor_block/post_segment_model.dart';
 import 'package:PiliPlus/models/common/sponsor_block/segment_type.dart';
+import 'package:PiliPlus/models/sponsor_block/segment_item.dart';
 import 'package:PiliPlus/pages/common/common_collapse_slide_page.dart';
 import 'package:PiliPlus/pages/video/controller.dart';
 import 'package:PiliPlus/plugin/pl_player/controller.dart';
@@ -569,7 +570,10 @@ class _PostPanelState extends CommonCollapseSlidePageState<PostPanel> {
           Get.back();
           SmartDialog.showToast('提交成功');
           list?.clear();
-          videoDetailController.handleSBData(res);
+          if (res.data case List list) {
+            videoDetailController.handleSBData(
+                list.map((e) => SegmentItemModel.fromJson(e)).toList());
+          }
           plPlayerController.segmentList.value =
               videoDetailController.segmentProgressList ?? <Segment>[];
           if (videoDetailController.positionSubscription == null) {

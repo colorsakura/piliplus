@@ -93,7 +93,7 @@ class HisListItem with MultiSelectData {
     longTitle = json['long_title'];
     cover = json['cover'];
     pic = json['cover'] ?? '';
-    covers = json['covers'] ?? [];
+    covers = json['covers'];
     uri = json['uri'];
     history = History.fromJson(json['history']);
     videos = json['videos'];

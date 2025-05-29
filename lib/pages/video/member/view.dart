@@ -332,10 +332,8 @@ class _HorizontalMemberPageState extends State<HorizontalMemberPage> {
                         mid: widget.mid,
                         isFollow: memberInfoModel.isFollowed ?? false,
                         callback: (attribute) {
-                          (_controller.userState.value
-                                  as Success<MemberInfoModel>)
-                              .response
-                              .isFollowed = attribute != 0;
+                          _controller.userState.value.data.isFollowed =
+                              attribute != 0;
                           _controller.userState.refresh();
                         },
                       );

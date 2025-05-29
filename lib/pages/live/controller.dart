@@ -97,7 +97,7 @@ class LiveController extends CommonListController {
       isLogin: isLogin.value,
       moduleSelect: true,
     );
-    if (res is Success) {
+    if (res.isSuccess) {
       final data = res.data;
       topState.value = Pair(
         first: data.followItem,

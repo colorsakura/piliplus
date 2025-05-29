@@ -35,7 +35,7 @@ class FavNoteController
   }
 
   Future<void> onRemove() async {
-    List<FavNoteModel> dataList = (loadingState.value as Success).response;
+    List<FavNoteModel> dataList = loadingState.value.data!;
     Set<FavNoteModel> removeList =
         dataList.where((item) => item.checked == true).toSet();
     final res = await VideoHttp.delNote(

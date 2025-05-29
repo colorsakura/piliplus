@@ -72,14 +72,14 @@ class BangumiController extends CommonListController<
       return;
     }
     followLoading = true;
-    dynamic res = await BangumiHttp.bangumiFollowList(
+    var res = await BangumiHttp.bangumiFollowList(
       mid: mid,
       type: tabType == HomeTabType.bangumi ? 1 : 2,
       pn: followPage,
     );
 
-    if (res is Success) {
-      BangumiListDataModel data = res.response;
+    if (res.isSuccess) {
+      BangumiListDataModel data = res.data;
       List<BangumiListItemModel>? list = data.list;
       followCount.value = data.total ?? -1;
       if (data.hasNext == 0) {
@@ -101,7 +101,7 @@ class BangumiController extends CommonListController<
         }
         followState.value = Success(list);
         followController?.animToTop();
-      } else if (followState.value is Success) {
+      } else if (followState.value.isSuccess) {
         final currentList = followState.value.data!..addAll(list!);
         if (currentList.length >= followCount.value) {
           followEnd = true;
@@ -110,7 +110,7 @@ class BangumiController extends CommonListController<
       }
       followPage++;
     } else if (isRefresh) {
-      followState.value = res;
+      followState.value = res as Error;
     }
     followLoading = false;
   }

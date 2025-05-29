@@ -213,7 +213,7 @@ class LoginPageController extends GetxController
       return;
     }
     try {
-      dynamic result = await Request().get(
+      var result = await Request().get(
         "/x/member/web/account",
         options: Options(headers: {
           "cookie": cookieTextController.text,

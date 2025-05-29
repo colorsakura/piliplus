@@ -28,7 +28,7 @@ class MemberFavItem extends StatelessWidget {
           }
 
           if (item.type == 0) {
-            dynamic res = await Get.toNamed(
+            var res = await Get.toNamed(
               '/favDetail',
               parameters: {
                 'mediaId': item.id.toString(),

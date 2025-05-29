@@ -119,8 +119,8 @@ class _LiveAreaPageState extends State<LiveAreaPage> {
                                                 .markNeedsBuild();
                                           } else {
                                             // check
-                                            if (_controller.favState.value
-                                                is Success) {
+                                            if (_controller
+                                                .favState.value.isSuccess) {
                                               _controller.favState
                                                 ..value.data.add(item)
                                                 ..refresh();
@@ -151,7 +151,7 @@ class _LiveAreaPageState extends State<LiveAreaPage> {
 
   Widget _buildFavWidget(
       ThemeData theme, LoadingState<List<AreaItem>?> loadingState) {
-    if (loadingState is Success) {
+    if (loadingState.isSuccess) {
       final List<AreaItem>? list = loadingState.data;
       return Padding(
         padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -193,7 +193,7 @@ class _LiveAreaPageState extends State<LiveAreaPage> {
                           _controller.favState.refresh();
 
                           // update isFav
-                          if (_controller.loadingState.value is Success) {
+                          if (_controller.loadingState.value.isSuccess) {
                             List<AreaList>? areaList =
                                 _controller.loadingState.value.data;
                             if (areaList?.isNotEmpty == true) {
@@ -276,7 +276,7 @@ class _LiveAreaPageState extends State<LiveAreaPage> {
               right: 16,
               child: Obx(() {
                 if (_controller.isEditing.value &&
-                    _controller.favState.value is Success) {
+                    _controller.favState.value.isSuccess) {
                   // init isFav
                   item.isFav ??= _controller.favState.value.data.contains(item);
 

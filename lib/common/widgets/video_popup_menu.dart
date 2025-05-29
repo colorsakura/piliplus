@@ -72,9 +72,8 @@ class VideoCustomActions {
               SmartDialog.showToast("请退出账号后重新登录");
               return;
             }
-            if (videoItem is RecVideoItemAppModel) {
-              RecVideoItemAppModel v = videoItem as RecVideoItemAppModel;
-              ThreePoint? tp = v.threePoint;
+            if (videoItem case RecVideoItemAppModel item) {
+              ThreePoint? tp = item.threePoint;
               if (tp == null) {
                 SmartDialog.showToast("未能获取threePoint");
                 return;
@@ -92,8 +91,8 @@ class VideoCustomActions {
                     var res = await VideoHttp.feedDislike(
                       reasonId: r?.id,
                       feedbackId: f?.id,
-                      id: v.param!,
-                      goto: v.goto!,
+                      id: item.param!,
+                      goto: item.goto!,
                     );
                     SmartDialog.dismiss();
                     SmartDialog.showToast(
@@ -143,8 +142,8 @@ class VideoCustomActions {
                               onPressed: () async {
                                 SmartDialog.showLoading(msg: '正在提交');
                                 var res = await VideoHttp.feedDislikeCancel(
-                                  id: v.param!,
-                                  goto: v.goto!,
+                                  id: item.param!,
+                                  goto: item.goto!,
                                 );
                                 SmartDialog.dismiss();
                                 SmartDialog.showToast(
@@ -183,8 +182,7 @@ class VideoCustomActions {
                                   Get.back();
                                   SmartDialog.showLoading(msg: '正在提交');
                                   var res = await VideoHttp.dislikeVideo(
-                                      bvid: videoItem.bvid as String,
-                                      type: true);
+                                      bvid: videoItem.bvid!, type: true);
                                   SmartDialog.dismiss();
                                   SmartDialog.showToast(
                                     res['status'] ? "点踩成功" : res['msg'],
@@ -203,8 +201,7 @@ class VideoCustomActions {
                                   Get.back();
                                   SmartDialog.showLoading(msg: '正在提交');
                                   var res = await VideoHttp.dislikeVideo(
-                                      bvid: videoItem.bvid as String,
-                                      type: false);
+                                      bvid: videoItem.bvid!, type: false);
                                   SmartDialog.dismiss();
                                   SmartDialog.showToast(
                                       res['status'] ? "取消踩" : res['msg']);

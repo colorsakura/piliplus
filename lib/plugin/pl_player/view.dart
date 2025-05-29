@@ -6,7 +6,9 @@ import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/common/widgets/progress_bar/audio_video_progress_bar.dart';
 import 'package:PiliPlus/common/widgets/progress_bar/segment_progress_bar.dart';
 import 'package:PiliPlus/models/common/super_resolution_type.dart';
-import 'package:PiliPlus/models/video_detail_res.dart';
+import 'package:PiliPlus/models/video_detail/episode.dart';
+import 'package:PiliPlus/models/video_detail/page.dart';
+import 'package:PiliPlus/models/video_detail/section.dart';
 import 'package:PiliPlus/models/video_shot/data.dart';
 import 'package:PiliPlus/pages/video/controller.dart';
 import 'package:PiliPlus/pages/video/introduction/pgc/controller.dart';
@@ -581,7 +583,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                           onTap: () => widget.videoDetailController!
                               .setSubtitle(e.$1 + 1),
                           child: Text(
-                            "${e.$2['lan_doc']}",
+                            "${e.$2.lanDoc}",
                             style: const TextStyle(color: Colors.white),
                           ),
                         );

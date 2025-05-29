@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:PiliPlus/common/skeleton/msg_feed_sys_msg_.dart';
 import 'package:PiliPlus/common/widgets/dialog/dialog.dart';
 import 'package:PiliPlus/common/widgets/loading_widget/http_error.dart';
@@ -69,15 +67,6 @@ class _SysMsgPageState extends State<SysMsgPage> {
                   _sysMsgController.onLoadMore();
                 }
                 final item = response[index];
-                String? content = item.content;
-                if (content != null) {
-                  try {
-                    dynamic jsonContent = json.decode(content);
-                    if (jsonContent != null && jsonContent['web'] != null) {
-                      content = jsonContent['web'];
-                    }
-                  } catch (_) {}
-                }
                 return ListTile(
                   onLongPress: () => showConfirmDialog(
                     context: context,
@@ -93,7 +82,7 @@ class _SysMsgPageState extends State<SysMsgPage> {
                     children: [
                       const SizedBox(height: 4),
                       Text.rich(
-                        _buildContent(theme, content ?? ''),
+                        _buildContent(theme, item.content ?? ''),
                         style: TextStyle(
                           fontSize: 14,
                           color: theme.colorScheme.onSurface

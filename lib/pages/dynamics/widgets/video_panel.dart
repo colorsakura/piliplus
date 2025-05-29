@@ -69,14 +69,14 @@ Widget videoSeasonWidget(
               height: width / StyleString.aspectRatio,
               src: itemContent.cover,
             ),
-            if (itemContent.badge?['text'] != null)
+            if (itemContent.badge?.text != null)
               PBadge(
-                text: itemContent.badge!['text'],
+                text: itemContent.badge!.text,
                 top: 8.0,
                 right: 10.0,
                 bottom: null,
                 left: null,
-                type: itemContent.badge!['text'] == '充电专属'
+                type: itemContent.badge!.text == '充电专属'
                     ? PBadgeType.error
                     : PBadgeType.primary,
               ),

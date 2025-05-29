@@ -683,7 +683,7 @@ List<SettingsModel> get styleSettings => [
       SettingsModel(
         settingsType: SettingsType.normal,
         onTap: (setState) async {
-          dynamic result = await Get.toNamed('/fontSizeSetting');
+          var result = await Get.toNamed('/fontSizeSetting');
           if (result != null) {
             Get.put(ColorSelectController()).currentTextScale.value = result;
           }
