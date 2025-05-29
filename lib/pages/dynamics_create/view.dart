@@ -318,6 +318,7 @@ class _CreateDynPanelState extends CommonPublishPageState<CreateDynPanel> {
         ? theme.colorScheme.error
         : theme.colorScheme.secondary;
     return PopupMenuButton<bool>(
+      requestFocus: false,
       initialValue: _isPrivate.value,
       onOpened: controller.keepChatPanel,
       onSelected: (value) => _isPrivate.value = value,
@@ -374,6 +375,7 @@ class _CreateDynPanelState extends CommonPublishPageState<CreateDynPanel> {
         ? theme.colorScheme.error
         : theme.colorScheme.secondary;
     return PopupMenuButton<ReplyOptionType>(
+      requestFocus: false,
       initialValue: _replyOption.value,
       onOpened: controller.keepChatPanel,
       onSelected: (item) => _replyOption.value = item,
