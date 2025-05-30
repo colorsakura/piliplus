@@ -3,7 +3,6 @@ import 'package:PiliPlus/models/live/live_room/room_info.dart';
 import 'package:PiliPlus/models/video/play/url.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/storage.dart';
-import 'package:flutter/material.dart';
 
 class VideoUtils {
   static String getCdnUrl(dynamic item, [String? defaultCDNService]) {
@@ -13,13 +12,13 @@ class VideoUtils {
     if (item is AudioItem) {
       if (GStorage.setting
           .get(SettingBoxKey.disableAudioCDN, defaultValue: true)) {
-        return item.backupUrl.isNullOrEmpty.not
+        return item.backupUrl?.isNotEmpty == true
             ? item.backupUrl!
             : item.baseUrl ?? "";
       }
     }
     if (defaultCDNService == CDNService.baseUrl.code) {
-      return (item.baseUrl as String?).isNullOrEmpty.not
+      return (item.baseUrl as String?)?.isNotEmpty == true
           ? item.baseUrl
           : item.backupUrl ?? "";
     }
@@ -31,17 +30,17 @@ class VideoUtils {
       backupUrl = item.backupUrl;
     }
     if (defaultCDNService == CDNService.backupUrl.code) {
-      return backupUrl.isNullOrEmpty.not ? backupUrl : item.baseUrl ?? "";
+      return backupUrl?.isNotEmpty == true ? backupUrl : item.baseUrl ?? "";
     }
-    videoUrl = backupUrl.isNullOrEmpty ? item.baseUrl : backupUrl;
+    videoUrl = backupUrl?.isNotEmpty == true ? backupUrl : item.baseUrl;
 
     if (videoUrl.isNullOrEmpty) {
       return "";
     }
-    debugPrint("videoUrl:$videoUrl");
+    // debugPrint("videoUrl:$videoUrl");
 
     String defaultCDNHost = CDNService.fromCode(defaultCDNService).host;
-    debugPrint("defaultCDNHost:$defaultCDNHost");
+    // debugPrint("defaultCDNHost:$defaultCDNHost");
     if (videoUrl!.contains("szbdyd.com")) {
       final uri = Uri.parse(videoUrl);
       String hostname = uri.queryParameters['xy_usource'] ?? defaultCDNHost;
@@ -54,7 +53,7 @@ class VideoUtils {
       // videoUrl =
       //     'https://proxy-tf-all-ws.bilivideo.com/?url=${Uri.encodeComponent(videoUrl)}';
     }
-    debugPrint("videoUrl:$videoUrl");
+    // debugPrint("videoUrl:$videoUrl");
 
     // /// 先获取backupUrl 一般是upgcxcode地址 播放更稳定
     // if (item is VideoItem) {

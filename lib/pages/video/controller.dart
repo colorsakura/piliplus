@@ -38,7 +38,6 @@ import 'package:PiliPlus/pages/video/widgets/header_control.dart';
 import 'package:PiliPlus/plugin/pl_player/controller.dart';
 import 'package:PiliPlus/plugin/pl_player/models/data_source.dart';
 import 'package:PiliPlus/plugin/pl_player/models/play_status.dart';
-import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/id_utils.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:PiliPlus/utils/storage.dart';
@@ -152,7 +151,7 @@ class VideoDetailController extends GetxController
             ? 'horizontal'
             : 'vertical'
         : 'horizontal';
-    if (scrollCtr.hasClients.not) {
+    if (!scrollCtr.hasClients) {
       videoHeight = direction == 'vertical' ? maxVideoHeight : minVideoHeight;
       this.direction.value = direction;
       return;
@@ -296,7 +295,7 @@ class VideoDetailController extends GetxController
     bool isReverse = false,
     bool isLoadPrevious = false,
   }) async {
-    if (isReverse.not &&
+    if (!isReverse &&
         Get.arguments['count'] != null &&
         mediaList.length >= Get.arguments['count']) {
       return;

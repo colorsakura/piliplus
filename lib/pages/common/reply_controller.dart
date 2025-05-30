@@ -189,13 +189,7 @@ abstract class ReplyController<R> extends CommonListController<R, ReplyInfo> {
 
           // check reply
           if (enableCommAntifraud && context.mounted) {
-            ReplyUtils.onCheckReply(
-              context: context,
-              replyInfo: replyInfo,
-              biliSendCommAntifraud: _biliSendCommAntifraud,
-              sourceId: sourceId,
-              isManual: false,
-            );
+            onCheckReply(context, replyInfo, isManual: false);
           }
         }
       },
@@ -215,13 +209,14 @@ abstract class ReplyController<R> extends CommonListController<R, ReplyInfo> {
     loadingState.refresh();
   }
 
-  void onCheckReply(BuildContext context, ReplyInfo replyInfo) {
+  void onCheckReply(BuildContext context, ReplyInfo replyInfo,
+      {required bool isManual}) {
     ReplyUtils.onCheckReply(
       context: context,
       replyInfo: replyInfo,
       biliSendCommAntifraud: _biliSendCommAntifraud,
       sourceId: sourceId,
-      isManual: true,
+      isManual: isManual,
     );
   }
 

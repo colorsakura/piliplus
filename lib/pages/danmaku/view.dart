@@ -6,7 +6,6 @@ import 'package:PiliPlus/pages/danmaku/controller.dart';
 import 'package:PiliPlus/plugin/pl_player/controller.dart';
 import 'package:PiliPlus/plugin/pl_player/models/play_status.dart';
 import 'package:PiliPlus/utils/danmaku_utils.dart';
-import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:canvas_danmaku/canvas_danmaku.dart';
 import 'package:flutter/material.dart';
@@ -90,7 +89,7 @@ class _PlDanmakuState extends State<PlDanmaku> {
       return;
     }
 
-    if (playerController.showDanmaku.not && widget.isPipMode != true) {
+    if (!playerController.showDanmaku && widget.isPipMode != true) {
       return;
     }
 

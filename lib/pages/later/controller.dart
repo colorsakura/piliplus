@@ -53,7 +53,7 @@ class LaterController extends MultiSelectController<Map, HotVideoItemModel> {
         loadingState.refresh();
       }
     }
-    if (checked.not) {
+    if (!checked) {
       baseCtr.enableMultiSelect.value = false;
     }
   }

@@ -849,7 +849,7 @@ class ReplyItemGrpc extends StatelessWidget {
         for (int i = 0; i < unmatchedItems.length; i++) {
           String patternStr = unmatchedItems[i];
           if (content.urls[patternStr]?.extra.isWordSearch == true &&
-              enableWordRe.not) {
+              !enableWordRe) {
             continue;
           }
           spanChildren.addAll(
@@ -1131,7 +1131,7 @@ class ReplyItemGrpc extends StatelessWidget {
               leading: Icon(Icons.error_outline, color: errorColor, size: 19),
               title: Text('举报', style: style!.copyWith(color: errorColor)),
             ),
-          if (replyLevel == '1' && isSubReply.not && ownerMid == upMid)
+          if (replyLevel == '1' && !isSubReply && ownerMid == upMid)
             ListTile(
               onTap: () => menuActionHandler('top'),
               minLeadingWidth: 0,

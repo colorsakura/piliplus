@@ -47,7 +47,7 @@ class _BangumiIntroPanelState extends State<BangumiIntroPanel>
 
   bool isProcessing = false;
   Future<void> handleState(FutureOr Function() action) async {
-    if (isProcessing.not) {
+    if (!isProcessing) {
       isProcessing = true;
       await action();
       isProcessing = false;

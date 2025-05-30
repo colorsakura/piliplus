@@ -17,7 +17,6 @@ import 'package:PiliPlus/pages/dynamics_detail/controller.dart';
 import 'package:PiliPlus/pages/dynamics_repost/view.dart';
 import 'package:PiliPlus/pages/video/reply/widgets/reply_item_grpc.dart';
 import 'package:PiliPlus/pages/video/reply_reply/view.dart';
-import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/feed_back.dart';
 import 'package:PiliPlus/utils/grid.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
@@ -425,7 +424,7 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
                         tooltip: '评论动态',
                         child: const Icon(Icons.reply),
                       );
-                  return _controller.showDynActionBar.not
+                  return !_controller.showDynActionBar
                       ? Align(
                           alignment: Alignment.bottomRight,
                           child: Padding(
@@ -733,7 +732,7 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
                     upMid: _controller.upMid,
                     callback: _getImageCallback,
                     onCheckReply: (item) =>
-                        _controller.onCheckReply(context, item),
+                        _controller.onCheckReply(context, item, isManual: true),
                     onToggleTop: (isUpTop, rpid) => _controller.onToggleTop(
                       index,
                       _controller.oid,

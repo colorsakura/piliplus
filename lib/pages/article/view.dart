@@ -616,7 +616,7 @@ class _ArticlePageState extends State<ArticlePage>
                     upMid: _articleCtr.upMid,
                     callback: _getImageCallback,
                     onCheckReply: (item) =>
-                        _articleCtr.onCheckReply(context, item),
+                        _articleCtr.onCheckReply(context, item, isManual: true),
                     onToggleTop: (isUpTop, rpid) => _articleCtr.onToggleTop(
                       index,
                       _articleCtr.commentId,
@@ -816,7 +816,7 @@ class _ArticlePageState extends State<ArticlePage>
                     tooltip: '评论动态',
                     child: const Icon(Icons.reply),
                   );
-              return _articleCtr.showDynActionBar.not
+              return !_articleCtr.showDynActionBar
                   ? Align(
                       alignment: Alignment.bottomRight,
                       child: Padding(

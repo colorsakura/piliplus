@@ -6,7 +6,6 @@ import 'package:PiliPlus/models/common/image_type.dart';
 import 'package:PiliPlus/pages/home/controller.dart';
 import 'package:PiliPlus/pages/main/controller.dart';
 import 'package:PiliPlus/pages/mine/controller.dart';
-import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/feed_back.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -58,7 +57,7 @@ class _HomePageState extends State<HomePage>
                   tabAlignment: TabAlignment.center,
                   onTap: (value) {
                     feedBack();
-                    if (_homeController.tabController.indexIsChanging.not) {
+                    if (!_homeController.tabController.indexIsChanging) {
                       _homeController.animateToTop();
                     }
                   },

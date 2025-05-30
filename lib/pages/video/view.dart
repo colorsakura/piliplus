@@ -203,9 +203,9 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
       if (videoDetailController.scrollCtr.hasClients) {
         bool isPlaying = status == PlayerStatus.playing;
         if (isPlaying) {
-          if (videoDetailController.isExpanding.not &&
+          if (!videoDetailController.isExpanding &&
               videoDetailController.scrollCtr.offset != 0 &&
-              videoDetailController.animationController.isAnimating.not) {
+              !videoDetailController.animationController.isAnimating) {
             videoDetailController.isExpanding = true;
             videoDetailController.animationController.forward(
                 from: 1 -
@@ -413,12 +413,12 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
     super.didPopNext();
     videoDetailController.autoPlay.value =
         !videoDetailController.isShowCover.value;
-    if (videoDetailController.isShowCover.value.not) {
+    if (!videoDetailController.isShowCover.value) {
       await videoDetailController.playerInit(
         autoplay: videoDetailController.playerStatus == PlayerStatus.playing,
       );
     } else if (videoDetailController.plPlayerController.preInitPlayer &&
-        videoDetailController.isQuerying.not &&
+        !videoDetailController.isQuerying &&
         videoDetailController.videoState.value is! Error) {
       await videoDetailController.playerInit();
     }
@@ -621,8 +621,8 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                               !isFullScreen &&
                               isShowing &&
                               mounted) {
-                            if (videoDetailController.imageStatus.not &&
-                                removeSafeArea.not) {
+                            if (!videoDetailController.imageStatus &&
+                                !removeSafeArea) {
                               showStatusBar();
                             }
                           }
@@ -1460,12 +1460,11 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
     }
 
     Widget tabbar() => TabBar(
-          labelColor: needIndicator.not || tabs.length == 1
+          labelColor: !needIndicator || tabs.length == 1
               ? themeData.colorScheme.onSurface
               : null,
-          indicator: needIndicator.not || tabs.length == 1
-              ? const BoxDecoration()
-              : null,
+          indicator:
+              !needIndicator || tabs.length == 1 ? const BoxDecoration() : null,
           padding: EdgeInsets.zero,
           controller: videoDetailController.tabCtr,
           labelStyle:
@@ -1488,9 +1487,9 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
               }
             }
 
-            if (needIndicator.not || tabs.length == 1) {
+            if (!needIndicator || tabs.length == 1) {
               animToTop();
-            } else if (videoDetailController.tabCtr.indexIsChanging.not) {
+            } else if (!videoDetailController.tabCtr.indexIsChanging) {
               animToTop();
             }
           },
@@ -1759,10 +1758,9 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
           body: CustomScrollView(
             key: const PageStorageKey<String>('简介'),
             controller: needCtr ? _introController : null,
-            physics: needCtr.not
+            physics: !needCtr
                 ? const AlwaysScrollableScrollPhysics(
-                    parent: ClampingScrollPhysics(),
-                  )
+                    parent: ClampingScrollPhysics())
                 : null,
             slivers: [
               if (videoDetailController.videoType == SearchType.video) ...[
@@ -2155,7 +2153,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
         ..isReversed = !item.isReversed
         ..episodes = item.episodes!.reversed.toList();
 
-      if (videoDetailController.plPlayerController.reverseFromFirst.not) {
+      if (!videoDetailController.plPlayerController.reverseFromFirst) {
         // keep current episode
         videoDetailController
           ..seasonIndex.refresh()
@@ -2179,7 +2177,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
       item
         ..isPageReversed = !item.isPageReversed
         ..pages = item.pages!.reversed.toList();
-      if (videoDetailController.plPlayerController.reverseFromFirst.not) {
+      if (!videoDetailController.plPlayerController.reverseFromFirst) {
         // keep current episode
         videoDetailController.cid.refresh();
       } else {

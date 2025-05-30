@@ -6,7 +6,6 @@ import 'package:PiliPlus/main.dart';
 import 'package:PiliPlus/models/common/publish_panel_type.dart';
 import 'package:PiliPlus/pages/common/common_publish_page.dart';
 import 'package:PiliPlus/pages/setting/slide_color_picker.dart';
-import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:canvas_danmaku/models/danmaku_content_item.dart';
 import 'package:flutter/material.dart';
@@ -93,7 +92,7 @@ class _SendDanmakuPanelState extends CommonPublishPageState<SendDanmakuPanel> {
             key: ValueKey(_color.value),
             builder: (context, constraints) {
               final int crossAxisCount = (constraints.maxWidth / 40).toInt();
-              final bool isCustomColor = _colorList.contains(_color.value).not;
+              final bool isCustomColor = !_colorList.contains(_color.value);
               final int length =
                   _colorList.length + (isCustomColor ? 1 : 0) + 1;
               return GridView.builder(

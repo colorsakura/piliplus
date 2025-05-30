@@ -18,7 +18,6 @@ import 'package:PiliPlus/pages/video/introduction/ugc/controller.dart';
 import 'package:PiliPlus/pages/video/pay_coins/view.dart';
 import 'package:PiliPlus/pages/video/reply/controller.dart';
 import 'package:PiliPlus/plugin/pl_player/models/play_repeat.dart';
-import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/feed_back.dart';
 import 'package:PiliPlus/utils/global_data.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
@@ -121,7 +120,7 @@ class BangumiIntroController extends GetxController {
     if (res['status']) {
       SmartDialog.showToast('投币成功');
       bangumiItem.stat!.coins = bangumiItem.stat!.coins! + coin;
-      if (selectLike && hasLike.value.not) {
+      if (selectLike && !hasLike.value) {
         hasLike.value = true;
         bangumiItem.stat!.likes = bangumiItem.stat!.likes! + 1;
       }
@@ -192,7 +191,7 @@ class BangumiIntroController extends GetxController {
       for (var i in favFolderData.value.list!.toList()) {
         bool isFaved = favIds?.contains(i.id) == true;
         if (i.favState == 1) {
-          if (isFaved.not) {
+          if (!isFaved) {
             addMediaIdsNew.add(i.id);
           }
         } else {

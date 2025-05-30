@@ -39,7 +39,7 @@ class PiliScheme {
     try {
       if (url.startsWith('//')) {
         url = 'https:$url';
-      } else if (RegExp(r'^\S+://').hasMatch(url).not) {
+      } else if (!RegExp(r'^\S+://').hasMatch(url)) {
         url = 'https://$url';
       }
       return routePush(
@@ -457,7 +457,7 @@ class PiliScheme {
             }
             return false;
           default:
-            if (selfHandle.not) {
+            if (!selfHandle) {
               debugPrint('$uri');
               SmartDialog.showToast('未知路径:$uri，请截图反馈给开发者');
             }
@@ -485,7 +485,7 @@ class PiliScheme {
           );
           return true;
         }
-        if (selfHandle.not) {
+        if (!selfHandle) {
           debugPrint('$uri');
           SmartDialog.showToast('未知路径:$uri，请截图反馈给开发者');
         }
@@ -505,13 +505,13 @@ class PiliScheme {
     String host = uri.host;
 
     if (selfHandle &&
-        host.contains('bilibili.com').not &&
-        host.contains('b23.tv').not) {
+        !host.contains('bilibili.com') &&
+        !host.contains('b23.tv')) {
       return false;
     }
 
     void launchURL() {
-      if (selfHandle.not) {
+      if (selfHandle) {
         _toWebview(uri.toString(), off, parameters);
       }
     }
@@ -531,7 +531,7 @@ class PiliScheme {
         uri = Uri.parse(redirectUrl);
         host = uri.host;
       }
-      if (host.contains('bilibili.com').not) {
+      if (!host.contains('bilibili.com')) {
         launchURL();
         return false;
       }
@@ -541,7 +541,7 @@ class PiliScheme {
 
     if (host.contains('t.bilibili.com')) {
       bool hasMatch = await _onPushDynDetail(path, off);
-      if (hasMatch.not) {
+      if (!hasMatch) {
         launchURL();
       }
       return hasMatch;
@@ -609,7 +609,7 @@ class PiliScheme {
         return false;
       case 'dynamic' || 'opus':
         bool hasMatch = await _onPushDynDetail(path, off);
-        if (hasMatch.not) {
+        if (!hasMatch) {
           launchURL();
         }
         return hasMatch;

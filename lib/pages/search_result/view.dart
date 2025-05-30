@@ -7,7 +7,6 @@ import 'package:PiliPlus/pages/search_panel/pgc/view.dart';
 import 'package:PiliPlus/pages/search_panel/user/view.dart';
 import 'package:PiliPlus/pages/search_panel/video/view.dart';
 import 'package:PiliPlus/pages/search_result/controller.dart';
-import 'package:PiliPlus/utils/extension.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -137,7 +136,7 @@ class _SearchResultPageState extends State<SearchResultPage>
                 unselectedLabelColor: theme.colorScheme.outline,
                 tabAlignment: TabAlignment.start,
                 onTap: (index) {
-                  if (_tabController.indexIsChanging.not) {
+                  if (!_tabController.indexIsChanging) {
                     if (_searchResultController.toTopIndex.value == index) {
                       _searchResultController.toTopIndex.refresh();
                     } else {

@@ -45,7 +45,6 @@ import 'package:PiliPlus/plugin/pl_player/models/fullscreen_mode.dart';
 import 'package:PiliPlus/plugin/pl_player/utils/fullscreen.dart';
 import 'package:PiliPlus/utils/accounts/account_manager/account_mgr.dart';
 import 'package:PiliPlus/utils/cache_manage.dart';
-import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/feed_back.dart';
 import 'package:PiliPlus/utils/global_data.dart';
 import 'package:PiliPlus/utils/recommend_filter.dart';
@@ -1394,7 +1393,7 @@ List<SettingsModel> get recommendSettings => [
           try {
             RcmdController ctr = Get.find<RcmdController>()
               ..savedRcmdTip = value;
-            if (value.not) {
+            if (!value) {
               ctr.lastRefreshAt = null;
             }
           } catch (e) {
@@ -1467,7 +1466,7 @@ List<SettingsModel> get privacySettings => [
       SettingsModel(
         settingsType: SettingsType.normal,
         onTap: (setState) {
-          if (Accounts.main.isLogin.not) {
+          if (!Accounts.main.isLogin) {
             SmartDialog.showToast('登录后查看');
             return;
           }

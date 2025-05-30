@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:PiliPlus/common/widgets/pair.dart';
-import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
@@ -22,7 +21,7 @@ class WebDav {
     final webDavUsername = GStorage.webdavUsername;
     final webDavPassword = GStorage.webdavPassword;
     _webdavDirectory = GStorage.webdavDirectory;
-    if (_webdavDirectory.endsWith('/').not) {
+    if (!_webdavDirectory.endsWith('/')) {
       _webdavDirectory += '/';
     }
     _webdavDirectory += 'PiliPlus';

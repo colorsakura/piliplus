@@ -6,7 +6,6 @@ import 'package:PiliPlus/grpc/im.dart';
 import 'package:PiliPlus/models/common/dynamic/dynamic_badge_mode.dart';
 import 'package:PiliPlus/models/common/msg/msg_unread_type.dart';
 import 'package:PiliPlus/models/common/nav_bar_config.dart';
-import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:get/get.dart';
@@ -75,7 +74,7 @@ class MainController extends GetxController {
   }
 
   Future<void> queryUnreadMsg() async {
-    if (isLogin.value.not || homeIndex == -1 || msgUnReadTypes.isEmpty) {
+    if (!isLogin.value || homeIndex == -1 || msgUnReadTypes.isEmpty) {
       msgUnReadCount.value = '';
       return;
     }

@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:math';
 
-import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/global_data.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:flutter/material.dart';
@@ -392,7 +391,7 @@ class _PayCoinsPageState extends State<PayCoinsPage>
                     children: [
                       GestureDetector(
                         onTap: () {
-                          _coinWithLike.value = _coinWithLike.value.not;
+                          _coinWithLike.value = !_coinWithLike.value;
                           GStorage.setting.put(
                             SettingBoxKey.coinWithLike,
                             _coinWithLike.value,

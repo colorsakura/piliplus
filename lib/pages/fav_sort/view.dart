@@ -51,7 +51,7 @@ class _FavSortPageState extends State<FavSortPage> {
   @override
   void initState() {
     super.initState();
-    if (_favDetailController.isEnd.not) {
+    if (!_favDetailController.isEnd) {
       _scrollController.addListener(listener);
     }
   }

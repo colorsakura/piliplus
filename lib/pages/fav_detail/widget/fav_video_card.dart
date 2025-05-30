@@ -8,7 +8,6 @@ import 'package:PiliPlus/http/search.dart';
 import 'package:PiliPlus/http/video.dart';
 import 'package:PiliPlus/models/common/badge_type.dart';
 import 'package:PiliPlus/models/user/fav_detail.dart';
-import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/id_utils.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:PiliPlus/utils/utils.dart';
@@ -63,7 +62,7 @@ class FavVideoCardH extends StatelessWidget {
                 }
               }
 
-              if ([0, 16].contains(videoItem.attr).not) {
+              if (!const [0, 16].contains(videoItem.attr)) {
                 Get.toNamed('/member?mid=${videoItem.owner.mid}');
                 return;
               }

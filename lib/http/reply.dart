@@ -6,7 +6,6 @@ import 'package:PiliPlus/models/video/reply/data.dart';
 import 'package:PiliPlus/models/video/reply/emote.dart';
 import 'package:PiliPlus/models/video/reply/item.dart';
 import 'package:PiliPlus/utils/accounts/account.dart';
-import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:dio/dio.dart';
 
@@ -17,7 +16,6 @@ class ReplyHttp {
   static RegExp replyRegExp =
       RegExp(GStorage.banWordForReply, caseSensitive: false);
 
-  @Deprecated('Use replyListGrpc instead')
   static Future<LoadingState> replyList({
     required bool isLogin,
     required int oid,
@@ -38,7 +36,7 @@ class ReplyHttp {
                   '{"offset":"${nextOffset.replaceAll('"', '\\"')}"}',
               'mode': sort + 2, //2:按时间排序；3：按热度排序
             },
-            options: isLogin.not ? _options : null,
+            options: !isLogin ? _options : null,
           )
         : await Request().get(
             Api.replyList,
@@ -49,7 +47,7 @@ class ReplyHttp {
               'pn': page,
               'ps': 20,
             },
-            options: isLogin.not ? _options : null,
+            options: !isLogin ? _options : null,
           );
     if (res.data['code'] == 0) {
       ReplyData replyData = ReplyData.fromJson(res.data['data']);
@@ -59,7 +57,7 @@ class ReplyHttp {
           replyData.topReplies!.removeWhere((item) {
             bool hasMatch = replyRegExp.hasMatch(item.content?.message ?? '');
             // remove subreplies
-            if (hasMatch.not) {
+            if (!hasMatch) {
               if (item.replies?.isNotEmpty == true) {
                 item.replies!.removeWhere((item) =>
                     replyRegExp.hasMatch(item.content?.message ?? ''));
@@ -74,7 +72,7 @@ class ReplyHttp {
           replyData.replies!.removeWhere((item) {
             bool hasMatch = replyRegExp.hasMatch(item.content?.message ?? '');
             // remove subreplies
-            if (hasMatch.not) {
+            if (!hasMatch) {
               if (item.replies?.isNotEmpty == true) {
                 item.replies!.removeWhere((item) =>
                     replyRegExp.hasMatch(item.content?.message ?? ''));
@@ -92,7 +90,7 @@ class ReplyHttp {
           replyData.topReplies!.removeWhere((item) {
             bool hasMatch = needRemove(item);
             // remove subreplies
-            if (hasMatch.not) {
+            if (!hasMatch) {
               if (item.replies?.isNotEmpty == true) {
                 item.replies!.removeWhere(needRemove);
               }
@@ -106,7 +104,7 @@ class ReplyHttp {
           replyData.replies!.removeWhere((item) {
             bool hasMatch = needRemove(item);
             // remove subreplies
-            if (hasMatch.not) {
+            if (!hasMatch) {
               if (item.replies?.isNotEmpty == true) {
                 item.replies!.removeWhere(needRemove);
               }
@@ -137,7 +135,6 @@ class ReplyHttp {
     return false;
   }
 
-  @Deprecated('Use replyReplyListGrpc instead')
   static Future<LoadingState<ReplyReplyData>> replyReplyList({
     required bool isLogin,
     required int oid,
@@ -158,7 +155,7 @@ class ReplyHttp {
         'sort': 1,
         if (isLogin) 'csrf': Accounts.main.csrf,
       },
-      options: isLogin.not ? _options : null,
+      options: !isLogin ? _options : null,
     );
     if (res.data['code'] == 0) {
       ReplyReplyData replyData = ReplyReplyData.fromJson(res.data['data']);

@@ -54,7 +54,7 @@ abstract class CommonPublishPageState<T extends CommonPublishPage>
     super.initState();
     WidgetsBinding.instance.addObserver(this);
 
-    if (widget.initialValue.isNullOrEmpty.not) {
+    if (widget.initialValue?.trim().isNotEmpty == true) {
       enablePublish.value = true;
     }
 

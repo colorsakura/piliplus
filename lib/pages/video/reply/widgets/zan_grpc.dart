@@ -1,7 +1,6 @@
 import 'package:PiliPlus/grpc/bilibili/main/community/reply/v1.pb.dart'
     show ReplyInfo;
 import 'package:PiliPlus/http/reply.dart';
-import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/feed_back.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:fixnum/fixnum.dart' as $fixnum;
@@ -87,7 +86,7 @@ class _ZanButtonGrpcState extends State<ZanButtonGrpc> {
 
   bool isProcessing = false;
   Future<void> handleState(Future Function() action) async {
-    if (isProcessing.not) {
+    if (!isProcessing) {
       isProcessing = true;
       await action();
       isProcessing = false;

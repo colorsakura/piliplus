@@ -230,7 +230,7 @@ class VideoHttp {
           'data': data,
         };
       } else {
-        if (epid != null && usePgcApi.not && forcePgcApi != true) {
+        if (epid != null && !usePgcApi && forcePgcApi != true) {
           return videoUrl(
             avid: avid,
             bvid: bvid,

@@ -5,7 +5,6 @@ import 'package:PiliPlus/models/video_detail/episode.dart';
 import 'package:PiliPlus/models/video_detail/section.dart';
 import 'package:PiliPlus/pages/video/controller.dart';
 import 'package:PiliPlus/pages/video/introduction/ugc/controller.dart';
-import 'package:PiliPlus/utils/extension.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -69,7 +68,7 @@ class _SeasonPanelState extends State<SeasonPanel> {
       if (_videoDetailController.seasonCid != cid) {
         bool isPart =
             videoDetail.pages?.indexWhere((item) => item.cid == cid) != -1;
-        if (isPart.not) {
+        if (!isPart) {
           _videoDetailController.seasonCid = cid;
         }
       }

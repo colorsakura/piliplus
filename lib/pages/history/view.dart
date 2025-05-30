@@ -59,7 +59,7 @@ class _HistoryPageState extends State<HistoryPage>
         ? _buildPage
         : Obx(
             () => PopScope(
-              canPop: enableMultiSelect.not,
+              canPop: !enableMultiSelect,
               onPopInvokedWithResult: (didPop, result) {
                 if (enableMultiSelect) {
                   currCtr().handleSelect();
@@ -184,8 +184,8 @@ class _HistoryPageState extends State<HistoryPage>
                               TabBar(
                                 controller: _historyController.tabController,
                                 onTap: (index) {
-                                  if (_historyController
-                                      .tabController!.indexIsChanging.not) {
+                                  if (!_historyController
+                                      .tabController!.indexIsChanging) {
                                     currCtr().scrollController.animToTop();
                                   } else {
                                     if (enableMultiSelect) {

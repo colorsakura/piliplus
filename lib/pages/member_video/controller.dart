@@ -191,7 +191,7 @@ class MemberVideoCtr
                   (type == ContributeType.video
                       ? order.value == 'click'
                       : sort.value == 'asc')
-              ? desc.not
+              ? !desc
               : desc;
           PageUtils.toVideoPage(
             'bvid=${element.bvid}&cid=${element.cid}',

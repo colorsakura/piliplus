@@ -48,7 +48,7 @@ class Utils {
           return str;
         },
       );
-      if (hasMatch.not) {
+      if (!hasMatch) {
         src += '@${quality ?? GlobalData().imgQuality}q.webp';
       }
     }
@@ -58,7 +58,7 @@ class Utils {
   static bool? _isIpad;
 
   static Future<bool> isIpad() async {
-    if (Platform.isIOS.not) {
+    if (!Platform.isIOS) {
       return false;
     }
     if (_isIpad != null) {
@@ -502,7 +502,7 @@ class Utils {
     try {
       final res = await Request().get(Api.latestApp, uaType: 'mob');
       if (res.data is Map || res.data.isEmpty) {
-        if (isAuto.not) {
+        if (!isAuto) {
           SmartDialog.showToast('检查更新失败，GitHub接口未返回数据，请检查网络');
         }
         return;
@@ -511,7 +511,7 @@ class Utils {
       DateTime current = DateTime.parse('${BuildConfig.buildTime}Z');
       current = current.copyWith(hour: current.hour - 8);
       if (current.compareTo(latest) >= 0) {
-        if (isAuto.not) {
+        if (!isAuto) {
           SmartDialog.showToast('已是最新版本');
         }
       } else {

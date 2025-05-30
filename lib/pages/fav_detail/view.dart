@@ -11,7 +11,6 @@ import 'package:PiliPlus/models/user/fav_folder.dart';
 import 'package:PiliPlus/pages/fav_detail/controller.dart';
 import 'package:PiliPlus/pages/fav_detail/widget/fav_video_card.dart';
 import 'package:PiliPlus/pages/fav_sort/view.dart';
-import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/grid.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:PiliPlus/utils/request_utils.dart';
@@ -43,7 +42,7 @@ class _FavDetailPageState extends State<FavDetailPage> {
     final theme = Theme.of(context);
     return Obx(
       () => PopScope(
-        canPop: _favDetailController.enableMultiSelect.value.not,
+        canPop: !_favDetailController.enableMultiSelect.value,
         onPopInvokedWithResult: (didPop, result) {
           if (_favDetailController.enableMultiSelect.value) {
             _favDetailController.handleSelect();
@@ -413,8 +412,8 @@ class _FavDetailPageState extends State<FavDetailPage> {
                               : null,
                           onLongPress: _favDetailController.isOwner.value
                               ? () {
-                                  if (_favDetailController
-                                      .enableMultiSelect.value.not) {
+                                  if (!_favDetailController
+                                      .enableMultiSelect.value) {
                                     _favDetailController
                                         .enableMultiSelect.value = true;
                                     _favDetailController.onSelect(index);

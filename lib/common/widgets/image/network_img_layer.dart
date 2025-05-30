@@ -42,7 +42,7 @@ class NetworkImgLayer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return src.isNullOrEmpty.not
+    return src?.isNotEmpty == true
         ? type == ImageType.avatar
             ? ClipOval(child: _buildImage(context))
             : radius == 0 || type == ImageType.emote

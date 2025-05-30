@@ -68,10 +68,6 @@ extension StringExt on String? {
   bool get isNullOrEmpty => this == null || this!.isEmpty;
 }
 
-extension BoolExt on bool {
-  bool get not => !this;
-}
-
 extension BuildContextExt on BuildContext {
   Color get vipColor {
     return Theme.of(this).brightness == Brightness.light

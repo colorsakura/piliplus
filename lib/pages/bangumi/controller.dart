@@ -68,7 +68,7 @@ class BangumiController extends CommonListController<
 
   // 我的订阅
   Future<void> queryBangumiFollow([bool isRefresh = true]) async {
-    if (isLogin.value.not || followLoading || (isRefresh.not && followEnd)) {
+    if (!isLogin.value || followLoading || (!isRefresh && followEnd)) {
       return;
     }
     followLoading = true;
@@ -119,7 +119,7 @@ class BangumiController extends CommonListController<
   Future<LoadingState<List<BangumiListItemModel>?>> customGetData() =>
       BangumiHttp.bangumiList(
         page: page,
-        indexType: tabType == HomeTabType.cinema ? 102 : null, // TODO: sort
+        indexType: tabType == HomeTabType.cinema ? 102 : null,
       );
 
   @override

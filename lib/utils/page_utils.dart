@@ -160,10 +160,8 @@ class PageUtils {
                     ...[
                       ...[
                         ...scheduleTimeChoices,
-                        if (scheduleTimeChoices
-                            .contains(
-                                shutdownTimerService.scheduledExitInMinutes)
-                            .not)
+                        if (!scheduleTimeChoices.contains(
+                            shutdownTimerService.scheduledExitInMinutes))
                           shutdownTimerService.scheduledExitInMinutes,
                       ]..sort(),
                       -1,
@@ -193,7 +191,7 @@ class PageUtils {
                         child: Divider(height: 1),
                       ),
                     ),
-                    if (isLive.not) ...[
+                    if (!isLive) ...[
                       const SizedBox(height: 10),
                       ListTile(
                         dense: true,
@@ -586,8 +584,8 @@ class PageUtils {
     bool inApp = false,
     Map? parameters,
   }) async {
-    if (inApp.not && GStorage.openInBrowser) {
-      if ((await PiliScheme.routePushFromUrl(url, selfHandle: true)).not) {
+    if (!inApp && GStorage.openInBrowser) {
+      if (!await PiliScheme.routePushFromUrl(url, selfHandle: true)) {
         launchURL(url);
       }
     } else {

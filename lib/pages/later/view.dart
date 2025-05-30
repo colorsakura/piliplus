@@ -58,7 +58,7 @@ class _LaterPageState extends State<LaterPage>
   Widget build(BuildContext context) {
     return Obx(
       () => PopScope(
-        canPop: _baseCtr.enableMultiSelect.value.not,
+        canPop: !_baseCtr.enableMultiSelect.value,
         onPopInvokedWithResult: (didPop, result) {
           if (_baseCtr.enableMultiSelect.value) {
             currCtr().handleSelect();
@@ -91,7 +91,7 @@ class _LaterPageState extends State<LaterPage>
                         text: '${item.title}${count != -1 ? '($count)' : ''}');
                   }).toList(),
                   onTap: (_) {
-                    if (_tabController.indexIsChanging.not) {
+                    if (!_tabController.indexIsChanging) {
                       currCtr().scrollController.animToTop();
                     } else {
                       if (_baseCtr.enableMultiSelect.value) {

@@ -195,7 +195,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
         FlutterVolumeController.addListener((double value) {
           if (mounted && !_volumeInterceptEventStream.value) {
             _volumeValue.value = value;
-            if (Platform.isIOS && FlutterVolumeController.showSystemUI.not) {
+            if (Platform.isIOS && !FlutterVolumeController.showSystemUI) {
               _volumeIndicator.value = true;
               _volumeTimer?.cancel();
               _volumeTimer = Timer(const Duration(milliseconds: 800), () {
@@ -479,8 +479,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
             color: Colors.white,
           ),
           onTap: () {
-            if (anySeason.not ||
-                widget.videoDetailController?.isPlayAll == true) {
+            if (!anySeason || widget.videoDetailController?.isPlayAll == true) {
               widget.showEpisodes?.call();
               return;
             }
@@ -776,8 +775,8 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                   _gestureType = 'horizontal';
                 } else if (cumulativeDelta.dy.abs() >
                     3 * cumulativeDelta.dx.abs()) {
-                  if (plPlayerController.enableSlideVolumeBrightness.not &&
-                      plPlayerController.enableSlideFS.not) {
+                  if (!plPlayerController.enableSlideVolumeBrightness &&
+                      !plPlayerController.enableSlideFS) {
                     return;
                   }
 
@@ -787,19 +786,19 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                   final double tapPosition = details.localFocalPoint.dx;
                   final double sectionWidth = totalWidth / 3;
                   if (tapPosition < sectionWidth) {
-                    if (plPlayerController.enableSlideVolumeBrightness.not) {
+                    if (!plPlayerController.enableSlideVolumeBrightness) {
                       return;
                     }
                     // 左边区域
                     _gestureType = 'left';
                   } else if (tapPosition < sectionWidth * 2) {
-                    if (plPlayerController.enableSlideFS.not) {
+                    if (!plPlayerController.enableSlideFS) {
                       return;
                     }
                     // 全屏
                     _gestureType = 'center';
                   } else {
-                    if (plPlayerController.enableSlideVolumeBrightness.not) {
+                    if (!plPlayerController.enableSlideVolumeBrightness) {
                       return;
                     }
                     // 右边区域
@@ -873,7 +872,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                         plPlayerController
                             .durationSeconds.value.inMilliseconds *
                         renderBox.size.width;
-                    if (plPlayerController.showPreview.value.not) {
+                    if (!plPlayerController.showPreview.value) {
                       plPlayerController.showPreview.value = true;
                     }
                   } catch (_) {}
@@ -954,8 +953,8 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
             },
             onVerticalDragUpdate: (details) {
               if (plPlayerController.controlsLock.value) return;
-              if (plPlayerController.enableSlideVolumeBrightness.not &&
-                  plPlayerController.enableSlideFS.not) {
+              if (!plPlayerController.enableSlideVolumeBrightness &&
+                  !plPlayerController.enableSlideFS) {
                 return;
               }
               RenderBox renderBox =
@@ -965,19 +964,19 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
               final double sectionWidth = totalWidth / 3;
               late String gestureType;
               if (tapPosition < sectionWidth) {
-                if (plPlayerController.enableSlideVolumeBrightness.not) {
+                if (!plPlayerController.enableSlideVolumeBrightness) {
                   return;
                 }
                 // 左边区域
                 gestureType = 'left';
               } else if (tapPosition < sectionWidth * 2) {
-                if (plPlayerController.enableSlideFS.not) {
+                if (!plPlayerController.enableSlideFS) {
                   return;
                 }
                 // 全屏
                 gestureType = 'center';
               } else {
-                if (plPlayerController.enableSlideVolumeBrightness.not) {
+                if (!plPlayerController.enableSlideVolumeBrightness) {
                   return;
                 }
                 // 右边区域

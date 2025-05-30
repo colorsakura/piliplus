@@ -186,7 +186,7 @@ class _VideoReplyReplyPanelState
                         onDismissed: widget.onDismissed,
                         callback: _getImageCallback,
                         onCheckReply: (item) => _videoReplyReplyController
-                            .onCheckReply(context, item),
+                            .onCheckReply(context, item, isManual: true),
                         onToggleTop: (isUpTop, rpid) =>
                             _videoReplyReplyController.onToggleTop(
                           index,
@@ -359,7 +359,8 @@ class _VideoReplyReplyPanelState
           ..loadingState.value.dataOrNull?.insert(index + 1, replyInfo)
           ..loadingState.refresh();
         if (_videoReplyReplyController.enableCommAntifraud && mounted) {
-          _videoReplyReplyController.onCheckReply(context, replyInfo);
+          _videoReplyReplyController.onCheckReply(context, replyInfo,
+              isManual: false);
         }
       }
     });
@@ -445,8 +446,8 @@ class _VideoReplyReplyPanelState
       onViewImage: widget.onViewImage,
       onDismissed: widget.onDismissed,
       callback: _getImageCallback,
-      onCheckReply: (item) =>
-          _videoReplyReplyController.onCheckReply(context, item),
+      onCheckReply: (item) => _videoReplyReplyController
+          .onCheckReply(context, item, isManual: true),
       onToggleTop: (isUpTop, rpid) => _videoReplyReplyController.onToggleTop(
         index,
         _videoReplyReplyController.oid,

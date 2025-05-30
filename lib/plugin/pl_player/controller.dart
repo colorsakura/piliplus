@@ -994,7 +994,7 @@ class PlPlayerController {
         } else if (event.startsWith('Could not open codec')) {
           SmartDialog.showToast('无法加载解码器, $event，可能会切换至软解');
         } else {
-          if (onlyPlayAudio.value.not) {
+          if (!onlyPlayAudio.value) {
             if (event.startsWith("Failed to open .") ||
                 event.startsWith("Cannot open") ||
                 event.startsWith("Can not open")) {
@@ -1464,7 +1464,7 @@ class PlPlayerController {
     if (!enableHeart || MineController.anonymity.value || progress == 0) {
       return;
     } else if (playerStatus.status.value == PlayerStatus.paused) {
-      if (isManual.not) {
+      if (!isManual) {
         return;
       }
     }

@@ -203,7 +203,7 @@ class _VideoInfoState extends State<VideoInfo> {
             );
 
   Future<void> handleState(FutureOr Function() action) async {
-    if (isProcessing.not) {
+    if (!isProcessing) {
       isProcessing = true;
       await action();
       isProcessing = false;
@@ -223,7 +223,7 @@ class _VideoInfoState extends State<VideoInfo> {
         initialExpanded: alwaysExapndIntroPanel,
       );
 
-      if (alwaysExapndIntroPanel.not && GStorage.exapndIntroPanelH) {
+      if (!alwaysExapndIntroPanel && GStorage.exapndIntroPanelH) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
           if (context.orientation == Orientation.landscape &&
               videoIntroController.expandableCtr?.expanded == false) {
@@ -684,7 +684,8 @@ class _VideoInfoState extends State<VideoInfo> {
                           ),
                         ),
                         if (videoIntroController
-                            .videoDetail.value.descV2.isNullOrEmpty.not) ...[
+                                .videoDetail.value.descV2?.isNotEmpty ==
+                            true) ...[
                           const SizedBox(height: 8),
                           SelectableText.rich(
                             style: const TextStyle(
@@ -748,7 +749,7 @@ class _VideoInfoState extends State<VideoInfo> {
                                     .queryVideoIntroData["status"] = true;
                                 videoIntroController.queryVideoIntro();
                                 if (videoDetailCtr.videoUrl.isNullOrEmpty &&
-                                    videoDetailCtr.isQuerying.not) {
+                                    !videoDetailCtr.isQuerying) {
                                   videoDetailCtr.queryVideoUrl();
                                 }
                               },
@@ -766,8 +767,8 @@ class _VideoInfoState extends State<VideoInfo> {
                       videoDetail.ugcSeason != null &&
                       (context.orientation != Orientation.landscape ||
                           (context.orientation == Orientation.landscape &&
-                              videoDetailCtr.plPlayerController
-                                  .horizontalSeasonPanel.not)))
+                              !videoDetailCtr
+                                  .plPlayerController.horizontalSeasonPanel)))
                     Obx(
                       () => SeasonPanel(
                         key: ValueKey(videoIntroController.videoDetail.value),
@@ -782,8 +783,8 @@ class _VideoInfoState extends State<VideoInfo> {
                       videoDetail.pages!.length > 1 &&
                       (context.orientation != Orientation.landscape ||
                           (context.orientation == Orientation.landscape &&
-                              videoDetailCtr.plPlayerController
-                                  .horizontalSeasonPanel.not))) ...[
+                              !videoDetailCtr.plPlayerController
+                                  .horizontalSeasonPanel))) ...[
                     Obx(
                       () => PagesPanel(
                         key: ValueKey(videoIntroController.videoDetail.value),

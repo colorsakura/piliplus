@@ -13,7 +13,6 @@ import 'package:PiliPlus/models/sponsor_block/segment_item.dart';
 import 'package:PiliPlus/pages/common/common_collapse_slide_page.dart';
 import 'package:PiliPlus/pages/video/controller.dart';
 import 'package:PiliPlus/plugin/pl_player/controller.dart';
-import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:dio/dio.dart';
@@ -167,10 +166,8 @@ class _PostPanelState extends CommonCollapseSlidePageState<PostPanel> {
                                             list![index].category = item;
                                             List<ActionType> constraintList =
                                                 item.toActionType;
-                                            if (constraintList
-                                                .contains(
-                                                    list![index].actionType)
-                                                .not) {
+                                            if (!constraintList.contains(
+                                                list![index].actionType)) {
                                               list![index].actionType =
                                                   constraintList.first;
                                             }
@@ -335,12 +332,8 @@ class _PostPanelState extends CommonCollapseSlidePageState<PostPanel> {
                                       .seek(
                                     Duration(milliseconds: start),
                                   );
-                                  if (widget
-                                      .plPlayerController
-                                      .videoPlayerController!
-                                      .state
-                                      .playing
-                                      .not) {
+                                  if (!widget.plPlayerController
+                                      .videoPlayerController!.state.playing) {
                                     await widget.plPlayerController
                                         .videoPlayerController!
                                         .play();

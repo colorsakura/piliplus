@@ -166,7 +166,7 @@ class VideoIntroController extends GetxController {
         if (videoDetailController.videoItem['pic'] == null ||
             videoDetailController.videoItem['pic'] == '' ||
             (videoDetailController.videoUrl.isNullOrEmpty &&
-                videoDetailController.isQuerying.not)) {
+                !videoDetailController.isQuerying)) {
           videoDetailController.videoItem['pic'] = data.pic;
         }
         if (videoDetailController.showReply) {
@@ -340,7 +340,7 @@ class VideoIntroController extends GetxController {
       _coinNum.value += coin;
       GlobalData().afterCoin(coin);
       videoDetail.value.stat!.coin = videoDetail.value.stat!.coin! + coin;
-      if (selectLike && hasLike.value.not) {
+      if (selectLike && !hasLike.value) {
         hasLike.value = true;
         videoDetail.value.stat!.like = videoDetail.value.stat!.like! + 1;
       }
@@ -411,7 +411,7 @@ class VideoIntroController extends GetxController {
       for (var i in favFolderData.value.list!.toList()) {
         bool isFaved = favIds?.contains(i.id) == true;
         if (i.favState == 1) {
-          if (isFaved.not) {
+          if (!isFaved) {
             addMediaIdsNew.add(i.id);
           }
         } else {
@@ -695,7 +695,7 @@ class VideoIntroController extends GetxController {
 
   // 查看同时在看人数
   Future<void> queryOnlineTotal() async {
-    if (isShowOnlineTotal.not) {
+    if (!isShowOnlineTotal) {
       return;
     }
     var result = await VideoHttp.onlineTotal(
@@ -723,7 +723,7 @@ class VideoIntroController extends GetxController {
 
     final videoDetailCtr = Get.find<VideoDetailController>(tag: heroTag);
 
-    if (skipPages.not && (videoDetail.value.pages?.length ?? 0) > 1) {
+    if (!skipPages && (videoDetail.value.pages?.length ?? 0) > 1) {
       isPages = true;
       final List<Part> pages = videoDetail.value.pages!;
       episodes.addAll(pages);
@@ -775,7 +775,7 @@ class VideoIntroController extends GetxController {
       final videoDetailCtr = Get.find<VideoDetailController>(tag: heroTag);
 
       // part -> playall -> season
-      if (skipPages.not && (videoDetail.value.pages?.length ?? 0) > 1) {
+      if (!skipPages && (videoDetail.value.pages?.length ?? 0) > 1) {
         isPages = true;
         final List<Part> pages = videoDetail.value.pages!;
         episodes.addAll(pages);
@@ -811,7 +811,7 @@ class VideoIntroController extends GetxController {
 
       int nextIndex = currentIndex + 1;
 
-      if (isPages.not &&
+      if (!isPages &&
           videoDetailCtr.isPlayAll &&
           currentIndex == episodes.length - 2) {
         videoDetailCtr.getMediaList();

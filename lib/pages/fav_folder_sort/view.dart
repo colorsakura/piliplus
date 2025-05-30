@@ -3,7 +3,6 @@ import 'package:PiliPlus/http/user.dart';
 import 'package:PiliPlus/models/user/fav_folder.dart';
 import 'package:PiliPlus/pages/fav/video/controller.dart';
 import 'package:PiliPlus/pages/fav/video/widgets/item.dart';
-import 'package:PiliPlus/utils/extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
@@ -50,7 +49,7 @@ class _FavFolderSortPageState extends State<FavFolderSortPage> {
   @override
   void initState() {
     super.initState();
-    if (_favController.isEnd.not) {
+    if (!_favController.isEnd) {
       _scrollController.addListener(listener);
     }
   }

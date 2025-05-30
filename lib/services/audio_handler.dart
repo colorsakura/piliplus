@@ -3,7 +3,6 @@ import 'package:PiliPlus/models/pgc/pgc_info_model/result.dart';
 import 'package:PiliPlus/models/video_detail/data.dart';
 import 'package:PiliPlus/plugin/pl_player/controller.dart';
 import 'package:PiliPlus/plugin/pl_player/models/play_status.dart';
-import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:audio_service/audio_service.dart';
 import 'package:get/get_utils/get_utils.dart';
@@ -72,7 +71,7 @@ class VideoPlayerServiceHandler extends BaseAudioHandler with SeekHandler {
       PlayerStatus status, bool isBuffering, bool isLive) async {
     if (!enableBackgroundPlay ||
         _item.isEmpty ||
-        PlPlayerController.instanceExists().not) {
+        !PlPlayerController.instanceExists()) {
       return;
     }
 
@@ -90,11 +89,11 @@ class VideoPlayerServiceHandler extends BaseAudioHandler with SeekHandler {
       processingState:
           isBuffering ? AudioProcessingState.buffering : processingState,
       controls: [
-        if (isLive.not)
+        if (!isLive)
           MediaControl.rewind
               .copyWith(androidIcon: 'drawable/ic_baseline_replay_10_24'),
         if (playing) MediaControl.pause else MediaControl.play,
-        if (isLive.not)
+        if (!isLive)
           MediaControl.fastForward
               .copyWith(androidIcon: 'drawable/ic_baseline_forward_10_24'),
       ],
@@ -209,7 +208,7 @@ class VideoPlayerServiceHandler extends BaseAudioHandler with SeekHandler {
   void onPositionChange(Duration position) {
     if (!enableBackgroundPlay ||
         _item.isEmpty ||
-        PlPlayerController.instanceExists().not) {
+        !PlPlayerController.instanceExists()) {
       return;
     }
 

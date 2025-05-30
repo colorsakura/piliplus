@@ -8,7 +8,6 @@ import 'package:PiliPlus/models/dynamics/result.dart';
 import 'package:PiliPlus/pages/common/common_publish_page.dart';
 import 'package:PiliPlus/pages/emote/controller.dart';
 import 'package:PiliPlus/pages/emote/view.dart';
-import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/request_utils.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:flutter/material.dart' hide DraggableScrollableSheet;
@@ -245,7 +244,7 @@ class _RepostPanelState extends CommonPublishPageState<RepostPanel> {
         ),
       );
 
-  Widget _buildAppBar(ThemeData theme) => _isMax.not
+  Widget _buildAppBar(ThemeData theme) => !_isMax
       ? Row(
           children: [
             const SizedBox(width: 16),

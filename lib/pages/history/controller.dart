@@ -60,7 +60,7 @@ class HistoryController extends MultiSelectController<HistoryData, HisListItem>
         loadingState.refresh();
       }
     }
-    if (checked.not) {
+    if (!checked) {
       baseCtr.enableMultiSelect.value = false;
     }
   }

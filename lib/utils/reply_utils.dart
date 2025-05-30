@@ -97,22 +97,24 @@ class ReplyUtils {
     }
 
     // CommAntifraud
-    if (isManual.not) {
-      await Future.delayed(const Duration(seconds: 5));
+    if (!isManual) {
+      await Future.delayed(const Duration(seconds: 8));
     }
     void showReplyCheckResult(String message) {
-      showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          title: const Text('评论检查结果'),
-          content: SelectableText(message),
-        ),
-      );
+      if (context.mounted) {
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: const Text('评论检查结果'),
+            content: SelectableText(message),
+          ),
+        );
+      }
     }
 
-    if (context.mounted.not) return;
+    if (!context.mounted) return;
     // root reply
-    if (rpid == null) {
+    if (rpid == null || rpid == 0) {
       // no cookie check
       var res = await ReplyHttp.replyList(
         isLogin: false,
@@ -124,7 +126,7 @@ class ReplyUtils {
         enableFilter: false,
         antiGoodsReply: false,
       );
-      if (context.mounted.not) return;
+      if (!context.mounted) return;
       if (res is Error) {
         SmartDialog.showToast('获取评论主列表时发生错误：${res.errMsg}');
         return;
@@ -134,14 +136,10 @@ class ReplyUtils {
             replies.replies?.indexWhere((item) => item.rpid == replyId) ?? -1;
         if (index != -1) {
           // found
-          if (context.mounted) {
-            showReplyCheckResult(
-              '无账号状态下找到了你的评论，评论正常！\n\n你的评论：$message',
-            );
-          }
+          showReplyCheckResult('无账号状态下找到了你的评论，评论正常！\n\n你的评论：$message');
         } else {
           // not found
-          if (context.mounted.not) return;
+          if (!context.mounted) return;
           // cookie check
           final res1 = await ReplyHttp.replyReplyList(
             isLogin: true,
@@ -152,17 +150,13 @@ class ReplyUtils {
             filterBanWord: false,
             antiGoodsReply: false,
           );
-          if (context.mounted.not) return;
+          if (!context.mounted) return;
           if (res1 is Error) {
             // not found
-            if (context.mounted) {
-              showReplyCheckResult(
-                '无法找到你的评论。\n\n你的评论：$message',
-              );
-            }
+            showReplyCheckResult('无法找到你的评论。\n\n你的评论：$message');
           } else {
             // found
-            if (context.mounted.not) return;
+            if (!context.mounted) return;
             // no cookie check
             final res2 = await ReplyHttp.replyReplyList(
               isLogin: false,
@@ -174,35 +168,31 @@ class ReplyUtils {
               isCheck: true,
               antiGoodsReply: false,
             );
-            if (context.mounted.not) return;
+            if (!context.mounted) return;
             if (res2 is Error) {
               // not found
-              if (context.mounted) {
-                showReplyCheckResult(
-                  res2.errMsg?.startsWith('12022') == true
-                      ? '你的评论被shadow ban（仅自己可见）！\n\n你的评论: $message'
-                      : '评论不可见(${res2.errMsg}): $message',
-                );
-              }
+              showReplyCheckResult(
+                res2.errMsg?.startsWith('12022') == true
+                    ? '你的评论被shadow ban（仅自己可见）！\n\n你的评论: $message'
+                    : '评论不可见(${res2.errMsg}): $message',
+              );
             } else {
               // found
-              if (context.mounted) {
-                showReplyCheckResult(isManual
-                    ? '无账号状态下找到了你的评论，评论正常！\n\n你的评论：$message'
-                    : '''
+              showReplyCheckResult(isManual
+                  ? '无账号状态下找到了你的评论，评论正常！\n\n你的评论：$message'
+                  : '''
 你评论状态有点可疑，虽然无账号翻找评论区获取不到你的评论，但是无账号可通过
 https://api.bilibili.com/x/v2/reply/reply?oid=$oid&pn=1&ps=20&root=${rpid ?? replyId}&type=$replyType
 获取你的评论，疑似评论区被戒严或者这是你的视频。
 
 你的评论：$message''');
-              }
             }
           }
         }
       }
     } else {
       for (int i = 1;; i++) {
-        if (context.mounted.not) return;
+        if (!context.mounted) return;
         final res3 = await ReplyHttp.replyReplyList(
           isLogin: false,
           oid: oid,
@@ -226,18 +216,14 @@ https://api.bilibili.com/x/v2/reply/reply?oid=$oid&pn=1&ps=20&root=${rpid ?? rep
             // not found
           } else {
             // found
-            if (context.mounted) {
-              showReplyCheckResult(
-                '无账号状态下找到了你的评论，评论正常！\n\n你的评论：$message',
-              );
-            }
+            showReplyCheckResult('无账号状态下找到了你的评论，评论正常！\n\n你的评论：$message');
             return;
           }
         }
       }
 
       for (int i = 1;; i++) {
-        if (context.mounted.not) return;
+        if (!context.mounted) return;
         final res4 = await ReplyHttp.replyReplyList(
           isLogin: true,
           oid: oid,
@@ -261,21 +247,13 @@ https://api.bilibili.com/x/v2/reply/reply?oid=$oid&pn=1&ps=20&root=${rpid ?? rep
             // not found
           } else {
             // found
-            if (context.mounted) {
-              showReplyCheckResult(
-                '你的评论被shadow ban（仅自己可见）！\n\n你的评论: $message',
-              );
-            }
+            showReplyCheckResult('你的评论被shadow ban（仅自己可见）！\n\n你的评论: $message');
             return;
           }
         }
       }
 
-      if (context.mounted) {
-        showReplyCheckResult(
-          '评论不可见: $message',
-        );
-      }
+      showReplyCheckResult('评论不可见: $message');
     }
   }
 }

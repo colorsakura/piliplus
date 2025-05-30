@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:math';
 
-import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/feed_back.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show HapticFeedback;
@@ -68,7 +67,7 @@ class ActionItemState extends State<ActionItem>
   void _cancelLongPress([bool isCancel = false]) {
     int duration = DateTime.now().millisecondsSinceEpoch - _lastTime;
     if (duration >= 200 && duration < 1500) {
-      if (widget.hasTriple.not) {
+      if (!widget.hasTriple) {
         controller?.reverse();
         widget.callBack?.call(false);
       }

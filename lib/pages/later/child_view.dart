@@ -8,7 +8,6 @@ import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/common/later_view_type.dart';
 import 'package:PiliPlus/models/model_hot_video_item.dart';
 import 'package:PiliPlus/pages/later/controller.dart';
-import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/grid.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:PiliPlus/utils/utils.dart';
@@ -101,13 +100,12 @@ class _LaterViewChildPageState extends State<LaterViewChildPage>
                             },
                           );
                         },
-                        onTap:
-                            _laterController.baseCtr.enableMultiSelect.value.not
-                                ? null
-                                : () => _laterController.onSelect(index),
+                        onTap: !_laterController.baseCtr.enableMultiSelect.value
+                            ? null
+                            : () => _laterController.onSelect(index),
                         onLongPress: () {
-                          if (_laterController
-                              .baseCtr.enableMultiSelect.value.not) {
+                          if (!_laterController
+                              .baseCtr.enableMultiSelect.value) {
                             _laterController.baseCtr.enableMultiSelect.value =
                                 true;
                             _laterController.onSelect(index);
