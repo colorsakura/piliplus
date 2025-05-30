@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math' show max;
 
 import 'package:PiliPlus/grpc/dyn.dart';
 import 'package:PiliPlus/grpc/im.dart';
@@ -11,8 +12,8 @@ import 'package:PiliPlus/utils/utils.dart';
 import 'package:get/get.dart';
 
 class MainController extends GetxController {
-  RxList<NavigationBarType> navigationBars = <NavigationBarType>[].obs;
-  int dynCount = 0;
+  List<NavigationBarType> navigationBars = <NavigationBarType>[];
+  RxInt dynCount = 0.obs;
 
   StreamController<bool>? bottomBarStream;
   late bool hideTabBar;
@@ -137,9 +138,8 @@ class MainController extends GetxController {
   }
 
   Future<void> setCount([int count = 0]) async {
-    if (dynIndex == -1 || dynCount == count) return;
-    dynCount = count;
-    navigationBars.refresh();
+    if (dynIndex == -1 || dynCount.value == count) return;
+    dynCount.value = count;
   }
 
   void checkUnreadDynamic() {
@@ -166,10 +166,10 @@ class MainController extends GetxController {
     } else {
       navigationBars =
           navBarSort.map((i) => NavigationBarType.values[i]).toList();
-      if (!navBarSort.contains(defaultHomePage)) defaultHomePage = 0;
     }
-    this.navigationBars.value = navigationBars;
-    selectedIndex.value = defaultHomePage;
+    this.navigationBars = navigationBars;
+    selectedIndex.value =
+        max(0, navigationBars.indexWhere((e) => e.index == defaultHomePage));
   }
 
   @override

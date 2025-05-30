@@ -207,24 +207,24 @@ class _MainAppState extends State<MainApp>
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               if (useSideBar || !isPortrait) ...[
-                Obx(
-                  () => _mainController.navigationBars.length > 1
-                      ? context.isTablet && GStorage.optTabletNav
-                          ? Column(
-                              children: [
-                                SizedBox(
-                                    height:
-                                        MediaQuery.paddingOf(context).top + 50),
-                                userAndSearchVertical(theme),
-                                const Spacer(flex: 2),
-                                Expanded(
-                                  flex: 5,
-                                  child: SizedBox(
-                                    width: 130,
-                                    child: MediaQuery.removePadding(
-                                      context: context,
-                                      removeRight: true,
-                                      child: NavigationDrawer(
+                _mainController.navigationBars.length > 1
+                    ? context.isTablet && GStorage.optTabletNav
+                        ? Column(
+                            children: [
+                              SizedBox(
+                                  height:
+                                      MediaQuery.paddingOf(context).top + 50),
+                              userAndSearchVertical(theme),
+                              const Spacer(flex: 2),
+                              Expanded(
+                                flex: 5,
+                                child: SizedBox(
+                                  width: 130,
+                                  child: MediaQuery.removePadding(
+                                    context: context,
+                                    removeRight: true,
+                                    child: Obx(
+                                      () => NavigationDrawer(
                                         backgroundColor: Colors.transparent,
                                         tilePadding: const EdgeInsets.symmetric(
                                             vertical: 5, horizontal: 12),
@@ -237,38 +237,27 @@ class _MainAppState extends State<MainApp>
                                         onDestinationSelected: setIndex,
                                         selectedIndex:
                                             _mainController.selectedIndex.value,
-                                        children: [
-                                          ..._mainController.navigationBars
-                                              .map((e) {
-                                            return NavigationDrawerDestination(
-                                              label: Text(e.label),
-                                              icon: _buildIcon(
-                                                type: e,
-                                                count: e ==
-                                                        NavigationBarType
-                                                            .dynamics
-                                                    ? _mainController.dynCount
-                                                    : 0,
-                                              ),
-                                              selectedIcon: _buildIcon(
-                                                type: e,
-                                                count: e ==
-                                                        NavigationBarType
-                                                            .dynamics
-                                                    ? _mainController.dynCount
-                                                    : 0,
-                                                selected: true,
-                                              ),
-                                            );
-                                          }),
-                                        ],
+                                        children: _mainController.navigationBars
+                                            .map(
+                                              (e) =>
+                                                  NavigationDrawerDestination(
+                                                      label: Text(e.label),
+                                                      icon: _buildIcon(type: e),
+                                                      selectedIcon: _buildIcon(
+                                                        type: e,
+                                                        selected: true,
+                                                      )),
+                                            )
+                                            .toList(),
                                       ),
                                     ),
                                   ),
                                 ),
-                              ],
-                            )
-                          : NavigationRail(
+                              ),
+                            ],
+                          )
+                        : Obx(
+                            () => NavigationRail(
                               groupAlignment: 0.5,
                               selectedIndex:
                                   _mainController.selectedIndex.value,
@@ -276,37 +265,25 @@ class _MainAppState extends State<MainApp>
                               labelType: NavigationRailLabelType.selected,
                               leading: userAndSearchVertical(theme),
                               destinations: _mainController.navigationBars
-                                  .map(
-                                    (e) => NavigationRailDestination(
-                                      label: Text(e.label),
-                                      icon: _buildIcon(
-                                        type: e,
-                                        count: e == NavigationBarType.dynamics
-                                            ? _mainController.dynCount
-                                            : 0,
-                                      ),
-                                      selectedIcon: _buildIcon(
-                                        type: e,
-                                        count: e == NavigationBarType.dynamics
-                                            ? _mainController.dynCount
-                                            : 0,
-                                        selected: true,
-                                      ),
-                                    ),
-                                  )
+                                  .map((e) => NavigationRailDestination(
+                                        label: Text(e.label),
+                                        icon: _buildIcon(type: e),
+                                        selectedIcon: _buildIcon(
+                                          type: e,
+                                          selected: true,
+                                        ),
+                                      ))
                                   .toList(),
-                            )
-                      : SafeArea(
-                          right: false,
-                          child: Container(
-                            padding: const EdgeInsets.only(
-                              top: 10,
                             ),
-                            width: 80,
-                            child: userAndSearchVertical(theme),
-                          ),
+                          )
+                    : SafeArea(
+                        right: false,
+                        child: Container(
+                          padding: const EdgeInsets.only(top: 10),
+                          width: 80,
+                          child: userAndSearchVertical(theme),
                         ),
-                ),
+                      ),
                 VerticalDivider(
                   width: 1,
                   indent: MediaQuery.of(context).padding.top,
@@ -357,75 +334,46 @@ class _MainAppState extends State<MainApp>
                       duration: const Duration(milliseconds: 500),
                       offset: Offset(0, snapshot.data ? 0 : 1),
                       child: enableMYBar
-                          ? Obx(
-                              () => _mainController.navigationBars.length > 1
-                                  ? NavigationBar(
-                                      onDestinationSelected: setIndex,
-                                      selectedIndex:
-                                          _mainController.selectedIndex.value,
-                                      destinations:
-                                          _mainController.navigationBars.map(
-                                        (e) {
-                                          return NavigationDestination(
+                          ? _mainController.navigationBars.length > 1
+                              ? Obx(
+                                  () => NavigationBar(
+                                    onDestinationSelected: setIndex,
+                                    selectedIndex:
+                                        _mainController.selectedIndex.value,
+                                    destinations: _mainController.navigationBars
+                                        .map((e) => NavigationDestination(
                                             label: e.label,
-                                            icon: _buildIcon(
-                                              type: e,
-                                              count: e ==
-                                                      NavigationBarType.dynamics
-                                                  ? _mainController.dynCount
-                                                  : 0,
-                                            ),
+                                            icon: _buildIcon(type: e),
                                             selectedIcon: _buildIcon(
                                               type: e,
-                                              count: e ==
-                                                      NavigationBarType.dynamics
-                                                  ? _mainController.dynCount
-                                                  : 0,
                                               selected: true,
-                                            ),
-                                          );
-                                        },
-                                      ).toList(),
-                                    )
-                                  : const SizedBox.shrink(),
-                            )
-                          : Obx(
-                              () => _mainController.navigationBars.length > 1
-                                  ? BottomNavigationBar(
-                                      currentIndex:
-                                          _mainController.selectedIndex.value,
-                                      onTap: setIndex,
-                                      iconSize: 16,
-                                      selectedFontSize: 12,
-                                      unselectedFontSize: 12,
-                                      type: BottomNavigationBarType.fixed,
-                                      items: _mainController.navigationBars
-                                          .map(
-                                            (e) => BottomNavigationBarItem(
-                                              label: e.label,
-                                              icon: _buildIcon(
-                                                type: e,
-                                                count: e ==
-                                                        NavigationBarType
-                                                            .dynamics
-                                                    ? _mainController.dynCount
-                                                    : 0,
-                                              ),
-                                              activeIcon: _buildIcon(
-                                                type: e,
-                                                count: e ==
-                                                        NavigationBarType
-                                                            .dynamics
-                                                    ? _mainController.dynCount
-                                                    : 0,
-                                                selected: true,
-                                              ),
-                                            ),
-                                          )
-                                          .toList(),
-                                    )
-                                  : const SizedBox.shrink(),
-                            ),
+                                            )))
+                                        .toList(),
+                                  ),
+                                )
+                              : const SizedBox.shrink()
+                          : _mainController.navigationBars.length > 1
+                              ? Obx(
+                                  () => BottomNavigationBar(
+                                    currentIndex:
+                                        _mainController.selectedIndex.value,
+                                    onTap: setIndex,
+                                    iconSize: 16,
+                                    selectedFontSize: 12,
+                                    unselectedFontSize: 12,
+                                    type: BottomNavigationBarType.fixed,
+                                    items: _mainController.navigationBars
+                                        .map((e) => BottomNavigationBarItem(
+                                            label: e.label,
+                                            icon: _buildIcon(type: e),
+                                            activeIcon: _buildIcon(
+                                              type: e,
+                                              selected: true,
+                                            )))
+                                        .toList(),
+                                  ),
+                                )
+                              : const SizedBox.shrink(),
                     );
                   },
                 ),
@@ -436,17 +384,19 @@ class _MainAppState extends State<MainApp>
 
   Widget _buildIcon({
     required NavigationBarType type,
-    required int count,
     bool selected = false,
   }) {
     final icon = selected ? type.selectIcon : type.icon;
-    return count > 0
-        ? Badge(
-            label: _mainController.dynamicBadgeMode == DynamicBadgeMode.number
-                ? Text(count.toString())
-                : null,
-            padding: const EdgeInsets.fromLTRB(6, 0, 6, 0),
-            child: icon,
+    return type == NavigationBarType.dynamics
+        ? Obx(
+            () => Badge(
+              isLabelVisible: _mainController.dynCount.value > 0,
+              label: _mainController.dynamicBadgeMode == DynamicBadgeMode.number
+                  ? Text(_mainController.dynCount.value.toString())
+                  : null,
+              padding: const EdgeInsets.symmetric(horizontal: 6),
+              child: icon,
+            ),
           )
         : icon;
   }
