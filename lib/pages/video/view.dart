@@ -86,7 +86,6 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
   late bool autoExitFullscreen;
   late bool autoPlayEnable;
   late bool enableVerticalExpand;
-  late bool autoPiP;
   late bool pipNoDanmaku;
   late bool removeSafeArea;
   bool isShowing = true;
@@ -142,7 +141,6 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
         setting.get(SettingBoxKey.enableAutoExit, defaultValue: true);
     autoPlayEnable =
         setting.get(SettingBoxKey.autoPlayEnable, defaultValue: false);
-    autoPiP = setting.get(SettingBoxKey.autoPiP, defaultValue: false);
     pipNoDanmaku = setting.get(SettingBoxKey.pipNoDanmaku, defaultValue: false);
     enableVerticalExpand =
         setting.get(SettingBoxKey.enableVerticalExpand, defaultValue: false);
@@ -151,17 +149,6 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
     if (removeSafeArea) hideStatusBar();
     videoSourceInit();
     autoScreen();
-    if (Platform.isAndroid) {
-      Utils.channel.setMethodCallHandler((call) async {
-        if (call.method == 'onUserLeaveHint') {
-          if (autoPiP &&
-              plPlayerController?.playerStatus.status.value ==
-                  PlayerStatus.playing) {
-            enterPip();
-          }
-        }
-      });
-    }
 
     if (videoDetailController.showReply) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -276,9 +263,8 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
         }
       }
       // 播放完展示控制栏
-      if (videoDetailController.floating != null && !notExitFlag) {
-        PiPStatus currentStatus =
-            await videoDetailController.floating!.pipStatus;
+      if (Platform.isAndroid && !notExitFlag) {
+        PiPStatus currentStatus = await Floating().pipStatus;
         if (currentStatus == PiPStatus.disabled) {
           plPlayerController!.onLockControl(false);
         }
@@ -452,17 +438,6 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
     themeData = videoDetailController.plPlayerController.darkVideoPage
         ? MyApp.darkThemeData ?? Theme.of(context)
         : Theme.of(context);
-  }
-
-  void enterPip() {
-    if (Get.currentRoute.startsWith('/video') &&
-        videoDetailController.floating != null) {
-      PageUtils.enterPip(
-        videoDetailController.floating!,
-        videoDetailController.data.dash!.video!.first.width!,
-        videoDetailController.data.dash!.video!.first.height!,
-      );
-    }
   }
 
   void animListener() {
@@ -1413,7 +1388,6 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                       key: videoDetailController.headerCtrKey,
                       controller: videoDetailController.plPlayerController,
                       videoDetailCtr: videoDetailController,
-                      floating: videoDetailController.floating,
                       heroTag: heroTag,
                     ),
                     danmuWidget: Obx(
@@ -1431,11 +1405,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
 
   Widget autoChoose(Widget childWhenDisabled) {
     if (Platform.isAndroid) {
-      return PiPSwitcher(
-        getChildWhenDisabled: () => childWhenDisabled,
-        getChildWhenEnabled: () => childWhenEnabled,
-        floating: videoDetailController.floating,
-      );
+      return Floating().isPipMode ? childWhenEnabled : childWhenDisabled;
     }
     return childWhenDisabled;
   }

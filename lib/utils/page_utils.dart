@@ -330,17 +330,21 @@ class PageUtils {
     );
   }
 
-  static void enterPip(Floating floating, int width, int height) {
-    Rational aspectRatio = Rational(width, height);
-    floating.enable(
-      EnableManual(
-        aspectRatio: aspectRatio.fitsInAndroidRequirements
-            ? aspectRatio
-            : height > width
-                ? const Rational.vertical()
-                : const Rational.landscape(),
-      ),
-    );
+  static void enterPip({int? width, int? height}) {
+    if (width != null && height != null) {
+      Rational aspectRatio = Rational(width, height);
+      Floating().enable(
+        EnableManual(
+          aspectRatio: aspectRatio.fitsInAndroidRequirements
+              ? aspectRatio
+              : height > width
+                  ? const Rational.vertical()
+                  : const Rational.landscape(),
+        ),
+      );
+    } else {
+      Floating().enable(const EnableManual());
+    }
   }
 
   static Future<void> pushDynDetail(DynamicItemModel item, floor,

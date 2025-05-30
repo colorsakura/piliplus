@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 import 'dart:math';
 import 'dart:ui';
 
@@ -48,7 +47,6 @@ import 'package:PiliPlus/utils/video_utils.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:easy_debounce/easy_throttle.dart';
 import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart';
-import 'package:floating/floating.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_volume_controller/flutter_volume_controller.dart';
@@ -103,7 +101,6 @@ class VideoDetailController extends GetxController
   // 亮度
   double? brightness;
 
-  Floating? floating;
   late final headerCtrKey = GlobalKey<HeaderControlState>();
 
   Box get setting => GStorage.setting;
@@ -286,10 +283,6 @@ class VideoDetailController extends GetxController
         setting.get(SettingBoxKey.autoPlayEnable, defaultValue: false);
     if (autoPlay.value) isShowCover.value = false;
     danmakuCid.value = cid.value;
-
-    if (Platform.isAndroid) {
-      floating = Floating();
-    }
 
     // 预设的解码格式
     cacheDecode = setting.get(SettingBoxKey.defaultDecode,
@@ -1109,6 +1102,8 @@ class VideoDetailController extends GetxController
         }
         setSubtitle(vttSubtitlesIndex.value);
       },
+      width: data.dash!.video!.first.width,
+      height: data.dash!.video!.first.height,
     );
 
     initSkip();
@@ -1121,9 +1116,7 @@ class VideoDetailController extends GetxController
       _getDmTrend();
     }
 
-    if (defaultST != null) {
-      defaultST = null;
-    }
+    defaultST = null;
   }
 
   bool isQuerying = false;

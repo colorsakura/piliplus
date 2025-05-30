@@ -47,13 +47,11 @@ class HeaderControl extends StatefulWidget implements PreferredSizeWidget {
   const HeaderControl({
     required this.controller,
     required this.videoDetailCtr,
-    this.floating,
     required this.heroTag,
     super.key,
   });
   final PlPlayerController controller;
   final VideoDetailController videoDetailCtr;
-  final Floating? floating;
   final String heroTag;
 
   @override
@@ -2118,8 +2116,7 @@ class HeaderControlState extends State<HeaderControl> {
                         padding: WidgetStateProperty.all(EdgeInsets.zero),
                       ),
                       onPressed: () async {
-                        bool canUsePiP = widget.floating != null &&
-                            await widget.floating!.isPipAvailable;
+                        bool canUsePiP = await Floating().isPipAvailable;
                         widget.controller.hiddenControls(false);
                         if (canUsePiP) {
                           bool enableBackgroundPlay = setting.get(
@@ -2189,10 +2186,9 @@ class HeaderControlState extends State<HeaderControl> {
                           }
                           if (!context.mounted) return;
                           PageUtils.enterPip(
-                            widget.floating!,
-                            widget
+                            width: widget
                                 .videoDetailCtr.data.dash!.video!.first.width!,
-                            widget
+                            height: widget
                                 .videoDetailCtr.data.dash!.video!.first.height!,
                           );
                         }

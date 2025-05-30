@@ -23,6 +23,7 @@ import 'package:PiliPlus/plugin/pl_player/utils/fullscreen.dart';
 import 'package:PiliPlus/services/service_locator.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/feed_back.dart';
+import 'package:PiliPlus/utils/page_utils.dart' show PageUtils;
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:canvas_danmaku/canvas_danmaku.dart';
@@ -116,6 +117,8 @@ class PlPlayerController {
   dynamic _seasonId;
   dynamic _subType;
   int _heartDuration = 0;
+  int? width;
+  int? height;
 
   late DataSource dataSource;
 
@@ -242,6 +245,15 @@ class PlPlayerController {
 
   /// 弹幕开关
   RxBool isOpenDanmu = false.obs;
+
+  bool autoPiP =
+      GStorage.setting.get(SettingBoxKey.autoPiP, defaultValue: false);
+
+  void enterPip() {
+    if (Get.currentRoute.startsWith('/video')) {
+      PageUtils.enterPip(width: width, height: height);
+    }
+  }
 
   /// 弹幕权重
   int danmakuWeight = 0;
@@ -486,6 +498,16 @@ class PlPlayerController {
       enableHeart = false;
     }
 
+    if (Platform.isAndroid) {
+      Utils.channel.setMethodCallHandler((call) async {
+        if (call.method == 'onUserLeaveHint') {
+          if (autoPiP && playerStatus.status.value == PlayerStatus.playing) {
+            enterPip();
+          }
+        }
+      });
+    }
+
     // _playerEventSubs = onPlayerStatusChanged.listen((PlayerStatus status) {
     //   if (status == PlayerStatus.playing) {
     //     WakelockPlus.enable();
@@ -520,8 +542,8 @@ class PlPlayerController {
     Duration? seekTo,
     // 初始化播放速度
     double speed = 1.0,
-    double? width,
-    double? height,
+    int? width,
+    int? height,
     Duration? duration,
     // 方向
     String? direction,
@@ -534,6 +556,8 @@ class PlPlayerController {
     VoidCallback? callback,
   }) async {
     try {
+      this.width = width;
+      this.height = height;
       this.dataSource = dataSource;
       this.segmentList.value = segmentList ?? <Segment>[];
       this.viewPointList.value = viewPointList ?? <Segment>[];
@@ -568,8 +592,8 @@ class PlPlayerController {
         return;
       }
       // 配置Player 音轨、字幕等等
-      _videoPlayerController = await _createVideoController(
-          dataSource, _looping, width, height, seekTo);
+      _videoPlayerController =
+          await _createVideoController(dataSource, _looping, seekTo);
       callback?.call();
       // 获取视频时长 00:00
       _duration.value = duration ?? _videoPlayerController!.state.duration;
@@ -676,8 +700,6 @@ class PlPlayerController {
   Future<Player> _createVideoController(
     DataSource dataSource,
     PlaylistMode looping,
-    double? width,
-    double? height,
     Duration? seekTo,
   ) async {
     // 每次配置时先移除监听

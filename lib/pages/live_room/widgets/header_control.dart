@@ -10,12 +10,10 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 class LiveHeaderControl extends StatelessWidget implements PreferredSizeWidget {
   const LiveHeaderControl({
     required this.plPlayerController,
-    this.floating,
     required this.onSendDanmaku,
     super.key,
   });
 
-  final Floating? floating;
   final PlPlayerController plPlayerController;
   final VoidCallback onSendDanmaku;
 
@@ -77,9 +75,15 @@ class LiveHeaderControl extends StatelessWidget implements PreferredSizeWidget {
                 ),
                 onPressed: () async {
                   try {
-                    if ((await floating?.isPipAvailable) == true) {
+                    var floating = Floating();
+                    if ((await floating.isPipAvailable) == true) {
                       plPlayerController.hiddenControls(false);
-                      floating!.enable(const EnableManual());
+                      floating.enable(
+                        plPlayerController.direction.value == 'vertical'
+                            ? const EnableManual(
+                                aspectRatio: Rational.vertical())
+                            : const EnableManual(),
+                      );
                     }
                   } catch (_) {}
                 },

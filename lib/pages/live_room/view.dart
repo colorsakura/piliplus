@@ -44,7 +44,6 @@ class _LiveRoomPageState extends State<LiveRoomPage>
 
   bool isShowCover = true;
   bool isPlay = true;
-  Floating? floating;
 
   StreamSubscription? _listener;
 
@@ -69,9 +68,6 @@ class _LiveRoomPageState extends State<LiveRoomPage>
       tag: heroTag,
     );
     PlPlayerController.setPlayCallBack(playCallBack);
-    if (Platform.isAndroid) {
-      floating = Floating();
-    }
     videoSourceInit();
     _futureBuilderFuture = _liveRoomController.queryLiveInfo();
     plPlayerController
@@ -145,7 +141,6 @@ class _LiveRoomPageState extends State<LiveRoomPage>
 
   final GlobalKey videoPlayerKey = GlobalKey();
   final GlobalKey playerKey = GlobalKey();
-  double? padding;
 
   Widget videoPlayerPanel({Color? fill, Alignment? alignment}) {
     return PopScope(
@@ -167,7 +162,6 @@ class _LiveRoomPageState extends State<LiveRoomPage>
               plPlayerController: plPlayerController,
               headerControl: LiveHeaderControl(
                 plPlayerController: plPlayerController,
-                floating: floating,
                 onSendDanmaku: onSendDanmaku,
               ),
               bottomControl: BottomControl(
@@ -243,7 +237,7 @@ class _LiveRoomPageState extends State<LiveRoomPage>
                   ),
           ),
           SafeArea(
-            top: false,
+            top: !isFullScreen,
             left: !isFullScreen,
             right: !isFullScreen,
             bottom: false,
@@ -251,10 +245,6 @@ class _LiveRoomPageState extends State<LiveRoomPage>
                 ? Obx(
                     () {
                       if (_liveRoomController.isPortrait.value) {
-                        if (padding == null) {
-                          final padding = MediaQuery.paddingOf(context);
-                          this.padding = padding.bottom + padding.top;
-                        }
                         return _buildPP;
                       }
                       return _buildPH;
@@ -285,50 +275,40 @@ class _LiveRoomPageState extends State<LiveRoomPage>
           _buildAppBar,
           Column(
             children: [
-              Obx(
-                () => Container(
-                  color: Colors.black,
-                  width: Get.width,
-                  margin: isFullScreen
-                      ? null
-                      : EdgeInsets.only(
-                          top: 56 + MediaQuery.paddingOf(context).top,
+              Expanded(
+                child: Stack(
+                  clipBehavior: Clip.none,
+                  children: [
+                    Obx(
+                      () => Container(
+                        margin: isFullScreen
+                            ? null
+                            : const EdgeInsets.only(top: 56),
+                        color: Colors.black,
+                        child: videoPlayerPanel(
+                          alignment: isFullScreen ? null : Alignment.topCenter,
                         ),
-                  height: isFullScreen
-                      ? Get.height -
-                          (context.orientation == Orientation.landscape
-                              ? 0
-                              : MediaQuery.paddingOf(context).top)
-                      : Get.height - 56 - 85 - padding!,
-                  child: videoPlayerPanel(
-                    alignment: isFullScreen ? null : Alignment.topCenter,
-                  ),
+                      ),
+                    ),
+                    Obx(
+                      () => isFullScreen
+                          ? const SizedBox.shrink()
+                          : Positioned(
+                              left: 0,
+                              right: 0,
+                              bottom: 55,
+                              child: SizedBox(
+                                height: 125,
+                                child: _buildChatWidget(true),
+                              ),
+                            ),
+                    ),
+                  ],
                 ),
               ),
+              Obx(() =>
+                  isFullScreen ? const SizedBox.shrink() : _buildInputWidget),
             ],
-          ),
-          Obx(
-            () => isFullScreen
-                ? const SizedBox.shrink()
-                : Positioned(
-                    left: 0,
-                    right: 0,
-                    bottom: 125 + MediaQuery.paddingOf(context).bottom,
-                    child: SizedBox(
-                      height: 125,
-                      child: _buildChatWidget(true),
-                    ),
-                  ),
-          ),
-          Obx(
-            () => isFullScreen
-                ? const SizedBox.shrink()
-                : Positioned(
-                    left: 0,
-                    right: 0,
-                    bottom: 0,
-                    child: _buildInputWidget,
-                  ),
           ),
         ],
       );
@@ -341,12 +321,9 @@ class _LiveRoomPageState extends State<LiveRoomPage>
     return OrientationBuilder(
       builder: (BuildContext context, Orientation orientation) {
         if (Platform.isAndroid) {
-          return PiPSwitcher(
-            getChildWhenDisabled: () =>
-                childWhenDisabled(orientation == Orientation.portrait),
-            getChildWhenEnabled: () => videoPlayerPanel(),
-            floating: floating,
-          );
+          return Floating().isPipMode
+              ? videoPlayerPanel()
+              : childWhenDisabled(orientation == Orientation.portrait);
         } else {
           return childWhenDisabled(orientation == Orientation.portrait);
         }
