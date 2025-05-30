@@ -26,9 +26,8 @@ class ReplyUtils {
       _checkReply(
         context: context,
         oid: replyInfo.oid.toInt(),
-        rpid: replyInfo.hasRoot() ? replyInfo.root.toInt() : null,
-        replyType: replyInfo.type.toInt(),
-        replyId: replyInfo.id.toInt(),
+        type: replyInfo.type.toInt(),
+        id: replyInfo.id.toInt(),
         message: replyInfo.content.message,
         //
         root: replyInfo.root.toInt(),
@@ -52,9 +51,8 @@ class ReplyUtils {
   static Future<void> _checkReply({
     required BuildContext context,
     required int oid,
-    required int? rpid,
-    required int replyType,
-    required int replyId,
+    required int type,
+    required int id,
     required String message,
     dynamic root,
     dynamic parent,
@@ -78,8 +76,8 @@ class ReplyUtils {
           {
             'action': 0,
             'oid': oid,
-            'type': replyType,
-            'rpid': replyId,
+            'type': type,
+            'rpid': id,
             'root': root,
             'parent': parent,
             'ctime': ctime,
@@ -114,13 +112,13 @@ class ReplyUtils {
 
     if (!context.mounted) return;
     // root reply
-    if (rpid == null || rpid == 0) {
+    if (root == 0) {
       // no cookie check
       var res = await ReplyHttp.replyList(
         isLogin: false,
         oid: oid,
         nextOffset: '',
-        type: replyType,
+        type: type,
         sort: ReplySortType.time.index,
         page: 1,
         enableFilter: false,
@@ -133,7 +131,7 @@ class ReplyUtils {
       } else if (res.isSuccess) {
         ReplyData replies = res.data;
         int index =
-            replies.replies?.indexWhere((item) => item.rpid == replyId) ?? -1;
+            replies.replies?.indexWhere((item) => item.rpid == id) ?? -1;
         if (index != -1) {
           // found
           showReplyCheckResult('无账号状态下找到了你的评论，评论正常！\n\n你的评论：$message');
@@ -144,9 +142,9 @@ class ReplyUtils {
           final res1 = await ReplyHttp.replyReplyList(
             isLogin: true,
             oid: oid,
-            root: rpid ?? replyId,
+            root: id,
             pageNum: 1,
-            type: replyType,
+            type: type,
             filterBanWord: false,
             antiGoodsReply: false,
           );
@@ -161,9 +159,9 @@ class ReplyUtils {
             final res2 = await ReplyHttp.replyReplyList(
               isLogin: false,
               oid: oid,
-              root: rpid ?? replyId,
+              root: id,
               pageNum: 1,
-              type: replyType,
+              type: type,
               filterBanWord: false,
               isCheck: true,
               antiGoodsReply: false,
@@ -182,7 +180,7 @@ class ReplyUtils {
                   ? '无账号状态下找到了你的评论，评论正常！\n\n你的评论：$message'
                   : '''
 你评论状态有点可疑，虽然无账号翻找评论区获取不到你的评论，但是无账号可通过
-https://api.bilibili.com/x/v2/reply/reply?oid=$oid&pn=1&ps=20&root=${rpid ?? replyId}&type=$replyType
+https://api.bilibili.com/x/v2/reply/reply?oid=$oid&pn=1&ps=20&root=$id&type=$type
 获取你的评论，疑似评论区被戒严或者这是你的视频。
 
 你的评论：$message''');
@@ -196,9 +194,9 @@ https://api.bilibili.com/x/v2/reply/reply?oid=$oid&pn=1&ps=20&root=${rpid ?? rep
         final res3 = await ReplyHttp.replyReplyList(
           isLogin: false,
           oid: oid,
-          root: rpid,
+          root: root,
           pageNum: i,
-          type: replyType,
+          type: type,
           filterBanWord: false,
           isCheck: true,
           antiGoodsReply: false,
@@ -210,8 +208,7 @@ https://api.bilibili.com/x/v2/reply/reply?oid=$oid&pn=1&ps=20&root=${rpid ?? rep
           if (data.replies.isNullOrEmpty) {
             break;
           }
-          int index =
-              data.replies?.indexWhere((item) => item.rpid == replyId) ?? -1;
+          int index = data.replies?.indexWhere((item) => item.rpid == id) ?? -1;
           if (index == -1) {
             // not found
           } else {
@@ -227,9 +224,9 @@ https://api.bilibili.com/x/v2/reply/reply?oid=$oid&pn=1&ps=20&root=${rpid ?? rep
         final res4 = await ReplyHttp.replyReplyList(
           isLogin: true,
           oid: oid,
-          root: rpid,
+          root: root,
           pageNum: i,
-          type: replyType,
+          type: type,
           filterBanWord: false,
           isCheck: true,
           antiGoodsReply: false,
@@ -241,8 +238,7 @@ https://api.bilibili.com/x/v2/reply/reply?oid=$oid&pn=1&ps=20&root=${rpid ?? rep
           if (data.replies.isNullOrEmpty) {
             break;
           }
-          int index =
-              data.replies?.indexWhere((item) => item.rpid == replyId) ?? -1;
+          int index = data.replies?.indexWhere((item) => item.rpid == id) ?? -1;
           if (index == -1) {
             // not found
           } else {

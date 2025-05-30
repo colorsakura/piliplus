@@ -10,8 +10,8 @@ import 'package:PiliPlus/utils/storage.dart';
 import 'package:dio/dio.dart';
 
 class ReplyHttp {
-  static Options get _options =>
-      Options(extra: {'account': AnonymousAccount()});
+  static final Options _options =
+      Options(extra: {'account': AnonymousAccount(), 'checkReply': true});
 
   static RegExp replyRegExp =
       RegExp(GStorage.banWordForReply, caseSensitive: false);
