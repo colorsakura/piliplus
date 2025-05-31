@@ -173,10 +173,8 @@ class _SharePanelState extends State<SharePanel> {
               GestureDetector(
                 onTap: () async {
                   _focusNode.unfocus();
-                  UserModel? userModel = await Get.dialog(
-                    const ContactPage(),
-                    useSafeArea: false,
-                    transitionDuration: const Duration(milliseconds: 120),
+                  UserModel? userModel = await Navigator.of(context).push(
+                    GetPageRoute(page: () => const ContactPage()),
                   );
                   if (userModel != null) {
                     _userList

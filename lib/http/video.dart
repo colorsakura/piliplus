@@ -15,6 +15,7 @@ import 'package:PiliPlus/models/pgc/pgc_rank/pgc_rank_item_model.dart';
 import 'package:PiliPlus/models/pgc_lcf.dart';
 import 'package:PiliPlus/models/play_info/data.dart';
 import 'package:PiliPlus/models/triple/pgc_triple.dart';
+import 'package:PiliPlus/models/triple/ugc_triple.dart';
 import 'package:PiliPlus/models/user/fav_folder.dart';
 import 'package:PiliPlus/models/video/ai.dart';
 import 'package:PiliPlus/models/video/note_list/data.dart';
@@ -428,7 +429,7 @@ class VideoHttp {
       ),
     );
     if (res.data['code'] == 0) {
-      return {'status': true, 'data': res.data['data']};
+      return {'status': true, 'data': UgcTriple.fromJson(res.data['data'])};
     } else {
       return {'status': false, 'msg': res.data['message']};
     }

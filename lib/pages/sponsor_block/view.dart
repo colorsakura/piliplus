@@ -443,7 +443,7 @@ class _SponsorBlockPageState extends State<SponsorBlockPage> {
           divider,
           SliverToBoxAdapter(child: _blockToastItem(titleStyle)),
           divider,
-          SliverToBoxAdapter(child: _blockTrackItem(titleStyle, titleStyle)),
+          SliverToBoxAdapter(child: _blockTrackItem(titleStyle, subTitleStyle)),
           dividerL,
           SliverList.separated(
             itemCount: _blockSettings.length,

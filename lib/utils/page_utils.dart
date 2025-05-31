@@ -48,11 +48,9 @@ class PageUtils {
                 avatar: item.talkerIcon,
               ))
           .toList());
-    } else {
-      UserModel? userModel = await Get.dialog(
-        const ContactPage(),
-        useSafeArea: false,
-        transitionDuration: const Duration(milliseconds: 120),
+    } else if (context.mounted) {
+      UserModel? userModel = await Navigator.of(context).push(
+        GetPageRoute(page: () => const ContactPage()),
       );
       if (userModel != null) {
         selectedIndex = 0;

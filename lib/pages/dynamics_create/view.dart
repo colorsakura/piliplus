@@ -3,8 +3,10 @@ import 'dart:math';
 import 'package:PiliPlus/common/widgets/button/icon_button.dart';
 import 'package:PiliPlus/common/widgets/button/toolbar_icon_button.dart';
 import 'package:PiliPlus/common/widgets/custom_icon.dart';
+import 'package:PiliPlus/common/widgets/draggable_sheet/draggable_scrollable_sheet_dyn.dart'
+    as dyn_sheet;
 import 'package:PiliPlus/common/widgets/draggable_sheet/draggable_scrollable_sheet_topic.dart'
-    show DraggableScrollableSheet;
+    as topic_sheet;
 import 'package:PiliPlus/common/widgets/pair.dart';
 import 'package:PiliPlus/http/dynamics.dart';
 import 'package:PiliPlus/models/common/publish_panel_type.dart';
@@ -28,12 +30,33 @@ class CreateDynPanel extends CommonPublishPage {
     super.key,
     super.imageLengthLimit = 18,
     this.scrollController,
+    this.topic,
   });
 
   final ScrollController? scrollController;
+  final Pair<int, String>? topic;
 
   @override
   State<CreateDynPanel> createState() => _CreateDynPanelState();
+
+  static void onCreateDyn(BuildContext context, {Pair<int, String>? topic}) =>
+      showModalBottomSheet(
+        context: context,
+        useSafeArea: true,
+        isScrollControlled: true,
+        builder: (context) => dyn_sheet.DraggableScrollableSheet(
+          snap: true,
+          expand: false,
+          initialChildSize: 1,
+          minChildSize: 0,
+          maxChildSize: 1,
+          snapSizes: const [1],
+          builder: (context, scrollController) => CreateDynPanel(
+            scrollController: scrollController,
+            topic: topic,
+          ),
+        ),
+      );
 }
 
 class _CreateDynPanelState extends CommonPublishPageState<CreateDynPanel> {
@@ -41,7 +64,13 @@ class _CreateDynPanelState extends CommonPublishPageState<CreateDynPanel> {
   final Rx<DateTime?> _publishTime = Rx<DateTime?>(null);
   final Rx<ReplyOptionType> _replyOption = ReplyOptionType.allow.obs;
   final _titleEditCtr = TextEditingController();
-  Rx<Pair<int, String>?> topic = Rx<Pair<int, String>?>(null);
+  final Rx<Pair<int, String>?> topic = Rx<Pair<int, String>?>(null);
+
+  @override
+  void initState() {
+    super.initState();
+    topic.value = widget.topic;
+  }
 
   @override
   void dispose() {
@@ -598,7 +627,7 @@ class _CreateDynPanelState extends CommonPublishPageState<CreateDynPanel> {
       constraints: BoxConstraints(
         maxWidth: min(600, context.mediaQueryShortestSide),
       ),
-      builder: (context) => DraggableScrollableSheet(
+      builder: (context) => topic_sheet.DraggableScrollableSheet(
         expand: false,
         snap: true,
         minChildSize: 0,

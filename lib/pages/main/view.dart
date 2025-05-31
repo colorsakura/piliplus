@@ -203,26 +203,25 @@ class _MainAppState extends State<MainApp>
         ),
         child: Scaffold(
           extendBody: true,
-          body: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              if (useSideBar || !isPortrait) ...[
-                _mainController.navigationBars.length > 1
-                    ? context.isTablet && GStorage.optTabletNav
-                        ? Column(
-                            children: [
-                              SizedBox(
-                                  height:
-                                      MediaQuery.paddingOf(context).top + 50),
-                              userAndSearchVertical(theme),
-                              const Spacer(flex: 2),
-                              Expanded(
-                                flex: 5,
-                                child: SizedBox(
-                                  width: 130,
-                                  child: MediaQuery.removePadding(
-                                    context: context,
-                                    removeRight: true,
+          resizeToAvoidBottomInset: false,
+          appBar: AppBar(toolbarHeight: 0),
+          body: SafeArea(
+            bottom: false,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                if (useSideBar || !isPortrait) ...[
+                  _mainController.navigationBars.length > 1
+                      ? context.isTablet && GStorage.optTabletNav
+                          ? Column(
+                              children: [
+                                const SizedBox(height: 25),
+                                userAndSearchVertical(theme),
+                                const Spacer(flex: 2),
+                                Expanded(
+                                  flex: 5,
+                                  child: SizedBox(
+                                    width: 130,
                                     child: Obx(
                                       () => NavigationDrawer(
                                         backgroundColor: Colors.transparent,
@@ -253,49 +252,40 @@ class _MainAppState extends State<MainApp>
                                     ),
                                   ),
                                 ),
+                              ],
+                            )
+                          : Obx(
+                              () => NavigationRail(
+                                groupAlignment: 0.5,
+                                selectedIndex:
+                                    _mainController.selectedIndex.value,
+                                onDestinationSelected: setIndex,
+                                labelType: NavigationRailLabelType.selected,
+                                leading: userAndSearchVertical(theme),
+                                destinations: _mainController.navigationBars
+                                    .map((e) => NavigationRailDestination(
+                                          label: Text(e.label),
+                                          icon: _buildIcon(type: e),
+                                          selectedIcon: _buildIcon(
+                                            type: e,
+                                            selected: true,
+                                          ),
+                                        ))
+                                    .toList(),
                               ),
-                            ],
-                          )
-                        : Obx(
-                            () => NavigationRail(
-                              groupAlignment: 0.5,
-                              selectedIndex:
-                                  _mainController.selectedIndex.value,
-                              onDestinationSelected: setIndex,
-                              labelType: NavigationRailLabelType.selected,
-                              leading: userAndSearchVertical(theme),
-                              destinations: _mainController.navigationBars
-                                  .map((e) => NavigationRailDestination(
-                                        label: Text(e.label),
-                                        icon: _buildIcon(type: e),
-                                        selectedIcon: _buildIcon(
-                                          type: e,
-                                          selected: true,
-                                        ),
-                                      ))
-                                  .toList(),
-                            ),
-                          )
-                    : SafeArea(
-                        right: false,
-                        child: Container(
+                            )
+                      : Container(
                           padding: const EdgeInsets.only(top: 10),
                           width: 80,
                           child: userAndSearchVertical(theme),
                         ),
-                      ),
-                VerticalDivider(
-                  width: 1,
-                  indent: MediaQuery.of(context).padding.top,
-                  endIndent: MediaQuery.of(context).padding.bottom,
-                  color: theme.colorScheme.outline.withValues(alpha: 0.06),
-                ),
-              ],
-              Expanded(
-                child: SafeArea(
-                  top: false,
-                  bottom: false,
-                  left: isPortrait,
+                  VerticalDivider(
+                    width: 1,
+                    endIndent: MediaQuery.paddingOf(context).bottom,
+                    color: theme.colorScheme.outline.withValues(alpha: 0.06),
+                  ),
+                ],
+                Expanded(
                   child: _mainController.mainTabBarView
                       ? CustomTabBarView(
                           scrollDirection:
@@ -314,8 +304,8 @@ class _MainAppState extends State<MainApp>
                               .toList(),
                         ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
           bottomNavigationBar: useSideBar || !isPortrait
               ? null

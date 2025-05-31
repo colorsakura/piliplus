@@ -1,5 +1,3 @@
-import 'package:PiliPlus/common/widgets/draggable_sheet/draggable_scrollable_sheet_dyn.dart'
-    show DraggableScrollableSheet;
 import 'package:PiliPlus/common/widgets/scroll_physics.dart';
 import 'package:PiliPlus/models/common/dynamic/dynamics_type.dart';
 import 'package:PiliPlus/models/common/dynamic/up_panel_position.dart';
@@ -42,21 +40,7 @@ class _DynamicsPageState extends State<DynamicsPage>
             ),
             onPressed: () {
               if (_dynamicsController.isLogin.value) {
-                showModalBottomSheet(
-                  context: context,
-                  useSafeArea: true,
-                  isScrollControlled: true,
-                  builder: (context) => DraggableScrollableSheet(
-                    snap: true,
-                    expand: false,
-                    initialChildSize: 1,
-                    minChildSize: 0,
-                    maxChildSize: 1,
-                    snapSizes: const [1],
-                    builder: (context, scrollController) =>
-                        CreateDynPanel(scrollController: scrollController),
-                  ),
-                );
+                CreateDynPanel.onCreateDyn(context);
               }
             },
             icon: Icon(
@@ -130,6 +114,7 @@ class _DynamicsPageState extends State<DynamicsPage>
     super.build(context);
     ThemeData theme = Theme.of(context);
     return Scaffold(
+      backgroundColor: Colors.transparent,
       appBar: AppBar(
         leading: upPanelPosition == UpPanelPosition.rightDrawer
             ? _createDynamicBtn(theme, false)

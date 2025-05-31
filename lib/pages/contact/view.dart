@@ -46,13 +46,13 @@ class _ContactPageState extends State<ContactPage>
         actions: [
           IconButton(
             onPressed: () async {
-              UserModel? userModel = await Get.dialog(
-                FollowSearchPage(
-                  mid: mid,
-                  isFromSelect: widget.isFromSelect,
+              UserModel? userModel = await Navigator.of(context).push(
+                GetPageRoute(
+                  page: () => FollowSearchPage(
+                    mid: mid,
+                    isFromSelect: widget.isFromSelect,
+                  ),
                 ),
-                useSafeArea: false,
-                transitionDuration: const Duration(milliseconds: 120),
               );
               if (userModel != null) {
                 Get.back(result: userModel);

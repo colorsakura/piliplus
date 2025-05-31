@@ -42,15 +42,11 @@ class _MediaPageState extends CommonPageState<MediaPage, MediaController>
     super.build(context);
     final theme = Theme.of(context);
     Color primary = theme.colorScheme.primary;
-    return MediaQuery.removePadding(
-      context: context,
-      removeLeft: context.orientation == Orientation.landscape,
-      child: Scaffold(
-        backgroundColor: Colors.transparent,
-        appBar: AppBar(
-          toolbarHeight: 30,
-        ),
-        body: ListView(
+    return Padding(
+      padding: const EdgeInsets.only(top: 30),
+      child: Material(
+        color: Colors.transparent,
+        child: ListView(
           controller: controller.scrollController,
           physics: const AlwaysScrollableScrollPhysics(),
           children: [

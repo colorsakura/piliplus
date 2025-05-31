@@ -141,39 +141,32 @@ class _BangumiPageState extends CommonPageState<BangumiPage, BangumiController>
                         ],
                       ),
                       Expanded(
-                        child: MediaQuery.removePadding(
-                          context: context,
-                          removeLeft:
-                              context.orientation == Orientation.landscape,
-                          child: TabBarView(
-                              physics: const NeverScrollableScrollPhysics(),
-                              children: response.map((item) {
-                                if (item.episodes!.isNullOrEmpty) {
-                                  return const SizedBox.shrink();
-                                }
-                                return ListView.builder(
-                                  physics:
-                                      const AlwaysScrollableScrollPhysics(),
-                                  scrollDirection: Axis.horizontal,
-                                  itemCount: item.episodes!.length,
-                                  itemBuilder: (context, index) {
-                                    return Container(
-                                      width: Grid.smallCardWidth / 2,
-                                      margin: EdgeInsets.only(
-                                        left: StyleString.safeSpace,
-                                        right:
-                                            index == item.episodes!.length - 1
-                                                ? StyleString.safeSpace
-                                                : 0,
-                                      ),
-                                      child: BangumiCardVTimeline(
-                                        item: item.episodes![index],
-                                      ),
-                                    );
-                                  },
-                                );
-                              }).toList()),
-                        ),
+                        child: TabBarView(
+                            physics: const NeverScrollableScrollPhysics(),
+                            children: response.map((item) {
+                              if (item.episodes!.isNullOrEmpty) {
+                                return const SizedBox.shrink();
+                              }
+                              return ListView.builder(
+                                physics: const AlwaysScrollableScrollPhysics(),
+                                scrollDirection: Axis.horizontal,
+                                itemCount: item.episodes!.length,
+                                itemBuilder: (context, index) {
+                                  return Container(
+                                    width: Grid.smallCardWidth / 2,
+                                    margin: EdgeInsets.only(
+                                      left: StyleString.safeSpace,
+                                      right: index == item.episodes!.length - 1
+                                          ? StyleString.safeSpace
+                                          : 0,
+                                    ),
+                                    child: BangumiCardVTimeline(
+                                      item: item.episodes![index],
+                                    ),
+                                  );
+                                },
+                              );
+                            }).toList()),
                       ),
                     ],
                   ),
@@ -347,15 +340,11 @@ class _BangumiPageState extends CommonPageState<BangumiPage, BangumiController>
               ? Column(
                   children: [
                     _buildFollowTitle(theme),
-                    MediaQuery.removePadding(
-                      context: context,
-                      removeLeft: context.orientation == Orientation.landscape,
-                      child: SizedBox(
-                        height: Grid.smallCardWidth / 2 / 0.75 +
-                            MediaQuery.textScalerOf(context).scale(50),
-                        child: Obx(
-                          () => _buildFollowBody(controller.followState.value),
-                        ),
+                    SizedBox(
+                      height: Grid.smallCardWidth / 2 / 0.75 +
+                          MediaQuery.textScalerOf(context).scale(50),
+                      child: Obx(
+                        () => _buildFollowBody(controller.followState.value),
                       ),
                     ),
                   ],
