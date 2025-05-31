@@ -101,7 +101,6 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
       context.orientation == Orientation.landscape &&
       videoDetailController.plPlayerController.horizontalPreview;
 
-  StreamSubscription? _listenerDetail;
   StreamSubscription? _listenerFS;
 
   Box get setting => GStorage.setting;
@@ -129,11 +128,6 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
       );
     }
     videoIntroController = Get.put(VideoIntroController(), tag: heroTag);
-    _listenerDetail = videoIntroController.videoDetail.listen((value) {
-      if (!context.mounted) return;
-      videoPlayerServiceHandler.onVideoDetailChange(
-          value, videoDetailController.cid.value, heroTag);
-    });
     if (videoDetailController.videoType == SearchType.media_bangumi) {
       bangumiIntroController = Get.put(BangumiIntroController(), tag: heroTag);
     }
@@ -304,7 +298,6 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
 
   @override
   void dispose() {
-    _listenerDetail?.cancel();
     _listenerFS?.cancel();
 
     videoDetailController.skipTimer?.cancel();

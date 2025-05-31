@@ -241,18 +241,21 @@ class ChatItem extends StatelessWidget {
               fontWeight: FontWeight.bold,
             ),
           ),
-          const SizedBox(height: 1),
-          SelectableText(
-            content['summary'] ?? "",
-            style: TextStyle(
-              letterSpacing: 0.6,
-              height: 1.5,
-              color: textColor.withValues(alpha: 0.6),
-              fontSize: 12,
-              overflow: TextOverflow.ellipsis,
+          if (content['summary'] != null && content['summary'] != '') ...[
+            const SizedBox(height: 1),
+            SelectableText(
+              scrollPhysics: const NeverScrollableScrollPhysics(),
+              content['summary'],
+              style: TextStyle(
+                letterSpacing: 0.6,
+                height: 1.5,
+                color: textColor.withValues(alpha: 0.6),
+                fontSize: 12,
+                overflow: TextOverflow.ellipsis,
+              ),
+              maxLines: 2,
             ),
-            maxLines: 2,
-          ),
+          ],
         ],
       ),
     );
