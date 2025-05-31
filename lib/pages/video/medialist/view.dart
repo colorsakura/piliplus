@@ -164,9 +164,11 @@ class _MediaListPanelState
                     String bvid = item.bvid!;
                     int? aid = item.aid;
                     String cover = item.cover ?? '';
-                    final int cid =
+                    final int? cid =
                         item.cid ?? await SearchHttp.ab2c(aid: aid, bvid: bvid);
-                    widget.changeMediaList?.call(bvid, cid, aid, cover);
+                    if (cid != null) {
+                      widget.changeMediaList?.call(bvid, cid, aid, cover);
+                    }
                   },
                   onLongPress: () => imageSaveDialog(
                     title: item.title,

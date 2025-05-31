@@ -28,15 +28,17 @@ class SubVideoCardH extends StatelessWidget {
     String bvid = videoItem.bvid!;
     return InkWell(
       onTap: () async {
-        int cid = await SearchHttp.ab2c(bvid: bvid);
-        PageUtils.toVideoPage(
-          'bvid=$bvid&cid=$cid',
-          arguments: {
-            'videoItem': videoItem,
-            'heroTag': Utils.makeHeroTag(id),
-            'videoType': SearchType.video,
-          },
-        );
+        int? cid = await SearchHttp.ab2c(bvid: bvid);
+        if (cid != null) {
+          PageUtils.toVideoPage(
+            'bvid=$bvid&cid=$cid',
+            arguments: {
+              'videoItem': videoItem,
+              'heroTag': Utils.makeHeroTag(id),
+              'videoType': SearchType.video,
+            },
+          );
+        }
       },
       onLongPress: () => imageSaveDialog(
         title: videoItem.title,

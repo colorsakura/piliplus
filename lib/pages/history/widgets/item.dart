@@ -76,15 +76,17 @@ class HistoryItem extends StatelessWidget {
               if (epid != null) {
                 PageUtils.viewBangumi(epId: epid);
               } else {
-                int cid = videoItem.history.cid ??
+                int? cid = videoItem.history.cid ??
                     await SearchHttp.ab2c(aid: aid, bvid: bvid);
-                PageUtils.toVideoPage(
-                  'bvid=$bvid&cid=$cid',
-                  arguments: {
-                    'heroTag': Utils.makeHeroTag(cid),
-                    'pic': videoItem.cover,
-                  },
-                );
+                if (cid != null) {
+                  PageUtils.toVideoPage(
+                    'bvid=$bvid&cid=$cid',
+                    arguments: {
+                      'heroTag': Utils.makeHeroTag(cid),
+                      'pic': videoItem.cover,
+                    },
+                  );
+                }
               }
             } else {
               SmartDialog.showToast(result['msg']);
@@ -95,15 +97,17 @@ class HistoryItem extends StatelessWidget {
             }
           }
         } else {
-          int cid = videoItem.history.cid ??
+          int? cid = videoItem.history.cid ??
               await SearchHttp.ab2c(aid: aid, bvid: bvid);
-          PageUtils.toVideoPage(
-            'bvid=$bvid&cid=$cid',
-            arguments: {
-              'heroTag': Utils.makeHeroTag(aid),
-              'pic': videoItem.cover,
-            },
-          );
+          if (cid != null) {
+            PageUtils.toVideoPage(
+              'bvid=$bvid&cid=$cid',
+              arguments: {
+                'heroTag': Utils.makeHeroTag(aid),
+                'pic': videoItem.cover,
+              },
+            );
+          }
         }
       },
       onLongPress: () {

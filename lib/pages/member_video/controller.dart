@@ -147,35 +147,37 @@ class MemberVideoCtr
       if (list.isNullOrEmpty) return;
 
       if (episodicButton.value.text == '继续播放') {
-        dynamic oid = RegExp(r'oid=([\d]+)')
+        String? oid = RegExp(r'oid=(\d+)')
             .firstMatch('${episodicButton.value.uri}')
             ?.group(1);
-        dynamic bvid = IdUtils.av2bv(int.tryParse(oid) ?? 0);
-        dynamic cid = await SearchHttp.ab2c(aid: oid, bvid: bvid);
-        PageUtils.toVideoPage(
-          'bvid=$bvid&cid=$cid',
-          arguments: {
-            'heroTag': Utils.makeHeroTag(oid),
-            'sourceType': 'archive',
-            'mediaId': seasonId ?? seriesId ?? mid,
-            'oid': oid,
-            'favTitle':
-                '$username: ${title ?? episodicButton.value.text ?? '播放全部'}',
-            if (seriesId == null) 'count': count.value,
-            if (seasonId != null || seriesId != null)
-              'mediaType': RegExp(r'page_type=([\d]+)')
+        if (oid != null) {
+          var bvid = IdUtils.av2bv(int.parse(oid));
+          var cid = await SearchHttp.ab2c(aid: oid, bvid: bvid);
+          PageUtils.toVideoPage(
+            'bvid=$bvid&cid=$cid',
+            arguments: {
+              'heroTag': Utils.makeHeroTag(oid),
+              'sourceType': 'archive',
+              'mediaId': seasonId ?? seriesId ?? mid,
+              'oid': oid,
+              'favTitle':
+                  '$username: ${title ?? episodicButton.value.text ?? '播放全部'}',
+              if (seriesId == null) 'count': count.value,
+              if (seasonId != null || seriesId != null)
+                'mediaType': RegExp(r'page_type=([\d]+)')
+                    .firstMatch('${episodicButton.value.uri}')
+                    ?.group(1),
+              'desc': RegExp(r'desc=([\d]+)')
+                      .firstMatch('${episodicButton.value.uri}')
+                      ?.group(1) ==
+                  '1',
+              'sortField': RegExp(r'sort_field=([\d]+)')
                   .firstMatch('${episodicButton.value.uri}')
                   ?.group(1),
-            'desc': RegExp(r'desc=([\d]+)')
-                    .firstMatch('${episodicButton.value.uri}')
-                    ?.group(1) ==
-                '1',
-            'sortField': RegExp(r'sort_field=([\d]+)')
-                .firstMatch('${episodicButton.value.uri}')
-                ?.group(1),
-            'isContinuePlaying': true,
-          },
-        );
+              'isContinuePlaying': true,
+            },
+          );
+        }
         return;
       }
 

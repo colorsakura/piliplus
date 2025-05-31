@@ -97,18 +97,20 @@ class VideoCardH extends StatelessWidget {
                   }
                 }
                 try {
-                  final int cid = videoItem.cid ??
+                  final int? cid = videoItem.cid ??
                       await SearchHttp.ab2c(aid: aid, bvid: bvid);
-                  if (source == 'later') {
-                    onViewLater!(cid);
-                  } else {
-                    PageUtils.toVideoPage(
-                      'bvid=$bvid&cid=$cid',
-                      arguments: {
-                        'videoItem': videoItem,
-                        'heroTag': Utils.makeHeroTag(aid)
-                      },
-                    );
+                  if (cid != null) {
+                    if (source == 'later') {
+                      onViewLater!(cid);
+                    } else {
+                      PageUtils.toVideoPage(
+                        'bvid=$bvid&cid=$cid',
+                        arguments: {
+                          'videoItem': videoItem,
+                          'heroTag': Utils.makeHeroTag(aid)
+                        },
+                      );
+                    }
                   }
                 } catch (err) {
                   SmartDialog.showToast(err.toString());

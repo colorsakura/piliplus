@@ -34,15 +34,17 @@ class MemberCoinsItem extends StatelessWidget {
               }
             }
           }
-          int cid =
+          int? cid =
               await SearchHttp.ab2c(aid: coinItem.aid, bvid: coinItem.bvid);
-          PageUtils.toVideoPage(
-            'bvid=${coinItem.bvid}&cid=$cid',
-            arguments: {
-              'videoItem': coinItem,
-              'heroTag': Utils.makeHeroTag(coinItem.aid)
-            },
-          );
+          if (cid != null) {
+            PageUtils.toVideoPage(
+              'bvid=${coinItem.bvid}&cid=$cid',
+              arguments: {
+                'videoItem': coinItem,
+                'heroTag': Utils.makeHeroTag(coinItem.aid)
+              },
+            );
+          }
         },
         onLongPress: () => imageSaveDialog(
           title: coinItem.title,

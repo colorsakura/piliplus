@@ -4,15 +4,11 @@ import 'package:PiliPlus/common/widgets/button/icon_button.dart';
 import 'package:PiliPlus/common/widgets/image/image_save.dart';
 import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
 import 'package:PiliPlus/common/widgets/stat/stat.dart';
-import 'package:PiliPlus/http/search.dart';
-import 'package:PiliPlus/http/video.dart';
 import 'package:PiliPlus/models/common/badge_type.dart';
 import 'package:PiliPlus/models/user/fav_detail.dart';
-import 'package:PiliPlus/utils/id_utils.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 
 // 收藏视频卡片 - 水平布局
@@ -36,8 +32,6 @@ class FavVideoCardH extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    int id = videoItem.id!;
-    String bvid = videoItem.bvid ?? IdUtils.av2bv(id);
     return InkWell(
       onTap: isSort == true
           ? null
@@ -46,26 +40,21 @@ class FavVideoCardH extends StatelessWidget {
                 onTap!();
                 return;
               }
-              String? epId;
-              if (videoItem.type == 24) {
-                videoItem.cid = await SearchHttp.ab2c(bvid: bvid);
-                dynamic seasonId = videoItem.ogv!.seasonId;
-                epId = videoItem.epId;
-                PageUtils.viewBangumi(seasonId: seasonId, epId: epId);
-                return;
-              } else if (videoItem.page == 0 || videoItem.page! > 1) {
-                var result = await VideoHttp.videoIntro(bvid: bvid);
-                if (result['status']) {
-                  epId = result['data'].epId;
-                } else {
-                  SmartDialog.showToast(result['msg']);
-                }
-              }
 
               if (!const [0, 16].contains(videoItem.attr)) {
                 Get.toNamed('/member?mid=${videoItem.owner.mid}');
                 return;
               }
+
+              // pgc
+              if (videoItem.type == 24) {
+                PageUtils.viewBangumi(
+                  seasonId: videoItem.ogv!.seasonId,
+                  epId: videoItem.epId,
+                );
+                return;
+              }
+
               onViewFav?.call();
             },
       onLongPress: isSort == true

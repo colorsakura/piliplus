@@ -2160,7 +2160,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
           ..cid.refresh();
       } else {
         // switch to first episode
-        dynamic episode = videoIntroController.videoDetail.value.ugcSeason!
+        var episode = videoIntroController.videoDetail.value.ugcSeason!
             .sections![videoDetailController.seasonIndex.value].episodes!.first;
         if (episode.cid != videoDetailController.cid.value) {
           changeEpisode(episode);
@@ -2182,7 +2182,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
         videoDetailController.cid.refresh();
       } else {
         // switch to first episode
-        dynamic episode = videoIntroController.videoDetail.value.pages!.first;
+        var episode = videoIntroController.videoDetail.value.pages!.first;
         if (episode.cid != videoDetailController.cid.value) {
           changeEpisode(episode);
         } else {

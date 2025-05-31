@@ -218,13 +218,15 @@ TextSpan? richNode(
                   recognizer: TapGestureRecognizer()
                     ..onTap = () async {
                       try {
-                        int cid = await SearchHttp.ab2c(bvid: i.rid);
-                        PageUtils.toVideoPage(
-                          'bvid=${i.rid}&cid=$cid',
-                          arguments: {
-                            'heroTag': Utils.makeHeroTag(i.rid),
-                          },
-                        );
+                        int? cid = await SearchHttp.ab2c(bvid: i.rid);
+                        if (cid != null) {
+                          PageUtils.toVideoPage(
+                            'bvid=${i.rid}&cid=$cid',
+                            arguments: {
+                              'heroTag': Utils.makeHeroTag(i.rid),
+                            },
+                          );
+                        }
                       } catch (err) {
                         SmartDialog.showToast(err.toString());
                       }

@@ -159,22 +159,25 @@ class SearchHttp {
     }
   }
 
-  static Future<int> ab2c({dynamic aid, dynamic bvid, int? part}) async {
-    Map<String, dynamic> data = {};
-    if (aid != null) {
-      data['aid'] = aid;
-    } else if (bvid != null) {
-      data['bvid'] = bvid;
-    }
-    var res = await Request().get(Api.ab2c, queryParameters: data);
+  static Future<int?> ab2c({dynamic aid, dynamic bvid, int? part}) async {
+    var res = await Request().get(
+      Api.ab2c,
+      queryParameters: {
+        if (aid != null) 'aid': aid,
+        if (bvid != null) 'bvid': bvid,
+      },
+    );
     if (res.data['code'] == 0) {
-      return part != null
-          ? ((res.data['data'] as List).getOrNull(part - 1)?['cid'] ??
-              res.data['data'].first['cid'])
-          : res.data['data'].first['cid'];
+      if (res.data['data'] case List list) {
+        return part != null
+            ? (list.getOrNull(part - 1)?['cid'] ?? list.firstOrNull?['cid'])
+            : list.firstOrNull?['cid'];
+      } else {
+        return null;
+      }
     } else {
       SmartDialog.showToast("ab2c error: ${res.data['message']}");
-      return -1;
+      return null;
     }
   }
 

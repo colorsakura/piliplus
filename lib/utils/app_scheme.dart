@@ -624,19 +624,21 @@ class PiliScheme {
                 ?.group(1);
         if (bvid != null) {
           if (mediaId != null) {
-            final int cid = await SearchHttp.ab2c(bvid: bvid);
-            PageUtils.toVideoPage(
-              'bvid=$bvid&cid=$cid',
-              arguments: {
-                'heroTag': Utils.makeHeroTag(bvid),
-                'sourceType': 'playlist',
-                'favTitle': '播放列表',
-                'mediaId': mediaId,
-                'mediaType': 3,
-                'desc': true,
-                'isContinuePlaying': true,
-              },
-            );
+            final int? cid = await SearchHttp.ab2c(bvid: bvid);
+            if (cid != null) {
+              PageUtils.toVideoPage(
+                'bvid=$bvid&cid=$cid',
+                arguments: {
+                  'heroTag': Utils.makeHeroTag(bvid),
+                  'sourceType': 'playlist',
+                  'favTitle': '播放列表',
+                  'mediaId': mediaId,
+                  'mediaType': 3,
+                  'desc': true,
+                  'isContinuePlaying': true,
+                },
+              );
+            }
           } else {
             videoPush(null, bvid, off: off);
           }
@@ -852,7 +854,7 @@ class PiliScheme {
       if (showDialog) {
         SmartDialog.showLoading<dynamic>(msg: '获取中...');
       }
-      final int cid = await SearchHttp.ab2c(
+      final int? cid = await SearchHttp.ab2c(
         bvid: bvid,
         aid: aid,
         part: part != null ? int.tryParse(part) : null,
@@ -860,16 +862,18 @@ class PiliScheme {
       if (showDialog) {
         SmartDialog.dismiss();
       }
-      PageUtils.toVideoPage(
-        'bvid=$bvid&cid=$cid',
-        arguments: {
-          'pic': null,
-          'heroTag': Utils.makeHeroTag(aid),
-          if (progress != null) 'progress': int.tryParse(progress),
-        },
-        off: off,
-        preventDuplicates: false,
-      );
+      if (cid != null) {
+        PageUtils.toVideoPage(
+          'bvid=$bvid&cid=$cid',
+          arguments: {
+            'pic': null,
+            'heroTag': Utils.makeHeroTag(aid),
+            if (progress != null) 'progress': int.tryParse(progress),
+          },
+          off: off,
+          preventDuplicates: false,
+        );
+      }
     } catch (e) {
       SmartDialog.dismiss();
       SmartDialog.showToast('video获取失败: $e');

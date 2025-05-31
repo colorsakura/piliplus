@@ -346,15 +346,8 @@ class _LiveRoomPageState extends State<LiveRoomPage>
                 : Row(
                     children: [
                       GestureDetector(
-                        onTap: () {
-                          dynamic uid = roomInfoH5.roomInfo?.uid;
-                          Get.toNamed(
-                            '/member?mid=$uid',
-                            arguments: {
-                              'heroTag': Utils.makeHeroTag(uid),
-                            },
-                          );
-                        },
+                        onTap: () => Get.toNamed(
+                            '/member?mid=${roomInfoH5.roomInfo?.uid}'),
                         child: NetworkImgLayer(
                           width: 34,
                           height: 34,

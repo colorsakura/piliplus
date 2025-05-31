@@ -49,15 +49,17 @@ class UrlUtils {
       int? aid = matchRes['AV'];
       String? bvid = matchRes['BV'];
       bvid ??= IdUtils.av2bv(aid!);
-      final int cid = await SearchHttp.ab2c(aid: aid, bvid: bvid);
-      PageUtils.toVideoPage(
-        'bvid=$bvid&cid=$cid',
-        arguments: <String, String?>{
-          'pic': '',
-          'heroTag': Utils.makeHeroTag(bvid),
-        },
-        preventDuplicates: false,
-      );
+      final int? cid = await SearchHttp.ab2c(aid: aid, bvid: bvid);
+      if (cid != null) {
+        PageUtils.toVideoPage(
+          'bvid=$bvid&cid=$cid',
+          arguments: <String, String?>{
+            'pic': '',
+            'heroTag': Utils.makeHeroTag(bvid),
+          },
+          preventDuplicates: false,
+        );
+      }
     } else {
       if (redirectUrl.isNotEmpty) {
         PageUtils.handleWebview(redirectUrl);

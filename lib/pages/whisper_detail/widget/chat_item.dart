@@ -291,15 +291,17 @@ class ChatItem extends StatelessWidget {
                     String bvid = match.group(0)!;
                     try {
                       SmartDialog.showLoading();
-                      final int cid = await SearchHttp.ab2c(bvid: bvid);
+                      final int? cid = await SearchHttp.ab2c(bvid: bvid);
                       SmartDialog.dismiss();
-                      PageUtils.toVideoPage(
-                        'bvid=$bvid&cid=$cid',
-                        arguments: <String, String?>{
-                          'pic': i['cover_url'],
-                          'heroTag': Utils.makeHeroTag(bvid),
-                        },
-                      );
+                      if (cid != null) {
+                        PageUtils.toVideoPage(
+                          'bvid=$bvid&cid=$cid',
+                          arguments: <String, String?>{
+                            'pic': i['cover_url'],
+                            'heroTag': Utils.makeHeroTag(bvid),
+                          },
+                        );
+                      }
                     } catch (err) {
                       SmartDialog.dismiss();
                       SmartDialog.showToast(err.toString());
@@ -378,15 +380,17 @@ class ChatItem extends StatelessWidget {
                 try {
                   SmartDialog.showLoading();
                   var bvid = content["bvid"];
-                  final int cid = await SearchHttp.ab2c(bvid: bvid);
+                  final int? cid = await SearchHttp.ab2c(bvid: bvid);
                   SmartDialog.dismiss();
-                  PageUtils.toVideoPage(
-                    'bvid=$bvid&cid=$cid',
-                    arguments: {
-                      'pic': content['thumb'],
-                      'heroTag': Utils.makeHeroTag(bvid),
-                    },
-                  );
+                  if (cid != null) {
+                    PageUtils.toVideoPage(
+                      'bvid=$bvid&cid=$cid',
+                      arguments: {
+                        'pic': content['thumb'],
+                        'heroTag': Utils.makeHeroTag(bvid),
+                      },
+                    );
+                  }
                 } catch (err) {
                   SmartDialog.dismiss();
                   SmartDialog.showToast(err.toString());
@@ -460,15 +464,17 @@ class ChatItem extends StatelessWidget {
           }
           bvid ??= IdUtils.av2bv(aid);
           SmartDialog.showLoading();
-          final int cid = await SearchHttp.ab2c(bvid: bvid);
+          final int? cid = await SearchHttp.ab2c(bvid: bvid);
           SmartDialog.dismiss();
-          PageUtils.toVideoPage(
-            'bvid=$bvid&cid=$cid',
-            arguments: <String, String?>{
-              'pic': content['thumb'],
-              'heroTag': Utils.makeHeroTag(bvid),
-            },
-          );
+          if (cid != null) {
+            PageUtils.toVideoPage(
+              'bvid=$bvid&cid=$cid',
+              arguments: <String, String?>{
+                'pic': content['thumb'],
+                'heroTag': Utils.makeHeroTag(bvid),
+              },
+            );
+          }
         };
         break;
 

@@ -546,7 +546,7 @@ class _EpisodePanelState extends CommonSlidePageState<EpisodePanel> {
               ? Icons.notifications_off_outlined
               : Icons.notifications_active_outlined,
           onPressed: () async {
-            dynamic result = await VideoHttp.seasonFav(
+            var result = await VideoHttp.seasonFav(
               isFav: response,
               seasonId: widget.seasonId,
             );

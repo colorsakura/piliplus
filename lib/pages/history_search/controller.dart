@@ -30,7 +30,7 @@ class HistorySearchController
       loadingState
         ..value.data!.removeAt(index)
         ..refresh();
-      SmartDialog.showToast(res['msg']);
     }
+    SmartDialog.showToast(res['msg']);
   }
 }
