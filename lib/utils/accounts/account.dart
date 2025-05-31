@@ -76,12 +76,10 @@ class LoginAccount implements Account {
     this.accessKey,
     this.refresh, [
     Set<AccountType>? type,
-  ]) : type = type ?? {} {
-    cookieJar.setBuvid3();
-  }
+  ]) : type = type ?? {};
 
   factory LoginAccount.fromJson(Map<String, dynamic> json) => LoginAccount(
-        BiliCookieJar.fromJson(json['cookies']),
+        BiliCookieJar.fromJson(json['cookies'])..setBuvid3(),
         json['accessKey'],
         json['refresh'],
         (json['type'] as Iterable?)?.map((i) => AccountType.values[i]).toSet(),
