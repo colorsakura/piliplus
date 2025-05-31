@@ -35,40 +35,31 @@ class FavVideoCardH extends StatelessWidget {
     return InkWell(
       onTap: isSort == true
           ? null
-          : () async {
-              if (onTap != null) {
-                onTap!();
-                return;
-              }
+          : onTap ??
+              () {
+                if (!const [0, 16].contains(videoItem.attr)) {
+                  Get.toNamed('/member?mid=${videoItem.owner.mid}');
+                  return;
+                }
 
-              if (!const [0, 16].contains(videoItem.attr)) {
-                Get.toNamed('/member?mid=${videoItem.owner.mid}');
-                return;
-              }
+                // pgc
+                if (videoItem.type == 24) {
+                  PageUtils.viewBangumi(
+                    seasonId: videoItem.ogv!.seasonId,
+                    epId: videoItem.epId,
+                  );
+                  return;
+                }
 
-              // pgc
-              if (videoItem.type == 24) {
-                PageUtils.viewBangumi(
-                  seasonId: videoItem.ogv!.seasonId,
-                  epId: videoItem.epId,
-                );
-                return;
-              }
-
-              onViewFav?.call();
-            },
+                onViewFav?.call();
+              },
       onLongPress: isSort == true
           ? null
-          : () {
-              if (onLongPress != null) {
-                onLongPress!();
-              } else {
-                imageSaveDialog(
-                  title: videoItem.title,
-                  cover: videoItem.pic,
-                );
-              }
-            },
+          : onLongPress ??
+              () => imageSaveDialog(
+                    title: videoItem.title,
+                    cover: videoItem.pic,
+                  ),
       child: Padding(
         padding: const EdgeInsets.symmetric(
           horizontal: StyleString.safeSpace,

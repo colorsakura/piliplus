@@ -60,62 +60,54 @@ class VideoCardH extends StatelessWidget {
             label: Utils.videoItemSemantics(videoItem),
             excludeSemantics: true,
             child: InkWell(
-              onLongPress: () {
-                if (onLongPress != null) {
-                  onLongPress!();
-                } else {
-                  imageSaveDialog(
-                    title: videoItem.title,
-                    cover: videoItem.pic,
-                  );
-                }
-              },
-              onTap: () async {
-                if (onTap != null) {
-                  onTap!();
-                  return;
-                }
-                if (type == 'ketang') {
-                  SmartDialog.showToast('课堂视频暂不支持播放');
-                  return;
-                } else if (type == 'live_room') {
-                  if (videoItem case SearchVideoItemModel item) {
-                    int? roomId = item.id;
-                    if (roomId != null) {
-                      Get.toNamed('/liveRoom?roomid=$roomId');
+              onLongPress: onLongPress ??
+                  () => imageSaveDialog(
+                        title: videoItem.title,
+                        cover: videoItem.pic,
+                      ),
+              onTap: onTap ??
+                  () async {
+                    if (type == 'ketang') {
+                      SmartDialog.showToast('课堂视频暂不支持播放');
+                      return;
+                    } else if (type == 'live_room') {
+                      if (videoItem case SearchVideoItemModel item) {
+                        int? roomId = item.id;
+                        if (roomId != null) {
+                          Get.toNamed('/liveRoom?roomid=$roomId');
+                        }
+                      } else {
+                        SmartDialog.showToast(
+                            'err: live_room : ${videoItem.runtimeType}');
+                      }
+                      return;
                     }
-                  } else {
-                    SmartDialog.showToast(
-                        'err: live_room : ${videoItem.runtimeType}');
-                  }
-                  return;
-                }
-                if (videoItem case HotVideoItemModel item) {
-                  if (item.redirectUrl?.isNotEmpty == true &&
-                      PageUtils.viewPgcFromUri(item.redirectUrl!)) {
-                    return;
-                  }
-                }
-                try {
-                  final int? cid = videoItem.cid ??
-                      await SearchHttp.ab2c(aid: aid, bvid: bvid);
-                  if (cid != null) {
-                    if (source == 'later') {
-                      onViewLater!(cid);
-                    } else {
-                      PageUtils.toVideoPage(
-                        'bvid=$bvid&cid=$cid',
-                        arguments: {
-                          'videoItem': videoItem,
-                          'heroTag': Utils.makeHeroTag(aid)
-                        },
-                      );
+                    if (videoItem case HotVideoItemModel item) {
+                      if (item.redirectUrl?.isNotEmpty == true &&
+                          PageUtils.viewPgcFromUri(item.redirectUrl!)) {
+                        return;
+                      }
                     }
-                  }
-                } catch (err) {
-                  SmartDialog.showToast(err.toString());
-                }
-              },
+                    try {
+                      final int? cid = videoItem.cid ??
+                          await SearchHttp.ab2c(aid: aid, bvid: bvid);
+                      if (cid != null) {
+                        if (source == 'later') {
+                          onViewLater!(cid);
+                        } else {
+                          PageUtils.toVideoPage(
+                            'bvid=$bvid&cid=$cid',
+                            arguments: {
+                              'videoItem': videoItem,
+                              'heroTag': Utils.makeHeroTag(aid)
+                            },
+                          );
+                        }
+                      }
+                    } catch (err) {
+                      SmartDialog.showToast(err.toString());
+                    }
+                  },
               child: Padding(
                 padding: const EdgeInsets.symmetric(
                   horizontal: StyleString.safeSpace,

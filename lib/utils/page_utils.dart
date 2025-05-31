@@ -697,7 +697,7 @@ class PageUtils {
   }
 
   static Future<void> viewBangumi(
-      {dynamic seasonId, dynamic epId, dynamic progress}) async {
+      {dynamic seasonId, dynamic epId, String? progress}) async {
     try {
       SmartDialog.showLoading(msg: '资源获取中');
       var result = await SearchHttp.bangumiInfo(seasonId: seasonId, epId: epId);

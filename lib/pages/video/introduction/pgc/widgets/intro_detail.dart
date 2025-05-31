@@ -173,7 +173,7 @@ class _IntroDetailState extends CommonCollapseSlidePageState<IntroDetail> {
                       '/searchResult',
                       parameters: {'keyword': tagName},
                     ),
-                    onLongPress: (tagName) => Utils.copyText(tagName),
+                    onLongPress: Utils.copyText,
                   ),
                 )
                 .toList(),

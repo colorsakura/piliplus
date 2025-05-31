@@ -37,30 +37,28 @@ class VideoCardHMemberVideo extends StatelessWidget {
             title: videoItem.title,
             cover: videoItem.cover,
           ),
-          onTap: () async {
-            if (onTap != null) {
-              onTap!();
-              return;
-            }
-            if (videoItem.isPgc == true && videoItem.uri?.isNotEmpty == true) {
-              if (PageUtils.viewPgcFromUri(videoItem.uri!)) {
-                return;
-              }
-            }
-            if (videoItem.bvid == null || videoItem.cid == null) {
-              return;
-            }
-            try {
-              PageUtils.toVideoPage(
-                'bvid=${videoItem.bvid}&cid=${videoItem.cid}',
-                arguments: {
-                  'heroTag': Utils.makeHeroTag(videoItem.bvid),
-                },
-              );
-            } catch (err) {
-              SmartDialog.showToast(err.toString());
-            }
-          },
+          onTap: onTap ??
+              () async {
+                if (videoItem.isPgc == true &&
+                    videoItem.uri?.isNotEmpty == true) {
+                  if (PageUtils.viewPgcFromUri(videoItem.uri!)) {
+                    return;
+                  }
+                }
+                if (videoItem.bvid == null || videoItem.cid == null) {
+                  return;
+                }
+                try {
+                  PageUtils.toVideoPage(
+                    'bvid=${videoItem.bvid}&cid=${videoItem.cid}',
+                    arguments: {
+                      'heroTag': Utils.makeHeroTag(videoItem.bvid),
+                    },
+                  );
+                } catch (err) {
+                  SmartDialog.showToast(err.toString());
+                }
+              },
           child: Padding(
             padding: const EdgeInsets.symmetric(
               horizontal: StyleString.safeSpace,

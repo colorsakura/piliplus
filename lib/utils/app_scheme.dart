@@ -85,9 +85,10 @@ class PiliScheme {
             if (id != null) {
               bool isEp = path.contains('/ep/');
               PageUtils.viewBangumi(
-                  seasonId: isEp ? null : id,
-                  epId: isEp ? id : null,
-                  progress: uri.queryParameters['start_progress']);
+                seasonId: isEp ? null : id,
+                epId: isEp ? id : null,
+                progress: uri.queryParameters['start_progress'],
+              );
               return true;
             }
             return false;

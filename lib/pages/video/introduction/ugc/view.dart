@@ -719,8 +719,7 @@ class _VideoInfoState extends State<VideoInfo> {
                                           '/searchResult',
                                           parameters: {'keyword': tagName},
                                         ),
-                                        onLongPress: (tagName) =>
-                                            Utils.copyText(tagName),
+                                        onLongPress: Utils.copyText,
                                       ),
                                     )
                                     .toList(),

@@ -215,14 +215,13 @@ class SearchHttp {
     dynamic seasonId,
     dynamic epId,
   }) async {
-    final Map<String, dynamic> data = {};
-    if (seasonId != null) {
-      data['season_id'] = seasonId;
-    } else if (epId != null) {
-      data['ep_id'] = epId;
-    }
-    var res = await Request().get(Api.bangumiInfo, queryParameters: data);
-
+    var res = await Request().get(
+      Api.bangumiInfo,
+      queryParameters: {
+        if (seasonId != null) 'season_id': seasonId,
+        if (epId != null) 'ep_id': epId,
+      },
+    );
     if (res.data['code'] == 0) {
       return {
         'status': true,

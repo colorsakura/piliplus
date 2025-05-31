@@ -149,14 +149,13 @@ class _UpPanelState extends State<UpPanel> {
           }
         },
         onDoubleTap: data is LiveUserItem ? () => _onSelect(data) : null,
-        onLongPress: () {
-          if (data.mid == -1) {
-            return;
-          }
-          String heroTag = Utils.makeHeroTag(data.mid);
-          Get.toNamed('/member?mid=${data.mid}',
-              arguments: {'face': data.face, 'heroTag': heroTag});
-        },
+        onLongPress: data.mid == -1
+            ? null
+            : () {
+                String heroTag = Utils.makeHeroTag(data.mid);
+                Get.toNamed('/member?mid=${data.mid}',
+                    arguments: {'face': data.face, 'heroTag': heroTag});
+              },
         child: AnimatedOpacity(
           opacity: isCurrent ? 1 : 0.6,
           duration: const Duration(milliseconds: 200),

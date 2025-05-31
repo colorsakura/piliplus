@@ -145,9 +145,9 @@ class ActionItemState extends State<ActionItem>
                   widget.onTap?.call();
                 },
           onLongPress: _isThumbsUp ? null : widget.onLongPress,
-          onTapDown: (details) => _isThumbsUp ? _startLongPress() : null,
-          onTapUp: (details) => _isThumbsUp ? _cancelLongPress() : null,
-          onTapCancel: () => _isThumbsUp ? _cancelLongPress(true) : null,
+          onTapDown: _isThumbsUp ? (details) => _startLongPress() : null,
+          onTapUp: _isThumbsUp ? (details) => _cancelLongPress() : null,
+          onTapCancel: _isThumbsUp ? () => _cancelLongPress(true) : null,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
