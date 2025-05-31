@@ -186,62 +186,59 @@ class _ColorSelectPageState extends State<ColorSelectPage> {
                       alignment: WrapAlignment.center,
                       spacing: 22,
                       runSpacing: 18,
-                      children: [
-                        ...ctr.colorThemes.map(
-                          (e) {
-                            final index = ctr.colorThemes.indexOf(e);
-                            return GestureDetector(
-                              onTap: () {
-                                ctr.currentColor.value = index;
-                                ctr.setting
-                                    .put(SettingBoxKey.customColor, index);
-                                Get.forceAppUpdate();
-                              },
-                              child: Column(
-                                children: [
-                                  Container(
-                                    width: 46,
-                                    height: 46,
-                                    decoration: BoxDecoration(
-                                      color: e['color'].withValues(alpha: 0.8),
-                                      borderRadius: const BorderRadius.all(
-                                          Radius.circular(50)),
-                                      border: Border.all(
-                                        width: 2,
-                                        color: ctr.currentColor.value == index
-                                            ? Colors.black
-                                            : e['color'].withValues(alpha: 0.8),
-                                      ),
-                                    ),
-                                    child: AnimatedOpacity(
-                                      opacity: ctr.currentColor.value == index
-                                          ? 1
-                                          : 0,
-                                      duration:
-                                          const Duration(milliseconds: 200),
-                                      child: const Icon(
-                                        Icons.done,
-                                        color: Colors.black,
-                                        size: 20,
-                                      ),
+                      children: colorThemeTypes.indexed.map(
+                        (e) {
+                          final index = e.$1;
+                          final item = e.$2;
+                          return GestureDetector(
+                            behavior: HitTestBehavior.opaque,
+                            onTap: () {
+                              ctr
+                                ..currentColor.value = index
+                                ..setting.put(SettingBoxKey.customColor, index);
+                              Get.forceAppUpdate();
+                            },
+                            child: Column(
+                              spacing: 3,
+                              children: [
+                                Container(
+                                  width: 46,
+                                  height: 46,
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: item.color.withValues(alpha: 0.8),
+                                    border: Border.all(
+                                      width: 2,
+                                      color: ctr.currentColor.value == index
+                                          ? Colors.black
+                                          : item.color.withValues(alpha: 0.8),
                                     ),
                                   ),
-                                  const SizedBox(height: 3),
-                                  Text(
-                                    e['label'],
-                                    style: TextStyle(
-                                      fontSize: 12,
-                                      color: ctr.currentColor.value != index
-                                          ? theme.colorScheme.outline
-                                          : null,
+                                  child: AnimatedOpacity(
+                                    opacity:
+                                        ctr.currentColor.value == index ? 1 : 0,
+                                    duration: const Duration(milliseconds: 200),
+                                    child: const Icon(
+                                      Icons.done,
+                                      color: Colors.black,
+                                      size: 20,
                                     ),
                                   ),
-                                ],
-                              ),
-                            );
-                          },
-                        )
-                      ],
+                                ),
+                                Text(
+                                  item.label,
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: ctr.currentColor.value != index
+                                        ? theme.colorScheme.outline
+                                        : null,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      ).toList(),
                     ),
                   ),
                 ),
@@ -249,9 +246,10 @@ class _ColorSelectPageState extends State<ColorSelectPage> {
             ),
             ...[
               IgnorePointer(
-                child: SizedBox(
+                child: Container(
                   height: Get.height / 2,
                   width: Get.width,
+                  color: theme.colorScheme.surface,
                   child: const HomePage(),
                 ),
               ),
@@ -278,7 +276,6 @@ class _ColorSelectPageState extends State<ColorSelectPage> {
 class ColorSelectController extends GetxController {
   RxBool dynamicColor = true.obs;
   RxInt type = 0.obs;
-  late final List<Map<String, dynamic>> colorThemes = colorThemeTypes;
   RxInt currentColor = 0.obs;
   RxDouble currentTextScale = 1.0.obs;
   Rx<ThemeType> themeType = GStorage.themeType.obs;

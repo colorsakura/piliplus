@@ -129,7 +129,7 @@ class MyApp extends StatelessWidget {
     // 主题色
     Color defaultColor =
         colorThemeTypes[setting.get(SettingBoxKey.customColor, defaultValue: 0)]
-            ['color'];
+            .color;
     Color brandColor = defaultColor;
     // 是否动态取色
     bool isDynamicColor =

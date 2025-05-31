@@ -104,9 +104,7 @@ class _HomePageState extends State<HomePage>
                                 _homeController.showUserInfoDialog(context),
                             splashColor: theme.colorScheme.primaryContainer
                                 .withValues(alpha: 0.3),
-                            borderRadius: const BorderRadius.all(
-                              Radius.circular(50),
-                            ),
+                            customBorder: const CircleBorder(),
                           ),
                         ),
                       ),
