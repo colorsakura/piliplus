@@ -41,14 +41,27 @@ Widget liveRcmdPanel(
                   PBadge(
                     text: liveRcmd.watchedShow?.textLarge,
                     top: 6,
-                    right: 56,
+                    right: 65,
+                    fontSize: 10.5,
                     type: PBadgeType.gray,
                   ),
-                  PBadge(
-                    text: liveRcmd.liveStatus == 1 ? '直播中' : '直播结束',
-                    top: 6,
-                    right: 6,
-                  ),
+                  if (liveRcmd.liveStatus == 1)
+                    Positioned(
+                      right: 6,
+                      top: 6,
+                      child: Image.asset(
+                        height: 16,
+                        'assets/images/live/live.gif',
+                        filterQuality: FilterQuality.low,
+                      ),
+                    )
+                  else
+                    const PBadge(
+                      text: '直播结束',
+                      top: 6,
+                      right: 6,
+                      type: PBadgeType.gray,
+                    ),
                   if (liveRcmd.areaName != null)
                     Positioned(
                       left: 0,

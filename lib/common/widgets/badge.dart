@@ -59,8 +59,13 @@ class PBadge extends StatelessWidget {
         bgColor = Colors.black45;
         color = Colors.white;
       case PBadgeType.error:
-        bgColor = theme.error;
-        color = theme.onError;
+        if (Get.isDarkMode) {
+          bgColor = theme.errorContainer;
+          color = theme.onErrorContainer;
+        } else {
+          bgColor = theme.error;
+          color = theme.onError;
+        }
       case PBadgeType.line_primary:
         color = theme.primary;
         bgColor = Colors.transparent;

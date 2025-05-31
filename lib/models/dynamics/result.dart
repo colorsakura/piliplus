@@ -1165,7 +1165,7 @@ class Badge {
   String? text;
 
   Badge.fromJson(Map<String, dynamic> json) {
-    text = json['text'];
+    text = json['text'] == '投稿视频' ? null : json['text'];
   }
 }
 

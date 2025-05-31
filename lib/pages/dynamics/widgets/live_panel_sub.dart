@@ -42,14 +42,26 @@ Widget livePanelSub(
                   PBadge(
                     text: content.watchedShow?.textLarge,
                     top: 6,
-                    right: 56,
+                    right: 70,
+                    fontSize: 10.5,
                     type: PBadgeType.gray,
                   ),
-                  PBadge(
-                    text: content.liveStatus == 1 ? '直播中' : '直播结束',
-                    top: 6,
-                    right: 6,
-                  ),
+                  if (content.liveStatus == 1)
+                    Positioned(
+                      right: 6,
+                      top: 6,
+                      child: Image.asset(
+                        height: 16,
+                        'assets/images/live/live.gif',
+                        filterQuality: FilterQuality.low,
+                      ),
+                    )
+                  else
+                    const PBadge(
+                      text: '直播结束',
+                      top: 6,
+                      right: 6,
+                    ),
                   if (content.areaName != null)
                     Positioned(
                       left: 0,

@@ -76,9 +76,10 @@ Widget videoSeasonWidget(
                 right: 10.0,
                 bottom: null,
                 left: null,
-                type: itemContent.badge!.text == '充电专属'
-                    ? PBadgeType.error
-                    : PBadgeType.primary,
+                type: switch (itemContent.badge!.text) {
+                  '充电专属' => PBadgeType.error,
+                  _ => PBadgeType.primary,
+                },
               ),
             Positioned(
               left: 0,

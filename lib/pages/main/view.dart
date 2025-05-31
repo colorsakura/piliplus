@@ -203,7 +203,6 @@ class _MainAppState extends State<MainApp>
         ),
         child: Scaffold(
           extendBody: true,
-          resizeToAvoidBottomInset: false,
           appBar: AppBar(toolbarHeight: 0),
           body: SafeArea(
             bottom: false,
