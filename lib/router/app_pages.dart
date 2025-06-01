@@ -21,6 +21,7 @@ import 'package:PiliPlus/pages/later/view.dart';
 import 'package:PiliPlus/pages/later_search/view.dart';
 import 'package:PiliPlus/pages/live_room/view.dart';
 import 'package:PiliPlus/pages/login/view.dart';
+import 'package:PiliPlus/pages/main/view.dart';
 import 'package:PiliPlus/pages/media/view.dart';
 import 'package:PiliPlus/pages/member/view.dart';
 import 'package:PiliPlus/pages/member_dynamics/view.dart';
@@ -61,8 +62,9 @@ import 'package:get/get.dart';
 
 class Routes {
   static final List<GetPage<dynamic>> getPages = [
+    CustomGetPage(name: '/', page: () => const MainApp()),
     // 首页(推荐)
-    CustomGetPage(name: '/', page: () => const HomePage()),
+    CustomGetPage(name: '/home', page: () => const HomePage()),
     // 热门
     CustomGetPage(name: '/hot', page: () => const HotPage()),
     // 视频详情
