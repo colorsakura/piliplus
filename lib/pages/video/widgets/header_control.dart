@@ -2186,10 +2186,8 @@ class HeaderControlState extends State<HeaderControl> {
                           }
                           if (!context.mounted) return;
                           PageUtils.enterPip(
-                            width: widget
-                                .videoDetailCtr.data.dash!.video!.first.width!,
-                            height: widget
-                                .videoDetailCtr.data.dash!.video!.first.height!,
+                            width: widget.videoDetailCtr.firstVideo.width,
+                            height: widget.videoDetailCtr.firstVideo.height,
                           );
                         }
                       },

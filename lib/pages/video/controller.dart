@@ -1101,8 +1101,8 @@ class VideoDetailController extends GetxController
         }
         setSubtitle(vttSubtitlesIndex.value);
       },
-      width: data.dash!.video!.first.width,
-      height: data.dash!.video!.first.height,
+      width: firstVideo.width,
+      height: firstVideo.height,
     );
 
     initSkip();
