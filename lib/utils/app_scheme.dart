@@ -512,7 +512,7 @@ class PiliScheme {
     }
 
     void launchURL() {
-      if (selfHandle) {
+      if (!selfHandle) {
         _toWebview(uri.toString(), off, parameters);
       }
     }
