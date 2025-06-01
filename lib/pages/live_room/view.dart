@@ -22,7 +22,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:canvas_danmaku/canvas_danmaku.dart';
 import 'package:floating/floating.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart' show MethodChannel;
+import 'package:flutter/services.dart' show MethodChannel, SystemUiOverlayStyle;
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 import 'package:screen_brightness/screen_brightness.dart';
@@ -207,57 +207,79 @@ class _LiveRoomPageState extends State<LiveRoomPage>
     );
   }
 
+  SystemUiOverlayStyle _systemOverlayStyleForBrightness(
+    Brightness brightness, [
+    Color? backgroundColor,
+  ]) {
+    final SystemUiOverlayStyle style = brightness == Brightness.dark
+        ? SystemUiOverlayStyle.light
+        : SystemUiOverlayStyle.dark;
+    // For backward compatibility, create an overlay style without system navigation bar settings.
+    return SystemUiOverlayStyle(
+      statusBarColor: backgroundColor,
+      statusBarBrightness: style.statusBarBrightness,
+      statusBarIconBrightness: style.statusBarIconBrightness,
+      systemStatusBarContrastEnforced: style.systemStatusBarContrastEnforced,
+    );
+  }
+
   Widget childWhenDisabled(bool isPortrait) {
-    return ColoredBox(
-      color: Colors.black,
-      child: Stack(
-        clipBehavior: Clip.none,
-        children: [
-          Obx(
-            () => isFullScreen
-                ? const SizedBox.shrink()
-                : Positioned.fill(
-                    child: Opacity(
-                      opacity: 0.6,
-                      child: _liveRoomController.roomInfoH5.value?.roomInfo
-                                  ?.appBackground?.isNotEmpty ==
-                              true
-                          ? CachedNetworkImage(
-                              fit: BoxFit.cover,
-                              width: Get.width,
-                              height: Get.height,
-                              imageUrl: _liveRoomController.roomInfoH5.value!
-                                  .roomInfo!.appBackground!.http2https,
-                            )
-                          : Image.asset(
-                              'assets/images/live/default_bg.webp',
-                              fit: BoxFit.cover,
-                            ),
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: _systemOverlayStyleForBrightness(
+        Brightness.dark,
+        Theme.of(context).useMaterial3 ? const Color(0x00000000) : null,
+      ),
+      child: ColoredBox(
+        color: Colors.black,
+        child: Stack(
+          clipBehavior: Clip.none,
+          children: [
+            Obx(
+              () => isFullScreen
+                  ? const SizedBox.shrink()
+                  : Positioned.fill(
+                      child: Opacity(
+                        opacity: 0.6,
+                        child: _liveRoomController.roomInfoH5.value?.roomInfo
+                                    ?.appBackground?.isNotEmpty ==
+                                true
+                            ? CachedNetworkImage(
+                                fit: BoxFit.cover,
+                                width: Get.width,
+                                height: Get.height,
+                                imageUrl: _liveRoomController.roomInfoH5.value!
+                                    .roomInfo!.appBackground!.http2https,
+                              )
+                            : Image.asset(
+                                'assets/images/live/default_bg.webp',
+                                fit: BoxFit.cover,
+                              ),
+                      ),
                     ),
-                  ),
-          ),
-          SafeArea(
-            top: !isFullScreen,
-            left: !isFullScreen,
-            right: !isFullScreen,
-            bottom: false,
-            child: isPortrait
-                ? Obx(
-                    () {
-                      if (_liveRoomController.isPortrait.value) {
-                        return _buildPP;
-                      }
-                      return _buildPH;
-                    },
-                  )
-                : Column(
-                    children: [
-                      Obx(() => _buildAppBar),
-                      _buildBodyH,
-                    ],
-                  ),
-          ),
-        ],
+            ),
+            SafeArea(
+              top: !isFullScreen,
+              left: !isFullScreen,
+              right: !isFullScreen,
+              bottom: false,
+              child: isPortrait
+                  ? Obx(
+                      () {
+                        if (_liveRoomController.isPortrait.value) {
+                          return _buildPP;
+                        }
+                        return _buildPH;
+                      },
+                    )
+                  : Column(
+                      children: [
+                        Obx(() => _buildAppBar),
+                        _buildBodyH,
+                      ],
+                    ),
+            ),
+          ],
+        ),
       ),
     );
   }
