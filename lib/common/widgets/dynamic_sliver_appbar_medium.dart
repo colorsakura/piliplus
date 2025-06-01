@@ -119,15 +119,17 @@ class _DynamicSliverAppBarMediumState extends State<DynamicSliverAppBarMedium> {
     });
   }
 
-  @override
-  void didChangeDependencies() {
-    _height = 0;
-    _updateHeight();
-    super.didChangeDependencies();
-  }
+  Orientation? _orientation;
 
   @override
   Widget build(BuildContext context) {
+    final orientation = MediaQuery.of(context).orientation;
+    if (orientation != _orientation) {
+      _orientation = orientation;
+      _height = 0;
+      _updateHeight();
+    }
+
     //Needed to lay out the flexibleSpace the first time, so we can calculate its intrinsic height
     if (_height == 0) {
       return SliverToBoxAdapter(
