@@ -20,6 +20,7 @@ import 'package:PiliPlus/models/space_archive/data.dart';
 import 'package:PiliPlus/models/space_article/data.dart';
 import 'package:PiliPlus/models/space_fav/space_fav.dart';
 import 'package:PiliPlus/models/space_opus/data.dart';
+import 'package:PiliPlus/models/upower_rank/data.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:PiliPlus/utils/wbi_sign.dart';
@@ -850,6 +851,30 @@ class MemberHttp {
     );
     if (res.data['code'] == 0) {
       return Success(SpaceOpusData.fromJson(res.data['data']));
+    } else {
+      return Error(res.data['message']);
+    }
+  }
+
+  static Future<LoadingState<UpowerRankData>> upowerRank({
+    required upMid,
+    required int page,
+    int? privilegeType,
+  }) async {
+    var res = await Request().get(
+      Api.upowerRank,
+      queryParameters: {
+        'up_mid': upMid,
+        'pn': page,
+        'ps': 100,
+        if (privilegeType != null) 'privilege_type': privilegeType,
+        'mobi_app': 'web',
+        'web_location': 333.1196,
+        if (Accounts.main.isLogin) 'csrf': Accounts.main.csrf,
+      },
+    );
+    if (res.data['code'] == 0) {
+      return Success(UpowerRankData.fromJson(res.data['data']));
     } else {
       return Error(res.data['message']);
     }

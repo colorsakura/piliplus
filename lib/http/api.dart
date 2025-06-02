@@ -872,4 +872,6 @@ class Api {
 
   static const String topicPubSearch =
       '${HttpString.appBaseUrl}/x/topic/pub/search';
+
+  static const String upowerRank = '/x/upower/up/member/rank/v2';
 }

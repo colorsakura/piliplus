@@ -27,6 +27,7 @@ import 'package:PiliPlus/pages/member/view.dart';
 import 'package:PiliPlus/pages/member_dynamics/view.dart';
 import 'package:PiliPlus/pages/member_profile/view.dart';
 import 'package:PiliPlus/pages/member_search/view.dart';
+import 'package:PiliPlus/pages/member_upower_rank/view.dart';
 import 'package:PiliPlus/pages/msg_feed_top/at_me/view.dart';
 import 'package:PiliPlus/pages/msg_feed_top/like_me/view.dart';
 import 'package:PiliPlus/pages/msg_feed_top/reply_me/view.dart';
@@ -173,6 +174,7 @@ class Routes {
     CustomGetPage(name: '/dynTopic', page: () => const DynTopicPage()),
     CustomGetPage(name: '/articleList', page: () => const ArticleListPage()),
     CustomGetPage(name: '/barSetting', page: () => const BarSetPage()),
+    CustomGetPage(name: '/upowerRank', page: () => const UpowerRankPage()),
   ];
 }
 

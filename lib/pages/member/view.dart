@@ -119,6 +119,22 @@ class _MemberPageState extends State<MemberPage> {
                   ],
                 ),
               ),
+              PopupMenuItem(
+                onTap: () => Get.toNamed(
+                  '/upowerRank',
+                  parameters: {
+                    'mid': _userController.mid.toString(),
+                  },
+                ),
+                child: const Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(Icons.electric_bolt, size: 19),
+                    SizedBox(width: 10),
+                    Text('充电排行榜'),
+                  ],
+                ),
+              ),
               if (_userController.ownerMid != null &&
                   _userController.mid != _userController.ownerMid) ...[
                 const PopupMenuDivider(),
