@@ -834,7 +834,7 @@ class PiliScheme {
       '/webview',
       parameters: {
         'url': url,
-        if (parameters != null) ...parameters,
+        ...?parameters,
       },
       off: off,
     );

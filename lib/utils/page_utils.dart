@@ -596,7 +596,7 @@ class PageUtils {
           '/webview',
           parameters: {
             'url': url,
-            if (parameters != null) ...parameters,
+            ...?parameters,
           },
         );
       } else {

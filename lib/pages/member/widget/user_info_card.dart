@@ -240,16 +240,15 @@ class UserInfoCard extends StatelessWidget {
                   ),
                 ),
               ),
-              if (!card.spaceTag.isNullOrEmpty)
-                ...card.spaceTag!.map(
-                  (item) => Text(
-                    item.title ?? '',
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: theme.colorScheme.outline,
-                    ),
+              ...?card.spaceTag?.map(
+                (item) => Text(
+                  item.title ?? '',
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: theme.colorScheme.outline,
                   ),
                 ),
+              ),
             ],
           ),
         ),

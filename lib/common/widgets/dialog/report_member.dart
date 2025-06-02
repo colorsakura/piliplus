@@ -51,7 +51,7 @@ class _MemberReportPanelState extends State<MemberReportPanel> {
                   _reason.remove(index + 1);
                 }
               },
-              ['头像违规', '昵称违规', '签名违规'][index],
+              const ['头像违规', '昵称违规', '签名违规'][index],
             ),
           ),
           const Text('举报理由（单选，非必选）'),

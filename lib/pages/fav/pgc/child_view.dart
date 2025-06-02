@@ -111,7 +111,7 @@ class _FavPgcChildPageState extends State<FavPgcChildPage>
                         ),
                       ),
                       const Spacer(),
-                      ...const <({int followStatus, String title})>[
+                      ...const [
                         (followStatus: 1, title: '想看'),
                         (followStatus: 2, title: '在看'),
                         (followStatus: 3, title: '看过'),

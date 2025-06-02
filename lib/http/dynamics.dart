@@ -167,7 +167,7 @@ class DynamicsHttp {
                 "type": 1,
                 "biz_id": "",
               },
-              if (extraContent != null) ...extraContent,
+              ...?extraContent,
             ],
             if (title?.isNotEmpty == true) 'title': title,
           },
