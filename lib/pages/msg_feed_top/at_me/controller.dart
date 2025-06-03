@@ -5,8 +5,8 @@ import 'package:PiliPlus/pages/common/common_list_controller.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 
 class AtMeController extends CommonListController<MsgFeedAtMe, AtMeItems> {
-  int cursor = -1;
-  int cursorTime = -1;
+  int? cursor;
+  int? cursorTime;
 
   @override
   void onInit() {
@@ -25,15 +25,15 @@ class AtMeController extends CommonListController<MsgFeedAtMe, AtMeItems> {
     if (data.cursor?.isEnd == true) {
       isEnd = true;
     }
-    cursor = data.cursor?.id ?? -1;
-    cursorTime = data.cursor?.time ?? -1;
+    cursor = data.cursor?.id;
+    cursorTime = data.cursor?.time;
     return false;
   }
 
   @override
   Future<void> onRefresh() {
-    cursor = -1;
-    cursorTime = -1;
+    cursor = null;
+    cursorTime = null;
     return super.onRefresh();
   }
 

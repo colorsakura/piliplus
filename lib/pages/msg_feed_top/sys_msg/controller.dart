@@ -7,7 +7,7 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 class SysMsgController
     extends CommonListController<List<SystemNotifyList>?, SystemNotifyList> {
   final pageSize = 20;
-  int cursor = -1;
+  int? cursor;
 
   @override
   void onInit() {
@@ -17,10 +17,10 @@ class SysMsgController
 
   @override
   void handleListResponse(List<SystemNotifyList> dataList) {
-    if (cursor == -1) {
+    if (cursor == null) {
       msgSysUpdateCursor(dataList.first.cursor);
     }
-    cursor = dataList.last.cursor ?? -1;
+    cursor = dataList.last.cursor;
     if (!isEnd && dataList.length + 1 < pageSize) {
       isEnd = true;
     }
@@ -34,7 +34,7 @@ class SysMsgController
 
   @override
   Future<void> onRefresh() {
-    cursor = -1;
+    cursor = null;
     return super.onRefresh();
   }
 

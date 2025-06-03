@@ -19,15 +19,21 @@ import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 
 class MsgHttp {
-  static Future<LoadingState<MsgFeedReplyMe>> msgFeedReplyMe(
-      {int cursor = -1, int cursorTime = -1}) async {
-    var res = await Request().get(Api.msgFeedReply, queryParameters: {
-      'id': cursor == -1 ? null : cursor,
-      'reply_time': cursorTime == -1 ? null : cursorTime,
-      'platform': 'android',
-      'mobi_app': 'android',
-      'build': '8350200',
-    });
+  static Future<LoadingState<MsgFeedReplyMe>> msgFeedReplyMe({
+    int? cursor,
+    int? cursorTime,
+  }) async {
+    var res = await Request().get(
+      Api.msgFeedReply,
+      queryParameters: {
+        if (cursor != null) 'id': cursor,
+        if (cursorTime != null) 'reply_time': cursorTime,
+        'platform': 'web',
+        'mobi_app': 'web',
+        'build': 0,
+        'web_location': 333.40164,
+      },
+    );
     if (res.data['code'] == 0) {
       MsgFeedReplyMe data = MsgFeedReplyMe.fromJson(res.data['data']);
       return Success(data);
@@ -37,14 +43,18 @@ class MsgHttp {
   }
 
   static Future<LoadingState<MsgFeedAtMe>> msgFeedAtMe(
-      {int cursor = -1, int cursorTime = -1}) async {
-    var res = await Request().get(Api.msgFeedAt, queryParameters: {
-      'id': cursor == -1 ? null : cursor,
-      'at_time': cursorTime == -1 ? null : cursorTime,
-      'platform': 'android',
-      'mobi_app': 'android',
-      'build': '8350200',
-    });
+      {int? cursor, int? cursorTime}) async {
+    var res = await Request().get(
+      Api.msgFeedAt,
+      queryParameters: {
+        if (cursor != null) 'id': cursor,
+        if (cursorTime != null) 'at_time': cursorTime,
+        'platform': 'web',
+        'mobi_app': 'web',
+        'build': 0,
+        'web_location': 333.40164,
+      },
+    );
     if (res.data['code'] == 0) {
       MsgFeedAtMe data = MsgFeedAtMe.fromJson(res.data['data']);
       return Success(data);
@@ -54,13 +64,14 @@ class MsgHttp {
   }
 
   static Future<LoadingState<MsgFeedLikeMe>> msgFeedLikeMe(
-      {int cursor = -1, int cursorTime = -1}) async {
+      {int? cursor, int? cursorTime}) async {
     var res = await Request().get(Api.msgFeedLike, queryParameters: {
-      'id': cursor == -1 ? null : cursor,
-      'like_time': cursorTime == -1 ? null : cursorTime,
-      'platform': 'android',
-      'mobi_app': 'android',
-      'build': '8350200',
+      if (cursor != null) 'id': cursor,
+      if (cursorTime != null) 'like_time': cursorTime,
+      'platform': 'web',
+      'mobi_app': 'web',
+      'build': 0,
+      'web_location': 333.40164,
     });
     if (res.data['code'] == 0) {
       MsgFeedLikeMe data = MsgFeedLikeMe.fromJson(res.data['data']);
@@ -71,11 +82,17 @@ class MsgHttp {
   }
 
   static Future<LoadingState<List<SystemNotifyList>?>> msgFeedNotify(
-      {int cursor = -1, int pageSize = 20}) async {
-    var res = await Request().get(Api.msgSysNotify, queryParameters: {
-      'cursor': cursor == -1 ? null : cursor,
-      'page_size': pageSize,
-    });
+      {int? cursor, int pageSize = 20}) async {
+    var res = await Request().get(
+      Api.msgSysNotify,
+      queryParameters: {
+        if (cursor != null) 'cursor': cursor,
+        'page_size': pageSize,
+        'mobi_app': 'web',
+        'build': 0,
+        'web_location': 333.40164,
+      },
+    );
     if (res.data['code'] == 0) {
       List<SystemNotifyList>? list = (res.data['data'] as List?)
           ?.map((e) => SystemNotifyList.fromJson(e))

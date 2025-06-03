@@ -84,13 +84,16 @@ class _ReplyMePageState extends State<ReplyMePage> {
                 return ListTile(
                   onTap: () {
                     String? nativeUri = item.item?.nativeUri;
-                    if (nativeUri != null) {
-                      PiliScheme.routePushFromUrl(
-                        nativeUri,
-                        businessId: item.item?.businessId,
-                        oid: item.item?.subjectId,
-                      );
+                    if (nativeUri == null ||
+                        nativeUri.isEmpty ||
+                        nativeUri.startsWith('?')) {
+                      return;
                     }
+                    PiliScheme.routePushFromUrl(
+                      nativeUri,
+                      businessId: item.item?.businessId,
+                      oid: item.item?.subjectId,
+                    );
                   },
                   onLongPress: () => showConfirmDialog(
                     context: context,

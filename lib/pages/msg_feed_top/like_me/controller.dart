@@ -7,8 +7,8 @@ import 'package:PiliPlus/utils/extension.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 
 class LikeMeController extends CommonDataController<MsgFeedLikeMe, dynamic> {
-  int cursor = -1;
-  int cursorTime = -1;
+  int? cursor;
+  int? cursorTime;
 
   bool isEnd = false;
 
@@ -33,8 +33,8 @@ class LikeMeController extends CommonDataController<MsgFeedLikeMe, dynamic> {
         data.total?.items.isNullOrEmpty == true) {
       isEnd = true;
     }
-    cursor = data.total?.cursor?.id ?? -1;
-    cursorTime = data.total?.cursor?.time ?? -1;
+    cursor = data.total?.cursor?.id;
+    cursorTime = data.total?.cursor?.time;
     List<LikeMeItems> latest = data.latest?.items ?? [];
     List<LikeMeItems> total = data.total?.items ?? [];
     if (!isRefresh && loadingState.value.isSuccess) {
@@ -48,8 +48,8 @@ class LikeMeController extends CommonDataController<MsgFeedLikeMe, dynamic> {
 
   @override
   Future<void> onRefresh() {
-    cursor = -1;
-    cursorTime = -1;
+    cursor = null;
+    cursorTime = null;
     return super.onRefresh();
   }
 

@@ -6,8 +6,8 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 
 class ReplyMeController
     extends CommonListController<MsgFeedReplyMe, ReplyMeItems> {
-  int cursor = -1;
-  int cursorTime = -1;
+  int? cursor;
+  int? cursorTime;
 
   @override
   void onInit() {
@@ -26,15 +26,15 @@ class ReplyMeController
     if (data.cursor?.isEnd == true) {
       isEnd = true;
     }
-    cursor = data.cursor?.id ?? -1;
-    cursorTime = data.cursor?.time ?? -1;
+    cursor = data.cursor?.id;
+    cursorTime = data.cursor?.time;
     return false;
   }
 
   @override
   Future<void> onRefresh() {
-    cursor = -1;
-    cursorTime = -1;
+    cursor = null;
+    cursorTime = null;
     return super.onRefresh();
   }
 
