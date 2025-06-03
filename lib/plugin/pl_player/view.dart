@@ -32,6 +32,7 @@ import 'package:PiliPlus/utils/utils.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_debounce/easy_throttle.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_volume_controller/flutter_volume_controller.dart';
@@ -65,8 +66,8 @@ class PLVideoPlayer extends StatefulWidget {
   final VideoDetailController? videoDetailController;
   final VideoIntroController? videoIntroController;
   final BangumiIntroController? bangumiIntroController;
-  final PreferredSizeWidget headerControl;
-  final PreferredSizeWidget? bottomControl;
+  final Widget headerControl;
+  final Widget? bottomControl;
   final Widget? danmuWidget;
   // List<Widget> or Widget
 
@@ -748,7 +749,9 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                 interacting = true;
               }
               _initialFocalPoint = details.localFocalPoint;
-              // debugPrint("_initialFocalPoint$_initialFocalPoint");
+              // if (kDebugMode) {
+              //   debugPrint("_initialFocalPoint$_initialFocalPoint");
+              // }
               _gestureType = null;
             },
             onInteractionUpdate: (ScaleUpdateDetails details) {
@@ -900,13 +903,13 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                   if (isFullScreen ^ fullScreenGestureReverse) {
                     fullScreenTrigger(fullScreenGestureReverse);
                   }
-                  // debugPrint('center_down:$cumulativeDy');
+                  // if (kDebugMode) debugPrint('center_down:$cumulativeDy');
                 } else if (cumulativeDy < -threshold) {
                   _gestureType = 'center_up';
                   if (!isFullScreen ^ fullScreenGestureReverse) {
                     fullScreenTrigger(!fullScreenGestureReverse);
                   }
-                  // debugPrint('center_up:$cumulativeDy');
+                  // if (kDebugMode) debugPrint('center_up:$cumulativeDy');
                 }
               } else if (_gestureType == 'right') {
                 // 右边区域
@@ -1010,13 +1013,13 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                   if (isFullScreen ^ fullScreenGestureReverse) {
                     fullScreenTrigger(fullScreenGestureReverse);
                   }
-                  // debugPrint('center_down:$cumulativeDy');
+                  // if (kDebugMode) debugPrint('center_down:$cumulativeDy');
                 } else if (cumulativeDy < -threshold) {
                   _gestureType = 'center_up';
                   if (!isFullScreen ^ fullScreenGestureReverse) {
                     fullScreenTrigger(!fullScreenGestureReverse);
                   }
-                  // debugPrint('center_up:$cumulativeDy');
+                  // if (kDebugMode)   debugPrint('center_up:$cumulativeDy');
                 }
               } else if (_gestureType == 'right') {
                 // 右边区域
@@ -1866,7 +1869,7 @@ Widget buildSeekPreviewWidget(PlPlayerController plPlayerController) {
             ),
           );
         } catch (e) {
-          debugPrint('seek preview: $e');
+          if (kDebugMode) debugPrint('seek preview: $e');
           return SizedBox.shrink(
             key: ValueKey(plPlayerController.previewDx.value),
           );
@@ -1896,9 +1899,9 @@ Widget buildViewPointWidget(
                 plPlayerController.videoPlayerController
                     ?.seek(Duration(seconds: item.from!));
               }
-              // debugPrint('${item.title},,${item.from}');
+              // if (kDebugMode) debugPrint('${item.title},,${item.from}');
             } catch (e) {
-              debugPrint('$e');
+              if (kDebugMode) debugPrint('$e');
             }
           },
         ),

@@ -1,5 +1,6 @@
 import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/common/skeleton/video_card_h.dart';
+import 'package:PiliPlus/common/widgets/keep_alive_wrapper.dart';
 import 'package:PiliPlus/common/widgets/loading_widget/http_error.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/common/widgets/scroll_physics.dart';
@@ -212,7 +213,8 @@ class _HistoryPageState extends State<HistoryPage>
                                     controller:
                                         _historyController.tabController,
                                     children: [
-                                      _buildPage,
+                                      KeepAliveWrapper(
+                                          builder: (context) => _buildPage),
                                       ..._historyController.tabs.map(
                                         (item) => HistoryPage(type: item.type),
                                       ),
@@ -294,7 +296,7 @@ class _HistoryPageState extends State<HistoryPage>
   }
 
   @override
-  bool get wantKeepAlive => true;
+  bool get wantKeepAlive => widget.type != null;
 }
 
 class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {

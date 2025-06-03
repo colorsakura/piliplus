@@ -46,6 +46,7 @@ import 'package:PiliPlus/utils/video_utils.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:easy_debounce/easy_throttle.dart';
 import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart';
+import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_volume_controller/flutter_volume_controller.dart';
@@ -771,7 +772,7 @@ class VideoDetailController extends GetxController
           plPlayerController.segmentList.value = segmentProgressList!;
         }
       } catch (e) {
-        debugPrint('failed to parse sponsorblock: $e');
+        if (kDebugMode) debugPrint('failed to parse sponsorblock: $e');
       }
     }
   }
@@ -789,8 +790,10 @@ class VideoDetailController extends GetxController
         if (currentPos != _lastPos) {
           _lastPos = currentPos;
           for (SegmentModel item in segmentList) {
-            // debugPrint(
-            //     '${position.inSeconds},,${item.segment.first},,${item.segment.second},,${item.skipType.name},,${item.hasSkipped}');
+            // if (kDebugMode) {
+            //   debugPrint(
+            //       '${position.inSeconds},,${item.segment.first},,${item.segment.second},,${item.skipType.name},,${item.hasSkipped}');
+            // }
             if (item.segment.first == position.inSeconds) {
               if (item.skipType == SkipType.alwaysSkip) {
                 onSkip(item);
@@ -881,7 +884,7 @@ class VideoDetailController extends GetxController
                     );
                     SmartDialog.showToast('已跳至第${item + 1}P');
                   } catch (e) {
-                    debugPrint('$e');
+                    if (kDebugMode) debugPrint('$e');
                     SmartDialog.showToast('跳转失败');
                   }
                   onRemoveItem(listData.indexOf(item), item);
@@ -916,7 +919,7 @@ class VideoDetailController extends GetxController
         _showBlockToast('已跳至${item.segmentType.shortTitle}');
       }
     } catch (e) {
-      debugPrint('failed to skip: $e');
+      if (kDebugMode) debugPrint('failed to skip: $e');
       if (isSkip) {
         _showBlockToast('${item.segmentType.shortTitle}片段跳过失败');
       } else {
@@ -1199,7 +1202,7 @@ class VideoDetailController extends GetxController
         return;
       }
       final List<VideoItem> allVideosList = data.dash!.video!;
-      // debugPrint("allVideosList:${allVideosList}");
+      // if (kDebugMode) debugPrint("allVideosList:${allVideosList}");
       // 当前可播放的最高质量视频
       int currentHighVideoQa = allVideosList.first.quality.code;
       // 预设的画质为null，则当前可用的最高质量
@@ -1424,10 +1427,12 @@ class VideoDetailController extends GetxController
       if (res.data['code'] == 0) {
         steinEdgeInfo = EdgeInfoData.fromJson(res.data['data']);
       } else {
-        debugPrint('getSteinEdgeInfo error: ${res.data['message']}');
+        if (kDebugMode) {
+          debugPrint('getSteinEdgeInfo error: ${res.data['message']}');
+        }
       }
     } catch (e) {
-      debugPrint('getSteinEdgeInfo: $e');
+      if (kDebugMode) debugPrint('getSteinEdgeInfo: $e');
     }
   }
 
@@ -1446,7 +1451,7 @@ class VideoDetailController extends GetxController
             getSteinEdgeInfo();
           }
         } catch (e) {
-          debugPrint('handle stein: $e');
+          if (kDebugMode) debugPrint('handle stein: $e');
         }
       }
 
@@ -1615,7 +1620,7 @@ class VideoDetailController extends GetxController
         }
       }
     } catch (e) {
-      debugPrint('_getDmTrend: $e');
+      if (kDebugMode) debugPrint('_getDmTrend: $e');
     }
   }
 

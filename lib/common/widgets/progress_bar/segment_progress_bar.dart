@@ -33,18 +33,19 @@ class SegmentProgressBar extends CustomPainter {
     final paint = Paint()..style = PaintingStyle.fill;
 
     for (int i = 0; i < segmentColors.length; i++) {
-      paint.color = segmentColors[i].color;
-      final segmentStart = segmentColors[i].start * size.width;
-      final segmentEnd = segmentColors[i].end * size.width;
+      final item = segmentColors[i];
+      paint.color = item.color;
+      final segmentStart = item.start * size.width;
+      final segmentEnd = item.end * size.width;
 
       if (segmentEnd > segmentStart ||
           (segmentEnd == segmentStart && segmentStart > 0)) {
-        if (segmentColors[i].title != null) {
+        if (item.title != null) {
           double fontSize = 10;
 
           _defHeight ??= (TextPainter(
                 text: TextSpan(
-                  text: segmentColors[i].title,
+                  text: item.title,
                   style: TextStyle(
                     fontSize: fontSize,
                   ),
@@ -56,7 +57,7 @@ class SegmentProgressBar extends CustomPainter {
 
           TextPainter getTextPainter() => TextPainter(
                 text: TextSpan(
-                  text: segmentColors[i].title,
+                  text: item.title,
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: fontSize,

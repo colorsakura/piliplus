@@ -1,4 +1,5 @@
 import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
+import 'package:PiliPlus/common/widgets/keep_alive_wrapper.dart';
 import 'package:PiliPlus/common/widgets/loading_widget/http_error.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/common/widgets/scroll_physics.dart';
@@ -29,6 +30,7 @@ class _UpowerRankPageState extends State<UpowerRankPage>
   @override
   Widget build(BuildContext context) {
     super.build(context);
+    final theme = Theme.of(context);
     final child = refreshIndicator(
       onRefresh: _controller.onRefresh,
       child: CustomScrollView(
@@ -37,7 +39,8 @@ class _UpowerRankPageState extends State<UpowerRankPage>
             padding: EdgeInsets.only(
               bottom: MediaQuery.paddingOf(context).bottom + 80,
             ),
-            sliver: Obx(() => _bilidBody(_controller.loadingState.value)),
+            sliver:
+                Obx(() => _bilidBody(theme, _controller.loadingState.value)),
           ),
         ],
       ),
@@ -53,37 +56,44 @@ class _UpowerRankPageState extends State<UpowerRankPage>
         body: SafeArea(
           top: false,
           bottom: false,
-          child: Obx(
-            () => _controller.tabs.value != null
-                ? DefaultTabController(
-                    length: _controller.tabs.value!.length,
-                    child: Column(
-                      children: [
-                        TabBar(
-                          isScrollable: true,
-                          tabAlignment: TabAlignment.start,
-                          tabs: _controller.tabs.value!
-                              .map((e) => Tab(
-                                  text: '${e.name!}(${e.memberTotal ?? 0})'))
-                              .toList(),
-                        ),
-                        Expanded(
-                          child: Material(
-                            color: Colors.transparent,
-                            child: tabBarView(
-                              children: [
-                                child,
-                                ..._controller.tabs.value!.sublist(1).map((e) =>
-                                    UpowerRankPage(
-                                        privilegeType: e.privilegeType))
-                              ],
+          child: Center(
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 625),
+              child: Obx(
+                () => _controller.tabs.value != null
+                    ? DefaultTabController(
+                        length: _controller.tabs.value!.length,
+                        child: Column(
+                          children: [
+                            TabBar(
+                              isScrollable: true,
+                              tabAlignment: TabAlignment.start,
+                              tabs: _controller.tabs.value!
+                                  .map((e) => Tab(
+                                      text:
+                                          '${e.name!}(${e.memberTotal ?? 0})'))
+                                  .toList(),
                             ),
-                          ),
+                            Expanded(
+                              child: Material(
+                                color: Colors.transparent,
+                                child: tabBarView(
+                                  children: [
+                                    KeepAliveWrapper(
+                                        builder: (context) => child),
+                                    ..._controller.tabs.value!.sublist(1).map(
+                                        (e) => UpowerRankPage(
+                                            privilegeType: e.privilegeType))
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
-                  )
-                : child,
+                      )
+                    : child,
+              ),
+            ),
           ),
         ),
       );
@@ -92,7 +102,8 @@ class _UpowerRankPageState extends State<UpowerRankPage>
     }
   }
 
-  Widget _bilidBody(LoadingState<List<UpowerRankInfo>?> loadingState) {
+  Widget _bilidBody(
+      ThemeData theme, LoadingState<List<UpowerRankInfo>?> loadingState) {
     return switch (loadingState) {
       Loading() => widget.privilegeType == null
           ? const SliverToBoxAdapter(child: LinearProgressIndicator())
@@ -113,50 +124,50 @@ class _UpowerRankPageState extends State<UpowerRankPage>
                     _controller.onLoadMore();
                   }
                   final item = response[index];
-                  return InkWell(
+                  return ListTile(
                     onTap: () => Get.toNamed('/member?mid=${item.mid}'),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 12),
-                      child: Row(
+                    leading: Text(
+                      (index + 1).toString(),
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontStyle: FontStyle.italic,
+                        fontWeight: FontWeight.bold,
+                        color: switch (index) {
+                          0 => const Color(0xFFfdad13),
+                          1 => const Color(0xFF8aace1),
+                          2 => const Color(0xFFdfa777),
+                          _ => theme.colorScheme.outline,
+                        },
+                      ),
+                    ),
+                    title: Row(
+                      spacing: 12,
+                      children: [
+                        NetworkImgLayer(
+                          width: 38,
+                          height: 38,
+                          src: item.avatar,
+                          type: ImageType.avatar,
+                        ),
+                        Text(
+                          item.nickname!,
+                          style: const TextStyle(fontSize: 14),
+                        ),
+                      ],
+                    ),
+                    trailing: Text.rich(
+                      TextSpan(
                         children: [
-                          SizedBox(
-                            width: 32,
-                            child: Text(
-                              (index + 1).toString(),
-                              textAlign: TextAlign.center,
-                              style: const TextStyle(fontSize: 13),
+                          TextSpan(
+                            text: item.day!.toString(),
+                            style: const TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
-                          const SizedBox(width: 6),
-                          NetworkImgLayer(
-                            width: 36,
-                            height: 36,
-                            src: item.avatar,
-                            type: ImageType.avatar,
-                          ),
-                          const SizedBox(width: 12),
-                          Text(
-                            item.nickname!,
-                            style: const TextStyle(fontSize: 14),
-                          ),
-                          const Spacer(),
-                          Text.rich(
-                            TextSpan(
-                              children: [
-                                TextSpan(
-                                  text: item.day!.toString(),
-                                  style: const TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                const TextSpan(
-                                  text: ' 天',
-                                  style: TextStyle(fontSize: 13),
-                                ),
-                              ],
-                            ),
+                          const TextSpan(
+                            text: ' 天',
+                            style: TextStyle(fontSize: 13),
                           ),
                         ],
                       ),
@@ -173,5 +184,5 @@ class _UpowerRankPageState extends State<UpowerRankPage>
   }
 
   @override
-  bool get wantKeepAlive => true;
+  bool get wantKeepAlive => widget.privilegeType != null;
 }

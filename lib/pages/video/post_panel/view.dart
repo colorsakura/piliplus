@@ -16,6 +16,7 @@ import 'package:PiliPlus/plugin/pl_player/controller.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show FilteringTextInputFormatter;
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -516,7 +517,7 @@ class _PostPanelState extends CommonCollapseSlidePageState<PostPanel> {
                   });
                 }
               } catch (e) {
-                debugPrint(e.toString());
+                if (kDebugMode) debugPrint(e.toString());
               }
             }
           });

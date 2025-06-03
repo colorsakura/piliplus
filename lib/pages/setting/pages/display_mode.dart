@@ -1,4 +1,5 @@
 import 'package:PiliPlus/utils/storage.dart';
+import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart' show PlatformException;
@@ -57,7 +58,7 @@ class _SetDisplayModeState extends State<SetDisplayMode> {
     try {
       modes = await FlutterDisplayMode.supported;
     } on PlatformException catch (e) {
-      debugPrint(e.toString());
+      if (kDebugMode) debugPrint(e.toString());
     }
     var res = getDisplayModeType(modes);
 

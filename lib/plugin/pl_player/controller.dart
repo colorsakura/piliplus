@@ -28,6 +28,7 @@ import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:canvas_danmaku/canvas_danmaku.dart';
 import 'package:easy_debounce/easy_throttle.dart';
+import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -613,8 +614,10 @@ class PlPlayerController {
       await _initializePlayer();
     } catch (err, stackTrace) {
       dataStatus.status.value = DataStatus.error;
-      debugPrint(stackTrace.toString());
-      debugPrint('plPlayer err:  $err');
+      if (kDebugMode) {
+        debugPrint(stackTrace.toString());
+        debugPrint('plPlayer err:  $err');
+      }
     }
   }
 
@@ -650,7 +653,7 @@ class PlPlayerController {
         await targetFile.writeAsBytes(bytes);
         // copiedFilesCount++;
       } catch (e) {
-        debugPrint('$e');
+        if (kDebugMode) debugPrint('$e');
       }
     }
     return shadersDirectory;
@@ -964,11 +967,6 @@ class PlPlayerController {
           videoType.value == 'live',
         );
       }),
-      // videoPlayerController!.stream.log.listen((event) {
-      //   debugPrint('videoPlayerController!.stream.log.listen');
-      //   debugPrint(event);
-      //   SmartDialog.showToast('视频加载日志： $event');
-      // }),
       videoPlayerController!.stream.error.listen((String event) {
         // 直播的错误提示没有参考价值，均不予显示
         if (videoType.value == 'live') return;
@@ -980,13 +978,15 @@ class PlPlayerController {
           EasyThrottle.throttle('videoPlayerController!.stream.error.listen',
               const Duration(milliseconds: 10000), () {
             Future.delayed(const Duration(milliseconds: 3000), () async {
-              debugPrint("isBuffering.value: ${isBuffering.value}");
-              debugPrint("_buffered.value: ${_buffered.value}");
+              if (kDebugMode) {
+                debugPrint("isBuffering.value: ${isBuffering.value}");
+              }
+              if (kDebugMode) debugPrint("_buffered.value: ${_buffered.value}");
               if (isBuffering.value && _buffered.value == Duration.zero) {
                 SmartDialog.showToast('视频链接打开失败，重试中',
                     displayTime: const Duration(milliseconds: 500));
                 if (!await refreshPlayer()) {
-                  debugPrint("failed");
+                  if (kDebugMode) debugPrint("failed");
                 }
               }
             });
@@ -1008,7 +1008,7 @@ class PlPlayerController {
               }
             }
             SmartDialog.showToast('视频加载错误, $event');
-            debugPrint('视频加载错误, $event');
+            if (kDebugMode) debugPrint('视频加载错误, $event');
           }
         }
       }),
@@ -1064,13 +1064,13 @@ class PlPlayerController {
       try {
         await _videoPlayerController?.seek(position);
       } catch (e) {
-        debugPrint('seek failed: $e');
+        if (kDebugMode) debugPrint('seek failed: $e');
       }
       // if (playerStatus.stopped) {
       //   play();
       // }
     } else {
-      debugPrint('seek duration else');
+      if (kDebugMode) debugPrint('seek duration else');
       _timerForSeek?.cancel();
       _timerForSeek =
           Timer.periodic(const Duration(milliseconds: 200), (Timer t) async {
@@ -1084,7 +1084,7 @@ class PlPlayerController {
             danmakuController?.clear();
             await _videoPlayerController?.seek(position);
           } catch (e) {
-            debugPrint('seek failed: $e');
+            if (kDebugMode) debugPrint('seek failed: $e');
           }
           // if (playerStatus.status.value == PlayerStatus.paused) {
           //   play();
@@ -1235,7 +1235,7 @@ class PlPlayerController {
       FlutterVolumeController.updateShowSystemUI(false);
       await FlutterVolumeController.setVolume(volumeNew);
     } catch (err) {
-      debugPrint(err.toString());
+      if (kDebugMode) debugPrint(err.toString());
     }
   }
 
@@ -1356,7 +1356,7 @@ class PlPlayerController {
             enableAutoLongPressSpeed ? playbackSpeed * 2 : longPressSpeed);
       }
     } else {
-      // debugPrint('$playbackSpeed');
+      // if (kDebugMode) debugPrint('$playbackSpeed');
       _longPressStatus.value = val;
       await setPlaybackSpeed(lastPlaybackSpeed);
     }
@@ -1577,7 +1577,7 @@ class PlPlayerController {
       _instance = null;
       videoPlayerServiceHandler.clear();
     } catch (err) {
-      debugPrint(err.toString());
+      if (kDebugMode) debugPrint(err.toString());
     }
   }
 
@@ -1632,7 +1632,7 @@ class PlPlayerController {
       }
     } catch (e) {
       videoShot = {'status': false};
-      debugPrint('getVideoShot: $e');
+      if (kDebugMode) debugPrint('getVideoShot: $e');
     }
     _isQueryingVideoShot = false;
   }

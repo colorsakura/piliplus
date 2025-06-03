@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 
-class BottomControl extends StatelessWidget implements PreferredSizeWidget {
+class BottomControl extends StatelessWidget {
   final PlPlayerController controller;
   final Function buildBottomControl;
   const BottomControl({
@@ -17,9 +17,6 @@ class BottomControl extends StatelessWidget implements PreferredSizeWidget {
     required this.buildBottomControl,
     super.key,
   });
-
-  @override
-  Size get preferredSize => const Size(double.infinity, kToolbarHeight);
 
   @override
   Widget build(BuildContext context) {

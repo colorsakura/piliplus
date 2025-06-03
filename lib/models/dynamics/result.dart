@@ -161,7 +161,7 @@ class ItemModulesModel {
         // case 'MODULE_TYPE_BOTTOM':
         //   break;
         // default:
-        //   debugPrint('unknown type: ${i}');
+        // if (kDebugMode) debugPrint('unknown type: ${i}');
       }
     }
   }

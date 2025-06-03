@@ -5,6 +5,7 @@ import 'package:PiliPlus/utils/id_utils.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 
@@ -27,7 +28,7 @@ class UrlUtils {
         ),
       );
       redirectUrl = response.headers['location']?.firstOrNull;
-      debugPrint('redirectUrl: $redirectUrl');
+      if (kDebugMode) debugPrint('redirectUrl: $redirectUrl');
       if (redirectUrl != null && !redirectUrl.startsWith('http')) {
         redirectUrl = Uri.parse(url).resolve(redirectUrl).toString();
       }

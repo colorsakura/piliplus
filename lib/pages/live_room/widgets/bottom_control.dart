@@ -6,7 +6,7 @@ import 'package:PiliPlus/utils/storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class BottomControl extends StatelessWidget implements PreferredSizeWidget {
+class BottomControl extends StatelessWidget {
   const BottomControl({
     super.key,
     required this.plPlayerController,
@@ -22,9 +22,6 @@ class BottomControl extends StatelessWidget implements PreferredSizeWidget {
 
   final TextStyle subTitleStyle;
   final TextStyle titleStyle;
-
-  @override
-  Size get preferredSize => const Size(double.infinity, kToolbarHeight);
 
   @override
   Widget build(BuildContext context) {

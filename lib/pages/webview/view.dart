@@ -8,6 +8,7 @@ import 'package:PiliPlus/utils/cache_manage.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/utils.dart';
+import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -229,7 +230,7 @@ class _WebviewPageState extends State<WebviewPage> {
                           suggestedFilename =
                               Uri.decodeComponent(suggestedFilename);
                         } catch (e) {
-                          debugPrint(e.toString());
+                          if (kDebugMode) debugPrint(e.toString());
                         }
                         return AlertDialog(
                           title: Text(
@@ -284,7 +285,7 @@ class _WebviewPageState extends State<WebviewPage> {
               selfHandle: true,
               off: _off,
             );
-            // debugPrint('webview: [$url], [$hasMatch]');
+            // if (kDebugMode) debugPrint('webview: [$url], [$hasMatch]');
             if (hasMatch) {
               progress.value = 1;
               return NavigationActionPolicy.CANCEL;

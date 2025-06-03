@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
-import 'package:PiliPlus/build_config.dart';
 import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/grpc/bilibili/metadata.pb.dart';
 import 'package:PiliPlus/grpc/bilibili/metadata/device.pb.dart';
@@ -19,6 +18,7 @@ import 'package:PiliPlus/utils/utils.dart';
 import 'package:archive/archive.dart';
 import 'package:dio/dio.dart';
 import 'package:fixnum/fixnum.dart';
+import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:protobuf/protobuf.dart' show GeneratedMessage;
 
 class GrpcUrl {
@@ -214,7 +214,7 @@ class GrpcRepo {
             // UNKNOWN : -400 : msg
             final errMsg =
                 grpcMsg.details.map((e) => e.status.message).join('\n');
-            msg = BuildConfig.isDebug
+            msg = kDebugMode
                 ? 'CODE: ${grpcMsg.code}(${grpcMsg.message})\nMSG: $errMsg'
                 : errMsg;
           } catch (e) {

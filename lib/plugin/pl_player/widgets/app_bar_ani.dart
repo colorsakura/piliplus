@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class AppBarAni extends StatelessWidget implements PreferredSizeWidget {
+class AppBarAni extends StatelessWidget {
   const AppBarAni({
     required this.child,
     required this.controller,
@@ -9,13 +9,10 @@ class AppBarAni extends StatelessWidget implements PreferredSizeWidget {
     super.key,
   });
 
-  final PreferredSizeWidget child;
+  final Widget child;
   final AnimationController controller;
   final bool visible;
   final String? position;
-
-  @override
-  Size get preferredSize => child.preferredSize;
 
   @override
   Widget build(BuildContext context) {

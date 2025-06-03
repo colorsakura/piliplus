@@ -5,6 +5,7 @@ import 'package:PiliPlus/http/member.dart';
 import 'package:PiliPlus/models/space_fav/datum.dart';
 import 'package:PiliPlus/models/space_fav/list.dart';
 import 'package:PiliPlus/pages/common/common_data_controller.dart';
+import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
@@ -50,7 +51,7 @@ class MemberFavoriteCtr extends CommonDataController {
       secondEnd.value = (res[1].mediaListResponse?.count ?? -1) <=
           (res[1].mediaListResponse?.list?.length ?? -1);
     } catch (e) {
-      debugPrint(e.toString());
+      if (kDebugMode) debugPrint(e.toString());
     }
     loadingState.value = response;
     return true;

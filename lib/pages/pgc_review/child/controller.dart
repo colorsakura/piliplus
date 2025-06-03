@@ -26,7 +26,6 @@ class PgcReviewController
 
   @override
   Future<void> onRefresh() {
-    count.value = null;
     next = null;
     return super.onRefresh();
   }

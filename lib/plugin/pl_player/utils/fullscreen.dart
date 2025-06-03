@@ -28,8 +28,10 @@ Future<void> landScape() async {
       );
     }
   } catch (exception, stacktrace) {
-    debugPrint(exception.toString());
-    debugPrint(stacktrace.toString());
+    if (kDebugMode) {
+      debugPrint(exception.toString());
+      debugPrint(stacktrace.toString());
+    }
   }
 }
 
@@ -98,7 +100,9 @@ Future<void> showStatusBar() async {
       );
     }
   } catch (exception, stacktrace) {
-    debugPrint(exception.toString());
-    debugPrint(stacktrace.toString());
+    if (kDebugMode) {
+      debugPrint(exception.toString());
+      debugPrint(stacktrace.toString());
+    }
   }
 }

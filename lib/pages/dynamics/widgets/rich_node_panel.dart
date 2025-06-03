@@ -7,6 +7,7 @@ import 'package:PiliPlus/pages/dynamics/widgets/vote.dart';
 import 'package:PiliPlus/utils/app_scheme.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:PiliPlus/utils/utils.dart';
+import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -258,16 +259,14 @@ TextSpan? richNode(
               );
             break;
           default:
-            spanChildren.add(
-              TextSpan(text: i.text, style: style),
-            );
+            spanChildren.add(TextSpan(text: i.text, style: style));
             break;
         }
       }
       return TextSpan(children: spanChildren);
     }
   } catch (err) {
-    debugPrint('❌rich_node_panel err: $err');
+    if (kDebugMode) debugPrint('❌rich_node_panel err: $err');
     return null;
   }
 }

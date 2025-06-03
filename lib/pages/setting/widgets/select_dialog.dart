@@ -7,6 +7,7 @@ import 'package:PiliPlus/models/video/play/url.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/video_utils.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/material.dart';
 
 class SelectDialog<T> extends StatelessWidget {
@@ -104,7 +105,7 @@ class _CdnSelectDialogState extends State<CdnSelectDialog> {
       final videoItem = widget.sample ?? await _getSampleUrl();
       await _testAllCdnServices(videoItem);
     } catch (e) {
-      debugPrint('CDN speed test failed: $e');
+      if (kDebugMode) debugPrint('CDN speed test failed: $e');
     }
   }
 
@@ -167,7 +168,7 @@ class _CdnSelectDialogState extends State<CdnSelectDialog> {
   void _handleSpeedTestError(dynamic error, int index) {
     if (_cdnResList[index].value != null) return;
 
-    debugPrint('CDN speed test error: $error');
+    if (kDebugMode) debugPrint('CDN speed test error: $error');
     if (!mounted) return;
     var message = error.toString();
     if (message.isEmpty) {

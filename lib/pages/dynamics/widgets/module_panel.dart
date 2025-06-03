@@ -204,26 +204,27 @@ Widget module(
                 const SizedBox(width: 10),
                 Expanded(
                   child: Column(
+                    spacing: 2,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
                         item.modules.moduleDynamic!.major!.common!.title!,
-                        style: TextStyle(
-                          color: theme.colorScheme.primary,
-                        ),
+                        style: TextStyle(color: theme.colorScheme.primary),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
-                      const SizedBox(height: 2),
-                      Text(
-                        item.modules.moduleDynamic!.major!.common!.desc!,
-                        style: TextStyle(
-                          color: theme.colorScheme.outline,
-                          fontSize: theme.textTheme.labelMedium!.fontSize,
+                      if (item.modules.moduleDynamic!.major!.common!.desc
+                              ?.isNotEmpty ==
+                          true)
+                        Text(
+                          item.modules.moduleDynamic!.major!.common!.desc!,
+                          style: TextStyle(
+                            color: theme.colorScheme.outline,
+                            fontSize: theme.textTheme.labelMedium!.fontSize,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                         ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
                     ],
                   ),
                 ),

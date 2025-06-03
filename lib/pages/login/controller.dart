@@ -11,6 +11,7 @@ import 'package:PiliPlus/models/login/model.dart';
 import 'package:PiliPlus/utils/accounts/account.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
@@ -124,7 +125,7 @@ class LoginPageController extends GetxController
             SmartDialog.showToast('关闭验证');
           },
           onResult: (Map<String, dynamic> message) {
-            debugPrint("Captcha result: $message");
+            if (kDebugMode) debugPrint("Captcha result: $message");
             String code = message["code"];
             if (code == "1") {
               // 发送 message["result"] 中的数据向 B 端的业务服务接口进行查询
@@ -139,7 +140,7 @@ class LoginPageController extends GetxController
               onSuccess();
             } else {
               // 终端用户完成验证失败，自动重试 If the verification fails, it will be automatically retried.
-              debugPrint("Captcha result code : $code");
+              if (kDebugMode) debugPrint("Captcha result code : $code");
             }
           },
           onError: (Map<String, dynamic> message) {
@@ -609,7 +610,10 @@ class LoginPageController extends GetxController
           }
 
           if (!isGeeArgumentValid(geeGt, geeChallenge)) {
-            debugPrint('验证信息错误：${res["msg"]}\n返回内容：${res["data"]}，尝试另一个验证码接口');
+            if (kDebugMode) {
+              debugPrint(
+                  '验证信息错误：${res["msg"]}\n返回内容：${res["data"]}，尝试另一个验证码接口');
+            }
             var preCaptureRes = await LoginHttp.preCapture();
             if (!preCaptureRes['status'] || preCaptureRes['data'] == null) {
               SmartDialog.showToast("获取验证码失败，请尝试其它登录方式\n"

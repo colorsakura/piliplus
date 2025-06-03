@@ -4,6 +4,7 @@ import 'package:PiliPlus/http/video.dart';
 import 'package:PiliPlus/models/pgc/list.dart';
 import 'package:PiliPlus/pages/common/multi_select_controller.dart';
 import 'package:PiliPlus/utils/storage.dart';
+import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
@@ -88,7 +89,7 @@ class FavPgcController
           ctr.allSelected.value = false;
         }
       } catch (e) {
-        debugPrint('fav pgc onUpdate: $e');
+        if (kDebugMode) debugPrint('fav pgc onUpdate: $e');
       }
     }
     SmartDialog.showToast(res['msg']);
@@ -112,7 +113,7 @@ class FavPgcController
           ctr.allSelected.value = false;
         }
       } catch (e) {
-        debugPrint('fav pgc bangumiUpdate: $e');
+        if (kDebugMode) debugPrint('fav pgc bangumiUpdate: $e');
       }
     }
     SmartDialog.showToast(result['msg']);

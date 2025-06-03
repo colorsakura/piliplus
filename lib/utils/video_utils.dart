@@ -37,10 +37,10 @@ class VideoUtils {
     if (videoUrl.isNullOrEmpty) {
       return "";
     }
-    // debugPrint("videoUrl:$videoUrl");
+    // if (kDebugMode) debugPrint("videoUrl:$videoUrl");
 
     String defaultCDNHost = CDNService.fromCode(defaultCDNService).host;
-    // debugPrint("defaultCDNHost:$defaultCDNHost");
+    // if (kDebugMode) debugPrint("defaultCDNHost:$defaultCDNHost");
     if (videoUrl!.contains("szbdyd.com")) {
       final uri = Uri.parse(videoUrl);
       String hostname = uri.queryParameters['xy_usource'] ?? defaultCDNHost;
@@ -53,7 +53,7 @@ class VideoUtils {
       // videoUrl =
       //     'https://proxy-tf-all-ws.bilivideo.com/?url=${Uri.encodeComponent(videoUrl)}';
     }
-    // debugPrint("videoUrl:$videoUrl");
+    // if (kDebugMode) debugPrint("videoUrl:$videoUrl");
 
     // /// 先获取backupUrl 一般是upgcxcode地址 播放更稳定
     // if (item is VideoItem) {

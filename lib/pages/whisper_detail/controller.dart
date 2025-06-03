@@ -43,8 +43,6 @@ class WhisperDetailController extends CommonListController<RspSessionMsg, Msg> {
       if (msgs.length == 1 &&
           msgs.last.msgType == 18 &&
           msgs.last.msgSource == 18) {
-        // debugPrint(messageList.last);
-        // debugPrint(messageList.last.content);
         //{content: [{"text":"对方主动回复或关注你前，最多发送1条消息","color_day":"#9499A0","color_nig":"#9499A0"}]}
       } else {
         ackSessionMsg(msgs.last.msgSeqno.toInt());

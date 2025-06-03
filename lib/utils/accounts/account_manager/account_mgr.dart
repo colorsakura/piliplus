@@ -11,6 +11,7 @@ import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 
@@ -107,7 +108,7 @@ class AccountManager extends Interceptor {
 
     // app端不需要管理cookie
     if (path.startsWith(HttpString.appBaseUrl)) {
-      // debugPrint('is app: ${options.path}');
+      // if (kDebugMode) debugPrint('is app: ${options.path}');
       // bytes是grpc响应
       if (options.responseType != ResponseType.bytes) {
         final dataPtr = (options.method == 'POST' && options.data is Map
@@ -121,7 +122,7 @@ class AccountManager extends Interceptor {
           dataPtr['ts'] ??=
               (DateTime.now().millisecondsSinceEpoch ~/ 1000).toString();
           Utils.appSign(dataPtr);
-          // debugPrint(dataPtr.toString());
+          // if (kDebugMode) debugPrint(dataPtr.toString());
         }
       }
       return handler.next(options);
@@ -213,7 +214,7 @@ class AccountManager extends Interceptor {
       'site/getCoin',
     ];
     String url = err.requestOptions.uri.toString();
-    debugPrint('🌹🌹ApiInterceptor: $url');
+    if (kDebugMode) debugPrint('🌹🌹ApiInterceptor: $url');
     if (skipShow.any((i) => url.contains(i)) ||
         (url.contains('skipSegments') && err.requestOptions.method == 'GET')) {
       // skip

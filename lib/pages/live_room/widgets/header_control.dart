@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
-class LiveHeaderControl extends StatelessWidget implements PreferredSizeWidget {
+class LiveHeaderControl extends StatelessWidget {
   const LiveHeaderControl({
     required this.plPlayerController,
     required this.onSendDanmaku,
@@ -16,9 +16,6 @@ class LiveHeaderControl extends StatelessWidget implements PreferredSizeWidget {
 
   final PlPlayerController plPlayerController;
   final VoidCallback onSendDanmaku;
-
-  @override
-  Size get preferredSize => const Size(double.infinity, kToolbarHeight);
 
   @override
   Widget build(BuildContext context) {

@@ -43,7 +43,7 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'package:media_kit/media_kit.dart';
 import 'package:share_plus/share_plus.dart';
 
-class HeaderControl extends StatefulWidget implements PreferredSizeWidget {
+class HeaderControl extends StatefulWidget {
   const HeaderControl({
     required this.controller,
     required this.videoDetailCtr,
@@ -56,9 +56,6 @@ class HeaderControl extends StatefulWidget implements PreferredSizeWidget {
 
   @override
   State<HeaderControl> createState() => HeaderControlState();
-
-  @override
-  Size get preferredSize => throw UnimplementedError();
 }
 
 class HeaderControlState extends State<HeaderControl> {
@@ -332,7 +329,7 @@ class HeaderControlState extends State<HeaderControl> {
                                 .controller.continuePlayInBackground.value,
                           ),
                         ),
-                      int() => throw UnimplementedError(),
+                      _ => throw UnimplementedError(),
                     };
                   },
                 ),

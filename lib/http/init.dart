@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:PiliPlus/build_config.dart';
 import 'package:PiliPlus/http/constants.dart';
 import 'package:PiliPlus/http/retry_interceptor.dart';
 import 'package:PiliPlus/http/user.dart';
@@ -15,6 +14,7 @@ import 'package:brotli/brotli.dart';
 import 'package:dio/dio.dart';
 import 'package:dio/io.dart';
 import 'package:dio_http2_adapter/dio_http2_adapter.dart';
+import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter_inappwebview/flutter_inappwebview.dart' as web;
 
 class Request {
@@ -170,7 +170,7 @@ class Request {
         .add(RetryInterceptor(GStorage.retryCount, GStorage.retryDelay));
 
     // 日志拦截器 输出请求、响应内容
-    if (BuildConfig.isDebug) {
+    if (kDebugMode) {
       dio.interceptors.add(LogInterceptor(
         request: false,
         requestHeader: false,
@@ -228,7 +228,7 @@ class Request {
     Options? options,
     CancelToken? cancelToken,
   }) async {
-    // debugPrint('post-data: $data');
+    // if (kDebugMode) debugPrint('post-data: $data');
     try {
       return await dio.post<T>(
         url,
@@ -260,14 +260,14 @@ class Request {
         savePath,
         cancelToken: cancelToken,
         // onReceiveProgress: (int count, int total) {
-        //进度
-        // debugPrint("$count $total");
+        // 进度
+        // if (kDebugMode) debugPrint("$count $total");
         // },
       );
-      // debugPrint('downloadFile success: ${response.data}');
+      // if (kDebugMode) debugPrint('downloadFile success: ${response.data}');
       return response;
     } on DioException catch (e) {
-      // debugPrint('downloadFile error: $e');
+      // if (kDebugMode) debugPrint('downloadFile error: $e');
       return Response(
         data: {
           'message': await AccountManager.dioError(e),

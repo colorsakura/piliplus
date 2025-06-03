@@ -24,6 +24,7 @@ import 'package:PiliPlus/pages/video/introduction/ugc/widgets/page.dart';
 import 'package:PiliPlus/utils/id_utils.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/utils.dart';
+import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/material.dart' hide TabBarView;
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
@@ -601,7 +602,7 @@ class _EpisodePanelState extends CommonSlidePageState<EpisodePanel> {
                     duration: const Duration(milliseconds: 200),
                   );
                 } catch (e) {
-                  debugPrint('to top: $e');
+                  if (kDebugMode) debugPrint('to top: $e');
                 }
               },
             ),
@@ -617,7 +618,7 @@ class _EpisodePanelState extends CommonSlidePageState<EpisodePanel> {
                     duration: const Duration(milliseconds: 200),
                   );
                 } catch (e) {
-                  debugPrint('to bottom: $e');
+                  if (kDebugMode) debugPrint('to bottom: $e');
                 }
               },
             ),

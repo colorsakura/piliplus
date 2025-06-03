@@ -8,6 +8,7 @@ import 'package:PiliPlus/pages/common/common_controller.dart';
 import 'package:PiliPlus/pages/mine/view.dart';
 import 'package:PiliPlus/utils/feed_back.dart';
 import 'package:PiliPlus/utils/storage.dart';
+import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -60,7 +61,9 @@ class HomeController extends GetxController
 
   @override
   Future<void> onRefresh() {
-    return controller.onRefresh().catchError((e) => debugPrint(e.toString()));
+    return controller.onRefresh().catchError((e) {
+      if (kDebugMode) debugPrint(e.toString());
+    });
   }
 
   void setTabConfig() {

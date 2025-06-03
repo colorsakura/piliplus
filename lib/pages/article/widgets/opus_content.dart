@@ -14,6 +14,7 @@ import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cached_network_svg_image/cached_network_svg_image.dart';
+import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -55,7 +56,7 @@ class OpusContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    debugPrint('opusContent');
+    if (kDebugMode) debugPrint('opusContent');
 
     if (opus.isEmpty) {
       return const SliverToBoxAdapter();
@@ -552,7 +553,7 @@ class OpusContent extends StatelessWidget {
                 child: SelectionArea(child: Text.rich(renderer.span!)),
               );
             default:
-              debugPrint('unknown type ${element.paraType}');
+              if (kDebugMode) debugPrint('unknown type ${element.paraType}');
               if (element.text?.nodes?.isNotEmpty == true) {
                 return SelectionArea(
                   child: Text.rich(

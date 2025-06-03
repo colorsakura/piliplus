@@ -679,7 +679,7 @@ class _VideoInfoState extends State<VideoInfo> {
                             videoIntroController.videoDetail.value.bvid ?? '',
                             style: TextStyle(
                               fontSize: 14,
-                              color: theme.colorScheme.primary,
+                              color: theme.colorScheme.secondary,
                             ),
                           ),
                         ),

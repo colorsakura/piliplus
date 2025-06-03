@@ -11,6 +11,7 @@ import 'package:PiliPlus/utils/accounts/account.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/storage.dart' show Accounts;
 import 'package:PiliPlus/utils/utils.dart';
+import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 
@@ -89,7 +90,7 @@ class ReplyUtils {
           },
         );
       } catch (e) {
-        debugPrint('biliSendCommAntifraud: $e');
+        if (kDebugMode) debugPrint('biliSendCommAntifraud: $e');
       }
       return;
     }

@@ -14,6 +14,7 @@ import 'package:PiliPlus/pages/member_contribute/controller.dart';
 import 'package:PiliPlus/pages/member_home/widget/fav_item.dart';
 import 'package:PiliPlus/pages/member_like/view.dart';
 import 'package:PiliPlus/utils/grid.dart';
+import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
@@ -270,10 +271,10 @@ class _MemberHomeState extends State<MemberHome>
                         if (contributeCtr.tabController?.index != index1) {
                           contributeCtr.tabController?.index = index1;
                         }
-                        debugPrint('initialized');
+                        if (kDebugMode) debugPrint('initialized');
                       } catch (e) {
                         _ctr.contributeInitialIndex.value = index1;
-                        debugPrint('not initialized');
+                        if (kDebugMode) debugPrint('not initialized');
                       }
                     }
                   }

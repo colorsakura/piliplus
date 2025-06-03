@@ -25,6 +25,7 @@ import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/url_utils.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:floating/floating.dart';
+import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show FilteringTextInputFormatter;
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -34,7 +35,7 @@ import 'package:url_launcher/url_launcher.dart';
 class PageUtils {
   static Future<void> pmShare(BuildContext context,
       {required Map content}) async {
-    // debugPrint(content.toString());
+    // if (kDebugMode) debugPrint(content.toString());
 
     int? selectedIndex;
     List<UserModel> userList = <UserModel>[];
@@ -372,7 +373,7 @@ class PageUtils {
       return;
     }
 
-    // debugPrint('pushDynDetail: ${item.type}');
+    // if (kDebugMode) debugPrint('pushDynDetail: ${item.type}');
 
     switch (item.type) {
       case 'DYNAMIC_TYPE_AV':
@@ -431,7 +432,7 @@ class PageUtils {
 
         break;
       case 'DYNAMIC_TYPE_PGC':
-        debugPrint('番剧');
+        if (kDebugMode) debugPrint('番剧');
         SmartDialog.showToast('暂未支持的类型，请联系开发者');
         break;
 
@@ -473,7 +474,7 @@ class PageUtils {
 
       /// 番剧查看
       case 'DYNAMIC_TYPE_PGC_UNION':
-        debugPrint('DYNAMIC_TYPE_PGC_UNION 番剧');
+        if (kDebugMode) debugPrint('DYNAMIC_TYPE_PGC_UNION 番剧');
         DynamicArchiveModel pgc = item.modules.moduleDynamic!.major!.pgc!;
         if (pgc.epid != null) {
           viewBangumi(epId: pgc.epid);
@@ -769,7 +770,7 @@ class PageUtils {
     } catch (e) {
       SmartDialog.dismiss();
       SmartDialog.showToast('$e');
-      debugPrint('$e');
+      if (kDebugMode) debugPrint('$e');
     }
   }
 

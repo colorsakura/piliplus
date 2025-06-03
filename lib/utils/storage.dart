@@ -36,6 +36,7 @@ import 'package:PiliPlus/utils/global_data.dart';
 import 'package:PiliPlus/utils/login_utils.dart';
 import 'package:PiliPlus/utils/set_int_adapter.dart';
 import 'package:cookie_jar/cookie_jar.dart';
+import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -909,7 +910,7 @@ class Accounts {
     final String tempPath = "${tempDir.path}/.plpl/";
     final Directory dir = Directory(tempPath);
     if (dir.existsSync()) {
-      debugPrint('migrating...');
+      if (kDebugMode) debugPrint('migrating...');
       final cookieJar =
           PersistCookieJar(ignoreExpires: true, storage: FileStorage(tempPath));
       await cookieJar.forceInit();
@@ -931,7 +932,7 @@ class Accounts {
                   localAccessKey['refresh'], AccountType.values.toSet())
               .onChange()
       ]);
-      debugPrint('migrated successfully');
+      if (kDebugMode) debugPrint('migrated successfully');
     }
   }
 

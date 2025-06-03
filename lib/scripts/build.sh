@@ -10,7 +10,6 @@ commit_hash=$(git rev-parse HEAD)
 
 cat <<EOL > lib/build_config.dart
 class BuildConfig {
-  static const bool isDebug = false;
   static const String buildTime = '$build_time';
   static const String commitHash = '$commit_hash';
 }

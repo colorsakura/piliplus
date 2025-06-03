@@ -19,6 +19,7 @@ import 'package:PiliPlus/pages/emote/controller.dart';
 import 'package:PiliPlus/pages/emote/view.dart';
 import 'package:PiliPlus/utils/request_utils.dart';
 import 'package:PiliPlus/utils/storage.dart';
+import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/material.dart' hide DraggableScrollableSheet;
 import 'package:flutter/services.dart' show LengthLimitingTextInputFormatter;
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -614,7 +615,7 @@ class _CreateDynPanelState extends CommonPublishPageState<CreateDynPanel> {
       );
     } else {
       SmartDialog.showToast(result['msg']);
-      debugPrint('failed to publish: ${result['msg']}');
+      if (kDebugMode) debugPrint('failed to publish: ${result['msg']}');
     }
   }
 

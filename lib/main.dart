@@ -18,6 +18,7 @@ import 'package:PiliPlus/utils/theme_utils.dart';
 import 'package:catcher_2/catcher_2.dart';
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flex_seed_scheme/flex_seed_scheme.dart';
+import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_displaymode/flutter_displaymode.dart';
@@ -234,8 +235,7 @@ class MyApp extends StatelessWidget {
 }
 
 class _CustomHttpOverrides extends HttpOverrides {
-  final badCertificateCallback =
-      BuildConfig.isDebug || GStorage.badCertificateCallback;
+  final badCertificateCallback = kDebugMode || GStorage.badCertificateCallback;
 
   @override
   HttpClient createHttpClient(SecurityContext? context) {

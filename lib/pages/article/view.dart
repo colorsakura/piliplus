@@ -30,6 +30,7 @@ import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_debounce/easy_throttle.dart';
+import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -362,14 +363,14 @@ class _ArticlePageState extends State<ArticlePage>
             if (_articleCtr.isLoaded.value) {
               late Widget content;
               if (_articleCtr.opus != null) {
-                debugPrint('json page');
+                if (kDebugMode) debugPrint('json page');
                 content = OpusContent(
                   opus: _articleCtr.opus!,
                   callback: _getImageCallback,
                   maxWidth: maxWidth,
                 );
               } else if (_articleCtr.opusData?.modules.moduleBlocked != null) {
-                debugPrint('moduleBlocked');
+                if (kDebugMode) debugPrint('moduleBlocked');
                 final moduleBlocked =
                     _articleCtr.opusData!.modules.moduleBlocked!;
                 content = SliverToBoxAdapter(
@@ -380,7 +381,7 @@ class _ArticlePageState extends State<ArticlePage>
                   // json
                   return ReadOpus(ops: _articleCtr.articleData?.ops);
                 }
-                debugPrint('html page');
+                if (kDebugMode) debugPrint('html page');
                 final res = parser.parse(_articleCtr.articleData!.content!);
                 if (res.body!.children.isEmpty) {
                   content = SliverToBoxAdapter(

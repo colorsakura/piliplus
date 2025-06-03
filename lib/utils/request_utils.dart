@@ -24,6 +24,7 @@ import 'package:PiliPlus/pages/group_panel/view.dart';
 import 'package:PiliPlus/pages/later/controller.dart';
 import 'package:PiliPlus/utils/feed_back.dart';
 import 'package:PiliPlus/utils/storage.dart';
+import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
@@ -255,7 +256,7 @@ class RequestUtils {
   //     return jsonDecode(
   //         Uri.decodeComponent(scriptElement?.text ?? ''))['access_id'];
   //   } catch (e) {
-  //     debugPrint('failed to get wwebid: $e');
+  //     if (kDebugMode) debugPrint('failed to get wwebid: $e');
   //     return null;
   //   }
   // }
@@ -279,7 +280,7 @@ class RequestUtils {
         }
       }
     } catch (e) {
-      debugPrint('create dyn $e');
+      if (kDebugMode) debugPrint('create dyn $e');
     }
   }
 
@@ -301,7 +302,7 @@ class RequestUtils {
           );
         }
       } catch (e) {
-        debugPrint('check dyn error: $e');
+        if (kDebugMode) debugPrint('check dyn error: $e');
       }
     }
   }
@@ -473,7 +474,7 @@ class RequestUtils {
           SmartDialog.showToast('关闭验证');
         },
         onResult: (Map<String, dynamic> message) async {
-          debugPrint("Captcha result: $message");
+          if (kDebugMode) debugPrint("Captcha result: $message");
           String code = message["code"];
           if (code == "1") {
             // 发送 message["result"] 中的数据向 B 端的业务服务接口进行查询
@@ -502,7 +503,7 @@ class RequestUtils {
             }
           } else {
             // 终端用户完成验证失败，自动重试 If the verification fails, it will be automatically retried.
-            debugPrint("Captcha result code : $code");
+            if (kDebugMode) debugPrint("Captcha result code : $code");
           }
         },
         onError: (Map<String, dynamic> message) {

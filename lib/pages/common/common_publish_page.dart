@@ -252,7 +252,7 @@ abstract class CommonPublishPageState<T extends CommonPublishPage>
         }
       },
       onPanelTypeChange: (panelType, data) {
-        // debugPrint('panelType: $panelType');
+        // if (kDebugMode) debugPrint('panelType: $panelType');
         switch (panelType) {
           case ChatBottomPanelType.none:
             this.panelType.value = PanelType.none;

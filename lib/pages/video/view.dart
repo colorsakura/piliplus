@@ -54,6 +54,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_debounce/easy_throttle.dart';
 import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart';
 import 'package:floating/floating.dart';
+import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart' show SystemUiOverlayStyle;
@@ -213,7 +214,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
         }
       }
     } catch (e) {
-      debugPrint('handle playe status: $e');
+      if (kDebugMode) debugPrint('handle playe status: $e');
     }
 
     if (status == PlayerStatus.completed) {
@@ -274,12 +275,14 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
   /// 未开启自动播放时触发播放
   Future<void> handlePlay() async {
     if (videoDetailController.isQuerying) {
-      debugPrint('handlePlay: querying');
+      if (kDebugMode) debugPrint('handlePlay: querying');
       return;
     }
     if (videoDetailController.videoUrl == null ||
         videoDetailController.audioUrl == null) {
-      debugPrint('handlePlay: videoUrl/audioUrl not initialized');
+      if (kDebugMode) {
+        debugPrint('handlePlay: videoUrl/audioUrl not initialized');
+      }
       videoDetailController.queryVideoUrl();
       return;
     }
@@ -840,15 +843,19 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                                   child: GestureDetector(
                                     onTap: () async {
                                       if (videoDetailController.isQuerying) {
-                                        debugPrint('handlePlay: querying');
+                                        if (kDebugMode) {
+                                          debugPrint('handlePlay: querying');
+                                        }
                                         return;
                                       }
                                       if (videoDetailController.videoUrl ==
                                               null ||
                                           videoDetailController.audioUrl ==
                                               null) {
-                                        debugPrint(
-                                            'handlePlay: videoUrl/audioUrl not initialized');
+                                        if (kDebugMode) {
+                                          debugPrint(
+                                              'handlePlay: videoUrl/audioUrl not initialized');
+                                        }
                                         videoDetailController.queryVideoUrl();
                                         return;
                                       }
@@ -1732,7 +1739,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                     ),
                   );
                 } catch (e) {
-                  debugPrint('build stein edges: $e');
+                  if (kDebugMode) debugPrint('build stein edges: $e');
                   return const SizedBox.shrink();
                 }
               }

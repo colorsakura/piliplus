@@ -51,6 +51,7 @@ import 'package:PiliPlus/utils/recommend_filter.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:auto_orientation/auto_orientation.dart';
+import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show FilteringTextInputFormatter;
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -1378,7 +1379,7 @@ List<SettingsModel> get recommendSettings => [
           try {
             Get.find<RcmdController>().enableSaveLastData = value;
           } catch (e) {
-            debugPrint('$e');
+            if (kDebugMode) debugPrint('$e');
           }
         },
       ),
@@ -1397,7 +1398,7 @@ List<SettingsModel> get recommendSettings => [
               ctr.lastRefreshAt = null;
             }
           } catch (e) {
-            debugPrint('$e');
+            if (kDebugMode) debugPrint('$e');
           }
         },
       ),

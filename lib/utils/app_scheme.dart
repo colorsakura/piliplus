@@ -8,6 +8,7 @@ import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:PiliPlus/utils/url_utils.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:app_links/app_links.dart';
+import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
@@ -64,7 +65,7 @@ class PiliScheme {
     int? businessId,
     int? oid,
   }) async {
-    // debugPrint('onAppLink: $uri');
+    // if (kDebugMode) debugPrint('onAppLink: $uri');
 
     final String scheme = uri.scheme;
     final String host = uri.host;
@@ -459,7 +460,7 @@ class PiliScheme {
             return false;
           default:
             if (!selfHandle) {
-              debugPrint('$uri');
+              if (kDebugMode) debugPrint('$uri');
               SmartDialog.showToast('未知路径:$uri，请截图反馈给开发者');
             }
             return false;
@@ -487,7 +488,7 @@ class PiliScheme {
           return true;
         }
         if (!selfHandle) {
-          debugPrint('$uri');
+          if (kDebugMode) debugPrint('$uri');
           SmartDialog.showToast('未知路径:$uri，请截图反馈给开发者');
         }
         return false;
@@ -591,7 +592,7 @@ class PiliScheme {
         pathSegments.first == 'mobile' || pathSegments.first == 'h5'
             ? pathSegments.getOrNull(1)
             : pathSegments.first;
-    debugPrint('area: $area');
+    if (kDebugMode) debugPrint('area: $area');
     switch (area) {
       case 'note' || 'note-app':
         String? id = uri.queryParameters['cvid'];
@@ -649,7 +650,7 @@ class PiliScheme {
         return false;
       case 'bangumi':
         // www.bilibili.com/bangumi/play/ep{eid}?start_progress={offset}&thumb_up_dm_id={dmid}
-        debugPrint('番剧');
+        if (kDebugMode) debugPrint('番剧');
         String? id = RegExp(r'(ss|ep)\d+').firstMatch(path)?.group(0);
         if (id != null) {
           bool isSeason = id.startsWith('ss');
@@ -664,7 +665,7 @@ class PiliScheme {
         launchURL();
         return false;
       case 'video':
-        debugPrint('投稿');
+        if (kDebugMode) debugPrint('投稿');
         final Map<String, dynamic> map = IdUtils.matchAvorBv(input: path);
         if (map.isNotEmpty) {
           final queryParameters = uri.queryParameters;
@@ -695,7 +696,7 @@ class PiliScheme {
           launchURL();
           return false;
         }
-        debugPrint('专栏');
+        if (kDebugMode) debugPrint('专栏');
         String? id =
             RegExp(r'cv(\d+)', caseSensitive: false).firstMatch(path)?.group(1);
         if (id != null) {
@@ -712,7 +713,7 @@ class PiliScheme {
         launchURL();
         return false;
       case 'space':
-        debugPrint('个人空间');
+        if (kDebugMode) debugPrint('个人空间');
         String? mid = uriDigitRegExp.firstMatch(path)?.group(1);
         if (mid != null) {
           PageUtils.toDupNamed(

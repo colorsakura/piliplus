@@ -26,6 +26,7 @@ import 'package:PiliPlus/utils/utils.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:fixnum/fixnum.dart';
+import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -694,7 +695,7 @@ class ReplyItemGrpc extends StatelessWidget {
                 0;
             isValid = seek * 1000 <= duration;
           } catch (e) {
-            debugPrint('failed to validate: $e');
+            if (kDebugMode) debugPrint('failed to validate: $e');
           }
           spanChildren.add(
             TextSpan(

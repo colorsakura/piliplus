@@ -4,6 +4,7 @@ import 'package:PiliPlus/common/widgets/loading_widget/loading_widget.dart';
 import 'package:PiliPlus/services/loggeer.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:PiliPlus/utils/utils.dart';
+import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/material.dart';
 
 class LogsPage extends StatefulWidget {
@@ -67,7 +68,7 @@ class _LogsPageState extends State<LogsPage> {
                   l.split("Crash occurred on")[1].trim(),
                 );
               } catch (e) {
-                debugPrint(e.toString());
+                if (kDebugMode) debugPrint(e.toString());
                 date = l.toString();
               }
               return "";

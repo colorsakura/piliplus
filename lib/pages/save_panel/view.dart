@@ -12,6 +12,7 @@ import 'package:PiliPlus/pages/video/introduction/ugc/controller.dart';
 import 'package:PiliPlus/pages/video/reply/widgets/reply_item_grpc.dart';
 import 'package:PiliPlus/utils/download.dart';
 import 'package:PiliPlus/utils/utils.dart';
+import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -152,11 +153,11 @@ class _SavePanelState extends State<SavePanel> {
         } catch (_) {}
       }
 
-      debugPrint(uri);
+      if (kDebugMode) debugPrint(uri);
     } else if (_item is DynamicItemModel) {
       uri = parseDyn(_item);
 
-      debugPrint(uri);
+      if (kDebugMode) debugPrint(uri);
     }
   }
 
@@ -269,7 +270,7 @@ class _SavePanelState extends State<SavePanel> {
         }
       }
     } catch (e) {
-      debugPrint('on save/share reply: $e');
+      if (kDebugMode) debugPrint('on save/share reply: $e');
       SmartDialog.dismiss();
     }
   }

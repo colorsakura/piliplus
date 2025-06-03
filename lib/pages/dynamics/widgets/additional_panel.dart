@@ -1,4 +1,3 @@
-import 'package:PiliPlus/build_config.dart';
 import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
 import 'package:PiliPlus/http/dynamics.dart';
@@ -7,6 +6,7 @@ import 'package:PiliPlus/models/dynamics/result.dart';
 import 'package:PiliPlus/pages/dynamics/widgets/vote.dart';
 import 'package:PiliPlus/utils/app_scheme.dart';
 import 'package:PiliPlus/utils/utils.dart';
+import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -708,7 +708,7 @@ Widget addWidget(ThemeData theme, DynamicItemModel item, BuildContext context,
           ),
         );
       default:
-        if (BuildConfig.isDebug) {
+        if (kDebugMode) {
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 12),
             child: Text('additional panel\ntype: $type'),

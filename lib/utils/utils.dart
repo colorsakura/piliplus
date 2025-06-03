@@ -16,6 +16,7 @@ import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:crypto/crypto.dart';
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -207,7 +208,7 @@ class Utils {
       number *= getUnit(match.group(2));
       return number.toInt();
     } catch (e) {
-      debugPrint('parse failed: "$numberStr" : $e');
+      if (kDebugMode) debugPrint('parse failed: "$numberStr" : $e');
       return 0;
     }
   }
@@ -497,7 +498,7 @@ class Utils {
 
   // 检查更新
   static Future<void> checkUpdate([bool isAuto = true]) async {
-    if (BuildConfig.isDebug) return;
+    if (kDebugMode) return;
     SmartDialog.dismiss();
     try {
       final res = await Request().get(Api.latestApp, uaType: 'mob');
@@ -581,7 +582,7 @@ class Utils {
         );
       }
     } catch (e) {
-      debugPrint('failed to check update: $e');
+      if (kDebugMode) debugPrint('failed to check update: $e');
     }
   }
 
