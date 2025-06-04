@@ -15,7 +15,9 @@ class RoomInfoModel {
     roomId = json['room_id'];
     liveStatus = json['live_status'];
     liveTime = json['live_time'];
-    playurlInfo = PlayurlInfo.fromJson(json['playurl_info']);
+    playurlInfo = json['playurl_info'] == null
+        ? null
+        : PlayurlInfo.fromJson(json['playurl_info']);
     isPortrait = json['is_portrait'];
   }
 }
@@ -28,7 +30,8 @@ class PlayurlInfo {
   Playurl? playurl;
 
   PlayurlInfo.fromJson(Map<String, dynamic> json) {
-    playurl = Playurl.fromJson(json['playurl']);
+    playurl =
+        json['playurl'] == null ? null : Playurl.fromJson(json['playurl']);
   }
 }
 

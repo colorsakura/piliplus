@@ -103,17 +103,20 @@ class LiveHttp {
   }
 
   static Future liveRoomInfo({roomId, qn}) async {
-    var res = await Request().get(Api.liveRoomInfo, queryParameters: {
-      'room_id': roomId,
-      'protocol': '0, 1',
-      'format': '0, 1, 2',
-      'codec': '0, 1',
-      'qn': qn,
-      'platform': 'web',
-      'ptype': 8,
-      'dolby': 5,
-      'panorama': 1,
-    });
+    var res = await Request().get(
+      Api.liveRoomInfo,
+      queryParameters: {
+        'room_id': roomId,
+        'protocol': '0, 1',
+        'format': '0, 1, 2',
+        'codec': '0, 1',
+        'qn': qn,
+        'platform': 'web',
+        'ptype': 8,
+        'dolby': 5,
+        'panorama': 1,
+      },
+    );
     if (res.data['code'] == 0) {
       return {'status': true, 'data': RoomInfoModel.fromJson(res.data['data'])};
     } else {

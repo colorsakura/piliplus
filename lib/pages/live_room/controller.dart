@@ -88,6 +88,29 @@ class LiveRoomController extends GetxController {
     var res = await LiveHttp.liveRoomInfo(roomId: roomId, qn: currentQn);
     if (res['status']) {
       RoomInfoModel data = res['data'];
+      if (data.liveStatus != 1) {
+        Get.dialog(
+          AlertDialog(
+            title: const Text('当前直播间未开播'),
+            actions: [
+              TextButton(
+                onPressed: Get.back,
+                child: Text(
+                  '关闭',
+                  style: TextStyle(color: Get.theme.colorScheme.outline),
+                ),
+              ),
+              TextButton(
+                onPressed: () => Get
+                  ..back()
+                  ..back(),
+                child: const Text('退出'),
+              ),
+            ],
+          ),
+        );
+        return;
+      }
       isPortrait.value = data.isPortrait ?? false;
       List<CodecItem> codec =
           data.playurlInfo!.playurl!.stream!.first.format!.first.codec!;
