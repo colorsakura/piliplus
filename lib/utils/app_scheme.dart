@@ -207,7 +207,7 @@ class PiliScheme {
             }
             return false;
           case 'opus':
-            bool hasMatch = await _onPushDynDetail(path, off);
+            bool hasMatch = _onPushDynDetail(uri, off);
             return hasMatch;
           case 'search':
             final keyword = uri.queryParameters['keyword'];
@@ -385,7 +385,7 @@ class PiliScheme {
                         actions: [
                           IconButton(
                             tooltip: '前往',
-                            onPressed: () => _onPushDynDetail(path, off),
+                            onPressed: () => _onPushDynDetail(uri, off),
                             icon: const Icon(Icons.open_in_new),
                           ),
                         ],
@@ -410,11 +410,11 @@ class PiliScheme {
                 }
                 return true;
               } else {
-                bool hasMatch = await _onPushDynDetail(path, off);
+                bool hasMatch = _onPushDynDetail(uri, off);
                 return hasMatch;
               }
             } else {
-              bool hasMatch = await _onPushDynDetail(path, off);
+              bool hasMatch = _onPushDynDetail(uri, off);
               return hasMatch;
             }
           case 'album':
@@ -542,7 +542,7 @@ class PiliScheme {
     final String path = uri.path;
 
     if (host.contains('t.bilibili.com')) {
-      bool hasMatch = await _onPushDynDetail(path, off);
+      bool hasMatch = _onPushDynDetail(uri, off);
       if (!hasMatch) {
         launchURL();
       }
@@ -610,7 +610,7 @@ class PiliScheme {
         launchURL();
         return false;
       case 'dynamic' || 'opus':
-        bool hasMatch = await _onPushDynDetail(path, off);
+        bool hasMatch = _onPushDynDetail(uri, off);
         if (!hasMatch) {
           launchURL();
         }
@@ -817,10 +817,15 @@ class PiliScheme {
     }
   }
 
-  static Future<bool> _onPushDynDetail(path, off) async {
-    String? id = uriDigitRegExp.firstMatch(path)?.group(1);
+  static bool _onPushDynDetail(Uri uri, bool off) {
+    String? id = uriDigitRegExp.firstMatch(uri.path)?.group(1);
+    bool isRid = uri.queryParameters['type'] == '2';
     if (id != null) {
-      PageUtils.pushDynFromId(id: id, off: off);
+      PageUtils.pushDynFromId(
+        id: isRid ? null : id,
+        rid: isRid ? id : null,
+        off: off,
+      );
       return true;
     }
     return false;
