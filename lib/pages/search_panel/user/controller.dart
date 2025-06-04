@@ -8,7 +8,7 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 
 class SearchUserController
-    extends SearchPanelController<SearchUserModel, SearchUserItemModel> {
+    extends SearchPanelController<SearchUserData, SearchUserItemModel> {
   SearchUserController({
     required super.keyword,
     required super.searchType,

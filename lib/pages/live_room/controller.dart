@@ -5,15 +5,17 @@ import 'package:PiliPlus/http/constants.dart';
 import 'package:PiliPlus/http/live.dart';
 import 'package:PiliPlus/http/video.dart';
 import 'package:PiliPlus/models/common/video/live_quality.dart';
-import 'package:PiliPlus/models/live/live_room/danmu_info.dart';
-import 'package:PiliPlus/models/live/live_room/room_info.dart';
-import 'package:PiliPlus/models/live/live_room/room_info_h5.dart';
+import 'package:PiliPlus/models_new/live/live_dm_info/data.dart';
+import 'package:PiliPlus/models_new/live/live_room_info_h5/data.dart';
+import 'package:PiliPlus/models_new/live/live_room_play_info/codec.dart';
+import 'package:PiliPlus/models_new/live/live_room_play_info/data.dart';
 import 'package:PiliPlus/pages/mine/controller.dart';
 import 'package:PiliPlus/plugin/pl_player/controller.dart';
 import 'package:PiliPlus/plugin/pl_player/models/data_source.dart';
 import 'package:PiliPlus/services/service_locator.dart';
 import 'package:PiliPlus/tcp/live.dart';
 import 'package:PiliPlus/utils/danmaku_utils.dart';
+import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/video_utils.dart';
 import 'package:canvas_danmaku/canvas_danmaku.dart';
@@ -32,7 +34,7 @@ class LiveRoomController extends GetxController {
   RxBool volumeOff = false.obs;
   PlPlayerController plPlayerController =
       PlPlayerController.getInstance(videoType: 'live');
-  Rx<RoomInfoH5Model?> roomInfoH5 = Rx<RoomInfoH5Model?>(null);
+  Rx<RoomInfoH5Data?> roomInfoH5 = Rx<RoomInfoH5Data?>(null);
 
   RxList<dynamic> messages = [].obs;
   RxBool disableAutoScroll = false.obs;
@@ -58,7 +60,7 @@ class LiveRoomController extends GetxController {
     }
   }
 
-  Future<void> playerInit(source) async {
+  Future<void> playerInit(String source) async {
     await plPlayerController.setDataSource(
       DataSource(
         videoSource: source,
@@ -87,7 +89,7 @@ class LiveRoomController extends GetxController {
     }
     var res = await LiveHttp.liveRoomInfo(roomId: roomId, qn: currentQn);
     if (res['status']) {
-      RoomInfoModel data = res['data'];
+      RoomPlayInfoData data = res['data'];
       if (data.liveStatus != 1) {
         Get.dialog(
           AlertDialog(
@@ -119,7 +121,7 @@ class LiveRoomController extends GetxController {
       currentQn = item.currentQn!;
       acceptQnList = item.acceptQn!.map((e) {
         return (
-          code: e as int,
+          code: e,
           desc: LiveQuality.values
               .firstWhere((element) => element.code == e)
               .description,
@@ -183,19 +185,20 @@ class LiveRoomController extends GetxController {
         }
       });
     }
-    LiveHttp.liveRoomGetDanmakuToken(roomId: roomId).then((v) {
-      if (v['status']) {
-        LiveDanmakuInfo info = v['data'];
+    LiveHttp.liveRoomGetDanmakuToken(roomId: roomId).then((res) {
+      if (res['status']) {
+        LiveDmInfoData info = res['data'];
         // logger.d("info => $info");
-        List<String> servers = [];
-        for (final host in info.data.hostList) {
-          servers.add('wss://${host.host}:${host.wssPort}/sub');
+        if (info.hostList!.isNullOrEmpty) {
+          return;
         }
         msgStream = LiveMessageStream(
-          streamToken: info.data.token,
+          streamToken: info.token!,
           roomId: roomId,
           uid: Accounts.main.mid,
-          servers: servers,
+          servers: info.hostList!
+              .map((host) => 'wss://${host.host}:${host.wssPort}/sub')
+              .toList(),
         );
         msgStream?.addEventListener((obj) {
           if (obj['cmd'] == 'DANMU_MSG') {

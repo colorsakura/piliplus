@@ -5,8 +5,6 @@ class MemberCoinsDataModel extends HotVideoItemModel {
   int? coins;
   int? time;
   String? resourceType;
-  // int? get view => stat.view;
-  // int? get danmaku => stat.danmu;
 
   MemberCoinsDataModel.fromJson(Map<String, dynamic> json)
       : super.fromJson(json) {
@@ -15,15 +13,5 @@ class MemberCoinsDataModel extends HotVideoItemModel {
     time = json['time'];
     resourceType = json['resource_type'];
     redirectUrl = json['redirect_url'];
-    // view = json['stat']['view'];
-    // danmaku = json['stat']['danmaku'];
   }
-  // @override
-  // String? goto;
-  // @override
-  // bool isFollowed;
-  // @override
-  // String? rcmdReason;
-  // @override
-  // String? uri;
 }

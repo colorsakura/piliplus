@@ -1,8 +1,8 @@
+import 'package:PiliPlus/http/fav.dart';
 import 'package:PiliPlus/http/loading_state.dart';
-import 'package:PiliPlus/http/user.dart';
-import 'package:PiliPlus/http/video.dart';
-import 'package:PiliPlus/models/user/fav_detail.dart';
-import 'package:PiliPlus/models/user/fav_folder.dart';
+import 'package:PiliPlus/models_new/fav/fav_detail/data.dart';
+import 'package:PiliPlus/models_new/fav/fav_detail/media.dart';
+import 'package:PiliPlus/models_new/fav/fav_video/list.dart';
 import 'package:PiliPlus/pages/common/multi_select_controller.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
@@ -13,13 +13,13 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 
 class FavDetailController
-    extends MultiSelectController<FavDetailData, FavDetailItemData> {
-  Rx<FavFolderItemData> item = FavFolderItemData().obs;
+    extends MultiSelectController<FavDetailData, FavDetailItemModel> {
   late int mediaId;
   late String heroTag;
+  Rx<FavVideoItemModel> item = FavVideoItemModel().obs;
   RxBool isOwner = false.obs;
 
-  dynamic mid;
+  late int mid;
 
   @override
   void onInit() {
@@ -37,8 +37,8 @@ class FavDetailController
   bool? get hasFooter => true;
 
   @override
-  List<FavDetailItemData>? getDataList(FavDetailData response) {
-    return response.list;
+  List<FavDetailItemModel>? getDataList(FavDetailData response) {
+    return response.medias;
   }
 
   @override
@@ -52,19 +52,19 @@ class FavDetailController
   bool customHandleResponse(bool isRefresh, Success<FavDetailData> response) {
     FavDetailData data = response.response;
     if (isRefresh) {
-      item.value = data.info ?? FavFolderItemData();
+      item.value = data.info ?? FavVideoItemModel();
       isOwner.value = data.info?.mid == mid;
     }
     return false;
   }
 
   Future<void> onCancelFav(int index, int id, int type) async {
-    var result = await VideoHttp.delFav(
+    var result = await FavHttp.delFav(
       ids: ['$id:$type'],
       delIds: mediaId.toString(),
     );
     if (result['status']) {
-      List<FavDetailItemData> dataList = loadingState.value.data!;
+      List<FavDetailItemModel> dataList = loadingState.value.data!;
       item.value.mediaCount = item.value.mediaCount! - 1;
       item.refresh();
       dataList.removeAt(index);
@@ -77,7 +77,7 @@ class FavDetailController
 
   @override
   Future<LoadingState<FavDetailData>> customGetData() =>
-      UserHttp.userFavFolderDetail(
+      FavHttp.userFavFolderDetail(
         pn: page,
         ps: 20,
         mediaId: mediaId,
@@ -103,16 +103,16 @@ class FavDetailController
             TextButton(
               onPressed: () async {
                 Get.back();
-                List<FavDetailItemData> list = loadingState.value.data!
+                List<FavDetailItemModel> list = loadingState.value.data!
                     .where((e) => e.checked == true)
                     .toList();
-                var result = await VideoHttp.delFav(
+                var result = await FavHttp.delFav(
                   ids: list.map((item) => '${item.id}:${item.type}').toList(),
                   delIds: mediaId.toString(),
                 );
                 if (result['status']) {
-                  List<FavDetailItemData> dataList = loadingState.value.data!;
-                  List<FavDetailItemData> remainList =
+                  List<FavDetailItemModel> dataList = loadingState.value.data!;
+                  List<FavDetailItemModel> remainList =
                       dataList.toSet().difference(list.toSet()).toList();
                   item.value.mediaCount = item.value.mediaCount! - list.length;
                   item.refresh();
@@ -138,18 +138,18 @@ class FavDetailController
 
   void toViewPlayAll() {
     if (loadingState.value.isSuccess) {
-      List<FavDetailItemData>? list = loadingState.value.data;
+      List<FavDetailItemModel>? list = loadingState.value.data;
       if (list.isNullOrEmpty) return;
 
-      for (FavDetailItemData element in list!) {
-        if (element.cid == null) {
+      for (FavDetailItemModel element in list!) {
+        if (element.ugc?.firstCid == null) {
           continue;
         } else {
           if (element.bvid != list.first.bvid) {
             SmartDialog.showToast('已跳过不支持播放的视频');
           }
           PageUtils.toVideoPage(
-            'bvid=${element.bvid}&cid=${element.cid}',
+            'bvid=${element.bvid}&cid=${element.ugc!.firstCid}',
             arguments: {
               'videoItem': element,
               'heroTag': Utils.makeHeroTag(element.bvid),
@@ -172,5 +172,18 @@ class FavDetailController
   Future<void> onReload() {
     scrollController.jumpToTop();
     return super.onReload();
+  }
+
+  Future<void> onFav(bool isFav) async {
+    var res = isFav
+        ? await FavHttp.unfavFavFolder(mediaId)
+        : await FavHttp.favFavFolder(mediaId);
+
+    if (res['status']) {
+      item
+        ..value.favState = isFav ? 0 : 1
+        ..refresh();
+    }
+    SmartDialog.showToast(res['msg']);
   }
 }

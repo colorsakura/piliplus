@@ -4,7 +4,7 @@ import 'package:PiliPlus/common/widgets/loading_widget/http_error.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/common/image_type.dart';
-import 'package:PiliPlus/models/user/black.dart';
+import 'package:PiliPlus/models_new/blacklist/list.dart';
 import 'package:PiliPlus/pages/blacklist/controller.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/utils.dart';

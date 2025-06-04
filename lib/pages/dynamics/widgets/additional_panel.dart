@@ -1,8 +1,8 @@
 import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
 import 'package:PiliPlus/http/dynamics.dart';
-import 'package:PiliPlus/models/dynamics/dyn_reserve/data.dart';
 import 'package:PiliPlus/models/dynamics/result.dart';
+import 'package:PiliPlus/models_new/dynamic/dyn_reserve/data.dart';
 import 'package:PiliPlus/pages/dynamics/widgets/vote.dart';
 import 'package:PiliPlus/utils/app_scheme.dart';
 import 'package:PiliPlus/utils/utils.dart';

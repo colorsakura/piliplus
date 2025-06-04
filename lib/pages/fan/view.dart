@@ -5,7 +5,7 @@ import 'package:PiliPlus/common/widgets/loading_widget/http_error.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/common/image_type.dart';
-import 'package:PiliPlus/models/fans/result.dart';
+import 'package:PiliPlus/models_new/fans/list.dart';
 import 'package:PiliPlus/pages/fan/controller.dart';
 import 'package:PiliPlus/pages/share/view.dart' show UserModel;
 import 'package:PiliPlus/utils/grid.dart';

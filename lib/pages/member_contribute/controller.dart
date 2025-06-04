@@ -1,8 +1,7 @@
 import 'dart:math';
 
 import 'package:PiliPlus/http/loading_state.dart';
-import 'package:PiliPlus/models/space/tab2.dart';
-import 'package:PiliPlus/models/space/tab_item.dart';
+import 'package:PiliPlus/models_new/space/space/tab2.dart';
 import 'package:PiliPlus/pages/common/common_data_controller.dart';
 import 'package:PiliPlus/pages/member/controller.dart';
 import 'package:PiliPlus/utils/extension.dart';
@@ -21,12 +20,12 @@ class MemberContributeCtr extends CommonDataController
   TabController? tabController;
   List<Tab>? tabs;
   late final _ctr = Get.find<MemberController>(tag: heroTag);
-  List<SpaceTabItem>? items;
+  List<SpaceTab2Item>? items;
 
   @override
   void onInit() {
     super.onInit();
-    Tab2 contribute =
+    SpaceTab2 contribute =
         _ctr.tab2!.firstWhere((item) => item.param == 'contribute');
     if (contribute.items?.isNullOrEmpty == false) {
       items = contribute.items;
@@ -34,7 +33,7 @@ class MemberContributeCtr extends CommonDataController
         // show if exist
         if (_ctr.hasSeasonOrSeries == true) {
           items!.add(
-            const SpaceTabItem(
+            const SpaceTab2Item(
               param: 'ugcSeason',
               title: '全部合集/列表',
             ),

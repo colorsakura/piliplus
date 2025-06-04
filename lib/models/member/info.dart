@@ -1,5 +1,5 @@
-import 'package:PiliPlus/models/dynamics/result.dart';
 import 'package:PiliPlus/models/model_avatar.dart';
+import 'package:PiliPlus/models_new/live/live_feed_index/watched_show.dart';
 
 class MemberInfoModel {
   MemberInfoModel({
@@ -35,7 +35,7 @@ class MemberInfoModel {
     name = json['name'];
     sex = json['sex'];
     face = json['face'];
-    sign = json['sign'] == '' ? '该用户还没有签名' : json['sign'].replaceAll('\n', '');
+    sign = json['sign'];
     level = json['level'];
     isFollowed = json['is_followed'];
     topPhoto = json['top_photo'];

@@ -6,7 +6,7 @@ import 'package:PiliPlus/common/widgets/pendant_avatar.dart';
 import 'package:PiliPlus/common/widgets/self_sized_horizontal_list.dart';
 import 'package:PiliPlus/common/widgets/stat/stat.dart';
 import 'package:PiliPlus/models/common/image_type.dart';
-import 'package:PiliPlus/models/video_detail/data.dart';
+import 'package:PiliPlus/models_new/video/video_detail/data.dart';
 import 'package:PiliPlus/pages/mine/controller.dart';
 import 'package:PiliPlus/pages/search/widgets/search_text.dart';
 import 'package:PiliPlus/pages/video/controller.dart';
@@ -613,18 +613,23 @@ class _VideoInfoState extends State<VideoInfo> {
                               label: 'AI总结',
                               child: GestureDetector(
                                 onTap: () async {
-                                  final res =
-                                      await videoIntroController.aiConclusion();
-                                  if (res['status']) {
-                                    if (videoIntroController.modelResult.summary
-                                            .isNullOrEmpty &&
-                                        videoIntroController
-                                                .modelResult.outline ==
-                                            null) {
-                                      SmartDialog.showToast("当前视频不支持AI视频总结");
-                                    } else {
-                                      widget.showAiBottomSheet();
-                                    }
+                                  if (videoIntroController.aiConclusionResult ==
+                                      null) {
+                                    await videoIntroController.aiConclusion();
+                                  }
+                                  if (videoIntroController.aiConclusionResult ==
+                                      null) {
+                                    return;
+                                  }
+                                  if (videoIntroController.aiConclusionResult!
+                                              .summary?.isNotEmpty ==
+                                          true ||
+                                      videoIntroController.aiConclusionResult!
+                                              .outline?.isNotEmpty ==
+                                          true) {
+                                    widget.showAiBottomSheet();
+                                  } else {
+                                    SmartDialog.showToast("当前视频不支持AI视频总结");
                                   }
                                 },
                                 child: Image.asset('assets/images/ai.png',

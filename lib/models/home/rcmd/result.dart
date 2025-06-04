@@ -15,7 +15,7 @@ class RecVideoItemAppModel extends BaseRecVideoItemModel {
     aid = id;
     bvid = json['bvid'] ?? IdUtils.av2bv(id!);
     cid = json['player_args']?['cid'] ?? 0;
-    pic = json['cover'];
+    cover = json['cover'];
     stat = RcmdStat.fromJson(json);
     // 改用player_args中的duration作为原始数据（秒数）
     duration = json['player_args']?['duration'] ?? 0;
@@ -41,7 +41,7 @@ class RecVideoItemAppModel extends BaseRecVideoItemModel {
     talkBack = json['talk_back'];
 
     if (json['goto'] == 'bangumi') {
-      bangumiBadge = json['cover_right_text'];
+      pgcBadge = json['cover_right_text'];
     }
 
     cardType = json['card_type'];
@@ -70,8 +70,8 @@ class RcmdStat implements BaseStat {
   late String danmuStr;
 
   RcmdStat.fromJson(Map<String, dynamic> json) {
-    viewStr = json["cover_left_text_1"];
-    danmuStr = json['cover_left_text_2'];
+    viewStr = json["cover_left_text_1"] ?? '';
+    danmuStr = json['cover_left_text_2'] ?? '';
   }
 
   @override

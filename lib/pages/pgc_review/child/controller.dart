@@ -1,8 +1,8 @@
-import 'package:PiliPlus/http/bangumi.dart';
 import 'package:PiliPlus/http/loading_state.dart';
+import 'package:PiliPlus/http/pgc.dart';
 import 'package:PiliPlus/models/common/pgc_review_type.dart';
-import 'package:PiliPlus/models/pgc/pgc_review/data.dart';
-import 'package:PiliPlus/models/pgc/pgc_review/list.dart';
+import 'package:PiliPlus/models_new/pgc/pgc_review/data.dart';
+import 'package:PiliPlus/models_new/pgc/pgc_review/list.dart';
 import 'package:PiliPlus/pages/common/common_list_controller.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
@@ -51,7 +51,7 @@ class PgcReviewController
   }
 
   @override
-  Future<LoadingState<PgcReviewData>> customGetData() => BangumiHttp.pgcReview(
+  Future<LoadingState<PgcReviewData>> customGetData() => PgcHttp.pgcReview(
         type: type,
         mediaId: mediaId,
         next: next,
@@ -59,7 +59,7 @@ class PgcReviewController
       );
 
   Future<void> onLike(int index, bool isLike, reviewId) async {
-    var res = await BangumiHttp.pgcReviewLike(
+    var res = await PgcHttp.pgcReviewLike(
       mediaId: mediaId,
       reviewId: reviewId,
     );
@@ -79,7 +79,7 @@ class PgcReviewController
   }
 
   Future<void> onDislike(int index, bool isDislike, reviewId) async {
-    var res = await BangumiHttp.pgcReviewDislike(
+    var res = await PgcHttp.pgcReviewDislike(
       mediaId: mediaId,
       reviewId: reviewId,
     );
@@ -99,7 +99,7 @@ class PgcReviewController
   }
 
   Future<void> onDel(int index, int? reviewId) async {
-    var res = await BangumiHttp.pgcReviewDel(
+    var res = await PgcHttp.pgcReviewDel(
       mediaId: mediaId,
       reviewId: reviewId,
     );

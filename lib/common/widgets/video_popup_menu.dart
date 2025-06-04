@@ -3,7 +3,7 @@ import 'package:PiliPlus/http/video.dart';
 import 'package:PiliPlus/models/common/account_type.dart';
 import 'package:PiliPlus/models/home/rcmd/result.dart';
 import 'package:PiliPlus/models/model_video.dart';
-import 'package:PiliPlus/models/space_archive/item.dart';
+import 'package:PiliPlus/models_new/space/space_archive/item.dart';
 import 'package:PiliPlus/pages/mine/controller.dart';
 import 'package:PiliPlus/pages/search/widgets/search_text.dart';
 import 'package:PiliPlus/utils/storage.dart';

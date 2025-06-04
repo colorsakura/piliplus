@@ -1,7 +1,7 @@
+import 'package:PiliPlus/http/fav.dart';
 import 'package:PiliPlus/http/loading_state.dart';
-import 'package:PiliPlus/http/user.dart';
-import 'package:PiliPlus/models/fav_article/data.dart';
-import 'package:PiliPlus/models/fav_article/item.dart';
+import 'package:PiliPlus/models_new/fav/fav_article/data.dart';
+import 'package:PiliPlus/models_new/fav/fav_article/item.dart';
 import 'package:PiliPlus/pages/common/common_list_controller.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 
@@ -23,10 +23,10 @@ class FavArticleController
 
   @override
   Future<LoadingState<FavArticleData>> customGetData() =>
-      UserHttp.favArticle(page: page);
+      FavHttp.favArticle(page: page);
 
-  Future<void> onRemove(index, id) async {
-    final res = await UserHttp.communityAction(opusId: id, action: 4);
+  Future<void> onRemove(int index, String? id) async {
+    final res = await FavHttp.communityAction(opusId: id, action: 4);
     if (res['status']) {
       loadingState
         ..value.data!.removeAt(index)

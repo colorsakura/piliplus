@@ -5,7 +5,7 @@ import 'package:PiliPlus/common/widgets/image/image_save.dart';
 import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
 import 'package:PiliPlus/common/widgets/stat/stat.dart';
 import 'package:PiliPlus/models/common/badge_type.dart';
-import 'package:PiliPlus/models/user/fav_detail.dart';
+import 'package:PiliPlus/models_new/fav/fav_detail/media.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
@@ -13,7 +13,7 @@ import 'package:get/get.dart';
 
 // 收藏视频卡片 - 水平布局
 class FavVideoCardH extends StatelessWidget {
-  final FavDetailItemData videoItem;
+  final FavDetailItemModel videoItem;
   final GestureTapCallback? onTap;
   final GestureLongPressCallback? onLongPress;
   final VoidCallback? onDelFav;
@@ -38,15 +38,15 @@ class FavVideoCardH extends StatelessWidget {
           : onTap ??
               () {
                 if (!const [0, 16].contains(videoItem.attr)) {
-                  Get.toNamed('/member?mid=${videoItem.owner.mid}');
+                  Get.toNamed('/member?mid=${videoItem.upper?.mid}');
                   return;
                 }
 
                 // pgc
                 if (videoItem.type == 24) {
-                  PageUtils.viewBangumi(
+                  PageUtils.viewPgc(
                     seasonId: videoItem.ogv!.seasonId,
-                    epId: videoItem.epId,
+                    epId: videoItem.id,
                   );
                   return;
                 }
@@ -58,7 +58,7 @@ class FavVideoCardH extends StatelessWidget {
           : onLongPress ??
               () => imageSaveDialog(
                     title: videoItem.title,
-                    cover: videoItem.pic,
+                    cover: videoItem.cover,
                   ),
       child: Padding(
         padding: const EdgeInsets.symmetric(
@@ -79,7 +79,7 @@ class FavVideoCardH extends StatelessWidget {
                     clipBehavior: Clip.none,
                     children: [
                       NetworkImgLayer(
-                        src: videoItem.pic,
+                        src: videoItem.cover,
                         width: maxWidth,
                         height: maxHeight,
                       ),
@@ -109,7 +109,7 @@ class FavVideoCardH extends StatelessWidget {
     );
   }
 
-  Widget videoContent(context) {
+  Widget videoContent(BuildContext context) {
     final theme = Theme.of(context);
     return Expanded(
       child: Stack(
@@ -120,7 +120,7 @@ class FavVideoCardH extends StatelessWidget {
             children: [
               Expanded(
                 child: Text(
-                  videoItem.title,
+                  videoItem.title!,
                   textAlign: TextAlign.start,
                   style: const TextStyle(
                     letterSpacing: 0.3,
@@ -130,7 +130,7 @@ class FavVideoCardH extends StatelessWidget {
                 ),
               ),
               Text(
-                '${Utils.dateFormat(videoItem.favTime)} ${videoItem.owner.name}',
+                '${Utils.dateFormat(videoItem.favTime)} ${videoItem.upper?.name}',
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(
@@ -145,13 +145,13 @@ class FavVideoCardH extends StatelessWidget {
                   StatView(
                     context: context,
                     theme: 'gray',
-                    value: videoItem.stat.viewStr,
+                    value: Utils.numFormat(videoItem.cntInfo?.play),
                   ),
                   const SizedBox(width: 8),
                   StatDanMu(
                     context: context,
                     theme: 'gray',
-                    value: videoItem.stat.danmuStr,
+                    value: Utils.numFormat(videoItem.cntInfo?.danmaku),
                   ),
                   const Spacer(),
                 ],

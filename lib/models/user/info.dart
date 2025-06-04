@@ -88,7 +88,7 @@ class UserInfoData {
     face = json['face'];
     levelInfo = json['level_info'] != null
         ? LevelInfo.fromJson(json['level_info'])
-        : LevelInfo();
+        : null;
     mid = json['mid'];
     mobileVerified = json['mobile_verified'];
     money = json['money'] is int ? json['money'].toDouble() : json['money'];

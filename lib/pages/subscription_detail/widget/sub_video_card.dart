@@ -6,14 +6,14 @@ import 'package:PiliPlus/common/widgets/stat/stat.dart';
 import 'package:PiliPlus/http/search.dart';
 import 'package:PiliPlus/models/common/badge_type.dart';
 import 'package:PiliPlus/models/common/search_type.dart';
-import 'package:PiliPlus/models/user/sub_detail.dart';
+import 'package:PiliPlus/models_new/sub/sub_detail/media.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
 
 // 收藏视频卡片 - 水平布局
 class SubVideoCardH extends StatelessWidget {
-  final SubDetailMediaItem videoItem;
+  final SubDetailItemModel videoItem;
   final int? searchType;
 
   const SubVideoCardH({
@@ -115,13 +115,13 @@ class SubVideoCardH extends StatelessWidget {
               StatView(
                 context: context,
                 theme: 'gray',
-                value: Utils.numFormat(videoItem.cntInfo?['play']),
+                value: Utils.numFormat(videoItem.cntInfo?.play),
               ),
               const SizedBox(width: 8),
               StatDanMu(
                 context: context,
                 theme: 'gray',
-                value: Utils.numFormat(videoItem.cntInfo?['danmaku']),
+                value: Utils.numFormat(videoItem.cntInfo?.danmaku),
               ),
               const Spacer(),
             ],

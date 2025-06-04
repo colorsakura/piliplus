@@ -1,8 +1,8 @@
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/http/member.dart';
-import 'package:PiliPlus/models/upower_rank/data.dart';
-import 'package:PiliPlus/models/upower_rank/level_info.dart';
-import 'package:PiliPlus/models/upower_rank/rank_info.dart';
+import 'package:PiliPlus/models_new/upower_rank/data.dart';
+import 'package:PiliPlus/models_new/upower_rank/level_info.dart';
+import 'package:PiliPlus/models_new/upower_rank/rank_info.dart';
 import 'package:PiliPlus/pages/common/common_list_controller.dart';
 import 'package:get/get.dart';
 

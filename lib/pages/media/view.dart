@@ -1,12 +1,12 @@
 import 'dart:async';
 
-import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/common/nav_bar_config.dart';
-import 'package:PiliPlus/models/user/fav_folder.dart';
+import 'package:PiliPlus/models_new/fav/fav_video/list.dart';
 import 'package:PiliPlus/pages/common/common_page.dart';
 import 'package:PiliPlus/pages/main/controller.dart';
 import 'package:PiliPlus/pages/media/controller.dart';
+import 'package:PiliPlus/pages/media/widgets/item.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
@@ -169,12 +169,13 @@ class _MediaPageState extends CommonPageState<MediaPage, MediaController>
       Loading() => const SizedBox.shrink(),
       Success(:var response) => Builder(
           builder: (context) {
-            List<FavFolderItemData>? favFolderList = response.list;
+            List<FavVideoItemModel>? favFolderList = response.list;
             if (favFolderList.isNullOrEmpty) {
               return const SizedBox.shrink();
             }
             bool flag = controller.count.value > favFolderList!.length;
-            return ListView.builder(
+            return ListView.separated(
+              padding: const EdgeInsets.only(left: 20),
               itemCount: response.list.length + (flag ? 1 : 0),
               itemBuilder: (context, index) {
                 if (flag && index == favFolderList.length) {
@@ -210,24 +211,15 @@ class _MediaPageState extends CommonPageState<MediaPage, MediaController>
                   return FavFolderItem(
                     heroTag: heroTag,
                     item: response.list[index],
-                    index: index,
-                    onTap: () async {
-                      await Get.toNamed(
-                        '/favDetail',
-                        arguments: response.list[index],
-                        parameters: {
-                          'mediaId': response.list[index].id.toString(),
-                          'heroTag': heroTag,
-                        },
-                      );
-                      Future.delayed(const Duration(milliseconds: 150), () {
-                        controller.onRefresh();
-                      });
-                    },
+                    callback: () => Future.delayed(
+                      const Duration(milliseconds: 150),
+                      controller.onRefresh,
+                    ),
                   );
                 }
               },
               scrollDirection: Axis.horizontal,
+              separatorBuilder: (context, index) => const SizedBox(width: 14),
             );
           },
         ),
@@ -241,80 +233,5 @@ class _MediaPageState extends CommonPageState<MediaPage, MediaController>
           ),
         ),
     };
-  }
-}
-
-class FavFolderItem extends StatelessWidget {
-  const FavFolderItem({
-    super.key,
-    this.item,
-    this.index,
-    required this.onTap,
-    required this.heroTag,
-  });
-
-  final FavFolderItemData? item;
-  final int? index;
-  final GestureTapCallback onTap;
-  final String heroTag;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    return Container(
-      margin: EdgeInsets.only(left: index == 0 ? 20 : 0, right: 14),
-      child: GestureDetector(
-        onTap: onTap,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(height: 12),
-            Container(
-              width: 180,
-              height: 110,
-              margin: const EdgeInsets.only(bottom: 8),
-              clipBehavior: Clip.hardEdge,
-              decoration: BoxDecoration(
-                borderRadius: const BorderRadius.all(Radius.circular(12)),
-                color:
-                    theme.colorScheme.onInverseSurface.withValues(alpha: 0.4),
-                boxShadow: [
-                  BoxShadow(
-                    color: theme.colorScheme.onInverseSurface
-                        .withValues(alpha: 0.4),
-                    offset: const Offset(4, -12),
-                    blurRadius: 0.0,
-                    spreadRadius: 0.0,
-                  ),
-                ],
-              ),
-              child: LayoutBuilder(
-                builder: (context, BoxConstraints box) {
-                  return Hero(
-                    tag: heroTag,
-                    child: NetworkImgLayer(
-                      src: item!.cover,
-                      width: box.maxWidth,
-                      height: box.maxHeight,
-                    ),
-                  );
-                },
-              ),
-            ),
-            Text(
-              ' ${item!.title}',
-              overflow: TextOverflow.fade,
-              maxLines: 1,
-            ),
-            Text(
-              ' 共${item!.mediaCount}条视频 · ${Utils.isPublicFavText(item?.attr ?? 0)}',
-              style: theme.textTheme.labelSmall!
-                  .copyWith(color: theme.colorScheme.outline),
-            )
-          ],
-        ),
-      ),
-    );
   }
 }

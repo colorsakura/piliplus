@@ -1,8 +1,8 @@
 import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/common/widgets/video_card/video_card_h.dart';
 import 'package:PiliPlus/models/search/result.dart';
-import 'package:PiliPlus/pages/bangumi/widgets/bangumi_card_v_search.dart';
 import 'package:PiliPlus/pages/search_panel/all/controller.dart';
+import 'package:PiliPlus/pages/search_panel/all/widgets/pgc_card_v_search.dart';
 import 'package:PiliPlus/pages/search_panel/pgc/widgets/item.dart';
 import 'package:PiliPlus/pages/search_panel/user/widgets/item.dart';
 import 'package:PiliPlus/pages/search_panel/view.dart';
@@ -24,7 +24,7 @@ class SearchAllPanel extends CommonSearchPanel {
 }
 
 class _SearchAllPanelState
-    extends CommonSearchPanelState<SearchAllPanel, SearchAllModel, dynamic> {
+    extends CommonSearchPanelState<SearchAllPanel, SearchAllData, dynamic> {
   @override
   late final SearchAllController controller = Get.put(
     SearchAllController(
@@ -58,7 +58,7 @@ class _SearchAllPanelState
                     showPubdate: true,
                   ),
                 ),
-              List<SearchMBangumiItemModel>() => item.length == 1
+              List<SearchPgcItemModel>() => item.length == 1
                   ? SizedBox(
                       height: 160,
                       child: SearchPgcItem(item: item.first),
@@ -80,7 +80,7 @@ class _SearchAllPanelState
                                   ? StyleString.safeSpace
                                   : 0,
                             ),
-                            child: BangumiCardVSearch(item: item[index]),
+                            child: PgcCardVSearch(item: item[index]),
                           );
                         },
                       ),

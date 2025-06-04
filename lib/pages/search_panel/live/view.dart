@@ -20,10 +20,10 @@ class SearchLivePanel extends CommonSearchPanel {
 }
 
 class _SearchLivePanelState extends CommonSearchPanelState<SearchLivePanel,
-    SearchLiveModel, SearchLiveItemModel> {
+    SearchLiveData, SearchLiveItemModel> {
   @override
   late final controller = Get.put(
-    SearchPanelController<SearchLiveModel, SearchLiveItemModel>(
+    SearchPanelController<SearchLiveData, SearchLiveItemModel>(
       keyword: widget.keyword,
       searchType: widget.searchType,
       tag: widget.tag,

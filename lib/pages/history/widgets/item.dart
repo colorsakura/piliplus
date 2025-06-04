@@ -5,11 +5,9 @@ import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
 import 'package:PiliPlus/common/widgets/progress_bar/video_progress_indicator.dart';
 import 'package:PiliPlus/http/search.dart';
 import 'package:PiliPlus/http/user.dart';
-import 'package:PiliPlus/http/video.dart';
 import 'package:PiliPlus/models/common/badge_type.dart';
 import 'package:PiliPlus/models/common/history_business_type.dart';
-import 'package:PiliPlus/models/user/history.dart';
-import 'package:PiliPlus/models/video_detail/data.dart';
+import 'package:PiliPlus/models_new/history/list.dart';
 import 'package:PiliPlus/pages/common/multi_select_controller.dart';
 import 'package:PiliPlus/pages/history/base_controller.dart';
 import 'package:PiliPlus/utils/feed_back.dart';
@@ -22,7 +20,7 @@ import 'package:get/get.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 class HistoryItem extends StatelessWidget {
-  final HisListItem videoItem;
+  final HistoryItemModel videoItem;
   final dynamic ctr;
   final Function? onChoose;
   final Function(dynamic kid, dynamic business) onDelete;
@@ -64,41 +62,15 @@ class HistoryItem extends StatelessWidget {
           } else {
             SmartDialog.showToast('直播未开播');
           }
-        } else if (videoItem.history.business == 'pgc' ||
-            videoItem.tagName?.contains('动画') == true) {
-          var bvid = videoItem.history.bvid;
-          if (bvid != null && bvid != '') {
-            var result = await VideoHttp.videoIntro(bvid: bvid);
-            if (result['status']) {
-              VideoDetailData data = result['data'];
-              String bvid = data.bvid!;
-              var epid = data.epId;
-              if (epid != null) {
-                PageUtils.viewBangumi(epId: epid);
-              } else {
-                int? cid = videoItem.history.cid ??
-                    await SearchHttp.ab2c(aid: aid, bvid: bvid);
-                if (cid != null) {
-                  PageUtils.toVideoPage(
-                    'bvid=$bvid&cid=$cid',
-                    arguments: {
-                      'heroTag': Utils.makeHeroTag(cid),
-                      'pic': videoItem.cover,
-                    },
-                  );
-                }
-              }
-            } else {
-              SmartDialog.showToast(result['msg']);
-            }
-          } else {
-            if (videoItem.history.epid != null && videoItem.history.epid != 0) {
-              PageUtils.viewBangumi(epId: videoItem.history.epid);
-            }
-          }
+        } else if (videoItem.history.business == 'pgc') {
+          PageUtils.viewPgc(epId: videoItem.history.epid);
         } else {
           int? cid = videoItem.history.cid ??
-              await SearchHttp.ab2c(aid: aid, bvid: bvid);
+              await SearchHttp.ab2c(
+                aid: aid,
+                bvid: bvid,
+                part: videoItem.history.page,
+              );
           if (cid != null) {
             PageUtils.toVideoPage(
               'bvid=$bvid&cid=$cid',
@@ -324,7 +296,7 @@ class HistoryItem extends StatelessWidget {
         children: [
           Expanded(
             child: Text(
-              videoItem.title,
+              videoItem.title!,
               textAlign: TextAlign.start,
               style: TextStyle(
                 fontSize: theme.textTheme.bodyMedium!.fontSize,

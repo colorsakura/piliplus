@@ -1,12 +1,12 @@
 import 'package:PiliPlus/http/fan.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/http/video.dart';
-import 'package:PiliPlus/models/fans/result.dart';
+import 'package:PiliPlus/models_new/fans/data.dart';
+import 'package:PiliPlus/models_new/fans/list.dart';
 import 'package:PiliPlus/pages/common/common_list_controller.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 
-class FansController
-    extends CommonListController<FansDataModel, FansItemModel> {
+class FansController extends CommonListController<FansData, FansItemModel> {
   FansController(this.mid);
   int ps = 20;
   int total = 0;
@@ -19,12 +19,12 @@ class FansController
   }
 
   @override
-  List<FansItemModel>? getDataList(FansDataModel response) {
+  List<FansItemModel>? getDataList(FansData response) {
     return response.list;
   }
 
   @override
-  Future<LoadingState<FansDataModel>> customGetData() => FanHttp.fans(
+  Future<LoadingState<FansData>> customGetData() => FanHttp.fans(
         vmid: mid,
         pn: page,
         ps: ps,

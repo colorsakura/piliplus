@@ -12,14 +12,14 @@ import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/main.dart';
 import 'package:PiliPlus/models/common/episode_panel_type.dart';
 import 'package:PiliPlus/models/common/search_type.dart';
-import 'package:PiliPlus/models/pgc/pgc_info_model/episode.dart' as bangumi;
-import 'package:PiliPlus/models/pgc/pgc_info_model/result.dart';
-import 'package:PiliPlus/models/video_detail/episode.dart';
-import 'package:PiliPlus/models/video_detail/page.dart';
-import 'package:PiliPlus/models/video_tag/data.dart';
+import 'package:PiliPlus/models_new/pgc/pgc_info_model/episode.dart' as pgc;
+import 'package:PiliPlus/models_new/pgc/pgc_info_model/result.dart';
+import 'package:PiliPlus/models_new/video/video_detail/episode.dart';
+import 'package:PiliPlus/models_new/video/video_detail/page.dart';
+import 'package:PiliPlus/models_new/video/video_tag/data.dart';
 import 'package:PiliPlus/pages/danmaku/view.dart';
 import 'package:PiliPlus/pages/episode_panel/view.dart';
-import 'package:PiliPlus/pages/video/ai/view.dart';
+import 'package:PiliPlus/pages/video/ai_conclusion/view.dart';
 import 'package:PiliPlus/pages/video/controller.dart';
 import 'package:PiliPlus/pages/video/introduction/pgc/controller.dart';
 import 'package:PiliPlus/pages/video/introduction/pgc/view.dart';
@@ -79,7 +79,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
   late VideoReplyController _videoReplyController;
   PlPlayerController? plPlayerController;
   late VideoIntroController videoIntroController;
-  late BangumiIntroController bangumiIntroController;
+  late PgcIntroController pgcIntroController;
   late final _introController = ScrollController();
   late String heroTag;
 
@@ -130,7 +130,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
     }
     videoIntroController = Get.put(VideoIntroController(), tag: heroTag);
     if (videoDetailController.videoType == SearchType.media_bangumi) {
-      bangumiIntroController = Get.put(BangumiIntroController(), tag: heroTag);
+      pgcIntroController = Get.put(PgcIntroController(), tag: heroTag);
     }
     autoExitFullscreen =
         setting.get(SettingBoxKey.enableAutoExit, defaultValue: true);
@@ -237,7 +237,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
           notExitFlag = videoIntroController.nextPlay();
         } else if (videoDetailController.videoType ==
             SearchType.media_bangumi) {
-          notExitFlag = bangumiIntroController.nextPlay();
+          notExitFlag = pgcIntroController.nextPlay();
         }
       }
 
@@ -1197,9 +1197,9 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                     videoDetailController.videoType == SearchType.video
                         ? videoIntroController
                         : null,
-                bangumiIntroController:
+                pgcIntroController:
                     videoDetailController.videoType == SearchType.media_bangumi
-                        ? bangumiIntroController
+                        ? pgcIntroController
                         : null,
                 headerControl: HeaderControl(
                   controller: plPlayerController!,
@@ -1380,9 +1380,9 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                         videoDetailController.videoType == SearchType.video
                             ? videoIntroController
                             : null,
-                    bangumiIntroController: videoDetailController.videoType ==
+                    pgcIntroController: videoDetailController.videoType ==
                             SearchType.media_bangumi
-                        ? bangumiIntroController
+                        ? pgcIntroController
                         : null,
                     headerControl: HeaderControl(
                       key: videoDetailController.headerCtrKey,
@@ -1799,7 +1799,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
               ] else if (videoDetailController.videoType ==
                   SearchType.media_bangumi)
                 Obx(
-                  () => BangumiIntroPanel(
+                  () => PgcIntroPanel(
                     key: pgcPanelKey,
                     heroTag: heroTag,
                     cid: videoDetailController.cid.value,
@@ -1899,7 +1899,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                         videoIntroController.videoDetail.value.isPageReversed,
                     changeFucCall: videoDetailController.videoType ==
                             SearchType.media_bangumi
-                        ? bangumiIntroController.changeSeasonOrbangu
+                        ? pgcIntroController.changeSeasonOrbangu
                         : videoIntroController.changeSeasonOrbangu,
                     showTitle: false,
                     isSupportReverse: videoDetailController.videoType !=
@@ -1955,7 +1955,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                       .isReversed,
                   changeFucCall: videoDetailController.videoType ==
                           SearchType.media_bangumi
-                      ? bangumiIntroController.changeSeasonOrbangu
+                      ? pgcIntroController.changeSeasonOrbangu
                       : videoIntroController.changeSeasonOrbangu,
                   showTitle: false,
                   isSupportReverse: videoDetailController.videoType !=
@@ -2039,16 +2039,17 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
   void showAiBottomSheet() {
     videoDetailController.childKey.currentState?.showBottomSheet(
       backgroundColor: Colors.transparent,
-      (context) => AiDetail(modelResult: videoIntroController.modelResult),
+      (context) =>
+          AiDetail(modelResult: videoIntroController.aiConclusionResult!),
     );
   }
 
   void showIntroDetail(
-      BangumiInfoModel videoDetail, List<VideoTagItem>? videoTags) {
+      PgcInfoModel videoDetail, List<VideoTagItem>? videoTags) {
     videoDetailController.childKey.currentState?.showBottomSheet(
       backgroundColor: Colors.transparent,
       (context) => IntroDetail(
-        bangumiDetail: videoDetail,
+        item: videoDetail,
         videoTags: videoTags,
       ),
     );
@@ -2066,7 +2067,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
               ? EpisodeType.season
               : episodes is List<Part>
                   ? EpisodeType.part
-                  : EpisodeType.bangumi,
+                  : EpisodeType.pgc,
           cover: videoDetailController.videoItem['pic'],
           enableSlide: enableSlide,
           initialTabIndex: index ?? 0,
@@ -2090,7 +2091,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
               videoDetailController.videoType != SearchType.media_bangumi,
           changeFucCall:
               videoDetailController.videoType == SearchType.media_bangumi
-                  ? bangumiIntroController.changeSeasonOrbangu
+                  ? pgcIntroController.changeSeasonOrbangu
                   : videoIntroController.changeSeasonOrbangu,
           onClose: Get.back,
           onReverse: () {
@@ -2133,13 +2134,13 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
 
     void changeEpisode(episode) {
       videoIntroController.changeSeasonOrbangu(
-        episode is bangumi.EpisodeItem ? episode.epId : null,
+        episode is pgc.EpisodeItem ? episode.epId : null,
         episode.runtimeType.toString() == "EpisodeItem" ? episode.bvid : bvid,
         episode.cid,
         episode.runtimeType.toString() == "EpisodeItem" ? episode.aid : aid,
         episode is EpisodeItem
             ? episode.arc?.pic
-            : episode is bangumi.EpisodeItem
+            : episode is pgc.EpisodeItem
                 ? episode.cover
                 : null,
       );

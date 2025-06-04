@@ -96,7 +96,7 @@ class _SavePanelState extends State<SavePanel> {
 
         try {
           final heroTag = Get.arguments?['heroTag'];
-          late final ctr = Get.find<BangumiIntroController>(tag: heroTag);
+          late final ctr = Get.find<PgcIntroController>(tag: heroTag);
           final type = _item.type.toInt();
           late final oid = _item.oid;
           late final rootId = hasRoot ? _item.root : _item.id;

@@ -1,6 +1,7 @@
 import 'package:PiliPlus/models/model_owner.dart';
 import 'package:PiliPlus/models/model_video.dart';
 import 'package:PiliPlus/utils/em.dart';
+import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/utils.dart';
 
 abstract class SearchNumData<T> {
@@ -13,13 +14,13 @@ abstract class SearchNumData<T> {
   List<T>? list;
 }
 
-class SearchAllModel extends SearchNumData {
-  SearchAllModel({
+class SearchAllData extends SearchNumData {
+  SearchAllData({
     super.numResults,
     super.list,
   });
 
-  SearchAllModel.fromJson(Map<String, dynamic> json) {
+  SearchAllData.fromJson(Map<String, dynamic> json) {
     numResults = (json['numResults'] as num?)?.toInt();
     if ((json['result'] as List?)?.isNotEmpty == true) {
       final isRefresh = json['page'] == 1;
@@ -30,7 +31,7 @@ class SearchAllModel extends SearchNumData {
             case 'media_bangumi' || 'media_bangumi':
               if (isRefresh) {
                 list!.add((item['data'] as List)
-                    .map((e) => SearchMBangumiItemModel.fromJson(e))
+                    .map((e) => SearchPgcItemModel.fromJson(e))
                     .toList());
               }
               break;
@@ -53,13 +54,13 @@ class SearchAllModel extends SearchNumData {
   }
 }
 
-class SearchVideoModel extends SearchNumData<SearchVideoItemModel> {
-  SearchVideoModel({
+class SearchVideoData extends SearchNumData<SearchVideoItemModel> {
+  SearchVideoData({
     super.numResults,
     super.list,
   });
 
-  SearchVideoModel.fromJson(Map<String, dynamic> json) {
+  SearchVideoData.fromJson(Map<String, dynamic> json) {
     numResults = (json['numResults'] as num?)?.toInt();
     list = (json['result'] as List?)
         ?.where((e) => e['available'] == true)
@@ -71,22 +72,11 @@ class SearchVideoModel extends SearchNumData<SearchVideoItemModel> {
 class SearchVideoItemModel extends BaseVideoItemModel {
   String? type;
   int? id;
-  // String? author;
-  // String? typeid;
-  // String? typename;
   String? arcurl;
-  // String? play;
-  // int? videoReview;
-  // String? favorites;
   String? tag;
-  // String? review;
   int? ctime;
-  // String? duration;
-  // String? viewType;
-  // String? like;
-  // String? upic;
-  // String? danmaku;
-  List<Map<String, String>>? titleList;
+
+  List<({bool isEm, String text})>? titleList;
 
   SearchVideoItemModel.fromJson(Map<String, dynamic> json) {
     type = json['type'];
@@ -94,26 +84,16 @@ class SearchVideoItemModel extends BaseVideoItemModel {
     arcurl = json['arcurl'];
     aid = json['aid'];
     bvid = json['bvid'];
-    // title = json['title'].replaceAll(RegExp(r'<.*?>'), '');
     titleList = Em.regTitle(json['title']);
-    title = titleList!.map((i) => i['text']!).join();
+    title = titleList!.map((i) => i.text).join();
     desc = json['description'];
-    pic = json['pic'] != null && json['pic'].startsWith('//')
-        ? 'https:${json['pic']}'
-        : json['pic'] ?? '';
+    cover = (json['pic'] as String?)?.http2https;
     pubdate = json['pubdate'];
     ctime = json['senddate'];
     duration = Utils.duration(json['duration']);
     owner = SearchOwner.fromJson(json);
     stat = SearchStat.fromJson(json);
   }
-
-  // @override
-  // String? goto;
-  // @override
-  // bool isFollowed;
-  // @override
-  // String? uri;
 }
 
 class SearchStat extends BaseStat {
@@ -139,13 +119,13 @@ class SearchOwner extends Owner {
   }
 }
 
-class SearchUserModel extends SearchNumData<SearchUserItemModel> {
-  SearchUserModel({
+class SearchUserData extends SearchNumData<SearchUserItemModel> {
+  SearchUserData({
     super.numResults,
     super.list,
   });
 
-  SearchUserModel.fromJson(Map<String, dynamic> json) {
+  SearchUserData.fromJson(Map<String, dynamic> json) {
     numResults = (json['numResults'] as num?)?.toInt();
     list = (json['result'] as List?)
         ?.map<SearchUserItemModel>((e) => SearchUserItemModel.fromJson(e))
@@ -199,7 +179,7 @@ class SearchUserItemModel {
     usign = json['usign'];
     fans = json['fans'];
     videos = json['videos'];
-    upic = 'https:${json['upic']}';
+    upic = (json['upic'] as String?)?.http2https;
     faceNft = json['face_nft'];
     faceNftType = json['face_nft_type'];
     verifyInfo = json['verify_info'];
@@ -213,13 +193,13 @@ class SearchUserItemModel {
   }
 }
 
-class SearchLiveModel extends SearchNumData<SearchLiveItemModel> {
-  SearchLiveModel({
+class SearchLiveData extends SearchNumData<SearchLiveItemModel> {
+  SearchLiveData({
     super.numResults,
     super.list,
   });
 
-  SearchLiveModel.fromJson(Map<String, dynamic> json) {
+  SearchLiveData.fromJson(Map<String, dynamic> json) {
     numResults = (json['numResults'] as num?)?.toInt();
     list = json['result']
         ?.map<SearchLiveItemModel>((e) => SearchLiveItemModel.fromJson(e))
@@ -238,7 +218,7 @@ class SearchLiveItemModel {
     this.face,
     this.userCover,
     this.type,
-    this.title,
+    required this.title,
     this.cover,
     this.pic,
     this.online,
@@ -258,7 +238,7 @@ class SearchLiveItemModel {
   String? face;
   String? userCover;
   String? type;
-  List? title;
+  late List<({bool isEm, String text})> title;
   String? cover;
   String? pic;
   int? online;
@@ -291,26 +271,25 @@ class SearchLiveItemModel {
   }
 }
 
-class SearchMBangumiModel extends SearchNumData<SearchMBangumiItemModel> {
-  SearchMBangumiModel({
+class SearchPgcData extends SearchNumData<SearchPgcItemModel> {
+  SearchPgcData({
     super.numResults,
     super.list,
   });
 
-  SearchMBangumiModel.fromJson(Map<String, dynamic> json) {
+  SearchPgcData.fromJson(Map<String, dynamic> json) {
     numResults = (json['numResults'] as num?)?.toInt();
     list = (json['result'] as List?)
-        ?.map<SearchMBangumiItemModel>(
-            (e) => SearchMBangumiItemModel.fromJson(e))
+        ?.map<SearchPgcItemModel>((e) => SearchPgcItemModel.fromJson(e))
         .toList();
   }
 }
 
-class SearchMBangumiItemModel {
-  SearchMBangumiItemModel({
+class SearchPgcItemModel {
+  SearchPgcItemModel({
     this.type,
     this.mediaId,
-    this.title,
+    required this.title,
     this.orgTitle,
     this.mediaType,
     this.cv,
@@ -337,7 +316,7 @@ class SearchMBangumiItemModel {
 
   String? type;
   int? mediaId;
-  List? title;
+  late List<({bool isEm, String text})> title;
   String? orgTitle;
   int? mediaType;
   String? cv;
@@ -361,7 +340,7 @@ class SearchMBangumiItemModel {
   Map? mediaScore;
   String? indexShow;
 
-  SearchMBangumiItemModel.fromJson(Map<String, dynamic> json) {
+  SearchPgcItemModel.fromJson(Map<String, dynamic> json) {
     type = json['type'];
     mediaId = json['media_id'];
     title = Em.regTitle(json['title']);
@@ -390,13 +369,13 @@ class SearchMBangumiItemModel {
   }
 }
 
-class SearchArticleModel extends SearchNumData<SearchArticleItemModel> {
-  SearchArticleModel({
+class SearchArticleData extends SearchNumData<SearchArticleItemModel> {
+  SearchArticleData({
     super.numResults,
     super.list,
   });
 
-  SearchArticleModel.fromJson(Map<String, dynamic> json) {
+  SearchArticleData.fromJson(Map<String, dynamic> json) {
     numResults = (json['numResults'] as num?)?.toInt();
     list = (json['result'] as List?)
         ?.map<SearchArticleItemModel>((e) => SearchArticleItemModel.fromJson(e))
@@ -408,7 +387,7 @@ class SearchArticleItemModel {
   SearchArticleItemModel({
     this.pubTime,
     this.like,
-    this.title,
+    required this.title,
     this.subTitle,
     this.rankOffset,
     this.mid,
@@ -426,11 +405,11 @@ class SearchArticleItemModel {
 
   int? pubTime;
   int? like;
-  List? title;
+  late List<({bool isEm, String text})> title;
   String? subTitle;
   int? rankOffset;
   int? mid;
-  List? imageUrls;
+  List<String>? imageUrls;
   int? id;
   int? categoryId;
   int? view;
@@ -445,11 +424,10 @@ class SearchArticleItemModel {
     pubTime = json['pub_time'];
     like = json['like'];
     title = Em.regTitle(json['title']);
-    subTitle =
-        Em.decodeHtmlEntities(json['title'].replaceAll(RegExp(r'<[^>]*>'), ''));
+    subTitle = title.map((e) => e.text).join();
     rankOffset = json['rank_offset'];
     mid = json['mid'];
-    imageUrls = json['image_urls'];
+    imageUrls = (json['image_urls'] as List?)?.cast();
     id = json['id'];
     categoryId = json['category_id'];
     view = json['view'];

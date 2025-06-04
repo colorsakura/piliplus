@@ -3,7 +3,7 @@ import 'package:PiliPlus/common/widgets/loading_widget/http_error.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/common/follow_order_type.dart';
-import 'package:PiliPlus/models/follow/result.dart';
+import 'package:PiliPlus/models_new/follow/list.dart';
 import 'package:PiliPlus/pages/follow/child_controller.dart';
 import 'package:PiliPlus/pages/follow/controller.dart';
 import 'package:PiliPlus/pages/follow/widgets/follow_item.dart';

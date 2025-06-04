@@ -21,7 +21,7 @@ class LiveItem extends StatelessWidget {
       child: InkWell(
         onTap: () => Get.toNamed('/liveRoom?roomid=${liveItem.roomid}'),
         onLongPress: () => imageSaveDialog(
-          title: liveItem.title?.map((item) => item['text']).join() ?? '',
+          title: liveItem.title.map((item) => item.text).join(),
           cover: liveItem.cover,
         ),
         child: Column(
@@ -73,20 +73,16 @@ class LiveItem extends StatelessWidget {
             children: [
               Text.rich(
                 TextSpan(
-                  children: [
-                    for (var i in liveItem.title!) ...[
-                      TextSpan(
-                        text: i['text'],
-                        style: TextStyle(
-                          letterSpacing: 0.3,
-                          color: i['type'] == 'em'
-                              ? theme.colorScheme.primary
-                              : theme.colorScheme.onSurface,
-                        ),
-                      ),
-                    ]
-                  ],
-                ),
+                    children: liveItem.title
+                        .map((e) => TextSpan(
+                              text: e.text,
+                              style: TextStyle(
+                                color: e.isEm
+                                    ? theme.colorScheme.primary
+                                    : theme.colorScheme.onSurface,
+                              ),
+                            ))
+                        .toList()),
               ),
               SizedBox(
                 width: double.infinity,

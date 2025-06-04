@@ -48,7 +48,7 @@ class MemberCoinsItem extends StatelessWidget {
         },
         onLongPress: () => imageSaveDialog(
           title: coinItem.title,
-          cover: coinItem.pic,
+          cover: coinItem.cover,
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -62,7 +62,7 @@ class MemberCoinsItem extends StatelessWidget {
                   clipBehavior: Clip.none,
                   children: [
                     NetworkImgLayer(
-                      src: coinItem.pic,
+                      src: coinItem.cover,
                       width: maxWidth,
                       height: maxHeight,
                     ),

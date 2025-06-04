@@ -501,7 +501,7 @@ class ChatItem extends StatelessWidget {
 
       // pgc
       case 16:
-        onTap = () => PageUtils.viewBangumi(epId: content['id']);
+        onTap = () => PageUtils.viewPgc(epId: content['id']);
         break;
 
       default:

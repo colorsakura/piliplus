@@ -1,4 +1,5 @@
-import 'package:PiliPlus/models/user/history.dart';
+import 'package:PiliPlus/models_new/history/data.dart';
+import 'package:PiliPlus/models_new/history/list.dart';
 import 'package:PiliPlus/pages/common/common_search_page.dart';
 import 'package:PiliPlus/pages/history/widgets/item.dart';
 import 'package:PiliPlus/pages/history_search/controller.dart';
@@ -14,8 +15,8 @@ class HistorySearchPage extends CommonSearchPage {
   State<HistorySearchPage> createState() => _HistorySearchPageState();
 }
 
-class _HistorySearchPageState
-    extends CommonSearchPageState<HistorySearchPage, HistoryData, HisListItem> {
+class _HistorySearchPageState extends CommonSearchPageState<HistorySearchPage,
+    HistoryData, HistoryItemModel> {
   @override
   final HistorySearchController controller = Get.put(
     HistorySearchController(),
@@ -23,7 +24,7 @@ class _HistorySearchPageState
   );
 
   @override
-  Widget buildList(List<HisListItem> list) {
+  Widget buildList(List<HistoryItemModel> list) {
     return SliverGrid(
       gridDelegate: Grid.videoCardHDelegate(context, minHeight: 110),
       delegate: SliverChildBuilderDelegate(

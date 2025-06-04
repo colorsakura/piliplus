@@ -22,7 +22,7 @@ class SearchVideoPanel extends CommonSearchPanel {
 }
 
 class _SearchVideoPanelState extends CommonSearchPanelState<SearchVideoPanel,
-    SearchVideoModel, SearchVideoItemModel> {
+    SearchVideoData, SearchVideoItemModel> {
   @override
   late final SearchVideoController controller = Get.put(
     SearchVideoController(

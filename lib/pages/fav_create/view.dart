@@ -1,7 +1,7 @@
 import 'package:PiliPlus/common/widgets/loading_widget/http_error.dart';
+import 'package:PiliPlus/http/fav.dart';
 import 'package:PiliPlus/http/msg.dart';
-import 'package:PiliPlus/http/user.dart';
-import 'package:PiliPlus/models/folder_info/data.dart';
+import 'package:PiliPlus/models_new/fav/fav_folder_info/data.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_debounce/easy_throttle.dart';
@@ -40,7 +40,7 @@ class _CreateFavPageState extends State<CreateFavPage> {
 
   void _getFolderInfo() {
     _errMsg = null;
-    UserHttp.folderInfo(mediaId: _mediaId).then((res) {
+    FavHttp.folderInfo(mediaId: _mediaId).then((res) {
       if (res['status']) {
         FolderInfo data = res['data'];
         _titleController.text = data.title!;
@@ -75,7 +75,7 @@ class _CreateFavPageState extends State<CreateFavPage> {
                 SmartDialog.showToast('名称不能为空');
                 return;
               }
-              UserHttp.addOrEditFolder(
+              FavHttp.addOrEditFolder(
                 isAdd: _mediaId == null,
                 mediaId: _mediaId,
                 title: _titleController.text,

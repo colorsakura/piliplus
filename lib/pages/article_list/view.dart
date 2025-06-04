@@ -6,8 +6,8 @@ import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/http/constants.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/common/image_type.dart';
-import 'package:PiliPlus/models/dynamics/article_list/list.dart';
-import 'package:PiliPlus/models/space_article/item.dart';
+import 'package:PiliPlus/models_new/article/article_list/article.dart';
+import 'package:PiliPlus/models_new/article/article_list/list.dart';
 import 'package:PiliPlus/pages/article_list/controller.dart';
 import 'package:PiliPlus/pages/article_list/widgets/item.dart';
 import 'package:PiliPlus/utils/grid.dart';
@@ -54,7 +54,7 @@ class _ArticleListPageState extends State<ArticleListPage> {
   }
 
   Widget _buildBody(
-      ThemeData theme, LoadingState<List<SpaceArticleItem>?> loadingState) {
+      ThemeData theme, LoadingState<List<ArticleListItemModel>?> loadingState) {
     return switch (loadingState) {
       Loading() => SliverPadding(
           padding: EdgeInsets.only(
@@ -94,7 +94,7 @@ class _ArticleListPageState extends State<ArticleListPage> {
     };
   }
 
-  Widget _buildHeader(ThemeData theme, ArticleList? item) {
+  Widget _buildHeader(ThemeData theme, ArticleListInfo? item) {
     if (item == null) {
       return const SliverToBoxAdapter();
     }

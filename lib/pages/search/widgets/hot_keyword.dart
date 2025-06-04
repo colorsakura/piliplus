@@ -1,4 +1,4 @@
-import 'package:PiliPlus/models/search/search_trending/trending_list.dart';
+import 'package:PiliPlus/models_new/search/search_trending/list.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 
 class HotKeyword extends StatelessWidget {
   final double width;
-  final List<SearchKeywordList> hotSearchList;
+  final List<SearchTrendingItemModel> hotSearchList;
   final Function? onClick;
   final bool showMore;
   const HotKeyword({

@@ -2,17 +2,17 @@ import 'dart:math';
 
 import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/common/widgets/loading_widget/loading_widget.dart';
-import 'package:PiliPlus/common/widgets/video_card/video_card_v_member_home.dart';
 import 'package:PiliPlus/http/loading_state.dart';
-import 'package:PiliPlus/models/space/data.dart';
-import 'package:PiliPlus/models/space/tab_item.dart';
-import 'package:PiliPlus/pages/bangumi/widgets/bangumi_card_v_member_home.dart';
+import 'package:PiliPlus/models_new/space/space/data.dart';
+import 'package:PiliPlus/models_new/space/space/tab2.dart';
 import 'package:PiliPlus/pages/member/controller.dart';
 import 'package:PiliPlus/pages/member_article/widget/item.dart';
 import 'package:PiliPlus/pages/member_coin/view.dart';
 import 'package:PiliPlus/pages/member_contribute/controller.dart';
-import 'package:PiliPlus/pages/member_home/widget/fav_item.dart';
+import 'package:PiliPlus/pages/member_home/widgets/fav_item.dart';
+import 'package:PiliPlus/pages/member_home/widgets/video_card_v_member_home.dart';
 import 'package:PiliPlus/pages/member_like/view.dart';
+import 'package:PiliPlus/pages/member_pgc/widgets/pgc_card_v_member_pgc.dart';
 import 'package:PiliPlus/utils/grid.dart';
 import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/material.dart';
@@ -206,8 +206,8 @@ class _MemberHomeState extends State<MemberHome>
                       ),
                       delegate: SliverChildBuilderDelegate(
                         (context, index) {
-                          return BangumiCardVMemberHome(
-                            bangumiItem: res.season!.item![index],
+                          return PgcCardVMemberPgc(
+                            item: res.season!.item![index],
                           );
                         },
                         childCount:
@@ -258,7 +258,7 @@ class _MemberHomeState extends State<MemberHome>
                     _ctr.tab2!.indexWhere((item) => item.param == param);
                 if (index != -1) {
                   if (const ['video', 'opus', 'audio'].contains(param1)) {
-                    List<SpaceTabItem> items = _ctr.tab2!
+                    List<SpaceTab2Item> items = _ctr.tab2!
                         .firstWhere((item) => item.param == param)
                         .items!;
                     int index1 =

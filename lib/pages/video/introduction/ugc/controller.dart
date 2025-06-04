@@ -2,23 +2,26 @@ import 'dart:async';
 
 import 'package:PiliPlus/http/api.dart';
 import 'package:PiliPlus/http/constants.dart';
+import 'package:PiliPlus/http/fav.dart';
 import 'package:PiliPlus/http/init.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/http/member.dart';
 import 'package:PiliPlus/http/search.dart';
 import 'package:PiliPlus/http/user.dart';
 import 'package:PiliPlus/http/video.dart';
-import 'package:PiliPlus/models/triple/ugc_triple.dart';
-import 'package:PiliPlus/models/user/fav_folder.dart';
-import 'package:PiliPlus/models/video/ai.dart';
-import 'package:PiliPlus/models/video_detail/data.dart';
-import 'package:PiliPlus/models/video_detail/episode.dart';
-import 'package:PiliPlus/models/video_detail/page.dart';
-import 'package:PiliPlus/models/video_detail/section.dart';
-import 'package:PiliPlus/models/video_detail/staff.dart';
-import 'package:PiliPlus/models/video_detail/ugc_season.dart';
-import 'package:PiliPlus/models/video_relation/data.dart';
-import 'package:PiliPlus/models/video_tag/data.dart';
+import 'package:PiliPlus/models_new/fav/fav_video/data.dart';
+import 'package:PiliPlus/models_new/fav/fav_video/list.dart';
+import 'package:PiliPlus/models_new/triple/ugc_triple.dart';
+import 'package:PiliPlus/models_new/video/video_ai_conclusion/data.dart';
+import 'package:PiliPlus/models_new/video/video_ai_conclusion/model_result.dart';
+import 'package:PiliPlus/models_new/video/video_detail/data.dart';
+import 'package:PiliPlus/models_new/video/video_detail/episode.dart';
+import 'package:PiliPlus/models_new/video/video_detail/page.dart';
+import 'package:PiliPlus/models_new/video/video_detail/section.dart';
+import 'package:PiliPlus/models_new/video/video_detail/staff.dart';
+import 'package:PiliPlus/models_new/video/video_detail/ugc_season.dart';
+import 'package:PiliPlus/models_new/video/video_relation/data.dart';
+import 'package:PiliPlus/models_new/video/video_tag/data.dart';
 import 'package:PiliPlus/pages/dynamics_repost/view.dart';
 import 'package:PiliPlus/pages/video/controller.dart';
 import 'package:PiliPlus/pages/video/pay_coins/view.dart';
@@ -75,7 +78,7 @@ class VideoIntroController extends GetxController {
   // 是否稍后再看
   RxBool hasLater = false.obs;
   bool isLogin = false;
-  Rx<FavFolderData> favFolderData = FavFolderData().obs;
+  Rx<FavVideoData> favFolderData = FavVideoData().obs;
   Set? favIds;
   // 关注状态 默认未关注
   RxMap followStatus = {}.obs;
@@ -88,7 +91,7 @@ class VideoIntroController extends GetxController {
   RxString total = '1'.obs;
   Timer? timer;
   String heroTag = '';
-  late ModelResult modelResult;
+  AiConclusionResult? aiConclusionResult;
   RxMap<String, dynamic> queryVideoIntroData =
       RxMap<String, dynamic>({"status": true});
 
@@ -379,7 +382,7 @@ class VideoIntroController extends GetxController {
   }
 
   // （取消）收藏
-  Future<void> actionFavVideo({type = 'choose'}) async {
+  Future<void> actionFavVideo({String type = 'choose'}) async {
     // 收藏至默认文件夹
     if (type == 'default') {
       SmartDialog.showLoading(msg: '请求中');
@@ -387,7 +390,7 @@ class VideoIntroController extends GetxController {
         if (res['status']) {
           int defaultFolderId = favFolderData.value.list!.first.id!;
           bool notInDefFolder = favFolderData.value.list!.first.favState! == 0;
-          var result = await VideoHttp.favVideo(
+          var result = await FavHttp.favVideo(
             aid: IdUtils.bv2av(bvid),
             addIds: notInDefFolder ? '$defaultFolderId' : '',
             delIds: !notInDefFolder ? '$defaultFolderId' : '',
@@ -427,7 +430,7 @@ class VideoIntroController extends GetxController {
       if (kDebugMode) debugPrint(e.toString());
     }
     SmartDialog.showLoading(msg: '请求中');
-    var result = await VideoHttp.favVideo(
+    var result = await FavHttp.favVideo(
       aid: IdUtils.bv2av(bvid),
       addIds: addMediaIdsNew.join(','),
       delIds: delMediaIdsNew.join(','),
@@ -444,7 +447,7 @@ class VideoIntroController extends GetxController {
   }
 
   // 分享视频
-  void actionShareVideo(context) {
+  void actionShareVideo(BuildContext context) {
     showDialog(
         context: context,
         builder: (_) {
@@ -546,7 +549,7 @@ class VideoIntroController extends GetxController {
 
   Future queryVideoInFolder() async {
     favIds = null;
-    var result = await VideoHttp.videoInFolder(
+    var result = await FavHttp.videoInFolder(
         mid: userInfo.mid, rid: IdUtils.bv2av(bvid));
     if (result['status']) {
       favFolderData.value = result['data'];
@@ -561,7 +564,7 @@ class VideoIntroController extends GetxController {
   // 选择文件夹
   void onChoose(bool checkValue, int index) {
     feedBack();
-    FavFolderItemData item = favFolderData.value.list![index];
+    FavVideoItemModel item = favFolderData.value.list![index];
     item
       ..favState = checkValue ? 1 : 0
       ..mediaCount = checkValue ? item.mediaCount! + 1 : item.mediaCount! - 1;
@@ -620,7 +623,7 @@ class VideoIntroController extends GetxController {
   }
 
   // 修改分P或番剧分集
-  bool changeSeasonOrbangu(epid, bvid, cid, aid, cover, [isStein]) {
+  bool changeSeasonOrbangu(dynamic epid, bvid, cid, aid, cover, [isStein]) {
     // 重新获取视频资源
     final videoDetailCtr = Get.find<VideoDetailController>(tag: heroTag);
 
@@ -886,7 +889,7 @@ class VideoIntroController extends GetxController {
           firstItem.bvid,
           firstItem.cid,
           firstItem.aid,
-          firstItem.pic,
+          firstItem.cover,
         );
       } else {
         SearchHttp.ab2c(aid: firstItem.aid, bvid: firstItem.bvid).then(
@@ -895,7 +898,7 @@ class VideoIntroController extends GetxController {
             firstItem.bvid,
             cid,
             firstItem.aid,
-            firstItem.pic,
+            firstItem.cover,
           ),
         );
       }
@@ -915,11 +918,11 @@ class VideoIntroController extends GetxController {
     );
     SmartDialog.dismiss();
     if (res['status']) {
-      modelResult = res['data'].modelResult;
+      AiConclusionData data = res['data'];
+      aiConclusionResult = data.modelResult;
     } else {
       SmartDialog.showToast("当前视频可能暂不支持AI视频总结");
     }
-    return res;
   }
 
   // 收藏

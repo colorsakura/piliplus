@@ -1,6 +1,6 @@
 import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
 import 'package:PiliPlus/models/common/image_type.dart';
-import 'package:PiliPlus/models/follow/result.dart';
+import 'package:PiliPlus/models_new/follow/list.dart';
 import 'package:PiliPlus/pages/share/view.dart' show UserModel;
 import 'package:PiliPlus/utils/feed_back.dart';
 import 'package:PiliPlus/utils/request_utils.dart';

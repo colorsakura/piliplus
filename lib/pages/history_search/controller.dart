@@ -1,11 +1,12 @@
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/http/user.dart';
-import 'package:PiliPlus/models/user/history.dart';
+import 'package:PiliPlus/models_new/history/data.dart';
+import 'package:PiliPlus/models_new/history/list.dart';
 import 'package:PiliPlus/pages/common/common_search_controller.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 
 class HistorySearchController
-    extends CommonSearchController<HistoryData, HisListItem> {
+    extends CommonSearchController<HistoryData, HistoryItemModel> {
   @override
   Future<LoadingState<HistoryData>> customGetData() => UserHttp.searchHistory(
         pn: page,
@@ -13,11 +14,11 @@ class HistorySearchController
       );
 
   @override
-  List<HisListItem>? getDataList(HistoryData response) {
+  List<HistoryItemModel>? getDataList(HistoryData response) {
     return response.list;
   }
 
-  Future<void> onDelHistory(index, kid, business) async {
+  Future<void> onDelHistory(int index, kid, business) async {
     String resKid = 'archive_$kid';
     if (business == 'live') {
       resKid = 'live_$kid';

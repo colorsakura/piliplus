@@ -12,7 +12,7 @@ import 'package:PiliPlus/models/common/audio_normalization.dart';
 import 'package:PiliPlus/models/common/sponsor_block/segment_type.dart';
 import 'package:PiliPlus/models/common/sponsor_block/skip_type.dart';
 import 'package:PiliPlus/models/user/danmaku_rule.dart';
-import 'package:PiliPlus/models/video_shot/data.dart';
+import 'package:PiliPlus/models_new/video/video_shot/data.dart';
 import 'package:PiliPlus/pages/mine/controller.dart';
 import 'package:PiliPlus/plugin/pl_player/models/data_source.dart';
 import 'package:PiliPlus/plugin/pl_player/models/data_status.dart';
@@ -659,15 +659,15 @@ class PlPlayerController {
     return shadersDirectory;
   }
 
-  bool get _isBangumi =>
+  bool get _isPgc =>
       Get.parameters['type'] == '1' || Get.parameters['type'] == '4';
-  late int superResolutionType = _isBangumi ? GStorage.superResolutionType : 0;
+  late int superResolutionType = _isPgc ? GStorage.superResolutionType : 0;
   Future<void> setShader([int? type, NativePlayer? pp]) async {
     if (type == null) {
       type ??= superResolutionType;
     } else {
       superResolutionType = type;
-      if (_isBangumi) {
+      if (_isPgc) {
         GStorage.setting.put(SettingBoxKey.superResolutionType, type);
       }
     }
@@ -728,7 +728,7 @@ class PlPlayerController {
         );
     var pp = player.platform as NativePlayer;
     // 解除倍速限制
-    if (_isBangumi) {
+    if (_isPgc) {
       setShader(superResolutionType, pp);
     }
     if (_videoPlayerController == null) {

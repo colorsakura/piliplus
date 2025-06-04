@@ -1,12 +1,12 @@
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/http/video.dart';
-import 'package:PiliPlus/models/video/note_list/data.dart';
-import 'package:PiliPlus/models/video/note_list/list.dart';
+import 'package:PiliPlus/models_new/video/video_note_list/data.dart';
+import 'package:PiliPlus/models_new/video/video_note_list/list.dart';
 import 'package:PiliPlus/pages/common/common_list_controller.dart';
 import 'package:get/get.dart';
 
 class NoteListPageCtr
-    extends CommonListController<NoteListData, NoteListItemModel> {
+    extends CommonListController<VideoNoteData, VideoNoteItemModel> {
   NoteListPageCtr({this.oid, this.upperMid});
   final dynamic oid;
   final dynamic upperMid;
@@ -20,7 +20,7 @@ class NoteListPageCtr
   }
 
   @override
-  List<NoteListItemModel>? getDataList(NoteListData response) {
+  List<VideoNoteItemModel>? getDataList(VideoNoteData response) {
     count.value = response.page?.total ?? -1;
     return response.list;
   }
@@ -33,7 +33,7 @@ class NoteListPageCtr
   }
 
   @override
-  Future<LoadingState<NoteListData>> customGetData() =>
+  Future<LoadingState<VideoNoteData>> customGetData() =>
       VideoHttp.getVideoNoteList(
         oid: oid,
         uperMid: upperMid,

@@ -4,7 +4,8 @@ import 'package:PiliPlus/common/widgets/loading_widget/loading_widget.dart';
 import 'package:PiliPlus/common/widgets/scroll_physics.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/common/image_type.dart';
-import 'package:PiliPlus/models/video/reply/emote.dart';
+import 'package:PiliPlus/models_new/emote/emote.dart';
+import 'package:PiliPlus/models_new/emote/package.dart';
 import 'package:PiliPlus/pages/emote/controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -34,7 +35,7 @@ class _EmotePanelState extends State<EmotePanel>
   }
 
   Widget _buildBody(
-      ThemeData theme, LoadingState<List<Packages>?> loadingState) {
+      ThemeData theme, LoadingState<List<Package>?> loadingState) {
     return switch (loadingState) {
       Loading() => loadingWidget,
       Success(:var response) => response?.isNotEmpty == true

@@ -19,10 +19,10 @@ class SearchPgcPanel extends CommonSearchPanel {
 }
 
 class _SearchPgcPanelState extends CommonSearchPanelState<SearchPgcPanel,
-    SearchMBangumiModel, SearchMBangumiItemModel> {
+    SearchPgcData, SearchPgcItemModel> {
   @override
   late final controller = Get.put(
-    SearchPanelController<SearchMBangumiModel, SearchMBangumiItemModel>(
+    SearchPanelController<SearchPgcData, SearchPgcItemModel>(
       keyword: widget.keyword,
       searchType: widget.searchType,
       tag: widget.tag,
@@ -31,7 +31,7 @@ class _SearchPgcPanelState extends CommonSearchPanelState<SearchPgcPanel,
   );
 
   @override
-  Widget buildList(ThemeData theme, List<SearchMBangumiItemModel> list) {
+  Widget buildList(ThemeData theme, List<SearchPgcItemModel> list) {
     return SliverGrid(
       gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
         maxCrossAxisExtent: Grid.smallCardWidth * 2,

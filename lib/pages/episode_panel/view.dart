@@ -9,14 +9,15 @@ import 'package:PiliPlus/common/widgets/keep_alive_wrapper.dart';
 import 'package:PiliPlus/common/widgets/page/tabs.dart';
 import 'package:PiliPlus/common/widgets/scroll_physics.dart';
 import 'package:PiliPlus/common/widgets/stat/stat.dart';
+import 'package:PiliPlus/http/fav.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/http/video.dart';
 import 'package:PiliPlus/models/common/badge_type.dart';
 import 'package:PiliPlus/models/common/episode_panel_type.dart';
-import 'package:PiliPlus/models/pgc/pgc_info_model/episode.dart' as bangumi;
-import 'package:PiliPlus/models/video_detail/episode.dart' as video;
-import 'package:PiliPlus/models/video_detail/page.dart';
-import 'package:PiliPlus/models/video_relation/data.dart';
+import 'package:PiliPlus/models_new/pgc/pgc_info_model/episode.dart' as pgc;
+import 'package:PiliPlus/models_new/video/video_detail/episode.dart' as ugc;
+import 'package:PiliPlus/models_new/video/video_detail/page.dart';
+import 'package:PiliPlus/models_new/video/video_relation/data.dart';
 import 'package:PiliPlus/pages/common/common_slide_page.dart';
 import 'package:PiliPlus/pages/video/controller.dart';
 import 'package:PiliPlus/pages/video/introduction/ugc/controller.dart';
@@ -355,7 +356,7 @@ class _EpisodePanelState extends CommonSlidePageState<EpisodePanel> {
         duration = part.duration;
         pubdate = part.ctime;
         break;
-      case video.EpisodeItem item:
+      case ugc.EpisodeItem item:
         title = item.title!;
         cover = item.arc?.pic;
         duration = item.arc?.duration;
@@ -363,7 +364,7 @@ class _EpisodePanelState extends CommonSlidePageState<EpisodePanel> {
         view = item.arc?.stat?.view;
         danmaku = item.arc?.stat?.danmaku;
         break;
-      case bangumi.EpisodeItem item:
+      case pgc.EpisodeItem item:
         if (item.longTitle != null && item.longTitle != "") {
           dynamic leading = item.title ?? index + 1;
           title =
@@ -402,7 +403,7 @@ class _EpisodePanelState extends CommonSlidePageState<EpisodePanel> {
               _currentItemIndex = index;
             }
             widget.changeFucCall(
-              episode is bangumi.EpisodeItem ? episode.epId : null,
+              episode is pgc.EpisodeItem ? episode.epId : null,
               episode.runtimeType.toString() == "EpisodeItem"
                   ? episode.bvid
                   : widget.bvid,
@@ -547,7 +548,7 @@ class _EpisodePanelState extends CommonSlidePageState<EpisodePanel> {
               ? Icons.notifications_off_outlined
               : Icons.notifications_active_outlined,
           onPressed: () async {
-            var result = await VideoHttp.seasonFav(
+            var result = await FavHttp.seasonFav(
               isFav: response,
               seasonId: widget.seasonId,
             );

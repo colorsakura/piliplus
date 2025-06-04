@@ -2,8 +2,8 @@ import 'package:PiliPlus/common/skeleton/video_card_h.dart';
 import 'package:PiliPlus/common/widgets/loading_widget/http_error.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/http/loading_state.dart';
-import 'package:PiliPlus/models/space_fav/datum.dart';
-import 'package:PiliPlus/models/space_fav/list.dart';
+import 'package:PiliPlus/models_new/space/space_fav/data.dart';
+import 'package:PiliPlus/models_new/space/space_fav/list.dart';
 import 'package:PiliPlus/pages/member_favorite/controller.dart';
 import 'package:PiliPlus/pages/member_favorite/widget/item.dart';
 import 'package:PiliPlus/utils/grid.dart';
@@ -56,13 +56,16 @@ class _MemberFavoriteState extends State<MemberFavorite>
 
   Widget _buildBody(ThemeData theme, LoadingState loadingState) {
     return switch (loadingState) {
-      Loading() => SliverGrid(
-          gridDelegate: Grid.videoCardHDelegate(context),
-          delegate: SliverChildBuilderDelegate(
-            (context, index) {
-              return const VideoCardHSkeleton();
-            },
-            childCount: 10,
+      Loading() => SliverPadding(
+          padding: const EdgeInsets.only(top: 7),
+          sliver: SliverGrid(
+            gridDelegate: Grid.videoCardHDelegate(context),
+            delegate: SliverChildBuilderDelegate(
+              (context, index) {
+                return const VideoCardHSkeleton();
+              },
+              childCount: 10,
+            ),
           ),
         ),
       Success(:var response) => (response as List?)?.isNotEmpty == true

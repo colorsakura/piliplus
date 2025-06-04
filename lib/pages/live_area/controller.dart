@@ -1,7 +1,7 @@
 import 'package:PiliPlus/http/live.dart';
 import 'package:PiliPlus/http/loading_state.dart';
-import 'package:PiliPlus/models/live/live_area_list/area_item.dart';
-import 'package:PiliPlus/models/live/live_area_list/area_list.dart';
+import 'package:PiliPlus/models_new/live/live_area_list/area_item.dart';
+import 'package:PiliPlus/models_new/live/live_area_list/area_list.dart';
 import 'package:PiliPlus/pages/common/common_list_controller.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';

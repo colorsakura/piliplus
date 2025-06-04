@@ -16,11 +16,11 @@ class Api {
 
   // 视频流
   // https://github.com/SocialSisterYi/bilibili-API-collect/blob/master/docs/video/videostream_url.md
-  static const String videoUrl = '/x/player/wbi/playurl';
+  static const String ugcUrl = '/x/player/wbi/playurl';
 
   // 番剧视频流
   // https://api.bilibili.com/pgc/player/web/v2/playurl?cid=104236640&bvid=BV13t411n7ex
-  static const String bangumiVideoUrl = '/pgc/player/web/v2/playurl';
+  static const String pgcUrl = '/pgc/player/web/v2/playurl';
 
   // 字幕
   // aid, cid
@@ -51,7 +51,7 @@ class Api {
   // https://api.bilibili.com/x/web-interface/archive/has/like
   // static const String hasLikeVideo = '/x/web-interface/archive/has/like';
 
-  static const String bangumiLikeCoinFav = '/pgc/season/episode/community';
+  static const String pgcLikeCoinFav = '/pgc/season/episode/community';
 
   // 视频点踩 web端不支持
 
@@ -279,7 +279,7 @@ class Api {
   static const String ab2c = '/x/player/pagelist';
 
   // 番剧/剧集明细
-  static const String bangumiInfo = '/pgc/view/web/season';
+  static const String pgcInfo = '/pgc/view/web/season';
 
   // https://api.bilibili.com/pgc/season/episode/web/info?ep_id=12345678
   static const String episodeInfo = '/pgc/season/episode/web/info';
@@ -370,12 +370,11 @@ class Api {
   // order_avoided=true&
   // w_rid=d893cf98a4e010cf326373194a648360&
   // wts=1689767832
-  static const String memberArchive = '/x/space/wbi/arc/search';
+  static const String searchArchive = '/x/space/wbi/arc/search';
 
   // 用户动态搜索
   // static const String memberDynamicSearch = '/x/space/dynamic/search';
-  static const String memberDynamicSearch =
-      '/x/polymer/web-dynamic/v1/feed/space/search';
+  static const String dynSearch = '/x/polymer/web-dynamic/v1/feed/space/search';
 
   // 用户动态
   static const String memberDynamic = '/x/polymer/web-dynamic/v1/feed/space';
@@ -390,12 +389,12 @@ class Api {
   static const String toViewClear = '/x/v2/history/toview/clear';
 
   // 追番
-  static const String bangumiAdd = '/pgc/web/follow/add';
+  static const String pgcAdd = '/pgc/web/follow/add';
 
   // 取消追番
-  static const String bangumiDel = '/pgc/web/follow/del';
+  static const String pgcDel = '/pgc/web/follow/del';
 
-  static const String bangumiUpdate = '/pgc/web/follow/status/update';
+  static const String pgcUpdate = '/pgc/web/follow/status/update';
 
   // 番剧列表
   // https://api.bilibili.com/pgc/season/index/result?
@@ -415,11 +414,11 @@ class Api {
   // season_type=1&
   // pagesize=20&
   // type=1
-  static const String bangumiList =
+  static const String pgcIndex =
       '/pgc/season/index/result?st=1&order=3&season_version=-1&spoken_language_type=-1&area=-1&is_finish=-1&copyright=-1&season_status=-1&season_month=-1&year=-1&style_id=-1&sort=0&season_type=1&pagesize=20&type=1';
 
   // 我的追番/追剧 ?type=1&pn=1&ps=15
-  static const String bangumiFollowList = '/x/space/bangumi/follow/list';
+  static const String favPgc = '/x/space/bangumi/follow/list';
 
   // 黑名单
   static const String blackLst = '/x/relation/blacks';
@@ -874,4 +873,8 @@ class Api {
       '${HttpString.appBaseUrl}/x/topic/pub/search';
 
   static const String upowerRank = '/x/upower/up/member/rank/v2';
+
+  static const String favFavFolder = '/x/v3/fav/folder/fav';
+
+  static const String unfavFavFolder = '/x/v3/fav/folder/unfav';
 }

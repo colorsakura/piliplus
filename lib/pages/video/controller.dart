@@ -5,6 +5,7 @@ import 'dart:ui';
 import 'package:PiliPlus/common/widgets/pair.dart';
 import 'package:PiliPlus/common/widgets/progress_bar/segment_progress_bar.dart';
 import 'package:PiliPlus/http/constants.dart';
+import 'package:PiliPlus/http/fav.dart';
 import 'package:PiliPlus/http/init.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/http/user.dart';
@@ -19,15 +20,15 @@ import 'package:PiliPlus/models/common/sponsor_block/skip_type.dart';
 import 'package:PiliPlus/models/common/video/audio_quality.dart';
 import 'package:PiliPlus/models/common/video/video_decode_type.dart';
 import 'package:PiliPlus/models/common/video/video_quality.dart';
-import 'package:PiliPlus/models/media_list/data.dart';
-import 'package:PiliPlus/models/media_list/media_list.dart';
-import 'package:PiliPlus/models/play_info/data.dart';
-import 'package:PiliPlus/models/play_info/subtitle.dart';
-import 'package:PiliPlus/models/sponsor_block/segment_item.dart';
-import 'package:PiliPlus/models/stein_edgeinfo/data.dart';
 import 'package:PiliPlus/models/video/play/url.dart';
-import 'package:PiliPlus/models/video_detail/page.dart';
-import 'package:PiliPlus/models/video_pbp/data.dart';
+import 'package:PiliPlus/models_new/media_list/data.dart';
+import 'package:PiliPlus/models_new/media_list/media_list.dart';
+import 'package:PiliPlus/models_new/sponsor_block/segment_item.dart';
+import 'package:PiliPlus/models_new/video/video_detail/page.dart';
+import 'package:PiliPlus/models_new/video/video_pbp/data.dart';
+import 'package:PiliPlus/models_new/video/video_play_info/data.dart';
+import 'package:PiliPlus/models_new/video/video_play_info/subtitle.dart';
+import 'package:PiliPlus/models_new/video/video_stein_edgeinfo/data.dart';
 import 'package:PiliPlus/pages/search/widgets/search_text.dart';
 import 'package:PiliPlus/pages/video/introduction/ugc/controller.dart';
 import 'package:PiliPlus/pages/video/medialist/view.dart';
@@ -361,7 +362,7 @@ class VideoDetailController extends GetxController
   }
 
   // 稍后再看面板展开
-  void showMediaListPanel(context) {
+  void showMediaListPanel(BuildContext context) {
     if (mediaList.isNotEmpty) {
       Widget panel() => MediaListPanel(
             mediaList: mediaList,
@@ -396,7 +397,7 @@ class VideoDetailController extends GetxController
                       SmartDialog.showToast(res['msg']);
                     } else {
                       final item = mediaList[index];
-                      var res = await VideoHttp.delFav(
+                      var res = await FavHttp.delFav(
                         ids: ['${item.aid}:${item.type}'],
                         delIds: '${Get.arguments?['mediaId']}',
                       );

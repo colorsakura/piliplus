@@ -1,11 +1,11 @@
 import 'package:PiliPlus/common/widgets/disabled_icon.dart';
 import 'package:PiliPlus/common/widgets/loading_widget/loading_widget.dart';
 import 'package:PiliPlus/http/loading_state.dart';
-import 'package:PiliPlus/models/search/search_trending/trending_data.dart';
-import 'package:PiliPlus/models/search/suggest.dart';
+import 'package:PiliPlus/models_new/search/search_rcmd/data.dart';
 import 'package:PiliPlus/pages/search/controller.dart';
 import 'package:PiliPlus/pages/search/widgets/hot_keyword.dart';
 import 'package:PiliPlus/pages/search/widgets/search_text.dart';
+import 'package:PiliPlus/utils/em.dart' show Em;
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
@@ -76,7 +76,6 @@ class _SearchPageState extends State<SearchPage> {
         padding: MediaQuery.paddingOf(context).copyWith(top: 0),
         child: Column(
           children: [
-            // 搜索建议
             if (_searchController.searchSuggestion) _searchSuggest(),
             if (context.orientation == Orientation.portrait) ...[
               if (_searchController.enableHotKey) hotSearch(theme),
@@ -127,7 +126,23 @@ class _SearchPageState extends State<SearchPage> {
                           top: 9,
                           bottom: 9,
                         ),
-                        child: highlightText(context, item.textRich),
+                        child: Text.rich(
+                          TextSpan(
+                            children: Em.regTitle(item.textRich)
+                                .map((e) => TextSpan(
+                                      text: e.text,
+                                      style: e.isEm
+                                          ? TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .primary,
+                                            )
+                                          : null,
+                                    ))
+                                .toList(),
+                          ),
+                        ),
                       ),
                     ),
                   )
@@ -264,9 +279,7 @@ class _SearchPageState extends State<SearchPage> {
                           icon: _searchController.recordSearchHistory.value
                               ? historyIcon(theme)
                               : historyIcon(theme).disable(),
-                          style: IconButton.styleFrom(
-                            padding: EdgeInsets.zero,
-                          ),
+                          style: IconButton.styleFrom(padding: EdgeInsets.zero),
                           onPressed: () {
                             _searchController.recordSearchHistory.value =
                                 !_searchController.recordSearchHistory.value;
@@ -284,11 +297,9 @@ class _SearchPageState extends State<SearchPage> {
                       child: TextButton.icon(
                         style: ButtonStyle(
                           padding: WidgetStateProperty.all(
-                            const EdgeInsets.only(
-                              left: 10,
-                              top: 6,
-                              bottom: 6,
-                              right: 10,
+                            const EdgeInsets.symmetric(
+                              horizontal: 10,
+                              vertical: 6,
                             ),
                           ),
                         ),
@@ -300,9 +311,7 @@ class _SearchPageState extends State<SearchPage> {
                         ),
                         label: Text(
                           '清空',
-                          style: TextStyle(
-                            color: theme.colorScheme.secondary,
-                          ),
+                          style: TextStyle(color: theme.colorScheme.secondary),
                         ),
                       ),
                     )
@@ -335,8 +344,7 @@ class _SearchPageState extends State<SearchPage> {
   Icon historyIcon(ThemeData theme) => Icon(Icons.history,
       color: theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.8));
 
-  Widget _buildHotKey(
-      LoadingState<SearchKeywordData> loadingState, bool isHot) {
+  Widget _buildHotKey(LoadingState<SearchRcmdData> loadingState, bool isHot) {
     return switch (loadingState) {
       Success(:var response) => response.list?.isNotEmpty == true
           ? LayoutBuilder(

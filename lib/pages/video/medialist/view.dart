@@ -8,7 +8,7 @@ import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/common/widgets/stat/stat.dart';
 import 'package:PiliPlus/http/search.dart';
 import 'package:PiliPlus/models/common/badge_type.dart';
-import 'package:PiliPlus/models/media_list/media_list.dart';
+import 'package:PiliPlus/models_new/media_list/media_list.dart';
 import 'package:PiliPlus/pages/common/common_collapse_slide_page.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart' hide RefreshCallback;

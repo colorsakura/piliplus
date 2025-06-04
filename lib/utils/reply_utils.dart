@@ -6,7 +6,7 @@ import 'package:PiliPlus/grpc/bilibili/main/community/reply/v1.pb.dart'
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/http/reply.dart';
 import 'package:PiliPlus/models/common/reply/reply_sort_type.dart';
-import 'package:PiliPlus/models/video/reply/data.dart' show ReplyData;
+import 'package:PiliPlus/models_new/reply/data.dart';
 import 'package:PiliPlus/utils/accounts/account.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/storage.dart' show Accounts;

@@ -2,7 +2,7 @@ import 'package:PiliPlus/common/skeleton/video_card_h.dart';
 import 'package:PiliPlus/common/widgets/loading_widget/http_error.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/http/loading_state.dart';
-import 'package:PiliPlus/models/user/sub_folder.dart';
+import 'package:PiliPlus/models_new/sub/sub/list.dart';
 import 'package:PiliPlus/pages/subscription/controller.dart';
 import 'package:PiliPlus/pages/subscription/widgets/item.dart';
 import 'package:PiliPlus/utils/grid.dart';
@@ -44,7 +44,7 @@ class _SubPageState extends State<SubPage> {
     );
   }
 
-  Widget _buildBody(LoadingState<List<SubFolderItemData>?> loadingState) {
+  Widget _buildBody(LoadingState<List<SubItemModel>?> loadingState) {
     return switch (loadingState) {
       Loading() => SliverGrid(
           gridDelegate: Grid.videoCardHDelegate(context),
@@ -62,9 +62,10 @@ class _SubPageState extends State<SubPage> {
                   if (index == response.length - 1) {
                     _subController.onLoadMore();
                   }
+                  final item = response[index];
                   return SubItem(
-                    subFolderItem: response[index],
-                    cancelSub: _subController.cancelSub,
+                    item: item,
+                    cancelSub: () => _subController.cancelSub(item),
                   );
                 },
               ),

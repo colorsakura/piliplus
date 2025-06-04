@@ -1,6 +1,6 @@
 import 'package:PiliPlus/common/widgets/button/icon_button.dart';
 import 'package:PiliPlus/common/widgets/custom_icon.dart';
-import 'package:PiliPlus/http/bangumi.dart';
+import 'package:PiliPlus/http/pgc.dart';
 import 'package:PiliPlus/pages/common/common_collapse_slide_page.dart';
 import 'package:PiliPlus/utils/storage.dart' show Accounts;
 import 'package:flutter/material.dart';
@@ -212,7 +212,7 @@ class _PgcReviewPostPanelState
 
   Future<void> _onPost() async {
     if (_isMod) {
-      var res = await BangumiHttp.pgcReviewMod(
+      var res = await PgcHttp.pgcReviewMod(
         mediaId: widget.mediaId,
         score: _score.value * 2,
         content: _controller.text,
@@ -230,7 +230,7 @@ class _PgcReviewPostPanelState
       SmartDialog.showToast('账号未登录');
       return;
     }
-    var res = await BangumiHttp.pgcReviewPost(
+    var res = await PgcHttp.pgcReviewPost(
       mediaId: widget.mediaId,
       score: _score.value * 2,
       content: _controller.text,

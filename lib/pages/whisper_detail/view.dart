@@ -6,9 +6,9 @@ import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/grpc/bilibili/im/type.pb.dart' show Msg;
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/http/msg.dart';
-import 'package:PiliPlus/models/bfs_res/data.dart';
 import 'package:PiliPlus/models/common/image_type.dart';
 import 'package:PiliPlus/models/common/publish_panel_type.dart';
+import 'package:PiliPlus/models_new/upload_bfs/data.dart';
 import 'package:PiliPlus/pages/common/common_publish_page.dart';
 import 'package:PiliPlus/pages/emote/view.dart';
 import 'package:PiliPlus/pages/whisper_detail/controller.dart';
@@ -302,7 +302,7 @@ class _WhisperDetailPageState
                                   ?.split('/')
                                   .getOrNull(1) ??
                               'jpg';
-                          BfsResData data = result['data'];
+                          UploadBfsResData data = result['data'];
                           Map picMsg = {
                             'url': data.imageUrl,
                             'height': data.imageHeight,

@@ -8,21 +8,21 @@ class Em {
     return matches.lastOrNull?.group(1) ?? origin;
   }
 
-  static List<Map<String, String>> regTitle(String origin) {
-    List<Map<String, String>> res = [];
+  static List<({bool isEm, String text})> regTitle(String origin) {
+    List<({bool isEm, String text})> res = [];
     origin.splitMapJoin(
       _exp,
       onMatch: (Match match) {
         String matchStr = match[0]!;
-        res.add({'type': 'em', 'text': regCate(matchStr)});
-        return matchStr;
+        res.add((isEm: true, text: regCate(matchStr)));
+        return '';
       },
       onNonMatch: (String str) {
         if (str != '') {
           str = decodeHtmlEntities(str);
-          res.add({'type': 'text', 'text': str});
+          res.add((isEm: false, text: str));
         }
-        return str;
+        return '';
       },
     );
     return res;

@@ -1,10 +1,10 @@
 import 'package:PiliPlus/http/dynamics.dart';
+import 'package:PiliPlus/http/fav.dart';
 import 'package:PiliPlus/http/loading_state.dart';
-import 'package:PiliPlus/http/user.dart';
-import 'package:PiliPlus/models/dynamics/dyn_topic_feed/item.dart';
-import 'package:PiliPlus/models/dynamics/dyn_topic_feed/topic_card_list.dart';
-import 'package:PiliPlus/models/dynamics/dyn_topic_feed/topic_sort_by_conf.dart';
-import 'package:PiliPlus/models/dynamics/dyn_topic_top/top_details.dart';
+import 'package:PiliPlus/models_new/dynamic/dyn_topic_feed/item.dart';
+import 'package:PiliPlus/models_new/dynamic/dyn_topic_feed/topic_card_list.dart';
+import 'package:PiliPlus/models_new/dynamic/dyn_topic_feed/topic_sort_by_conf.dart';
+import 'package:PiliPlus/models_new/dynamic/dyn_topic_top/top_details.dart';
 import 'package:PiliPlus/pages/common/common_list_controller.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/storage.dart' show Accounts;
@@ -97,8 +97,8 @@ class DynTopicController
     }
     bool isFav = this.isFav.value ?? false;
     var res = isFav
-        ? await UserHttp.delFavTopic(topicId)
-        : await UserHttp.addFavTopic(topicId);
+        ? await FavHttp.delFavTopic(topicId)
+        : await FavHttp.addFavTopic(topicId);
     if (res['status']) {
       if (isFav) {
         topState.value.data!.topicItem!.fav -= 1;
@@ -117,7 +117,7 @@ class DynTopicController
       return;
     }
     bool isLike = this.isLike.value ?? false;
-    var res = await UserHttp.likeTopic(topicId, isLike);
+    var res = await FavHttp.likeTopic(topicId, isLike);
     if (res['status']) {
       if (isLike) {
         topState.value.data!.topicItem!.like -= 1;

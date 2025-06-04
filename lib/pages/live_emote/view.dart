@@ -5,8 +5,8 @@ import 'package:PiliPlus/common/widgets/loading_widget/loading_widget.dart';
 import 'package:PiliPlus/common/widgets/scroll_physics.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/common/image_type.dart';
-import 'package:PiliPlus/models/live/live_emoticons/datum.dart';
-import 'package:PiliPlus/models/live/live_emoticons/emoticon.dart';
+import 'package:PiliPlus/models_new/live/live_emote/datum.dart';
+import 'package:PiliPlus/models_new/live/live_emote/emoticon.dart';
 import 'package:PiliPlus/pages/live_emote/controller.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:flutter/material.dart';
@@ -14,8 +14,8 @@ import 'package:get/get.dart';
 
 class LiveEmotePanel extends StatefulWidget {
   final int roomId;
-  final ValueChanged<LiveEmoticon> onChoose;
-  final ValueChanged<LiveEmoticon> onSendEmoticonUnique;
+  final ValueChanged<Emoticon> onChoose;
+  final ValueChanged<Emoticon> onSendEmoticonUnique;
   const LiveEmotePanel({
     super.key,
     required this.roomId,

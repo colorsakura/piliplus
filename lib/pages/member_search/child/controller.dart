@@ -1,6 +1,8 @@
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/http/member.dart';
 import 'package:PiliPlus/models/common/member/search_type.dart';
+import 'package:PiliPlus/models/dynamics/result.dart';
+import 'package:PiliPlus/models_new/member/search_archive/data.dart';
 import 'package:PiliPlus/pages/common/common_list_controller.dart';
 import 'package:PiliPlus/pages/member_search/controller.dart';
 
@@ -33,12 +35,14 @@ class MemberSearchChildController extends CommonListController {
   List? getDataList(response) {
     switch (searchType) {
       case MemberSearchType.archive:
-        controller.counts[searchType.index] = response.page?['count'] ?? 0;
-        return response.list?.vlist;
+        SearchArchiveData data = response;
+        controller.counts[searchType.index] = data.page?.count ?? 0;
+        return data.list?.vlist;
       case MemberSearchType.dynamic:
-        offset = response.offset;
-        controller.counts[searchType.index] = response.total ?? 0;
-        return response.items;
+        DynamicsDataModel data = response;
+        offset = data.offset;
+        controller.counts[searchType.index] = data.total ?? 0;
+        return data.items;
     }
   }
 
@@ -51,13 +55,13 @@ class MemberSearchChildController extends CommonListController {
   @override
   Future<LoadingState> customGetData() {
     return switch (searchType) {
-      MemberSearchType.archive => MemberHttp.memberArchiveNew(
+      MemberSearchType.archive => MemberHttp.searchArchive(
           mid: controller.mid,
           pn: page,
           keyword: controller.editingController.text,
           order: 'pubdate',
         ),
-      MemberSearchType.dynamic => MemberHttp.memberDynamicSearchNew(
+      MemberSearchType.dynamic => MemberHttp.dynSearch(
           mid: controller.mid,
           pn: page,
           offset: offset ?? '',

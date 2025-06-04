@@ -1,4 +1,5 @@
-import 'package:PiliPlus/models/user/fav_detail.dart';
+import 'package:PiliPlus/models_new/fav/fav_detail/data.dart';
+import 'package:PiliPlus/models_new/fav/fav_detail/media.dart';
 import 'package:PiliPlus/pages/common/common_search_page.dart';
 import 'package:PiliPlus/pages/fav_detail/widget/fav_video_card.dart';
 import 'package:PiliPlus/pages/fav_search/controller.dart';
@@ -16,7 +17,7 @@ class FavSearchPage extends CommonSearchPage {
 }
 
 class _FavSearchPageState extends CommonSearchPageState<FavSearchPage,
-    FavDetailData, FavDetailItemData> {
+    FavDetailData, FavDetailItemModel> {
   @override
   final FavSearchController controller = Get.put(
     FavSearchController(),
@@ -24,7 +25,7 @@ class _FavSearchPageState extends CommonSearchPageState<FavSearchPage,
   );
 
   @override
-  Widget buildList(List<FavDetailItemData> list) {
+  Widget buildList(List<FavDetailItemModel> list) {
     return SliverGrid(
       gridDelegate: Grid.videoCardHDelegate(context, minHeight: 110),
       delegate: SliverChildBuilderDelegate(
@@ -44,7 +45,7 @@ class _FavSearchPageState extends CommonSearchPageState<FavSearchPage,
                     )
                 : null,
             onViewFav: () => PageUtils.toVideoPage(
-              'bvid=${item.bvid}&cid=${item.cid}',
+              'bvid=${item.bvid}&cid=${item.ugc?.firstCid}',
               arguments: {
                 'videoItem': item,
                 'heroTag': Utils.makeHeroTag(item.bvid),

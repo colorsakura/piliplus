@@ -13,16 +13,16 @@ class SearchPgcItem extends StatelessWidget {
     required this.item,
   });
 
-  final SearchMBangumiItemModel item;
+  final SearchPgcItemModel item;
 
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
     const TextStyle style = TextStyle(fontSize: 13);
     return InkWell(
-      onTap: () => PageUtils.viewBangumi(seasonId: item.seasonId),
+      onTap: () => PageUtils.viewPgc(seasonId: item.seasonId),
       onLongPress: () => imageSaveDialog(
-        title: item.title?.map((item) => item['text']).join() ?? '',
+        title: item.title.map((item) => item.text).join(),
         cover: item.cover,
       ),
       child: Padding(
@@ -58,22 +58,16 @@ class SearchPgcItem extends StatelessWidget {
                   const SizedBox(height: 4),
                   Text.rich(
                     TextSpan(
-                      style: TextStyle(color: theme.colorScheme.onSurface),
-                      children: [
-                        for (var i in item.title!) ...[
-                          TextSpan(
-                            text: i['text'],
-                            style: TextStyle(
-                              fontSize: theme.textTheme.titleSmall!.fontSize!,
-                              fontWeight: FontWeight.bold,
-                              color: i['type'] == 'em'
-                                  ? theme.colorScheme.primary
-                                  : theme.colorScheme.onSurface,
-                            ),
-                          ),
-                        ],
-                      ],
-                    ),
+                        children: item.title
+                            .map((e) => TextSpan(
+                                  text: e.text,
+                                  style: TextStyle(
+                                    color: e.isEm
+                                        ? theme.colorScheme.primary
+                                        : theme.colorScheme.onSurface,
+                                  ),
+                                ))
+                            .toList()),
                   ),
                   const SizedBox(height: 12),
                   Text('评分:${item.mediaScore?['score']}', style: style),

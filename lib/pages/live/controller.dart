@@ -1,9 +1,9 @@
 import 'package:PiliPlus/common/widgets/pair.dart';
 import 'package:PiliPlus/http/live.dart';
 import 'package:PiliPlus/http/loading_state.dart';
-import 'package:PiliPlus/models/live/live_feed_index/card_data_list_item.dart';
-import 'package:PiliPlus/models/live/live_feed_index/card_list.dart';
-import 'package:PiliPlus/models/live/live_second_list/tag.dart';
+import 'package:PiliPlus/models_new/live/live_feed_index/card_data_list_item.dart';
+import 'package:PiliPlus/models_new/live/live_feed_index/card_list.dart';
+import 'package:PiliPlus/models_new/live/live_second_list/tag.dart';
 import 'package:PiliPlus/pages/common/common_list_controller.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:get/get_rx/src/rx_types/rx_types.dart';

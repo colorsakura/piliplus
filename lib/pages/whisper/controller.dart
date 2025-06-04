@@ -2,7 +2,7 @@ import 'package:PiliPlus/grpc/bilibili/app/im/v1.pb.dart'
     show Offset, Session, SessionMainReply, SessionPageType, ThreeDotItem;
 import 'package:PiliPlus/grpc/im.dart';
 import 'package:PiliPlus/http/loading_state.dart';
-import 'package:PiliPlus/models/msg/msgfeed_unread.dart';
+import 'package:PiliPlus/models_new/msg/msgfeed_unread.dart';
 import 'package:PiliPlus/pages/common/common_whisper_controller.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:flutter/foundation.dart';

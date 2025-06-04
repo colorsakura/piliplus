@@ -3,10 +3,11 @@ import 'package:PiliPlus/common/widgets/loading_widget/http_error.dart';
 import 'package:PiliPlus/common/widgets/loading_widget/loading_widget.dart';
 import 'package:PiliPlus/common/widgets/self_sized_horizontal_list.dart';
 import 'package:PiliPlus/http/loading_state.dart';
-import 'package:PiliPlus/models/pgc/pgc_index/condition.dart';
-import 'package:PiliPlus/models/pgc/pgc_index_item/list.dart';
-import 'package:PiliPlus/pages/bangumi/widgets/bangumi_card_v_pgc_index.dart';
+import 'package:PiliPlus/models_new/pgc/pgc_index_condition/data.dart';
+import 'package:PiliPlus/models_new/pgc/pgc_index_condition/order.dart';
+import 'package:PiliPlus/models_new/pgc/pgc_index_result/list.dart';
 import 'package:PiliPlus/pages/pgc_index/controller.dart';
+import 'package:PiliPlus/pages/pgc_index/widgets/pgc_card_v_pgc_index.dart';
 import 'package:PiliPlus/pages/search/widgets/search_text.dart';
 import 'package:PiliPlus/utils/grid.dart';
 import 'package:flutter/material.dart';
@@ -44,7 +45,7 @@ class _PgcIndexPageState extends State<PgcIndexPage>
   }
 
   Widget _buildBody(
-      ThemeData theme, LoadingState<PgcIndexCondition> loadingState) {
+      ThemeData theme, LoadingState<PgcIndexConditionData> loadingState) {
     return switch (loadingState) {
       Loading() => loadingWidget,
       Success(:var response) => Builder(builder: (context) {
@@ -118,7 +119,7 @@ class _PgcIndexPageState extends State<PgcIndexPage>
                         ),
                         childBuilder: (childIndex) => Obx(
                           () => SearchText(
-                            bgColor: (item[childIndex] is Order
+                            bgColor: (item[childIndex] is PgcConditionOrder
                                         ? _ctr.indexParams['order']
                                         : _ctr.indexParams[data
                                             .filter![
@@ -126,12 +127,12 @@ class _PgcIndexPageState extends State<PgcIndexPage>
                                                     ? index - 1
                                                     : index]
                                             .field]) ==
-                                    (item[childIndex] is Order
+                                    (item[childIndex] is PgcConditionOrder
                                         ? item[childIndex].field
                                         : item[childIndex].keyword)
                                 ? theme.colorScheme.secondaryContainer
                                 : Colors.transparent,
-                            textColor: (item[childIndex] is Order
+                            textColor: (item[childIndex] is PgcConditionOrder
                                         ? _ctr.indexParams['order']
                                         : _ctr.indexParams[data
                                             .filter![
@@ -139,7 +140,7 @@ class _PgcIndexPageState extends State<PgcIndexPage>
                                                     ? index - 1
                                                     : index]
                                             .field]) ==
-                                    (item[childIndex] is Order
+                                    (item[childIndex] is PgcConditionOrder
                                         ? item[childIndex].field
                                         : item[childIndex].keyword)
                                 ? theme.colorScheme.onSecondaryContainer
@@ -150,7 +151,8 @@ class _PgcIndexPageState extends State<PgcIndexPage>
                               vertical: 3,
                             ),
                             onTap: (_) {
-                              String name = item[childIndex] is Order
+                              String name = item[childIndex]
+                                      is PgcConditionOrder
                                   ? 'order'
                                   : data
                                       .filter![data.order?.isNotEmpty == true
@@ -158,7 +160,7 @@ class _PgcIndexPageState extends State<PgcIndexPage>
                                           : index]
                                       .field!;
                               _ctr.indexParams[name] =
-                                  (item[childIndex] is Order
+                                  (item[childIndex] is PgcConditionOrder
                                       ? item[childIndex].field
                                       : item[childIndex].keyword);
                               _ctr.onReload();
@@ -201,7 +203,7 @@ class _PgcIndexPageState extends State<PgcIndexPage>
         ],
       );
 
-  Widget _buildList(LoadingState<List<PgcIndexItemModel>?> loadingState) {
+  Widget _buildList(LoadingState<List<PgcIndexItem>?> loadingState) {
     return switch (loadingState) {
       Loading() => const SliverToBoxAdapter(child: LinearProgressIndicator()),
       Success(:var response) => response?.isNotEmpty == true
@@ -218,7 +220,7 @@ class _PgcIndexPageState extends State<PgcIndexPage>
                   if (index == response.length - 1) {
                     _ctr.onLoadMore();
                   }
-                  return BangumiCardVPgcIndex(bangumiItem: response[index]);
+                  return PgcCardVPgcIndex(item: response[index]);
                 },
                 childCount: response!.length,
               ),

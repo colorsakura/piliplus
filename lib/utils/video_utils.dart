@@ -1,6 +1,6 @@
 import 'package:PiliPlus/models/common/video/cdn_type.dart';
-import 'package:PiliPlus/models/live/live_room/room_info.dart';
 import 'package:PiliPlus/models/video/play/url.dart';
+import 'package:PiliPlus/models_new/live/live_room_play_info/codec.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/storage.dart';
 

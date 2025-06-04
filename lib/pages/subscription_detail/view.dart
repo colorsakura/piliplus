@@ -3,8 +3,7 @@ import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
 import 'package:PiliPlus/common/widgets/loading_widget/http_error.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/http/loading_state.dart';
-import 'package:PiliPlus/models/user/sub_detail.dart';
-import 'package:PiliPlus/models/user/sub_folder.dart';
+import 'package:PiliPlus/models_new/sub/sub_detail/media.dart';
 import 'package:PiliPlus/pages/subscription_detail/controller.dart';
 import 'package:PiliPlus/pages/subscription_detail/widget/sub_video_card.dart';
 import 'package:PiliPlus/utils/grid.dart';
@@ -39,9 +38,9 @@ class _SubDetailPageState extends State<SubDetailPage> {
             physics: const AlwaysScrollableScrollPhysics(),
             slivers: [
               _buildAppBar(theme),
-              _buildCount(theme),
               SliverPadding(
                 padding: EdgeInsets.only(
+                  top: 7,
                   bottom: MediaQuery.paddingOf(context).bottom + 80,
                 ),
                 sliver: Obx(
@@ -54,7 +53,7 @@ class _SubDetailPageState extends State<SubDetailPage> {
     );
   }
 
-  Widget _buildBody(LoadingState<List<SubDetailMediaItem>?> loadingState) {
+  Widget _buildBody(LoadingState<List<SubDetailItemModel>?> loadingState) {
     return switch (loadingState) {
       Loading() => SliverGrid(
           gridDelegate: Grid.videoCardHDelegate(context),
@@ -88,113 +87,106 @@ class _SubDetailPageState extends State<SubDetailPage> {
     };
   }
 
-  Widget _buildCount(ThemeData theme) => SliverToBoxAdapter(
-        child: Padding(
-          padding: const EdgeInsets.only(top: 12, bottom: 8, left: 14),
-          child: Obx(
+  Widget _buildAppBar(ThemeData theme) {
+    final style = TextStyle(
+      fontSize: 12.5,
+      color: theme.colorScheme.outline,
+    );
+    return SliverAppBar.medium(
+      expandedHeight: kToolbarHeight + 132,
+      pinned: true,
+      title: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            _subDetailController.item.title!,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: theme.textTheme.titleMedium,
+          ),
+          Obx(
             () => Text(
               '共${_subDetailController.mediaCount.value}条视频',
-              style: TextStyle(
-                fontSize: theme.textTheme.labelMedium!.fontSize,
-                color: theme.colorScheme.outline,
-                letterSpacing: 1,
+              style: theme.textTheme.labelMedium,
+            ),
+          ),
+        ],
+      ),
+      flexibleSpace: FlexibleSpaceBar(
+        background: Container(
+          decoration: BoxDecoration(
+            border: Border(
+              bottom: BorderSide(
+                color: theme.dividerColor.withValues(alpha: 0.2),
               ),
             ),
           ),
-        ),
-      );
-
-  Widget _buildAppBar(ThemeData theme) => SliverAppBar.medium(
-        expandedHeight: kToolbarHeight + 132,
-        pinned: true,
-        title: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              _subDetailController.item.title!,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: theme.textTheme.titleMedium,
-            ),
-            Obx(
-              () => Text(
-                '共${_subDetailController.mediaCount.value}条视频',
-                style: theme.textTheme.labelMedium,
-              ),
-            ),
-          ],
-        ),
-        flexibleSpace: FlexibleSpaceBar(
-          background: Container(
-            decoration: BoxDecoration(
-              border: Border(
-                bottom: BorderSide(
-                  color: theme.dividerColor.withValues(alpha: 0.2),
+          padding: EdgeInsets.only(
+            top: kToolbarHeight + MediaQuery.of(context).padding.top + 10,
+            left: 12,
+            right: 12,
+            bottom: 12,
+          ),
+          child: Row(
+            spacing: 12,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Hero(
+                tag: _subDetailController.heroTag,
+                child: NetworkImgLayer(
+                  width: 176,
+                  height: 110,
+                  src: _subDetailController.item.cover,
                 ),
               ),
-            ),
-            padding: EdgeInsets.only(
-              top: kToolbarHeight + MediaQuery.of(context).padding.top + 10,
-              left: 12,
-              right: 12,
-              bottom: 12,
-            ),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Hero(
-                  tag: _subDetailController.heroTag,
-                  child: NetworkImgLayer(
-                    width: 176,
-                    height: 110,
-                    src: _subDetailController.item.cover,
-                  ),
+              Expanded(
+                child: Column(
+                  spacing: 4,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      _subDetailController.item.title!,
+                      style: TextStyle(
+                        fontSize: theme.textTheme.titleMedium!.fontSize,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        Get.toNamed(
+                          '/member?mid=${_subDetailController.item.upper!.mid}',
+                          arguments: {
+                            'face': _subDetailController.item.upper!.face,
+                          },
+                        );
+                      },
+                      child: Text(
+                        _subDetailController.item.upper!.name!,
+                        style: TextStyle(color: theme.colorScheme.primary),
+                      ),
+                    ),
+                    const Spacer(),
+                    Obx(
+                      () => _subDetailController.mediaCount.value == 0
+                          ? const SizedBox.shrink()
+                          : Text(
+                              '共${_subDetailController.mediaCount.value}条视频',
+                              style: style,
+                            ),
+                    ),
+                    Obx(
+                      () => Text(
+                        '${Utils.numFormat(_subDetailController.playCount.value)}次播放',
+                        style: style,
+                      ),
+                    ),
+                  ],
                 ),
-                const SizedBox(width: 14),
-                Expanded(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const SizedBox(height: 4),
-                      Text(
-                        _subDetailController.item.title!,
-                        style: TextStyle(
-                            fontSize: theme.textTheme.titleMedium!.fontSize,
-                            fontWeight: FontWeight.bold),
-                      ),
-                      const SizedBox(height: 4),
-                      GestureDetector(
-                        onTap: () {
-                          SubFolderItemData item = _subDetailController.item;
-                          Get.toNamed(
-                            '/member?mid=${item.upper!.mid}',
-                            arguments: {
-                              'face': item.upper!.face,
-                            },
-                          );
-                        },
-                        child: Text(
-                          _subDetailController.item.upper!.name!,
-                          style: TextStyle(color: theme.colorScheme.primary),
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-                      Obx(
-                        () => Text(
-                          '${Utils.numFormat(_subDetailController.playCount.value)}次播放',
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: theme.colorScheme.outline,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
-      );
+      ),
+    );
+  }
 }

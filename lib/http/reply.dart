@@ -2,9 +2,11 @@ import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/http/api.dart';
 import 'package:PiliPlus/http/init.dart';
 import 'package:PiliPlus/http/loading_state.dart';
-import 'package:PiliPlus/models/video/reply/data.dart';
-import 'package:PiliPlus/models/video/reply/emote.dart';
-import 'package:PiliPlus/models/video/reply/item.dart';
+import 'package:PiliPlus/models_new/emote/data.dart';
+import 'package:PiliPlus/models_new/emote/package.dart';
+import 'package:PiliPlus/models_new/reply/data.dart';
+import 'package:PiliPlus/models_new/reply/reply.dart';
+import 'package:PiliPlus/models_new/reply2reply/data.dart';
 import 'package:PiliPlus/utils/accounts/account.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:dio/dio.dart';
@@ -230,7 +232,7 @@ class ReplyHttp {
     }
   }
 
-  static Future<LoadingState<List<Packages>?>> getEmoteList(
+  static Future<LoadingState<List<Package>?>> getEmoteList(
       {String? business}) async {
     var res = await Request().get(Api.myEmote, queryParameters: {
       'business': business ?? 'reply',

@@ -2,15 +2,15 @@ import 'package:PiliPlus/grpc/bilibili/main/community/reply/v1.pb.dart'
     show MainListReply, ReplyInfo;
 import 'package:PiliPlus/grpc/reply.dart';
 import 'package:PiliPlus/http/dynamics.dart';
+import 'package:PiliPlus/http/fav.dart';
 import 'package:PiliPlus/http/loading_state.dart';
-import 'package:PiliPlus/http/user.dart';
 import 'package:PiliPlus/http/video.dart';
-import 'package:PiliPlus/models/article_info/data.dart';
 import 'package:PiliPlus/models/dynamics/article_content_model.dart'
     show ArticleContentModel;
 import 'package:PiliPlus/models/dynamics/result.dart';
 import 'package:PiliPlus/models/model_avatar.dart';
-import 'package:PiliPlus/models/space_article/item.dart';
+import 'package:PiliPlus/models_new/article/article_info/data.dart';
+import 'package:PiliPlus/models_new/article/article_view/data.dart';
 import 'package:PiliPlus/pages/common/reply_controller.dart';
 import 'package:PiliPlus/pages/mine/controller.dart';
 import 'package:PiliPlus/utils/storage.dart';
@@ -39,7 +39,7 @@ class ArticleController extends ReplyController<MainListReply> {
 
   final RxBool isLoaded = false.obs;
   DynamicItemModel? opusData; // 标题信息从summary获取, 动态没有favorite
-  SpaceArticleItem? articleData;
+  ArticleViewData? articleData;
   final Rx<ModuleStatModel?> stats = Rx<ModuleStatModel?>(null);
 
   List<ArticleContentModel>? get opus =>
@@ -188,9 +188,9 @@ class ArticleController extends ReplyController<MainListReply> {
     bool isFav = stats.value?.favorite?.status == true;
     final res = type == 'read'
         ? isFav
-            ? await UserHttp.delFavArticle(id: commentId)
-            : await UserHttp.addFavArticle(id: commentId)
-        : await UserHttp.communityAction(opusId: id, action: isFav ? 4 : 3);
+            ? await FavHttp.delFavArticle(id: commentId)
+            : await FavHttp.addFavArticle(id: commentId)
+        : await FavHttp.communityAction(opusId: id, action: isFav ? 4 : 3);
     if (res['status']) {
       stats.value?.favorite?.status = !isFav;
       var count = stats.value?.favorite?.count ?? 0;

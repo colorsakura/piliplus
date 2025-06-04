@@ -3,63 +3,23 @@ import 'package:PiliPlus/http/api.dart';
 import 'package:PiliPlus/http/init.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/common/live_search_type.dart';
-import 'package:PiliPlus/models/live/live_area_list/area_item.dart';
-import 'package:PiliPlus/models/live/live_area_list/area_list.dart';
-import 'package:PiliPlus/models/live/live_emoticons/data.dart';
-import 'package:PiliPlus/models/live/live_emoticons/datum.dart';
-import 'package:PiliPlus/models/live/live_feed_index/data.dart';
-import 'package:PiliPlus/models/live/live_follow/data.dart';
-import 'package:PiliPlus/models/live/live_room/danmu_info.dart';
-import 'package:PiliPlus/models/live/live_room/item.dart';
-import 'package:PiliPlus/models/live/live_room/room_info.dart';
-import 'package:PiliPlus/models/live/live_room/room_info_h5.dart';
-import 'package:PiliPlus/models/live/live_search/data.dart';
-import 'package:PiliPlus/models/live/live_second_list/data.dart';
+import 'package:PiliPlus/models_new/live/live_area_list/area_item.dart';
+import 'package:PiliPlus/models_new/live/live_area_list/area_list.dart';
+import 'package:PiliPlus/models_new/live/live_dm_info/data.dart';
+import 'package:PiliPlus/models_new/live/live_emote/data.dart';
+import 'package:PiliPlus/models_new/live/live_emote/datum.dart';
+import 'package:PiliPlus/models_new/live/live_feed_index/data.dart';
+import 'package:PiliPlus/models_new/live/live_follow/data.dart';
+import 'package:PiliPlus/models_new/live/live_room_info_h5/data.dart';
+import 'package:PiliPlus/models_new/live/live_room_play_info/data.dart';
+import 'package:PiliPlus/models_new/live/live_search/data.dart';
+import 'package:PiliPlus/models_new/live/live_second_list/data.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:PiliPlus/utils/wbi_sign.dart';
 import 'package:dio/dio.dart';
 
 class LiveHttp {
-  static Future<LoadingState<List<LiveItemModel>?>> liveList({
-    int? vmid,
-    int? pn,
-    int? ps,
-    String? orderType,
-    String? gaiaVtoken,
-  }) async {
-    var res = await Request().get(
-      Api.liveList,
-      queryParameters: await WbiSign.makSign({
-        'page': pn,
-        'page_size': 30,
-        'platform': 'web',
-        'web_location': 0.0,
-        if (gaiaVtoken != null) 'gaia_vtoken': gaiaVtoken,
-      }),
-      options: Options(
-        headers: {
-          'origin': 'https://live.bilibili.com',
-          'referer': 'https://live.bilibili.com/',
-          'user-agent': Request.headerUa(type: 'pc'),
-          if (gaiaVtoken != null) 'cookie': 'x-bili-gaia-vtoken=$gaiaVtoken'
-        },
-      ),
-    );
-    if (res.data['code'] == 0) {
-      List<LiveItemModel>? list = (res.data['data']?['list'] as List?)
-          ?.map<LiveItemModel>((e) => LiveItemModel.fromJson(e))
-          .toList();
-      return Success(list);
-    } else {
-      String? vVoucher;
-      if (gaiaVtoken == null && res.data['code'] == -352) {
-        vVoucher = res.headers['x-bili-gaia-vvoucher']?.firstOrNull;
-      }
-      return Error(vVoucher ?? res.data['message']);
-    }
-  }
-
   static Future sendLiveMsg({roomId, msg, dmType, emoticonOptions}) async {
     String csrf = Accounts.main.csrf;
     var res = await Request().post(
@@ -118,7 +78,10 @@ class LiveHttp {
       },
     );
     if (res.data['code'] == 0) {
-      return {'status': true, 'data': RoomInfoModel.fromJson(res.data['data'])};
+      return {
+        'status': true,
+        'data': RoomPlayInfoData.fromJson(res.data['data'])
+      };
     } else {
       return {'status': false, 'msg': res.data['message']};
     }
@@ -131,7 +94,7 @@ class LiveHttp {
     if (res.data['code'] == 0) {
       return {
         'status': true,
-        'data': RoomInfoH5Model.fromJson(res.data['data'])
+        'data': RoomInfoH5Data.fromJson(res.data['data'])
       };
     } else {
       return {'status': false, 'msg': res.data['message']};
@@ -142,6 +105,12 @@ class LiveHttp {
     var res = await Request().get(
       Api.liveRoomDmPrefetch,
       queryParameters: {'roomid': roomId},
+      options: Options(
+        headers: {
+          'referer': 'https://live.bilibili.com/$roomId',
+          'user-agent': Request.headerUa(type: 'pc'),
+        },
+      ),
     );
     if (res.data['code'] == 0) {
       return {'status': true, 'data': res.data['data']?['room']};
@@ -159,7 +128,10 @@ class LiveHttp {
       }),
     );
     if (res.data['code'] == 0) {
-      return {'status': true, 'data': LiveDanmakuInfo.fromJson(res.data)};
+      return {
+        'status': true,
+        'data': LiveDmInfoData.fromJson(res.data['data'])
+      };
     } else {
       return {'status': false, 'msg': res.data['message']};
     }

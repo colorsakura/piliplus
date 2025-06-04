@@ -8,7 +8,7 @@ abstract class BaseRecVideoItemModel extends BaseVideoItemModel {
 
   // app推荐专属
   int? param;
-  String? bangumiBadge;
+  String? pgcBadge;
 }
 
 class RecVideoItemModel extends BaseRecVideoItemModel {
@@ -18,7 +18,7 @@ class RecVideoItemModel extends BaseRecVideoItemModel {
     cid = json["cid"];
     goto = json["goto"];
     uri = json["uri"];
-    pic = json["pic"];
+    cover = json["pic"];
     title = json["title"];
     duration = json["duration"];
     pubdate = json["pubdate"];

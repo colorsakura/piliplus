@@ -5,7 +5,7 @@ import 'package:PiliPlus/common/widgets/loading_widget/http_error.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/common/widgets/scroll_physics.dart';
 import 'package:PiliPlus/http/loading_state.dart';
-import 'package:PiliPlus/models/user/history.dart';
+import 'package:PiliPlus/models_new/history/list.dart';
 import 'package:PiliPlus/pages/history/base_controller.dart';
 import 'package:PiliPlus/pages/history/controller.dart';
 import 'package:PiliPlus/pages/history/widgets/item.dart';
@@ -254,7 +254,7 @@ class _HistoryPageState extends State<HistoryPage>
         ),
       );
 
-  Widget _buildBody(LoadingState<List<HisListItem>?> loadingState) {
+  Widget _buildBody(LoadingState<List<HistoryItemModel>?> loadingState) {
     return switch (loadingState) {
       Loading() => SliverGrid(
           gridDelegate: Grid.videoCardHDelegate(context),

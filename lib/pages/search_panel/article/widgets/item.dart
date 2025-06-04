@@ -27,7 +27,7 @@ class SearchArticleItem extends StatelessWidget {
         },
       ),
       onLongPress: () => imageSaveDialog(
-        title: item.title?.map((item) => item['text']).join() ?? '',
+        title: item.title.map((item) => item.text).join(),
         cover: item.imageUrls?.firstOrNull,
       ),
       child: Padding(
@@ -60,19 +60,16 @@ class SearchArticleItem extends StatelessWidget {
                   Text.rich(
                     maxLines: 2,
                     TextSpan(
-                      children: [
-                        for (var i in item.title!) ...[
-                          TextSpan(
-                            text: i['text'],
-                            style: TextStyle(
-                              color: i['type'] == 'em'
-                                  ? theme.colorScheme.primary
-                                  : theme.colorScheme.onSurface,
-                            ),
-                          ),
-                        ]
-                      ],
-                    ),
+                        children: item.title
+                            .map((e) => TextSpan(
+                                  text: e.text,
+                                  style: TextStyle(
+                                    color: e.isEm
+                                        ? theme.colorScheme.primary
+                                        : theme.colorScheme.onSurface,
+                                  ),
+                                ))
+                            .toList()),
                   ),
                   const Spacer(),
                   Text(

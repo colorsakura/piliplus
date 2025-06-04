@@ -37,7 +37,7 @@ class VoteInfo extends SimpleVoteInfo {
     myVotes = (json['my_votes'] as List?)?.cast(); // doVote
     options =
         (json['options'] as List?)?.map((v) => Option.fromJson(v)).toList() ??
-            [];
+            <Option>[];
     optionsCnt = json['options_cnt'];
     voterLevel = json['voter_level'];
     face = json['face'];

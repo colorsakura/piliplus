@@ -1,13 +1,12 @@
+import 'package:PiliPlus/http/fav.dart';
 import 'package:PiliPlus/http/loading_state.dart';
-import 'package:PiliPlus/http/user.dart';
-import 'package:PiliPlus/models/user/fav_folder.dart';
+import 'package:PiliPlus/models_new/fav/fav_video/data.dart';
 import 'package:PiliPlus/pages/common/common_data_controller.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class MediaController
-    extends CommonDataController<FavFolderData, FavFolderData> {
+class MediaController extends CommonDataController<FavVideoData, FavVideoData> {
   final list = <({IconData icon, String title, VoidCallback onTap})>[
     (
       icon: Icons.history,
@@ -48,16 +47,16 @@ class MediaController
   }
 
   @override
-  bool customHandleResponse(bool isRefresh, Success<FavFolderData> response) {
+  bool customHandleResponse(bool isRefresh, Success<FavVideoData> response) {
     count.value = response.response.count ?? -1;
     loadingState.value = response;
     return true;
   }
 
   @override
-  Future<LoadingState<FavFolderData>> customGetData() {
+  Future<LoadingState<FavVideoData>> customGetData() {
     mid ??= Accounts.main.mid;
-    return UserHttp.userfavFolder(
+    return FavHttp.userfavFolder(
       pn: 1,
       ps: 5,
       mid: mid,

@@ -5,7 +5,7 @@ import 'package:PiliPlus/common/widgets/loading_widget/http_error.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/common/image_type.dart';
-import 'package:PiliPlus/models/video/note_list/list.dart';
+import 'package:PiliPlus/models_new/video/video_note_list/list.dart';
 import 'package:PiliPlus/pages/common/common_slide_page.dart';
 import 'package:PiliPlus/pages/video/note/controller.dart';
 import 'package:PiliPlus/pages/webview/view.dart';
@@ -158,7 +158,7 @@ class _NoteListPageState extends CommonSlidePageState<NoteListPage> {
   }
 
   Widget _buildBody(
-      ThemeData theme, LoadingState<List<NoteListItemModel>?> loadingState) {
+      ThemeData theme, LoadingState<List<VideoNoteItemModel>?> loadingState) {
     return switch (loadingState) {
       Loading() => SliverToBoxAdapter(
           child: ListView.builder(
@@ -192,7 +192,7 @@ class _NoteListPageState extends CommonSlidePageState<NoteListPage> {
     };
   }
 
-  Widget _itemWidget(ThemeData theme, NoteListItemModel item) {
+  Widget _itemWidget(ThemeData theme, VideoNoteItemModel item) {
     return InkWell(
       onTap: () => Get.toNamed(
         '/articlePage',

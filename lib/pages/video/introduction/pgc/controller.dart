@@ -4,14 +4,16 @@ import 'package:PiliPlus/grpc/bilibili/app/viewunite/pgcanymodel.pb.dart'
     show ViewPgcAny;
 import 'package:PiliPlus/grpc/view.dart';
 import 'package:PiliPlus/http/constants.dart';
+import 'package:PiliPlus/http/fav.dart';
 import 'package:PiliPlus/http/user.dart';
 import 'package:PiliPlus/http/video.dart';
-import 'package:PiliPlus/models/pgc/pgc_info_model/episode.dart';
-import 'package:PiliPlus/models/pgc/pgc_info_model/result.dart';
 import 'package:PiliPlus/models/pgc_lcf.dart';
-import 'package:PiliPlus/models/triple/pgc_triple.dart';
-import 'package:PiliPlus/models/user/fav_folder.dart';
-import 'package:PiliPlus/models/video_tag/data.dart';
+import 'package:PiliPlus/models_new/fav/fav_video/data.dart';
+import 'package:PiliPlus/models_new/fav/fav_video/list.dart';
+import 'package:PiliPlus/models_new/pgc/pgc_info_model/episode.dart';
+import 'package:PiliPlus/models_new/pgc/pgc_info_model/result.dart';
+import 'package:PiliPlus/models_new/triple/pgc_triple.dart';
+import 'package:PiliPlus/models_new/video/video_tag/data.dart';
 import 'package:PiliPlus/pages/dynamics_repost/view.dart';
 import 'package:PiliPlus/pages/video/controller.dart';
 import 'package:PiliPlus/pages/video/introduction/ugc/controller.dart';
@@ -27,7 +29,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 
-class BangumiIntroController extends GetxController {
+class PgcIntroController extends GetxController {
   // 视频bvid
   String bvid = Get.parameters['bvid'] ?? '';
   var seasonId = Get.parameters['seasonId'] != null
@@ -42,7 +44,7 @@ class BangumiIntroController extends GetxController {
           ? '追番'
           : '追剧';
 
-  final BangumiInfoModel bangumiItem = Get.arguments['bangumiItem'];
+  final PgcInfoModel pgcItem = Get.arguments['pgcItem'];
 
   // 是否点赞
   RxBool hasLike = false.obs;
@@ -56,7 +58,7 @@ class BangumiIntroController extends GetxController {
   List<VideoTagItem>? videoTags;
 
   List? favIds;
-  Rx<FavFolderData> favFolderData = FavFolderData().obs;
+  Rx<FavVideoData> favFolderData = FavVideoData().obs;
 
   bool isLogin = Accounts.main.isLogin;
   int mid = Accounts.main.mid;
@@ -72,7 +74,7 @@ class BangumiIntroController extends GetxController {
         queryIsFollowed();
       }
       if (epId != null) {
-        queryBangumiLikeCoinFav();
+        queryPgcLikeCoinFav();
       }
     }
     queryVideoTags();
@@ -86,8 +88,8 @@ class BangumiIntroController extends GetxController {
   }
 
   // 获取点赞/投币/收藏状态
-  Future<void> queryBangumiLikeCoinFav() async {
-    var result = await VideoHttp.bangumiLikeCoinFav(epId: epId);
+  Future<void> queryPgcLikeCoinFav() async {
+    var result = await VideoHttp.pgcLikeCoinFav(epId: epId);
     if (result['status']) {
       PgcLCF data = result['data'];
       hasLike.value = data.like == 1;
@@ -103,8 +105,7 @@ class BangumiIntroController extends GetxController {
     var result = await VideoHttp.likeVideo(bvid: bvid, type: !hasLike.value);
     if (result['status']) {
       SmartDialog.showToast(!hasLike.value ? result['data']['toast'] : '取消赞');
-      bangumiItem.stat!.likes =
-          bangumiItem.stat!.likes! + (!hasLike.value ? 1 : -1);
+      pgcItem.stat!.likes = pgcItem.stat!.likes! + (!hasLike.value ? 1 : -1);
       hasLike.value = !hasLike.value;
     } else {
       SmartDialog.showToast(result['msg']);
@@ -119,10 +120,10 @@ class BangumiIntroController extends GetxController {
     );
     if (res['status']) {
       SmartDialog.showToast('投币成功');
-      bangumiItem.stat!.coins = bangumiItem.stat!.coins! + coin;
+      pgcItem.stat!.coins = pgcItem.stat!.coins! + coin;
       if (selectLike && !hasLike.value) {
         hasLike.value = true;
-        bangumiItem.stat!.likes = bangumiItem.stat!.likes! + 1;
+        pgcItem.stat!.likes = pgcItem.stat!.likes! + 1;
       }
       _coinNum.value += coin;
       GlobalData().afterCoin(coin);
@@ -154,8 +155,8 @@ class BangumiIntroController extends GetxController {
     );
   }
 
-  // （取消）收藏 bangumi
-  Future<void> actionFavVideo({type = 'choose'}) async {
+  // （取消）收藏 pgc
+  Future<void> actionFavVideo({String type = 'choose'}) async {
     // 收藏至默认文件夹
     if (type == 'default') {
       SmartDialog.showLoading(msg: '请求中');
@@ -163,7 +164,7 @@ class BangumiIntroController extends GetxController {
         if (res['status']) {
           int defaultFolderId = favFolderData.value.list!.first.id!;
           int favStatus = favFolderData.value.list!.first.favState!;
-          var result = await VideoHttp.favVideo(
+          var result = await FavHttp.favVideo(
             aid: epId,
             type: 24,
             addIds: favStatus == 0 ? '$defaultFolderId' : '',
@@ -173,7 +174,7 @@ class BangumiIntroController extends GetxController {
           if (result['status']) {
             // 重新获取收藏状态
             await Future.delayed(const Duration(milliseconds: 255));
-            await queryBangumiLikeCoinFav();
+            await queryPgcLikeCoinFav();
             SmartDialog.showToast('✅ 快速收藏/取消收藏成功');
           } else {
             SmartDialog.showToast(result['msg']);
@@ -201,7 +202,7 @@ class BangumiIntroController extends GetxController {
         }
       }
     } catch (_) {}
-    var result = await VideoHttp.favVideo(
+    var result = await FavHttp.favVideo(
       aid: epId,
       type: 24,
       addIds: addMediaIdsNew.join(','),
@@ -211,7 +212,7 @@ class BangumiIntroController extends GetxController {
       SmartDialog.showToast('操作成功');
       Get.back();
       Future.delayed(const Duration(milliseconds: 255), () {
-        queryBangumiLikeCoinFav();
+        queryPgcLikeCoinFav();
       });
     } else {
       SmartDialog.showToast(result['msg']);
@@ -271,7 +272,7 @@ class BangumiIntroController extends GetxController {
                   ),
                   onTap: () {
                     Get.back();
-                    EpisodeItem? item = bangumiItem.episodes
+                    EpisodeItem? item = pgcItem.episodes
                         ?.firstWhereOrNull((item) => item.epId == epId);
                     showModalBottomSheet(
                       context: context,
@@ -296,9 +297,9 @@ class BangumiIntroController extends GetxController {
                           '5' || '7' => 4099,
                           _ => -1,
                         },
-                        pic: bangumiItem.cover,
+                        pic: pgcItem.cover,
                         title:
-                            '${bangumiItem.title}${item != null ? '\n${item.showTitle}' : ''}',
+                            '${pgcItem.title}${item != null ? '\n${item.showTitle}' : ''}',
                         uname: '',
                       ),
                     );
@@ -313,9 +314,9 @@ class BangumiIntroController extends GetxController {
                   onTap: () {
                     Get.back();
                     try {
-                      EpisodeItem item = bangumiItem.episodes!
+                      EpisodeItem item = pgcItem.episodes!
                           .firstWhere((item) => item.epId == epId);
-                      final title = '${bangumiItem.title!} ${item.showTitle}';
+                      final title = '${item.title!} ${item.showTitle}';
                       PageUtils.pmShare(
                         context,
                         content: {
@@ -325,7 +326,7 @@ class BangumiIntroController extends GetxController {
                           "headline": title,
                           "source": 16,
                           "thumb": item.cover,
-                          "source_desc": switch (bangumiItem.type) {
+                          "source_desc": switch (pgcItem.type) {
                             1 => '番剧',
                             2 => '电影',
                             3 => '纪录片',
@@ -351,7 +352,7 @@ class BangumiIntroController extends GetxController {
   // 选择文件夹
   void onChoose(bool checkValue, int index) {
     feedBack();
-    FavFolderItemData item = favFolderData.value.list![index];
+    FavVideoItemModel item = favFolderData.value.list![index];
     item
       ..favState = checkValue ? 1 : 0
       ..mediaCount = checkValue ? item.mediaCount! + 1 : item.mediaCount! - 1;
@@ -388,7 +389,7 @@ class BangumiIntroController extends GetxController {
     }
 
     if (isLogin) {
-      queryBangumiLikeCoinFav();
+      queryPgcLikeCoinFav();
     }
 
     try {
@@ -401,8 +402,8 @@ class BangumiIntroController extends GetxController {
   }
 
   // 追番
-  Future<void> bangumiAdd() async {
-    var result = await VideoHttp.bangumiAdd(seasonId: bangumiItem.seasonId);
+  Future<void> pgcAdd() async {
+    var result = await VideoHttp.pgcAdd(seasonId: pgcItem.seasonId);
     if (result['status']) {
       isFollowed.value = true;
       followStatus.value = 2;
@@ -411,17 +412,17 @@ class BangumiIntroController extends GetxController {
   }
 
   // 取消追番
-  Future<void> bangumiDel() async {
-    var result = await VideoHttp.bangumiDel(seasonId: bangumiItem.seasonId);
+  Future<void> pgcDel() async {
+    var result = await VideoHttp.pgcDel(seasonId: pgcItem.seasonId);
     if (result['status']) {
       isFollowed.value = false;
     }
     SmartDialog.showToast(result['msg']);
   }
 
-  Future<void> bangumiUpdate(status) async {
-    var result = await VideoHttp.bangumiUpdate(
-      seasonId: [bangumiItem.seasonId],
+  Future<void> pgcUpdate(status) async {
+    var result = await VideoHttp.pgcUpdate(
+      seasonId: [pgcItem.seasonId],
       status: status,
     );
     if (result['status']) {
@@ -432,10 +433,10 @@ class BangumiIntroController extends GetxController {
 
   Future queryVideoInFolder() async {
     favIds = null;
-    var result = await VideoHttp.videoInFolder(
+    var result = await FavHttp.videoInFolder(
       mid: mid,
-      rid: epId, // bangumi
-      type: 24, // bangumi
+      rid: epId, // pgc
+      type: 24, // pgc
     );
     if (result['status']) {
       favFolderData.value = result['data'];
@@ -448,7 +449,7 @@ class BangumiIntroController extends GetxController {
   }
 
   bool prevPlay() {
-    List episodes = bangumiItem.episodes!;
+    List episodes = pgcItem.episodes!;
     VideoDetailController videoDetailCtr =
         Get.find<VideoDetailController>(tag: Get.arguments['heroTag']);
     int currentIndex =
@@ -474,7 +475,7 @@ class BangumiIntroController extends GetxController {
   /// 列表循环或者顺序播放时，自动播放下一个；自动连播时，播放相关视频
   bool nextPlay() {
     try {
-      List episodes = bangumiItem.episodes!;
+      List episodes = pgcItem.episodes!;
       VideoDetailController videoDetailCtr =
           Get.find<VideoDetailController>(tag: Get.arguments['heroTag']);
       PlayRepeat playRepeat = videoDetailCtr.plPlayerController.playRepeat;

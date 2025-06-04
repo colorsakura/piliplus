@@ -7,10 +7,9 @@ import 'package:PiliPlus/http/search.dart';
 import 'package:PiliPlus/models/common/image_preview_type.dart';
 import 'package:PiliPlus/models/common/search_type.dart';
 import 'package:PiliPlus/models/dynamics/result.dart';
-import 'package:PiliPlus/models/live/live_room/item.dart';
-import 'package:PiliPlus/models/pgc/pgc_info_model/episode.dart';
-import 'package:PiliPlus/models/pgc/pgc_info_model/result.dart';
-import 'package:PiliPlus/models/pgc/pgc_info_model/section.dart';
+import 'package:PiliPlus/models_new/pgc/pgc_info_model/episode.dart';
+import 'package:PiliPlus/models_new/pgc/pgc_info_model/result.dart';
+import 'package:PiliPlus/models_new/pgc/pgc_info_model/section.dart';
 import 'package:PiliPlus/pages/contact/view.dart';
 import 'package:PiliPlus/pages/fav_panel/view.dart';
 import 'package:PiliPlus/pages/share/view.dart';
@@ -439,17 +438,7 @@ class PageUtils {
       case 'DYNAMIC_TYPE_LIVE_RCMD':
         DynamicLiveModel liveRcmd =
             item.modules.moduleDynamic!.major!.liveRcmd!;
-        ModuleAuthorModel author = item.modules.moduleAuthor!;
-        LiveItemModel liveItem = LiveItemModel.fromJson({
-          'title': liveRcmd.title,
-          'uname': author.name,
-          'cover': liveRcmd.cover,
-          'mid': author.mid,
-          'face': author.face,
-          'roomid': liveRcmd.roomId,
-          'watched_show': liveRcmd.watchedShow,
-        });
-        toDupNamed('/liveRoom?roomid=${liveItem.roomId}');
+        toDupNamed('/liveRoom?roomid=${liveRcmd.roomId}');
         break;
 
       /// 合集查看
@@ -477,7 +466,7 @@ class PageUtils {
         if (kDebugMode) debugPrint('DYNAMIC_TYPE_PGC_UNION 番剧');
         DynamicArchiveModel pgc = item.modules.moduleDynamic!.major!.pgc!;
         if (pgc.epid != null) {
-          viewBangumi(epId: pgc.epid);
+          viewPgc(epId: pgc.epid);
         }
         break;
       case 'DYNAMIC_TYPE_MEDIALIST':
@@ -688,7 +677,7 @@ class PageUtils {
     if (id != null) {
       bool isSeason = id.startsWith('ss');
       id = id.substring(2);
-      viewBangumi(
+      viewPgc(
         seasonId: isSeason ? id : null,
         epId: isSeason ? null : id,
       );
@@ -697,14 +686,14 @@ class PageUtils {
     return false;
   }
 
-  static Future<void> viewBangumi(
+  static Future<void> viewPgc(
       {dynamic seasonId, dynamic epId, String? progress}) async {
     try {
       SmartDialog.showLoading(msg: '资源获取中');
-      var result = await SearchHttp.bangumiInfo(seasonId: seasonId, epId: epId);
+      var result = await SearchHttp.pgcInfo(seasonId: seasonId, epId: epId);
       SmartDialog.dismiss();
       if (result['status']) {
-        BangumiInfoModel data = result['data'];
+        PgcInfoModel data = result['data'];
 
         // epId episode -> progress episode -> first episode
         EpisodeItem? episode;
@@ -759,7 +748,7 @@ class PageUtils {
             'pic': episode.cover,
             'heroTag': Utils.makeHeroTag(episode.cid),
             'videoType': SearchType.media_bangumi,
-            'bangumiItem': data,
+            'pgcItem': data,
             if (progress != null) 'progress': int.tryParse(progress)
           },
           preventDuplicates: false,

@@ -1,11 +1,11 @@
+import 'package:PiliPlus/http/fav.dart';
 import 'package:PiliPlus/http/loading_state.dart';
-import 'package:PiliPlus/http/video.dart';
-import 'package:PiliPlus/models/member/article.dart';
+import 'package:PiliPlus/models_new/fav/fav_note/list.dart';
 import 'package:PiliPlus/pages/common/multi_select_controller.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 
 class FavNoteController
-    extends MultiSelectController<List<FavNoteModel>?, FavNoteModel> {
+    extends MultiSelectController<List<FavNoteItemModel>?, FavNoteItemModel> {
   FavNoteController(this.isPublish);
 
   final bool isPublish;
@@ -28,24 +28,24 @@ class FavNoteController
   }
 
   @override
-  Future<LoadingState<List<FavNoteModel>?>> customGetData() {
+  Future<LoadingState<List<FavNoteItemModel>?>> customGetData() {
     return isPublish
-        ? VideoHttp.userNoteList(page: page)
-        : VideoHttp.noteList(page: page);
+        ? FavHttp.userNoteList(page: page)
+        : FavHttp.noteList(page: page);
   }
 
   Future<void> onRemove() async {
-    List<FavNoteModel> dataList = loadingState.value.data!;
-    Set<FavNoteModel> removeList =
+    List<FavNoteItemModel> dataList = loadingState.value.data!;
+    Set<FavNoteItemModel> removeList =
         dataList.where((item) => item.checked == true).toSet();
-    final res = await VideoHttp.delNote(
+    final res = await FavHttp.delNote(
       isPublish: isPublish,
       noteIds: removeList
           .map((item) => isPublish ? item.cvid : item.noteId)
           .toList(),
     );
     if (res['status']) {
-      List<FavNoteModel> remainList =
+      List<FavNoteItemModel> remainList =
           dataList.toSet().difference(removeList).toList();
       loadingState.value = Success(remainList);
       enableMultiSelect.value = false;

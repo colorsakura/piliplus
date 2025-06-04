@@ -12,7 +12,7 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 class SearchVideoController
-    extends SearchPanelController<SearchVideoModel, SearchVideoItemModel> {
+    extends SearchPanelController<SearchVideoData, SearchVideoItemModel> {
   SearchVideoController({
     required super.keyword,
     required super.searchType,
@@ -46,13 +46,12 @@ class SearchVideoController
   }
 
   @override
-  List<SearchVideoItemModel>? getDataList(SearchVideoModel response) {
+  List<SearchVideoItemModel>? getDataList(SearchVideoData response) {
     return response.list;
   }
 
   @override
-  bool customHandleResponse(
-      bool isRefresh, Success<SearchVideoModel> response) {
+  bool customHandleResponse(bool isRefresh, Success<SearchVideoData> response) {
     searchResultController?.count[searchType.index] =
         response.response.numResults ?? 0;
     if (searchType == SearchType.video && hasJump2Video != true && isRefresh) {

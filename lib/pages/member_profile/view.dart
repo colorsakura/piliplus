@@ -4,7 +4,7 @@ import 'package:PiliPlus/http/constants.dart';
 import 'package:PiliPlus/http/init.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/common/member/profile_type.dart';
-import 'package:PiliPlus/models/user_info/data.dart';
+import 'package:PiliPlus/models_new/account_myinfo/data.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:PiliPlus/utils/storage.dart';
@@ -29,8 +29,8 @@ class EditProfilePage extends StatefulWidget {
 }
 
 class _EditProfilePageState extends State<EditProfilePage> {
-  LoadingState<UserInfoData> _loadingState =
-      LoadingState<UserInfoData>.loading();
+  LoadingState<AccountMyInfoData> _loadingState =
+      LoadingState<AccountMyInfoData>.loading();
   late final _textController = TextEditingController();
   late final _imagePicker = ImagePicker();
 
@@ -71,7 +71,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
         .then((res) {
       setState(() {
         if (res.data['code'] == 0) {
-          _loadingState = Success(UserInfoData.fromJson(res.data['data']));
+          _loadingState = Success(AccountMyInfoData.fromJson(res.data['data']));
         } else {
           _loadingState = Error(res.data['message']);
         }
@@ -79,7 +79,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
     });
   }
 
-  Widget _buildBody(ThemeData theme, LoadingState<UserInfoData> loadingState) {
+  Widget _buildBody(
+      ThemeData theme, LoadingState<AccountMyInfoData> loadingState) {
     late final divider = Divider(
       height: 1,
       color: theme.dividerColor.withValues(alpha: 0.1),
@@ -337,7 +338,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
     )
         .then((res) {
       if (res.data['code'] == 0) {
-        UserInfoData data = _loadingState.data;
+        AccountMyInfoData data = _loadingState.data;
         if (type == ProfileType.uname) {
           data
             ..name = _textController.text

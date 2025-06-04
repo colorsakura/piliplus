@@ -1,6 +1,6 @@
+import 'package:PiliPlus/http/fav.dart';
 import 'package:PiliPlus/http/loading_state.dart';
-import 'package:PiliPlus/http/user.dart';
-import 'package:PiliPlus/models/user/fav_folder.dart';
+import 'package:PiliPlus/models_new/fav/fav_video/list.dart';
 import 'package:PiliPlus/pages/fav/video/controller.dart';
 import 'package:PiliPlus/pages/fav/video/widgets/item.dart';
 import 'package:flutter/material.dart';
@@ -20,8 +20,8 @@ class _FavFolderSortPageState extends State<FavFolderSortPage> {
   FavController get _favController => widget.favController;
 
   final GlobalKey _key = GlobalKey();
-  late List<FavFolderItemData> sortList =
-      List<FavFolderItemData>.from(_favController.loadingState.value.data!);
+  late List<FavVideoItemModel> sortList =
+      List<FavVideoItemModel>.from(_favController.loadingState.value.data!);
 
   final ScrollController _scrollController = ScrollController();
 
@@ -34,7 +34,7 @@ class _FavFolderSortPageState extends State<FavFolderSortPage> {
       _favController.onLoadMore().whenComplete(() {
         try {
           if (_favController.loadingState.value.isSuccess) {
-            List<FavFolderItemData> list =
+            List<FavVideoItemModel> list =
                 _favController.loadingState.value.data!;
             sortList.addAll(list.sublist(sortList.length));
             if (mounted) {
@@ -70,7 +70,7 @@ class _FavFolderSortPageState extends State<FavFolderSortPage> {
         actions: [
           TextButton(
             onPressed: () async {
-              var res = await UserHttp.sortFavFolder(
+              var res = await FavHttp.sortFavFolder(
                 sort: sortList.map((item) => item.id).toList(),
               );
               if (res['status']) {
@@ -126,7 +126,7 @@ class _FavFolderSortPageState extends State<FavFolderSortPage> {
         return SizedBox(
           key: Key(key),
           height: 98,
-          child: FavItem(
+          child: FavVideoItem(
             heroTag: key,
             favFolderItem: item,
             onLongPress:

@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:PiliPlus/common/widgets/pendant_avatar.dart';
 import 'package:PiliPlus/models/dynamics/article_content_model.dart';
 import 'package:PiliPlus/models/model_avatar.dart';
+import 'package:PiliPlus/models_new/live/live_feed_index/watched_show.dart';
 
 class DynamicsDataModel {
   bool? hasMore;
@@ -55,7 +56,7 @@ class DynamicItemModel {
     modules = json['item']?['modules'] == null
         ? ItemModulesModel()
         : ItemModulesModel.fromOpusJson(
-            (json['item']?['modules'] as List).cast());
+            (json['item']['modules'] as List).cast());
 
     if (json['fallback'] != null) {
       fallback = Fallback.fromJson(json['fallback']);
@@ -1071,27 +1072,6 @@ class LivePlayInfo {
       );
 }
 
-class WatchedShow {
-  bool? watchedShowSwitch;
-  int? num;
-  String? textSmall;
-  String? textLarge;
-
-  WatchedShow({
-    this.watchedShowSwitch,
-    this.num,
-    this.textSmall,
-    this.textLarge,
-  });
-
-  factory WatchedShow.fromJson(Map<String, dynamic> json) => WatchedShow(
-        watchedShowSwitch: json["switch"],
-        num: json["num"],
-        textSmall: json["text_small"],
-        textLarge: json["text_large"],
-      );
-}
-
 class DynamicTopicModel {
   DynamicTopicModel({
     this.id,
@@ -1443,9 +1423,11 @@ class ModuleStatModel {
   // DynamicStat? coin;
 
   ModuleStatModel.fromJson(Map<String, dynamic> json) {
-    comment = DynamicStat.fromJson(json['comment']);
-    forward = DynamicStat.fromJson(json['forward']);
-    like = DynamicStat.fromJson(json['like']);
+    comment =
+        json['comment'] == null ? null : DynamicStat.fromJson(json['comment']);
+    forward =
+        json['forward'] == null ? null : DynamicStat.fromJson(json['forward']);
+    like = json['like'] == null ? null : DynamicStat.fromJson(json['like']);
     if (json['favorite'] != null) {
       favorite = DynamicStat.fromJson(json['favorite']);
     }

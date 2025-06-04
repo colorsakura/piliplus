@@ -1,12 +1,12 @@
+import 'package:PiliPlus/http/fav.dart';
 import 'package:PiliPlus/http/loading_state.dart';
-import 'package:PiliPlus/http/user.dart';
-import 'package:PiliPlus/models/user/fav_topic/data.dart';
-import 'package:PiliPlus/models/user/fav_topic/topic_item.dart';
+import 'package:PiliPlus/models_new/fav/fav_topic/data.dart';
+import 'package:PiliPlus/models_new/fav/fav_topic/topic_item.dart';
 import 'package:PiliPlus/pages/common/common_list_controller.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 
 class FavTopicController
-    extends CommonListController<FavTopicData, FavTopicModel> {
+    extends CommonListController<FavTopicData, FavTopicItem> {
   int? total;
 
   @override
@@ -23,7 +23,7 @@ class FavTopicController
   }
 
   @override
-  List<FavTopicModel>? getDataList(FavTopicData response) {
+  List<FavTopicItem>? getDataList(FavTopicData response) {
     total = response.topicList?.pageInfo?.total;
     return response.topicList?.topicItems;
   }
@@ -36,10 +36,10 @@ class FavTopicController
 
   @override
   Future<LoadingState<FavTopicData>> customGetData() =>
-      UserHttp.favTopic(page: page);
+      FavHttp.favTopic(page: page);
 
   Future<void> onRemove(index, id) async {
-    var res = await UserHttp.delFavTopic(id);
+    var res = await FavHttp.delFavTopic(id);
     if (res['status']) {
       loadingState
         ..value.data!.removeAt(index)

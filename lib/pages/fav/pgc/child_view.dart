@@ -4,7 +4,7 @@ import 'package:PiliPlus/common/widgets/dialog/dialog.dart';
 import 'package:PiliPlus/common/widgets/loading_widget/http_error.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/http/loading_state.dart';
-import 'package:PiliPlus/models/pgc/list.dart';
+import 'package:PiliPlus/models_new/fav/fav_pgc/list.dart';
 import 'package:PiliPlus/pages/fav/pgc/controller.dart';
 import 'package:PiliPlus/pages/fav/pgc/widget/item.dart';
 import 'package:PiliPlus/utils/grid.dart';
@@ -155,7 +155,7 @@ class _FavPgcChildPageState extends State<FavPgcChildPage>
     );
   }
 
-  Widget _buildBody(LoadingState<List<BangumiListItemModel>?> loadingState) {
+  Widget _buildBody(LoadingState<List<FavPgcItemModel>?> loadingState) {
     return switch (loadingState) {
       Loading() => SliverGrid(
           gridDelegate: Grid.videoCardHDelegate(context),
@@ -185,7 +185,7 @@ class _FavPgcChildPageState extends State<FavPgcChildPage>
                       followStatus: widget.followStatus,
                       onUpdateStatus: (followStatus) {
                         if (followStatus == -1) {
-                          _favPgcController.bangumiDel(
+                          _favPgcController.pgcDel(
                             index,
                             item.seasonId,
                           );

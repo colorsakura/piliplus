@@ -1,13 +1,13 @@
+import 'package:PiliPlus/http/fav.dart';
 import 'package:PiliPlus/http/loading_state.dart';
-import 'package:PiliPlus/http/user.dart';
-import 'package:PiliPlus/http/video.dart';
-import 'package:PiliPlus/models/user/fav_detail.dart';
+import 'package:PiliPlus/models_new/fav/fav_detail/data.dart';
+import 'package:PiliPlus/models_new/fav/fav_detail/media.dart';
 import 'package:PiliPlus/pages/common/common_search_controller.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 
 class FavSearchController
-    extends CommonSearchController<FavDetailData, FavDetailItemData> {
+    extends CommonSearchController<FavDetailData, FavDetailItemModel> {
   int type = Get.arguments['type'];
   int mediaId = Get.arguments['mediaId'];
   bool isOwner = Get.arguments['isOwner'];
@@ -16,7 +16,7 @@ class FavSearchController
 
   @override
   Future<LoadingState<FavDetailData>> customGetData() =>
-      UserHttp.userFavFolderDetail(
+      FavHttp.userFavFolderDetail(
         pn: page,
         ps: 20,
         mediaId: mediaId,
@@ -25,8 +25,8 @@ class FavSearchController
       );
 
   @override
-  List<FavDetailItemData>? getDataList(FavDetailData response) {
-    return response.list;
+  List<FavDetailItemModel>? getDataList(FavDetailData response) {
+    return response.medias;
   }
 
   @override
@@ -38,7 +38,7 @@ class FavSearchController
   }
 
   Future<void> onCancelFav(int index, int id, int? type) async {
-    var result = await VideoHttp.favVideo(
+    var result = await FavHttp.favVideo(
       aid: id,
       addIds: '',
       delIds: mediaId.toString(),

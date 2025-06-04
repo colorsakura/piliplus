@@ -8,7 +8,7 @@ import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/common/image_type.dart';
 import 'package:PiliPlus/models/common/pgc_review_type.dart';
-import 'package:PiliPlus/models/pgc/pgc_review/list.dart';
+import 'package:PiliPlus/models_new/pgc/pgc_review/list.dart';
 import 'package:PiliPlus/pages/pgc_review/child/controller.dart';
 import 'package:PiliPlus/pages/pgc_review/post/view.dart';
 import 'package:PiliPlus/utils/extension.dart';

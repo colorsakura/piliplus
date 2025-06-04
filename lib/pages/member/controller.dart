@@ -4,9 +4,8 @@ import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/http/member.dart';
 import 'package:PiliPlus/http/video.dart';
 import 'package:PiliPlus/models/common/member/tab_type.dart';
-import 'package:PiliPlus/models/space/data.dart';
-import 'package:PiliPlus/models/space/tab2.dart';
-import 'package:PiliPlus/models/space/tab_item.dart';
+import 'package:PiliPlus/models_new/space/space/data.dart';
+import 'package:PiliPlus/models_new/space/space/tab2.dart';
 import 'package:PiliPlus/pages/common/common_data_controller.dart';
 import 'package:PiliPlus/utils/request_utils.dart';
 import 'package:PiliPlus/utils/storage.dart';
@@ -34,7 +33,7 @@ class MemberController extends CommonDataController<SpaceData, SpaceData?>
   RxInt relation = 0.obs;
   bool get isFollow => relation.value != 0 && relation.value != 128;
 
-  List<Tab2>? tab2;
+  List<SpaceTab2>? tab2;
   late List<Tab> tabs;
   TabController? tabController;
   RxInt contributeInitialIndex = 0.obs;
@@ -92,8 +91,7 @@ class MemberController extends CommonDataController<SpaceData, SpaceData?>
     }
     tab2?.retainWhere((item) => implTabs.contains(item.param));
     if (tab2?.isNotEmpty == true) {
-      if (!data.tab!.toJson().values.contains(true) &&
-          tab2!.first.param == 'home') {
+      if (data.tab!.hasItem != true && tab2!.first.param == 'home') {
         // remove empty home tab
         tab2!.removeAt(0);
       }
@@ -129,14 +127,14 @@ class MemberController extends CommonDataController<SpaceData, SpaceData?>
   @override
   bool handleError(String? errMsg) {
     tab2 = const [
-      Tab2(title: '动态', param: 'dynamic'),
-      Tab2(
+      SpaceTab2(title: '动态', param: 'dynamic'),
+      SpaceTab2(
         title: '投稿',
         param: 'contribute',
-        items: [SpaceTabItem(title: '视频', param: 'video')],
+        items: [SpaceTab2Item(title: '视频', param: 'video')],
       ),
-      Tab2(title: '收藏', param: 'favorite'),
-      Tab2(title: '追番', param: 'bangumi'),
+      SpaceTab2(title: '收藏', param: 'favorite'),
+      SpaceTab2(title: '追番', param: 'bangumi'),
     ];
     tabs = tab2!.map((item) => Tab(text: item.title)).toList();
     tabController?.dispose();

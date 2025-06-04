@@ -43,11 +43,13 @@ class _ActionPanelState extends State<ActionPanel> {
     if (res['status']) {
       SmartDialog.showToast(!status ? '点赞成功' : '取消赞');
       if (up == 1) {
-        item.modules.moduleStat?.like?.count = count + 1;
-        item.modules.moduleStat?.like?.status = true;
+        item.modules.moduleStat?.like
+          ?..count = count + 1
+          ..status = true;
       } else {
-        item.modules.moduleStat?.like?.count = count - 1;
-        item.modules.moduleStat?.like?.status = false;
+        item.modules.moduleStat?.like
+          ?..count = count - 1
+          ..status = false;
       }
       if (mounted) {
         setState(() {});

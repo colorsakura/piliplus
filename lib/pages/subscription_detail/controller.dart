@@ -1,33 +1,35 @@
+import 'package:PiliPlus/http/fav.dart';
 import 'package:PiliPlus/http/loading_state.dart';
-import 'package:PiliPlus/http/user.dart';
-import 'package:PiliPlus/models/user/sub_detail.dart';
-import 'package:PiliPlus/models/user/sub_folder.dart';
+import 'package:PiliPlus/models_new/sub/sub/list.dart';
+import 'package:PiliPlus/models_new/sub/sub_detail/data.dart';
+import 'package:PiliPlus/models_new/sub/sub_detail/media.dart';
 import 'package:PiliPlus/pages/common/common_list_controller.dart';
 import 'package:get/get.dart';
 
 class SubDetailController
-    extends CommonListController<SubDetailModelData, SubDetailMediaItem> {
-  late SubFolderItemData item;
+    extends CommonListController<SubDetailData, SubDetailItemModel> {
+  late SubItemModel item;
 
   late int id;
   late String heroTag;
 
-  RxInt mediaCount = 0.obs;
-  RxInt playCount = 0.obs;
+  late final RxInt mediaCount;
+  late final RxInt playCount;
 
   @override
   void onInit() {
     super.onInit();
     item = Get.arguments;
-    playCount.value = item.viewCount!;
+    mediaCount = (item.mediaCount ?? 0).obs;
+    playCount = (item.viewCount ?? 0).obs;
     id = int.parse(Get.parameters['id']!);
     heroTag = Get.parameters['heroTag']!;
     queryData();
   }
 
   @override
-  List<SubDetailMediaItem>? getDataList(SubDetailModelData response) {
-    return response.list;
+  List<SubDetailItemModel>? getDataList(SubDetailData response) {
+    return response.medias;
   }
 
   @override
@@ -38,26 +40,24 @@ class SubDetailController
   }
 
   @override
-  bool customHandleResponse(
-      bool isRefresh, Success<SubDetailModelData> response) {
+  bool customHandleResponse(bool isRefresh, Success<SubDetailData> response) {
     mediaCount.value = response.response.info!.mediaCount!;
     if (item.type == 11) {
-      playCount.value = response.response.info!.cntInfo!['play'];
+      playCount.value = response.response.info!.cntInfo!.play!;
     }
     return false;
   }
 
   @override
-  Future<LoadingState<SubDetailModelData>> customGetData() {
-    if (item.type! == 11) {
-      return UserHttp.favResourceList(
+  Future<LoadingState<SubDetailData>> customGetData() {
+    if (item.type == 11) {
+      return FavHttp.favResourceList(
         id: id,
         ps: 20,
         pn: page,
       );
     } else {
-      return UserHttp.favSeasonList(
-        // item.type! == 21
+      return FavHttp.favSeasonList(
         id: id,
         ps: 20,
         pn: page,

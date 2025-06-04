@@ -11,7 +11,7 @@ import 'package:PiliPlus/common/widgets/pair.dart';
 import 'package:PiliPlus/http/dynamics.dart';
 import 'package:PiliPlus/models/common/publish_panel_type.dart';
 import 'package:PiliPlus/models/common/reply/reply_option_type.dart';
-import 'package:PiliPlus/models/topic_pub_search/topic_item.dart';
+import 'package:PiliPlus/models_new/dynamic/dyn_topic_pub_search/topic_item.dart';
 import 'package:PiliPlus/pages/common/common_publish_page.dart';
 import 'package:PiliPlus/pages/dynamics_select_topic/controller.dart';
 import 'package:PiliPlus/pages/dynamics_select_topic/view.dart';

@@ -28,7 +28,7 @@ class HotVideoItemModel extends BaseRecVideoItemModel with MultiSelectData {
     tid = json["tid"];
     tname = json["tname"];
     copyright = json["copyright"];
-    pic = json["pic"];
+    cover = json["pic"];
     title = json["title"];
     pubdate = json["pubdate"];
     ctime = json["ctime"];

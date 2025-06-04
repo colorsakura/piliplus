@@ -6,10 +6,10 @@ import 'package:PiliPlus/common/widgets/dialog/dialog.dart';
 import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
 import 'package:PiliPlus/common/widgets/stat/stat.dart';
 import 'package:PiliPlus/models/common/image_preview_type.dart';
-import 'package:PiliPlus/models/pgc/pgc_info_model/result.dart';
+import 'package:PiliPlus/models_new/pgc/pgc_info_model/result.dart';
 import 'package:PiliPlus/pages/video/controller.dart';
 import 'package:PiliPlus/pages/video/introduction/pgc/controller.dart';
-import 'package:PiliPlus/pages/video/introduction/pgc/widgets/bangumi_panel.dart';
+import 'package:PiliPlus/pages/video/introduction/pgc/widgets/pgc_panel.dart';
 import 'package:PiliPlus/pages/video/introduction/ugc/widgets/action_item.dart';
 import 'package:PiliPlus/pages/video/introduction/ugc/widgets/action_row_item.dart';
 import 'package:PiliPlus/utils/extension.dart';
@@ -19,13 +19,13 @@ import 'package:flutter/services.dart' show HapticFeedback;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
-class BangumiIntroPanel extends StatefulWidget {
+class PgcIntroPanel extends StatefulWidget {
   final int? cid;
   final String heroTag;
   final Function showEpisodes;
   final Function showIntroDetail;
 
-  const BangumiIntroPanel({
+  const PgcIntroPanel({
     super.key,
     this.cid,
     required this.heroTag,
@@ -34,12 +34,12 @@ class BangumiIntroPanel extends StatefulWidget {
   });
 
   @override
-  State<BangumiIntroPanel> createState() => _BangumiIntroPanelState();
+  State<PgcIntroPanel> createState() => _PgcIntroPanelState();
 }
 
-class _BangumiIntroPanelState extends State<BangumiIntroPanel>
+class _PgcIntroPanelState extends State<PgcIntroPanel>
     with AutomaticKeepAliveClientMixin {
-  late BangumiIntroController bangumiIntroController;
+  late PgcIntroController pgcIntroController;
   late VideoDetailController videoDetailCtr;
 
   late final _coinKey = GlobalKey<ActionItemState>();
@@ -60,8 +60,7 @@ class _BangumiIntroPanelState extends State<BangumiIntroPanel>
   @override
   void initState() {
     super.initState();
-    bangumiIntroController =
-        Get.put(BangumiIntroController(), tag: widget.heroTag);
+    pgcIntroController = Get.put(PgcIntroController(), tag: widget.heroTag);
     videoDetailCtr = Get.find<VideoDetailController>(tag: widget.heroTag);
   }
 
@@ -69,7 +68,7 @@ class _BangumiIntroPanelState extends State<BangumiIntroPanel>
   Widget build(BuildContext context) {
     super.build(context);
     final ThemeData theme = Theme.of(context);
-    final bangumiItem = bangumiIntroController.bangumiItem;
+    final item = pgcIntroController.pgcItem;
     final isLandscape =
         MediaQuery.of(context).orientation == Orientation.landscape;
     return SliverPadding(
@@ -96,25 +95,25 @@ class _BangumiIntroPanelState extends State<BangumiIntroPanel>
                         context.imageView(
                           imgList: [
                             SourceModel(
-                              url: bangumiItem.cover!,
+                              url: item.cover!,
                             )
                           ],
                           onDismissed: videoDetailCtr.onDismissed,
                         );
                       },
                       child: Hero(
-                        tag: bangumiItem.cover!,
+                        tag: item.cover!,
                         child: NetworkImgLayer(
                           width: isLandscape ? 115 / 0.75 : 115,
                           height: isLandscape ? 115 : 115 / 0.75,
-                          src: bangumiItem.cover!,
+                          src: item.cover!,
                           semanticsLabel: '封面',
                         ),
                       ),
                     ),
-                    if (bangumiItem.rating != null)
+                    if (item.rating != null)
                       PBadge(
-                        text: '评分 ${bangumiItem.rating!.score!}',
+                        text: '评分 ${item.rating!.score!}',
                         top: null,
                         right: 6,
                         bottom: 6,
@@ -125,7 +124,7 @@ class _BangumiIntroPanelState extends State<BangumiIntroPanel>
                 Expanded(
                   child: GestureDetector(
                     onTap: () => widget.showIntroDetail(
-                        bangumiItem, bangumiIntroController.videoTags),
+                        item, pgcIntroController.videoTags),
                     behavior: HitTestBehavior.opaque,
                     child: SizedBox(
                       height: isLandscape ? 115 : 115 / 0.75,
@@ -139,7 +138,7 @@ class _BangumiIntroPanelState extends State<BangumiIntroPanel>
                             children: [
                               Expanded(
                                 child: Text(
-                                  bangumiItem.title!,
+                                  item.title!,
                                   style: const TextStyle(
                                     fontSize: 16,
                                   ),
@@ -158,46 +157,43 @@ class _BangumiIntroPanelState extends State<BangumiIntroPanel>
                                     ),
                                     visualDensity: VisualDensity.compact,
                                     foregroundColor:
-                                        bangumiIntroController.isFollowed.value
+                                        pgcIntroController.isFollowed.value
                                             ? theme.colorScheme.outline
                                             : null,
                                     backgroundColor:
-                                        bangumiIntroController.isFollowed.value
+                                        pgcIntroController.isFollowed.value
                                             ? theme.colorScheme.onInverseSurface
                                             : null,
                                   ),
-                                  onPressed: bangumiIntroController
+                                  onPressed: pgcIntroController
                                               .followStatus.value ==
                                           -1
                                       ? null
                                       : () {
-                                          if (bangumiIntroController
+                                          if (pgcIntroController
                                               .isFollowed.value) {
                                             showPgcFollowDialog(
                                               context: context,
-                                              type: bangumiIntroController.type,
-                                              followStatus:
-                                                  bangumiIntroController
-                                                      .followStatus.value,
+                                              type: pgcIntroController.type,
+                                              followStatus: pgcIntroController
+                                                  .followStatus.value,
                                               onUpdateStatus: (followStatus) {
                                                 if (followStatus == -1) {
-                                                  bangumiIntroController
-                                                      .bangumiDel();
+                                                  pgcIntroController.pgcDel();
                                                 } else {
-                                                  bangumiIntroController
-                                                      .bangumiUpdate(
-                                                          followStatus);
+                                                  pgcIntroController
+                                                      .pgcUpdate(followStatus);
                                                 }
                                               },
                                             );
                                           } else {
-                                            bangumiIntroController.bangumiAdd();
+                                            pgcIntroController.pgcAdd();
                                           }
                                         },
                                   child: Text(
-                                    bangumiIntroController.isFollowed.value
-                                        ? '已${bangumiIntroController.type}'
-                                        : '${bangumiIntroController.type}',
+                                    pgcIntroController.isFollowed.value
+                                        ? '已${pgcIntroController.type}'
+                                        : '${pgcIntroController.type}',
                                   ),
                                 ),
                               ),
@@ -209,28 +205,27 @@ class _BangumiIntroPanelState extends State<BangumiIntroPanel>
                               StatView(
                                 context: context,
                                 theme: 'gray',
-                                value: Utils.numFormat(bangumiItem.stat!.views),
+                                value: Utils.numFormat(item.stat!.views),
                               ),
                               StatDanMu(
                                 context: context,
                                 theme: 'gray',
-                                value:
-                                    Utils.numFormat(bangumiItem.stat!.danmakus),
+                                value: Utils.numFormat(item.stat!.danmakus),
                               ),
                               if (isLandscape) ...[
-                                areasAndPubTime(theme, bangumiItem),
-                                newEpDesc(theme, bangumiItem),
+                                areasAndPubTime(theme, item),
+                                newEpDesc(theme, item),
                               ]
                             ],
                           ),
                           SizedBox(height: isLandscape ? 2 : 6),
                           if (!isLandscape) ...[
-                            areasAndPubTime(theme, bangumiItem),
-                            newEpDesc(theme, bangumiItem),
+                            areasAndPubTime(theme, item),
+                            newEpDesc(theme, item),
                           ],
                           const Spacer(),
                           Text(
-                            '简介：${bangumiItem.evaluate!}',
+                            '简介：${item.evaluate!}',
                             maxLines: isLandscape ? 2 : 3,
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(
@@ -247,16 +242,16 @@ class _BangumiIntroPanelState extends State<BangumiIntroPanel>
             ),
             const SizedBox(height: 6),
             // 点赞收藏转发 布局样式2
-            actionGrid(theme, bangumiItem, bangumiIntroController),
+            actionGrid(theme, item, pgcIntroController),
             // 番剧分p
-            if (bangumiItem.episodes!.isNotEmpty) ...[
-              BangumiPanel(
+            if (item.episodes!.isNotEmpty) ...[
+              PgcPanel(
                 heroTag: widget.heroTag,
-                pages: bangumiItem.episodes!,
+                pages: item.episodes!,
                 cid: videoDetailCtr.cid.value,
-                changeFuc: bangumiIntroController.changeSeasonOrbangu,
+                changeFuc: pgcIntroController.changeSeasonOrbangu,
                 showEpisodes: widget.showEpisodes,
-                newEp: bangumiItem.newEp,
+                newEp: item.newEp,
               )
             ],
           ],
@@ -265,8 +260,8 @@ class _BangumiIntroPanelState extends State<BangumiIntroPanel>
     );
   }
 
-  Widget actionGrid(ThemeData theme, BangumiInfoModel bangumiItem,
-      BangumiIntroController bangumiIntroController) {
+  Widget actionGrid(ThemeData theme, PgcInfoModel item,
+      PgcIntroController pgcIntroController) {
     return Material(
       color: theme.colorScheme.surface,
       child: Padding(
@@ -280,17 +275,16 @@ class _BangumiIntroPanelState extends State<BangumiIntroPanel>
                 () => ActionItem(
                   icon: const Icon(FontAwesomeIcons.thumbsUp),
                   selectIcon: const Icon(FontAwesomeIcons.solidThumbsUp),
-                  onTap: () =>
-                      handleState(bangumiIntroController.actionLikeVideo),
-                  onLongPress: bangumiIntroController.actionOneThree,
-                  selectStatus: bangumiIntroController.hasLike.value,
+                  onTap: () => handleState(pgcIntroController.actionLikeVideo),
+                  onLongPress: pgcIntroController.actionOneThree,
+                  selectStatus: pgcIntroController.hasLike.value,
                   isLoading: false,
                   semanticsLabel: '点赞',
-                  text: Utils.numFormat(bangumiItem.stat!.likes),
+                  text: Utils.numFormat(item.stat!.likes),
                   needAnim: true,
-                  hasTriple: bangumiIntroController.hasLike.value &&
-                      bangumiIntroController.hasCoin &&
-                      bangumiIntroController.hasFav.value,
+                  hasTriple: pgcIntroController.hasLike.value &&
+                      pgcIntroController.hasCoin &&
+                      pgcIntroController.hasFav.value,
                   callBack: (start) {
                     if (start) {
                       HapticFeedback.lightImpact();
@@ -308,12 +302,11 @@ class _BangumiIntroPanelState extends State<BangumiIntroPanel>
                   key: _coinKey,
                   icon: const Icon(FontAwesomeIcons.b),
                   selectIcon: const Icon(FontAwesomeIcons.b),
-                  onTap: () =>
-                      handleState(bangumiIntroController.actionCoinVideo),
-                  selectStatus: bangumiIntroController.hasCoin,
+                  onTap: () => handleState(pgcIntroController.actionCoinVideo),
+                  selectStatus: pgcIntroController.hasCoin,
                   isLoading: false,
                   semanticsLabel: '投币',
-                  text: Utils.numFormat(bangumiItem.stat!.coins),
+                  text: Utils.numFormat(item.stat!.coins),
                   needAnim: true,
                 ),
               ),
@@ -322,14 +315,13 @@ class _BangumiIntroPanelState extends State<BangumiIntroPanel>
                   key: _favKey,
                   icon: const Icon(FontAwesomeIcons.star),
                   selectIcon: const Icon(FontAwesomeIcons.solidStar),
-                  onTap: () =>
-                      bangumiIntroController.showFavBottomSheet(context),
-                  onLongPress: () => bangumiIntroController
+                  onTap: () => pgcIntroController.showFavBottomSheet(context),
+                  onLongPress: () => pgcIntroController
                       .showFavBottomSheet(context, type: 'longPress'),
-                  selectStatus: bangumiIntroController.hasFav.value,
+                  selectStatus: pgcIntroController.hasFav.value,
                   isLoading: false,
                   semanticsLabel: '收藏',
-                  text: Utils.numFormat(bangumiItem.stat!.favorite),
+                  text: Utils.numFormat(item.stat!.favorite),
                   needAnim: true,
                 ),
               ),
@@ -340,15 +332,15 @@ class _BangumiIntroPanelState extends State<BangumiIntroPanel>
                 selectStatus: false,
                 isLoading: false,
                 semanticsLabel: '评论',
-                text: Utils.numFormat(bangumiItem.stat!.reply),
+                text: Utils.numFormat(item.stat!.reply),
               ),
               ActionItem(
                 icon: const Icon(FontAwesomeIcons.shareFromSquare),
-                onTap: () => bangumiIntroController.actionShareVideo(context),
+                onTap: () => pgcIntroController.actionShareVideo(context),
                 selectStatus: false,
                 isLoading: false,
                 semanticsLabel: '转发',
-                text: Utils.numFormat(bangumiItem.stat!.share),
+                text: Utils.numFormat(item.stat!.share),
               ),
             ],
           ),
@@ -358,8 +350,8 @@ class _BangumiIntroPanelState extends State<BangumiIntroPanel>
   }
 
   Widget actionRow(
-    BangumiInfoModel bangumiItem,
-    BangumiIntroController bangumiIntroController,
+    PgcInfoModel item,
+    PgcIntroController pgcIntroController,
     VideoDetailController videoDetailCtr,
   ) {
     return Row(
@@ -368,30 +360,30 @@ class _BangumiIntroPanelState extends State<BangumiIntroPanel>
         Obx(
           () => ActionRowItem(
             icon: const Icon(FontAwesomeIcons.thumbsUp),
-            onTap: () => handleState(bangumiIntroController.actionLikeVideo),
-            selectStatus: bangumiIntroController.hasLike.value,
+            onTap: () => handleState(pgcIntroController.actionLikeVideo),
+            selectStatus: pgcIntroController.hasLike.value,
             isLoading: false,
-            text: bangumiItem.stat!.likes!.toString(),
+            text: item.stat!.likes!.toString(),
           ),
         ),
         Obx(
           () => ActionRowItem(
             icon: const Icon(FontAwesomeIcons.b),
-            onTap: () => handleState(bangumiIntroController.actionCoinVideo),
-            selectStatus: bangumiIntroController.hasCoin,
+            onTap: () => handleState(pgcIntroController.actionCoinVideo),
+            selectStatus: pgcIntroController.hasCoin,
             isLoading: false,
-            text: bangumiItem.stat!.coins!.toString(),
+            text: item.stat!.coins!.toString(),
           ),
         ),
         Obx(
           () => ActionRowItem(
             icon: const Icon(FontAwesomeIcons.heart),
-            onTap: () => bangumiIntroController.showFavBottomSheet(context),
-            onLongPress: () => bangumiIntroController
-                .showFavBottomSheet(context, type: 'longPress'),
-            selectStatus: bangumiIntroController.hasFav.value,
+            onTap: () => pgcIntroController.showFavBottomSheet(context),
+            onLongPress: () => pgcIntroController.showFavBottomSheet(context,
+                type: 'longPress'),
+            selectStatus: pgcIntroController.hasFav.value,
             isLoading: false,
-            text: bangumiItem.stat!.favorite!.toString(),
+            text: item.stat!.favorite!.toString(),
           ),
         ),
         ActionRowItem(
@@ -399,11 +391,11 @@ class _BangumiIntroPanelState extends State<BangumiIntroPanel>
           onTap: () => videoDetailCtr.tabCtr.animateTo(1),
           selectStatus: false,
           isLoading: false,
-          text: bangumiItem.stat!.reply!.toString(),
+          text: item.stat!.reply!.toString(),
         ),
         ActionRowItem(
           icon: const Icon(FontAwesomeIcons.share),
-          onTap: () => bangumiIntroController.actionShareVideo(context),
+          onTap: () => pgcIntroController.actionShareVideo(context),
           selectStatus: false,
           isLoading: false,
           text: '转发',
@@ -412,20 +404,20 @@ class _BangumiIntroPanelState extends State<BangumiIntroPanel>
     );
   }
 
-  Widget areasAndPubTime(ThemeData theme, BangumiInfoModel bangumiItem) {
+  Widget areasAndPubTime(ThemeData theme, PgcInfoModel item) {
     return Row(
       spacing: 6,
       children: [
-        if (bangumiItem.areas?.isNotEmpty == true)
+        if (item.areas?.isNotEmpty == true)
           Text(
-            bangumiItem.areas!.first.name!,
+            item.areas!.first.name!,
             style: TextStyle(
               fontSize: 12,
               color: theme.colorScheme.outline,
             ),
           ),
         Text(
-          bangumiItem.publish!.pubTimeShow!,
+          item.publish!.pubTimeShow!,
           style: TextStyle(
             fontSize: 12,
             color: theme.colorScheme.outline,
@@ -435,9 +427,9 @@ class _BangumiIntroPanelState extends State<BangumiIntroPanel>
     );
   }
 
-  Widget newEpDesc(ThemeData theme, BangumiInfoModel bangumiItem) {
+  Widget newEpDesc(ThemeData theme, PgcInfoModel item) {
     return Text(
-      bangumiItem.newEp!.desc!,
+      item.newEp!.desc!,
       style: TextStyle(
         fontSize: 12,
         color: theme.colorScheme.outline,

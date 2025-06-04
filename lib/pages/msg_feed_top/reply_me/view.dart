@@ -7,7 +7,7 @@ import 'package:PiliPlus/grpc/bilibili/app/im/v1.pbenum.dart'
     show IMSettingType;
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/common/image_type.dart';
-import 'package:PiliPlus/models/msg/msgfeed_reply_me.dart';
+import 'package:PiliPlus/models_new/msg/msg_reply/item.dart';
 import 'package:PiliPlus/pages/msg_feed_top/reply_me/controller.dart';
 import 'package:PiliPlus/pages/whisper_settings/view.dart';
 import 'package:PiliPlus/utils/app_scheme.dart';
@@ -64,7 +64,7 @@ class _ReplyMePageState extends State<ReplyMePage> {
   }
 
   Widget _buildBody(
-      ThemeData theme, LoadingState<List<ReplyMeItems>?> loadingState) {
+      ThemeData theme, LoadingState<List<MsgReplyItem>?> loadingState) {
     return switch (loadingState) {
       Loading() => SliverList.builder(
           itemCount: 12,
@@ -80,7 +80,7 @@ class _ReplyMePageState extends State<ReplyMePage> {
                   _replyMeController.onLoadMore();
                 }
 
-                ReplyMeItems item = response[index];
+                MsgReplyItem item = response[index];
                 return ListTile(
                   onTap: () {
                     String? nativeUri = item.item?.nativeUri;

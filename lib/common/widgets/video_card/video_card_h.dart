@@ -63,7 +63,7 @@ class VideoCardH extends StatelessWidget {
               onLongPress: onLongPress ??
                   () => imageSaveDialog(
                         title: videoItem.title,
-                        cover: videoItem.pic,
+                        cover: videoItem.cover,
                       ),
               onTap: onTap ??
                   () async {
@@ -132,7 +132,7 @@ class VideoCardH extends StatelessWidget {
                             clipBehavior: Clip.none,
                             children: [
                               NetworkImgLayer(
-                                src: videoItem.pic,
+                                src: videoItem.cover,
                                 width: maxWidth,
                                 height: maxHeight,
                               ),
@@ -219,21 +219,20 @@ class VideoCardH extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                   maxLines: 2,
                   TextSpan(
-                    children: [
-                      for (var i in item.titleList!)
-                        TextSpan(
-                          text: i['text'],
-                          style: TextStyle(
-                            fontSize: theme.textTheme.bodyMedium!.fontSize,
-                            height: 1.42,
-                            letterSpacing: 0.3,
-                            color: i['type'] == 'em'
-                                ? theme.colorScheme.primary
-                                : theme.colorScheme.onSurface,
-                          ),
-                        ),
-                    ],
-                  ),
+                      children: item.titleList!
+                          .map((e) => TextSpan(
+                                text: e.text,
+                                style: TextStyle(
+                                  fontSize:
+                                      theme.textTheme.bodyMedium!.fontSize,
+                                  height: 1.42,
+                                  letterSpacing: 0.3,
+                                  color: e.isEm
+                                      ? theme.colorScheme.primary
+                                      : theme.colorScheme.onSurface,
+                                ),
+                              ))
+                          .toList()),
                 ),
               )
           ] else

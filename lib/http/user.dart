@@ -2,22 +2,16 @@ import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/http/api.dart';
 import 'package:PiliPlus/http/init.dart';
 import 'package:PiliPlus/http/loading_state.dart';
-import 'package:PiliPlus/models/fav_article/data.dart';
-import 'package:PiliPlus/models/folder_info/data.dart';
-import 'package:PiliPlus/models/media_list/data.dart';
 import 'package:PiliPlus/models/model_hot_video_item.dart';
-import 'package:PiliPlus/models/user/fav_detail.dart';
-import 'package:PiliPlus/models/user/fav_folder.dart';
-import 'package:PiliPlus/models/user/fav_topic/data.dart';
-import 'package:PiliPlus/models/user/history.dart';
 import 'package:PiliPlus/models/user/info.dart';
 import 'package:PiliPlus/models/user/stat.dart';
-import 'package:PiliPlus/models/user/sub_detail.dart';
-import 'package:PiliPlus/models/user/sub_folder.dart';
-import 'package:PiliPlus/models/video_tag/data.dart';
+import 'package:PiliPlus/models_new/history/data.dart';
+import 'package:PiliPlus/models_new/media_list/data.dart';
+import 'package:PiliPlus/models_new/sub/sub/data.dart';
+import 'package:PiliPlus/models_new/sub/sub/list.dart';
+import 'package:PiliPlus/models_new/video/video_tag/data.dart';
 import 'package:PiliPlus/utils/global_data.dart';
 import 'package:PiliPlus/utils/storage.dart';
-import 'package:PiliPlus/utils/utils.dart';
 import 'package:PiliPlus/utils/wbi_sign.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -50,180 +44,6 @@ class UserHttp {
       return {'status': true, 'data': data};
     } else {
       return {'status': false, 'msg': res.data['message']};
-    }
-  }
-
-  // 收藏夹
-  static Future<LoadingState<FavFolderData>> userfavFolder({
-    required int pn,
-    required int ps,
-    required dynamic mid,
-  }) async {
-    var res = await Request().get(Api.userFavFolder, queryParameters: {
-      'pn': pn,
-      'ps': ps,
-      'up_mid': mid,
-    });
-    if (res.data['code'] == 0) {
-      return Success(FavFolderData.fromJson(res.data['data']));
-    } else {
-      return Error(res.data['message'] ?? '账号未登录');
-    }
-  }
-
-  static Future sortFavFolder({
-    required List<int?> sort,
-  }) async {
-    Map<String, dynamic> data = {
-      'sort': sort.join(','),
-      'csrf': Accounts.main.csrf,
-    };
-    Utils.appSign(data);
-    var res = await Request().post(
-      Api.sortFavFolder,
-      data: data,
-      options: Options(
-        contentType: Headers.formUrlEncodedContentType,
-      ),
-    );
-    if (res.data['code'] == 0) {
-      return {'status': true, 'data': res.data['data']};
-    } else {
-      return {'status': false, 'msg': res.data['message']};
-    }
-  }
-
-  static Future sortFav({
-    required dynamic mediaId,
-    required List<String> sort,
-  }) async {
-    Map<String, dynamic> data = {
-      'media_id': mediaId,
-      'sort': sort.join(','),
-      'csrf': Accounts.main.csrf,
-    };
-    Utils.appSign(data);
-    var res = await Request().post(
-      Api.sortFav,
-      data: data,
-      options: Options(
-        contentType: Headers.formUrlEncodedContentType,
-      ),
-    );
-    if (res.data['code'] == 0) {
-      return {'status': true, 'data': res.data['data']};
-    } else {
-      return {'status': false, 'msg': res.data['message']};
-    }
-  }
-
-  static Future cleanFav({
-    required dynamic mediaId,
-  }) async {
-    var res = await Request().post(
-      Api.cleanFav,
-      data: {
-        'media_id': mediaId,
-        'platform': 'web',
-        'csrf': Accounts.main.csrf,
-      },
-      options: Options(
-        contentType: Headers.formUrlEncodedContentType,
-      ),
-    );
-    if (res.data['code'] == 0) {
-      return {'status': true, 'data': res.data['data']};
-    } else {
-      return {'status': false, 'msg': res.data['message']};
-    }
-  }
-
-  static Future deleteFolder({
-    required List<dynamic> mediaIds,
-  }) async {
-    var res = await Request().post(Api.deleteFolder,
-        data: {
-          'media_ids': mediaIds.join(','),
-          'platform': 'web',
-          'csrf': Accounts.main.csrf,
-        },
-        options: Options(
-          contentType: Headers.formUrlEncodedContentType,
-        ));
-    if (res.data['code'] == 0) {
-      return {'status': true, 'data': res.data['data']};
-    } else {
-      return {'status': false, 'msg': res.data['message']};
-    }
-  }
-
-  static Future addOrEditFolder({
-    required bool isAdd,
-    dynamic mediaId,
-    required String title,
-    required int privacy,
-    required String cover,
-    required String intro,
-  }) async {
-    var res = await Request().post(isAdd ? Api.addFolder : Api.editFolder,
-        data: {
-          'title': title,
-          'intro': intro,
-          'privacy': privacy,
-          'cover': cover.isNotEmpty ? Uri.encodeFull(cover) : cover,
-          'csrf': Accounts.main.csrf,
-          if (mediaId != null) 'media_id': mediaId,
-        },
-        options: Options(
-          contentType: Headers.formUrlEncodedContentType,
-        ));
-    if (res.data['code'] == 0) {
-      return {
-        'status': true,
-        'data': FavFolderItemData.fromJson(res.data['data'])
-      };
-    } else {
-      return {'status': false, 'msg': res.data['message']};
-    }
-  }
-
-  static Future folderInfo({
-    dynamic mediaId,
-  }) async {
-    var res = await Request().get(
-      Api.folderInfo,
-      queryParameters: {
-        'media_id': mediaId,
-      },
-    );
-    if (res.data['code'] == 0) {
-      return {'status': true, 'data': FolderInfo.fromJson(res.data['data'])};
-    } else {
-      return {'status': false, 'msg': res.data['message']};
-    }
-  }
-
-  static Future<LoadingState<FavDetailData>> userFavFolderDetail(
-      {required int mediaId,
-      required int pn,
-      required int ps,
-      String keyword = '',
-      String order = 'mtime',
-      int type = 0}) async {
-    var res = await Request().get(Api.favResourceList, queryParameters: {
-      'media_id': mediaId,
-      'pn': pn,
-      'ps': ps,
-      'keyword': keyword,
-      'order': order,
-      'type': type,
-      'tid': 0,
-      'platform': 'web'
-    });
-    if (res.data['code'] == 0) {
-      return Success(FavDetailData.fromJson(res.data['data']));
-    } else {
-      return Error(res.data['message']);
     }
   }
 
@@ -445,7 +265,7 @@ class UserHttp {
   }
 
   // 我的订阅
-  static Future<LoadingState<List<SubFolderItemData>?>> userSubFolder({
+  static Future<LoadingState<List<SubItemModel>?>> userSubFolder({
     required int mid,
     required int pn,
     required int ps,
@@ -460,224 +280,9 @@ class UserHttp {
       },
     );
     if (res.data['code'] == 0 && res.data['data'] is Map) {
-      return Success(SubFolderModelData.fromJson(res.data['data']).list);
+      return Success(SubData.fromJson(res.data['data']).list);
     } else {
       return Error(res.data['message']);
-    }
-  }
-
-  static Future<LoadingState<SubDetailModelData>> favSeasonList({
-    required int id,
-    required int pn,
-    required int ps,
-  }) async {
-    var res = await Request().get(
-      Api.favSeasonList,
-      queryParameters: {
-        'season_id': id,
-        'ps': ps,
-        'pn': pn,
-      },
-    );
-    if (res.data['code'] == 0) {
-      return Success(SubDetailModelData.fromJson(res.data['data']));
-    } else {
-      return Error(res.data['message']);
-    }
-  }
-
-  static Future<LoadingState<FavTopicData>> favTopic({
-    required int page,
-  }) async {
-    var res = await Request().get(
-      Api.favTopicList,
-      queryParameters: {
-        'page_size': 24,
-        'page_num': page,
-        'web_location': 333.1387,
-      },
-    );
-    if (res.data['code'] == 0) {
-      return Success(FavTopicData.fromJson(res.data['data']));
-    } else {
-      return Error(res.data['message']);
-    }
-  }
-
-  static Future addFavTopic(topicId) async {
-    var res = await Request().post(
-      Api.addFavTopic,
-      data: {
-        'topic_id': topicId,
-        'csrf': Accounts.main.csrf,
-      },
-      options: Options(contentType: Headers.formUrlEncodedContentType),
-    );
-    if (res.data['code'] == 0) {
-      return {'status': true};
-    } else {
-      return {'status': false, 'msg': res.data['message']};
-    }
-  }
-
-  static Future delFavTopic(topicId) async {
-    var res = await Request().post(
-      Api.delFavTopic,
-      data: {
-        'topic_id': topicId,
-        'csrf': Accounts.main.csrf,
-      },
-      options: Options(contentType: Headers.formUrlEncodedContentType),
-    );
-    if (res.data['code'] == 0) {
-      return {'status': true};
-    } else {
-      return {'status': false, 'msg': res.data['message']};
-    }
-  }
-
-  static Future likeTopic(topicId, bool isLike) async {
-    var res = await Request().post(
-      Api.likeTopic,
-      data: {
-        'action': isLike ? 'cancel_like' : 'like',
-        'up_mid': Accounts.main.mid,
-        'topic_id': topicId,
-        'csrf': Accounts.main.csrf,
-        'business': 'topic',
-      },
-      options: Options(contentType: Headers.formUrlEncodedContentType),
-    );
-    if (res.data['code'] == 0) {
-      return {'status': true};
-    } else {
-      return {'status': false, 'msg': res.data['message']};
-    }
-  }
-
-  static Future<LoadingState<FavArticleData>> favArticle({
-    required int page,
-  }) async {
-    var res = await Request().get(
-      Api.favArticle,
-      queryParameters: {
-        'page_size': 20,
-        'page': page,
-      },
-    );
-    if (res.data['code'] == 0) {
-      return Success(FavArticleData.fromJson(res.data['data']));
-    } else {
-      return Error(res.data['message']);
-    }
-  }
-
-  static Future addFavArticle({
-    required dynamic id,
-  }) async {
-    var res = await Request().post(
-      Api.addFavArticle,
-      data: {
-        'id': id,
-        'csrf': Accounts.main.csrf,
-      },
-      options: Options(
-        contentType: Headers.formUrlEncodedContentType,
-      ),
-    );
-    if (res.data['code'] == 0) {
-      return {'status': true};
-    } else {
-      return {'status': false, 'msg': res.data['message']};
-    }
-  }
-
-  static Future delFavArticle({
-    required dynamic id,
-  }) async {
-    var res = await Request().post(
-      Api.delFavArticle,
-      data: {
-        'id': id,
-        'csrf': Accounts.main.csrf,
-      },
-      options: Options(
-        contentType: Headers.formUrlEncodedContentType,
-      ),
-    );
-    if (res.data['code'] == 0) {
-      return {'status': true};
-    } else {
-      return {'status': false, 'msg': res.data['message']};
-    }
-  }
-
-  static Future communityAction({
-    required dynamic opusId,
-    required dynamic action,
-  }) async {
-    var res = await Request().post(
-      Api.communityAction,
-      queryParameters: {
-        'csrf': Accounts.main.csrf,
-      },
-      data: {
-        "entity": {
-          "object_id_str": opusId,
-          "type": {"biz": 2}
-        },
-        "action": action, // 3 fav, 4 unfav
-      },
-    );
-    if (res.data['code'] == 0) {
-      return {'status': true};
-    } else {
-      return {'status': false, 'msg': res.data['message']};
-    }
-  }
-
-  static Future<LoadingState<SubDetailModelData>> favResourceList({
-    required int id,
-    required int pn,
-    required int ps,
-  }) async {
-    var res = await Request().get(Api.favResourceList, queryParameters: {
-      'media_id': id,
-      'ps': ps,
-      'pn': pn,
-    });
-    if (res.data['code'] == 0) {
-      return Success(SubDetailModelData.fromJson(res.data['data']));
-    } else {
-      return Error(res.data['message']);
-    }
-  }
-
-  // 取消订阅
-  static Future cancelSub({required int id, required int type}) async {
-    late Response res;
-    if (type == 11) {
-      res = await Request().post(
-        Api.unfavFolder,
-        queryParameters: {
-          'media_id': id,
-          'csrf': Accounts.main.csrf,
-        },
-      );
-    } else {
-      res = await Request().post(
-        Api.unfavSeason,
-        queryParameters: {
-          'platform': 'web',
-          'season_id': id,
-          'csrf': Accounts.main.csrf,
-        },
-      );
-    }
-    if (res.data['code'] == 0) {
-      return {'status': true};
-    } else {
-      return {'status': false, 'msg': res.data['message']};
     }
   }
 
@@ -713,7 +318,7 @@ class UserHttp {
         'type': type,
         'biz_id': bizId,
         if (oid != null) 'oid': oid,
-        if (otype != null) 'otype': otype, // video:2 // bangumi: 24
+        if (otype != null) 'otype': otype, // ugc:2 // pgc: 24
         'ps': ps,
         'direction': direction,
         'desc': desc,

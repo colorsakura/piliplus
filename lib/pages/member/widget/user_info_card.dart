@@ -1,8 +1,8 @@
 import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/common/widgets/pendant_avatar.dart';
 import 'package:PiliPlus/models/common/image_preview_type.dart';
-import 'package:PiliPlus/models/space/card.dart';
-import 'package:PiliPlus/models/space/images.dart';
+import 'package:PiliPlus/models_new/space/space/card.dart';
+import 'package:PiliPlus/models_new/space/space/images.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:PiliPlus/utils/storage.dart' show Accounts;
@@ -44,7 +44,7 @@ class UserInfoCard extends StatelessWidget {
   Widget _countWidget({
     required ThemeData theme,
     required String title,
-    required int count,
+    required int? count,
     required VoidCallback onTap,
   }) {
     return GestureDetector(
@@ -307,7 +307,7 @@ class UserInfoCard extends StatelessWidget {
                           ? card.fans
                           : index == 2
                               ? card.attention
-                              : card.likes?.likeNum ?? 0,
+                              : card.likes?.likeNum,
                       onTap: () {
                         if (index == 0) {
                           Get.toNamed('/fan?mid=${card.mid}&name=${card.name}');
@@ -464,9 +464,9 @@ class UserInfoCard extends StatelessWidget {
   Widget buildPrInfo(ThemeData theme) => Builder(builder: (context) {
         final isDark = theme.brightness == Brightness.dark;
         final textColor = isDark
-            ? Color(int.parse('FF${card.prInfo?.textColorNight?.substring(1)}',
+            ? Color(int.parse('FF${card.prInfo?.textColorNight.substring(1)}',
                 radix: 16))
-            : Color(int.parse('FF${card.prInfo?.textColor?.substring(1)}',
+            : Color(int.parse('FF${card.prInfo?.textColor.substring(1)}',
                 radix: 16));
         return GestureDetector(
           onTap: () {
@@ -478,10 +478,9 @@ class UserInfoCard extends StatelessWidget {
             margin: const EdgeInsets.only(top: 8),
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
             color: isDark
-                ? Color(int.parse(
-                    'FF${card.prInfo?.bgColorNight?.substring(1)}',
+                ? Color(int.parse('FF${card.prInfo?.bgColorNight.substring(1)}',
                     radix: 16))
-                : Color(int.parse('FF${card.prInfo?.bgColor?.substring(1)}',
+                : Color(int.parse('FF${card.prInfo?.bgColor.substring(1)}',
                     radix: 16)),
             child: Row(
               children: [

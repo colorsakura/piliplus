@@ -4,7 +4,7 @@ import 'dart:ui';
 
 import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
 import 'package:PiliPlus/models/common/image_type.dart';
-import 'package:PiliPlus/models/live/live_room/room_info_h5.dart';
+import 'package:PiliPlus/models_new/live/live_room_info_h5/data.dart';
 import 'package:PiliPlus/pages/live_room/controller.dart';
 import 'package:PiliPlus/pages/live_room/send_danmaku/view.dart';
 import 'package:PiliPlus/pages/live_room/widgets/bottom_control.dart';
@@ -355,110 +355,121 @@ class _LiveRoomPageState extends State<LiveRoomPage>
 
   final Color _color = const Color(0xFFEEEEEE);
 
-  PreferredSizeWidget get _buildAppBar => AppBar(
-        backgroundColor: Colors.transparent,
-        foregroundColor: Colors.white,
-        toolbarHeight: isFullScreen ? 0 : null,
-        titleTextStyle: const TextStyle(color: Colors.white),
-        title: Obx(
-          () {
-            RoomInfoH5Model? roomInfoH5 = _liveRoomController.roomInfoH5.value;
-            return roomInfoH5 == null
-                ? const SizedBox.shrink()
-                : Row(
-                    children: [
-                      GestureDetector(
-                        onTap: () => Get.toNamed(
-                            '/member?mid=${roomInfoH5.roomInfo?.uid}'),
-                        child: NetworkImgLayer(
-                          width: 34,
-                          height: 34,
-                          type: ImageType.avatar,
-                          src: roomInfoH5.anchorInfo!.baseInfo!.face,
+  PreferredSizeWidget get _buildAppBar {
+    final color = Theme.of(context).colorScheme.onSurfaceVariant;
+    return AppBar(
+      backgroundColor: Colors.transparent,
+      foregroundColor: Colors.white,
+      toolbarHeight: isFullScreen ? 0 : null,
+      titleTextStyle: const TextStyle(color: Colors.white),
+      title: Obx(
+        () {
+          RoomInfoH5Data? roomInfoH5 = _liveRoomController.roomInfoH5.value;
+          return roomInfoH5 == null
+              ? const SizedBox.shrink()
+              : Row(
+                  children: [
+                    GestureDetector(
+                      onTap: () => Get.toNamed(
+                          '/member?mid=${roomInfoH5.roomInfo?.uid}'),
+                      child: NetworkImgLayer(
+                        width: 34,
+                        height: 34,
+                        type: ImageType.avatar,
+                        src: roomInfoH5.anchorInfo!.baseInfo!.face,
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          roomInfoH5.anchorInfo!.baseInfo!.uname!,
+                          style: const TextStyle(fontSize: 14),
                         ),
-                      ),
-                      const SizedBox(width: 10),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
+                        const SizedBox(height: 1),
+                        if (roomInfoH5.watchedShow?.textLarge?.isNotEmpty ==
+                            true)
                           Text(
-                            roomInfoH5.anchorInfo!.baseInfo!.uname!,
-                            style: const TextStyle(fontSize: 14),
+                            roomInfoH5.watchedShow!.textLarge!,
+                            style: const TextStyle(fontSize: 12),
                           ),
-                          const SizedBox(height: 1),
-                          if (roomInfoH5.watchedShow?.textLarge?.isNotEmpty ==
-                              true)
-                            Text(
-                              roomInfoH5.watchedShow!.textLarge!,
-                              style: const TextStyle(fontSize: 12),
-                            ),
-                        ],
-                      ),
-                    ],
-                  );
-          },
+                      ],
+                    ),
+                  ],
+                );
+        },
+      ),
+      actions: [
+        IconButton(
+          tooltip: '刷新',
+          onPressed: () =>
+              _futureBuilderFuture = _liveRoomController.queryLiveInfo(),
+          icon: const Icon(Icons.refresh, size: 20),
         ),
-        actions: [
-          IconButton(
-            tooltip: '刷新',
-            onPressed: () =>
-                _futureBuilderFuture = _liveRoomController.queryLiveInfo(),
-            icon: const Icon(Icons.refresh),
-          ),
-          PopupMenuButton(
-            icon: const Icon(Icons.more_vert, size: 19),
-            itemBuilder: (BuildContext context) => <PopupMenuEntry>[
+        PopupMenuButton(
+          icon: const Icon(Icons.more_vert, size: 20),
+          itemBuilder: (BuildContext context) => <PopupMenuEntry>[
+            PopupMenuItem(
+              onTap: () => PageUtils.inAppWebview(
+                'https://live.bilibili.com/h5/${_liveRoomController.roomId}',
+                off: true,
+              ),
+              child: Row(
+                spacing: 10,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(
+                    Icons.open_in_browser,
+                    size: 19,
+                    color: color,
+                  ),
+                  const Text('浏览器打开'),
+                ],
+              ),
+            ),
+            if (_liveRoomController.roomInfoH5.value != null)
               PopupMenuItem(
-                onTap: () => PageUtils.inAppWebview(
-                  'https://live.bilibili.com/h5/${_liveRoomController.roomId}',
-                  off: true,
-                ),
-                child: const Row(
+                onTap: () {
+                  try {
+                    RoomInfoH5Data roomInfo =
+                        _liveRoomController.roomInfoH5.value!;
+                    PageUtils.pmShare(
+                      this.context,
+                      content: {
+                        "cover": roomInfo.roomInfo!.cover!,
+                        "sourceID": _liveRoomController.roomId.toString(),
+                        "title": roomInfo.roomInfo!.title!,
+                        "url":
+                            "https://live.bilibili.com/${_liveRoomController.roomId}",
+                        "authorID": roomInfo.roomInfo!.uid.toString(),
+                        "source": "直播",
+                        "desc": roomInfo.roomInfo!.title!,
+                        "author": roomInfo.anchorInfo!.baseInfo!.uname,
+                      },
+                    );
+                  } catch (e) {
+                    SmartDialog.showToast(e.toString());
+                  }
+                },
+                child: Row(
+                  spacing: 10,
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Icon(Icons.open_in_browser, size: 19),
-                    SizedBox(width: 10),
-                    Text('浏览器打开'),
+                    Icon(
+                      Icons.forward_to_inbox,
+                      size: 19,
+                      color: color,
+                    ),
+                    const Text('分享至消息'),
                   ],
                 ),
               ),
-              if (_liveRoomController.roomInfoH5.value != null)
-                PopupMenuItem(
-                  onTap: () {
-                    try {
-                      RoomInfoH5Model roomInfo =
-                          _liveRoomController.roomInfoH5.value!;
-                      PageUtils.pmShare(
-                        this.context,
-                        content: {
-                          "cover": roomInfo.roomInfo!.cover!,
-                          "sourceID": _liveRoomController.roomId.toString(),
-                          "title": roomInfo.roomInfo!.title!,
-                          "url":
-                              "https://live.bilibili.com/${_liveRoomController.roomId}",
-                          "authorID": roomInfo.roomInfo!.uid.toString(),
-                          "source": "直播",
-                          "desc": roomInfo.roomInfo!.title!,
-                          "author": roomInfo.anchorInfo!.baseInfo!.uname,
-                        },
-                      );
-                    } catch (e) {
-                      SmartDialog.showToast(e.toString());
-                    }
-                  },
-                  child: const Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(Icons.forward_to_inbox, size: 19),
-                      SizedBox(width: 10),
-                      Text('分享至消息'),
-                    ],
-                  ),
-                ),
-            ],
-          ),
-        ],
-      );
+          ],
+        ),
+      ],
+    );
+  }
 
   Widget get _buildBodyH {
     double videoWidth =

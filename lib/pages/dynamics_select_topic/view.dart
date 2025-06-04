@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:PiliPlus/common/widgets/custom_icon.dart';
 import 'package:PiliPlus/common/widgets/loading_widget/loading_widget.dart';
 import 'package:PiliPlus/http/loading_state.dart';
-import 'package:PiliPlus/models/topic_pub_search/topic_item.dart';
+import 'package:PiliPlus/models_new/dynamic/dyn_topic_pub_search/topic_item.dart';
 import 'package:PiliPlus/pages/dynamics_select_topic/controller.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/utils.dart';

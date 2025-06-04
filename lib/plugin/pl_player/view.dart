@@ -6,10 +6,10 @@ import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/common/widgets/progress_bar/audio_video_progress_bar.dart';
 import 'package:PiliPlus/common/widgets/progress_bar/segment_progress_bar.dart';
 import 'package:PiliPlus/models/common/super_resolution_type.dart';
-import 'package:PiliPlus/models/video_detail/episode.dart';
-import 'package:PiliPlus/models/video_detail/page.dart';
-import 'package:PiliPlus/models/video_detail/section.dart';
-import 'package:PiliPlus/models/video_shot/data.dart';
+import 'package:PiliPlus/models_new/video/video_detail/episode.dart';
+import 'package:PiliPlus/models_new/video/video_detail/page.dart';
+import 'package:PiliPlus/models_new/video/video_detail/section.dart';
+import 'package:PiliPlus/models_new/video/video_shot/data.dart';
 import 'package:PiliPlus/pages/video/controller.dart';
 import 'package:PiliPlus/pages/video/introduction/pgc/controller.dart';
 import 'package:PiliPlus/pages/video/introduction/ugc/controller.dart';
@@ -49,7 +49,7 @@ class PLVideoPlayer extends StatefulWidget {
     required this.plPlayerController,
     this.videoDetailController,
     this.videoIntroController,
-    this.bangumiIntroController,
+    this.pgcIntroController,
     required this.headerControl,
     this.bottomControl,
     this.danmuWidget,
@@ -65,7 +65,7 @@ class PLVideoPlayer extends StatefulWidget {
   final PlPlayerController plPlayerController;
   final VideoDetailController? videoDetailController;
   final VideoIntroController? videoIntroController;
-  final BangumiIntroController? bangumiIntroController;
+  final PgcIntroController? pgcIntroController;
   final Widget headerControl;
   final Widget? bottomControl;
   final Widget? danmuWidget;
@@ -87,7 +87,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
   late AnimationController animationController;
   late VideoController videoController;
   late VideoIntroController? videoIntroController;
-  late BangumiIntroController? bangumiIntroController;
+  late PgcIntroController? pgcIntroController;
 
   final GlobalKey _playerKey = GlobalKey();
   final GlobalKey<VideoState> key = GlobalKey<VideoState>();
@@ -181,7 +181,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
         vsync: this, duration: const Duration(milliseconds: 100));
     videoController = plPlayerController.videoController!;
     videoIntroController = widget.videoIntroController;
-    bangumiIntroController = widget.bangumiIntroController;
+    pgcIntroController = widget.pgcIntroController;
     defaultBtmProgressBehavior = GStorage.setting.get(
         SettingBoxKey.btmProgressBehavior,
         defaultValue: BtmProgressBehavior.values.first.code);
@@ -269,8 +269,8 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
     bool isSeason = videoIntroController?.videoDetail.value.ugcSeason != null;
     bool isPage = videoIntroController?.videoDetail.value.pages != null &&
         videoIntroController!.videoDetail.value.pages!.length > 1;
-    bool isBangumi = bangumiIntroController != null;
-    bool anySeason = isSeason || isPage || isBangumi;
+    bool isPgc = pgcIntroController != null;
+    bool anySeason = isSeason || isPage || isPgc;
     double widgetWidth =
         isFullScreen && context.orientation == Orientation.landscape ? 42 : 35;
     Map<BottomControlType, Widget> videoProgressWidgets = {
@@ -291,8 +291,8 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
             if (videoIntroController != null) {
               res = videoIntroController!.prevPlay();
             }
-            if (bangumiIntroController != null) {
-              res = bangumiIntroController!.prevPlay();
+            if (pgcIntroController != null) {
+              res = pgcIntroController!.prevPlay();
             }
             if (res == false) {
               SmartDialog.showToast('已经是第一集了');
@@ -323,8 +323,8 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
             if (videoIntroController != null) {
               res = videoIntroController!.nextPlay();
             }
-            if (bangumiIntroController != null) {
-              res = bangumiIntroController!.nextPlay();
+            if (pgcIntroController != null) {
+              res = pgcIntroController!.nextPlay();
             }
             if (res == false) {
               SmartDialog.showToast('已经是最后一集了');
@@ -505,8 +505,8 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
               final List<Part> pages =
                   videoIntroController!.videoDetail.value.pages!;
               episodes = pages;
-            } else if (isBangumi) {
-              episodes = bangumiIntroController!.bangumiItem.episodes!;
+            } else if (isPgc) {
+              episodes = pgcIntroController!.pgcItem.episodes!;
             }
             widget.showEpisodes?.call(
               index,

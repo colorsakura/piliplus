@@ -1,6 +1,8 @@
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/http/user.dart';
-import 'package:PiliPlus/models/user/history.dart';
+import 'package:PiliPlus/models_new/history/data.dart';
+import 'package:PiliPlus/models_new/history/list.dart';
+import 'package:PiliPlus/models_new/history/tab.dart';
 import 'package:PiliPlus/pages/common/multi_select_controller.dart';
 import 'package:PiliPlus/pages/history/base_controller.dart';
 import 'package:PiliPlus/utils/extension.dart';
@@ -9,7 +11,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 
-class HistoryController extends MultiSelectController<HistoryData, HisListItem>
+class HistoryController
+    extends MultiSelectController<HistoryData, HistoryItemModel>
     with GetSingleTickerProviderStateMixin {
   HistoryController(this.type);
 
@@ -17,7 +20,7 @@ class HistoryController extends MultiSelectController<HistoryData, HisListItem>
 
   final String? type;
   TabController? tabController;
-  late RxList<HisTabItem> tabs = <HisTabItem>[].obs;
+  late RxList<HistoryTab> tabs = <HistoryTab>[].obs;
 
   int? max;
   int? viewAt;
@@ -38,7 +41,7 @@ class HistoryController extends MultiSelectController<HistoryData, HisListItem>
 
   @override
   void onSelect(int index, [bool disableSelect = true]) {
-    List<HisListItem> list = loadingState.value.data!;
+    List<HistoryItemModel> list = loadingState.value.data!;
     list[index].checked = !(list[index].checked ?? false);
     baseCtr.checkedCount.value =
         list.where((item) => item.checked == true).length;
@@ -51,9 +54,9 @@ class HistoryController extends MultiSelectController<HistoryData, HisListItem>
   @override
   void handleSelect([bool checked = false, bool disableSelect = true]) {
     if (loadingState.value.isSuccess) {
-      List<HisListItem>? list = loadingState.value.data;
+      List<HistoryItemModel>? list = loadingState.value.data;
       if (list?.isNotEmpty == true) {
-        for (HisListItem item in list!) {
+        for (HistoryItemModel item in list!) {
           item.checked = checked;
         }
         baseCtr.checkedCount.value = checked ? list.length : 0;
@@ -66,7 +69,7 @@ class HistoryController extends MultiSelectController<HistoryData, HisListItem>
   }
 
   @override
-  List<HisListItem>? getDataList(HistoryData response) {
+  List<HistoryItemModel>? getDataList(HistoryData response) {
     return response.list;
   }
 
@@ -102,14 +105,14 @@ class HistoryController extends MultiSelectController<HistoryData, HisListItem>
   }
 
   // 删除某条历史记录
-  void delHistory(HisListItem item) {
+  void delHistory(HistoryItemModel item) {
     _onDelete([item]);
   }
 
   // 删除已看历史记录
   void onDelHistory() {
     if (loadingState.value.isSuccess) {
-      List<HisListItem> list =
+      List<HistoryItemModel> list =
           loadingState.value.data!.where((e) => e.progress == -1).toList();
       if (list.isNotEmpty) {
         _onDelete(list);
@@ -119,14 +122,14 @@ class HistoryController extends MultiSelectController<HistoryData, HisListItem>
     }
   }
 
-  Future<void> _onDelete(List<HisListItem> result) async {
+  Future<void> _onDelete(List<HistoryItemModel> result) async {
     SmartDialog.showLoading(msg: '请求中');
     List<String> kidList = result.map((item) {
       return '${item.history.business}_${item.kid}';
     }).toList();
     var response = await UserHttp.delHistory(kidList);
     if (response['status']) {
-      List<HisListItem> remainList =
+      List<HistoryItemModel> remainList =
           loadingState.value.data!.toSet().difference(result.toSet()).toList();
       if (remainList.isNotEmpty) {
         loadingState.value = Success(remainList);

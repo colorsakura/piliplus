@@ -7,7 +7,6 @@ import 'package:PiliPlus/models/common/dynamic/dynamics_type.dart';
 import 'package:PiliPlus/models/common/home_tab_type.dart';
 import 'package:PiliPlus/models/user/info.dart';
 import 'package:PiliPlus/models/user/stat.dart';
-import 'package:PiliPlus/pages/bangumi/controller.dart';
 import 'package:PiliPlus/pages/dynamics/controller.dart';
 import 'package:PiliPlus/pages/dynamics_tab/controller.dart';
 import 'package:PiliPlus/pages/home/controller.dart';
@@ -15,6 +14,7 @@ import 'package:PiliPlus/pages/live/controller.dart';
 import 'package:PiliPlus/pages/main/controller.dart';
 import 'package:PiliPlus/pages/media/controller.dart';
 import 'package:PiliPlus/pages/mine/controller.dart';
+import 'package:PiliPlus/pages/pgc/controller.dart';
 import 'package:PiliPlus/utils/accounts/account.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart' as web;
@@ -88,17 +88,17 @@ class LoginUtils {
       } catch (_) {}
 
       try {
-        Get.find<BangumiController>(tag: HomeTabType.bangumi.name)
+        Get.find<PgcController>(tag: HomeTabType.bangumi.name)
           ..isLogin.value = true
           ..mid = data.mid
-          ..queryBangumiFollow();
+          ..queryPgcFollow();
       } catch (_) {}
 
       try {
-        Get.find<BangumiController>(tag: HomeTabType.cinema.name)
+        Get.find<PgcController>(tag: HomeTabType.cinema.name)
           ..isLogin.value = true
           ..mid = data.mid
-          ..queryBangumiFollow();
+          ..queryPgcFollow();
       } catch (_) {}
     } else {
       // 获取用户信息失败
@@ -161,14 +161,14 @@ class LoginUtils {
     }
 
     try {
-      Get.find<BangumiController>(tag: HomeTabType.bangumi.name)
+      Get.find<PgcController>(tag: HomeTabType.bangumi.name)
         ..mid = null
         ..isLogin.value = false
         ..followState.value = LoadingState.loading();
     } catch (_) {}
 
     try {
-      Get.find<BangumiController>(tag: HomeTabType.cinema.name)
+      Get.find<PgcController>(tag: HomeTabType.cinema.name)
         ..mid = null
         ..isLogin.value = false
         ..followState.value = LoadingState.loading();

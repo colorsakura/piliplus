@@ -1,11 +1,11 @@
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/http/member.dart';
-import 'package:PiliPlus/models/member_ss/item.dart';
-import 'package:PiliPlus/models/member_ss/season.dart';
+import 'package:PiliPlus/models_new/space/space_season_series/item.dart';
+import 'package:PiliPlus/models_new/space/space_season_series/season.dart';
 import 'package:PiliPlus/pages/common/common_list_controller.dart';
 
 class SeasonSeriesController
-    extends CommonListController<MemberSsData, MemberSsModel> {
+    extends CommonListController<SpaceSsData, SpaceSsModel> {
   SeasonSeriesController(this.mid);
   final int mid;
   int? count;
@@ -17,10 +17,10 @@ class SeasonSeriesController
   }
 
   @override
-  List<MemberSsModel>? getDataList(MemberSsData response) {
+  List<SpaceSsModel>? getDataList(SpaceSsData response) {
     count = response.page?.total;
-    return (response.seasonsList ?? <MemberSsModel>[]) +
-        (response.seriesList ?? <MemberSsModel>[]);
+    return (response.seasonsList ?? <SpaceSsModel>[]) +
+        (response.seriesList ?? <SpaceSsModel>[]);
   }
 
   @override
@@ -31,7 +31,7 @@ class SeasonSeriesController
   }
 
   @override
-  Future<LoadingState<MemberSsData>> customGetData() =>
+  Future<LoadingState<SpaceSsData>> customGetData() =>
       MemberHttp.seasonSeriesList(
         mid: mid,
         pn: page,

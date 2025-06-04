@@ -5,7 +5,7 @@ import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/common/widgets/scroll_physics.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/common/image_type.dart';
-import 'package:PiliPlus/models/upower_rank/rank_info.dart';
+import 'package:PiliPlus/models_new/upower_rank/rank_info.dart';
 import 'package:PiliPlus/pages/member_upower_rank/controller.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';

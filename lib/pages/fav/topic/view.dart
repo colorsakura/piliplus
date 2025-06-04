@@ -3,7 +3,7 @@ import 'package:PiliPlus/common/widgets/dialog/dialog.dart';
 import 'package:PiliPlus/common/widgets/loading_widget/http_error.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/http/loading_state.dart';
-import 'package:PiliPlus/models/user/fav_topic/topic_item.dart';
+import 'package:PiliPlus/models_new/fav/fav_topic/topic_item.dart';
 import 'package:PiliPlus/pages/fav/topic/controller.dart';
 import 'package:PiliPlus/utils/grid.dart';
 import 'package:flutter/material.dart';
@@ -49,7 +49,7 @@ class _FavTopicPageState extends State<FavTopicPage>
   }
 
   Widget _buildBody(
-      ThemeData theme, LoadingState<List<FavTopicModel>?> loadingState) {
+      ThemeData theme, LoadingState<List<FavTopicItem>?> loadingState) {
     return switch (loadingState) {
       Loading() => const SliverToBoxAdapter(child: LinearProgressIndicator()),
       Success(:var response) => response?.isNotEmpty == true

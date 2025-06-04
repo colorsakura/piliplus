@@ -70,11 +70,13 @@ class _ZanButtonGrpcState extends State<ZanButtonGrpc> {
     if (res['status']) {
       SmartDialog.showToast(isLike ? '取消赞' : '点赞成功');
       if (action == 1) {
-        widget.replyItem.like += $fixnum.Int64.ONE;
-        widget.replyItem.replyControl.action = $fixnum.Int64.ONE;
+        widget.replyItem
+          ..like += $fixnum.Int64.ONE
+          ..replyControl.action = $fixnum.Int64.ONE;
       } else {
-        widget.replyItem.like -= $fixnum.Int64.ONE;
-        widget.replyItem.replyControl.action = $fixnum.Int64.ZERO;
+        widget.replyItem
+          ..like -= $fixnum.Int64.ONE
+          ..replyControl.action = $fixnum.Int64.ZERO;
       }
       if (mounted) {
         setState(() {});

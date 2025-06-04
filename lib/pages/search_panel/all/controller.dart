@@ -6,7 +6,7 @@ import 'package:PiliPlus/pages/search_panel/controller.dart';
 import 'package:PiliPlus/utils/app_scheme.dart';
 
 class SearchAllController
-    extends SearchPanelController<SearchAllModel, dynamic> {
+    extends SearchPanelController<SearchAllData, dynamic> {
   SearchAllController({
     required super.keyword,
     required super.searchType,
@@ -38,7 +38,7 @@ class SearchAllController
   }
 
   @override
-  Future<LoadingState<SearchAllModel>> customGetData() => SearchHttp.searchAll(
+  Future<LoadingState<SearchAllData>> customGetData() => SearchHttp.searchAll(
         keyword: keyword,
         page: page,
         order: order.value,

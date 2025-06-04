@@ -66,7 +66,7 @@ class HeaderControlState extends State<HeaderControl> {
   double buttonSpace = 8;
   String get heroTag => widget.heroTag;
   late VideoIntroController videoIntroController;
-  late BangumiIntroController bangumiIntroController;
+  late PgcIntroController pgcIntroController;
   late bool horizontalScreen;
   RxString now = ''.obs;
   Timer? clock;
@@ -84,7 +84,7 @@ class HeaderControlState extends State<HeaderControl> {
     super.initState();
     videoIntroController = Get.find<VideoIntroController>(tag: heroTag);
     if (videoDetailCtr.videoType != SearchType.video) {
-      bangumiIntroController = Get.find<BangumiIntroController>(tag: heroTag);
+      pgcIntroController = Get.find<PgcIntroController>(tag: heroTag);
     }
     horizontalScreen = GStorage.horizontalScreen;
     defaultCDNService = setting.get(SettingBoxKey.CDNService,
@@ -2353,21 +2353,19 @@ class HeaderControlState extends State<HeaderControl> {
                                 ),
                                 selectIcon:
                                     const Icon(FontAwesomeIcons.solidThumbsUp),
-                                onTap: bangumiIntroController.actionLikeVideo,
+                                onTap: pgcIntroController.actionLikeVideo,
                                 onLongPress: () {
-                                  bangumiIntroController.actionOneThree();
+                                  pgcIntroController.actionOneThree();
                                   plPlayerController
                                     ..isTriple = null
                                     ..hideTaskControls();
                                 },
-                                selectStatus:
-                                    bangumiIntroController.hasLike.value,
+                                selectStatus: pgcIntroController.hasLike.value,
                                 semanticsLabel: '点赞',
                                 needAnim: true,
-                                hasTriple:
-                                    bangumiIntroController.hasLike.value &&
-                                        bangumiIntroController.hasCoin &&
-                                        bangumiIntroController.hasFav.value,
+                                hasTriple: pgcIntroController.hasLike.value &&
+                                    pgcIntroController.hasCoin &&
+                                    pgcIntroController.hasFav.value,
                                 callBack: (start) {
                                   if (start) {
                                     HapticFeedback.lightImpact();
@@ -2399,8 +2397,8 @@ class HeaderControlState extends State<HeaderControl> {
                                   color: Colors.white,
                                 ),
                                 selectIcon: const Icon(FontAwesomeIcons.b),
-                                onTap: bangumiIntroController.actionCoinVideo,
-                                selectStatus: bangumiIntroController.hasCoin,
+                                onTap: pgcIntroController.actionCoinVideo,
+                                selectStatus: pgcIntroController.hasCoin,
                                 semanticsLabel: '投币',
                                 needAnim: true,
                               ),
@@ -2419,13 +2417,12 @@ class HeaderControlState extends State<HeaderControl> {
                                 ),
                                 selectIcon:
                                     const Icon(FontAwesomeIcons.solidStar),
-                                onTap: () => bangumiIntroController
+                                onTap: () => pgcIntroController
                                     .showFavBottomSheet(context),
-                                onLongPress: () => bangumiIntroController
+                                onLongPress: () => pgcIntroController
                                     .showFavBottomSheet(context,
                                         type: 'longPress'),
-                                selectStatus:
-                                    bangumiIntroController.hasFav.value,
+                                selectStatus: pgcIntroController.hasFav.value,
                                 semanticsLabel: '收藏',
                                 needAnim: true,
                               ),
@@ -2440,8 +2437,8 @@ class HeaderControlState extends State<HeaderControl> {
                                 FontAwesomeIcons.shareFromSquare,
                                 color: Colors.white,
                               ),
-                              onTap: () => bangumiIntroController
-                                  .actionShareVideo(context),
+                              onTap: () =>
+                                  pgcIntroController.actionShareVideo(context),
                               semanticsLabel: '转发',
                             ),
                           ),

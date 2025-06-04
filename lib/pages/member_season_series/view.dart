@@ -1,9 +1,9 @@
-import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/common/skeleton/video_card_h.dart';
 import 'package:PiliPlus/common/widgets/loading_widget/http_error.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/common/member/contribute_type.dart';
-import 'package:PiliPlus/models/member_ss/season.dart' show MemberSsModel;
+import 'package:PiliPlus/models_new/space/space_season_series/season.dart'
+    show SpaceSsModel;
 import 'package:PiliPlus/pages/member_season_series/controller.dart';
 import 'package:PiliPlus/pages/member_season_series/widget/season_series_card.dart';
 import 'package:PiliPlus/pages/member_video/view.dart';
@@ -42,7 +42,6 @@ class _SeasonSeriesPageState extends State<SeasonSeriesPage>
       slivers: [
         SliverPadding(
           padding: EdgeInsets.only(
-            top: StyleString.safeSpace - 5,
             bottom: MediaQuery.paddingOf(context).bottom + 80,
           ),
           sliver: Obx(
@@ -53,7 +52,7 @@ class _SeasonSeriesPageState extends State<SeasonSeriesPage>
     );
   }
 
-  Widget _buildBody(LoadingState<List<MemberSsModel>?> loadingState) {
+  Widget _buildBody(LoadingState<List<SpaceSsModel>?> loadingState) {
     return switch (loadingState) {
       Loading() => SliverGrid(
           gridDelegate: Grid.videoCardHDelegate(context),
@@ -72,7 +71,7 @@ class _SeasonSeriesPageState extends State<SeasonSeriesPage>
                   if (index == response.length - 1) {
                     _controller.onLoadMore();
                   }
-                  MemberSsModel item = response[index];
+                  SpaceSsModel item = response[index];
                   return SeasonSeriesCard(
                     item: item,
                     onTap: () {

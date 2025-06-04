@@ -1,11 +1,12 @@
+import 'package:PiliPlus/http/fav.dart';
 import 'package:PiliPlus/http/loading_state.dart';
-import 'package:PiliPlus/http/user.dart';
-import 'package:PiliPlus/models/user/fav_folder.dart';
+import 'package:PiliPlus/models_new/fav/fav_video/data.dart';
+import 'package:PiliPlus/models_new/fav/fav_video/list.dart';
 import 'package:PiliPlus/pages/common/common_list_controller.dart';
 import 'package:PiliPlus/utils/storage.dart';
 
 class FavController
-    extends CommonListController<FavFolderData, FavFolderItemData> {
+    extends CommonListController<FavVideoData, FavVideoItemModel> {
   late final dynamic mid = Accounts.main.mid;
 
   @override
@@ -24,12 +25,12 @@ class FavController
   }
 
   @override
-  List<FavFolderItemData>? getDataList(FavFolderData response) {
+  List<FavVideoItemModel>? getDataList(FavVideoData response) {
     return response.list;
   }
 
   @override
-  bool customHandleResponse(bool isRefresh, Success<FavFolderData> response) {
+  bool customHandleResponse(bool isRefresh, Success<FavVideoData> response) {
     if (response.response.hasMore == false) {
       isEnd = true;
     }
@@ -37,7 +38,7 @@ class FavController
   }
 
   @override
-  Future<LoadingState<FavFolderData>> customGetData() => UserHttp.userfavFolder(
+  Future<LoadingState<FavVideoData>> customGetData() => FavHttp.userfavFolder(
         pn: page,
         ps: 20,
         mid: mid,

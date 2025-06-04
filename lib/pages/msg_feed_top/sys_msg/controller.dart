@@ -1,11 +1,11 @@
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/http/msg.dart';
-import 'package:PiliPlus/models/msg/msgfeed_sys_msg.dart';
+import 'package:PiliPlus/models_new/msg/msg_sys/data.dart';
 import 'package:PiliPlus/pages/common/common_list_controller.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 
 class SysMsgController
-    extends CommonListController<List<SystemNotifyList>?, SystemNotifyList> {
+    extends CommonListController<List<MsgSysItem>?, MsgSysItem> {
   final pageSize = 20;
   int? cursor;
 
@@ -16,7 +16,7 @@ class SysMsgController
   }
 
   @override
-  void handleListResponse(List<SystemNotifyList> dataList) {
+  void handleListResponse(List<MsgSysItem> dataList) {
     if (cursor == null) {
       msgSysUpdateCursor(dataList.first.cursor);
     }
@@ -53,6 +53,6 @@ class SysMsgController
   }
 
   @override
-  Future<LoadingState<List<SystemNotifyList>?>> customGetData() =>
+  Future<LoadingState<List<MsgSysItem>?>> customGetData() =>
       MsgHttp.msgFeedNotify(cursor: cursor, pageSize: pageSize);
 }

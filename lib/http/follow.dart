@@ -1,10 +1,10 @@
 import 'package:PiliPlus/http/api.dart';
 import 'package:PiliPlus/http/init.dart';
 import 'package:PiliPlus/http/loading_state.dart';
-import 'package:PiliPlus/models/follow/result.dart';
+import 'package:PiliPlus/models_new/follow/data.dart';
 
 class FollowHttp {
-  static Future<LoadingState<FollowDataModel>> followings({
+  static Future<LoadingState<FollowData>> followings({
     int? vmid,
     int? pn,
     int? ps,
@@ -19,14 +19,14 @@ class FollowHttp {
     });
     if (res.data['code'] == 0) {
       return Success(
-        FollowDataModel.fromJson(res.data['data']),
+        FollowData.fromJson(res.data['data']),
       );
     } else {
       return Error(res.data['message']);
     }
   }
 
-  static Future<LoadingState<FollowDataModel>> followingsNew({
+  static Future<LoadingState<FollowData>> followingsNew({
     int? vmid,
     int? pn,
     int? ps,
@@ -42,7 +42,7 @@ class FollowHttp {
 
     if (res.data['code'] == 0) {
       return Success(
-        FollowDataModel.fromJson(res.data['data']),
+        FollowData.fromJson(res.data['data']),
       );
     } else {
       return Error(res.data['message']);

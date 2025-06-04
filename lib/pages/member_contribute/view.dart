@@ -1,4 +1,5 @@
 import 'package:PiliPlus/models/common/member/contribute_type.dart';
+import 'package:PiliPlus/models_new/space/space/tab2.dart';
 import 'package:PiliPlus/pages/member_article/view.dart';
 import 'package:PiliPlus/pages/member_audio/view.dart';
 import 'package:PiliPlus/pages/member_contribute/controller.dart';
@@ -88,7 +89,7 @@ class _MemberContributeState extends State<MemberContribute>
             : const SizedBox.shrink();
   }
 
-  Widget _getPageFromType(item) {
+  Widget _getPageFromType(SpaceTab2Item item) {
     return switch (item.param) {
       'video' => MemberVideo(
           type: ContributeType.video,

@@ -36,7 +36,7 @@ class VideoCardV extends StatelessWidget {
     String? goto = videoItem.goto;
     switch (goto) {
       case 'bangumi':
-        PageUtils.viewBangumi(epId: videoItem.param!);
+        PageUtils.viewPgc(epId: videoItem.param!);
         break;
       case 'av':
         String bvid = videoItem.bvid ?? IdUtils.av2bv(videoItem.aid!);
@@ -47,7 +47,7 @@ class VideoCardV extends StatelessWidget {
         PageUtils.toVideoPage(
           'bvid=$bvid&cid=$cid',
           arguments: {
-            'pic': videoItem.pic,
+            'pic': videoItem.cover,
             'heroTag': heroTag,
           },
         );
@@ -106,7 +106,7 @@ class VideoCardV extends StatelessWidget {
               onTap: () => onPushDetail(Utils.makeHeroTag(videoItem.aid)),
               onLongPress: () => imageSaveDialog(
                 title: videoItem.title,
-                cover: videoItem.pic,
+                cover: videoItem.cover,
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -120,7 +120,7 @@ class VideoCardV extends StatelessWidget {
                         clipBehavior: Clip.none,
                         children: [
                           NetworkImgLayer(
-                            src: videoItem.pic,
+                            src: videoItem.cover,
                             width: maxWidth,
                             height: maxHeight,
                           ),
@@ -181,7 +181,7 @@ class VideoCardV extends StatelessWidget {
               children: [
                 if (videoItem.goto == 'bangumi')
                   PBadge(
-                    text: videoItem.bangumiBadge,
+                    text: videoItem.pgcBadge,
                     isStack: false,
                     size: PBadgeSize.small,
                     type: PBadgeType.line_primary,

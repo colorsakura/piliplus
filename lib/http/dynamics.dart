@@ -3,17 +3,17 @@ import 'package:PiliPlus/http/api.dart';
 import 'package:PiliPlus/http/constants.dart';
 import 'package:PiliPlus/http/init.dart';
 import 'package:PiliPlus/http/loading_state.dart';
-import 'package:PiliPlus/models/article_info/data.dart';
 import 'package:PiliPlus/models/common/dynamic/dynamics_type.dart';
 import 'package:PiliPlus/models/common/reply/reply_option_type.dart';
-import 'package:PiliPlus/models/dynamics/article_list/data.dart';
-import 'package:PiliPlus/models/dynamics/dyn_reserve/data.dart';
-import 'package:PiliPlus/models/dynamics/dyn_topic_feed/topic_card_list.dart';
-import 'package:PiliPlus/models/dynamics/dyn_topic_top/top_details.dart';
 import 'package:PiliPlus/models/dynamics/result.dart';
 import 'package:PiliPlus/models/dynamics/up.dart';
 import 'package:PiliPlus/models/dynamics/vote_model.dart';
-import 'package:PiliPlus/models/space_article/item.dart';
+import 'package:PiliPlus/models_new/article/article_info/data.dart';
+import 'package:PiliPlus/models_new/article/article_list/data.dart';
+import 'package:PiliPlus/models_new/article/article_view/data.dart';
+import 'package:PiliPlus/models_new/dynamic/dyn_reserve/data.dart';
+import 'package:PiliPlus/models_new/dynamic/dyn_topic_feed/topic_card_list.dart';
+import 'package:PiliPlus/models_new/dynamic/dyn_topic_top/top_details.dart';
 import 'package:PiliPlus/utils/accounts/account.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/utils.dart';
@@ -41,36 +41,36 @@ class DynamicsHttp {
     };
     var res = await Request().get(Api.followDynamic, queryParameters: data);
     if (res.data['code'] == 0) {
-      try {
-        DynamicsDataModel data = DynamicsDataModel.fromJson(res.data['data']);
-        final antiGoodsDyn = GStorage.antiGoodsDyn;
-        final filterWord = banWordForDyn.pattern.isNotEmpty;
+      // try {
+      DynamicsDataModel data = DynamicsDataModel.fromJson(res.data['data']);
+      final antiGoodsDyn = GStorage.antiGoodsDyn;
+      final filterWord = banWordForDyn.pattern.isNotEmpty;
 
-        data.items?.removeWhere(
-          (item) =>
-              (antiGoodsDyn &&
-                  (item.orig?.modules.moduleDynamic?.additional?.type ==
-                          'ADDITIONAL_TYPE_GOODS' ||
-                      item.modules.moduleDynamic?.additional?.type ==
-                          'ADDITIONAL_TYPE_GOODS')) ||
-              (filterWord &&
-                  (item.orig?.modules.moduleDynamic?.major?.opus?.summary?.text
-                              ?.contains(banWordForDyn) ==
-                          true ||
-                      item.modules.moduleDynamic?.major?.opus?.summary?.text
-                              ?.contains(banWordForDyn) ==
-                          true ||
-                      item.orig?.modules.moduleDynamic?.desc?.text
-                              ?.contains(banWordForDyn) ==
-                          true ||
-                      item.modules.moduleDynamic?.desc?.text
-                              ?.contains(banWordForDyn) ==
-                          true)),
-        );
-        return Success(data);
-      } catch (err) {
-        return Error(err.toString());
-      }
+      data.items?.removeWhere(
+        (item) =>
+            (antiGoodsDyn &&
+                (item.orig?.modules.moduleDynamic?.additional?.type ==
+                        'ADDITIONAL_TYPE_GOODS' ||
+                    item.modules.moduleDynamic?.additional?.type ==
+                        'ADDITIONAL_TYPE_GOODS')) ||
+            (filterWord &&
+                (item.orig?.modules.moduleDynamic?.major?.opus?.summary?.text
+                            ?.contains(banWordForDyn) ==
+                        true ||
+                    item.modules.moduleDynamic?.major?.opus?.summary?.text
+                            ?.contains(banWordForDyn) ==
+                        true ||
+                    item.orig?.modules.moduleDynamic?.desc?.text
+                            ?.contains(banWordForDyn) ==
+                        true ||
+                    item.modules.moduleDynamic?.desc?.text
+                            ?.contains(banWordForDyn) ==
+                        true)),
+      );
+      return Success(data);
+      // } catch (err) {
+      //   return Error(err.toString());
+      // }
     } else {
       return Error(res.data['message']);
     }
@@ -245,10 +245,11 @@ class DynamicsHttp {
         'web_location': '333.1330',
         'x-bili-device-req-json':
             '{"platform":"web","device":"pc","spmid":"333.1330"}',
-        if (Accounts.main.isLogin) 'csrf': Accounts.main.csrf,
+        if (!clearCookie && Accounts.main.isLogin) 'csrf': Accounts.main.csrf,
       },
-      options:
-          clearCookie ? Options(extra: {'account': AnonymousAccount()}) : null,
+      options: clearCookie
+          ? Options(extra: {'account': AnonymousAccount(), 'checkReply': true})
+          : null,
     );
     if (res.data['code'] == 0) {
       try {
@@ -311,7 +312,7 @@ class DynamicsHttp {
     }
   }
 
-  static Future<LoadingState<SpaceArticleItem>> articleView(
+  static Future<LoadingState<ArticleViewData>> articleView(
       {required dynamic cvId}) async {
     final res = await Request().get(
       Api.articleView,
@@ -322,7 +323,7 @@ class DynamicsHttp {
       }),
     );
     if (res.data['code'] == 0) {
-      return Success(SpaceArticleItem.fromJson(res.data['data']));
+      return Success(ArticleViewData.fromJson(res.data['data']));
     } else {
       return Error(res.data['message']);
     }

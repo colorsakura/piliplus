@@ -1,16 +1,17 @@
 import 'package:PiliPlus/http/api.dart';
+import 'package:PiliPlus/http/fav.dart';
 import 'package:PiliPlus/http/init.dart';
 import 'package:PiliPlus/http/loading_state.dart';
-import 'package:PiliPlus/http/member.dart';
-import 'package:PiliPlus/models/space_fav/datum.dart';
-import 'package:PiliPlus/models/space_fav/list.dart';
+import 'package:PiliPlus/models_new/space/space_fav/data.dart';
+import 'package:PiliPlus/models_new/space/space_fav/list.dart';
 import 'package:PiliPlus/pages/common/common_data_controller.dart';
 import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 
-class MemberFavoriteCtr extends CommonDataController {
+class MemberFavoriteCtr
+    extends CommonDataController<List<SpaceFavData>?, dynamic> {
   MemberFavoriteCtr({
     required this.mid,
   });
@@ -40,9 +41,10 @@ class MemberFavoriteCtr extends CommonDataController {
   }
 
   @override
-  bool customHandleResponse(bool isRefresh, Success response) {
+  bool customHandleResponse(
+      bool isRefresh, Success<List<SpaceFavData>?> response) {
     try {
-      List<SpaceFavData> res = response.response;
+      List<SpaceFavData> res = response.response!;
       first.value = res.first;
       second.value = res[1];
 
@@ -111,5 +113,6 @@ class MemberFavoriteCtr extends CommonDataController {
   }
 
   @override
-  Future<LoadingState> customGetData() => MemberHttp.spaceFav(mid: mid);
+  Future<LoadingState<List<SpaceFavData>?>> customGetData() =>
+      FavHttp.spaceFav(mid: mid);
 }

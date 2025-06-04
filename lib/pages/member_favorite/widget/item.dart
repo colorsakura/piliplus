@@ -3,8 +3,9 @@ import 'package:PiliPlus/common/widgets/badge.dart';
 import 'package:PiliPlus/common/widgets/image/image_save.dart';
 import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
 import 'package:PiliPlus/models/common/badge_type.dart';
-import 'package:PiliPlus/models/space_fav/list.dart';
-import 'package:PiliPlus/models/user/sub_folder.dart';
+import 'package:PiliPlus/models_new/space/space_fav/list.dart';
+import 'package:PiliPlus/models_new/sub/sub/list.dart';
+import 'package:PiliPlus/models_new/sub/sub/upper.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -39,7 +40,7 @@ class MemberFavItem extends StatelessWidget {
           } else {
             Get.toNamed(
               '/subDetail',
-              arguments: SubFolderItemData(
+              arguments: SubItemModel(
                 type: item.type,
                 title: item.title,
                 cover: item.cover,

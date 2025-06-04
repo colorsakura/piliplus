@@ -2,13 +2,14 @@ import 'package:PiliPlus/http/follow.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/http/member.dart';
 import 'package:PiliPlus/models/common/follow_order_type.dart';
-import 'package:PiliPlus/models/follow/result.dart';
+import 'package:PiliPlus/models_new/follow/data.dart';
+import 'package:PiliPlus/models_new/follow/list.dart';
 import 'package:PiliPlus/pages/common/common_list_controller.dart';
 import 'package:PiliPlus/pages/follow/controller.dart';
 import 'package:get/get.dart';
 
 class FollowChildController
-    extends CommonListController<FollowDataModel, FollowItemModel> {
+    extends CommonListController<FollowData, FollowItemModel> {
   FollowChildController(this.controller, this.mid, this.tagid);
   final FollowController? controller;
   final int? tagid;
@@ -23,12 +24,12 @@ class FollowChildController
   }
 
   @override
-  List<FollowItemModel>? getDataList(FollowDataModel response) {
+  List<FollowItemModel>? getDataList(FollowData response) {
     return response.list;
   }
 
   @override
-  bool customHandleResponse(bool isRefresh, Success<FollowDataModel> response) {
+  bool customHandleResponse(bool isRefresh, Success<FollowData> response) {
     if (controller != null) {
       try {
         if (controller!.isOwner &&
@@ -45,7 +46,7 @@ class FollowChildController
   }
 
   @override
-  Future<LoadingState<FollowDataModel>> customGetData() {
+  Future<LoadingState<FollowData>> customGetData() {
     if (tagid != null) {
       return MemberHttp.followUpGroup(mid, tagid, page, 20);
     }

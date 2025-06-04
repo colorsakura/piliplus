@@ -4,11 +4,12 @@ import 'package:PiliPlus/http/api.dart';
 import 'package:PiliPlus/http/init.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/common/search_type.dart';
-import 'package:PiliPlus/models/pgc/pgc_info_model/result.dart';
 import 'package:PiliPlus/models/search/result.dart';
-import 'package:PiliPlus/models/search/search_trending/trending_data.dart';
 import 'package:PiliPlus/models/search/suggest.dart';
-import 'package:PiliPlus/models/topic_pub_search/data.dart';
+import 'package:PiliPlus/models_new/dynamic/dyn_topic_pub_search/data.dart';
+import 'package:PiliPlus/models_new/pgc/pgc_info_model/result.dart';
+import 'package:PiliPlus/models_new/search/search_rcmd/data.dart';
+import 'package:PiliPlus/models_new/search/search_trending/data.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:flutter/material.dart';
@@ -16,33 +17,27 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 
 class SearchHttp {
   // 获取搜索建议
-  static Future searchSuggest({required term}) async {
-    var res = await Request().get(Api.searchSuggest,
-        queryParameters: {'term': term, 'main_ver': 'v1', 'highlight': term});
+  static Future searchSuggest({required String term}) async {
+    var res = await Request().get(
+      Api.searchSuggest,
+      queryParameters: {
+        'term': term,
+        'main_ver': 'v1',
+        'highlight': term,
+      },
+    );
     if (res.data is String) {
       Map<String, dynamic> resultMap = json.decode(res.data);
       if (resultMap['code'] == 0) {
         if (resultMap['result'] is Map) {
-          resultMap['result']['term'] = term;
+          return {
+            'status': true,
+            'data': SearchSuggestModel.fromJson(resultMap['result']),
+          };
         }
-        return {
-          'status': true,
-          'data': resultMap['result'] is Map
-              ? SearchSuggestModel.fromJson(resultMap['result'])
-              : null,
-        };
-      } else {
-        return {
-          'status': false,
-          'msg': '请求错误 🙅',
-        };
       }
-    } else {
-      return {
-        'status': false,
-        'msg': '请求错误 🙅',
-      };
     }
+    return {'status': false, 'msg': '请求错误'};
   }
 
   // 分类搜索
@@ -91,19 +86,19 @@ class SearchHttp {
                 i['available'] = !blackMids.contains(i['mid']);
               }
             }
-            data = SearchVideoModel.fromJson(res.data['data']);
+            data = SearchVideoData.fromJson(res.data['data']);
             break;
           case SearchType.live_room:
-            data = SearchLiveModel.fromJson(res.data['data']);
+            data = SearchLiveData.fromJson(res.data['data']);
             break;
           case SearchType.bili_user:
-            data = SearchUserModel.fromJson(res.data['data']);
+            data = SearchUserData.fromJson(res.data['data']);
             break;
           case SearchType.media_bangumi || SearchType.media_ft:
-            data = SearchMBangumiModel.fromJson(res.data['data']);
+            data = SearchPgcData.fromJson(res.data['data']);
             break;
           case SearchType.article:
-            data = SearchArticleModel.fromJson(res.data['data']);
+            data = SearchArticleData.fromJson(res.data['data']);
             break;
         }
         return Success(data);
@@ -116,7 +111,7 @@ class SearchHttp {
     }
   }
 
-  static Future<LoadingState<SearchAllModel>> searchAll({
+  static Future<LoadingState<SearchAllData>> searchAll({
     required String keyword,
     required page,
     String? order,
@@ -149,7 +144,7 @@ class SearchHttp {
     }
     if (res.data['code'] == 0) {
       try {
-        return Success(SearchAllModel.fromJson(res.data['data']));
+        return Success(SearchAllData.fromJson(res.data['data']));
       } catch (err) {
         debugPrint(err.toString());
         return Error(err.toString());
@@ -181,17 +176,17 @@ class SearchHttp {
     }
   }
 
-  static Future<LoadingState<BangumiInfoModel>> bangumiInfoNew(
+  static Future<LoadingState<PgcInfoModel>> pgcInfoNew(
       {int? seasonId, int? epId}) async {
     var res = await Request().get(
-      Api.bangumiInfo,
+      Api.pgcInfo,
       queryParameters: {
         if (seasonId != null) 'season_id': seasonId,
         if (epId != null) 'ep_id': epId,
       },
     );
     if (res.data['code'] == 0) {
-      return Success(BangumiInfoModel.fromJson(res.data['result']));
+      return Success(PgcInfoModel.fromJson(res.data['result']));
     } else {
       return Error(res.data['message']);
     }
@@ -211,12 +206,12 @@ class SearchHttp {
     }
   }
 
-  static Future<Map<String, dynamic>> bangumiInfo({
+  static Future<Map<String, dynamic>> pgcInfo({
     dynamic seasonId,
     dynamic epId,
   }) async {
     var res = await Request().get(
-      Api.bangumiInfo,
+      Api.pgcInfo,
       queryParameters: {
         if (seasonId != null) 'season_id': seasonId,
         if (epId != null) 'ep_id': epId,
@@ -225,14 +220,14 @@ class SearchHttp {
     if (res.data['code'] == 0) {
       return {
         'status': true,
-        'data': BangumiInfoModel.fromJson(res.data['result']),
+        'data': PgcInfoModel.fromJson(res.data['result']),
       };
     } else {
       return {'status': false, 'msg': res.data['message']};
     }
   }
 
-  static Future<LoadingState<TrendingData>> searchTrending(
+  static Future<LoadingState<SearchTrendingData>> searchTrending(
       {int limit = 30}) async {
     final res = await Request().get(
       Api.searchTrending,
@@ -241,22 +236,25 @@ class SearchHttp {
       },
     );
     if (res.data['code'] == 0) {
-      return Success(TrendingData.fromJson(res.data['data']));
+      return Success(SearchTrendingData.fromJson(res.data['data']));
     } else {
       return Error(res.data['message']);
     }
   }
 
-  static Future<LoadingState<SearchKeywordData>> searchRecommend() async {
-    final res = await Request().get(Api.searchRecommend, queryParameters: {
-      'build': '8350200',
-      'c_locale': 'zh_CN',
-      'mobi_app': 'android',
-      'platform': 'android',
-      's_locale': 'zh_CN',
-    });
+  static Future<LoadingState<SearchRcmdData>> searchRecommend() async {
+    final res = await Request().get(
+      Api.searchRecommend,
+      queryParameters: {
+        'build': '8350200',
+        'c_locale': 'zh_CN',
+        'mobi_app': 'android',
+        'platform': 'android',
+        's_locale': 'zh_CN',
+      },
+    );
     if (res.data['code'] == 0) {
-      return Success(SearchKeywordData.fromJson(res.data['data']));
+      return Success(SearchRcmdData.fromJson(res.data['data']));
     } else {
       return Error(res.data['message']);
     }

@@ -80,7 +80,7 @@ abstract class CommonSearchPanelState<
         (context, index) {
           switch (widget.searchType) {
             case SearchType.media_bangumi || SearchType.media_ft:
-              return const MediaBangumiSkeleton();
+              return const MediaPgcSkeleton();
             case SearchType.bili_user:
               return const MsgFeedTopSkeleton();
             case SearchType.live_room:

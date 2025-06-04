@@ -85,7 +85,7 @@ class PiliScheme {
             String? id = uriDigitRegExp.firstMatch(path)?.group(1);
             if (id != null) {
               bool isEp = path.contains('/ep/');
-              PageUtils.viewBangumi(
+              PageUtils.viewPgc(
                 seasonId: isEp ? null : id,
                 epId: isEp ? id : null,
                 progress: uri.queryParameters['start_progress'],
@@ -201,7 +201,7 @@ class PiliScheme {
             if (path.startsWith('/season')) {
               String? seasonId = uriDigitRegExp.firstMatch(path)?.group(1);
               if (seasonId != null) {
-                PageUtils.viewBangumi(seasonId: seasonId, epId: null);
+                PageUtils.viewPgc(seasonId: seasonId, epId: null);
                 return true;
               }
             }
@@ -655,7 +655,7 @@ class PiliScheme {
         if (id != null) {
           bool isSeason = id.startsWith('ss');
           id = id.substring(2);
-          PageUtils.viewBangumi(
+          PageUtils.viewPgc(
             seasonId: isSeason ? id : null,
             epId: isSeason ? null : id,
             progress: uri.queryParameters['start_progress'],

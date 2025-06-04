@@ -2,14 +2,14 @@ import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/common/skeleton/skeleton.dart';
 import 'package:flutter/material.dart';
 
-class MediaBangumiSkeleton extends StatefulWidget {
-  const MediaBangumiSkeleton({super.key});
+class MediaPgcSkeleton extends StatefulWidget {
+  const MediaPgcSkeleton({super.key});
 
   @override
-  State<MediaBangumiSkeleton> createState() => _MediaBangumiSkeletonState();
+  State<MediaPgcSkeleton> createState() => _MediaPgcSkeletonState();
 }
 
-class _MediaBangumiSkeletonState extends State<MediaBangumiSkeleton> {
+class _MediaPgcSkeletonState extends State<MediaPgcSkeleton> {
   @override
   Widget build(BuildContext context) {
     Color bgColor = Theme.of(context).colorScheme.onInverseSurface;

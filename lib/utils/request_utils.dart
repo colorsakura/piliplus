@@ -9,6 +9,7 @@ import 'package:PiliPlus/grpc/bilibili/main/community/reply/v1.pb.dart'
     show ReplyInfo;
 import 'package:PiliPlus/grpc/im.dart';
 import 'package:PiliPlus/http/dynamics.dart';
+import 'package:PiliPlus/http/fav.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/http/member.dart';
 import 'package:PiliPlus/http/msg.dart';
@@ -17,7 +18,7 @@ import 'package:PiliPlus/http/validate.dart';
 import 'package:PiliPlus/http/video.dart';
 import 'package:PiliPlus/models/dynamics/result.dart';
 import 'package:PiliPlus/models/login/model.dart';
-import 'package:PiliPlus/models/user/fav_folder.dart';
+import 'package:PiliPlus/models_new/fav/fav_video/list.dart';
 import 'package:PiliPlus/pages/common/multi_select_controller.dart';
 import 'package:PiliPlus/pages/dynamics_tab/controller.dart';
 import 'package:PiliPlus/pages/group_panel/view.dart';
@@ -220,7 +221,7 @@ class RequestUtils {
     }
   }
 
-  static ReplyInfo replyCast(res) {
+  static ReplyInfo replyCast(Map res) {
     Map? emote = res['content']['emote'];
     emote?.forEach((key, value) {
       value['size'] = value['meta']['size'];
@@ -261,7 +262,7 @@ class RequestUtils {
   //   }
   // }
 
-  static Future<void> insertCreatedDyn(id) async {
+  static Future<void> insertCreatedDyn(dynamic id) async {
     try {
       if (id != null) {
         await Future.delayed(const Duration(milliseconds: 200));
@@ -284,11 +285,12 @@ class RequestUtils {
     }
   }
 
-  static Future<void> checkCreatedDyn({id, dynText, isManual}) async {
-    if (isManual == true || GStorage.enableCreateDynAntifraud) {
+  static Future<void> checkCreatedDyn(
+      {dynamic id, String? dynText, bool isManual = false}) async {
+    if (isManual || GStorage.enableCreateDynAntifraud) {
       try {
         if (id != null) {
-          if (isManual != true) {
+          if (!isManual) {
             await Future.delayed(const Duration(seconds: 5));
           }
           var res = await DynamicsHttp.dynamicDetail(id: id, clearCookie: true);
@@ -340,11 +342,11 @@ class RequestUtils {
     required dynamic mediaId,
     required dynamic mid,
   }) {
-    VideoHttp.allFavFolders(mid).then((res) {
+    FavHttp.allFavFolders(mid).then((res) {
       if (context.mounted &&
           res['status'] &&
           (res['data'].list as List?)?.isNotEmpty == true) {
-        List<FavFolderItemData> list = res['data'].list;
+        List<FavVideoItemModel> list = res['data'].list;
         dynamic checkedId;
         showDialog(
           context: context,
@@ -388,7 +390,7 @@ class RequestUtils {
                           .where((e) => e.checked == true)
                           .toList();
                       SmartDialog.showLoading();
-                      VideoHttp.copyOrMoveFav(
+                      FavHttp.copyOrMoveFav(
                         isCopy: isCopy,
                         isFav: ctr is! LaterController,
                         srcMediaId: mediaId,

@@ -3,7 +3,7 @@ import 'package:PiliPlus/common/widgets/dynamic_sliver_appbar.dart';
 import 'package:PiliPlus/common/widgets/loading_widget/loading_widget.dart';
 import 'package:PiliPlus/common/widgets/scroll_physics.dart';
 import 'package:PiliPlus/http/loading_state.dart';
-import 'package:PiliPlus/models/space/data.dart';
+import 'package:PiliPlus/models_new/space/space/data.dart';
 import 'package:PiliPlus/pages/member/controller.dart';
 import 'package:PiliPlus/pages/member/widget/user_info_card.dart';
 import 'package:PiliPlus/pages/member_contribute/view.dart';
@@ -267,10 +267,10 @@ class _MemberPageState extends State<MemberPage> {
     );
   }
 
-  Widget _buildUserInfo(LoadingState userState, [bool isV = true]) {
+  Widget _buildUserInfo(LoadingState<SpaceData?> userState, [bool isV = true]) {
     return switch (userState) {
       Loading() => const CircularProgressIndicator(),
-      Success(:var response) => response is SpaceData
+      Success(:var response) => response != null
           ? Obx(
               () => UserInfoCard(
                 isV: isV,

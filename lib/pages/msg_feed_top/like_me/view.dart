@@ -8,7 +8,7 @@ import 'package:PiliPlus/grpc/bilibili/app/im/v1.pbenum.dart'
     show IMSettingType;
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/common/image_type.dart';
-import 'package:PiliPlus/models/msg/msgfeed_like_me.dart';
+import 'package:PiliPlus/models_new/msg/msg_like/item.dart';
 import 'package:PiliPlus/pages/msg_feed_top/like_me/controller.dart';
 import 'package:PiliPlus/pages/whisper_settings/view.dart';
 import 'package:PiliPlus/utils/app_scheme.dart';
@@ -73,9 +73,9 @@ class _LikeMePageState extends State<LikeMePage> {
           },
         ),
       Success(:var response) => () {
-          Pair<List<LikeMeItems>, List<LikeMeItems>> pair = response;
-          List<LikeMeItems> latest = pair.first;
-          List<LikeMeItems> total = pair.second;
+          Pair<List<MsgLikeItem>, List<MsgLikeItem>> pair = response;
+          List<MsgLikeItem> latest = pair.first;
+          List<MsgLikeItem> total = pair.second;
           if (latest.isNotEmpty || total.isNotEmpty) {
             return SliverMainAxisGroup(
               slivers: [
@@ -171,7 +171,7 @@ class _LikeMePageState extends State<LikeMePage> {
 
   Widget _buildItem(
     ThemeData theme,
-    LikeMeItems item,
+    MsgLikeItem item,
     ValueChanged<int?> onRemove,
     Function(bool isNotice, int? id) onSetNotice,
   ) {

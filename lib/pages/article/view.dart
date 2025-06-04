@@ -16,9 +16,9 @@ import 'package:PiliPlus/models/common/image_type.dart';
 import 'package:PiliPlus/models/common/reply/reply_sort_type.dart';
 import 'package:PiliPlus/models/dynamics/result.dart' show DynamicStat;
 import 'package:PiliPlus/pages/article/controller.dart';
+import 'package:PiliPlus/pages/article/widgets/article_ops.dart';
 import 'package:PiliPlus/pages/article/widgets/html_render.dart';
 import 'package:PiliPlus/pages/article/widgets/opus_content.dart';
-import 'package:PiliPlus/pages/article/widgets/read_opus.dart';
 import 'package:PiliPlus/pages/dynamics_repost/view.dart';
 import 'package:PiliPlus/pages/video/reply/widgets/reply_item_grpc.dart';
 import 'package:PiliPlus/pages/video/reply_reply/view.dart';
@@ -379,7 +379,7 @@ class _ArticlePageState extends State<ArticlePage>
               } else if (_articleCtr.articleData?.content != null) {
                 if (_articleCtr.articleData?.type == 3) {
                   // json
-                  return ReadOpus(ops: _articleCtr.articleData?.ops);
+                  return ArticleOpus(ops: _articleCtr.articleData?.ops);
                 }
                 if (kDebugMode) debugPrint('html page');
                 final res = parser.parse(_articleCtr.articleData!.content!);

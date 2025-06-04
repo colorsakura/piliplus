@@ -25,7 +25,7 @@ class AccountManager extends Interceptor {
       Api.replyReplyList,
       Api.heartBeat,
       Api.ab2c,
-      Api.bangumiInfo,
+      Api.pgcInfo,
       Api.liveRoomInfo,
       Api.liveRoomInfoH5,
       Api.onlineTotal,
@@ -35,8 +35,8 @@ class AccountManager extends Interceptor {
       Api.liveRoomDmToken,
       Api.liveRoomDmPrefetch,
       Api.searchByType,
-      Api.memberDynamicSearch,
-      Api.memberArchive
+      Api.dynSearch,
+      Api.searchArchive
     },
     AccountType.recommend: {
       Api.recommendListWeb,
@@ -52,7 +52,7 @@ class AccountManager extends Interceptor {
       Api.searchTrending,
       Api.searchRecommend,
     },
-    AccountType.video: {Api.videoUrl, Api.bangumiVideoUrl}
+    AccountType.video: {Api.ugcUrl, Api.pgcUrl}
   };
 
   static const loginApi = {

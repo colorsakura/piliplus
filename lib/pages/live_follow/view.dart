@@ -3,7 +3,7 @@ import 'package:PiliPlus/common/skeleton/video_card_v.dart';
 import 'package:PiliPlus/common/widgets/loading_widget/http_error.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/http/loading_state.dart';
-import 'package:PiliPlus/models/live/live_follow/item.dart';
+import 'package:PiliPlus/models_new/live/live_follow/item.dart';
 import 'package:PiliPlus/pages/live_follow/controller.dart';
 import 'package:PiliPlus/pages/live_follow/widgets/live_item_follow.dart';
 import 'package:PiliPlus/utils/grid.dart';

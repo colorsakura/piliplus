@@ -16,7 +16,7 @@ Widget htmlRender({
   required double maxWidth,
   Function(List<String>, int)? callback,
 }) {
-  if (kDebugMode) debugPrint('htmlRender');
+  // if (kDebugMode) debugPrint('htmlRender');
   final extensions = [
     TagExtension(
       tagsToExtend: <String>{'img'},

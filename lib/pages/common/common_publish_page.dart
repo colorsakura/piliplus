@@ -4,11 +4,11 @@ import 'dart:math';
 
 import 'package:PiliPlus/common/widgets/button/icon_button.dart';
 import 'package:PiliPlus/http/msg.dart';
-import 'package:PiliPlus/models/bfs_res/data.dart';
 import 'package:PiliPlus/models/common/image_preview_type.dart';
 import 'package:PiliPlus/models/common/publish_panel_type.dart';
-import 'package:PiliPlus/models/live/live_emoticons/emoticon.dart';
-import 'package:PiliPlus/models/video/reply/emote.dart';
+import 'package:PiliPlus/models_new/emote/emote.dart';
+import 'package:PiliPlus/models_new/live/live_emote/emoticon.dart';
+import 'package:PiliPlus/models_new/upload_bfs/data.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/feed_back.dart';
 import 'package:chat_bottom_container/chat_bottom_container.dart';
@@ -176,7 +176,7 @@ abstract class CommonPublishPageState<T extends CommonPublishPage>
                 cancelToken: cancelToken,
               );
               if (!result['status']) throw HttpException(result['msg']);
-              BfsResData data = result['data'];
+              UploadBfsResData data = result['data'];
               return {
                 'img_width': data.imageWidth,
                 'img_height': data.imageHeight,
@@ -211,7 +211,7 @@ abstract class CommonPublishPageState<T extends CommonPublishPage>
         selection: TextSelection.collapsed(
             offset: cursorPosition + emote.text!.length),
       );
-    } else if (emote is LiveEmoticon) {
+    } else if (emote is Emoticon) {
       final String newText = currentText.substring(0, cursorPosition) +
           emote.emoji! +
           currentText.substring(cursorPosition);
