@@ -8,7 +8,7 @@ import 'package:get/get.dart';
 
 Widget livePanelSub(
   ThemeData theme,
-  String? source,
+  bool isDetail,
   DynamicItemModel item,
   BuildContext context, {
   int floor = 1,
@@ -113,9 +113,9 @@ Widget livePanelSub(
               const EdgeInsets.symmetric(horizontal: StyleString.safeSpace),
           child: Text(
             content.title!,
-            maxLines: source == 'detail' ? null : 1,
+            maxLines: isDetail ? null : 1,
             style: const TextStyle(fontWeight: FontWeight.bold),
-            overflow: source == 'detail' ? null : TextOverflow.ellipsis,
+            overflow: isDetail ? null : TextOverflow.ellipsis,
           ),
         ),
       const SizedBox(height: 2),

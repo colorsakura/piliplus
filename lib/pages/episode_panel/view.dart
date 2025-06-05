@@ -512,20 +512,19 @@ class _EpisodePanelState extends CommonSlidePageState<EpisodePanel> {
                       if (view != null) ...[
                         const SizedBox(height: 2),
                         Row(
+                          spacing: 8,
                           children: [
                             StatView(
                               context: context,
                               theme: 'gray',
                               value: view,
                             ),
-                            if (danmaku != null) ...[
-                              const SizedBox(width: 8),
+                            if (danmaku != null)
                               StatDanMu(
                                 context: context,
                                 theme: 'gray',
                                 value: danmaku,
                               ),
-                            ],
                           ],
                         ),
                       ],

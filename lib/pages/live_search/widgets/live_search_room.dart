@@ -78,7 +78,7 @@ class LiveCardVSearch extends StatelessWidget {
     );
   }
 
-  Widget videoStat(context) {
+  Widget videoStat(BuildContext context) {
     return Container(
       height: 50,
       padding: const EdgeInsets.only(top: 26, left: 10, right: 10),

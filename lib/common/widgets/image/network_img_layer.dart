@@ -56,7 +56,7 @@ class NetworkImgLayer extends StatelessWidget {
         : getPlaceHolder?.call() ?? placeholder(context);
   }
 
-  Widget _buildImage(context) {
+  Widget _buildImage(BuildContext context) {
     int? memCacheWidth, memCacheHeight;
     if (height == null || callback?.call() == true || width <= height!) {
       memCacheWidth = width.cacheSize(context);

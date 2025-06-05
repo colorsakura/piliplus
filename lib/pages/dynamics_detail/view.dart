@@ -137,7 +137,7 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
                 id: id,
                 oid: oid,
                 rpid: rpid,
-                source: 'dynamic',
+                isVideoDetail: false,
                 replyType: _controller.replyType,
                 firstFloor: replyItem,
                 onDispose: onDispose,
@@ -253,7 +253,7 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
                 duration: const Duration(milliseconds: 300),
                 child: AuthorPanel(
                   item: _controller.dynItem,
-                  source: 'detail', //to remove tag
+                  isDetail: true,
                 ),
               );
             },
@@ -332,7 +332,7 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
                     SliverToBoxAdapter(
                       child: DynamicPanel(
                         item: _controller.dynItem,
-                        source: 'detail',
+                        isDetail: true,
                         callback: _getImageCallback,
                       ),
                     ),
@@ -363,7 +363,7 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
                             sliver: SliverToBoxAdapter(
                               child: DynamicPanel(
                                 item: _controller.dynItem,
-                                source: 'detail',
+                                isDetail: true,
                                 callback: _getImageCallback,
                               ),
                             ),

@@ -10,7 +10,7 @@ import 'package:flutter/material.dart';
 Widget videoSeasonWidget(
   ThemeData theme,
   bool isSave,
-  String? source,
+  bool isDetail,
   DynamicItemModel item,
   BuildContext context,
   String type,
@@ -29,9 +29,7 @@ Widget videoSeasonWidget(
               const SizedBox(width: 5),
               Text(
                 item.modules.moduleDynamic!.major!.none!.tips!,
-                style: TextStyle(
-                  color: theme.colorScheme.outline,
-                ),
+                style: TextStyle(color: theme.colorScheme.outline),
               ),
             ],
           )
@@ -159,9 +157,9 @@ Widget videoSeasonWidget(
               : EdgeInsets.zero,
           child: Text(
             itemContent.title!,
-            maxLines: source == 'detail' ? null : 1,
+            maxLines: isDetail ? null : 1,
             style: const TextStyle(fontWeight: FontWeight.bold),
-            overflow: source == 'detail' ? null : TextOverflow.ellipsis,
+            overflow: isDetail ? null : TextOverflow.ellipsis,
           ),
         ),
     ],

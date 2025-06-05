@@ -9,6 +9,7 @@ import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models_new/fav/fav_detail/data.dart';
 import 'package:PiliPlus/models_new/fav/fav_detail/media.dart';
 import 'package:PiliPlus/models_new/fav/fav_video/list.dart';
+import 'package:PiliPlus/pages/dynamics_repost/view.dart';
 import 'package:PiliPlus/pages/fav_detail/controller.dart';
 import 'package:PiliPlus/pages/fav_detail/widget/fav_video_card.dart';
 import 'package:PiliPlus/pages/fav_sort/view.dart';
@@ -135,6 +136,16 @@ class _FavDetailPageState extends State<FavDetailPage> {
           icon: const Icon(Icons.search_outlined),
         ),
         Obx(
+          () => Utils.isPublicFav(_favDetailController.item.value.attr ?? 0)
+              ? IconButton(
+                  tooltip: '分享',
+                  onPressed: () => Utils.shareText(
+                      'https://www.bilibili.com/medialist/detail/ml${_favDetailController.mediaId}'),
+                  icon: const Icon(Icons.share),
+                )
+              : const SizedBox.shrink(),
+        ),
+        Obx(
           () => _favDetailController.isOwner.value
               ? PopupMenuButton(
                   icon: const Icon(Icons.more_vert),
@@ -150,6 +161,23 @@ class _FavDetailPageState extends State<FavDetailPage> {
                       }),
                       child: const Text('编辑信息'),
                     ),
+                    if (Utils.isPublicFav(
+                        _favDetailController.item.value.attr ?? 0))
+                      PopupMenuItem(
+                        onTap: () => showModalBottomSheet(
+                          context: context,
+                          isScrollControlled: true,
+                          useSafeArea: true,
+                          builder: (context) => RepostPanel(
+                            rid: _favDetailController.mediaId,
+                            dynType: 4300,
+                            pic: _favDetailController.item.value.cover,
+                            title: _favDetailController.item.value.title,
+                            uname: _favDetailController.item.value.upper?.name,
+                          ),
+                        ),
+                        child: const Text('分享至动态'),
+                      ),
                     PopupMenuItem(
                       onTap: () =>
                           FavHttp.cleanFav(mediaId: mediaId).then((data) {
@@ -225,7 +253,7 @@ class _FavDetailPageState extends State<FavDetailPage> {
                     )
                   : const SizedBox.shrink(),
         ),
-        const SizedBox(width: 12),
+        const SizedBox(width: 10),
       ];
 
   List<Widget> _selectActions(ThemeData theme) => [
@@ -410,7 +438,7 @@ class _FavDetailPageState extends State<FavDetailPage> {
                     children: [
                       Positioned.fill(
                         child: FavVideoCardH(
-                          videoItem: item,
+                          item: item,
                           onDelFav: _favDetailController.isOwner.value
                               ? () => _favDetailController.onCancelFav(
                                     index,

@@ -2,10 +2,10 @@ import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/http/api.dart';
 import 'package:PiliPlus/http/init.dart';
 import 'package:PiliPlus/http/loading_state.dart';
-import 'package:PiliPlus/models/model_hot_video_item.dart';
 import 'package:PiliPlus/models/user/info.dart';
 import 'package:PiliPlus/models/user/stat.dart';
 import 'package:PiliPlus/models_new/history/data.dart';
+import 'package:PiliPlus/models_new/later/data.dart';
 import 'package:PiliPlus/models_new/media_list/data.dart';
 import 'package:PiliPlus/models_new/sub/sub/data.dart';
 import 'package:PiliPlus/models_new/sub/sub/list.dart';
@@ -48,7 +48,7 @@ class UserHttp {
   }
 
   // 稍后再看
-  static Future<LoadingState<Map>> seeYouLater({
+  static Future<LoadingState<LaterData>> seeYouLater({
     required int page,
     int viewed = 0,
     String keyword = '',
@@ -67,19 +67,7 @@ class UserHttp {
       }),
     );
     if (res.data['code'] == 0) {
-      if (res.data['data']['count'] == 0) {
-        return const Success({'count': 0});
-      }
-      List<HotVideoItemModel> list = <HotVideoItemModel>[];
-      if (res.data['data']?['list'] != null) {
-        for (var i in res.data['data']['list']) {
-          list.add(HotVideoItemModel.fromJson(i));
-        }
-      }
-      return Success({
-        'list': list,
-        'count': res.data['data']?['count'] ?? 0,
-      });
+      return Success(LaterData.fromJson(res.data['data']));
     } else {
       return Error(res.data['message']);
     }

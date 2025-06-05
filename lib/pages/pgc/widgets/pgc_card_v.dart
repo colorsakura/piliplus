@@ -66,14 +66,14 @@ class PgcCardV extends StatelessWidget {
                 );
               }),
             ),
-            bagumiContent(context)
+            content(context)
           ],
         ),
       ),
     );
   }
 
-  Widget bagumiContent(context) {
+  Widget content(BuildContext context) {
     final theme = Theme.of(context);
     final style = TextStyle(
       fontSize: theme.textTheme.labelMedium!.fontSize,

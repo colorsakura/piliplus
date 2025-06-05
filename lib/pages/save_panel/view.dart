@@ -323,7 +323,7 @@ class _SavePanelState extends State<SavePanel> {
                               IgnorePointer(
                                 child: DynamicPanel(
                                   item: _item,
-                                  source: 'detail',
+                                  isDetail: true,
                                   isSave: true,
                                 ),
                               ),

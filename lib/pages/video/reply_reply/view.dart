@@ -25,7 +25,7 @@ class VideoReplyReplyPanel extends CommonSlidePage {
     required this.rpid,
     this.dialog,
     this.firstFloor,
-    this.source,
+    required this.isVideoDetail,
     required this.replyType,
     this.isDialogue = false,
     this.onViewImage,
@@ -37,7 +37,7 @@ class VideoReplyReplyPanel extends CommonSlidePage {
   final int rpid;
   final int? dialog;
   final ReplyInfo? firstFloor;
-  final String? source;
+  final bool isVideoDetail;
   final int replyType;
   final bool isDialogue;
   final VoidCallback? onViewImage;
@@ -118,7 +118,7 @@ class _VideoReplyReplyPanelState
       resizeToAvoidBottomInset: false,
       body: Column(
         children: [
-          widget.source == 'videoDetail'
+          widget.isVideoDetail
               ? Container(
                   height: 45,
                   decoration: BoxDecoration(
@@ -439,7 +439,7 @@ class _VideoReplyReplyPanelState
           rpid: replyItem.root.toInt(),
           dialog: replyItem.dialog.toInt(),
           replyType: widget.replyType,
-          source: 'videoDetail',
+          isVideoDetail: true,
           isDialogue: true,
         ),
       ),

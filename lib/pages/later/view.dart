@@ -1,6 +1,7 @@
 import 'package:PiliPlus/common/widgets/scroll_physics.dart';
 import 'package:PiliPlus/models/common/later_view_type.dart';
-import 'package:PiliPlus/models/model_hot_video_item.dart';
+import 'package:PiliPlus/models_new/later/data.dart';
+import 'package:PiliPlus/models_new/later/list.dart';
 import 'package:PiliPlus/pages/history/view.dart' show AppBarWidget;
 import 'package:PiliPlus/pages/later/base_controller.dart';
 import 'package:PiliPlus/pages/later/controller.dart';
@@ -266,7 +267,7 @@ class _LaterPageState extends State<LaterPage>
             ),
             onPressed: () {
               final ctr = currCtr();
-              RequestUtils.onCopyOrMove<Map, HotVideoItemModel>(
+              RequestUtils.onCopyOrMove<LaterData, LaterItemModel>(
                 context: context,
                 isCopy: true,
                 ctr: ctr,
@@ -287,7 +288,7 @@ class _LaterPageState extends State<LaterPage>
             ),
             onPressed: () {
               final ctr = currCtr();
-              RequestUtils.onCopyOrMove<Map, HotVideoItemModel>(
+              RequestUtils.onCopyOrMove<LaterData, LaterItemModel>(
                 context: context,
                 isCopy: false,
                 ctr: ctr,

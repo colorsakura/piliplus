@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 
 Widget liveRcmdPanel(
   ThemeData theme,
-  String? source,
+  bool isDetail,
   DynamicItemModel item,
   BuildContext context, {
   int floor = 1,
@@ -113,9 +113,9 @@ Widget liveRcmdPanel(
               const EdgeInsets.symmetric(horizontal: StyleString.safeSpace),
           child: Text(
             liveRcmd.title!,
-            maxLines: source == 'detail' ? null : 1,
+            maxLines: isDetail ? null : 1,
             style: const TextStyle(fontWeight: FontWeight.bold),
-            overflow: source == 'detail' ? null : TextOverflow.ellipsis,
+            overflow: isDetail ? null : TextOverflow.ellipsis,
           ),
         ),
       const SizedBox(height: 2),

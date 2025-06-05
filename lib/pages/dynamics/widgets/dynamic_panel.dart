@@ -12,7 +12,7 @@ import 'package:get/get.dart';
 
 class DynamicPanel extends StatelessWidget {
   final DynamicItemModel item;
-  final String? source;
+  final bool isDetail;
   final ValueChanged? onRemove;
   final Function(List<String>, int)? callback;
   final bool isSave;
@@ -22,7 +22,7 @@ class DynamicPanel extends StatelessWidget {
   const DynamicPanel({
     super.key,
     required this.item,
-    this.source,
+    this.isDetail = false,
     this.onRemove,
     this.callback,
     this.isSave = false,
@@ -35,7 +35,7 @@ class DynamicPanel extends StatelessWidget {
     final theme = Theme.of(context);
     final authorWidget = AuthorPanel(
       item: item,
-      source: source,
+      isDetail: isDetail,
       onRemove: onRemove,
       isSave: isSave,
       onSetTop: onSetTop,
@@ -45,7 +45,7 @@ class DynamicPanel extends StatelessWidget {
       elevation: 0,
       color: Colors.transparent,
       child: InkWell(
-        onTap: source == 'detail' &&
+        onTap: isDetail &&
                 !const {
                   'DYNAMIC_TYPE_AV',
                   'DYNAMIC_TYPE_UGC_SEASON',
@@ -67,22 +67,21 @@ class DynamicPanel extends StatelessWidget {
               child: authorWidget,
             ),
             if (item.type != 'DYNAMIC_TYPE_NONE')
-              content(theme, isSave, context, item, source, callback),
-            module(theme, isSave, item, context, source, callback),
+              content(theme, isSave, context, item, isDetail, callback),
+            module(theme, isSave, item, context, isDetail, callback),
             if (item.modules.moduleDynamic?.additional != null)
               addWidget(theme, item, context),
             if (item.modules.moduleDynamic?.major?.blocked != null)
               blockedItem(theme, item.modules.moduleDynamic!.major!.blocked!),
             const SizedBox(height: 2),
-            if (source == null) ActionPanel(item: item),
-            if (source == 'detail' && !isSave) const SizedBox(height: 12),
+            if (!isDetail) ActionPanel(item: item),
+            if (isDetail && !isSave) const SizedBox(height: 12),
           ],
         ),
       ),
     );
     if (isSave ||
-        (source == 'detail' &&
-            Get.context!.orientation == Orientation.landscape)) {
+        (isDetail && Get.context!.orientation == Orientation.landscape)) {
       return child;
     }
     return DecoratedBox(

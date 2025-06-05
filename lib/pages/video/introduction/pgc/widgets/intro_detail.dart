@@ -13,11 +13,11 @@ import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart' hide TabBarView;
 import 'package:get/get.dart';
 
-class IntroDetail extends CommonCollapseSlidePage {
+class PgcIntroPanel extends CommonCollapseSlidePage {
   final PgcInfoModel item;
   final List<VideoTagItem>? videoTags;
 
-  const IntroDetail({
+  const PgcIntroPanel({
     super.key,
     required this.item,
     super.enableSlide = false,
@@ -25,10 +25,10 @@ class IntroDetail extends CommonCollapseSlidePage {
   });
 
   @override
-  State<IntroDetail> createState() => _IntroDetailState();
+  State<PgcIntroPanel> createState() => _IntroDetailState();
 }
 
-class _IntroDetailState extends CommonCollapseSlidePageState<IntroDetail> {
+class _IntroDetailState extends CommonCollapseSlidePageState<PgcIntroPanel> {
   late final _tabController = TabController(length: 2, vsync: this);
   final _controller = ScrollController();
 
@@ -106,13 +106,13 @@ class _IntroDetailState extends CommonCollapseSlidePageState<IntroDetail> {
         ),
         const SizedBox(height: 4),
         Row(
+          spacing: 6,
           children: [
             StatView(
               context: context,
               theme: 'gray',
               value: Utils.numFormat(widget.item.stat!.views),
             ),
-            const SizedBox(width: 6),
             StatDanMu(
               context: context,
               theme: 'gray',

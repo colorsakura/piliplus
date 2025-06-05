@@ -22,7 +22,7 @@ import 'package:get/get.dart';
 class AuthorPanel extends StatelessWidget {
   final DynamicItemModel item;
   final Function? addBannedList;
-  final String? source;
+  final bool isDetail;
   final ValueChanged? onRemove;
   final bool isSave;
   final Function(bool isTop, dynamic dynId)? onSetTop;
@@ -32,7 +32,7 @@ class AuthorPanel extends StatelessWidget {
     super.key,
     required this.item,
     this.addBannedList,
-    this.source,
+    this.isDetail = false,
     this.onRemove,
     this.isSave = false,
     this.onSetTop,
@@ -119,7 +119,7 @@ class AuthorPanel extends StatelessWidget {
         ),
         Align(
           alignment: Alignment.centerRight,
-          child: source != 'detail' && item.modules.moduleTag?.text != null
+          child: !isDetail && item.modules.moduleTag?.text != null
               ? Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [

@@ -1799,7 +1799,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
               ] else if (videoDetailController.videoType ==
                   SearchType.media_bangumi)
                 Obx(
-                  () => PgcIntroPanel(
+                  () => PgcIntroPage(
                     key: pgcPanelKey,
                     heroTag: heroTag,
                     cid: videoDetailController.cid.value,
@@ -2027,7 +2027,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
           rpid: rpid,
           firstFloor: replyItem,
           replyType: 1,
-          source: 'videoDetail',
+          isVideoDetail: true,
           onViewImage: videoDetailController.onViewImage,
           onDismissed: videoDetailController.onDismissed,
         ),
@@ -2040,7 +2040,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
     videoDetailController.childKey.currentState?.showBottomSheet(
       backgroundColor: Colors.transparent,
       (context) =>
-          AiDetail(modelResult: videoIntroController.aiConclusionResult!),
+          AiConclusionPanel(item: videoIntroController.aiConclusionResult!),
     );
   }
 
@@ -2048,7 +2048,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
       PgcInfoModel videoDetail, List<VideoTagItem>? videoTags) {
     videoDetailController.childKey.currentState?.showBottomSheet(
       backgroundColor: Colors.transparent,
-      (context) => IntroDetail(
+      (context) => PgcIntroPanel(
         item: videoDetail,
         videoTags: videoTags,
       ),

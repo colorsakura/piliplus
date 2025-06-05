@@ -6,19 +6,19 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class AiDetail extends CommonCollapseSlidePage {
-  final AiConclusionResult modelResult;
+class AiConclusionPanel extends CommonCollapseSlidePage {
+  final AiConclusionResult item;
 
-  const AiDetail({
+  const AiConclusionPanel({
     super.key,
-    required this.modelResult,
+    required this.item,
   });
 
   @override
-  State<AiDetail> createState() => _AiDetailState();
+  State<AiConclusionPanel> createState() => _AiDetailState();
 }
 
-class _AiDetailState extends CommonCollapseSlidePageState<AiDetail> {
+class _AiDetailState extends CommonCollapseSlidePageState<AiConclusionPanel> {
   @override
   Widget buildPage(ThemeData theme) {
     return Material(
@@ -56,12 +56,12 @@ class _AiDetailState extends CommonCollapseSlidePageState<AiDetail> {
       controller: ScrollController(),
       physics: const AlwaysScrollableScrollPhysics(),
       slivers: [
-        if (widget.modelResult.summary?.isNotEmpty == true) ...[
+        if (widget.item.summary?.isNotEmpty == true) ...[
           SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 14),
               child: SelectableText(
-                widget.modelResult.summary!,
+                widget.item.summary!,
                 style: const TextStyle(
                   fontSize: 15,
                   height: 1.5,
@@ -69,7 +69,7 @@ class _AiDetailState extends CommonCollapseSlidePageState<AiDetail> {
               ),
             ),
           ),
-          if (widget.modelResult.outline?.isNotEmpty == true)
+          if (widget.item.outline?.isNotEmpty == true)
             SliverToBoxAdapter(
               child: Divider(
                 height: 20,
@@ -78,7 +78,7 @@ class _AiDetailState extends CommonCollapseSlidePageState<AiDetail> {
               ),
             ),
         ],
-        if (widget.modelResult.outline?.isNotEmpty == true)
+        if (widget.item.outline?.isNotEmpty == true)
           SliverPadding(
             padding: EdgeInsets.only(
               left: 14,
@@ -86,14 +86,14 @@ class _AiDetailState extends CommonCollapseSlidePageState<AiDetail> {
               bottom: MediaQuery.paddingOf(context).bottom + 80,
             ),
             sliver: SliverList.builder(
-              itemCount: widget.modelResult.outline!.length,
+              itemCount: widget.item.outline!.length,
               itemBuilder: (context, index) {
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     if (index != 0) const SizedBox(height: 10),
                     SelectableText(
-                      widget.modelResult.outline![index].title!,
+                      widget.item.outline![index].title!,
                       style: const TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.bold,
@@ -101,10 +101,9 @@ class _AiDetailState extends CommonCollapseSlidePageState<AiDetail> {
                       ),
                     ),
                     const SizedBox(height: 6),
-                    if (widget.modelResult.outline![index].partOutline
-                            ?.isNotEmpty ==
+                    if (widget.item.outline![index].partOutline?.isNotEmpty ==
                         true)
-                      ...widget.modelResult.outline![index].partOutline!.map(
+                      ...widget.item.outline![index].partOutline!.map(
                         (item) => Wrap(
                           children: [
                             SelectableText.rich(
@@ -122,7 +121,6 @@ class _AiDetailState extends CommonCollapseSlidePageState<AiDetail> {
                                     ),
                                     recognizer: TapGestureRecognizer()
                                       ..onTap = () {
-                                        // 跳转到指定位置
                                         try {
                                           Get.find<VideoDetailController>(
                                                   tag: Get.arguments['heroTag'])

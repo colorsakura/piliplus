@@ -220,7 +220,7 @@ class PgcIntroController extends GetxController {
   }
 
   // 分享视频
-  void actionShareVideo(context) {
+  void actionShareVideo(BuildContext context) {
     showDialog(
         context: context,
         builder: (_) {
@@ -360,7 +360,7 @@ class PgcIntroController extends GetxController {
   }
 
   // 修改分P或番剧分集
-  void changeSeasonOrbangu(epId, bvid, cid, aid, cover) {
+  void changeSeasonOrbangu(dynamic epId, bvid, cid, aid, cover) {
     // 重新获取视频资源
     this.epId = epId;
     this.bvid = bvid;
@@ -420,7 +420,7 @@ class PgcIntroController extends GetxController {
     SmartDialog.showToast(result['msg']);
   }
 
-  Future<void> pgcUpdate(status) async {
+  Future<void> pgcUpdate(int status) async {
     var result = await VideoHttp.pgcUpdate(
       seasonId: [pgcItem.seasonId],
       status: status,

@@ -11,7 +11,7 @@ Widget content(
   bool isSave,
   BuildContext context,
   DynamicItemModel item,
-  String? source,
+  bool isDetail,
   Function(List<String>, int)? callback, {
   floor = 1,
 }) {
@@ -53,7 +53,7 @@ Widget content(
               style: TextStyle(
                 fontSize: floor != 1
                     ? 14
-                    : source == 'detail' && !isSave
+                    : isDetail && !isSave
                         ? 16
                         : 15,
                 color: theme.colorScheme.primary,
@@ -61,7 +61,7 @@ Widget content(
             ),
           ),
         if (richNodes != null)
-          source == 'detail' && floor == 1
+          isDetail && floor == 1
               ? SelectableText.rich(
                   richNodes,
                   style: isSave

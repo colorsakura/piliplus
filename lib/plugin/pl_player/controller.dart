@@ -998,14 +998,7 @@ class PlPlayerController {
             if (event.startsWith("Failed to open .") ||
                 event.startsWith("Cannot open") ||
                 event.startsWith("Can not open")) {
-              List list = [
-                if (dataSource.videoSource.isNullOrEmpty) '视频',
-                if (dataSource.audioSource.isNullOrEmpty) '音频',
-              ];
-              if (list.isNotEmpty) {
-                SmartDialog.showToast('${list.join('、')}源为空');
-                return;
-              }
+              return;
             }
             SmartDialog.showToast('视频加载错误, $event');
             if (kDebugMode) debugPrint('视频加载错误, $event');

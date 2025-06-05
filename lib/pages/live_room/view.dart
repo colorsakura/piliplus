@@ -105,7 +105,7 @@ class _LiveRoomPageState extends State<LiveRoomPage>
     }
   }
 
-  double _getFontSize(isFullScreen) {
+  double _getFontSize(bool isFullScreen) {
     return isFullScreen == false || _isPipMode == true
         ? 15 * plPlayerController.fontSize
         : 15 * plPlayerController.fontSizeFS;

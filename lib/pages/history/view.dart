@@ -275,7 +275,7 @@ class _HistoryPageState extends State<HistoryPage>
                   }
                   final item = response[index];
                   return HistoryItem(
-                    videoItem: item,
+                    item: item,
                     ctr: _historyController.baseCtr,
                     onChoose: () => _historyController.onSelect(index),
                     onDelete: (kid, business) =>

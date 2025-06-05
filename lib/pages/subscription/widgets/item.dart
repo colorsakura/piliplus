@@ -88,14 +88,14 @@ class SubItem extends StatelessWidget {
               ),
             ),
             const SizedBox(width: 10),
-            videoContent(context),
+            content(context),
           ],
         ),
       ),
     );
   }
 
-  Widget videoContent(context) {
+  Widget content(BuildContext context) {
     final theme = Theme.of(context);
     final style = TextStyle(
       fontSize: 13,

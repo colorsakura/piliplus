@@ -218,7 +218,7 @@ class _PayCoinsPageState extends State<PayCoinsPage>
     });
   }
 
-  Widget _buildBody(isV) => Stack(
+  Widget _buildBody(bool isV) => Stack(
         key: _key,
         clipBehavior: Clip.none,
         alignment: Alignment.center,

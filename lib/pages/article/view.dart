@@ -193,7 +193,7 @@ class _ArticlePageState extends State<ArticlePage>
                 id: id,
                 oid: oid,
                 rpid: rpid,
-                source: 'dynamic',
+                isVideoDetail: false,
                 replyType: _articleCtr.commentType,
                 firstFloor: replyItem,
                 onDispose: onDispose,

@@ -165,7 +165,7 @@ class VideoCardHMemberVideo extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(width: 10),
-                    videoContent(context, theme),
+                    content(context, theme),
                   ],
                 );
               },
@@ -185,7 +185,7 @@ class VideoCardHMemberVideo extends StatelessWidget {
     );
   }
 
-  Widget videoContent(BuildContext context, ThemeData theme) {
+  Widget content(BuildContext context, ThemeData theme) {
     final isCurr = fromViewAid == videoItem.param ||
         (videoItem.bvid != null && videoItem.bvid == bvid);
     return Expanded(
@@ -221,13 +221,13 @@ class VideoCardHMemberVideo extends StatelessWidget {
           ),
           const SizedBox(height: 3),
           Row(
+            spacing: 8,
             children: [
               StatView(
                 context: context,
                 theme: 'gray',
                 value: videoItem.stat.viewStr,
               ),
-              const SizedBox(width: 8),
               StatDanMu(
                 context: context,
                 theme: 'gray',

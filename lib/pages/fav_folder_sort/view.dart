@@ -128,7 +128,7 @@ class _FavFolderSortPageState extends State<FavFolderSortPage> {
           height: 98,
           child: FavVideoItem(
             heroTag: key,
-            favFolderItem: item,
+            item: item,
             onLongPress:
                 index == 0 ? () => SmartDialog.showToast('默认收藏夹不支持排序') : null,
           ),

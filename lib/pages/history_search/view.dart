@@ -35,7 +35,7 @@ class _HistorySearchPageState extends CommonSearchPageState<HistorySearchPage,
           }
           final item = list[index];
           return HistoryItem(
-            videoItem: item,
+            item: item,
             ctr: controller,
             onChoose: null,
             onDelete: (kid, business) {

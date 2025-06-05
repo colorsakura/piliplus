@@ -20,14 +20,14 @@ import 'package:get/get.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 class HistoryItem extends StatelessWidget {
-  final HistoryItemModel videoItem;
+  final HistoryItemModel item;
   final dynamic ctr;
   final Function? onChoose;
   final Function(dynamic kid, dynamic business) onDelete;
 
   const HistoryItem({
     super.key,
-    required this.videoItem,
+    required this.item,
     this.ctr,
     this.onChoose,
     required this.onDelete,
@@ -36,8 +36,8 @@ class HistoryItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    int aid = videoItem.history.oid!;
-    String bvid = videoItem.history.bvid ?? IdUtils.av2bv(aid);
+    int aid = item.history.oid!;
+    String bvid = item.history.bvid ?? IdUtils.av2bv(aid);
     return InkWell(
       onTap: () async {
         if (ctr is MultiSelectController || ctr is HistoryBaseController) {
@@ -46,37 +46,37 @@ class HistoryItem extends StatelessWidget {
             return;
           }
         }
-        if (videoItem.history.business?.contains('article') == true) {
+        if (item.history.business?.contains('article') == true) {
           PageUtils.toDupNamed(
             '/articlePage',
             parameters: {
-              'id': videoItem.history.business == 'article-list'
-                  ? '${videoItem.history.cid}'
-                  : '${videoItem.history.oid}',
+              'id': item.history.business == 'article-list'
+                  ? '${item.history.cid}'
+                  : '${item.history.oid}',
               'type': 'read',
             },
           );
-        } else if (videoItem.history.business == 'live') {
-          if (videoItem.liveStatus == 1) {
-            Get.toNamed('/liveRoom?roomid=${videoItem.history.oid}');
+        } else if (item.history.business == 'live') {
+          if (item.liveStatus == 1) {
+            Get.toNamed('/liveRoom?roomid=${item.history.oid}');
           } else {
             SmartDialog.showToast('直播未开播');
           }
-        } else if (videoItem.history.business == 'pgc') {
-          PageUtils.viewPgc(epId: videoItem.history.epid);
+        } else if (item.history.business == 'pgc') {
+          PageUtils.viewPgc(epId: item.history.epid);
         } else {
-          int? cid = videoItem.history.cid ??
+          int? cid = item.history.cid ??
               await SearchHttp.ab2c(
                 aid: aid,
                 bvid: bvid,
-                part: videoItem.history.page,
+                part: item.history.page,
               );
           if (cid != null) {
             PageUtils.toVideoPage(
               'bvid=$bvid&cid=$cid',
               arguments: {
                 'heroTag': Utils.makeHeroTag(aid),
-                'pic': videoItem.cover,
+                'pic': item.cover,
               },
             );
           }
@@ -91,8 +91,8 @@ class HistoryItem extends StatelessWidget {
           return;
         }
         imageSaveDialog(
-          title: videoItem.title,
-          cover: videoItem.cover,
+          title: item.title,
+          cover: item.cover,
         );
       },
       child: Stack(
@@ -117,51 +117,51 @@ class HistoryItem extends StatelessWidget {
                         clipBehavior: Clip.none,
                         children: [
                           NetworkImgLayer(
-                            src: videoItem.cover?.isNotEmpty == true
-                                ? videoItem.cover
-                                : videoItem.covers?.firstOrNull ?? '',
+                            src: item.cover?.isNotEmpty == true
+                                ? item.cover
+                                : item.covers?.firstOrNull ?? '',
                             width: maxWidth,
                             height: maxHeight,
                           ),
                           if (!HistoryBusinessType.hiddenDurationType
-                              .contains(videoItem.history.business))
+                              .contains(item.history.business))
                             PBadge(
-                              text: videoItem.progress == -1
+                              text: item.progress == -1
                                   ? '已看完'
-                                  : '${Utils.timeFormat(videoItem.progress)}/${Utils.timeFormat(videoItem.duration!)}',
+                                  : '${Utils.timeFormat(item.progress)}/${Utils.timeFormat(item.duration!)}',
                               right: 6.0,
                               bottom: 8.0,
                               type: PBadgeType.gray,
                             ),
                           // 右上角
                           if (HistoryBusinessType.showBadge
-                                  .contains(videoItem.history.business) ||
-                              videoItem.history.business ==
+                                  .contains(item.history.business) ||
+                              item.history.business ==
                                   HistoryBusinessType.live.type)
                             PBadge(
-                              text: videoItem.badge,
+                              text: item.badge,
                               top: 6.0,
                               right: 6.0,
                               bottom: null,
                               left: null,
                             ),
-                          if (videoItem.duration != null &&
-                              videoItem.duration != 0 &&
-                              videoItem.progress != null &&
-                              videoItem.progress != 0)
+                          if (item.duration != null &&
+                              item.duration != 0 &&
+                              item.progress != null &&
+                              item.progress != 0)
                             Positioned(
                               left: 0,
                               right: 0,
                               bottom: 0,
                               child: videoProgressIndicator(
-                                videoItem.progress == -1
+                                item.progress == -1
                                     ? 1
-                                    : videoItem.progress! / videoItem.duration!,
+                                    : item.progress! / item.duration!,
                               ),
                             ),
                           Positioned.fill(
                             child: AnimatedOpacity(
-                              opacity: videoItem.checked == true ? 1 : 0,
+                              opacity: item.checked == true ? 1 : 0,
                               duration: const Duration(milliseconds: 200),
                               child: Container(
                                 alignment: Alignment.center,
@@ -173,7 +173,7 @@ class HistoryItem extends StatelessWidget {
                                   width: 34,
                                   height: 34,
                                   child: AnimatedScale(
-                                    scale: videoItem.checked == true ? 1 : 0,
+                                    scale: item.checked == true ? 1 : 0,
                                     duration: const Duration(milliseconds: 250),
                                     curve: Curves.easeInOut,
                                     child: IconButton(
@@ -207,7 +207,7 @@ class HistoryItem extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(width: 10),
-                videoContent(theme),
+                content(theme),
               ],
             ),
           ),
@@ -227,13 +227,13 @@ class HistoryItem extends StatelessWidget {
                 ),
                 position: PopupMenuPosition.under,
                 itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
-                  if (videoItem.authorMid != null &&
-                      videoItem.authorName?.isNotEmpty == true)
+                  if (item.authorMid != null &&
+                      item.authorName?.isNotEmpty == true)
                     PopupMenuItem<String>(
                       onTap: () => Get.toNamed(
-                        '/member?mid=${videoItem.authorMid}',
+                        '/member?mid=${item.authorMid}',
                         arguments: {
-                          'heroTag': '${videoItem.authorMid}',
+                          'heroTag': '${item.authorMid}',
                         },
                       ),
                       height: 35,
@@ -242,21 +242,21 @@ class HistoryItem extends StatelessWidget {
                           const Icon(MdiIcons.accountCircleOutline, size: 16),
                           const SizedBox(width: 6),
                           Text(
-                            '访问：${videoItem.authorName}',
+                            '访问：${item.authorName}',
                             style: const TextStyle(fontSize: 13),
                           )
                         ],
                       ),
                     ),
-                  if (videoItem.history.business != 'pgc' &&
-                      videoItem.badge != '番剧' &&
-                      videoItem.tagName?.contains('动画') != true &&
-                      videoItem.history.business != 'live' &&
-                      videoItem.history.business?.contains('article') != true)
+                  if (item.history.business != 'pgc' &&
+                      item.badge != '番剧' &&
+                      item.tagName?.contains('动画') != true &&
+                      item.history.business != 'live' &&
+                      item.history.business?.contains('article') != true)
                     PopupMenuItem<String>(
                       onTap: () async {
-                        var res = await UserHttp.toViewLater(
-                            bvid: videoItem.history.bvid);
+                        var res =
+                            await UserHttp.toViewLater(bvid: item.history.bvid);
                         SmartDialog.showToast(res['msg']);
                       },
                       height: 35,
@@ -269,8 +269,7 @@ class HistoryItem extends StatelessWidget {
                       ),
                     ),
                   PopupMenuItem<String>(
-                    onTap: () =>
-                        onDelete(videoItem.kid, videoItem.history.business),
+                    onTap: () => onDelete(item.kid, item.history.business),
                     height: 35,
                     child: const Row(
                       children: [
@@ -289,27 +288,37 @@ class HistoryItem extends StatelessWidget {
     );
   }
 
-  Widget videoContent(ThemeData theme) {
+  Widget content(ThemeData theme) {
     return Expanded(
       child: Column(
+        spacing: 2,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Expanded(
-            child: Text(
-              videoItem.title!,
-              textAlign: TextAlign.start,
+          Text(
+            item.title!,
+            style: TextStyle(
+              fontSize: theme.textTheme.bodyMedium!.fontSize,
+              height: 1.42,
+              letterSpacing: 0.3,
+            ),
+            maxLines: item.videos! > 1 ? 1 : 2,
+            overflow: TextOverflow.ellipsis,
+          ),
+          if (item.history.business == 'pgc' &&
+              item.showTitle?.isNotEmpty == true)
+            Text(
+              item.showTitle!,
               style: TextStyle(
-                fontSize: theme.textTheme.bodyMedium!.fontSize,
-                height: 1.42,
-                letterSpacing: 0.3,
+                fontSize: 13,
+                color: theme.colorScheme.outline,
               ),
-              maxLines: videoItem.videos! > 1 ? 1 : 2,
+              maxLines: 2,
               overflow: TextOverflow.ellipsis,
             ),
-          ),
-          if (videoItem.authorName != '')
+          const Spacer(),
+          if (item.authorName?.isNotEmpty == true)
             Text(
-              videoItem.authorName!,
+              item.authorName!,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               style: TextStyle(
@@ -317,9 +326,8 @@ class HistoryItem extends StatelessWidget {
                 color: theme.colorScheme.outline,
               ),
             ),
-          const SizedBox(height: 2),
           Text(
-            Utils.dateFormat(videoItem.viewAt!),
+            Utils.dateFormat(item.viewAt!),
             style: TextStyle(
               fontSize: theme.textTheme.labelMedium!.fontSize,
               color: theme.colorScheme.outline,

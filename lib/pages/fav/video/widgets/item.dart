@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 
 class FavVideoItem extends StatelessWidget {
   final String heroTag;
-  final FavVideoItemModel favFolderItem;
+  final FavVideoItemModel item;
   final VoidCallback? onTap;
   final VoidCallback? onLongPress;
 
@@ -16,7 +16,7 @@ class FavVideoItem extends StatelessWidget {
     this.onTap,
     this.onLongPress,
     required this.heroTag,
-    required this.favFolderItem,
+    required this.item,
   });
 
   @override
@@ -27,8 +27,8 @@ class FavVideoItem extends StatelessWidget {
           (onTap == null
               ? null
               : () => imageSaveDialog(
-                    title: favFolderItem.title,
-                    cover: favFolderItem.cover,
+                    title: item.title,
+                    cover: item.cover,
                   )),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
@@ -43,7 +43,7 @@ class FavVideoItem extends StatelessWidget {
                   return Hero(
                     tag: heroTag,
                     child: NetworkImgLayer(
-                      src: favFolderItem.cover,
+                      src: item.cover,
                       width: boxConstraints.maxWidth,
                       height: boxConstraints.maxHeight,
                     ),
@@ -52,14 +52,14 @@ class FavVideoItem extends StatelessWidget {
               ),
             ),
             const SizedBox(width: 10),
-            videoContent(context),
+            content(context),
           ],
         ),
       ),
     );
   }
 
-  Widget videoContent(context) {
+  Widget content(BuildContext context) {
     final theme = Theme.of(context);
     final fontSize = theme.textTheme.labelMedium!.fontSize;
     final color = theme.colorScheme.outline;
@@ -68,22 +68,22 @@ class FavVideoItem extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            favFolderItem.title ?? '',
+            item.title!,
             textAlign: TextAlign.start,
             style: const TextStyle(
               letterSpacing: 0.3,
             ),
           ),
-          if (favFolderItem.intro?.isNotEmpty == true)
+          if (item.intro?.isNotEmpty == true)
             Text(
-              favFolderItem.intro!,
+              item.intro!,
               style: TextStyle(
                 fontSize: fontSize,
                 color: color,
               ),
             ),
           Text(
-            '${favFolderItem.mediaCount}个内容',
+            '${item.mediaCount}个内容',
             style: TextStyle(
               fontSize: fontSize,
               color: color,
@@ -91,7 +91,7 @@ class FavVideoItem extends StatelessWidget {
           ),
           const Spacer(),
           Text(
-            Utils.isPublicFavText(favFolderItem.attr ?? 0),
+            Utils.isPublicFavText(item.attr ?? 0),
             style: TextStyle(
               fontSize: fontSize,
               color: color,

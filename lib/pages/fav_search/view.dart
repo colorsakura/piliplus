@@ -36,7 +36,7 @@ class _FavSearchPageState extends CommonSearchPageState<FavSearchPage,
           }
           final item = list[index];
           return FavVideoCardH(
-            videoItem: item,
+            item: item,
             onDelFav: controller.isOwner == true
                 ? () => controller.onCancelFav(
                       index,

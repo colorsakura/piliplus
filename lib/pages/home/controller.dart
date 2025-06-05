@@ -93,7 +93,7 @@ class HomeController extends GetxController
     } catch (_) {}
   }
 
-  void showUserInfoDialog(context) {
+  void showUserInfoDialog(BuildContext context) {
     feedBack();
     showDialog(
       context: context,

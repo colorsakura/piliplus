@@ -6,7 +6,7 @@ import 'package:get/get.dart';
 
 Widget livePanel(
   ThemeData theme,
-  String? source,
+  bool isDetail,
   DynamicItemModel item,
   BuildContext context, {
   int floor = 1,
@@ -45,8 +45,8 @@ Widget livePanel(
                 children: [
                   Text(
                     content.live!.title!,
-                    maxLines: source == 'detail' ? null : 2,
-                    overflow: source == 'detail' ? null : TextOverflow.ellipsis,
+                    maxLines: isDetail ? null : 2,
+                    overflow: isDetail ? null : TextOverflow.ellipsis,
                   ),
                   const SizedBox(height: 4),
                   if (content.live?.descFirst != null)

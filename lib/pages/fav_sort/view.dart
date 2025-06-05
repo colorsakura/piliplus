@@ -135,7 +135,7 @@ class _FavSortPageState extends State<FavSortPage> {
           height: 98,
           child: FavVideoCardH(
             isSort: true,
-            videoItem: item,
+            item: item,
           ),
         );
       },

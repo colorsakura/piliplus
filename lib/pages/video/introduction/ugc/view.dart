@@ -551,6 +551,7 @@ class _VideoInfoState extends State<VideoInfo> {
                     clipBehavior: Clip.none,
                     children: [
                       Row(
+                        spacing: 10,
                         children: [
                           StatView(
                             context: context,
@@ -560,7 +561,6 @@ class _VideoInfoState extends State<VideoInfo> {
                                 : videoItem['stat']?.view ?? '-'),
                             textColor: theme.colorScheme.outline,
                           ),
-                          const SizedBox(width: 10),
                           StatDanMu(
                             context: context,
                             theme: 'gray',
@@ -569,7 +569,6 @@ class _VideoInfoState extends State<VideoInfo> {
                                 : videoItem['stat']?.danmu ?? '-'),
                             textColor: theme.colorScheme.outline,
                           ),
-                          const SizedBox(width: 10),
                           Text(
                             Utils.dateFormat(
                                 !widget.isLoading
@@ -581,16 +580,13 @@ class _VideoInfoState extends State<VideoInfo> {
                               color: theme.colorScheme.outline,
                             ),
                           ),
-                          if (MineController.anonymity.value) ...<Widget>[
-                            const SizedBox(width: 10),
+                          if (MineController.anonymity.value)
                             Icon(
                               MdiIcons.incognito,
                               size: 15,
                               color: theme.colorScheme.outline,
                               semanticLabel: '无痕',
                             ),
-                          ],
-                          const SizedBox(width: 10),
                           if (videoIntroController.isShowOnlineTotal)
                             Obx(
                               () => Text(

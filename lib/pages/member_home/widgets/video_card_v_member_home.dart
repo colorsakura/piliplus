@@ -95,14 +95,14 @@ class VideoCardVMemberHome extends StatelessWidget {
                 },
               ),
             ),
-            videoContent(context)
+            content(context)
           ],
         ),
       ),
     );
   }
 
-  Widget videoContent(BuildContext context) {
+  Widget content(BuildContext context) {
     return Expanded(
       child: Padding(
         padding: const EdgeInsets.fromLTRB(6, 5, 6, 5),

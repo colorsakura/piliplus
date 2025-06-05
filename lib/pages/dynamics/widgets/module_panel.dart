@@ -22,7 +22,7 @@ Widget module(
   bool isSave,
   DynamicItemModel item,
   BuildContext context,
-  String? source,
+  bool isDetail,
   Function(List<String>, int)? callback, {
   floor = 1,
 }) {
@@ -36,7 +36,7 @@ Widget module(
     // 视频
     case 'DYNAMIC_TYPE_AV':
       return videoSeasonWidget(
-          theme, isSave, source, item, context, 'archive', callback,
+          theme, isSave, isDetail, item, context, 'archive', callback,
           floor: floor);
     // 转发
     case 'DYNAMIC_TYPE_FORWARD':
@@ -45,108 +45,134 @@ Widget module(
           orig.modules.moduleDynamic?.major?.type == 'MAJOR_TYPE_NONE';
       late final isNormalAuth =
           orig.modules.moduleAuthor!.type == 'AUTHOR_TYPE_NORMAL';
-      return InkWell(
-        onTap:
-            isNoneMajor ? null : () => PageUtils.pushDynDetail(orig, floor + 1),
-        onLongPress: isNoneMajor
-            ? null
-            : () {
-                late String? title, cover;
-                late var origMajor = orig.modules.moduleDynamic?.major;
-                late var major = item.modules.moduleDynamic?.major;
-                switch (orig.type) {
-                  case 'DYNAMIC_TYPE_AV':
-                    title = origMajor?.archive?.title;
-                    cover = origMajor?.archive?.cover;
-                    break;
-                  case 'DYNAMIC_TYPE_UGC_SEASON':
-                    title = origMajor?.ugcSeason?.title;
-                    cover = origMajor?.ugcSeason?.cover;
-                    break;
-                  case 'DYNAMIC_TYPE_PGC' || 'DYNAMIC_TYPE_PGC_UNION':
-                    title = origMajor?.pgc?.title;
-                    cover = origMajor?.pgc?.cover;
-                    break;
-                  case 'DYNAMIC_TYPE_LIVE_RCMD':
-                    title = major?.liveRcmd?.title;
-                    cover = major?.liveRcmd?.cover;
-                    break;
-                  case 'DYNAMIC_TYPE_LIVE':
-                    title = major?.live?.title;
-                    cover = major?.live?.cover;
-                    break;
-                  default:
-                    return;
-                }
-                imageSaveDialog(
-                  title: title,
-                  cover: cover,
-                );
-              },
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
-          color: theme.dividerColor.withValues(alpha: 0.08),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              if (orig.type != 'DYNAMIC_TYPE_NONE') ...[
-                Row(
-                  children: [
-                    GestureDetector(
-                      onTap: isNormalAuth
-                          ? () => Get.toNamed(
-                                '/member?mid=${orig.modules.moduleAuthor!.mid}',
-                                arguments: {
-                                  'face': orig.modules.moduleAuthor!.face
-                                },
-                              )
-                          : null,
-                      child: Text(
-                        '${isNormalAuth ? '@' : ''}${orig.modules.moduleAuthor!.name}',
-                        style: TextStyle(color: theme.colorScheme.primary),
+      return orig.type == 'DYNAMIC_TYPE_NONE'
+          ? const SizedBox.shrink()
+          : InkWell(
+              onTap: isNoneMajor
+                  ? null
+                  : () => PageUtils.pushDynDetail(orig, floor + 1),
+              onLongPress: isNoneMajor
+                  ? null
+                  : () {
+                      late String? title, cover;
+                      late var origMajor = orig.modules.moduleDynamic?.major;
+                      late var major = item.modules.moduleDynamic?.major;
+                      switch (orig.type) {
+                        case 'DYNAMIC_TYPE_AV':
+                          title = origMajor?.archive?.title;
+                          cover = origMajor?.archive?.cover;
+                          break;
+                        case 'DYNAMIC_TYPE_UGC_SEASON':
+                          title = origMajor?.ugcSeason?.title;
+                          cover = origMajor?.ugcSeason?.cover;
+                          break;
+                        case 'DYNAMIC_TYPE_PGC' || 'DYNAMIC_TYPE_PGC_UNION':
+                          title = origMajor?.pgc?.title;
+                          cover = origMajor?.pgc?.cover;
+                          break;
+                        case 'DYNAMIC_TYPE_LIVE_RCMD':
+                          title = major?.liveRcmd?.title;
+                          cover = major?.liveRcmd?.cover;
+                          break;
+                        case 'DYNAMIC_TYPE_LIVE':
+                          title = major?.live?.title;
+                          cover = major?.live?.cover;
+                          break;
+                        default:
+                          return;
+                      }
+                      imageSaveDialog(
+                        title: title,
+                        cover: cover,
+                      );
+                    },
+              child: Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
+                color: theme.dividerColor.withValues(alpha: 0.08),
+                child: isNoneMajor
+                    ? Row(
+                        children: [
+                          Icon(
+                            Icons.error,
+                            size: 18,
+                            color: theme.colorScheme.outline,
+                          ),
+                          const SizedBox(width: 5),
+                          Text(
+                            orig.modules.moduleDynamic?.major?.none?.tips ??
+                                'NONE',
+                            style: TextStyle(color: theme.colorScheme.outline),
+                          ),
+                        ],
+                      )
+                    : Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              GestureDetector(
+                                onTap: isNormalAuth
+                                    ? () => Get.toNamed(
+                                          '/member?mid=${orig.modules.moduleAuthor!.mid}',
+                                          arguments: {
+                                            'face':
+                                                orig.modules.moduleAuthor!.face
+                                          },
+                                        )
+                                    : null,
+                                child: Text(
+                                  '${isNormalAuth ? '@' : ''}${orig.modules.moduleAuthor!.name}',
+                                  style: TextStyle(
+                                      color: theme.colorScheme.primary),
+                                ),
+                              ),
+                              const SizedBox(width: 6),
+                              Text(
+                                Utils.dateFormat(
+                                    orig.modules.moduleAuthor!.pubTs),
+                                style: TextStyle(
+                                    color: theme.colorScheme.outline,
+                                    fontSize:
+                                        theme.textTheme.labelSmall!.fontSize),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 5),
+                          content(
+                              theme, isSave, context, orig, isDetail, callback,
+                              floor: floor + 1),
+                          module(
+                              theme, isSave, orig, context, isDetail, callback,
+                              floor: floor + 1),
+                          if (orig.modules.moduleDynamic?.additional != null)
+                            addWidget(theme, orig, context, floor: floor + 1),
+                          if (orig.modules.moduleDynamic?.major?.blocked !=
+                              null)
+                            blockedItem(theme,
+                                orig.modules.moduleDynamic!.major!.blocked!),
+                        ],
                       ),
-                    ),
-                    const SizedBox(width: 6),
-                    Text(
-                      Utils.dateFormat(orig.modules.moduleAuthor!.pubTs),
-                      style: TextStyle(
-                          color: theme.colorScheme.outline,
-                          fontSize: theme.textTheme.labelSmall!.fontSize),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 5),
-                content(theme, isSave, context, orig, source, callback,
-                    floor: floor + 1),
-              ],
-              module(theme, isSave, orig, context, source, callback,
-                  floor: floor + 1),
-              if (orig.modules.moduleDynamic?.additional != null)
-                addWidget(theme, orig, context, floor: floor + 1),
-              if (orig.modules.moduleDynamic?.major?.blocked != null)
-                blockedItem(theme, orig.modules.moduleDynamic!.major!.blocked!),
-            ],
-          ),
-        ),
-      );
+              ),
+            );
     // 直播
     case 'DYNAMIC_TYPE_LIVE_RCMD':
-      return liveRcmdPanel(theme, source, item, context, floor: floor);
+      return liveRcmdPanel(theme, isDetail, item, context, floor: floor);
     // 直播
     case 'DYNAMIC_TYPE_LIVE':
-      return livePanel(theme, source, item, context, floor: floor);
+      return livePanel(theme, isDetail, item, context, floor: floor);
     // 合集
     case 'DYNAMIC_TYPE_UGC_SEASON':
       return videoSeasonWidget(
-          theme, isSave, source, item, context, 'ugcSeason', callback);
+          theme, isSave, isDetail, item, context, 'ugcSeason', callback);
     case 'DYNAMIC_TYPE_PGC':
       return videoSeasonWidget(
-          theme, isSave, source, item, context, 'pgc', callback,
+          theme, isSave, isDetail, item, context, 'pgc', callback,
           floor: floor);
     case 'DYNAMIC_TYPE_PGC_UNION':
       return videoSeasonWidget(
-          theme, isSave, source, item, context, 'pgc', callback,
+          theme, isSave, isDetail, item, context, 'pgc', callback,
           floor: floor);
     case 'DYNAMIC_TYPE_NONE':
       return Row(
@@ -342,7 +368,7 @@ Widget module(
     case 'DYNAMIC_TYPE_SUBSCRIPTION_NEW'
         when item.modules.moduleDynamic?.major?.type ==
             'MAJOR_TYPE_SUBSCRIPTION_NEW':
-      return livePanelSub(theme, source, item, context, floor: floor);
+      return livePanelSub(theme, isDetail, item, context, floor: floor);
 
     default:
       return Padding(

@@ -24,17 +24,15 @@ class SubVideoCardH extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    int id = videoItem.id!;
-    String bvid = videoItem.bvid!;
     return InkWell(
       onTap: () async {
-        int? cid = await SearchHttp.ab2c(bvid: bvid);
+        int? cid = await SearchHttp.ab2c(bvid: videoItem.bvid);
         if (cid != null) {
           PageUtils.toVideoPage(
-            'bvid=$bvid&cid=$cid',
+            'bvid=${videoItem.bvid}&cid=$cid',
             arguments: {
               'videoItem': videoItem,
-              'heroTag': Utils.makeHeroTag(id),
+              'heroTag': Utils.makeHeroTag(videoItem.id),
               'videoType': SearchType.video,
             },
           );
@@ -79,21 +77,21 @@ class SubVideoCardH extends StatelessWidget {
               ),
             ),
             const SizedBox(width: 10),
-            videoContent(context),
+            content(context),
           ],
         ),
       ),
     );
   }
 
-  Widget videoContent(context) {
+  Widget content(BuildContext context) {
     return Expanded(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Expanded(
             child: Text(
-              '${videoItem.title}',
+              videoItem.title!,
               textAlign: TextAlign.start,
               style: const TextStyle(
                 letterSpacing: 0.3,
@@ -111,19 +109,18 @@ class SubVideoCardH extends StatelessWidget {
           ),
           const SizedBox(height: 3),
           Row(
+            spacing: 8,
             children: [
               StatView(
                 context: context,
                 theme: 'gray',
                 value: Utils.numFormat(videoItem.cntInfo?.play),
               ),
-              const SizedBox(width: 8),
               StatDanMu(
                 context: context,
                 theme: 'gray',
                 value: Utils.numFormat(videoItem.cntInfo?.danmaku),
               ),
-              const Spacer(),
             ],
           ),
         ],

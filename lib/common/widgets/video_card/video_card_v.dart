@@ -32,7 +32,7 @@ class VideoCardV extends StatelessWidget {
     return numericRegex.hasMatch(str);
   }
 
-  Future<void> onPushDetail(heroTag) async {
+  Future<void> onPushDetail(String heroTag) async {
     String? goto = videoItem.goto;
     switch (goto) {
       case 'bangumi':
@@ -136,7 +136,7 @@ class VideoCardV extends StatelessWidget {
                       );
                     }),
                   ),
-                  videoContent(context)
+                  content(context)
                 ],
               ),
             ),
@@ -157,7 +157,7 @@ class VideoCardV extends StatelessWidget {
     );
   }
 
-  Widget videoContent(context) {
+  Widget content(BuildContext context) {
     final theme = Theme.of(context);
     return Expanded(
       child: Padding(

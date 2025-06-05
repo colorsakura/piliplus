@@ -61,14 +61,14 @@ class PgcCardVPgcIndex extends StatelessWidget {
                 );
               }),
             ),
-            bagumiContent(context)
+            conetent(context)
           ],
         ),
       ),
     );
   }
 
-  Widget bagumiContent(context) {
+  Widget conetent(BuildContext context) {
     final theme = Theme.of(context);
     return Expanded(
       child: Padding(

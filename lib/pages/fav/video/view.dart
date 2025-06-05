@@ -72,7 +72,7 @@ class _FavVideoPageState extends State<FavVideoPage>
                   String heroTag = Utils.makeHeroTag(item.fid);
                   return FavVideoItem(
                     heroTag: heroTag,
-                    favFolderItem: item,
+                    item: item,
                     onTap: () async {
                       var res = await Get.toNamed(
                         '/favDetail',

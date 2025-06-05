@@ -19,13 +19,13 @@ import 'package:flutter/services.dart' show HapticFeedback;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
-class PgcIntroPanel extends StatefulWidget {
+class PgcIntroPage extends StatefulWidget {
   final int? cid;
   final String heroTag;
   final Function showEpisodes;
   final Function showIntroDetail;
 
-  const PgcIntroPanel({
+  const PgcIntroPage({
     super.key,
     this.cid,
     required this.heroTag,
@@ -34,10 +34,10 @@ class PgcIntroPanel extends StatefulWidget {
   });
 
   @override
-  State<PgcIntroPanel> createState() => _PgcIntroPanelState();
+  State<PgcIntroPage> createState() => _PgcIntroPageState();
 }
 
-class _PgcIntroPanelState extends State<PgcIntroPanel>
+class _PgcIntroPageState extends State<PgcIntroPage>
     with AutomaticKeepAliveClientMixin {
   late PgcIntroController pgcIntroController;
   late VideoDetailController videoDetailCtr;

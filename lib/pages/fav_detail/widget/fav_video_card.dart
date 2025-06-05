@@ -13,7 +13,7 @@ import 'package:get/get.dart';
 
 // 收藏视频卡片 - 水平布局
 class FavVideoCardH extends StatelessWidget {
-  final FavDetailItemModel videoItem;
+  final FavDetailItemModel item;
   final GestureTapCallback? onTap;
   final GestureLongPressCallback? onLongPress;
   final VoidCallback? onDelFav;
@@ -22,7 +22,7 @@ class FavVideoCardH extends StatelessWidget {
 
   const FavVideoCardH({
     super.key,
-    required this.videoItem,
+    required this.item,
     this.onDelFav,
     this.onTap,
     this.onLongPress,
@@ -37,16 +37,16 @@ class FavVideoCardH extends StatelessWidget {
           ? null
           : onTap ??
               () {
-                if (!const [0, 16].contains(videoItem.attr)) {
-                  Get.toNamed('/member?mid=${videoItem.upper?.mid}');
+                if (!const [0, 16].contains(item.attr)) {
+                  Get.toNamed('/member?mid=${item.upper?.mid}');
                   return;
                 }
 
                 // pgc
-                if (videoItem.type == 24) {
+                if (item.type == 24) {
                   PageUtils.viewPgc(
-                    seasonId: videoItem.ogv!.seasonId,
-                    epId: videoItem.id,
+                    seasonId: item.ogv!.seasonId,
+                    epId: item.id,
                   );
                   return;
                 }
@@ -57,8 +57,8 @@ class FavVideoCardH extends StatelessWidget {
           ? null
           : onLongPress ??
               () => imageSaveDialog(
-                    title: videoItem.title,
-                    cover: videoItem.cover,
+                    title: item.title,
+                    cover: item.cover,
                   ),
       child: Padding(
         padding: const EdgeInsets.symmetric(
@@ -79,18 +79,18 @@ class FavVideoCardH extends StatelessWidget {
                     clipBehavior: Clip.none,
                     children: [
                       NetworkImgLayer(
-                        src: videoItem.cover,
+                        src: item.cover,
                         width: maxWidth,
                         height: maxHeight,
                       ),
                       PBadge(
-                        text: Utils.timeFormat(videoItem.duration),
+                        text: Utils.timeFormat(item.duration),
                         right: 6.0,
                         bottom: 6.0,
                         type: PBadgeType.gray,
                       ),
                       PBadge(
-                        text: videoItem.ogv?.typeName,
+                        text: item.ogv?.typeName,
                         top: 6.0,
                         right: 6.0,
                         bottom: null,
@@ -102,35 +102,45 @@ class FavVideoCardH extends StatelessWidget {
               ),
             ),
             const SizedBox(width: 10),
-            videoContent(context),
+            content(context),
           ],
         ),
       ),
     );
   }
 
-  Widget videoContent(BuildContext context) {
+  Widget content(BuildContext context) {
     final theme = Theme.of(context);
     return Expanded(
       child: Stack(
         clipBehavior: Clip.none,
         children: [
           Column(
+            spacing: 3,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Expanded(
-                child: Text(
-                  videoItem.title!,
-                  textAlign: TextAlign.start,
-                  style: const TextStyle(
-                    letterSpacing: 0.3,
-                  ),
+              Text(
+                item.title!,
+                textAlign: TextAlign.start,
+                style: const TextStyle(
+                  letterSpacing: 0.3,
+                ),
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
+              if (item.type == 24 && item.intro?.isNotEmpty == true)
+                Text(
+                  item.intro!,
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontSize: 13,
+                    color: theme.colorScheme.outline,
+                  ),
                 ),
-              ),
+              const Spacer(),
               Text(
-                '${Utils.dateFormat(videoItem.favTime)} ${videoItem.upper?.name}',
+                '${Utils.dateFormat(item.favTime)} ${item.upper?.name}',
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(
@@ -139,23 +149,22 @@ class FavVideoCardH extends StatelessWidget {
                   color: theme.colorScheme.outline,
                 ),
               ),
-              const SizedBox(height: 3),
-              Row(
-                children: [
-                  StatView(
-                    context: context,
-                    theme: 'gray',
-                    value: Utils.numFormat(videoItem.cntInfo?.play),
-                  ),
-                  const SizedBox(width: 8),
-                  StatDanMu(
-                    context: context,
-                    theme: 'gray',
-                    value: Utils.numFormat(videoItem.cntInfo?.danmaku),
-                  ),
-                  const Spacer(),
-                ],
-              ),
+              if (item.type != 24)
+                Row(
+                  spacing: 8,
+                  children: [
+                    StatView(
+                      context: context,
+                      theme: 'gray',
+                      value: Utils.numFormat(item.cntInfo?.play),
+                    ),
+                    StatDanMu(
+                      context: context,
+                      theme: 'gray',
+                      value: Utils.numFormat(item.cntInfo?.danmaku),
+                    ),
+                  ],
+                ),
             ],
           ),
           if (onDelFav != null)

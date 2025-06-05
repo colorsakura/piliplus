@@ -21,7 +21,6 @@ class VideoCardH extends StatelessWidget {
   const VideoCardH({
     super.key,
     required this.videoItem,
-    this.source = 'normal',
     this.showOwner = true,
     this.showView = true,
     this.showDanmaku = true,
@@ -31,7 +30,6 @@ class VideoCardH extends StatelessWidget {
     this.onViewLater,
   });
   final BaseVideoItemModel videoItem;
-  final String source;
   final bool showOwner;
   final bool showView;
   final bool showDanmaku;
@@ -42,8 +40,6 @@ class VideoCardH extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final int aid = videoItem.aid!;
-    final String bvid = videoItem.bvid!;
     String type = 'video';
     if (videoItem case SearchVideoItemModel item) {
       var typeOrNull = item.type;
@@ -90,19 +86,16 @@ class VideoCardH extends StatelessWidget {
                     }
                     try {
                       final int? cid = videoItem.cid ??
-                          await SearchHttp.ab2c(aid: aid, bvid: bvid);
+                          await SearchHttp.ab2c(
+                              aid: videoItem.aid, bvid: videoItem.bvid);
                       if (cid != null) {
-                        if (source == 'later') {
-                          onViewLater!(cid);
-                        } else {
-                          PageUtils.toVideoPage(
-                            'bvid=$bvid&cid=$cid',
-                            arguments: {
-                              'videoItem': videoItem,
-                              'heroTag': Utils.makeHeroTag(aid)
-                            },
-                          );
-                        }
+                        PageUtils.toVideoPage(
+                          'bvid=${videoItem.bvid}&cid=$cid',
+                          arguments: {
+                            'videoItem': videoItem,
+                            'heroTag': Utils.makeHeroTag(videoItem.aid)
+                          },
+                        );
                       }
                     } catch (err) {
                       SmartDialog.showToast(err.toString());
@@ -181,28 +174,27 @@ class VideoCardH extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(width: 10),
-                    videoContent(context),
+                    content(context),
                   ],
                 ),
               ),
             ),
           ),
-          if (source == 'normal')
-            Positioned(
-              bottom: 0,
-              right: 12,
-              child: VideoPopupMenu(
-                size: 29,
-                iconSize: 17,
-                videoItem: videoItem,
-              ),
+          Positioned(
+            bottom: 0,
+            right: 12,
+            child: VideoPopupMenu(
+              size: 29,
+              iconSize: 17,
+              videoItem: videoItem,
             ),
+          ),
         ],
       ),
     );
   }
 
-  Widget videoContent(BuildContext context) {
+  Widget content(BuildContext context) {
     final theme = Theme.of(context);
     String pubdate = showPubdate
         ? Utils.dateFormat(videoItem.pubdate!, formatType: 'day')
@@ -262,23 +254,20 @@ class VideoCardH extends StatelessWidget {
             ),
           const SizedBox(height: 3),
           Row(
+            spacing: 8,
             children: [
-              if (showView) ...[
+              if (showView)
                 StatView(
                   context: context,
                   theme: 'gray',
                   value: videoItem.stat.viewStr,
                 ),
-                const SizedBox(width: 8),
-              ],
               if (showDanmaku)
                 StatDanMu(
                   context: context,
                   theme: 'gray',
                   value: videoItem.stat.danmuStr,
                 ),
-              const Spacer(),
-              if (source == 'normal') const SizedBox(width: 24),
             ],
           ),
         ],

@@ -198,6 +198,16 @@ class _MediaListPanelState
                                         width: boxConstraints.maxWidth,
                                         height: boxConstraints.maxHeight,
                                       ),
+                                      if (item.badge?.text?.isNotEmpty == true)
+                                        PBadge(
+                                          text: item.badge?.text,
+                                          right: 6.0,
+                                          top: 6.0,
+                                          type: switch (item.badge?.text) {
+                                            '充电专属' => PBadgeType.error,
+                                            _ => PBadgeType.primary,
+                                          },
+                                        ),
                                       PBadge(
                                         text: Utils.timeFormat(item.duration!),
                                         right: 6.0,
@@ -216,7 +226,6 @@ class _MediaListPanelState
                                 children: [
                                   Text(
                                     item.title!,
-                                    textAlign: TextAlign.start,
                                     maxLines: 2,
                                     overflow: TextOverflow.ellipsis,
                                     style: TextStyle(
@@ -227,6 +236,19 @@ class _MediaListPanelState
                                           : null,
                                     ),
                                   ),
+                                  if (item.type == 24 &&
+                                      item.intro?.isNotEmpty == true) ...[
+                                    const SizedBox(height: 3),
+                                    Text(
+                                      item.intro!,
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                        fontSize: 13,
+                                        color: theme.colorScheme.outline,
+                                      ),
+                                    ),
+                                  ],
                                   const Spacer(),
                                   Text(
                                     item.upper!.name!,
@@ -237,24 +259,26 @@ class _MediaListPanelState
                                       color: theme.colorScheme.outline,
                                     ),
                                   ),
-                                  const SizedBox(height: 3),
-                                  Row(
-                                    children: [
-                                      StatView(
-                                        context: context,
-                                        theme: 'gray',
-                                        value: Utils.numFormat(
-                                            item.cntInfo!.play!),
-                                      ),
-                                      const SizedBox(width: 8),
-                                      StatDanMu(
-                                        context: context,
-                                        theme: 'gray',
-                                        value: Utils.numFormat(
-                                            item.cntInfo!.danmaku!),
-                                      ),
-                                    ],
-                                  ),
+                                  if (item.type == 2) ...[
+                                    const SizedBox(height: 3),
+                                    Row(
+                                      spacing: 8,
+                                      children: [
+                                        StatView(
+                                          context: context,
+                                          theme: 'gray',
+                                          value: Utils.numFormat(
+                                              item.cntInfo!.play!),
+                                        ),
+                                        StatDanMu(
+                                          context: context,
+                                          theme: 'gray',
+                                          value: Utils.numFormat(
+                                              item.cntInfo!.danmaku!),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
                                 ],
                               ),
                             ),

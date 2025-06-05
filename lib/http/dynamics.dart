@@ -41,36 +41,36 @@ class DynamicsHttp {
     };
     var res = await Request().get(Api.followDynamic, queryParameters: data);
     if (res.data['code'] == 0) {
-      // try {
-      DynamicsDataModel data = DynamicsDataModel.fromJson(res.data['data']);
-      final antiGoodsDyn = GStorage.antiGoodsDyn;
-      final filterWord = banWordForDyn.pattern.isNotEmpty;
+      try {
+        DynamicsDataModel data = DynamicsDataModel.fromJson(res.data['data']);
+        final antiGoodsDyn = GStorage.antiGoodsDyn;
+        final filterWord = banWordForDyn.pattern.isNotEmpty;
 
-      data.items?.removeWhere(
-        (item) =>
-            (antiGoodsDyn &&
-                (item.orig?.modules.moduleDynamic?.additional?.type ==
-                        'ADDITIONAL_TYPE_GOODS' ||
-                    item.modules.moduleDynamic?.additional?.type ==
-                        'ADDITIONAL_TYPE_GOODS')) ||
-            (filterWord &&
-                (item.orig?.modules.moduleDynamic?.major?.opus?.summary?.text
-                            ?.contains(banWordForDyn) ==
-                        true ||
-                    item.modules.moduleDynamic?.major?.opus?.summary?.text
-                            ?.contains(banWordForDyn) ==
-                        true ||
-                    item.orig?.modules.moduleDynamic?.desc?.text
-                            ?.contains(banWordForDyn) ==
-                        true ||
-                    item.modules.moduleDynamic?.desc?.text
-                            ?.contains(banWordForDyn) ==
-                        true)),
-      );
-      return Success(data);
-      // } catch (err) {
-      //   return Error(err.toString());
-      // }
+        data.items?.removeWhere(
+          (item) =>
+              (antiGoodsDyn &&
+                  (item.orig?.modules.moduleDynamic?.additional?.type ==
+                          'ADDITIONAL_TYPE_GOODS' ||
+                      item.modules.moduleDynamic?.additional?.type ==
+                          'ADDITIONAL_TYPE_GOODS')) ||
+              (filterWord &&
+                  (item.orig?.modules.moduleDynamic?.major?.opus?.summary?.text
+                              ?.contains(banWordForDyn) ==
+                          true ||
+                      item.modules.moduleDynamic?.major?.opus?.summary?.text
+                              ?.contains(banWordForDyn) ==
+                          true ||
+                      item.orig?.modules.moduleDynamic?.desc?.text
+                              ?.contains(banWordForDyn) ==
+                          true ||
+                      item.modules.moduleDynamic?.desc?.text
+                              ?.contains(banWordForDyn) ==
+                          true)),
+        );
+        return Success(data);
+      } catch (err) {
+        return Error(err.toString());
+      }
     } else {
       return Error(res.data['message']);
     }
