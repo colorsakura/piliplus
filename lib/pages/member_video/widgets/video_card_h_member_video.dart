@@ -6,6 +6,7 @@ import 'package:PiliPlus/common/widgets/progress_bar/video_progress_indicator.da
 import 'package:PiliPlus/common/widgets/stat/stat.dart';
 import 'package:PiliPlus/common/widgets/video_popup_menu.dart';
 import 'package:PiliPlus/models/common/badge_type.dart';
+import 'package:PiliPlus/models/common/stat_type.dart';
 import 'package:PiliPlus/models_new/space/space_archive/item.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:PiliPlus/utils/utils.dart';
@@ -223,15 +224,13 @@ class VideoCardHMemberVideo extends StatelessWidget {
           Row(
             spacing: 8,
             children: [
-              StatView(
-                context: context,
-                theme: 'gray',
-                value: videoItem.stat.viewStr,
+              StatWidget(
+                type: StatType.view,
+                value: videoItem.stat.view,
               ),
-              StatDanMu(
-                context: context,
-                theme: 'gray',
-                value: videoItem.stat.danmuStr,
+              StatWidget(
+                type: StatType.danmaku,
+                value: videoItem.stat.danmu,
               ),
             ],
           ),

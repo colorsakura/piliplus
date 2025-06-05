@@ -6,6 +6,7 @@ import 'package:PiliPlus/common/widgets/stat/stat.dart';
 import 'package:PiliPlus/http/search.dart';
 import 'package:PiliPlus/models/common/badge_type.dart';
 import 'package:PiliPlus/models/common/search_type.dart';
+import 'package:PiliPlus/models/common/stat_type.dart';
 import 'package:PiliPlus/models_new/sub/sub_detail/media.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:PiliPlus/utils/utils.dart';
@@ -111,15 +112,13 @@ class SubVideoCardH extends StatelessWidget {
           Row(
             spacing: 8,
             children: [
-              StatView(
-                context: context,
-                theme: 'gray',
-                value: Utils.numFormat(videoItem.cntInfo?.play),
+              StatWidget(
+                type: StatType.play,
+                value: videoItem.cntInfo?.play,
               ),
-              StatDanMu(
-                context: context,
-                theme: 'gray',
-                value: Utils.numFormat(videoItem.cntInfo?.danmaku),
+              StatWidget(
+                type: StatType.danmaku,
+                value: videoItem.cntInfo?.danmaku,
               ),
             ],
           ),

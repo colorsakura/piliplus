@@ -6,6 +6,7 @@ import 'package:PiliPlus/common/widgets/progress_bar/video_progress_indicator.da
 import 'package:PiliPlus/common/widgets/stat/stat.dart';
 import 'package:PiliPlus/http/search.dart';
 import 'package:PiliPlus/models/common/badge_type.dart';
+import 'package:PiliPlus/models/common/stat_type.dart';
 import 'package:PiliPlus/models/search/result.dart';
 import 'package:PiliPlus/models_new/later/list.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
@@ -174,10 +175,9 @@ class VideoCardHLater extends StatelessWidget {
               overflow: TextOverflow.ellipsis,
             ),
             const Spacer(),
-            StatView(
-              context: context,
-              theme: 'gray',
-              value: Utils.numFormat(videoItem.stat?.view),
+            StatWidget(
+              type: StatType.view,
+              value: videoItem.stat?.view,
             ),
           ] else ...[
             Expanded(
@@ -206,15 +206,13 @@ class VideoCardHLater extends StatelessWidget {
             Row(
               spacing: 8,
               children: [
-                StatView(
-                  context: context,
-                  theme: 'gray',
-                  value: Utils.numFormat(videoItem.stat?.view),
+                StatWidget(
+                  type: StatType.view,
+                  value: videoItem.stat?.view,
                 ),
-                StatDanMu(
-                  context: context,
-                  theme: 'gray',
-                  value: Utils.numFormat(videoItem.stat?.danmaku),
+                StatWidget(
+                  type: StatType.danmaku,
+                  value: videoItem.stat?.danmaku,
                 ),
               ],
             ),

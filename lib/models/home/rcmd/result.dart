@@ -50,34 +50,13 @@ class RecVideoItemAppModel extends BaseRecVideoItemModel {
         : null;
     desc = json['desc'];
   }
-
-  // @override
-  // int? get pubdate => null;
 }
 
-class RcmdStat implements BaseStat {
-  @override
-  int? like;
-
-  @override
-  int? get view => Utils.parseNum(viewStr);
-  @override
-  int? get danmu => Utils.parseNum(danmuStr);
-
-  @override
-  late String viewStr;
-  @override
-  late String danmuStr;
-
+class RcmdStat extends BaseStat {
   RcmdStat.fromJson(Map<String, dynamic> json) {
-    viewStr = json["cover_left_text_1"] ?? '';
-    danmuStr = json['cover_left_text_2'] ?? '';
+    view = Utils.parseNum(json["cover_left_text_1"] ?? '');
+    danmu = Utils.parseNum(json["cover_left_text_2"] ?? '');
   }
-
-  @override
-  set danmu(_) {}
-  @override
-  set view(_) {}
 }
 
 class RcmdOwner extends BaseOwner {

@@ -4,6 +4,7 @@ import 'package:PiliPlus/models_new/fav/fav_detail/data.dart';
 import 'package:PiliPlus/models_new/fav/fav_detail/media.dart';
 import 'package:PiliPlus/models_new/fav/fav_video/list.dart';
 import 'package:PiliPlus/pages/common/multi_select_controller.dart';
+import 'package:PiliPlus/pages/fav_sort/view.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:PiliPlus/utils/storage.dart';
@@ -16,10 +17,10 @@ class FavDetailController
     extends MultiSelectController<FavDetailData, FavDetailItemModel> {
   late int mediaId;
   late String heroTag;
-  Rx<FavVideoItemModel> item = FavVideoItemModel().obs;
-  RxBool isOwner = false.obs;
+  final Rx<FavVideoItemModel> item = FavVideoItemModel().obs;
+  final Rx<bool?> isOwner = Rx<bool?>(null);
 
-  late int mid;
+  final int mid = Accounts.main.mid;
 
   @override
   void onInit() {
@@ -27,8 +28,6 @@ class FavDetailController
 
     mediaId = int.parse(Get.parameters['mediaId']!);
     heroTag = Get.parameters['heroTag']!;
-
-    mid = Accounts.main.mid;
 
     queryData();
   }
@@ -159,7 +158,7 @@ class FavDetailController
               'favTitle': item.value.title,
               'count': item.value.mediaCount,
               'desc': true,
-              'isOwner': isOwner.value,
+              'isOwner': isOwner.value ?? false,
             },
           );
           break;
@@ -175,6 +174,10 @@ class FavDetailController
   }
 
   Future<void> onFav(bool isFav) async {
+    if (mid == 0) {
+      SmartDialog.showToast('账号未登录');
+      return;
+    }
     var res = isFav
         ? await FavHttp.unfavFavFolder(mediaId)
         : await FavHttp.favFavFolder(mediaId);
@@ -185,5 +188,28 @@ class FavDetailController
         ..refresh();
     }
     SmartDialog.showToast(res['msg']);
+  }
+
+  Future<void> cleanFav() async {
+    var res = await FavHttp.cleanFav(mediaId: mediaId);
+    if (res['status']) {
+      SmartDialog.showToast('清除成功');
+      Future.delayed(const Duration(milliseconds: 200), () {
+        onReload();
+      });
+    } else {
+      SmartDialog.showToast(res['msg']);
+    }
+  }
+
+  void onSort() {
+    if (loadingState.value.isSuccess &&
+        loadingState.value.data?.isNotEmpty == true) {
+      if ((item.value.mediaCount ?? 0) > 1000) {
+        SmartDialog.showToast('内容太多啦！超过1000不支持排序');
+        return;
+      }
+      Get.to(FavSortPage(favDetailController: this));
+    }
   }
 }

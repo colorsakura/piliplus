@@ -2,6 +2,7 @@ import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/common/widgets/image/image_save.dart';
 import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
 import 'package:PiliPlus/common/widgets/stat/stat.dart';
+import 'package:PiliPlus/models/common/stat_type.dart';
 import 'package:PiliPlus/models_new/pgc/pgc_rank/pgc_rank_item_model.dart';
 import 'package:PiliPlus/utils/app_scheme.dart';
 import 'package:flutter/material.dart';
@@ -69,17 +70,14 @@ class PgcRankItem extends StatelessWidget {
                     ],
                     Row(
                       children: [
-                        StatView(
-                          context: context,
-                          theme: 'gray',
-                          value: item.stat!.view!,
+                        StatWidget(
+                          type: StatType.view,
+                          value: item.stat!.view,
                         ),
                         const SizedBox(width: 8),
-                        StatView(
-                          context: context,
-                          theme: 'gray',
-                          goto: 'follow',
-                          value: item.stat!.follow!,
+                        StatWidget(
+                          type: StatType.follow,
+                          value: item.stat!.follow,
                         ),
                       ],
                     )

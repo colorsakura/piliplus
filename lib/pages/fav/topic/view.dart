@@ -51,7 +51,14 @@ class _FavTopicPageState extends State<FavTopicPage>
   Widget _buildBody(
       ThemeData theme, LoadingState<List<FavTopicItem>?> loadingState) {
     return switch (loadingState) {
-      Loading() => const SliverToBoxAdapter(child: LinearProgressIndicator()),
+      Loading() => const SliverToBoxAdapter(
+          child: SizedBox(
+            height: 125,
+            child: Center(
+              child: CircularProgressIndicator(),
+            ),
+          ),
+        ),
       Success(:var response) => response?.isNotEmpty == true
           ? SliverGrid(
               gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(

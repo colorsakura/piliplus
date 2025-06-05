@@ -1,5 +1,5 @@
 import 'package:PiliPlus/common/widgets/loading_widget/http_error.dart';
-import 'package:PiliPlus/models_new/fav/fav_video/list.dart';
+import 'package:PiliPlus/models_new/fav/fav_video/data.dart';
 import 'package:PiliPlus/utils/feed_back.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
@@ -43,11 +43,10 @@ class _FavPanelState extends State<FavPanel> {
           title: const Text('添加到收藏夹'),
           actions: [
             TextButton.icon(
-              onPressed: () =>
-                  Get.toNamed<FavVideoItemModel>('/createFav')?.then((data) {
+              onPressed: () => Get.toNamed('/createFav')?.then((data) {
                 if (data != null) {
-                  widget.ctr?.favFolderData
-                    ..value.data?.list?.insert(1, data)
+                  (widget.ctr?.favFolderData as Rx<FavVideoData>)
+                    ..value.list?.insert(1, data)
                     ..refresh();
                 }
               }),

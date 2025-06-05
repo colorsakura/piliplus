@@ -14,6 +14,7 @@ import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/http/video.dart';
 import 'package:PiliPlus/models/common/badge_type.dart';
 import 'package:PiliPlus/models/common/episode_panel_type.dart';
+import 'package:PiliPlus/models/common/stat_type.dart';
 import 'package:PiliPlus/models_new/pgc/pgc_info_model/episode.dart' as pgc;
 import 'package:PiliPlus/models_new/video/video_detail/episode.dart' as ugc;
 import 'package:PiliPlus/models_new/video/video_detail/page.dart';
@@ -514,16 +515,14 @@ class _EpisodePanelState extends CommonSlidePageState<EpisodePanel> {
                         Row(
                           spacing: 8,
                           children: [
-                            StatView(
-                              context: context,
-                              theme: 'gray',
+                            StatWidget(
                               value: view,
+                              type: StatType.view,
                             ),
                             if (danmaku != null)
-                              StatDanMu(
-                                context: context,
-                                theme: 'gray',
+                              StatWidget(
                                 value: danmaku,
+                                type: StatType.danmaku,
                               ),
                           ],
                         ),

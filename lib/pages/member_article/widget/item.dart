@@ -2,6 +2,7 @@ import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/common/widgets/image/image_save.dart';
 import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
 import 'package:PiliPlus/common/widgets/stat/stat.dart';
+import 'package:PiliPlus/models/common/stat_type.dart';
 import 'package:PiliPlus/models_new/space/space_article/item.dart';
 import 'package:PiliPlus/utils/app_scheme.dart';
 import 'package:flutter/material.dart';
@@ -81,18 +82,16 @@ class MemberArticleItem extends StatelessWidget {
                     ),
                     const SizedBox(height: 3),
                     Row(
+                      spacing: 16,
                       children: [
-                        StatView(
-                          context: context,
-                          value: item.stats?.view ?? 0,
-                          goto: 'picture',
+                        StatWidget(
+                          type: StatType.view,
+                          value: item.stats?.view,
                           textColor: outline,
                         ),
-                        const SizedBox(width: 16),
-                        StatView(
-                          context: context,
-                          goto: 'reply',
-                          value: item.stats?.reply ?? 0,
+                        StatWidget(
+                          type: StatType.play,
+                          value: item.stats?.reply,
                           textColor: outline,
                         ),
                       ],

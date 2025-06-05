@@ -1,5 +1,6 @@
 import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/common/skeleton/video_card_h.dart';
+import 'package:PiliPlus/common/widgets/button/icon_button.dart';
 import 'package:PiliPlus/common/widgets/dialog/dialog.dart';
 import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
 import 'package:PiliPlus/common/widgets/loading_widget/http_error.dart';
@@ -12,7 +13,6 @@ import 'package:PiliPlus/models_new/fav/fav_video/list.dart';
 import 'package:PiliPlus/pages/dynamics_repost/view.dart';
 import 'package:PiliPlus/pages/fav_detail/controller.dart';
 import 'package:PiliPlus/pages/fav_detail/widget/fav_video_card.dart';
-import 'package:PiliPlus/pages/fav_sort/view.dart';
 import 'package:PiliPlus/utils/grid.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:PiliPlus/utils/request_utils.dart';
@@ -130,128 +130,96 @@ class _FavDetailPageState extends State<FavDetailPage> {
               'mediaId': int.parse(mediaId),
               'title': _favDetailController.item.value.title,
               'count': _favDetailController.item.value.mediaCount,
-              'isOwner': _favDetailController.isOwner.value,
+              'isOwner': _favDetailController.isOwner.value ?? false,
             },
           ),
           icon: const Icon(Icons.search_outlined),
         ),
         Obx(
-          () => Utils.isPublicFav(_favDetailController.item.value.attr ?? 0)
-              ? IconButton(
-                  tooltip: '分享',
+          () => _favDetailController.item.value.attr == null ||
+                  !Utils.isPublicFav(_favDetailController.item.value.attr!)
+              ? const SizedBox.shrink()
+              : IconButton(
+                  iconSize: 22,
                   onPressed: () => Utils.shareText(
                       'https://www.bilibili.com/medialist/detail/ml${_favDetailController.mediaId}'),
                   icon: const Icon(Icons.share),
-                )
-              : const SizedBox.shrink(),
+                ),
         ),
-        Obx(
-          () => _favDetailController.isOwner.value
-              ? PopupMenuButton(
-                  icon: const Icon(Icons.more_vert),
-                  itemBuilder: (context) => [
-                    PopupMenuItem(
-                      onTap: () => Get.toNamed(
-                        '/createFav',
-                        parameters: {'mediaId': mediaId},
-                      )?.then((res) {
-                        if (res is FavVideoItemModel) {
-                          _favDetailController.item.value = res;
-                        }
-                      }),
-                      child: const Text('编辑信息'),
+        PopupMenuButton(
+          icon: const Icon(Icons.more_vert),
+          itemBuilder: (context) => [
+            if (_favDetailController.isOwner.value == true) ...[
+              PopupMenuItem(
+                onTap: _favDetailController.onSort,
+                child: const Text('排序'),
+              ),
+              PopupMenuItem(
+                onTap: () => Get.toNamed(
+                  '/createFav',
+                  parameters: {'mediaId': mediaId},
+                )?.then((res) {
+                  if (res is FavVideoItemModel) {
+                    _favDetailController.item.value = res;
+                  }
+                }),
+                child: const Text('编辑信息'),
+              ),
+            ] else
+              PopupMenuItem(
+                onTap: () => _favDetailController
+                    .onFav(_favDetailController.item.value.favState == 1),
+                child: Text(
+                    '${_favDetailController.item.value.favState == 1 ? '取消' : ''}收藏'),
+              ),
+            if (Utils.isPublicFav(_favDetailController.item.value.attr ?? 0))
+              PopupMenuItem(
+                onTap: () => showModalBottomSheet(
+                  context: context,
+                  isScrollControlled: true,
+                  useSafeArea: true,
+                  builder: (context) => RepostPanel(
+                    rid: _favDetailController.mediaId,
+                    dynType: 4300,
+                    pic: _favDetailController.item.value.cover,
+                    title: _favDetailController.item.value.title,
+                    uname: _favDetailController.item.value.upper?.name,
+                  ),
+                ),
+                child: const Text('分享至动态'),
+              ),
+            if (_favDetailController.isOwner.value == true) ...<PopupMenuEntry>[
+              PopupMenuItem(
+                onTap: _favDetailController.cleanFav,
+                child: const Text('清除失效内容'),
+              ),
+              if (!Utils.isDefaultFav(
+                  _favDetailController.item.value.attr)) ...[
+                const PopupMenuDivider(height: 12),
+                PopupMenuItem(
+                  onTap: () => showConfirmDialog(
+                    context: context,
+                    title: '确定删除该收藏夹?',
+                    onConfirm: () =>
+                        FavHttp.deleteFolder(mediaIds: [mediaId]).then((data) {
+                      if (data['status']) {
+                        SmartDialog.showToast('删除成功');
+                        Get.back(result: true);
+                      } else {
+                        SmartDialog.showToast(data['msg']);
+                      }
+                    }),
+                  ),
+                  child: Text(
+                    '删除',
+                    style: TextStyle(
+                      color: theme.colorScheme.error,
                     ),
-                    if (Utils.isPublicFav(
-                        _favDetailController.item.value.attr ?? 0))
-                      PopupMenuItem(
-                        onTap: () => showModalBottomSheet(
-                          context: context,
-                          isScrollControlled: true,
-                          useSafeArea: true,
-                          builder: (context) => RepostPanel(
-                            rid: _favDetailController.mediaId,
-                            dynType: 4300,
-                            pic: _favDetailController.item.value.cover,
-                            title: _favDetailController.item.value.title,
-                            uname: _favDetailController.item.value.upper?.name,
-                          ),
-                        ),
-                        child: const Text('分享至动态'),
-                      ),
-                    PopupMenuItem(
-                      onTap: () =>
-                          FavHttp.cleanFav(mediaId: mediaId).then((data) {
-                        if (data['status']) {
-                          SmartDialog.showToast('清除成功');
-                          Future.delayed(const Duration(milliseconds: 200), () {
-                            _favDetailController.onReload();
-                          });
-                        } else {
-                          SmartDialog.showToast(data['msg']);
-                        }
-                      }),
-                      child: const Text('清除失效内容'),
-                    ),
-                    PopupMenuItem(
-                      onTap: () {
-                        if (_favDetailController.loadingState.value.isSuccess &&
-                            _favDetailController
-                                    .loadingState.value.data?.isNotEmpty ==
-                                true) {
-                          if ((_favDetailController.item.value.mediaCount ??
-                                  0) >
-                              1000) {
-                            SmartDialog.showToast('内容太多啦！超过1000不支持排序');
-                            return;
-                          }
-                          Get.to(
-                            FavSortPage(
-                                favDetailController: _favDetailController),
-                          );
-                        }
-                      },
-                      child: const Text('排序'),
-                    ),
-                    if (!Utils.isDefaultFav(
-                        _favDetailController.item.value.attr ?? 0))
-                      PopupMenuItem(
-                        onTap: () => showConfirmDialog(
-                          context: context,
-                          title: '确定删除该收藏夹?',
-                          onConfirm: () =>
-                              FavHttp.deleteFolder(mediaIds: [mediaId])
-                                  .then((data) {
-                            if (data['status']) {
-                              SmartDialog.showToast('删除成功');
-                              Get.back(result: true);
-                            } else {
-                              SmartDialog.showToast(data['msg']);
-                            }
-                          }),
-                        ),
-                        child: Text(
-                          '删除',
-                          style: TextStyle(
-                            color: theme.colorScheme.error,
-                          ),
-                        ),
-                      ),
-                  ],
-                )
-              : _favDetailController.mid != 0
-                  ? Builder(
-                      builder: (context) {
-                        bool isFav =
-                            _favDetailController.item.value.favState == 1;
-                        return IconButton(
-                          onPressed: () => _favDetailController.onFav(isFav),
-                          icon: isFav
-                              ? const Icon(Icons.favorite)
-                              : const Icon(Icons.favorite_border),
-                        );
-                      },
-                    )
-                  : const SizedBox.shrink(),
+                  ),
+                ),
+              ],
+            ],
+          ],
         ),
         const SizedBox(width: 10),
       ];
@@ -312,7 +280,7 @@ class _FavDetailPageState extends State<FavDetailPage> {
             style: TextStyle(color: theme.colorScheme.error),
           ),
         ),
-        const SizedBox(width: 12),
+        const SizedBox(width: 10),
       ];
 
   Widget _flexibleSpace(ThemeData theme) {
@@ -336,13 +304,41 @@ class _FavDetailPageState extends State<FavDetailPage> {
               spacing: 12,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Hero(
-                  tag: _favDetailController.heroTag,
-                  child: NetworkImgLayer(
-                    width: 176,
-                    height: 110,
-                    src: item.cover,
-                  ),
+                Stack(
+                  clipBehavior: Clip.none,
+                  children: [
+                    Hero(
+                      tag: _favDetailController.heroTag,
+                      child: NetworkImgLayer(
+                        width: 176,
+                        height: 110,
+                        src: item.cover,
+                      ),
+                    ),
+                    Positioned(
+                      right: 6,
+                      top: 6,
+                      child: Obx(() {
+                        if (_favDetailController.isOwner.value != false) {
+                          return const SizedBox.shrink();
+                        }
+                        bool isFav =
+                            _favDetailController.item.value.favState == 1;
+                        return iconButton(
+                          context: context,
+                          size: 28,
+                          iconSize: 18,
+                          tooltip: '${isFav ? '取消' : ''}收藏',
+                          onPressed: () => _favDetailController.onFav(isFav),
+                          icon: isFav ? Icons.favorite : Icons.favorite_border,
+                          bgColor:
+                              isFav ? null : theme.colorScheme.onInverseSurface,
+                          iconColor:
+                              isFav ? null : theme.colorScheme.onSurfaceVariant,
+                        );
+                      }),
+                    )
+                  ],
                 ),
                 if (item.title != null)
                   Expanded(
@@ -379,7 +375,7 @@ class _FavDetailPageState extends State<FavDetailPage> {
                             child: Align(
                               alignment: Alignment.bottomLeft,
                               child: Text(
-                                '共${item.mediaCount}条视频 · ${Utils.isPublicFavText(item.attr ?? 0)}',
+                                '共${item.mediaCount}条视频 · ${Utils.isPublicFavText(item.attr)}',
                                 textAlign: TextAlign.end,
                                 style: style,
                               ),
@@ -439,7 +435,7 @@ class _FavDetailPageState extends State<FavDetailPage> {
                       Positioned.fill(
                         child: FavVideoCardH(
                           item: item,
-                          onDelFav: _favDetailController.isOwner.value
+                          onDelFav: _favDetailController.isOwner.value == true
                               ? () => _favDetailController.onCancelFav(
                                     index,
                                     item.id!,
@@ -459,22 +455,24 @@ class _FavDetailPageState extends State<FavDetailPage> {
                                   _favDetailController.item.value.mediaCount,
                               'desc': true,
                               'isContinuePlaying': index != 0,
-                              'isOwner': _favDetailController.isOwner.value,
+                              'isOwner':
+                                  _favDetailController.isOwner.value ?? false,
                             },
                           ),
                           onTap: _favDetailController.enableMultiSelect.value
                               ? () => _favDetailController.onSelect(index)
                               : null,
-                          onLongPress: _favDetailController.isOwner.value
-                              ? () {
-                                  if (!_favDetailController
-                                      .enableMultiSelect.value) {
-                                    _favDetailController
-                                        .enableMultiSelect.value = true;
-                                    _favDetailController.onSelect(index);
-                                  }
-                                }
-                              : null,
+                          onLongPress:
+                              _favDetailController.isOwner.value == true
+                                  ? () {
+                                      if (!_favDetailController
+                                          .enableMultiSelect.value) {
+                                        _favDetailController
+                                            .enableMultiSelect.value = true;
+                                        _favDetailController.onSelect(index);
+                                      }
+                                    }
+                                  : null,
                         ),
                       ),
                       Positioned(

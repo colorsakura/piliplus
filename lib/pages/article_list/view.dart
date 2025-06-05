@@ -1,4 +1,3 @@
-import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/common/skeleton/video_card_h.dart';
 import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
 import 'package:PiliPlus/common/widgets/loading_widget/http_error.dart';
@@ -71,12 +70,7 @@ class _ArticleListPageState extends State<ArticleListPage> {
         ),
       Success(:var response) => response?.isNotEmpty == true
           ? SliverGrid(
-              gridDelegate: SliverGridDelegateWithExtentAndRatio(
-                mainAxisSpacing: 2,
-                maxCrossAxisExtent: Grid.smallCardWidth * 2,
-                childAspectRatio: StyleString.aspectRatio * 2.6,
-                minHeight: MediaQuery.textScalerOf(context).scale(90),
-              ),
+              gridDelegate: Grid.videoCardHDelegate(context),
               delegate: SliverChildBuilderDelegate(
                 (context, index) {
                   return ArticleListItem(
@@ -197,7 +191,8 @@ class _ArticleListPageState extends State<ArticleListPage> {
           onPressed: () => PageUtils.inAppWebview(
               '${HttpString.baseUrl}/read/mobile-readlist/rl${_controller.id}'),
           icon: const Icon(Icons.open_in_browser_outlined, size: 19),
-        )
+        ),
+        const SizedBox(width: 10),
       ],
     );
   }

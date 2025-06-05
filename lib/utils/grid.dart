@@ -8,7 +8,8 @@ import 'package:flutter/rendering.dart';
 class Grid {
   static double smallCardWidth = GStorage.smallCardWidth;
 
-  static SliverGridDelegateWithExtentAndRatio videoCardHDelegate(context,
+  static SliverGridDelegateWithExtentAndRatio videoCardHDelegate(
+          BuildContext context,
           {double minHeight = 90}) =>
       SliverGridDelegateWithExtentAndRatio(
         mainAxisSpacing: 2,

@@ -5,6 +5,7 @@ import 'package:PiliPlus/common/widgets/image/image_save.dart';
 import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
 import 'package:PiliPlus/common/widgets/stat/stat.dart';
 import 'package:PiliPlus/models/common/badge_type.dart';
+import 'package:PiliPlus/models/common/stat_type.dart';
 import 'package:PiliPlus/models_new/fav/fav_detail/media.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:PiliPlus/utils/utils.dart';
@@ -153,15 +154,13 @@ class FavVideoCardH extends StatelessWidget {
                 Row(
                   spacing: 8,
                   children: [
-                    StatView(
-                      context: context,
-                      theme: 'gray',
-                      value: Utils.numFormat(item.cntInfo?.play),
+                    StatWidget(
+                      type: StatType.play,
+                      value: item.cntInfo?.play,
                     ),
-                    StatDanMu(
-                      context: context,
-                      theme: 'gray',
-                      value: Utils.numFormat(item.cntInfo?.danmaku),
+                    StatWidget(
+                      type: StatType.danmaku,
+                      value: item.cntInfo?.danmaku,
                     ),
                   ],
                 ),

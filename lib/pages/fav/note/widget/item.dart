@@ -47,56 +47,14 @@ class FavNoteItem extends StatelessWidget {
             vertical: 5,
           ),
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
+            spacing: 10,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Expanded(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      item.title ?? '',
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                        height: 1.4,
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const Spacer(),
-                    Text(
-                      item.summary ?? '',
-                      maxLines: 1,
-                      style: TextStyle(
-                        fontSize: 14,
-                        height: 1,
-                        color: theme.colorScheme.outline,
-                        overflow: TextOverflow.clip,
-                      ),
-                    ),
-                    const Spacer(),
-                    Text(
-                      item.message ?? '',
-                      maxLines: 1,
-                      style: TextStyle(
-                        fontSize: 13,
-                        height: 1,
-                        color: theme.colorScheme.outline,
-                        overflow: TextOverflow.clip,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              if (item.pic?.isNotEmpty == true) ...[
-                const SizedBox(width: 10),
+              if (item.pic?.isNotEmpty == true)
                 AspectRatio(
                   aspectRatio: StyleString.aspectRatio,
                   child: LayoutBuilder(
-                    builder:
-                        (BuildContext context, BoxConstraints boxConstraints) {
+                    builder: (context, boxConstraints) {
                       return Stack(
                         clipBehavior: Clip.none,
                         children: [
@@ -161,7 +119,42 @@ class FavNoteItem extends StatelessWidget {
                     },
                   ),
                 ),
-              ],
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      item.title ?? '',
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                        height: 1.4,
+                        fontSize: 14,
+                      ),
+                    ),
+                    const Spacer(),
+                    Text(
+                      item.summary ?? '',
+                      maxLines: 1,
+                      style: TextStyle(
+                        fontSize: 14,
+                        height: 1,
+                        color: theme.colorScheme.outline,
+                      ),
+                    ),
+                    const Spacer(),
+                    Text(
+                      item.message ?? '',
+                      maxLines: 1,
+                      style: TextStyle(
+                        fontSize: 13,
+                        height: 1,
+                        color: theme.colorScheme.outline,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ],
           ),
         ),

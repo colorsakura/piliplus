@@ -1,6 +1,7 @@
 import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
 import 'package:PiliPlus/common/widgets/stat/stat.dart';
+import 'package:PiliPlus/models/common/stat_type.dart';
 import 'package:PiliPlus/models_new/article/article_list/article.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -33,65 +34,10 @@ class ArticleListItem extends StatelessWidget {
           vertical: 5,
         ),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
+          spacing: 10,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Expanded(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    item.title!,
-                    style: const TextStyle(
-                      fontSize: 15,
-                      height: 1.42,
-                      letterSpacing: 0.3,
-                    ),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  const SizedBox(height: 3),
-                  if (item.summary != null)
-                    Text(
-                      item.summary!,
-                      style: TextStyle(
-                        fontSize: 13,
-                        color: theme.colorScheme.outline,
-                      ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  const Spacer(),
-                  Row(
-                    children: [
-                      StatView(
-                        context: context,
-                        value: item.stats?.view ?? 0,
-                        goto: 'picture',
-                        textColor: theme.colorScheme.outline,
-                      ),
-                      const SizedBox(width: 16),
-                      StatView(
-                        context: context,
-                        goto: 'like',
-                        value: item.stats?.like ?? 0,
-                        textColor: theme.colorScheme.outline,
-                      ),
-                      const SizedBox(width: 16),
-                      StatView(
-                        context: context,
-                        goto: 'reply',
-                        value: item.stats?.reply ?? 0,
-                        textColor: theme.colorScheme.outline,
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-            if (item.imageUrls?.isNotEmpty == true) ...[
-              const SizedBox(width: 10),
+            if (item.imageUrls?.isNotEmpty == true)
               AspectRatio(
                 aspectRatio: StyleString.aspectRatio,
                 child: LayoutBuilder(
@@ -104,7 +50,56 @@ class ArticleListItem extends StatelessWidget {
                   },
                 ),
               ),
-            ],
+            Expanded(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    item.title!,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      height: 1.42,
+                      letterSpacing: 0.3,
+                    ),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  const SizedBox(height: 3),
+                  if (item.summary != null)
+                    Text(
+                      item.summary!,
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: theme.colorScheme.outline,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  const Spacer(),
+                  Row(
+                    spacing: 16,
+                    children: [
+                      StatWidget(
+                        value: item.stats?.view,
+                        textColor: theme.colorScheme.outline,
+                        type: StatType.view,
+                      ),
+                      StatWidget(
+                        type: StatType.like,
+                        value: item.stats?.like,
+                        textColor: theme.colorScheme.outline,
+                      ),
+                      StatWidget(
+                        type: StatType.reply,
+                        value: item.stats?.reply,
+                        textColor: theme.colorScheme.outline,
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
           ],
         ),
       ),

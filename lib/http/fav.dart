@@ -510,7 +510,7 @@ class FavHttp {
     required dynamic seasonId,
   }) async {
     var res = await Request().post(
-      Api.seasonFav + (isFav ? 'unfav' : 'fav'),
+      isFav ? Api.unfavSeason : Api.favSeason,
       data: {
         'platform': 'web',
         'season_id': seasonId,

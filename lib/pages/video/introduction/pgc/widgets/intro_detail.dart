@@ -3,6 +3,7 @@ import 'package:PiliPlus/common/widgets/keep_alive_wrapper.dart';
 import 'package:PiliPlus/common/widgets/page/tabs.dart';
 import 'package:PiliPlus/common/widgets/scroll_physics.dart';
 import 'package:PiliPlus/common/widgets/stat/stat.dart';
+import 'package:PiliPlus/models/common/stat_type.dart';
 import 'package:PiliPlus/models_new/pgc/pgc_info_model/result.dart';
 import 'package:PiliPlus/models_new/video/video_tag/data.dart';
 import 'package:PiliPlus/pages/common/common_collapse_slide_page.dart';
@@ -108,15 +109,13 @@ class _IntroDetailState extends CommonCollapseSlidePageState<PgcIntroPanel> {
         Row(
           spacing: 6,
           children: [
-            StatView(
-              context: context,
-              theme: 'gray',
-              value: Utils.numFormat(widget.item.stat!.views),
+            StatWidget(
+              type: StatType.view,
+              value: widget.item.stat!.views,
             ),
-            StatDanMu(
-              context: context,
-              theme: 'gray',
-              value: Utils.numFormat(widget.item.stat!.danmakus),
+            StatWidget(
+              type: StatType.danmaku,
+              value: widget.item.stat!.danmakus,
             ),
           ],
         ),

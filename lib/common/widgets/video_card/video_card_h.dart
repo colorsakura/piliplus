@@ -7,6 +7,7 @@ import 'package:PiliPlus/common/widgets/stat/stat.dart';
 import 'package:PiliPlus/common/widgets/video_popup_menu.dart';
 import 'package:PiliPlus/http/search.dart';
 import 'package:PiliPlus/models/common/badge_type.dart';
+import 'package:PiliPlus/models/common/stat_type.dart';
 import 'package:PiliPlus/models/model_hot_video_item.dart';
 import 'package:PiliPlus/models/model_video.dart';
 import 'package:PiliPlus/models/search/result.dart';
@@ -257,16 +258,14 @@ class VideoCardH extends StatelessWidget {
             spacing: 8,
             children: [
               if (showView)
-                StatView(
-                  context: context,
-                  theme: 'gray',
-                  value: videoItem.stat.viewStr,
+                StatWidget(
+                  type: StatType.view,
+                  value: videoItem.stat.view,
                 ),
               if (showDanmaku)
-                StatDanMu(
-                  context: context,
-                  theme: 'gray',
-                  value: videoItem.stat.danmuStr,
+                StatWidget(
+                  type: StatType.danmaku,
+                  value: videoItem.stat.danmu,
                 ),
             ],
           ),

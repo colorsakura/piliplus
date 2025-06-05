@@ -91,7 +91,7 @@ class FavVideoItem extends StatelessWidget {
           ),
           const Spacer(),
           Text(
-            Utils.isPublicFavText(item.attr ?? 0),
+            Utils.isPublicFavText(item.attr),
             style: TextStyle(
               fontSize: fontSize,
               color: color,

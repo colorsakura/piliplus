@@ -142,8 +142,11 @@ class HistoryItem extends StatelessWidget {
                               text: item.badge,
                               top: 6.0,
                               right: 6.0,
-                              bottom: null,
-                              left: null,
+                              type: item.history.business ==
+                                          HistoryBusinessType.live.type &&
+                                      item.liveStatus != 1
+                                  ? PBadgeType.gray
+                                  : PBadgeType.primary,
                             ),
                           if (item.duration != null &&
                               item.duration != 0 &&

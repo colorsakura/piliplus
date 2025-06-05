@@ -42,7 +42,7 @@ Widget livePanelSub(
                   PBadge(
                     text: content.watchedShow?.textLarge,
                     top: 6,
-                    right: 70,
+                    right: 65,
                     fontSize: 10.5,
                     type: PBadgeType.gray,
                   ),

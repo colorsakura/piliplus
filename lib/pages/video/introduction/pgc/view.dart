@@ -6,6 +6,7 @@ import 'package:PiliPlus/common/widgets/dialog/dialog.dart';
 import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
 import 'package:PiliPlus/common/widgets/stat/stat.dart';
 import 'package:PiliPlus/models/common/image_preview_type.dart';
+import 'package:PiliPlus/models/common/stat_type.dart';
 import 'package:PiliPlus/models_new/pgc/pgc_info_model/result.dart';
 import 'package:PiliPlus/pages/video/controller.dart';
 import 'package:PiliPlus/pages/video/introduction/pgc/controller.dart';
@@ -202,15 +203,13 @@ class _PgcIntroPageState extends State<PgcIntroPage>
                           Row(
                             spacing: 6,
                             children: [
-                              StatView(
-                                context: context,
-                                theme: 'gray',
-                                value: Utils.numFormat(item.stat!.views),
+                              StatWidget(
+                                type: StatType.view,
+                                value: item.stat!.views,
                               ),
-                              StatDanMu(
-                                context: context,
-                                theme: 'gray',
-                                value: Utils.numFormat(item.stat!.danmakus),
+                              StatWidget(
+                                type: StatType.danmaku,
+                                value: item.stat!.danmakus,
                               ),
                               if (isLandscape) ...[
                                 areasAndPubTime(theme, item),

@@ -94,24 +94,22 @@ class Utils {
     return absolutePaths.join(':');
   }
 
-  static void showCopyTextDialog(text) {
-    Get.dialog(
-      AlertDialog(
-        content: SelectableText('$text'),
-      ),
-    );
-  }
-
-  static bool isStringNumeric(str) {
+  static bool isStringNumeric(String str) {
     RegExp numericRegex = RegExp(r'^[\d\.]+$');
-    return numericRegex.hasMatch(str.toString());
+    return numericRegex.hasMatch(str);
   }
 
-  static bool isDefaultFav(int attr) {
+  static bool isDefaultFav(int? attr) {
+    if (attr == null) {
+      return false;
+    }
     return (attr & 2) == 0;
   }
 
-  static String isPublicFavText(int attr) {
+  static String isPublicFavText(int? attr) {
+    if (attr == null) {
+      return '';
+    }
     return isPublicFav(attr) ? '公开' : '私密';
   }
 

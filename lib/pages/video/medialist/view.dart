@@ -8,6 +8,7 @@ import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/common/widgets/stat/stat.dart';
 import 'package:PiliPlus/http/search.dart';
 import 'package:PiliPlus/models/common/badge_type.dart';
+import 'package:PiliPlus/models/common/stat_type.dart';
 import 'package:PiliPlus/models_new/media_list/media_list.dart';
 import 'package:PiliPlus/pages/common/common_collapse_slide_page.dart';
 import 'package:PiliPlus/utils/utils.dart';
@@ -264,17 +265,13 @@ class _MediaListPanelState
                                     Row(
                                       spacing: 8,
                                       children: [
-                                        StatView(
-                                          context: context,
-                                          theme: 'gray',
-                                          value: Utils.numFormat(
-                                              item.cntInfo!.play!),
+                                        StatWidget(
+                                          type: StatType.play,
+                                          value: item.cntInfo!.play,
                                         ),
-                                        StatDanMu(
-                                          context: context,
-                                          theme: 'gray',
-                                          value: Utils.numFormat(
-                                              item.cntInfo!.danmaku!),
+                                        StatWidget(
+                                          type: StatType.danmaku,
+                                          value: item.cntInfo!.danmaku,
                                         ),
                                       ],
                                     ),

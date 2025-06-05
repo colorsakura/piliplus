@@ -118,7 +118,7 @@ class _PgcPanelState extends State<PgcPanel> {
                   ),
                   child: Text(
                     widget.newEp?.desc?.contains('连载') == true
-                        ? '连载中，更新至${Utils.isStringNumeric(widget.newEp!.title) ? '第${widget.newEp!.title}话' : '${widget.newEp!.title}'}'
+                        ? '连载中，更新至${Utils.isStringNumeric(widget.newEp!.title!) ? '第${widget.newEp!.title}话' : '${widget.newEp!.title}'}'
                         : widget.newEp?.desc ?? '',
                     style: const TextStyle(fontSize: 13),
                   ),

@@ -455,6 +455,7 @@ class _ArticlePageState extends State<ArticlePage>
                                     return GestureDetector(
                                       behavior: HitTestBehavior.opaque,
                                       onTap: () => context.imageView(
+                                        quality: 60,
                                         imgList: pics
                                             .map(
                                                 (e) => SourceModel(url: e.url!))
@@ -474,6 +475,10 @@ class _ArticlePageState extends State<ArticlePage>
                                                     : null,
                                                 imageUrl: Utils.thumbnailImgUrl(
                                                     pic.url, 60),
+                                                fadeInDuration: const Duration(
+                                                    milliseconds: 120),
+                                                fadeOutDuration: const Duration(
+                                                    milliseconds: 120),
                                               ),
                                             ),
                                             if (pic.isLongPic == true)

@@ -6,6 +6,7 @@ import 'package:PiliPlus/common/widgets/pendant_avatar.dart';
 import 'package:PiliPlus/common/widgets/self_sized_horizontal_list.dart';
 import 'package:PiliPlus/common/widgets/stat/stat.dart';
 import 'package:PiliPlus/models/common/image_type.dart';
+import 'package:PiliPlus/models/common/stat_type.dart';
 import 'package:PiliPlus/models_new/video/video_detail/data.dart';
 import 'package:PiliPlus/pages/mine/controller.dart';
 import 'package:PiliPlus/pages/search/widgets/search_text.dart';
@@ -553,20 +554,18 @@ class _VideoInfoState extends State<VideoInfo> {
                       Row(
                         spacing: 10,
                         children: [
-                          StatView(
-                            context: context,
-                            theme: 'gray',
-                            value: Utils.numFormat(!widget.isLoading
-                                ? videoDetail.stat?.view ?? '-'
-                                : videoItem['stat']?.view ?? '-'),
+                          StatWidget(
+                            type: StatType.view,
+                            value: !widget.isLoading
+                                ? videoDetail.stat?.view
+                                : videoItem['stat']?.view,
                             textColor: theme.colorScheme.outline,
                           ),
-                          StatDanMu(
-                            context: context,
-                            theme: 'gray',
-                            value: Utils.numFormat(!widget.isLoading
-                                ? videoDetail.stat?.danmaku ?? '-'
-                                : videoItem['stat']?.danmu ?? '-'),
+                          StatWidget(
+                            type: StatType.danmaku,
+                            value: !widget.isLoading
+                                ? videoDetail.stat?.danmaku
+                                : videoItem['stat']?.danmu,
                             textColor: theme.colorScheme.outline,
                           ),
                           Text(

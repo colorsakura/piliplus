@@ -1,4 +1,5 @@
 import 'package:PiliPlus/common/widgets/button/icon_button.dart';
+import 'package:PiliPlus/common/widgets/dialog/dialog.dart';
 import 'package:PiliPlus/models_new/later/data.dart';
 import 'package:PiliPlus/models_new/later/list.dart';
 import 'package:PiliPlus/pages/common/common_search_page.dart';
@@ -64,10 +65,15 @@ class _LaterSearchPageState
                 child: iconButton(
                   tooltip: '移除',
                   context: context,
-                  onPressed: () => controller.toViewDel(
-                    context,
-                    index,
-                    item.aid,
+                  onPressed: () => showConfirmDialog(
+                    context: context,
+                    title: '提示',
+                    content: '即将移除该视频，确定是否移除',
+                    onConfirm: () => controller.toViewDel(
+                      context,
+                      index,
+                      item.aid,
+                    ),
                   ),
                   icon: Icons.clear,
                   iconColor: Theme.of(context).colorScheme.onSurfaceVariant,

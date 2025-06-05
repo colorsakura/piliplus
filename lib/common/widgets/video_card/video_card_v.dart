@@ -6,6 +6,7 @@ import 'package:PiliPlus/common/widgets/stat/stat.dart';
 import 'package:PiliPlus/common/widgets/video_popup_menu.dart';
 import 'package:PiliPlus/http/search.dart';
 import 'package:PiliPlus/models/common/badge_type.dart';
+import 'package:PiliPlus/models/common/stat_type.dart';
 import 'package:PiliPlus/models/home/rcmd/result.dart';
 import 'package:PiliPlus/models/model_rec_video_item.dart';
 import 'package:PiliPlus/utils/app_scheme.dart';
@@ -234,19 +235,17 @@ class VideoCardV extends StatelessWidget {
   Widget videoStat(BuildContext context, ThemeData theme) {
     return Row(
       children: [
-        StatView(
-          context: context,
-          theme: 'gray',
-          value: videoItem.stat.viewStr,
-          goto: videoItem.goto,
+        StatWidget(
+          value: videoItem.stat.view,
+          type: StatType.view,
         ),
-        const SizedBox(width: 4),
-        if (videoItem.goto != 'picture')
-          StatDanMu(
-            context: context,
-            theme: 'gray',
-            value: videoItem.stat.danmuStr,
+        if (videoItem.goto != 'picture') ...[
+          const SizedBox(width: 4),
+          StatWidget(
+            type: StatType.danmaku,
+            value: videoItem.stat.danmu,
           ),
+        ],
         if (videoItem is RecVideoItemModel) ...[
           const Spacer(),
           Text.rich(

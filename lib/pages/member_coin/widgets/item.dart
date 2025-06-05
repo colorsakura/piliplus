@@ -5,6 +5,7 @@ import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
 import 'package:PiliPlus/common/widgets/stat/stat.dart';
 import 'package:PiliPlus/http/search.dart';
 import 'package:PiliPlus/models/common/badge_type.dart';
+import 'package:PiliPlus/models/common/stat_type.dart';
 import 'package:PiliPlus/models/member/coin.dart';
 import 'package:PiliPlus/utils/app_scheme.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
@@ -91,16 +92,14 @@ class MemberCoinsItem extends StatelessWidget {
                   const SizedBox(height: 4),
                   Row(
                     children: [
-                      StatView(
-                        context: context,
-                        value: coinItem.stat.viewStr,
-                        theme: 'gray',
+                      StatWidget(
+                        type: StatType.view,
+                        value: coinItem.stat.view,
                       ),
                       const SizedBox(width: 8),
-                      StatDanMu(
-                        context: context,
-                        theme: 'gray',
-                        value: coinItem.stat.danmuStr,
+                      StatWidget(
+                        type: StatType.danmaku,
+                        value: coinItem.stat.danmu,
                       ),
                       const Spacer(),
                       Text(

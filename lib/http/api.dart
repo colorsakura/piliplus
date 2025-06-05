@@ -697,9 +697,6 @@ class Api {
 
   static const String pgcSeasonRank = "/pgc/season/rank/web/list";
 
-  /// 取消订阅-合集
-  static const String unfavSeason = '/x/v3/fav/season/unfav';
-
   /// 取消订阅-播单
   static const String unfavFolder = '/x/v3/fav/folder/unfav';
 
@@ -731,7 +728,9 @@ class Api {
   // 点赞投币收藏关注
   static const String videoRelation = '/x/web-interface/archive/relation';
 
-  static const String seasonFav = '/x/v3/fav/season/'; // + fav unfav
+  static const String favSeason = '/x/v3/fav/season/fav';
+
+  static const String unfavSeason = '/x/v3/fav/season/unfav';
 
   /// 稍后再看&收藏夹视频列表
   static const String mediaList = '/x/v2/medialist/resource/list';
