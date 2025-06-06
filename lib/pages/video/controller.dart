@@ -226,7 +226,7 @@ class VideoDetailController extends GetxController
     imageStatus = true;
   }
 
-  void onDismissed(value) {
+  void onDismissed(int _) {
     imageStatus = false;
   }
 
@@ -813,7 +813,7 @@ class VideoDetailController extends GetxController
     }
   }
 
-  void onAddItem(item) {
+  void onAddItem(dynamic item) {
     if (listData.contains(item)) return;
     listData.insert(0, item);
     listKey.currentState?.insertItem(0);
@@ -841,7 +841,7 @@ class VideoDetailController extends GetxController
     });
   }
 
-  Widget buildItem(item, Animation<double> animation) {
+  Widget buildItem(dynamic item, Animation<double> animation) {
     return Align(
       alignment: Alignment.centerLeft,
       child: SlideTransition(
@@ -1063,10 +1063,10 @@ class VideoDetailController extends GetxController
   }
 
   Future<void> playerInit({
-    video,
-    audio,
-    seekToTime,
-    duration,
+    String? video,
+    String? audio,
+    Duration? seekToTime,
+    Duration? duration,
     bool? autoplay,
   }) async {
     await plPlayerController.setDataSource(
@@ -1088,9 +1088,10 @@ class VideoDetailController extends GetxController
       showVP: showVP,
       dmTrend: dmTrend,
       seekTo: seekToTime ?? defaultST ?? playedTime,
-      duration: duration ?? data.timeLength == null
-          ? null
-          : Duration(milliseconds: data.timeLength!),
+      duration: duration ??
+          (data.timeLength == null
+              ? null
+              : Duration(milliseconds: data.timeLength!)),
       // 宽>高 水平 否则 垂直
       direction: direction.value,
       bvid: bvid,
@@ -1414,7 +1415,7 @@ class VideoDetailController extends GetxController
   int? graphVersion;
   EdgeInfoData? steinEdgeInfo;
   late final RxBool showSteinEdgeInfo = false.obs;
-  Future<void> getSteinEdgeInfo([edgeId]) async {
+  Future<void> getSteinEdgeInfo([int? edgeId]) async {
     steinEdgeInfo = null;
     try {
       var res = await Request().get(
@@ -1517,7 +1518,7 @@ class VideoDetailController extends GetxController
     }
   }
 
-  void updateMediaListHistory(aid) {
+  void updateMediaListHistory(int aid) {
     if (Get.arguments?['sortField'] != null) {
       VideoHttp.medialistHistory(
         desc: _mediaDesc ? 1 : 0,
@@ -1561,7 +1562,7 @@ class VideoDetailController extends GetxController
     super.onClose();
   }
 
-  void onReset([isStein]) {
+  void onReset([bool? isStein]) {
     playedTime = null;
     videoUrl = null;
     audioUrl = null;

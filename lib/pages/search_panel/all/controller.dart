@@ -51,7 +51,7 @@ class SearchAllController
         pubEnd: pubEnd,
       );
 
-  void onPushDetail(resultList) {
+  void onPushDetail(dynamic resultList) {
     try {
       int? aid = int.tryParse(keyword);
       if (aid != null && resultList.first.aid == aid) {

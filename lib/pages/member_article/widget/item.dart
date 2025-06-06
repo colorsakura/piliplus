@@ -87,12 +87,12 @@ class MemberArticleItem extends StatelessWidget {
                         StatWidget(
                           type: StatType.view,
                           value: item.stats?.view,
-                          textColor: outline,
+                          color: outline,
                         ),
                         StatWidget(
-                          type: StatType.play,
+                          type: StatType.reply,
                           value: item.stats?.reply,
-                          textColor: outline,
+                          color: outline,
                         ),
                       ],
                     ),

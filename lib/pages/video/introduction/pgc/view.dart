@@ -204,7 +204,7 @@ class _PgcIntroPageState extends State<PgcIntroPage>
                             spacing: 6,
                             children: [
                               StatWidget(
-                                type: StatType.view,
+                                type: StatType.play,
                                 value: item.stat!.views,
                               ),
                               StatWidget(

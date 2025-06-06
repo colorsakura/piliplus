@@ -93,7 +93,7 @@ class MemberCoinsItem extends StatelessWidget {
                   Row(
                     children: [
                       StatWidget(
-                        type: StatType.view,
+                        type: StatType.play,
                         value: coinItem.stat.view,
                       ),
                       const SizedBox(width: 8),

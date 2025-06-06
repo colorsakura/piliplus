@@ -111,7 +111,7 @@ class LoginPageController extends GetxController
   }
 
   // 申请极验验证码
-  void getCaptcha(geeGt, geeChallenge, onSuccess) {
+  void getCaptcha(String? geeGt, String? geeChallenge, VoidCallback onSuccess) {
     var registerData = Gt3RegisterData(
       challenge: geeChallenge,
       gt: geeGt,

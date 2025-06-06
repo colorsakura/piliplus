@@ -517,7 +517,7 @@ class _EpisodePanelState extends CommonSlidePageState<EpisodePanel> {
                           children: [
                             StatWidget(
                               value: view,
-                              type: StatType.view,
+                              type: StatType.play,
                             ),
                             if (danmaku != null)
                               StatWidget(

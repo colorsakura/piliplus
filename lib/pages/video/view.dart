@@ -2055,7 +2055,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
     );
   }
 
-  void showEpisodes([index, season, episodes, bvid, aid, cid]) {
+  void showEpisodes([int? index, season, episodes, bvid, aid, cid]) {
     if (bvid == null) {
       videoDetailController.showMediaListPanel(context);
       return;
@@ -2224,7 +2224,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
     }
   }
 
-  void _onPopInvokedWithResult(didPop, result) {
+  void _onPopInvokedWithResult(bool didPop, result) {
     if (plPlayerController?.controlsLock.value == true) {
       plPlayerController?.onLockControl(false);
       return;
@@ -2238,7 +2238,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
     }
   }
 
-  void onShowMemberPage(mid) {
+  void onShowMemberPage(int? mid) {
     videoDetailController.childKey.currentState?.showBottomSheet(
       shape: const RoundedRectangleBorder(),
       (context) {

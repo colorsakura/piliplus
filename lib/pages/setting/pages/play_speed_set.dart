@@ -168,7 +168,7 @@ class _PlaySpeedPageState extends State<PlaySpeedPage> {
   }
 
   //
-  void menuAction(index, id) {
+  void menuAction(int index, int id) {
     double speed = speedList[index];
     // 设置
     if (id == 1) {

@@ -61,6 +61,7 @@ class SpaceOpusItem extends StatelessWidget {
                       child: StatWidget(
                         type: StatType.like,
                         value: item.stat?.like,
+                        color: Colors.white.withValues(alpha: 0.8),
                       ),
                     ),
                   ),
@@ -82,7 +83,7 @@ class SpaceOpusItem extends StatelessWidget {
                 child: StatWidget(
                   type: StatType.like,
                   value: item.stat?.like,
-                  textColor: Theme.of(context).colorScheme.onSurfaceVariant,
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
                 ),
               ),
           ],

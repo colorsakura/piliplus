@@ -176,7 +176,7 @@ class VideoCardHLater extends StatelessWidget {
             ),
             const Spacer(),
             StatWidget(
-              type: StatType.view,
+              type: StatType.play,
               value: videoItem.stat?.view,
             ),
           ] else ...[
@@ -207,7 +207,7 @@ class VideoCardHLater extends StatelessWidget {
               spacing: 8,
               children: [
                 StatWidget(
-                  type: StatType.view,
+                  type: StatType.play,
                   value: videoItem.stat?.view,
                 ),
                 StatWidget(

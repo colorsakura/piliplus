@@ -35,7 +35,7 @@ class SavePanel extends StatefulWidget {
   @override
   State<SavePanel> createState() => _SavePanelState();
 
-  static void toSavePanel({upMid, item}) {
+  static void toSavePanel({dynamic upMid, dynamic item}) {
     Get.generalDialog(
       barrierLabel: '',
       barrierDismissible: true,
@@ -161,7 +161,7 @@ class _SavePanelState extends State<SavePanel> {
     }
   }
 
-  String parseDyn(item) {
+  String parseDyn(dynamic item) {
     String uri = '';
     try {
       switch (item.type) {

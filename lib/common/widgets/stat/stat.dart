@@ -5,14 +5,14 @@ import 'package:flutter/material.dart';
 class StatWidget extends StatelessWidget {
   final StatType type;
   final dynamic value;
-  final Color? textColor;
+  final Color? color;
   final double iconSize;
 
   const StatWidget({
     super.key,
     required this.type,
     required this.value,
-    this.textColor,
+    this.color,
     this.iconSize = 13,
   });
 
@@ -27,7 +27,7 @@ class StatWidget extends StatelessWidget {
       StatType.play => Icons.play_circle_outlined,
     };
 
-    Color color = textColor ??
+    Color color = this.color ??
         Theme.of(context).colorScheme.outline.withValues(alpha: 0.8);
 
     return Row(

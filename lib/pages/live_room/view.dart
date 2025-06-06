@@ -155,12 +155,15 @@ class _LiveRoomPageState extends State<LiveRoomPage>
         future: _futureBuilderFuture,
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.hasData && snapshot.data['status']) {
+            final roomInfoH5 = _liveRoomController.roomInfoH5.value;
             return PLVideoPlayer(
               key: playerKey,
               fill: fill,
               alignment: alignment,
               plPlayerController: plPlayerController,
               headerControl: LiveHeaderControl(
+                title: roomInfoH5?.roomInfo?.title,
+                upName: roomInfoH5?.anchorInfo?.baseInfo?.uname,
                 plPlayerController: plPlayerController,
                 onSendDanmaku: onSendDanmaku,
               ),
@@ -485,12 +488,7 @@ class _LiveRoomPageState extends State<LiveRoomPage>
               color: isFullScreen ? Colors.black : null,
               width: isFullScreen ? Get.size.width : videoWidth,
               height: isFullScreen ? Get.size.height : Get.size.width * 9 / 16,
-              child: MediaQuery.removePadding(
-                removeTop: true,
-                removeRight: true,
-                context: context,
-                child: videoPlayerPanel(fill: Colors.transparent),
-              ),
+              child: videoPlayerPanel(fill: Colors.transparent),
             ),
           ),
           Expanded(

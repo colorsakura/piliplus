@@ -102,7 +102,7 @@ class LiveRoomChat extends StatelessWidget {
     );
   }
 
-  TextSpan _buildMsg(obj) {
+  TextSpan _buildMsg(dynamic obj) {
     dynamic emots = obj['emots'];
     dynamic uemote = obj['uemote'];
     List list = [

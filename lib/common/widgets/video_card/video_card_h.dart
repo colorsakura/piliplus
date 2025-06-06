@@ -259,7 +259,7 @@ class VideoCardH extends StatelessWidget {
             children: [
               if (showView)
                 StatWidget(
-                  type: StatType.view,
+                  type: StatType.play,
                   value: videoItem.stat.view,
                 ),
               if (showDanmaku)

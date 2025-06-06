@@ -225,7 +225,7 @@ class VideoCardHMemberVideo extends StatelessWidget {
             spacing: 8,
             children: [
               StatWidget(
-                type: StatType.view,
+                type: StatType.play,
                 value: videoItem.stat.view,
               ),
               StatWidget(

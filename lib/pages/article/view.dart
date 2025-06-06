@@ -527,7 +527,6 @@ class _ArticlePageState extends State<ArticlePage>
                         child: Row(
                           children: [
                             NetworkImgLayer(
-                              // TODO Avatar
                               width: 40,
                               height: 40,
                               type: ImageType.avatar,

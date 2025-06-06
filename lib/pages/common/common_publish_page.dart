@@ -198,7 +198,7 @@ abstract class CommonPublishPageState<T extends CommonPublishPage>
 
   Future<void> onCustomPublish({required String message, List? pictures});
 
-  void onChooseEmote(emote) {
+  void onChooseEmote(dynamic emote) {
     enablePublish.value = true;
     final int cursorPosition = editController.selection.baseOffset;
     final String currentText = editController.text;

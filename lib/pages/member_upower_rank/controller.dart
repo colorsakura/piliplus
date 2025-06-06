@@ -8,10 +8,10 @@ import 'package:get/get.dart';
 
 class UpowerRankController
     extends CommonListController<UpowerRankData, UpowerRankInfo> {
-  UpowerRankController(this.privilegeType);
+  UpowerRankController({this.privilegeType, required this.upMid});
   int? privilegeType;
 
-  final upMid = Get.parameters['mid'];
+  final String upMid;
   final Rx<String?> name = Rx<String?>(null);
   final Rx<List<LevelInfo>?> tabs = Rx<List<LevelInfo>?>(null);
   int? memberTotal;

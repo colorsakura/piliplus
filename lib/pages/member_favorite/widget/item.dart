@@ -2,7 +2,6 @@ import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/common/widgets/badge.dart';
 import 'package:PiliPlus/common/widgets/image/image_save.dart';
 import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
-import 'package:PiliPlus/models/common/badge_type.dart';
 import 'package:PiliPlus/models_new/space/space_fav/list.dart';
 import 'package:PiliPlus/models_new/sub/sub/list.dart';
 import 'package:PiliPlus/models_new/sub/sub/upper.dart';
@@ -86,28 +85,19 @@ class MemberFavItem extends StatelessWidget {
                         ),
                         if (item.type == 21)
                           const PBadge(
-                            right: 3,
-                            bottom: 3,
+                            right: 6,
+                            top: 6,
                             text: '合集',
+                            fontSize: 10,
                             isBold: false,
-                            size: PBadgeSize.small,
                           )
-                        else if (item.type == 0 || item.type == 11)
-                          Positioned(
-                            right: 3,
-                            bottom: 3,
-                            child: Container(
-                              padding: const EdgeInsets.all(5),
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: theme.colorScheme.primary,
-                              ),
-                              child: Icon(
-                                Icons.video_library_outlined,
-                                size: 12,
-                                color: theme.colorScheme.onPrimary,
-                              ),
-                            ),
+                        else if (item.type == 11)
+                          const PBadge(
+                            right: 6,
+                            top: 6,
+                            text: '收藏夹',
+                            fontSize: 10,
+                            isBold: false,
                           ),
                       ],
                     );

@@ -12,8 +12,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class UpowerRankPage extends StatefulWidget {
-  const UpowerRankPage({super.key, this.privilegeType});
+  const UpowerRankPage({super.key, this.upMid, this.tag, this.privilegeType});
 
+  final String? upMid;
+  final String? tag;
   final int? privilegeType;
 
   @override
@@ -22,10 +24,24 @@ class UpowerRankPage extends StatefulWidget {
 
 class _UpowerRankPageState extends State<UpowerRankPage>
     with AutomaticKeepAliveClientMixin {
-  late final _controller = Get.put(
-    UpowerRankController(widget.privilegeType),
-    tag: Utils.generateRandomString(8),
-  );
+  late final _upMid = Get.parameters['mid']!;
+  late final String _tag;
+  late final UpowerRankController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _tag = widget.privilegeType == null
+        ? Utils.generateRandomString(8)
+        : '${widget.tag}${widget.privilegeType}';
+    _controller = Get.put(
+      UpowerRankController(
+        privilegeType: widget.privilegeType,
+        upMid: widget.upMid ?? _upMid,
+      ),
+      tag: _tag,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,6 +50,7 @@ class _UpowerRankPageState extends State<UpowerRankPage>
     final child = refreshIndicator(
       onRefresh: _controller.onRefresh,
       child: CustomScrollView(
+        controller: _controller.scrollController,
         slivers: [
           SliverPadding(
             padding: EdgeInsets.only(
@@ -51,7 +68,7 @@ class _UpowerRankPageState extends State<UpowerRankPage>
           title: Obx(() => _controller.name.value == null
               ? const SizedBox.shrink()
               : Text(
-                  '${_controller.name.value}充电排行榜${_controller.memberTotal == 0 ? '' : '(${_controller.memberTotal})'}')),
+                  '${_controller.name.value} 充电排行榜${_controller.memberTotal == 0 ? '' : '(${_controller.memberTotal})'}')),
         ),
         body: SafeArea(
           top: false,
@@ -63,32 +80,56 @@ class _UpowerRankPageState extends State<UpowerRankPage>
                 () => _controller.tabs.value != null
                     ? DefaultTabController(
                         length: _controller.tabs.value!.length,
-                        child: Column(
-                          children: [
-                            TabBar(
-                              isScrollable: true,
-                              tabAlignment: TabAlignment.start,
-                              tabs: _controller.tabs.value!
-                                  .map((e) => Tab(
-                                      text:
-                                          '${e.name!}(${e.memberTotal ?? 0})'))
-                                  .toList(),
-                            ),
-                            Expanded(
-                              child: Material(
-                                color: Colors.transparent,
-                                child: tabBarView(
-                                  children: [
-                                    KeepAliveWrapper(
-                                        builder: (context) => child),
-                                    ..._controller.tabs.value!.sublist(1).map(
-                                        (e) => UpowerRankPage(
-                                            privilegeType: e.privilegeType))
-                                  ],
+                        child: Builder(
+                          builder: (context) {
+                            return Column(
+                              children: [
+                                TabBar(
+                                  isScrollable: true,
+                                  tabAlignment: TabAlignment.start,
+                                  tabs: _controller.tabs.value!
+                                      .map((e) => Tab(
+                                          text:
+                                              '${e.name!}(${e.memberTotal ?? 0})'))
+                                      .toList(),
+                                  onTap: (index) {
+                                    if (!DefaultTabController.of(context)
+                                        .indexIsChanging) {
+                                      try {
+                                        if (index == 0) {
+                                          _controller.animateToTop();
+                                        } else {
+                                          Get.find<UpowerRankController>(
+                                                  tag:
+                                                      '$_tag${_controller.tabs.value![index].privilegeType}')
+                                              .animateToTop();
+                                        }
+                                      } catch (_) {}
+                                    }
+                                  },
                                 ),
-                              ),
-                            ),
-                          ],
+                                Expanded(
+                                  child: Material(
+                                    color: Colors.transparent,
+                                    child: tabBarView(
+                                      children: [
+                                        KeepAliveWrapper(
+                                            builder: (context) => child),
+                                        ..._controller.tabs.value!
+                                            .sublist(1)
+                                            .map((e) => UpowerRankPage(
+                                                  upMid: _upMid,
+                                                  tag: _tag,
+                                                  privilegeType:
+                                                      e.privilegeType,
+                                                ))
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            );
+                          },
                         ),
                       )
                     : child,
@@ -104,6 +145,7 @@ class _UpowerRankPageState extends State<UpowerRankPage>
 
   Widget _bilidBody(
       ThemeData theme, LoadingState<List<UpowerRankInfo>?> loadingState) {
+    late final width = MediaQuery.textScalerOf(context).scale(32);
     return switch (loadingState) {
       Loading() => widget.privilegeType == null
           ? const SliverToBoxAdapter(child: LinearProgressIndicator())
@@ -126,18 +168,23 @@ class _UpowerRankPageState extends State<UpowerRankPage>
                   final item = response[index];
                   return ListTile(
                     onTap: () => Get.toNamed('/member?mid=${item.mid}'),
-                    leading: Text(
-                      (index + 1).toString(),
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontStyle: FontStyle.italic,
-                        fontWeight: FontWeight.bold,
-                        color: switch (index) {
-                          0 => const Color(0xFFfdad13),
-                          1 => const Color(0xFF8aace1),
-                          2 => const Color(0xFFdfa777),
-                          _ => theme.colorScheme.outline,
-                        },
+                    leading: SizedBox(
+                      width: width,
+                      child: Center(
+                        child: Text(
+                          (index + 1).toString(),
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontStyle: FontStyle.italic,
+                            fontWeight: FontWeight.bold,
+                            color: switch (index) {
+                              0 => const Color(0xFFfdad13),
+                              1 => const Color(0xFF8aace1),
+                              2 => const Color(0xFFdfa777),
+                              _ => theme.colorScheme.outline,
+                            },
+                          ),
+                        ),
                       ),
                     ),
                     title: Row(

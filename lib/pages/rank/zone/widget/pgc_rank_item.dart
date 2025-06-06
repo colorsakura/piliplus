@@ -71,7 +71,7 @@ class PgcRankItem extends StatelessWidget {
                     Row(
                       children: [
                         StatWidget(
-                          type: StatType.view,
+                          type: StatType.play,
                           value: item.stat!.view,
                         ),
                         const SizedBox(width: 8),

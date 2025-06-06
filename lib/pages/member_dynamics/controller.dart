@@ -55,7 +55,7 @@ class MemberDynamicsController
         mid: mid,
       );
 
-  Future<void> onRemove(dynamicId) async {
+  Future<void> onRemove(dynamic dynamicId) async {
     var res = await MsgHttp.removeDynamic(dynIdStr: dynamicId);
     if (res['status']) {
       loadingState

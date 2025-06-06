@@ -135,7 +135,7 @@ class ChatItem extends StatelessWidget {
   Widget messageContent({
     required BuildContext context,
     required ThemeData theme,
-    required content,
+    required dynamic content,
     required Color textColor,
   }) {
     try {
@@ -169,7 +169,7 @@ class ChatItem extends StatelessWidget {
     }
   }
 
-  Widget msgTypeCommonShareCard_14(content, Color textColor) {
+  Widget msgTypeCommonShareCard_14(dynamic content, Color textColor) {
     if (content['source'] == '直播') {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -209,7 +209,7 @@ class ChatItem extends StatelessWidget {
     }
   }
 
-  Widget msgTypeArticleCard_12(content, Color textColor) {
+  Widget msgTypeArticleCard_12(dynamic content, Color textColor) {
     return GestureDetector(
       onTap: () => Get.toNamed(
         '/articlePage',
@@ -443,7 +443,7 @@ class ChatItem extends StatelessWidget {
     );
   }
 
-  Widget msgTypeShareV2_7(content, Color textColor) {
+  Widget msgTypeShareV2_7(dynamic content, Color textColor) {
     String? type;
     GestureTapCallback onTap;
     switch (content['source']) {
@@ -589,7 +589,7 @@ class ChatItem extends StatelessWidget {
   }
 
   Widget msgTypeText_1({
-    required content,
+    required dynamic content,
     required Color textColor,
   }) {
     late final style = TextStyle(
@@ -717,7 +717,7 @@ class ChatItem extends StatelessWidget {
     );
   }
 
-  Widget msgTypePictureCard_13(content) {
+  Widget msgTypePictureCard_13(dynamic content) {
     return Center(
       child: ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: 400.0),

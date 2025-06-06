@@ -74,7 +74,7 @@ class _FollowPageState extends State<FollowPage> {
     );
   }
 
-  bool _isCustomTag(tagid) {
+  bool _isCustomTag(int? tagid) {
     return tagid != null && tagid != 0 && tagid != -10 && tagid != -2;
   }
 

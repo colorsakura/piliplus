@@ -150,8 +150,8 @@ class _PlDanmakuState extends State<PlDanmaku> {
     super.dispose();
   }
 
-  double _getFontSize(isFullScreen) =>
-      isFullScreen == false || widget.isPipMode == true
+  double _getFontSize(bool isFullScreen) =>
+      !isFullScreen || widget.isPipMode == true
           ? 15 * playerController.fontSize
           : 15 * playerController.fontSizeFS;
 

@@ -65,7 +65,7 @@ class FavPgcController
     SmartDialog.showToast(result['msg']);
   }
 
-  Future<void> onUpdateList(followStatus) async {
+  Future<void> onUpdateList(int followStatus) async {
     List<FavPgcItemModel> dataList = loadingState.value.data!;
     Set<FavPgcItemModel> updateList =
         dataList.where((item) => item.checked == true).toSet();
@@ -95,7 +95,7 @@ class FavPgcController
     SmartDialog.showToast(res['msg']);
   }
 
-  Future<void> onUpdate(index, followStatus, seasonId) async {
+  Future<void> onUpdate(int index, int followStatus, int? seasonId) async {
     var result = await VideoHttp.pgcUpdate(
       seasonId: [seasonId],
       status: followStatus,

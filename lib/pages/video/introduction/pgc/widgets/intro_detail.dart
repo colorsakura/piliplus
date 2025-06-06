@@ -110,7 +110,7 @@ class _IntroDetailState extends CommonCollapseSlidePageState<PgcIntroPanel> {
           spacing: 6,
           children: [
             StatWidget(
-              type: StatType.view,
+              type: StatType.play,
               value: widget.item.stat!.views,
             ),
             StatWidget(

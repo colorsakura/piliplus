@@ -82,7 +82,7 @@ class FollowController extends GetxController with GetTickerProviderStateMixin {
     }
   }
 
-  Future<void> onDelTag(tagid) async {
+  Future<void> onDelTag(int? tagid) async {
     final res = await MemberHttp.delFollowTag(tagid);
     if (res['status']) {
       followState.value = LoadingState.loading();

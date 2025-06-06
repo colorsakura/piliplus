@@ -75,7 +75,7 @@ class ArticleController extends ReplyController<MainListReply> {
     _queryContent();
   }
 
-  Future<bool> queryOpus(opusId) async {
+  Future<bool> queryOpus(String opusId) async {
     final res = await DynamicsHttp.opusDetail(opusId: opusId);
     if (res.isSuccess) {
       final opusData = res.data;
@@ -104,7 +104,7 @@ class ArticleController extends ReplyController<MainListReply> {
     return false;
   }
 
-  Future<bool> queryRead(cvid) async {
+  Future<bool> queryRead(int cvid) async {
     final res = await DynamicsHttp.articleView(cvId: cvid);
     if (res.isSuccess) {
       articleData = res.data;

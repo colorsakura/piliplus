@@ -82,18 +82,18 @@ class ArticleListItem extends StatelessWidget {
                     children: [
                       StatWidget(
                         value: item.stats?.view,
-                        textColor: theme.colorScheme.outline,
+                        color: theme.colorScheme.outline,
                         type: StatType.view,
                       ),
                       StatWidget(
                         type: StatType.like,
                         value: item.stats?.like,
-                        textColor: theme.colorScheme.outline,
+                        color: theme.colorScheme.outline,
                       ),
                       StatWidget(
                         type: StatType.reply,
                         value: item.stats?.reply,
-                        textColor: theme.colorScheme.outline,
+                        color: theme.colorScheme.outline,
                       ),
                     ],
                   ),

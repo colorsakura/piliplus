@@ -90,7 +90,7 @@ class FavArticleItem extends StatelessWidget {
                             StatWidget(
                               type: StatType.like,
                               value: item.stat!.like,
-                              textColor: theme.colorScheme.outline,
+                              color: theme.colorScheme.outline,
                             ),
                             Text(
                               '  ·  ${item.pubTime}',

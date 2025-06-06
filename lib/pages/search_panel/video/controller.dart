@@ -61,10 +61,10 @@ class SearchVideoController
     return false;
   }
 
-  void onPushDetail(resultList) {
+  void onPushDetail(List<SearchVideoItemModel>? resultList) {
     try {
       int? aid = int.tryParse(keyword);
-      if (aid != null && resultList.first.aid == aid) {
+      if (aid != null && resultList?.firstOrNull?.aid == aid) {
         PiliScheme.videoPush(aid, null, showDialog: false);
       }
     } catch (_) {}

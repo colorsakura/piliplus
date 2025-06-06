@@ -236,8 +236,8 @@ class VideoCardV extends StatelessWidget {
     return Row(
       children: [
         StatWidget(
+          type: StatType.play,
           value: videoItem.stat.view,
-          type: StatType.view,
         ),
         if (videoItem.goto != 'picture') ...[
           const SizedBox(width: 4),

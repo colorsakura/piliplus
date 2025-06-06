@@ -229,7 +229,7 @@ class _HorizontalMemberPageState extends State<HorizontalMemberPage> {
     return Row(
       children: [
         const SizedBox(width: 16),
-        _buildAvatar(memberInfoModel.face),
+        _buildAvatar(memberInfoModel.face!),
         const SizedBox(width: 10),
         Expanded(child: _buildInfo(theme, memberInfoModel)),
         const SizedBox(width: 16),
@@ -388,7 +388,7 @@ class _HorizontalMemberPageState extends State<HorizontalMemberPage> {
     );
   }
 
-  Hero _buildAvatar(face) => Hero(
+  Hero _buildAvatar(String face) => Hero(
         tag: face,
         child: GestureDetector(
           onTap: () {

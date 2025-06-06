@@ -214,7 +214,7 @@ class _WhisperDetailPageState
     );
   }
 
-  Widget _buildInputView(theme) {
+  Widget _buildInputView(ThemeData theme) {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 8),
       decoration: BoxDecoration(

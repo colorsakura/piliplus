@@ -45,7 +45,7 @@ class VideoIntroPanel extends StatefulWidget {
   final String heroTag;
   final Function showAiBottomSheet;
   final Function showEpisodes;
-  final ValueChanged onShowMemberPage;
+  final ValueChanged<int?> onShowMemberPage;
 
   @override
   State<VideoIntroPanel> createState() => _VideoIntroPanelState();
@@ -97,7 +97,7 @@ class VideoInfo extends StatefulWidget {
   final String heroTag;
   final Function showAiBottomSheet;
   final Function showEpisodes;
-  final ValueChanged onShowMemberPage;
+  final ValueChanged<int?> onShowMemberPage;
   final VideoIntroController videoIntroController;
 
   const VideoInfo({
@@ -555,18 +555,18 @@ class _VideoInfoState extends State<VideoInfo> {
                         spacing: 10,
                         children: [
                           StatWidget(
-                            type: StatType.view,
+                            type: StatType.play,
                             value: !widget.isLoading
                                 ? videoDetail.stat?.view
                                 : videoItem['stat']?.view,
-                            textColor: theme.colorScheme.outline,
+                            color: theme.colorScheme.outline,
                           ),
                           StatWidget(
                             type: StatType.danmaku,
                             value: !widget.isLoading
                                 ? videoDetail.stat?.danmaku
                                 : videoItem['stat']?.danmu,
-                            textColor: theme.colorScheme.outline,
+                            color: theme.colorScheme.outline,
                           ),
                           Text(
                             Utils.dateFormat(
