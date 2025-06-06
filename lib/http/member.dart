@@ -8,11 +8,11 @@ import 'package:PiliPlus/http/init.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/common/member/contribute_type.dart';
 import 'package:PiliPlus/models/dynamics/result.dart';
-import 'package:PiliPlus/models/member/coin.dart';
 import 'package:PiliPlus/models/member/info.dart';
 import 'package:PiliPlus/models/member/tags.dart';
 import 'package:PiliPlus/models_new/follow/data.dart';
 import 'package:PiliPlus/models_new/follow/list.dart';
+import 'package:PiliPlus/models_new/member/coin_like_arc/data.dart';
 import 'package:PiliPlus/models_new/member/search_archive/data.dart';
 import 'package:PiliPlus/models_new/space/space/data.dart';
 import 'package:PiliPlus/models_new/space/space_archive/data.dart';
@@ -605,62 +605,6 @@ class MemberHttp {
     }
   }
 
-  // 最近投币
-  static Future<LoadingState<List<MemberCoinsDataModel>?>> getRecentCoinVideo(
-      {required int mid}) async {
-    Map params = await WbiSign.makSign({
-      'mid': mid,
-      'gaia_source': 'main_web',
-      'web_location': 333.999,
-    });
-    var res = await Request().get(
-      Api.getRecentCoinVideoApi,
-      queryParameters: {
-        'vmid': mid,
-        'gaia_source': 'main_web',
-        'web_location': 333.999,
-        'w_rid': params['w_rid'],
-        'wts': params['wts'],
-      },
-    );
-    if (res.data['code'] == 0) {
-      List<MemberCoinsDataModel>? list = (res.data['data'] as List?)
-          ?.map<MemberCoinsDataModel>((e) => MemberCoinsDataModel.fromJson(e))
-          .toList();
-      return Success(list);
-    } else {
-      return Error(res.data['message']);
-    }
-  }
-
-  // 最近点赞
-  static Future<LoadingState<List<MemberCoinsDataModel>?>> getRecentLikeVideo(
-      {required int mid}) async {
-    Map params = await WbiSign.makSign({
-      'mid': mid,
-      'gaia_source': 'main_web',
-      'web_location': 333.999,
-    });
-    var res = await Request().get(
-      Api.getRecentLikeVideoApi,
-      queryParameters: {
-        'vmid': mid,
-        'gaia_source': 'main_web',
-        'web_location': 333.999,
-        'w_rid': params['w_rid'],
-        'wts': params['wts'],
-      },
-    );
-    if (res.data['code'] == 0) {
-      List<MemberCoinsDataModel>? list = (res.data['data']?['list'] as List?)
-          ?.map<MemberCoinsDataModel>((e) => MemberCoinsDataModel.fromJson(e))
-          .toList();
-      return Success(list);
-    } else {
-      return Error(res.data['message']);
-    }
-  }
-
   // 获取up播放数、点赞数
   static Future memberView({required int mid}) async {
     var res = await Request()
@@ -744,6 +688,44 @@ class MemberHttp {
     );
     if (res.data['code'] == 0) {
       return Success(UpowerRankData.fromJson(res.data['data']));
+    } else {
+      return Error(res.data['message']);
+    }
+  }
+
+  static Future<LoadingState<CoinLikeArcData>> coinArc({
+    required int mid,
+    required int page,
+  }) async {
+    var res = await Request().get(
+      Api.coinArc,
+      queryParameters: {
+        'pn': page,
+        'ps': 20,
+        'vmid': mid,
+      },
+    );
+    if (res.data['code'] == 0) {
+      return Success(CoinLikeArcData.fromJson(res.data['data']));
+    } else {
+      return Error(res.data['message']);
+    }
+  }
+
+  static Future<LoadingState<CoinLikeArcData>> likeArc({
+    required int mid,
+    required int page,
+  }) async {
+    var res = await Request().get(
+      Api.likeArc,
+      queryParameters: {
+        'pn': page,
+        'ps': 20,
+        'vmid': mid,
+      },
+    );
+    if (res.data['code'] == 0) {
+      return Success(CoinLikeArcData.fromJson(res.data['data']));
     } else {
       return Error(res.data['message']);
     }

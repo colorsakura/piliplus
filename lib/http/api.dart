@@ -876,4 +876,8 @@ class Api {
   static const String favFavFolder = '/x/v3/fav/folder/fav';
 
   static const String unfavFavFolder = '/x/v3/fav/folder/unfav';
+
+  static const String coinArc = '${HttpString.appBaseUrl}/x/v2/space/coinarc';
+
+  static const String likeArc = '${HttpString.appBaseUrl}/x/v2/space/likearc';
 }

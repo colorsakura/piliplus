@@ -2,7 +2,7 @@ import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/common/skeleton/video_card_v.dart';
 import 'package:PiliPlus/common/widgets/loading_widget/http_error.dart';
 import 'package:PiliPlus/http/loading_state.dart';
-import 'package:PiliPlus/models/member/coin.dart';
+import 'package:PiliPlus/models_new/member/coin_like_arc/item.dart';
 import 'package:PiliPlus/pages/member_coin/controller.dart';
 import 'package:PiliPlus/pages/member_coin/widgets/item.dart';
 import 'package:PiliPlus/utils/grid.dart';
@@ -59,7 +59,7 @@ class _MemberCoinPageState extends State<MemberCoinPage> {
     );
   }
 
-  Widget _buildBody(LoadingState<List<MemberCoinsDataModel>?> loadingState) {
+  Widget _buildBody(LoadingState<List<CoinLikeArcItem>?> loadingState) {
     return switch (loadingState) {
       Loading() => SliverGrid.builder(
           gridDelegate: SliverGridDelegateWithExtentAndRatio(
@@ -85,7 +85,10 @@ class _MemberCoinPageState extends State<MemberCoinPage> {
               ),
               itemCount: response!.length,
               itemBuilder: (context, index) {
-                return MemberCoinsItem(coinItem: response[index]);
+                if (index == response.length - 1) {
+                  _ctr.onLoadMore();
+                }
+                return MemberCoinLikeItem(item: response[index]);
               },
             )
           : HttpError(onReload: _ctr.onReload),

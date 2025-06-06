@@ -1,10 +1,11 @@
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/http/member.dart';
-import 'package:PiliPlus/models/member/coin.dart';
+import 'package:PiliPlus/models_new/member/coin_like_arc/data.dart';
+import 'package:PiliPlus/models_new/member/coin_like_arc/item.dart';
 import 'package:PiliPlus/pages/common/common_list_controller.dart';
 
-class MemberCoinController extends CommonListController<
-    List<MemberCoinsDataModel>?, MemberCoinsDataModel> {
+class MemberCoinController
+    extends CommonListController<CoinLikeArcData, CoinLikeArcItem> {
   final dynamic mid;
   MemberCoinController({this.mid});
 
@@ -15,6 +16,11 @@ class MemberCoinController extends CommonListController<
   }
 
   @override
-  Future<LoadingState<List<MemberCoinsDataModel>?>> customGetData() =>
-      MemberHttp.getRecentCoinVideo(mid: mid);
+  List<CoinLikeArcItem>? getDataList(CoinLikeArcData response) {
+    return response.item;
+  }
+
+  @override
+  Future<LoadingState<CoinLikeArcData>> customGetData() =>
+      MemberHttp.coinArc(mid: mid, page: page);
 }

@@ -6,18 +6,18 @@ import 'package:PiliPlus/common/widgets/stat/stat.dart';
 import 'package:PiliPlus/http/search.dart';
 import 'package:PiliPlus/models/common/badge_type.dart';
 import 'package:PiliPlus/models/common/stat_type.dart';
-import 'package:PiliPlus/models/member/coin.dart';
-import 'package:PiliPlus/utils/app_scheme.dart';
+import 'package:PiliPlus/models_new/member/coin_like_arc/item.dart';
+import 'package:PiliPlus/utils/id_utils.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
 
-class MemberCoinsItem extends StatelessWidget {
-  final MemberCoinsDataModel coinItem;
+class MemberCoinLikeItem extends StatelessWidget {
+  final CoinLikeArcItem item;
 
-  const MemberCoinsItem({
+  const MemberCoinLikeItem({
     super.key,
-    required this.coinItem,
+    required this.item,
   });
 
   @override
@@ -27,29 +27,29 @@ class MemberCoinsItem extends StatelessWidget {
       margin: EdgeInsets.zero,
       child: InkWell(
         onTap: () async {
-          if (coinItem.resourceType != 'ugc') {
-            if (coinItem.redirectUrl?.isNotEmpty == true) {
-              if (await PiliScheme.routePushFromUrl(coinItem.redirectUrl!,
-                  selfHandle: true)) {
-                return;
-              }
+          if (item.isPgc == true) {
+            if (item.uri?.isNotEmpty == true) {
+              PageUtils.viewPgcFromUri(item.uri!);
             }
+            return;
           }
-          int? cid =
-              await SearchHttp.ab2c(aid: coinItem.aid, bvid: coinItem.bvid);
-          if (cid != null) {
-            PageUtils.toVideoPage(
-              'bvid=${coinItem.bvid}&cid=$cid',
-              arguments: {
-                'videoItem': coinItem,
-                'heroTag': Utils.makeHeroTag(coinItem.aid)
-              },
-            );
+
+          if (item.param != null) {
+            int? cid = await SearchHttp.ab2c(aid: item.param);
+            if (cid != null) {
+              PageUtils.toVideoPage(
+                'bvid=${IdUtils.av2bv(int.parse(item.param!))}&cid=$cid',
+                arguments: {
+                  'videoItem': item,
+                  'heroTag': Utils.makeHeroTag(item.param)
+                },
+              );
+            }
           }
         },
         onLongPress: () => imageSaveDialog(
-          title: coinItem.title,
-          cover: coinItem.cover,
+          title: item.title,
+          cover: item.cover,
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -63,16 +63,16 @@ class MemberCoinsItem extends StatelessWidget {
                   clipBehavior: Clip.none,
                   children: [
                     NetworkImgLayer(
-                      src: coinItem.cover,
+                      src: item.cover,
                       width: maxWidth,
                       height: maxHeight,
                     ),
-                    if (coinItem.duration > 0)
+                    if (item.duration != null && item.duration! > 0)
                       PBadge(
                         bottom: 6,
                         right: 6,
                         type: PBadgeType.gray,
-                        text: Utils.timeFormat(coinItem.duration),
+                        text: Utils.timeFormat(item.duration),
                       )
                   ],
                 );
@@ -85,7 +85,7 @@ class MemberCoinsItem extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    '${coinItem.title}\n',
+                    '${item.title}\n',
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -94,17 +94,17 @@ class MemberCoinsItem extends StatelessWidget {
                     children: [
                       StatWidget(
                         type: StatType.play,
-                        value: coinItem.stat.view,
+                        value: item.play,
                       ),
                       const SizedBox(width: 8),
                       StatWidget(
                         type: StatType.danmaku,
-                        value: coinItem.stat.danmu,
+                        value: item.danmaku,
                       ),
                       const Spacer(),
                       Text(
                         Utils.customStampStr(
-                            timestamp: coinItem.pubdate, date: 'MM-DD'),
+                            timestamp: item.ctime, date: 'MM-DD'),
                         style: TextStyle(
                           fontSize: 11,
                           color: Theme.of(context).colorScheme.outline,
