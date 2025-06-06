@@ -147,16 +147,14 @@ class _UpowerRankPageState extends State<UpowerRankPage>
       ThemeData theme, LoadingState<List<UpowerRankInfo>?> loadingState) {
     late final width = MediaQuery.textScalerOf(context).scale(32);
     return switch (loadingState) {
-      Loading() => widget.privilegeType == null
-          ? const SliverToBoxAdapter(child: LinearProgressIndicator())
-          : const SliverToBoxAdapter(
-              child: SizedBox(
-                height: 125,
-                child: Center(
-                  child: CircularProgressIndicator(),
-                ),
-              ),
+      Loading() => const SliverToBoxAdapter(
+          child: SizedBox(
+            height: 125,
+            child: Center(
+              child: CircularProgressIndicator(),
             ),
+          ),
+        ),
       Success<List<UpowerRankInfo>?>(:var response) =>
         response?.isNotEmpty == true
             ? SliverList.builder(

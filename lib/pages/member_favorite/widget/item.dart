@@ -88,16 +88,12 @@ class MemberFavItem extends StatelessWidget {
                             right: 6,
                             top: 6,
                             text: '合集',
-                            fontSize: 10,
-                            isBold: false,
                           )
                         else if (item.type == 11)
                           const PBadge(
                             right: 6,
                             top: 6,
                             text: '收藏夹',
-                            fontSize: 10,
-                            isBold: false,
                           ),
                       ],
                     );
