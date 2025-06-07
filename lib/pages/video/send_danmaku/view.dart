@@ -478,7 +478,7 @@ class _SendDanmakuPanelState extends CommonPublishPageState<SendDanmakuPanel> {
       widget.callback(
         DanmakuContentItem(
           editController.text,
-          color: _color.value,
+          color: isColorful ? Colors.white : _color.value,
           type: switch (_mode.value) {
             5 => DanmakuItemType.top,
             4 => DanmakuItemType.bottom,
