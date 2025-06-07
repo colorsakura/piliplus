@@ -225,23 +225,28 @@ class PercentageChip extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
             child: Row(
-              // mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              spacing: 8,
               children: [
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(label, maxLines: 1, overflow: TextOverflow.ellipsis),
-                    if (selected)
-                      Padding(
-                        padding: const EdgeInsets.only(left: 4),
-                        child: Icon(
+                Expanded(
+                  child: Row(
+                    spacing: 4,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Flexible(
+                        child: Text(
+                          label,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                      if (selected)
+                        Icon(
                           Icons.check_circle,
                           size: 12,
                           color: colorScheme.onPrimaryContainer,
                         ),
-                      ),
-                  ],
+                    ],
+                  ),
                 ),
                 if (percentage != null)
                   Text('${(percentage! * 100).toStringAsFixed(0)}%'),
