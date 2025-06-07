@@ -326,7 +326,7 @@ class _PostPanelState extends CommonCollapseSlidePageState<PostPanel> {
                                     0,
                                     (list![index].segment.first * 1000)
                                             .toInt() -
-                                        1,
+                                        2,
                                   );
                                   await widget
                                       .plPlayerController.videoPlayerController!
@@ -341,7 +341,7 @@ class _PostPanelState extends CommonCollapseSlidePageState<PostPanel> {
                                   }
                                   if (start != 0) {
                                     await Future.delayed(
-                                        const Duration(seconds: 1));
+                                        const Duration(seconds: 2));
                                   }
                                   widget
                                       .plPlayerController.videoPlayerController!
