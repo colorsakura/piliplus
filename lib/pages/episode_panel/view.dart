@@ -345,6 +345,7 @@ class _EpisodePanelState extends CommonSlidePageState<EpisodePanel> {
   }) {
     late String title;
     String? cover;
+    String? bvid;
     num? duration;
     int? pubdate;
     int? view;
@@ -360,12 +361,14 @@ class _EpisodePanelState extends CommonSlidePageState<EpisodePanel> {
       case ugc.EpisodeItem item:
         title = item.title!;
         cover = item.arc?.pic;
+        bvid = item.bvid;
         duration = item.arc?.duration;
         pubdate = item.arc?.pubdate;
         view = item.arc?.stat?.view;
         danmaku = item.arc?.stat?.danmaku;
         break;
       case pgc.EpisodeItem item:
+        bvid = item.bvid;
         if (item.longTitle != null && item.longTitle != "") {
           dynamic leading = item.title ?? index + 1;
           title =
@@ -424,7 +427,7 @@ class _EpisodePanelState extends CommonSlidePageState<EpisodePanel> {
           },
           onLongPress: () {
             if (cover?.isNotEmpty == true) {
-              imageSaveDialog(title: title, cover: cover);
+              imageSaveDialog(title: title, cover: cover, bvid: bvid);
             }
           },
           child: Padding(

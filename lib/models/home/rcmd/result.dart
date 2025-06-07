@@ -12,7 +12,7 @@ class RecVideoItemAppModel extends BaseRecVideoItemModel {
 
   RecVideoItemAppModel.fromJson(Map<String, dynamic> json) {
     aid = json['player_args']?['aid'] ?? int.tryParse(json['param'] ?? '0');
-    bvid = json['bvid'] ?? IdUtils.av2bv(id!);
+    bvid = json['bvid'] ?? IdUtils.av2bv(aid!);
     cid = json['player_args']?['cid'];
     cover = json['cover'];
     stat = RcmdStat.fromJson(json);
