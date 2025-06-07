@@ -370,36 +370,38 @@ class _LiveRoomPageState extends State<LiveRoomPage>
           RoomInfoH5Data? roomInfoH5 = _liveRoomController.roomInfoH5.value;
           return roomInfoH5 == null
               ? const SizedBox.shrink()
-              : Row(
-                  children: [
-                    GestureDetector(
-                      onTap: () => Get.toNamed(
-                          '/member?mid=${roomInfoH5.roomInfo?.uid}'),
-                      child: NetworkImgLayer(
+              : GestureDetector(
+                  behavior: HitTestBehavior.opaque,
+                  onTap: () =>
+                      Get.toNamed('/member?mid=${roomInfoH5.roomInfo?.uid}'),
+                  child: Row(
+                    spacing: 10,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      NetworkImgLayer(
                         width: 34,
                         height: 34,
                         type: ImageType.avatar,
                         src: roomInfoH5.anchorInfo!.baseInfo!.face,
                       ),
-                    ),
-                    const SizedBox(width: 10),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          roomInfoH5.anchorInfo!.baseInfo!.uname!,
-                          style: const TextStyle(fontSize: 14),
-                        ),
-                        const SizedBox(height: 1),
-                        if (roomInfoH5.watchedShow?.textLarge?.isNotEmpty ==
-                            true)
+                      Column(
+                        spacing: 1,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
                           Text(
-                            roomInfoH5.watchedShow!.textLarge!,
-                            style: const TextStyle(fontSize: 12),
+                            roomInfoH5.anchorInfo!.baseInfo!.uname!,
+                            style: const TextStyle(fontSize: 14),
                           ),
-                      ],
-                    ),
-                  ],
+                          if (roomInfoH5.watchedShow?.textLarge?.isNotEmpty ==
+                              true)
+                            Text(
+                              roomInfoH5.watchedShow!.textLarge!,
+                              style: const TextStyle(fontSize: 12),
+                            ),
+                        ],
+                      ),
+                    ],
+                  ),
                 );
         },
       ),

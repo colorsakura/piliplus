@@ -91,26 +91,7 @@ class LiveRoomController extends GetxController {
     if (res['status']) {
       RoomPlayInfoData data = res['data'];
       if (data.liveStatus != 1) {
-        Get.dialog(
-          AlertDialog(
-            title: const Text('当前直播间未开播'),
-            actions: [
-              TextButton(
-                onPressed: Get.back,
-                child: Text(
-                  '关闭',
-                  style: TextStyle(color: Get.theme.colorScheme.outline),
-                ),
-              ),
-              TextButton(
-                onPressed: () => Get
-                  ..back()
-                  ..back(),
-                child: const Text('退出'),
-              ),
-            ],
-          ),
-        );
+        _dialog(title: '当前直播间未开播');
         return;
       }
       isPortrait.value = data.isPortrait ?? false;
@@ -145,7 +126,36 @@ class LiveRoomController extends GetxController {
         roomId,
         heroTag,
       );
+    } else {
+      if (res['msg'] != null) {
+        _dialog(title: res['msg']);
+      }
     }
+  }
+
+  void _dialog({
+    required String title,
+  }) {
+    Get.dialog(
+      AlertDialog(
+        title: Text(title),
+        actions: [
+          TextButton(
+            onPressed: Get.back,
+            child: Text(
+              '关闭',
+              style: TextStyle(color: Get.theme.colorScheme.outline),
+            ),
+          ),
+          TextButton(
+            onPressed: () => Get
+              ..back()
+              ..back(),
+            child: const Text('退出'),
+          ),
+        ],
+      ),
+    );
   }
 
   LiveMessageStream? msgStream;

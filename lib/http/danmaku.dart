@@ -35,7 +35,7 @@ class DanmakuHttp {
       //'aid': aid,
       'bvid': bvid,
       'progress': progress,
-      'color': colorful == true ? null : color,
+      'color': colorful == true ? 16777215 : color,
       'fontsize': fontsize,
       'pool': pool,
       'rnd': DateTime.now().microsecondsSinceEpoch,

@@ -47,19 +47,26 @@ class BottomControl extends StatelessWidget {
           ),
           const Spacer(),
           Obx(
-            () => IconButton(
-              onPressed: () {
-                plPlayerController.isOpenDanmu.value =
-                    !plPlayerController.isOpenDanmu.value;
-                GStorage.setting.put(SettingBoxKey.enableShowDanmaku,
-                    plPlayerController.isOpenDanmu.value);
-              },
-              icon: Icon(
-                size: 18,
-                plPlayerController.isOpenDanmu.value
-                    ? Icons.subtitles_outlined
-                    : Icons.subtitles_off_outlined,
-                color: Colors.white,
+            () => SizedBox(
+              width: 35,
+              height: 35,
+              child: IconButton(
+                style: ButtonStyle(
+                  padding: WidgetStateProperty.all(EdgeInsets.zero),
+                ),
+                onPressed: () {
+                  plPlayerController.isOpenDanmu.value =
+                      !plPlayerController.isOpenDanmu.value;
+                  GStorage.setting.put(SettingBoxKey.enableShowDanmaku,
+                      plPlayerController.isOpenDanmu.value);
+                },
+                icon: Icon(
+                  size: 18,
+                  plPlayerController.isOpenDanmu.value
+                      ? Icons.subtitles_outlined
+                      : Icons.subtitles_off_outlined,
+                  color: Colors.white,
+                ),
               ),
             ),
           ),

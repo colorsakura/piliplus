@@ -30,6 +30,7 @@ class LiveHeaderControl extends StatelessWidget {
       automaticallyImplyLeading: false,
       titleSpacing: 14,
       title: Row(
+        spacing: 10,
         children: [
           if (title != null)
             Expanded(
@@ -55,72 +56,92 @@ class LiveHeaderControl extends StatelessWidget {
             )
           else
             const Spacer(),
-          IconButton(
-            tooltip: '发弹幕',
-            style: ButtonStyle(
-              padding: WidgetStateProperty.all(EdgeInsets.zero),
-            ),
-            onPressed: onSendDanmaku,
-            icon: const Icon(
-              Icons.comment_outlined,
-              size: 18,
-              color: Colors.white,
-            ),
-          ),
-          Obx(
-            () => IconButton(
-              onPressed: plPlayerController.setOnlyPlayAudio,
-              icon: plPlayerController.onlyPlayAudio.value
-                  ? const Icon(
-                      size: 18,
-                      MdiIcons.musicCircle,
-                      color: Colors.white,
-                    )
-                  : const Icon(
-                      size: 18,
-                      MdiIcons.musicCircleOutline,
-                      color: Colors.white,
-                    ),
-            ),
-          ),
-          const SizedBox(width: 10),
-          if (Platform.isAndroid) ...[
-            IconButton(
-              tooltip: '画中画',
+          SizedBox(
+            width: 35,
+            height: 35,
+            child: IconButton(
+              tooltip: '发弹幕',
               style: ButtonStyle(
                 padding: WidgetStateProperty.all(EdgeInsets.zero),
               ),
-              onPressed: () async {
-                try {
-                  var floating = Floating();
-                  if ((await floating.isPipAvailable) == true) {
-                    plPlayerController.hiddenControls(false);
-                    floating.enable(
-                      plPlayerController.direction.value == 'vertical'
-                          ? const EnableManual(aspectRatio: Rational.vertical())
-                          : const EnableManual(),
-                    );
-                  }
-                } catch (_) {}
-              },
+              onPressed: onSendDanmaku,
               icon: const Icon(
-                Icons.picture_in_picture_outlined,
+                Icons.comment_outlined,
                 size: 18,
                 color: Colors.white,
               ),
             ),
-            const SizedBox(width: 10),
-          ],
-          IconButton(
-            onPressed: () => PageUtils.scheduleExit(
-              context,
-              plPlayerController.isFullScreen.value,
-              true,
+          ),
+          Obx(
+            () => SizedBox(
+              width: 35,
+              height: 35,
+              child: IconButton(
+                onPressed: plPlayerController.setOnlyPlayAudio,
+                style: ButtonStyle(
+                  padding: WidgetStateProperty.all(EdgeInsets.zero),
+                ),
+                icon: plPlayerController.onlyPlayAudio.value
+                    ? const Icon(
+                        size: 18,
+                        MdiIcons.musicCircle,
+                        color: Colors.white,
+                      )
+                    : const Icon(
+                        size: 18,
+                        MdiIcons.musicCircleOutline,
+                        color: Colors.white,
+                      ),
+              ),
             ),
-            icon: const Icon(
-              size: 18,
-              Icons.schedule,
-              color: Colors.white,
+          ),
+          if (Platform.isAndroid)
+            SizedBox(
+              width: 35,
+              height: 35,
+              child: IconButton(
+                tooltip: '画中画',
+                style: ButtonStyle(
+                  padding: WidgetStateProperty.all(EdgeInsets.zero),
+                ),
+                onPressed: () async {
+                  try {
+                    var floating = Floating();
+                    if ((await floating.isPipAvailable) == true) {
+                      plPlayerController.hiddenControls(false);
+                      floating.enable(
+                        plPlayerController.direction.value == 'vertical'
+                            ? const EnableManual(
+                                aspectRatio: Rational.vertical())
+                            : const EnableManual(),
+                      );
+                    }
+                  } catch (_) {}
+                },
+                icon: const Icon(
+                  Icons.picture_in_picture_outlined,
+                  size: 18,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          SizedBox(
+            width: 35,
+            height: 35,
+            child: IconButton(
+              style: ButtonStyle(
+                padding: WidgetStateProperty.all(EdgeInsets.zero),
+              ),
+              onPressed: () => PageUtils.scheduleExit(
+                context,
+                plPlayerController.isFullScreen.value,
+                true,
+              ),
+              icon: const Icon(
+                size: 18,
+                Icons.schedule,
+                color: Colors.white,
+              ),
             ),
           ),
         ],

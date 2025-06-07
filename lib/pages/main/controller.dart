@@ -8,9 +8,11 @@ import 'package:PiliPlus/models/common/msg/msg_unread_type.dart';
 import 'package:PiliPlus/models/common/nav_bar_config.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/utils.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class MainController extends GetxController {
+class MainController extends GetxController
+    with GetSingleTickerProviderStateMixin {
   List<NavigationBarType> navigationBars = <NavigationBarType>[];
   RxInt dynCount = 0.obs;
 
@@ -43,6 +45,14 @@ class MainController extends GetxController {
     }
 
     setNavBarConfig();
+
+    controller = mainTabBarView
+        ? TabController(
+            vsync: this,
+            initialIndex: selectedIndex.value,
+            length: navigationBars.length,
+          )
+        : PageController(initialPage: selectedIndex.value);
 
     hideTabBar =
         GStorage.setting.get(SettingBoxKey.hideTabBar, defaultValue: true);
@@ -174,6 +184,7 @@ class MainController extends GetxController {
   @override
   void onClose() {
     bottomBarStream?.close();
+    controller.dispose();
     super.onClose();
   }
 }

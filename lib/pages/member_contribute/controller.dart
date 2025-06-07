@@ -1,14 +1,12 @@
 import 'dart:math';
 
-import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models_new/space/space/tab2.dart';
-import 'package:PiliPlus/pages/common/common_data_controller.dart';
 import 'package:PiliPlus/pages/member/controller.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class MemberContributeCtr extends CommonDataController
+class MemberContributeCtr extends GetxController
     with GetSingleTickerProviderStateMixin {
   MemberContributeCtr({
     required this.heroTag,
@@ -47,11 +45,6 @@ class MemberContributeCtr extends CommonDataController
         );
       }
     }
-  }
-
-  @override
-  Future<LoadingState> customGetData() {
-    throw UnimplementedError();
   }
 
   @override

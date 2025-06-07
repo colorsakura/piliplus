@@ -1451,6 +1451,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
       if (_shouldShowSeasonPanel) '播放列表',
     ];
     if (videoDetailController.tabCtr.length != tabs.length) {
+      videoDetailController.tabCtr.dispose();
       videoDetailController.tabCtr = TabController(
         vsync: this,
         length: tabs.length,

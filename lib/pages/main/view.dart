@@ -37,7 +37,7 @@ class MainApp extends StatefulWidget {
 }
 
 class _MainAppState extends State<MainApp>
-    with SingleTickerProviderStateMixin, RouteAware, WidgetsBindingObserver {
+    with RouteAware, WidgetsBindingObserver {
   final MainController _mainController = Get.put(MainController());
   late final _homeController = Get.put(HomeController());
   late final _dynamicController = Get.put(DynamicsController());
@@ -50,13 +50,6 @@ class _MainAppState extends State<MainApp>
   void initState() {
     super.initState();
     _lastSelectTime = DateTime.now().millisecondsSinceEpoch;
-    _mainController.controller = _mainController.mainTabBarView
-        ? TabController(
-            vsync: this,
-            initialIndex: _mainController.selectedIndex.value,
-            length: _mainController.navigationBars.length,
-          )
-        : PageController(initialPage: _mainController.selectedIndex.value);
     enableMYBar =
         GStorage.setting.get(SettingBoxKey.enableMYBar, defaultValue: true);
     useSideBar =
