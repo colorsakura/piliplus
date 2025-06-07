@@ -108,6 +108,7 @@ class VideoCardV extends StatelessWidget {
               onLongPress: () => imageSaveDialog(
                 title: videoItem.title,
                 cover: videoItem.cover,
+                bvid: videoItem.bvid,
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,

@@ -93,6 +93,7 @@ class HistoryItem extends StatelessWidget {
         imageSaveDialog(
           title: item.title,
           cover: item.cover,
+          bvid: bvid,
         );
       },
       child: Stack(

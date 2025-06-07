@@ -54,17 +54,19 @@ Widget module(
               onLongPress: isNoneMajor
                   ? null
                   : () {
-                      late String? title, cover;
+                      String? title, cover, bvid;
                       late var origMajor = orig.modules.moduleDynamic?.major;
                       late var major = item.modules.moduleDynamic?.major;
                       switch (orig.type) {
                         case 'DYNAMIC_TYPE_AV':
                           title = origMajor?.archive?.title;
                           cover = origMajor?.archive?.cover;
+                          bvid = origMajor?.archive?.bvid;
                           break;
                         case 'DYNAMIC_TYPE_UGC_SEASON':
                           title = origMajor?.ugcSeason?.title;
                           cover = origMajor?.ugcSeason?.cover;
+                          bvid = origMajor?.ugcSeason?.bvid;
                           break;
                         case 'DYNAMIC_TYPE_PGC' || 'DYNAMIC_TYPE_PGC_UNION':
                           title = origMajor?.pgc?.title;
@@ -84,6 +86,7 @@ Widget module(
                       imageSaveDialog(
                         title: title,
                         cover: cover,
+                        bvid: bvid,
                       );
                     },
               child: Container(

@@ -1,6 +1,7 @@
 import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/common/widgets/button/icon_button.dart';
 import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
+import 'package:PiliPlus/http/user.dart';
 import 'package:PiliPlus/utils/download.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -9,12 +10,31 @@ import 'package:get/get.dart';
 void imageSaveDialog({
   required String? title,
   required String? cover,
+  dynamic aid,
+  String? bvid,
 }) {
   final double imgWidth = Get.mediaQuery.size.shortestSide - 8 * 2;
   SmartDialog.show(
     animationType: SmartAnimationType.centerScale_otherSlide,
     builder: (context) {
       final theme = Theme.of(context);
+      late final iconColor = theme.colorScheme.onSurfaceVariant;
+
+      Widget iconBtn({
+        String? tooltip,
+        required IconData icon,
+        required VoidCallback? onPressed,
+      }) {
+        return iconButton(
+          context: context,
+          onPressed: onPressed,
+          iconSize: 20,
+          icon: icon,
+          bgColor: Colors.transparent,
+          iconColor: iconColor,
+        );
+      }
+
       return Container(
         width: imgWidth,
         margin: const EdgeInsets.symmetric(horizontal: StyleString.safeSpace),
@@ -66,28 +86,36 @@ void imageSaveDialog({
               padding: const EdgeInsets.fromLTRB(12, 10, 8, 10),
               child: Row(
                 children: [
-                  Expanded(
-                    child: SelectableText(
-                      title ?? '',
-                      style: theme.textTheme.titleSmall,
+                  if (title != null)
+                    Expanded(
+                      child: SelectableText(
+                        title,
+                        style: theme.textTheme.titleSmall,
+                      ),
+                    )
+                  else
+                    const Spacer(),
+                  if (aid != null || bvid != null)
+                    iconBtn(
+                      tooltip: '稍后再看',
+                      onPressed: () => {
+                        SmartDialog.dismiss(),
+                        UserHttp.toViewLater(aid: aid, bvid: bvid).then(
+                          (res) => SmartDialog.showToast(res['msg']),
+                        ),
+                      },
+                      icon: Icons.watch_later_outlined,
                     ),
-                  ),
                   if (cover?.isNotEmpty == true) ...[
-                    const SizedBox(width: 4),
-                    iconButton(
-                      context: context,
+                    iconBtn(
                       tooltip: '分享',
                       onPressed: () {
                         SmartDialog.dismiss();
                         DownloadUtils.onShareImg(cover!);
                       },
-                      iconSize: 20,
                       icon: Icons.share,
-                      bgColor: Colors.transparent,
-                      iconColor: theme.colorScheme.onSurfaceVariant,
                     ),
-                    iconButton(
-                      context: context,
+                    iconBtn(
                       tooltip: '保存封面图',
                       onPressed: () async {
                         bool saveStatus = await DownloadUtils.downloadImg(
@@ -98,10 +126,7 @@ void imageSaveDialog({
                           SmartDialog.dismiss();
                         }
                       },
-                      iconSize: 20,
                       icon: Icons.download,
-                      bgColor: Colors.transparent,
-                      iconColor: theme.colorScheme.onSurfaceVariant,
                     ),
                   ],
                 ],

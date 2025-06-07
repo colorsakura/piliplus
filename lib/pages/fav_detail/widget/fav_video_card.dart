@@ -60,6 +60,7 @@ class FavVideoCardH extends StatelessWidget {
               () => imageSaveDialog(
                     title: item.title,
                     cover: item.cover,
+                    bvid: item.bvid,
                   ),
       child: Padding(
         padding: const EdgeInsets.symmetric(

@@ -19,7 +19,6 @@ class FavDetailItemModel with MultiSelectData {
   int? ctime;
   int? pubtime;
   int? favTime;
-  String? bvId;
   String? bvid;
   Ogv? ogv;
   Ugc? ugc;
@@ -40,7 +39,6 @@ class FavDetailItemModel with MultiSelectData {
     this.ctime,
     this.pubtime,
     this.favTime,
-    this.bvId,
     this.bvid,
     this.ogv,
     this.ugc,
@@ -67,8 +65,7 @@ class FavDetailItemModel with MultiSelectData {
         ctime: json['ctime'] as int?,
         pubtime: json['pubtime'] as int?,
         favTime: json['fav_time'] as int?,
-        bvId: json['bv_id'] as String?,
-        bvid: json['bvid'] as String?,
+        bvid: json['bvid'] ?? json['bv_id'],
         ogv: json['ogv'] == null ? null : Ogv.fromJson(json['ogv']),
         ugc: json['ugc'] == null
             ? null

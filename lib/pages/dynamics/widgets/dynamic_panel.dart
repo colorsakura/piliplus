@@ -104,17 +104,20 @@ class DynamicPanel extends StatelessWidget {
     BuildContext context,
     Function(BuildContext) morePanel,
   ) {
-    late String? title;
-    late String? cover;
+    String? title;
+    String? cover;
+    String? bvid;
     late final major = item.modules.moduleDynamic?.major;
     switch (item.type) {
       case 'DYNAMIC_TYPE_AV':
         title = major?.archive?.title;
         cover = major?.archive?.cover;
+        bvid = major?.archive?.bvid;
         break;
       case 'DYNAMIC_TYPE_UGC_SEASON':
         title = major?.ugcSeason?.title;
         cover = major?.ugcSeason?.cover;
+        bvid = major?.ugcSeason?.bvid;
         break;
       case 'DYNAMIC_TYPE_PGC' || 'DYNAMIC_TYPE_PGC_UNION':
         title = major?.pgc?.title;
@@ -135,6 +138,7 @@ class DynamicPanel extends StatelessWidget {
     imageSaveDialog(
       title: title,
       cover: cover,
+      bvid: bvid,
     );
   }
 }

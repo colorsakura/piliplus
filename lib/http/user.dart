@@ -130,15 +130,13 @@ class UserHttp {
 
   // 稍后再看
   static Future toViewLater({String? bvid, dynamic aid}) async {
-    var data = {'csrf': Accounts.main.csrf};
-    if (bvid != null) {
-      data['bvid'] = bvid;
-    } else if (aid != null) {
-      data['aid'] = aid;
-    }
     var res = await Request().post(
       Api.toViewLater,
-      queryParameters: data,
+      queryParameters: {
+        if (aid != null) 'aid': aid,
+        if (bvid != null) 'bvid': bvid,
+        'csrf': Accounts.main.csrf,
+      },
     );
     if (res.data['code'] == 0) {
       return {'status': true, 'msg': 'yeah！稍后再看'};

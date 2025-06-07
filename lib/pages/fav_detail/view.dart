@@ -90,16 +90,24 @@ class _FavDetailPageState extends State<FavDetailPage> {
   Widget _buildHeader(ThemeData theme) {
     return SliverAppBar.medium(
       leading: _favDetailController.enableMultiSelect.value
-          ? IconButton(
-              tooltip: '取消',
-              onPressed: _favDetailController.handleSelect,
-              icon: const Icon(Icons.close_outlined),
+          ? Row(
+              children: [
+                IconButton(
+                  tooltip: '取消',
+                  onPressed: _favDetailController.handleSelect,
+                  icon: const Icon(Icons.close_outlined),
+                ),
+                Text(
+                  '已选: ${_favDetailController.checkedCount.value}',
+                  style: const TextStyle(fontSize: 15),
+                ),
+              ],
             )
           : null,
       expandedHeight: kToolbarHeight + 130,
       pinned: true,
       title: _favDetailController.enableMultiSelect.value
-          ? Text('已选: ${_favDetailController.checkedCount.value}')
+          ? null
           : Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -288,7 +296,6 @@ class _FavDetailPageState extends State<FavDetailPage> {
       fontSize: 12.5,
       color: theme.colorScheme.outline,
     );
-    final item = _favDetailController.item.value;
     return FlexibleSpaceBar(
       background: Padding(
         padding: EdgeInsets.only(
@@ -300,97 +307,103 @@ class _FavDetailPageState extends State<FavDetailPage> {
         child: SizedBox(
           height: 110,
           child: Obx(
-            () => Row(
-              spacing: 12,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Stack(
-                  clipBehavior: Clip.none,
-                  children: [
-                    Hero(
-                      tag: _favDetailController.heroTag,
-                      child: NetworkImgLayer(
-                        width: 176,
-                        height: 110,
-                        src: item.cover,
-                      ),
-                    ),
-                    Positioned(
-                      right: 6,
-                      top: 6,
-                      child: Obx(() {
-                        if (_favDetailController.isOwner.value != false) {
-                          return const SizedBox.shrink();
-                        }
-                        bool isFav =
-                            _favDetailController.item.value.favState == 1;
-                        return iconButton(
-                          context: context,
-                          size: 28,
-                          iconSize: 18,
-                          tooltip: '${isFav ? '取消' : ''}收藏',
-                          onPressed: () => _favDetailController.onFav(isFav),
-                          icon: isFav ? Icons.favorite : Icons.favorite_border,
-                          bgColor:
-                              isFav ? null : theme.colorScheme.onInverseSurface,
-                          iconColor:
-                              isFav ? null : theme.colorScheme.onSurfaceVariant,
-                        );
-                      }),
-                    )
-                  ],
-                ),
-                if (item.title != null)
-                  Expanded(
-                    child: Column(
-                      spacing: 4,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          item.title!,
-                          style: TextStyle(
-                            fontSize: theme.textTheme.titleMedium!.fontSize,
-                            fontWeight: FontWeight.bold,
-                          ),
+            () {
+              final item = _favDetailController.item.value;
+              return Row(
+                spacing: 12,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Stack(
+                    clipBehavior: Clip.none,
+                    children: [
+                      Hero(
+                        tag: _favDetailController.heroTag,
+                        child: NetworkImgLayer(
+                          width: 176,
+                          height: 110,
+                          src: item.cover,
                         ),
-                        GestureDetector(
-                          onTap: () =>
-                              Get.toNamed('/member?mid=${item.upper!.mid}'),
-                          child: Text(
-                            item.upper!.name!,
+                      ),
+                      Positioned(
+                        right: 6,
+                        top: 6,
+                        child: Obx(() {
+                          if (_favDetailController.isOwner.value != false) {
+                            return const SizedBox.shrink();
+                          }
+                          bool isFav =
+                              _favDetailController.item.value.favState == 1;
+                          return iconButton(
+                            context: context,
+                            size: 28,
+                            iconSize: 18,
+                            tooltip: '${isFav ? '取消' : ''}收藏',
+                            onPressed: () => _favDetailController.onFav(isFav),
+                            icon:
+                                isFav ? Icons.favorite : Icons.favorite_border,
+                            bgColor: isFav
+                                ? null
+                                : theme.colorScheme.onInverseSurface,
+                            iconColor: isFav
+                                ? null
+                                : theme.colorScheme.onSurfaceVariant,
+                          );
+                        }),
+                      )
+                    ],
+                  ),
+                  if (item.title != null)
+                    Expanded(
+                      child: Column(
+                        spacing: 4,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            item.title!,
                             style: TextStyle(
-                              color: theme.colorScheme.primary,
+                              fontSize: theme.textTheme.titleMedium!.fontSize,
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
-                        ),
-                        if (item.intro?.isNotEmpty == true)
-                          Text(
-                            item.intro!,
-                            style: style,
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        if (item.attr != null) ...[
-                          Expanded(
-                            child: Align(
-                              alignment: Alignment.bottomLeft,
-                              child: Text(
-                                '共${item.mediaCount}条视频 · ${Utils.isPublicFavText(item.attr)}',
-                                textAlign: TextAlign.end,
-                                style: style,
+                          GestureDetector(
+                            onTap: () =>
+                                Get.toNamed('/member?mid=${item.upper!.mid}'),
+                            child: Text(
+                              item.upper!.name!,
+                              style: TextStyle(
+                                color: theme.colorScheme.primary,
                               ),
                             ),
                           ),
+                          if (item.intro?.isNotEmpty == true)
+                            Text(
+                              item.intro!,
+                              style: style,
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          if (item.attr != null) ...[
+                            Expanded(
+                              child: Align(
+                                alignment: Alignment.bottomLeft,
+                                child: Text(
+                                  '共${item.mediaCount}条视频 · ${Utils.isPublicFavText(item.attr)}',
+                                  textAlign: TextAlign.end,
+                                  style: style,
+                                ),
+                              ),
+                            ),
+                          ],
                         ],
-                      ],
-                    ),
-                  )
-                else
-                  SizedBox.shrink(
-                    key: ValueKey(_favDetailController.item.value),
-                  )
-              ],
-            ),
+                      ),
+                    )
+                  else
+                    SizedBox.shrink(
+                      key: ValueKey(_favDetailController.item.value),
+                    )
+                ],
+              );
+            },
           ),
         ),
       ),

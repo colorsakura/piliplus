@@ -42,6 +42,7 @@ class SubVideoCardH extends StatelessWidget {
       onLongPress: () => imageSaveDialog(
         title: videoItem.title,
         cover: videoItem.cover,
+        bvid: videoItem.bvid,
       ),
       child: Padding(
         padding: const EdgeInsets.symmetric(

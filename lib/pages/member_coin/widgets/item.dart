@@ -50,6 +50,7 @@ class MemberCoinLikeItem extends StatelessWidget {
         onLongPress: () => imageSaveDialog(
           title: item.title,
           cover: item.cover,
+          aid: item.param,
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

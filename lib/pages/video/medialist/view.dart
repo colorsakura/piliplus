@@ -174,6 +174,8 @@ class _MediaListPanelState
                   onLongPress: () => imageSaveDialog(
                     title: item.title,
                     cover: item.cover,
+                    aid: item.aid,
+                    bvid: item.bvid,
                   ),
                   child: Stack(
                     clipBehavior: Clip.none,

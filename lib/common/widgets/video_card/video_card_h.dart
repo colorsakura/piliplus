@@ -59,6 +59,7 @@ class VideoCardH extends StatelessWidget {
             child: InkWell(
               onLongPress: onLongPress ??
                   () => imageSaveDialog(
+                        bvid: videoItem.bvid,
                         title: videoItem.title,
                         cover: videoItem.cover,
                       ),

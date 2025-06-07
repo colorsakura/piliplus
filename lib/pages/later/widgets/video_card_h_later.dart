@@ -44,6 +44,7 @@ class VideoCardHLater extends StatelessWidget {
             () => imageSaveDialog(
                   title: videoItem.title,
                   cover: videoItem.pic,
+                  bvid: videoItem.bvid,
                 ),
         onTap: onTap ??
             () async {

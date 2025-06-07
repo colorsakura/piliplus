@@ -26,27 +26,32 @@ class VideoCardVMemberHome extends StatelessWidget {
       case 'bangumi':
         PageUtils.viewPgc(epId: videoItem.param);
         break;
+
       case 'av':
-        if (videoItem.isPgc == true && videoItem.uri?.isNotEmpty == true) {
-          if (PageUtils.viewPgcFromUri(videoItem.uri!)) {
-            return;
+        if (videoItem.isPgc == true) {
+          if (videoItem.uri?.isNotEmpty == true) {
+            PageUtils.viewPgcFromUri(videoItem.uri!);
           }
+          return;
         }
+
         String? aid = videoItem.param;
         String? bvid = videoItem.bvid;
         if (aid == null && bvid == null) {
           return;
         }
-        int? cid = videoItem.cid;
-        cid ??= await SearchHttp.ab2c(aid: aid, bvid: bvid);
+
+        bvid ??= IdUtils.av2bv(int.parse(aid!));
+        int? cid = videoItem.cid ?? await SearchHttp.ab2c(aid: aid, bvid: bvid);
         PageUtils.toVideoPage(
-          'bvid=${bvid ?? IdUtils.av2bv(int.parse(aid!))}&cid=$cid',
+          'bvid=$bvid&cid=$cid',
           arguments: {
             'pic': videoItem.cover,
             'heroTag': heroTag,
           },
         );
         break;
+
       default:
         if (videoItem.uri?.isNotEmpty == true) {
           PiliScheme.routePushFromUrl(videoItem.uri!);
@@ -64,6 +69,8 @@ class VideoCardVMemberHome extends StatelessWidget {
         onLongPress: () => imageSaveDialog(
           title: videoItem.title,
           cover: videoItem.cover,
+          aid: videoItem.param,
+          bvid: videoItem.bvid,
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
