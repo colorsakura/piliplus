@@ -7,6 +7,7 @@ import 'package:PiliPlus/models/user/stat.dart';
 import 'package:PiliPlus/models_new/history/data.dart';
 import 'package:PiliPlus/models_new/later/data.dart';
 import 'package:PiliPlus/models_new/media_list/data.dart';
+import 'package:PiliPlus/models_new/space_setting/data.dart';
 import 'package:PiliPlus/models_new/sub/sub/data.dart';
 import 'package:PiliPlus/models_new/sub/sub/list.dart';
 import 'package:PiliPlus/models_new/video/video_tag/data.dart';
@@ -351,5 +352,35 @@ class UserHttp {
       ),
     );
     return res.data as Map;
+  }
+
+  static Future<LoadingState<SpaceSettingData>> spaceSetting() async {
+    final res = await Request().get(
+      Api.spaceSetting,
+      queryParameters: {
+        'mid': Accounts.main.mid,
+      },
+    );
+    if (res.data['code'] == 0) {
+      return Success(SpaceSettingData.fromJson(res.data['data']));
+    } else {
+      return Error(res.data['message']);
+    }
+  }
+
+  static Future spaceSettingMod(data) async {
+    final res = await Request().post(
+      Api.spaceSettingMod,
+      queryParameters: {
+        'csrf': Accounts.main.csrf,
+      },
+      data: data,
+      options: Options(contentType: Headers.formUrlEncodedContentType),
+    );
+    if (res.data['code'] == 0) {
+      return {'status': true};
+    } else {
+      return {'status': false, 'msg': res.data['message']};
+    }
   }
 }

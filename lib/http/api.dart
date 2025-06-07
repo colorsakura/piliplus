@@ -880,4 +880,8 @@ class Api {
   static const String coinArc = '${HttpString.appBaseUrl}/x/v2/space/coinarc';
 
   static const String likeArc = '${HttpString.appBaseUrl}/x/v2/space/likearc';
+
+  static const String spaceSetting = '/x/space/setting/app';
+
+  static const String spaceSettingMod = '/x/space/privacy/batch/modify';
 }

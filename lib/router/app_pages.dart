@@ -49,6 +49,7 @@ import 'package:PiliPlus/pages/setting/style_setting.dart';
 import 'package:PiliPlus/pages/setting/video_setting.dart';
 import 'package:PiliPlus/pages/setting/view.dart';
 import 'package:PiliPlus/pages/settings_search/view.dart';
+import 'package:PiliPlus/pages/space_setting/view.dart';
 import 'package:PiliPlus/pages/sponsor_block/view.dart';
 import 'package:PiliPlus/pages/subscription/view.dart';
 import 'package:PiliPlus/pages/subscription_detail/view.dart';
@@ -175,6 +176,7 @@ class Routes {
     CustomGetPage(name: '/articleList', page: () => const ArticleListPage()),
     CustomGetPage(name: '/barSetting', page: () => const BarSetPage()),
     CustomGetPage(name: '/upowerRank', page: () => const UpowerRankPage()),
+    CustomGetPage(name: '/spaceSetting', page: () => const SpaceSettingPage()),
   ];
 }
 

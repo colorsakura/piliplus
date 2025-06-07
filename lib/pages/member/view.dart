@@ -135,41 +135,53 @@ class _MemberPageState extends State<MemberPage> {
                   ],
                 ),
               ),
-              if (_userController.ownerMid != null &&
-                  _userController.mid != _userController.ownerMid) ...[
-                const PopupMenuDivider(),
-                PopupMenuItem(
-                  onTap: () => showDialog(
-                    context: context,
-                    builder: (context) => AlertDialog(
-                      clipBehavior: Clip.hardEdge,
-                      contentPadding: const EdgeInsets.symmetric(
-                        horizontal: 20,
-                        vertical: 16,
-                      ),
-                      content: MemberReportPanel(
-                        name: _userController.username,
-                        mid: _mid,
+              if (_userController.ownerMid != 0)
+                if (_userController.mid == _userController.ownerMid)
+                  PopupMenuItem(
+                    onTap: () => Get.toNamed('/spaceSetting'),
+                    child: const Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(Icons.settings_outlined, size: 19),
+                        SizedBox(width: 10),
+                        Text('空间设置'),
+                      ],
+                    ),
+                  )
+                else ...[
+                  const PopupMenuDivider(),
+                  PopupMenuItem(
+                    onTap: () => showDialog(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                        clipBehavior: Clip.hardEdge,
+                        contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 20,
+                          vertical: 16,
+                        ),
+                        content: MemberReportPanel(
+                          name: _userController.username,
+                          mid: _mid,
+                        ),
                       ),
                     ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          Icons.error_outline,
+                          size: 19,
+                          color: theme.colorScheme.error,
+                        ),
+                        const SizedBox(width: 10),
+                        Text(
+                          '举报',
+                          style: TextStyle(color: theme.colorScheme.error),
+                        ),
+                      ],
+                    ),
                   ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(
-                        Icons.error_outline,
-                        size: 19,
-                        color: theme.colorScheme.error,
-                      ),
-                      const SizedBox(width: 10),
-                      Text(
-                        '举报',
-                        style: TextStyle(color: theme.colorScheme.error),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
+                ],
             ],
           ),
           const SizedBox(width: 4),
