@@ -32,9 +32,9 @@ class SpaceSettingController
       if (data != null) {
         var res = await UserHttp.spaceSettingMod(
           {
-            for (var e in data.list1) ...{e.key: e.value},
-            for (var e in data.list2) ...{e.key: e.value},
-            for (var e in data.list3) ...{e.key: e.value},
+            for (var e in data.list1) e.key: e.value,
+            for (var e in data.list2) e.key: e.value,
+            for (var e in data.list3) e.key: e.value,
           },
         );
         if (!res['status']) {

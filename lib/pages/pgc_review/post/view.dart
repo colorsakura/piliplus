@@ -42,6 +42,12 @@ class _PgcReviewPostPanelState
     super.dispose();
   }
 
+  void _onScore(double dx) {
+    int index = (dx / 50).toInt().clamp(0, 4);
+    _enablePost.value = true;
+    _score.value = index + 1;
+  }
+
   @override
   Widget buildPage(ThemeData theme) {
     final theme = Theme.of(context);
@@ -76,34 +82,35 @@ class _PgcReviewPostPanelState
             ),
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.only(top: 20, bottom: 10),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: List.generate(
-              5,
-              (index) {
-                return Obx(
-                  () => GestureDetector(
-                    onTap: () {
-                      _enablePost.value = true;
-                      _score.value = index + 1;
-                    },
-                    behavior: HitTestBehavior.opaque,
-                    child: index <= _score.value - 1
-                        ? const Icon(
-                            CustomIcon.star_favorite_solid,
-                            size: 50,
-                            color: Color(0xFFFFAD35),
-                          )
-                        : const Icon(
-                            CustomIcon.star_favorite_line,
-                            size: 50,
-                            color: Colors.grey,
-                          ),
-                  ),
-                );
-              },
+        Center(
+          child: Padding(
+            padding: const EdgeInsets.only(top: 20, bottom: 10),
+            child: GestureDetector(
+              behavior: HitTestBehavior.opaque,
+              onHorizontalDragUpdate: (details) =>
+                  _onScore(details.localPosition.dx),
+              onTapDown: (details) => _onScore(details.localPosition.dx),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: List.generate(
+                  5,
+                  (index) {
+                    return Obx(
+                      () => index <= _score.value - 1
+                          ? const Icon(
+                              CustomIcon.star_favorite_solid,
+                              size: 50,
+                              color: Color(0xFFFFAD35),
+                            )
+                          : const Icon(
+                              CustomIcon.star_favorite_line,
+                              size: 50,
+                              color: Colors.grey,
+                            ),
+                    );
+                  },
+                ),
+              ),
             ),
           ),
         ),
