@@ -198,8 +198,8 @@ class OpusContent extends StatelessWidget {
                 return imageView(
                     maxWidth,
                     element.pic!.pics!
-                        .map(
-                            (e) => ImageModel(width: 1, height: 1, url: e.url!))
+                        .map((e) => ImageModel(
+                            width: e.width, height: e.height, url: e.url!))
                         .toList());
               }
             case 3 when (element.line != null):
