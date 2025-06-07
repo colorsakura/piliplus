@@ -4,17 +4,16 @@ import 'package:PiliPlus/utils/id_utils.dart';
 import 'package:PiliPlus/utils/utils.dart';
 
 class RecVideoItemAppModel extends BaseRecVideoItemModel {
-  int? id;
+  int? get id => aid;
   String? talkBack;
 
   String? cardType;
   ThreePoint? threePoint;
 
   RecVideoItemAppModel.fromJson(Map<String, dynamic> json) {
-    id = json['player_args']?['aid'] ?? int.tryParse(json['param'] ?? '0');
-    aid = id;
+    aid = json['player_args']?['aid'] ?? int.tryParse(json['param'] ?? '0');
     bvid = json['bvid'] ?? IdUtils.av2bv(id!);
-    cid = json['player_args']?['cid'] ?? 0;
+    cid = json['player_args']?['cid'];
     cover = json['cover'];
     stat = RcmdStat.fromJson(json);
     // 改用player_args中的duration作为原始数据（秒数）

@@ -41,17 +41,17 @@ class VideoCardV extends StatelessWidget {
         break;
       case 'av':
         String bvid = videoItem.bvid ?? IdUtils.av2bv(videoItem.aid!);
-        int? cid = videoItem.cid;
-        if (cid == null || cid == 0 || cid == -1) {
-          cid = await SearchHttp.ab2c(aid: videoItem.aid, bvid: bvid);
+        int? cid = videoItem.cid ??
+            await SearchHttp.ab2c(aid: videoItem.aid, bvid: bvid);
+        if (cid != null) {
+          PageUtils.toVideoPage(
+            'bvid=$bvid&cid=$cid',
+            arguments: {
+              'pic': videoItem.cover,
+              'heroTag': heroTag,
+            },
+          );
         }
-        PageUtils.toVideoPage(
-          'bvid=$bvid&cid=$cid',
-          arguments: {
-            'pic': videoItem.cover,
-            'heroTag': heroTag,
-          },
-        );
         break;
       // 动态
       case 'picture':
