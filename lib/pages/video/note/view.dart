@@ -53,6 +53,7 @@ class _NoteListPageState extends CommonSlidePageState<NoteListPage> {
   @override
   Widget buildPage(ThemeData theme) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       key: _key,
       body: Column(
         children: [
