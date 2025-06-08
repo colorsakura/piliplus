@@ -2,10 +2,12 @@ import 'dart:async';
 import 'dart:math' show max;
 
 import 'package:PiliPlus/grpc/dyn.dart';
-import 'package:PiliPlus/grpc/im.dart';
+import 'package:PiliPlus/http/msg.dart';
 import 'package:PiliPlus/models/common/dynamic/dynamic_badge_mode.dart';
 import 'package:PiliPlus/models/common/msg/msg_unread_type.dart';
 import 'package:PiliPlus/models/common/nav_bar_config.dart';
+import 'package:PiliPlus/models_new/msgfeed_unread/data.dart';
+import 'package:PiliPlus/models_new/single_unread/data.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
@@ -83,45 +85,65 @@ class MainController extends GetxController
     }
   }
 
-  Future<void> queryUnreadMsg() async {
-    if (!isLogin.value || homeIndex == -1 || msgUnReadTypes.isEmpty) {
-      msgUnReadCount.value = '';
-      return;
+  Future<int> _msgUnread() async {
+    if (msgUnReadTypes.contains(MsgUnReadType.pm)) {
+      var res = await MsgHttp.msgUnread();
+      if (res['status']) {
+        SingleUnreadData data = res['data'];
+        return data.followUnread +
+            data.unfollowUnread +
+            data.bizMsgFollowUnread +
+            data.bizMsgUnfollowUnread +
+            data.unfollowPushMsg +
+            data.customUnread;
+      }
     }
+    return 0;
+  }
 
+  Future<int> _msgFeedUnread() async {
     int count = 0;
-    final res = await ImGrpc.getTotalUnread();
-    if (res.isSuccess) {
-      final data = res.data;
-      if (msgUnReadTypes.length == MsgUnReadType.values.length) {
-        count = data.hasTotalUnread() ? data.totalUnread : 0;
-      } else {
-        final msgUnread = data.msgFeedUnread.unread;
-        for (final item in msgUnReadTypes) {
+    var remainTypes = Set<MsgUnReadType>.from(msgUnReadTypes)
+      ..remove(MsgUnReadType.pm);
+    if (remainTypes.isNotEmpty) {
+      var res = await MsgHttp.msgFeedUnread();
+      if (res['status']) {
+        MsgFeedUnreadData data = res['data'];
+        for (var item in remainTypes) {
           switch (item) {
             case MsgUnReadType.pm:
-              final pmUnread = data.sessionSingleUnread;
-              count += (pmUnread.followUnread +
-                      pmUnread.unfollowUnread +
-                      pmUnread.dustbinUnread)
-                  .toInt();
               break;
             case MsgUnReadType.reply:
-              count += msgUnread['reply']?.toInt() ?? 0;
+              count += data.reply;
               break;
             case MsgUnReadType.at:
-              count += msgUnread['at']?.toInt() ?? 0;
+              count += data.at;
               break;
             case MsgUnReadType.like:
-              count += msgUnread['like']?.toInt() ?? 0;
+              count += data.like;
               break;
             case MsgUnReadType.sysMsg:
-              count += msgUnread['sys_msg']?.toInt() ?? 0;
+              count += data.sysMsg;
               break;
           }
         }
       }
     }
+    return count;
+  }
+
+  Future<void> queryUnreadMsg([bool isChangeType = false]) async {
+    if (!isLogin.value ||
+        homeIndex == -1 ||
+        msgUnReadTypes.isEmpty ||
+        msgBadgeMode == DynamicBadgeMode.hidden) {
+      msgUnReadCount.value = '';
+      return;
+    }
+
+    var res = await Future.wait([_msgUnread(), _msgFeedUnread()]);
+
+    int count = res.fold(0, (prev, e) => prev + e);
 
     final countStr = count == 0
         ? ''
@@ -129,7 +151,9 @@ class MainController extends GetxController
             ? '99+'
             : count.toString();
     if (msgUnReadCount.value == countStr) {
-      msgUnReadCount.refresh();
+      if (isChangeType) {
+        msgUnReadCount.refresh();
+      }
     } else {
       msgUnReadCount.value = countStr;
     }

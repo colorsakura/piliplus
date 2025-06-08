@@ -373,7 +373,7 @@ List<SettingsModel> get styleSettings => [
             MainController mainController = Get.put(MainController())
               ..msgBadgeMode = DynamicBadgeMode.values[result.index];
             if (mainController.msgBadgeMode != DynamicBadgeMode.hidden) {
-              mainController.queryUnreadMsg();
+              mainController.queryUnreadMsg(true);
             } else {
               mainController.msgUnReadCount.value = '';
             }

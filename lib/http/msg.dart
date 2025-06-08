@@ -9,6 +9,8 @@ import 'package:PiliPlus/models_new/msg/msg_like/data.dart';
 import 'package:PiliPlus/models_new/msg/msg_reply/data.dart';
 import 'package:PiliPlus/models_new/msg/msg_sys/data.dart';
 import 'package:PiliPlus/models_new/msg/session_ss/data.dart';
+import 'package:PiliPlus/models_new/msgfeed_unread/data.dart';
+import 'package:PiliPlus/models_new/single_unread/data.dart';
 import 'package:PiliPlus/models_new/upload_bfs/data.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/wbi_sign.dart';
@@ -554,6 +556,45 @@ class MsgHttp {
           .toList());
     } else {
       return Error(res.data['message']);
+    }
+  }
+
+  static Future msgUnread() async {
+    var res = await Request().get(
+      Api.msgUnread,
+      queryParameters: {
+        'build': 0,
+        'mobi_app': 'web',
+        'unread_type': 0,
+        'web_location': 333.1365,
+      },
+    );
+    if (res.data['code'] == 0) {
+      return {
+        'status': true,
+        'data': SingleUnreadData.fromJson(res.data['data'])
+      };
+    } else {
+      return {'status': false, 'data': res.data['message']};
+    }
+  }
+
+  static Future msgFeedUnread() async {
+    var res = await Request().get(
+      Api.msgFeedUnread,
+      queryParameters: {
+        'build': 0,
+        'mobi_app': 'web',
+        'web_location': 333.1365,
+      },
+    );
+    if (res.data['code'] == 0) {
+      return {
+        'status': true,
+        'data': MsgFeedUnreadData.fromJson(res.data['data'])
+      };
+    } else {
+      return {'status': false, 'data': res.data['message']};
     }
   }
 }
