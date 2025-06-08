@@ -28,10 +28,20 @@ class Privacy {
   factory Privacy.fromJson(Map<String, dynamic> json) => Privacy(
         list1: [
           SpaceSettingModel(
-              name: '公开我的收藏', key: 'fav_video', value: json['fav_video']),
+            name: '公开我的收藏',
+            key: 'fav_video',
+            value: json['fav_video'],
+          ),
           SpaceSettingModel(
-              name: '公开我的追番追剧', key: 'bangumi', value: json['bangumi']),
-          SpaceSettingModel(name: '公开我的追漫', key: 'comic', value: json['comic']),
+            name: '公开我的追番追剧',
+            key: 'bangumi',
+            value: json['bangumi'],
+          ),
+          SpaceSettingModel(
+            name: '公开我的追漫',
+            key: 'comic',
+            value: json['comic'],
+          ),
           SpaceSettingModel(
             name: '公开最近投币的视频',
             key: 'coins_video',
@@ -48,7 +58,10 @@ class Privacy {
             value: json['played_game'],
           ),
           SpaceSettingModel(
-              name: '公开拥有的粉丝装扮', key: 'dress_up', value: json['dress_up']),
+            name: '公开拥有的粉丝装扮',
+            key: 'dress_up',
+            value: json['dress_up'],
+          ),
           SpaceSettingModel(
             name: '公开我的关注列表',
             key: 'disable_following',

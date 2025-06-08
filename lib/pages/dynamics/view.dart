@@ -99,9 +99,7 @@ class _DynamicsPageState extends State<DynamicsPage>
                 ),
               );
             } else {
-              return UpPanel(
-                dynamicsController: _dynamicsController,
-              );
+              return UpPanel(dynamicsController: _dynamicsController);
             }
           },
         ),

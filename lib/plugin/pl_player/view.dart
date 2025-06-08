@@ -1829,7 +1829,7 @@ Widget buildSeekPreviewWidget(PlPlayerController plPlayerController) {
                   2));
 
           // pageIndex
-          int pageIndex = (index ~/ 100).clamp(0, data.image!.length);
+          int pageIndex = (index ~/ 100).clamp(0, data.image!.length - 1);
 
           // alignment
           double cal(m) {
