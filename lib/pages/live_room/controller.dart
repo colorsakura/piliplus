@@ -94,6 +94,9 @@ class LiveRoomController extends GetxController {
         _dialog(title: '当前直播间未开播');
         return;
       }
+      if (data.roomId != null) {
+        roomId = data.roomId!;
+      }
       isPortrait.value = data.isPortrait ?? false;
       List<CodecItem> codec =
           data.playurlInfo!.playurl!.stream!.first.format!.first.codec!;
