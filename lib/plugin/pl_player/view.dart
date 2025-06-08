@@ -1801,15 +1801,12 @@ Widget buildSeekPreviewWidget(PlPlayerController plPlayerController) {
       if (plPlayerController.videoShot == null) {
         plPlayerController.getVideoShot();
       }
-      return SizedBox.shrink(
-        key: ValueKey(plPlayerController.previewDx.value),
-      );
+      return const SizedBox.shrink();
     }
 
     VideoShotData data = plPlayerController.videoShot!['data'];
 
     return LayoutBuilder(
-      key: ValueKey(plPlayerController.previewDx.value),
       builder: (context, constraints) {
         try {
           double scale = plPlayerController.isFullScreen.value &&
