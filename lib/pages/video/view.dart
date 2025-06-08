@@ -557,8 +557,9 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
           controller: videoDetailController.scrollCtr,
           onlyOneScrollInBody: true,
           pinnedHeaderSliverHeightBuilder: () {
-            double pinnedHeight = isFullScreen || !isPortrait
-                ? height
+            double pinnedHeight = isFullScreen ||
+                    MediaQuery.orientationOf(context) == Orientation.landscape
+                ? MediaQuery.sizeOf(context).height
                 : videoDetailController.isExpanding ||
                         videoDetailController.isCollapsing
                     ? animHeight
