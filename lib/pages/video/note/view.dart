@@ -160,6 +160,10 @@ class _NoteListPageState extends CommonSlidePageState<NoteListPage> {
 
   Widget _buildBody(
       ThemeData theme, LoadingState<List<VideoNoteItemModel>?> loadingState) {
+    late final divider = Divider(
+      height: 1,
+      color: theme.colorScheme.outline.withValues(alpha: 0.1),
+    );
     return switch (loadingState) {
       Loading() => SliverToBoxAdapter(
           child: ListView.builder(
@@ -180,10 +184,7 @@ class _NoteListPageState extends CommonSlidePageState<NoteListPage> {
                 return _itemWidget(theme, response[index]);
               },
               itemCount: response!.length,
-              separatorBuilder: (context, index) => Divider(
-                height: 1,
-                color: theme.colorScheme.outline.withValues(alpha: 0.1),
-              ),
+              separatorBuilder: (context, index) => divider,
             )
           : HttpError(onReload: _controller.onReload),
       Error(:var errMsg) => HttpError(

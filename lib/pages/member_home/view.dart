@@ -7,11 +7,11 @@ import 'package:PiliPlus/models_new/space/space/data.dart';
 import 'package:PiliPlus/models_new/space/space/tab2.dart';
 import 'package:PiliPlus/pages/member/controller.dart';
 import 'package:PiliPlus/pages/member_article/widget/item.dart';
-import 'package:PiliPlus/pages/member_coin/view.dart';
+import 'package:PiliPlus/pages/member_coin_arc/view.dart';
 import 'package:PiliPlus/pages/member_contribute/controller.dart';
 import 'package:PiliPlus/pages/member_home/widgets/fav_item.dart';
 import 'package:PiliPlus/pages/member_home/widgets/video_card_v_member_home.dart';
-import 'package:PiliPlus/pages/member_like/view.dart';
+import 'package:PiliPlus/pages/member_like_arc/view.dart';
 import 'package:PiliPlus/pages/member_pgc/widgets/pgc_card_v_member_pgc.dart';
 import 'package:PiliPlus/utils/grid.dart';
 import 'package:flutter/foundation.dart' show kDebugMode;
@@ -281,7 +281,7 @@ class _MemberHomeState extends State<MemberHome>
                   _ctr.tabController?.animateTo(index);
                 } else {
                   if (param == 'coinArchive') {
-                    Get.to(MemberCoinPage(
+                    Get.to(MemberCoinArcPage(
                       mid: _ctr.mid,
                       name: _ctr.username,
                     ));
@@ -289,7 +289,7 @@ class _MemberHomeState extends State<MemberHome>
                   }
 
                   if (param == 'likeArchive') {
-                    Get.to(MemberLikePage(
+                    Get.to(MemberLikeArcPage(
                       mid: _ctr.mid,
                       name: _ctr.username,
                     ));

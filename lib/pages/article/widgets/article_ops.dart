@@ -69,9 +69,7 @@ class ArticleOpus extends StatelessWidget {
           return Text(e.toString());
         }
       },
-      separatorBuilder: (context, index) {
-        return const SizedBox(height: 10);
-      },
+      separatorBuilder: (context, index) => const SizedBox(height: 10),
     );
   }
 }

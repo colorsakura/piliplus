@@ -4,6 +4,7 @@ import 'package:PiliPlus/http/init.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/user/info.dart';
 import 'package:PiliPlus/models/user/stat.dart';
+import 'package:PiliPlus/models_new/coin_log/data.dart';
 import 'package:PiliPlus/models_new/history/data.dart';
 import 'package:PiliPlus/models_new/later/data.dart';
 import 'package:PiliPlus/models_new/media_list/data.dart';
@@ -396,6 +397,21 @@ class UserHttp {
       return {'status': true};
     } else {
       return {'status': false, 'msg': res.data['message']};
+    }
+  }
+
+  static Future<LoadingState<CoinLogData>> coinLog() async {
+    final res = await Request().get(
+      Api.coinLog,
+      queryParameters: {
+        'jsonp': 'jsonp',
+        'web_location': '333.33',
+      },
+    );
+    if (res.data['code'] == 0) {
+      return Success(CoinLogData.fromJson(res.data['data']));
+    } else {
+      return Error(res.data['message']);
     }
   }
 }

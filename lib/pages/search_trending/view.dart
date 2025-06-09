@@ -142,6 +142,11 @@ class _SearchTrendingPageState extends State<SearchTrendingPage> {
 
   Widget _buildBody(ThemeData theme,
       LoadingState<List<SearchTrendingItemModel>?> loadingState) {
+    late final divider = Divider(
+      height: 1,
+      indent: 48,
+      color: theme.colorScheme.outline.withValues(alpha: 0.1),
+    );
     return switch (loadingState) {
       Loading() => const SliverToBoxAdapter(child: LinearProgressIndicator()),
       Success(:var response) => response?.isNotEmpty == true
@@ -206,11 +211,7 @@ class _SearchTrendingPageState extends State<SearchTrendingPage> {
                   ),
                 );
               },
-              separatorBuilder: (context, index) => Divider(
-                height: 1,
-                indent: 48,
-                color: theme.colorScheme.outline.withValues(alpha: 0.1),
-              ),
+              separatorBuilder: (context, index) => divider,
             )
           : HttpError(
               onReload: _controller.onReload,

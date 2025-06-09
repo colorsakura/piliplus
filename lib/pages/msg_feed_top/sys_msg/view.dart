@@ -50,6 +50,12 @@ class _SysMsgPageState extends State<SysMsgPage> {
 
   Widget _buildBody(
       ThemeData theme, LoadingState<List<MsgSysItem>?> loadingState) {
+    late final divider = Divider(
+      indent: 72,
+      endIndent: 20,
+      height: 6,
+      color: Colors.grey.withValues(alpha: 0.1),
+    );
     return switch (loadingState) {
       Loading() => SliverSafeArea(
           sliver: SliverList.builder(
@@ -107,14 +113,7 @@ class _SysMsgPageState extends State<SysMsgPage> {
                   ),
                 );
               },
-              separatorBuilder: (BuildContext context, int index) {
-                return Divider(
-                  indent: 72,
-                  endIndent: 20,
-                  height: 6,
-                  color: Colors.grey.withValues(alpha: 0.1),
-                );
-              },
+              separatorBuilder: (context, index) => divider,
             )
           : HttpError(onReload: _sysMsgController.onReload),
       Error(:var errMsg) => HttpError(

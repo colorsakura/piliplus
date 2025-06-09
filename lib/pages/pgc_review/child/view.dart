@@ -73,6 +73,10 @@ class _PgcReviewChildPageState extends State<PgcReviewChildPage>
 
   Widget _buildBody(
       ThemeData theme, LoadingState<List<PgcReviewItemModel>?> loadingState) {
+    late final divider = Divider(
+      height: 1,
+      color: theme.colorScheme.outline.withValues(alpha: 0.1),
+    );
     return switch (loadingState) {
       Loading() => SliverToBoxAdapter(
           child: ListView.builder(
@@ -93,10 +97,7 @@ class _PgcReviewChildPageState extends State<PgcReviewChildPage>
                 return _itemWidget(theme, index, response[index]);
               },
               itemCount: response!.length,
-              separatorBuilder: (context, index) => Divider(
-                height: 1,
-                color: theme.colorScheme.outline.withValues(alpha: 0.1),
-              ),
+              separatorBuilder: (context, index) => divider,
             )
           : HttpError(onReload: _controller.onReload),
       Error(:var errMsg) => HttpError(

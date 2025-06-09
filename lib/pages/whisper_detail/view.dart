@@ -168,8 +168,7 @@ class _WhisperDetailPageState
                           : null,
                 );
               },
-              separatorBuilder: (BuildContext context, int index) =>
-                  const SizedBox(height: 12),
+              separatorBuilder: (context, index) => const SizedBox(height: 12),
             )
           : scrollErrorWidget(
               onReload: _whisperDetailController.onReload,

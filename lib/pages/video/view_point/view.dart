@@ -87,6 +87,10 @@ class _ViewPointsPageState
 
   @override
   Widget buildList(ThemeData theme) {
+    final divider = Divider(
+      height: 1,
+      color: theme.dividerColor.withValues(alpha: 0.1),
+    );
     return ListView.separated(
       controller: ScrollController(),
       physics: const AlwaysScrollableScrollPhysics(),
@@ -157,10 +161,7 @@ class _ViewPointsPageState
           ),
         );
       },
-      separatorBuilder: (context, index) => Divider(
-        height: 1,
-        color: theme.dividerColor.withValues(alpha: 0.1),
-      ),
+      separatorBuilder: (context, index) => divider,
     );
   }
 }

@@ -65,6 +65,12 @@ class _ReplyMePageState extends State<ReplyMePage> {
 
   Widget _buildBody(
       ThemeData theme, LoadingState<List<MsgReplyItem>?> loadingState) {
+    late final divider = Divider(
+      indent: 72,
+      endIndent: 20,
+      height: 6,
+      color: Colors.grey.withValues(alpha: 0.1),
+    );
     return switch (loadingState) {
       Loading() => SliverList.builder(
           itemCount: 12,
@@ -166,14 +172,7 @@ class _ReplyMePageState extends State<ReplyMePage> {
                   ),
                 );
               },
-              separatorBuilder: (BuildContext context, int index) {
-                return Divider(
-                  indent: 72,
-                  endIndent: 20,
-                  height: 6,
-                  color: Colors.grey.withValues(alpha: 0.1),
-                );
-              },
+              separatorBuilder: (context, index) => divider,
             )
           : HttpError(onReload: _replyMeController.onReload),
       Error(:var errMsg) => HttpError(

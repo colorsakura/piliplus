@@ -103,6 +103,7 @@ class _MinePageState extends State<MinePage> {
       color: theme.colorScheme.primary,
       fontWeight: FontWeight.bold,
     );
+    final isVip = userInfo.vipStatus != null && userInfo.vipStatus! > 0;
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -125,8 +126,7 @@ class _MinePageState extends State<MinePage> {
                           width: 55,
                           height: 55,
                         ),
-                        if (userInfo.vipStatus != null &&
-                            userInfo.vipStatus! > 0)
+                        if (isVip)
                           Positioned(
                             right: -1,
                             bottom: -2,
@@ -161,9 +161,7 @@ class _MinePageState extends State<MinePage> {
                             userInfo.uname ?? '点击头像登录',
                             style: theme.textTheme.titleMedium!.copyWith(
                               height: 1,
-                              color: userInfo.vipStatus != null &&
-                                      userInfo.vipStatus! > 0 &&
-                                      userInfo.vipType == 2
+                              color: isVip && userInfo.vipType == 2
                                   ? context.vipColor
                                   : null,
                             ),

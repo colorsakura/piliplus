@@ -4,10 +4,10 @@ import 'package:PiliPlus/models_new/member/coin_like_arc/data.dart';
 import 'package:PiliPlus/models_new/member/coin_like_arc/item.dart';
 import 'package:PiliPlus/pages/common/common_list_controller.dart';
 
-class MemberLikeController
+class MemberCoinArcController
     extends CommonListController<CoinLikeArcData, CoinLikeArcItem> {
   final dynamic mid;
-  MemberLikeController({this.mid});
+  MemberCoinArcController({this.mid});
 
   @override
   void onInit() {
@@ -22,5 +22,5 @@ class MemberLikeController
 
   @override
   Future<LoadingState<CoinLikeArcData>> customGetData() =>
-      MemberHttp.likeArc(mid: mid, page: page);
+      MemberHttp.coinArc(mid: mid, page: page);
 }

@@ -6,6 +6,7 @@ import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models_new/space/space/data.dart';
 import 'package:PiliPlus/pages/member/controller.dart';
 import 'package:PiliPlus/pages/member/widget/user_info_card.dart';
+import 'package:PiliPlus/pages/member_coin_log/view.dart';
 import 'package:PiliPlus/pages/member_contribute/view.dart';
 import 'package:PiliPlus/pages/member_dynamics/view.dart';
 import 'package:PiliPlus/pages/member_favorite/view.dart';
@@ -14,6 +15,7 @@ import 'package:PiliPlus/pages/member_pgc/view.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
 class MemberPage extends StatefulWidget {
@@ -152,6 +154,17 @@ class _MemberPageState extends State<MemberPage> {
                         ],
                       ),
                     ),
+                  PopupMenuItem(
+                    onTap: () => Get.to(const MemberCoinLogPage()),
+                    child: const Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(FontAwesomeIcons.b, size: 18),
+                        SizedBox(width: 10),
+                        Text('硬币记录'),
+                      ],
+                    ),
+                  ),
                   PopupMenuItem(
                     onTap: () => Get.toNamed('/spaceSetting'),
                     child: const Row(

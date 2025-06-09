@@ -86,6 +86,12 @@ class _WhisperPageState extends State<WhisperPage> {
   }
 
   Widget _buildBody(LoadingState<List<Session>?> loadingState) {
+    late final divider = Divider(
+      indent: 72,
+      endIndent: 20,
+      height: 1,
+      color: Colors.grey.withValues(alpha: 0.1),
+    );
     return switch (loadingState) {
       Loading() => SliverList.builder(
           itemCount: 12,
@@ -109,12 +115,7 @@ class _WhisperPageState extends State<WhisperPage> {
                   onRemove: (talkerId) => _controller.onRemove(index, talkerId),
                 );
               },
-              separatorBuilder: (context, index) => Divider(
-                indent: 72,
-                endIndent: 20,
-                height: 1,
-                color: Colors.grey.withValues(alpha: 0.1),
-              ),
+              separatorBuilder: (context, index) => divider,
             )
           : HttpError(
               onReload: _controller.onReload,

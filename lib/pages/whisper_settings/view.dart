@@ -145,6 +145,10 @@ class _WhisperSettingsPageState extends State<WhisperSettingsPage> {
 
   Widget _buildBody(
       ThemeData theme, LoadingState<PbMap<int, Setting>> loadingState) {
+    late final divider = Divider(
+      height: 1,
+      color: theme.colorScheme.outline.withValues(alpha: 0.1),
+    );
     return switch (loadingState) {
       Loading() => const SizedBox.shrink(),
       Success<PbMap<int, Setting>>(:var response) =>
@@ -163,10 +167,7 @@ class _WhisperSettingsPageState extends State<WhisperSettingsPage> {
                 onRedirect: () => onRedirect(theme, key, response, item),
               );
             },
-            separatorBuilder: (context, index) => Divider(
-              height: 1,
-              color: theme.colorScheme.outline.withValues(alpha: 0.1),
-            ),
+            separatorBuilder: (context, index) => divider,
           );
         }),
       Error(:var errMsg) => scrollErrorWidget(

@@ -417,12 +417,12 @@ class _SponsorBlockPageState extends State<SponsorBlockPage> {
       color: theme.colorScheme.outline,
     );
 
-    final divider = SliverToBoxAdapter(
-      child: Divider(
-        height: 1,
-        color: theme.colorScheme.outline.withValues(alpha: 0.1),
-      ),
+    final divider = Divider(
+      height: 1,
+      color: theme.colorScheme.outline.withValues(alpha: 0.1),
     );
+
+    final sliverDivider = SliverToBoxAdapter(child: divider);
 
     final dividerL = SliverToBoxAdapter(
       child: Divider(
@@ -440,9 +440,9 @@ class _SponsorBlockPageState extends State<SponsorBlockPage> {
           dividerL,
           SliverToBoxAdapter(
               child: _blockLimitItem(theme, titleStyle, subTitleStyle)),
-          divider,
+          sliverDivider,
           SliverToBoxAdapter(child: _blockToastItem(titleStyle)),
-          divider,
+          sliverDivider,
           SliverToBoxAdapter(child: _blockTrackItem(titleStyle, subTitleStyle)),
           dividerL,
           SliverList.separated(
@@ -536,15 +536,12 @@ class _SponsorBlockPageState extends State<SponsorBlockPage> {
                 ),
               ),
             ),
-            separatorBuilder: (context, index) => Divider(
-              height: 1,
-              color: theme.colorScheme.outline.withValues(alpha: 0.1),
-            ),
+            separatorBuilder: (context, index) => divider,
           ),
           dividerL,
           SliverToBoxAdapter(
               child: _userIdItem(theme, titleStyle, subTitleStyle)),
-          divider,
+          sliverDivider,
           SliverToBoxAdapter(
               child: _blockServerItem(theme, titleStyle, subTitleStyle)),
           dividerL,
