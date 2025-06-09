@@ -40,7 +40,7 @@ class DynTopicController
     topState.value = await DynamicsHttp.topicTop(topicId: topicId);
     if (topState.value.isSuccess) {
       var topicItem = topState.value.data!.topicItem!;
-      topicName = topicItem.name!;
+      topicName = topicItem.name;
       isFav.value = topicItem.isFav;
       isLike.value = topicItem.isLike;
     }

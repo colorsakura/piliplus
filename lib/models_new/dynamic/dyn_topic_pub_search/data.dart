@@ -1,11 +1,11 @@
 import 'package:PiliPlus/models_new/dynamic/dyn_topic_pub_search/new_topic.dart';
 import 'package:PiliPlus/models_new/dynamic/dyn_topic_pub_search/page_info.dart';
-import 'package:PiliPlus/models_new/dynamic/dyn_topic_pub_search/topic_item.dart';
+import 'package:PiliPlus/models_new/dynamic/dyn_topic_top/topic_item.dart';
 
 class TopicPubSearchData {
   NewTopic? newTopic;
   bool? hasCreateJurisdiction;
-  List<TopicPubSearchItem>? topicItems;
+  List<TopicItem>? topicItems;
   String? requestId;
   PageInfo? pageInfo;
 
@@ -24,7 +24,7 @@ class TopicPubSearchData {
             : NewTopic.fromJson(json['new_topic'] as Map<String, dynamic>),
         hasCreateJurisdiction: json['has_create_jurisdiction'] as bool?,
         topicItems: (json['topic_items'] as List<dynamic>?)
-            ?.map((e) => TopicPubSearchItem.fromJson(e as Map<String, dynamic>))
+            ?.map((e) => TopicItem.fromJson(e as Map<String, dynamic>))
             .toList(),
         requestId: json['request_id'] as String?,
         pageInfo: json['page_info'] == null

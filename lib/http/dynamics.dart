@@ -14,6 +14,7 @@ import 'package:PiliPlus/models_new/article/article_view/data.dart';
 import 'package:PiliPlus/models_new/dynamic/dyn_reserve/data.dart';
 import 'package:PiliPlus/models_new/dynamic/dyn_topic_feed/topic_card_list.dart';
 import 'package:PiliPlus/models_new/dynamic/dyn_topic_top/top_details.dart';
+import 'package:PiliPlus/models_new/dynamic/dyn_topic_top/topic_item.dart';
 import 'package:PiliPlus/utils/accounts/account.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/utils.dart';
@@ -471,6 +472,25 @@ class DynamicsHttp {
       };
     } else {
       return {'status': false, 'msg': res.data['message']};
+    }
+  }
+
+  static Future<LoadingState<List<TopicItem>?>> dynTopicRcmd(
+      {int ps = 25}) async {
+    final res = await Request().get(
+      Api.dynTopicRcmd,
+      queryParameters: {
+        'source': 'Web',
+        'page_size': ps,
+        'web_location': 333.1365,
+      },
+    );
+    if (res.data['code'] == 0) {
+      return Success((res.data['data']?['topic_items'] as List?)
+          ?.map((e) => TopicItem.fromJson(e))
+          .toList());
+    } else {
+      return Error(res.data['message']);
     }
   }
 }

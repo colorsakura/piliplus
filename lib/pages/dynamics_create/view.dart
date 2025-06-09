@@ -11,7 +11,7 @@ import 'package:PiliPlus/common/widgets/pair.dart';
 import 'package:PiliPlus/http/dynamics.dart';
 import 'package:PiliPlus/models/common/publish_panel_type.dart';
 import 'package:PiliPlus/models/common/reply/reply_option_type.dart';
-import 'package:PiliPlus/models_new/dynamic/dyn_topic_pub_search/topic_item.dart';
+import 'package:PiliPlus/models_new/dynamic/dyn_topic_top/topic_item.dart';
 import 'package:PiliPlus/pages/common/common_publish_page.dart';
 import 'package:PiliPlus/pages/dynamics_select_topic/controller.dart';
 import 'package:PiliPlus/pages/dynamics_select_topic/view.dart';
@@ -621,7 +621,7 @@ class _CreateDynPanelState extends CommonPublishPageState<CreateDynPanel> {
 
   double _offset = 0;
   Future<void> _onSelectTopic() async {
-    TopicPubSearchItem? res = await showModalBottomSheet(
+    TopicItem? res = await showModalBottomSheet(
       context: context,
       useSafeArea: true,
       isScrollControlled: true,
@@ -643,7 +643,7 @@ class _CreateDynPanelState extends CommonPublishPageState<CreateDynPanel> {
       ),
     );
     if (res != null) {
-      topic.value = Pair(first: res.id!, second: res.name!);
+      topic.value = Pair(first: res.id, second: res.name);
     }
   }
 }

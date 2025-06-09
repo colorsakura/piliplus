@@ -888,4 +888,6 @@ class Api {
   static const String vipExpAdd = '/x/vip/experience/add';
 
   static const String coinLog = '/x/member/web/coin/log';
+
+  static const String dynTopicRcmd = '/x/topic/web/dynamic/rcmd';
 }

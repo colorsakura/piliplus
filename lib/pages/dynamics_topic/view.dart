@@ -153,7 +153,7 @@ class _DynTopicPageState extends State<DynTopicPage> {
           pinned: true,
           callback: (value) => _controller.appbarOffset =
               value - kToolbarHeight - paddingTop - 7,
-          title: IgnorePointer(child: Text(response!.topicItem!.name!)),
+          title: IgnorePointer(child: Text(response!.topicItem!.name)),
           flexibleSpace: Container(
             decoration: BoxDecoration(
               image: DecorationImage(
@@ -206,7 +206,7 @@ class _DynTopicPageState extends State<DynTopicPage> {
                   ),
                 ),
                 Text(
-                  response.topicItem!.name!,
+                  response.topicItem!.name,
                   style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,

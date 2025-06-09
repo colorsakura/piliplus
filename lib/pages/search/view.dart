@@ -174,31 +174,48 @@ class _SearchPageState extends State<SearchPage> {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           text,
-                          Padding(
-                            padding: const EdgeInsets.only(left: 14),
-                            child: SizedBox(
-                              height: 34,
-                              child: TextButton.icon(
-                                onPressed: () => Get.toNamed(
-                                  '/searchTrending',
-                                  parameters: {'tag': _tag},
-                                ),
-                                label: Text(
-                                  '完整榜单',
-                                  style: TextStyle(
-                                    fontSize: 13,
-                                    color: theme.colorScheme.outline,
-                                  ),
-                                ),
-                                icon: Icon(
-                                  size: 16,
-                                  Icons.keyboard_arrow_right,
+                          const SizedBox(width: 14),
+                          SizedBox(
+                            height: 34,
+                            child: TextButton.icon(
+                              onPressed: () => Get.toNamed(
+                                '/searchTrending',
+                                parameters: {'tag': _tag},
+                              ),
+                              label: Text(
+                                '完整榜单',
+                                style: TextStyle(
+                                  fontSize: 13,
                                   color: theme.colorScheme.outline,
                                 ),
-                                iconAlignment: IconAlignment.end,
                               ),
+                              icon: Icon(
+                                size: 16,
+                                Icons.keyboard_arrow_right,
+                                color: theme.colorScheme.outline,
+                              ),
+                              iconAlignment: IconAlignment.end,
                             ),
-                          )
+                          ),
+                          SizedBox(
+                            height: 34,
+                            child: TextButton.icon(
+                              onPressed: () => Get.toNamed('/dynTopicRcmd'),
+                              label: Text(
+                                '话题',
+                                style: TextStyle(
+                                  fontSize: 13,
+                                  color: theme.colorScheme.outline,
+                                ),
+                              ),
+                              icon: Icon(
+                                size: 16,
+                                Icons.keyboard_arrow_right,
+                                color: theme.colorScheme.outline,
+                              ),
+                              iconAlignment: IconAlignment.end,
+                            ),
+                          ),
                         ],
                       )
                     : text,

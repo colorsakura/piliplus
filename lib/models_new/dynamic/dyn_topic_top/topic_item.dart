@@ -1,10 +1,10 @@
 class TopicItem {
-  int? id;
-  String? name;
-  int? view;
-  int? discuss;
-  late int fav;
-  late int like;
+  int id;
+  String name;
+  int view;
+  int discuss;
+  int fav;
+  int like;
   int? dynamics;
   String? jumpUrl;
   String? backColor;
@@ -17,10 +17,10 @@ class TopicItem {
   bool? isLike;
 
   TopicItem({
-    this.id,
-    this.name,
-    this.view,
-    this.discuss,
+    required this.id,
+    required this.name,
+    required this.view,
+    required this.discuss,
     required this.fav,
     required this.like,
     this.dynamics,
@@ -36,12 +36,12 @@ class TopicItem {
   });
 
   factory TopicItem.fromJson(Map<String, dynamic> json) => TopicItem(
-        id: json['id'] as int?,
-        name: json['name'] as String?,
-        view: json['view'] as int? ?? 0,
-        discuss: json['discuss'] as int? ?? 0,
-        fav: json['fav'] as int? ?? 0,
-        like: json['like'] as int? ?? 0,
+        id: json['id'],
+        name: json['name'],
+        view: json['view'] ?? 0,
+        discuss: json['discuss'] ?? 0,
+        fav: json['fav'] ?? 0,
+        like: json['like'] ?? 0,
         dynamics: json['dynamics'] as int?,
         jumpUrl: json['jump_url'] as String?,
         backColor: json['back_color'] as String?,
