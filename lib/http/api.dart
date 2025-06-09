@@ -884,4 +884,6 @@ class Api {
   static const String spaceSetting = '/x/space/setting/app';
 
   static const String spaceSettingMod = '/x/space/privacy/batch/modify';
+
+  static const String vipExpAdd = '/x/vip/experience/add';
 }

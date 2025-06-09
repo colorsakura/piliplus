@@ -136,7 +136,22 @@ class _MemberPageState extends State<MemberPage> {
                 ),
               ),
               if (_userController.ownerMid != 0)
-                if (_userController.mid == _userController.ownerMid)
+                if (_userController.mid == _userController.ownerMid) ...[
+                  if ((_userController
+                              .loadingState.value.data?.card?.vip?.status ??
+                          0) >
+                      0)
+                    PopupMenuItem(
+                      onTap: _userController.vipExpAdd,
+                      child: const Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(Icons.upcoming_outlined, size: 19),
+                          SizedBox(width: 10),
+                          Text('大会员经验'),
+                        ],
+                      ),
+                    ),
                   PopupMenuItem(
                     onTap: () => Get.toNamed('/spaceSetting'),
                     child: const Row(
@@ -147,8 +162,8 @@ class _MemberPageState extends State<MemberPage> {
                         Text('空间设置'),
                       ],
                     ),
-                  )
-                else ...[
+                  ),
+                ] else ...[
                   const PopupMenuDivider(),
                   PopupMenuItem(
                     onTap: () => showDialog(

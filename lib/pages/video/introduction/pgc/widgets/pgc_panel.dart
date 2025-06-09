@@ -193,14 +193,13 @@ class _PgcPanelState extends State<PgcPanel> {
                               const SizedBox(width: 2),
                               if (item.badge != null) ...[
                                 const Spacer(),
-                                if (item.badge == '会员') ...[
+                                if (item.badge == '会员')
                                   Image.asset(
                                     'assets/images/big-vip.png',
                                     height: 16,
                                     semanticLabel: "大会员",
-                                  ),
-                                ],
-                                if (item.badge != '会员') ...[
+                                  )
+                                else
                                   Text(
                                     item.badge!,
                                     style: TextStyle(
@@ -208,7 +207,6 @@ class _PgcPanelState extends State<PgcPanel> {
                                       color: theme.colorScheme.primary,
                                     ),
                                   ),
-                                ],
                               ]
                             ],
                           ),

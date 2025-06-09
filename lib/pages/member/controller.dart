@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/http/member.dart';
+import 'package:PiliPlus/http/user.dart';
 import 'package:PiliPlus/http/video.dart';
 import 'package:PiliPlus/models/common/member/tab_type.dart';
 import 'package:PiliPlus/models_new/space/space/data.dart';
@@ -253,6 +254,15 @@ class MemberController extends CommonDataController<SpaceData, SpaceData?>
         duration: const Duration(milliseconds: 500),
         curve: Curves.easeInOut,
       );
+    }
+  }
+
+  Future<void> vipExpAdd() async {
+    var res = await UserHttp.vipExpAdd();
+    if (res['status']) {
+      SmartDialog.showToast('领取成功');
+    } else {
+      SmartDialog.showToast(res['msg']);
     }
   }
 }

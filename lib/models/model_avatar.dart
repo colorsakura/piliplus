@@ -43,9 +43,9 @@ class Vip {
   Label? label;
 
   Vip.fromJson(Map<String, dynamic> json) {
-    type = json['type'];
-    status = json['status'] ?? 0;
-    dueDate = json['due_date'];
+    type = json['type'] ?? json['vipType'];
+    status = json['status'] ?? json['vipStatus'] ?? 0;
+    dueDate = json['due_date'] ?? json['vipDueDate'];
     if (json['label'] != null) label = Label.fromJson(json['label']);
   }
 }

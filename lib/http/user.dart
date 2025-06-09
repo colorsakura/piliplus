@@ -383,4 +383,19 @@ class UserHttp {
       return {'status': false, 'msg': res.data['message']};
     }
   }
+
+  static Future vipExpAdd() async {
+    final res = await Request().post(
+      Api.vipExpAdd,
+      queryParameters: {
+        'mid': Accounts.main.mid,
+        'csrf': Accounts.main.csrf,
+      },
+    );
+    if (res.data['code'] == 0) {
+      return {'status': true};
+    } else {
+      return {'status': false, 'msg': res.data['message']};
+    }
+  }
 }

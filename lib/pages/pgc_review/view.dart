@@ -50,6 +50,7 @@ class _PgcReviewPageState extends State<PgcReviewPage>
                 indicatorWeight: 0,
                 overlayColor: WidgetStateProperty.all(Colors.transparent),
                 splashFactory: NoSplash.splashFactory,
+                padding: const EdgeInsets.only(left: 6),
                 indicatorPadding:
                     const EdgeInsets.symmetric(horizontal: 3, vertical: 8),
                 indicator: BoxDecoration(

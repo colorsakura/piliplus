@@ -251,9 +251,12 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
               return AnimatedOpacity(
                 opacity: _visibleTitle.value ? 1 : 0,
                 duration: const Duration(milliseconds: 300),
-                child: AuthorPanel(
-                  item: _controller.dynItem,
-                  isDetail: true,
+                child: IgnorePointer(
+                  ignoring: !_visibleTitle.value,
+                  child: AuthorPanel(
+                    item: _controller.dynItem,
+                    isDetail: true,
+                  ),
                 ),
               );
             },
