@@ -1,3 +1,4 @@
+import 'package:PiliPlus/common/widgets/color_palette.dart';
 import 'package:PiliPlus/models/common/nav_bar_config.dart';
 import 'package:PiliPlus/models/common/theme/theme_color_type.dart';
 import 'package:PiliPlus/models/common/theme/theme_type.dart';
@@ -180,8 +181,7 @@ class _ColorSelectPageState extends State<ColorSelectPage> {
                 () => SizedBox(
                   height: ctr.type.value == 0 ? 0 : null,
                   child: Padding(
-                    padding:
-                        const EdgeInsets.only(top: 12, left: 12, right: 12),
+                    padding: const EdgeInsets.all(12),
                     child: Wrap(
                       alignment: WrapAlignment.center,
                       spacing: 22,
@@ -201,29 +201,9 @@ class _ColorSelectPageState extends State<ColorSelectPage> {
                             child: Column(
                               spacing: 3,
                               children: [
-                                Container(
-                                  width: 46,
-                                  height: 46,
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: item.color.withValues(alpha: 0.8),
-                                    border: Border.all(
-                                      width: 2,
-                                      color: ctr.currentColor.value == index
-                                          ? Colors.black
-                                          : item.color.withValues(alpha: 0.8),
-                                    ),
-                                  ),
-                                  child: AnimatedOpacity(
-                                    opacity:
-                                        ctr.currentColor.value == index ? 1 : 0,
-                                    duration: const Duration(milliseconds: 200),
-                                    child: const Icon(
-                                      Icons.done,
-                                      color: Colors.black,
-                                      size: 20,
-                                    ),
-                                  ),
+                                ColorPalette(
+                                  color: item.color,
+                                  selected: ctr.currentColor.value == index,
                                 ),
                                 Text(
                                   item.label,

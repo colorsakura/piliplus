@@ -210,6 +210,7 @@ dependencies:
   universal_platform: any
   path: any
   collection: any
+  material_color_utilities: any
 
 dependency_overrides:
   screen_brightness: ^2.0.1
