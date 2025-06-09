@@ -34,6 +34,7 @@ class WhisperSecController
     if (response.paginationParams.hasMore == false) {
       isEnd = true;
     }
+    offset = response.paginationParams.offsets;
 
     return response.sessions;
   }
