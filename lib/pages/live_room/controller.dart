@@ -49,13 +49,14 @@ class LiveRoomController extends GetxController {
   String? savedDanmaku;
 
   late final isLogin = Accounts.main.isLogin;
+  late final mid = Accounts.main.mid;
 
   @override
   void onInit() {
     super.onInit();
     roomId = int.parse(Get.parameters['roomid']!);
     queryLiveInfoH5();
-    if (Accounts.main.isLogin && !MineController.anonymity.value) {
+    if (isLogin && !MineController.anonymity.value) {
       VideoHttp.roomEntryAction(roomId: roomId);
     }
   }
@@ -221,9 +222,10 @@ class LiveRoomController extends GetxController {
             final content = first[15];
             final extra = jsonDecode(content['extra']);
             final user = content['user'];
+            final uid = user['uid'];
             messages.add({
               'name': user['base']['name'],
-              'uid': user['uid'],
+              'uid': uid,
               'text': info[1],
               'emots': extra['emots'],
               'uemote': first[13],
@@ -234,6 +236,7 @@ class LiveRoomController extends GetxController {
                   extra['content'],
                   color: DmUtils.decimalToColor(extra['color']),
                   type: DmUtils.getPosition(extra['mode']),
+                  selfSend: uid == mid,
                 ),
               );
               WidgetsBinding.instance

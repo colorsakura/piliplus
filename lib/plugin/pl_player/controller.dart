@@ -27,6 +27,7 @@ import 'package:PiliPlus/utils/page_utils.dart' show PageUtils;
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:canvas_danmaku/canvas_danmaku.dart';
+import 'package:crclib/catalog.dart';
 import 'package:easy_debounce/easy_throttle.dart';
 import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/material.dart';
@@ -256,6 +257,8 @@ class PlPlayerController {
     }
   }
 
+  late final isLogin = Accounts.main.isLogin;
+
   /// 弹幕权重
   int danmakuWeight = 0;
   late RuleFilter filters;
@@ -264,6 +267,9 @@ class PlPlayerController {
   bool showDanmaku = true;
   Set<int> dmState = <int>{};
   late final mergeDanmaku = GStorage.mergeDanmaku;
+  late final String midHash = Crc32Xz()
+      .convert(utf8.encode(Accounts.main.mid.toString()))
+      .toRadixString(16);
   // 弹幕相关配置
   late Set<int> blockTypes;
   late double showArea;

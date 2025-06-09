@@ -200,6 +200,7 @@ dependencies:
     git:
       url: https://github.com/bggRGjQaUbCoE/flutter_sortable_wrap.git
       ref: master
+  crclib: ^3.0.0
 
   vector_math: any
   fixnum: any

@@ -513,6 +513,12 @@ const DanmakuElem$json = {
     {'1': 'type', '3': 25, '4': 1, '5': 5, '10': 'type'},
     {'1': 'oid', '3': 26, '4': 1, '5': 3, '10': 'oid'},
     {'1': 'dm_from', '3': 27, '4': 1, '5': 14, '6': '.bilibili.community.service.dm.v1.DmFromType', '10': 'dmFrom'},
+    {'1': 'count', '3': 28, '4': 1, '5': 5, '9': 0, '10': 'count', '17': true},
+    {'1': 'isSelf', '3': 29, '4': 1, '5': 8, '9': 1, '10': 'isSelf', '17': true},
+  ],
+  '8': [
+    {'1': '_count'},
+    {'1': '_isSelf'},
   ],
 };
 
@@ -527,7 +533,9 @@ final $typed_data.Uint8List danmakuElemDescriptor = $convert.base64Decode(
     'CWFuaW1hdGlvbhIUCgVleHRyYRgXIAEoCVIFZXh0cmESTAoIY29sb3JmdWwYGCABKA4yMC5iaW'
     'xpYmlsaS5jb21tdW5pdHkuc2VydmljZS5kbS52MS5EbUNvbG9yZnVsVHlwZVIIY29sb3JmdWwS'
     'EgoEdHlwZRgZIAEoBVIEdHlwZRIQCgNvaWQYGiABKANSA29pZBJFCgdkbV9mcm9tGBsgASgOMi'
-    'wuYmlsaWJpbGkuY29tbXVuaXR5LnNlcnZpY2UuZG0udjEuRG1Gcm9tVHlwZVIGZG1Gcm9t');
+    'wuYmlsaWJpbGkuY29tbXVuaXR5LnNlcnZpY2UuZG0udjEuRG1Gcm9tVHlwZVIGZG1Gcm9tEhkK'
+    'BWNvdW50GBwgASgFSABSBWNvdW50iAEBEhsKBmlzU2VsZhgdIAEoCEgBUgZpc1NlbGaIAQFCCA'
+    'oGX2NvdW50QgkKB19pc1NlbGY=');
 
 @$core.Deprecated('Use danmakuFlagDescriptor instead')
 const DanmakuFlag$json = {

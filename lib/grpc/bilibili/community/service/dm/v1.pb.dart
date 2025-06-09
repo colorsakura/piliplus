@@ -1243,6 +1243,8 @@ class DanmakuElem extends $pb.GeneratedMessage {
     $core.int? type,
     $fixnum.Int64? oid,
     DmFromType? dmFrom,
+    $core.int? count,
+    $core.bool? isSelf,
   }) {
     final $result = create();
     if (id != null) {
@@ -1302,6 +1304,12 @@ class DanmakuElem extends $pb.GeneratedMessage {
     if (dmFrom != null) {
       $result.dmFrom = dmFrom;
     }
+    if (count != null) {
+      $result.count = count;
+    }
+    if (isSelf != null) {
+      $result.isSelf = isSelf;
+    }
     return $result;
   }
   DanmakuElem._() : super();
@@ -1328,6 +1336,8 @@ class DanmakuElem extends $pb.GeneratedMessage {
     ..a<$core.int>(25, _omitFieldNames ? '' : 'type', $pb.PbFieldType.O3)
     ..aInt64(26, _omitFieldNames ? '' : 'oid')
     ..e<DmFromType>(27, _omitFieldNames ? '' : 'dmFrom', $pb.PbFieldType.OE, defaultOrMaker: DmFromType.DmFromUnknown, valueOf: DmFromType.valueOf, enumValues: DmFromType.values)
+    ..a<$core.int>(28, _omitFieldNames ? '' : 'count', $pb.PbFieldType.O3)
+    ..aOB(29, _omitFieldNames ? '' : 'isSelf', protoName: 'isSelf')
     ..hasRequiredFields = false
   ;
 
@@ -1522,6 +1532,24 @@ class DanmakuElem extends $pb.GeneratedMessage {
   $core.bool hasDmFrom() => $_has(18);
   @$pb.TagNumber(27)
   void clearDmFrom() => $_clearField(27);
+
+  @$pb.TagNumber(28)
+  $core.int get count => $_getIZ(19);
+  @$pb.TagNumber(28)
+  set count($core.int v) { $_setSignedInt32(19, v); }
+  @$pb.TagNumber(28)
+  $core.bool hasCount() => $_has(19);
+  @$pb.TagNumber(28)
+  void clearCount() => $_clearField(28);
+
+  @$pb.TagNumber(29)
+  $core.bool get isSelf => $_getBF(20);
+  @$pb.TagNumber(29)
+  set isSelf($core.bool v) { $_setBool(20, v); }
+  @$pb.TagNumber(29)
+  $core.bool hasIsSelf() => $_has(20);
+  @$pb.TagNumber(29)
+  void clearIsSelf() => $_clearField(29);
 }
 
 class DanmakuFlag extends $pb.GeneratedMessage {

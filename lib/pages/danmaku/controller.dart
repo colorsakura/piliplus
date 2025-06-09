@@ -55,10 +55,11 @@ class PlDanmakuController {
           if (mergeDanmaku) {
             final count = counts[element.content];
             if (count != 1) {
-              element.attr = count!;
-            } else {
-              element.clearAttr();
+              element.count = count!;
             }
+          }
+          if (plPlayerController.isLogin) {
+            element.isSelf = element.midHash == plPlayerController.midHash;
           }
           int pos = element.progress ~/ 100; //每0.1秒存储一次
           (dmSegMap[pos] ??= []).add(element);
