@@ -98,6 +98,16 @@ class ThemeUtils {
       ),
       // ignore: deprecated_member_use
       sliderTheme: const SliderThemeData(year2023: false),
+      tooltipTheme: TooltipThemeData(
+        textStyle: const TextStyle(
+          color: Colors.white,
+          fontSize: 14,
+        ),
+        decoration: BoxDecoration(
+          color: Colors.grey[700]!.withValues(alpha: 0.9),
+          borderRadius: const BorderRadius.all(Radius.circular(4)),
+        ),
+      ),
     );
     if (isDark && GStorage.isPureBlackTheme) {
       themeData = darkenTheme(themeData);
