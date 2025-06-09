@@ -3,6 +3,7 @@ import 'package:PiliPlus/models/common/dynamic/up_panel_position.dart';
 import 'package:PiliPlus/models/common/image_type.dart';
 import 'package:PiliPlus/models/dynamics/up.dart';
 import 'package:PiliPlus/pages/dynamics/controller.dart';
+import 'package:PiliPlus/pages/live_follow/view.dart';
 import 'package:PiliPlus/utils/feed_back.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
@@ -43,6 +44,7 @@ class _UpPanelState extends State<UpPanel> {
               widget.dynamicsController.showLiveItems =
                   !widget.dynamicsController.showLiveItems;
             }),
+            onLongPress: () => Get.to(const LiveFollowPage()),
             child: Container(
               alignment: Alignment.center,
               height: isTop ? 76 : 60,
