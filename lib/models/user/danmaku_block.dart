@@ -1,13 +1,28 @@
 class DanmakuBlockDataModel {
-  List<SimpleRule>? rule;
+  late List<SimpleRule> rule;
+  late List<SimpleRule> rule1;
+  late List<SimpleRule> rule2;
   String? toast;
   int? valid;
   int? ver;
 
-  DanmakuBlockDataModel({this.rule, this.toast, this.valid, this.ver});
-
   DanmakuBlockDataModel.fromJson(Map<String, dynamic> json) {
-    rule = (json['rule'] as List?)?.map((v) => SimpleRule.fromJson(v)).toList();
+    rule = <SimpleRule>[];
+    rule1 = <SimpleRule>[];
+    rule2 = <SimpleRule>[];
+    if ((json['rule'] as List?)?.isNotEmpty == true) {
+      for (var e in json['rule']) {
+        SimpleRule item = SimpleRule.fromJson(e);
+        switch (item.type) {
+          case 0:
+            rule.add(item);
+          case 1:
+            rule1.add(item);
+          case 2:
+            rule2.add(item);
+        }
+      }
+    }
     toast = json['toast'] == '' ? null : json['toast'];
     valid = json['valid'];
     ver = json['ver'];
@@ -17,8 +32,7 @@ class DanmakuBlockDataModel {
 class SimpleRule {
   late final int id;
   late final int type;
-  late String filter;
-  SimpleRule(this.id, this.type, this.filter);
+  late final String filter;
 
   SimpleRule.fromJson(Map<String, dynamic> json) {
     id = json['id'];

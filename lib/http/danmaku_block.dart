@@ -28,10 +28,7 @@ class DanmakuFilterHttp {
       },
     );
     if (res.data['code'] == 0) {
-      return {
-        'status': true,
-        'msg': '操作成功',
-      };
+      return {'status': true};
     } else {
       return {
         'status': false,

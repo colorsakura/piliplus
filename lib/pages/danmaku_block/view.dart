@@ -1,9 +1,15 @@
+import 'package:PiliPlus/common/widgets/dialog/dialog.dart';
+import 'package:PiliPlus/common/widgets/keep_alive_wrapper.dart';
+import 'package:PiliPlus/common/widgets/loading_widget/loading_widget.dart';
 import 'package:PiliPlus/common/widgets/scroll_physics.dart';
+import 'package:PiliPlus/models/common/dm_block_type.dart';
+import 'package:PiliPlus/models/user/danmaku_block.dart';
 import 'package:PiliPlus/models/user/danmaku_rule.dart';
 import 'package:PiliPlus/pages/danmaku_block/controller.dart';
 import 'package:PiliPlus/plugin/pl_player/controller.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 
@@ -15,84 +21,21 @@ class DanmakuBlockPage extends StatefulWidget {
 }
 
 class _DanmakuBlockPageState extends State<DanmakuBlockPage> {
-  final DanmakuBlockController _danmakuBlockController =
-      Get.put(DanmakuBlockController());
-  final ScrollController scrollController = ScrollController();
+  final DanmakuBlockController _controller = Get.put(DanmakuBlockController());
   late PlPlayerController plPlayerController;
-
-  static const Map<int, String> ruleLabels = {
-    0: '关键词',
-    1: '正则',
-    2: '用户',
-  };
 
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _danmakuBlockController.queryDanmakuFilter();
-    });
     plPlayerController = Get.arguments as PlPlayerController;
   }
 
   @override
   void dispose() {
-    final ruleFilter = RuleFilter.fromRuleTypeEntires(
-        _danmakuBlockController.ruleTypes.entries);
+    final ruleFilter = RuleFilter.fromRuleTypeEntires(_controller.rules);
     plPlayerController.filters = ruleFilter;
-    scrollController.dispose();
     GStorage.localCache.put(LocalCacheKey.danmakuFilterRules, ruleFilter);
     super.dispose();
-  }
-
-  void _showAddDialog(int type) {
-    final TextEditingController textController = TextEditingController();
-    late String hintText;
-    switch (type) {
-      case 0:
-        hintText = '输入过滤的关键词，其它类别请切换标签页后添加';
-        break;
-      case 1:
-        hintText = '输入//之间的正则表达式，无需包含头尾的"/"';
-        break;
-      case 2:
-        hintText = '输入经CRC32B（即小写16进制的CRC32）哈希后的用户UID';
-        break;
-    }
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('添加新的${ruleLabels[type]}规则'),
-          content: Column(mainAxisSize: MainAxisSize.min, children: [
-            Text(hintText),
-            TextField(
-              controller: textController,
-              autofocus: true,
-            )
-          ]),
-          actions: <Widget>[
-            TextButton(
-              onPressed: Navigator.of(context).pop,
-              child: const Text('取消'),
-            ),
-            TextButton(
-              child: const Text('添加'),
-              onPressed: () {
-                String filter = textController.text;
-                if (filter.isNotEmpty) {
-                  _danmakuBlockController.danmakuFilterAdd(
-                      filter: filter, type: type);
-                  Navigator.of(context).pop();
-                } else {
-                  SmartDialog.showToast('输入内容不能为空');
-                }
-              },
-            ),
-          ],
-        );
-      },
-    );
   }
 
   @override
@@ -100,45 +43,114 @@ class _DanmakuBlockPageState extends State<DanmakuBlockPage> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: TabBar(controller: _danmakuBlockController.tabController, tabs: [
-          for (var i = 0; i < ruleLabels.length; i++)
-            Obx(() => Tab(
-                text:
-                    '${ruleLabels[i]}(${_danmakuBlockController.ruleTypes[i]!.length})')),
-        ]),
+        title: const Text('弹幕屏蔽'),
+        bottom: TabBar(
+          controller: _controller.tabController,
+          tabs: DmBlockType.values
+              .map((e) => Obx(() => Tab(
+                  text: '${e.label}(${_controller.rules[e.index].length})')))
+              .toList(),
+        ),
       ),
       body: tabBarView(
-        controller: _danmakuBlockController.tabController,
-        children: [
-          for (var i = 0; i < ruleLabels.length; i++)
-            Obx(() => tabViewBuilder(
-                i, _danmakuBlockController.ruleTypes[i]!.entries.toList())),
-        ],
+        controller: _controller.tabController,
+        children: DmBlockType.values
+            .map((e) => KeepAliveWrapper(
+                  builder: (context) => Obx(() =>
+                      tabViewBuilder(e.index, _controller.rules[e.index])),
+                ))
+            .toList(),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () =>
-            _showAddDialog(_danmakuBlockController.tabController.index),
+            _showAddDialog(DmBlockType.values[_controller.tabController.index]),
         child: const Icon(Icons.add),
       ),
     );
   }
 
-  Widget tabViewBuilder(int tabIndex, List<MapEntry<int, String>> list) {
+  Widget tabViewBuilder(int tabIndex, List<SimpleRule> list) {
+    if (list.isEmpty) {
+      return scrollErrorWidget();
+    }
     return ListView.builder(
-      controller: scrollController,
       itemCount: list.length,
-      padding: const EdgeInsets.only(bottom: 100),
-      itemBuilder: (BuildContext context, int listIndex) {
+      padding:
+          EdgeInsets.only(bottom: MediaQuery.paddingOf(context).bottom + 80),
+      itemBuilder: (context, itemIndex) {
+        final SimpleRule item = list[itemIndex];
         return ListTile(
           title: Text(
-            list[listIndex].value,
+            item.filter,
             style: Theme.of(context).textTheme.bodyMedium,
           ),
           trailing: IconButton(
-            icon: const Icon(Icons.delete),
-            onPressed: () => _danmakuBlockController.danmakuFilterDel(
-                tabIndex, list[listIndex].key),
+            icon: const Icon(Icons.delete_outlined),
+            onPressed: () => showConfirmDialog(
+              context: context,
+              title: '确定删除该规则？',
+              onConfirm: () => _controller.danmakuFilterDel(
+                tabIndex,
+                itemIndex,
+                item.id,
+              ),
+            ),
           ),
+        );
+      },
+    );
+  }
+
+  void _showAddDialog(DmBlockType type) {
+    String filter = '';
+    String hintText = switch (type) {
+      DmBlockType.keyword => '输入过滤的关键词，其它类别请切换标签页后添加',
+      DmBlockType.regex => '输入//之间的正则表达式，无需包含头尾的"/"',
+      DmBlockType.uid => '输入用户UID',
+    };
+    final isUid = type == DmBlockType.uid;
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('添加新的${type.label}规则'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(hintText),
+              TextFormField(
+                autofocus: true,
+                initialValue: filter,
+                onChanged: (value) => filter = value,
+                keyboardType: isUid ? TextInputType.number : null,
+                inputFormatters: isUid
+                    ? [FilteringTextInputFormatter.allow(RegExp(r'\d+'))]
+                    : null,
+              )
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: Get.back,
+              child: Text(
+                '取消',
+                style: TextStyle(color: Theme.of(context).colorScheme.outline),
+              ),
+            ),
+            TextButton(
+              child: const Text('添加'),
+              onPressed: () {
+                if (filter.isNotEmpty) {
+                  Get.back();
+                  _controller.danmakuFilterAdd(
+                      filter: filter, type: type.index);
+                } else {
+                  SmartDialog.showToast('输入内容不能为空');
+                }
+              },
+            ),
+          ],
         );
       },
     );

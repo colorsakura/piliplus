@@ -1,4 +1,5 @@
 import 'package:PiliPlus/grpc/bilibili/community/service/dm/v1.pb.dart';
+import 'package:PiliPlus/models/user/danmaku_block.dart';
 
 class RuleFilter {
   static final _regExp = RegExp(r'^/(.*)/$');
@@ -14,23 +15,17 @@ class RuleFilter {
         count ?? dmFilterString.length + dmRegExp.length + dmUid.length;
   }
 
-  RuleFilter.fromRuleTypeEntires(
-      Iterable<MapEntry<int, Map<int, String>>> rules) {
-    for (var rule in rules) {
-      switch (rule.key) {
-        case 0:
-          dmFilterString.addAll(rule.value.values);
-          break;
-        case 1:
-          dmRegExp.addAll(rule.value.values.map((i) => RegExp(
-              _regExp.matchAsPrefix(i)?.group(1) ?? i,
-              caseSensitive: false)));
-          break;
-        case 2:
-          dmUid.addAll(rule.value.values);
-          break;
-      }
-    }
+  RuleFilter.fromRuleTypeEntires(List<List<SimpleRule>> rules) {
+    dmFilterString = rules[0].map((e) => e.filter).toList();
+
+    dmRegExp = rules[1]
+        .map((e) => RegExp(
+            _regExp.matchAsPrefix(e.filter)?.group(1) ?? e.filter,
+            caseSensitive: false))
+        .toList();
+
+    dmUid = rules[2].map((e) => e.filter).toSet();
+
     count = dmFilterString.length + dmRegExp.length + dmUid.length;
   }
 
