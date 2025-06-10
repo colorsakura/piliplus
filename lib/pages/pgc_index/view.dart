@@ -205,7 +205,7 @@ class _PgcIndexPageState extends State<PgcIndexPage>
 
   Widget _buildList(LoadingState<List<PgcIndexItem>?> loadingState) {
     return switch (loadingState) {
-      Loading() => const SliverToBoxAdapter(child: LinearProgressIndicator()),
+      Loading() => linearLoading,
       Success(:var response) => response?.isNotEmpty == true
           ? SliverGrid(
               gridDelegate: SliverGridDelegateWithExtentAndRatio(

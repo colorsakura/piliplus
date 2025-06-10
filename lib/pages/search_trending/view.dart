@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:PiliPlus/common/widgets/loading_widget/http_error.dart';
+import 'package:PiliPlus/common/widgets/loading_widget/loading_widget.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models_new/search/search_trending/list.dart';
@@ -148,7 +149,7 @@ class _SearchTrendingPageState extends State<SearchTrendingPage> {
       color: theme.colorScheme.outline.withValues(alpha: 0.1),
     );
     return switch (loadingState) {
-      Loading() => const SliverToBoxAdapter(child: LinearProgressIndicator()),
+      Loading() => linearLoading,
       Success(:var response) => response?.isNotEmpty == true
           ? SliverList.separated(
               itemCount: response!.length,

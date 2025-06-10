@@ -8,7 +8,6 @@ import 'package:PiliPlus/models/dynamics/up.dart';
 import 'package:PiliPlus/models_new/follow/list.dart';
 import 'package:PiliPlus/pages/common/common_controller.dart';
 import 'package:PiliPlus/pages/dynamics_tab/controller.dart';
-import 'package:PiliPlus/pages/dynamics_tab/view.dart';
 import 'package:PiliPlus/services/account_service.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/storage.dart';
@@ -27,7 +26,6 @@ class DynamicsController extends GetxController
   RxInt mid = (-1).obs;
   late TabController tabController;
   Set<int> tempBannedList = <int>{};
-  late List<Widget> tabsPageList;
   List<UpItem> hasUpdatedUps = <UpItem>[];
   int allFollowedUpsPage = 1;
   int allFollowedUpsTotal = 0;
@@ -57,9 +55,6 @@ class DynamicsController extends GetxController
       initialIndex: GStorage.setting
           .get(SettingBoxKey.defaultDynamicType, defaultValue: 0),
     );
-    tabsPageList = DynamicsTabType.values
-        .map((e) => DynamicsTabPage(dynamicsType: e))
-        .toList();
 
     queryFollowUp();
   }

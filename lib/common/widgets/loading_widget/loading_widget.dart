@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 
 Widget get loadingWidget => const Center(child: CircularProgressIndicator());
 
+Widget get linearLoading =>
+    const SliverToBoxAdapter(child: LinearProgressIndicator());
+
 Widget errorWidget({errMsg, onReload}) => HttpError(
       isSliver: false,
       errMsg: errMsg,

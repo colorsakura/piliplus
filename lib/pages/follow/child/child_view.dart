@@ -4,7 +4,7 @@ import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/common/follow_order_type.dart';
 import 'package:PiliPlus/models_new/follow/list.dart';
-import 'package:PiliPlus/pages/follow/child_controller.dart';
+import 'package:PiliPlus/pages/follow/child/child_controller.dart';
 import 'package:PiliPlus/pages/follow/controller.dart';
 import 'package:PiliPlus/pages/follow/widgets/follow_item.dart';
 import 'package:PiliPlus/pages/share/view.dart' show UserModel;
@@ -15,12 +15,14 @@ import 'package:get/get.dart';
 class FollowChildPage extends StatefulWidget {
   const FollowChildPage({
     super.key,
+    this.tag,
     this.controller,
     required this.mid,
     this.tagid,
     this.onSelect,
   });
 
+  final String? tag;
   final FollowController? controller;
   final int mid;
   final int? tagid;
@@ -33,8 +35,9 @@ class FollowChildPage extends StatefulWidget {
 class _FollowChildPageState extends State<FollowChildPage>
     with AutomaticKeepAliveClientMixin {
   late final _followController = Get.put(
-      FollowChildController(widget.controller, widget.mid, widget.tagid),
-      tag: Utils.generateRandomString(8));
+    FollowChildController(widget.controller, widget.mid, widget.tagid),
+    tag: '${widget.tag ?? Utils.generateRandomString(8)}${widget.tagid}',
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -62,6 +65,7 @@ class _FollowChildPageState extends State<FollowChildPage>
   Widget get _child => refreshIndicator(
         onRefresh: _followController.onRefresh,
         child: CustomScrollView(
+          controller: _followController.scrollController,
           physics: const AlwaysScrollableScrollPhysics(),
           slivers: [
             SliverPadding(

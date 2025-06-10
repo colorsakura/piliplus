@@ -1,4 +1,5 @@
 import 'package:PiliPlus/common/widgets/loading_widget/http_error.dart';
+import 'package:PiliPlus/common/widgets/loading_widget/loading_widget.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models_new/dynamic/dyn_topic_top/topic_item.dart';
@@ -43,7 +44,7 @@ class _DynTopicRcmdPageState extends State<DynTopicRcmdPage> {
 
   Widget _buildBody(LoadingState<List<TopicItem>?> loadingState) {
     return switch (loadingState) {
-      Loading() => const SliverToBoxAdapter(child: LinearProgressIndicator()),
+      Loading() => linearLoading,
       Success(:var response) => response?.isNotEmpty == true
           ? SliverList.builder(
               itemCount: response!.length,

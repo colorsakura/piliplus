@@ -1,4 +1,5 @@
 import 'package:PiliPlus/common/widgets/loading_widget/http_error.dart';
+import 'package:PiliPlus/common/widgets/loading_widget/loading_widget.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models_new/coin_log/list.dart';
 import 'package:PiliPlus/pages/member_coin_log/controller.dart';
@@ -45,7 +46,7 @@ class _MemberCoinLogPageState extends State<MemberCoinLogPage> {
 
   Widget _buildBody(LoadingState<List<CoinLogItem>?> loadingState) {
     return switch (loadingState) {
-      Loading() => const SliverToBoxAdapter(child: LinearProgressIndicator()),
+      Loading() => linearLoading,
       Success(:var response) => response?.isNotEmpty == true
           ? Builder(
               builder: (context) {

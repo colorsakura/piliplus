@@ -149,6 +149,9 @@ class _LogsPageState extends State<LogsPage> {
           ? SafeArea(
               bottom: false,
               child: ListView.separated(
+                padding: EdgeInsets.only(
+                  bottom: MediaQuery.paddingOf(context).bottom + 80,
+                ),
                 itemCount: logsContent.length,
                 itemBuilder: (context, index) {
                   final log = logsContent[index];

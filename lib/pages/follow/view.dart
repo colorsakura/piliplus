@@ -3,7 +3,8 @@ import 'package:PiliPlus/common/widgets/loading_widget/loading_widget.dart';
 import 'package:PiliPlus/common/widgets/scroll_physics.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/member/tags.dart';
-import 'package:PiliPlus/pages/follow/child_view.dart';
+import 'package:PiliPlus/pages/follow/child/child_controller.dart';
+import 'package:PiliPlus/pages/follow/child/child_view.dart';
 import 'package:PiliPlus/pages/follow/controller.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
@@ -18,10 +19,9 @@ class FollowPage extends StatefulWidget {
 }
 
 class _FollowPageState extends State<FollowPage> {
-  final FollowController _followController = Get.put(
-    FollowController(),
-    tag: Utils.generateRandomString(8),
-  );
+  final _tag = Utils.generateRandomString(8);
+  late final FollowController _followController =
+      Get.put(FollowController(), tag: _tag);
 
   @override
   Widget build(BuildContext context) {
@@ -69,10 +69,16 @@ class _FollowPageState extends State<FollowPage> {
       ),
       body: _followController.isOwner
           ? Obx(() => _buildBody(_followController.followState.value))
-          : FollowChildPage(
-              controller: _followController, mid: _followController.mid),
+          : _childPage(),
     );
   }
+
+  Widget _childPage([MemberTagItemModel? item]) => FollowChildPage(
+        tag: _tag,
+        controller: _followController,
+        mid: _followController.mid,
+        tagid: item?.tagid,
+      );
 
   bool _isCustomTag(int? tagid) {
     return tagid != null && tagid != 0 && tagid != -10 && tagid != -2;
@@ -97,7 +103,11 @@ class _FollowPageState extends State<FollowPage> {
                     int? count = item.count;
                     if (_isCustomTag(item.tagid)) {
                       return GestureDetector(
-                        onLongPress: () => _onHandleTag(index, item),
+                        behavior: HitTestBehavior.translucent,
+                        onLongPress: () {
+                          Feedback.forLongPress(context);
+                          _onHandleTag(index, item);
+                        },
                         child: Tab(
                           child: Row(
                             children: [
@@ -117,9 +127,13 @@ class _FollowPageState extends State<FollowPage> {
                 onTap: (value) {
                   if (!_followController.tabController!.indexIsChanging) {
                     final item = _followController.tabs[value];
-                    if (_isCustomTag(item.tagid)) {
-                      _onHandleTag(value, item);
-                    }
+                    // if (_isCustomTag(item.tagid)) {
+                    //   _onHandleTag(value, item);
+                    // }
+                    try {
+                      Get.find<FollowChildController>(tag: '$_tag${item.tagid}')
+                          .animateToTop();
+                    } catch (_) {}
                   }
                 },
               ),
@@ -129,24 +143,13 @@ class _FollowPageState extends State<FollowPage> {
                 color: Colors.transparent,
                 child: tabBarView(
                   controller: _followController.tabController,
-                  children: _followController.tabs
-                      .map(
-                        (item) => FollowChildPage(
-                          controller: _followController,
-                          mid: _followController.mid,
-                          tagid: item.tagid,
-                        ),
-                      )
-                      .toList(),
+                  children: _followController.tabs.map(_childPage).toList(),
                 ),
               ),
             ),
           ],
         ),
-      Error() => FollowChildPage(
-          controller: _followController,
-          mid: _followController.mid,
-        ),
+      Error() => _childPage(),
     };
   }
 
