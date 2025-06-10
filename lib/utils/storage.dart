@@ -497,6 +497,9 @@ class GStorage {
   static String get banWordForDyn =>
       GStorage.setting.get(SettingBoxKey.banWordForDyn, defaultValue: '');
 
+  static bool get enableLog =>
+      setting.get(SettingBoxKey.enableLog, defaultValue: true);
+
   static List<double> get dynamicDetailRatio => List<double>.from(setting
       .get(SettingBoxKey.dynamicDetailRatio, defaultValue: const [60.0, 40.0]));
 
@@ -794,6 +797,7 @@ class SettingBoxKey {
       pageTransition = 'pageTransition',
       optTabletNav = 'optTabletNav',
       banWordForDyn = 'banWordForDyn',
+      enableLog = 'enableLog',
 
       // WebDAV
       webdavUri = 'webdavUri',

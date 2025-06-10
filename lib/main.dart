@@ -68,45 +68,50 @@ void main() async {
   Request();
   await Request.setCookie();
   RecommendFilter();
-  // 异常捕获 logo记录
-  const String buildConfig = '''\n
+
+  if (GStorage.enableLog) {
+    // 异常捕获 logo记录
+    const String buildConfig = '''\n
 Build Time: ${BuildConfig.buildTime}
 Commit Hash: ${BuildConfig.commitHash}''';
-  final Catcher2Options debugConfig = Catcher2Options(
-    SilentReportMode(),
-    [
-      FileHandler(await getLogsPath()),
-      ConsoleHandler(
-        enableDeviceParameters: false,
-        enableApplicationParameters: false,
-        enableCustomParameters: true,
-      )
-    ],
-    customParameters: {
-      'BuildConfig': buildConfig,
-    },
-  );
+    final Catcher2Options debugConfig = Catcher2Options(
+      SilentReportMode(),
+      [
+        FileHandler(await getLogsPath()),
+        ConsoleHandler(
+          enableDeviceParameters: false,
+          enableApplicationParameters: false,
+          enableCustomParameters: true,
+        )
+      ],
+      customParameters: {
+        'BuildConfig': buildConfig,
+      },
+    );
 
-  final Catcher2Options releaseConfig = Catcher2Options(
-    SilentReportMode(),
-    [
-      FileHandler(await getLogsPath()),
-      ConsoleHandler(
-        enableCustomParameters: true,
-      )
-    ],
-    customParameters: {
-      'BuildConfig': buildConfig,
-    },
-  );
+    final Catcher2Options releaseConfig = Catcher2Options(
+      SilentReportMode(),
+      [
+        FileHandler(await getLogsPath()),
+        ConsoleHandler(
+          enableCustomParameters: true,
+        )
+      ],
+      customParameters: {
+        'BuildConfig': buildConfig,
+      },
+    );
 
-  Catcher2(
-    debugConfig: debugConfig,
-    releaseConfig: releaseConfig,
-    runAppFunction: () {
-      runApp(const MyApp());
-    },
-  );
+    Catcher2(
+      debugConfig: debugConfig,
+      releaseConfig: releaseConfig,
+      runAppFunction: () {
+        runApp(const MyApp());
+      },
+    );
+  } else {
+    runApp(const MyApp());
+  }
 
   // 小白条、导航栏沉浸
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);

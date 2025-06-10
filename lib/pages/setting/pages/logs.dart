@@ -3,9 +3,11 @@ import 'dart:io';
 import 'package:PiliPlus/common/widgets/loading_widget/loading_widget.dart';
 import 'package:PiliPlus/services/loggeer.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
+import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/material.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 
 class LogsPage extends StatefulWidget {
   const LogsPage({super.key});
@@ -19,6 +21,7 @@ class _LogsPageState extends State<LogsPage> {
   late String fileContent;
   List logsContent = [];
   DateTime? latestLog;
+  late bool enableLog = GStorage.enableLog;
 
   @override
   void initState() {
@@ -114,6 +117,11 @@ class _LogsPageState extends State<LogsPage> {
           PopupMenuButton<String>(
             onSelected: (String type) {
               switch (type) {
+                case 'log':
+                  enableLog = !enableLog;
+                  GStorage.setting.put(SettingBoxKey.enableLog, enableLog);
+                  SmartDialog.showToast('已${enableLog ? '开启' : '关闭'}，重启生效');
+                  break;
                 case 'copy':
                   copyLogs();
                   break;
@@ -128,6 +136,10 @@ class _LogsPageState extends State<LogsPage> {
               }
             },
             itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+              PopupMenuItem<String>(
+                value: 'log',
+                child: Text('${enableLog ? '关闭' : '开启'}日志'),
+              ),
               const PopupMenuItem<String>(
                 value: 'copy',
                 child: Text('复制日志'),
