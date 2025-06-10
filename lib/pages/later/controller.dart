@@ -7,9 +7,9 @@ import 'package:PiliPlus/models_new/later/data.dart';
 import 'package:PiliPlus/models_new/later/list.dart';
 import 'package:PiliPlus/pages/common/multi_select_controller.dart';
 import 'package:PiliPlus/pages/later/base_controller.dart';
+import 'package:PiliPlus/services/account_service.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
-import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -21,7 +21,8 @@ class LaterController extends MultiSelectController<LaterData, LaterItemModel> {
   );
   final LaterViewType laterViewType;
 
-  dynamic mid;
+  AccountService accountService = Get.find<AccountService>();
+
   final RxBool asc = false.obs;
 
   final LaterBaseController baseCtr = Get.put(LaterBaseController());
@@ -65,7 +66,6 @@ class LaterController extends MultiSelectController<LaterData, LaterItemModel> {
   @override
   void onInit() {
     super.onInit();
-    mid = Accounts.main.mid;
     queryData();
   }
 
@@ -219,7 +219,7 @@ class LaterController extends MultiSelectController<LaterData, LaterItemModel> {
               'sourceType': 'watchLater',
               'count': baseCtr.counts[LaterViewType.all],
               'favTitle': '稍后再看',
-              'mediaId': mid,
+              'mediaId': accountService.mid,
               'desc': false,
             },
           );

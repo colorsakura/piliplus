@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:PiliPlus/models/user/info.dart';
 import 'package:PiliPlus/models_new/pgc/pgc_info_model/episode.dart';
 import 'package:PiliPlus/models_new/pgc/pgc_info_model/new_ep.dart';
 import 'package:PiliPlus/pages/video/controller.dart';
@@ -34,9 +35,8 @@ class PgcPanel extends StatefulWidget {
 class _PgcPanelState extends State<PgcPanel> {
   late int currentIndex;
   final ScrollController listViewScrollCtr = ScrollController();
-  dynamic userInfo;
   // 默认未开通
-  int vipStatus = 0;
+  late int vipStatus;
   late int cid;
   late final VideoDetailController videoDetailCtr;
   StreamSubscription? _listener;
@@ -47,10 +47,10 @@ class _PgcPanelState extends State<PgcPanel> {
     cid = widget.cid!;
     currentIndex = widget.pages.indexWhere((e) => e.cid == cid);
     scrollToIndex();
-    userInfo = GStorage.userInfo.get('userInfoCache');
-    if (userInfo != null) {
-      vipStatus = userInfo.vipStatus;
-    }
+
+    UserInfoData? userInfo = GStorage.userInfo.get('userInfoCache');
+    vipStatus = userInfo?.vipStatus ?? 0;
+
     videoDetailCtr = Get.find<VideoDetailController>(tag: widget.heroTag);
 
     _listener = videoDetailCtr.cid.listen((int p0) {

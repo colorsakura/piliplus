@@ -32,7 +32,7 @@ class _LiveAreaPageState extends State<LiveAreaPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('全部标签'),
-        actions: _controller.isLogin
+        actions: _controller.accountService.isLogin.value
             ? [
                 TextButton(
                   onPressed: _controller.onEdit,
@@ -52,7 +52,7 @@ class _LiveAreaPageState extends State<LiveAreaPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            if (_controller.isLogin)
+            if (_controller.accountService.isLogin.value)
               Obx(() => _buildFavWidget(theme, _controller.favState.value)),
             Expanded(
               child:

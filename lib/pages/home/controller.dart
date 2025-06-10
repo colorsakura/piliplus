@@ -6,6 +6,7 @@ import 'package:PiliPlus/http/init.dart';
 import 'package:PiliPlus/models/common/home_tab_type.dart';
 import 'package:PiliPlus/pages/common/common_controller.dart';
 import 'package:PiliPlus/pages/mine/view.dart';
+import 'package:PiliPlus/services/account_service.dart';
 import 'package:PiliPlus/utils/feed_back.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:flutter/foundation.dart' show kDebugMode;
@@ -16,9 +17,6 @@ class HomeController extends GetxController
     with GetSingleTickerProviderStateMixin, ScrollOrRefreshMixin {
   late List<HomeTabType> tabs;
   late TabController tabController;
-
-  RxBool isLogin = false.obs;
-  RxString userFace = ''.obs;
 
   StreamController<bool>? searchBarStream;
   late bool hideSearchBar;
@@ -33,12 +31,11 @@ class HomeController extends GetxController
   @override
   ScrollController get scrollController => controller.scrollController;
 
+  AccountService accountService = Get.find<AccountService>();
+
   @override
   void onInit() {
     super.onInit();
-    final userInfo = GStorage.userInfo.get('userInfoCache');
-    isLogin.value = userInfo != null;
-    userFace.value = userInfo != null ? userInfo.face! : '';
 
     hideSearchBar =
         GStorage.setting.get(SettingBoxKey.hideSearchBar, defaultValue: true);

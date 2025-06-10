@@ -3,6 +3,7 @@ import 'package:PiliPlus/models/common/account_type.dart';
 import 'package:PiliPlus/models/common/theme/theme_type.dart';
 import 'package:PiliPlus/models/user/info.dart';
 import 'package:PiliPlus/models/user/stat.dart';
+import 'package:PiliPlus/services/account_service.dart';
 import 'package:PiliPlus/utils/accounts/account.dart';
 import 'package:PiliPlus/utils/login_utils.dart';
 import 'package:PiliPlus/utils/storage.dart';
@@ -18,7 +19,7 @@ class MineController extends GetxController {
   // 用户状态 动态、关注、粉丝
   Rx<UserStat> userStat = UserStat().obs;
 
-  RxBool isLogin = false.obs;
+  AccountService accountService = Get.find<AccountService>();
 
   Rx<ThemeType> themeType = ThemeType.system.obs;
   Box get setting => GStorage.setting;
@@ -31,16 +32,14 @@ class MineController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-
-    dynamic userInfoCache = GStorage.userInfo.get('userInfoCache');
+    UserInfoData? userInfoCache = GStorage.userInfo.get('userInfoCache');
     if (userInfoCache != null) {
       userInfo.value = userInfoCache;
-      isLogin.value = true;
     }
   }
 
   void onLogin([bool longPress = false]) {
-    if (!isLogin.value || longPress) {
+    if (!accountService.isLogin.value || longPress) {
       Get.toNamed('/loginPage', preventDuplicates: false);
     } else {
       int mid = userInfo.value.mid!;
@@ -51,15 +50,20 @@ class MineController extends GetxController {
   }
 
   Future<void> queryUserInfo() async {
-    if (!isLogin.value) {
+    if (!accountService.isLogin.value) {
       return;
     }
     var res = await UserHttp.userInfo();
     if (res['status']) {
-      if (res['data'].isLogin) {
-        userInfo.value = res['data'];
-        GStorage.userInfo.put('userInfoCache', res['data']);
-        isLogin.value = true;
+      UserInfoData data = res['data'];
+      if (data.isLogin == true) {
+        userInfo.value = data;
+        GStorage.userInfo.put('userInfoCache', data);
+        accountService
+          ..mid = data.mid!
+          ..name.value = data.uname!
+          ..face.value = data.face!
+          ..isLogin.value = true;
       } else {
         LoginUtils.onLogoutMain();
         return;
@@ -203,7 +207,7 @@ class MineController extends GetxController {
   }
 
   void pushFollow() {
-    if (!isLogin.value) {
+    if (!accountService.isLogin.value) {
       SmartDialog.showToast('账号未登录');
       return;
     }
@@ -211,7 +215,7 @@ class MineController extends GetxController {
   }
 
   void pushFans() {
-    if (!isLogin.value) {
+    if (!accountService.isLogin.value) {
       SmartDialog.showToast('账号未登录');
       return;
     }
@@ -219,7 +223,7 @@ class MineController extends GetxController {
   }
 
   void pushDynamic() {
-    if (!isLogin.value) {
+    if (!accountService.isLogin.value) {
       SmartDialog.showToast('账号未登录');
       return;
     }

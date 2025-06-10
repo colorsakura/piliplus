@@ -9,6 +9,7 @@ import 'package:PiliPlus/models_new/follow/list.dart';
 import 'package:PiliPlus/pages/common/common_controller.dart';
 import 'package:PiliPlus/pages/dynamics_tab/controller.dart';
 import 'package:PiliPlus/pages/dynamics_tab/view.dart';
+import 'package:PiliPlus/services/account_service.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:easy_debounce/easy_throttle.dart';
@@ -27,9 +28,6 @@ class DynamicsController extends GetxController
   late TabController tabController;
   Set<int> tempBannedList = <int>{};
   late List<Widget> tabsPageList;
-  RxBool isLogin = false.obs;
-  dynamic ownerMid;
-  dynamic face;
   List<UpItem> hasUpdatedUps = <UpItem>[];
   int allFollowedUpsPage = 1;
   int allFollowedUpsTotal = 0;
@@ -38,6 +36,8 @@ class DynamicsController extends GetxController
   late bool showLiveItems = GStorage.expandDynLivePanel;
 
   final upPanelPosition = GStorage.upPanelPosition;
+
+  AccountService accountService = Get.find<AccountService>();
 
   DynamicsTabController? get controller {
     try {
@@ -51,12 +51,6 @@ class DynamicsController extends GetxController
   @override
   void onInit() {
     super.onInit();
-
-    dynamic userInfo = GStorage.userInfo.get('userInfoCache');
-    ownerMid = userInfo?.mid;
-    face = userInfo?.face;
-    isLogin.value = userInfo != null;
-
     tabController = TabController(
       length: DynamicsTabType.values.length,
       vsync: this,
@@ -76,7 +70,7 @@ class DynamicsController extends GetxController
       return;
     }
     var res = await FollowHttp.followings(
-      vmid: ownerMid,
+      vmid: accountService.mid,
       pn: allFollowedUpsPage,
       ps: 50,
       orderType: 'attention',
@@ -107,7 +101,7 @@ class DynamicsController extends GetxController
   Future<void> queryFollowUp({String type = 'init'}) async {
     if (isQuerying) return;
     isQuerying = true;
-    if (!isLogin.value) {
+    if (!accountService.isLogin.value) {
       upData
         ..value.errMsg = '账号未登录'
         ..refresh();
@@ -118,7 +112,7 @@ class DynamicsController extends GetxController
       allFollowedUpsPage = 1;
       final f1 = DynamicsHttp.followUp();
       final f2 = FollowHttp.followings(
-        vmid: ownerMid,
+        vmid: accountService.mid,
         pn: allFollowedUpsPage,
         ps: 50,
         orderType: 'attention',

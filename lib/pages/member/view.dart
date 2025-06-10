@@ -82,8 +82,8 @@ class _MemberPageState extends State<MemberPage> {
           PopupMenuButton(
             icon: const Icon(Icons.more_vert),
             itemBuilder: (BuildContext context) => <PopupMenuEntry>[
-              if (_userController.ownerMid != 0 &&
-                  _userController.ownerMid != _mid) ...[
+              if (_userController.accountService.isLogin.value &&
+                  _userController.accountService.mid != _mid) ...[
                 PopupMenuItem(
                   onTap: () => _userController.blockUser(context),
                   child: Row(
@@ -117,7 +117,9 @@ class _MemberPageState extends State<MemberPage> {
                   children: [
                     const Icon(Icons.share_outlined, size: 19),
                     const SizedBox(width: 10),
-                    Text(_userController.ownerMid != _mid ? '分享UP主' : '分享我的主页'),
+                    Text(_userController.accountService.mid != _mid
+                        ? '分享UP主'
+                        : '分享我的主页'),
                   ],
                 ),
               ),
@@ -137,8 +139,9 @@ class _MemberPageState extends State<MemberPage> {
                   ],
                 ),
               ),
-              if (_userController.ownerMid != 0)
-                if (_userController.mid == _userController.ownerMid) ...[
+              if (_userController.accountService.isLogin.value)
+                if (_userController.mid ==
+                    _userController.accountService.mid) ...[
                   if ((_userController
                               .loadingState.value.data?.card?.vip?.status ??
                           0) >
@@ -314,7 +317,8 @@ class _MemberPageState extends State<MemberPage> {
           ? Obx(
               () => UserInfoCard(
                 isV: isV,
-                isOwner: _userController.mid == _userController.ownerMid,
+                isOwner:
+                    _userController.mid == _userController.accountService.mid,
                 relation: _userController.relation.value,
                 card: response.card!,
                 images: response.images!,

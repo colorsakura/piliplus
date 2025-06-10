@@ -4,7 +4,10 @@ import 'package:PiliPlus/http/constants.dart';
 import 'package:PiliPlus/http/init.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/common/member/profile_type.dart';
+import 'package:PiliPlus/models/user/info.dart';
 import 'package:PiliPlus/models_new/account_myinfo/data.dart';
+import 'package:PiliPlus/pages/mine/controller.dart';
+import 'package:PiliPlus/services/account_service.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:PiliPlus/utils/storage.dart';
@@ -33,6 +36,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
       LoadingState<AccountMyInfoData>.loading();
   late final _textController = TextEditingController();
   late final _imagePicker = ImagePicker();
+  AccountService accountService = Get.find<AccountService>();
 
   @override
   void initState() {
@@ -69,13 +73,32 @@ class _EditProfilePageState extends State<EditProfilePage> {
         .get('${HttpString.appBaseUrl}/x/v2/account/myinfo',
             queryParameters: data)
         .then((res) {
-      setState(() {
-        if (res.data['code'] == 0) {
-          _loadingState = Success(AccountMyInfoData.fromJson(res.data['data']));
-        } else {
-          _loadingState = Error(res.data['message']);
-        }
-      });
+      if (mounted) {
+        setState(() {
+          if (res.data['code'] == 0) {
+            AccountMyInfoData data =
+                AccountMyInfoData.fromJson(res.data['data']);
+            _loadingState = Success(data);
+            accountService
+              ..name.value = data.name!
+              ..face.value = data.face!;
+            try {
+              UserInfoData userInfo = GStorage.userInfo.get('userInfoCache')
+                ..uname = data.name
+                ..face = data.face;
+              GStorage.userInfo.put('userInfoCache', userInfo);
+            } catch (_) {}
+            try {
+              Get.find<MineController>().userInfo
+                ..value.uname = data.name
+                ..value.face = data.face
+                ..refresh();
+            } catch (_) {}
+          } else {
+            _loadingState = Error(res.data['message']);
+          }
+        });
+      }
     });
   }
 
@@ -343,6 +366,17 @@ class _EditProfilePageState extends State<EditProfilePage> {
           data
             ..name = _textController.text
             ..coins = data.coins! - 6;
+          accountService.name.value = _textController.text;
+          try {
+            UserInfoData userInfo = GStorage.userInfo.get('userInfoCache')
+              ..uname = _textController.text;
+            GStorage.userInfo.put('userInfoCache', userInfo);
+          } catch (_) {}
+          try {
+            Get.find<MineController>().userInfo
+              ..value.uname = _textController.text
+              ..refresh();
+          } catch (_) {}
         } else if (type == ProfileType.sign) {
           data.sign = _textController.text;
         } else if (type == ProfileType.birthday) {
@@ -351,7 +385,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
           data.sex = datum;
         }
         SmartDialog.showToast('修改成功');
-        setState(() {});
+        if (mounted) {
+          setState(() {});
+        }
         if (type == ProfileType.uname || type == ProfileType.sign) {
           Get.back();
         }
@@ -469,9 +505,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
           )
               .then((res) {
             if (res.data['code'] == 0) {
-              _loadingState.data.face = res.data['data'];
               SmartDialog.showToast('修改成功');
-              setState(() {});
+              Future.delayed(const Duration(milliseconds: 500))
+                  .whenComplete(_getInfo);
             } else {
               SmartDialog.showToast(res.data['message']);
             }

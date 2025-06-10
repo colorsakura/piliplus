@@ -8,8 +8,8 @@ import 'package:PiliPlus/models/common/image_type.dart';
 import 'package:PiliPlus/models_new/fans/list.dart';
 import 'package:PiliPlus/pages/fan/controller.dart';
 import 'package:PiliPlus/pages/share/view.dart' show UserModel;
+import 'package:PiliPlus/services/account_service.dart';
 import 'package:PiliPlus/utils/grid.dart';
-import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -37,13 +37,13 @@ class _FansPageState extends State<FansPage> {
   @override
   void initState() {
     super.initState();
-    final userInfo = GStorage.userInfo.get('userInfoCache');
+    AccountService accountService = Get.find<AccountService>();
     mid = widget.mid ??
         (Get.parameters['mid'] != null
             ? int.parse(Get.parameters['mid']!)
-            : userInfo?.mid);
-    isOwner = mid == userInfo?.mid;
-    name = Get.parameters['name'] ?? userInfo?.uname;
+            : accountService.mid);
+    isOwner = mid == accountService.mid;
+    name = Get.parameters['name'] ?? accountService.name.value;
     _fansController = Get.put(FansController(mid), tag: Utils.makeHeroTag(mid));
   }
 

@@ -14,11 +14,11 @@ import 'package:PiliPlus/pages/member_video/widgets/video_card_h_member_video.da
 import 'package:PiliPlus/pages/video/controller.dart';
 import 'package:PiliPlus/pages/video/introduction/ugc/controller.dart';
 import 'package:PiliPlus/pages/video/member/controller.dart';
+import 'package:PiliPlus/services/account_service.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/grid.dart';
 import 'package:PiliPlus/utils/id_utils.dart';
 import 'package:PiliPlus/utils/request_utils.dart';
-import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -42,7 +42,7 @@ class HorizontalMemberPage extends StatefulWidget {
 
 class _HorizontalMemberPageState extends State<HorizontalMemberPage> {
   late final HorizontalMemberPageController _controller;
-  int? _ownerMid;
+  AccountService accountService = Get.find<AccountService>();
   dynamic _bvid;
 
   @override
@@ -56,7 +56,6 @@ class _HorizontalMemberPageState extends State<HorizontalMemberPage> {
       tag: widget.videoDetailController.heroTag,
     );
     _bvid = widget.videoDetailController.bvid;
-    _ownerMid = Accounts.main.mid;
   }
 
   @override
@@ -320,10 +319,10 @@ class _HorizontalMemberPageState extends State<HorizontalMemberPage> {
                     visualDensity: const VisualDensity(vertical: -2),
                   ),
                   onPressed: () {
-                    if (widget.mid == _ownerMid) {
+                    if (widget.mid == accountService.mid) {
                       Get.toNamed('/editProfile');
                     } else {
-                      if (_ownerMid == null) {
+                      if (!accountService.isLogin.value) {
                         SmartDialog.showToast('账号未登录');
                         return;
                       }
@@ -340,7 +339,7 @@ class _HorizontalMemberPageState extends State<HorizontalMemberPage> {
                     }
                   },
                   child: Text(
-                    widget.mid == _ownerMid
+                    widget.mid == accountService.mid
                         ? '编辑资料'
                         : memberInfoModel.isFollowed == true
                             ? '已关注'

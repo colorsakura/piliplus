@@ -4,15 +4,17 @@ import 'package:PiliPlus/models/common/live_search_type.dart';
 import 'package:PiliPlus/models_new/live/live_search/data.dart';
 import 'package:PiliPlus/pages/common/common_list_controller.dart';
 import 'package:PiliPlus/pages/live_search/controller.dart';
-import 'package:PiliPlus/utils/storage.dart';
+import 'package:PiliPlus/services/account_service.dart';
+import 'package:get/get.dart';
 
 class LiveSearchChildController
     extends CommonListController<LiveSearchData, dynamic> {
   LiveSearchChildController(this.controller, this.searchType);
 
-  final isLogin = Accounts.main.isLogin;
   final LiveSearchController controller;
   final LiveSearchType searchType;
+
+  AccountService accountService = Get.find<AccountService>();
 
   @override
   void checkIsEnd(int length) {
@@ -46,7 +48,7 @@ class LiveSearchChildController
   @override
   Future<LoadingState<LiveSearchData>> customGetData() {
     return LiveHttp.liveSearch(
-      isLogin: isLogin,
+      isLogin: accountService.isLogin.value,
       page: page,
       keyword: controller.editingController.text,
       type: searchType,

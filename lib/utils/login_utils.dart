@@ -9,12 +9,11 @@ import 'package:PiliPlus/models/user/info.dart';
 import 'package:PiliPlus/models/user/stat.dart';
 import 'package:PiliPlus/pages/dynamics/controller.dart';
 import 'package:PiliPlus/pages/dynamics_tab/controller.dart';
-import 'package:PiliPlus/pages/home/controller.dart';
 import 'package:PiliPlus/pages/live/controller.dart';
-import 'package:PiliPlus/pages/main/controller.dart';
 import 'package:PiliPlus/pages/media/controller.dart';
 import 'package:PiliPlus/pages/mine/controller.dart';
 import 'package:PiliPlus/pages/pgc/controller.dart';
+import 'package:PiliPlus/services/account_service.dart';
 import 'package:PiliPlus/utils/accounts/account.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart' as web;
@@ -45,61 +44,50 @@ class LoginUtils {
       SmartDialog.showToast('设置登录态失败，$e');
     }
     final result = await UserHttp.userInfo();
-    if (result['status'] && result['data']?.isLogin == true) {
+    if (result['status']) {
       final UserInfoData data = result['data'];
-      SmartDialog.showToast('main登录成功');
-      await GStorage.userInfo.put('userInfoCache', data);
-      try {
-        Get.find<MineController>()
-          ..isLogin.value = true
-          ..queryUserInfo();
-      } catch (_) {}
+      if (data.isLogin == true) {
+        Get.find<AccountService>()
+          ..mid = data.mid!
+          ..name.value = data.uname!
+          ..face.value = data.face!
+          ..isLogin.value = true;
 
-      try {
-        Get.find<HomeController>()
-          ..isLogin.value = true
-          ..userFace.value = data.face!;
-      } catch (_) {}
+        SmartDialog.showToast('main登录成功');
+        await GStorage.userInfo.put('userInfoCache', data);
 
-      try {
-        Get.find<DynamicsController>()
-          ..isLogin.value = true
-          ..ownerMid = data.mid
-          ..face = data.face
-          ..onRefresh();
-      } catch (_) {}
-
-      for (var item in DynamicsTabType.values) {
         try {
-          Get.find<DynamicsTabController>(tag: item.name).onRefresh();
+          Get.find<MineController>().queryUserInfo();
+        } catch (_) {}
+
+        try {
+          Get.find<DynamicsController>().onRefresh();
+        } catch (_) {}
+
+        for (var item in DynamicsTabType.values) {
+          try {
+            Get.find<DynamicsTabController>(tag: item.name).onRefresh();
+          } catch (_) {}
+        }
+
+        try {
+          Get.find<MediaController>().onRefresh();
+        } catch (_) {}
+
+        try {
+          Get.find<LiveController>().onRefresh();
+        } catch (_) {}
+
+        try {
+          Get.find<PgcController>(tag: HomeTabType.bangumi.name)
+              .queryPgcFollow();
+        } catch (_) {}
+
+        try {
+          Get.find<PgcController>(tag: HomeTabType.cinema.name)
+              .queryPgcFollow();
         } catch (_) {}
       }
-
-      try {
-        Get.find<MediaController>()
-          ..mid = data.mid
-          ..onRefresh();
-      } catch (_) {}
-
-      try {
-        Get.find<LiveController>()
-          ..isLogin.value = true
-          ..onRefresh();
-      } catch (_) {}
-
-      try {
-        Get.find<PgcController>(tag: HomeTabType.bangumi.name)
-          ..isLogin.value = true
-          ..mid = data.mid
-          ..queryPgcFollow();
-      } catch (_) {}
-
-      try {
-        Get.find<PgcController>(tag: HomeTabType.cinema.name)
-          ..isLogin.value = true
-          ..mid = data.mid
-          ..queryPgcFollow();
-      } catch (_) {}
     } else {
       // 获取用户信息失败
       await Accounts.deleteAll({account});
@@ -110,6 +98,12 @@ class LoginUtils {
   }
 
   static Future<void> onLogoutMain() async {
+    Get.find<AccountService>()
+      ..mid = 0
+      ..name.value = ''
+      ..face.value = ''
+      ..isLogin.value = false;
+
     GrpcRepo.updateHeaders(null);
 
     await Future.wait([
@@ -118,40 +112,22 @@ class LoginUtils {
     ]);
 
     try {
-      Get.find<MainController>().isLogin.value = false;
-    } catch (_) {}
-
-    try {
       Get.find<MineController>()
         ..userInfo.value = UserInfoData()
-        ..userStat.value = UserStat()
-        ..isLogin.value = false;
+        ..userStat.value = UserStat();
       // MineController.anonymity.value = false;
     } catch (_) {}
 
     try {
-      Get.find<HomeController>()
-        ..isLogin.value = false
-        ..userFace.value = '';
+      Get.find<DynamicsController>().onRefresh();
     } catch (_) {}
 
     try {
-      Get.find<DynamicsController>()
-        ..ownerMid = null
-        ..isLogin.value = false
-        ..onRefresh();
+      Get.find<MediaController>().loadingState.value = LoadingState.loading();
     } catch (_) {}
 
     try {
-      Get.find<MediaController>()
-        ..mid = null
-        ..loadingState.value = LoadingState.loading();
-    } catch (_) {}
-
-    try {
-      Get.find<LiveController>()
-        ..isLogin.value = false
-        ..onRefresh();
+      Get.find<LiveController>().onRefresh();
     } catch (_) {}
 
     for (var item in DynamicsTabType.values) {
@@ -161,17 +137,13 @@ class LoginUtils {
     }
 
     try {
-      Get.find<PgcController>(tag: HomeTabType.bangumi.name)
-        ..mid = null
-        ..isLogin.value = false
-        ..followState.value = LoadingState.loading();
+      Get.find<PgcController>(tag: HomeTabType.bangumi.name).followState.value =
+          LoadingState.loading();
     } catch (_) {}
 
     try {
-      Get.find<PgcController>(tag: HomeTabType.cinema.name)
-        ..mid = null
-        ..isLogin.value = false
-        ..followState.value = LoadingState.loading();
+      Get.find<PgcController>(tag: HomeTabType.cinema.name).followState.value =
+          LoadingState.loading();
     } catch (_) {}
   }
 

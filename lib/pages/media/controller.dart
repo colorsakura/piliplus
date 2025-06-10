@@ -2,7 +2,7 @@ import 'package:PiliPlus/http/fav.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models_new/fav/fav_video/data.dart';
 import 'package:PiliPlus/pages/common/common_data_controller.dart';
-import 'package:PiliPlus/utils/storage.dart';
+import 'package:PiliPlus/services/account_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -34,14 +34,14 @@ class MediaController extends CommonDataController<FavVideoData, FavVideoData> {
           ),
     ),
   ];
-  int? mid;
   RxInt count = (-1).obs;
+
+  AccountService accountService = Get.find<AccountService>();
 
   @override
   void onInit() {
     super.onInit();
-    mid = Accounts.main.mid;
-    if (mid != 0) {
+    if (accountService.isLogin.value) {
       queryData();
     }
   }
@@ -55,11 +55,10 @@ class MediaController extends CommonDataController<FavVideoData, FavVideoData> {
 
   @override
   Future<LoadingState<FavVideoData>> customGetData() {
-    mid ??= Accounts.main.mid;
     return FavHttp.userfavFolder(
       pn: 1,
       ps: 5,
-      mid: mid,
+      mid: accountService.mid,
     );
   }
 }

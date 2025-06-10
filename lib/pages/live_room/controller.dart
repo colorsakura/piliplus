@@ -12,6 +12,7 @@ import 'package:PiliPlus/models_new/live/live_room_play_info/data.dart';
 import 'package:PiliPlus/pages/mine/controller.dart';
 import 'package:PiliPlus/plugin/pl_player/controller.dart';
 import 'package:PiliPlus/plugin/pl_player/models/data_source.dart';
+import 'package:PiliPlus/services/account_service.dart';
 import 'package:PiliPlus/services/service_locator.dart';
 import 'package:PiliPlus/tcp/live.dart';
 import 'package:PiliPlus/utils/danmaku_utils.dart';
@@ -48,15 +49,14 @@ class LiveRoomController extends GetxController {
 
   String? savedDanmaku;
 
-  late final isLogin = Accounts.main.isLogin;
-  late final mid = Accounts.main.mid;
+  AccountService accountService = Get.find<AccountService>();
 
   @override
   void onInit() {
     super.onInit();
     roomId = int.parse(Get.parameters['roomid']!);
     queryLiveInfoH5();
-    if (isLogin && !MineController.anonymity.value) {
+    if (accountService.isLogin.value && !MineController.anonymity.value) {
       VideoHttp.roomEntryAction(roomId: roomId);
     }
   }
@@ -236,7 +236,7 @@ class LiveRoomController extends GetxController {
                   extra['content'],
                   color: DmUtils.decimalToColor(extra['color']),
                   type: DmUtils.getPosition(extra['mode']),
-                  selfSend: uid == mid,
+                  selfSend: uid == accountService.mid,
                 ),
               );
               WidgetsBinding.instance

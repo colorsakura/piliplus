@@ -7,6 +7,7 @@ import 'package:PiliPlus/models_new/fav/fav_pgc/list.dart';
 import 'package:PiliPlus/models_new/pgc/pgc_index_result/list.dart';
 import 'package:PiliPlus/models_new/pgc/pgc_timeline/result.dart';
 import 'package:PiliPlus/pages/common/common_list_controller.dart';
+import 'package:PiliPlus/services/account_service.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:flutter/material.dart';
@@ -17,30 +18,28 @@ class PgcController
   PgcController({required this.tabType});
   final HomeTabType tabType;
 
-  int? mid;
-  late final RxBool isLogin;
   late final showPgcTimeline =
       tabType == HomeTabType.bangumi && GStorage.showPgcTimeline;
+
+  AccountService accountService = Get.find<AccountService>();
 
   @override
   void onInit() {
     super.onInit();
-    mid = Accounts.main.mid;
-    isLogin = (mid != 0).obs;
 
     queryData();
     queryPgcFollow();
     if (showPgcTimeline) {
       queryPgcTimeline();
     }
-    if (isLogin.value) {
+    if (accountService.isLogin.value) {
       followController = ScrollController();
     }
   }
 
   @override
   Future<void> onRefresh() {
-    if (isLogin.value) {
+    if (accountService.isLogin.value) {
       followPage = 1;
       followEnd = false;
     }
@@ -71,12 +70,14 @@ class PgcController
 
   // 我的订阅
   Future<void> queryPgcFollow([bool isRefresh = true]) async {
-    if (!isLogin.value || followLoading || (!isRefresh && followEnd)) {
+    if (!accountService.isLogin.value ||
+        followLoading ||
+        (!isRefresh && followEnd)) {
       return;
     }
     followLoading = true;
     var res = await FavHttp.favPgc(
-      mid: mid,
+      mid: accountService.mid,
       type: tabType == HomeTabType.bangumi ? 1 : 2,
       pn: followPage,
     );

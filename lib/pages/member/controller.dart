@@ -8,6 +8,7 @@ import 'package:PiliPlus/models/common/member/tab_type.dart';
 import 'package:PiliPlus/models_new/space/space/data.dart';
 import 'package:PiliPlus/models_new/space/space/tab2.dart';
 import 'package:PiliPlus/pages/common/common_data_controller.dart';
+import 'package:PiliPlus/services/account_service.dart';
 import 'package:PiliPlus/utils/request_utils.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/utils.dart';
@@ -22,9 +23,10 @@ class MemberController extends CommonDataController<SpaceData, SpaceData?>
     with GetTickerProviderStateMixin {
   MemberController({required this.mid});
   int mid;
-  int? ownerMid;
   String? username;
   RxBool showUname = false.obs;
+
+  AccountService accountService = Get.find<AccountService>();
 
   dynamic live;
   int? silence;
@@ -56,7 +58,6 @@ class MemberController extends CommonDataController<SpaceData, SpaceData?>
   @override
   void onInit() {
     super.onInit();
-    ownerMid = Accounts.main.mid;
     queryData();
   }
 
@@ -156,7 +157,7 @@ class MemberController extends CommonDataController<SpaceData, SpaceData?>
       );
 
   void blockUser(BuildContext context) {
-    if (ownerMid == 0) {
+    if (!accountService.isLogin.value) {
       SmartDialog.showToast('账号未登录');
       return;
     }
@@ -203,12 +204,12 @@ class MemberController extends CommonDataController<SpaceData, SpaceData?>
   }
 
   void onFollow(BuildContext context) {
-    if (mid == ownerMid) {
+    if (mid == accountService.mid) {
       Get.toNamed('/editProfile');
     } else if (relation.value == 128) {
       _onBlock();
     } else {
-      if (ownerMid == null) {
+      if (!accountService.isLogin.value) {
         SmartDialog.showToast('账号未登录');
         return;
       }

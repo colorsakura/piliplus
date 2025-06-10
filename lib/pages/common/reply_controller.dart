@@ -6,6 +6,7 @@ import 'package:PiliPlus/http/reply.dart';
 import 'package:PiliPlus/models/common/reply/reply_sort_type.dart';
 import 'package:PiliPlus/pages/common/common_list_controller.dart';
 import 'package:PiliPlus/pages/video/reply_new/view.dart';
+import 'package:PiliPlus/services/account_service.dart';
 import 'package:PiliPlus/utils/feed_back.dart';
 import 'package:PiliPlus/utils/reply_utils.dart';
 import 'package:PiliPlus/utils/request_utils.dart';
@@ -24,7 +25,7 @@ abstract class ReplyController<R> extends CommonListController<R, ReplyInfo> {
 
   late final savedReplies = {};
 
-  late final bool isLogin = Accounts.main.isLogin;
+  AccountService accountService = Get.find<AccountService>();
 
   Int64? upMid;
   Int64? cursorNext;

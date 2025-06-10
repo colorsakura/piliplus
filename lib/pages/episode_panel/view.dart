@@ -15,6 +15,7 @@ import 'package:PiliPlus/http/video.dart';
 import 'package:PiliPlus/models/common/badge_type.dart';
 import 'package:PiliPlus/models/common/episode_panel_type.dart';
 import 'package:PiliPlus/models/common/stat_type.dart';
+import 'package:PiliPlus/models/user/info.dart';
 import 'package:PiliPlus/models_new/pgc/pgc_info_model/episode.dart' as pgc;
 import 'package:PiliPlus/models_new/video/video_detail/episode.dart' as ugc;
 import 'package:PiliPlus/models_new/video/video_detail/page.dart';
@@ -391,11 +392,8 @@ class _EpisodePanelState extends CommonSlidePageState<EpisodePanel> {
         child: InkWell(
           onTap: () {
             if (episode.badge != null && episode.badge == "会员") {
-              dynamic userInfo = GStorage.userInfo.get('userInfoCache');
-              int vipStatus = 0;
-              if (userInfo != null) {
-                vipStatus = userInfo.vipStatus;
-              }
+              UserInfoData? userInfo = GStorage.userInfo.get('userInfoCache');
+              int vipStatus = userInfo?.vipStatus ?? 0;
               if (vipStatus != 1) {
                 SmartDialog.showToast('需要大会员');
                 // return;

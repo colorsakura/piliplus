@@ -20,6 +20,7 @@ import 'package:PiliPlus/pages/video/introduction/ugc/controller.dart';
 import 'package:PiliPlus/pages/video/pay_coins/view.dart';
 import 'package:PiliPlus/pages/video/reply/controller.dart';
 import 'package:PiliPlus/plugin/pl_player/models/play_repeat.dart';
+import 'package:PiliPlus/services/account_service.dart';
 import 'package:PiliPlus/utils/feed_back.dart';
 import 'package:PiliPlus/utils/global_data.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
@@ -60,8 +61,7 @@ class PgcIntroController extends GetxController {
   List? favIds;
   Rx<FavVideoData> favFolderData = FavVideoData().obs;
 
-  bool isLogin = Accounts.main.isLogin;
-  int mid = Accounts.main.mid;
+  AccountService accountService = Get.find<AccountService>();
 
   late final enableQuickFav =
       GStorage.setting.get(SettingBoxKey.enableQuickFav, defaultValue: false);
@@ -69,7 +69,7 @@ class PgcIntroController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    if (isLogin) {
+    if (accountService.isLogin.value) {
       if (seasonId != null) {
         queryIsFollowed();
       }
@@ -134,7 +134,7 @@ class PgcIntroController extends GetxController {
 
   // 投币
   void actionCoinVideo() {
-    if (!isLogin) {
+    if (!accountService.isLogin.value) {
       SmartDialog.showToast('账号未登录');
       return;
     }
@@ -388,7 +388,7 @@ class PgcIntroController extends GetxController {
       } catch (_) {}
     }
 
-    if (isLogin) {
+    if (accountService.isLogin.value) {
       queryPgcLikeCoinFav();
     }
 
@@ -434,7 +434,7 @@ class PgcIntroController extends GetxController {
   Future queryVideoInFolder() async {
     favIds = null;
     var result = await FavHttp.videoInFolder(
-      mid: mid,
+      mid: accountService.mid,
       rid: epId, // pgc
       type: 24, // pgc
     );
@@ -508,7 +508,7 @@ class PgcIntroController extends GetxController {
   // 一键三连
   Future<void> actionOneThree() async {
     feedBack();
-    if (!isLogin) {
+    if (!accountService.isLogin.value) {
       SmartDialog.showToast('账号未登录');
       return;
     }
@@ -562,7 +562,7 @@ class PgcIntroController extends GetxController {
 
   // 收藏
   void showFavBottomSheet(BuildContext context, {type = 'tap'}) {
-    if (!isLogin) {
+    if (!accountService.isLogin.value) {
       SmartDialog.showToast('账号未登录');
       return;
     }

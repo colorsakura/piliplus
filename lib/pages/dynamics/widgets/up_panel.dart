@@ -30,7 +30,7 @@ class _UpPanelState extends State<UpPanel> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    if (!widget.dynamicsController.isLogin.value) {
+    if (!widget.dynamicsController.accountService.isLogin.value) {
       return const SizedBox.shrink();
     }
     return CustomScrollView(
@@ -102,12 +102,14 @@ class _UpPanelState extends State<UpPanel> {
           child: upItemBuild(theme, UpItem(face: '', uname: '全部动态', mid: -1)),
         ),
         SliverToBoxAdapter(
-          child: upItemBuild(
-            theme,
-            UpItem(
-              uname: '我',
-              face: widget.dynamicsController.face,
-              mid: widget.dynamicsController.ownerMid,
+          child: Obx(
+            () => upItemBuild(
+              theme,
+              UpItem(
+                uname: '我',
+                face: widget.dynamicsController.accountService.face.value,
+                mid: widget.dynamicsController.accountService.mid,
+              ),
             ),
           ),
         ),

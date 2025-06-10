@@ -587,7 +587,7 @@ class _LiveRoomPageState extends State<LiveRoomPage>
       );
 
   void onSendDanmaku([bool fromEmote = false]) {
-    if (!_liveRoomController.isLogin) {
+    if (!_liveRoomController.accountService.isLogin.value) {
       SmartDialog.showToast('账号未登录');
       return;
     }

@@ -257,8 +257,6 @@ class PlPlayerController {
     }
   }
 
-  late final isLogin = Accounts.main.isLogin;
-
   /// 弹幕权重
   int danmakuWeight = 0;
   late RuleFilter filters;

@@ -8,6 +8,7 @@ import 'package:PiliPlus/models/common/msg/msg_unread_type.dart';
 import 'package:PiliPlus/models/common/nav_bar_config.dart';
 import 'package:PiliPlus/models_new/msgfeed_unread/data.dart';
 import 'package:PiliPlus/models_new/single_unread/data.dart';
+import 'package:PiliPlus/services/account_service.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
@@ -15,6 +16,8 @@ import 'package:get/get.dart';
 
 class MainController extends GetxController
     with GetSingleTickerProviderStateMixin {
+  AccountService accountService = Get.find<AccountService>();
+
   List<NavigationBarType> navigationBars = <NavigationBarType>[];
   RxInt dynCount = 0.obs;
 
@@ -22,7 +25,6 @@ class MainController extends GetxController
   late bool hideTabBar;
   late dynamic controller;
   RxInt selectedIndex = 0.obs;
-  RxBool isLogin = false.obs;
 
   late DynamicBadgeMode dynamicBadgeMode;
   late bool checkDynamic = GStorage.checkDynamic;
@@ -61,7 +63,6 @@ class MainController extends GetxController
     if (navigationBars.length > 1 && hideTabBar) {
       bottomBarStream = StreamController<bool>.broadcast();
     }
-    isLogin.value = Accounts.main.isLogin;
     dynamicBadgeMode = DynamicBadgeMode.values[GStorage.setting.get(
         SettingBoxKey.dynamicBadgeMode,
         defaultValue: DynamicBadgeMode.number.index)];
@@ -133,7 +134,7 @@ class MainController extends GetxController
   }
 
   Future<void> queryUnreadMsg([bool isChangeType = false]) async {
-    if (!isLogin.value ||
+    if (!accountService.isLogin.value ||
         homeIndex == -1 ||
         msgUnReadTypes.isEmpty ||
         msgBadgeMode == DynamicBadgeMode.hidden) {
@@ -160,7 +161,7 @@ class MainController extends GetxController
   }
 
   Future<void> getUnreadDynamic() async {
-    if (!isLogin.value || dynIndex == -1) {
+    if (!accountService.isLogin.value || dynIndex == -1) {
       return;
     }
     DynGrpc.dynRed().then((res) {
@@ -177,7 +178,7 @@ class MainController extends GetxController
 
   void checkUnreadDynamic() {
     if (dynIndex == -1 ||
-        !isLogin.value ||
+        !accountService.isLogin.value ||
         dynamicBadgeMode == DynamicBadgeMode.hidden ||
         !checkDynamic) {
       return;

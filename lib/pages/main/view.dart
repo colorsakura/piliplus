@@ -104,7 +104,7 @@ class _MainAppState extends State<MainApp>
   }
 
   void _checkUnread([bool shouldCheck = false]) {
-    if (_mainController.isLogin.value &&
+    if (_mainController.accountService.isLogin.value &&
         _mainController.homeIndex != -1 &&
         _mainController.msgBadgeMode != DynamicBadgeMode.hidden) {
       if (shouldCheck &&
@@ -389,7 +389,7 @@ class _MainAppState extends State<MainApp>
         Semantics(
           label: "我的",
           child: Obx(
-            () => _homeController.isLogin.value
+            () => _mainController.accountService.isLogin.value
                 ? Stack(
                     clipBehavior: Clip.none,
                     children: [
@@ -397,7 +397,7 @@ class _MainAppState extends State<MainApp>
                         type: ImageType.avatar,
                         width: 34,
                         height: 34,
-                        src: _homeController.userFace.value,
+                        src: _mainController.accountService.face.value,
                       ),
                       Positioned.fill(
                         child: Material(
@@ -443,7 +443,7 @@ class _MainAppState extends State<MainApp>
         ),
         const SizedBox(height: 8),
         Obx(
-          () => _homeController.isLogin.value
+          () => _mainController.accountService.isLogin.value
               ? msgBadge(_mainController)
               : const SizedBox.shrink(),
         ),

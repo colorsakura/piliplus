@@ -5,9 +5,9 @@ import 'package:PiliPlus/models_new/fav/fav_detail/media.dart';
 import 'package:PiliPlus/models_new/fav/fav_video/list.dart';
 import 'package:PiliPlus/pages/common/multi_select_controller.dart';
 import 'package:PiliPlus/pages/fav_sort/view.dart';
+import 'package:PiliPlus/services/account_service.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
-import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -20,7 +20,7 @@ class FavDetailController
   final Rx<FavVideoItemModel> item = FavVideoItemModel().obs;
   final Rx<bool?> isOwner = Rx<bool?>(null);
 
-  final int mid = Accounts.main.mid;
+  AccountService accountService = Get.find<AccountService>();
 
   @override
   void onInit() {
@@ -52,7 +52,7 @@ class FavDetailController
     FavDetailData data = response.response;
     if (isRefresh) {
       item.value = data.info ?? FavVideoItemModel();
-      isOwner.value = data.info?.mid == mid;
+      isOwner.value = data.info?.mid == accountService.mid;
     }
     return false;
   }
@@ -174,7 +174,7 @@ class FavDetailController
   }
 
   Future<void> onFav(bool isFav) async {
-    if (mid == 0) {
+    if (!accountService.isLogin.value) {
       SmartDialog.showToast('账号未登录');
       return;
     }

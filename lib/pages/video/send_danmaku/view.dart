@@ -4,6 +4,7 @@ import 'package:PiliPlus/common/widgets/button/icon_button.dart';
 import 'package:PiliPlus/http/danmaku.dart';
 import 'package:PiliPlus/main.dart';
 import 'package:PiliPlus/models/common/publish_panel_type.dart';
+import 'package:PiliPlus/models/user/info.dart';
 import 'package:PiliPlus/pages/common/common_publish_page.dart';
 import 'package:PiliPlus/pages/setting/slide_color_picker.dart';
 import 'package:PiliPlus/utils/storage.dart';
@@ -71,12 +72,10 @@ class _SendDanmakuPanelState extends CommonPublishPageState<SendDanmakuPanel> {
     _mode = (widget.dmConfig?.mode ?? 1).obs;
     _fontsize = (widget.dmConfig?.fontsize ?? 25).obs;
     _color = (widget.dmConfig?.color ?? Colors.white).obs;
-    try {
-      final userInfo = GStorage.userInfo.get('userInfoCache');
-      if (userInfo?.vipStatus == 1) {
-        _colorList.add(Colors.transparent);
-      }
-    } catch (_) {}
+    UserInfoData? userInfo = GStorage.userInfo.get('userInfoCache');
+    if (userInfo?.vipStatus == 1) {
+      _colorList.add(Colors.transparent);
+    }
   }
 
   @override

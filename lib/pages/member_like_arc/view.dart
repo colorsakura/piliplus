@@ -5,8 +5,8 @@ import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models_new/member/coin_like_arc/item.dart';
 import 'package:PiliPlus/pages/member_coin_arc/widgets/item.dart';
 import 'package:PiliPlus/pages/member_like_arc/controller.dart';
+import 'package:PiliPlus/services/account_service.dart';
 import 'package:PiliPlus/utils/grid.dart';
-import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -26,7 +26,7 @@ class MemberLikeArcPage extends StatefulWidget {
 }
 
 class _MemberLikeArcPageState extends State<MemberLikeArcPage> {
-  late final _ownerMid = Accounts.main.mid;
+  AccountService accountService = Get.find<AccountService>();
 
   late final _ctr = Get.put(
     MemberLikeArcController(mid: widget.mid),
@@ -37,7 +37,8 @@ class _MemberLikeArcPageState extends State<MemberLikeArcPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('${widget.mid == _ownerMid ? '我' : '${widget.name}'}的推荐'),
+        title: Text(
+            '${widget.mid == accountService.mid ? '我' : '${widget.name}'}的推荐'),
       ),
       body: SafeArea(
         top: false,

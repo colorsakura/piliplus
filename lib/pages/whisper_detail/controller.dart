@@ -8,16 +8,16 @@ import 'package:PiliPlus/grpc/im.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/http/msg.dart';
 import 'package:PiliPlus/pages/common/common_list_controller.dart';
+import 'package:PiliPlus/services/account_service.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/feed_back.dart';
-import 'package:PiliPlus/utils/storage.dart';
 import 'package:fixnum/fixnum.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 
 class WhisperDetailController extends CommonListController<RspSessionMsg, Msg> {
-  late final ownerMid = Accounts.main.mid;
+  AccountService accountService = Get.find<AccountService>();
 
   final int talkerId = Get.arguments['talkerId'];
   final String name = Get.arguments['name'];
@@ -73,12 +73,12 @@ class WhisperDetailController extends CommonListController<RspSessionMsg, Msg> {
   }) async {
     feedBack();
     SmartDialog.dismiss();
-    if (ownerMid == 0) {
+    if (!accountService.isLogin.value) {
       SmartDialog.showToast('请先登录');
       return;
     }
     var result = await ImGrpc.sendMsg(
-      senderUid: ownerMid,
+      senderUid: accountService.mid,
       receiverId: mid!,
       content:
           msgType == 5 ? message : jsonEncode(picMsg ?? {"content": message}),

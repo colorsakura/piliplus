@@ -5,8 +5,8 @@ import 'package:PiliPlus/models_new/live/live_feed_index/card_data_list_item.dar
 import 'package:PiliPlus/models_new/live/live_feed_index/card_list.dart';
 import 'package:PiliPlus/models_new/live/live_second_list/tag.dart';
 import 'package:PiliPlus/pages/common/common_list_controller.dart';
-import 'package:PiliPlus/utils/storage.dart';
-import 'package:get/get_rx/src/rx_types/rx_types.dart';
+import 'package:PiliPlus/services/account_service.dart';
+import 'package:get/get.dart';
 
 class LiveController extends CommonListController {
   @override
@@ -14,6 +14,8 @@ class LiveController extends CommonListController {
     super.onInit();
     queryData();
   }
+
+  AccountService accountService = Get.find<AccountService>();
 
   int? count;
 
@@ -29,7 +31,6 @@ class LiveController extends CommonListController {
 
   final Rx<Pair<LiveCardList?, LiveCardList?>> topState =
       Pair<LiveCardList?, LiveCardList?>(first: null, second: null).obs;
-  final RxBool isLogin = Accounts.main.isLogin.obs;
 
   @override
   void checkIsEnd(int length) {
@@ -71,13 +72,14 @@ class LiveController extends CommonListController {
     if (areaIndex.value != 0) {
       return LiveHttp.liveSecondList(
         pn: page,
-        isLogin: isLogin.value,
+        isLogin: accountService.isLogin.value,
         areaId: areaId,
         parentAreaId: parentAreaId,
         sortType: sortType,
       );
     }
-    return LiveHttp.liveFeedIndex(pn: page, isLogin: isLogin.value);
+    return LiveHttp.liveFeedIndex(
+        pn: page, isLogin: accountService.isLogin.value);
   }
 
   @override
@@ -94,7 +96,7 @@ class LiveController extends CommonListController {
   Future<void> queryTop() async {
     final res = await LiveHttp.liveFeedIndex(
       pn: page,
-      isLogin: isLogin.value,
+      isLogin: accountService.isLogin.value,
       moduleSelect: true,
     );
     if (res.isSuccess) {

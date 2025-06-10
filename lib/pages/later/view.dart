@@ -272,7 +272,7 @@ class _LaterPageState extends State<LaterPage>
                 isCopy: true,
                 ctr: ctr,
                 mediaId: null,
-                mid: ctr.mid,
+                mid: ctr.accountService.mid,
               );
             },
             child: Text(
@@ -293,7 +293,7 @@ class _LaterPageState extends State<LaterPage>
                 isCopy: false,
                 ctr: ctr,
                 mediaId: null,
-                mid: ctr.mid,
+                mid: ctr.accountService.mid,
               );
             },
             child: Text(

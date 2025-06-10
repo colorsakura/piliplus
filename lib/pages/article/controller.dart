@@ -161,7 +161,7 @@ class ArticleController extends ReplyController<MainListReply> {
     }
     if (isLoaded.value) {
       queryData();
-      if (isLogin && !MineController.anonymity.value) {
+      if (accountService.isLogin.value && !MineController.anonymity.value) {
         VideoHttp.historyReport(aid: commentId, type: 5);
       }
     }

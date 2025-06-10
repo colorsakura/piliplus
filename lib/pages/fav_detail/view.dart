@@ -250,7 +250,7 @@ class _FavDetailPageState extends State<FavDetailPage> {
             isCopy: true,
             ctr: _favDetailController,
             mediaId: _favDetailController.mediaId,
-            mid: _favDetailController.mid,
+            mid: _favDetailController.accountService.mid,
           ),
           child: Text(
             '复制',
@@ -269,7 +269,7 @@ class _FavDetailPageState extends State<FavDetailPage> {
             isCopy: false,
             ctr: _favDetailController,
             mediaId: _favDetailController.mediaId,
-            mid: _favDetailController.mid,
+            mid: _favDetailController.accountService.mid,
           ),
           child: Text(
             '移动',

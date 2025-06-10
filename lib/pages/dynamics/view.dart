@@ -39,7 +39,7 @@ class _DynamicsPageState extends State<DynamicsPage>
               }),
             ),
             onPressed: () {
-              if (_dynamicsController.isLogin.value) {
+              if (_dynamicsController.accountService.isLogin.value) {
                 CreateDynPanel.onCreateDyn(context);
               }
             },

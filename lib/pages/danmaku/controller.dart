@@ -1,6 +1,8 @@
 import 'package:PiliPlus/grpc/bilibili/community/service/dm/v1.pb.dart';
 import 'package:PiliPlus/grpc/dm.dart';
 import 'package:PiliPlus/plugin/pl_player/controller.dart';
+import 'package:PiliPlus/services/account_service.dart';
+import 'package:get/get.dart';
 
 class PlDanmakuController {
   PlDanmakuController(
@@ -10,6 +12,8 @@ class PlDanmakuController {
   final int cid;
   final PlPlayerController plPlayerController;
   final bool mergeDanmaku;
+
+  AccountService accountService = Get.find<AccountService>();
 
   Map<int, List<DanmakuElem>> dmSegMap = {};
   // 已请求的段落标记
@@ -58,7 +62,7 @@ class PlDanmakuController {
               element.count = count!;
             }
           }
-          if (plPlayerController.isLogin) {
+          if (accountService.isLogin.value) {
             element.isSelf = element.midHash == plPlayerController.midHash;
           }
           int pos = element.progress ~/ 100; //每0.1秒存储一次

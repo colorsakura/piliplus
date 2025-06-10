@@ -28,6 +28,7 @@ import 'package:PiliPlus/pages/video/pay_coins/view.dart';
 import 'package:PiliPlus/pages/video/related/controller.dart';
 import 'package:PiliPlus/pages/video/reply/controller.dart';
 import 'package:PiliPlus/plugin/pl_player/models/play_repeat.dart';
+import 'package:PiliPlus/services/account_service.dart';
 import 'package:PiliPlus/services/service_locator.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/feed_back.dart';
@@ -77,14 +78,12 @@ class VideoIntroController extends GetxController {
   RxBool hasFav = false.obs;
   // 是否稍后再看
   RxBool hasLater = false.obs;
-  bool isLogin = false;
   Rx<FavVideoData> favFolderData = FavVideoData().obs;
   Set? favIds;
   // 关注状态 默认未关注
   RxMap followStatus = {}.obs;
 
   RxInt lastPlayCid = 0.obs;
-  dynamic userInfo;
 
   // 同时观看
   bool isShowOnlineTotal = false;
@@ -103,10 +102,11 @@ class VideoIntroController extends GetxController {
   late final enableQuickFav =
       GStorage.setting.get(SettingBoxKey.enableQuickFav, defaultValue: false);
 
+  AccountService accountService = Get.find<AccountService>();
+
   @override
   void onInit() {
     super.onInit();
-    userInfo = GStorage.userInfo.get('userInfoCache');
     try {
       if (heroTag.isEmpty) {
         heroTag = Get.arguments['heroTag'];
@@ -139,7 +139,6 @@ class VideoIntroController extends GetxController {
         videoItem['owner'] = keys.contains('owner') ? args.owner : null;
       }
     }
-    isLogin = userInfo != null;
     lastPlayCid.value = int.parse(Get.parameters['cid']!);
     isShowOnlineTotal = GStorage.setting
         .get(SettingBoxKey.enableOnlineTotal, defaultValue: false);
@@ -194,7 +193,7 @@ class VideoIntroController extends GetxController {
           "${result['code']} ${result['msg']} ${result['data']}");
     }
     queryVideoIntroData.addAll(result);
-    if (isLogin) {
+    if (accountService.isLogin.value) {
       queryAllStatus();
       queryFollowStatus();
     }
@@ -252,7 +251,7 @@ class VideoIntroController extends GetxController {
   // 一键三连
   Future<void> actionOneThree() async {
     feedBack();
-    if (userInfo == null) {
+    if (!accountService.isLogin.value) {
       SmartDialog.showToast('账号未登录');
       return;
     }
@@ -278,7 +277,7 @@ class VideoIntroController extends GetxController {
 
   // （取消）点赞
   Future<void> actionLikeVideo() async {
-    if (userInfo == null) {
+    if (!accountService.isLogin.value) {
       SmartDialog.showToast('账号未登录');
       return;
     }
@@ -303,7 +302,7 @@ class VideoIntroController extends GetxController {
   }
 
   Future<void> actionDislikeVideo() async {
-    if (userInfo == null) {
+    if (!accountService.isLogin.value) {
       SmartDialog.showToast('账号未登录');
       return;
     }
@@ -357,7 +356,7 @@ class VideoIntroController extends GetxController {
 
   // 投币
   Future<void> actionCoinVideo() async {
-    if (userInfo == null) {
+    if (!accountService.isLogin.value) {
       SmartDialog.showToast('账号未登录');
       return;
     }
@@ -550,7 +549,9 @@ class VideoIntroController extends GetxController {
   Future queryVideoInFolder() async {
     favIds = null;
     var result = await FavHttp.videoInFolder(
-        mid: userInfo.mid, rid: IdUtils.bv2av(bvid));
+      mid: accountService.mid,
+      rid: IdUtils.bv2av(bvid),
+    );
     if (result['status']) {
       favFolderData.value = result['data'];
       favIds = favFolderData.value.list
@@ -586,7 +587,7 @@ class VideoIntroController extends GetxController {
 
   // 关注/取关up
   Future<void> actionRelationMod(BuildContext context) async {
-    if (userInfo == null) {
+    if (!accountService.isLogin.value) {
       SmartDialog.showToast('账号未登录');
       return;
     }
@@ -927,7 +928,7 @@ class VideoIntroController extends GetxController {
 
   // 收藏
   void showFavBottomSheet(BuildContext context, {type = 'tap'}) {
-    if (userInfo == null) {
+    if (!accountService.isLogin.value) {
       SmartDialog.showToast('账号未登录');
       return;
     }

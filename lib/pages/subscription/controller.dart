@@ -3,25 +3,24 @@ import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/http/user.dart';
 import 'package:PiliPlus/models_new/sub/sub/list.dart';
 import 'package:PiliPlus/pages/common/common_list_controller.dart';
-import 'package:PiliPlus/utils/storage.dart';
+import 'package:PiliPlus/services/account_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 
 class SubController
     extends CommonListController<List<SubItemModel>?, SubItemModel> {
-  dynamic mid;
+  AccountService accountService = Get.find<AccountService>();
 
   @override
   void onInit() {
     super.onInit();
-    mid = Accounts.main.mid;
     queryData();
   }
 
   @override
   Future<void> queryData([bool isRefresh = true]) {
-    if (mid == 0) {
+    if (!accountService.isLogin.value) {
       loadingState.value = const Error('账号未登录');
       return Future.value();
     }
@@ -69,6 +68,6 @@ class SubController
       UserHttp.userSubFolder(
         pn: page,
         ps: 20,
-        mid: mid,
+        mid: accountService.mid,
       );
 }

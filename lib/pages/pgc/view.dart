@@ -337,7 +337,7 @@ class _PgcPageState extends CommonPageState<PgcPage, PgcController>
 
   Widget _buildFollow(ThemeData theme) => SliverToBoxAdapter(
         child: Obx(
-          () => controller.isLogin.value
+          () => controller.accountService.isLogin.value
               ? Column(
                   children: [
                     _buildFollowTitle(theme),
@@ -377,7 +377,7 @@ class _PgcPageState extends CommonPageState<PgcPage, PgcController>
               ),
             ),
             Obx(
-              () => controller.isLogin.value
+              () => controller.accountService.isLogin.value
                   ? Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 10),
                       child: GestureDetector(

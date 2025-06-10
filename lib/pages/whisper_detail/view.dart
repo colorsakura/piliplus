@@ -162,10 +162,10 @@ class _WhisperDetailPageState
                 return ChatItem(
                   item: item,
                   eInfos: _whisperDetailController.eInfos,
-                  onLongPress:
-                      item.senderUid == _whisperDetailController.ownerMid
-                          ? () => onLongPress(index, item)
-                          : null,
+                  onLongPress: item.senderUid.toInt() ==
+                          _whisperDetailController.accountService.mid
+                      ? () => onLongPress(index, item)
+                      : null,
                 );
               },
               separatorBuilder: (context, index) => const SizedBox(height: 12),

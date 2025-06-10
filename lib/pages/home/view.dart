@@ -78,7 +78,7 @@ class _HomePageState extends State<HomePage>
         searchBar(theme),
         const SizedBox(width: 4),
         Obx(
-          () => _homeController.isLogin.value
+          () => _homeController.accountService.isLogin.value
               ? msgBadge(_mainController)
               : const SizedBox.shrink(),
         ),
@@ -86,7 +86,7 @@ class _HomePageState extends State<HomePage>
         Semantics(
           label: "我的",
           child: Obx(
-            () => _homeController.isLogin.value
+            () => _homeController.accountService.isLogin.value
                 ? Stack(
                     clipBehavior: Clip.none,
                     children: [
@@ -94,7 +94,7 @@ class _HomePageState extends State<HomePage>
                         type: ImageType.avatar,
                         width: 34,
                         height: 34,
-                        src: _homeController.userFace.value,
+                        src: _homeController.accountService.face.value,
                       ),
                       Positioned.fill(
                         child: Material(
