@@ -218,7 +218,7 @@ class _MemberHomeState extends State<MemberHome>
                 ],
                 SliverToBoxAdapter(
                   child: SizedBox(
-                    height: 80 + MediaQuery.of(context).padding.bottom,
+                    height: 80 + MediaQuery.paddingOf(context).bottom,
                   ),
                 ),
               ],

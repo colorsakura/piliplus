@@ -314,7 +314,7 @@ class _SavePanelState extends State<SavePanel> {
                               IgnorePointer(
                                 child: ReplyItemGrpc(
                                   replyItem: _item,
-                                  replyLevel: '',
+                                  replyLevel: 0,
                                   needDivider: false,
                                   upMid: widget.upMid,
                                 ),

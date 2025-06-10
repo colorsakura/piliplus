@@ -17,7 +17,7 @@ class VideoReplyPanel extends StatefulWidget {
   final String? bvid;
   final int oid;
   final int rpid;
-  final String replyLevel;
+  final int replyLevel;
   final String heroTag;
   final Function(ReplyInfo replyItem, int? rpid) replyReply;
   final VoidCallback? onViewImage;
@@ -30,7 +30,7 @@ class VideoReplyPanel extends StatefulWidget {
     this.bvid,
     required this.oid,
     this.rpid = 0,
-    this.replyLevel = '1',
+    this.replyLevel = 1,
     required this.heroTag,
     required this.replyReply,
     this.onViewImage,
@@ -163,7 +163,7 @@ class _VideoReplyPanelState extends State<VideoReplyPanel>
             ],
           ),
           Positioned(
-            bottom: MediaQuery.of(context).padding.bottom + 14,
+            bottom: MediaQuery.paddingOf(context).bottom + 14,
             right: 14,
             child: SlideTransition(
               position: _videoReplyController.anim,
@@ -198,7 +198,7 @@ class _VideoReplyPanelState extends State<VideoReplyPanel>
       Success(:var response) => response?.isNotEmpty == true
           ? SliverList.builder(
               itemBuilder: (context, index) {
-                double bottom = MediaQuery.of(context).padding.bottom;
+                double bottom = MediaQuery.paddingOf(context).bottom;
                 if (index == response.length) {
                   _videoReplyController.onLoadMore();
                   return Container(

@@ -116,7 +116,7 @@ class _FavFolderSortPageState extends State<FavFolderSortPage> {
       onReorder: onReorder,
       physics: const AlwaysScrollableScrollPhysics(),
       footer: SizedBox(
-        height: MediaQuery.of(context).padding.bottom + 80,
+        height: MediaQuery.paddingOf(context).bottom + 80,
       ),
       itemCount: sortList.length,
       itemBuilder: (context, index) {

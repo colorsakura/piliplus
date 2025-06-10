@@ -134,7 +134,7 @@ class _NineGridViewState extends State<NineGridView> {
       return Rect.fromLTRB(0, 0, padding.horizontal, padding.vertical);
     }
     double width = widget.width ??
-        (MediaQuery.of(context).size.width - widget.margin.horizontal);
+        (MediaQuery.sizeOf(context).width - widget.margin.horizontal);
     width = width - padding.horizontal;
     double space = widget.space;
     double itemW;
@@ -389,11 +389,11 @@ class _NineGridViewState extends State<NineGridView> {
   /// get big image size.
   Rect _getBigImgSize(double originalWidth, double originalHeight) {
     double width = widget.width ??
-        (MediaQuery.of(context).size.width - widget.margin.horizontal);
+        (MediaQuery.sizeOf(context).width - widget.margin.horizontal);
     width = width - widget.padding.horizontal;
     double itemW = (width - widget.space * 2) / 3;
 
-    //double devicePixelRatio = MediaQuery.of(context)?.devicePixelRatio ?? 3;
+    // double devicePixelRatio = MediaQuery.devicePixelRatioOf(context);
     double devicePixelRatio = 1.0;
     double tempWidth = originalWidth / devicePixelRatio;
     double tempHeight = originalHeight / devicePixelRatio;

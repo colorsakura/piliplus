@@ -73,7 +73,7 @@ class _FavDetailPageState extends State<FavDetailPage> {
                   _buildHeader(theme),
                   SliverPadding(
                     padding: EdgeInsets.only(
-                      bottom: MediaQuery.of(context).padding.bottom + 85,
+                      bottom: MediaQuery.paddingOf(context).bottom + 85,
                     ),
                     sliver: Obx(() => _buildBody(
                         theme, _favDetailController.loadingState.value)),
@@ -306,7 +306,7 @@ class _FavDetailPageState extends State<FavDetailPage> {
     return FlexibleSpaceBar(
       background: Padding(
         padding: EdgeInsets.only(
-          top: kToolbarHeight + MediaQuery.of(context).padding.top + 10,
+          top: kToolbarHeight + MediaQuery.paddingOf(context).top + 10,
           left: 14,
           right: 20,
           bottom: 10,

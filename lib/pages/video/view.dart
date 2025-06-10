@@ -624,7 +624,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                               ? height -
                                   (!isPortrait || removeSafeArea
                                       ? 0
-                                      : MediaQuery.of(this.context).padding.top)
+                                      : MediaQuery.paddingOf(this.context).top)
                               : videoDetailController.isExpanding ||
                                       videoDetailController.isCollapsing
                                   ? animHeight

@@ -69,7 +69,7 @@ class _MemberVideoState extends State<MemberVideo>
             slivers: [
               SliverPadding(
                 padding: EdgeInsets.only(
-                  bottom: MediaQuery.of(context).padding.bottom + 80,
+                  bottom: MediaQuery.paddingOf(context).bottom + 80,
                 ),
                 sliver: Obx(
                     () => _buildBody(theme, _controller.loadingState.value)),

@@ -180,7 +180,7 @@ class _HorizontalMemberPageState extends State<HorizontalMemberPage> {
       Success(:var response) => response?.isNotEmpty == true
           ? SliverPadding(
               padding: EdgeInsets.only(
-                bottom: MediaQuery.of(context).padding.bottom + 80,
+                bottom: MediaQuery.paddingOf(context).bottom + 80,
               ),
               sliver: SliverGrid(
                 gridDelegate: Grid.videoCardHDelegate(context),

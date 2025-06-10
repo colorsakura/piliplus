@@ -595,7 +595,7 @@ class _ArticlePageState extends State<ArticlePage>
                   return Container(
                     alignment: Alignment.center,
                     margin: EdgeInsets.only(
-                        bottom: MediaQuery.of(context).padding.bottom),
+                        bottom: MediaQuery.paddingOf(context).bottom),
                     height: 125,
                     child: Text(
                       _articleCtr.isEnd ? '没有更多了' : '加载中...',
@@ -608,7 +608,7 @@ class _ArticlePageState extends State<ArticlePage>
                 } else {
                   return ReplyItemGrpc(
                     replyItem: response[index],
-                    replyLevel: '1',
+                    replyLevel: 1,
                     replyReply: (replyItem, id) =>
                         replyReply(context, replyItem, id),
                     onReply: () => _articleCtr.onReply(
@@ -827,7 +827,7 @@ class _ArticlePageState extends State<ArticlePage>
                       child: Padding(
                         padding: EdgeInsets.only(
                           right: 14,
-                          bottom: MediaQuery.of(context).padding.bottom + 14,
+                          bottom: MediaQuery.paddingOf(context).bottom + 14,
                         ),
                         child: button(),
                       ),
@@ -872,7 +872,7 @@ class _ArticlePageState extends State<ArticlePage>
                               bottom: 14 +
                                   (_articleCtr.stats.value != null
                                       ? 0
-                                      : MediaQuery.of(context).padding.bottom),
+                                      : MediaQuery.paddingOf(context).bottom),
                             ),
                             child: button(),
                           ),

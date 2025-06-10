@@ -709,7 +709,7 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
                   return Container(
                     alignment: Alignment.center,
                     margin: EdgeInsets.only(
-                        bottom: MediaQuery.of(context).padding.bottom),
+                        bottom: MediaQuery.paddingOf(context).bottom),
                     height: 125,
                     child: Text(
                       _controller.isEnd ? '没有更多了' : '加载中...',
@@ -722,7 +722,7 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
                 } else {
                   return ReplyItemGrpc(
                     replyItem: response[index],
-                    replyLevel: '1',
+                    replyLevel: 1,
                     replyReply: (replyItem, id) =>
                         replyReply(context, replyItem, id),
                     onReply: () => _controller.onReply(

@@ -34,7 +34,7 @@ class _SubPageState extends State<SubPage> {
               Obx(() => _buildBody(_subController.loadingState.value)),
               SliverToBoxAdapter(
                 child: SizedBox(
-                  height: MediaQuery.of(context).padding.bottom + 80,
+                  height: MediaQuery.paddingOf(context).bottom + 80,
                 ),
               ),
             ],

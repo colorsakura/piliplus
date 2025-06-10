@@ -13,7 +13,7 @@ class CustomToast extends StatelessWidget {
         .get(SettingBoxKey.defaultToastOp, defaultValue: 1.0) as double;
     return Container(
       margin:
-          EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom + 30),
+          EdgeInsets.only(bottom: MediaQuery.paddingOf(context).bottom + 30),
       padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
       decoration: BoxDecoration(
         color:

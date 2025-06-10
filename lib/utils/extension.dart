@@ -19,14 +19,14 @@ extension ImageExtension on num? {
     if (this == null || this == 0) {
       return null;
     }
-    return (this! * MediaQuery.of(context).devicePixelRatio).round();
+    return (this! * MediaQuery.devicePixelRatioOf(context)).round();
   }
 }
 
 extension ScrollControllerExt on ScrollController {
   void animToTop() {
     if (!hasClients) return;
-    if (offset >= MediaQuery.of(Get.context!).size.height * 7) {
+    if (offset >= Get.mediaQuery.size.height * 7) {
       jumpTo(0);
     } else {
       animateTo(0,

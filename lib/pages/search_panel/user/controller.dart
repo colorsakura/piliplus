@@ -50,7 +50,7 @@ class SearchUserController
               top: 20,
               left: 16,
               right: 16,
-              bottom: 80 + MediaQuery.of(context).padding.bottom,
+              bottom: 80 + MediaQuery.paddingOf(context).bottom,
             ),
             child: Column(
               mainAxisSize: MainAxisSize.min,

@@ -55,7 +55,7 @@ abstract class CommonSearchPageState<S extends CommonSearchPage, R, T>
           slivers: [
             SliverPadding(
               padding: EdgeInsets.only(
-                bottom: MediaQuery.of(context).padding.bottom + 80,
+                bottom: MediaQuery.paddingOf(context).bottom + 80,
               ),
               sliver: Obx(() => _buildBody(controller.loadingState.value)),
             ),

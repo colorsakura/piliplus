@@ -50,7 +50,7 @@ class _MemberBangumiState extends State<MemberBangumi>
               right: StyleString.safeSpace,
               top: StyleString.safeSpace,
               bottom: StyleString.safeSpace +
-                  MediaQuery.of(context).padding.bottom +
+                  MediaQuery.paddingOf(context).bottom +
                   80,
             ),
             sliver: Obx(

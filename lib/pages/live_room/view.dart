@@ -538,7 +538,7 @@ class _LiveRoomPageState extends State<LiveRoomPage>
           left: 10,
           top: 10,
           right: 10,
-          bottom: 25 + MediaQuery.of(context).padding.bottom,
+          bottom: 25 + MediaQuery.paddingOf(context).bottom,
         ),
         decoration: const BoxDecoration(
           borderRadius: BorderRadius.only(

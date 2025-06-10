@@ -242,7 +242,7 @@ class AuthorPanel extends StatelessWidget {
         final theme = Theme.of(context);
         return Padding(
           padding:
-              EdgeInsets.only(bottom: MediaQuery.of(context1).padding.bottom),
+              EdgeInsets.only(bottom: MediaQuery.paddingOf(context1).bottom),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [

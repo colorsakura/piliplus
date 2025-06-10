@@ -122,7 +122,7 @@ class _SubDetailPageState extends State<SubDetailPage> {
             ),
           ),
           padding: EdgeInsets.only(
-            top: kToolbarHeight + MediaQuery.of(context).padding.top + 10,
+            top: kToolbarHeight + MediaQuery.paddingOf(context).top + 10,
             left: 12,
             right: 12,
             bottom: 12,

@@ -355,7 +355,7 @@ class _RepostPanelState extends CommonPublishPageState<RepostPanel> {
             ),
           ),
         ),
-        SizedBox(height: 10 + MediaQuery.of(context).padding.bottom),
+        SizedBox(height: 10 + MediaQuery.paddingOf(context).bottom),
       ];
 
   @override

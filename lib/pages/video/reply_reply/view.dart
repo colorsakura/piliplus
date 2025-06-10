@@ -178,7 +178,7 @@ class _VideoReplyReplyPanelState
                     if (index == 0) {
                       return ReplyItemGrpc(
                         replyItem: firstFloor!,
-                        replyLevel: '2',
+                        replyLevel: 2,
                         needDivider: false,
                         onReply: () => _onReply(firstFloor!, -1),
                         upMid: _videoReplyReplyController.upMid,
@@ -384,8 +384,8 @@ class _VideoReplyReplyPanelState
             _videoReplyReplyController.onLoadMore();
             return Container(
               alignment: Alignment.center,
-              margin: EdgeInsets.only(
-                  bottom: MediaQuery.of(context).padding.bottom),
+              margin:
+                  EdgeInsets.only(bottom: MediaQuery.paddingOf(context).bottom),
               height: 125,
               child: Text(
                 _videoReplyReplyController.isEnd ? '没有更多了' : '加载中...',
@@ -426,7 +426,7 @@ class _VideoReplyReplyPanelState
   Widget _replyItem(ReplyInfo replyItem, int index) {
     return ReplyItemGrpc(
       replyItem: replyItem,
-      replyLevel: widget.isDialogue ? '3' : '2',
+      replyLevel: widget.isDialogue ? 3 : 2,
       onReply: () => _onReply(replyItem, index),
       onDelete: (subIndex) {
         _videoReplyReplyController.onRemove(index, null);

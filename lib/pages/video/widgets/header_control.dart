@@ -1863,7 +1863,7 @@ class HeaderControlState extends State<HeaderControl> {
                     onPressed: () {
                       if (isFullScreen) {
                         widget.controller.triggerFullScreen(status: false);
-                      } else if (MediaQuery.of(context).orientation ==
+                      } else if (MediaQuery.orientationOf(context) ==
                               Orientation.landscape &&
                           !horizontalScreen) {
                         verticalScreenForTwoSeconds();
@@ -1874,7 +1874,7 @@ class HeaderControlState extends State<HeaderControl> {
                   ),
                 ),
                 if (!isFullScreen ||
-                    MediaQuery.of(context).orientation != Orientation.portrait)
+                    MediaQuery.orientationOf(context) != Orientation.portrait)
                   SizedBox(
                     width: 42,
                     height: 34,
@@ -1895,7 +1895,7 @@ class HeaderControlState extends State<HeaderControl> {
                     (isFullScreen ||
                         (!isFullScreen &&
                             !horizontalScreen &&
-                            MediaQuery.of(context).orientation ==
+                            MediaQuery.orientationOf(context) ==
                                 Orientation.landscape)))
                   Expanded(
                     child: Column(
@@ -1996,7 +1996,7 @@ class HeaderControlState extends State<HeaderControl> {
                 Obx(
                   () {
                     if ((isFullScreen || !horizontalScreen) &&
-                        MediaQuery.of(context).orientation ==
+                        MediaQuery.orientationOf(context) ==
                             Orientation.landscape) {
                       startClock();
                       return Text(

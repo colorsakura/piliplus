@@ -51,7 +51,7 @@ class ReplyItemGrpc extends StatelessWidget {
     this.onToggleTop,
   });
   final ReplyInfo replyItem;
-  final String replyLevel;
+  final int replyLevel;
   final Function(ReplyInfo replyItem, int? rpid)? replyReply;
   final bool needDivider;
   final VoidCallback? onReply;
@@ -230,7 +230,7 @@ class ReplyItemGrpc extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
                       Text(
-                        replyLevel == ''
+                        replyLevel == 0
                             ? DateTime.fromMillisecondsSinceEpoch(
                                     replyItem.ctime.toInt() * 1000)
                                 .toString()
@@ -259,7 +259,7 @@ class ReplyItemGrpc extends StatelessWidget {
         Padding(
           padding: EdgeInsets.only(
             top: 10,
-            left: replyLevel == '' ? 6 : 45,
+            left: replyLevel == 0 ? 6 : 45,
             right: 6,
             bottom: 4,
           ),
@@ -272,7 +272,7 @@ class ReplyItemGrpc extends StatelessWidget {
               );
               TextPainter? textPainter;
               bool? didExceedMaxLines;
-              if (replyLevel == '1' && GlobalData().replyLengthLimit != 0) {
+              if (replyLevel == 1 && GlobalData().replyLengthLimit != 0) {
                 textPainter = TextPainter(
                   text: TextSpan(text: text, style: style),
                   maxLines: GlobalData().replyLengthLimit,
@@ -316,12 +316,10 @@ class ReplyItemGrpc extends StatelessWidget {
           ),
         ),
         // 操作区域
-        if (replyLevel != '')
+        if (replyLevel != 0)
           buttonAction(context, theme, replyItem.replyControl),
         // 一楼的评论
-        if (replyLevel == '1' &&
-            (replyItem.replies.isNotEmpty ||
-                replyItem.replyControl.subReplyEntryText.isNotEmpty)) ...[
+        if (replyLevel == 1 && replyItem.replies.isNotEmpty) ...[
           Padding(
             padding: const EdgeInsets.only(top: 5, bottom: 12),
             child: replyItemRow(context, theme),
@@ -397,9 +395,7 @@ class ReplyItemGrpc extends StatelessWidget {
                 color: theme.colorScheme.secondary,
                 fontSize: theme.textTheme.labelMedium!.fontSize),
           ),
-        if (replyLevel == '2' &&
-            needDivider &&
-            replyItem.id != replyItem.dialog)
+        if (replyLevel == 2 && needDivider && replyItem.id != replyItem.dialog)
           SizedBox(
             height: 32,
             child: TextButton(
@@ -424,8 +420,8 @@ class ReplyItemGrpc extends StatelessWidget {
 
   Widget replyItemRow(BuildContext context, ThemeData theme) {
     final bool extraRow = replyItem.replies.length < replyItem.count.toInt();
-    return Container(
-      margin: const EdgeInsets.only(left: 42, right: 4, top: 0),
+    return Padding(
+      padding: const EdgeInsets.only(left: 42, right: 4),
       child: Material(
         color: theme.colorScheme.onInverseSurface,
         borderRadius: const BorderRadius.all(Radius.circular(6)),
@@ -1132,7 +1128,7 @@ class ReplyItemGrpc extends StatelessWidget {
               leading: Icon(Icons.error_outline, color: errorColor, size: 19),
               title: Text('举报', style: style!.copyWith(color: errorColor)),
             ),
-          if (replyLevel == '1' && !isSubReply && ownerMid == upMid)
+          if (replyLevel == 1 && !isSubReply && ownerMid == upMid)
             ListTile(
               onTap: () => menuActionHandler('top'),
               minLeadingWidth: 0,

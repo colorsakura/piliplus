@@ -123,7 +123,7 @@ class _DynamicSliverAppBarMediumState extends State<DynamicSliverAppBarMedium> {
 
   @override
   Widget build(BuildContext context) {
-    final orientation = MediaQuery.of(context).orientation;
+    final orientation = MediaQuery.orientationOf(context);
     if (orientation != _orientation) {
       _orientation = orientation;
       _height = 0;

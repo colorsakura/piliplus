@@ -245,7 +245,7 @@ class _HistoryPageState extends State<HistoryPage>
             SliverPadding(
               padding: EdgeInsets.only(
                 top: StyleString.safeSpace - 5,
-                bottom: MediaQuery.of(context).padding.bottom + 80,
+                bottom: MediaQuery.paddingOf(context).bottom + 80,
               ),
               sliver:
                   Obx(() => _buildBody(_historyController.loadingState.value)),

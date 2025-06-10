@@ -71,7 +71,7 @@ class _PgcIntroPageState extends State<PgcIntroPage>
     final ThemeData theme = Theme.of(context);
     final item = pgcIntroController.pgcItem;
     final isLandscape =
-        MediaQuery.of(context).orientation == Orientation.landscape;
+        MediaQuery.orientationOf(context) == Orientation.landscape;
     return SliverPadding(
       padding: EdgeInsets.only(
         left: StyleString.safeSpace,
