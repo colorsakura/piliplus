@@ -18,7 +18,7 @@ import 'package:PiliPlus/http/validate.dart';
 import 'package:PiliPlus/http/video.dart';
 import 'package:PiliPlus/models/dynamics/result.dart';
 import 'package:PiliPlus/models/login/model.dart';
-import 'package:PiliPlus/models_new/fav/fav_video/list.dart';
+import 'package:PiliPlus/models_new/fav/fav_folder/list.dart';
 import 'package:PiliPlus/pages/common/multi_select_controller.dart';
 import 'package:PiliPlus/pages/dynamics_tab/controller.dart';
 import 'package:PiliPlus/pages/group_panel/view.dart';
@@ -346,7 +346,7 @@ class RequestUtils {
       if (context.mounted &&
           res['status'] &&
           (res['data'].list as List?)?.isNotEmpty == true) {
-        List<FavVideoItemModel> list = res['data'].list;
+        List<FavFolderInfo> list = res['data'].list;
         dynamic checkedId;
         showDialog(
           context: context,
@@ -360,7 +360,7 @@ class RequestUtils {
                     children: List.generate(list.length, (index) {
                       return RadioWidget(
                         padding: const EdgeInsets.only(left: 14),
-                        title: list[index].title ?? '',
+                        title: list[index].title,
                         groupValue: checkedId,
                         value: list[index].id,
                         onChanged: (value) {

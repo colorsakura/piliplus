@@ -1,4 +1,4 @@
-import 'package:PiliPlus/models_new/sub/sub/upper.dart';
+import 'package:PiliPlus/models/model_owner.dart';
 
 class SubItemModel {
   int? id;
@@ -8,7 +8,7 @@ class SubItemModel {
   String? attrDesc;
   String? title;
   String? cover;
-  Upper? upper;
+  Owner? upper;
   int? coverType;
   String? intro;
   int? ctime;
@@ -61,7 +61,7 @@ class SubItemModel {
         cover: json['cover'] as String?,
         upper: json['upper'] == null
             ? null
-            : Upper.fromJson(json['upper'] as Map<String, dynamic>),
+            : Owner.fromJson(json['upper'] as Map<String, dynamic>),
         coverType: json['cover_type'] as int?,
         intro: json['intro'] as String?,
         ctime: json['ctime'] as int?,

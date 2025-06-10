@@ -1,13 +1,13 @@
 import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/common/widgets/image/image_save.dart';
 import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
-import 'package:PiliPlus/models_new/fav/fav_video/list.dart';
+import 'package:PiliPlus/models_new/fav/fav_folder/list.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
 
 class FavVideoItem extends StatelessWidget {
   final String heroTag;
-  final FavVideoItemModel item;
+  final FavFolderInfo item;
   final VoidCallback? onTap;
   final VoidCallback? onLongPress;
 
@@ -68,7 +68,7 @@ class FavVideoItem extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            item.title!,
+            item.title,
             textAlign: TextAlign.start,
             style: const TextStyle(
               letterSpacing: 0.3,

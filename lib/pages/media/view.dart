@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/common/nav_bar_config.dart';
-import 'package:PiliPlus/models_new/fav/fav_video/list.dart';
+import 'package:PiliPlus/models_new/fav/fav_folder/list.dart';
 import 'package:PiliPlus/pages/common/common_page.dart';
 import 'package:PiliPlus/pages/main/controller.dart';
 import 'package:PiliPlus/pages/media/controller.dart';
@@ -169,7 +169,7 @@ class _MediaPageState extends CommonPageState<MediaPage, MediaController>
       Loading() => const SizedBox.shrink(),
       Success(:var response) => Builder(
           builder: (context) {
-            List<FavVideoItemModel>? favFolderList = response.list;
+            List<FavFolderInfo>? favFolderList = response.list;
             if (favFolderList.isNullOrEmpty) {
               return const SizedBox.shrink();
             }

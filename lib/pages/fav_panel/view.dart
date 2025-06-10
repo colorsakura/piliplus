@@ -1,5 +1,5 @@
 import 'package:PiliPlus/common/widgets/loading_widget/http_error.dart';
-import 'package:PiliPlus/models_new/fav/fav_video/data.dart';
+import 'package:PiliPlus/models_new/fav/fav_folder/data.dart';
 import 'package:PiliPlus/utils/feed_back.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
@@ -45,7 +45,7 @@ class _FavPanelState extends State<FavPanel> {
             TextButton.icon(
               onPressed: () => Get.toNamed('/createFav')?.then((data) {
                 if (data != null) {
-                  (widget.ctr?.favFolderData as Rx<FavVideoData>)
+                  (widget.ctr?.favFolderData as Rx<FavFolderData>)
                     ..value.list?.insert(1, data)
                     ..refresh();
                 }

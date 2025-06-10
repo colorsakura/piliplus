@@ -9,8 +9,8 @@ import 'package:PiliPlus/http/member.dart';
 import 'package:PiliPlus/http/search.dart';
 import 'package:PiliPlus/http/user.dart';
 import 'package:PiliPlus/http/video.dart';
-import 'package:PiliPlus/models_new/fav/fav_video/data.dart';
-import 'package:PiliPlus/models_new/fav/fav_video/list.dart';
+import 'package:PiliPlus/models_new/fav/fav_folder/data.dart';
+import 'package:PiliPlus/models_new/fav/fav_folder/list.dart';
 import 'package:PiliPlus/models_new/triple/ugc_triple.dart';
 import 'package:PiliPlus/models_new/video/video_ai_conclusion/data.dart';
 import 'package:PiliPlus/models_new/video/video_ai_conclusion/model_result.dart';
@@ -78,7 +78,7 @@ class VideoIntroController extends GetxController {
   RxBool hasFav = false.obs;
   // 是否稍后再看
   RxBool hasLater = false.obs;
-  Rx<FavVideoData> favFolderData = FavVideoData().obs;
+  Rx<FavFolderData> favFolderData = FavFolderData().obs;
   Set? favIds;
   // 关注状态 默认未关注
   RxMap followStatus = {}.obs;
@@ -387,7 +387,7 @@ class VideoIntroController extends GetxController {
       SmartDialog.showLoading(msg: '请求中');
       queryVideoInFolder().then((res) async {
         if (res['status']) {
-          int defaultFolderId = favFolderData.value.list!.first.id!;
+          int defaultFolderId = favFolderData.value.list!.first.id;
           bool notInDefFolder = favFolderData.value.list!.first.favState! == 0;
           var result = await FavHttp.favVideo(
             aid: IdUtils.bv2av(bvid),
@@ -565,10 +565,10 @@ class VideoIntroController extends GetxController {
   // 选择文件夹
   void onChoose(bool checkValue, int index) {
     feedBack();
-    FavVideoItemModel item = favFolderData.value.list![index];
+    FavFolderInfo item = favFolderData.value.list![index];
     item
       ..favState = checkValue ? 1 : 0
-      ..mediaCount = checkValue ? item.mediaCount! + 1 : item.mediaCount! - 1;
+      ..mediaCount = checkValue ? item.mediaCount + 1 : item.mediaCount - 1;
     favFolderData.refresh();
   }
 

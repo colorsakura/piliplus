@@ -1,10 +1,10 @@
+import 'package:PiliPlus/models/model_owner.dart';
+import 'package:PiliPlus/models_new/fav/fav_detail/cnt_info.dart';
 import 'package:PiliPlus/models_new/media_list/badge.dart';
-import 'package:PiliPlus/models_new/media_list/cnt_info.dart';
 import 'package:PiliPlus/models_new/media_list/coin.dart';
 import 'package:PiliPlus/models_new/media_list/ogv_info.dart';
 import 'package:PiliPlus/models_new/media_list/page.dart';
 import 'package:PiliPlus/models_new/media_list/rights.dart';
-import 'package:PiliPlus/models_new/media_list/upper.dart';
 import 'package:PiliPlus/utils/extension.dart';
 
 class MediaListItemModel {
@@ -26,7 +26,7 @@ class MediaListItemModel {
   List<Page>? pages;
   String? title;
   int? type;
-  Upper? upper;
+  Owner? upper;
   String? link;
   String? bvid;
   String? shortLink;
@@ -94,7 +94,7 @@ class MediaListItemModel {
     pages = (json['pages'] as List?)?.map((e) => Page.fromJson(e)).toList();
     title = json['title'] as String?;
     type = json['type'] as int?;
-    upper = json['upper'] == null ? null : Upper.fromJson(json['upper']);
+    upper = json['upper'] == null ? null : Owner.fromJson(json['upper']);
     link = json['link'] as String?;
     bvid = json['bv_id'] as String?;
     shortLink = json['short_link'] as String?;

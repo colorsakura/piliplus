@@ -1,7 +1,7 @@
+import 'package:PiliPlus/models/model_owner.dart';
 import 'package:PiliPlus/models_new/fav/fav_detail/cnt_info.dart';
 import 'package:PiliPlus/models_new/fav/fav_detail/ogv.dart';
 import 'package:PiliPlus/models_new/fav/fav_detail/ugc.dart';
-import 'package:PiliPlus/models_new/fav/fav_detail/upper.dart';
 import 'package:PiliPlus/pages/common/multi_select_controller.dart';
 
 class FavDetailItemModel with MultiSelectData {
@@ -12,7 +12,7 @@ class FavDetailItemModel with MultiSelectData {
   String? intro;
   int? page;
   int? duration;
-  Upper? upper;
+  Owner? upper;
   int? attr;
   CntInfo? cntInfo;
   String? link;
@@ -56,7 +56,7 @@ class FavDetailItemModel with MultiSelectData {
         duration: json['duration'] as int?,
         upper: json['upper'] == null
             ? null
-            : Upper.fromJson(json['upper'] as Map<String, dynamic>),
+            : Owner.fromJson(json['upper'] as Map<String, dynamic>),
         attr: json['attr'] as int?,
         cntInfo: json['cnt_info'] == null
             ? null

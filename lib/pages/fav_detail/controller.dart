@@ -2,7 +2,7 @@ import 'package:PiliPlus/http/fav.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models_new/fav/fav_detail/data.dart';
 import 'package:PiliPlus/models_new/fav/fav_detail/media.dart';
-import 'package:PiliPlus/models_new/fav/fav_video/list.dart';
+import 'package:PiliPlus/models_new/fav/fav_folder/list.dart';
 import 'package:PiliPlus/pages/common/multi_select_controller.dart';
 import 'package:PiliPlus/pages/fav_sort/view.dart';
 import 'package:PiliPlus/services/account_service.dart';
@@ -17,7 +17,7 @@ class FavDetailController
     extends MultiSelectController<FavDetailData, FavDetailItemModel> {
   late int mediaId;
   late String heroTag;
-  final Rx<FavVideoItemModel> item = FavVideoItemModel().obs;
+  final Rx<FavFolderInfo> folderInfo = FavFolderInfo().obs;
   final Rx<bool?> isOwner = Rx<bool?>(null);
 
   AccountService accountService = Get.find<AccountService>();
@@ -42,7 +42,7 @@ class FavDetailController
 
   @override
   void checkIsEnd(int length) {
-    if (item.value.mediaCount != null && length >= item.value.mediaCount!) {
+    if (length >= folderInfo.value.mediaCount) {
       isEnd = true;
     }
   }
@@ -51,7 +51,7 @@ class FavDetailController
   bool customHandleResponse(bool isRefresh, Success<FavDetailData> response) {
     FavDetailData data = response.response;
     if (isRefresh) {
-      item.value = data.info ?? FavVideoItemModel();
+      folderInfo.value = data.info!;
       isOwner.value = data.info?.mid == accountService.mid;
     }
     return false;
@@ -63,11 +63,12 @@ class FavDetailController
       delIds: mediaId.toString(),
     );
     if (result['status']) {
-      List<FavDetailItemModel> dataList = loadingState.value.data!;
-      item.value.mediaCount = item.value.mediaCount! - 1;
-      item.refresh();
-      dataList.removeAt(index);
-      loadingState.refresh();
+      folderInfo
+        ..value.mediaCount -= 1
+        ..refresh();
+      loadingState
+        ..value.data!.removeAt(index)
+        ..refresh();
       SmartDialog.showToast('取消收藏');
     } else {
       SmartDialog.showToast(result['msg']);
@@ -113,8 +114,9 @@ class FavDetailController
                   List<FavDetailItemModel> dataList = loadingState.value.data!;
                   List<FavDetailItemModel> remainList =
                       dataList.toSet().difference(list.toSet()).toList();
-                  item.value.mediaCount = item.value.mediaCount! - list.length;
-                  item.refresh();
+                  folderInfo
+                    ..value.mediaCount -= list.length
+                    ..refresh();
                   if (remainList.isNotEmpty) {
                     loadingState.value = Success(remainList);
                   } else {
@@ -153,10 +155,10 @@ class FavDetailController
               'videoItem': element,
               'heroTag': Utils.makeHeroTag(element.bvid),
               'sourceType': 'fav',
-              'mediaId': item.value.id,
+              'mediaId': folderInfo.value.id,
               'oid': element.id,
-              'favTitle': item.value.title,
-              'count': item.value.mediaCount,
+              'favTitle': folderInfo.value.title,
+              'count': folderInfo.value.mediaCount,
               'desc': true,
               'isOwner': isOwner.value ?? false,
             },
@@ -183,7 +185,7 @@ class FavDetailController
         : await FavHttp.favFavFolder(mediaId);
 
     if (res['status']) {
-      item
+      folderInfo
         ..value.favState = isFav ? 0 : 1
         ..refresh();
     }
@@ -205,7 +207,7 @@ class FavDetailController
   void onSort() {
     if (loadingState.value.isSuccess &&
         loadingState.value.data?.isNotEmpty == true) {
-      if ((item.value.mediaCount ?? 0) > 1000) {
+      if (folderInfo.value.mediaCount > 1000) {
         SmartDialog.showToast('内容太多啦！超过1000不支持排序');
         return;
       }

@@ -8,7 +8,7 @@ import 'package:get/get.dart';
 
 class SubDetailController
     extends CommonListController<SubDetailData, SubDetailItemModel> {
-  late SubItemModel item;
+  late SubItemModel subInfo;
 
   late int id;
   late String heroTag;
@@ -19,9 +19,9 @@ class SubDetailController
   @override
   void onInit() {
     super.onInit();
-    item = Get.arguments;
-    mediaCount = (item.mediaCount ?? 0).obs;
-    playCount = (item.viewCount ?? 0).obs;
+    subInfo = Get.arguments;
+    mediaCount = (subInfo.mediaCount ?? 0).obs;
+    playCount = (subInfo.viewCount ?? 0).obs;
     id = int.parse(Get.parameters['id']!);
     heroTag = Get.parameters['heroTag']!;
     queryData();
@@ -42,7 +42,7 @@ class SubDetailController
   @override
   bool customHandleResponse(bool isRefresh, Success<SubDetailData> response) {
     mediaCount.value = response.response.info!.mediaCount!;
-    if (item.type == 11) {
+    if (subInfo.type == 11) {
       playCount.value = response.response.info!.cntInfo!.play!;
     }
     return false;
@@ -50,7 +50,7 @@ class SubDetailController
 
   @override
   Future<LoadingState<SubDetailData>> customGetData() {
-    if (item.type == 11) {
+    if (subInfo.type == 11) {
       return FavHttp.favResourceList(
         id: id,
         ps: 20,

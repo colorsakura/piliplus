@@ -1,5 +1,5 @@
-import 'package:PiliPlus/models_new/sub/sub_detail/cnt_info.dart';
-import 'package:PiliPlus/models_new/sub/sub_detail/upper.dart';
+import 'package:PiliPlus/models/model_owner.dart';
+import 'package:PiliPlus/models_new/fav/fav_detail/cnt_info.dart';
 
 class SubDetailItemModel {
   int? id;
@@ -8,7 +8,7 @@ class SubDetailItemModel {
   int? duration;
   int? pubtime;
   String? bvid;
-  Upper? upper;
+  Owner? upper;
   CntInfo? cntInfo;
   int? enableVt;
   String? vtDisplay;
@@ -38,7 +38,7 @@ class SubDetailItemModel {
         bvid: json['bvid'] as String?,
         upper: json['upper'] == null
             ? null
-            : Upper.fromJson(json['upper'] as Map<String, dynamic>),
+            : Owner.fromJson(json['upper'] as Map<String, dynamic>),
         cntInfo: json['cnt_info'] == null
             ? null
             : CntInfo.fromJson(json['cnt_info'] as Map<String, dynamic>),

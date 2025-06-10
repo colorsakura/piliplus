@@ -4,12 +4,11 @@ import 'package:PiliPlus/http/init.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models_new/fav/fav_article/data.dart';
 import 'package:PiliPlus/models_new/fav/fav_detail/data.dart';
-import 'package:PiliPlus/models_new/fav/fav_folder_info/data.dart';
+import 'package:PiliPlus/models_new/fav/fav_folder/data.dart';
+import 'package:PiliPlus/models_new/fav/fav_folder/list.dart';
 import 'package:PiliPlus/models_new/fav/fav_note/list.dart';
 import 'package:PiliPlus/models_new/fav/fav_pgc/data.dart';
 import 'package:PiliPlus/models_new/fav/fav_topic/data.dart';
-import 'package:PiliPlus/models_new/fav/fav_video/data.dart';
-import 'package:PiliPlus/models_new/fav/fav_video/list.dart';
 import 'package:PiliPlus/models_new/space/space_fav/data.dart';
 import 'package:PiliPlus/models_new/sub/sub_detail/data.dart';
 import 'package:PiliPlus/utils/storage.dart' show Accounts;
@@ -353,7 +352,7 @@ class FavHttp {
   }
 
   // 收藏夹
-  static Future<LoadingState<FavVideoData>> userfavFolder({
+  static Future<LoadingState<FavFolderData>> userfavFolder({
     required int pn,
     required int ps,
     required dynamic mid,
@@ -367,7 +366,7 @@ class FavHttp {
       },
     );
     if (res.data['code'] == 0) {
-      return Success(FavVideoData.fromJson(res.data['data']));
+      return Success(FavFolderData.fromJson(res.data['data']));
     } else {
       return Error(res.data['message'] ?? '账号未登录');
     }
@@ -480,26 +479,23 @@ class FavHttp {
           contentType: Headers.formUrlEncodedContentType,
         ));
     if (res.data['code'] == 0) {
-      return {
-        'status': true,
-        'data': FavVideoItemModel.fromJson(res.data['data'])
-      };
+      return {'status': true, 'data': FavFolderInfo.fromJson(res.data['data'])};
     } else {
       return {'status': false, 'msg': res.data['message']};
     }
   }
 
-  static Future folderInfo({
+  static Future favFolderInfo({
     dynamic mediaId,
   }) async {
     var res = await Request().get(
-      Api.folderInfo,
+      Api.favFolderInfo,
       queryParameters: {
         'media_id': mediaId,
       },
     );
     if (res.data['code'] == 0) {
-      return {'status': true, 'data': FolderInfo.fromJson(res.data['data'])};
+      return {'status': true, 'data': FavFolderInfo.fromJson(res.data['data'])};
     } else {
       return {'status': false, 'msg': res.data['message']};
     }
@@ -674,7 +670,7 @@ class FavHttp {
       queryParameters: {'up_mid': mid},
     );
     if (res.data['code'] == 0) {
-      return {'status': true, 'data': FavVideoData.fromJson(res.data['data'])};
+      return {'status': true, 'data': FavFolderData.fromJson(res.data['data'])};
     } else {
       return {'status': false, 'msg': res.data['message']};
     }
@@ -695,7 +691,7 @@ class FavHttp {
       },
     );
     if (res.data['code'] == 0) {
-      return {'status': true, 'data': FavVideoData.fromJson(res.data['data'])};
+      return {'status': true, 'data': FavFolderData.fromJson(res.data['data'])};
     } else {
       return {'status': false, 'msg': res.data['message']};
     }

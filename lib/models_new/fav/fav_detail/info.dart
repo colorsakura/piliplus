@@ -1,5 +1,5 @@
+import 'package:PiliPlus/models/model_owner.dart';
 import 'package:PiliPlus/models_new/fav/fav_detail/cnt_info.dart';
-import 'package:PiliPlus/models_new/fav/fav_detail/upper.dart';
 
 class FavDetailInfo {
   int? id;
@@ -8,7 +8,7 @@ class FavDetailInfo {
   int? attr;
   String? title;
   String? cover;
-  Upper? upper;
+  Owner? upper;
   int? coverType;
   CntInfo? cntInfo;
   int? type;
@@ -51,7 +51,7 @@ class FavDetailInfo {
         cover: json['cover'] as String?,
         upper: json['upper'] == null
             ? null
-            : Upper.fromJson(json['upper'] as Map<String, dynamic>),
+            : Owner.fromJson(json['upper'] as Map<String, dynamic>),
         coverType: json['cover_type'] as int?,
         cntInfo: json['cnt_info'] == null
             ? null

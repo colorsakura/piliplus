@@ -3,7 +3,7 @@ import 'package:PiliPlus/common/skeleton/video_card_h.dart';
 import 'package:PiliPlus/common/widgets/loading_widget/http_error.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/http/loading_state.dart';
-import 'package:PiliPlus/models_new/fav/fav_video/list.dart';
+import 'package:PiliPlus/models_new/fav/fav_folder/list.dart';
 import 'package:PiliPlus/pages/fav/video/controller.dart';
 import 'package:PiliPlus/pages/fav/video/widgets/item.dart';
 import 'package:PiliPlus/utils/grid.dart';
@@ -48,7 +48,7 @@ class _FavVideoPageState extends State<FavVideoPage>
     );
   }
 
-  Widget _buildBody(LoadingState<List<FavVideoItemModel>?> loadingState) {
+  Widget _buildBody(LoadingState<List<FavFolderInfo>?> loadingState) {
     return switch (loadingState) {
       Loading() => SliverGrid(
           gridDelegate: Grid.videoCardHDelegate(context),

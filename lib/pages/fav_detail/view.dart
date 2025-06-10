@@ -9,7 +9,7 @@ import 'package:PiliPlus/http/fav.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models_new/fav/fav_detail/data.dart';
 import 'package:PiliPlus/models_new/fav/fav_detail/media.dart';
-import 'package:PiliPlus/models_new/fav/fav_video/list.dart';
+import 'package:PiliPlus/models_new/fav/fav_folder/list.dart';
 import 'package:PiliPlus/pages/dynamics_repost/view.dart';
 import 'package:PiliPlus/pages/fav_detail/controller.dart';
 import 'package:PiliPlus/pages/fav_detail/widget/fav_video_card.dart';
@@ -53,7 +53,7 @@ class _FavDetailPageState extends State<FavDetailPage> {
         child: Scaffold(
           resizeToAvoidBottomInset: false,
           floatingActionButton: Obx(
-            () => (_favDetailController.item.value.mediaCount ?? -1) > 0
+            () => _favDetailController.folderInfo.value.mediaCount > 0
                 ? FloatingActionButton.extended(
                     onPressed: _favDetailController.toViewPlayAll,
                     label: const Text('播放全部'),
@@ -112,11 +112,11 @@ class _FavDetailPageState extends State<FavDetailPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  _favDetailController.item.value.title ?? '',
+                  _favDetailController.folderInfo.value.title,
                   style: theme.textTheme.titleMedium,
                 ),
                 Text(
-                  '共${_favDetailController.item.value.mediaCount}条视频',
+                  '共${_favDetailController.folderInfo.value.mediaCount}条视频',
                   style: theme.textTheme.labelMedium,
                 )
               ],
@@ -128,35 +128,42 @@ class _FavDetailPageState extends State<FavDetailPage> {
     );
   }
 
-  List<Widget> _actions(ThemeData theme) => [
-        IconButton(
-          tooltip: '搜索',
-          onPressed: () => Get.toNamed(
+  List<Widget> _actions(ThemeData theme) {
+    return [
+      IconButton(
+        tooltip: '搜索',
+        onPressed: () {
+          final folderInfo = _favDetailController.folderInfo.value;
+          Get.toNamed(
             '/favSearch',
             arguments: {
               'type': 0,
               'mediaId': int.parse(mediaId),
-              'title': _favDetailController.item.value.title,
-              'count': _favDetailController.item.value.mediaCount,
+              'title': folderInfo.title,
+              'count': folderInfo.mediaCount,
               'isOwner': _favDetailController.isOwner.value ?? false,
             },
-          ),
-          icon: const Icon(Icons.search_outlined),
-        ),
-        Obx(
-          () => _favDetailController.item.value.attr == null ||
-                  !Utils.isPublicFav(_favDetailController.item.value.attr!)
-              ? const SizedBox.shrink()
-              : IconButton(
-                  iconSize: 22,
-                  onPressed: () => Utils.shareText(
-                      'https://www.bilibili.com/medialist/detail/ml${_favDetailController.mediaId}'),
-                  icon: const Icon(Icons.share),
-                ),
-        ),
-        PopupMenuButton(
-          icon: const Icon(Icons.more_vert),
-          itemBuilder: (context) => [
+          );
+        },
+        icon: const Icon(Icons.search_outlined),
+      ),
+      Obx(() {
+        final attr = _favDetailController.folderInfo.value.attr;
+        return attr == -1 || !Utils.isPublicFav(attr)
+            ? const SizedBox.shrink()
+            : IconButton(
+                iconSize: 22,
+                tooltip: '分享',
+                onPressed: () => Utils.shareText(
+                    'https://www.bilibili.com/medialist/detail/ml${_favDetailController.mediaId}'),
+                icon: const Icon(Icons.share),
+              );
+      }),
+      PopupMenuButton(
+        icon: const Icon(Icons.more_vert),
+        itemBuilder: (context) {
+          final folderInfo = _favDetailController.folderInfo.value;
+          return [
             if (_favDetailController.isOwner.value == true) ...[
               PopupMenuItem(
                 onTap: _favDetailController.onSort,
@@ -167,20 +174,19 @@ class _FavDetailPageState extends State<FavDetailPage> {
                   '/createFav',
                   parameters: {'mediaId': mediaId},
                 )?.then((res) {
-                  if (res is FavVideoItemModel) {
-                    _favDetailController.item.value = res;
+                  if (res is FavFolderInfo) {
+                    _favDetailController.folderInfo.value = res;
                   }
                 }),
                 child: const Text('编辑信息'),
               ),
             ] else
               PopupMenuItem(
-                onTap: () => _favDetailController
-                    .onFav(_favDetailController.item.value.favState == 1),
-                child: Text(
-                    '${_favDetailController.item.value.favState == 1 ? '取消' : ''}收藏'),
+                onTap: () =>
+                    _favDetailController.onFav(folderInfo.favState == 1),
+                child: Text('${folderInfo.favState == 1 ? '取消' : ''}收藏'),
               ),
-            if (Utils.isPublicFav(_favDetailController.item.value.attr ?? 0))
+            if (Utils.isPublicFav(folderInfo.attr))
               PopupMenuItem(
                 onTap: () => showModalBottomSheet(
                   context: context,
@@ -189,9 +195,9 @@ class _FavDetailPageState extends State<FavDetailPage> {
                   builder: (context) => RepostPanel(
                     rid: _favDetailController.mediaId,
                     dynType: 4300,
-                    pic: _favDetailController.item.value.cover,
-                    title: _favDetailController.item.value.title,
-                    uname: _favDetailController.item.value.upper?.name,
+                    pic: folderInfo.cover,
+                    title: folderInfo.title,
+                    uname: folderInfo.upper?.name,
                   ),
                 ),
                 child: const Text('分享至动态'),
@@ -201,8 +207,7 @@ class _FavDetailPageState extends State<FavDetailPage> {
                 onTap: _favDetailController.cleanFav,
                 child: const Text('清除失效内容'),
               ),
-              if (!Utils.isDefaultFav(
-                  _favDetailController.item.value.attr)) ...[
+              if (!Utils.isDefaultFav(folderInfo.attr)) ...[
                 const PopupMenuDivider(height: 12),
                 PopupMenuItem(
                   onTap: () => showConfirmDialog(
@@ -227,10 +232,12 @@ class _FavDetailPageState extends State<FavDetailPage> {
                 ),
               ],
             ],
-          ],
-        ),
-        const SizedBox(width: 10),
-      ];
+          ];
+        },
+      ),
+      const SizedBox(width: 10),
+    ];
+  }
 
   List<Widget> _selectActions(ThemeData theme) => [
         TextButton(
@@ -308,7 +315,7 @@ class _FavDetailPageState extends State<FavDetailPage> {
           height: 110,
           child: Obx(
             () {
-              final item = _favDetailController.item.value;
+              final folderInfo = _favDetailController.folderInfo.value;
               return Row(
                 spacing: 12,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -321,7 +328,7 @@ class _FavDetailPageState extends State<FavDetailPage> {
                         child: NetworkImgLayer(
                           width: 176,
                           height: 110,
-                          src: item.cover,
+                          src: folderInfo.cover,
                         ),
                       ),
                       Positioned(
@@ -331,8 +338,7 @@ class _FavDetailPageState extends State<FavDetailPage> {
                           if (_favDetailController.isOwner.value != false) {
                             return const SizedBox.shrink();
                           }
-                          bool isFav =
-                              _favDetailController.item.value.favState == 1;
+                          bool isFav = folderInfo.favState == 1;
                           return iconButton(
                             context: context,
                             size: 28,
@@ -352,55 +358,49 @@ class _FavDetailPageState extends State<FavDetailPage> {
                       )
                     ],
                   ),
-                  if (item.title != null)
+                  if (folderInfo.title.isNotEmpty)
                     Expanded(
                       child: Column(
                         spacing: 4,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            item.title!,
+                            folderInfo.title,
                             style: TextStyle(
                               fontSize: theme.textTheme.titleMedium!.fontSize,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
                           GestureDetector(
-                            onTap: () =>
-                                Get.toNamed('/member?mid=${item.upper!.mid}'),
+                            onTap: () => Get.toNamed(
+                                '/member?mid=${folderInfo.upper!.mid}'),
                             child: Text(
-                              item.upper!.name!,
+                              folderInfo.upper!.name!,
                               style: TextStyle(
                                 color: theme.colorScheme.primary,
                               ),
                             ),
                           ),
-                          if (item.intro?.isNotEmpty == true)
+                          if (folderInfo.intro?.isNotEmpty == true)
                             Text(
-                              item.intro!,
+                              folderInfo.intro!,
                               style: style,
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
                             ),
-                          if (item.attr != null) ...[
-                            Expanded(
-                              child: Align(
-                                alignment: Alignment.bottomLeft,
-                                child: Text(
-                                  '共${item.mediaCount}条视频 · ${Utils.isPublicFavText(item.attr)}',
-                                  textAlign: TextAlign.end,
-                                  style: style,
-                                ),
+                          Expanded(
+                            child: Align(
+                              alignment: Alignment.bottomLeft,
+                              child: Text(
+                                '共${folderInfo.mediaCount}条视频 · ${Utils.isPublicFavText(folderInfo.attr)}',
+                                textAlign: TextAlign.end,
+                                style: style,
                               ),
                             ),
-                          ],
+                          ),
                         ],
                       ),
-                    )
-                  else
-                    SizedBox.shrink(
-                      key: ValueKey(_favDetailController.item.value),
-                    )
+                    ),
                 ],
               );
             },
@@ -455,23 +455,26 @@ class _FavDetailPageState extends State<FavDetailPage> {
                                     item.type!,
                                   )
                               : null,
-                          onViewFav: () => PageUtils.toVideoPage(
-                            'bvid=${item.bvid}&cid=${item.ugc?.firstCid}',
-                            arguments: {
-                              'videoItem': item,
-                              'heroTag': Utils.makeHeroTag(item.bvid),
-                              'sourceType': 'fav',
-                              'mediaId': _favDetailController.item.value.id,
-                              'oid': item.id,
-                              'favTitle': _favDetailController.item.value.title,
-                              'count':
-                                  _favDetailController.item.value.mediaCount,
-                              'desc': true,
-                              'isContinuePlaying': index != 0,
-                              'isOwner':
-                                  _favDetailController.isOwner.value ?? false,
-                            },
-                          ),
+                          onViewFav: () {
+                            final folderInfo =
+                                _favDetailController.folderInfo.value;
+                            PageUtils.toVideoPage(
+                              'bvid=${item.bvid}&cid=${item.ugc?.firstCid}',
+                              arguments: {
+                                'videoItem': item,
+                                'heroTag': Utils.makeHeroTag(item.bvid),
+                                'sourceType': 'fav',
+                                'mediaId': folderInfo.id,
+                                'oid': item.id,
+                                'favTitle': folderInfo.title,
+                                'count': folderInfo.mediaCount,
+                                'desc': true,
+                                'isContinuePlaying': index != 0,
+                                'isOwner':
+                                    _favDetailController.isOwner.value ?? false,
+                              },
+                            );
+                          },
                           onTap: _favDetailController.enableMultiSelect.value
                               ? () => _favDetailController.onSelect(index)
                               : null,

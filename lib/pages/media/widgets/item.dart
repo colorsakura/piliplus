@@ -1,5 +1,5 @@
 import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
-import 'package:PiliPlus/models_new/fav/fav_video/list.dart';
+import 'package:PiliPlus/models_new/fav/fav_folder/list.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -12,7 +12,7 @@ class FavFolderItem extends StatelessWidget {
     required this.heroTag,
   });
 
-  final FavVideoItemModel item;
+  final FavFolderInfo item;
   final VoidCallback callback;
   final String heroTag;
 

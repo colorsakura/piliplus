@@ -99,7 +99,7 @@ class _SubDetailPageState extends State<SubDetailPage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            _subDetailController.item.title!,
+            _subDetailController.subInfo.title!,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
             style: theme.textTheme.titleMedium,
@@ -136,7 +136,7 @@ class _SubDetailPageState extends State<SubDetailPage> {
                 child: NetworkImgLayer(
                   width: 176,
                   height: 110,
-                  src: _subDetailController.item.cover,
+                  src: _subDetailController.subInfo.cover,
                 ),
               ),
               Expanded(
@@ -145,7 +145,7 @@ class _SubDetailPageState extends State<SubDetailPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      _subDetailController.item.title!,
+                      _subDetailController.subInfo.title!,
                       style: TextStyle(
                         fontSize: theme.textTheme.titleMedium!.fontSize,
                         fontWeight: FontWeight.bold,
@@ -154,14 +154,14 @@ class _SubDetailPageState extends State<SubDetailPage> {
                     GestureDetector(
                       onTap: () {
                         Get.toNamed(
-                          '/member?mid=${_subDetailController.item.upper!.mid}',
+                          '/member?mid=${_subDetailController.subInfo.upper!.mid}',
                           arguments: {
-                            'face': _subDetailController.item.upper!.face,
+                            'face': _subDetailController.subInfo.upper!.face,
                           },
                         );
                       },
                       child: Text(
-                        _subDetailController.item.upper!.name!,
+                        _subDetailController.subInfo.upper!.name!,
                         style: TextStyle(color: theme.colorScheme.primary),
                       ),
                     ),

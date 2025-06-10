@@ -1,6 +1,6 @@
 import 'package:PiliPlus/http/fav.dart';
 import 'package:PiliPlus/http/loading_state.dart';
-import 'package:PiliPlus/models_new/fav/fav_video/list.dart';
+import 'package:PiliPlus/models_new/fav/fav_folder/list.dart';
 import 'package:PiliPlus/pages/fav/video/controller.dart';
 import 'package:PiliPlus/pages/fav/video/widgets/item.dart';
 import 'package:flutter/material.dart';
@@ -20,8 +20,8 @@ class _FavFolderSortPageState extends State<FavFolderSortPage> {
   FavController get _favController => widget.favController;
 
   final GlobalKey _key = GlobalKey();
-  late List<FavVideoItemModel> sortList =
-      List<FavVideoItemModel>.from(_favController.loadingState.value.data!);
+  late List<FavFolderInfo> sortList =
+      List<FavFolderInfo>.from(_favController.loadingState.value.data!);
 
   final ScrollController _scrollController = ScrollController();
 
@@ -34,8 +34,7 @@ class _FavFolderSortPageState extends State<FavFolderSortPage> {
       _favController.onLoadMore().whenComplete(() {
         try {
           if (_favController.loadingState.value.isSuccess) {
-            List<FavVideoItemModel> list =
-                _favController.loadingState.value.data!;
+            List<FavFolderInfo> list = _favController.loadingState.value.data!;
             sortList.addAll(list.sublist(sortList.length));
             if (mounted) {
               setState(() {});

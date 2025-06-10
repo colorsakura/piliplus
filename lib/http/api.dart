@@ -202,7 +202,7 @@ class Api {
   // https://api.bilibili.com/x/v3/fav/folder/created/list?pn=1&ps=10&up_mid=17340771
   static const String userFavFolder = '/x/v3/fav/folder/created/list';
 
-  static const String folderInfo = '/x/v3/fav/folder/info';
+  static const String favFolderInfo = '/x/v3/fav/folder/info';
 
   static const String addFolder = '/x/v3/fav/folder/add';
 

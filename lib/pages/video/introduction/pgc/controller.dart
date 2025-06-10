@@ -8,8 +8,8 @@ import 'package:PiliPlus/http/fav.dart';
 import 'package:PiliPlus/http/user.dart';
 import 'package:PiliPlus/http/video.dart';
 import 'package:PiliPlus/models/pgc_lcf.dart';
-import 'package:PiliPlus/models_new/fav/fav_video/data.dart';
-import 'package:PiliPlus/models_new/fav/fav_video/list.dart';
+import 'package:PiliPlus/models_new/fav/fav_folder/data.dart';
+import 'package:PiliPlus/models_new/fav/fav_folder/list.dart';
 import 'package:PiliPlus/models_new/pgc/pgc_info_model/episode.dart';
 import 'package:PiliPlus/models_new/pgc/pgc_info_model/result.dart';
 import 'package:PiliPlus/models_new/triple/pgc_triple.dart';
@@ -59,7 +59,7 @@ class PgcIntroController extends GetxController {
   List<VideoTagItem>? videoTags;
 
   List? favIds;
-  Rx<FavVideoData> favFolderData = FavVideoData().obs;
+  Rx<FavFolderData> favFolderData = FavFolderData().obs;
 
   AccountService accountService = Get.find<AccountService>();
 
@@ -162,7 +162,7 @@ class PgcIntroController extends GetxController {
       SmartDialog.showLoading(msg: '请求中');
       queryVideoInFolder().then((res) async {
         if (res['status']) {
-          int defaultFolderId = favFolderData.value.list!.first.id!;
+          int defaultFolderId = favFolderData.value.list!.first.id;
           int favStatus = favFolderData.value.list!.first.favState!;
           var result = await FavHttp.favVideo(
             aid: epId,
@@ -352,10 +352,10 @@ class PgcIntroController extends GetxController {
   // 选择文件夹
   void onChoose(bool checkValue, int index) {
     feedBack();
-    FavVideoItemModel item = favFolderData.value.list![index];
+    FavFolderInfo item = favFolderData.value.list![index];
     item
       ..favState = checkValue ? 1 : 0
-      ..mediaCount = checkValue ? item.mediaCount! + 1 : item.mediaCount! - 1;
+      ..mediaCount = checkValue ? item.mediaCount + 1 : item.mediaCount - 1;
     favFolderData.refresh();
   }
 

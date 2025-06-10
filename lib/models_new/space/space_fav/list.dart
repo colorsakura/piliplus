@@ -1,4 +1,4 @@
-import 'package:PiliPlus/models_new/space/space_fav/upper.dart';
+import 'package:PiliPlus/models/model_owner.dart';
 
 class SpaceFavItemModel {
   int? id;
@@ -11,7 +11,7 @@ class SpaceFavItemModel {
   String? attrDesc;
   String? title;
   String? cover;
-  Upper? upper;
+  Owner? upper;
   int? coverType;
   String? intro;
   int? ctime;
@@ -71,7 +71,7 @@ class SpaceFavItemModel {
         cover: json['cover'] as String?,
         upper: json['upper'] == null
             ? null
-            : Upper.fromJson(json['upper'] as Map<String, dynamic>),
+            : Owner.fromJson(json['upper'] as Map<String, dynamic>),
         coverType: json['cover_type'] as int?,
         intro: json['intro'] as String?,
         ctime: json['ctime'] as int?,

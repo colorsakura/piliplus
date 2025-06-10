@@ -1,8 +1,8 @@
 import 'package:PiliPlus/models_new/fav/fav_detail/media.dart';
-import 'package:PiliPlus/models_new/fav/fav_video/list.dart';
+import 'package:PiliPlus/models_new/fav/fav_folder/list.dart';
 
 class FavDetailData {
-  FavVideoItemModel? info;
+  FavFolderInfo? info;
   List<FavDetailItemModel>? medias;
   bool? hasMore;
   int? ttl;
@@ -12,7 +12,7 @@ class FavDetailData {
   factory FavDetailData.fromJson(Map<String, dynamic> json) => FavDetailData(
         info: json['info'] == null
             ? null
-            : FavVideoItemModel.fromJson(json['info'] as Map<String, dynamic>),
+            : FavFolderInfo.fromJson(json['info'] as Map<String, dynamic>),
         medias: (json['medias'] as List<dynamic>?)
             ?.map((e) => FavDetailItemModel.fromJson(e as Map<String, dynamic>))
             .toList(),

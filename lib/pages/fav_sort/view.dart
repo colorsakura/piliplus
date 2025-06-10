@@ -68,7 +68,7 @@ class _FavSortPageState extends State<FavSortPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('排序: ${_favDetailController.item.value.title}'),
+        title: Text('排序: ${_favDetailController.folderInfo.value.title}'),
         actions: [
           TextButton(
             onPressed: () async {

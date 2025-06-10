@@ -1,12 +1,12 @@
-import 'package:PiliPlus/models_new/sub/sub_detail/cnt_info.dart';
-import 'package:PiliPlus/models_new/sub/sub_detail/upper.dart';
+import 'package:PiliPlus/models/model_owner.dart';
+import 'package:PiliPlus/models_new/fav/fav_detail/cnt_info.dart';
 
 class Info {
   int? id;
   int? seasonType;
   String? title;
   String? cover;
-  Upper? upper;
+  Owner? upper;
   CntInfo? cntInfo;
   int? mediaCount;
   String? intro;
@@ -31,7 +31,7 @@ class Info {
         cover: json['cover'] as String?,
         upper: json['upper'] == null
             ? null
-            : Upper.fromJson(json['upper'] as Map<String, dynamic>),
+            : Owner.fromJson(json['upper'] as Map<String, dynamic>),
         cntInfo: json['cnt_info'] == null
             ? null
             : CntInfo.fromJson(json['cnt_info'] as Map<String, dynamic>),
