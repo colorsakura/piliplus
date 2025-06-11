@@ -55,15 +55,22 @@ class PlDanmakuController {
           });
         }
 
+        final shouldFilter = plPlayerController.filters.count != 0;
         for (final element in data.elems) {
+          if (accountService.isLogin.value) {
+            element.isSelf = element.midHash == plPlayerController.midHash;
+          }
+          if (!element.isSelf) {
+            if (element.weight < plPlayerController.danmakuWeight ||
+                (shouldFilter && plPlayerController.filters.remove(element))) {
+              continue;
+            }
+          }
           if (mergeDanmaku) {
             final count = counts[element.content];
             if (count != 1) {
               element.count = count!;
             }
-          }
-          if (accountService.isLogin.value) {
-            element.isSelf = element.midHash == plPlayerController.midHash;
           }
           int pos = element.progress ~/ 100; //每0.1秒存储一次
           (dmSegMap[pos] ??= []).add(element);
@@ -80,14 +87,6 @@ class PlDanmakuController {
       queryDanmaku(segmentIndex);
       return null;
     }
-    if (plPlayerController.danmakuWeight == 0 &&
-        plPlayerController.filters.count == 0) {
-      return dmSegMap[progress ~/ 100];
-    } else {
-      return dmSegMap[progress ~/ 100]
-        ?..retainWhere((element) =>
-            element.weight >= plPlayerController.danmakuWeight &&
-            plPlayerController.filters.retain(element));
-    }
+    return dmSegMap[progress ~/ 100];
   }
 }

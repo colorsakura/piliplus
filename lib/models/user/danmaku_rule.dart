@@ -31,9 +31,9 @@ class RuleFilter {
 
   RuleFilter.empty();
 
-  bool retain(DanmakuElem elem) {
-    return !(dmUid.contains(elem.midHash) ||
+  bool remove(DanmakuElem elem) {
+    return dmUid.contains(elem.midHash) ||
         dmFilterString.any((i) => elem.content.contains(i)) ||
-        dmRegExp.any((i) => i.hasMatch(elem.content)));
+        dmRegExp.any((i) => i.hasMatch(elem.content));
   }
 }
