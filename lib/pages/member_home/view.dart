@@ -44,6 +44,7 @@ class _MemberHomeState extends State<MemberHome>
   Widget _buildBody(LoadingState<SpaceData?> loadingState) {
     final isVertical = context.orientation == Orientation.portrait;
     final setting = _ctr.spaceSetting;
+    final isOwner = setting != null;
     final color = Theme.of(context).colorScheme.outline;
     return switch (loadingState) {
       Loading() => loadingWidget,
@@ -89,7 +90,7 @@ class _MemberHomeState extends State<MemberHome>
                     title: '收藏',
                     param: 'favorite',
                     count: res.favourite2!.count!,
-                    visible: setting?.favVideo == 1,
+                    visible: isOwner ? setting.favVideo == 1 : null,
                   ),
                   SliverToBoxAdapter(
                     child: SizedBox(
@@ -106,7 +107,7 @@ class _MemberHomeState extends State<MemberHome>
                     title: '最近投币的视频',
                     param: 'coinArchive',
                     count: res.coinArchive!.count!,
-                    visible: setting?.coinsVideo == 1,
+                    visible: isOwner ? setting.coinsVideo == 1 : null,
                   ),
                   SliverPadding(
                     padding: const EdgeInsets.symmetric(
@@ -139,7 +140,7 @@ class _MemberHomeState extends State<MemberHome>
                     title: '最近点赞的视频',
                     param: 'likeArchive',
                     count: res.likeArchive!.count!,
-                    visible: setting?.likesVideo == 1,
+                    visible: isOwner ? setting.likesVideo == 1 : null,
                   ),
                   SliverPadding(
                     padding: const EdgeInsets.symmetric(
@@ -202,7 +203,7 @@ class _MemberHomeState extends State<MemberHome>
                     title: '追番',
                     param: 'bangumi',
                     count: res.season!.count!,
-                    visible: setting?.bangumi == 1,
+                    visible: isOwner ? setting.bangumi == 1 : null,
                   ),
                   SliverPadding(
                     padding: const EdgeInsets.symmetric(
