@@ -1,18 +1,18 @@
 class SegmentItemModel {
-  String cid;
+  String? cid;
   String category;
-  String actionType;
+  String? actionType;
   List<int> segment;
   String uuid;
-  double videoDuration;
+  num? videoDuration;
 
   SegmentItemModel({
-    required this.cid,
+    this.cid,
     required this.category,
-    required this.actionType,
+    this.actionType,
     required this.segment,
     required this.uuid,
-    required this.videoDuration,
+    this.videoDuration,
   });
 
   factory SegmentItemModel.fromJson(Map<String, dynamic> json) =>
@@ -20,9 +20,12 @@ class SegmentItemModel {
         cid: json["cid"],
         category: json["category"],
         actionType: json["actionType"],
-        segment:
-            (json["segment"] as List).map((e) => (e as num).round()).toList(),
+        segment: (json["segment"] as List)
+            .map((e) => ((e as num) * 1000).round())
+            .toList(),
         uuid: json["UUID"],
-        videoDuration: (json["videoDuration"] as num).toDouble(),
+        videoDuration: json["videoDuration"] == null
+            ? null
+            : (json["videoDuration"] as num) * 1000,
       );
 }
