@@ -734,16 +734,15 @@ class VideoDetailController extends GetxController
                 !isShowCover.value &&
                 plPlayerController.videoPlayerController != null) {
               final currPost = plPlayerController.position.value.inMilliseconds;
-              if (currPost > segmentModel.segment.first &&
+              if (currPost >= segmentModel.segment.first &&
                   currPost < segmentModel.segment.second) {
+                _lastPos = currPost;
                 if (segmentModel.skipType == SkipType.alwaysSkip) {
-                  _lastPos = 0;
                   plPlayerController.videoPlayerController!.stream.buffer.first
                       .whenComplete(() {
                     onSkip(segmentModel);
                   });
                 } else if (segmentModel.skipType == SkipType.skipOnce) {
-                  _lastPos = 0;
                   segmentModel.hasSkipped = true;
                   plPlayerController.videoPlayerController!.stream.buffer.first
                       .whenComplete(() {
@@ -800,7 +799,7 @@ class VideoDetailController extends GetxController
               if (item.skipType == SkipType.alwaysSkip) {
                 onSkip(item);
               } else if (item.skipType == SkipType.skipOnce &&
-                  item.hasSkipped) {
+                  !item.hasSkipped) {
                 item.hasSkipped = true;
                 onSkip(item);
               } else if (item.skipType == SkipType.skipManually) {
