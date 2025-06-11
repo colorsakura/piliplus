@@ -43,6 +43,8 @@ class _MemberHomeState extends State<MemberHome>
 
   Widget _buildBody(LoadingState<SpaceData?> loadingState) {
     final isVertical = context.orientation == Orientation.portrait;
+    final setting = _ctr.spaceSetting;
+    final color = Theme.of(context).colorScheme.outline;
     return switch (loadingState) {
       Loading() => loadingWidget,
       Success(response: final res) => res != null
@@ -50,6 +52,7 @@ class _MemberHomeState extends State<MemberHome>
               slivers: [
                 if (res.archive?.item?.isNotEmpty == true) ...[
                   _videoHeader(
+                    color,
                     title: '视频',
                     param: 'contribute',
                     param1: 'video',
@@ -82,9 +85,11 @@ class _MemberHomeState extends State<MemberHome>
                 ],
                 if (res.favourite2?.item?.isNotEmpty == true) ...[
                   _videoHeader(
+                    color,
                     title: '收藏',
                     param: 'favorite',
                     count: res.favourite2!.count!,
+                    visible: setting?.favVideo == 1,
                   ),
                   SliverToBoxAdapter(
                     child: SizedBox(
@@ -97,9 +102,11 @@ class _MemberHomeState extends State<MemberHome>
                 ],
                 if (res.coinArchive?.item?.isNotEmpty == true) ...[
                   _videoHeader(
+                    color,
                     title: '最近投币的视频',
                     param: 'coinArchive',
                     count: res.coinArchive!.count!,
+                    visible: setting?.coinsVideo == 1,
                   ),
                   SliverPadding(
                     padding: const EdgeInsets.symmetric(
@@ -128,9 +135,11 @@ class _MemberHomeState extends State<MemberHome>
                 ],
                 if (res.likeArchive?.item?.isNotEmpty == true) ...[
                   _videoHeader(
+                    color,
                     title: '最近点赞的视频',
                     param: 'likeArchive',
                     count: res.likeArchive!.count!,
+                    visible: setting?.likesVideo == 1,
                   ),
                   SliverPadding(
                     padding: const EdgeInsets.symmetric(
@@ -159,6 +168,7 @@ class _MemberHomeState extends State<MemberHome>
                 ],
                 if (res.article?.item?.isNotEmpty == true) ...[
                   _videoHeader(
+                    color,
                     title: '图文',
                     param: 'contribute',
                     param1: 'opus',
@@ -178,6 +188,7 @@ class _MemberHomeState extends State<MemberHome>
                 ],
                 if (res.audios?.item?.isNotEmpty == true) ...[
                   _videoHeader(
+                    color,
                     title: '音频',
                     param: 'contribute',
                     param1: 'audio',
@@ -187,9 +198,11 @@ class _MemberHomeState extends State<MemberHome>
                 ],
                 if (res.season?.item?.isNotEmpty == true) ...[
                   _videoHeader(
+                    color,
                     title: '追番',
                     param: 'bangumi',
                     count: res.season!.count!,
+                    visible: setting?.bangumi == 1,
                   ),
                   SliverPadding(
                     padding: const EdgeInsets.symmetric(
@@ -228,13 +241,14 @@ class _MemberHomeState extends State<MemberHome>
     };
   }
 
-  Widget _videoHeader({
+  Widget _videoHeader(
+    Color color, {
     required String title,
     required String param,
     String? param1,
     required int count,
+    bool? visible,
   }) {
-    final color = Theme.of(context).colorScheme.outline;
     return SliverToBoxAdapter(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
@@ -249,6 +263,20 @@ class _MemberHomeState extends State<MemberHome>
                     text: count.toString(),
                     style: TextStyle(fontSize: 13, color: color),
                   ),
+                  if (visible != null)
+                    WidgetSpan(
+                      alignment: PlaceholderAlignment.middle,
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 10),
+                        child: Icon(
+                          visible == true
+                              ? Icons.visibility
+                              : Icons.visibility_off,
+                          size: 17,
+                          color: color,
+                        ),
+                      ),
+                    ),
                 ],
               ),
             ),

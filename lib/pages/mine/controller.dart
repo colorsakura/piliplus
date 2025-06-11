@@ -92,6 +92,7 @@ class MineController extends GetxController {
     }
     anonymity.value = !anonymity.value;
     if (anonymity.value) {
+      SmartDialog.dismiss();
       SmartDialog.show<bool>(
         clickMaskDismiss: false,
         usePenetrate: true,
@@ -99,8 +100,10 @@ class MineController extends GetxController {
         alignment: Alignment.bottomCenter,
         builder: (context) {
           final theme = Theme.of(context);
+          final style =
+              TextStyle(color: theme.colorScheme.onSecondaryContainer);
           return ColoredBox(
-            color: theme.colorScheme.primaryContainer,
+            color: theme.colorScheme.secondaryContainer,
             child: Padding(
               padding: EdgeInsets.only(
                 top: 15,
@@ -110,47 +113,40 @@ class MineController extends GetxController {
               ),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Row(
                     children: <Widget>[
-                      const Icon(MdiIcons.incognito),
+                      const Icon(MdiIcons.incognito, size: 20),
                       const SizedBox(width: 10),
                       Text('已进入无痕模式', style: theme.textTheme.titleMedium)
                     ],
                   ),
                   const SizedBox(height: 10),
                   Text(
-                      '搜索、观看视频/直播不携带身份信息（包含大会员）\n'
-                      '不产生查询或播放记录\n'
-                      '点赞等其它操作不受影响\n'
-                      '（前往隐私设置了解详情）',
-                      style: theme.textTheme.bodySmall),
+                    '搜索、观看视频/直播不携带身份信息（包含大会员）\n'
+                    '不产生查询或播放记录\n'
+                    '点赞等其它操作不受影响\n'
+                    '(前往隐私设置了解详情)',
+                    style: theme.textTheme.bodySmall,
+                  ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       TextButton(
-                          onPressed: () {
-                            SmartDialog.dismiss(result: true);
-                            SmartDialog.showToast('已设为永久无痕模式');
-                          },
-                          child: Text(
-                            '保存为永久',
-                            style: TextStyle(
-                              color: theme.colorScheme.primary,
-                            ),
-                          )),
+                        onPressed: () {
+                          SmartDialog.dismiss(result: true);
+                          SmartDialog.showToast('已设为永久无痕模式');
+                        },
+                        child: Text('保存为永久', style: style),
+                      ),
                       const SizedBox(width: 10),
                       TextButton(
                         onPressed: () {
                           SmartDialog.dismiss();
                           SmartDialog.showToast('已设为临时无痕模式');
                         },
-                        child: Text(
-                          '仅本次（默认）',
-                          style: TextStyle(
-                            color: theme.colorScheme.primary,
-                          ),
-                        ),
+                        child: Text('仅本次（默认）', style: style),
                       ),
                     ],
                   ),
@@ -160,12 +156,16 @@ class MineController extends GetxController {
           );
         },
       ).then((res) {
+        if (res == false) {
+          return;
+        }
         res == true
             ? Accounts.set(AccountType.heartbeat, AnonymousAccount())
             : Accounts.accountMode[AccountType.heartbeat] = AnonymousAccount();
       });
     } else {
       Accounts.set(AccountType.heartbeat, Accounts.main);
+      SmartDialog.dismiss(result: false);
       SmartDialog.show(
         clickMaskDismiss: false,
         usePenetrate: true,
@@ -185,7 +185,7 @@ class MineController extends GetxController {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  const Icon(MdiIcons.incognitoOff),
+                  const Icon(MdiIcons.incognitoOff, size: 20),
                   const SizedBox(width: 10),
                   Text('已退出无痕模式', style: theme.textTheme.titleMedium),
                 ],

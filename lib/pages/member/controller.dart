@@ -6,6 +6,7 @@ import 'package:PiliPlus/http/user.dart';
 import 'package:PiliPlus/http/video.dart';
 import 'package:PiliPlus/models/common/member/tab_type.dart';
 import 'package:PiliPlus/models_new/space/space/data.dart';
+import 'package:PiliPlus/models_new/space/space/setting.dart';
 import 'package:PiliPlus/models_new/space/space/tab2.dart';
 import 'package:PiliPlus/pages/common/common_data_controller.dart';
 import 'package:PiliPlus/services/account_service.dart';
@@ -36,6 +37,7 @@ class MemberController extends CommonDataController<SpaceData, SpaceData?>
   RxInt relation = 0.obs;
   bool get isFollow => relation.value != 0 && relation.value != 128;
 
+  SpaceSetting? spaceSetting;
   List<SpaceTab2>? tab2;
   late List<Tab> tabs;
   TabController? tabController;
@@ -121,6 +123,9 @@ class MemberController extends CommonDataController<SpaceData, SpaceData?>
           initialIndex: max(0, initialIndex),
         );
       }
+    }
+    if (mid == accountService.mid) {
+      spaceSetting = data.setting;
     }
     loadingState.value = response;
     return true;

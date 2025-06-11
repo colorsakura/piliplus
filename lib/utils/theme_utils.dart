@@ -59,7 +59,7 @@ class ThemeUtils {
         actionTextColor: colorScheme.primary,
         backgroundColor: colorScheme.secondaryContainer,
         closeIconColor: colorScheme.secondary,
-        contentTextStyle: TextStyle(color: colorScheme.secondary),
+        contentTextStyle: TextStyle(color: colorScheme.onSecondaryContainer),
         elevation: 20,
       ),
       popupMenuTheme: PopupMenuThemeData(
