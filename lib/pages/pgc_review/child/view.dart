@@ -108,252 +108,255 @@ class _PgcReviewChildPageState extends State<PgcReviewChildPage>
   }
 
   Widget _itemWidget(ThemeData theme, int index, PgcReviewItemModel item) {
-    return InkWell(
-      onTap: isLongReview
-          ? () => Get.toNamed(
-                '/articlePage',
-                parameters: {
-                  'id': item.articleId!.toString(),
-                  'type': 'read',
-                },
-              )
-          : null,
-      onLongPress: isLongReview
-          ? null
-          : () => showDialog(
-                context: context,
-                builder: (context) => AlertDialog(
-                  clipBehavior: Clip.hardEdge,
-                  contentPadding: const EdgeInsets.symmetric(vertical: 12),
-                  content: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      if (item.author!.mid == Accounts.main.mid) ...[
-                        ListTile(
-                          dense: true,
-                          title: const Text(
-                            '编辑',
-                            style: TextStyle(fontSize: 14),
-                          ),
-                          onTap: () {
-                            Get.back();
-                            showModalBottomSheet(
-                              context: context,
-                              useSafeArea: true,
-                              isScrollControlled: true,
-                              builder: (context) {
-                                return PgcReviewPostPanel(
-                                  name: widget.name,
-                                  mediaId: widget.mediaId,
-                                  reviewId: item.reviewId,
-                                  content: item.content,
-                                  score: item.score,
-                                );
-                              },
-                            );
-                          },
-                        ),
-                        ListTile(
-                          dense: true,
-                          title: const Text(
-                            '删除',
-                            style: TextStyle(fontSize: 14),
-                          ),
-                          onTap: () {
-                            Get.back();
-                            showConfirmDialog(
-                              context: context,
-                              title: '删除短评，同时删除评分？',
-                              onConfirm: () =>
-                                  _controller.onDel(index, item.reviewId),
-                            );
-                          },
-                        ),
-                      ],
-                      ListTile(
-                        dense: true,
-                        title: const Text(
-                          '举报',
-                          style: TextStyle(fontSize: 14),
-                        ),
-                        onTap: () => Get
-                          ..back()
-                          ..toNamed(
-                            '/webview',
-                            parameters: {
-                              'url':
-                                  'https://www.bilibili.com/appeal/?reviewId=${item.reviewId}&type=shortComment&mediaId=${widget.mediaId}'
+    return Material(
+      type: MaterialType.transparency,
+      child: InkWell(
+        onTap: isLongReview
+            ? () => Get.toNamed(
+                  '/articlePage',
+                  parameters: {
+                    'id': item.articleId!.toString(),
+                    'type': 'read',
+                  },
+                )
+            : null,
+        onLongPress: isLongReview
+            ? null
+            : () => showDialog(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                    clipBehavior: Clip.hardEdge,
+                    contentPadding: const EdgeInsets.symmetric(vertical: 12),
+                    content: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        if (item.author!.mid == Accounts.main.mid) ...[
+                          ListTile(
+                            dense: true,
+                            title: const Text(
+                              '编辑',
+                              style: TextStyle(fontSize: 14),
+                            ),
+                            onTap: () {
+                              Get.back();
+                              showModalBottomSheet(
+                                context: context,
+                                useSafeArea: true,
+                                isScrollControlled: true,
+                                builder: (context) {
+                                  return PgcReviewPostPanel(
+                                    name: widget.name,
+                                    mediaId: widget.mediaId,
+                                    reviewId: item.reviewId,
+                                    content: item.content,
+                                    score: item.score,
+                                  );
+                                },
+                              );
                             },
                           ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-      child: Padding(
-        padding: const EdgeInsets.all(12),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            GestureDetector(
-              behavior: HitTestBehavior.opaque,
-              onTap: () => Get.toNamed('/member?mid=${item.author!.mid}'),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  NetworkImgLayer(
-                    height: 34,
-                    width: 34,
-                    src: item.author!.avatar,
-                    type: ImageType.avatar,
-                  ),
-                  const SizedBox(width: 10),
-                  Column(
-                    spacing: 2,
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        spacing: 6,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(
-                            item.author!.uname!,
-                            style: TextStyle(
-                              color: item.author?.vip?.status != null &&
-                                      item.author!.vip!.status > 0 &&
-                                      item.author!.vip!.type == 2
-                                  ? context.vipColor
-                                  : theme.colorScheme.outline,
-                              fontSize: 13,
+                          ListTile(
+                            dense: true,
+                            title: const Text(
+                              '删除',
+                              style: TextStyle(fontSize: 14),
                             ),
-                          ),
-                          Image.asset(
-                            'assets/images/lv/lv${item.author!.level}.png',
-                            height: 11,
-                          ),
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          if (item.pushTimeStr != null) ...[
-                            Text(
-                              item.pushTimeStr!,
-                              style: TextStyle(
-                                color: theme.colorScheme.outline,
-                                fontSize: 12,
-                              ),
-                            ),
-                            const SizedBox(width: 10),
-                          ],
-                          ...List.generate(
-                            5,
-                            (index) {
-                              if (index <= item.score - 1) {
-                                return const Icon(
-                                  CustomIcon.star_favorite_solid,
-                                  size: 13,
-                                  color: Color(0xFFFFAD35),
-                                );
-                              }
-                              return const Icon(
-                                CustomIcon.star_favorite_line,
-                                size: 14,
-                                color: Colors.grey,
+                            onTap: () {
+                              Get.back();
+                              showConfirmDialog(
+                                context: context,
+                                title: '删除短评，同时删除评分？',
+                                onConfirm: () =>
+                                    _controller.onDel(index, item.reviewId),
                               );
                             },
                           ),
                         ],
-                      )
-                    ],
-                  )
-                ],
-              ),
-            ),
-            const SizedBox(height: 5),
-            if (item.title != null)
-              Text(
-                item.title!,
-                style: const TextStyle(
-                  height: 1.75,
-                  fontSize: 15,
-                  fontWeight: FontWeight.bold,
+                        ListTile(
+                          dense: true,
+                          title: const Text(
+                            '举报',
+                            style: TextStyle(fontSize: 14),
+                          ),
+                          onTap: () => Get
+                            ..back()
+                            ..toNamed(
+                              '/webview',
+                              parameters: {
+                                'url':
+                                    'https://www.bilibili.com/appeal/?reviewId=${item.reviewId}&type=shortComment&mediaId=${widget.mediaId}'
+                              },
+                            ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+        child: Padding(
+          padding: const EdgeInsets.all(12),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              GestureDetector(
+                behavior: HitTestBehavior.opaque,
+                onTap: () => Get.toNamed('/member?mid=${item.author!.mid}'),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    NetworkImgLayer(
+                      height: 34,
+                      width: 34,
+                      src: item.author!.avatar,
+                      type: ImageType.avatar,
+                    ),
+                    const SizedBox(width: 10),
+                    Column(
+                      spacing: 2,
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          spacing: 6,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              item.author!.uname!,
+                              style: TextStyle(
+                                color: item.author?.vip?.status != null &&
+                                        item.author!.vip!.status > 0 &&
+                                        item.author!.vip!.type == 2
+                                    ? context.vipColor
+                                    : theme.colorScheme.outline,
+                                fontSize: 13,
+                              ),
+                            ),
+                            Image.asset(
+                              'assets/images/lv/lv${item.author!.level}.png',
+                              height: 11,
+                            ),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            if (item.pushTimeStr != null) ...[
+                              Text(
+                                item.pushTimeStr!,
+                                style: TextStyle(
+                                  color: theme.colorScheme.outline,
+                                  fontSize: 12,
+                                ),
+                              ),
+                              const SizedBox(width: 10),
+                            ],
+                            ...List.generate(
+                              5,
+                              (index) {
+                                if (index <= item.score - 1) {
+                                  return const Icon(
+                                    CustomIcon.star_favorite_solid,
+                                    size: 13,
+                                    color: Color(0xFFFFAD35),
+                                  );
+                                }
+                                return const Icon(
+                                  CustomIcon.star_favorite_line,
+                                  size: 14,
+                                  color: Colors.grey,
+                                );
+                              },
+                            ),
+                          ],
+                        )
+                      ],
+                    )
+                  ],
                 ),
               ),
-            if (isLongReview)
-              Text(
-                item.content!,
-                style: const TextStyle(height: 1.75),
-              )
-            else
-              SelectableText(
-                item.content!,
-                style: const TextStyle(height: 1.75),
-              ),
-            Builder(
-              builder: (context) {
-                final Color color = theme.colorScheme.outline;
-                final Color primary = theme.colorScheme.primary;
-                final ButtonStyle style = TextButton.styleFrom(
-                  padding: EdgeInsets.zero,
-                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                  visualDensity: VisualDensity.compact,
-                );
-                final isLike = item.stat?.liked == 1;
-                late final isDislike = item.stat?.disliked == 1;
-                return Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    if (!isLongReview)
+              const SizedBox(height: 5),
+              if (item.title != null)
+                Text(
+                  item.title!,
+                  style: const TextStyle(
+                    height: 1.75,
+                    fontSize: 15,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              if (isLongReview)
+                Text(
+                  item.content!,
+                  style: const TextStyle(height: 1.75),
+                )
+              else
+                SelectableText(
+                  item.content!,
+                  style: const TextStyle(height: 1.75),
+                ),
+              Builder(
+                builder: (context) {
+                  final Color color = theme.colorScheme.outline;
+                  final Color primary = theme.colorScheme.primary;
+                  final ButtonStyle style = TextButton.styleFrom(
+                    padding: EdgeInsets.zero,
+                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    visualDensity: VisualDensity.compact,
+                  );
+                  final isLike = item.stat?.liked == 1;
+                  late final isDislike = item.stat?.disliked == 1;
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      if (!isLongReview)
+                        SizedBox(
+                          height: 32,
+                          child: TextButton(
+                            style: style,
+                            onPressed: () => _controller.onDislike(
+                                index, isDislike, item.reviewId),
+                            child: Icon(
+                              isDislike
+                                  ? FontAwesomeIcons.solidThumbsDown
+                                  : FontAwesomeIcons.thumbsDown,
+                              size: 16,
+                              color: isDislike ? primary : color,
+                            ),
+                          ),
+                        ),
                       SizedBox(
                         height: 32,
                         child: TextButton(
                           style: style,
-                          onPressed: () => _controller.onDislike(
-                              index, isDislike, item.reviewId),
-                          child: Icon(
-                            isDislike
-                                ? FontAwesomeIcons.solidThumbsDown
-                                : FontAwesomeIcons.thumbsDown,
-                            size: 16,
-                            color: isDislike ? primary : color,
+                          onPressed: isLongReview
+                              ? null
+                              : () => _controller.onLike(
+                                  index, isLike, item.reviewId),
+                          child: Row(
+                            spacing: 4,
+                            children: [
+                              Icon(
+                                isLike
+                                    ? FontAwesomeIcons.solidThumbsUp
+                                    : FontAwesomeIcons.thumbsUp,
+                                size: 16,
+                                color: isLike ? primary : color,
+                              ),
+                              Text(
+                                Utils.numFormat(item.stat?.likes ?? 0),
+                                style: TextStyle(
+                                  color: isLike ? primary : color,
+                                  fontSize: 12,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ),
-                    SizedBox(
-                      height: 32,
-                      child: TextButton(
-                        style: style,
-                        onPressed: isLongReview
-                            ? null
-                            : () => _controller.onLike(
-                                index, isLike, item.reviewId),
-                        child: Row(
-                          spacing: 4,
-                          children: [
-                            Icon(
-                              isLike
-                                  ? FontAwesomeIcons.solidThumbsUp
-                                  : FontAwesomeIcons.thumbsUp,
-                              size: 16,
-                              color: isLike ? primary : color,
-                            ),
-                            Text(
-                              Utils.numFormat(item.stat?.likes ?? 0),
-                              style: TextStyle(
-                                color: isLike ? primary : color,
-                                fontSize: 12,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
-                );
-              },
-            ),
-          ],
+                    ],
+                  );
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );

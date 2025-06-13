@@ -14,7 +14,7 @@ class MemberFavItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: Colors.transparent,
+      type: MaterialType.transparency,
       child: InkWell(
         onTap: () {
           if (item.type == 2) {

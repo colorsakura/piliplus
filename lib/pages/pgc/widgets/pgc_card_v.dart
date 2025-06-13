@@ -1,10 +1,10 @@
+import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/common/widgets/badge.dart';
 import 'package:PiliPlus/common/widgets/image/image_save.dart';
 import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
 import 'package:PiliPlus/models/common/badge_type.dart';
 import 'package:PiliPlus/models_new/fav/fav_pgc/list.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
-import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
 
 // 视频卡片 - 垂直布局
@@ -18,11 +18,10 @@ class PgcCardV extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String heroTag = Utils.makeHeroTag(item.mediaId);
     return Card(
-      clipBehavior: Clip.hardEdge,
-      margin: EdgeInsets.zero,
+      shape: const RoundedRectangleBorder(borderRadius: StyleString.mdRadius),
       child: InkWell(
+        borderRadius: StyleString.mdRadius,
         onLongPress: () => imageSaveDialog(
           title: item.title,
           cover: item.cover,
@@ -39,13 +38,10 @@ class PgcCardV extends StatelessWidget {
                 return Stack(
                   clipBehavior: Clip.none,
                   children: [
-                    Hero(
-                      tag: heroTag,
-                      child: NetworkImgLayer(
-                        src: item.cover,
-                        width: maxWidth,
-                        height: maxHeight,
-                      ),
+                    NetworkImgLayer(
+                      src: item.cover,
+                      width: maxWidth,
+                      height: maxHeight,
                     ),
                     PBadge(
                       text: item.badge,

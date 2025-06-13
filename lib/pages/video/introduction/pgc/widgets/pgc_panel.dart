@@ -144,8 +144,8 @@ class _PgcPanelState extends State<PgcPanel> {
                 child: Material(
                   color: theme.colorScheme.onInverseSurface,
                   borderRadius: const BorderRadius.all(Radius.circular(6)),
-                  clipBehavior: Clip.hardEdge,
                   child: InkWell(
+                    borderRadius: const BorderRadius.all(Radius.circular(6)),
                     onTap: () {
                       if (item.badge != null &&
                           item.badge == '会员' &&

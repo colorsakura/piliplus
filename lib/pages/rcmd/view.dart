@@ -75,7 +75,6 @@ class _RcmdPageState extends CommonPageState<RcmdPage, RcmdController>
                           ..animateToTop()
                           ..onRefresh(),
                         child: Card(
-                          margin: EdgeInsets.zero,
                           child: Container(
                             alignment: Alignment.center,
                             padding: const EdgeInsets.symmetric(horizontal: 10),

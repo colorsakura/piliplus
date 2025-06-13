@@ -65,7 +65,6 @@ class VideoCardVMemberHome extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       clipBehavior: Clip.hardEdge,
-      margin: EdgeInsets.zero,
       child: InkWell(
         onTap: () => onPushDetail(Utils.makeHeroTag(videoItem.bvid)),
         onLongPress: () => imageSaveDialog(
@@ -90,6 +89,7 @@ class VideoCardVMemberHome extends StatelessWidget {
                         src: videoItem.cover,
                         width: maxWidth,
                         height: maxHeight,
+                        radius: 0,
                       ),
                       if (videoItem.duration > 0)
                         PBadge(

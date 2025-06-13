@@ -39,24 +39,29 @@ class _HomePageState extends State<HomePage>
         if (_homeController.tabs.length > 1)
           Material(
             color: theme.colorScheme.surface,
-            child: Container(
-              height: 42,
+            child: Padding(
               padding: const EdgeInsets.only(top: 4),
-              child: TabBar(
-                controller: _homeController.tabController,
-                tabs: [for (var i in _homeController.tabs) Tab(text: i.label)],
-                isScrollable: true,
-                dividerColor: Colors.transparent,
-                dividerHeight: 0,
-                enableFeedback: true,
-                splashBorderRadius: StyleString.mdRadius,
-                tabAlignment: TabAlignment.center,
-                onTap: (value) {
-                  feedBack();
-                  if (!_homeController.tabController.indexIsChanging) {
-                    _homeController.animateToTop();
-                  }
-                },
+              child: SizedBox(
+                height: 42,
+                width: double.infinity,
+                child: TabBar(
+                  controller: _homeController.tabController,
+                  tabs: [
+                    for (var i in _homeController.tabs) Tab(text: i.label)
+                  ],
+                  isScrollable: true,
+                  dividerColor: Colors.transparent,
+                  dividerHeight: 0,
+                  enableFeedback: true,
+                  splashBorderRadius: StyleString.mdRadius,
+                  tabAlignment: TabAlignment.center,
+                  onTap: (value) {
+                    feedBack();
+                    if (!_homeController.tabController.indexIsChanging) {
+                      _homeController.animateToTop();
+                    }
+                  },
+                ),
               ),
             ),
           )
@@ -98,7 +103,7 @@ class _HomePageState extends State<HomePage>
                       ),
                       Positioned.fill(
                         child: Material(
-                          color: Colors.transparent,
+                          type: MaterialType.transparency,
                           child: InkWell(
                             onTap: () =>
                                 _homeController.showUserInfoDialog(context),
@@ -170,15 +175,13 @@ class _HomePageState extends State<HomePage>
 
   Widget searchBar(ThemeData theme) {
     return Expanded(
-      child: Container(
+      child: SizedBox(
         height: 44,
-        clipBehavior: Clip.hardEdge,
-        decoration: const BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(25)),
-        ),
         child: Material(
+          borderRadius: const BorderRadius.all(Radius.circular(25)),
           color: theme.colorScheme.onSecondaryContainer.withValues(alpha: 0.05),
           child: InkWell(
+            borderRadius: const BorderRadius.all(Radius.circular(25)),
             splashColor:
                 theme.colorScheme.primaryContainer.withValues(alpha: 0.3),
             onTap: () => Get.toNamed(

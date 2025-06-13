@@ -15,7 +15,7 @@ class PgcRankItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: Colors.transparent,
+      type: MaterialType.transparency,
       child: InkWell(
         onTap: () {
           if (item.url != null) {

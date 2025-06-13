@@ -78,6 +78,7 @@ class NetworkImgLayer extends StatelessWidget {
       placeholder: (BuildContext context, String url) =>
           getPlaceHolder?.call() ?? placeholder(context),
       imageBuilder: imageBuilder,
+      errorWidget: (context, url, error) => placeholder(context),
     );
   }
 

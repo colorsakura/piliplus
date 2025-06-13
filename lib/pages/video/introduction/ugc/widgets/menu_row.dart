@@ -1,102 +1,6 @@
 import 'package:PiliPlus/utils/feed_back.dart';
 import 'package:flutter/material.dart';
 
-class MenuRow extends StatelessWidget {
-  const MenuRow({
-    super.key,
-    this.isLoading,
-  });
-  final bool? isLoading;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    return Container(
-      width: double.infinity,
-      color: theme.colorScheme.surface,
-      padding: const EdgeInsets.only(top: 9, bottom: 9, left: 12),
-      child: SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        child: Row(children: [
-          ActionRowLineItem(
-            onTap: () => {},
-            isLoading: isLoading,
-            text: '推荐',
-            selectStatus: false,
-          ),
-          const SizedBox(width: 8),
-          ActionRowLineItem(
-            onTap: () => {},
-            isLoading: isLoading,
-            text: '弹幕',
-            selectStatus: false,
-          ),
-          const SizedBox(width: 8),
-          ActionRowLineItem(
-            onTap: () => {},
-            isLoading: isLoading,
-            text: '评论列表',
-            selectStatus: false,
-          ),
-          const SizedBox(width: 8),
-          ActionRowLineItem(
-            onTap: () => {},
-            isLoading: isLoading,
-            text: '播放列表',
-            selectStatus: false,
-          ),
-        ]),
-      ),
-    );
-  }
-
-  Widget actionRowLineItem(
-      ThemeData theme, Function? onTap, bool? isLoading, String? text,
-      {bool selectStatus = false}) {
-    return Material(
-      color: selectStatus
-          ? theme.highlightColor.withValues(alpha: 0.2)
-          : Colors.transparent,
-      borderRadius: const BorderRadius.all(Radius.circular(30)),
-      clipBehavior: Clip.hardEdge,
-      child: InkWell(
-        onTap: () => {
-          feedBack(),
-          onTap?.call(),
-        },
-        child: Container(
-          padding: const EdgeInsets.fromLTRB(13, 5.5, 13, 4.5),
-          decoration: BoxDecoration(
-            borderRadius: const BorderRadius.all(Radius.circular(30)),
-            border: Border.all(
-              color: selectStatus
-                  ? Colors.transparent
-                  : theme.highlightColor.withValues(alpha: 0.2),
-            ),
-          ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              AnimatedOpacity(
-                opacity: isLoading! ? 0 : 1,
-                duration: const Duration(milliseconds: 200),
-                child: Text(
-                  text!,
-                  style: TextStyle(
-                      fontSize: 13,
-                      color: selectStatus
-                          ? theme.colorScheme.onSurface
-                          : theme.colorScheme.outline),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
 class ActionRowLineItem extends StatelessWidget {
   const ActionRowLineItem({
     super.key,
@@ -118,12 +22,11 @@ class ActionRowLineItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Material(
-      color: selectStatus
-          ? theme.colorScheme.secondaryContainer
-          : Colors.transparent,
+      color: selectStatus ? theme.colorScheme.secondaryContainer : null,
+      type: selectStatus ? MaterialType.canvas : MaterialType.transparency,
       borderRadius: const BorderRadius.all(Radius.circular(30)),
-      clipBehavior: Clip.hardEdge,
       child: InkWell(
+        borderRadius: const BorderRadius.all(Radius.circular(30)),
         onTap: () => {
           feedBack(),
           onTap?.call(),

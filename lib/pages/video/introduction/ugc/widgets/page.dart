@@ -147,8 +147,8 @@ class _PagesPanelState extends State<PagesPanel> {
                 child: Material(
                   color: theme.colorScheme.onInverseSurface,
                   borderRadius: const BorderRadius.all(Radius.circular(6)),
-                  clipBehavior: Clip.hardEdge,
                   child: InkWell(
+                    borderRadius: const BorderRadius.all(Radius.circular(6)),
                     onTap: () {
                       if (widget.showEpisodes == null) {
                         Get.back();

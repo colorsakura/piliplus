@@ -54,7 +54,7 @@ abstract class CommonSlidePageState<T extends CommonSlidePage> extends State<T>
 
   Widget buildList(ThemeData theme) => throw UnimplementedError();
 
-  Widget slideList(ThemeData theme, [Widget? buildList]) => LayoutBuilder(
+  Widget slideList(ThemeData theme) => LayoutBuilder(
         builder: (_, constrains) {
           final maxWidth = constrains.maxWidth;
 
@@ -110,7 +110,7 @@ abstract class CommonSlidePageState<T extends CommonSlidePage> extends State<T>
             onPanEnd: (_) {
               onDismiss();
             },
-            child: buildList ?? this.buildList(theme),
+            child: buildList(theme),
           );
         },
       );

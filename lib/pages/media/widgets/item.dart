@@ -42,11 +42,8 @@ class FavFolderItem extends StatelessWidget {
               width: 180,
               height: 110,
               margin: const EdgeInsets.only(bottom: 8),
-              clipBehavior: Clip.hardEdge,
               decoration: BoxDecoration(
                 borderRadius: const BorderRadius.all(Radius.circular(12)),
-                color:
-                    theme.colorScheme.onInverseSurface.withValues(alpha: 0.4),
                 boxShadow: [
                   BoxShadow(
                     color: theme.colorScheme.onInverseSurface
@@ -58,7 +55,7 @@ class FavFolderItem extends StatelessWidget {
                 ],
               ),
               child: LayoutBuilder(
-                builder: (context, BoxConstraints box) {
+                builder: (context, box) {
                   return Hero(
                     tag: heroTag,
                     child: NetworkImgLayer(

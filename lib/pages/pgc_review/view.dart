@@ -82,19 +82,16 @@ class _PgcReviewPageState extends State<PgcReviewPage>
               ),
             ),
             Expanded(
-              child: Material(
-                color: Colors.transparent,
-                child: TabBarView(
-                  controller: _tabController,
-                  physics: const NeverScrollableScrollPhysics(),
-                  children: PgcReviewType.values
-                      .map((e) => PgcReviewChildPage(
-                            type: e,
-                            name: widget.name,
-                            mediaId: widget.mediaId,
-                          ))
-                      .toList(),
-                ),
+              child: TabBarView(
+                controller: _tabController,
+                physics: const NeverScrollableScrollPhysics(),
+                children: PgcReviewType.values
+                    .map((e) => PgcReviewChildPage(
+                          type: e,
+                          name: widget.name,
+                          mediaId: widget.mediaId,
+                        ))
+                    .toList(),
               ),
             ),
           ],

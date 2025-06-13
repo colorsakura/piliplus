@@ -49,136 +49,132 @@ class VideoCardH extends StatelessWidget {
       }
     }
     return Material(
-      color: Colors.transparent,
+      type: MaterialType.transparency,
       child: Stack(
         clipBehavior: Clip.none,
         children: [
-          Semantics(
-            label: Utils.videoItemSemantics(videoItem),
-            excludeSemantics: true,
-            child: InkWell(
-              onLongPress: onLongPress ??
-                  () => imageSaveDialog(
-                        bvid: videoItem.bvid,
-                        title: videoItem.title,
-                        cover: videoItem.cover,
-                      ),
-              onTap: onTap ??
-                  () async {
-                    if (type == 'ketang') {
-                      SmartDialog.showToast('课堂视频暂不支持播放');
-                      return;
-                    } else if (type == 'live_room') {
-                      if (videoItem case SearchVideoItemModel item) {
-                        int? roomId = item.id;
-                        if (roomId != null) {
-                          Get.toNamed('/liveRoom?roomid=$roomId');
-                        }
-                      } else {
-                        SmartDialog.showToast(
-                            'err: live_room : ${videoItem.runtimeType}');
-                      }
-                      return;
-                    }
-                    if (videoItem case HotVideoItemModel item) {
-                      if (item.redirectUrl?.isNotEmpty == true &&
-                          PageUtils.viewPgcFromUri(item.redirectUrl!)) {
-                        return;
-                      }
-                    }
-                    try {
-                      final int? cid = videoItem.cid ??
-                          await SearchHttp.ab2c(
-                              aid: videoItem.aid, bvid: videoItem.bvid);
-                      if (cid != null) {
-                        PageUtils.toVideoPage(
-                          'bvid=${videoItem.bvid}&cid=$cid',
-                          arguments: {
-                            'videoItem': videoItem,
-                            'heroTag': Utils.makeHeroTag(videoItem.aid)
-                          },
-                        );
-                      }
-                    } catch (err) {
-                      SmartDialog.showToast(err.toString());
-                    }
-                  },
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: StyleString.safeSpace,
-                  vertical: 5,
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    AspectRatio(
-                      aspectRatio: StyleString.aspectRatio,
-                      child: LayoutBuilder(
-                        builder: (context, boxConstraints) {
-                          final double maxWidth = boxConstraints.maxWidth;
-                          final double maxHeight = boxConstraints.maxHeight;
-                          num? progress;
-                          if (videoItem case HotVideoItemModel item) {
-                            progress = item.progress;
-                          }
-
-                          return Stack(
-                            clipBehavior: Clip.none,
-                            children: [
-                              NetworkImgLayer(
-                                src: videoItem.cover,
-                                width: maxWidth,
-                                height: maxHeight,
-                              ),
-                              if (videoItem case HotVideoItemModel item)
-                                PBadge(
-                                  text: item.pgcLabel,
-                                  top: 6.0,
-                                  right: 6.0,
-                                ),
-                              if (progress != null && progress != 0) ...[
-                                PBadge(
-                                  text: progress == -1
-                                      ? '已看完'
-                                      : '${Utils.timeFormat(progress)}/${Utils.timeFormat(videoItem.duration)}',
-                                  right: 6,
-                                  bottom: 8,
-                                  type: PBadgeType.gray,
-                                ),
-                                Positioned(
-                                  left: 0,
-                                  bottom: 0,
-                                  right: 0,
-                                  child: videoProgressIndicator(
-                                    progress == -1
-                                        ? 1
-                                        : progress / videoItem.duration,
-                                  ),
-                                )
-                              ] else if (videoItem.duration > 0)
-                                PBadge(
-                                  text: Utils.timeFormat(videoItem.duration),
-                                  right: 6.0,
-                                  bottom: 6.0,
-                                  type: PBadgeType.gray,
-                                ),
-                              if (type != 'video')
-                                PBadge(
-                                  text: type,
-                                  left: 6.0,
-                                  bottom: 6.0,
-                                  type: PBadgeType.primary,
-                                ),
-                            ],
-                          );
-                        },
-                      ),
+          InkWell(
+            onLongPress: onLongPress ??
+                () => imageSaveDialog(
+                      bvid: videoItem.bvid,
+                      title: videoItem.title,
+                      cover: videoItem.cover,
                     ),
-                    const SizedBox(width: 10),
-                    content(context),
-                  ],
-                ),
+            onTap: onTap ??
+                () async {
+                  if (type == 'ketang') {
+                    SmartDialog.showToast('课堂视频暂不支持播放');
+                    return;
+                  } else if (type == 'live_room') {
+                    if (videoItem case SearchVideoItemModel item) {
+                      int? roomId = item.id;
+                      if (roomId != null) {
+                        Get.toNamed('/liveRoom?roomid=$roomId');
+                      }
+                    } else {
+                      SmartDialog.showToast(
+                          'err: live_room : ${videoItem.runtimeType}');
+                    }
+                    return;
+                  }
+                  if (videoItem case HotVideoItemModel item) {
+                    if (item.redirectUrl?.isNotEmpty == true &&
+                        PageUtils.viewPgcFromUri(item.redirectUrl!)) {
+                      return;
+                    }
+                  }
+                  try {
+                    final int? cid = videoItem.cid ??
+                        await SearchHttp.ab2c(
+                            aid: videoItem.aid, bvid: videoItem.bvid);
+                    if (cid != null) {
+                      PageUtils.toVideoPage(
+                        'bvid=${videoItem.bvid}&cid=$cid',
+                        arguments: {
+                          'videoItem': videoItem,
+                          'heroTag': Utils.makeHeroTag(videoItem.aid)
+                        },
+                      );
+                    }
+                  } catch (err) {
+                    SmartDialog.showToast(err.toString());
+                  }
+                },
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: StyleString.safeSpace,
+                vertical: 5,
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  AspectRatio(
+                    aspectRatio: StyleString.aspectRatio,
+                    child: LayoutBuilder(
+                      builder: (context, boxConstraints) {
+                        final double maxWidth = boxConstraints.maxWidth;
+                        final double maxHeight = boxConstraints.maxHeight;
+                        num? progress;
+                        if (videoItem case HotVideoItemModel item) {
+                          progress = item.progress;
+                        }
+
+                        return Stack(
+                          clipBehavior: Clip.none,
+                          children: [
+                            NetworkImgLayer(
+                              src: videoItem.cover,
+                              width: maxWidth,
+                              height: maxHeight,
+                            ),
+                            if (videoItem case HotVideoItemModel item)
+                              PBadge(
+                                text: item.pgcLabel,
+                                top: 6.0,
+                                right: 6.0,
+                              ),
+                            if (progress != null && progress != 0) ...[
+                              PBadge(
+                                text: progress == -1
+                                    ? '已看完'
+                                    : '${Utils.timeFormat(progress)}/${Utils.timeFormat(videoItem.duration)}',
+                                right: 6,
+                                bottom: 8,
+                                type: PBadgeType.gray,
+                              ),
+                              Positioned(
+                                left: 0,
+                                bottom: 0,
+                                right: 0,
+                                child: videoProgressIndicator(
+                                  progress == -1
+                                      ? 1
+                                      : progress / videoItem.duration,
+                                ),
+                              )
+                            ] else if (videoItem.duration > 0)
+                              PBadge(
+                                text: Utils.timeFormat(videoItem.duration),
+                                right: 6.0,
+                                bottom: 6.0,
+                                type: PBadgeType.gray,
+                              ),
+                            if (type != 'video')
+                              PBadge(
+                                text: type,
+                                left: 6.0,
+                                bottom: 6.0,
+                                type: PBadgeType.primary,
+                              ),
+                          ],
+                        );
+                      },
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  content(context),
+                ],
               ),
             ),
           ),

@@ -17,7 +17,7 @@ class MemberArticleItem extends StatelessWidget {
     final theme = Theme.of(context);
     final outline = theme.colorScheme.outline;
     return Material(
-      color: Colors.transparent,
+      type: MaterialType.transparency,
       child: InkWell(
         onTap: () {
           if (item.uri?.isNotEmpty == true) {

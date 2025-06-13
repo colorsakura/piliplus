@@ -72,7 +72,6 @@ Widget liveRcmdPanel(
                         height: 80,
                         alignment: Alignment.bottomLeft,
                         padding: const EdgeInsets.fromLTRB(12, 0, 10, 10),
-                        clipBehavior: Clip.hardEdge,
                         decoration: BoxDecoration(
                           gradient: const LinearGradient(
                             begin: Alignment.topCenter,

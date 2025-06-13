@@ -17,10 +17,8 @@ class LiveCardVApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String heroTag = Utils.makeHeroTag(item.roomid);
     return Card(
       clipBehavior: Clip.hardEdge,
-      margin: EdgeInsets.zero,
       child: InkWell(
         onTap: () => Get.toNamed('/liveRoom?roomid=${item.roomid}'),
         onLongPress: () => imageSaveDialog(
@@ -37,13 +35,11 @@ class LiveCardVApp extends StatelessWidget {
                 return Stack(
                   clipBehavior: Clip.none,
                   children: [
-                    Hero(
-                      tag: heroTag,
-                      child: NetworkImgLayer(
-                        src: item.cover!,
-                        width: maxWidth,
-                        height: maxHeight,
-                      ),
+                    NetworkImgLayer(
+                      src: item.cover!,
+                      width: maxWidth,
+                      height: maxHeight,
+                      radius: 0,
                     ),
                     Positioned(
                       left: 0,

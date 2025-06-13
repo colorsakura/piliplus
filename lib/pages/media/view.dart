@@ -45,7 +45,7 @@ class _MediaPageState extends CommonPageState<MediaPage, MediaController>
     return Padding(
       padding: const EdgeInsets.only(top: 30),
       child: Material(
-        color: Colors.transparent,
+        type: MaterialType.transparency,
         child: ListView(
           controller: controller.scrollController,
           physics: const AlwaysScrollableScrollPhysics(),

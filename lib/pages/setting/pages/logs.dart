@@ -213,8 +213,6 @@ class _LogsPageState extends State<LogsPage> {
                           ],
                         ),
                         Card(
-                          elevation: 1,
-                          margin: EdgeInsets.zero,
                           child: Container(
                             width: double.infinity,
                             padding: const EdgeInsets.all(12.0),

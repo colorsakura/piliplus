@@ -2,7 +2,6 @@ import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/common/widgets/image/image_save.dart';
 import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
 import 'package:PiliPlus/models_new/live/live_follow/item.dart';
-import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -17,10 +16,8 @@ class LiveCardVFollow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String heroTag = Utils.makeHeroTag(liveItem.roomid);
     return Card(
       clipBehavior: Clip.hardEdge,
-      margin: EdgeInsets.zero,
       child: InkWell(
         onTap: () => Get.toNamed('/liveRoom?roomid=${liveItem.roomid}'),
         onLongPress: () => imageSaveDialog(
@@ -37,13 +34,11 @@ class LiveCardVFollow extends StatelessWidget {
                 return Stack(
                   clipBehavior: Clip.none,
                   children: [
-                    Hero(
-                      tag: heroTag,
-                      child: NetworkImgLayer(
-                        src: liveItem.roomCover!,
-                        width: maxWidth,
-                        height: maxHeight,
-                      ),
+                    NetworkImgLayer(
+                      src: liveItem.roomCover!,
+                      width: maxWidth,
+                      height: maxHeight,
+                      radius: 0,
                     ),
                     Positioned(
                       left: 0,

@@ -95,13 +95,13 @@ class _GroupPanelState extends State<GroupPanel> {
                 }
                 Map data = snapshot.data as Map;
                 if (data['status']) {
-                  return Material(
-                    color: Colors.transparent,
-                    child: ListView.builder(
-                      controller: widget.scrollController,
-                      itemCount: tagsList.length,
-                      itemBuilder: (context, index) {
-                        return ListTile(
+                  return ListView.builder(
+                    controller: widget.scrollController,
+                    itemCount: tagsList.length,
+                    itemBuilder: (context, index) {
+                      return Material(
+                        type: MaterialType.transparency,
+                        child: ListTile(
                           onTap: () {
                             tagsList[index].checked = !tagsList[index].checked!;
                             showDefaultBtn =
@@ -127,9 +127,9 @@ class _GroupPanelState extends State<GroupPanel> {
                               },
                             ),
                           ),
-                        );
-                      },
-                    ),
+                        ),
+                      );
+                    },
                   );
                 } else {
                   return CustomScrollView(

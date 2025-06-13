@@ -73,13 +73,10 @@ class _MemberContributeState extends State<MemberContribute>
                 ),
               ),
               Expanded(
-                child: Material(
-                  color: Colors.transparent,
-                  child: TabBarView(
-                    physics: const NeverScrollableScrollPhysics(),
-                    controller: _controller.tabController,
-                    children: _controller.items!.map(_getPageFromType).toList(),
-                  ),
+                child: TabBarView(
+                  physics: const NeverScrollableScrollPhysics(),
+                  controller: _controller.tabController,
+                  children: _controller.items!.map(_getPageFromType).toList(),
                 ),
               ),
             ],

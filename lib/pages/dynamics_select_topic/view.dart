@@ -129,10 +129,7 @@ class _SelectTopicPanelState extends State<SelectTopicPanel> {
           ),
         ),
         Expanded(
-          child: Material(
-            color: Colors.transparent,
-            child: Obx(() => _buildBody(theme, _controller.loadingState.value)),
-          ),
+          child: Obx(() => _buildBody(theme, _controller.loadingState.value)),
         ),
       ],
     );

@@ -81,13 +81,13 @@ class _FavPanelState extends State<FavPanel> {
                 Map data = snapshot.data as Map;
                 if (data['status']) {
                   return Obx(
-                    () => Material(
-                      color: Colors.transparent,
-                      child: ListView.builder(
-                        controller: widget.scrollController,
-                        itemCount: widget.ctr.favFolderData.value.list.length,
-                        itemBuilder: (context, index) {
-                          return ListTile(
+                    () => ListView.builder(
+                      controller: widget.scrollController,
+                      itemCount: widget.ctr.favFolderData.value.list.length,
+                      itemBuilder: (context, index) {
+                        return Material(
+                          type: MaterialType.transparency,
+                          child: ListTile(
                             onTap: () => widget.ctr.onChoose(
                                 widget.ctr.favFolderData.value.list[index]
                                         .favState !=
@@ -114,9 +114,9 @@ class _FavPanelState extends State<FavPanel> {
                                     widget.ctr.onChoose(checkValue!, index),
                               ),
                             ),
-                          );
-                        },
-                      ),
+                          ),
+                        );
+                      },
                     ),
                   );
                 } else {

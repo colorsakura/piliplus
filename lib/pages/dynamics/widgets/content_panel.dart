@@ -77,25 +77,23 @@ Widget content(
                   overflow: isSave ? null : TextOverflow.ellipsis,
                 ),
         if (item.modules.moduleDynamic?.major?.opus?.pics?.isNotEmpty == true)
-          Text.rich(
-            WidgetSpan(
-              child: LayoutBuilder(
-                builder: (context, constraints) => imageView(
-                  constraints.maxWidth,
-                  item.modules.moduleDynamic!.major!.opus!.pics!
-                      .map(
-                        (item) => ImageModel(
-                          width: item.width,
-                          height: item.height,
-                          url: item.url ?? '',
-                          liveUrl: item.liveUrl,
-                        ),
-                      )
-                      .toList(),
-                  callback: callback,
-                ),
-              ),
-            ),
+          LayoutBuilder(
+            builder: (context, constraints) {
+              return imageView(
+                constraints.maxWidth,
+                item.modules.moduleDynamic!.major!.opus!.pics!
+                    .map(
+                      (item) => ImageModel(
+                        width: item.width,
+                        height: item.height,
+                        url: item.url ?? '',
+                        liveUrl: item.liveUrl,
+                      ),
+                    )
+                    .toList(),
+                callback: callback,
+              );
+            },
           ),
       ],
     ),

@@ -11,7 +11,6 @@ class SpaceOpusSkeleton extends StatelessWidget {
     return Skeleton(
       child: Card(
         clipBehavior: Clip.hardEdge,
-        margin: EdgeInsets.zero,
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(6)),
         ),

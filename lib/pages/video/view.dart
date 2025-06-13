@@ -1731,84 +1731,78 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
 
   Widget videoIntro([bool needRelated = true, bool needCtr = true]) {
     final bottom = MediaQuery.paddingOf(context).bottom;
-    Widget introPanel() => Scaffold(
-          resizeToAvoidBottomInset: false,
-          backgroundColor: Colors.transparent,
-          body: CustomScrollView(
-            key: const PageStorageKey<String>('简介'),
-            controller: needCtr ? _introController : null,
-            physics: !needCtr
-                ? const AlwaysScrollableScrollPhysics(
-                    parent: ClampingScrollPhysics())
-                : null,
-            slivers: [
-              if (videoDetailController.videoType == SearchType.video) ...[
-                VideoIntroPanel(
-                  key: ugcPanelKey,
+    Widget introPanel() => CustomScrollView(
+          key: const PageStorageKey<String>('简介'),
+          controller: needCtr ? _introController : null,
+          physics: !needCtr
+              ? const AlwaysScrollableScrollPhysics(
+                  parent: ClampingScrollPhysics())
+              : null,
+          slivers: [
+            if (videoDetailController.videoType == SearchType.video) ...[
+              VideoIntroPanel(
+                key: ugcPanelKey,
+                heroTag: heroTag,
+                showAiBottomSheet: showAiBottomSheet,
+                showEpisodes: showEpisodes,
+                onShowMemberPage: onShowMemberPage,
+              ),
+              if (needRelated &&
+                  videoDetailController
+                      .plPlayerController.showRelatedVideo) ...[
+                SliverToBoxAdapter(
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: StyleString.safeSpace),
+                    child: Divider(
+                      height: 1,
+                      indent: 12,
+                      endIndent: 12,
+                      color:
+                          themeData.colorScheme.outline.withValues(alpha: 0.08),
+                    ),
+                  ),
+                ),
+                RelatedVideoPanel(key: relatedVideoPanelKey, heroTag: heroTag),
+              ] else
+                SliverToBoxAdapter(
+                  child: SizedBox(
+                    height: bottom + StyleString.safeSpace,
+                  ),
+                ),
+            ] else if (videoDetailController.videoType ==
+                SearchType.media_bangumi)
+              Obx(
+                () => PgcIntroPage(
+                  key: pgcPanelKey,
                   heroTag: heroTag,
-                  showAiBottomSheet: showAiBottomSheet,
+                  cid: videoDetailController.cid.value,
                   showEpisodes: showEpisodes,
-                  onShowMemberPage: onShowMemberPage,
+                  showIntroDetail: showIntroDetail,
                 ),
-                if (needRelated &&
-                    videoDetailController
-                        .plPlayerController.showRelatedVideo) ...[
-                  SliverToBoxAdapter(
-                    child: Padding(
-                      padding:
-                          const EdgeInsets.only(top: StyleString.safeSpace),
-                      child: Divider(
-                        height: 1,
-                        indent: 12,
-                        endIndent: 12,
-                        color: themeData.colorScheme.outline
-                            .withValues(alpha: 0.08),
-                      ),
-                    ),
-                  ),
-                  RelatedVideoPanel(
-                      key: relatedVideoPanelKey, heroTag: heroTag),
-                ] else
-                  SliverToBoxAdapter(
-                    child: SizedBox(
-                      height: bottom + StyleString.safeSpace,
-                    ),
-                  ),
-              ] else if (videoDetailController.videoType ==
-                  SearchType.media_bangumi)
-                Obx(
-                  () => PgcIntroPage(
-                    key: pgcPanelKey,
-                    heroTag: heroTag,
-                    cid: videoDetailController.cid.value,
-                    showEpisodes: showEpisodes,
-                    showIntroDetail: showIntroDetail,
-                  ),
-                ),
-              SliverToBoxAdapter(
-                child: SizedBox(
-                  height: bottom +
-                      (videoDetailController.isPlayAll &&
-                              MediaQuery.orientationOf(context) ==
-                                  Orientation.landscape
-                          ? 75
-                          : 0),
-                ),
-              )
-            ],
-          ),
+              ),
+            SliverToBoxAdapter(
+              child: SizedBox(
+                height: bottom +
+                    (videoDetailController.isPlayAll &&
+                            MediaQuery.orientationOf(context) ==
+                                Orientation.landscape
+                        ? 75
+                        : 0),
+              ),
+            )
+          ],
         );
-    if (videoDetailController.isPlayAll) {
-      return Stack(
-        clipBehavior: Clip.none,
-        children: [
-          introPanel(),
+    return Stack(
+      clipBehavior: Clip.none,
+      children: [
+        introPanel(),
+        if (videoDetailController.isPlayAll)
           Positioned(
             left: 12,
             right: 12,
             bottom: bottom + 12,
             child: Material(
-              color: Colors.transparent,
+              type: MaterialType.transparency,
               child: InkWell(
                 onTap: () => videoDetailController.showMediaListPanel(context),
                 borderRadius: const BorderRadius.all(Radius.circular(14)),
@@ -1839,12 +1833,11 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                 ),
               ),
             ),
-          ),
-        ],
-      );
-    } else {
-      return introPanel();
-    }
+          )
+        else
+          const SizedBox.shrink(),
+      ],
+    );
   }
 
   Widget get seasonPanel => Column(

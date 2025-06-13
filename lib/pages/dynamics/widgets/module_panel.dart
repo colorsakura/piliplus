@@ -13,6 +13,7 @@ import 'package:PiliPlus/pages/dynamics/widgets/live_rcmd_panel.dart';
 import 'package:PiliPlus/pages/dynamics/widgets/video_panel.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:PiliPlus/utils/utils.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
@@ -118,12 +119,7 @@ Widget module(
                               GestureDetector(
                                 onTap: isNormalAuth
                                     ? () => Get.toNamed(
-                                          '/member?mid=${orig.modules.moduleAuthor!.mid}',
-                                          arguments: {
-                                            'face':
-                                                orig.modules.moduleAuthor!.face
-                                          },
-                                        )
+                                        '/member?mid=${orig.modules.moduleAuthor!.mid}')
                                     : null,
                                 child: Text(
                                   '${isNormalAuth ? '@' : ''}${orig.modules.moduleAuthor!.name}',
@@ -223,14 +219,17 @@ Widget module(
             padding:
                 const EdgeInsets.only(left: 12, top: 10, right: 12, bottom: 10),
             child: Row(
+              spacing: 10,
               children: [
-                NetworkImgLayer(
-                  radius: 8,
-                  width: 45,
-                  height: 45,
-                  src: item.modules.moduleDynamic!.major!.common!.cover,
-                ),
-                const SizedBox(width: 10),
+                if (item.modules.moduleDynamic!.major!.common!.cover
+                        ?.isNotEmpty ==
+                    true)
+                  CachedNetworkImage(
+                    width: 45,
+                    height: 45,
+                    fit: BoxFit.cover,
+                    imageUrl: item.modules.moduleDynamic!.major!.common!.cover!,
+                  ),
                 Expanded(
                   child: Column(
                     spacing: 2,

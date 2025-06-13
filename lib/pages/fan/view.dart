@@ -100,7 +100,6 @@ class _FansPageState extends State<FansPage> {
                     _fansController.onLoadMore();
                   }
                   final item = response[index];
-                  String heroTag = Utils.makeHeroTag(item.mid);
                   return ListTile(
                     onTap: () {
                       if (widget.onSelect != null) {
@@ -111,10 +110,7 @@ class _FansPageState extends State<FansPage> {
                         ));
                         return;
                       }
-                      Get.toNamed(
-                        '/member?mid=${item.mid}',
-                        arguments: {'face': item.face, 'heroTag': heroTag},
-                      );
+                      Get.toNamed('/member?mid=${item.mid}');
                     },
                     onLongPress: widget.onSelect != null
                         ? null
@@ -126,14 +122,11 @@ class _FansPageState extends State<FansPage> {
                                       index, item.mid!),
                                 )
                             : null,
-                    leading: Hero(
-                      tag: heroTag,
-                      child: NetworkImgLayer(
-                        width: 45,
-                        height: 45,
-                        type: ImageType.avatar,
-                        src: item.face,
-                      ),
+                    leading: NetworkImgLayer(
+                      width: 45,
+                      height: 45,
+                      type: ImageType.avatar,
+                      src: item.face,
                     ),
                     title: Text(
                       item.uname!,

@@ -38,7 +38,7 @@ class VideoCardHLater extends StatelessWidget {
       }
     }
     return Material(
-      color: Colors.transparent,
+      type: MaterialType.transparency,
       child: InkWell(
         onLongPress: onLongPress ??
             () => imageSaveDialog(

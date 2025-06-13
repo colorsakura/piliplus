@@ -57,9 +57,7 @@ class VideoCustomActions {
           '访问：${videoItem.owner.name}',
           'visit',
           const Icon(MdiIcons.accountCircleOutline, size: 16),
-          () => Get.toNamed('/member?mid=${videoItem.owner.mid}', arguments: {
-            'heroTag': '${videoItem.owner.mid}',
-          }),
+          () => Get.toNamed('/member?mid=${videoItem.owner.mid}'),
         ),
       if (videoItem is! SpaceArchiveItem)
         VideoCustomAction(

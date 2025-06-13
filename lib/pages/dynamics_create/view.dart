@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/common/widgets/button/icon_button.dart';
 import 'package:PiliPlus/common/widgets/button/toolbar_icon_button.dart';
 import 'package:PiliPlus/common/widgets/custom_icon.dart';
@@ -246,8 +247,7 @@ class _CreateDynPanelState extends CommonPublishPageState<CreateDynPanel> {
                 if (pathList.length != limit)
                   Builder(
                     builder: (context) {
-                      const borderRadius =
-                          BorderRadius.all(Radius.circular(10));
+                      const borderRadius = StyleString.mdRadius;
                       return Material(
                         borderRadius: borderRadius,
                         child: InkWell(

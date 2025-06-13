@@ -26,7 +26,7 @@ class FavPgcItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Material(
-      color: Colors.transparent,
+      type: MaterialType.transparency,
       child: Stack(
         clipBehavior: Clip.none,
         children: [

@@ -74,7 +74,7 @@ class _LiveEmotePanelState extends State<LiveEmotePanel>
                           itemCount: item.emoticons!.length,
                           itemBuilder: (context, index) {
                             return Material(
-                              color: Colors.transparent,
+                              type: MaterialType.transparency,
                               child: InkWell(
                                 borderRadius:
                                     const BorderRadius.all(Radius.circular(8)),

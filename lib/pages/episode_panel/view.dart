@@ -47,7 +47,7 @@ class EpisodePanel extends CommonSlidePage {
     required this.bvid,
     required this.cid,
     required this.cover,
-    this.showTitle,
+    this.showTitle = true,
     required this.list,
     this.seasonId,
     this.initialTabIndex = 0,
@@ -67,7 +67,7 @@ class EpisodePanel extends CommonSlidePage {
   final String bvid;
   final int cid;
   final String? cover;
-  final bool? showTitle;
+  final bool showTitle;
   final List list;
   final int? seasonId;
   final int initialTabIndex;
@@ -116,7 +116,7 @@ class _EpisodePanelState extends CommonSlidePageState<EpisodePanel> {
   @override
   void didUpdateWidget(EpisodePanel oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (widget.showTitle != false) {
+    if (widget.showTitle) {
       return;
     }
 
@@ -237,26 +237,22 @@ class _EpisodePanelState extends CommonSlidePageState<EpisodePanel> {
     }
 
     return Material(
-      color: widget.showTitle == false
-          ? Colors.transparent
-          : theme.colorScheme.surface,
+      color: widget.showTitle ? theme.colorScheme.surface : null,
+      type: widget.showTitle ? MaterialType.canvas : MaterialType.transparency,
       child: Column(
         children: [
           _buildToolbar(theme),
           if (isMulti) ...[
             tabbar(),
             Expanded(
-              child: Material(
-                color: Colors.transparent,
-                child: tabBarView(
-                  controller: _tabController,
-                  children: List.generate(
-                    widget.list.length,
-                    (index) => _buildBody(
-                      theme,
-                      index,
-                      widget.list[index].episodes,
-                    ),
+              child: tabBarView(
+                controller: _tabController,
+                children: List.generate(
+                  widget.list.length,
+                  (index) => _buildBody(
+                    theme,
+                    index,
+                    widget.list[index].episodes,
                   ),
                 ),
               ),
@@ -270,10 +266,7 @@ class _EpisodePanelState extends CommonSlidePageState<EpisodePanel> {
 
   @override
   Widget buildList(ThemeData theme) {
-    return Material(
-      color: Colors.transparent,
-      child: _buildBody(theme, 0, _getCurrEpisodes),
-    );
+    return _buildBody(theme, 0, _getCurrEpisodes);
   }
 
   Widget _buildBody(ThemeData theme, int tabIndex, episodes) {
@@ -288,22 +281,23 @@ class _EpisodePanelState extends CommonSlidePageState<EpisodePanel> {
         physics: const AlwaysScrollableScrollPhysics(),
         itemBuilder: (BuildContext context, int itemIndex) {
           final episode = episodes[itemIndex];
+          Widget episodeItem = _buildEpisodeItem(
+            theme: theme,
+            episode: episode,
+            index: itemIndex,
+            length: episodes.length,
+            isCurrentIndex: tabIndex == widget.initialTabIndex
+                ? itemIndex == _currentItemIndex
+                : false,
+          );
           return widget.type == EpisodeType.season &&
-                  widget.showTitle != false &&
+                  widget.showTitle &&
                   episode.pages.length > 1
               ? Column(
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _buildEpisodeItem(
-                      theme: theme,
-                      episode: episode,
-                      index: itemIndex,
-                      length: episodes.length,
-                      isCurrentIndex: tabIndex == widget.initialTabIndex
-                          ? itemIndex == _currentItemIndex
-                          : false,
-                    ),
+                    episodeItem,
                     Padding(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 12, vertical: 5),
@@ -321,15 +315,7 @@ class _EpisodePanelState extends CommonSlidePageState<EpisodePanel> {
                     ),
                   ],
                 )
-              : _buildEpisodeItem(
-                  theme: theme,
-                  episode: episode,
-                  index: itemIndex,
-                  length: episodes.length,
-                  isCurrentIndex: tabIndex == widget.initialTabIndex
-                      ? itemIndex == _currentItemIndex
-                      : false,
-                );
+              : episodeItem;
         },
         itemScrollController: _itemScrollController[tabIndex],
         separatorBuilder: (context, index) => const SizedBox(height: 2),
@@ -385,10 +371,10 @@ class _EpisodePanelState extends CommonSlidePageState<EpisodePanel> {
     }
     late final Color primary = theme.colorScheme.primary;
 
-    return Material(
-      color: Colors.transparent,
-      child: SizedBox(
-        height: 98,
+    return SizedBox(
+      height: 98,
+      child: Material(
+        type: MaterialType.transparency,
         child: InkWell(
           onTap: () {
             if (episode.badge != null && episode.badge == "会员") {
@@ -401,7 +387,7 @@ class _EpisodePanelState extends CommonSlidePageState<EpisodePanel> {
             }
             SmartDialog.showToast('切换到：$title');
             widget.onClose?.call();
-            if (widget.showTitle == false) {
+            if (!widget.showTitle) {
               _currentItemIndex = index;
             }
             widget.changeFucCall(
@@ -573,8 +559,7 @@ class _EpisodePanelState extends CommonSlidePageState<EpisodePanel> {
 
   Widget _buildToolbar(ThemeData theme) => Container(
         height: 45,
-        padding: EdgeInsets.symmetric(
-            horizontal: widget.showTitle != false ? 14 : 6),
+        padding: EdgeInsets.symmetric(horizontal: widget.showTitle ? 14 : 6),
         decoration: BoxDecoration(
           border: Border(
             bottom: BorderSide(
@@ -584,7 +569,7 @@ class _EpisodePanelState extends CommonSlidePageState<EpisodePanel> {
         ),
         child: Row(
           children: [
-            if (widget.showTitle != false)
+            if (widget.showTitle)
               Text(
                 widget.type.title,
                 style: theme.textTheme.titleMedium,

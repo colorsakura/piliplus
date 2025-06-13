@@ -42,8 +42,7 @@ class DynamicPanel extends StatelessWidget {
       onBlock: onBlock,
     );
     final child = Material(
-      elevation: 0,
-      color: Colors.transparent,
+      type: MaterialType.transparency,
       child: InkWell(
         onTap: isDetail &&
                 !const {

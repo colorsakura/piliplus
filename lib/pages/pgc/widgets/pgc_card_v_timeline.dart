@@ -1,3 +1,4 @@
+import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/common/widgets/badge.dart';
 import 'package:PiliPlus/common/widgets/image/image_save.dart';
 import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
@@ -18,9 +19,9 @@ class PgcCardVTimeline extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      clipBehavior: Clip.hardEdge,
-      margin: EdgeInsets.zero,
+      shape: const RoundedRectangleBorder(borderRadius: StyleString.mdRadius),
       child: InkWell(
+        borderRadius: StyleString.mdRadius,
         onLongPress: () => imageSaveDialog(
           title: item.title,
           cover: item.cover,

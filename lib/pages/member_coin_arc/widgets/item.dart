@@ -24,7 +24,6 @@ class MemberCoinLikeItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       clipBehavior: Clip.hardEdge,
-      margin: EdgeInsets.zero,
       child: InkWell(
         onTap: () async {
           if (item.isPgc == true) {
@@ -67,6 +66,7 @@ class MemberCoinLikeItem extends StatelessWidget {
                       src: item.cover,
                       width: maxWidth,
                       height: maxHeight,
+                      radius: 0,
                     ),
                     if (item.duration != null && item.duration! > 0)
                       PBadge(

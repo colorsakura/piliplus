@@ -44,19 +44,26 @@ class _FollowChildPageState extends State<FollowChildPage>
     super.build(context);
     if (widget.onSelect != null ||
         (widget.controller?.isOwner == true && widget.tagid == null)) {
-      return Scaffold(
-        backgroundColor: Colors.transparent,
-        body: _child,
-        floatingActionButton: FloatingActionButton.extended(
-          onPressed: () => _followController
-            ..orderType.value =
-                _followController.orderType.value == FollowOrderType.def
-                    ? FollowOrderType.attention
-                    : FollowOrderType.def
-            ..onReload(),
-          icon: const Icon(Icons.format_list_bulleted, size: 20),
-          label: Obx(() => Text(_followController.orderType.value.title)),
-        ),
+      final padding = MediaQuery.paddingOf(context);
+      return Stack(
+        clipBehavior: Clip.none,
+        children: [
+          _child,
+          Positioned(
+            right: 16 + padding.right,
+            bottom: 16 + padding.bottom,
+            child: FloatingActionButton.extended(
+              onPressed: () => _followController
+                ..orderType.value =
+                    _followController.orderType.value == FollowOrderType.def
+                        ? FollowOrderType.attention
+                        : FollowOrderType.def
+                ..onReload(),
+              icon: const Icon(Icons.format_list_bulleted, size: 20),
+              label: Obx(() => Text(_followController.orderType.value.title)),
+            ),
+          ),
+        ],
       );
     }
     return _child;

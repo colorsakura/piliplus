@@ -13,7 +13,6 @@ import 'package:PiliPlus/pages/search/widgets/search_text.dart';
 import 'package:PiliPlus/pages/video/controller.dart';
 import 'package:PiliPlus/pages/video/introduction/ugc/controller.dart';
 import 'package:PiliPlus/pages/video/introduction/ugc/widgets/action_item.dart';
-import 'package:PiliPlus/pages/video/introduction/ugc/widgets/action_row_item.dart';
 import 'package:PiliPlus/pages/video/introduction/ugc/widgets/page.dart';
 import 'package:PiliPlus/pages/video/introduction/ugc/widgets/season.dart';
 import 'package:PiliPlus/utils/app_scheme.dart';
@@ -435,7 +434,9 @@ class _VideoInfoState extends State<VideoInfo> {
                                                           '${videoItem['staff'][index].mid}'] ==
                                                       null
                                               ? Material(
-                                                  color: Colors.transparent,
+                                                  type:
+                                                      MaterialType.transparency,
+                                                  shape: const CircleBorder(),
                                                   child: InkWell(
                                                     customBorder:
                                                         const CircleBorder(),
@@ -837,11 +838,9 @@ class _VideoInfoState extends State<VideoInfo> {
 
   Widget actionGrid(
       BuildContext context, VideoIntroController videoIntroController) {
-    return Container(
-      margin: const EdgeInsets.only(top: 1),
+    return SizedBox(
       height: 48,
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           Obx(
             () => ActionItem(
@@ -941,63 +940,6 @@ class _VideoInfoState extends State<VideoInfo> {
     );
   }
 
-  Widget actionRow(
-    BuildContext context,
-    VideoIntroController videoIntroController,
-    VideoDetailController videoDetailCtr,
-  ) {
-    return Row(children: <Widget>[
-      Obx(
-        () => ActionRowItem(
-          icon: const Icon(FontAwesomeIcons.thumbsUp),
-          onTap: () => handleState(videoIntroController.actionLikeVideo),
-          selectStatus: videoIntroController.hasLike.value,
-          isLoading: widget.isLoading,
-          text: !widget.isLoading ? videoDetail.stat!.like!.toString() : '-',
-        ),
-      ),
-      const SizedBox(width: 8),
-      Obx(
-        () => ActionRowItem(
-          icon: const Icon(FontAwesomeIcons.b),
-          onTap: () => handleState(videoIntroController.actionCoinVideo),
-          selectStatus: videoIntroController.hasCoin,
-          isLoading: widget.isLoading,
-          text: !widget.isLoading ? videoDetail.stat!.coin!.toString() : '-',
-        ),
-      ),
-      const SizedBox(width: 8),
-      Obx(
-        () => ActionRowItem(
-          icon: const Icon(FontAwesomeIcons.heart),
-          onTap: () => videoIntroController.showFavBottomSheet(context),
-          onLongPress: () => videoIntroController.showFavBottomSheet(context,
-              type: 'longPress'),
-          selectStatus: videoIntroController.hasFav.value,
-          isLoading: widget.isLoading,
-          text:
-              !widget.isLoading ? videoDetail.stat!.favorite!.toString() : '-',
-        ),
-      ),
-      const SizedBox(width: 8),
-      ActionRowItem(
-        icon: const Icon(FontAwesomeIcons.comment),
-        onTap: () => videoDetailCtr.tabCtr.animateTo(1),
-        selectStatus: false,
-        isLoading: widget.isLoading,
-        text: !widget.isLoading ? videoDetail.stat!.reply!.toString() : '-',
-      ),
-      const SizedBox(width: 8),
-      ActionRowItem(
-        icon: const Icon(FontAwesomeIcons.share),
-        onTap: () => videoIntroController.actionShareVideo(context),
-        selectStatus: false,
-        isLoading: widget.isLoading,
-        text: '转发',
-      ),
-    ]);
-  }
-
   InlineSpan buildContent(ThemeData theme, VideoDetailData content) {
     final List descV2 = content.descV2!;
     // type
@@ -1073,15 +1015,11 @@ class _VideoInfoState extends State<VideoInfo> {
           return TextSpan(children: spanChildren);
         case 2:
           final Color colorSchemePrimary = theme.colorScheme.primary;
-          final String heroTag = Utils.makeHeroTag(currentDesc.bizId);
           return TextSpan(
             text: '@${currentDesc.rawText}',
             style: TextStyle(color: colorSchemePrimary),
             recognizer: TapGestureRecognizer()
-              ..onTap = () => Get.toNamed(
-                    '/member?mid=${currentDesc.bizId}',
-                    arguments: {'face': '', 'heroTag': heroTag},
-                  ),
+              ..onTap = () => Get.toNamed('/member?mid=${currentDesc.bizId}'),
           );
         default:
           return const TextSpan();

@@ -1,7 +1,6 @@
 import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
 import 'package:PiliPlus/models/common/image_type.dart';
 import 'package:PiliPlus/pages/live_room/controller.dart';
-import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -58,14 +57,8 @@ class LiveRoomChat extends StatelessWidget {
                           recognizer: TapGestureRecognizer()
                             ..onTap = () {
                               try {
-                                dynamic uid =
-                                    liveRoomController.messages[index]['uid'];
                                 Get.toNamed(
-                                  '/member?mid=$uid',
-                                  arguments: {
-                                    'heroTag': Utils.makeHeroTag(uid),
-                                  },
-                                );
+                                    '/member?mid=${liveRoomController.messages[index]['uid']}');
                               } catch (err) {
                                 if (kDebugMode) debugPrint(err.toString());
                               }

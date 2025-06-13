@@ -147,49 +147,46 @@ class _SearchResultPageState extends State<SearchResultPage>
               ),
             ),
             Expanded(
-              child: Material(
-                color: Colors.transparent,
-                child: tabBarView(
-                  controller: _tabController,
-                  children: SearchType.values
-                      .map(
-                        (item) => switch (item) {
-                          // SearchType.all => SearchAllPanel(
-                          //     tag: _tag,
-                          //     searchType: item,
-                          //     keyword: _searchResultController.keyword,
-                          //   ),
-                          SearchType.video => SearchVideoPanel(
-                              tag: _tag,
-                              searchType: item,
-                              keyword: _searchResultController.keyword,
-                            ),
-                          SearchType.media_bangumi ||
-                          SearchType.media_ft =>
-                            SearchPgcPanel(
-                              tag: _tag,
-                              searchType: item,
-                              keyword: _searchResultController.keyword,
-                            ),
-                          SearchType.live_room => SearchLivePanel(
-                              tag: _tag,
-                              searchType: item,
-                              keyword: _searchResultController.keyword,
-                            ),
-                          SearchType.bili_user => SearchUserPanel(
-                              tag: _tag,
-                              searchType: item,
-                              keyword: _searchResultController.keyword,
-                            ),
-                          SearchType.article => SearchArticlePanel(
-                              tag: _tag,
-                              searchType: item,
-                              keyword: _searchResultController.keyword,
-                            ),
-                        },
-                      )
-                      .toList(),
-                ),
+              child: tabBarView(
+                controller: _tabController,
+                children: SearchType.values
+                    .map(
+                      (item) => switch (item) {
+                        // SearchType.all => SearchAllPanel(
+                        //     tag: _tag,
+                        //     searchType: item,
+                        //     keyword: _searchResultController.keyword,
+                        //   ),
+                        SearchType.video => SearchVideoPanel(
+                            tag: _tag,
+                            searchType: item,
+                            keyword: _searchResultController.keyword,
+                          ),
+                        SearchType.media_bangumi ||
+                        SearchType.media_ft =>
+                          SearchPgcPanel(
+                            tag: _tag,
+                            searchType: item,
+                            keyword: _searchResultController.keyword,
+                          ),
+                        SearchType.live_room => SearchLivePanel(
+                            tag: _tag,
+                            searchType: item,
+                            keyword: _searchResultController.keyword,
+                          ),
+                        SearchType.bili_user => SearchUserPanel(
+                            tag: _tag,
+                            searchType: item,
+                            keyword: _searchResultController.keyword,
+                          ),
+                        SearchType.article => SearchArticlePanel(
+                            tag: _tag,
+                            searchType: item,
+                            keyword: _searchResultController.keyword,
+                          ),
+                      },
+                    )
+                    .toList(),
               ),
             ),
           ],

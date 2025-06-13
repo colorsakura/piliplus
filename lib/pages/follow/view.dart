@@ -139,12 +139,9 @@ class _FollowPageState extends State<FollowPage> {
               ),
             ),
             Expanded(
-              child: Material(
-                color: Colors.transparent,
-                child: tabBarView(
-                  controller: _followController.tabController,
-                  children: _followController.tabs.map(_childPage).toList(),
-                ),
+              child: tabBarView(
+                controller: _followController.tabController,
+                children: _followController.tabs.map(_childPage).toList(),
               ),
             ),
           ],

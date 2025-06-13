@@ -70,12 +70,7 @@ class _WhisperDetailPageState
           onTap: () {
             if (_whisperDetailController.mid != null) {
               feedBack();
-              Get.toNamed(
-                '/member?mid=${_whisperDetailController.mid}',
-                arguments: {
-                  'face': _whisperDetailController.face,
-                },
-              );
+              Get.toNamed('/member?mid=${_whisperDetailController.mid}');
             }
           },
           child: Row(

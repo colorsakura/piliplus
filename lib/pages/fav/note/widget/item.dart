@@ -21,7 +21,7 @@ class FavNoteItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Material(
-      color: Colors.transparent,
+      type: MaterialType.transparency,
       child: InkWell(
         onTap: () {
           if (ctr.enableMultiSelect.value) {

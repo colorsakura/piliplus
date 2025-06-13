@@ -94,50 +94,47 @@ class _PgcPageState extends CommonPageState<PgcPage, PgcController>
                           ),
                           const SizedBox(width: 16),
                           Expanded(
-                            child: Material(
-                              color: Colors.transparent,
-                              child: TabBar(
-                                isScrollable: true,
-                                tabAlignment: TabAlignment.start,
-                                dividerHeight: 0,
-                                overlayColor:
-                                    WidgetStateProperty.all(Colors.transparent),
-                                splashFactory: NoSplash.splashFactory,
-                                padding: const EdgeInsets.only(right: 10),
-                                indicatorPadding: const EdgeInsets.symmetric(
-                                  horizontal: 4,
-                                  vertical: 10,
-                                ),
-                                indicator: BoxDecoration(
-                                  color: theme.colorScheme.secondaryContainer,
-                                  borderRadius: const BorderRadius.all(
-                                      Radius.circular(20)),
-                                ),
-                                indicatorSize: TabBarIndicatorSize.tab,
-                                labelColor:
-                                    theme.colorScheme.onSecondaryContainer,
-                                labelStyle: TabBarTheme.of(context)
-                                        .labelStyle
-                                        ?.copyWith(fontSize: 14) ??
-                                    const TextStyle(fontSize: 14),
-                                dividerColor: Colors.transparent,
-                                tabs: response.map(
-                                  (item) {
-                                    return Tab(
-                                      text:
-                                          '${item.date} ${item.isToday == 1 ? '今天' : '周${const [
-                                              '一',
-                                              '二',
-                                              '三',
-                                              '四',
-                                              '五',
-                                              '六',
-                                              '日',
-                                            ][item.dayOfWeek! - 1]}'}',
-                                    );
-                                  },
-                                ).toList(),
+                            child: TabBar(
+                              isScrollable: true,
+                              tabAlignment: TabAlignment.start,
+                              dividerHeight: 0,
+                              overlayColor:
+                                  WidgetStateProperty.all(Colors.transparent),
+                              splashFactory: NoSplash.splashFactory,
+                              padding: const EdgeInsets.only(right: 10),
+                              indicatorPadding: const EdgeInsets.symmetric(
+                                horizontal: 4,
+                                vertical: 10,
                               ),
+                              indicator: BoxDecoration(
+                                color: theme.colorScheme.secondaryContainer,
+                                borderRadius:
+                                    const BorderRadius.all(Radius.circular(20)),
+                              ),
+                              indicatorSize: TabBarIndicatorSize.tab,
+                              labelColor:
+                                  theme.colorScheme.onSecondaryContainer,
+                              labelStyle: TabBarTheme.of(context)
+                                      .labelStyle
+                                      ?.copyWith(fontSize: 14) ??
+                                  const TextStyle(fontSize: 14),
+                              dividerColor: Colors.transparent,
+                              tabs: response.map(
+                                (item) {
+                                  return Tab(
+                                    text:
+                                        '${item.date} ${item.isToday == 1 ? '今天' : '周${const [
+                                            '一',
+                                            '二',
+                                            '三',
+                                            '四',
+                                            '五',
+                                            '六',
+                                            '日',
+                                          ][item.dayOfWeek! - 1]}'}',
+                                  );
+                                },
+                              ).toList(),
                             ),
                           ),
                         ],
@@ -237,38 +234,41 @@ class _PgcPageState extends CommonPageState<PgcPage, PgcController>
                         appBar: AppBar(title: const Text('索引')),
                         body: DefaultTabController(
                           length: types.length,
-                          child: Builder(builder: (context) {
-                            return Column(
-                              children: [
-                                SafeArea(
-                                  top: false,
-                                  bottom: false,
-                                  child: TabBar(
-                                    tabs: titles
-                                        .map((title) => Tab(text: title))
-                                        .toList(),
-                                    onTap: (index) {
-                                      try {
-                                        if (!DefaultTabController.of(context)
-                                            .indexIsChanging) {
-                                          Get.find<PgcIndexController>(
-                                                  tag: types[index].toString())
-                                              .animateToTop();
-                                        }
-                                      } catch (_) {}
-                                    },
+                          child: Builder(
+                            builder: (context) {
+                              return Column(
+                                children: [
+                                  SafeArea(
+                                    top: false,
+                                    bottom: false,
+                                    child: TabBar(
+                                      tabs: titles
+                                          .map((title) => Tab(text: title))
+                                          .toList(),
+                                      onTap: (index) {
+                                        try {
+                                          if (!DefaultTabController.of(context)
+                                              .indexIsChanging) {
+                                            Get.find<PgcIndexController>(
+                                                    tag:
+                                                        types[index].toString())
+                                                .animateToTop();
+                                          }
+                                        } catch (_) {}
+                                      },
+                                    ),
                                   ),
-                                ),
-                                Expanded(
-                                  child: tabBarView(
-                                      children: types
-                                          .map((type) =>
-                                              PgcIndexPage(indexType: type))
-                                          .toList()),
-                                )
-                              ],
-                            );
-                          }),
+                                  Expanded(
+                                    child: tabBarView(
+                                        children: types
+                                            .map((type) =>
+                                                PgcIndexPage(indexType: type))
+                                            .toList()),
+                                  )
+                                ],
+                              );
+                            },
+                          ),
                         ),
                       ),
                     );

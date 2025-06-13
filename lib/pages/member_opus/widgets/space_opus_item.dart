@@ -19,7 +19,6 @@ class SpaceOpusItem extends StatelessWidget {
     final hasPic = item.cover?.url?.isNotEmpty == true;
     return Card(
       clipBehavior: Clip.hardEdge,
-      margin: EdgeInsets.zero,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.all(Radius.circular(6)),
       ),

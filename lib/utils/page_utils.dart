@@ -138,21 +138,15 @@ class PageUtils {
           final ThemeData theme = Theme.of(context);
           return Theme(
             data: theme,
-            child: Material(
-              color: Colors.transparent,
-              child: Container(
+            child: Padding(
+              padding: const EdgeInsets.all(12),
+              child: Material(
                 clipBehavior: Clip.hardEdge,
-                decoration: BoxDecoration(
-                  color: theme.colorScheme.surface,
-                  borderRadius: const BorderRadius.all(Radius.circular(12)),
-                ),
-                margin: const EdgeInsets.all(12),
-                padding: const EdgeInsets.only(left: 14, right: 14),
+                color: theme.colorScheme.surface,
+                borderRadius: const BorderRadius.all(Radius.circular(12)),
                 child: ListView(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 0, horizontal: 20),
+                  padding: const EdgeInsets.symmetric(vertical: 14),
                   children: [
-                    const SizedBox(height: 10),
                     const Center(child: Text('定时关闭', style: titleStyle)),
                     const SizedBox(height: 10),
                     ...[
@@ -167,30 +161,25 @@ class PageUtils {
                       (choice) => ListTile(
                         dense: true,
                         onTap: () => onTap(choice),
-                        contentPadding: EdgeInsets.zero,
-                        title: Text(choice == -1
-                            ? '自定义'
-                            : choice == 0
-                                ? "禁用"
-                                : "$choice分钟后"),
+                        title: Text(
+                          choice == -1
+                              ? '自定义'
+                              : choice == 0
+                                  ? "禁用"
+                                  : "$choice分钟后",
+                          style: titleStyle,
+                        ),
                         trailing: shutdownTimerService.scheduledExitInMinutes ==
                                 choice
                             ? Icon(
+                                size: 20,
                                 Icons.done,
                                 color: theme.colorScheme.primary,
                               )
                             : null,
                       ),
                     ),
-                    const SizedBox(height: 6),
-                    const Center(
-                      child: SizedBox(
-                        width: 125,
-                        child: Divider(height: 1),
-                      ),
-                    ),
                     if (!isLive) ...[
-                      const SizedBox(height: 10),
                       ListTile(
                         dense: true,
                         onTap: () {
@@ -198,7 +187,6 @@ class PageUtils {
                               !shutdownTimerService.waitForPlayingCompleted;
                           setState(() {});
                         },
-                        contentPadding: EdgeInsets.zero,
                         title: const Text("额外等待视频播放完毕", style: titleStyle),
                         trailing: Transform.scale(
                           alignment: Alignment.centerRight,
@@ -222,9 +210,9 @@ class PageUtils {
                     ],
                     const SizedBox(height: 10),
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         const Text('倒计时结束:', style: titleStyle),
-                        const Spacer(),
                         ActionRowLineItem(
                           onTap: () {
                             shutdownTimerService.exitApp = false;
@@ -233,7 +221,6 @@ class PageUtils {
                           text: " 暂停视频 ",
                           selectStatus: !shutdownTimerService.exitApp,
                         ),
-                        const Spacer(),
                         ActionRowLineItem(
                           onTap: () {
                             shutdownTimerService.exitApp = true;
@@ -244,7 +231,6 @@ class PageUtils {
                         )
                       ],
                     ),
-                    const SizedBox(height: 10),
                   ],
                 ),
               ),

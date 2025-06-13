@@ -25,71 +25,74 @@ class SubItem extends StatelessWidget {
       21 => '合集',
       _ => '其它(${item.type})',
     };
-    return InkWell(
-      onTap: () {
-        if (item.state == 1) {
-          SmartDialog.showToast('该$type已失效');
-          return;
-        }
-        if (item.type == 11) {
-          Get.toNamed(
-            '/favDetail',
-            parameters: {
-              'mediaId': item.id!.toString(),
-              'heroTag': heroTag,
-            },
-          );
-        } else {
-          Get.toNamed(
-            '/subDetail',
-            arguments: item,
-            parameters: {
-              'heroTag': heroTag,
-              'id': item.id.toString(),
-            },
-          );
-        }
-      },
-      onLongPress: () => imageSaveDialog(
-        title: item.title,
-        cover: item.cover,
-      ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            AspectRatio(
-              aspectRatio: StyleString.aspectRatio,
-              child: LayoutBuilder(
-                builder: (context, boxConstraints) {
-                  double maxWidth = boxConstraints.maxWidth;
-                  double maxHeight = boxConstraints.maxHeight;
-                  return Stack(
-                    clipBehavior: Clip.none,
-                    children: [
-                      Hero(
-                        tag: heroTag,
-                        child: NetworkImgLayer(
-                          src: item.cover,
-                          width: maxWidth,
-                          height: maxHeight,
+    return Material(
+      type: MaterialType.transparency,
+      child: InkWell(
+        onTap: () {
+          if (item.state == 1) {
+            SmartDialog.showToast('该$type已失效');
+            return;
+          }
+          if (item.type == 11) {
+            Get.toNamed(
+              '/favDetail',
+              parameters: {
+                'mediaId': item.id!.toString(),
+                'heroTag': heroTag,
+              },
+            );
+          } else {
+            Get.toNamed(
+              '/subDetail',
+              arguments: item,
+              parameters: {
+                'heroTag': heroTag,
+                'id': item.id.toString(),
+              },
+            );
+          }
+        },
+        onLongPress: () => imageSaveDialog(
+          title: item.title,
+          cover: item.cover,
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              AspectRatio(
+                aspectRatio: StyleString.aspectRatio,
+                child: LayoutBuilder(
+                  builder: (context, boxConstraints) {
+                    double maxWidth = boxConstraints.maxWidth;
+                    double maxHeight = boxConstraints.maxHeight;
+                    return Stack(
+                      clipBehavior: Clip.none,
+                      children: [
+                        Hero(
+                          tag: heroTag,
+                          child: NetworkImgLayer(
+                            src: item.cover,
+                            width: maxWidth,
+                            height: maxHeight,
+                          ),
                         ),
-                      ),
-                      PBadge(
-                        right: 6,
-                        top: 6,
-                        text: type,
-                      )
-                    ],
-                  );
-                },
+                        PBadge(
+                          right: 6,
+                          top: 6,
+                          text: type,
+                        )
+                      ],
+                    );
+                  },
+                ),
               ),
-            ),
-            const SizedBox(width: 10),
-            content(context),
-          ],
+              const SizedBox(width: 10),
+              content(context),
+            ],
+          ),
         ),
       ),
     );

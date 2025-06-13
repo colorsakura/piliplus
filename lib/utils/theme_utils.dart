@@ -67,6 +67,7 @@ class ThemeUtils {
       ),
       cardTheme: CardThemeData(
         elevation: 1,
+        margin: EdgeInsets.zero,
         surfaceTintColor: isDynamic
             ? colorScheme.onSurfaceVariant
             : isDark

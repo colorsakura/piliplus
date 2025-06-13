@@ -109,22 +109,18 @@ class _UpowerRankPageState extends State<UpowerRankPage>
                                   },
                                 ),
                                 Expanded(
-                                  child: Material(
-                                    color: Colors.transparent,
-                                    child: tabBarView(
-                                      children: [
-                                        KeepAliveWrapper(
-                                            builder: (context) => child),
-                                        ..._controller.tabs.value!
-                                            .sublist(1)
-                                            .map((e) => UpowerRankPage(
-                                                  upMid: _upMid,
-                                                  tag: _tag,
-                                                  privilegeType:
-                                                      e.privilegeType,
-                                                ))
-                                      ],
-                                    ),
+                                  child: tabBarView(
+                                    children: [
+                                      KeepAliveWrapper(
+                                          builder: (context) => child),
+                                      ..._controller.tabs.value!
+                                          .sublist(1)
+                                          .map((e) => UpowerRankPage(
+                                                upMid: _upMid,
+                                                tag: _tag,
+                                                privilegeType: e.privilegeType,
+                                              ))
+                                    ],
                                   ),
                                 ),
                               ],
@@ -164,57 +160,60 @@ class _UpowerRankPageState extends State<UpowerRankPage>
                     _controller.onLoadMore();
                   }
                   final item = response[index];
-                  return ListTile(
-                    onTap: () => Get.toNamed('/member?mid=${item.mid}'),
-                    leading: SizedBox(
-                      width: width,
-                      child: Center(
-                        child: Text(
-                          (index + 1).toString(),
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontStyle: FontStyle.italic,
-                            fontWeight: FontWeight.bold,
-                            color: switch (index) {
-                              0 => const Color(0xFFfdad13),
-                              1 => const Color(0xFF8aace1),
-                              2 => const Color(0xFFdfa777),
-                              _ => theme.colorScheme.outline,
-                            },
+                  return Material(
+                    type: MaterialType.transparency,
+                    child: ListTile(
+                      onTap: () => Get.toNamed('/member?mid=${item.mid}'),
+                      leading: SizedBox(
+                        width: width,
+                        child: Center(
+                          child: Text(
+                            (index + 1).toString(),
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontStyle: FontStyle.italic,
+                              fontWeight: FontWeight.bold,
+                              color: switch (index) {
+                                0 => const Color(0xFFfdad13),
+                                1 => const Color(0xFF8aace1),
+                                2 => const Color(0xFFdfa777),
+                                _ => theme.colorScheme.outline,
+                              },
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                    title: Row(
-                      spacing: 12,
-                      children: [
-                        NetworkImgLayer(
-                          width: 38,
-                          height: 38,
-                          src: item.avatar,
-                          type: ImageType.avatar,
-                        ),
-                        Text(
-                          item.nickname!,
-                          style: const TextStyle(fontSize: 14),
-                        ),
-                      ],
-                    ),
-                    trailing: Text.rich(
-                      TextSpan(
+                      title: Row(
+                        spacing: 12,
                         children: [
-                          TextSpan(
-                            text: item.day!.toString(),
-                            style: const TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold,
-                            ),
+                          NetworkImgLayer(
+                            width: 38,
+                            height: 38,
+                            src: item.avatar,
+                            type: ImageType.avatar,
                           ),
-                          const TextSpan(
-                            text: ' 天',
-                            style: TextStyle(fontSize: 13),
+                          Text(
+                            item.nickname!,
+                            style: const TextStyle(fontSize: 14),
                           ),
                         ],
+                      ),
+                      trailing: Text.rich(
+                        TextSpan(
+                          children: [
+                            TextSpan(
+                              text: item.day!.toString(),
+                              style: const TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const TextSpan(
+                              text: ' 天',
+                              style: TextStyle(fontSize: 13),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   );

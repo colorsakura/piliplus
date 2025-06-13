@@ -147,7 +147,7 @@ class _LaterPageState extends State<LaterPage>
           ),
           Material(
             clipBehavior: Clip.hardEdge,
-            color: Colors.transparent,
+            type: MaterialType.transparency,
             borderRadius: const BorderRadius.all(Radius.circular(20)),
             child: Builder(
               key: sortKey,
@@ -198,7 +198,7 @@ class _LaterPageState extends State<LaterPage>
           ),
           Material(
             clipBehavior: Clip.hardEdge,
-            color: Colors.transparent,
+            type: MaterialType.transparency,
             borderRadius: const BorderRadius.all(Radius.circular(20)),
             child: PopupMenuButton(
               tooltip: '清空',

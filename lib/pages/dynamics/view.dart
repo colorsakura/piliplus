@@ -79,11 +79,10 @@ class _DynamicsPageState extends State<DynamicsPage>
 
   Widget upPanelPart(ThemeData theme) {
     bool isTop = upPanelPosition == UpPanelPosition.top;
+    bool needBg = isTop || upPanelPosition.index > 1;
     return Material(
-      //抽屉模式增加底色
-      color: isTop || upPanelPosition.index > 1
-          ? theme.colorScheme.surface
-          : Colors.transparent,
+      color: needBg ? theme.colorScheme.surface : null,
+      type: needBg ? MaterialType.canvas : MaterialType.transparency,
       child: SizedBox(
         width: isTop ? null : 64,
         height: isTop ? 76 : null,
@@ -120,6 +119,7 @@ class _DynamicsPageState extends State<DynamicsPage>
             : null,
         leadingWidth: 50,
         toolbarHeight: 50,
+        backgroundColor: Colors.transparent,
         title: SizedBox(
           height: 50,
           child: TabBar(

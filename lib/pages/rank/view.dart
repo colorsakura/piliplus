@@ -33,21 +33,21 @@ class _RankPageState extends State<RankPage>
             child: Column(
               children: List.generate(
                 RankType.values.length,
-                (index) => Obx(
-                  () => IntrinsicHeight(
-                    child: InkWell(
-                      onTap: () {
-                        if (_rankController.tabIndex.value != index) {
-                          _rankController.tabIndex.value = index;
-                          _rankController.tabController.animateTo(index);
-                        } else {
-                          _rankController.animateToTop();
-                        }
-                      },
-                      child: ColoredBox(
-                        color: index == _rankController.tabIndex.value
-                            ? theme.colorScheme.onInverseSurface
-                            : theme.colorScheme.surface,
+                (index) => IntrinsicHeight(
+                  child: Obx(
+                    () => Ink(
+                      color: index == _rankController.tabIndex.value
+                          ? theme.colorScheme.onInverseSurface
+                          : theme.colorScheme.surface,
+                      child: InkWell(
+                        onTap: () {
+                          if (_rankController.tabIndex.value != index) {
+                            _rankController.tabIndex.value = index;
+                            _rankController.tabController.animateTo(index);
+                          } else {
+                            _rankController.animateToTop();
+                          }
+                        },
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [

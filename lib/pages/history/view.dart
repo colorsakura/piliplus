@@ -204,22 +204,18 @@ class _HistoryPageState extends State<HistoryPage>
                                 ],
                               ),
                               Expanded(
-                                child: Material(
-                                  color: Colors.transparent,
-                                  child: TabBarView(
-                                    physics: enableMultiSelect
-                                        ? const NeverScrollableScrollPhysics()
-                                        : const CustomTabBarViewScrollPhysics(),
-                                    controller:
-                                        _historyController.tabController,
-                                    children: [
-                                      KeepAliveWrapper(
-                                          builder: (context) => _buildPage),
-                                      ..._historyController.tabs.map(
-                                        (item) => HistoryPage(type: item.type),
-                                      ),
-                                    ],
-                                  ),
+                                child: TabBarView(
+                                  physics: enableMultiSelect
+                                      ? const NeverScrollableScrollPhysics()
+                                      : const CustomTabBarViewScrollPhysics(),
+                                  controller: _historyController.tabController,
+                                  children: [
+                                    KeepAliveWrapper(
+                                        builder: (context) => _buildPage),
+                                    ..._historyController.tabs.map(
+                                      (item) => HistoryPage(type: item.type),
+                                    ),
+                                  ],
                                 ),
                               ),
                             ],

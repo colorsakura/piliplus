@@ -77,11 +77,7 @@ class AuthorPanel extends StatelessWidget {
                 ? () {
                     feedBack();
                     Get.toNamed(
-                      '/member?mid=${item.modules.moduleAuthor!.mid}',
-                      arguments: {
-                        'face': item.modules.moduleAuthor!.face,
-                      },
-                    );
+                        '/member?mid=${item.modules.moduleAuthor!.mid}');
                   }
                 : null,
             child: Row(

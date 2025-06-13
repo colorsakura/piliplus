@@ -41,8 +41,7 @@ class _LivePageState extends CommonPageState<LivePage, LiveController>
     final ThemeData theme = Theme.of(context);
     return Container(
       clipBehavior: Clip.hardEdge,
-      margin: const EdgeInsets.only(
-          left: StyleString.safeSpace, right: StyleString.safeSpace),
+      margin: const EdgeInsets.symmetric(horizontal: StyleString.safeSpace),
       decoration: const BoxDecoration(borderRadius: StyleString.mdRadius),
       child: refreshIndicator(
         onRefresh: controller.onRefresh,

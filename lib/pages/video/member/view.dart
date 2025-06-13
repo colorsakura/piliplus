@@ -190,26 +190,23 @@ class _HorizontalMemberPageState extends State<HorizontalMemberPage> {
                       _controller.onLoadMore();
                     }
                     final SpaceArchiveItem videoItem = response[index];
-                    return Material(
-                      color: Colors.transparent,
-                      child: VideoCardHMemberVideo(
-                        videoItem: videoItem,
-                        bvid: _bvid,
-                        onTap: () {
-                          final status =
-                              widget.videoIntroController.changeSeasonOrbangu(
-                            null,
-                            videoItem.bvid,
-                            videoItem.cid,
-                            IdUtils.bv2av(videoItem.bvid!),
-                            videoItem.cover,
-                          );
-                          if (status) {
-                            _bvid = videoItem.bvid;
-                            setState(() {});
-                          }
-                        },
-                      ),
+                    return VideoCardHMemberVideo(
+                      videoItem: videoItem,
+                      bvid: _bvid,
+                      onTap: () {
+                        final status =
+                            widget.videoIntroController.changeSeasonOrbangu(
+                          null,
+                          videoItem.bvid,
+                          videoItem.cid,
+                          IdUtils.bv2av(videoItem.bvid!),
+                          videoItem.cover,
+                        );
+                        if (status) {
+                          _bvid = videoItem.bvid;
+                          setState(() {});
+                        }
+                      },
                     );
                   },
                   childCount: response!.length,
@@ -387,22 +384,19 @@ class _HorizontalMemberPageState extends State<HorizontalMemberPage> {
     );
   }
 
-  Hero _buildAvatar(String face) => Hero(
-        tag: face,
-        child: GestureDetector(
-          onTap: () {
-            widget.videoDetailController.onViewImage();
-            context.imageView(
-              imgList: [SourceModel(url: face)],
-              onDismissed: widget.videoDetailController.onDismissed,
-            );
-          },
-          child: NetworkImgLayer(
-            src: face,
-            type: ImageType.avatar,
-            width: 70,
-            height: 70,
-          ),
+  Widget _buildAvatar(String face) => GestureDetector(
+        onTap: () {
+          widget.videoDetailController.onViewImage();
+          context.imageView(
+            imgList: [SourceModel(url: face)],
+            onDismissed: widget.videoDetailController.onDismissed,
+          );
+        },
+        child: NetworkImgLayer(
+          src: face,
+          type: ImageType.avatar,
+          width: 70,
+          height: 70,
         ),
       );
 }

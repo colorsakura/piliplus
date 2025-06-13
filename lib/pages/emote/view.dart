@@ -62,7 +62,7 @@ class _EmotePanelState extends State<EmotePanel>
                           itemCount: e.emote!.length,
                           itemBuilder: (context, index) {
                             return Material(
-                              color: Colors.transparent,
+                              type: MaterialType.transparency,
                               child: InkWell(
                                 borderRadius:
                                     const BorderRadius.all(Radius.circular(8)),
@@ -120,7 +120,7 @@ class _EmotePanelState extends State<EmotePanel>
                     ),
                     Expanded(
                       child: Material(
-                        color: Colors.transparent,
+                        type: MaterialType.transparency,
                         child: TabBar(
                           controller: _emotePanelController.tabController,
                           padding: const EdgeInsets.only(right: 60),

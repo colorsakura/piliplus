@@ -88,7 +88,6 @@ Widget videoSeasonWidget(
                 height: 70,
                 alignment: Alignment.bottomLeft,
                 padding: const EdgeInsets.fromLTRB(10, 0, 8, 8),
-                clipBehavior: Clip.hardEdge,
                 decoration: const BoxDecoration(
                   gradient: LinearGradient(
                     begin: Alignment.topCenter,
@@ -146,12 +145,14 @@ Widget videoSeasonWidget(
     mainAxisAlignment: MainAxisAlignment.start,
     children: [
       if (itemContent.cover != null)
-        Padding(
-          padding: floor == 1
-              ? const EdgeInsets.symmetric(horizontal: StyleString.safeSpace)
-              : EdgeInsets.zero,
-          child: buildCover(),
-        ),
+        if (floor == 1)
+          Padding(
+            padding:
+                const EdgeInsets.symmetric(horizontal: StyleString.safeSpace),
+            child: buildCover(),
+          )
+        else
+          buildCover(),
       const SizedBox(height: 6),
       if (itemContent.title != null)
         Padding(

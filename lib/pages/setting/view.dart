@@ -287,25 +287,28 @@ class _SettingPageState extends State<SettingPage> {
           right: 16,
           bottom: 8,
         ),
-        child: InkWell(
-          onTap: () => Get.toNamed('/settingsSearch'),
-          borderRadius: const BorderRadius.all(Radius.circular(50)),
-          child: Ink(
-            padding: const EdgeInsets.symmetric(vertical: 6),
-            decoration: BoxDecoration(
-              borderRadius: const BorderRadius.all(Radius.circular(50)),
-              color: theme.colorScheme.onInverseSurface,
-            ),
-            child: Center(
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(
-                    size: MediaQuery.textScalerOf(context).scale(18),
-                    Icons.search,
-                  ),
-                  const Text(' 搜索'),
-                ],
+        child: Material(
+          type: MaterialType.transparency,
+          child: InkWell(
+            onTap: () => Get.toNamed('/settingsSearch'),
+            borderRadius: const BorderRadius.all(Radius.circular(50)),
+            child: Ink(
+              padding: const EdgeInsets.symmetric(vertical: 6),
+              decoration: BoxDecoration(
+                borderRadius: const BorderRadius.all(Radius.circular(50)),
+                color: theme.colorScheme.onInverseSurface,
+              ),
+              child: Center(
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
+                      size: MediaQuery.textScalerOf(context).scale(18),
+                      Icons.search,
+                    ),
+                    const Text(' 搜索'),
+                  ],
+                ),
               ),
             ),
           ),

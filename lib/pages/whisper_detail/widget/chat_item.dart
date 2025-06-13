@@ -559,15 +559,15 @@ class ChatItem extends StatelessWidget {
   }
 
   Widget msgTypePic_2(BuildContext context, content) {
+    final url = content['url'];
     return GestureDetector(
-      onTap: () =>
-          context.imageView(imgList: [SourceModel(url: content['url'])]),
+      onTap: () => context.imageView(imgList: [SourceModel(url: url)]),
       child: Hero(
-        tag: content['url'],
+        tag: url,
         child: NetworkImgLayer(
           width: 220,
           height: 220 * content['height'] / content['width'],
-          src: content['url'],
+          src: url,
         ),
       ),
     );
@@ -610,12 +610,13 @@ class ChatItem extends StatelessWidget {
         RegExp(r"\[[^\[\]]+\]"),
         onMatch: (Match match) {
           final String emojiKey = match[0]!;
+          final size = emojiMap[emojiKey]!['size'];
           if (emojiMap.containsKey(emojiKey)) {
             children.add(
               WidgetSpan(
                 child: NetworkImgLayer(
-                  width: emojiMap[emojiKey]!['size'],
-                  height: emojiMap[emojiKey]!['size'],
+                  width: size,
+                  height: size,
                   src: emojiMap[emojiKey]!['url'],
                   type: ImageType.emote,
                 ),
@@ -718,15 +719,14 @@ class ChatItem extends StatelessWidget {
   }
 
   Widget msgTypePictureCard_13(dynamic content) {
+    final url = content['jump_url'];
     return Center(
       child: ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: 400.0),
         child: ClipRRect(
           borderRadius: StyleString.mdRadius,
           child: GestureDetector(
-            onTap: content['jump_url'] == null
-                ? null
-                : () => PiliScheme.routePushFromUrl(content['jump_url']),
+            onTap: url == null ? null : () => PiliScheme.routePushFromUrl(url),
             child: CachedNetworkImage(
               imageUrl: Utils.thumbnailImgUrl(content['pic_url']),
             ),

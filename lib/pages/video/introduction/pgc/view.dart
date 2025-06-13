@@ -12,7 +12,6 @@ import 'package:PiliPlus/pages/video/controller.dart';
 import 'package:PiliPlus/pages/video/introduction/pgc/controller.dart';
 import 'package:PiliPlus/pages/video/introduction/pgc/widgets/pgc_panel.dart';
 import 'package:PiliPlus/pages/video/introduction/ugc/widgets/action_item.dart';
-import 'package:PiliPlus/pages/video/introduction/ugc/widgets/action_row_item.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
@@ -261,145 +260,83 @@ class _PgcIntroPageState extends State<PgcIntroPage>
 
   Widget actionGrid(ThemeData theme, PgcInfoModel item,
       PgcIntroController pgcIntroController) {
-    return Material(
-      color: theme.colorScheme.surface,
-      child: Padding(
-        padding: const EdgeInsets.only(top: 1),
-        child: SizedBox(
-          height: 48,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: <Widget>[
-              Obx(
-                () => ActionItem(
-                  icon: const Icon(FontAwesomeIcons.thumbsUp),
-                  selectIcon: const Icon(FontAwesomeIcons.solidThumbsUp),
-                  onTap: () => handleState(pgcIntroController.actionLikeVideo),
-                  onLongPress: pgcIntroController.actionOneThree,
-                  selectStatus: pgcIntroController.hasLike.value,
-                  isLoading: false,
-                  semanticsLabel: '点赞',
-                  text: Utils.numFormat(item.stat!.likes),
-                  needAnim: true,
-                  hasTriple: pgcIntroController.hasLike.value &&
-                      pgcIntroController.hasCoin &&
-                      pgcIntroController.hasFav.value,
-                  callBack: (start) {
-                    if (start) {
-                      HapticFeedback.lightImpact();
-                      _coinKey.currentState?.controller?.forward();
-                      _favKey.currentState?.controller?.forward();
-                    } else {
-                      _coinKey.currentState?.controller?.reverse();
-                      _favKey.currentState?.controller?.reverse();
-                    }
-                  },
-                ),
-              ),
-              Obx(
-                () => ActionItem(
-                  key: _coinKey,
-                  icon: const Icon(FontAwesomeIcons.b),
-                  selectIcon: const Icon(FontAwesomeIcons.b),
-                  onTap: () => handleState(pgcIntroController.actionCoinVideo),
-                  selectStatus: pgcIntroController.hasCoin,
-                  isLoading: false,
-                  semanticsLabel: '投币',
-                  text: Utils.numFormat(item.stat!.coins),
-                  needAnim: true,
-                ),
-              ),
-              Obx(
-                () => ActionItem(
-                  key: _favKey,
-                  icon: const Icon(FontAwesomeIcons.star),
-                  selectIcon: const Icon(FontAwesomeIcons.solidStar),
-                  onTap: () => pgcIntroController.showFavBottomSheet(context),
-                  onLongPress: () => pgcIntroController
-                      .showFavBottomSheet(context, type: 'longPress'),
-                  selectStatus: pgcIntroController.hasFav.value,
-                  isLoading: false,
-                  semanticsLabel: '收藏',
-                  text: Utils.numFormat(item.stat!.favorite),
-                  needAnim: true,
-                ),
-              ),
-              ActionItem(
-                icon: const Icon(FontAwesomeIcons.comment),
-                selectIcon: const Icon(FontAwesomeIcons.reply),
-                onTap: () => videoDetailCtr.tabCtr.animateTo(1),
-                selectStatus: false,
-                isLoading: false,
-                semanticsLabel: '评论',
-                text: Utils.numFormat(item.stat!.reply),
-              ),
-              ActionItem(
-                icon: const Icon(FontAwesomeIcons.shareFromSquare),
-                onTap: () => pgcIntroController.actionShareVideo(context),
-                selectStatus: false,
-                isLoading: false,
-                semanticsLabel: '转发',
-                text: Utils.numFormat(item.stat!.share),
-              ),
-            ],
+    return SizedBox(
+      height: 48,
+      child: Row(
+        children: [
+          Obx(
+            () => ActionItem(
+              icon: const Icon(FontAwesomeIcons.thumbsUp),
+              selectIcon: const Icon(FontAwesomeIcons.solidThumbsUp),
+              onTap: () => handleState(pgcIntroController.actionLikeVideo),
+              onLongPress: pgcIntroController.actionOneThree,
+              selectStatus: pgcIntroController.hasLike.value,
+              isLoading: false,
+              semanticsLabel: '点赞',
+              text: Utils.numFormat(item.stat!.likes),
+              needAnim: true,
+              hasTriple: pgcIntroController.hasLike.value &&
+                  pgcIntroController.hasCoin &&
+                  pgcIntroController.hasFav.value,
+              callBack: (start) {
+                if (start) {
+                  HapticFeedback.lightImpact();
+                  _coinKey.currentState?.controller?.forward();
+                  _favKey.currentState?.controller?.forward();
+                } else {
+                  _coinKey.currentState?.controller?.reverse();
+                  _favKey.currentState?.controller?.reverse();
+                }
+              },
+            ),
           ),
-        ),
+          Obx(
+            () => ActionItem(
+              key: _coinKey,
+              icon: const Icon(FontAwesomeIcons.b),
+              selectIcon: const Icon(FontAwesomeIcons.b),
+              onTap: () => handleState(pgcIntroController.actionCoinVideo),
+              selectStatus: pgcIntroController.hasCoin,
+              isLoading: false,
+              semanticsLabel: '投币',
+              text: Utils.numFormat(item.stat!.coins),
+              needAnim: true,
+            ),
+          ),
+          Obx(
+            () => ActionItem(
+              key: _favKey,
+              icon: const Icon(FontAwesomeIcons.star),
+              selectIcon: const Icon(FontAwesomeIcons.solidStar),
+              onTap: () => pgcIntroController.showFavBottomSheet(context),
+              onLongPress: () => pgcIntroController.showFavBottomSheet(context,
+                  type: 'longPress'),
+              selectStatus: pgcIntroController.hasFav.value,
+              isLoading: false,
+              semanticsLabel: '收藏',
+              text: Utils.numFormat(item.stat!.favorite),
+              needAnim: true,
+            ),
+          ),
+          ActionItem(
+            icon: const Icon(FontAwesomeIcons.comment),
+            selectIcon: const Icon(FontAwesomeIcons.reply),
+            onTap: () => videoDetailCtr.tabCtr.animateTo(1),
+            selectStatus: false,
+            isLoading: false,
+            semanticsLabel: '评论',
+            text: Utils.numFormat(item.stat!.reply),
+          ),
+          ActionItem(
+            icon: const Icon(FontAwesomeIcons.shareFromSquare),
+            onTap: () => pgcIntroController.actionShareVideo(context),
+            selectStatus: false,
+            isLoading: false,
+            semanticsLabel: '转发',
+            text: Utils.numFormat(item.stat!.share),
+          ),
+        ],
       ),
-    );
-  }
-
-  Widget actionRow(
-    PgcInfoModel item,
-    PgcIntroController pgcIntroController,
-    VideoDetailController videoDetailCtr,
-  ) {
-    return Row(
-      spacing: 8,
-      children: [
-        Obx(
-          () => ActionRowItem(
-            icon: const Icon(FontAwesomeIcons.thumbsUp),
-            onTap: () => handleState(pgcIntroController.actionLikeVideo),
-            selectStatus: pgcIntroController.hasLike.value,
-            isLoading: false,
-            text: item.stat!.likes!.toString(),
-          ),
-        ),
-        Obx(
-          () => ActionRowItem(
-            icon: const Icon(FontAwesomeIcons.b),
-            onTap: () => handleState(pgcIntroController.actionCoinVideo),
-            selectStatus: pgcIntroController.hasCoin,
-            isLoading: false,
-            text: item.stat!.coins!.toString(),
-          ),
-        ),
-        Obx(
-          () => ActionRowItem(
-            icon: const Icon(FontAwesomeIcons.heart),
-            onTap: () => pgcIntroController.showFavBottomSheet(context),
-            onLongPress: () => pgcIntroController.showFavBottomSheet(context,
-                type: 'longPress'),
-            selectStatus: pgcIntroController.hasFav.value,
-            isLoading: false,
-            text: item.stat!.favorite!.toString(),
-          ),
-        ),
-        ActionRowItem(
-          icon: const Icon(FontAwesomeIcons.comment),
-          onTap: () => videoDetailCtr.tabCtr.animateTo(1),
-          selectStatus: false,
-          isLoading: false,
-          text: item.stat!.reply!.toString(),
-        ),
-        ActionRowItem(
-          icon: const Icon(FontAwesomeIcons.share),
-          onTap: () => pgcIntroController.actionShareVideo(context),
-          selectStatus: false,
-          isLoading: false,
-          text: '转发',
-        ),
-      ],
     );
   }
 

@@ -33,79 +33,82 @@ class FavVideoCardH extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: isSort == true
-          ? null
-          : onTap ??
-              () {
-                if (!const [0, 16].contains(item.attr)) {
-                  Get.toNamed('/member?mid=${item.upper?.mid}');
-                  return;
-                }
+    return Material(
+      type: MaterialType.transparency,
+      child: InkWell(
+        onTap: isSort == true
+            ? null
+            : onTap ??
+                () {
+                  if (!const [0, 16].contains(item.attr)) {
+                    Get.toNamed('/member?mid=${item.upper?.mid}');
+                    return;
+                  }
 
-                // pgc
-                if (item.type == 24) {
-                  PageUtils.viewPgc(
-                    seasonId: item.ogv!.seasonId,
-                    epId: item.id,
-                  );
-                  return;
-                }
+                  // pgc
+                  if (item.type == 24) {
+                    PageUtils.viewPgc(
+                      seasonId: item.ogv!.seasonId,
+                      epId: item.id,
+                    );
+                    return;
+                  }
 
-                onViewFav?.call();
-              },
-      onLongPress: isSort == true
-          ? null
-          : onLongPress ??
-              () => imageSaveDialog(
-                    title: item.title,
-                    cover: item.cover,
-                    bvid: item.bvid,
-                  ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: StyleString.safeSpace,
-          vertical: 5,
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            AspectRatio(
-              aspectRatio: StyleString.aspectRatio,
-              child: LayoutBuilder(
-                builder: (context, boxConstraints) {
-                  double maxWidth = boxConstraints.maxWidth;
-                  double maxHeight = boxConstraints.maxHeight;
-                  return Stack(
-                    clipBehavior: Clip.none,
-                    children: [
-                      NetworkImgLayer(
-                        src: item.cover,
-                        width: maxWidth,
-                        height: maxHeight,
-                      ),
-                      PBadge(
-                        text: Utils.timeFormat(item.duration),
-                        right: 6.0,
-                        bottom: 6.0,
-                        type: PBadgeType.gray,
-                      ),
-                      PBadge(
-                        text: item.ogv?.typeName,
-                        top: 6.0,
-                        right: 6.0,
-                        bottom: null,
-                        left: null,
-                      ),
-                    ],
-                  );
+                  onViewFav?.call();
                 },
+        onLongPress: isSort == true
+            ? null
+            : onLongPress ??
+                () => imageSaveDialog(
+                      title: item.title,
+                      cover: item.cover,
+                      bvid: item.bvid,
+                    ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: StyleString.safeSpace,
+            vertical: 5,
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              AspectRatio(
+                aspectRatio: StyleString.aspectRatio,
+                child: LayoutBuilder(
+                  builder: (context, boxConstraints) {
+                    double maxWidth = boxConstraints.maxWidth;
+                    double maxHeight = boxConstraints.maxHeight;
+                    return Stack(
+                      clipBehavior: Clip.none,
+                      children: [
+                        NetworkImgLayer(
+                          src: item.cover,
+                          width: maxWidth,
+                          height: maxHeight,
+                        ),
+                        PBadge(
+                          text: Utils.timeFormat(item.duration),
+                          right: 6.0,
+                          bottom: 6.0,
+                          type: PBadgeType.gray,
+                        ),
+                        PBadge(
+                          text: item.ogv?.typeName,
+                          top: 6.0,
+                          right: 6.0,
+                          bottom: null,
+                          left: null,
+                        ),
+                      ],
+                    );
+                  },
+                ),
               ),
-            ),
-            const SizedBox(width: 10),
-            content(context),
-          ],
+              const SizedBox(width: 10),
+              content(context),
+            ],
+          ),
         ),
       ),
     );

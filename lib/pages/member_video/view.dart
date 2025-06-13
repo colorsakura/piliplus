@@ -213,10 +213,8 @@ class _MemberVideoState extends State<MemberVideo>
                           index == response.length - 1) {
                         _controller.onLoadMore();
                       }
-                      final SpaceArchiveItem item = response[index];
                       return VideoCardHMemberVideo(
-                        // key: ValueKey('${item.param}'),
-                        videoItem: item,
+                        videoItem: response[index],
                         fromViewAid: _controller.fromViewAid,
                       );
                     },

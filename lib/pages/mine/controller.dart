@@ -42,10 +42,8 @@ class MineController extends GetxController {
     if (!accountService.isLogin.value || longPress) {
       Get.toNamed('/loginPage', preventDuplicates: false);
     } else {
-      int mid = userInfo.value.mid!;
-      String face = userInfo.value.face!;
-      Get.toNamed('/member?mid=$mid',
-          arguments: {'face': face}, preventDuplicates: false);
+      Get.toNamed('/member?mid=${userInfo.value.mid}',
+          preventDuplicates: false);
     }
   }
 

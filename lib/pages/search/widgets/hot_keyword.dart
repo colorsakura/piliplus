@@ -27,10 +27,10 @@ class HotKeyword extends StatelessWidget {
           SizedBox(
             width: width,
             child: Material(
-              color: Colors.transparent,
+              type: MaterialType.transparency,
               borderRadius: const BorderRadius.all(Radius.circular(3)),
-              clipBehavior: Clip.hardEdge,
               child: InkWell(
+                borderRadius: const BorderRadius.all(Radius.circular(3)),
                 onTap: () => onClick?.call(i.keyword),
                 child: Padding(
                   padding: const EdgeInsets.only(left: 2, right: 10),

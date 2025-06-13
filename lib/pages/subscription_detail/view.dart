@@ -154,11 +154,7 @@ class _SubDetailPageState extends State<SubDetailPage> {
                     GestureDetector(
                       onTap: () {
                         Get.toNamed(
-                          '/member?mid=${_subDetailController.subInfo.upper!.mid}',
-                          arguments: {
-                            'face': _subDetailController.subInfo.upper!.face,
-                          },
-                        );
+                            '/member?mid=${_subDetailController.subInfo.upper!.mid}');
                       },
                       child: Text(
                         _subDetailController.subInfo.upper!.name!,

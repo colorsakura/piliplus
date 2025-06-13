@@ -15,34 +15,37 @@ class DynTopicItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      dense: true,
-      onTap: () => onTap(item),
-      title: Text.rich(
-        TextSpan(
-          children: [
-            const WidgetSpan(
-              alignment: PlaceholderAlignment.middle,
-              child: Padding(
-                padding: EdgeInsets.only(right: 5),
-                child: Icon(
-                  CustomIcon.topic_tag,
-                  size: 18,
+    return Material(
+      type: MaterialType.transparency,
+      child: ListTile(
+        dense: true,
+        onTap: () => onTap(item),
+        title: Text.rich(
+          TextSpan(
+            children: [
+              const WidgetSpan(
+                alignment: PlaceholderAlignment.middle,
+                child: Padding(
+                  padding: EdgeInsets.only(right: 5),
+                  child: Icon(
+                    CustomIcon.topic_tag,
+                    size: 18,
+                  ),
                 ),
               ),
-            ),
-            TextSpan(
-              text: item.name,
-              style: const TextStyle(fontSize: 14),
-            ),
-          ],
+              TextSpan(
+                text: item.name,
+                style: const TextStyle(fontSize: 14),
+              ),
+            ],
+          ),
         ),
-      ),
-      subtitle: Padding(
-        padding: const EdgeInsets.only(left: 23),
-        child: Text(
-          '${Utils.numFormat(item.view)}浏览 · ${Utils.numFormat(item.discuss)}讨论',
-          style: TextStyle(color: Theme.of(context).colorScheme.outline),
+        subtitle: Padding(
+          padding: const EdgeInsets.only(left: 23),
+          child: Text(
+            '${Utils.numFormat(item.view)}浏览 · ${Utils.numFormat(item.discuss)}讨论',
+            style: TextStyle(color: Theme.of(context).colorScheme.outline),
+          ),
         ),
       ),
     );
