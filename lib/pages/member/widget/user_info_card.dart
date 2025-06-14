@@ -3,6 +3,7 @@ import 'package:PiliPlus/common/widgets/pendant_avatar.dart';
 import 'package:PiliPlus/models/common/image_preview_type.dart';
 import 'package:PiliPlus/models_new/space/space/card.dart';
 import 'package:PiliPlus/models_new/space/space/images.dart';
+import 'package:PiliPlus/models_new/space/space/live.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:PiliPlus/utils/storage.dart' show Accounts;
@@ -31,7 +32,7 @@ class UserInfoCard extends StatelessWidget {
   final SpaceCard card;
   final SpaceImages images;
   final VoidCallback onFollow;
-  final dynamic live;
+  final Live? live;
   final int? silence;
   final String? endTime;
 
@@ -419,7 +420,7 @@ class UserInfoCard extends StatelessWidget {
         officialType: card.officialVerify?.type,
         isVip: (card.vip?.status ?? -1) > 0,
         garbPendantImage: card.pendant!.image!,
-        roomId: live is Map && live['liveStatus'] == 1 ? live['roomid'] : null,
+        roomId: live?.liveStatus == 1 ? live!.roomid : null,
         onTap: () => context
             .imageView(imgList: [SourceModel(url: card.face.http2https)]),
       ));

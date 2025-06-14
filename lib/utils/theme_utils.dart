@@ -110,11 +110,13 @@ class ThemeUtils {
         ),
       ),
     );
-    if (isDark && GStorage.isPureBlackTheme) {
-      themeData = darkenTheme(themeData);
-    }
-    if (isDark && GStorage.darkVideoPage) {
-      MyApp.darkThemeData = themeData;
+    if (isDark) {
+      if (GStorage.isPureBlackTheme) {
+        themeData = darkenTheme(themeData);
+      }
+      if (GStorage.darkVideoPage) {
+        MyApp.darkThemeData = themeData;
+      }
     }
     return themeData;
   }

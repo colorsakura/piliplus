@@ -79,7 +79,7 @@ class _DynamicsPageState extends State<DynamicsPage>
 
   Widget upPanelPart(ThemeData theme) {
     bool isTop = upPanelPosition == UpPanelPosition.top;
-    bool needBg = isTop || upPanelPosition.index > 1;
+    bool needBg = upPanelPosition.index > 1;
     return Material(
       color: needBg ? theme.colorScheme.surface : null,
       type: needBg ? MaterialType.canvas : MaterialType.transparency,

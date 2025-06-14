@@ -6,6 +6,7 @@ import 'package:PiliPlus/http/user.dart';
 import 'package:PiliPlus/http/video.dart';
 import 'package:PiliPlus/models/common/member/tab_type.dart';
 import 'package:PiliPlus/models_new/space/space/data.dart';
+import 'package:PiliPlus/models_new/space/space/live.dart';
 import 'package:PiliPlus/models_new/space/space/setting.dart';
 import 'package:PiliPlus/models_new/space/space/tab2.dart';
 import 'package:PiliPlus/pages/common/common_data_controller.dart';
@@ -29,7 +30,7 @@ class MemberController extends CommonDataController<SpaceData, SpaceData?>
 
   AccountService accountService = Get.find<AccountService>();
 
-  dynamic live;
+  Live? live;
   int? silence;
   String? endTime;
 

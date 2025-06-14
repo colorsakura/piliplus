@@ -159,6 +159,13 @@ class _SearchPageState extends State<SearchPage> {
       style: theme.textTheme.titleMedium!
           .copyWith(height: 1, fontWeight: FontWeight.bold),
     );
+    final outline = theme.colorScheme.outline;
+    final secondary = theme.colorScheme.secondary;
+    final style = TextStyle(
+      height: 1,
+      fontSize: 13,
+      color: outline,
+    );
     return Padding(
       padding: EdgeInsets.fromLTRB(10, isHot ? 25 : 4, 4, 25),
       child: Column(
@@ -177,43 +184,47 @@ class _SearchPageState extends State<SearchPage> {
                           const SizedBox(width: 14),
                           SizedBox(
                             height: 34,
-                            child: TextButton.icon(
+                            child: TextButton(
                               onPressed: () => Get.toNamed(
                                 '/searchTrending',
                                 parameters: {'tag': _tag},
                               ),
-                              label: Text(
-                                '完整榜单',
-                                style: TextStyle(
-                                  fontSize: 13,
-                                  color: theme.colorScheme.outline,
-                                ),
+                              child: Row(
+                                children: [
+                                  Text(
+                                    '完整榜单',
+                                    strutStyle:
+                                        const StrutStyle(leading: 0, height: 1),
+                                    style: style,
+                                  ),
+                                  Icon(
+                                    size: 18,
+                                    Icons.keyboard_arrow_right,
+                                    color: outline,
+                                  ),
+                                ],
                               ),
-                              icon: Icon(
-                                size: 16,
-                                Icons.keyboard_arrow_right,
-                                color: theme.colorScheme.outline,
-                              ),
-                              iconAlignment: IconAlignment.end,
                             ),
                           ),
                           SizedBox(
                             height: 34,
-                            child: TextButton.icon(
+                            child: TextButton(
                               onPressed: () => Get.toNamed('/dynTopicRcmd'),
-                              label: Text(
-                                '话题',
-                                style: TextStyle(
-                                  fontSize: 13,
-                                  color: theme.colorScheme.outline,
-                                ),
+                              child: Row(
+                                children: [
+                                  Text(
+                                    '话题',
+                                    strutStyle:
+                                        const StrutStyle(leading: 0, height: 1),
+                                    style: style,
+                                  ),
+                                  Icon(
+                                    size: 18,
+                                    Icons.keyboard_arrow_right,
+                                    color: outline,
+                                  ),
+                                ],
                               ),
-                              icon: Icon(
-                                size: 16,
-                                Icons.keyboard_arrow_right,
-                                color: theme.colorScheme.outline,
-                              ),
-                              iconAlignment: IconAlignment.end,
                             ),
                           ),
                         ],
@@ -232,12 +243,14 @@ class _SearchPageState extends State<SearchPage> {
                     icon: Icon(
                       Icons.refresh_outlined,
                       size: 18,
-                      color: theme.colorScheme.secondary,
+                      color: secondary,
                     ),
                     label: Text(
                       '刷新',
+                      strutStyle: const StrutStyle(leading: 0, height: 1),
                       style: TextStyle(
-                        color: theme.colorScheme.secondary,
+                        height: 1,
+                        color: secondary,
                       ),
                     ),
                   ),
@@ -257,6 +270,7 @@ class _SearchPageState extends State<SearchPage> {
   }
 
   Widget _history(ThemeData theme) {
+    final secondary = theme.colorScheme.secondary;
     return Obx(
       () => Padding(
         padding: EdgeInsets.fromLTRB(
@@ -324,11 +338,11 @@ class _SearchPageState extends State<SearchPage> {
                         icon: Icon(
                           Icons.clear_all_outlined,
                           size: 18,
-                          color: theme.colorScheme.secondary,
+                          color: secondary,
                         ),
                         label: Text(
                           '清空',
-                          style: TextStyle(color: theme.colorScheme.secondary),
+                          style: TextStyle(color: secondary),
                         ),
                       ),
                     )

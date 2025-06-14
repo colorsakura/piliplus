@@ -210,9 +210,10 @@ class PageUtils {
                     ],
                     const SizedBox(height: 10),
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
+                        const SizedBox(width: 18),
                         const Text('倒计时结束:', style: titleStyle),
+                        const Spacer(),
                         ActionRowLineItem(
                           onTap: () {
                             shutdownTimerService.exitApp = false;
@@ -221,6 +222,7 @@ class PageUtils {
                           text: " 暂停视频 ",
                           selectStatus: !shutdownTimerService.exitApp,
                         ),
+                        const Spacer(),
                         ActionRowLineItem(
                           onTap: () {
                             shutdownTimerService.exitApp = true;
@@ -228,7 +230,8 @@ class PageUtils {
                           },
                           text: " 退出APP ",
                           selectStatus: shutdownTimerService.exitApp,
-                        )
+                        ),
+                        const SizedBox(width: 25),
                       ],
                     ),
                   ],

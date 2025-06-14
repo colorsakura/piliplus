@@ -204,7 +204,7 @@ class PercentageChip extends StatelessWidget {
       labelPadding: EdgeInsets.zero,
       padding: EdgeInsets.zero,
       showCheckmark: false,
-      clipBehavior: Clip.antiAlias,
+      clipBehavior: Clip.hardEdge,
       label: Stack(
         clipBehavior: Clip.none,
         alignment: Alignment.center,
