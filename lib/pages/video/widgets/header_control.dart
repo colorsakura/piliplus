@@ -61,8 +61,6 @@ class HeaderControlState extends State<HeaderControl> {
   PlayUrlModel get videoInfo => videoDetailCtr.data;
   static const TextStyle subTitleStyle = TextStyle(fontSize: 12);
   static const TextStyle titleStyle = TextStyle(fontSize: 14);
-  Size get preferredSize => const Size(double.infinity, kToolbarHeight);
-  double buttonSpace = 8;
   String get heroTag => widget.heroTag;
   late VideoIntroController videoIntroController;
   late PgcIntroController pgcIntroController;
@@ -582,10 +580,10 @@ class HeaderControlState extends State<HeaderControl> {
                     onTap: () => SmartDialog.showToast(
                         '标灰画质需要bilibili会员（已是会员？请关闭无痕模式）；4k和杜比视界播放效果可能不佳'),
                     child: Row(
+                      spacing: 8,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         const Text('选择画质', style: titleStyle),
-                        SizedBox(width: buttonSpace),
                         Icon(
                           Icons.info_outline,
                           size: 16,
