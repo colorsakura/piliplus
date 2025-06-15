@@ -10,7 +10,7 @@ import 'package:PiliPlus/models_new/msgfeed_unread/data.dart';
 import 'package:PiliPlus/models_new/single_unread/data.dart';
 import 'package:PiliPlus/services/account_service.dart';
 import 'package:PiliPlus/utils/storage.dart';
-import 'package:PiliPlus/utils/utils.dart';
+import 'package:PiliPlus/utils/update.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -45,7 +45,7 @@ class MainController extends GetxController
   void onInit() {
     super.onInit();
     if (GStorage.autoUpdate) {
-      Utils.checkUpdate();
+      Update.checkUpdate();
     }
 
     setNavBarConfig();

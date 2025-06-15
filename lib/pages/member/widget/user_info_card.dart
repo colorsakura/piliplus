@@ -5,6 +5,8 @@ import 'package:PiliPlus/models_new/space/space/card.dart';
 import 'package:PiliPlus/models_new/space/space/images.dart';
 import 'package:PiliPlus/models_new/space/space/live.dart';
 import 'package:PiliPlus/utils/extension.dart';
+import 'package:PiliPlus/utils/image_util.dart';
+import 'package:PiliPlus/utils/num_util.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:PiliPlus/utils/storage.dart' show Accounts;
 import 'package:PiliPlus/utils/utils.dart';
@@ -55,7 +57,7 @@ class UserInfoCard extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(
-            Utils.numFormat(count),
+            NumUtil.numFormat(count),
             style: const TextStyle(fontSize: 14),
           ),
           Text(
@@ -86,7 +88,7 @@ class UserInfoCard extends StatelessWidget {
           imgList: [SourceModel(url: imgUrl)],
         ),
         child: CachedNetworkImage(
-          imageUrl: Utils.thumbnailImgUrl(imgUrl),
+          imageUrl: ImageUtil.thumbnailUrl(imgUrl),
           width: double.infinity,
           height: 135,
           imageBuilder: (context, imageProvider) => DecoratedBox(
@@ -164,7 +166,7 @@ class UserInfoCard extends StatelessWidget {
                 ),
               if (card.nameplate?.imageSmall?.isNotEmpty == true)
                 CachedNetworkImage(
-                  imageUrl: Utils.thumbnailImgUrl(card.nameplate!.imageSmall!),
+                  imageUrl: ImageUtil.thumbnailUrl(card.nameplate!.imageSmall!),
                   height: 20,
                   placeholder: (context, url) {
                     return const SizedBox.shrink();
@@ -488,13 +490,13 @@ class UserInfoCard extends StatelessWidget {
               children: [
                 if (isDark && card.prInfo?.iconNight?.isNotEmpty == true) ...[
                   CachedNetworkImage(
-                    imageUrl: Utils.thumbnailImgUrl(card.prInfo!.iconNight!),
+                    imageUrl: ImageUtil.thumbnailUrl(card.prInfo!.iconNight!),
                     height: 20,
                   ),
                   const SizedBox(width: 16),
                 ] else if (card.prInfo?.icon?.isNotEmpty == true) ...[
                   CachedNetworkImage(
-                    imageUrl: Utils.thumbnailImgUrl(card.prInfo!.icon!),
+                    imageUrl: ImageUtil.thumbnailUrl(card.prInfo!.icon!),
                     height: 20,
                   ),
                   const SizedBox(width: 16),

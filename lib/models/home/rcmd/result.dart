@@ -1,7 +1,7 @@
 import 'package:PiliPlus/models/model_rec_video_item.dart';
 import 'package:PiliPlus/models/model_video.dart';
 import 'package:PiliPlus/utils/id_utils.dart';
-import 'package:PiliPlus/utils/utils.dart';
+import 'package:PiliPlus/utils/num_util.dart';
 
 class RecVideoItemAppModel extends BaseRecVideoItemModel {
   int? get id => aid;
@@ -26,7 +26,7 @@ class RecVideoItemAppModel extends BaseRecVideoItemModel {
     //     json['top_rcmd_reason'];
     if (rcmdReason != null && rcmdReason!.contains('赞')) {
       // 有时能在推荐原因里获得点赞数
-      (stat as RcmdStat).like = Utils.parseNum(rcmdReason!);
+      (stat as RcmdStat).like = NumUtil.parseNum(rcmdReason!);
     }
     // 由于app端api并不会直接返回与owner的关注状态
     // 所以借用推荐原因是否为“已关注”、“新关注”判别关注状态，从而与web端接口等效
@@ -53,8 +53,8 @@ class RecVideoItemAppModel extends BaseRecVideoItemModel {
 
 class RcmdStat extends BaseStat {
   RcmdStat.fromJson(Map<String, dynamic> json) {
-    view = Utils.parseNum(json["cover_left_text_1"] ?? '');
-    danmu = Utils.parseNum(json["cover_left_text_2"] ?? '');
+    view = NumUtil.parseNum(json["cover_left_text_1"] ?? '');
+    danmu = NumUtil.parseNum(json["cover_left_text_2"] ?? '');
   }
 }
 

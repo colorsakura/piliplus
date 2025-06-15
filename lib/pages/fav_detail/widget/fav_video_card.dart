@@ -7,8 +7,9 @@ import 'package:PiliPlus/common/widgets/stat/stat.dart';
 import 'package:PiliPlus/models/common/badge_type.dart';
 import 'package:PiliPlus/models/common/stat_type.dart';
 import 'package:PiliPlus/models_new/fav/fav_detail/media.dart';
+import 'package:PiliPlus/utils/date_util.dart';
+import 'package:PiliPlus/utils/duration_util.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
-import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -88,7 +89,7 @@ class FavVideoCardH extends StatelessWidget {
                           height: maxHeight,
                         ),
                         PBadge(
-                          text: Utils.timeFormat(item.duration),
+                          text: DurationUtil.formatDuration(item.duration),
                           right: 6.0,
                           bottom: 6.0,
                           type: PBadgeType.gray,
@@ -145,7 +146,7 @@ class FavVideoCardH extends StatelessWidget {
                 ),
               const Spacer(),
               Text(
-                '${Utils.dateFormat(item.favTime)} ${item.upper?.name}',
+                '${DateUtil.dateFormat(item.favTime)} ${item.upper?.name}',
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(

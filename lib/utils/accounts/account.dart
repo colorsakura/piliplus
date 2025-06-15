@@ -1,6 +1,6 @@
 import 'package:PiliPlus/models/common/account_type.dart';
+import 'package:PiliPlus/utils/id_utils.dart';
 import 'package:PiliPlus/utils/storage.dart';
-import 'package:PiliPlus/utils/utils.dart';
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:hive/hive.dart';
 
@@ -46,7 +46,7 @@ class LoginAccount implements Account {
   @override
   late final Map<String, String> headers = {
     'x-bili-mid': _midStr,
-    'x-bili-aurora-eid': Utils.genAuroraEid(mid),
+    'x-bili-aurora-eid': IdUtils.genAuroraEid(mid),
   };
   @override
   late String csrf =
@@ -165,7 +165,7 @@ extension BiliCookieJar on DefaultCookieJar {
   void setBuvid3() {
     domainCookies['bilibili.com'] ??= {'/': {}};
     domainCookies['bilibili.com']!['/']!['buvid3'] ??= SerializableCookie(
-        Cookie('buvid3', Utils.genBuvid3())..setBiliDomain());
+        Cookie('buvid3', IdUtils.genBuvid3())..setBiliDomain());
   }
 
   static DefaultCookieJar fromJson(Map json) =>

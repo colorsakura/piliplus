@@ -1,14 +1,14 @@
 import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/models/common/image_type.dart';
 import 'package:PiliPlus/utils/extension.dart';
-import 'package:PiliPlus/utils/utils.dart';
+import 'package:PiliPlus/utils/image_util.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 class NetworkImgLayer extends StatelessWidget {
   const NetworkImgLayer({
     super.key,
-    this.src,
+    required this.src,
     required this.width,
     this.height,
     this.type = ImageType.def,
@@ -64,7 +64,7 @@ class NetworkImgLayer extends StatelessWidget {
       memCacheHeight = height.cacheSize(context);
     }
     return CachedNetworkImage(
-      imageUrl: Utils.thumbnailImgUrl(src, quality),
+      imageUrl: ImageUtil.thumbnailUrl(src, quality),
       width: width,
       height: height,
       memCacheWidth: memCacheWidth,

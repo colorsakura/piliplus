@@ -49,7 +49,7 @@ import 'package:PiliPlus/utils/feed_back.dart';
 import 'package:PiliPlus/utils/global_data.dart';
 import 'package:PiliPlus/utils/recommend_filter.dart';
 import 'package:PiliPlus/utils/storage.dart';
-import 'package:PiliPlus/utils/utils.dart';
+import 'package:PiliPlus/utils/update.dart';
 import 'package:auto_orientation/auto_orientation.dart';
 import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/material.dart';
@@ -2572,7 +2572,7 @@ List<SettingsModel> get extraSettings => [
         defaultVal: true,
         onChanged: (val) {
           if (val) {
-            Utils.checkUpdate(false);
+            Update.checkUpdate(false);
           }
         },
       ),

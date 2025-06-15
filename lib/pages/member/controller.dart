@@ -11,6 +11,7 @@ import 'package:PiliPlus/models_new/space/space/setting.dart';
 import 'package:PiliPlus/models_new/space/space/tab2.dart';
 import 'package:PiliPlus/pages/common/common_data_controller.dart';
 import 'package:PiliPlus/services/account_service.dart';
+import 'package:PiliPlus/utils/date_util.dart';
 import 'package:PiliPlus/utils/request_utils.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/utils.dart';
@@ -19,7 +20,6 @@ import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart'
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 
 class MemberController extends CommonDataController<SpaceData, SpaceData?>
     with GetTickerProviderStateMixin {
@@ -91,7 +91,7 @@ class MemberController extends CommonDataController<SpaceData, SpaceData?>
       } else if (data.card!.endTime! >
           DateTime.now().millisecondsSinceEpoch ~/ 1000) {
         endTime =
-            '：至 ${DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.fromMillisecondsSinceEpoch(data.card!.endTime! * 1000))}';
+            '：至 ${DateUtil.longFormatDs.format(DateTime.fromMillisecondsSinceEpoch(data.card!.endTime! * 1000))}';
       }
     }
     tab2?.retainWhere((item) => implTabs.contains(item.param));

@@ -16,9 +16,12 @@ import 'package:PiliPlus/pages/dynamics/widgets/vote.dart';
 import 'package:PiliPlus/pages/save_panel/view.dart';
 import 'package:PiliPlus/pages/video/controller.dart';
 import 'package:PiliPlus/pages/video/reply/widgets/zan_grpc.dart';
+import 'package:PiliPlus/utils/date_util.dart';
+import 'package:PiliPlus/utils/duration_util.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/feed_back.dart';
 import 'package:PiliPlus/utils/global_data.dart';
+import 'package:PiliPlus/utils/image_util.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/url_utils.dart';
@@ -54,7 +57,7 @@ class ReplyItemGrpc extends StatelessWidget {
   final int replyLevel;
   final Function(ReplyInfo replyItem, int? rpid)? replyReply;
   final bool needDivider;
-  final VoidCallback? onReply;
+  final ValueChanged<ReplyInfo>? onReply;
   final ValueChanged<int?>? onDelete;
   final Int64? upMid;
   final VoidCallback? showDialogue;
@@ -231,11 +234,8 @@ class ReplyItemGrpc extends StatelessWidget {
                     children: <Widget>[
                       Text(
                         replyLevel == 0
-                            ? DateTime.fromMillisecondsSinceEpoch(
-                                    replyItem.ctime.toInt() * 1000)
-                                .toString()
-                                .substring(0, 19)
-                            : Utils.dateFormat(replyItem.ctime.toInt()),
+                            ? DateUtil.longFormatDs.format(DateTime.now())
+                            : DateUtil.dateFormat(replyItem.ctime.toInt()),
                         style: TextStyle(
                           fontSize: theme.textTheme.labelSmall!.fontSize,
                           color: theme.colorScheme.outline,
@@ -347,7 +347,7 @@ class ReplyItemGrpc extends StatelessWidget {
             style: _style,
             onPressed: () {
               feedBack();
-              onReply?.call();
+              onReply?.call(replyItem);
             },
             child: Row(children: [
               Icon(
@@ -712,7 +712,9 @@ class ReplyItemGrpc extends StatelessWidget {
                                   tag: Get.arguments['heroTag'])
                               .plPlayerController
                               .seekTo(
-                                  Duration(seconds: Utils.duration(matchStr)),
+                                  Duration(
+                                      seconds:
+                                          DurationUtil.parseDuration(matchStr)),
                                   type: 'slider');
                         } catch (e) {
                           SmartDialog.showToast('跳转失败: $e');
@@ -736,7 +738,7 @@ class ReplyItemGrpc extends StatelessWidget {
                 if (content.urls[matchStr]?.hasPrefixIcon() == true) ...[
                   WidgetSpan(
                     child: CachedNetworkImage(
-                      imageUrl: Utils.thumbnailImgUrl(
+                      imageUrl: ImageUtil.thumbnailUrl(
                           content.urls[matchStr]!.prefixIcon),
                       height: 19,
                       color: theme.colorScheme.primary,
@@ -854,7 +856,7 @@ class ReplyItemGrpc extends StatelessWidget {
               if (content.urls[patternStr]?.hasPrefixIcon() == true) ...[
                 WidgetSpan(
                   child: CachedNetworkImage(
-                    imageUrl: Utils.thumbnailImgUrl(
+                    imageUrl: ImageUtil.thumbnailUrl(
                         content.urls[patternStr]!.prefixIcon),
                     height: 19,
                     color: theme.colorScheme.primary,

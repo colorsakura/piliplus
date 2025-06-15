@@ -7,6 +7,7 @@ import 'package:PiliPlus/models_new/sub/sub_detail/media.dart';
 import 'package:PiliPlus/pages/subscription_detail/controller.dart';
 import 'package:PiliPlus/pages/subscription_detail/widget/sub_video_card.dart';
 import 'package:PiliPlus/utils/grid.dart';
+import 'package:PiliPlus/utils/num_util.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -172,7 +173,7 @@ class _SubDetailPageState extends State<SubDetailPage> {
                     ),
                     Obx(
                       () => Text(
-                        '${Utils.numFormat(_subDetailController.playCount.value)}次播放',
+                        '${NumUtil.numFormat(_subDetailController.playCount.value)}次播放',
                         style: style,
                       ),
                     ),

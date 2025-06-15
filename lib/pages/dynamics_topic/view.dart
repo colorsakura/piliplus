@@ -15,6 +15,7 @@ import 'package:PiliPlus/pages/dynamics_create/view.dart';
 import 'package:PiliPlus/pages/dynamics_tab/view.dart';
 import 'package:PiliPlus/pages/dynamics_topic/controller.dart';
 import 'package:PiliPlus/utils/grid.dart';
+import 'package:PiliPlus/utils/num_util.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/utils.dart';
@@ -221,7 +222,7 @@ class _DynTopicPageState extends State<DynTopicPage> {
                 Row(
                   children: [
                     Text(
-                      '${Utils.numFormat(response.topicItem!.view)}浏览 · ${Utils.numFormat(response.topicItem!.discuss)}讨论',
+                      '${NumUtil.numFormat(response.topicItem!.view)}浏览 · ${NumUtil.numFormat(response.topicItem!.discuss)}讨论',
                       style: TextStyle(
                         fontSize: 13,
                         color: theme.colorScheme.outline,
@@ -248,7 +249,7 @@ class _DynTopicPageState extends State<DynTopicPage> {
                           ? const Icon(FontAwesomeIcons.solidThumbsUp, size: 13)
                           : const Icon(FontAwesomeIcons.thumbsUp, size: 13),
                       label: Text(
-                        Utils.numFormat(response.topicItem!.like),
+                        NumUtil.numFormat(response.topicItem!.like),
                         style: const TextStyle(fontSize: 13),
                         textScaler: TextScaler.noScaling,
                       ),
@@ -274,7 +275,7 @@ class _DynTopicPageState extends State<DynTopicPage> {
                           ? const Icon(FontAwesomeIcons.solidStar, size: 13)
                           : const Icon(FontAwesomeIcons.star, size: 13),
                       label: Text(
-                        Utils.numFormat(response.topicItem!.fav),
+                        NumUtil.numFormat(response.topicItem!.fav),
                         style: const TextStyle(fontSize: 13),
                         textScaler: TextScaler.noScaling,
                       ),

@@ -4,7 +4,7 @@ import 'package:PiliPlus/common/widgets/badge.dart';
 import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
 import 'package:PiliPlus/models/common/badge_type.dart';
 import 'package:PiliPlus/models/dynamics/result.dart';
-import 'package:PiliPlus/utils/utils.dart';
+import 'package:PiliPlus/utils/num_util.dart';
 import 'package:flutter/material.dart';
 
 Widget videoSeasonWidget(
@@ -120,9 +120,9 @@ Widget videoSeasonWidget(
                         ),
                         const SizedBox(width: 6),
                       ],
-                      Text('${Utils.numFormat(itemContent.stat?.play)}次围观'),
+                      Text('${NumUtil.numFormat(itemContent.stat?.play)}次围观'),
                       const SizedBox(width: 6),
-                      Text('${Utils.numFormat(itemContent.stat?.danmu)}条弹幕'),
+                      Text('${NumUtil.numFormat(itemContent.stat?.danmu)}条弹幕'),
                       const Spacer(),
                       Image.asset(
                         'assets/images/play.png',

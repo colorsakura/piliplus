@@ -3,10 +3,13 @@ import 'package:PiliPlus/common/widgets/badge.dart';
 import 'package:PiliPlus/common/widgets/image/image_save.dart';
 import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
 import 'package:PiliPlus/common/widgets/stat/stat.dart';
+import 'package:PiliPlus/common/widgets/video_card/video_card_v.dart';
 import 'package:PiliPlus/http/search.dart';
 import 'package:PiliPlus/models/common/badge_type.dart';
 import 'package:PiliPlus/models/common/stat_type.dart';
 import 'package:PiliPlus/models_new/member/coin_like_arc/item.dart';
+import 'package:PiliPlus/utils/date_util.dart';
+import 'package:PiliPlus/utils/duration_util.dart';
 import 'package:PiliPlus/utils/id_utils.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:PiliPlus/utils/utils.dart';
@@ -73,7 +76,7 @@ class MemberCoinLikeItem extends StatelessWidget {
                         bottom: 6,
                         right: 6,
                         type: PBadgeType.gray,
-                        text: Utils.timeFormat(item.duration),
+                        text: DurationUtil.formatDuration(item.duration),
                       )
                   ],
                 );
@@ -104,8 +107,11 @@ class MemberCoinLikeItem extends StatelessWidget {
                       ),
                       const Spacer(),
                       Text(
-                        Utils.customStampStr(
-                            timestamp: item.ctime, date: 'MM-DD'),
+                        DateUtil.dateFormat(
+                          item.ctime,
+                          shortFormat: VideoCardV.shortFormat,
+                          longFormat: VideoCardV.longFormat,
+                        ),
                         style: TextStyle(
                           fontSize: 11,
                           color: Theme.of(context).colorScheme.outline,

@@ -8,7 +8,10 @@ import 'package:PiliPlus/models/user/info.dart';
 import 'package:PiliPlus/models_new/account_myinfo/data.dart';
 import 'package:PiliPlus/pages/mine/controller.dart';
 import 'package:PiliPlus/services/account_service.dart';
+import 'package:PiliPlus/utils/app_sign.dart';
+import 'package:PiliPlus/utils/date_util.dart';
 import 'package:PiliPlus/utils/extension.dart';
+import 'package:PiliPlus/utils/image_util.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/utils.dart';
@@ -21,7 +24,6 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart' hide FormData, MultipartFile;
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:intl/intl.dart';
 import 'package:mime/mime.dart';
 
 class EditProfilePage extends StatefulWidget {
@@ -128,7 +130,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 padding: const EdgeInsets.symmetric(vertical: 5),
                 child: ClipOval(
                   child: CachedNetworkImage(
-                    imageUrl: Utils.thumbnailImgUrl(response.face),
+                    imageUrl: ImageUtil.thumbnailUrl(response.face),
                   ),
                 ),
               ),
@@ -178,7 +180,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 if (res != null) {
                   _update(
                     type: ProfileType.birthday,
-                    datum: DateFormat('yyyy-MM-dd').format(res),
+                    datum: DateUtil.longFormat.format(res),
                   );
                 }
               }),
@@ -350,7 +352,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
       else if (type == ProfileType.sex)
         'sex': datum.toString(),
     };
-    Utils.appSign(data);
+    AppSign.appSign(data);
     Request()
         .post(
       '/x/member/app/${type.name}/update',

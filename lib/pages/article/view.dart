@@ -22,9 +22,12 @@ import 'package:PiliPlus/pages/article/widgets/opus_content.dart';
 import 'package:PiliPlus/pages/dynamics_repost/view.dart';
 import 'package:PiliPlus/pages/video/reply/widgets/reply_item_grpc.dart';
 import 'package:PiliPlus/pages/video/reply_reply/view.dart';
+import 'package:PiliPlus/utils/date_util.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/feed_back.dart';
 import 'package:PiliPlus/utils/grid.dart';
+import 'package:PiliPlus/utils/image_util.dart';
+import 'package:PiliPlus/utils/num_util.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/utils.dart';
@@ -473,8 +476,9 @@ class _ArticlePageState extends State<ArticlePage>
                                                 fit: pic.isLongPic == true
                                                     ? BoxFit.cover
                                                     : null,
-                                                imageUrl: Utils.thumbnailImgUrl(
-                                                    pic.url, 60),
+                                                imageUrl:
+                                                    ImageUtil.thumbnailUrl(
+                                                        pic.url, 60),
                                                 fadeInDuration: const Duration(
                                                     milliseconds: 120),
                                                 fadeOutDuration: const Duration(
@@ -545,7 +549,7 @@ class _ArticlePageState extends State<ArticlePage>
                                 ),
                                 if (pubTime != null)
                                   Text(
-                                    Utils.dateFormat(pubTime),
+                                    DateUtil.format(pubTime),
                                     style: TextStyle(
                                       color: theme.colorScheme.outline,
                                       fontSize:
@@ -611,9 +615,9 @@ class _ArticlePageState extends State<ArticlePage>
                     replyLevel: 1,
                     replyReply: (replyItem, id) =>
                         replyReply(context, replyItem, id),
-                    onReply: () => _articleCtr.onReply(
+                    onReply: (replyItem) => _articleCtr.onReply(
                       context,
-                      replyItem: response[index],
+                      replyItem: replyItem,
                       index: index,
                     ),
                     onDelete: (subIndex) =>
@@ -654,7 +658,7 @@ class _ArticlePageState extends State<ArticlePage>
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Obx(() => Text(
-                  '${_articleCtr.count.value == -1 ? 0 : Utils.numFormat(_articleCtr.count.value)}条回复')),
+                  '${_articleCtr.count.value == -1 ? 0 : NumUtil.numFormat(_articleCtr.count.value)}条回复')),
               SizedBox(
                 height: 35,
                 child: TextButton.icon(
@@ -857,7 +861,7 @@ class _ArticlePageState extends State<ArticlePage>
                             foregroundColor: theme.colorScheme.outline,
                           ),
                           label: Text(stat?.count != null
-                              ? Utils.numFormat(stat!.count)
+                              ? NumUtil.numFormat(stat!.count)
                               : text),
                         );
                       }
@@ -1016,7 +1020,7 @@ class _ArticlePageState extends State<ArticlePage>
                                                 _articleCtr.stats.value?.like
                                                             ?.count !=
                                                         null
-                                                    ? Utils.numFormat(
+                                                    ? NumUtil.numFormat(
                                                         _articleCtr.stats.value!
                                                             .like!.count)
                                                     : '点赞',

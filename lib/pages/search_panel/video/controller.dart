@@ -6,10 +6,10 @@ import 'package:PiliPlus/models/search/result.dart';
 import 'package:PiliPlus/pages/search/widgets/search_text.dart';
 import 'package:PiliPlus/pages/search_panel/controller.dart';
 import 'package:PiliPlus/utils/app_scheme.dart';
+import 'package:PiliPlus/utils/date_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 
 class SearchVideoController
     extends SearchPanelController<SearchVideoData, SearchVideoItemModel> {
@@ -152,7 +152,7 @@ class SearchVideoController
           final theme = Theme.of(context);
           Widget dateWidget([bool isFirst = true]) {
             return SearchText(
-              text: DateFormat('yyyy-MM-dd')
+              text: DateUtil.longFormat
                   .format(isFirst ? pubBeginDate : pubEndDate),
               textAlign: TextAlign.center,
               onTap: (text) {

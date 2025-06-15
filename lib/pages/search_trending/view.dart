@@ -6,7 +6,7 @@ import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models_new/search/search_trending/list.dart';
 import 'package:PiliPlus/pages/search_trending/controller.dart';
-import 'package:PiliPlus/utils/utils.dart';
+import 'package:PiliPlus/utils/image_util.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -197,7 +197,7 @@ class _SearchTrendingPageState extends State<SearchTrendingPage> {
                       if (item.icon?.isNotEmpty == true) ...[
                         const SizedBox(width: 4),
                         CachedNetworkImage(
-                          imageUrl: Utils.thumbnailImgUrl(item.icon!),
+                          imageUrl: ImageUtil.thumbnailUrl(item.icon!),
                           height: 16,
                         ),
                       ] else if (item.showLiveIcon == true) ...[

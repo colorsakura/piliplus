@@ -7,15 +7,17 @@ import 'package:PiliPlus/common/widgets/video_popup_menu.dart';
 import 'package:PiliPlus/http/search.dart';
 import 'package:PiliPlus/models/common/badge_type.dart';
 import 'package:PiliPlus/models/common/stat_type.dart';
-import 'package:PiliPlus/models/home/rcmd/result.dart';
 import 'package:PiliPlus/models/model_rec_video_item.dart';
 import 'package:PiliPlus/utils/app_scheme.dart';
+import 'package:PiliPlus/utils/date_util.dart';
+import 'package:PiliPlus/utils/duration_util.dart';
 import 'package:PiliPlus/utils/id_utils.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 // 视频卡片 - 垂直布局
 class VideoCardV extends StatelessWidget {
@@ -129,7 +131,8 @@ class VideoCardV extends StatelessWidget {
                             right: 7,
                             size: PBadgeSize.small,
                             type: PBadgeType.gray,
-                            text: Utils.timeFormat(videoItem.duration),
+                            text:
+                                DurationUtil.formatDuration(videoItem.duration),
                           )
                       ],
                     );
@@ -229,6 +232,9 @@ class VideoCardV extends StatelessWidget {
     );
   }
 
+  static final shortFormat = DateFormat('M-d');
+  static final longFormat = DateFormat('yy-M-d');
+
   Widget videoStat(BuildContext context, ThemeData theme) {
     return Row(
       children: [
@@ -248,29 +254,36 @@ class VideoCardV extends StatelessWidget {
           Text.rich(
             maxLines: 1,
             TextSpan(
-                style: TextStyle(
-                  fontSize: theme.textTheme.labelSmall!.fontSize,
-                  color: theme.colorScheme.outline.withValues(alpha: 0.8),
-                ),
-                text: Utils.formatTimestampToRelativeTime(videoItem.pubdate)),
-          ),
-          const SizedBox(width: 2),
-        ] else if (videoItem is RecVideoItemAppModel &&
-            videoItem.desc != null &&
-            videoItem.desc!.contains(' · ')) ...[
-          const Spacer(),
-          Text.rich(
-            maxLines: 1,
-            TextSpan(
-                style: TextStyle(
-                  fontSize: theme.textTheme.labelSmall!.fontSize,
-                  color: theme.colorScheme.outline.withValues(alpha: 0.8),
-                ),
-                text: Utils.shortenChineseDateString(
-                    videoItem.desc!.split(' · ').last)),
+              style: TextStyle(
+                fontSize: theme.textTheme.labelSmall!.fontSize,
+                color: theme.colorScheme.outline.withValues(alpha: 0.8),
+              ),
+              text: DateUtil.dateFormat(
+                videoItem.pubdate,
+                shortFormat: shortFormat,
+                longFormat: longFormat,
+              ),
+            ),
           ),
           const SizedBox(width: 2),
         ]
+        // deprecated
+        //  else if (videoItem is RecVideoItemAppModel &&
+        //     videoItem.desc != null &&
+        //     videoItem.desc!.contains(' · ')) ...[
+        //   const Spacer(),
+        //   Text.rich(
+        //     maxLines: 1,
+        //     TextSpan(
+        //         style: TextStyle(
+        //           fontSize: theme.textTheme.labelSmall!.fontSize,
+        //           color: theme.colorScheme.outline.withValues(alpha: 0.8),
+        //         ),
+        //         text: Utils.shortenChineseDateString(
+        //             videoItem.desc!.split(' · ').last)),
+        //   ),
+        //   const SizedBox(width: 2),
+        // ]
       ],
     );
   }

@@ -8,6 +8,8 @@ import 'package:PiliPlus/models/common/badge_type.dart';
 import 'package:PiliPlus/models/common/search_type.dart';
 import 'package:PiliPlus/models/common/stat_type.dart';
 import 'package:PiliPlus/models_new/sub/sub_detail/media.dart';
+import 'package:PiliPlus/utils/date_util.dart';
+import 'package:PiliPlus/utils/duration_util.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
@@ -70,7 +72,7 @@ class SubVideoCardH extends StatelessWidget {
                           height: maxHeight,
                         ),
                         PBadge(
-                          text: Utils.timeFormat(videoItem.duration!),
+                          text: DurationUtil.formatDuration(videoItem.duration),
                           right: 6.0,
                           bottom: 6.0,
                           type: PBadgeType.gray,
@@ -106,7 +108,7 @@ class SubVideoCardH extends StatelessWidget {
             ),
           ),
           Text(
-            Utils.dateFormat(videoItem.pubtime),
+            DateUtil.dateFormat(videoItem.pubtime),
             style: TextStyle(
               fontSize: 12,
               color: Theme.of(context).colorScheme.outline,

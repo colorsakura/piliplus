@@ -1,7 +1,7 @@
 import 'package:PiliPlus/common/widgets/loading_widget/http_error.dart';
 import 'package:PiliPlus/models_new/fav/fav_folder/data.dart';
+import 'package:PiliPlus/utils/fav_util.dart';
 import 'package:PiliPlus/utils/feed_back.dart';
-import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -94,7 +94,7 @@ class _FavPanelState extends State<FavPanel> {
                                     1,
                                 index),
                             dense: true,
-                            leading: Utils.isPublicFav(widget
+                            leading: FavUtil.isPublicFav(widget
                                     .ctr.favFolderData.value.list[index].attr)
                                 ? const Icon(Icons.folder_outlined)
                                 : const Icon(Icons.lock_outline),
@@ -102,7 +102,7 @@ class _FavPanelState extends State<FavPanel> {
                             title: Text(widget
                                 .ctr.favFolderData.value.list[index].title!),
                             subtitle: Text(
-                              '${widget.ctr.favFolderData.value.list[index].mediaCount}个内容 . ${Utils.isPublicFavText(widget.ctr.favFolderData.value.list[index].attr)}',
+                              '${widget.ctr.favFolderData.value.list[index].mediaCount}个内容 . ${FavUtil.isPublicFavText(widget.ctr.favFolderData.value.list[index].attr)}',
                             ),
                             trailing: Transform.scale(
                               scale: 0.9,

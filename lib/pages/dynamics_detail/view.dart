@@ -19,6 +19,7 @@ import 'package:PiliPlus/pages/video/reply/widgets/reply_item_grpc.dart';
 import 'package:PiliPlus/pages/video/reply_reply/view.dart';
 import 'package:PiliPlus/utils/feed_back.dart';
 import 'package:PiliPlus/utils/grid.dart';
+import 'package:PiliPlus/utils/num_util.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:PiliPlus/utils/request_utils.dart';
 import 'package:PiliPlus/utils/storage.dart';
@@ -517,7 +518,7 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
                                           _controller.dynItem.modules.moduleStat
                                                       ?.forward?.count !=
                                                   null
-                                              ? Utils.numFormat(_controller
+                                              ? NumUtil.numFormat(_controller
                                                   .dynItem
                                                   .modules
                                                   .moduleStat!
@@ -608,7 +609,7 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
                                                         ?.like
                                                         ?.count !=
                                                     null
-                                                ? Utils.numFormat(_controller
+                                                ? NumUtil.numFormat(_controller
                                                     .dynItem
                                                     .modules
                                                     .moduleStat!
@@ -660,7 +661,7 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
                     return ScaleTransition(scale: animation, child: child);
                   },
                   child: Text(
-                    '${_controller.count.value == -1 ? 0 : Utils.numFormat(_controller.count.value)}条回复',
+                    '${_controller.count.value == -1 ? 0 : NumUtil.numFormat(_controller.count.value)}条回复',
                     key: ValueKey<int>(_controller.count.value),
                   ),
                 ),
@@ -725,9 +726,9 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
                     replyLevel: 1,
                     replyReply: (replyItem, id) =>
                         replyReply(context, replyItem, id),
-                    onReply: () => _controller.onReply(
+                    onReply: (replyItem) => _controller.onReply(
                       context,
-                      replyItem: response[index],
+                      replyItem: replyItem,
                       index: index,
                     ),
                     onDelete: (subIndex) =>

@@ -6,6 +6,7 @@ import 'package:PiliPlus/http/search.dart';
 import 'package:PiliPlus/models/common/badge_type.dart';
 import 'package:PiliPlus/models_new/space/space_archive/item.dart';
 import 'package:PiliPlus/utils/app_scheme.dart';
+import 'package:PiliPlus/utils/duration_util.dart';
 import 'package:PiliPlus/utils/id_utils.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:PiliPlus/utils/utils.dart';
@@ -97,7 +98,7 @@ class VideoCardVMemberHome extends StatelessWidget {
                           right: 7,
                           size: PBadgeSize.small,
                           type: PBadgeType.gray,
-                          text: Utils.timeFormat(videoItem.duration),
+                          text: DurationUtil.formatDuration(videoItem.duration),
                         )
                     ],
                   );

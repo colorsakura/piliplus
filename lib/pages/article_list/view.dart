@@ -9,7 +9,9 @@ import 'package:PiliPlus/models_new/article/article_list/article.dart';
 import 'package:PiliPlus/models_new/article/article_list/list.dart';
 import 'package:PiliPlus/pages/article_list/controller.dart';
 import 'package:PiliPlus/pages/article_list/widgets/item.dart';
+import 'package:PiliPlus/utils/date_util.dart';
 import 'package:PiliPlus/utils/grid.dart';
+import 'package:PiliPlus/utils/num_util.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
@@ -158,11 +160,12 @@ class _ArticleListPageState extends State<ArticleListPage> {
                     TextSpan(
                       children: [
                         TextSpan(
-                            text: '${Utils.numFormat(item.articlesCount)}篇专栏'),
+                            text:
+                                '${NumUtil.numFormat(item.articlesCount)}篇专栏'),
                         divider,
-                        TextSpan(text: '${Utils.numFormat(item.words)}个字'),
+                        TextSpan(text: '${NumUtil.numFormat(item.words)}个字'),
                         divider,
-                        TextSpan(text: '${Utils.numFormat(item.read)}次阅读'),
+                        TextSpan(text: '${NumUtil.numFormat(item.read)}次阅读'),
                       ],
                       style: style,
                     ),
@@ -171,8 +174,7 @@ class _ArticleListPageState extends State<ArticleListPage> {
                     TextSpan(
                       children: [
                         TextSpan(
-                            text:
-                                '${Utils.dateFormat(item.updateTime, formatType: 'day')}更新'),
+                            text: '${DateUtil.dateFormat(item.updateTime)}更新'),
                         divider,
                         TextSpan(text: '文集号: ${item.id}'),
                       ],

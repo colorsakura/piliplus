@@ -12,6 +12,7 @@ import 'package:PiliPlus/grpc/google/rpc/status.pb.dart';
 import 'package:PiliPlus/http/constants.dart';
 import 'package:PiliPlus/http/init.dart';
 import 'package:PiliPlus/http/loading_state.dart';
+import 'package:PiliPlus/utils/id_utils.dart';
 import 'package:PiliPlus/utils/login_utils.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/utils.dart';
@@ -77,7 +78,7 @@ class GrpcRepo {
   static const _phone = 'phone';
 
   static final _buvid = LoginUtils.buvid;
-  static final _traceId = Utils.genTraceId();
+  static final _traceId = IdUtils.genTraceId();
   static final _sessionId = Utils.generateRandomString(8);
 
   static void updateHeaders(String? accessKey) {

@@ -8,6 +8,7 @@ import 'package:PiliPlus/http/video.dart';
 import 'package:PiliPlus/models/dynamics/result.dart';
 import 'package:PiliPlus/pages/dynamics/controller.dart';
 import 'package:PiliPlus/pages/save_panel/view.dart';
+import 'package:PiliPlus/utils/date_util.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/feed_back.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
@@ -59,11 +60,9 @@ class AuthorPanel extends StatelessWidget {
     final theme = Theme.of(context);
     final pubTime = item.modules.moduleAuthor?.pubTs != null
         ? isSave
-            ? DateTime.fromMillisecondsSinceEpoch(
-                    item.modules.moduleAuthor!.pubTs! * 1000)
-                .toString()
-                .substring(0, 19)
-            : Utils.dateFormat(item.modules.moduleAuthor!.pubTs)
+            ? DateUtil.format(item.modules.moduleAuthor!.pubTs,
+                format: DateUtil.longFormatDs)
+            : DateUtil.dateFormat(item.modules.moduleAuthor!.pubTs)
         : item.modules.moduleAuthor?.pubTime;
     return Stack(
       clipBehavior: Clip.none,

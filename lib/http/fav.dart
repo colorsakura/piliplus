@@ -11,8 +11,8 @@ import 'package:PiliPlus/models_new/fav/fav_pgc/data.dart';
 import 'package:PiliPlus/models_new/fav/fav_topic/data.dart';
 import 'package:PiliPlus/models_new/space/space_fav/data.dart';
 import 'package:PiliPlus/models_new/sub/sub_detail/data.dart';
+import 'package:PiliPlus/utils/app_sign.dart';
 import 'package:PiliPlus/utils/storage.dart' show Accounts;
-import 'package:PiliPlus/utils/utils.dart';
 import 'package:dio/dio.dart';
 
 class FavHttp {
@@ -379,7 +379,7 @@ class FavHttp {
       'sort': sort.join(','),
       'csrf': Accounts.main.csrf,
     };
-    Utils.appSign(data);
+    AppSign.appSign(data);
     var res = await Request().post(
       Api.sortFavFolder,
       data: data,
@@ -403,7 +403,7 @@ class FavHttp {
       'sort': sort.join(','),
       'csrf': Accounts.main.csrf,
     };
-    Utils.appSign(data);
+    AppSign.appSign(data);
     var res = await Request().post(
       Api.sortFav,
       data: data,

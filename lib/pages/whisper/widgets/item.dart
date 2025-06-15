@@ -7,8 +7,8 @@ import 'package:PiliPlus/grpc/bilibili/app/im/v1.pb.dart'
     show Session, SessionId, SessionPageType, SessionType, UnreadStyle;
 import 'package:PiliPlus/models/common/badge_type.dart';
 import 'package:PiliPlus/pages/whisper_secondary/view.dart';
+import 'package:PiliPlus/utils/date_util.dart';
 import 'package:PiliPlus/utils/extension.dart';
-import 'package:PiliPlus/utils/utils.dart';
 import 'package:fixnum/fixnum.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -232,8 +232,7 @@ class WhisperSessionItem extends StatelessWidget {
             children: [
               if (item.hasTimestamp())
                 Text(
-                  Utils.dateFormat((item.timestamp ~/ 1000000).toInt(),
-                      formatType: "day"),
+                  DateUtil.dateFormat((item.timestamp ~/ 1000000).toInt()),
                   style: TextStyle(
                     fontSize: 12,
                     color: theme.colorScheme.outline,

@@ -13,7 +13,7 @@ import 'package:PiliPlus/pages/video/introduction/pgc/controller.dart';
 import 'package:PiliPlus/pages/video/introduction/pgc/widgets/pgc_panel.dart';
 import 'package:PiliPlus/pages/video/introduction/ugc/widgets/action_item.dart';
 import 'package:PiliPlus/utils/extension.dart';
-import 'package:PiliPlus/utils/utils.dart';
+import 'package:PiliPlus/utils/num_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show HapticFeedback;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -273,7 +273,7 @@ class _PgcIntroPageState extends State<PgcIntroPage>
               selectStatus: pgcIntroController.hasLike.value,
               isLoading: false,
               semanticsLabel: '点赞',
-              text: Utils.numFormat(item.stat!.likes),
+              text: NumUtil.numFormat(item.stat!.likes),
               needAnim: true,
               hasTriple: pgcIntroController.hasLike.value &&
                   pgcIntroController.hasCoin &&
@@ -299,7 +299,7 @@ class _PgcIntroPageState extends State<PgcIntroPage>
               selectStatus: pgcIntroController.hasCoin,
               isLoading: false,
               semanticsLabel: '投币',
-              text: Utils.numFormat(item.stat!.coins),
+              text: NumUtil.numFormat(item.stat!.coins),
               needAnim: true,
             ),
           ),
@@ -314,7 +314,7 @@ class _PgcIntroPageState extends State<PgcIntroPage>
               selectStatus: pgcIntroController.hasFav.value,
               isLoading: false,
               semanticsLabel: '收藏',
-              text: Utils.numFormat(item.stat!.favorite),
+              text: NumUtil.numFormat(item.stat!.favorite),
               needAnim: true,
             ),
           ),
@@ -325,7 +325,7 @@ class _PgcIntroPageState extends State<PgcIntroPage>
             selectStatus: false,
             isLoading: false,
             semanticsLabel: '评论',
-            text: Utils.numFormat(item.stat!.reply),
+            text: NumUtil.numFormat(item.stat!.reply),
           ),
           ActionItem(
             icon: const Icon(FontAwesomeIcons.shareFromSquare),
@@ -333,7 +333,7 @@ class _PgcIntroPageState extends State<PgcIntroPage>
             selectStatus: false,
             isLoading: false,
             semanticsLabel: '转发',
-            text: Utils.numFormat(item.stat!.share),
+            text: NumUtil.numFormat(item.stat!.share),
           ),
         ],
       ),

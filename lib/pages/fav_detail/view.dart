@@ -13,6 +13,7 @@ import 'package:PiliPlus/models_new/fav/fav_folder/list.dart';
 import 'package:PiliPlus/pages/dynamics_repost/view.dart';
 import 'package:PiliPlus/pages/fav_detail/controller.dart';
 import 'package:PiliPlus/pages/fav_detail/widget/fav_video_card.dart';
+import 'package:PiliPlus/utils/fav_util.dart';
 import 'package:PiliPlus/utils/grid.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:PiliPlus/utils/request_utils.dart';
@@ -149,7 +150,7 @@ class _FavDetailPageState extends State<FavDetailPage> {
       ),
       Obx(() {
         final attr = _favDetailController.folderInfo.value.attr;
-        return attr == -1 || !Utils.isPublicFav(attr)
+        return attr == -1 || !FavUtil.isPublicFav(attr)
             ? const SizedBox.shrink()
             : IconButton(
                 iconSize: 22,
@@ -186,7 +187,7 @@ class _FavDetailPageState extends State<FavDetailPage> {
                     _favDetailController.onFav(folderInfo.favState == 1),
                 child: Text('${folderInfo.favState == 1 ? '取消' : ''}收藏'),
               ),
-            if (Utils.isPublicFav(folderInfo.attr))
+            if (FavUtil.isPublicFav(folderInfo.attr))
               PopupMenuItem(
                 onTap: () => showModalBottomSheet(
                   context: context,
@@ -207,7 +208,7 @@ class _FavDetailPageState extends State<FavDetailPage> {
                 onTap: _favDetailController.cleanFav,
                 child: const Text('清除失效内容'),
               ),
-              if (!Utils.isDefaultFav(folderInfo.attr)) ...[
+              if (!FavUtil.isDefaultFav(folderInfo.attr)) ...[
                 const PopupMenuDivider(height: 12),
                 PopupMenuItem(
                   onTap: () => showConfirmDialog(
@@ -392,7 +393,7 @@ class _FavDetailPageState extends State<FavDetailPage> {
                             child: Align(
                               alignment: Alignment.bottomLeft,
                               child: Text(
-                                '共${folderInfo.mediaCount}条视频 · ${Utils.isPublicFavText(folderInfo.attr)}',
+                                '共${folderInfo.mediaCount}条视频 · ${FavUtil.isPublicFavText(folderInfo.attr)}',
                                 textAlign: TextAlign.end,
                                 style: style,
                               ),

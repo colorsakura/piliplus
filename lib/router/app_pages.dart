@@ -23,6 +23,7 @@ import 'package:PiliPlus/pages/later_search/view.dart';
 import 'package:PiliPlus/pages/live_room/view.dart';
 import 'package:PiliPlus/pages/login/view.dart';
 import 'package:PiliPlus/pages/main/view.dart';
+import 'package:PiliPlus/pages/match_info/view.dart';
 import 'package:PiliPlus/pages/media/view.dart';
 import 'package:PiliPlus/pages/member/view.dart';
 import 'package:PiliPlus/pages/member_dynamics/view.dart';
@@ -179,6 +180,7 @@ class Routes {
     CustomGetPage(name: '/upowerRank', page: () => const UpowerRankPage()),
     CustomGetPage(name: '/spaceSetting', page: () => const SpaceSettingPage()),
     CustomGetPage(name: '/dynTopicRcmd', page: () => const DynTopicRcmdPage()),
+    CustomGetPage(name: '/matchInfo', page: () => const MatchInfoPage()),
   ];
 }
 

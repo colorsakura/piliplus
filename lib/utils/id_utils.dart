@@ -2,6 +2,9 @@
 
 import 'dart:convert';
 
+import 'package:PiliPlus/utils/utils.dart';
+import 'package:uuid/v4.dart';
+
 class IdUtils {
   static const XOR_CODE = 23442827791579;
   static const MASK_CODE = 2251799813685247;
@@ -67,18 +70,41 @@ class IdUtils {
     return result;
   }
 
-  // eid生成
-  static String? genAuroraEid(int uid) {
+  static String genBuvid3() {
+    return '${const UuidV4().generate().toUpperCase()}${Utils.random.nextInt(100000).toString().padLeft(5, "0")}infoc';
+  }
+
+  static String genAuroraEid(int uid) {
     if (uid == 0) {
-      return null;
+      return '';
     }
-    String uidString = uid.toString();
-    List<int> resultBytes = List.generate(
-      uidString.length,
-      (i) => uidString.codeUnitAt(i) ^ "ad1va46a7lza".codeUnitAt(i % 12),
-    );
-    String auroraEid = base64Url.encode(resultBytes);
-    auroraEid = auroraEid.replaceAll(RegExp(r'=*$', multiLine: true), '');
-    return auroraEid;
+
+    var midByte = utf8.encode(uid.toString());
+
+    const key = 'ad1va46a7lza';
+    for (int i = 0; i < midByte.length; i++) {
+      midByte[i] ^= key.codeUnitAt(i % key.length);
+    }
+
+    String base64Encoded = base64.encode(midByte).replaceAll('=', '');
+
+    return base64Encoded;
+  }
+
+  static String genTraceId() {
+    String randomId = Utils.generateRandomString(32);
+
+    StringBuffer randomTraceId = StringBuffer(randomId.substring(0, 24));
+
+    int ts = DateTime.now().millisecondsSinceEpoch ~/ 1000;
+
+    for (int i = 2; i >= 0; i--) {
+      ts >>= 8;
+      randomTraceId.write((ts & 0xFF).toRadixString(16).padLeft(2, '0'));
+    }
+
+    randomTraceId.write(randomId.substring(30, 32));
+
+    return '${randomTraceId.toString()}:${randomTraceId.toString().substring(16, 32)}:0:0';
   }
 }

@@ -12,7 +12,7 @@ import 'package:PiliPlus/models_new/msg/msg_like/item.dart';
 import 'package:PiliPlus/pages/msg_feed_top/like_me/controller.dart';
 import 'package:PiliPlus/pages/whisper_settings/view.dart';
 import 'package:PiliPlus/utils/app_scheme.dart';
-import 'package:PiliPlus/utils/utils.dart';
+import 'package:PiliPlus/utils/date_util.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -295,7 +295,7 @@ class _LikeMePageState extends State<LikeMePage> {
           ],
           const SizedBox(height: 4),
           Text(
-            Utils.dateFormat(item.likeTime),
+            DateUtil.dateFormat(item.likeTime),
             style: theme.textTheme.bodyMedium!.copyWith(
               fontSize: 13,
               color: theme.colorScheme.outline,

@@ -802,6 +802,21 @@ class PiliScheme {
         }
         launchURL();
         return false;
+      case 'match' || 'v':
+        if (path.contains('match/data/detail') ||
+            path.contains('match/singledata')) {
+          String? cid = uriDigitRegExp.firstMatch(path)?.group(1);
+          if (cid != null) {
+            PageUtils.toDupNamed(
+              '/matchInfo',
+              parameters: {'cid': cid},
+              off: off,
+            );
+            return true;
+          }
+        }
+        launchURL();
+        return false;
       default:
         Map map = IdUtils.matchAvorBv(input: area?.split('?').first);
         if (map.isNotEmpty) {

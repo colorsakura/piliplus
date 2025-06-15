@@ -2,7 +2,7 @@ import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/common/widgets/button/icon_button.dart';
 import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
 import 'package:PiliPlus/http/user.dart';
-import 'package:PiliPlus/utils/download.dart';
+import 'package:PiliPlus/utils/image_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
@@ -111,14 +111,14 @@ void imageSaveDialog({
                       tooltip: '分享',
                       onPressed: () {
                         SmartDialog.dismiss();
-                        DownloadUtils.onShareImg(cover!);
+                        ImageUtil.onShareImg(cover!);
                       },
                       icon: Icons.share,
                     ),
                     iconBtn(
                       tooltip: '保存封面图',
                       onPressed: () async {
-                        bool saveStatus = await DownloadUtils.downloadImg(
+                        bool saveStatus = await ImageUtil.downloadImg(
                           context,
                           [cover!],
                         );

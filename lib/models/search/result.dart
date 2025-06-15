@@ -1,8 +1,8 @@
 import 'package:PiliPlus/models/model_owner.dart';
 import 'package:PiliPlus/models/model_video.dart';
+import 'package:PiliPlus/utils/duration_util.dart';
 import 'package:PiliPlus/utils/em.dart';
 import 'package:PiliPlus/utils/extension.dart';
-import 'package:PiliPlus/utils/utils.dart';
 
 abstract class SearchNumData<T> {
   SearchNumData({
@@ -90,7 +90,7 @@ class SearchVideoItemModel extends BaseVideoItemModel {
     cover = (json['pic'] as String?)?.http2https;
     pubdate = json['pubdate'];
     ctime = json['senddate'];
-    duration = Utils.duration(json['duration']);
+    duration = DurationUtil.parseDuration(json['duration']);
     owner = SearchOwner.fromJson(json);
     stat = SearchStat.fromJson(json);
   }

@@ -4,8 +4,8 @@ import 'package:PiliPlus/common/widgets/interactiveviewer_gallery/interactive_vi
     as custom;
 import 'package:PiliPlus/common/widgets/interactiveviewer_gallery/interactive_viewer_boundary.dart';
 import 'package:PiliPlus/models/common/image_preview_type.dart';
-import 'package:PiliPlus/utils/download.dart';
 import 'package:PiliPlus/utils/extension.dart';
+import 'package:PiliPlus/utils/image_util.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -248,7 +248,7 @@ class _InteractiveviewerGalleryState extends State<InteractiveviewerGallery>
 
   String _getActualUrl(String url) {
     return _quality != 100
-        ? Utils.thumbnailImgUrl(url, _quality)
+        ? ImageUtil.thumbnailUrl(url, _quality)
         : url.http2https;
   }
 
@@ -367,7 +367,7 @@ class _InteractiveviewerGalleryState extends State<InteractiveviewerGallery>
                         final item = widget.sources[currentIndex.value];
                         return [
                           PopupMenuItem(
-                            onTap: () => DownloadUtils.onShareImg(item.url),
+                            onTap: () => ImageUtil.onShareImg(item.url),
                             child: const Text("分享图片"),
                           ),
                           PopupMenuItem(
@@ -375,7 +375,7 @@ class _InteractiveviewerGalleryState extends State<InteractiveviewerGallery>
                             child: const Text("复制链接"),
                           ),
                           PopupMenuItem(
-                            onTap: () => DownloadUtils.downloadImg(
+                            onTap: () => ImageUtil.downloadImg(
                               this.context,
                               [item.url],
                             ),
@@ -383,7 +383,7 @@ class _InteractiveviewerGalleryState extends State<InteractiveviewerGallery>
                           ),
                           if (widget.sources.length > 1)
                             PopupMenuItem(
-                              onTap: () => DownloadUtils.downloadImg(
+                              onTap: () => ImageUtil.downloadImg(
                                 this.context,
                                 widget.sources.map((item) => item.url).toList(),
                               ),
@@ -392,7 +392,7 @@ class _InteractiveviewerGalleryState extends State<InteractiveviewerGallery>
                           if (item.sourceType == SourceType.livePhoto)
                             PopupMenuItem(
                               onTap: () {
-                                DownloadUtils.downloadLivePhoto(
+                                ImageUtil.downloadLivePhoto(
                                   context: this.context,
                                   url: item.url,
                                   liveUrl: item.liveUrl!,
@@ -433,7 +433,7 @@ class _InteractiveviewerGalleryState extends State<InteractiveviewerGallery>
                 return CachedNetworkImage(
                   fadeInDuration: Duration.zero,
                   fadeOutDuration: Duration.zero,
-                  imageUrl: Utils.thumbnailImgUrl(item.url, widget.quality),
+                  imageUrl: ImageUtil.thumbnailUrl(item.url, widget.quality),
                 );
               },
             ),
@@ -510,7 +510,7 @@ class _InteractiveviewerGalleryState extends State<InteractiveviewerGallery>
               ListTile(
                 onTap: () {
                   Get.back();
-                  DownloadUtils.onShareImg(item.url);
+                  ImageUtil.onShareImg(item.url);
                 },
                 dense: true,
                 title: const Text('分享', style: TextStyle(fontSize: 14)),
@@ -526,7 +526,7 @@ class _InteractiveviewerGalleryState extends State<InteractiveviewerGallery>
               ListTile(
                 onTap: () {
                   Get.back();
-                  DownloadUtils.downloadImg(
+                  ImageUtil.downloadImg(
                     this.context,
                     [item.url],
                   );
@@ -538,7 +538,7 @@ class _InteractiveviewerGalleryState extends State<InteractiveviewerGallery>
                 ListTile(
                   onTap: () {
                     Get.back();
-                    DownloadUtils.downloadImg(
+                    ImageUtil.downloadImg(
                       this.context,
                       widget.sources.map((item) => item.url).toList(),
                     );
@@ -550,7 +550,7 @@ class _InteractiveviewerGalleryState extends State<InteractiveviewerGallery>
                 ListTile(
                   onTap: () {
                     Get.back();
-                    DownloadUtils.downloadLivePhoto(
+                    ImageUtil.downloadLivePhoto(
                       context: this.context,
                       url: item.url,
                       liveUrl: item.liveUrl!,

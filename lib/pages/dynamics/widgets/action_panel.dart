@@ -2,8 +2,8 @@ import 'package:PiliPlus/http/dynamics.dart';
 import 'package:PiliPlus/models/dynamics/result.dart';
 import 'package:PiliPlus/pages/dynamics_repost/view.dart';
 import 'package:PiliPlus/utils/feed_back.dart';
+import 'package:PiliPlus/utils/num_util.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
-import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -97,7 +97,7 @@ class _ActionPanelState extends State<ActionPanel> {
             ),
             label: Text(
               widget.item.modules.moduleStat!.forward!.count != null
-                  ? Utils.numFormat(
+                  ? NumUtil.numFormat(
                       widget.item.modules.moduleStat!.forward!.count)
                   : '转发',
             ),
@@ -120,7 +120,7 @@ class _ActionPanelState extends State<ActionPanel> {
             ),
             label: Text(
               widget.item.modules.moduleStat!.comment!.count != null
-                  ? Utils.numFormat(
+                  ? NumUtil.numFormat(
                       widget.item.modules.moduleStat!.comment!.count)
                   : '评论',
             ),
@@ -152,7 +152,7 @@ class _ActionPanelState extends State<ActionPanel> {
               },
               child: Text(
                 widget.item.modules.moduleStat!.like!.count != null
-                    ? Utils.numFormat(
+                    ? NumUtil.numFormat(
                         widget.item.modules.moduleStat!.like!.count)
                     : '点赞',
                 key: ValueKey<String>(

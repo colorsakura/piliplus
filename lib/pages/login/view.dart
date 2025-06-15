@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/common/widgets/scroll_physics.dart';
 import 'package:PiliPlus/pages/login/controller.dart';
+import 'package:PiliPlus/utils/image_util.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -55,8 +56,7 @@ class _LoginPageState extends State<LoginPage> {
                 Uint8List pngBytes = byteData!.buffer.asUint8List();
                 SmartDialog.dismiss();
                 SmartDialog.showLoading(msg: '正在保存至图库');
-                String picName =
-                    "PiliPlus_loginQRCode_${DateTime.now().toString().replaceAll(' ', '_').replaceAll(':', '-').split('.').first}";
+                String picName = "PiliPlus_loginQRCode_${ImageUtil.time}";
                 final SaveResult result = await SaverGallery.saveImage(
                   Uint8List.fromList(pngBytes),
                   fileName: picName,

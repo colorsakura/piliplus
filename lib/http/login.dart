@@ -5,6 +5,7 @@ import 'package:PiliPlus/http/api.dart';
 import 'package:PiliPlus/http/init.dart';
 import 'package:PiliPlus/models/login/model.dart';
 import 'package:PiliPlus/utils/accounts/account.dart';
+import 'package:PiliPlus/utils/app_sign.dart';
 import 'package:PiliPlus/utils/login_utils.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:crypto/crypto.dart';
@@ -34,7 +35,7 @@ class LoginHttp {
       'platform': 'android',
       'mobi_app': 'android_hd',
     };
-    Utils.appSign(params);
+    AppSign.appSign(params);
     var res = await Request().post(Api.getTVCode, queryParameters: params);
 
     if (res.data['code'] == 0) {
@@ -50,7 +51,7 @@ class LoginHttp {
       'local_id': '0',
       'ts': (DateTime.now().millisecondsSinceEpoch ~/ 1000).toString(),
     };
-    Utils.appSign(params);
+    AppSign.appSign(params);
     var res = await Request().post(Api.qrcodePoll, queryParameters: params);
     return {
       'status': res.data['code'] == 0,
@@ -116,7 +117,7 @@ class LoginHttp {
       'tel': tel,
       'ts': (timestamp ~/ 1000).toString(),
     };
-    Utils.appSign(data);
+    AppSign.appSign(data);
 
     var res = await Request().post(
       Api.appSmsCode,
@@ -159,7 +160,7 @@ class LoginHttp {
   //     'statistics': Constants.statistics,
   //     'ts': (DateTime.now().millisecondsSinceEpoch ~/ 1000).toString(),
   //   };
-  //   String sign = Utils.appSign(
+  //   String sign = AppSign.appSign(
   //     params,
   //     Constants.appKey,
   //     Constants.appSec,
@@ -224,7 +225,7 @@ class LoginHttp {
       'ts': (DateTime.now().millisecondsSinceEpoch ~/ 1000).toString(),
       'username': username,
     };
-    Utils.appSign(data);
+    AppSign.appSign(data);
     var res = await Request().post(
       Api.loginByPwdApi,
       data: data,
@@ -289,7 +290,7 @@ class LoginHttp {
       'tel': tel,
       'ts': (DateTime.now().millisecondsSinceEpoch ~/ 1000).toString(),
     };
-    Utils.appSign(data);
+    AppSign.appSign(data);
     var res = await Request().post(
       Api.logInByAppSms,
       data: data,
@@ -369,7 +370,7 @@ class LoginHttp {
       if (geeValidate != null) 'gee_validate': geeValidate,
       if (recaptchaToken != null) 'recaptcha_token': recaptchaToken,
     };
-    Utils.appSign(data);
+    AppSign.appSign(data);
     var res = await Request().post(
       Api.safeCenterSmsCode,
       data: data,
@@ -409,7 +410,7 @@ class LoginHttp {
       'source': source,
       'captcha_key': captchaKey,
     };
-    Utils.appSign(data);
+    AppSign.appSign(data);
     var res = await Request().post(
       Api.safeCenterSmsVerify,
       data: data,
@@ -455,7 +456,7 @@ class LoginHttp {
       // 'statistics': Constants.statistics,
       'ts': (DateTime.now().millisecondsSinceEpoch ~/ 1000).toString(),
     };
-    Utils.appSign(data);
+    AppSign.appSign(data);
     var res = await Request().post(
       Api.oauth2AccessToken,
       data: data,

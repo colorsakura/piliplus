@@ -24,6 +24,8 @@ import 'package:PiliPlus/pages/common/common_slide_page.dart';
 import 'package:PiliPlus/pages/video/controller.dart';
 import 'package:PiliPlus/pages/video/introduction/ugc/controller.dart';
 import 'package:PiliPlus/pages/video/introduction/ugc/widgets/page.dart';
+import 'package:PiliPlus/utils/date_util.dart';
+import 'package:PiliPlus/utils/duration_util.dart';
 import 'package:PiliPlus/utils/id_utils.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/utils.dart';
@@ -438,7 +440,7 @@ class _EpisodePanelState extends CommonSlidePageState<EpisodePanel> {
                             ),
                             if (duration != null && duration > 0)
                               PBadge(
-                                text: Utils.timeFormat(duration),
+                                text: DurationUtil.formatDuration(duration),
                                 right: 6.0,
                                 bottom: 6.0,
                                 type: PBadgeType.gray,
@@ -488,7 +490,7 @@ class _EpisodePanelState extends CommonSlidePageState<EpisodePanel> {
                       ),
                       if (pubdate != null)
                         Text(
-                          Utils.dateFormat(pubdate),
+                          DateUtil.format(pubdate),
                           maxLines: 1,
                           style: TextStyle(
                             fontSize: 12,

@@ -11,9 +11,9 @@ import 'package:PiliPlus/pages/dynamics/widgets/live_panel.dart';
 import 'package:PiliPlus/pages/dynamics/widgets/live_panel_sub.dart';
 import 'package:PiliPlus/pages/dynamics/widgets/live_rcmd_panel.dart';
 import 'package:PiliPlus/pages/dynamics/widgets/video_panel.dart';
+import 'package:PiliPlus/utils/date_util.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
-import 'package:PiliPlus/utils/utils.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -130,7 +130,7 @@ Widget module(
                               ),
                               const SizedBox(width: 6),
                               Text(
-                                Utils.dateFormat(
+                                DateUtil.dateFormat(
                                     orig.modules.moduleAuthor!.pubTs),
                                 style: TextStyle(
                                     color: theme.colorScheme.outline,

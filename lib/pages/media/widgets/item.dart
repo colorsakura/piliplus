@@ -1,6 +1,6 @@
 import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
 import 'package:PiliPlus/models_new/fav/fav_folder/list.dart';
-import 'package:PiliPlus/utils/utils.dart';
+import 'package:PiliPlus/utils/fav_util.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -73,7 +73,7 @@ class FavFolderItem extends StatelessWidget {
               maxLines: 1,
             ),
             Text(
-              ' 共${item.mediaCount}条视频 · ${Utils.isPublicFavText(item.attr)}',
+              ' 共${item.mediaCount}条视频 · ${FavUtil.isPublicFavText(item.attr)}',
               style: theme.textTheme.labelSmall!
                   .copyWith(color: theme.colorScheme.outline),
             )

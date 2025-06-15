@@ -11,7 +11,7 @@ import 'package:PiliPlus/models/common/badge_type.dart';
 import 'package:PiliPlus/models/common/stat_type.dart';
 import 'package:PiliPlus/models_new/media_list/media_list.dart';
 import 'package:PiliPlus/pages/common/common_collapse_slide_page.dart';
-import 'package:PiliPlus/utils/utils.dart';
+import 'package:PiliPlus/utils/duration_util.dart';
 import 'package:flutter/material.dart' hide RefreshCallback;
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
@@ -216,8 +216,8 @@ class _MediaListPanelState
                                             },
                                           ),
                                         PBadge(
-                                          text:
-                                              Utils.timeFormat(item.duration!),
+                                          text: DurationUtil.formatDuration(
+                                              item.duration),
                                           right: 6.0,
                                           bottom: 6.0,
                                           type: PBadgeType.gray,

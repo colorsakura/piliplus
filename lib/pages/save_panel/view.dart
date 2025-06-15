@@ -10,13 +10,15 @@ import 'package:PiliPlus/pages/dynamics/widgets/dynamic_panel.dart';
 import 'package:PiliPlus/pages/video/introduction/pgc/controller.dart';
 import 'package:PiliPlus/pages/video/introduction/ugc/controller.dart';
 import 'package:PiliPlus/pages/video/reply/widgets/reply_item_grpc.dart';
-import 'package:PiliPlus/utils/download.dart';
+import 'package:PiliPlus/utils/date_util.dart';
+import 'package:PiliPlus/utils/image_util.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart' show DateFormat;
 import 'package:pretty_qr_code/pretty_qr_code.dart';
 import 'package:saver_gallery/saver_gallery.dart';
 import 'package:share_plus/share_plus.dart';
@@ -225,8 +227,7 @@ class _SavePanelState extends State<SavePanel> {
 
   Future<void> _onSaveOrSharePic([bool isShare = false]) async {
     if (!isShare) {
-      if (mounted &&
-          !await DownloadUtils.checkPermissionDependOnSdkInt(context)) {
+      if (mounted && !await ImageUtil.checkPermissionDependOnSdkInt(context)) {
         return;
       }
     }
@@ -238,7 +239,7 @@ class _SavePanelState extends State<SavePanel> {
       ByteData? byteData = await image.toByteData(format: ImageByteFormat.png);
       Uint8List pngBytes = byteData!.buffer.asUint8List();
       String picName =
-          "plpl_reply_${DateTime.now().toString().substring(0, 19).replaceAll(RegExp(r'[- :]'), '')}";
+          "plpl_reply_${DateFormat('yyyyMMddHHmmss').format(DateTime.now())}";
       if (isShare) {
         Get.back();
         SmartDialog.dismiss();
@@ -424,10 +425,9 @@ class _SavePanelState extends State<SavePanel> {
                                                     ),
                                                     const SizedBox(height: 4),
                                                     Text(
-                                                      DateTime.now()
-                                                          .toString()
-                                                          .split('.')
-                                                          .first,
+                                                      DateUtil.longFormatDs
+                                                          .format(
+                                                              DateTime.now()),
                                                       textAlign: TextAlign.end,
                                                       style: TextStyle(
                                                         fontSize: 13,

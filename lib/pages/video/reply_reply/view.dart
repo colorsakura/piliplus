@@ -8,6 +8,7 @@ import 'package:PiliPlus/pages/common/common_slide_page.dart';
 import 'package:PiliPlus/pages/video/reply/widgets/reply_item_grpc.dart';
 import 'package:PiliPlus/pages/video/reply_new/view.dart';
 import 'package:PiliPlus/pages/video/reply_reply/controller.dart';
+import 'package:PiliPlus/utils/num_util.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:PiliPlus/utils/request_utils.dart';
 import 'package:PiliPlus/utils/utils.dart';
@@ -180,7 +181,7 @@ class _VideoReplyReplyPanelState
                         replyItem: firstFloor!,
                         replyLevel: 2,
                         needDivider: false,
-                        onReply: () => _onReply(firstFloor!, -1),
+                        onReply: (replyItem) => _onReply(replyItem, -1),
                         upMid: _videoReplyReplyController.upMid,
                         onViewImage: widget.onViewImage,
                         onDismissed: widget.onDismissed,
@@ -252,7 +253,7 @@ class _VideoReplyReplyPanelState
             Obx(
               () => _videoReplyReplyController.count.value != -1
                   ? Text(
-                      '相关回复共${Utils.numFormat(_videoReplyReplyController.count.value)}条',
+                      '相关回复共${NumUtil.numFormat(_videoReplyReplyController.count.value)}条',
                       style: const TextStyle(fontSize: 13),
                     )
                   : const SizedBox.shrink(),
@@ -427,7 +428,7 @@ class _VideoReplyReplyPanelState
     return ReplyItemGrpc(
       replyItem: replyItem,
       replyLevel: widget.isDialogue ? 3 : 2,
-      onReply: () => _onReply(replyItem, index),
+      onReply: (replyItem) => _onReply(replyItem, index),
       onDelete: (subIndex) {
         _videoReplyReplyController.onRemove(index, null);
       },

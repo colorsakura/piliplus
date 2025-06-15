@@ -11,8 +11,11 @@ import 'package:PiliPlus/models/common/badge_type.dart';
 import 'package:PiliPlus/models/common/image_preview_type.dart';
 import 'package:PiliPlus/models/common/image_type.dart';
 import 'package:PiliPlus/utils/app_scheme.dart';
+import 'package:PiliPlus/utils/date_util.dart';
+import 'package:PiliPlus/utils/duration_util.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/id_utils.dart';
+import 'package:PiliPlus/utils/image_util.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -60,7 +63,7 @@ class ChatItem extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(top: 6, bottom: 18),
                 child: Text(
-                  Utils.dateFormat(item.timestamp.toInt()),
+                  DateUtil.chatFormat(item.timestamp.toInt()),
                   textAlign: TextAlign.center,
                   style: TextStyle(color: theme.colorScheme.outline),
                 ),
@@ -417,7 +420,7 @@ class ChatItem extends StatelessWidget {
                         type: PBadgeType.gray,
                         text: content['times'] == 0
                             ? '--:--'
-                            : Utils.timeFormat(content['times']),
+                            : DurationUtil.formatDuration(content['times']),
                       )
                     ],
                   ),
@@ -728,7 +731,7 @@ class ChatItem extends StatelessWidget {
           child: GestureDetector(
             onTap: url == null ? null : () => PiliScheme.routePushFromUrl(url),
             child: CachedNetworkImage(
-              imageUrl: Utils.thumbnailImgUrl(content['pic_url']),
+              imageUrl: ImageUtil.thumbnailUrl(content['pic_url']),
             ),
           ),
         ),

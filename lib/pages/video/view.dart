@@ -43,12 +43,12 @@ import 'package:PiliPlus/plugin/pl_player/utils/fullscreen.dart';
 import 'package:PiliPlus/plugin/pl_player/view.dart';
 import 'package:PiliPlus/services/service_locator.dart';
 import 'package:PiliPlus/services/shutdown_timer_service.dart';
-import 'package:PiliPlus/utils/download.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/id_utils.dart';
+import 'package:PiliPlus/utils/image_util.dart';
+import 'package:PiliPlus/utils/num_util.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:PiliPlus/utils/storage.dart';
-import 'package:PiliPlus/utils/utils.dart';
 import 'package:auto_orientation/auto_orientation.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_debounce/easy_throttle.dart';
@@ -751,7 +751,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                                                               context);
                                                       break;
                                                     case 'savePic':
-                                                      DownloadUtils.downloadImg(
+                                                      ImageUtil.downloadImg(
                                                         context,
                                                         [
                                                           videoDetailController
@@ -1292,7 +1292,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                             videoDetailController.showNoteList(context);
                             break;
                           case 'savePic':
-                            DownloadUtils.downloadImg(
+                            ImageUtil.downloadImg(
                               context,
                               [videoDetailController.videoItem['pic']],
                             );
@@ -1475,7 +1475,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
             if (text == '评论') {
               return Tab(
                 text:
-                    '评论${_videoReplyController.count.value == -1 ? '' : ' ${Utils.numFormat(_videoReplyController.count.value)}'}',
+                    '评论${_videoReplyController.count.value == -1 ? '' : ' ${NumUtil.numFormat(_videoReplyController.count.value)}'}',
               );
             } else {
               return Tab(text: text);

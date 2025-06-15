@@ -10,6 +10,8 @@ import 'package:PiliPlus/models/common/history_business_type.dart';
 import 'package:PiliPlus/models_new/history/list.dart';
 import 'package:PiliPlus/pages/common/multi_select_controller.dart';
 import 'package:PiliPlus/pages/history/base_controller.dart';
+import 'package:PiliPlus/utils/date_util.dart';
+import 'package:PiliPlus/utils/duration_util.dart';
 import 'package:PiliPlus/utils/feed_back.dart';
 import 'package:PiliPlus/utils/id_utils.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
@@ -131,7 +133,7 @@ class HistoryItem extends StatelessWidget {
                               PBadge(
                                 text: item.progress == -1
                                     ? '已看完'
-                                    : '${Utils.timeFormat(item.progress)}/${Utils.timeFormat(item.duration!)}',
+                                    : '${DurationUtil.formatDuration(item.progress)}/${DurationUtil.formatDuration(item.duration)}',
                                 right: 6.0,
                                 bottom: 8.0,
                                 type: PBadgeType.gray,
@@ -332,7 +334,7 @@ class HistoryItem extends StatelessWidget {
               ),
             ),
           Text(
-            Utils.dateFormat(item.viewAt!),
+            DateUtil.chatFormat(item.viewAt!, isHistory: true),
             style: TextStyle(
               fontSize: theme.textTheme.labelMedium!.fontSize,
               color: theme.colorScheme.outline,

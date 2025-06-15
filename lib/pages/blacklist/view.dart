@@ -6,8 +6,8 @@ import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/common/image_type.dart';
 import 'package:PiliPlus/models_new/blacklist/list.dart';
 import 'package:PiliPlus/pages/blacklist/controller.dart';
+import 'package:PiliPlus/utils/date_util.dart';
 import 'package:PiliPlus/utils/storage.dart';
-import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -89,7 +89,7 @@ class _BlackListPageState extends State<BlackListPage> {
                     style: const TextStyle(fontSize: 14),
                   ),
                   subtitle: Text(
-                    Utils.dateFormat(item.mtime),
+                    DateUtil.dateFormat(item.mtime),
                     maxLines: 1,
                     style:
                         TextStyle(color: Theme.of(context).colorScheme.outline),

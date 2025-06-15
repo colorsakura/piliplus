@@ -8,6 +8,8 @@ import 'package:PiliPlus/common/widgets/video_popup_menu.dart';
 import 'package:PiliPlus/models/common/badge_type.dart';
 import 'package:PiliPlus/models/common/stat_type.dart';
 import 'package:PiliPlus/models_new/space/space_archive/item.dart';
+import 'package:PiliPlus/utils/date_util.dart';
+import 'package:PiliPlus/utils/duration_util.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
@@ -141,14 +143,14 @@ class VideoCardHMemberVideo extends StatelessWidget {
                                         text: videoItem.history!.progress ==
                                                 videoItem.history!.duration
                                             ? '已看完'
-                                            : '${Utils.timeFormat(videoItem.history!.progress)}/${Utils.timeFormat(videoItem.history!.duration)}',
+                                            : '${DurationUtil.formatDuration(videoItem.history!.progress)}/${DurationUtil.formatDuration(videoItem.history!.duration)}',
                                         right: 6.0,
                                         bottom: 6.0,
                                         type: PBadgeType.gray,
                                       );
                                     } catch (_) {
                                       return PBadge(
-                                        text: Utils.timeFormat(
+                                        text: DurationUtil.formatDuration(
                                             videoItem.duration),
                                         right: 6.0,
                                         bottom: 6.0,
@@ -158,7 +160,8 @@ class VideoCardHMemberVideo extends StatelessWidget {
                                   }),
                                 ] else if (videoItem.duration > 0)
                                   PBadge(
-                                    text: Utils.timeFormat(videoItem.duration),
+                                    text: DurationUtil.formatDuration(
+                                        videoItem.duration),
                                     right: 6.0,
                                     bottom: 6.0,
                                     type: PBadgeType.gray,
@@ -214,7 +217,7 @@ class VideoCardHMemberVideo extends StatelessWidget {
           ),
           Text(
             videoItem.season != null
-                ? Utils.dateFormat(videoItem.season!.mtime)
+                ? DateUtil.dateFormat(videoItem.season!.mtime)
                 : videoItem.publishTimeText ?? '',
             maxLines: 1,
             style: TextStyle(

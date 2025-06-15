@@ -2,7 +2,7 @@ import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/common/widgets/image/image_save.dart';
 import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
 import 'package:PiliPlus/models_new/fav/fav_folder/list.dart';
-import 'package:PiliPlus/utils/utils.dart';
+import 'package:PiliPlus/utils/fav_util.dart';
 import 'package:flutter/material.dart';
 
 class FavVideoItem extends StatelessWidget {
@@ -94,7 +94,7 @@ class FavVideoItem extends StatelessWidget {
           ),
           const Spacer(),
           Text(
-            Utils.isPublicFavText(item.attr),
+            FavUtil.isPublicFavText(item.attr),
             style: TextStyle(
               fontSize: fontSize,
               color: color,

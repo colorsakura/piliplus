@@ -16,9 +16,11 @@ import 'package:PiliPlus/pages/video/introduction/ugc/widgets/action_item.dart';
 import 'package:PiliPlus/pages/video/introduction/ugc/widgets/page.dart';
 import 'package:PiliPlus/pages/video/introduction/ugc/widgets/season.dart';
 import 'package:PiliPlus/utils/app_scheme.dart';
+import 'package:PiliPlus/utils/date_util.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/feed_back.dart';
 import 'package:PiliPlus/utils/id_utils.dart';
+import 'package:PiliPlus/utils/num_util.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:PiliPlus/utils/request_utils.dart';
 import 'package:PiliPlus/utils/storage.dart';
@@ -345,7 +347,7 @@ class _VideoInfoState extends State<VideoInfo> {
                                         const SizedBox(height: 0),
                                         Obx(
                                           () => Text(
-                                            '${Utils.numFormat(videoIntroController.userStat['follower'])}粉丝    ${videoIntroController.userStat['archive_count'] != null ? '${Utils.numFormat(videoIntroController.userStat['archive_count'])}视频' : ''}',
+                                            '${NumUtil.numFormat(videoIntroController.userStat['follower'])}粉丝    ${videoIntroController.userStat['archive_count'] != null ? '${NumUtil.numFormat(videoIntroController.userStat['archive_count'])}视频' : ''}',
                                             style: TextStyle(
                                               fontSize: 12,
                                               color: theme.colorScheme.outline,
@@ -570,11 +572,11 @@ class _VideoInfoState extends State<VideoInfo> {
                             color: theme.colorScheme.outline,
                           ),
                           Text(
-                            Utils.dateFormat(
-                                !widget.isLoading
-                                    ? videoDetail.pubdate
-                                    : videoItem['pubdate'],
-                                formatType: 'detail'),
+                            DateUtil.format(
+                              !widget.isLoading
+                                  ? videoDetail.pubdate
+                                  : videoItem['pubdate'],
+                            ),
                             style: TextStyle(
                               fontSize: 12,
                               color: theme.colorScheme.outline,
@@ -853,7 +855,7 @@ class _VideoInfoState extends State<VideoInfo> {
               isLoading: widget.isLoading,
               semanticsLabel: '点赞',
               text: !widget.isLoading
-                  ? Utils.numFormat(videoDetail.stat!.like!)
+                  ? NumUtil.numFormat(videoDetail.stat!.like!)
                   : '-',
               needAnim: true,
               hasTriple: videoIntroController.hasLike.value &&
@@ -892,7 +894,7 @@ class _VideoInfoState extends State<VideoInfo> {
               isLoading: widget.isLoading,
               semanticsLabel: '投币',
               text: !widget.isLoading
-                  ? Utils.numFormat(videoDetail.stat!.coin!)
+                  ? NumUtil.numFormat(videoDetail.stat!.coin!)
                   : '-',
               needAnim: true,
             ),
@@ -909,7 +911,7 @@ class _VideoInfoState extends State<VideoInfo> {
               isLoading: widget.isLoading,
               semanticsLabel: '收藏',
               text: !widget.isLoading
-                  ? Utils.numFormat(videoDetail.stat!.favorite!)
+                  ? NumUtil.numFormat(videoDetail.stat!.favorite!)
                   : '-',
               needAnim: true,
             ),
@@ -932,7 +934,7 @@ class _VideoInfoState extends State<VideoInfo> {
             isLoading: widget.isLoading,
             semanticsLabel: '分享',
             text: !widget.isLoading
-                ? Utils.numFormat(videoDetail.stat!.share!)
+                ? NumUtil.numFormat(videoDetail.stat!.share!)
                 : '分享',
           ),
         ],

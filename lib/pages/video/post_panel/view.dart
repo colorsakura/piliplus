@@ -13,8 +13,8 @@ import 'package:PiliPlus/models_new/sponsor_block/segment_item.dart';
 import 'package:PiliPlus/pages/common/common_collapse_slide_page.dart';
 import 'package:PiliPlus/pages/video/controller.dart';
 import 'package:PiliPlus/plugin/pl_player/controller.dart';
+import 'package:PiliPlus/utils/duration_util.dart';
 import 'package:PiliPlus/utils/storage.dart';
-import 'package:PiliPlus/utils/utils.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/material.dart';
@@ -423,7 +423,7 @@ class _PostPanelState extends CommonCollapseSlidePageState<PostPanel> {
     required int index,
     required bool isFirst,
   }) {
-    String value = Utils.timeFormat(
+    String value = DurationUtil.formatDuration(
         isFirst ? list![index].segment.first : list![index].segment.second);
     return [
       Text(

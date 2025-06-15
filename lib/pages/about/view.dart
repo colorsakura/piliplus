@@ -11,6 +11,7 @@ import 'package:PiliPlus/utils/cache_manage.dart';
 import 'package:PiliPlus/utils/login_utils.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:PiliPlus/utils/storage.dart';
+import 'package:PiliPlus/utils/update.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show Clipboard, ClipboardData;
@@ -120,7 +121,7 @@ class _AboutPageState extends State<AboutPage> {
           ),
           Obx(
             () => ListTile(
-              onTap: () => Utils.checkUpdate(false),
+              onTap: () => Update.checkUpdate(false),
               onLongPress: () => Utils.copyText(currentVersion.value),
               title: const Text('当前版本'),
               leading: const Icon(Icons.commit_outlined),

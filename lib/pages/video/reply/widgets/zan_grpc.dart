@@ -2,7 +2,7 @@ import 'package:PiliPlus/grpc/bilibili/main/community/reply/v1.pb.dart'
     show ReplyInfo;
 import 'package:PiliPlus/http/reply.dart';
 import 'package:PiliPlus/utils/feed_back.dart';
-import 'package:PiliPlus/utils/utils.dart';
+import 'package:PiliPlus/utils/num_util.dart';
 import 'package:fixnum/fixnum.dart' as $fixnum;
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -146,7 +146,7 @@ class _ZanButtonGrpcState extends State<ZanButtonGrpc> {
                     return ScaleTransition(scale: animation, child: child);
                   },
                   child: Text(
-                    Utils.numFormat(widget.replyItem.like.toInt()),
+                    NumUtil.numFormat(widget.replyItem.like.toInt()),
                     style: TextStyle(
                       color: isLike ? primary : color,
                       fontSize: theme.textTheme.labelSmall!.fontSize,

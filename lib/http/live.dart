@@ -14,8 +14,8 @@ import 'package:PiliPlus/models_new/live/live_room_info_h5/data.dart';
 import 'package:PiliPlus/models_new/live/live_room_play_info/data.dart';
 import 'package:PiliPlus/models_new/live/live_search/data.dart';
 import 'package:PiliPlus/models_new/live/live_second_list/data.dart';
+import 'package:PiliPlus/utils/app_sign.dart';
 import 'package:PiliPlus/utils/storage.dart';
-import 'package:PiliPlus/utils/utils.dart';
 import 'package:PiliPlus/utils/wbi_sign.dart';
 import 'package:dio/dio.dart';
 
@@ -181,7 +181,7 @@ class LiveHttp {
       'statistics': Constants.statistics,
       'ts': DateTime.now().millisecondsSinceEpoch ~/ 1000,
     };
-    Utils.appSign(
+    AppSign.appSign(
       params,
       Constants.appKey,
       Constants.appSec,
@@ -249,7 +249,7 @@ class LiveHttp {
       'statistics': Constants.statistics,
       'ts': (DateTime.now().millisecondsSinceEpoch ~/ 1000).toString(),
     };
-    Utils.appSign(
+    AppSign.appSign(
       params,
       Constants.appKey,
       Constants.appSec,
@@ -282,7 +282,7 @@ class LiveHttp {
       'statistics': Constants.statistics,
       'ts': DateTime.now().millisecondsSinceEpoch ~/ 1000,
     };
-    Utils.appSign(
+    AppSign.appSign(
       params,
       Constants.appKey,
       Constants.appSec,
@@ -317,7 +317,7 @@ class LiveHttp {
       'statistics': Constants.statistics,
       'ts': DateTime.now().millisecondsSinceEpoch ~/ 1000,
     };
-    Utils.appSign(
+    AppSign.appSign(
       params,
       Constants.appKey,
       Constants.appSec,
@@ -355,7 +355,7 @@ class LiveHttp {
       'statistics': Constants.statistics,
       'ts': DateTime.now().millisecondsSinceEpoch ~/ 1000,
     };
-    Utils.appSign(
+    AppSign.appSign(
       data,
       Constants.appKey,
       Constants.appSec,
@@ -396,7 +396,7 @@ class LiveHttp {
       'statistics': Constants.statistics,
       'ts': DateTime.now().millisecondsSinceEpoch ~/ 1000,
     };
-    Utils.appSign(
+    AppSign.appSign(
       params,
       Constants.appKey,
       Constants.appSec,
@@ -438,7 +438,7 @@ class LiveHttp {
       'ts': DateTime.now().millisecondsSinceEpoch ~/ 1000,
       'type': type.name,
     };
-    Utils.appSign(
+    AppSign.appSign(
       params,
       Constants.appKey,
       Constants.appSec,

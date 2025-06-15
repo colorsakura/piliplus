@@ -2,30 +2,34 @@ import 'dart:io';
 
 import 'package:PiliPlus/http/init.dart';
 import 'package:PiliPlus/utils/extension.dart';
+import 'package:PiliPlus/utils/global_data.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart' show DateFormat;
 import 'package:live_photo_maker/live_photo_maker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:saver_gallery/saver_gallery.dart';
 import 'package:share_plus/share_plus.dart';
 
-class DownloadUtils {
+class ImageUtil {
+  static String get time =>
+      DateFormat('yyyy-MM-dd_HH-mm-ss').format(DateTime.now());
+
   // 图片分享
-  static Future<void> onShareImg(String imgUrl) async {
+  static Future<void> onShareImg(String url) async {
     try {
       SmartDialog.showLoading();
       var response = await Request()
-          .get(imgUrl, options: Options(responseType: ResponseType.bytes));
+          .get(url, options: Options(responseType: ResponseType.bytes));
       final temp = await getTemporaryDirectory();
       SmartDialog.dismiss();
-      String imgName =
-          "plpl_pic_${DateTime.now().toString().split('-').join()}.jpg";
-      var path = '${temp.path}/$imgName';
+      var name = Utils.getFileName(url);
+      var path = '${temp.path}/$name';
       File(path).writeAsBytesSync(response.data);
 
       Rect? sharePositionOrigin;
@@ -35,7 +39,7 @@ class DownloadUtils {
 
       Share.shareXFiles(
         [XFile(path)],
-        subject: imgUrl,
+        subject: url,
         sharePositionOrigin: sharePositionOrigin,
       );
     } catch (e) {
@@ -111,17 +115,9 @@ class DownloadUtils {
       SmartDialog.showLoading(msg: '正在下载');
 
       String tmpPath = (await getTemporaryDirectory()).path;
-      String time = DateTime.now()
-          .toString()
-          .replaceAll(' ', '_')
-          .replaceAll(':', '-')
-          .split('.')
-          .first;
-      late String imageName =
-          "cover_$time.${url.split('.').lastOrNull ?? 'jpg'}";
+      late String imageName = "cover_${Utils.getFileName(url)}";
       late String imagePath = '$tmpPath/$imageName';
-      String videoName =
-          "video_$time.${liveUrl.split('.').lastOrNull ?? 'mp4'}";
+      String videoName = "video_${Utils.getFileName(liveUrl)}";
       String videoPath = '$tmpPath/$videoName';
 
       await Request.dio.download(liveUrl, videoPath);
@@ -167,10 +163,7 @@ class DownloadUtils {
   }
 
   static Future<bool> downloadImg(
-    BuildContext context,
-    List<String> imgList, {
-    String imgType = 'cover',
-  }) async {
+      BuildContext context, List<String> imgList) async {
     if (!await checkPermissionDependOnSdkInt(context)) return false;
     final cancelToken = CancelToken();
     SmartDialog.showLoading(
@@ -237,5 +230,29 @@ class DownloadUtils {
     } finally {
       SmartDialog.dismiss(status: SmartStatus.loading);
     }
+  }
+
+  static final regExp =
+      RegExp(r'(@(\d+[a-z]_?)*)(\..*)?$', caseSensitive: false);
+
+  static String thumbnailUrl(String? src, [int? quality]) {
+    if (src != null && quality != 100) {
+      bool hasMatch = false;
+      src = src.splitMapJoin(
+        regExp,
+        onMatch: (Match match) {
+          hasMatch = true;
+          String suffix = match.group(3) ?? '.webp';
+          return '${match.group(1)}_${quality ?? GlobalData().imgQuality}q$suffix';
+        },
+        onNonMatch: (String str) {
+          return str;
+        },
+      );
+      if (!hasMatch) {
+        src += '@${quality ?? GlobalData().imgQuality}q.webp';
+      }
+    }
+    return src.http2https;
   }
 }

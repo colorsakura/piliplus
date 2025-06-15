@@ -21,7 +21,7 @@ import 'package:PiliPlus/pages/video/introduction/ugc/widgets/menu_row.dart';
 import 'package:PiliPlus/plugin/pl_player/controller.dart';
 import 'package:PiliPlus/plugin/pl_player/models/play_repeat.dart';
 import 'package:PiliPlus/plugin/pl_player/utils/fullscreen.dart';
-import 'package:PiliPlus/utils/download.dart';
+import 'package:PiliPlus/utils/image_util.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:PiliPlus/utils/storage.dart';
@@ -37,6 +37,7 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
+import 'package:intl/intl.dart' show DateFormat;
 import 'package:marquee/marquee.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:media_kit/media_kit.dart';
@@ -148,7 +149,7 @@ class HeaderControlState extends State<HeaderControl> {
                     dense: true,
                     onTap: () {
                       Get.back();
-                      DownloadUtils.downloadImg(
+                      ImageUtil.downloadImg(
                         context,
                         [widget.videoDetailCtr.videoItem['pic']],
                       );
@@ -1786,12 +1787,15 @@ class HeaderControlState extends State<HeaderControl> {
     );
   }
 
+  static final _format = DateFormat('HH:mm');
+
   void startClock() {
     clock ??= Timer.periodic(const Duration(seconds: 1), (Timer t) {
       if (!mounted) {
+        clock?.cancel();
         return;
       }
-      now.value = DateTime.now().toString().split(' ')[1].substring(0, 5);
+      now.value = _format.format(DateTime.now());
     });
   }
 

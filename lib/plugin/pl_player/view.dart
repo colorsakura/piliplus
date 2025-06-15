@@ -25,10 +25,10 @@ import 'package:PiliPlus/plugin/pl_player/widgets/bottom_control.dart';
 import 'package:PiliPlus/plugin/pl_player/widgets/common_btn.dart';
 import 'package:PiliPlus/plugin/pl_player/widgets/forward_seek.dart';
 import 'package:PiliPlus/plugin/pl_player/widgets/play_pause_btn.dart';
+import 'package:PiliPlus/utils/duration_util.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/id_utils.dart';
 import 'package:PiliPlus/utils/storage.dart';
-import 'package:PiliPlus/utils/utils.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_debounce/easy_throttle.dart';
 import 'package:fl_chart/fl_chart.dart';
@@ -340,20 +340,19 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
           // 播放时间
           Obx(() {
             return Text(
-              Utils.timeFormat(plPlayerController.positionSeconds.value),
+              DurationUtil.formatDuration(
+                  plPlayerController.positionSeconds.value),
               style: const TextStyle(
                 color: Colors.white,
                 fontSize: 10,
                 height: 1.4,
                 fontFeatures: [FontFeature.tabularFigures()],
               ),
-              semanticsLabel:
-                  '已播放${Utils.durationReadFormat(Utils.timeFormat(plPlayerController.positionSeconds.value))}',
             );
           }),
           Obx(
             () => Text(
-              Utils.timeFormat(
+              DurationUtil.formatDuration(
                   plPlayerController.durationSeconds.value.inSeconds),
               style: const TextStyle(
                 color: Color(0xFFD0D0D0),
@@ -361,8 +360,6 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                 height: 1.4,
                 fontFeatures: [FontFeature.tabularFigures()],
               ),
-              semanticsLabel:
-                  '共${Utils.durationReadFormat(Utils.timeFormat(plPlayerController.durationSeconds.value.inSeconds))}',
             ),
           ),
         ],
@@ -1139,7 +1136,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                         children: [
                           Obx(() {
                             return Text(
-                              Utils.timeFormat(plPlayerController
+                              DurationUtil.formatDuration(plPlayerController
                                   .sliderTempPosition.value.inSeconds),
                               style: textStyle,
                             );
