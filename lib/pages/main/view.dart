@@ -12,7 +12,6 @@ import 'package:PiliPlus/pages/home/view.dart';
 import 'package:PiliPlus/pages/main/controller.dart';
 import 'package:PiliPlus/pages/mine/controller.dart';
 import 'package:PiliPlus/utils/app_scheme.dart';
-import 'package:PiliPlus/utils/event_bus.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/feed_back.dart';
 import 'package:PiliPlus/utils/storage.dart';
@@ -163,7 +162,6 @@ class _MainAppState extends State<MainApp>
     MainApp.routeObserver.unsubscribe(this);
     WidgetsBinding.instance.removeObserver(this);
     GStorage.close();
-    EventBus().off(EventName.loginEvent);
     PiliScheme.listener?.cancel();
     super.dispose();
   }
