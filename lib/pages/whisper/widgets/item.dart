@@ -178,76 +178,75 @@ class WhisperSessionItem extends StatelessWidget {
         },
       ),
       title: Row(
+        spacing: 5,
         children: [
-          Text(
-            item.sessionInfo.sessionName,
-            style: TextStyle(
-              fontSize: 15,
-              color: vipInfo?['status'] != null &&
-                      vipInfo!['status'] > 0 &&
-                      vipInfo['type'] == 2
-                  ? context.vipColor
-                  : null,
+          Expanded(
+            child: Row(
+              spacing: 5,
+              children: [
+                Flexible(
+                  child: Text(
+                    item.sessionInfo.sessionName,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontSize: 15,
+                      color: vipInfo?['status'] != null &&
+                              vipInfo!['status'] > 0 &&
+                              vipInfo['type'] == 2
+                          ? context.vipColor
+                          : null,
+                    ),
+                  ),
+                ),
+                if (item.sessionInfo.userLabel.style.borderedLabel.hasText())
+                  PBadge(
+                    isStack: false,
+                    type: PBadgeType.line_secondary,
+                    size: PBadgeSize.small,
+                    fontSize: 10,
+                    isBold: false,
+                    text: item.sessionInfo.userLabel.style.borderedLabel.text,
+                  ),
+                if (item.sessionInfo.isLive)
+                  Image.asset('assets/images/live/live.gif', height: 15),
+              ],
             ),
           ),
-          if (item.sessionInfo.userLabel.style.borderedLabel.hasText()) ...[
-            const SizedBox(width: 5),
-            PBadge(
-              isStack: false,
-              type: PBadgeType.line_secondary,
-              size: PBadgeSize.small,
-              fontSize: 10,
-              isBold: false,
-              text: item.sessionInfo.userLabel.style.borderedLabel.text,
+          if (item.hasTimestamp())
+            Text(
+              DateUtil.dateFormat((item.timestamp ~/ 1000000).toInt()),
+              style: TextStyle(
+                fontSize: 12,
+                color: theme.colorScheme.outline,
+              ),
             ),
-          ],
-          if (item.sessionInfo.isLive) ...[
-            const SizedBox(width: 5),
-            Image.asset('assets/images/live/live.gif', height: 15),
-          ],
         ],
       ),
-      subtitle: Text(
-        item.msgSummary.rawMsg,
-        maxLines: 1,
-        overflow: TextOverflow.ellipsis,
-        style: theme.textTheme.labelMedium!
-            .copyWith(color: theme.colorScheme.outline),
-      ),
-      trailing: Row(
-        mainAxisSize: MainAxisSize.min,
+      subtitle: Row(
         children: [
-          if (item.isMuted) ...[
+          Expanded(
+            child: Text(
+              item.msgSummary.rawMsg,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: theme.textTheme.labelMedium!
+                  .copyWith(color: theme.colorScheme.outline),
+            ),
+          ),
+          if (item.isMuted)
             Icon(
               size: 16,
               Icons.notifications_off,
               color: theme.colorScheme.outline,
-            ),
-            if (item.hasTimestamp()) const SizedBox(width: 4),
-          ],
-          Column(
-            spacing: 10,
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              if (item.hasTimestamp())
-                Text(
-                  DateUtil.dateFormat((item.timestamp ~/ 1000000).toInt()),
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: theme.colorScheme.outline,
-                  ),
-                ),
-              if (item.hasUnread() &&
-                  item.unread.style != UnreadStyle.UNREAD_STYLE_NONE)
-                Badge(
-                  label: item.unread.style == UnreadStyle.UNREAD_STYLE_NUMBER
-                      ? Text(item.unread.number.toString())
-                      : null,
-                  alignment: Alignment.topRight,
-                )
-            ],
-          ),
+            )
+          else if (item.hasUnread() &&
+              item.unread.style != UnreadStyle.UNREAD_STYLE_NONE)
+            Badge(
+              label: item.unread.style == UnreadStyle.UNREAD_STYLE_NUMBER
+                  ? Text(item.unread.number.toString())
+                  : null,
+            )
         ],
       ),
     );
