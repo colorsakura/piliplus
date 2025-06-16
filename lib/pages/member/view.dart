@@ -142,8 +142,8 @@ class _MemberPageState extends State<MemberPage> {
               if (_userController.accountService.isLogin.value)
                 if (_userController.mid ==
                     _userController.accountService.mid) ...[
-                  if ((_userController
-                              .loadingState.value.data?.card?.vip?.status ??
+                  if ((_userController.loadingState.value.dataOrNull?.card?.vip
+                              ?.status ??
                           0) >
                       0)
                     PopupMenuItem(

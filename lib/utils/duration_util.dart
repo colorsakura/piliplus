@@ -17,7 +17,10 @@ class DurationUtil {
         : "${h.toString().padLeft(2, '0')}:${m.toString().padLeft(2, '0')}:$sms";
   }
 
-  static int parseDuration(String data) {
+  static int parseDuration(String? data) {
+    if (data == null || data.isEmpty) {
+      return 0;
+    }
     List<int> split =
         data.split(':').reversed.map((e) => int.parse(e)).toList();
     int duration = 0;
