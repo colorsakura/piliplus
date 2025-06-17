@@ -25,6 +25,7 @@ import 'package:PiliPlus/pages/group_panel/view.dart';
 import 'package:PiliPlus/pages/later/controller.dart';
 import 'package:PiliPlus/utils/feed_back.dart';
 import 'package:PiliPlus/utils/storage.dart';
+import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -294,12 +295,30 @@ class RequestUtils {
             await Future.delayed(const Duration(seconds: 5));
           }
           var res = await DynamicsHttp.dynamicDetail(id: id, clearCookie: true);
-          showDialog(
-            context: Get.context!,
-            builder: (context) => AlertDialog(
+          bool isBan = !res['status'];
+          Get.dialog(
+            AlertDialog(
               title: const Text('动态检查结果'),
               content: SelectableText(
-                  '${res['status'] ? '无账号状态下找到了你的动态，动态正常！' : '你的动态被shadow ban（仅自己可见）！'}${dynText != null ? ' \n\n动态内容: $dynText' : ''}'),
+                  '${!isBan ? '无账号状态下找到了你的动态，动态正常！' : '你的动态被shadow ban（仅自己可见）！'}${dynText != null ? ' \n\n动态内容: $dynText' : ''}'),
+              actions: isBan
+                  ? [
+                      TextButton(
+                        onPressed: () {
+                          Get.back();
+                          Utils.copyText('https://www.bilibili.com/opus/$id');
+                          Get.toNamed(
+                            '/webview',
+                            parameters: {
+                              'url':
+                                  'https://www.bilibili.com/h5/comment/appeal?native.theme=2&night=${Get.isDarkMode ? 1 : 0}'
+                            },
+                          );
+                        },
+                        child: const Text('申诉'),
+                      ),
+                    ]
+                  : null,
             ),
           );
         }

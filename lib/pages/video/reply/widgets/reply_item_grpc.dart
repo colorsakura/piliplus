@@ -1158,7 +1158,7 @@ class ReplyItemGrpc extends StatelessWidget {
             leading: const Icon(Icons.save_alt, size: 19),
             title: Text('保存评论', style: style),
           ),
-          if (item.mid == ownerMid)
+          if (kDebugMode || item.mid == ownerMid)
             ListTile(
               onTap: () => menuActionHandler('checkReply'),
               minLeadingWidth: 0,

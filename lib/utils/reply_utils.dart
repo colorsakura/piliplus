@@ -9,15 +9,16 @@ import 'package:PiliPlus/models/common/reply/reply_sort_type.dart';
 import 'package:PiliPlus/models_new/reply/data.dart';
 import 'package:PiliPlus/utils/accounts/account.dart';
 import 'package:PiliPlus/utils/extension.dart';
+import 'package:PiliPlus/utils/id_utils.dart';
 import 'package:PiliPlus/utils/storage.dart' show Accounts;
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
+import 'package:get/get.dart';
 
 class ReplyUtils {
   static void onCheckReply({
-    required BuildContext context,
     required ReplyInfo replyInfo,
     required bool biliSendCommAntifraud,
     required sourceId,
@@ -25,7 +26,6 @@ class ReplyUtils {
   }) {
     try {
       _checkReply(
-        context: context,
         oid: replyInfo.oid.toInt(),
         type: replyInfo.type.toInt(),
         id: replyInfo.id.toInt(),
@@ -50,7 +50,6 @@ class ReplyUtils {
 
   // ref https://github.com/freedom-introvert/biliSendCommAntifraud
   static Future<void> _checkReply({
-    required BuildContext context,
     required int oid,
     required int type,
     required int id,
@@ -99,19 +98,42 @@ class ReplyUtils {
     if (!isManual) {
       await Future.delayed(const Duration(seconds: 8));
     }
-    void showReplyCheckResult(String message) {
-      if (context.mounted) {
-        showDialog(
-          context: context,
-          builder: (context) => AlertDialog(
-            title: const Text('评论检查结果'),
-            content: SelectableText(message),
-          ),
-        );
-      }
+    void showReplyCheckResult(String message, {bool isBan = false}) {
+      Get.dialog(
+        AlertDialog(
+          title: const Text('评论检查结果'),
+          content: SelectableText(message),
+          actions: isBan
+              ? [
+                  TextButton(
+                    onPressed: () {
+                      Get.back();
+                      String? uri;
+                      switch (type) {
+                        case 1:
+                          uri = IdUtils.av2bv(oid);
+                        case 17:
+                          uri = 'https://www.bilibili.com/opus/$oid';
+                      }
+                      if (uri != null) {
+                        Utils.copyText(uri);
+                      }
+                      Get.toNamed(
+                        '/webview',
+                        parameters: {
+                          'url':
+                              'https://www.bilibili.com/h5/comment/appeal?native.theme=2&night=${Get.isDarkMode ? 1 : 0}'
+                        },
+                      );
+                    },
+                    child: const Text('申诉'),
+                  ),
+                ]
+              : null,
+        ),
+      );
     }
 
-    if (!context.mounted) return;
     // root reply
     if (root == 0) {
       // no cookie check
@@ -125,7 +147,7 @@ class ReplyUtils {
         enableFilter: false,
         antiGoodsReply: false,
       );
-      if (!context.mounted) return;
+
       if (res is Error) {
         SmartDialog.showToast('获取评论主列表时发生错误：${res.errMsg}');
         return;
@@ -138,7 +160,7 @@ class ReplyUtils {
           showReplyCheckResult('无账号状态下找到了你的评论，评论正常！\n\n你的评论：$message');
         } else {
           // not found
-          if (!context.mounted) return;
+
           // cookie check
           final res1 = await ReplyHttp.replyReplyList(
             isLogin: true,
@@ -149,13 +171,13 @@ class ReplyUtils {
             filterBanWord: false,
             antiGoodsReply: false,
           );
-          if (!context.mounted) return;
+
           if (res1 is Error) {
             // not found
-            showReplyCheckResult('无法找到你的评论。\n\n你的评论：$message');
+            showReplyCheckResult('无法找到你的评论。\n\n你的评论：$message', isBan: true);
           } else {
             // found
-            if (!context.mounted) return;
+
             // no cookie check
             final res2 = await ReplyHttp.replyReplyList(
               isLogin: false,
@@ -167,13 +189,14 @@ class ReplyUtils {
               isCheck: true,
               antiGoodsReply: false,
             );
-            if (!context.mounted) return;
+
             if (res2 is Error) {
               // not found
               showReplyCheckResult(
                 res2.errMsg?.startsWith('12022') == true
                     ? '你的评论被shadow ban（仅自己可见）！\n\n你的评论: $message'
                     : '评论不可见(${res2.errMsg}): $message',
+                isBan: true,
               );
             } else {
               // found
@@ -191,7 +214,6 @@ https://api.bilibili.com/x/v2/reply/reply?oid=$oid&pn=1&ps=20&root=$id&type=$typ
       }
     } else {
       for (int i = 1;; i++) {
-        if (!context.mounted) return;
         final res3 = await ReplyHttp.replyReplyList(
           isLogin: false,
           oid: oid,
@@ -221,7 +243,6 @@ https://api.bilibili.com/x/v2/reply/reply?oid=$oid&pn=1&ps=20&root=$id&type=$typ
       }
 
       for (int i = 1;; i++) {
-        if (!context.mounted) return;
         final res4 = await ReplyHttp.replyReplyList(
           isLogin: true,
           oid: oid,
@@ -244,13 +265,16 @@ https://api.bilibili.com/x/v2/reply/reply?oid=$oid&pn=1&ps=20&root=$id&type=$typ
             // not found
           } else {
             // found
-            showReplyCheckResult('你的评论被shadow ban（仅自己可见）！\n\n你的评论: $message');
+            showReplyCheckResult(
+              '你的评论被shadow ban（仅自己可见）！\n\n你的评论: $message',
+              isBan: true,
+            );
             return;
           }
         }
       }
 
-      showReplyCheckResult('评论不可见: $message');
+      showReplyCheckResult('评论不可见: $message', isBan: true);
     }
   }
 }
