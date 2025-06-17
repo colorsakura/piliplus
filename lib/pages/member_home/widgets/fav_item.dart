@@ -17,15 +17,13 @@ class MemberFavItem extends StatelessWidget {
       type: MaterialType.transparency,
       child: InkWell(
         onTap: () {
-          if (item.type == 2 || item.type == 0 || item.type == 11) {
-            Get.toNamed(
-              '/favDetail',
-              parameters: {
-                'mediaId': item.mediaId.toString(),
-                'heroTag': Utils.makeHeroTag(item.mediaId),
-              },
-            );
-          }
+          Get.toNamed(
+            '/favDetail',
+            parameters: {
+              'mediaId': item.mediaId.toString(),
+              'heroTag': Utils.makeHeroTag(item.mediaId),
+            },
+          );
         },
         onLongPress: () => imageSaveDialog(
           title: item.title,
