@@ -1,3 +1,5 @@
+import 'dart:io' show Platform;
+
 import 'package:PiliPlus/common/widgets/image/image_view.dart';
 import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
 import 'package:PiliPlus/http/dynamics.dart';
@@ -283,7 +285,9 @@ TextSpan? richNode(
                       DynamicsHttp.dynPic(i.rid).then((res) {
                         if (res.isSuccess) {
                           var list = res.data;
-                          i.pics = list;
+                          if (Platform.isAndroid) {
+                            i.pics = list;
+                          }
                           if (list?.isNotEmpty == true) {
                             onView(list!);
                           }
