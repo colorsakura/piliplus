@@ -13,6 +13,7 @@ import 'package:PiliPlus/services/service_locator.dart';
 import 'package:PiliPlus/utils/app_scheme.dart';
 import 'package:PiliPlus/utils/cache_manage.dart';
 import 'package:PiliPlus/utils/data.dart';
+import 'package:PiliPlus/utils/date_util.dart';
 import 'package:PiliPlus/utils/recommend_filter.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/theme_utils.dart';
@@ -71,8 +72,8 @@ void main() async {
 
   if (GStorage.enableLog) {
     // 异常捕获 logo记录
-    const String buildConfig = '''\n
-Build Time: ${BuildConfig.buildTime}
+    String buildConfig = '''\n
+Build Time: ${DateUtil.format(BuildConfig.buildTime, format: DateUtil.longFormatDs)}
 Commit Hash: ${BuildConfig.commitHash}''';
     final Catcher2Options debugConfig = Catcher2Options(
       SilentReportMode(),

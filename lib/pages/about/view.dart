@@ -8,6 +8,7 @@ import 'package:PiliPlus/pages/mine/controller.dart';
 import 'package:PiliPlus/services/loggeer.dart';
 import 'package:PiliPlus/utils/accounts/account.dart';
 import 'package:PiliPlus/utils/cache_manage.dart';
+import 'package:PiliPlus/utils/date_util.dart';
 import 'package:PiliPlus/utils/login_utils.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:PiliPlus/utils/storage.dart';
@@ -132,11 +133,11 @@ class _AboutPageState extends State<AboutPage> {
             ),
           ),
           ListTile(
-            title: const Text(
+            title: Text(
               '''
-Build Time: ${BuildConfig.buildTime}
+Build Time: ${DateUtil.format(BuildConfig.buildTime, format: DateUtil.longFormatDs)}
 Commit Hash: ${BuildConfig.commitHash}''',
-              style: TextStyle(fontSize: 14),
+              style: const TextStyle(fontSize: 14),
             ),
             leading: const Icon(Icons.info_outline),
             onTap: () => PageUtils.launchURL(
