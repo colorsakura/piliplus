@@ -1175,13 +1175,13 @@ class DynamicOpusModel {
   });
 
   String? jumpUrl;
-  List<OpusPicsModel>? pics;
+  List<OpusPicModel>? pics;
   SummaryModel? summary;
   String? title;
   DynamicOpusModel.fromJson(Map<String, dynamic> json) {
     jumpUrl = json['jump_url'];
     pics = (json['pics'] as List?)
-        ?.map<OpusPicsModel>((e) => OpusPicsModel.fromJson(e))
+        ?.map<OpusPicModel>((e) => OpusPicModel.fromJson(e))
         .toList();
     summary =
         json['summary'] != null ? SummaryModel.fromJson(json['summary']) : null;
@@ -1219,7 +1219,7 @@ class RichTextNodeItem {
   String? text;
   String? type;
   String? rid;
-  List<OpusPicsModel>? pics;
+  List<OpusPicModel>? pics;
   String? jumpUrl;
 
   RichTextNodeItem.fromJson(Map<String, dynamic> json) {
@@ -1231,7 +1231,7 @@ class RichTextNodeItem {
     pics = json['pics'] == null
         ? null
         : (json['pics'] as List?)
-            ?.map((e) => OpusPicsModel.fromJson(e))
+            ?.map((e) => OpusPicModel.fromJson(e))
             .toList();
     jumpUrl = json['jump_url'];
   }
@@ -1267,26 +1267,23 @@ class DynamicNoneModel {
   }
 }
 
-class OpusPicsModel {
-  OpusPicsModel({
+class OpusPicModel {
+  OpusPicModel({
     this.width,
     this.height,
-    this.size,
     this.src,
     this.url,
   });
 
   int? width;
   int? height;
-  int? size;
   String? src;
   String? url;
   String? liveUrl;
 
-  OpusPicsModel.fromJson(Map<String, dynamic> json) {
+  OpusPicModel.fromJson(Map<String, dynamic> json) {
     width = json['width'];
     height = json['height'];
-    size = json['size'] != null ? json['size'].toInt() : 0;
     src = json['src'];
     url = json['url'];
     liveUrl = json['live_url'];

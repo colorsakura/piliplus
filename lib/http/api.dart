@@ -892,4 +892,6 @@ class Api {
   static const String dynTopicRcmd = '/x/topic/web/dynamic/rcmd';
 
   static const String matchInfo = '/x/esports/match/info';
+
+  static const String dynPic = '/x/polymer/web-dynamic/v1/detail/pic';
 }

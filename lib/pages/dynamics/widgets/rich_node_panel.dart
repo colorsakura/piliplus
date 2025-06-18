@@ -1,10 +1,14 @@
 import 'package:PiliPlus/common/widgets/image/image_view.dart';
 import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
+import 'package:PiliPlus/http/dynamics.dart';
 import 'package:PiliPlus/http/search.dart';
+import 'package:PiliPlus/models/common/image_preview_type.dart'
+    show SourceModel;
 import 'package:PiliPlus/models/common/image_type.dart';
 import 'package:PiliPlus/models/dynamics/result.dart';
 import 'package:PiliPlus/pages/dynamics/widgets/vote.dart';
 import 'package:PiliPlus/utils/app_scheme.dart';
+import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/foundation.dart' show kDebugMode;
@@ -235,28 +239,52 @@ TextSpan? richNode(
                 ),
               );
             break;
-          case 'RICH_TEXT_NODE_TYPE_VIEW_PICTURE'
-              when (i.pics?.isNotEmpty == true):
-            spanChildren
-              ..add(const TextSpan(text: '\n'))
-              ..add(
-                WidgetSpan(
-                  child: LayoutBuilder(
-                    builder: (context, constraints) {
-                      return imageView(
-                        constraints.maxWidth,
-                        i.pics!
-                            .map((item) => ImageModel(
-                                  url: item.src ?? '',
-                                  width: item.width,
-                                  height: item.height,
-                                ))
-                            .toList(),
-                      );
-                    },
+          case 'RICH_TEXT_NODE_TYPE_VIEW_PICTURE':
+            if (i.pics?.isNotEmpty == true) {
+              spanChildren
+                ..add(const TextSpan(text: '\n'))
+                ..add(
+                  WidgetSpan(
+                    child: LayoutBuilder(
+                      builder: (context, constraints) {
+                        return imageView(
+                          constraints.maxWidth,
+                          i.pics!
+                              .map((item) => ImageModel(
+                                    url: item.src ?? '',
+                                    width: item.width,
+                                    height: item.height,
+                                  ))
+                              .toList(),
+                        );
+                      },
+                    ),
                   ),
+                );
+            } else {
+              spanChildren.add(
+                TextSpan(
+                  text: i.text,
+                  style: style,
+                  recognizer: TapGestureRecognizer()
+                    ..onTap = () {
+                      DynamicsHttp.dynPic(i.rid).then((res) {
+                        if (res.isSuccess) {
+                          var list = res.data;
+                          if (list?.isNotEmpty == true) {
+                            Get.context!.imageView(
+                                imgList: list!
+                                    .map((e) => SourceModel(url: e.src!))
+                                    .toList());
+                          }
+                        } else {
+                          res.toast();
+                        }
+                      });
+                    },
                 ),
               );
+            }
             break;
           default:
             spanChildren.add(TextSpan(text: i.text, style: style));

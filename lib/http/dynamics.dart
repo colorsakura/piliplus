@@ -493,4 +493,21 @@ class DynamicsHttp {
       return Error(res.data['message']);
     }
   }
+
+  static Future<LoadingState<List<OpusPicModel>?>> dynPic(dynamic id) async {
+    final res = await Request().get(
+      Api.dynPic,
+      queryParameters: {
+        'id': id,
+        'web_location': 333.1368,
+      },
+    );
+    if (res.data['code'] == 0) {
+      return Success((res.data['data'] as List?)
+          ?.map((e) => OpusPicModel.fromJson(e))
+          .toList());
+    } else {
+      return Error(res.data['message']);
+    }
+  }
 }
