@@ -535,10 +535,10 @@ class _LiveRoomPageState extends State<LiveRoomPage>
 
   Widget get _buildInputWidget => Container(
         padding: EdgeInsets.only(
+          top: 5,
           left: 10,
-          top: 10,
           right: 10,
-          bottom: 25 + MediaQuery.paddingOf(context).bottom,
+          bottom: 15 + MediaQuery.paddingOf(context).bottom,
         ),
         decoration: const BoxDecoration(
           borderRadius: BorderRadius.only(
@@ -550,39 +550,42 @@ class _LiveRoomPageState extends State<LiveRoomPage>
           ),
           color: Color(0x1AFFFFFF),
         ),
-        child: Row(
-          children: [
-            Obx(
-              () => IconButton(
-                onPressed: () {
-                  plPlayerController.isOpenDanmu.value =
-                      !plPlayerController.isOpenDanmu.value;
-                  GStorage.setting.put(SettingBoxKey.enableShowDanmaku,
-                      plPlayerController.isOpenDanmu.value);
-                },
-                icon: Icon(
-                  plPlayerController.isOpenDanmu.value
-                      ? Icons.subtitles_outlined
-                      : Icons.subtitles_off_outlined,
-                  color: _color,
+        child: GestureDetector(
+          onTap: onSendDanmaku,
+          behavior: HitTestBehavior.opaque,
+          child: Padding(
+            padding: const EdgeInsets.only(top: 5, bottom: 10),
+            child: Row(
+              children: [
+                Obx(
+                  () => IconButton(
+                    onPressed: () {
+                      plPlayerController.isOpenDanmu.value =
+                          !plPlayerController.isOpenDanmu.value;
+                      GStorage.setting.put(SettingBoxKey.enableShowDanmaku,
+                          plPlayerController.isOpenDanmu.value);
+                    },
+                    icon: Icon(
+                      plPlayerController.isOpenDanmu.value
+                          ? Icons.subtitles_outlined
+                          : Icons.subtitles_off_outlined,
+                      color: _color,
+                    ),
+                  ),
                 ),
-              ),
-            ),
-            Expanded(
-              child: GestureDetector(
-                onTap: onSendDanmaku,
-                behavior: HitTestBehavior.opaque,
-                child: Text(
-                  '发送弹幕',
-                  style: TextStyle(color: _color),
+                Expanded(
+                  child: Text(
+                    '发送弹幕',
+                    style: TextStyle(color: _color),
+                  ),
                 ),
-              ),
+                IconButton(
+                  onPressed: () => onSendDanmaku(true),
+                  icon: Icon(Icons.emoji_emotions_outlined, color: _color),
+                ),
+              ],
             ),
-            IconButton(
-              onPressed: () => onSendDanmaku(true),
-              icon: Icon(Icons.emoji_emotions_outlined, color: _color),
-            ),
-          ],
+          ),
         ),
       );
 
