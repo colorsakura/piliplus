@@ -117,22 +117,17 @@ class OpusContent extends StatelessWidget {
                             );
                         }
                       case 'TEXT_NODE_TYPE_FORMULA' when (item.formula != null):
-                        return TextSpan(
-                          children: [
-                            WidgetSpan(
-                              child: CachedNetworkSVGImage(
-                                height: 65,
-                                'https://api.bilibili.com/x/web-frontend/mathjax/tex?formula=${Uri.encodeComponent(item.formula!.latexContent!)}',
-                                colorFilter: ColorFilter.mode(
-                                  colorScheme.onSurfaceVariant,
-                                  BlendMode.srcIn,
-                                ),
-                                alignment: Alignment.centerLeft,
-                                placeholderBuilder: (_) =>
-                                    const SizedBox.shrink(),
-                              ),
+                        return WidgetSpan(
+                          child: CachedNetworkSVGImage(
+                            height: 65,
+                            'https://api.bilibili.com/x/web-frontend/mathjax/tex?formula=${Uri.encodeComponent(item.formula!.latexContent!)}',
+                            colorFilter: ColorFilter.mode(
+                              colorScheme.onSurfaceVariant,
+                              BlendMode.srcIn,
                             ),
-                          ],
+                            alignment: Alignment.centerLeft,
+                            placeholderBuilder: (_) => const SizedBox.shrink(),
+                          ),
                         );
                       default:
                         return _getSpan(
