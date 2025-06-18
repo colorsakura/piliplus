@@ -14,7 +14,7 @@ class WhisperSettingsController
 
   final IMSettingType imSettingType;
 
-  RxString title = ''.obs;
+  final RxString title = ''.obs;
 
   @override
   void onInit() {

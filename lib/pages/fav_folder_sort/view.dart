@@ -23,44 +23,6 @@ class _FavFolderSortPageState extends State<FavFolderSortPage> {
   late List<FavFolderInfo> sortList =
       List<FavFolderInfo>.from(_favController.loadingState.value.data!);
 
-  final ScrollController _scrollController = ScrollController();
-
-  void listener() {
-    if (_favController.isEnd) {
-      return;
-    }
-    if (_scrollController.position.pixels >=
-        _scrollController.position.maxScrollExtent - 200) {
-      _favController.onLoadMore().whenComplete(() {
-        try {
-          if (_favController.loadingState.value.isSuccess) {
-            List<FavFolderInfo> list = _favController.loadingState.value.data!;
-            sortList.addAll(list.sublist(sortList.length));
-            if (mounted) {
-              setState(() {});
-            }
-          }
-        } catch (_) {}
-      });
-    }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    if (!_favController.isEnd) {
-      _scrollController.addListener(listener);
-    }
-  }
-
-  @override
-  void dispose() {
-    _scrollController
-      ..removeListener(listener)
-      ..dispose();
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -112,7 +74,6 @@ class _FavFolderSortPageState extends State<FavFolderSortPage> {
   Widget get _buildBody {
     return ReorderableListView.builder(
       key: _key,
-      scrollController: _scrollController,
       onReorder: onReorder,
       physics: const AlwaysScrollableScrollPhysics(),
       footer: SizedBox(

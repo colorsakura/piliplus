@@ -83,7 +83,6 @@ class _ReplyPageState extends CommonPublishPageState<LiveSendDmPanel> {
             message: emote.emoticonUnique!,
             dmType: 1,
             emoticonOptions: '[object Object]',
-            emoticonUnique: emote.emoji,
           );
         },
       );
@@ -189,7 +188,6 @@ class _ReplyPageState extends CommonPublishPageState<LiveSendDmPanel> {
     List? pictures,
     int? dmType,
     emoticonOptions,
-    emoticonUnique,
   }) async {
     final res = await LiveHttp.sendLiveMsg(
       roomId: liveRoomController.roomId,

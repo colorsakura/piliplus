@@ -82,11 +82,14 @@ class _FavPageState extends State<FavPage> with SingleTickerProviderStateMixin {
             () => _showVideoFavMenu.value
                 ? IconButton(
                     onPressed: () {
-                      if (!_favController.isEnd) {
-                        SmartDialog.showToast('加载全部收藏夹再排序');
-                        return;
+                      if (_favController.loadingState.value.isSuccess) {
+                        if (!_favController.isEnd) {
+                          SmartDialog.showToast('加载全部收藏夹再排序');
+                          return;
+                        }
+                        Get.to(
+                            FavFolderSortPage(favController: _favController));
                       }
-                      Get.to(FavFolderSortPage(favController: _favController));
                     },
                     icon: const Icon(Icons.sort),
                     tooltip: '收藏夹排序',
