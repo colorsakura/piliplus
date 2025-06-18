@@ -37,6 +37,9 @@ class FavDetailController
 
   @override
   List<FavDetailItemModel>? getDataList(FavDetailData response) {
+    if (response.hasMore == false) {
+      isEnd = true;
+    }
     return response.medias;
   }
 
@@ -49,8 +52,8 @@ class FavDetailController
 
   @override
   bool customHandleResponse(bool isRefresh, Success<FavDetailData> response) {
-    FavDetailData data = response.response;
     if (isRefresh) {
+      FavDetailData data = response.response;
       folderInfo.value = data.info!;
       isOwner.value = data.info?.mid == accountService.mid;
     }

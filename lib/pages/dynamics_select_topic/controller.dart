@@ -21,6 +21,9 @@ class SelectTopicController
 
   @override
   List<TopicItem>? getDataList(TopicPubSearchData response) {
+    if (response.pageInfo?.hasMore == false) {
+      isEnd = true;
+    }
     return response.topicItems;
   }
 

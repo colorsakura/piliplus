@@ -26,15 +26,10 @@ class FavController extends CommonListController<FavFolderData, FavFolderInfo> {
 
   @override
   List<FavFolderInfo>? getDataList(FavFolderData response) {
-    return response.list;
-  }
-
-  @override
-  bool customHandleResponse(bool isRefresh, Success<FavFolderData> response) {
-    if (response.response.hasMore == false) {
+    if (response.hasMore == false) {
       isEnd = true;
     }
-    return false;
+    return response.list;
   }
 
   @override

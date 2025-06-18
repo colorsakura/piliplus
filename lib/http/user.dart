@@ -10,7 +10,6 @@ import 'package:PiliPlus/models_new/later/data.dart';
 import 'package:PiliPlus/models_new/media_list/data.dart';
 import 'package:PiliPlus/models_new/space_setting/data.dart';
 import 'package:PiliPlus/models_new/sub/sub/data.dart';
-import 'package:PiliPlus/models_new/sub/sub/list.dart';
 import 'package:PiliPlus/models_new/video/video_tag/data.dart';
 import 'package:PiliPlus/utils/global_data.dart';
 import 'package:PiliPlus/utils/storage.dart';
@@ -253,7 +252,7 @@ class UserHttp {
   }
 
   // 我的订阅
-  static Future<LoadingState<List<SubItemModel>?>> userSubFolder({
+  static Future<LoadingState<SubData>> userSubFolder({
     required int mid,
     required int pn,
     required int ps,
@@ -268,7 +267,7 @@ class UserHttp {
       },
     );
     if (res.data['code'] == 0 && res.data['data'] is Map) {
-      return Success(SubData.fromJson(res.data['data']).list);
+      return Success(SubData.fromJson(res.data['data']));
     } else {
       return Error(res.data['message']);
     }

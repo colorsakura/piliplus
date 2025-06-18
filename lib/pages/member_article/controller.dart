@@ -22,6 +22,7 @@ class MemberArticleCtr
 
   @override
   List<SpaceArticleItem>? getDataList(SpaceArticleData response) {
+    count = response.count ?? -1;
     return response.item;
   }
 
@@ -30,13 +31,6 @@ class MemberArticleCtr
     if (length >= count) {
       isEnd = true;
     }
-  }
-
-  @override
-  bool customHandleResponse(
-      bool isRefresh, Success<SpaceArticleData> response) {
-    count = response.response.count ?? -1;
-    return false;
   }
 
   @override

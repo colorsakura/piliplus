@@ -29,6 +29,10 @@ class SubDetailController
 
   @override
   List<SubDetailItemModel>? getDataList(SubDetailData response) {
+    mediaCount.value = response.info!.mediaCount!;
+    if (subInfo.type == 11) {
+      playCount.value = response.info!.cntInfo!.play!;
+    }
     return response.medias;
   }
 
@@ -37,15 +41,6 @@ class SubDetailController
     if (length >= mediaCount.value) {
       isEnd = true;
     }
-  }
-
-  @override
-  bool customHandleResponse(bool isRefresh, Success<SubDetailData> response) {
-    mediaCount.value = response.response.info!.mediaCount!;
-    if (subInfo.type == 11) {
-      playCount.value = response.response.info!.cntInfo!.play!;
-    }
-    return false;
   }
 
   @override

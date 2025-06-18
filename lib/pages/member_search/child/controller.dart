@@ -41,6 +41,9 @@ class MemberSearchChildController extends CommonListController {
       case MemberSearchType.dynamic:
         DynamicsDataModel data = response;
         offset = data.offset;
+        if (data.hasMore == false) {
+          isEnd = true;
+        }
         controller.counts[searchType.index] = data.total ?? 0;
         return data.items;
     }

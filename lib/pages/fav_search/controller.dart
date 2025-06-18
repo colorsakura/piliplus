@@ -26,15 +26,10 @@ class FavSearchController
 
   @override
   List<FavDetailItemModel>? getDataList(FavDetailData response) {
-    return response.medias;
-  }
-
-  @override
-  bool customHandleResponse(bool isRefresh, Success<FavDetailData> response) {
-    if (response.response.hasMore == false) {
+    if (response.hasMore == false) {
       isEnd = true;
     }
-    return false;
+    return response.medias;
   }
 
   Future<void> onCancelFav(int index, int id, int? type) async {

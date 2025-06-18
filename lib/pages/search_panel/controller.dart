@@ -46,14 +46,8 @@ class SearchPanelController<R extends SearchNumData<T>, T>
 
   @override
   List<T>? getDataList(R response) {
+    searchResultController?.count[searchType.index] = response.numResults ?? 0;
     return response.list;
-  }
-
-  @override
-  bool customHandleResponse(bool isRefresh, Success<R> response) {
-    searchResultController?.count[searchType.index] =
-        response.response.numResults ?? 0;
-    return false;
   }
 
   @override

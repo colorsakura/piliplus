@@ -41,14 +41,8 @@ class DynamicsTabController
       response.items?.removeWhere((e) => dynamicsController.tempBannedList
           .contains(e.modules.moduleAuthor?.mid));
     }
+    offset = response.offset ?? '';
     return response.items;
-  }
-
-  @override
-  bool customHandleResponse(
-      bool isRefresh, Success<DynamicsDataModel> response) {
-    offset = response.response.offset ?? '';
-    return false;
   }
 
   @override

@@ -34,18 +34,11 @@ class MemberDynamicsController
 
   @override
   List<DynamicItemModel>? getDataList(DynamicsDataModel response) {
-    return response.items;
-  }
-
-  @override
-  bool customHandleResponse(
-      bool isRefresh, Success<DynamicsDataModel> response) {
-    DynamicsDataModel data = response.response;
-    offset = data.offset?.isNotEmpty == true ? data.offset! : '-1';
-    if (data.hasMore == false) {
+    offset = response.offset?.isNotEmpty == true ? response.offset! : '-1';
+    if (response.hasMore == false) {
       isEnd = true;
     }
-    return false;
+    return response.items;
   }
 
   @override
