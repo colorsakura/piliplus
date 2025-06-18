@@ -268,14 +268,24 @@ TextSpan? richNode(
                   style: style,
                   recognizer: TapGestureRecognizer()
                     ..onTap = () {
+                      void onView(List<OpusPicModel> list) {
+                        Get.context!.imageView(
+                            imgList: list
+                                .map((e) => SourceModel(url: e.src!))
+                                .toList());
+                      }
+
+                      if (i.pics?.isNotEmpty == true) {
+                        onView(i.pics!);
+                        return;
+                      }
+
                       DynamicsHttp.dynPic(i.rid).then((res) {
                         if (res.isSuccess) {
                           var list = res.data;
+                          i.pics = list;
                           if (list?.isNotEmpty == true) {
-                            Get.context!.imageView(
-                                imgList: list!
-                                    .map((e) => SourceModel(url: e.src!))
-                                    .toList());
+                            onView(list!);
                           }
                         } else {
                           res.toast();
