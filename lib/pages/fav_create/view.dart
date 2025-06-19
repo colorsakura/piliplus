@@ -155,11 +155,13 @@ class _CreateFavPageState extends State<CreateFavPage> {
             bucket: 'medialist',
             dir: 'cover',
           ).then((res) {
-            if (res['status']) {
-              _cover = res['data']['location'];
-              (context as Element).markNeedsBuild();
-            } else {
-              SmartDialog.showToast(res['msg']);
+            if (context.mounted) {
+              if (res['status']) {
+                _cover = res['data']['location'];
+                (context as Element).markNeedsBuild();
+              } else {
+                SmartDialog.showToast(res['msg']);
+              }
             }
           });
         }

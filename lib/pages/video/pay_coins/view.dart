@@ -188,9 +188,7 @@ class _PayCoinsPageState extends State<PayCoinsPage>
   }
 
   void _scale() {
-    _scale22Controller.forward().whenComplete(() {
-      _scale22Controller.reverse();
-    });
+    _scale22Controller.forward().whenComplete(_scale22Controller.reverse);
   }
 
   void _onScroll(int index) {
@@ -478,9 +476,7 @@ class _PayCoinsPageState extends State<PayCoinsPage>
             }
           });
         }
-        _boxAnimController.forward().whenComplete(() {
-          _boxAnimController.reverse();
-        });
+        _boxAnimController.forward().whenComplete(_boxAnimController.reverse);
         _coinSlideController.forward().whenComplete(() {
           _coinFadeController.forward().whenComplete(() {
             Get.back();

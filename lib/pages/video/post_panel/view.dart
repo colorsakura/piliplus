@@ -163,17 +163,17 @@ class _PostPanelState extends CommonCollapseSlidePageState<PostPanel> {
                                   ),
                                   const SizedBox(height: 8),
                                 ],
-                                Wrap(
-                                  runSpacing: 8,
-                                  spacing: 16,
-                                  children: [
-                                    Row(
-                                      mainAxisSize: MainAxisSize.min,
+                                Builder(
+                                  builder: (context) {
+                                    return Wrap(
+                                      runSpacing: 8,
+                                      spacing: 16,
                                       children: [
-                                        const Text('分类: '),
-                                        Builder(
-                                          builder: (context) {
-                                            return PopupMenuButton<SegmentType>(
+                                        Row(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            const Text('分类: '),
+                                            PopupMenuButton<SegmentType>(
                                               initialValue:
                                                   list![index].category,
                                               onSelected: (item) {
@@ -249,76 +249,92 @@ class _PostPanelState extends CommonCollapseSlidePageState<PostPanel> {
                                                   ),
                                                 ],
                                               ),
-                                            );
-                                          },
+                                            ),
+                                          ],
+                                        ),
+                                        Row(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            const Text('行为类别: '),
+                                            Builder(
+                                              builder: (context) {
+                                                return PopupMenuButton<
+                                                    ActionType>(
+                                                  initialValue:
+                                                      list![index].actionType,
+                                                  onSelected: (item) {
+                                                    list![index].actionType =
+                                                        item;
+                                                    if (item ==
+                                                        ActionType.full) {
+                                                      updateSegment(
+                                                        isFirst: true,
+                                                        index: index,
+                                                        value: 0,
+                                                      );
+                                                    }
+                                                    (context as Element)
+                                                        .markNeedsBuild();
+                                                  },
+                                                  itemBuilder: (context) =>
+                                                      ActionType.values
+                                                          .map(
+                                                            (item) =>
+                                                                PopupMenuItem<
+                                                                    ActionType>(
+                                                              enabled: list![
+                                                                      index]
+                                                                  .category
+                                                                  .toActionType
+                                                                  .contains(
+                                                                      item),
+                                                              value: item,
+                                                              child: Text(
+                                                                  item.title),
+                                                            ),
+                                                          )
+                                                          .toList(),
+                                                  child: Row(
+                                                    mainAxisSize:
+                                                        MainAxisSize.min,
+                                                    children: [
+                                                      Text(
+                                                        list![index]
+                                                            .actionType
+                                                            .title,
+                                                        style: TextStyle(
+                                                          height: 1,
+                                                          fontSize: 14,
+                                                          color: theme
+                                                              .colorScheme
+                                                              .secondary,
+                                                        ),
+                                                        strutStyle:
+                                                            const StrutStyle(
+                                                          height: 1,
+                                                          leading: 0,
+                                                        ),
+                                                      ),
+                                                      Icon(
+                                                        MdiIcons
+                                                            .unfoldMoreHorizontal,
+                                                        size: MediaQuery
+                                                                .textScalerOf(
+                                                                    context)
+                                                            .scale(14),
+                                                        color: theme.colorScheme
+                                                            .secondary,
+                                                      ),
+                                                    ],
+                                                  ),
+                                                );
+                                              },
+                                            ),
+                                          ],
                                         ),
                                       ],
-                                    ),
-                                    Row(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        const Text('行为类别: '),
-                                        Builder(builder: (context) {
-                                          return PopupMenuButton<ActionType>(
-                                            initialValue:
-                                                list![index].actionType,
-                                            onSelected: (item) {
-                                              list![index].actionType = item;
-                                              if (item == ActionType.full) {
-                                                updateSegment(
-                                                  isFirst: true,
-                                                  index: index,
-                                                  value: 0,
-                                                );
-                                              }
-                                              (context as Element)
-                                                  .markNeedsBuild();
-                                            },
-                                            itemBuilder: (context) => ActionType
-                                                .values
-                                                .map(
-                                                  (item) =>
-                                                      PopupMenuItem<ActionType>(
-                                                    enabled: list![index]
-                                                        .category
-                                                        .toActionType
-                                                        .contains(item),
-                                                    value: item,
-                                                    child: Text(item.title),
-                                                  ),
-                                                )
-                                                .toList(),
-                                            child: Row(
-                                              mainAxisSize: MainAxisSize.min,
-                                              children: [
-                                                Text(
-                                                  list![index].actionType.title,
-                                                  style: TextStyle(
-                                                    height: 1,
-                                                    fontSize: 14,
-                                                    color: theme
-                                                        .colorScheme.secondary,
-                                                  ),
-                                                  strutStyle: const StrutStyle(
-                                                    height: 1,
-                                                    leading: 0,
-                                                  ),
-                                                ),
-                                                Icon(
-                                                  MdiIcons.unfoldMoreHorizontal,
-                                                  size: MediaQuery.textScalerOf(
-                                                          context)
-                                                      .scale(14),
-                                                  color: theme
-                                                      .colorScheme.secondary,
-                                                ),
-                                              ],
-                                            ),
-                                          );
-                                        }),
-                                      ],
-                                    ),
-                                  ],
+                                    );
+                                  },
                                 ),
                               ],
                             ),
