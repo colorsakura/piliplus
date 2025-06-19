@@ -170,9 +170,19 @@ class _LikeMePageState extends State<LikeMePage> {
     return ListTile(
       onTap: () {
         String? nativeUri = item.item?.nativeUri;
-        if (nativeUri == null ||
-            nativeUri.isEmpty ||
-            nativeUri.startsWith('?')) {
+        bool isInvalid =
+            nativeUri == null || nativeUri.isEmpty || nativeUri.startsWith('?');
+        if (item.counts! > 1) {
+          Get.toNamed(
+            'msgLikeDetail',
+            parameters: {
+              'id': item.id!.toString(),
+              if (!isInvalid) 'uri': nativeUri,
+            },
+          );
+          return;
+        }
+        if (isInvalid) {
           return;
         }
         PiliScheme.routePushFromUrl(nativeUri);

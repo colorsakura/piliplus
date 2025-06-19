@@ -31,6 +31,7 @@ import 'package:PiliPlus/pages/member_profile/view.dart';
 import 'package:PiliPlus/pages/member_search/view.dart';
 import 'package:PiliPlus/pages/member_upower_rank/view.dart';
 import 'package:PiliPlus/pages/msg_feed_top/at_me/view.dart';
+import 'package:PiliPlus/pages/msg_feed_top/like_detail/view.dart';
 import 'package:PiliPlus/pages/msg_feed_top/like_me/view.dart';
 import 'package:PiliPlus/pages/msg_feed_top/reply_me/view.dart';
 import 'package:PiliPlus/pages/msg_feed_top/sys_msg/view.dart';
@@ -181,6 +182,7 @@ class Routes {
     CustomGetPage(name: '/spaceSetting', page: () => const SpaceSettingPage()),
     CustomGetPage(name: '/dynTopicRcmd', page: () => const DynTopicRcmdPage()),
     CustomGetPage(name: '/matchInfo', page: () => const MatchInfoPage()),
+    CustomGetPage(name: '/msgLikeDetail', page: () => const LikeDetailPage()),
   ];
 }
 

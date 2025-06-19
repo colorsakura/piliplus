@@ -6,6 +6,7 @@ import 'package:PiliPlus/models_new/msg/im_user_infos/datum.dart';
 import 'package:PiliPlus/models_new/msg/msg_at/data.dart';
 import 'package:PiliPlus/models_new/msg/msg_dnd/uid_setting.dart';
 import 'package:PiliPlus/models_new/msg/msg_like/data.dart';
+import 'package:PiliPlus/models_new/msg/msg_like_detail/data.dart';
 import 'package:PiliPlus/models_new/msg/msg_reply/data.dart';
 import 'package:PiliPlus/models_new/msg/msg_sys/data.dart';
 import 'package:PiliPlus/models_new/msg/session_ss/data.dart';
@@ -72,6 +73,29 @@ class MsgHttp {
     });
     if (res.data['code'] == 0) {
       return Success(MsgLikeData.fromJson(res.data['data']));
+    } else {
+      return Error(res.data['message']);
+    }
+  }
+
+  static Future<LoadingState<MsgLikeDetailData>> msgLikeDetail({
+    required dynamic cardId,
+    required int pn,
+  }) async {
+    var res = await Request().get(
+      Api.msgLikeDetail,
+      queryParameters: {
+        'card_id': cardId,
+        'pn': pn,
+        'last_view_at': 0,
+        'platform': 'web',
+        'build': 0,
+        'mobi_app': 'web',
+        'web_location': 333.40164,
+      },
+    );
+    if (res.data['code'] == 0) {
+      return Success(MsgLikeDetailData.fromJson(res.data['data']));
     } else {
       return Error(res.data['message']);
     }
