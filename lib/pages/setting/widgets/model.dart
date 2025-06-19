@@ -107,7 +107,6 @@ class SettingsModel {
   final Function? onTap;
   final EdgeInsetsGeometry? contentPadding;
   final TextStyle? titleStyle;
-  final bool? enableFeedback;
 
   SettingsModel({
     required this.settingsType,
@@ -124,7 +123,6 @@ class SettingsModel {
     this.onTap,
     this.contentPadding,
     this.titleStyle,
-    this.enableFeedback,
   });
 }
 
@@ -2210,7 +2208,6 @@ List<SettingsModel> get extraSettings => [
       ),
       SettingsModel(
         settingsType: SettingsType.sw1tch,
-        enableFeedback: true,
         setKey: SettingBoxKey.feedBackEnable,
         onChanged: (value) {
           enableFeedback = value;

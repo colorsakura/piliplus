@@ -21,8 +21,8 @@ import 'package:PiliPlus/pages/video/introduction/ugc/widgets/menu_row.dart';
 import 'package:PiliPlus/plugin/pl_player/controller.dart';
 import 'package:PiliPlus/plugin/pl_player/models/play_repeat.dart';
 import 'package:PiliPlus/plugin/pl_player/utils/fullscreen.dart';
-import 'package:PiliPlus/utils/image_util.dart';
 import 'package:PiliPlus/utils/extension.dart';
+import 'package:PiliPlus/utils/image_util.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/utils.dart';
@@ -398,9 +398,8 @@ class HeaderControlState extends State<HeaderControl> {
                       builder: (context) {
                         return AlertDialog(
                           title: const Text('播放信息'),
-                          content: SizedBox(
-                            width: double.infinity,
-                            child: ListView(
+                          content: SingleChildScrollView(
+                            child: Column(
                               children: [
                                 ListTile(
                                   dense: true,

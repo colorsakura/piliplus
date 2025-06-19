@@ -122,7 +122,6 @@ class _SetSwitchItemState extends State<SetSwitchItem> {
     return ListTile(
       contentPadding: widget.contentPadding,
       enabled: widget.onTap != null ? val : true,
-      enableFeedback: true,
       onTap: () => widget.onTap != null
           ? widget.onTap?.call()
           : switchChange(theme, null),

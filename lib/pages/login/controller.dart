@@ -35,8 +35,10 @@ class LoginPageController extends GetxController
   RxInt qrCodeLeftTime = 180.obs;
   RxString statusQRCode = ''.obs;
 
-  Map<String, dynamic> selectedCountryCodeId =
-      Constants.internationalDialingPrefix.first;
+  late final List<Map<String, dynamic>> internationalDialingPrefix =
+      Constants.internationalDialingPrefix;
+  late Map<String, dynamic> selectedCountryCodeId =
+      internationalDialingPrefix.first;
   String captchaKey = '';
   RxInt smsSendCooldown = 0.obs;
   int smsSendTimestamp = 0;

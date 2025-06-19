@@ -7,6 +7,7 @@ import 'package:PiliPlus/models/dynamics/vote_model.dart';
 import 'package:PiliPlus/utils/date_util.dart';
 import 'package:PiliPlus/utils/num_util.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class VotePanel extends StatefulWidget {
   final VoteInfo voteInfo;
@@ -26,7 +27,7 @@ class _VotePanelState extends State<VotePanel> {
   bool anonymity = false;
 
   late VoteInfo _voteInfo;
-  late final groupValue = _voteInfo.myVotes?.toSet() ?? {};
+  late final RxSet<int> groupValue = (_voteInfo.myVotes?.toSet() ?? {}).obs;
   late var _percentage = _cnt2Percentage(_voteInfo.options);
   late bool _enabled = groupValue.isEmpty &&
       _voteInfo.endTime! * 1000 > DateTime.now().millisecondsSinceEpoch;
@@ -83,7 +84,7 @@ class _VotePanelState extends State<VotePanel> {
                       ? '已结束'
                       : '已完成',
             ),
-            if (_enabled) Text('${groupValue.length} / $_maxCnt'),
+            if (_enabled) Obx(() => Text('${groupValue.length} / $_maxCnt'))
           ],
         ),
         Flexible(fit: FlexFit.loose, child: _buildContext()),

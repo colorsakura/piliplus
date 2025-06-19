@@ -52,10 +52,9 @@ class _HomePageState extends State<HomePage>
                   isScrollable: true,
                   dividerColor: Colors.transparent,
                   dividerHeight: 0,
-                  enableFeedback: true,
                   splashBorderRadius: StyleString.mdRadius,
                   tabAlignment: TabAlignment.center,
-                  onTap: (value) {
+                  onTap: (_) {
                     feedBack();
                     if (!_homeController.tabController.indexIsChanging) {
                       _homeController.animateToTop();

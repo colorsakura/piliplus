@@ -51,6 +51,8 @@ class LiveRoomController extends GetxController {
 
   AccountService accountService = Get.find<AccountService>();
 
+  LiveDmInfoData? dmInfo;
+
   @override
   void onInit() {
     super.onInit();
@@ -163,7 +165,8 @@ class LiveRoomController extends GetxController {
   }
 
   LiveMessageStream? msgStream;
-  final ScrollController scrollController = ScrollController();
+  late final ScrollController scrollController = ScrollController()
+    ..addListener(listener);
 
   void scrollToBottom() {
     if (disableAutoScroll.value) return;
@@ -199,53 +202,17 @@ class LiveRoomController extends GetxController {
         }
       });
     }
+    if (msgStream != null) {
+      return;
+    }
+    if (dmInfo != null) {
+      initDm(dmInfo!);
+      return;
+    }
     LiveHttp.liveRoomGetDanmakuToken(roomId: roomId).then((res) {
       if (res['status']) {
-        LiveDmInfoData info = res['data'];
-        // logger.d("info => $info");
-        if (info.hostList!.isNullOrEmpty) {
-          return;
-        }
-        msgStream = LiveMessageStream(
-          streamToken: info.token!,
-          roomId: roomId,
-          uid: Accounts.main.mid,
-          servers: info.hostList!
-              .map((host) => 'wss://${host.host}:${host.wssPort}/sub')
-              .toList(),
-        );
-        msgStream?.addEventListener((obj) {
-          if (obj['cmd'] == 'DANMU_MSG') {
-            // logger.i(' 原始弹幕消息 ======> ${jsonEncode(obj)}');
-            final info = obj['info'];
-            final first = info[0];
-            final content = first[15];
-            final extra = jsonDecode(content['extra']);
-            final user = content['user'];
-            final uid = user['uid'];
-            messages.add({
-              'name': user['base']['name'],
-              'uid': uid,
-              'text': info[1],
-              'emots': extra['emots'],
-              'uemote': first[13],
-            });
-            if (showDanmaku) {
-              controller?.addDanmaku(
-                DanmakuContentItem(
-                  extra['content'],
-                  color: DmUtils.decimalToColor(extra['color']),
-                  type: DmUtils.getPosition(extra['mode']),
-                  selfSend: uid == accountService.mid,
-                ),
-              );
-              WidgetsBinding.instance
-                  .addPostFrameCallback((_) => scrollToBottom());
-            }
-          }
-        });
-        msgStream?.init();
-        scrollController.addListener(listener);
+        dmInfo = res['data'];
+        initDm(dmInfo!);
       }
     });
   }
@@ -281,5 +248,50 @@ class LiveRoomController extends GetxController {
         .firstWhere((element) => element.code == currentQn)
         .description;
     return queryLiveInfo();
+  }
+
+  void initDm(LiveDmInfoData info) {
+    if (info.hostList!.isNullOrEmpty) {
+      return;
+    }
+    msgStream = LiveMessageStream(
+      streamToken: info.token!,
+      roomId: roomId,
+      uid: Accounts.main.mid,
+      servers: info.hostList!
+          .map((host) => 'wss://${host.host}:${host.wssPort}/sub')
+          .toList(),
+    )
+      ..addEventListener((obj) {
+        if (obj['cmd'] == 'DANMU_MSG') {
+          // logger.i(' 原始弹幕消息 ======> ${jsonEncode(obj)}');
+          final info = obj['info'];
+          final first = info[0];
+          final content = first[15];
+          final extra = jsonDecode(content['extra']);
+          final user = content['user'];
+          final uid = user['uid'];
+          messages.add({
+            'name': user['base']['name'],
+            'uid': uid,
+            'text': info[1],
+            'emots': extra['emots'],
+            'uemote': first[13],
+          });
+          if (showDanmaku) {
+            controller?.addDanmaku(
+              DanmakuContentItem(
+                extra['content'],
+                color: DmUtils.decimalToColor(extra['color']),
+                type: DmUtils.getPosition(extra['mode']),
+                selfSend: uid == accountService.mid,
+              ),
+            );
+            WidgetsBinding.instance
+                .addPostFrameCallback((_) => scrollToBottom());
+          }
+        }
+      })
+      ..init();
   }
 }

@@ -1,6 +1,5 @@
 import 'dart:ui';
 
-import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/common/widgets/scroll_physics.dart';
 import 'package:PiliPlus/pages/login/controller.dart';
 import 'package:PiliPlus/utils/image_util.dart';
@@ -332,9 +331,6 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  late final List<Map<String, dynamic>> internationalDialingPrefix =
-      Constants.internationalDialingPrefix;
-
   Widget loginBySmS(ThemeData theme) {
     return Column(
       children: [
@@ -360,7 +356,9 @@ class _LoginPageState extends State<LoginPage> {
                           '当前为${_loginPageCtr.selectedCountryCodeId['cname']}，'
                           '+${_loginPageCtr.selectedCountryCodeId['country_id']}',
                       onSelected: (Map<String, dynamic> type) {},
-                      itemBuilder: (_) => internationalDialingPrefix
+                      initialValue: _loginPageCtr.selectedCountryCodeId,
+                      itemBuilder: (_) => _loginPageCtr
+                          .internationalDialingPrefix
                           .map((Map<String, dynamic> item) {
                         return PopupMenuItem<Map<String, dynamic>>(
                           onTap: () {

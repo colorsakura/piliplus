@@ -1220,6 +1220,7 @@ class RichTextNodeItem {
   String? type;
   String? rid;
   List<OpusPicModel>? pics;
+  List<OpusPicModel>? dynPic;
   String? jumpUrl;
 
   RichTextNodeItem.fromJson(Map<String, dynamic> json) {

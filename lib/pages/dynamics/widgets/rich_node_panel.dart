@@ -281,12 +281,18 @@ TextSpan? richNode(
                         onView(i.pics!);
                         return;
                       }
+                      if (i.dynPic?.isNotEmpty == true) {
+                        onView(i.dynPic!);
+                        return;
+                      }
 
                       DynamicsHttp.dynPic(i.rid).then((res) {
                         if (res.isSuccess) {
                           var list = res.data;
                           if (Platform.isAndroid) {
                             i.pics = list;
+                          } else {
+                            i.dynPic = list;
                           }
                           if (list?.isNotEmpty == true) {
                             onView(list!);

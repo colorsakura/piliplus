@@ -84,7 +84,9 @@ class _LiveRoomPageState extends State<LiveRoomPage>
   void playerListener(PlayerStatus? status) {
     if (status != PlayerStatus.playing) {
       plPlayerController.danmakuController?.pause();
-      _liveRoomController.msgStream?.close();
+      _liveRoomController
+        ..msgStream?.close()
+        ..msgStream = null;
     } else {
       plPlayerController.danmakuController?.resume();
       _liveRoomController.liveMsg();
@@ -122,7 +124,9 @@ class _LiveRoomPageState extends State<LiveRoomPage>
     WidgetsBinding.instance.removeObserver(this);
     ScreenBrightness().resetApplicationScreenBrightness();
     PlPlayerController.setPlayCallBack(null);
-    _liveRoomController.msgStream?.close();
+    _liveRoomController
+      ..msgStream?.close()
+      ..msgStream = null;
     plPlayerController
       ..removeStatusLister(playerListener)
       ..dispose();
