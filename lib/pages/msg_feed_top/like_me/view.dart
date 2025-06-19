@@ -78,64 +78,66 @@ class _LikeMePageState extends State<LikeMePage> {
             return const MsgFeedTopSkeleton();
           },
         ),
-      Success(:var response) => () {
-          Pair<List<MsgLikeItem>, List<MsgLikeItem>> pair = response;
-          List<MsgLikeItem> latest = pair.first;
-          List<MsgLikeItem> total = pair.second;
-          if (latest.isNotEmpty || total.isNotEmpty) {
-            return SliverMainAxisGroup(
-              slivers: [
-                if (latest.isNotEmpty) ...[
-                  _buildHeader(theme, '最新'),
-                  SliverList.separated(
-                    itemBuilder: (context, index) {
-                      if (total.isEmpty && index == latest.length - 1) {
-                        _likeMeController.onLoadMore();
-                      }
-                      return _buildItem(
-                        theme,
-                        latest[index],
-                        (id) {
-                          _likeMeController.onRemove(id, index, true);
-                        },
-                        (isNotice, id) {
-                          _likeMeController.onSetNotice(
-                              id, index, isNotice, true);
-                        },
-                      );
-                    },
-                    itemCount: latest.length,
-                    separatorBuilder: (context, index) => divider,
-                  ),
+      Success(:var response) => Builder(
+          builder: (context) {
+            Pair<List<MsgLikeItem>, List<MsgLikeItem>> pair = response;
+            List<MsgLikeItem> latest = pair.first;
+            List<MsgLikeItem> total = pair.second;
+            if (latest.isNotEmpty || total.isNotEmpty) {
+              return SliverMainAxisGroup(
+                slivers: [
+                  if (latest.isNotEmpty) ...[
+                    _buildHeader(theme, '最新'),
+                    SliverList.separated(
+                      itemBuilder: (context, index) {
+                        if (total.isEmpty && index == latest.length - 1) {
+                          _likeMeController.onLoadMore();
+                        }
+                        return _buildItem(
+                          theme,
+                          latest[index],
+                          (id) {
+                            _likeMeController.onRemove(id, index, true);
+                          },
+                          (isNotice, id) {
+                            _likeMeController.onSetNotice(
+                                id, index, isNotice, true);
+                          },
+                        );
+                      },
+                      itemCount: latest.length,
+                      separatorBuilder: (context, index) => divider,
+                    ),
+                  ],
+                  if (total.isNotEmpty) ...[
+                    _buildHeader(theme, '累计'),
+                    SliverList.separated(
+                      itemBuilder: (context, index) {
+                        if (index == total.length - 1) {
+                          _likeMeController.onLoadMore();
+                        }
+                        return _buildItem(
+                          theme,
+                          total[index],
+                          (id) {
+                            _likeMeController.onRemove(id, index, false);
+                          },
+                          (isNotice, id) {
+                            _likeMeController.onSetNotice(
+                                id, index, isNotice, false);
+                          },
+                        );
+                      },
+                      itemCount: total.length,
+                      separatorBuilder: (context, index) => divider,
+                    ),
+                  ],
                 ],
-                if (total.isNotEmpty) ...[
-                  _buildHeader(theme, '累计'),
-                  SliverList.separated(
-                    itemBuilder: (context, index) {
-                      if (index == total.length - 1) {
-                        _likeMeController.onLoadMore();
-                      }
-                      return _buildItem(
-                        theme,
-                        total[index],
-                        (id) {
-                          _likeMeController.onRemove(id, index, false);
-                        },
-                        (isNotice, id) {
-                          _likeMeController.onSetNotice(
-                              id, index, isNotice, false);
-                        },
-                      );
-                    },
-                    itemCount: total.length,
-                    separatorBuilder: (context, index) => divider,
-                  ),
-                ],
-              ],
-            );
-          }
-          return HttpError(onReload: _likeMeController.onReload);
-        }(),
+              );
+            }
+            return HttpError(onReload: _likeMeController.onReload);
+          },
+        ),
       Error(:var errMsg) => HttpError(
           errMsg: errMsg,
           onReload: _likeMeController.onReload,

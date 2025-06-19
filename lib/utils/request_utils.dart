@@ -110,7 +110,7 @@ class RequestUtils {
         callback?.call(2);
       }
     } else {
-      if (followStatus == null) {
+      if (followStatus?['tag'] == null) {
         Map<String, dynamic> result = await UserHttp.hasFollow(mid);
         if (result['status']) {
           followStatus = result['data'];
@@ -119,6 +119,7 @@ class RequestUtils {
           return;
         }
       }
+
       if (context.mounted) {
         showDialog(
           context: context,

@@ -10,6 +10,7 @@ import 'package:PiliPlus/models/dynamics/result.dart';
 import 'package:PiliPlus/models_new/pgc/pgc_info_model/episode.dart';
 import 'package:PiliPlus/models_new/pgc/pgc_info_model/result.dart';
 import 'package:PiliPlus/models_new/pgc/pgc_info_model/section.dart';
+import 'package:PiliPlus/pages/common/common_intro_controller.dart';
 import 'package:PiliPlus/pages/contact/view.dart';
 import 'package:PiliPlus/pages/fav_panel/view.dart';
 import 'package:PiliPlus/pages/share/view.dart';
@@ -279,7 +280,7 @@ class PageUtils {
 
   static void showFavBottomSheet({
     required BuildContext context,
-    required dynamic ctr,
+    required CommonIntroController ctr,
   }) {
     showModalBottomSheet(
       context: context,

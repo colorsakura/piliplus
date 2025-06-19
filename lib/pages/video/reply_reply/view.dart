@@ -380,43 +380,45 @@ class _VideoReplyReplyPanelState
             itemCount: 8,
           ),
         ),
-      Success(:var response) => () {
-          if (index == response!.length) {
-            _videoReplyReplyController.onLoadMore();
-            return Container(
-              alignment: Alignment.center,
-              margin:
-                  EdgeInsets.only(bottom: MediaQuery.paddingOf(context).bottom),
-              height: 125,
-              child: Text(
-                _videoReplyReplyController.isEnd ? '没有更多了' : '加载中...',
-                style: TextStyle(
-                  fontSize: 12,
-                  color: theme.colorScheme.outline,
+      Success(:var response) => Builder(
+          builder: (context) {
+            if (index == response!.length) {
+              _videoReplyReplyController.onLoadMore();
+              return Container(
+                alignment: Alignment.center,
+                margin: EdgeInsets.only(
+                    bottom: MediaQuery.paddingOf(context).bottom),
+                height: 125,
+                child: Text(
+                  _videoReplyReplyController.isEnd ? '没有更多了' : '加载中...',
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: theme.colorScheme.outline,
+                  ),
                 ),
-              ),
-            );
-          } else {
-            if (_videoReplyReplyController.index != null &&
-                _videoReplyReplyController.index == index) {
-              colorAnimation ??= ColorTween(
-                begin: theme.colorScheme.onInverseSurface,
-                end: theme.colorScheme.surface,
-              ).animate(_videoReplyReplyController.controller!);
-              return AnimatedBuilder(
-                animation: colorAnimation!,
-                builder: (context, child) {
-                  return ColoredBox(
-                    color: colorAnimation!.value ??
-                        theme.colorScheme.onInverseSurface,
-                    child: _replyItem(response[index], index),
-                  );
-                },
               );
+            } else {
+              if (_videoReplyReplyController.index != null &&
+                  _videoReplyReplyController.index == index) {
+                colorAnimation ??= ColorTween(
+                  begin: theme.colorScheme.onInverseSurface,
+                  end: theme.colorScheme.surface,
+                ).animate(_videoReplyReplyController.controller!);
+                return AnimatedBuilder(
+                  animation: colorAnimation!,
+                  builder: (context, child) {
+                    return ColoredBox(
+                      color: colorAnimation!.value ??
+                          theme.colorScheme.onInverseSurface,
+                      child: _replyItem(response[index], index),
+                    );
+                  },
+                );
+              }
+              return _replyItem(response[index], index);
             }
-            return _replyItem(response[index], index);
-          }
-        }(),
+          },
+        ),
       Error(:var errMsg) => errorWidget(
           errMsg: errMsg,
           onReload: _videoReplyReplyController.onReload,

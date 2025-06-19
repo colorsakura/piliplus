@@ -8,19 +8,16 @@ import 'package:PiliPlus/http/fav.dart';
 import 'package:PiliPlus/http/user.dart';
 import 'package:PiliPlus/http/video.dart';
 import 'package:PiliPlus/models/pgc_lcf.dart';
-import 'package:PiliPlus/models_new/fav/fav_folder/data.dart';
-import 'package:PiliPlus/models_new/fav/fav_folder/list.dart';
 import 'package:PiliPlus/models_new/pgc/pgc_info_model/episode.dart';
 import 'package:PiliPlus/models_new/pgc/pgc_info_model/result.dart';
 import 'package:PiliPlus/models_new/triple/pgc_triple.dart';
-import 'package:PiliPlus/models_new/video/video_tag/data.dart';
+import 'package:PiliPlus/pages/common/common_intro_controller.dart';
 import 'package:PiliPlus/pages/dynamics_repost/view.dart';
 import 'package:PiliPlus/pages/video/controller.dart';
 import 'package:PiliPlus/pages/video/introduction/ugc/controller.dart';
 import 'package:PiliPlus/pages/video/pay_coins/view.dart';
 import 'package:PiliPlus/pages/video/reply/controller.dart';
 import 'package:PiliPlus/plugin/pl_player/models/play_repeat.dart';
-import 'package:PiliPlus/services/account_service.dart';
 import 'package:PiliPlus/utils/feed_back.dart';
 import 'package:PiliPlus/utils/global_data.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
@@ -30,7 +27,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 
-class PgcIntroController extends GetxController {
+class PgcIntroController extends CommonIntroController {
   // 视频bvid
   String bvid = Get.parameters['bvid'] ?? '';
   var seasonId = Get.parameters['seasonId'] != null
@@ -46,22 +43,6 @@ class PgcIntroController extends GetxController {
           : '追剧';
 
   final PgcInfoModel pgcItem = Get.arguments['pgcItem'];
-
-  // 是否点赞
-  RxBool hasLike = false.obs;
-  // 投币数量
-  final RxInt _coinNum = 0.obs;
-  // 是否投币
-  bool get hasCoin => _coinNum.value != 0;
-  // 是否收藏
-  RxBool hasFav = false.obs;
-
-  List<VideoTagItem>? videoTags;
-
-  List? favIds;
-  Rx<FavFolderData> favFolderData = FavFolderData().obs;
-
-  AccountService accountService = Get.find<AccountService>();
 
   late final enableQuickFav =
       GStorage.setting.get(SettingBoxKey.enableQuickFav, defaultValue: false);
@@ -93,7 +74,7 @@ class PgcIntroController extends GetxController {
     if (result['status']) {
       PgcLCF data = result['data'];
       hasLike.value = data.like == 1;
-      _coinNum.value = data.coinNumber!;
+      coinNum.value = data.coinNumber!;
       hasFav.value = data.favorite == 1;
     } else {
       SmartDialog.showToast(result['msg']);
@@ -125,7 +106,7 @@ class PgcIntroController extends GetxController {
         hasLike.value = true;
         pgcItem.stat!.likes = pgcItem.stat!.likes! + 1;
       }
-      _coinNum.value += coin;
+      coinNum.value += coin;
       GlobalData().afterCoin(coin);
     } else {
       SmartDialog.showToast(res['msg']);
@@ -139,7 +120,7 @@ class PgcIntroController extends GetxController {
       return;
     }
 
-    if (_coinNum.value >= 2) {
+    if (coinNum.value >= 2) {
       SmartDialog.showToast('达到投币上限啦~');
       return;
     }
@@ -151,11 +132,12 @@ class PgcIntroController extends GetxController {
 
     PayCoinsPage.toPayCoinsPage(
       onPayCoin: coinVideo,
-      hasCoin: _coinNum.value == 1,
+      hasCoin: coinNum.value == 1,
     );
   }
 
   // （取消）收藏 pgc
+  @override
   Future<void> actionFavVideo({String type = 'choose'}) async {
     // 收藏至默认文件夹
     if (type == 'default') {
@@ -349,16 +331,6 @@ class PgcIntroController extends GetxController {
         });
   }
 
-  // 选择文件夹
-  void onChoose(bool checkValue, int index) {
-    feedBack();
-    FavFolderInfo item = favFolderData.value.list![index];
-    item
-      ..favState = checkValue ? 1 : 0
-      ..mediaCount = checkValue ? item.mediaCount + 1 : item.mediaCount - 1;
-    favFolderData.refresh();
-  }
-
   // 修改分P或番剧分集
   void changeSeasonOrbangu(dynamic epId, bvid, cid, aid, cover) {
     // 重新获取视频资源
@@ -431,6 +403,7 @@ class PgcIntroController extends GetxController {
     SmartDialog.showToast(result['msg']);
   }
 
+  @override
   Future queryVideoInFolder() async {
     favIds = null;
     var result = await FavHttp.videoInFolder(
@@ -443,7 +416,7 @@ class PgcIntroController extends GetxController {
       favIds = favFolderData.value.list
           ?.where((item) => item.favState == 1)
           .map((item) => item.id)
-          .toList();
+          .toSet();
     }
     return result;
   }
@@ -522,7 +495,7 @@ class PgcIntroController extends GetxController {
       PgcTriple data = result['data'];
       hasLike.value = data.like == 1;
       if (data.coin == 1) {
-        _coinNum.value = 2;
+        coinNum.value = 2;
         GlobalData().afterCoin(2);
       }
       hasFav.value = data.favorite == 1;

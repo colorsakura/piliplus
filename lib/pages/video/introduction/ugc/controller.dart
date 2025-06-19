@@ -9,8 +9,6 @@ import 'package:PiliPlus/http/member.dart';
 import 'package:PiliPlus/http/search.dart';
 import 'package:PiliPlus/http/user.dart';
 import 'package:PiliPlus/http/video.dart';
-import 'package:PiliPlus/models_new/fav/fav_folder/data.dart';
-import 'package:PiliPlus/models_new/fav/fav_folder/list.dart';
 import 'package:PiliPlus/models_new/triple/ugc_triple.dart';
 import 'package:PiliPlus/models_new/video/video_ai_conclusion/data.dart';
 import 'package:PiliPlus/models_new/video/video_ai_conclusion/model_result.dart';
@@ -21,14 +19,13 @@ import 'package:PiliPlus/models_new/video/video_detail/section.dart';
 import 'package:PiliPlus/models_new/video/video_detail/staff.dart';
 import 'package:PiliPlus/models_new/video/video_detail/ugc_season.dart';
 import 'package:PiliPlus/models_new/video/video_relation/data.dart';
-import 'package:PiliPlus/models_new/video/video_tag/data.dart';
+import 'package:PiliPlus/pages/common/common_intro_controller.dart';
 import 'package:PiliPlus/pages/dynamics_repost/view.dart';
 import 'package:PiliPlus/pages/video/controller.dart';
 import 'package:PiliPlus/pages/video/pay_coins/view.dart';
 import 'package:PiliPlus/pages/video/related/controller.dart';
 import 'package:PiliPlus/pages/video/reply/controller.dart';
 import 'package:PiliPlus/plugin/pl_player/models/play_repeat.dart';
-import 'package:PiliPlus/services/account_service.dart';
 import 'package:PiliPlus/services/service_locator.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/feed_back.dart';
@@ -44,19 +41,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 
-class VideoIntroController extends GetxController {
+class VideoIntroController extends CommonIntroController {
   // 视频bvid
   late String bvid;
-
-  // 是否预渲染 骨架屏
-  bool preRender = false;
 
   // 视频详情 上个页面传入
   Map videoItem = {};
   late final RxMap staffRelations = {}.obs;
-
-  // 请求状态
-  RxBool isLoading = false.obs;
 
   // 视频详情 请求返回
   Rx<VideoDetailData> videoDetail = VideoDetailData().obs;
@@ -64,22 +55,12 @@ class VideoIntroController extends GetxController {
   // up主粉丝数
   RxMap<String, dynamic> userStat = RxMap<String, dynamic>({'follower': '-'});
 
-  List<VideoTagItem>? videoTags;
-
-  // 是否点赞
-  RxBool hasLike = false.obs;
   // 是否点踩
   RxBool hasDislike = false.obs;
-  // 投币数量
-  final RxInt _coinNum = 0.obs;
-  // 是否投币
-  bool get hasCoin => _coinNum.value != 0;
-  // 是否收藏
-  RxBool hasFav = false.obs;
+
   // 是否稍后再看
   RxBool hasLater = false.obs;
-  Rx<FavFolderData> favFolderData = FavFolderData().obs;
-  Set? favIds;
+
   // 关注状态 默认未关注
   RxMap followStatus = {}.obs;
 
@@ -102,8 +83,6 @@ class VideoIntroController extends GetxController {
   late final enableQuickFav =
       GStorage.setting.get(SettingBoxKey.enableQuickFav, defaultValue: false);
 
-  AccountService accountService = Get.find<AccountService>();
-
   @override
   void onInit() {
     super.onInit();
@@ -115,7 +94,6 @@ class VideoIntroController extends GetxController {
     } catch (_) {}
     if (Get.arguments.isNotEmpty) {
       if (Get.arguments.containsKey('videoItem')) {
-        preRender = true;
         var args = Get.arguments['videoItem'];
         var keys = Get.arguments.keys.toList();
         try {
@@ -243,7 +221,7 @@ class VideoIntroController extends GetxController {
       VideoRelation data = result['data'];
       hasLike.value = data.like!;
       hasDislike.value = data.dislike!;
-      _coinNum.value = data.coin!;
+      coinNum.value = data.coin!;
       hasFav.value = data.favorite!;
     }
   }
@@ -265,7 +243,7 @@ class VideoIntroController extends GetxController {
       UgcTriple data = result['data'];
       hasLike.value = data.like!;
       if (data.coin == true) {
-        _coinNum.value = 2;
+        coinNum.value = 2;
         GlobalData().afterCoin(2);
       }
       hasFav.value = data.fav!;
@@ -342,7 +320,7 @@ class VideoIntroController extends GetxController {
     );
     if (res['status']) {
       SmartDialog.showToast('投币成功');
-      _coinNum.value += coin;
+      coinNum.value += coin;
       GlobalData().afterCoin(coin);
       videoDetail.value.stat!.coin = videoDetail.value.stat!.coin! + coin;
       if (selectLike && !hasLike.value) {
@@ -363,7 +341,7 @@ class VideoIntroController extends GetxController {
 
     int copyright =
         (queryVideoIntroData['data'] as VideoDetailData?)?.copyright ?? 1;
-    if ((copyright != 1 && _coinNum.value >= 1) || _coinNum.value >= 2) {
+    if ((copyright != 1 && coinNum.value >= 1) || coinNum.value >= 2) {
       SmartDialog.showToast('达到投币上限啦~');
       return;
     }
@@ -376,11 +354,12 @@ class VideoIntroController extends GetxController {
     PayCoinsPage.toPayCoinsPage(
       onPayCoin: coinVideo,
       copyright: copyright,
-      hasCoin: _coinNum.value == 1,
+      hasCoin: coinNum.value == 1,
     );
   }
 
   // （取消）收藏
+  @override
   Future<void> actionFavVideo({String type = 'choose'}) async {
     // 收藏至默认文件夹
     if (type == 'default') {
@@ -546,6 +525,7 @@ class VideoIntroController extends GetxController {
         });
   }
 
+  @override
   Future queryVideoInFolder() async {
     favIds = null;
     var result = await FavHttp.videoInFolder(
@@ -560,16 +540,6 @@ class VideoIntroController extends GetxController {
           .toSet();
     }
     return result;
-  }
-
-  // 选择文件夹
-  void onChoose(bool checkValue, int index) {
-    feedBack();
-    FavFolderInfo item = favFolderData.value.list![index];
-    item
-      ..favState = checkValue ? 1 : 0
-      ..mediaCount = checkValue ? item.mediaCount + 1 : item.mediaCount - 1;
-    favFolderData.refresh();
   }
 
   // 查询关注状态
