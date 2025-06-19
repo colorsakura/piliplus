@@ -5,7 +5,6 @@ import 'package:PiliPlus/grpc/bilibili/app/viewunite/pgcanymodel.pb.dart'
 import 'package:PiliPlus/grpc/view.dart';
 import 'package:PiliPlus/http/constants.dart';
 import 'package:PiliPlus/http/fav.dart';
-import 'package:PiliPlus/http/user.dart';
 import 'package:PiliPlus/http/video.dart';
 import 'package:PiliPlus/models/pgc_lcf.dart';
 import 'package:PiliPlus/models_new/pgc/pgc_info_model/episode.dart';
@@ -21,15 +20,12 @@ import 'package:PiliPlus/plugin/pl_player/models/play_repeat.dart';
 import 'package:PiliPlus/utils/feed_back.dart';
 import 'package:PiliPlus/utils/global_data.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
-import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 
 class PgcIntroController extends CommonIntroController {
-  // 视频bvid
-  String bvid = Get.parameters['bvid'] ?? '';
   var seasonId = Get.parameters['seasonId'] != null
       ? int.tryParse(Get.parameters['seasonId']!)
       : null;
@@ -44,9 +40,6 @@ class PgcIntroController extends CommonIntroController {
 
   final PgcInfoModel pgcItem = Get.arguments['pgcItem'];
 
-  late final enableQuickFav =
-      GStorage.setting.get(SettingBoxKey.enableQuickFav, defaultValue: false);
-
   @override
   void onInit() {
     super.onInit();
@@ -59,13 +52,6 @@ class PgcIntroController extends CommonIntroController {
       }
     }
     queryVideoTags();
-  }
-
-  Future<void> queryVideoTags() async {
-    var result = await UserHttp.videoTags(bvid: bvid);
-    if (result['status']) {
-      videoTags = result['data'];
-    }
   }
 
   // 获取点赞/投币/收藏状态
@@ -531,25 +517,5 @@ class PgcIntroController extends CommonIntroController {
         followStatus.value = view.ogvData.userStatus.followStatus;
       }
     });
-  }
-
-  // 收藏
-  void showFavBottomSheet(BuildContext context, {type = 'tap'}) {
-    if (!accountService.isLogin.value) {
-      SmartDialog.showToast('账号未登录');
-      return;
-    }
-    // 快速收藏 &
-    // 点按 收藏至默认文件夹
-    // 长按选择文件夹
-    if (enableQuickFav) {
-      if (type == 'tap') {
-        actionFavVideo(type: 'default');
-      } else {
-        PageUtils.showFavBottomSheet(context: context, ctr: this);
-      }
-    } else if (type != 'longPress') {
-      PageUtils.showFavBottomSheet(context: context, ctr: this);
-    }
   }
 }

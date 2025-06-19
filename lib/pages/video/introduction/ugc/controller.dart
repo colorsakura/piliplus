@@ -42,9 +42,6 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 
 class VideoIntroController extends CommonIntroController {
-  // 视频bvid
-  late String bvid;
-
   // 视频详情 上个页面传入
   Map videoItem = {};
   late final RxMap staffRelations = {}.obs;
@@ -68,7 +65,7 @@ class VideoIntroController extends CommonIntroController {
 
   // 同时观看
   bool isShowOnlineTotal = false;
-  RxString total = '1'.obs;
+  late final RxString total = '1'.obs;
   Timer? timer;
   String heroTag = '';
   AiConclusionResult? aiConclusionResult;
@@ -80,8 +77,6 @@ class VideoIntroController extends CommonIntroController {
   late final showArgueMsg = GStorage.showArgueMsg;
   late final enableAi =
       GStorage.setting.get(SettingBoxKey.enableAi, defaultValue: false);
-  late final enableQuickFav =
-      GStorage.setting.get(SettingBoxKey.enableQuickFav, defaultValue: false);
 
   @override
   void onInit() {
@@ -90,7 +85,6 @@ class VideoIntroController extends CommonIntroController {
       if (heroTag.isEmpty) {
         heroTag = Get.arguments['heroTag'];
       }
-      bvid = Get.parameters['bvid']!;
     } catch (_) {}
     if (Get.arguments.isNotEmpty) {
       if (Get.arguments.containsKey('videoItem')) {
@@ -112,9 +106,10 @@ class VideoIntroController extends CommonIntroController {
           }
           videoItem['title'] = str;
         }
-        videoItem['stat'] = keys.contains('stat') ? args.stat : null;
-        videoItem['pubdate'] = keys.contains('pubdate') ? args.pubdate : null;
-        videoItem['owner'] = keys.contains('owner') ? args.owner : null;
+        videoItem
+          ..['stat'] = keys.contains('stat') ? args.stat : null
+          ..['pubdate'] = keys.contains('pubdate') ? args.pubdate : null
+          ..['owner'] = keys.contains('owner') ? args.owner : null;
       }
     }
     lastPlayCid.value = int.parse(Get.parameters['cid']!);
@@ -174,14 +169,6 @@ class VideoIntroController extends CommonIntroController {
     if (accountService.isLogin.value) {
       queryAllStatus();
       queryFollowStatus();
-    }
-  }
-
-  Future<void> queryVideoTags() async {
-    videoTags = null;
-    var result = await UserHttp.videoTags(bvid: bvid);
-    if (result['status']) {
-      videoTags = result['data'];
     }
   }
 
@@ -893,26 +880,6 @@ class VideoIntroController extends CommonIntroController {
       aiConclusionResult = data.modelResult;
     } else {
       SmartDialog.showToast("当前视频可能暂不支持AI视频总结");
-    }
-  }
-
-  // 收藏
-  void showFavBottomSheet(BuildContext context, {type = 'tap'}) {
-    if (!accountService.isLogin.value) {
-      SmartDialog.showToast('账号未登录');
-      return;
-    }
-    // 快速收藏 &
-    // 点按 收藏至默认文件夹
-    // 长按选择文件夹
-    if (enableQuickFav) {
-      if (type == 'tap') {
-        actionFavVideo(type: 'default');
-      } else {
-        PageUtils.showFavBottomSheet(context: context, ctr: this);
-      }
-    } else if (type != 'longPress') {
-      PageUtils.showFavBottomSheet(context: context, ctr: this);
     }
   }
 }
