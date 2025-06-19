@@ -11,7 +11,7 @@ class CustomSliverPersistentHeaderDelegate
   final double _minExtent;
   final double _maxExtent;
   final Widget child;
-  final Color bgColor;
+  final Color? bgColor;
 
   @override
   Widget build(
@@ -19,18 +19,20 @@ class CustomSliverPersistentHeaderDelegate
     //创建child子组件
     //shrinkOffset：child偏移值minExtent~maxExtent
     //overlapsContent：SliverPersistentHeader覆盖其他子组件返回true，否则返回false
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        color: bgColor,
-        boxShadow: [
-          BoxShadow(
-            color: bgColor,
-            offset: const Offset(0, -2),
-          ),
-        ],
-      ),
-      child: child,
-    );
+    return bgColor != null
+        ? DecoratedBox(
+            decoration: BoxDecoration(
+              color: bgColor,
+              boxShadow: [
+                BoxShadow(
+                  color: bgColor!,
+                  offset: const Offset(0, -2),
+                ),
+              ],
+            ),
+            child: child,
+          )
+        : child;
   }
 
   //SliverPersistentHeader最大高度

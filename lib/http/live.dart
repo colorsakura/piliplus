@@ -5,6 +5,8 @@ import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/common/live_search_type.dart';
 import 'package:PiliPlus/models_new/live/live_area_list/area_item.dart';
 import 'package:PiliPlus/models_new/live/live_area_list/area_list.dart';
+import 'package:PiliPlus/models_new/live/live_dm_block/data.dart';
+import 'package:PiliPlus/models_new/live/live_dm_block/shield_info.dart';
 import 'package:PiliPlus/models_new/live/live_dm_info/data.dart';
 import 'package:PiliPlus/models_new/live/live_emote/data.dart';
 import 'package:PiliPlus/models_new/live/live_emote/datum.dart';
@@ -451,6 +453,110 @@ class LiveHttp {
       return Success(LiveSearchData.fromJson(res.data['data']));
     } else {
       return Error(res.data['message']);
+    }
+  }
+
+  static Future<LoadingState<ShieldInfo?>> getLiveInfoByUser(
+      dynamic roomId) async {
+    var res = await Request().get(
+      Api.getLiveInfoByUser,
+      queryParameters: await WbiSign.makSign({
+        'room_id': roomId,
+        'from': 0,
+        'not_mock_enter_effect': 1,
+        'web_location': 444.8,
+      }),
+    );
+    if (res.data['code'] == 0) {
+      return Success(LiveDmBlockData.fromJson(res.data['data']).shieldInfo);
+    } else {
+      return Error(res.data['message']);
+    }
+  }
+
+  static Future liveSetSilent({
+    required String type,
+    required int level,
+  }) async {
+    final csrf = Accounts.main.csrf;
+    var res = await Request().post(
+      Api.liveSetSilent,
+      data: {
+        'type': type,
+        'level': level,
+        'csrf': csrf,
+        'csrf_token': csrf,
+      },
+      options: Options(contentType: Headers.formUrlEncodedContentType),
+    );
+    if (res.data['code'] == 0) {
+      return {'status': true};
+    } else {
+      return {'status': false, 'msg': res.data['message']};
+    }
+  }
+
+  static Future addShieldKeyword({
+    required String keyword,
+  }) async {
+    final csrf = Accounts.main.csrf;
+    var res = await Request().post(
+      Api.addShieldKeyword,
+      data: {
+        'keyword': keyword,
+        'csrf': csrf,
+        'csrf_token': csrf,
+      },
+      options: Options(contentType: Headers.formUrlEncodedContentType),
+    );
+    if (res.data['code'] == 0) {
+      return {'status': true};
+    } else {
+      return {'status': false, 'msg': res.data['message']};
+    }
+  }
+
+  static Future delShieldKeyword({
+    required String keyword,
+  }) async {
+    final csrf = Accounts.main.csrf;
+    var res = await Request().post(
+      Api.delShieldKeyword,
+      data: {
+        'keyword': keyword,
+        'csrf': csrf,
+        'csrf_token': csrf,
+      },
+      options: Options(contentType: Headers.formUrlEncodedContentType),
+    );
+    if (res.data['code'] == 0) {
+      return {'status': true};
+    } else {
+      return {'status': false, 'msg': res.data['message']};
+    }
+  }
+
+  static Future liveShieldUser({
+    required dynamic uid,
+    required dynamic roomid,
+    required int type,
+  }) async {
+    final csrf = Accounts.main.csrf;
+    var res = await Request().post(
+      Api.liveShieldUser,
+      data: {
+        'uid': uid,
+        'roomid': roomid,
+        'type': type,
+        'csrf': csrf,
+        'csrf_token': csrf,
+      },
+      options: Options(contentType: Headers.formUrlEncodedContentType),
+    );
+    if (res.data['code'] == 0) {
+      return {'status': true, 'data': res.data['data']};
+    } else {
+      return {'status': false, 'msg': res.data['message']};
     }
   }
 }

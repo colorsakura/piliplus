@@ -896,4 +896,19 @@ class Api {
   static const String dynPic = '/x/polymer/web-dynamic/v1/detail/pic';
 
   static const String msgLikeDetail = '/x/msgfeed/like_detail';
+
+  static const String getLiveInfoByUser =
+      '${HttpString.liveBaseUrl}/xlive/web-room/v1/index/getInfoByUser';
+
+  static const String liveSetSilent =
+      '${HttpString.liveBaseUrl}/liveact/user_silent';
+
+  static const String addShieldKeyword =
+      '${HttpString.liveBaseUrl}/xlive/web-ucenter/v1/banned/AddShieldKeyword';
+
+  static const String delShieldKeyword =
+      '${HttpString.liveBaseUrl}/xlive/web-ucenter/v1/banned/DelShieldKeyword';
+
+  static const String liveShieldUser =
+      '${HttpString.liveBaseUrl}/liveact/shield_user';
 }

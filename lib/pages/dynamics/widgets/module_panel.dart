@@ -225,12 +225,15 @@ Widget module(
                 if (item.modules.moduleDynamic!.major!.common!.cover
                         ?.isNotEmpty ==
                     true)
-                  CachedNetworkImage(
-                    width: 45,
-                    height: 45,
-                    fit: BoxFit.cover,
-                    imageUrl: item.modules.moduleDynamic!.major!.common!.cover!
-                        .http2https,
+                  ClipRRect(
+                    borderRadius: const BorderRadius.all(Radius.circular(6)),
+                    child: CachedNetworkImage(
+                      width: 45,
+                      height: 45,
+                      fit: BoxFit.cover,
+                      imageUrl: item.modules.moduleDynamic!.major!.common!
+                          .cover!.http2https,
+                    ),
                   ),
                 Expanded(
                   child: Column(

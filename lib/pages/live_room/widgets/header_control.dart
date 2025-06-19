@@ -147,6 +147,7 @@ class LiveHeaderControl extends StatelessWidget {
             width: 35,
             height: 35,
             child: IconButton(
+              tooltip: '定时关闭',
               style: ButtonStyle(
                 padding: WidgetStateProperty.all(EdgeInsets.zero),
               ),

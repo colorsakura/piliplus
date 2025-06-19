@@ -20,6 +20,7 @@ import 'package:PiliPlus/pages/home/view.dart';
 import 'package:PiliPlus/pages/hot/view.dart';
 import 'package:PiliPlus/pages/later/view.dart';
 import 'package:PiliPlus/pages/later_search/view.dart';
+import 'package:PiliPlus/pages/live_dm_block/view.dart';
 import 'package:PiliPlus/pages/live_room/view.dart';
 import 'package:PiliPlus/pages/login/view.dart';
 import 'package:PiliPlus/pages/main/view.dart';
@@ -183,6 +184,8 @@ class Routes {
     CustomGetPage(name: '/dynTopicRcmd', page: () => const DynTopicRcmdPage()),
     CustomGetPage(name: '/matchInfo', page: () => const MatchInfoPage()),
     CustomGetPage(name: '/msgLikeDetail', page: () => const LikeDetailPage()),
+    CustomGetPage(
+        name: '/liveDmBlockPage', page: () => const LiveDmBlockPage()),
   ];
 }
 

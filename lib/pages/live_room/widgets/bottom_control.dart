@@ -4,6 +4,7 @@ import 'package:PiliPlus/plugin/pl_player/widgets/common_btn.dart';
 import 'package:PiliPlus/plugin/pl_player/widgets/play_pause_btn.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 
 class BottomControl extends StatelessWidget {
@@ -46,11 +47,40 @@ class BottomControl extends StatelessWidget {
             onTap: onRefresh,
           ),
           const Spacer(),
+          SizedBox(
+            width: 35,
+            height: 35,
+            child: IconButton(
+              tooltip: '弹幕屏蔽',
+              style: ButtonStyle(
+                padding: WidgetStateProperty.all(EdgeInsets.zero),
+              ),
+              onPressed: () {
+                if (liveRoomCtr.accountService.isLogin.value) {
+                  Get.toNamed(
+                    '/liveDmBlockPage',
+                    parameters: {
+                      'roomId': liveRoomCtr.roomId.toString(),
+                    },
+                  );
+                } else {
+                  SmartDialog.showToast('账号未登录');
+                }
+              },
+              icon: const Icon(
+                size: 18,
+                Icons.block,
+                color: Colors.white,
+              ),
+            ),
+          ),
+          const SizedBox(width: 10),
           Obx(
             () => SizedBox(
               width: 35,
               height: 35,
               child: IconButton(
+                tooltip: '弹幕开关',
                 style: ButtonStyle(
                   padding: WidgetStateProperty.all(EdgeInsets.zero),
                 ),
