@@ -83,12 +83,12 @@ class _CreateFavPageState extends State<CreateFavPage> {
                 privacy: _isPublic ? 0 : 1,
                 cover: _cover ?? '',
                 intro: _introController.text,
-              ).then((data) {
-                if (data['status']) {
-                  Get.back(result: data['data']);
+              ).then((res) {
+                if (res['status']) {
+                  Get.back(result: res['data']);
                   SmartDialog.showToast('${_mediaId != null ? '编辑' : '创建'}成功');
                 } else {
-                  SmartDialog.showToast(data['msg']);
+                  SmartDialog.showToast(res['msg']);
                 }
               });
             },
@@ -117,7 +117,7 @@ class _CreateFavPageState extends State<CreateFavPage> {
     );
   }
 
-  Future<void> _pickImg(ThemeData theme) async {
+  Future<void> _pickImg(BuildContext context, ThemeData theme) async {
     try {
       XFile? pickedFile = await _imagePicker.pickImage(
         source: ImageSource.gallery,
@@ -154,12 +154,12 @@ class _CreateFavPageState extends State<CreateFavPage> {
             path: croppedFile.path,
             bucket: 'medialist',
             dir: 'cover',
-          ).then((data) {
-            if (data['status']) {
-              _cover = data['data']['location'];
-              setState(() {});
+          ).then((res) {
+            if (res['status']) {
+              _cover = res['data']['location'];
+              (context as Element).markNeedsBuild();
             } else {
-              SmartDialog.showToast(data['msg']);
+              SmartDialog.showToast(res['msg']);
             }
           });
         }
@@ -175,87 +175,91 @@ class _CreateFavPageState extends State<CreateFavPage> {
         child: Column(
           children: [
             if (_attr == null || !FavUtil.isDefaultFav(_attr!)) ...[
-              ListTile(
-                tileColor: theme.colorScheme.onInverseSurface,
-                onTap: () {
-                  EasyThrottle.throttle(
-                      'imagePicker', const Duration(milliseconds: 500), () {
-                    if (_cover?.isNotEmpty == true) {
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            clipBehavior: Clip.hardEdge,
-                            contentPadding:
-                                const EdgeInsets.fromLTRB(0, 12, 0, 12),
-                            content: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                ListTile(
-                                  dense: true,
-                                  onTap: () {
-                                    Get.back();
-                                    _pickImg(theme);
-                                  },
-                                  title: const Text(
-                                    '替换封面',
-                                    style: TextStyle(fontSize: 14),
-                                  ),
+              Builder(
+                builder: (context) {
+                  return ListTile(
+                    tileColor: theme.colorScheme.onInverseSurface,
+                    onTap: () {
+                      EasyThrottle.throttle(
+                          'imagePicker', const Duration(milliseconds: 500), () {
+                        if (_cover?.isNotEmpty == true) {
+                          showDialog(
+                            context: context,
+                            builder: (_) {
+                              return AlertDialog(
+                                clipBehavior: Clip.hardEdge,
+                                contentPadding:
+                                    const EdgeInsets.fromLTRB(0, 12, 0, 12),
+                                content: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    ListTile(
+                                      dense: true,
+                                      onTap: () {
+                                        Get.back();
+                                        _pickImg(context, theme);
+                                      },
+                                      title: const Text(
+                                        '替换封面',
+                                        style: TextStyle(fontSize: 14),
+                                      ),
+                                    ),
+                                    ListTile(
+                                      dense: true,
+                                      onTap: () {
+                                        Get.back();
+                                        _cover = null;
+                                        (context as Element).markNeedsBuild();
+                                      },
+                                      title: const Text(
+                                        '移除封面',
+                                        style: TextStyle(fontSize: 14),
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                                ListTile(
-                                  dense: true,
-                                  onTap: () {
-                                    Get.back();
-                                    _cover = null;
-                                    setState(() {});
-                                  },
-                                  title: const Text(
-                                    '移除封面',
-                                    style: TextStyle(fontSize: 14),
-                                  ),
-                                ),
-                              ],
-                            ),
+                              );
+                            },
                           );
-                        },
-                      );
-                    } else {
-                      _pickImg(theme);
-                    }
-                  });
-                },
-                leading: Text(
-                  '封面',
-                  style: leadingStyle,
-                ),
-                trailing: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    if (_cover?.isNotEmpty == true)
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 10),
-                        child: LayoutBuilder(
-                          builder: (context, constraints) {
-                            return ClipRRect(
-                              borderRadius:
-                                  const BorderRadius.all(Radius.circular(6)),
-                              child: CachedNetworkImage(
-                                imageUrl: ImageUtil.thumbnailUrl(_cover!),
-                                height: constraints.maxHeight,
-                                width: constraints.maxHeight * 16 / 9,
-                                fit: BoxFit.cover,
-                              ),
-                            );
-                          },
-                        ),
-                      ),
-                    const SizedBox(width: 10),
-                    Icon(
-                      Icons.keyboard_arrow_right,
-                      color: theme.colorScheme.outline,
+                        } else {
+                          _pickImg(context, theme);
+                        }
+                      });
+                    },
+                    leading: Text(
+                      '封面',
+                      style: leadingStyle,
                     ),
-                  ],
-                ),
+                    trailing: Row(
+                      spacing: 10,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        if (_cover?.isNotEmpty == true)
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 5),
+                            child: LayoutBuilder(
+                              builder: (context, constraints) {
+                                return ClipRRect(
+                                  borderRadius: const BorderRadius.all(
+                                      Radius.circular(6)),
+                                  child: CachedNetworkImage(
+                                    imageUrl: ImageUtil.thumbnailUrl(_cover!),
+                                    height: constraints.maxHeight,
+                                    width: constraints.maxHeight * 16 / 9,
+                                    fit: BoxFit.cover,
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                        Icon(
+                          Icons.keyboard_arrow_right,
+                          color: theme.colorScheme.outline,
+                        ),
+                      ],
+                    ),
+                  );
+                },
               ),
               const SizedBox(height: 16),
             ],
@@ -368,26 +372,30 @@ class _CreateFavPageState extends State<CreateFavPage> {
               ),
               const SizedBox(height: 16),
             ],
-            ListTile(
-              onTap: () => setState(() {
-                _isPublic = !_isPublic;
-              }),
-              tileColor: theme.colorScheme.onInverseSurface,
-              leading: Text(
-                '公开',
-                style: leadingStyle,
-              ),
-              trailing: Transform.scale(
-                alignment: Alignment.centerRight,
-                scale: 0.8,
-                child: Switch(
-                    value: _isPublic,
-                    onChanged: (value) {
-                      setState(() {
-                        _isPublic = value;
-                      });
-                    }),
-              ),
+            Builder(
+              builder: (context) {
+                void onTap() {
+                  _isPublic = !_isPublic;
+                  (context as Element).markNeedsBuild();
+                }
+
+                return ListTile(
+                  onTap: onTap,
+                  tileColor: theme.colorScheme.onInverseSurface,
+                  leading: Text(
+                    '公开',
+                    style: leadingStyle,
+                  ),
+                  trailing: Transform.scale(
+                    alignment: Alignment.centerRight,
+                    scale: 0.8,
+                    child: Switch(
+                      value: _isPublic,
+                      onChanged: (value) => onTap(),
+                    ),
+                  ),
+                );
+              },
             ),
             const SizedBox(height: 16),
           ],

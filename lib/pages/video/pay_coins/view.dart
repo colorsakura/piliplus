@@ -267,9 +267,7 @@ class _PayCoinsPageState extends State<PayCoinsPage>
                             physics: const ClampingScrollPhysics(),
                             itemCount: widget.copyright == 1 ? 2 : 1,
                             controller: _controller,
-                            onPageChanged: (index) => setState(() {
-                              _scale();
-                            }),
+                            onPageChanged: (index) => setState(_scale),
                             itemBuilder: (context, index) {
                               return ListenableBuilder(
                                 listenable: _controller,

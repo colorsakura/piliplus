@@ -32,10 +32,14 @@ class _LoginPageState extends State<LoginPage> {
         const SizedBox(height: 20),
         const Text('使用 bilibili 官方 App 扫码登录'),
         const SizedBox(height: 20),
-        Obx(() => Text('剩余有效时间: ${_loginPageCtr.qrCodeLeftTime} 秒',
+        Obx(
+          () => Text(
+            '剩余有效时间: ${_loginPageCtr.qrCodeLeftTime} 秒',
             style: TextStyle(
                 fontFeatures: const [FontFeature.tabularFigures()],
-                color: theme.colorScheme.primaryFixedDim))),
+                color: theme.colorScheme.primaryFixedDim),
+          ),
+        ),
         const SizedBox(height: 5),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -107,29 +111,37 @@ class _LoginPageState extends State<LoginPage> {
           }),
         ),
         const SizedBox(height: 10),
-        Obx(() => Text(
-              _loginPageCtr.statusQRCode.value,
-              style: TextStyle(color: theme.colorScheme.secondaryFixedDim),
-            )),
-        Obx(() => GestureDetector(
-              onTap: () => Utils.copyText(
-                  _loginPageCtr.codeInfo['data']?['url'] ?? '',
-                  toastText: '已复制到剪贴板，可粘贴至已登录的app私信处发送，然后点击已发送的链接打开'),
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-                child: Text(_loginPageCtr.codeInfo['data']?['url'] ?? "",
-                    style: theme.textTheme.labelSmall!.copyWith(
-                        color: theme.colorScheme.onSurface
-                            .withValues(alpha: 0.4))),
-              ),
-            )),
-        Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: Text('请务必在 PiliPlus 开源仓库等可信渠道下载安装。',
+        Obx(
+          () => Text(
+            _loginPageCtr.statusQRCode.value,
+            style: TextStyle(color: theme.colorScheme.secondaryFixedDim),
+          ),
+        ),
+        Obx(
+          () => GestureDetector(
+            onTap: () => Utils.copyText(
+                _loginPageCtr.codeInfo['data']?['url'] ?? '',
+                toastText: '已复制到剪贴板，可粘贴至已登录的app私信处发送，然后点击已发送的链接打开'),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+              child: Text(
+                _loginPageCtr.codeInfo['data']?['url'] ?? "",
                 style: theme.textTheme.labelSmall!.copyWith(
-                    color:
-                        theme.colorScheme.onSurface.withValues(alpha: 0.4)))),
+                  color: theme.colorScheme.onSurface.withValues(alpha: 0.4),
+                ),
+              ),
+            ),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: Text(
+            '请务必在 PiliPlus 开源仓库等可信渠道下载安装。',
+            style: theme.textTheme.labelSmall!.copyWith(
+              color: theme.colorScheme.onSurface.withValues(alpha: 0.4),
+            ),
+          ),
+        ),
       ],
     );
   }
@@ -247,8 +259,9 @@ class _LoginPageState extends State<LoginPage> {
                           const EdgeInsets.fromLTRB(0.0, 2.0, 0.0, 16.0),
                       children: [
                         const Padding(
-                            padding: EdgeInsets.fromLTRB(25, 0, 25, 10),
-                            child: Text("试试扫码、手机号登录，或选择")),
+                          padding: EdgeInsets.fromLTRB(25, 0, 25, 10),
+                          child: Text("试试扫码、手机号登录，或选择"),
+                        ),
                         ListTile(
                           title: const Text(
                             '找回密码（手机版）',
@@ -303,19 +316,24 @@ class _LoginPageState extends State<LoginPage> {
         ),
         const SizedBox(height: 20),
         Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: Text(
-                '根据 bilibili 官方登录接口规范，密码将在本地加盐、加密后传输。\n'
-                '盐与公钥均由官方提供；以 RSA/ECB/PKCS1Padding 方式加密。\n'
-                '账号密码仅用于该登录接口，不予保存；本地仅存储登录凭证。\n'
-                '请务必在 PiliPlus 开源仓库等可信渠道下载安装。',
-                textAlign: TextAlign.center,
-                style: theme.textTheme.labelSmall!.copyWith(
-                    color:
-                        theme.colorScheme.onSurface.withValues(alpha: 0.4)))),
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: Text(
+            '根据 bilibili 官方登录接口规范，密码将在本地加盐、加密后传输。\n'
+            '盐与公钥均由官方提供；以 RSA/ECB/PKCS1Padding 方式加密。\n'
+            '账号密码仅用于该登录接口，不予保存；本地仅存储登录凭证。\n'
+            '请务必在 PiliPlus 开源仓库等可信渠道下载安装。',
+            textAlign: TextAlign.center,
+            style: theme.textTheme.labelSmall!.copyWith(
+              color: theme.colorScheme.onSurface.withValues(alpha: 0.4),
+            ),
+          ),
+        ),
       ],
     );
   }
+
+  late final List<Map<String, dynamic>> internationalDialingPrefix =
+      Constants.internationalDialingPrefix;
 
   Widget loginBySmS(ThemeData theme) {
     return Column(
@@ -324,55 +342,63 @@ class _LoginPageState extends State<LoginPage> {
         const Text('使用手机短信验证码登录'),
         const SizedBox(height: 10),
         Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-            child: DecoratedBox(
-              decoration: UnderlineTabIndicator(
-                borderSide: BorderSide(
-                    color: theme.colorScheme.outline.withValues(alpha: 0.4)),
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+          child: DecoratedBox(
+            decoration: UnderlineTabIndicator(
+              borderSide: BorderSide(
+                color: theme.colorScheme.outline.withValues(alpha: 0.4),
               ),
-              child: Row(
-                children: [
-                  const SizedBox(width: 12),
-                  Icon(
-                    Icons.phone,
-                    color: theme.colorScheme.onSurfaceVariant,
+            ),
+            child: Row(
+              children: [
+                const SizedBox(width: 12),
+                Builder(
+                  builder: (context) {
+                    return PopupMenuButton<Map<String, dynamic>>(
+                      padding: EdgeInsets.zero,
+                      tooltip: '选择国际冠码，'
+                          '当前为${_loginPageCtr.selectedCountryCodeId['cname']}，'
+                          '+${_loginPageCtr.selectedCountryCodeId['country_id']}',
+                      onSelected: (Map<String, dynamic> type) {},
+                      itemBuilder: (_) => internationalDialingPrefix
+                          .map((Map<String, dynamic> item) {
+                        return PopupMenuItem<Map<String, dynamic>>(
+                          onTap: () {
+                            _loginPageCtr.selectedCountryCodeId = item;
+                            (context as Element).markNeedsBuild();
+                          },
+                          value: item,
+                          child: Row(children: [
+                            Text(item['cname']),
+                            const Spacer(),
+                            Text("+${item['country_id']}")
+                          ]),
+                        );
+                      }).toList(),
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.phone,
+                            color: theme.colorScheme.onSurfaceVariant,
+                          ),
+                          const SizedBox(width: 12),
+                          Text(
+                              "+${_loginPageCtr.selectedCountryCodeId['country_id']}"),
+                        ],
+                      ),
+                    );
+                  },
+                ),
+                const SizedBox(width: 6),
+                SizedBox(
+                  height: 24,
+                  child: VerticalDivider(
+                    color: theme.colorScheme.outline.withValues(alpha: 0.5),
                   ),
-                  const SizedBox(width: 12),
-                  PopupMenuButton<Map<String, dynamic>>(
-                    padding: EdgeInsets.zero,
-                    tooltip: '选择国际冠码，'
-                        '当前为${_loginPageCtr.selectedCountryCodeId['cname']}，'
-                        '+${_loginPageCtr.selectedCountryCodeId['country_id']}',
-                    //position: PopupMenuPosition.under,
-                    onSelected: (Map<String, dynamic> type) {},
-                    itemBuilder: (BuildContext context) => Constants
-                        .internationalDialingPrefix
-                        .map((Map<String, dynamic> item) {
-                      return PopupMenuItem<Map<String, dynamic>>(
-                        onTap: () => setState(() {
-                          _loginPageCtr.selectedCountryCodeId = item;
-                        }),
-                        value: item,
-                        child: Row(children: [
-                          Text(item['cname']),
-                          const Spacer(),
-                          Text("+${item['country_id']}")
-                        ]),
-                      );
-                    }).toList(),
-                    child: Text(
-                        "+${_loginPageCtr.selectedCountryCodeId['country_id']}"),
-                  ),
-                  const SizedBox(width: 6),
-                  SizedBox(
-                    height: 24,
-                    child: VerticalDivider(
-                      color: theme.colorScheme.outline.withValues(alpha: 0.5),
-                    ),
-                  ),
-                  const SizedBox(width: 6),
-                  Expanded(
-                      child: TextField(
+                ),
+                const SizedBox(width: 6),
+                Expanded(
+                  child: TextField(
                     controller: _loginPageCtr.telTextController,
                     keyboardType: TextInputType.number,
                     inputFormatters: <TextInputFormatter>[
@@ -386,45 +412,51 @@ class _LoginPageState extends State<LoginPage> {
                         icon: const Icon(Icons.clear),
                       ),
                     ),
-                  )),
-                ],
-              ),
-            )),
-        Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-            child: DecoratedBox(
-              decoration: UnderlineTabIndicator(
-                borderSide: BorderSide(
-                    color: theme.colorScheme.outline.withValues(alpha: 0.4)),
-              ),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: TextField(
-                      controller: _loginPageCtr.smsCodeTextController,
-                      decoration: const InputDecoration(
-                        prefixIcon: Icon(Icons.sms_outlined),
-                        border: InputBorder.none,
-                        labelText: '验证码',
-                      ),
-                      keyboardType: TextInputType.number,
-                      inputFormatters: <TextInputFormatter>[
-                        FilteringTextInputFormatter.digitsOnly,
-                      ],
-                    ),
                   ),
-                  Obx(() => TextButton.icon(
-                        onPressed: _loginPageCtr.smsSendCooldown > 0
-                            ? null
-                            : _loginPageCtr.sendSmsCode,
-                        icon: const Icon(Icons.send),
-                        label: Text(_loginPageCtr.smsSendCooldown > 0
-                            ? '等待${_loginPageCtr.smsSendCooldown}秒'
-                            : '获取验证码'),
-                      )),
-                ],
+                ),
+              ],
+            ),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+          child: DecoratedBox(
+            decoration: UnderlineTabIndicator(
+              borderSide: BorderSide(
+                color: theme.colorScheme.outline.withValues(alpha: 0.4),
               ),
-            )),
+            ),
+            child: Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    controller: _loginPageCtr.smsCodeTextController,
+                    decoration: const InputDecoration(
+                      prefixIcon: Icon(Icons.sms_outlined),
+                      border: InputBorder.none,
+                      labelText: '验证码',
+                    ),
+                    keyboardType: TextInputType.number,
+                    inputFormatters: <TextInputFormatter>[
+                      FilteringTextInputFormatter.digitsOnly,
+                    ],
+                  ),
+                ),
+                Obx(
+                  () => TextButton.icon(
+                    onPressed: _loginPageCtr.smsSendCooldown > 0
+                        ? null
+                        : _loginPageCtr.sendSmsCode,
+                    icon: const Icon(Icons.send),
+                    label: Text(_loginPageCtr.smsSendCooldown > 0
+                        ? '等待${_loginPageCtr.smsSendCooldown}秒'
+                        : '获取验证码'),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
         const SizedBox(height: 20),
         OutlinedButton.icon(
           onPressed: _loginPageCtr.loginBySmsCode,
@@ -433,15 +465,17 @@ class _LoginPageState extends State<LoginPage> {
         ),
         const SizedBox(height: 20),
         Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: Text(
-                '手机号仅用于 bilibili 官方发送验证码与登录接口，不予保存；\n'
-                '本地仅存储登录凭证。\n'
-                '请务必在 PiliPlus 开源仓库等可信渠道下载安装。',
-                textAlign: TextAlign.center,
-                style: theme.textTheme.labelSmall!.copyWith(
-                    color:
-                        theme.colorScheme.onSurface.withValues(alpha: 0.4)))),
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: Text(
+            '手机号仅用于 bilibili 官方发送验证码与登录接口，不予保存；\n'
+            '本地仅存储登录凭证。\n'
+            '请务必在 PiliPlus 开源仓库等可信渠道下载安装。',
+            textAlign: TextAlign.center,
+            style: theme.textTheme.labelSmall!.copyWith(
+              color: theme.colorScheme.onSurface.withValues(alpha: 0.4),
+            ),
+          ),
+        ),
       ],
     );
   }

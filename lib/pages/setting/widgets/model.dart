@@ -1480,7 +1480,7 @@ List<SettingsModel> get privacySettings => [
       SettingsModel(
         settingsType: SettingsType.normal,
         onTap: (setState) {
-          MineController.onChangeAnonymity(Get.context!);
+          MineController.onChangeAnonymity();
           setState();
         },
         leading: const Icon(Icons.privacy_tip_outlined),

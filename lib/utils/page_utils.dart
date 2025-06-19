@@ -119,8 +119,9 @@ class PageUtils {
                         onPressed: () {
                           Get.back();
                           int choice = int.tryParse(duration) ?? 0;
-                          shutdownTimerService.scheduledExitInMinutes = choice;
-                          shutdownTimerService.startShutdownTimer();
+                          shutdownTimerService
+                            ..scheduledExitInMinutes = choice
+                            ..startShutdownTimer();
                           setState(() {});
                         },
                         child: const Text('确定'),
@@ -181,59 +182,71 @@ class PageUtils {
                       ),
                     ),
                     if (!isLive) ...[
-                      ListTile(
-                        dense: true,
-                        onTap: () {
-                          shutdownTimerService.waitForPlayingCompleted =
-                              !shutdownTimerService.waitForPlayingCompleted;
-                          setState(() {});
+                      Builder(
+                        builder: (context) {
+                          return ListTile(
+                            dense: true,
+                            onTap: () {
+                              shutdownTimerService.waitForPlayingCompleted =
+                                  !shutdownTimerService.waitForPlayingCompleted;
+                              (context as Element).markNeedsBuild();
+                            },
+                            title: const Text("额外等待视频播放完毕", style: titleStyle),
+                            trailing: Transform.scale(
+                              alignment: Alignment.centerRight,
+                              scale: 0.8,
+                              child: Switch(
+                                thumbIcon:
+                                    WidgetStateProperty.resolveWith<Icon?>(
+                                        (Set<WidgetState> states) {
+                                  if (states.isNotEmpty &&
+                                      states.first == WidgetState.selected) {
+                                    return const Icon(Icons.done);
+                                  }
+                                  return null;
+                                }),
+                                value: shutdownTimerService
+                                    .waitForPlayingCompleted,
+                                onChanged: (value) {
+                                  shutdownTimerService.waitForPlayingCompleted =
+                                      value;
+                                  (context as Element).markNeedsBuild();
+                                },
+                              ),
+                            ),
+                          );
                         },
-                        title: const Text("额外等待视频播放完毕", style: titleStyle),
-                        trailing: Transform.scale(
-                          alignment: Alignment.centerRight,
-                          scale: 0.8,
-                          child: Switch(
-                            thumbIcon: WidgetStateProperty.resolveWith<Icon?>(
-                                (Set<WidgetState> states) {
-                              if (states.isNotEmpty &&
-                                  states.first == WidgetState.selected) {
-                                return const Icon(Icons.done);
-                              }
-                              return null;
-                            }),
-                            value: shutdownTimerService.waitForPlayingCompleted,
-                            onChanged: (value) => setState(() =>
-                                shutdownTimerService.waitForPlayingCompleted =
-                                    value),
-                          ),
-                        ),
                       ),
                     ],
                     const SizedBox(height: 10),
-                    Row(
-                      children: [
-                        const SizedBox(width: 18),
-                        const Text('倒计时结束:', style: titleStyle),
-                        const Spacer(),
-                        ActionRowLineItem(
-                          onTap: () {
-                            shutdownTimerService.exitApp = false;
-                            setState(() {});
-                          },
-                          text: " 暂停视频 ",
-                          selectStatus: !shutdownTimerService.exitApp,
-                        ),
-                        const Spacer(),
-                        ActionRowLineItem(
-                          onTap: () {
-                            shutdownTimerService.exitApp = true;
-                            setState(() {});
-                          },
-                          text: " 退出APP ",
-                          selectStatus: shutdownTimerService.exitApp,
-                        ),
-                        const SizedBox(width: 25),
-                      ],
+                    Builder(
+                      builder: (context) {
+                        return Row(
+                          children: [
+                            const SizedBox(width: 18),
+                            const Text('倒计时结束:', style: titleStyle),
+                            const Spacer(),
+                            ActionRowLineItem(
+                              onTap: () {
+                                shutdownTimerService.exitApp = false;
+                                (context as Element).markNeedsBuild();
+                              },
+                              text: " 暂停视频 ",
+                              selectStatus: !shutdownTimerService.exitApp,
+                            ),
+                            const Spacer(),
+                            ActionRowLineItem(
+                              onTap: () {
+                                shutdownTimerService.exitApp = true;
+                                (context as Element).markNeedsBuild();
+                              },
+                              text: " 退出APP ",
+                              selectStatus: shutdownTimerService.exitApp,
+                            ),
+                            const SizedBox(width: 25),
+                          ],
+                        );
+                      },
                     ),
                   ],
                 ),

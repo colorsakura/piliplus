@@ -20,31 +20,31 @@ class _PlaySpeedPageState extends State<PlaySpeedPage> {
   late double longPressSpeedDefault;
   late List<double> speedList;
   late bool enableAutoLongPressSpeed;
-  List<Map<dynamic, dynamic>> sheetMenu = [
-    {
-      'id': 1,
-      'title': '设置为默认倍速',
-      'leading': const Icon(
+  List<({int id, String title, Icon icon})> sheetMenu = [
+    (
+      id: 1,
+      title: '设置为默认倍速',
+      icon: const Icon(
         Icons.speed,
         size: 21,
       ),
-    },
-    {
-      'id': 2,
-      'title': '设置为默认长按倍速',
-      'leading': const Icon(
+    ),
+    (
+      id: 2,
+      title: '设置为默认长按倍速',
+      icon: const Icon(
         Icons.speed_sharp,
         size: 21,
       ),
-    },
-    {
-      'id': -1,
-      'title': '删除该项',
-      'leading': const Icon(
+    ),
+    (
+      id: -1,
+      title: '删除该项',
+      icon: const Icon(
         Icons.delete_outline,
         size: 21,
       ),
-    },
+    ),
   ];
 
   Box get video => GStorage.video;
@@ -62,13 +62,6 @@ class _PlaySpeedPageState extends State<PlaySpeedPage> {
     speedList = GStorage.speedList;
     enableAutoLongPressSpeed = GStorage.setting
         .get(SettingBoxKey.enableAutoLongPressSpeed, defaultValue: false);
-    if (enableAutoLongPressSpeed) {
-      Map newItem = sheetMenu[1];
-      newItem['show'] = false;
-      setState(() {
-        sheetMenu[1] = newItem;
-      });
-    }
   }
 
   // 添加自定义倍速
@@ -147,16 +140,18 @@ class _PlaySpeedPageState extends State<PlaySpeedPage> {
             const SizedBox(height: 10),
             ...sheetMenu.map(
               (item) => ListTile(
+                enabled:
+                    enableAutoLongPressSpeed && item.id == 2 ? false : true,
                 onTap: () {
-                  Navigator.pop(context);
-                  menuAction(index, item['id']);
+                  Get.back();
+                  menuAction(index, item.id);
                 },
                 minLeadingWidth: 0,
                 iconColor: theme.colorScheme.onSurface,
-                leading: item['leading'],
+                leading: item.icon,
                 title: Text(
-                  item['title'],
-                  style: theme.textTheme.titleSmall,
+                  item.title,
+                  style: const TextStyle(fontSize: 14),
                 ),
               ),
             ),
@@ -233,14 +228,8 @@ class _PlaySpeedPageState extends State<PlaySpeedPage> {
               subtitle: '根据默认倍速长按时自动双倍',
               setKey: SettingBoxKey.enableAutoLongPressSpeed,
               defaultVal: enableAutoLongPressSpeed,
-              onChanged: (val) {
-                Map newItem = sheetMenu[1];
-                val ? newItem['show'] = false : newItem['show'] = true;
-                setState(() {
-                  sheetMenu[1] = newItem;
-                  enableAutoLongPressSpeed = val;
-                });
-              },
+              onChanged: (val) =>
+                  setState(() => enableAutoLongPressSpeed = val),
             ),
             if (!enableAutoLongPressSpeed)
               ListTile(

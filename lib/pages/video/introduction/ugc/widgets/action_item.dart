@@ -47,7 +47,6 @@ class ActionItemState extends State<ActionItem>
 
   late final _isThumbsUp = widget.semanticsLabel == '点赞';
   late int _lastTime;
-  late bool _hideCircle = false;
   Timer? _timer;
 
   void _startLongPress() {
@@ -100,15 +99,12 @@ class ActionItemState extends State<ActionItem>
   }
 
   void listener() {
-    setState(() {
-      _hideCircle = controller?.value == 1;
-      if (_hideCircle) {
-        controller?.reset();
-        if (_isThumbsUp) {
-          widget.onLongPress?.call();
-        }
+    if (controller!.value == 1) {
+      controller!.reset();
+      if (_isThumbsUp) {
+        widget.onLongPress?.call();
       }
-    });
+    }
   }
 
   void cancelTimer() {
@@ -157,12 +153,15 @@ class ActionItemState extends State<ActionItem>
                   clipBehavior: Clip.none,
                   alignment: Alignment.center,
                   children: [
-                    if (widget.needAnim && !_hideCircle)
-                      CustomPaint(
-                        size: const Size(28, 28),
-                        painter: _ArcPainter(
-                          color: theme.colorScheme.primary,
-                          sweepAngle: _animation!.value,
+                    if (widget.needAnim)
+                      AnimatedBuilder(
+                        animation: _animation!,
+                        builder: (context, child) => CustomPaint(
+                          size: const Size(28, 28),
+                          painter: _ArcPainter(
+                            color: theme.colorScheme.primary,
+                            sweepAngle: _animation!.value,
+                          ),
                         ),
                       )
                     else

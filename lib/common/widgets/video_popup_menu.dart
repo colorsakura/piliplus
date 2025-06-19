@@ -266,7 +266,7 @@ class VideoCustomActions {
         MineController.anonymity.value
             ? const Icon(MdiIcons.incognitoOff, size: 16)
             : const Icon(MdiIcons.incognito, size: 16),
-        () => MineController.onChangeAnonymity(context),
+        MineController.onChangeAnonymity,
       )
     ];
   }

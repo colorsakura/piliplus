@@ -74,59 +74,63 @@ class _SponsorBlockPageState extends State<SponsorBlockPage> {
 
   Widget _blockLimitItem(
           ThemeData theme, TextStyle titleStyle, TextStyle subTitleStyle) =>
-      ListTile(
-        dense: true,
-        onTap: () {
-          _textController.text = _blockLimit.toString();
-          showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return AlertDialog(
-                title: Text('最短片段时长', style: titleStyle),
-                content: TextFormField(
-                  keyboardType:
-                      const TextInputType.numberWithOptions(decimal: true),
-                  controller: _textController,
-                  autofocus: true,
-                  decoration: const InputDecoration(suffixText: 's'),
-                  inputFormatters: [
-                    FilteringTextInputFormatter.allow(RegExp(r'[\d\.]+')),
-                  ],
-                ),
-                actions: [
-                  TextButton(
-                    onPressed: Get.back,
-                    child: Text(
-                      '取消',
-                      style: TextStyle(
-                        color: theme.colorScheme.outline,
-                      ),
+      Builder(
+        builder: (context) {
+          return ListTile(
+            dense: true,
+            onTap: () {
+              _textController.text = _blockLimit.toString();
+              showDialog(
+                context: context,
+                builder: (_) {
+                  return AlertDialog(
+                    title: Text('最短片段时长', style: titleStyle),
+                    content: TextFormField(
+                      keyboardType:
+                          const TextInputType.numberWithOptions(decimal: true),
+                      controller: _textController,
+                      autofocus: true,
+                      decoration: const InputDecoration(suffixText: 's'),
+                      inputFormatters: [
+                        FilteringTextInputFormatter.allow(RegExp(r'[\d\.]+')),
+                      ],
                     ),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      Get.back();
-                      _blockLimit = max(
-                          0.0, double.tryParse(_textController.text) ?? 0.0);
-                      setting.put(SettingBoxKey.blockLimit, _blockLimit);
-                      setState(() {});
-                    },
-                    child: const Text('确定'),
-                  )
-                ],
+                    actions: [
+                      TextButton(
+                        onPressed: Get.back,
+                        child: Text(
+                          '取消',
+                          style: TextStyle(
+                            color: theme.colorScheme.outline,
+                          ),
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          Get.back();
+                          _blockLimit = max(0.0,
+                              double.tryParse(_textController.text) ?? 0.0);
+                          setting.put(SettingBoxKey.blockLimit, _blockLimit);
+                          (context as Element).markNeedsBuild();
+                        },
+                        child: const Text('确定'),
+                      )
+                    ],
+                  );
+                },
               );
             },
+            title: Text('最短片段时长', style: titleStyle),
+            subtitle: Text(
+              '忽略短于此时长的片段',
+              style: subTitleStyle,
+            ),
+            trailing: Text(
+              '${_blockLimit}s',
+              style: const TextStyle(fontSize: 13),
+            ),
           );
         },
-        title: Text('最短片段时长', style: titleStyle),
-        subtitle: Text(
-          '忽略短于此时长的片段',
-          style: subTitleStyle,
-        ),
-        trailing: Text(
-          '${_blockLimit}s',
-          style: const TextStyle(fontSize: 13),
-        ),
       );
 
   Widget _aboudItem(TextStyle titleStyle, TextStyle subTitleStyle) => ListTile(
@@ -138,230 +142,250 @@ class _SponsorBlockPageState extends State<SponsorBlockPage> {
 
   Widget _userIdItem(
           ThemeData theme, TextStyle titleStyle, TextStyle subTitleStyle) =>
-      ListTile(
-        dense: true,
-        title: Text('用户ID', style: titleStyle),
-        subtitle: Text(_userId, style: subTitleStyle),
-        onTap: () {
-          final key = GlobalKey<FormState>();
-          _textController.text = _userId;
-          showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return AlertDialog(
-                title: Text('用户ID', style: titleStyle),
-                content: Form(
-                  key: key,
-                  child: TextFormField(
-                    minLines: 1,
-                    maxLines: 4,
-                    autofocus: true,
-                    controller: _textController,
-                    inputFormatters: [
-                      FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z\d]+')),
-                    ],
-                    validator: (value) {
-                      if ((value?.length ?? -1) < 30) {
-                        return '用户ID要求至少为30个字符长度的纯字符串';
-                      }
-                      return null;
-                    },
-                  ),
-                ),
-                actions: [
-                  TextButton(
-                    onPressed: () {
-                      Get.back();
-                      _userId = const Uuid().v4().replaceAll('-', '');
-                      setting.put(SettingBoxKey.blockUserID, _userId);
-                      setState(() {});
-                    },
-                    child: const Text('随机'),
-                  ),
-                  TextButton(
-                    onPressed: Get.back,
-                    child: Text(
-                      '取消',
-                      style: TextStyle(
-                        color: theme.colorScheme.outline,
+      Builder(
+        builder: (context) {
+          return ListTile(
+            dense: true,
+            title: Text('用户ID', style: titleStyle),
+            subtitle: Text(_userId, style: subTitleStyle),
+            onTap: () {
+              final key = GlobalKey<FormState>();
+              _textController.text = _userId;
+              showDialog(
+                context: context,
+                builder: (_) {
+                  return AlertDialog(
+                    title: Text('用户ID', style: titleStyle),
+                    content: Form(
+                      key: key,
+                      child: TextFormField(
+                        minLines: 1,
+                        maxLines: 4,
+                        autofocus: true,
+                        controller: _textController,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.allow(
+                              RegExp(r'[a-zA-Z\d]+')),
+                        ],
+                        validator: (value) {
+                          if ((value?.length ?? -1) < 30) {
+                            return '用户ID要求至少为30个字符长度的纯字符串';
+                          }
+                          return null;
+                        },
                       ),
                     ),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      if (key.currentState?.validate() == true) {
-                        Get.back();
-                        _userId = _textController.text;
-                        setting.put(SettingBoxKey.blockUserID, _userId);
-                        setState(() {});
-                      }
-                    },
-                    child: const Text('确定'),
-                  )
-                ],
+                    actions: [
+                      TextButton(
+                        onPressed: () {
+                          Get.back();
+                          _userId = const Uuid().v4().replaceAll('-', '');
+                          setting.put(SettingBoxKey.blockUserID, _userId);
+                          (context as Element).markNeedsBuild();
+                        },
+                        child: const Text('随机'),
+                      ),
+                      TextButton(
+                        onPressed: Get.back,
+                        child: Text(
+                          '取消',
+                          style: TextStyle(
+                            color: theme.colorScheme.outline,
+                          ),
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          if (key.currentState?.validate() == true) {
+                            Get.back();
+                            _userId = _textController.text;
+                            setting.put(SettingBoxKey.blockUserID, _userId);
+                            (context as Element).markNeedsBuild();
+                          }
+                        },
+                        child: const Text('确定'),
+                      )
+                    ],
+                  );
+                },
               );
             },
           );
         },
       );
 
-  void _updateBlockToast() {
-    _blockToast = !_blockToast;
-    setting.put(SettingBoxKey.blockToast, _blockToast);
-    setState(() {});
-  }
+  Widget _blockToastItem(TextStyle titleStyle) => Builder(
+        builder: (context) {
+          void update() {
+            _blockToast = !_blockToast;
+            setting.put(SettingBoxKey.blockToast, _blockToast);
+            (context as Element).markNeedsBuild();
+          }
 
-  void _updateBlockTrack() {
-    _blockTrack = !_blockTrack;
-    setting.put(SettingBoxKey.blockTrack, _blockTrack);
-    setState(() {});
-  }
-
-  Widget _blockToastItem(TextStyle titleStyle) => ListTile(
-      dense: true,
-      onTap: _updateBlockToast,
-      title: Text(
-        '显示跳过Toast',
-        style: titleStyle,
-      ),
-      trailing: Transform.scale(
-        alignment: Alignment.centerRight,
-        scale: 0.8,
-        child: Switch(
-          thumbIcon: WidgetStateProperty.resolveWith<Icon?>((states) {
-            if (states.isNotEmpty && states.first == WidgetState.selected) {
-              return const Icon(Icons.done);
-            }
-            return null;
-          }),
-          value: _blockToast,
-          onChanged: (val) {
-            _updateBlockToast();
-          },
-        ),
-      ));
+          return ListTile(
+            dense: true,
+            onTap: update,
+            title: Text(
+              '显示跳过Toast',
+              style: titleStyle,
+            ),
+            trailing: Transform.scale(
+              alignment: Alignment.centerRight,
+              scale: 0.8,
+              child: Switch(
+                thumbIcon: WidgetStateProperty.resolveWith<Icon?>((states) {
+                  if (states.isNotEmpty &&
+                      states.first == WidgetState.selected) {
+                    return const Icon(Icons.done);
+                  }
+                  return null;
+                }),
+                value: _blockToast,
+                onChanged: (val) => update(),
+              ),
+            ),
+          );
+        },
+      );
 
   Widget _blockTrackItem(TextStyle titleStyle, TextStyle subTitleStyle) =>
-      ListTile(
-          dense: true,
-          onTap: _updateBlockTrack,
-          title: Text(
-            '跳过次数统计跟踪',
-            style: titleStyle,
-          ),
-          subtitle: Text(
-            // from origin extension
-            '此功能追踪您跳过了哪些片段，让用户知道他们提交的片段帮助了多少人。同时点赞会作为依据，确保垃圾信息不会污染数据库。在您每次跳过片段时，我们都会向服务器发送一条消息。希望大家开启此项设置，以便得到更准确的统计数据。:)',
-            style: subTitleStyle,
-          ),
-          trailing: Transform.scale(
-            alignment: Alignment.centerRight,
-            scale: 0.8,
-            child: Switch(
-              thumbIcon: WidgetStateProperty.resolveWith<Icon?>((states) {
-                if (states.isNotEmpty && states.first == WidgetState.selected) {
-                  return const Icon(Icons.done);
-                }
-                return null;
-              }),
-              value: _blockTrack,
-              onChanged: (val) {
-                _updateBlockTrack();
-              },
-            ),
-          ));
+      Builder(
+        builder: (context) {
+          void update() {
+            _blockTrack = !_blockTrack;
+            setting.put(SettingBoxKey.blockTrack, _blockTrack);
+            (context as Element).markNeedsBuild();
+          }
+
+          return ListTile(
+              dense: true,
+              onTap: update,
+              title: Text(
+                '跳过次数统计跟踪',
+                style: titleStyle,
+              ),
+              subtitle: Text(
+                // from origin extension
+                '此功能追踪您跳过了哪些片段，让用户知道他们提交的片段帮助了多少人。同时点赞会作为依据，确保垃圾信息不会污染数据库。在您每次跳过片段时，我们都会向服务器发送一条消息。希望大家开启此项设置，以便得到更准确的统计数据。:)',
+                style: subTitleStyle,
+              ),
+              trailing: Transform.scale(
+                alignment: Alignment.centerRight,
+                scale: 0.8,
+                child: Switch(
+                  thumbIcon: WidgetStateProperty.resolveWith<Icon?>((states) {
+                    if (states.isNotEmpty &&
+                        states.first == WidgetState.selected) {
+                      return const Icon(Icons.done);
+                    }
+                    return null;
+                  }),
+                  value: _blockTrack,
+                  onChanged: (val) => update(),
+                ),
+              ));
+        },
+      );
 
   Widget _blockServerItem(
           ThemeData theme, TextStyle titleStyle, TextStyle subTitleStyle) =>
-      ListTile(
-        dense: true,
-        onTap: () {
-          _textController.text = _blockServer;
-          showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return AlertDialog(
-                title: Text('服务器地址', style: titleStyle),
-                content: TextFormField(
-                  keyboardType: TextInputType.url,
-                  controller: _textController,
-                  autofocus: true,
-                ),
-                actions: [
-                  TextButton(
-                    onPressed: () {
-                      Get.back();
-                      _blockServer = HttpString.sponsorBlockBaseUrl;
-                      setting.put(SettingBoxKey.blockServer, _blockServer);
-                      Request.accountManager.blockServer = _blockServer;
-                      setState(() {});
-                    },
-                    child: const Text('重置'),
-                  ),
-                  TextButton(
-                    onPressed: Get.back,
-                    child: Text(
-                      '取消',
-                      style: TextStyle(
-                        color: theme.colorScheme.outline,
-                      ),
+      Builder(
+        builder: (context) {
+          return ListTile(
+            dense: true,
+            onTap: () {
+              _textController.text = _blockServer;
+              showDialog(
+                context: context,
+                builder: (_) {
+                  return AlertDialog(
+                    title: Text('服务器地址', style: titleStyle),
+                    content: TextFormField(
+                      keyboardType: TextInputType.url,
+                      controller: _textController,
+                      autofocus: true,
                     ),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      Get.back();
-                      _blockServer = _textController.text;
-                      setting.put(SettingBoxKey.blockServer, _blockServer);
-                      Request.accountManager.blockServer = _blockServer;
-                      setState(() {});
-                    },
-                    child: const Text('确定'),
-                  )
-                ],
+                    actions: [
+                      TextButton(
+                        onPressed: () {
+                          Get.back();
+                          _blockServer = HttpString.sponsorBlockBaseUrl;
+                          setting.put(SettingBoxKey.blockServer, _blockServer);
+                          Request.accountManager.blockServer = _blockServer;
+                          (context as Element).markNeedsBuild();
+                        },
+                        child: const Text('重置'),
+                      ),
+                      TextButton(
+                        onPressed: Get.back,
+                        child: Text(
+                          '取消',
+                          style: TextStyle(
+                            color: theme.colorScheme.outline,
+                          ),
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          Get.back();
+                          _blockServer = _textController.text;
+                          setting.put(SettingBoxKey.blockServer, _blockServer);
+                          Request.accountManager.blockServer = _blockServer;
+                          (context as Element).markNeedsBuild();
+                        },
+                        child: const Text('确定'),
+                      )
+                    ],
+                  );
+                },
               );
             },
+            title: Text(
+              '服务器地址',
+              style: titleStyle,
+            ),
+            subtitle: Text(
+              _blockServer,
+              style: subTitleStyle,
+            ),
           );
         },
-        title: Text(
-          '服务器地址',
-          style: titleStyle,
-        ),
-        subtitle: Text(
-          _blockServer,
-          style: subTitleStyle,
-        ),
       );
 
-  Widget _serverStatusItem(ThemeData theme, TextStyle titleStyle) => ListTile(
-        dense: true,
-        onTap: () {
-          setState(() {
-            _serverStatus = null;
-          });
-          _checkServerStatus();
+  Widget _serverStatusItem(ThemeData theme, TextStyle titleStyle) => Builder(
+        builder: (context) {
+          return ListTile(
+            dense: true,
+            onTap: () {
+              _serverStatus = null;
+              (context as Element).markNeedsBuild();
+              _checkServerStatus();
+            },
+            title: Text('服务器状态', style: titleStyle),
+            trailing: Text(
+              _serverStatus == null
+                  ? '——'
+                  : _serverStatus == true
+                      ? '正常'
+                      : '错误',
+              style: TextStyle(
+                fontSize: 13,
+                color: _serverStatus == null
+                    ? null
+                    : _serverStatus == true
+                        ? theme.colorScheme.primary
+                        : theme.colorScheme.error,
+              ),
+            ),
+          );
         },
-        title: Text('服务器状态', style: titleStyle),
-        trailing: Text(
-          _serverStatus == null
-              ? '——'
-              : _serverStatus == true
-                  ? '正常'
-                  : '错误',
-          style: TextStyle(
-            fontSize: 13,
-            color: _serverStatus == null
-                ? null
-                : _serverStatus == true
-                    ? theme.colorScheme.primary
-                    : theme.colorScheme.error,
-          ),
-        ),
       );
 
-  void onSelectColor(int index) {
+  void onSelectColor(BuildContext context, int index, Color color,
+      Pair<SegmentType, SkipType> item) {
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
+      builder: (_) => AlertDialog(
         clipBehavior: Clip.hardEdge,
         contentPadding: const EdgeInsets.symmetric(vertical: 16),
         title: Text.rich(
@@ -378,28 +402,28 @@ class _SponsorBlockPageState extends State<SponsorBlockPage> {
                   width: 10,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: _blockColor[index],
+                    color: color,
                   ),
                 ),
                 style: const TextStyle(fontSize: 13, height: 1),
               ),
               TextSpan(
-                text: ' ${_blockSettings[index].first.title}',
+                text: ' ${item.first.title}',
                 style: const TextStyle(fontSize: 13, height: 1),
               ),
             ],
           ),
         ),
         content: SlideColorPicker(
-          color: _blockColor[index],
+          color: color,
           callback: (Color? color) {
-            _blockColor[index] = color ?? _blockSettings[index].first.color;
+            _blockColor[index] = color ?? item.first.color;
             setting.put(
                 SettingBoxKey.blockColor,
                 _blockColor
                     .map((item) => item.value.toRadixString(16).substring(2))
                     .toList());
-            setState(() {});
+            (context as Element).markNeedsBuild();
           },
         ),
       ),
@@ -447,95 +471,8 @@ class _SponsorBlockPageState extends State<SponsorBlockPage> {
           dividerL,
           SliverList.separated(
             itemCount: _blockSettings.length,
-            itemBuilder: (context, index) => ListTile(
-              dense: true,
-              enabled: _blockSettings[index].second != SkipType.disable,
-              onTap: () => onSelectColor(index),
-              title: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text.rich(
-                    TextSpan(
-                      children: [
-                        WidgetSpan(
-                          alignment: PlaceholderAlignment.middle,
-                          child: Container(
-                            height: 10,
-                            width: 10,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: _blockColor[index],
-                            ),
-                          ),
-                          style: const TextStyle(fontSize: 14, height: 1),
-                        ),
-                        TextSpan(
-                          text: ' ${_blockSettings[index].first.title}',
-                          style: const TextStyle(fontSize: 14, height: 1),
-                        ),
-                      ],
-                    ),
-                  ),
-                  PopupMenuButton(
-                    initialValue: _blockSettings[index].second,
-                    onSelected: (item) {
-                      _blockSettings[index].second = item;
-                      setting.put(
-                          SettingBoxKey.blockSettings,
-                          _blockSettings
-                              .map((item) => item.second.index)
-                              .toList());
-                      setState(() {});
-                    },
-                    itemBuilder: (context) => SkipType.values
-                        .map((item) => PopupMenuItem<SkipType>(
-                              value: item,
-                              child: Text(item.title),
-                            ))
-                        .toList(),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(
-                            _blockSettings[index].second.title,
-                            style: TextStyle(
-                              height: 1,
-                              fontSize: 14,
-                              color: _blockSettings[index].second ==
-                                      SkipType.disable
-                                  ? theme.colorScheme.outline
-                                      .withValues(alpha: 0.7)
-                                  : theme.colorScheme.secondary,
-                            ),
-                            strutStyle: const StrutStyle(height: 1, leading: 0),
-                          ),
-                          Icon(
-                            MdiIcons.unfoldMoreHorizontal,
-                            size: MediaQuery.textScalerOf(context).scale(14),
-                            color:
-                                _blockSettings[index].second == SkipType.disable
-                                    ? theme.colorScheme.outline
-                                        .withValues(alpha: 0.7)
-                                    : theme.colorScheme.secondary,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              subtitle: Text(
-                _blockSettings[index].first.description,
-                style: TextStyle(
-                  fontSize: 12,
-                  color: _blockSettings[index].second == SkipType.disable
-                      ? null
-                      : theme.colorScheme.outline,
-                ),
-              ),
-            ),
+            itemBuilder: (context, index) =>
+                _buildItem(theme, index, _blockSettings[index]),
             separatorBuilder: (context, index) => divider,
           ),
           dividerL,
@@ -553,6 +490,103 @@ class _SponsorBlockPageState extends State<SponsorBlockPage> {
           )),
         ],
       ),
+    );
+  }
+
+  Widget _buildItem(
+      ThemeData theme, int index, Pair<SegmentType, SkipType> item) {
+    return Builder(
+      builder: (context) {
+        Color color = _blockColor[index];
+        return ListTile(
+          dense: true,
+          enabled: item.second != SkipType.disable,
+          onTap: () => onSelectColor(context, index, color, item),
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text.rich(
+                TextSpan(
+                  children: [
+                    WidgetSpan(
+                      alignment: PlaceholderAlignment.middle,
+                      child: Container(
+                        height: 10,
+                        width: 10,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: color,
+                        ),
+                      ),
+                      style: const TextStyle(fontSize: 14, height: 1),
+                    ),
+                    TextSpan(
+                      text: ' ${item.first.title}',
+                      style: const TextStyle(fontSize: 14, height: 1),
+                    ),
+                  ],
+                ),
+              ),
+              Builder(
+                builder: (context) {
+                  return PopupMenuButton(
+                    initialValue: item.second,
+                    onSelected: (e) {
+                      item.second = e;
+                      setting.put(SettingBoxKey.blockSettings,
+                          _blockSettings.map((e) => e.second.index).toList());
+                      (context as Element).markNeedsBuild();
+                    },
+                    itemBuilder: (context) => SkipType.values
+                        .map((item) => PopupMenuItem<SkipType>(
+                              value: item,
+                              child: Text(item.title),
+                            ))
+                        .toList(),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            item.second.title,
+                            style: TextStyle(
+                              height: 1,
+                              fontSize: 14,
+                              color: item.second == SkipType.disable
+                                  ? theme.colorScheme.outline
+                                      .withValues(alpha: 0.7)
+                                  : theme.colorScheme.secondary,
+                            ),
+                            strutStyle: const StrutStyle(height: 1, leading: 0),
+                          ),
+                          Icon(
+                            MdiIcons.unfoldMoreHorizontal,
+                            size: MediaQuery.textScalerOf(context).scale(14),
+                            color: item.second == SkipType.disable
+                                ? theme.colorScheme.outline
+                                    .withValues(alpha: 0.7)
+                                : theme.colorScheme.secondary,
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ],
+          ),
+          subtitle: Text(
+            item.first.description,
+            style: TextStyle(
+              fontSize: 12,
+              color: item.second == SkipType.disable
+                  ? null
+                  : theme.colorScheme.outline,
+            ),
+          ),
+        );
+      },
     );
   }
 }

@@ -33,20 +33,21 @@ class _MinePageState extends State<MinePage> {
             style: theme.textTheme.titleMedium,
           ),
           const Spacer(),
-          IconButton(
-            iconSize: 40.0,
-            padding: const EdgeInsets.all(8),
-            style: const ButtonStyle(
-              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-            ),
-            tooltip: "${MineController.anonymity.value ? '退出' : '进入'}无痕模式",
-            onPressed: () {
-              MineController.onChangeAnonymity(context);
-              setState(() {});
+          Obx(
+            () {
+              return IconButton(
+                iconSize: 40.0,
+                padding: const EdgeInsets.all(8),
+                style: const ButtonStyle(
+                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                ),
+                tooltip: "${MineController.anonymity.value ? '退出' : '进入'}无痕模式",
+                onPressed: MineController.onChangeAnonymity,
+                icon: MineController.anonymity.value
+                    ? const Icon(MdiIcons.incognito, size: 24)
+                    : const Icon(MdiIcons.incognitoOff, size: 24),
+              );
             },
-            icon: MineController.anonymity.value
-                ? const Icon(MdiIcons.incognito, size: 24)
-                : const Icon(MdiIcons.incognitoOff, size: 24),
           ),
           Obx(
             () {

@@ -662,7 +662,7 @@ class _ArticlePageState extends State<ArticlePage>
               SizedBox(
                 height: 35,
                 child: TextButton.icon(
-                  onPressed: () => _articleCtr.queryBySort(),
+                  onPressed: _articleCtr.queryBySort,
                   icon: const Icon(Icons.sort, size: 16),
                   label: Obx(
                     () => Text(

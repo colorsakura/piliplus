@@ -125,8 +125,9 @@ class _UpPanelState extends State<UpPanel> {
   }
 
   void _onSelect(UserItem data) {
-    widget.dynamicsController.currentMid = data.mid;
-    widget.dynamicsController.onSelectUp(data.mid);
+    widget.dynamicsController
+      ..currentMid = data.mid
+      ..onSelectUp(data.mid);
 
     data.hasUpdate = false;
 

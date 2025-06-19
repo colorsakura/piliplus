@@ -52,26 +52,37 @@ class _FavPanelState extends State<FavPanel> {
             FavFolderInfo item = widget.ctr.favFolderData.value.list![index];
             return Material(
               type: MaterialType.transparency,
-              child: ListTile(
-                onTap: () => setState(
-                    () => widget.ctr.onChoose(item.favState != 1, index)),
-                dense: true,
-                leading: FavUtil.isPublicFav(item.attr)
-                    ? const Icon(Icons.folder_outlined)
-                    : const Icon(Icons.lock_outline),
-                minLeadingWidth: 0,
-                title: Text(item.title),
-                subtitle: Text(
-                  '${item.mediaCount}个内容 . ${FavUtil.isPublicFavText(item.attr)}',
-                ),
-                trailing: Transform.scale(
-                  scale: 0.9,
-                  child: Checkbox(
-                    value: item.favState == 1,
-                    onChanged: (bool? checkValue) =>
-                        setState(() => widget.ctr.onChoose(checkValue!, index)),
-                  ),
-                ),
+              child: Builder(
+                builder: (context) {
+                  void onTap() {
+                    bool isChecked = item.favState == 1;
+                    item
+                      ..favState = isChecked ? 0 : 1
+                      ..mediaCount =
+                          isChecked ? item.mediaCount - 1 : item.mediaCount + 1;
+                    (context as Element).markNeedsBuild();
+                  }
+
+                  return ListTile(
+                    onTap: onTap,
+                    dense: true,
+                    leading: FavUtil.isPublicFav(item.attr)
+                        ? const Icon(Icons.folder_outlined)
+                        : const Icon(Icons.lock_outline),
+                    minLeadingWidth: 0,
+                    title: Text(item.title),
+                    subtitle: Text(
+                      '${item.mediaCount}个内容 . ${FavUtil.isPublicFavText(item.attr)}',
+                    ),
+                    trailing: Transform.scale(
+                      scale: 0.9,
+                      child: Checkbox(
+                        value: item.favState == 1,
+                        onChanged: (bool? checkValue) => onTap(),
+                      ),
+                    ),
+                  );
+                },
               ),
             );
           },
@@ -136,7 +147,7 @@ class _FavPanelState extends State<FavPanel> {
             mainAxisAlignment: MainAxisAlignment.end,
             children: <Widget>[
               TextButton(
-                onPressed: () => Get.back(),
+                onPressed: Get.back,
                 style: TextButton.styleFrom(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 20, vertical: 10),

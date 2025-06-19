@@ -131,23 +131,33 @@ class _PostPanelState extends CommonCollapseSlidePageState<PostPanel> {
                                     runSpacing: 8,
                                     spacing: 16,
                                     children: [
-                                      Row(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: segmentWidget(
-                                          theme,
-                                          isFirst: true,
-                                          index: index,
-                                        ),
+                                      Builder(
+                                        builder: (context) {
+                                          return Row(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: segmentWidget(
+                                              context,
+                                              theme,
+                                              isFirst: true,
+                                              index: index,
+                                            ),
+                                          );
+                                        },
                                       ),
                                       if (list![index].category !=
                                           SegmentType.poi_highlight)
-                                        Row(
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: segmentWidget(
-                                            theme,
-                                            isFirst: false,
-                                            index: index,
-                                          ),
+                                        Builder(
+                                          builder: (context) {
+                                            return Row(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: segmentWidget(
+                                                context,
+                                                theme,
+                                                isFirst: false,
+                                                index: index,
+                                              ),
+                                            );
+                                          },
                                         ),
                                     ],
                                   ),
@@ -161,72 +171,86 @@ class _PostPanelState extends CommonCollapseSlidePageState<PostPanel> {
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
                                         const Text('分类: '),
-                                        PopupMenuButton<SegmentType>(
-                                          initialValue: list![index].category,
-                                          onSelected: (item) {
-                                            list![index].category = item;
-                                            List<ActionType> constraintList =
-                                                item.toActionType;
-                                            if (!constraintList.contains(
-                                                list![index].actionType)) {
-                                              list![index].actionType =
-                                                  constraintList.first;
-                                            }
-                                            switch (item) {
-                                              case SegmentType.poi_highlight:
-                                                updateSegment(
-                                                  isFirst: false,
-                                                  index: index,
-                                                  value: list![index]
-                                                      .segment
-                                                      .first,
-                                                );
-                                                break;
-                                              case SegmentType.exclusive_access:
-                                                updateSegment(
-                                                  isFirst: true,
-                                                  index: index,
-                                                  value: 0,
-                                                );
-                                                break;
-                                              case _:
-                                            }
-                                            setState(() {});
+                                        Builder(
+                                          builder: (context) {
+                                            return PopupMenuButton<SegmentType>(
+                                              initialValue:
+                                                  list![index].category,
+                                              onSelected: (item) {
+                                                list![index].category = item;
+                                                List<ActionType>
+                                                    constraintList =
+                                                    item.toActionType;
+                                                if (!constraintList.contains(
+                                                    list![index].actionType)) {
+                                                  list![index].actionType =
+                                                      constraintList.first;
+                                                }
+                                                switch (item) {
+                                                  case SegmentType
+                                                        .poi_highlight:
+                                                    updateSegment(
+                                                      isFirst: false,
+                                                      index: index,
+                                                      value: list![index]
+                                                          .segment
+                                                          .first,
+                                                    );
+                                                    break;
+                                                  case SegmentType
+                                                        .exclusive_access:
+                                                    updateSegment(
+                                                      isFirst: true,
+                                                      index: index,
+                                                      value: 0,
+                                                    );
+                                                    break;
+                                                  default:
+                                                }
+                                                (context as Element)
+                                                    .markNeedsBuild();
+                                              },
+                                              itemBuilder: (context) =>
+                                                  SegmentType.values
+                                                      .map((item) =>
+                                                          PopupMenuItem<
+                                                              SegmentType>(
+                                                            value: item,
+                                                            child: Text(
+                                                                item.title),
+                                                          ))
+                                                      .toList(),
+                                              child: Row(
+                                                mainAxisSize: MainAxisSize.min,
+                                                children: [
+                                                  Text(
+                                                    list![index].category.title,
+                                                    style: TextStyle(
+                                                      height: 1,
+                                                      fontSize: 14,
+                                                      color: theme.colorScheme
+                                                          .secondary,
+                                                    ),
+                                                    strutStyle:
+                                                        const StrutStyle(
+                                                      height: 1,
+                                                      leading: 0,
+                                                    ),
+                                                  ),
+                                                  Icon(
+                                                    MdiIcons
+                                                        .unfoldMoreHorizontal,
+                                                    size:
+                                                        MediaQuery.textScalerOf(
+                                                                context)
+                                                            .scale(14),
+                                                    color: theme
+                                                        .colorScheme.secondary,
+                                                  ),
+                                                ],
+                                              ),
+                                            );
                                           },
-                                          itemBuilder: (context) => SegmentType
-                                              .values
-                                              .map((item) =>
-                                                  PopupMenuItem<SegmentType>(
-                                                    value: item,
-                                                    child: Text(item.title),
-                                                  ))
-                                              .toList(),
-                                          child: Row(
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: [
-                                              Text(
-                                                list![index].category.title,
-                                                style: TextStyle(
-                                                  height: 1,
-                                                  fontSize: 14,
-                                                  color: theme
-                                                      .colorScheme.secondary,
-                                                ),
-                                                strutStyle: const StrutStyle(
-                                                  height: 1,
-                                                  leading: 0,
-                                                ),
-                                              ),
-                                              Icon(
-                                                MdiIcons.unfoldMoreHorizontal,
-                                                size: MediaQuery.textScalerOf(
-                                                        context)
-                                                    .scale(14),
-                                                color:
-                                                    theme.colorScheme.secondary,
-                                              ),
-                                            ],
-                                          ),
                                         ),
                                       ],
                                     ),
@@ -234,60 +258,64 @@ class _PostPanelState extends CommonCollapseSlidePageState<PostPanel> {
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
                                         const Text('行为类别: '),
-                                        PopupMenuButton<ActionType>(
-                                          initialValue: list![index].actionType,
-                                          onSelected: (item) {
-                                            list![index].actionType = item;
-                                            if (item == ActionType.full) {
-                                              updateSegment(
-                                                isFirst: true,
-                                                index: index,
-                                                value: 0,
-                                              );
-                                            }
-                                            setState(() {});
-                                          },
-                                          itemBuilder: (context) => ActionType
-                                              .values
-                                              .map(
-                                                (item) =>
-                                                    PopupMenuItem<ActionType>(
-                                                  enabled: list![index]
-                                                      .category
-                                                      .toActionType
-                                                      .contains(item),
-                                                  value: item,
-                                                  child: Text(item.title),
+                                        Builder(builder: (context) {
+                                          return PopupMenuButton<ActionType>(
+                                            initialValue:
+                                                list![index].actionType,
+                                            onSelected: (item) {
+                                              list![index].actionType = item;
+                                              if (item == ActionType.full) {
+                                                updateSegment(
+                                                  isFirst: true,
+                                                  index: index,
+                                                  value: 0,
+                                                );
+                                              }
+                                              (context as Element)
+                                                  .markNeedsBuild();
+                                            },
+                                            itemBuilder: (context) => ActionType
+                                                .values
+                                                .map(
+                                                  (item) =>
+                                                      PopupMenuItem<ActionType>(
+                                                    enabled: list![index]
+                                                        .category
+                                                        .toActionType
+                                                        .contains(item),
+                                                    value: item,
+                                                    child: Text(item.title),
+                                                  ),
+                                                )
+                                                .toList(),
+                                            child: Row(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                Text(
+                                                  list![index].actionType.title,
+                                                  style: TextStyle(
+                                                    height: 1,
+                                                    fontSize: 14,
+                                                    color: theme
+                                                        .colorScheme.secondary,
+                                                  ),
+                                                  strutStyle: const StrutStyle(
+                                                    height: 1,
+                                                    leading: 0,
+                                                  ),
                                                 ),
-                                              )
-                                              .toList(),
-                                          child: Row(
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: [
-                                              Text(
-                                                list![index].actionType.title,
-                                                style: TextStyle(
-                                                  height: 1,
-                                                  fontSize: 14,
+                                                Icon(
+                                                  MdiIcons.unfoldMoreHorizontal,
+                                                  size: MediaQuery.textScalerOf(
+                                                          context)
+                                                      .scale(14),
                                                   color: theme
                                                       .colorScheme.secondary,
                                                 ),
-                                                strutStyle: const StrutStyle(
-                                                  height: 1,
-                                                  leading: 0,
-                                                ),
-                                              ),
-                                              Icon(
-                                                MdiIcons.unfoldMoreHorizontal,
-                                                size: MediaQuery.textScalerOf(
-                                                        context)
-                                                    .scale(14),
-                                                color:
-                                                    theme.colorScheme.secondary,
-                                              ),
-                                            ],
-                                          ),
-                                        ),
+                                              ],
+                                            ),
+                                          );
+                                        }),
                                       ],
                                     ),
                                   ],
@@ -419,6 +447,7 @@ class _PostPanelState extends CommonCollapseSlidePageState<PostPanel> {
   }
 
   List<Widget> segmentWidget(
+    BuildContext context,
     ThemeData theme, {
     required int index,
     required bool isFirst,
@@ -436,13 +465,12 @@ class _PostPanelState extends CommonCollapseSlidePageState<PostPanel> {
         tooltip: '设为当前',
         icon: Icons.my_location,
         onPressed: () {
-          setState(() {
-            updateSegment(
-              isFirst: isFirst,
-              index: index,
-              value: currentPos,
-            );
-          });
+          updateSegment(
+            isFirst: isFirst,
+            index: index,
+            value: currentPos,
+          );
+          (context as Element).markNeedsBuild();
         },
       ),
       const SizedBox(width: 5),
@@ -452,13 +480,12 @@ class _PostPanelState extends CommonCollapseSlidePageState<PostPanel> {
         tooltip: isFirst ? '视频开头' : '视频结尾',
         icon: isFirst ? Icons.first_page : Icons.last_page,
         onPressed: () {
-          setState(() {
-            updateSegment(
-              isFirst: isFirst,
-              index: index,
-              value: isFirst ? 0 : videoDuration,
-            );
-          });
+          updateSegment(
+            isFirst: isFirst,
+            index: index,
+            value: isFirst ? 0 : videoDuration,
+          );
+          (context as Element).markNeedsBuild();
         },
       ),
       const SizedBox(width: 5),
@@ -508,13 +535,12 @@ class _PostPanelState extends CommonCollapseSlidePageState<PostPanel> {
                   duration += split[i] * pow(60, i);
                 }
                 if (duration <= videoDuration) {
-                  setState(() {
-                    updateSegment(
-                      isFirst: isFirst,
-                      index: index,
-                      value: duration,
-                    );
-                  });
+                  updateSegment(
+                    isFirst: isFirst,
+                    index: index,
+                    value: duration,
+                  );
+                  (context as Element).markNeedsBuild();
                 }
               } catch (e) {
                 if (kDebugMode) debugPrint(e.toString());

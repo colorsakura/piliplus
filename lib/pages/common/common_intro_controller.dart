@@ -1,8 +1,6 @@
 import 'package:PiliPlus/models_new/fav/fav_folder/data.dart';
-import 'package:PiliPlus/models_new/fav/fav_folder/list.dart';
 import 'package:PiliPlus/models_new/video/video_tag/data.dart';
 import 'package:PiliPlus/services/account_service.dart';
-import 'package:PiliPlus/utils/feed_back.dart';
 import 'package:get/get.dart';
 
 abstract class CommonIntroController extends GetxController {
@@ -25,13 +23,4 @@ abstract class CommonIntroController extends GetxController {
   Future queryVideoInFolder();
 
   Future<void> actionFavVideo();
-
-  void onChoose(bool checkValue, int index) {
-    feedBack();
-    FavFolderInfo item = favFolderData.value.list![index];
-    item
-      ..favState = checkValue ? 1 : 0
-      ..mediaCount = checkValue ? item.mediaCount + 1 : item.mediaCount - 1;
-    favFolderData.refresh();
-  }
 }

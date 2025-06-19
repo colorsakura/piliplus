@@ -292,7 +292,7 @@ class _MatchInfoPageState extends State<MatchInfoPage> {
               SizedBox(
                 height: 35,
                 child: TextButton.icon(
-                  onPressed: () => _controller.queryBySort(),
+                  onPressed: _controller.queryBySort,
                   icon: Icon(
                     Icons.sort,
                     size: 16,

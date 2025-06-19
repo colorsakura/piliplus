@@ -138,28 +138,40 @@ class _VotePanelState extends State<VotePanel> {
       ];
 
   Widget _buildOptions(int index) {
-    final opt = _voteInfo.options[index];
-    final selected = groupValue.contains(opt.optidx);
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4),
-      child: PercentageChip(
-        label: opt.optdesc!,
-        percentage: _showPercentage ? _percentage[index] : null,
-        selected: selected,
-        onSelected: !_enabled || (groupValue.length >= _maxCnt && !selected)
-            ? null
-            : (value) => _onSelected(value, opt.optidx!),
+      child: Builder(
+        builder: (context) {
+          final opt = _voteInfo.options[index];
+          final selected = groupValue.contains(opt.optidx);
+          return PercentageChip(
+            label: opt.optdesc!,
+            percentage: _showPercentage ? _percentage[index] : null,
+            selected: selected,
+            onSelected: !_enabled || (groupValue.length >= _maxCnt && !selected)
+                ? null
+                : (value) => _onSelected(context, value, opt.optidx!),
+          );
+        },
       ),
     );
   }
 
-  void _onSelected(bool value, int optidx) {
+  void _onSelected(BuildContext context, bool value, int optidx) {
+    bool isMax = groupValue.length >= _maxCnt;
     if (value) {
       groupValue.add(optidx);
     } else {
       groupValue.remove(optidx);
     }
-    setState(() {});
+    if ((isMax &&
+            _maxCnt != _voteInfo.options.length &&
+            groupValue.length < _maxCnt) ||
+        (groupValue.length >= _maxCnt && _maxCnt < _voteInfo.options.length)) {
+      setState(() {});
+    } else {
+      (context as Element).markNeedsBuild();
+    }
   }
 
   Widget _buildContext() {

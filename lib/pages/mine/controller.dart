@@ -83,7 +83,7 @@ class MineController extends GetxController {
     }
   }
 
-  static void onChangeAnonymity(BuildContext context) {
+  static void onChangeAnonymity() {
     if (Accounts.account.isEmpty) {
       SmartDialog.showToast('请先登录');
       return;

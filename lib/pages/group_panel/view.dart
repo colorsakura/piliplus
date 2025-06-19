@@ -25,7 +25,7 @@ class GroupPanel extends StatefulWidget {
 class _GroupPanelState extends State<GroupPanel> {
   LoadingState<List<MemberTagItemModel>> loadingState =
       LoadingState<List<MemberTagItemModel>>.loading();
-  bool showDefaultBtn = true;
+  RxBool showDefaultBtn = true.obs;
 
   @override
   void initState() {
@@ -43,7 +43,7 @@ class _GroupPanelState extends State<GroupPanel> {
             ..map((item) {
               return item.checked = widget.tags?.contains(item.tagid) == true;
             }).toList();
-          showDefaultBtn = !tagsList.any((e) => e.checked == true);
+          showDefaultBtn.value = !tagsList.any((e) => e.checked == true);
           loadingState = Success(tagsList);
         } else {
           loadingState = Error(res['msg']);
@@ -89,28 +89,32 @@ class _GroupPanelState extends State<GroupPanel> {
             final item = response[index];
             return Material(
               type: MaterialType.transparency,
-              child: ListTile(
-                onTap: () {
-                  item.checked = !item.checked!;
-                  showDefaultBtn = !response.any((e) => e.checked == true);
-                  setState(() {});
+              child: Builder(
+                builder: (context) {
+                  void onTap() {
+                    item.checked = !item.checked!;
+                    (context as Element).markNeedsBuild();
+                    showDefaultBtn.value =
+                        !response.any((e) => e.checked == true);
+                  }
+
+                  return ListTile(
+                    onTap: onTap,
+                    dense: true,
+                    leading: const Icon(Icons.group_outlined),
+                    minLeadingWidth: 0,
+                    title: Text(item.name ?? ''),
+                    subtitle:
+                        item.tip?.isNotEmpty == true ? Text(item.tip!) : null,
+                    trailing: Transform.scale(
+                      scale: 0.9,
+                      child: Checkbox(
+                        value: item.checked,
+                        onChanged: (bool? checkValue) => onTap(),
+                      ),
+                    ),
+                  );
                 },
-                dense: true,
-                leading: const Icon(Icons.group_outlined),
-                minLeadingWidth: 0,
-                title: Text(item.name ?? ''),
-                subtitle: item.tip?.isNotEmpty == true ? Text(item.tip!) : null,
-                trailing: Transform.scale(
-                  scale: 0.9,
-                  child: Checkbox(
-                    value: item.checked,
-                    onChanged: (bool? checkValue) {
-                      item.checked = checkValue;
-                      showDefaultBtn = !response.any((e) => e.checked == true);
-                      setState(() {});
-                    },
-                  ),
-                ),
               ),
             );
           },
@@ -152,13 +156,13 @@ class _GroupPanelState extends State<GroupPanel> {
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               TextButton(
-                onPressed: () => onSave(),
+                onPressed: onSave,
                 style: TextButton.styleFrom(
                   padding: const EdgeInsets.only(left: 30, right: 30),
                   foregroundColor: theme.colorScheme.onPrimary,
                   backgroundColor: theme.colorScheme.primary,
                 ),
-                child: Text(showDefaultBtn ? '保存至默认分组' : '保存'),
+                child: Obx(() => Text(showDefaultBtn.value ? '保存至默认分组' : '保存')),
               ),
             ],
           ),
