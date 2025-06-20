@@ -1,9 +1,11 @@
 import 'dart:convert';
 
 import 'package:PiliPlus/common/widgets/pendant_avatar.dart';
+import 'package:PiliPlus/models/common/dynamic/dynamics_type.dart';
 import 'package:PiliPlus/models/dynamics/article_content_model.dart';
 import 'package:PiliPlus/models/model_avatar.dart';
 import 'package:PiliPlus/models_new/live/live_feed_index/watched_show.dart';
+import 'package:PiliPlus/utils/storage.dart';
 
 class DynamicsDataModel {
   bool? hasMore;
@@ -11,11 +13,49 @@ class DynamicsDataModel {
   String? offset;
   int? total;
 
-  DynamicsDataModel.fromJson(Map<String, dynamic> json) {
+  static RegExp banWordForDyn =
+      RegExp(GStorage.banWordForDyn, caseSensitive: false);
+
+  DynamicsDataModel.fromJson(
+    Map<String, dynamic> json, {
+    DynamicsTabType type = DynamicsTabType.all,
+    Set<int>? tempBannedList,
+  }) {
     hasMore = json['has_more'];
-    items = (json['items'] as List?)
-        ?.map<DynamicItemModel>((e) => DynamicItemModel.fromJson(e))
-        .toList();
+
+    List? list = json['items'] as List?;
+    if (list != null && list.isNotEmpty) {
+      items = <DynamicItemModel>[];
+      late final antiGoodsDyn = GStorage.antiGoodsDyn;
+      late final filterWord = banWordForDyn.pattern.isNotEmpty;
+      late final filterBan =
+          type != DynamicsTabType.up && tempBannedList?.isNotEmpty == true;
+      for (var e in list) {
+        DynamicItemModel item = DynamicItemModel.fromJson(e);
+        if (antiGoodsDyn &&
+            (item.orig?.modules.moduleDynamic?.additional?.type ==
+                    'ADDITIONAL_TYPE_GOODS' ||
+                item.modules.moduleDynamic?.additional?.type ==
+                    'ADDITIONAL_TYPE_GOODS')) {
+          continue;
+        }
+        if (filterWord &&
+            banWordForDyn.hasMatch(
+                item.orig?.modules.moduleDynamic?.major?.opus?.summary?.text ??
+                    item.modules.moduleDynamic?.major?.opus?.summary?.text ??
+                    item.orig?.modules.moduleDynamic?.desc?.text ??
+                    item.modules.moduleDynamic?.desc?.text ??
+                    '')) {
+          continue;
+        }
+        if (filterBan &&
+            tempBannedList!.contains(item.modules.moduleAuthor?.mid)) {
+          continue;
+        }
+        items!.add(item);
+      }
+    }
+
     offset = json['offset'];
     total = json['total'];
   }

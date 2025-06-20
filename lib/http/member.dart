@@ -361,15 +361,12 @@ class MemberHttp {
     });
     var res = await Request().get(Api.memberDynamic, queryParameters: params);
     if (res.data['code'] == 0) {
-      DynamicsDataModel data = DynamicsDataModel.fromJson(res.data['data']);
-      if (GStorage.antiGoodsDyn) {
-        data.items?.removeWhere((item) =>
-            item.orig?.modules.moduleDynamic?.additional?.type ==
-                'ADDITIONAL_TYPE_GOODS' ||
-            item.modules.moduleDynamic?.additional?.type ==
-                'ADDITIONAL_TYPE_GOODS');
+      try {
+        DynamicsDataModel data = DynamicsDataModel.fromJson(res.data['data']);
+        return Success(data);
+      } catch (err) {
+        return Error(err.toString());
       }
-      return Success(data);
     } else {
       Map errMap = const {
         -352: '风控校验失败，请检查登录状态',

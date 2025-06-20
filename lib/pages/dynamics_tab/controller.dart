@@ -36,11 +36,6 @@ class DynamicsTabController
 
   @override
   List<DynamicItemModel>? getDataList(DynamicsDataModel response) {
-    if (dynamicsType != DynamicsTabType.up &&
-        dynamicsController.tempBannedList.isNotEmpty) {
-      response.items?.removeWhere((e) => dynamicsController.tempBannedList
-          .contains(e.modules.moduleAuthor?.mid));
-    }
     offset = response.offset ?? '';
     return response.items;
   }
@@ -51,6 +46,7 @@ class DynamicsTabController
         type: dynamicsType,
         offset: offset,
         mid: mid,
+        tempBannedList: dynamicsController.tempBannedList,
       );
 
   Future<void> onRemove(int index, dynamic dynamicId) async {

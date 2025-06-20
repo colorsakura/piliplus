@@ -5,7 +5,6 @@ import 'package:PiliPlus/common/widgets/custom_icon.dart';
 import 'package:PiliPlus/common/widgets/pendant_avatar.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart'
     show kDragContainerExtentPercentage, displacement;
-import 'package:PiliPlus/http/dynamics.dart';
 import 'package:PiliPlus/http/reply.dart';
 import 'package:PiliPlus/http/video.dart';
 import 'package:PiliPlus/main.dart';
@@ -28,6 +27,7 @@ import 'package:PiliPlus/models/common/video/live_quality.dart';
 import 'package:PiliPlus/models/common/video/subtitle_pref_type.dart';
 import 'package:PiliPlus/models/common/video/video_decode_type.dart';
 import 'package:PiliPlus/models/common/video/video_quality.dart';
+import 'package:PiliPlus/models/dynamics/result.dart';
 import 'package:PiliPlus/pages/home/controller.dart';
 import 'package:PiliPlus/pages/hot/controller.dart';
 import 'package:PiliPlus/pages/main/controller.dart';
@@ -1815,7 +1815,7 @@ List<SettingsModel> get extraSettings => [
         title: '动态关键词过滤',
         key: SettingBoxKey.banWordForDyn,
         callback: (value) {
-          DynamicsHttp.banWordForDyn = value;
+          DynamicsDataModel.banWordForDyn = value;
         },
       ),
       SettingsModel(
