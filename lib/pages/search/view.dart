@@ -206,27 +206,28 @@ class _SearchPageState extends State<SearchPage> {
                               ),
                             ),
                           ),
-                          SizedBox(
-                            height: 34,
-                            child: TextButton(
-                              onPressed: () => Get.toNamed('/dynTopicRcmd'),
-                              child: Row(
-                                children: [
-                                  Text(
-                                    '话题',
-                                    strutStyle:
-                                        const StrutStyle(leading: 0, height: 1),
-                                    style: style,
-                                  ),
-                                  Icon(
-                                    size: 18,
-                                    Icons.keyboard_arrow_right,
-                                    color: outline,
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
+                          // deprecated
+                          // SizedBox(
+                          //   height: 34,
+                          //   child: TextButton(
+                          //     onPressed: () => Get.toNamed('/dynTopicRcmd'),
+                          //     child: Row(
+                          //       children: [
+                          //         Text(
+                          //           '话题',
+                          //           strutStyle:
+                          //               const StrutStyle(leading: 0, height: 1),
+                          //           style: style,
+                          //         ),
+                          //         Icon(
+                          //           size: 18,
+                          //           Icons.keyboard_arrow_right,
+                          //           color: outline,
+                          //         ),
+                          //       ],
+                          //     ),
+                          //   ),
+                          // ),
                         ],
                       )
                     : text,
