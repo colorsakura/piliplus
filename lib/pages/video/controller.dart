@@ -384,17 +384,16 @@ class VideoDetailController extends GetxController
                 : null,
             onDelete: sourceType == 'watchLater' ||
                     (sourceType == 'fav' && Get.arguments?['isOwner'] == true)
-                ? (index) async {
+                ? (item, index) async {
                     if (sourceType == 'watchLater') {
                       var res = await UserHttp.toViewDel(
-                        aids: [mediaList[index].aid],
+                        aids: [item.aid],
                       );
                       if (res['status']) {
                         mediaList.removeAt(index);
                       }
                       SmartDialog.showToast(res['msg']);
                     } else {
-                      final item = mediaList[index];
                       var res = await FavHttp.delFav(
                         ids: ['${item.aid}:${item.type}'],
                         delIds: '${Get.arguments?['mediaId']}',

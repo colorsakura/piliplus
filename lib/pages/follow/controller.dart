@@ -70,12 +70,11 @@ class FollowController extends GetxController with GetTickerProviderStateMixin {
     }
   }
 
-  Future<void> onUpdateTag(int index, tagid, String tagName) async {
-    final res = await MemberHttp.updateFollowTag(tagid, tagName);
+  Future<void> onUpdateTag(MemberTagItemModel item, String tagName) async {
+    final res = await MemberHttp.updateFollowTag(item.tagid, tagName);
     if (res['status']) {
-      tabs
-        ..[index].name = tagName
-        ..refresh();
+      item.name = tagName;
+      tabs.refresh();
       SmartDialog.showToast('修改成功');
     } else {
       SmartDialog.showToast(res['msg']);

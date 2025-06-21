@@ -24,8 +24,8 @@ class FavPgcController
   }
 
   @override
-  void onSelect(int index, [bool disableSelect = true]) {
-    super.onSelect(index, false);
+  void onSelect(FavPgcItemModel item, [bool disableSelect = true]) {
+    super.onSelect(item, false);
   }
 
   @override

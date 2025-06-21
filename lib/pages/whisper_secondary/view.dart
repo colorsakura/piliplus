@@ -97,12 +97,13 @@ class _WhisperSecPageState extends State<WhisperSecPage> {
                 if (index == response.length - 1) {
                   _controller.onLoadMore();
                 }
+                final item = response[index];
                 return WhisperSessionItem(
-                  item: response[index],
+                  item: item,
                   onSetTop: (isTop, talkerId) =>
-                      _controller.onSetTop(index, isTop, talkerId),
+                      _controller.onSetTop(item, index, isTop, talkerId),
                   onSetMute: (isMuted, talkerUid) =>
-                      _controller.onSetMute(index, isMuted, talkerUid),
+                      _controller.onSetMute(item, isMuted, talkerUid),
                   onRemove: (talkerId) => _controller.onRemove(index, talkerId),
                 );
               },

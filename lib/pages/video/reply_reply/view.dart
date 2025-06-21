@@ -188,14 +188,6 @@ class _VideoReplyReplyPanelState
                         callback: _getImageCallback,
                         onCheckReply: (item) => _videoReplyReplyController
                             .onCheckReply(context, item, isManual: true),
-                        onToggleTop: (isUpTop, rpid) =>
-                            _videoReplyReplyController.onToggleTop(
-                          index,
-                          _videoReplyReplyController.oid,
-                          _videoReplyReplyController.replyType,
-                          isUpTop,
-                          rpid,
-                        ),
                       );
                     } else if (index == 1) {
                       return Divider(
@@ -431,8 +423,8 @@ class _VideoReplyReplyPanelState
       replyItem: replyItem,
       replyLevel: widget.isDialogue ? 3 : 2,
       onReply: (replyItem) => _onReply(replyItem, index),
-      onDelete: (subIndex) {
-        _videoReplyReplyController.onRemove(index, null);
+      onDelete: (item, subIndex) {
+        _videoReplyReplyController.onRemove(index, item, null);
       },
       upMid: _videoReplyReplyController.upMid,
       showDialogue: () => _key.currentState?.showBottomSheet(
@@ -451,13 +443,6 @@ class _VideoReplyReplyPanelState
       callback: _getImageCallback,
       onCheckReply: (item) => _videoReplyReplyController
           .onCheckReply(context, item, isManual: true),
-      onToggleTop: (isUpTop, rpid) => _videoReplyReplyController.onToggleTop(
-        index,
-        _videoReplyReplyController.oid,
-        _videoReplyReplyController.replyType,
-        isUpTop,
-        rpid,
-      ),
     );
   }
 

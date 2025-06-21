@@ -273,7 +273,7 @@ class _HistoryPageState extends State<HistoryPage>
                   return HistoryItem(
                     item: item,
                     ctr: _historyController.baseCtr,
-                    onChoose: () => _historyController.onSelect(index),
+                    onChoose: () => _historyController.onSelect(item),
                     onDelete: (kid, business) =>
                         _historyController.delHistory(item),
                   );

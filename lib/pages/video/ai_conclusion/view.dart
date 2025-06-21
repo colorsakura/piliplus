@@ -88,12 +88,13 @@ class _AiDetailState extends CommonCollapseSlidePageState<AiConclusionPanel> {
             sliver: SliverList.builder(
               itemCount: widget.item.outline!.length,
               itemBuilder: (context, index) {
+                final item = widget.item.outline![index];
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     if (index != 0) const SizedBox(height: 10),
                     SelectableText(
-                      widget.item.outline![index].title!,
+                      item.title!,
                       style: const TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.bold,
@@ -101,9 +102,8 @@ class _AiDetailState extends CommonCollapseSlidePageState<AiConclusionPanel> {
                       ),
                     ),
                     const SizedBox(height: 6),
-                    if (widget.item.outline![index].partOutline?.isNotEmpty ==
-                        true)
-                      ...widget.item.outline![index].partOutline!.map(
+                    if (item.partOutline?.isNotEmpty == true)
+                      ...item.partOutline!.map(
                         (item) => Wrap(
                           children: [
                             SelectableText.rich(

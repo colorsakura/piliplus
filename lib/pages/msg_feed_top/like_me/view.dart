@@ -99,10 +99,6 @@ class _LikeMePageState extends State<LikeMePage> {
                           (id) {
                             _likeMeController.onRemove(id, index, true);
                           },
-                          (isNotice, id) {
-                            _likeMeController.onSetNotice(
-                                id, index, isNotice, true);
-                          },
                         );
                       },
                       itemCount: latest.length,
@@ -121,10 +117,6 @@ class _LikeMePageState extends State<LikeMePage> {
                           total[index],
                           (id) {
                             _likeMeController.onRemove(id, index, false);
-                          },
-                          (isNotice, id) {
-                            _likeMeController.onSetNotice(
-                                id, index, isNotice, false);
                           },
                         );
                       },
@@ -167,7 +159,6 @@ class _LikeMePageState extends State<LikeMePage> {
     ThemeData theme,
     MsgLikeItem item,
     ValueChanged<int?> onRemove,
-    Function(bool isNotice, int? id) onSetNotice,
   ) {
     return ListTile(
       onTap: () {
@@ -223,10 +214,11 @@ class _LikeMePageState extends State<LikeMePage> {
                         context: context,
                         title: '不再通知',
                         content: '这条内容的点赞将不再通知，但仍可在列表内查看，是否继续？',
-                        onConfirm: () => onSetNotice(isNotice, item.id),
+                        onConfirm: () =>
+                            _likeMeController.onSetNotice(item, isNotice),
                       );
                     } else {
-                      onSetNotice(isNotice, item.id);
+                      _likeMeController.onSetNotice(item, isNotice);
                     }
                   },
                   dense: true,

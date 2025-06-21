@@ -101,13 +101,13 @@ class _LaterViewChildPageState extends State<LaterViewChildPage>
                         },
                         onTap: !_laterController.baseCtr.enableMultiSelect.value
                             ? null
-                            : () => _laterController.onSelect(index),
+                            : () => _laterController.onSelect(videoItem),
                         onLongPress: () {
                           if (!_laterController
                               .baseCtr.enableMultiSelect.value) {
                             _laterController.baseCtr.enableMultiSelect.value =
                                 true;
-                            _laterController.onSelect(index);
+                            _laterController.onSelect(videoItem);
                           }
                         },
                       ),

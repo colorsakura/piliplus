@@ -67,17 +67,14 @@ class _FavArticlePageState extends State<FavArticlePage>
                   if (index == response.length - 1) {
                     _favArticleController.onLoadMore();
                   }
+                  final item = response[index];
                   return FavArticleItem(
-                    item: response[index],
+                    item: item,
                     onDelete: () => showConfirmDialog(
                       context: context,
                       title: '确定取消收藏？',
-                      onConfirm: () {
-                        _favArticleController.onRemove(
-                          index,
-                          response[index].opusId,
-                        );
-                      },
+                      onConfirm: () =>
+                          _favArticleController.onRemove(index, item.opusId),
                     ),
                   );
                 },

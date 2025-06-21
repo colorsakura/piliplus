@@ -106,302 +106,9 @@ class _PostPanelState extends CommonCollapseSlidePageState<PostPanel> {
                   children: [
                     ...List.generate(
                       list!.length,
-                      (index) => Stack(
-                        clipBehavior: Clip.none,
-                        children: [
-                          Container(
-                            width: double.infinity,
-                            margin: const EdgeInsets.symmetric(
-                              horizontal: 16,
-                              vertical: 5,
-                            ),
-                            padding: const EdgeInsets.all(12),
-                            decoration: BoxDecoration(
-                              color: theme.colorScheme.onInverseSurface,
-                              borderRadius:
-                                  const BorderRadius.all(Radius.circular(12)),
-                            ),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                if (list![index].actionType !=
-                                    ActionType.full) ...[
-                                  Wrap(
-                                    runSpacing: 8,
-                                    spacing: 16,
-                                    children: [
-                                      Builder(
-                                        builder: (context) {
-                                          return Row(
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: segmentWidget(
-                                              context,
-                                              theme,
-                                              isFirst: true,
-                                              index: index,
-                                            ),
-                                          );
-                                        },
-                                      ),
-                                      if (list![index].category !=
-                                          SegmentType.poi_highlight)
-                                        Builder(
-                                          builder: (context) {
-                                            return Row(
-                                              mainAxisSize: MainAxisSize.min,
-                                              children: segmentWidget(
-                                                context,
-                                                theme,
-                                                isFirst: false,
-                                                index: index,
-                                              ),
-                                            );
-                                          },
-                                        ),
-                                    ],
-                                  ),
-                                  const SizedBox(height: 8),
-                                ],
-                                Builder(
-                                  builder: (context) {
-                                    return Wrap(
-                                      runSpacing: 8,
-                                      spacing: 16,
-                                      children: [
-                                        Row(
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            const Text('分类: '),
-                                            PopupMenuButton<SegmentType>(
-                                              initialValue:
-                                                  list![index].category,
-                                              onSelected: (item) {
-                                                list![index].category = item;
-                                                List<ActionType>
-                                                    constraintList =
-                                                    item.toActionType;
-                                                if (!constraintList.contains(
-                                                    list![index].actionType)) {
-                                                  list![index].actionType =
-                                                      constraintList.first;
-                                                }
-                                                switch (item) {
-                                                  case SegmentType
-                                                        .poi_highlight:
-                                                    updateSegment(
-                                                      isFirst: false,
-                                                      index: index,
-                                                      value: list![index]
-                                                          .segment
-                                                          .first,
-                                                    );
-                                                    break;
-                                                  case SegmentType
-                                                        .exclusive_access:
-                                                    updateSegment(
-                                                      isFirst: true,
-                                                      index: index,
-                                                      value: 0,
-                                                    );
-                                                    break;
-                                                  default:
-                                                }
-                                                (context as Element)
-                                                    .markNeedsBuild();
-                                              },
-                                              itemBuilder: (context) =>
-                                                  SegmentType.values
-                                                      .map((item) =>
-                                                          PopupMenuItem<
-                                                              SegmentType>(
-                                                            value: item,
-                                                            child: Text(
-                                                                item.title),
-                                                          ))
-                                                      .toList(),
-                                              child: Row(
-                                                mainAxisSize: MainAxisSize.min,
-                                                children: [
-                                                  Text(
-                                                    list![index].category.title,
-                                                    style: TextStyle(
-                                                      height: 1,
-                                                      fontSize: 14,
-                                                      color: theme.colorScheme
-                                                          .secondary,
-                                                    ),
-                                                    strutStyle:
-                                                        const StrutStyle(
-                                                      height: 1,
-                                                      leading: 0,
-                                                    ),
-                                                  ),
-                                                  Icon(
-                                                    MdiIcons
-                                                        .unfoldMoreHorizontal,
-                                                    size:
-                                                        MediaQuery.textScalerOf(
-                                                                context)
-                                                            .scale(14),
-                                                    color: theme
-                                                        .colorScheme.secondary,
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        Row(
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            const Text('行为类别: '),
-                                            Builder(
-                                              builder: (context) {
-                                                return PopupMenuButton<
-                                                    ActionType>(
-                                                  initialValue:
-                                                      list![index].actionType,
-                                                  onSelected: (item) {
-                                                    list![index].actionType =
-                                                        item;
-                                                    if (item ==
-                                                        ActionType.full) {
-                                                      updateSegment(
-                                                        isFirst: true,
-                                                        index: index,
-                                                        value: 0,
-                                                      );
-                                                    }
-                                                    (context as Element)
-                                                        .markNeedsBuild();
-                                                  },
-                                                  itemBuilder: (context) =>
-                                                      ActionType.values
-                                                          .map(
-                                                            (item) =>
-                                                                PopupMenuItem<
-                                                                    ActionType>(
-                                                              enabled: list![
-                                                                      index]
-                                                                  .category
-                                                                  .toActionType
-                                                                  .contains(
-                                                                      item),
-                                                              value: item,
-                                                              child: Text(
-                                                                  item.title),
-                                                            ),
-                                                          )
-                                                          .toList(),
-                                                  child: Row(
-                                                    mainAxisSize:
-                                                        MainAxisSize.min,
-                                                    children: [
-                                                      Text(
-                                                        list![index]
-                                                            .actionType
-                                                            .title,
-                                                        style: TextStyle(
-                                                          height: 1,
-                                                          fontSize: 14,
-                                                          color: theme
-                                                              .colorScheme
-                                                              .secondary,
-                                                        ),
-                                                        strutStyle:
-                                                            const StrutStyle(
-                                                          height: 1,
-                                                          leading: 0,
-                                                        ),
-                                                      ),
-                                                      Icon(
-                                                        MdiIcons
-                                                            .unfoldMoreHorizontal,
-                                                        size: MediaQuery
-                                                                .textScalerOf(
-                                                                    context)
-                                                            .scale(14),
-                                                        color: theme.colorScheme
-                                                            .secondary,
-                                                      ),
-                                                    ],
-                                                  ),
-                                                );
-                                              },
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    );
-                                  },
-                                ),
-                              ],
-                            ),
-                          ),
-                          Positioned(
-                            top: 0,
-                            right: 4,
-                            child: iconButton(
-                              context: context,
-                              size: 26,
-                              tooltip: '移除',
-                              icon: Icons.clear,
-                              onPressed: () {
-                                setState(() {
-                                  list!.removeAt(index);
-                                });
-                              },
-                            ),
-                          ),
-                          Positioned(
-                            top: 0,
-                            left: 4,
-                            child: iconButton(
-                              context: context,
-                              size: 26,
-                              tooltip: '预览',
-                              icon: Icons.preview_outlined,
-                              onPressed: () async {
-                                if (widget.plPlayerController
-                                        .videoPlayerController !=
-                                    null) {
-                                  int start = max(
-                                    0,
-                                    (list![index].segment.first * 1000)
-                                            .round() -
-                                        2000,
-                                  );
-                                  await widget
-                                      .plPlayerController.videoPlayerController!
-                                      .seek(
-                                    Duration(milliseconds: start),
-                                  );
-                                  if (!widget.plPlayerController
-                                      .videoPlayerController!.state.playing) {
-                                    await widget.plPlayerController
-                                        .videoPlayerController!
-                                        .play();
-                                  }
-                                  if (start != 0) {
-                                    await Future.delayed(
-                                        const Duration(seconds: 2));
-                                  }
-                                  widget
-                                      .plPlayerController.videoPlayerController!
-                                      .seek(
-                                    Duration(
-                                      milliseconds:
-                                          (list![index].segment.second * 1000)
-                                              .round(),
-                                    ),
-                                  );
-                                }
-                              },
-                            ),
-                          ),
-                        ],
-                      ),
+                      (index) {
+                        return _buildItem(theme, index, list![index]);
+                      },
                     ),
                     SizedBox(
                       height: 88 + MediaQuery.paddingOf(context).bottom,
@@ -448,28 +155,28 @@ class _PostPanelState extends CommonCollapseSlidePageState<PostPanel> {
 
   void updateSegment({
     required bool isFirst,
-    required int index,
+    required PostSegmentModel item,
     required double value,
   }) {
     if (isFirst) {
-      list![index].segment.first = value;
+      item.segment.first = value;
     } else {
-      list![index].segment.second = value;
+      item.segment.second = value;
     }
-    if (list![index].category == SegmentType.poi_highlight ||
-        list![index].actionType == ActionType.full) {
-      list![index].segment.second = value;
+    if (item.category == SegmentType.poi_highlight ||
+        item.actionType == ActionType.full) {
+      item.segment.second = value;
     }
   }
 
   List<Widget> segmentWidget(
     BuildContext context,
     ThemeData theme, {
-    required int index,
+    required PostSegmentModel item,
     required bool isFirst,
   }) {
     String value = DurationUtil.formatDuration(
-        isFirst ? list![index].segment.first : list![index].segment.second);
+        isFirst ? item.segment.first : item.segment.second);
     return [
       Text(
         '${isFirst ? '开始' : '结束'}: $value',
@@ -483,7 +190,7 @@ class _PostPanelState extends CommonCollapseSlidePageState<PostPanel> {
         onPressed: () {
           updateSegment(
             isFirst: isFirst,
-            index: index,
+            item: item,
             value: currentPos,
           );
           (context as Element).markNeedsBuild();
@@ -498,7 +205,7 @@ class _PostPanelState extends CommonCollapseSlidePageState<PostPanel> {
         onPressed: () {
           updateSegment(
             isFirst: isFirst,
-            index: index,
+            item: item,
             value: isFirst ? 0 : videoDuration,
           );
           (context as Element).markNeedsBuild();
@@ -553,7 +260,7 @@ class _PostPanelState extends CommonCollapseSlidePageState<PostPanel> {
                 if (duration <= videoDuration) {
                   updateSegment(
                     isFirst: isFirst,
-                    index: index,
+                    item: item,
                     value: duration,
                   );
                   (context as Element).markNeedsBuild();
@@ -626,6 +333,243 @@ class _PostPanelState extends CommonCollapseSlidePageState<PostPanel> {
             }}',
           );
         }
+      },
+    );
+  }
+
+  Widget _buildItem(ThemeData theme, int index, PostSegmentModel item) {
+    return Builder(
+      builder: (context) {
+        return Stack(
+          clipBehavior: Clip.none,
+          children: [
+            Container(
+              width: double.infinity,
+              margin: const EdgeInsets.symmetric(
+                horizontal: 16,
+                vertical: 5,
+              ),
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: theme.colorScheme.onInverseSurface,
+                borderRadius: const BorderRadius.all(Radius.circular(12)),
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  if (item.actionType != ActionType.full) ...[
+                    Wrap(
+                      runSpacing: 8,
+                      spacing: 16,
+                      children: [
+                        Builder(
+                          builder: (context) {
+                            return Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: segmentWidget(
+                                context,
+                                theme,
+                                isFirst: true,
+                                item: item,
+                              ),
+                            );
+                          },
+                        ),
+                        if (item.category != SegmentType.poi_highlight)
+                          Builder(
+                            builder: (context) {
+                              return Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: segmentWidget(
+                                  context,
+                                  theme,
+                                  isFirst: false,
+                                  item: item,
+                                ),
+                              );
+                            },
+                          ),
+                      ],
+                    ),
+                    const SizedBox(height: 8),
+                  ],
+                  Wrap(
+                    runSpacing: 8,
+                    spacing: 16,
+                    children: [
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Text('分类: '),
+                          PopupMenuButton<SegmentType>(
+                            initialValue: item.category,
+                            onSelected: (e) {
+                              item.category = e;
+                              List<ActionType> constraintList = e.toActionType;
+                              if (!constraintList.contains(item.actionType)) {
+                                item.actionType = constraintList.first;
+                              }
+                              switch (e) {
+                                case SegmentType.poi_highlight:
+                                  updateSegment(
+                                    isFirst: false,
+                                    item: item,
+                                    value: item.segment.first,
+                                  );
+                                  break;
+                                case SegmentType.exclusive_access:
+                                  updateSegment(
+                                    isFirst: true,
+                                    item: item,
+                                    value: 0,
+                                  );
+                                  break;
+                                default:
+                              }
+                              (context as Element).markNeedsBuild();
+                            },
+                            itemBuilder: (context) => SegmentType.values
+                                .map((e) => PopupMenuItem<SegmentType>(
+                                      value: e,
+                                      child: Text(e.title),
+                                    ))
+                                .toList(),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                  item.category.title,
+                                  style: TextStyle(
+                                    height: 1,
+                                    fontSize: 14,
+                                    color: theme.colorScheme.secondary,
+                                  ),
+                                  strutStyle: const StrutStyle(
+                                    height: 1,
+                                    leading: 0,
+                                  ),
+                                ),
+                                Icon(
+                                  MdiIcons.unfoldMoreHorizontal,
+                                  size: MediaQuery.textScalerOf(context)
+                                      .scale(14),
+                                  color: theme.colorScheme.secondary,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Text('行为类别: '),
+                          PopupMenuButton<ActionType>(
+                            initialValue: item.actionType,
+                            onSelected: (e) {
+                              item.actionType = e;
+                              if (e == ActionType.full) {
+                                updateSegment(
+                                  isFirst: true,
+                                  item: item,
+                                  value: 0,
+                                );
+                              }
+                              (context as Element).markNeedsBuild();
+                            },
+                            itemBuilder: (context) => ActionType.values
+                                .map(
+                                  (e) => PopupMenuItem<ActionType>(
+                                    enabled:
+                                        item.category.toActionType.contains(e),
+                                    value: e,
+                                    child: Text(e.title),
+                                  ),
+                                )
+                                .toList(),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                  item.actionType.title,
+                                  style: TextStyle(
+                                    height: 1,
+                                    fontSize: 14,
+                                    color: theme.colorScheme.secondary,
+                                  ),
+                                  strutStyle: const StrutStyle(
+                                    height: 1,
+                                    leading: 0,
+                                  ),
+                                ),
+                                Icon(
+                                  MdiIcons.unfoldMoreHorizontal,
+                                  size: MediaQuery.textScalerOf(context)
+                                      .scale(14),
+                                  color: theme.colorScheme.secondary,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            Positioned(
+              top: 0,
+              right: 4,
+              child: iconButton(
+                context: context,
+                size: 26,
+                tooltip: '移除',
+                icon: Icons.clear,
+                onPressed: () {
+                  setState(() {
+                    list!.removeAt(index);
+                  });
+                },
+              ),
+            ),
+            Positioned(
+              top: 0,
+              left: 4,
+              child: iconButton(
+                context: context,
+                size: 26,
+                tooltip: '预览',
+                icon: Icons.preview_outlined,
+                onPressed: () async {
+                  if (widget.plPlayerController.videoPlayerController != null) {
+                    int start = max(
+                      0,
+                      (item.segment.first * 1000).round() - 2000,
+                    );
+                    await widget.plPlayerController.videoPlayerController!.seek(
+                      Duration(milliseconds: start),
+                    );
+                    if (!widget.plPlayerController.videoPlayerController!.state
+                        .playing) {
+                      await widget.plPlayerController.videoPlayerController!
+                          .play();
+                    }
+                    if (start != 0) {
+                      await Future.delayed(const Duration(seconds: 2));
+                    }
+                    widget.plPlayerController.videoPlayerController!.seek(
+                      Duration(
+                        milliseconds: (item.segment.second * 1000).round(),
+                      ),
+                    );
+                  }
+                },
+              ),
+            ),
+          ],
+        );
       },
     );
   }

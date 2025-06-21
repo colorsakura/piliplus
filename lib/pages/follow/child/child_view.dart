@@ -100,14 +100,14 @@ class _FollowChildPageState extends State<FollowChildPage>
                 if (index == response.length - 1) {
                   _followController.onLoadMore();
                 }
+                final item = response[index];
                 return FollowItem(
-                  item: response[index],
+                  item: item,
                   isOwner: widget.controller?.isOwner,
                   onSelect: widget.onSelect,
                   callback: (attr) {
-                    _followController.loadingState
-                      ..value.data![index].attribute = attr == 0 ? -1 : 0
-                      ..refresh();
+                    item.attribute = attr == 0 ? -1 : 0;
+                    _followController.loadingState.refresh();
                   },
                 );
               },

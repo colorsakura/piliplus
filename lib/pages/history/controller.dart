@@ -41,9 +41,9 @@ class HistoryController
   }
 
   @override
-  void onSelect(int index, [bool disableSelect = true]) {
+  void onSelect(HistoryItemModel item, [bool disableSelect = true]) {
     List<HistoryItemModel> list = loadingState.value.data!;
-    list[index].checked = !(list[index].checked ?? false);
+    item.checked = !(item.checked ?? false);
     baseCtr.checkedCount.value =
         list.where((item) => item.checked == true).length;
     loadingState.refresh();

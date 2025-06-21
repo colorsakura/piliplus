@@ -35,9 +35,9 @@ class LaterController extends MultiSelectController<LaterData, LaterItemModel> {
       );
 
   @override
-  void onSelect(int index, [bool disableSelect = true]) {
+  void onSelect(LaterItemModel item, [bool disableSelect = true]) {
     List<LaterItemModel> list = loadingState.value.data!;
-    list[index].checked = !(list[index].checked ?? false);
+    item.checked = !(item.checked ?? false);
     baseCtr.checkedCount.value =
         list.where((item) => item.checked == true).length;
     loadingState.refresh();

@@ -35,17 +35,20 @@ class SelectDialog<T> extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: List.generate(
             values.length,
-            (index) => RadioListTile<T>(
-              dense: true,
-              value: values[index].$1,
-              title: Text(
-                values[index].$2,
-                style: Theme.of(context).textTheme.titleMedium!,
-              ),
-              subtitle: subtitleBuilder?.call(context, index),
-              groupValue: value,
-              onChanged: Navigator.of(context).pop,
-            ),
+            (index) {
+              final item = values[index];
+              return RadioListTile<T>(
+                dense: true,
+                value: item.$1,
+                title: Text(
+                  item.$2,
+                  style: Theme.of(context).textTheme.titleMedium!,
+                ),
+                subtitle: subtitleBuilder?.call(context, index),
+                groupValue: value,
+                onChanged: Navigator.of(context).pop,
+              );
+            },
           ),
         ),
       ),
@@ -166,7 +169,8 @@ class _CdnSelectDialogState extends State<CdnSelectDialog> {
   }
 
   void _handleSpeedTestError(dynamic error, int index) {
-    if (_cdnResList[index].value != null) return;
+    final item = _cdnResList[index];
+    if (item.value != null) return;
 
     if (kDebugMode) debugPrint('CDN speed test error: $error');
     if (!mounted) return;
@@ -174,7 +178,7 @@ class _CdnSelectDialogState extends State<CdnSelectDialog> {
     if (message.isEmpty) {
       message = '测速失败';
     }
-    _cdnResList[index].value = message;
+    item.value = message;
   }
 
   @override
@@ -184,17 +188,20 @@ class _CdnSelectDialogState extends State<CdnSelectDialog> {
       values: CDNService.values.map((i) => (i.code, i.desc)).toList(),
       value: VideoUtils.cdnService,
       subtitleBuilder: _cdnSpeedTest
-          ? (context, index) => ValueListenableBuilder(
-                valueListenable: _cdnResList[index],
+          ? (context, index) {
+              final item = _cdnResList[index];
+              return ValueListenableBuilder(
+                valueListenable: item,
                 builder: (context, value, _) {
                   return Text(
-                    _cdnResList[index].value ?? '---',
+                    item.value ?? '---',
                     style: const TextStyle(fontSize: 13),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   );
                 },
-              )
+              );
+            }
           : null,
     );
   }

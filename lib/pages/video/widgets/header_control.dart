@@ -593,15 +593,16 @@ class HeaderControlState extends State<HeaderControl> {
                     ),
                   ),
                 ),
-                for (int i = 0; i < totalQaSam; i++) ...[
-                  ListTile(
+                ...List.generate(totalQaSam, (index) {
+                  final item = videoFormat[index];
+                  return ListTile(
                     dense: true,
                     onTap: () async {
-                      if (currentVideoQa.code == videoFormat[i].quality) {
+                      if (currentVideoQa.code == item.quality) {
                         return;
                       }
                       Get.back();
-                      final int quality = videoFormat[i].quality!;
+                      final int quality = item.quality!;
                       videoDetailCtr
                         ..currentVideoQa = VideoQuality.fromCode(quality)
                         ..updatePlayer();
@@ -631,20 +632,20 @@ class HeaderControlState extends State<HeaderControl> {
                       );
                     },
                     // 可能包含会员解锁画质
-                    enabled: i >= totalQaSam - userfulQaSam,
+                    enabled: index >= totalQaSam - userfulQaSam,
                     contentPadding: const EdgeInsets.only(left: 20, right: 20),
-                    title: Text(videoFormat[i].newDesc!),
-                    trailing: currentVideoQa.code == videoFormat[i].quality
+                    title: Text(item.newDesc!),
+                    trailing: currentVideoQa.code == item.quality
                         ? Icon(
                             Icons.done,
                             color: theme.colorScheme.primary,
                           )
                         : Text(
-                            videoFormat[i].format!,
+                            item.format!,
                             style: subTitleStyle,
                           ),
-                  ),
-                ]
+                  );
+                }),
               ],
             ),
           ),

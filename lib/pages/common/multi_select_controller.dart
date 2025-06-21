@@ -11,9 +11,9 @@ abstract class MultiSelectController<R, T extends MultiSelectData>
   late final RxInt checkedCount = 0.obs;
   late final allSelected = false.obs;
 
-  void onSelect(int index, [bool disableSelect = true]) {
+  void onSelect(T item, [bool disableSelect = true]) {
     List<T> list = loadingState.value.data!;
-    list[index].checked = !(list[index].checked ?? false);
+    item.checked = !(item.checked ?? false);
     checkedCount.value = list.where((item) => item.checked == true).length;
     loadingState.refresh();
     if (disableSelect) {

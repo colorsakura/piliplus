@@ -32,6 +32,7 @@ class LiveRoomChat extends StatelessWidget {
             itemCount: liveRoomController.messages.length,
             physics: const ClampingScrollPhysics(),
             itemBuilder: (context, index) {
+              final item = liveRoomController.messages[index];
               return Container(
                 alignment: Alignment.centerLeft,
                 padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -48,8 +49,7 @@ class LiveRoomChat extends StatelessWidget {
                     TextSpan(
                       children: [
                         TextSpan(
-                          text:
-                              '${liveRoomController.messages[index]['name']}: ',
+                          text: '${item['name']}: ',
                           style: TextStyle(
                             color: Colors.white.withValues(alpha: 0.6),
                             fontSize: 14,
@@ -57,14 +57,13 @@ class LiveRoomChat extends StatelessWidget {
                           recognizer: TapGestureRecognizer()
                             ..onTap = () {
                               try {
-                                Get.toNamed(
-                                    '/member?mid=${liveRoomController.messages[index]['uid']}');
+                                Get.toNamed('/member?mid=${item['uid']}');
                               } catch (err) {
                                 if (kDebugMode) debugPrint(err.toString());
                               }
                             },
                         ),
-                        _buildMsg(liveRoomController.messages[index]),
+                        _buildMsg(item),
                       ],
                     ),
                   ),

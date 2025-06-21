@@ -151,10 +151,11 @@ class _FavNoteChildPageState extends State<FavNoteChildPage>
                   if (index == response.length - 1) {
                     _favNoteController.onLoadMore();
                   }
+                  final item = response[index];
                   return FavNoteItem(
-                    item: response[index],
+                    item: item,
                     ctr: _favNoteController,
-                    onSelect: () => _favNoteController.onSelect(index),
+                    onSelect: () => _favNoteController.onSelect(item),
                   );
                 },
                 childCount: response!.length,

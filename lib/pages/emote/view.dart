@@ -61,27 +61,28 @@ class _EmotePanelState extends State<EmotePanel>
                           ),
                           itemCount: e.emote!.length,
                           itemBuilder: (context, index) {
+                            final item = e.emote![index];
                             return Material(
                               type: MaterialType.transparency,
                               child: InkWell(
                                 borderRadius:
                                     const BorderRadius.all(Radius.circular(8)),
-                                onTap: () => widget.onChoose(e.emote![index]),
+                                onTap: () => widget.onChoose(item),
                                 child: Padding(
                                   padding: const EdgeInsets.all(6),
                                   child: type == 4
                                       ? Center(
                                           child: Text(
-                                            e.emote![index].text!,
+                                            item.text!,
                                             overflow: TextOverflow.clip,
                                             maxLines: 1,
                                           ),
                                         )
                                       : NetworkImgLayer(
-                                          src: e.emote![index].url!,
+                                          src: item.url!,
                                           width: size * 38,
                                           height: size * 38,
-                                          semanticsLabel: e.emote![index].text!,
+                                          semanticsLabel: item.text!,
                                           type: ImageType.emote,
                                           boxFit: BoxFit.contain,
                                         ),

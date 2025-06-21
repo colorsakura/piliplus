@@ -312,7 +312,7 @@ class _PgcReviewChildPageState extends State<PgcReviewChildPage>
                           child: TextButton(
                             style: style,
                             onPressed: () => _controller.onDislike(
-                                index, isDislike, item.reviewId),
+                                item, isDislike, item.reviewId),
                             child: Icon(
                               isDislike
                                   ? FontAwesomeIcons.solidThumbsDown
@@ -329,7 +329,7 @@ class _PgcReviewChildPageState extends State<PgcReviewChildPage>
                           onPressed: isLongReview
                               ? null
                               : () => _controller.onLike(
-                                  index, isLike, item.reviewId),
+                                  item, isLike, item.reviewId),
                           child: Row(
                             spacing: 4,
                             children: [

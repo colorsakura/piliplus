@@ -379,11 +379,12 @@ class RequestUtils {
                 child: Builder(
                   builder: (context) => Column(
                     children: List.generate(list.length, (index) {
+                      final item = list[index];
                       return RadioWidget(
                         padding: const EdgeInsets.only(left: 14),
-                        title: list[index].title,
+                        title: item.title,
                         groupValue: checkedId,
-                        value: list[index].id,
+                        value: item.id,
                         onChanged: (value) {
                           checkedId = value;
                           if (context.mounted) {

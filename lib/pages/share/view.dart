@@ -112,6 +112,7 @@ class _SharePanelState extends State<SharePanel> {
                   itemCount: _userList.length,
                   controller: _scrollController,
                   childBuilder: (index) {
+                    final item = _userList[index];
                     return GestureDetector(
                       onTap: () {
                         _selectedIndex = index;
@@ -131,13 +132,13 @@ class _SharePanelState extends State<SharePanel> {
                                   child: NetworkImgLayer(
                                     width: 40,
                                     height: 40,
-                                    src: _userList[index].avatar,
+                                    src: item.avatar,
                                     type: ImageType.avatar,
                                   ),
                                 ),
                                 const SizedBox(height: 2),
                                 Text(
-                                  _userList[index].name,
+                                  item.name,
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
                                   style: const TextStyle(fontSize: 12),

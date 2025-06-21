@@ -179,8 +179,7 @@ class _FollowPageState extends State<FollowPage> {
                     ),
                     onConfirm: () {
                       if (tagName.isNotEmpty) {
-                        _followController.onUpdateTag(
-                            index, item.tagid, tagName);
+                        _followController.onUpdateTag(item, tagName);
                       }
                     },
                   );

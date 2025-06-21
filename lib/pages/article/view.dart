@@ -619,20 +619,18 @@ class _ArticlePageState extends State<ArticlePage>
                     onReply: (replyItem) => _articleCtr.onReply(
                       context,
                       replyItem: replyItem,
-                      index: index,
                     ),
-                    onDelete: (subIndex) =>
-                        _articleCtr.onRemove(index, subIndex),
+                    onDelete: (item, subIndex) =>
+                        _articleCtr.onRemove(index, item, subIndex),
                     upMid: _articleCtr.upMid,
                     callback: _getImageCallback,
                     onCheckReply: (item) =>
                         _articleCtr.onCheckReply(context, item, isManual: true),
-                    onToggleTop: (isUpTop, rpid) => _articleCtr.onToggleTop(
+                    onToggleTop: (item) => _articleCtr.onToggleTop(
+                      item,
                       index,
                       _articleCtr.commentId,
                       _articleCtr.commentType,
-                      isUpTop,
-                      rpid,
                     ),
                   );
                 }

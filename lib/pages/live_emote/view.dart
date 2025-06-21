@@ -73,6 +73,7 @@ class _LiveEmotePanelState extends State<LiveEmotePanel>
                           ),
                           itemCount: item.emoticons!.length,
                           itemBuilder: (context, index) {
+                            final e = item.emoticons![index];
                             return Material(
                               type: MaterialType.transparency,
                               child: InkWell(
@@ -80,18 +81,16 @@ class _LiveEmotePanelState extends State<LiveEmotePanel>
                                     const BorderRadius.all(Radius.circular(8)),
                                 onTap: () {
                                   if (item.pkgType == 3) {
-                                    widget.onChoose(item.emoticons![index]);
+                                    widget.onChoose(e);
                                   } else {
-                                    widget.onSendEmoticonUnique(
-                                      item.emoticons![index],
-                                    );
+                                    widget.onSendEmoticonUnique(e);
                                   }
                                 },
                                 child: Padding(
                                   padding: const EdgeInsets.all(6),
                                   child: NetworkImgLayer(
                                     boxFit: BoxFit.contain,
-                                    src: item.emoticons![index].url!,
+                                    src: e.url!,
                                     width: widthFac * 38,
                                     height: heightFac * 38,
                                     type: ImageType.emote,

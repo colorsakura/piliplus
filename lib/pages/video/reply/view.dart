@@ -220,10 +220,9 @@ class _VideoReplyPanelState extends State<VideoReplyPanel>
                     onReply: (replyItem) => _videoReplyController.onReply(
                       context,
                       replyItem: replyItem,
-                      index: index,
                     ),
-                    onDelete: (subIndex) =>
-                        _videoReplyController.onRemove(index, subIndex),
+                    onDelete: (item, subIndex) =>
+                        _videoReplyController.onRemove(index, item, subIndex),
                     upMid: _videoReplyController.upMid,
                     getTag: () => heroTag,
                     onViewImage: widget.onViewImage,
@@ -231,13 +230,11 @@ class _VideoReplyPanelState extends State<VideoReplyPanel>
                     callback: widget.callback,
                     onCheckReply: (item) => _videoReplyController
                         .onCheckReply(context, item, isManual: true),
-                    onToggleTop: (isUpTop, rpid) =>
-                        _videoReplyController.onToggleTop(
+                    onToggleTop: (item) => _videoReplyController.onToggleTop(
+                      item,
                       index,
                       _videoReplyController.aid,
                       1,
-                      isUpTop,
-                      rpid,
                     ),
                   );
                 }

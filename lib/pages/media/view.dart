@@ -207,9 +207,8 @@ class _MediaPageState extends CommonPageState<MediaPage, MediaController>
                     ),
                   );
                 } else {
-                  String heroTag = Utils.makeHeroTag(response.list[index].fid);
                   return FavFolderItem(
-                    heroTag: heroTag,
+                    heroTag: Utils.generateRandomString(8),
                     item: response.list[index],
                     callback: () => Future.delayed(
                       const Duration(milliseconds: 150),

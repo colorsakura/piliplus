@@ -8,6 +8,8 @@ import 'package:PiliPlus/common/widgets/stat/stat.dart';
 import 'package:PiliPlus/models/common/image_type.dart';
 import 'package:PiliPlus/models/common/stat_type.dart';
 import 'package:PiliPlus/models_new/video/video_detail/data.dart';
+import 'package:PiliPlus/models_new/video/video_detail/staff.dart';
+import 'package:PiliPlus/models_new/video/video_tag/data.dart';
 import 'package:PiliPlus/pages/mine/controller.dart';
 import 'package:PiliPlus/pages/search/widgets/search_text.dart';
 import 'package:PiliPlus/pages/video/controller.dart';
@@ -292,73 +294,7 @@ class _VideoInfoState extends State<VideoInfo> {
                           Expanded(
                             child: Align(
                               alignment: Alignment.centerLeft,
-                              child: GestureDetector(
-                                onTap: onPushMember,
-                                behavior: HitTestBehavior.opaque,
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Obx(() => PendantAvatar(
-                                          avatar: videoIntroController
-                                              .userStat['card']?['face'],
-                                          size: 35,
-                                          badgeSize: 14,
-                                          isVip: (videoIntroController
-                                                          .userStat['card']
-                                                      ?['vip']?['status'] ??
-                                                  -1) >
-                                              0,
-                                          officialType: videoIntroController
-                                                  .userStat['card']
-                                              ?['official_verify']?['type'],
-                                          // garbPendantImage: videoIntroController.userStat.value['card']?['pendant']?['image'],
-                                        )),
-                                    const SizedBox(width: 10),
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Obx(
-                                          () => Text(
-                                            videoIntroController
-                                                        .userStat['card']
-                                                    ?['name'] ??
-                                                "",
-                                            maxLines: 1,
-                                            overflow: TextOverflow.ellipsis,
-                                            style: TextStyle(
-                                              fontSize: 13,
-                                              color: (videoIntroController.userStat[
-                                                                          'card']
-                                                                      ?['vip']
-                                                                  ?['status'] ??
-                                                              -1) >
-                                                          0 &&
-                                                      videoIntroController
-                                                                      .userStat[
-                                                                  'card']?[
-                                                              'vip']?['type'] ==
-                                                          2
-                                                  ? context.vipColor
-                                                  : null,
-                                            ),
-                                          ),
-                                        ),
-                                        const SizedBox(height: 0),
-                                        Obx(
-                                          () => Text(
-                                            '${NumUtil.numFormat(videoIntroController.userStat['follower'])}粉丝    ${videoIntroController.userStat['archive_count'] != null ? '${NumUtil.numFormat(videoIntroController.userStat['archive_count'])}视频' : ''}',
-                                            style: TextStyle(
-                                              fontSize: 12,
-                                              color: theme.colorScheme.outline,
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ),
+                              child: _buildAvatar(theme),
                             ),
                           ),
                           followButton(context, theme),
@@ -367,152 +303,10 @@ class _VideoInfoState extends State<VideoInfo> {
                             child: SelfSizedHorizontalList(
                               gapSize: 25,
                               itemCount: videoItem['staff'].length,
-                              childBuilder: (index) => GestureDetector(
-                                behavior: HitTestBehavior.opaque,
-                                onTap: () {
-                                  int? ownerMid = !widget.isLoading
-                                      ? videoDetail.owner?.mid
-                                      : videoItem['owner']?.mid;
-                                  if (videoItem['staff'][index].mid ==
-                                          ownerMid &&
-                                      context.orientation ==
-                                          Orientation.landscape &&
-                                      _horizontalMemberPage) {
-                                    widget.onShowMemberPage(ownerMid);
-                                  } else {
-                                    Get.toNamed(
-                                      '/member?mid=${videoItem['staff'][index].mid}&from_view_aid=${videoDetailCtr.oid.value}',
-                                    );
-                                  }
-                                },
-                                child: Row(
-                                  children: [
-                                    Stack(
-                                      clipBehavior: Clip.none,
-                                      children: [
-                                        NetworkImgLayer(
-                                          type: ImageType.avatar,
-                                          src: videoItem['staff'][index].face,
-                                          width: 35,
-                                          height: 35,
-                                          fadeInDuration: Duration.zero,
-                                          fadeOutDuration: Duration.zero,
-                                        ),
-                                        if ((videoItem['staff'][index]
-                                                    .official
-                                                    ?.type ??
-                                                -1) !=
-                                            -1)
-                                          Positioned(
-                                            right: -2,
-                                            bottom: -2,
-                                            child: DecoratedBox(
-                                              decoration: BoxDecoration(
-                                                shape: BoxShape.circle,
-                                                color:
-                                                    theme.colorScheme.surface,
-                                              ),
-                                              child: Icon(
-                                                Icons.offline_bolt,
-                                                color: videoItem['staff'][index]
-                                                            .official
-                                                            ?.type ==
-                                                        0
-                                                    ? const Color(0xFFFFCC00)
-                                                    : Colors.lightBlueAccent,
-                                                size: 14,
-                                              ),
-                                            ),
-                                          ),
-                                        Positioned(
-                                          top: 0,
-                                          right: -6,
-                                          child: Obx(() => videoIntroController
-                                                              .staffRelations[
-                                                          'status'] ==
-                                                      true &&
-                                                  videoIntroController
-                                                              .staffRelations[
-                                                          '${videoItem['staff'][index].mid}'] ==
-                                                      null
-                                              ? Material(
-                                                  type:
-                                                      MaterialType.transparency,
-                                                  shape: const CircleBorder(),
-                                                  child: InkWell(
-                                                    customBorder:
-                                                        const CircleBorder(),
-                                                    onTap: () => RequestUtils
-                                                        .actionRelationMod(
-                                                      context: context,
-                                                      mid: videoItem['staff']
-                                                              [index]
-                                                          .mid,
-                                                      isFollow: false,
-                                                      callback: (val) {
-                                                        videoIntroController
-                                                                .staffRelations[
-                                                            '${videoItem['staff'][index].mid}'] = true;
-                                                      },
-                                                    ),
-                                                    child: Ink(
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              2),
-                                                      decoration: BoxDecoration(
-                                                        color: theme.colorScheme
-                                                            .secondaryContainer,
-                                                        shape: BoxShape.circle,
-                                                      ),
-                                                      child: Icon(
-                                                        MdiIcons.plus,
-                                                        size: 16,
-                                                        color: theme.colorScheme
-                                                            .onSecondaryContainer,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                )
-                                              : const SizedBox.shrink()),
-                                        ),
-                                      ],
-                                    ),
-                                    const SizedBox(width: 8),
-                                    Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          videoItem['staff'][index].name,
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: TextStyle(
-                                            fontSize: 13,
-                                            color: videoItem['staff'][index]
-                                                            .vip
-                                                            .status >
-                                                        0 &&
-                                                    videoItem['staff'][index]
-                                                            .vip
-                                                            .type ==
-                                                        2
-                                                ? context.vipColor
-                                                : null,
-                                          ),
-                                        ),
-                                        Text(
-                                          videoItem['staff'][index].title,
-                                          style: TextStyle(
-                                            fontSize: 12,
-                                            color: theme.colorScheme.outline,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ),
+                              childBuilder: (index) {
+                                return _buildStaff(
+                                    theme, videoItem['staff'][index]);
+                              },
                             ),
                           ),
                         if (isHorizontal) ...[
@@ -554,88 +348,8 @@ class _VideoInfoState extends State<VideoInfo> {
                   Stack(
                     clipBehavior: Clip.none,
                     children: [
-                      Row(
-                        spacing: 10,
-                        children: [
-                          StatWidget(
-                            type: StatType.play,
-                            value: !widget.isLoading
-                                ? videoDetail.stat?.view
-                                : videoItem['stat']?.view,
-                            color: theme.colorScheme.outline,
-                          ),
-                          StatWidget(
-                            type: StatType.danmaku,
-                            value: !widget.isLoading
-                                ? videoDetail.stat?.danmaku
-                                : videoItem['stat']?.danmu,
-                            color: theme.colorScheme.outline,
-                          ),
-                          Text(
-                            DateUtil.format(
-                              !widget.isLoading
-                                  ? videoDetail.pubdate
-                                  : videoItem['pubdate'],
-                            ),
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: theme.colorScheme.outline,
-                            ),
-                          ),
-                          if (MineController.anonymity.value)
-                            Icon(
-                              MdiIcons.incognito,
-                              size: 15,
-                              color: theme.colorScheme.outline,
-                              semanticLabel: '无痕',
-                            ),
-                          if (videoIntroController.isShowOnlineTotal)
-                            Obx(
-                              () => Text(
-                                '${videoIntroController.total.value}人在看',
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  color: theme.colorScheme.outline,
-                                ),
-                              ),
-                            ),
-                        ],
-                      ),
-                      if (videoIntroController.enableAi)
-                        Positioned(
-                          right: 10,
-                          top: 0,
-                          bottom: 0,
-                          child: Center(
-                            child: Semantics(
-                              label: 'AI总结',
-                              child: GestureDetector(
-                                onTap: () async {
-                                  if (videoIntroController.aiConclusionResult ==
-                                      null) {
-                                    await videoIntroController.aiConclusion();
-                                  }
-                                  if (videoIntroController.aiConclusionResult ==
-                                      null) {
-                                    return;
-                                  }
-                                  if (videoIntroController.aiConclusionResult!
-                                              .summary?.isNotEmpty ==
-                                          true ||
-                                      videoIntroController.aiConclusionResult!
-                                              .outline?.isNotEmpty ==
-                                          true) {
-                                    widget.showAiBottomSheet();
-                                  } else {
-                                    SmartDialog.showToast("当前视频不支持AI视频总结");
-                                  }
-                                },
-                                child: Image.asset('assets/images/ai.png',
-                                    height: 22),
-                              ),
-                            ),
-                          ),
-                        )
+                      _buildInfo(theme),
+                      if (videoIntroController.enableAi) _aiBtn,
                     ],
                   ),
                   if (videoIntroController.videoDetail.value.argueInfo?.argueMsg
@@ -704,31 +418,7 @@ class _VideoInfoState extends State<VideoInfo> {
                         ],
                         if (videoIntroController.videoTags?.isNotEmpty ==
                             true) ...[
-                          GestureDetector(
-                            onTap: () {},
-                            behavior: HitTestBehavior.opaque,
-                            child: Container(
-                              width: double.infinity,
-                              padding: const EdgeInsets.only(top: 8),
-                              child: Wrap(
-                                spacing: 8,
-                                runSpacing: 8,
-                                children: videoIntroController.videoTags!
-                                    .map(
-                                      (item) => SearchText(
-                                        fontSize: 13,
-                                        text: item.tagName!,
-                                        onTap: (tagName) => Get.toNamed(
-                                          '/searchResult',
-                                          parameters: {'keyword': tagName},
-                                        ),
-                                        onLongPress: Utils.copyText,
-                                      ),
-                                    )
-                                    .toList(),
-                              ),
-                            ),
-                          ),
+                          _buildTags(videoIntroController.videoTags!),
                         ],
                       ],
                     ),
@@ -806,7 +496,7 @@ class _VideoInfoState extends State<VideoInfo> {
     );
   }
 
-  Obx followButton(BuildContext context, ThemeData t) {
+  Widget followButton(BuildContext context, ThemeData t) {
     return Obx(
       () {
         int attr = videoIntroController.followStatus['attribute'] ?? 0;
@@ -1028,5 +718,286 @@ class _VideoInfoState extends State<VideoInfo> {
       }
     });
     return TextSpan(children: spanChildren);
+  }
+
+  Widget _buildStaff(ThemeData theme, Staff item) {
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: () {
+        int? ownerMid = !widget.isLoading
+            ? videoDetail.owner?.mid
+            : videoItem['owner']?.mid;
+        if (item.mid == ownerMid &&
+            context.orientation == Orientation.landscape &&
+            _horizontalMemberPage) {
+          widget.onShowMemberPage(ownerMid);
+        } else {
+          Get.toNamed(
+            '/member?mid=${item.mid}&from_view_aid=${videoDetailCtr.oid.value}',
+          );
+        }
+      },
+      child: Row(
+        children: [
+          Stack(
+            clipBehavior: Clip.none,
+            children: [
+              NetworkImgLayer(
+                type: ImageType.avatar,
+                src: item.face,
+                width: 35,
+                height: 35,
+                fadeInDuration: Duration.zero,
+                fadeOutDuration: Duration.zero,
+              ),
+              if ((item.official?.type ?? -1) != -1)
+                Positioned(
+                  right: -2,
+                  bottom: -2,
+                  child: DecoratedBox(
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: theme.colorScheme.surface,
+                    ),
+                    child: Icon(
+                      Icons.offline_bolt,
+                      color: item.official?.type == 0
+                          ? const Color(0xFFFFCC00)
+                          : Colors.lightBlueAccent,
+                      size: 14,
+                    ),
+                  ),
+                ),
+              Positioned(
+                top: 0,
+                right: -6,
+                child: Obx(() =>
+                    videoIntroController.staffRelations['status'] == true &&
+                            videoIntroController
+                                    .staffRelations['${item.mid}'] ==
+                                null
+                        ? Material(
+                            type: MaterialType.transparency,
+                            shape: const CircleBorder(),
+                            child: InkWell(
+                              customBorder: const CircleBorder(),
+                              onTap: () => RequestUtils.actionRelationMod(
+                                context: context,
+                                mid: item.mid,
+                                isFollow: false,
+                                callback: (val) {
+                                  videoIntroController
+                                      .staffRelations['${item.mid}'] = true;
+                                },
+                              ),
+                              child: Ink(
+                                padding: const EdgeInsets.all(2),
+                                decoration: BoxDecoration(
+                                  color: theme.colorScheme.secondaryContainer,
+                                  shape: BoxShape.circle,
+                                ),
+                                child: Icon(
+                                  MdiIcons.plus,
+                                  size: 16,
+                                  color: theme.colorScheme.onSecondaryContainer,
+                                ),
+                              ),
+                            ),
+                          )
+                        : const SizedBox.shrink()),
+              ),
+            ],
+          ),
+          const SizedBox(width: 8),
+          Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                item.name!,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  fontSize: 13,
+                  color: (item.vip?.status ?? 0) > 0 && item.vip?.type == 2
+                      ? context.vipColor
+                      : null,
+                ),
+              ),
+              Text(
+                item.title!,
+                style: TextStyle(
+                  fontSize: 12,
+                  color: theme.colorScheme.outline,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildAvatar(ThemeData theme) => GestureDetector(
+        onTap: onPushMember,
+        behavior: HitTestBehavior.opaque,
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Obx(() => PendantAvatar(
+                  avatar: videoIntroController.userStat['card']?['face'],
+                  size: 35,
+                  badgeSize: 14,
+                  isVip: (videoIntroController.userStat['card']?['vip']
+                              ?['status'] ??
+                          -1) >
+                      0,
+                  officialType: videoIntroController.userStat['card']
+                      ?['official_verify']?['type'],
+                  // garbPendantImage: videoIntroController.userStat.value['card']?['pendant']?['image'],
+                )),
+            const SizedBox(width: 10),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Obx(
+                  () => Text(
+                    videoIntroController.userStat['card']?['name'] ?? "",
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontSize: 13,
+                      color: (videoIntroController.userStat['card']?['vip']
+                                          ?['status'] ??
+                                      -1) >
+                                  0 &&
+                              videoIntroController.userStat['card']?['vip']
+                                      ?['type'] ==
+                                  2
+                          ? context.vipColor
+                          : null,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 0),
+                Obx(
+                  () => Text(
+                    '${NumUtil.numFormat(videoIntroController.userStat['follower'])}粉丝    ${videoIntroController.userStat['archive_count'] != null ? '${NumUtil.numFormat(videoIntroController.userStat['archive_count'])}视频' : ''}',
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: theme.colorScheme.outline,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      );
+
+  Widget _buildInfo(ThemeData theme) => Row(
+        spacing: 10,
+        children: [
+          StatWidget(
+            type: StatType.play,
+            value: !widget.isLoading
+                ? videoDetail.stat?.view
+                : videoItem['stat']?.view,
+            color: theme.colorScheme.outline,
+          ),
+          StatWidget(
+            type: StatType.danmaku,
+            value: !widget.isLoading
+                ? videoDetail.stat?.danmaku
+                : videoItem['stat']?.danmu,
+            color: theme.colorScheme.outline,
+          ),
+          Text(
+            DateUtil.format(
+              !widget.isLoading ? videoDetail.pubdate : videoItem['pubdate'],
+            ),
+            style: TextStyle(
+              fontSize: 12,
+              color: theme.colorScheme.outline,
+            ),
+          ),
+          if (MineController.anonymity.value)
+            Icon(
+              MdiIcons.incognito,
+              size: 15,
+              color: theme.colorScheme.outline,
+              semanticLabel: '无痕',
+            ),
+          if (videoIntroController.isShowOnlineTotal)
+            Obx(
+              () => Text(
+                '${videoIntroController.total.value}人在看',
+                style: TextStyle(
+                  fontSize: 12,
+                  color: theme.colorScheme.outline,
+                ),
+              ),
+            ),
+        ],
+      );
+
+  Widget get _aiBtn => Positioned(
+        right: 10,
+        top: 0,
+        bottom: 0,
+        child: Center(
+          child: Semantics(
+            label: 'AI总结',
+            child: GestureDetector(
+              onTap: () async {
+                if (videoIntroController.aiConclusionResult == null) {
+                  await videoIntroController.aiConclusion();
+                }
+                if (videoIntroController.aiConclusionResult == null) {
+                  return;
+                }
+                if (videoIntroController
+                            .aiConclusionResult!.summary?.isNotEmpty ==
+                        true ||
+                    videoIntroController
+                            .aiConclusionResult!.outline?.isNotEmpty ==
+                        true) {
+                  widget.showAiBottomSheet();
+                } else {
+                  SmartDialog.showToast("当前视频不支持AI视频总结");
+                }
+              },
+              child: Image.asset('assets/images/ai.png', height: 22),
+            ),
+          ),
+        ),
+      );
+
+  Widget _buildTags(List<VideoTagItem> tags) {
+    return GestureDetector(
+      onTap: () {},
+      behavior: HitTestBehavior.opaque,
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.only(top: 8),
+        child: Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          children: tags
+              .map(
+                (item) => SearchText(
+                  fontSize: 13,
+                  text: item.tagName!,
+                  onTap: (tagName) => Get.toNamed(
+                    '/searchResult',
+                    parameters: {'keyword': tagName},
+                  ),
+                  onLongPress: Utils.copyText,
+                ),
+              )
+              .toList(),
+        ),
+      ),
+    );
   }
 }

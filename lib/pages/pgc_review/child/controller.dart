@@ -58,13 +58,12 @@ class PgcReviewController
         sort: sortType.value.sort,
       );
 
-  Future<void> onLike(int index, bool isLike, reviewId) async {
+  Future<void> onLike(PgcReviewItemModel item, bool isLike, reviewId) async {
     var res = await PgcHttp.pgcReviewLike(
       mediaId: mediaId,
       reviewId: reviewId,
     );
     if (res['status']) {
-      final item = loadingState.value.data![index];
       int likes = item.stat?.likes ?? 0;
       item.stat
         ?..liked = isLike ? 0 : 1
@@ -78,13 +77,13 @@ class PgcReviewController
     }
   }
 
-  Future<void> onDislike(int index, bool isDislike, reviewId) async {
+  Future<void> onDislike(
+      PgcReviewItemModel item, bool isDislike, reviewId) async {
     var res = await PgcHttp.pgcReviewDislike(
       mediaId: mediaId,
       reviewId: reviewId,
     );
     if (res['status']) {
-      final item = loadingState.value.data![index];
       item.stat?.disliked = isDislike ? 0 : 1;
       if (!isDislike) {
         if (item.stat?.liked == 1) {

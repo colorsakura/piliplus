@@ -178,7 +178,7 @@ class _FavPgcChildPageState extends State<FavPgcChildPage>
                   return FavPgcItem(
                     item: item,
                     ctr: _favPgcController,
-                    onSelect: () => _favPgcController.onSelect(index),
+                    onSelect: () => _favPgcController.onSelect(item),
                     onUpdateStatus: () => showPgcFollowDialog(
                       context: context,
                       type: widget.type == 0 ? '追番' : '追剧',

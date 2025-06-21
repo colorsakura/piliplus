@@ -477,7 +477,7 @@ class _FavDetailPageState extends State<FavDetailPage> {
                             );
                           },
                           onTap: _favDetailController.enableMultiSelect.value
-                              ? () => _favDetailController.onSelect(index)
+                              ? () => _favDetailController.onSelect(item)
                               : null,
                           onLongPress:
                               _favDetailController.isOwner.value == true
@@ -486,7 +486,7 @@ class _FavDetailPageState extends State<FavDetailPage> {
                                           .enableMultiSelect.value) {
                                         _favDetailController
                                             .enableMultiSelect.value = true;
-                                        _favDetailController.onSelect(index);
+                                        _favDetailController.onSelect(item);
                                       }
                                     }
                                   : null,

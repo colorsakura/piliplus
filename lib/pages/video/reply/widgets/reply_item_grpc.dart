@@ -58,7 +58,7 @@ class ReplyItemGrpc extends StatelessWidget {
   final Function(ReplyInfo replyItem, int? rpid)? replyReply;
   final bool needDivider;
   final ValueChanged<ReplyInfo>? onReply;
-  final ValueChanged<int?>? onDelete;
+  final Function(ReplyInfo replyItem, int? subIndex)? onDelete;
   final Int64? upMid;
   final VoidCallback? showDialogue;
   final Function? getTag;
@@ -66,7 +66,7 @@ class ReplyItemGrpc extends StatelessWidget {
   final ValueChanged<int>? onDismissed;
   final Function(List<String>, int)? callback;
   final ValueChanged<ReplyInfo>? onCheckReply;
-  final Function(bool isUpTop, int rpid)? onToggleTop;
+  final ValueChanged<ReplyInfo>? onToggleTop;
 
   static final _voteRegExp = RegExp(r"\{vote:\d+?\}");
   static final _timeRegExp = RegExp(r'^\b(?:\d+[:：])?\d+[:：]\d+\b$');
@@ -96,7 +96,7 @@ class ReplyItemGrpc extends StatelessWidget {
               return morePanel(
                 context: context,
                 item: replyItem,
-                onDelete: () => onDelete?.call(null),
+                onDelete: () => onDelete?.call(replyItem, null),
                 isSubReply: false,
               );
             },
@@ -463,7 +463,7 @@ class ReplyItemGrpc extends StatelessWidget {
                         return morePanel(
                           context: context,
                           item: childReply,
-                          onDelete: () => onDelete?.call(index),
+                          onDelete: () => onDelete?.call(replyItem, index),
                           isSubReply: true,
                         );
                       },
@@ -963,7 +963,7 @@ class ReplyItemGrpc extends StatelessWidget {
   Widget morePanel({
     required BuildContext context,
     required ReplyInfo item,
-    required onDelete,
+    required VoidCallback onDelete,
     required bool isSubReply,
   }) {
     final ownerMid = Int64(Accounts.main.mid);
@@ -994,7 +994,7 @@ class ReplyItemGrpc extends StatelessWidget {
                     Options(contentType: Headers.formUrlEncodedContentType),
               );
               if (res.data['code'] == 0) {
-                onDelete?.call();
+                onDelete();
               }
               return res.data as Map;
             },
@@ -1074,7 +1074,7 @@ class ReplyItemGrpc extends StatelessWidget {
           SmartDialog.dismiss();
           if (result['status']) {
             SmartDialog.showToast('删除成功');
-            onDelete?.call();
+            onDelete();
           } else {
             SmartDialog.showToast('删除失败, ${result["msg"]}');
           }
@@ -1085,7 +1085,7 @@ class ReplyItemGrpc extends StatelessWidget {
           break;
         case 'top':
           Get.back();
-          onToggleTop?.call(item.replyControl.isUpTop, item.id.toInt());
+          onToggleTop?.call(item);
           break;
         case 'saveReply':
           Get.back();
@@ -1167,7 +1167,7 @@ class ReplyItemGrpc extends StatelessWidget {
             leading: const Icon(Icons.save_alt, size: 19),
             title: Text('保存评论', style: style),
           ),
-          if (kDebugMode || item.mid == ownerMid)
+          if (item.mid == ownerMid)
             ListTile(
               onTap: () => menuActionHandler('checkReply'),
               minLeadingWidth: 0,

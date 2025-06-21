@@ -17,8 +17,8 @@ class FavNoteController
   }
 
   @override
-  void onSelect(int index, [bool disableSelect = true]) {
-    super.onSelect(index, false);
+  void onSelect(FavNoteItemModel item, [bool disableSelect = true]) {
+    super.onSelect(item, false);
   }
 
   @override

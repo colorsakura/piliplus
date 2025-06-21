@@ -126,63 +126,65 @@ Widget imageView(
     height: picArr.length == 1 ? imageHeight : null,
     width: picArr.length == 1 ? imageWidth : maxWidth,
     itemCount: picArr.length,
-    itemBuilder: (context, index) => Hero(
-      tag: picArr[index].url,
-      child: GestureDetector(
-        onTap: () => onTap(context, index),
-        child: Stack(
-          clipBehavior: Clip.none,
-          alignment: Alignment.center,
-          children: [
-            ClipRRect(
-              borderRadius: borderRadius(index),
-              child: NetworkImgLayer(
-                radius: 0,
-                src: picArr[index].url,
-                width: imageWidth,
-                height: imageHeight,
-                isLongPic: () => picArr[index].isLongPic,
-                callback: () =>
-                    picArr[index].safeWidth <= picArr[index].safeHeight,
-                getPlaceHolder: () {
-                  return Container(
-                    width: imageWidth,
-                    height: imageHeight,
-                    decoration: BoxDecoration(
-                      color: Theme.of(context)
-                          .colorScheme
-                          .onInverseSurface
-                          .withValues(alpha: 0.4),
-                      borderRadius: borderRadius(index),
-                    ),
-                    child: Center(
-                      child: Image.asset(
-                        'assets/images/loading.png',
-                        width: imageWidth,
-                        height: imageHeight,
-                        cacheWidth: imageWidth.cacheSize(context),
+    itemBuilder: (context, index) {
+      final item = picArr[index];
+      return Hero(
+        tag: item.url,
+        child: GestureDetector(
+          onTap: () => onTap(context, index),
+          child: Stack(
+            clipBehavior: Clip.none,
+            alignment: Alignment.center,
+            children: [
+              ClipRRect(
+                borderRadius: borderRadius(index),
+                child: NetworkImgLayer(
+                  radius: 0,
+                  src: item.url,
+                  width: imageWidth,
+                  height: imageHeight,
+                  isLongPic: () => item.isLongPic,
+                  callback: () => item.safeWidth <= item.safeHeight,
+                  getPlaceHolder: () {
+                    return Container(
+                      width: imageWidth,
+                      height: imageHeight,
+                      decoration: BoxDecoration(
+                        color: Theme.of(context)
+                            .colorScheme
+                            .onInverseSurface
+                            .withValues(alpha: 0.4),
+                        borderRadius: borderRadius(index),
                       ),
-                    ),
-                  );
-                },
+                      child: Center(
+                        child: Image.asset(
+                          'assets/images/loading.png',
+                          width: imageWidth,
+                          height: imageHeight,
+                          cacheWidth: imageWidth.cacheSize(context),
+                        ),
+                      ),
+                    );
+                  },
+                ),
               ),
-            ),
-            if (picArr[index].isLivePhoto)
-              const PBadge(
-                text: 'Live',
-                right: 8,
-                bottom: 8,
-                type: PBadgeType.gray,
-              )
-            else if (picArr[index].isLongPic)
-              const PBadge(
-                text: '长图',
-                right: 8,
-                bottom: 8,
-              ),
-          ],
+              if (item.isLivePhoto)
+                const PBadge(
+                  text: 'Live',
+                  right: 8,
+                  bottom: 8,
+                  type: PBadgeType.gray,
+                )
+              else if (item.isLongPic)
+                const PBadge(
+                  text: '长图',
+                  right: 8,
+                  bottom: 8,
+                ),
+            ],
+          ),
         ),
-      ),
-    ),
+      );
+    },
   );
 }

@@ -139,6 +139,7 @@ class _PagesPanelState extends State<PagesPanel> {
             itemExtent: 150,
             itemBuilder: (BuildContext context, int i) {
               bool isCurrentIndex = pageIndex == i;
+              final item = pages[i];
               return Container(
                 width: 150,
                 margin: EdgeInsets.only(
@@ -156,7 +157,7 @@ class _PagesPanelState extends State<PagesPanel> {
                       widget.videoIntroController.changeSeasonOrbangu(
                         null,
                         widget.bvid,
-                        pages[i].cid,
+                        item.cid,
                         IdUtils.bv2av(widget.bvid),
                         widget.cover,
                       );
@@ -168,8 +169,7 @@ class _PagesPanelState extends State<PagesPanel> {
                       }
                     },
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 8, horizontal: 8),
+                      padding: const EdgeInsets.all(8),
                       child: Row(
                         children: <Widget>[
                           if (isCurrentIndex) ...<Widget>[
@@ -182,17 +182,18 @@ class _PagesPanelState extends State<PagesPanel> {
                             const SizedBox(width: 6)
                           ],
                           Expanded(
-                              child: Text(
-                            pages[i].pagePart!,
-                            maxLines: 1,
-                            style: TextStyle(
-                              fontSize: 13,
-                              color: isCurrentIndex
-                                  ? theme.colorScheme.primary
-                                  : theme.colorScheme.onSurface,
+                            child: Text(
+                              item.pagePart!,
+                              maxLines: 1,
+                              style: TextStyle(
+                                fontSize: 13,
+                                color: isCurrentIndex
+                                    ? theme.colorScheme.primary
+                                    : theme.colorScheme.onSurface,
+                              ),
+                              overflow: TextOverflow.ellipsis,
                             ),
-                            overflow: TextOverflow.ellipsis,
-                          ))
+                          ),
                         ],
                       ),
                     ),

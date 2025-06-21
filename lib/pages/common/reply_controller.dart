@@ -107,7 +107,6 @@ abstract class ReplyController<R> extends CommonListController<R, ReplyInfo> {
     BuildContext context, {
     int? oid,
     ReplyInfo? replyItem,
-    int index = 0,
     int? replyType,
   }) {
     assert(replyItem != null || (oid != null && replyType != null));
@@ -168,7 +167,7 @@ abstract class ReplyController<R> extends CommonListController<R, ReplyInfo> {
               if (oid != null) {
                 list.insert(hasUpTop ? 1 : 0, replyInfo);
               } else {
-                list[index]
+                replyItem!
                   ..count += 1
                   ..replies.add(replyInfo);
               }
@@ -188,12 +187,12 @@ abstract class ReplyController<R> extends CommonListController<R, ReplyInfo> {
     );
   }
 
-  void onRemove(int index, int? subIndex) {
+  void onRemove(int index, ReplyInfo item, int? subIndex) {
     List<ReplyInfo> list = loadingState.value.data!;
     if (subIndex == null) {
       list.removeAt(index);
     } else {
-      list[index]
+      item
         ..count -= 1
         ..replies.removeAt(subIndex);
     }
@@ -212,21 +211,21 @@ abstract class ReplyController<R> extends CommonListController<R, ReplyInfo> {
   }
 
   Future<void> onToggleTop(
+    ReplyInfo item,
     int index,
     oid,
     int type,
-    bool isUpTop,
-    int rpid,
   ) async {
+    bool isUpTop = item.replyControl.isUpTop;
     final res = await ReplyHttp.replyTop(
       oid: oid,
       type: type,
-      rpid: rpid,
+      rpid: item.id,
       isUpTop: isUpTop,
     );
     if (res['status']) {
       List<ReplyInfo> list = loadingState.value.data!;
-      list[index].replyControl.isUpTop = !isUpTop;
+      item.replyControl.isUpTop = !isUpTop;
       if (!isUpTop && index != 0) {
         list[0].replyControl.isUpTop = false;
         final item = list.removeAt(index);
