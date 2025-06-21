@@ -72,7 +72,7 @@ List<SettingsModel> get recommendSettings => [
         context: Get.context!,
         title: '标题关键词过滤',
         key: SettingBoxKey.banWordForRecommend,
-        callback: (value) {
+        onChanged: (value) {
           RecommendFilter.rcmdRegExp = value;
           RecommendFilter.enableFilter = value.pattern.isNotEmpty;
         },
@@ -81,7 +81,7 @@ List<SettingsModel> get recommendSettings => [
         context: Get.context!,
         title: 'App推荐/热门/排行榜: 视频分区关键词过滤',
         key: SettingBoxKey.banWordForZone,
-        callback: (value) {
+        onChanged: (value) {
           VideoHttp.zoneRegExp = value;
           VideoHttp.enableFilter = value.pattern.isNotEmpty;
         },

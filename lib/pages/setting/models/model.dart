@@ -78,7 +78,7 @@ SettingsModel getBanwordModel({
   required BuildContext context,
   required String title,
   required String key,
-  required ValueChanged<RegExp> callback,
+  required ValueChanged<RegExp> onChanged,
 }) {
   String banWord = GStorage.setting.get(key, defaultValue: '');
   return SettingsModel(
@@ -120,10 +120,10 @@ SettingsModel getBanwordModel({
                 child: const Text('保存'),
                 onPressed: () async {
                   Get.back();
-                  await GStorage.setting.put(key, banWord);
                   setState();
-                  callback(RegExp(banWord, caseSensitive: false));
+                  onChanged(RegExp(banWord, caseSensitive: false));
                   SmartDialog.showToast('已保存');
+                  GStorage.setting.put(key, banWord);
                 },
               ),
             ],
@@ -211,9 +211,10 @@ SettingsModel getVideoFilterSelectModel({
           );
         }
         if (result != -1) {
-          onChanged?.call(result!);
-          await GStorage.setting.put(key, result);
+          value = result!;
           setState();
+          onChanged?.call(result!);
+          GStorage.setting.put(key, result);
         }
       }
     },
