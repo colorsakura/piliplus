@@ -319,10 +319,10 @@ class ReplyItemGrpc extends StatelessWidget {
         if (replyLevel != 0)
           buttonAction(context, theme, replyItem.replyControl),
         // 一楼的评论
-        if (replyLevel == 1 && replyItem.replies.isNotEmpty) ...[
+        if (replyLevel == 1 && replyItem.count > Int64.ZERO) ...[
           Padding(
             padding: const EdgeInsets.only(top: 5, bottom: 12),
-            child: replyItemRow(context, theme),
+            child: replyItemRow(context, theme, replyItem.replies),
           ),
         ],
       ],
@@ -418,8 +418,10 @@ class ReplyItemGrpc extends StatelessWidget {
     );
   }
 
-  Widget replyItemRow(BuildContext context, ThemeData theme) {
-    final bool extraRow = replyItem.replies.length < replyItem.count.toInt();
+  Widget replyItemRow(
+      BuildContext context, ThemeData theme, List<ReplyInfo> replies) {
+    final extraRow = replies.length < replyItem.count.toInt();
+    late final length = replies.length + (extraRow ? 1 : 0);
     return Padding(
       padding: const EdgeInsets.only(left: 42, right: 4),
       child: Material(
@@ -430,12 +432,24 @@ class ReplyItemGrpc extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            if (replyItem.replies.isNotEmpty)
-              for (int i = 0; i < replyItem.replies.length; i++) ...[
-                InkWell(
-                  // 一楼点击评论展开评论详情
-                  onTap: () => replyReply?.call(
-                      replyItem, replyItem.replies[i].id.toInt()),
+            if (replies.isNotEmpty)
+              ...List.generate(replies.length, (index) {
+                final childReply = replies[index];
+                EdgeInsets padding;
+                if (length == 1) {
+                  padding = const EdgeInsets.all(8);
+                } else {
+                  if (index == 0) {
+                    padding = const EdgeInsets.fromLTRB(8, 8, 8, 4);
+                  } else if (index == length - 1) {
+                    padding = const EdgeInsets.fromLTRB(8, 4, 8, 8);
+                  } else {
+                    padding = const EdgeInsets.fromLTRB(8, 4, 8, 4);
+                  }
+                }
+                return InkWell(
+                  onTap: () =>
+                      replyReply?.call(replyItem, childReply.id.toInt()),
                   onLongPress: () {
                     feedBack();
                     showModalBottomSheet(
@@ -448,8 +462,8 @@ class ReplyItemGrpc extends StatelessWidget {
                       builder: (context) {
                         return morePanel(
                           context: context,
-                          item: replyItem.replies[i],
-                          onDelete: () => onDelete?.call(i),
+                          item: childReply,
+                          onDelete: () => onDelete?.call(index),
                           isSubReply: true,
                         );
                       },
@@ -457,16 +471,10 @@ class ReplyItemGrpc extends StatelessWidget {
                   },
                   child: Container(
                     width: double.infinity,
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 8,
-                      vertical:
-                          i == 0 && (extraRow || replyItem.replies.length > 1)
-                              ? 8
-                              : 4,
-                    ),
+                    padding: padding,
                     child: Semantics(
                       label:
-                          '${replyItem.replies[i].member.name} ${replyItem.replies[i].content.message}',
+                          '${childReply.member.name} ${childReply.content.message}',
                       excludeSemantics: true,
                       child: Text.rich(
                         style: TextStyle(
@@ -479,7 +487,7 @@ class ReplyItemGrpc extends StatelessWidget {
                         TextSpan(
                           children: [
                             TextSpan(
-                              text: replyItem.replies[i].member.name,
+                              text: childReply.member.name,
                               style: TextStyle(
                                 color: theme.colorScheme.primary,
                               ),
@@ -487,11 +495,11 @@ class ReplyItemGrpc extends StatelessWidget {
                                 ..onTap = () {
                                   feedBack();
                                   Get.toNamed(
-                                    '/member?mid=${replyItem.replies[i].member.mid}',
+                                    '/member?mid=${childReply.member.mid}',
                                   );
                                 },
                             ),
-                            if (replyItem.replies[i].mid == upMid) ...[
+                            if (childReply.mid == upMid) ...[
                               const TextSpan(text: ' '),
                               const WidgetSpan(
                                 alignment: PlaceholderAlignment.middle,
@@ -506,17 +514,16 @@ class ReplyItemGrpc extends StatelessWidget {
                               const TextSpan(text: ' '),
                             ],
                             TextSpan(
-                              text: replyItem.replies[i].root ==
-                                      replyItem.replies[i].parent
+                              text: childReply.root == childReply.parent
                                   ? ': '
-                                  : replyItem.replies[i].mid == upMid
+                                  : childReply.mid == upMid
                                       ? ''
                                       : ' ',
                             ),
                             buildContent(
                               context,
                               theme,
-                              replyItem.replies[i],
+                              childReply,
                               replyItem,
                               null,
                               null,
@@ -526,15 +533,17 @@ class ReplyItemGrpc extends StatelessWidget {
                       ),
                     ),
                   ),
-                )
-              ],
+                );
+              }),
             if (extraRow)
               InkWell(
                 // 一楼点击【共xx条回复】展开评论详情
                 onTap: () => replyReply?.call(replyItem, null),
                 child: Container(
                   width: double.infinity,
-                  padding: const EdgeInsets.fromLTRB(8, 5, 8, 8),
+                  padding: length == 1
+                      ? const EdgeInsets.all(8)
+                      : const EdgeInsets.fromLTRB(8, 4, 8, 8),
                   child: Text.rich(
                     TextSpan(
                       style: TextStyle(
