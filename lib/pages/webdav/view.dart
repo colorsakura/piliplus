@@ -1,6 +1,8 @@
 import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/pages/webdav/webdav.dart';
 import 'package:PiliPlus/utils/storage.dart';
+import 'package:PiliPlus/utils/storage_key.dart';
+import 'package:PiliPlus/utils/storage_pref.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 
@@ -17,10 +19,10 @@ class WebDavSettingPage extends StatefulWidget {
 }
 
 class _WebDavSettingPageState extends State<WebDavSettingPage> {
-  final _uriCtr = TextEditingController(text: GStorage.webdavUri);
-  final _usernameCtr = TextEditingController(text: GStorage.webdavUsername);
-  final _passwordCtr = TextEditingController(text: GStorage.webdavPassword);
-  final _directoryCtr = TextEditingController(text: GStorage.webdavDirectory);
+  final _uriCtr = TextEditingController(text: Pref.webdavUri);
+  final _usernameCtr = TextEditingController(text: Pref.webdavUsername);
+  final _passwordCtr = TextEditingController(text: Pref.webdavPassword);
+  final _directoryCtr = TextEditingController(text: Pref.webdavDirectory);
 
   @override
   void dispose() {
@@ -115,13 +117,11 @@ class _WebDavSettingPageState extends State<WebDavSettingPage> {
             SmartDialog.showToast('地址不能为空');
             return;
           }
-          await GStorage.setting.put(SettingBoxKey.webdavUri, _uriCtr.text);
-          await GStorage.setting
-              .put(SettingBoxKey.webdavUsername, _usernameCtr.text);
-          await GStorage.setting
-              .put(SettingBoxKey.webdavPassword, _passwordCtr.text);
-          await GStorage.setting
-              .put(SettingBoxKey.webdavDirectory, _directoryCtr.text);
+          final setting = GStorage.setting;
+          await setting.put(SettingBoxKey.webdavUri, _uriCtr.text);
+          await setting.put(SettingBoxKey.webdavUsername, _usernameCtr.text);
+          await setting.put(SettingBoxKey.webdavPassword, _passwordCtr.text);
+          await setting.put(SettingBoxKey.webdavDirectory, _directoryCtr.text);
           try {
             final res = await WebDav().init();
             if (res.first) {

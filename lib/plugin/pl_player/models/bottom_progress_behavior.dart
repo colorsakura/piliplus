@@ -1,18 +1,10 @@
 enum BtmProgressBehavior {
-  alwaysShow,
-  alwaysHide,
-  onlyShowFullScreen,
-  onlyHideFullScreen,
-}
+  alwaysShow('始终展示'),
+  alwaysHide('始终隐藏'),
+  onlyShowFullScreen('仅全屏时展示'),
+  onlyHideFullScreen('仅全屏时隐藏'),
+  ;
 
-extension BtmProgresBehaviorDesc on BtmProgressBehavior {
-  String get description => const ['始终展示', '始终隐藏', '仅全屏时展示', '仅全屏时隐藏'][index];
-}
-
-extension BtmProgresBehaviorCode on BtmProgressBehavior {
-  int get code => index;
-
-  static BtmProgressBehavior fromCode(int code) {
-    return BtmProgressBehavior.values[code];
-  }
+  final String desc;
+  const BtmProgressBehavior(this.desc);
 }

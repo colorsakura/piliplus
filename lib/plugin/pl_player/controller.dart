@@ -3,17 +3,16 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:PiliPlus/common/constants.dart';
-import 'package:PiliPlus/common/widgets/pair.dart';
 import 'package:PiliPlus/common/widgets/progress_bar/segment_progress_bar.dart';
 import 'package:PiliPlus/http/init.dart';
 import 'package:PiliPlus/http/video.dart';
 import 'package:PiliPlus/models/common/account_type.dart';
 import 'package:PiliPlus/models/common/audio_normalization.dart';
-import 'package:PiliPlus/models/common/sponsor_block/segment_type.dart';
 import 'package:PiliPlus/models/common/sponsor_block/skip_type.dart';
 import 'package:PiliPlus/models/user/danmaku_rule.dart';
 import 'package:PiliPlus/models_new/video/video_shot/data.dart';
 import 'package:PiliPlus/pages/mine/controller.dart';
+import 'package:PiliPlus/plugin/pl_player/models/bottom_progress_behavior.dart';
 import 'package:PiliPlus/plugin/pl_player/models/data_source.dart';
 import 'package:PiliPlus/plugin/pl_player/models/data_status.dart';
 import 'package:PiliPlus/plugin/pl_player/models/fullscreen_mode.dart';
@@ -21,10 +20,13 @@ import 'package:PiliPlus/plugin/pl_player/models/play_repeat.dart';
 import 'package:PiliPlus/plugin/pl_player/models/play_status.dart';
 import 'package:PiliPlus/plugin/pl_player/utils/fullscreen.dart';
 import 'package:PiliPlus/services/service_locator.dart';
+import 'package:PiliPlus/utils/accounts.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/feed_back.dart';
 import 'package:PiliPlus/utils/page_utils.dart' show PageUtils;
 import 'package:PiliPlus/utils/storage.dart';
+import 'package:PiliPlus/utils/storage_key.dart';
+import 'package:PiliPlus/utils/storage_pref.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:canvas_danmaku/canvas_danmaku.dart';
 import 'package:crclib/catalog.dart';
@@ -78,8 +80,8 @@ class PlPlayerController {
   final RxInt _playerCount = 0.obs;
 
   late double lastPlaybackSpeed = 1.0;
-  final RxDouble _playbackSpeed = 1.0.obs;
-  final RxDouble _longPressSpeed = 2.0.obs;
+  final RxDouble _playbackSpeed = Pref.playSpeedDefault.obs;
+  late final RxDouble _longPressSpeed = Pref.longPressSpeedDefault.obs;
   final RxDouble _currentVolume = 1.0.obs;
   final RxDouble _currentBrightness = (-1.0).obs;
 
@@ -91,7 +93,7 @@ class PlPlayerController {
   final RxBool _controlsLock = false.obs;
   final RxBool _isFullScreen = false.obs;
   // 默认投稿视频格式
-  static RxString _videoType = 'archive'.obs;
+  static final RxString _videoType = 'archive'.obs;
 
   final RxString _direction = 'horizontal'.obs;
 
@@ -100,7 +102,8 @@ class PlPlayerController {
   late StreamSubscription<DataStatus> _dataListenerForEnterFullscreen;
 
   /// 后台播放
-  late final RxBool _continuePlayInBackground = false.obs;
+  late final RxBool _continuePlayInBackground =
+      Pref.continuePlayInBackground.obs;
 
   late final RxBool _flipX = false.obs;
 
@@ -135,7 +138,7 @@ class PlPlayerController {
   final RxBool showVP = true.obs;
   final RxList<Segment> segmentList = <Segment>[].obs;
 
-  Box get setting => GStorage.setting;
+  Box setting = GStorage.setting;
 
   // final Durations durations;
 
@@ -246,10 +249,9 @@ class PlPlayerController {
   RxString get videoType => _videoType;
 
   /// 弹幕开关
-  RxBool isOpenDanmu = false.obs;
+  RxBool enableShowDanmaku = Pref.enableShowDanmaku.obs;
 
-  bool autoPiP =
-      GStorage.setting.get(SettingBoxKey.autoPiP, defaultValue: false);
+  late final bool autoPiP = Pref.autoPiP;
 
   void enterPip() {
     if (Get.currentRoute.startsWith('/video')) {
@@ -258,82 +260,97 @@ class PlPlayerController {
   }
 
   /// 弹幕权重
-  int danmakuWeight = 0;
-  late RuleFilter filters;
+  late int danmakuWeight = Pref.danmakuWeight;
+  late RuleFilter filters = Pref.danmakuFilterRule;
   // 关联弹幕控制器
   DanmakuController? danmakuController;
   bool showDanmaku = true;
   Set<int> dmState = <int>{};
-  late final mergeDanmaku = GStorage.mergeDanmaku;
+  late final mergeDanmaku = Pref.mergeDanmaku;
   late final String midHash = Crc32Xz()
       .convert(utf8.encode(Accounts.main.mid.toString()))
       .toRadixString(16);
   // 弹幕相关配置
-  late Set<int> blockTypes;
-  late double showArea;
-  late double opacity;
-  late double fontSize;
-  late double fontSizeFS;
-  late double strokeWidth;
-  late int fontWeight;
-  late bool massiveMode;
-  late double danmakuDuration;
-  late double danmakuStaticDuration;
-  late List<double> speedList;
-  late bool enableAutoLongPressSpeed = false;
-  late bool enableLongShowControl;
-  double subtitleFontScale = 1.0;
-  double subtitleFontScaleFS = 1.5;
-  late double danmakuLineHeight = GStorage.danmakuLineHeight;
-  late int subtitlePaddingH = GStorage.subtitlePaddingH;
-  late int subtitlePaddingB = GStorage.subtitlePaddingB;
-  late double subtitleBgOpaticy = GStorage.subtitleBgOpaticy;
-  late bool showVipDanmaku = GStorage.showVipDanmaku;
-  late bool showSpecialDanmaku = GStorage.showSpecialDanmaku;
-  late double subtitleStrokeWidth = GStorage.subtitleStrokeWidth;
-  late int subtitleFontWeight = GStorage.subtitleFontWeight;
+  late Set<int> blockTypes = Pref.danmakuBlockType;
+  late double showArea = Pref.danmakuShowArea;
+  late double danmakuOpacity = Pref.danmakuOpacity;
+  late double danmakuFontScale = Pref.danmakuFontScale;
+  late double danmakuFontScaleFS = Pref.danmakuFontScaleFS;
+  late double strokeWidth = Pref.strokeWidth;
+  late int fontWeight = Pref.fontWeight;
+  late bool massiveMode = Pref.danmakuMassiveMode;
+  late double danmakuDuration = Pref.danmakuDuration;
+  late double danmakuStaticDuration = Pref.danmakuStaticDuration;
+  late List<double> speedList = Pref.speedList;
+  late bool enableAutoLongPressSpeed = Pref.enableAutoLongPressSpeed;
+  late bool enableLongShowControl = Pref.enableLongShowControl;
+  late double subtitleFontScale = Pref.subtitleFontScale;
+  late double subtitleFontScaleFS = Pref.subtitleFontScaleFS;
+  late double danmakuLineHeight = Pref.danmakuLineHeight;
+  late int subtitlePaddingH = Pref.subtitlePaddingH;
+  late int subtitlePaddingB = Pref.subtitlePaddingB;
+  late double subtitleBgOpaticy = Pref.subtitleBgOpaticy;
+  late bool showVipDanmaku = Pref.showVipDanmaku;
+  late bool showSpecialDanmaku = Pref.showSpecialDanmaku;
+  late double subtitleStrokeWidth = Pref.subtitleStrokeWidth;
+  late int subtitleFontWeight = Pref.subtitleFontWeight;
 
   // sponsor block
-  late final bool enableSponsorBlock =
-      setting.get(SettingBoxKey.enableSponsorBlock, defaultValue: false);
-  late final double blockLimit = GStorage.blockLimit;
-  late final List<Pair<SegmentType, SkipType>> blockSettings =
-      GStorage.blockSettings;
-  late final List<Color> blockColor = GStorage.blockColor;
+  late final bool enableSponsorBlock = Pref.enableSponsorBlock;
+  late final double blockLimit = Pref.blockLimit;
+  late final blockSettings = Pref.blockSettings;
+  late final List<Color> blockColor = Pref.blockColor;
   late final Set<String> enableList = blockSettings
       .where((item) => item.second != SkipType.disable)
       .map((item) => item.first.name)
       .toSet();
-  late final blockServer = GStorage.blockServer;
+  late final blockServer = Pref.blockServer;
 
   // settings
-  late final showFSActionItem = GStorage.showFSActionItem;
-  late final enableShrinkVideoSize = GStorage.enableShrinkVideoSize;
-  late final darkVideoPage = GStorage.darkVideoPage;
-  late final enableSlideVolumeBrightness = GStorage.enableSlideVolumeBrightness;
-  late final enableSlideFS = GStorage.enableSlideFS;
-  late final enableDragSubtitle = GStorage.enableDragSubtitle;
-  late final fastForBackwardDuration = GStorage.fastForBackwardDuration;
+  late final showFSActionItem = Pref.showFSActionItem;
+  late final enableShrinkVideoSize = Pref.enableShrinkVideoSize;
+  late final darkVideoPage = Pref.darkVideoPage;
+  late final enableSlideVolumeBrightness = Pref.enableSlideVolumeBrightness;
+  late final enableSlideFS = Pref.enableSlideFS;
+  late final enableDragSubtitle = Pref.enableDragSubtitle;
+  late final fastForBackwardDuration = Pref.fastForBackwardDuration;
 
-  late final horizontalSeasonPanel = GStorage.horizontalSeasonPanel;
-  late final preInitPlayer = GStorage.preInitPlayer;
-  late final showRelatedVideo = GStorage.showRelatedVideo;
-  late final showVideoReply = GStorage.showVideoReply;
-  late final showBangumiReply = GStorage.showBangumiReply;
-  late final reverseFromFirst = GStorage.reverseFromFirst;
-  late final horizontalPreview = GStorage.horizontalPreview;
-  late final showDmChart = GStorage.showDmChart;
+  late final horizontalSeasonPanel = Pref.horizontalSeasonPanel;
+  late final preInitPlayer = Pref.preInitPlayer;
+  late final showRelatedVideo = Pref.showRelatedVideo;
+  late final showVideoReply = Pref.showVideoReply;
+  late final showBangumiReply = Pref.showBangumiReply;
+  late final reverseFromFirst = Pref.reverseFromFirst;
+  late final horizontalPreview = Pref.horizontalPreview;
+  late final showDmChart = Pref.showDmChart;
+
+  late final bool autoExitFullscreen = Pref.autoExitFullscreen;
+  late final bool autoPlayEnable = Pref.autoPlayEnable;
+  late final bool enableVerticalExpand = Pref.enableVerticalExpand;
+  late final bool pipNoDanmaku = Pref.pipNoDanmaku;
+  late final bool removeSafeArea = Pref.removeSafeArea;
 
   int? cacheVideoQa;
   late int cacheAudioQa;
   bool enableHeart = true;
 
-  bool enableHA =
-      GStorage.setting.get(SettingBoxKey.enableHA, defaultValue: true);
-  String hwdec = GStorage.hardwareDecoding;
+  late final bool enableHA = Pref.enableHA;
+  late final String hwdec = Pref.hardwareDecoding;
+
+  late final defaultBtmProgressBehavior =
+      BtmProgressBehavior.values[Pref.btmProgressBehavior];
+  late final enableQuickDouble = Pref.enableQuickDouble;
+  late final fullScreenGestureReverse = Pref.fullScreenGestureReverse;
+
+  late final isRelative = Pref.useRelativeSlide;
+  late final offset =
+      isRelative ? Pref.sliderDuration / 100 : Pref.sliderDuration * 1000;
+
+  num get sliderScale =>
+      isRelative ? duration.value.inMilliseconds * offset : offset;
 
   // 播放顺序相关
-  PlayRepeat playRepeat = PlayRepeat.pause;
+  late PlayRepeat playRepeat = PlayRepeat.values[Pref.playRepeat];
 
   TextStyle get subTitleStyle => TextStyle(
         height: 1.5,
@@ -442,60 +459,10 @@ class PlPlayerController {
     await _instance?.setVolume(volumeNew, videoPlayerVolume: videoPlayerVolume);
   }
 
-  Box get video => GStorage.video;
+  Box video = GStorage.video;
 
   // 添加一个私有构造函数
   PlPlayerController._() {
-    _videoType = videoType;
-    isOpenDanmu.value =
-        setting.get(SettingBoxKey.enableShowDanmaku, defaultValue: true);
-    danmakuWeight = setting.get(SettingBoxKey.danmakuWeight, defaultValue: 0);
-    filters = GStorage.danmakuFilterRule;
-    blockTypes =
-        (setting.get(SettingBoxKey.danmakuBlockType, defaultValue: <int>[])
-                as Iterable)
-            .cast<int>()
-            .toSet();
-    showArea = setting.get(SettingBoxKey.danmakuShowArea, defaultValue: 0.5);
-    // 不透明度
-    opacity = setting.get(SettingBoxKey.danmakuOpacity, defaultValue: 1.0);
-    // 字体大小
-    fontSize = setting.get(SettingBoxKey.danmakuFontScale, defaultValue: 1.0);
-    // 全屏字体大小
-    fontSizeFS = GStorage.danmakuFontScaleFS;
-    subtitleFontScale = GStorage.subtitleFontScale;
-    subtitleFontScaleFS = GStorage.subtitleFontScaleFS;
-    massiveMode = GStorage.danmakuMassiveMode;
-    // 弹幕时间
-    danmakuDuration =
-        setting.get(SettingBoxKey.danmakuDuration, defaultValue: 7.0);
-    danmakuStaticDuration =
-        setting.get(SettingBoxKey.danmakuStaticDuration, defaultValue: 4.0);
-    // 描边粗细
-    strokeWidth = setting.get(SettingBoxKey.strokeWidth, defaultValue: 1.5);
-    // 弹幕字体粗细
-    fontWeight = setting.get(SettingBoxKey.fontWeight, defaultValue: 5);
-    playRepeat = PlayRepeat.values.toList().firstWhere(
-          (e) =>
-              e.value ==
-              video.get(VideoBoxKey.playRepeat,
-                  defaultValue: PlayRepeat.pause.value),
-        );
-    _playbackSpeed.value =
-        video.get(VideoBoxKey.playSpeedDefault, defaultValue: 1.0);
-    enableAutoLongPressSpeed = setting
-        .get(SettingBoxKey.enableAutoLongPressSpeed, defaultValue: false);
-    // 后台播放
-    _continuePlayInBackground.value = setting
-        .get(SettingBoxKey.continuePlayInBackground, defaultValue: false);
-    if (!enableAutoLongPressSpeed) {
-      _longPressSpeed.value =
-          video.get(VideoBoxKey.longPressSpeedDefault, defaultValue: 3.0);
-    }
-    enableLongShowControl =
-        setting.get(SettingBoxKey.enableLongShowControl, defaultValue: false);
-    speedList = GStorage.speedList;
-
     if (!Accounts.get(AccountType.heartbeat).isLogin ||
         GStorage.localCache.get(LocalCacheKey.historyPause) == true) {
       enableHeart = false;
@@ -663,7 +630,7 @@ class PlPlayerController {
 
   bool get _isPgc =>
       Get.parameters['type'] == '1' || Get.parameters['type'] == '4';
-  late int superResolutionType = _isPgc ? GStorage.superResolutionType : 0;
+  late int superResolutionType = _isPgc ? Pref.superResolutionType : 0;
   Future<void> setShader([int? type, NativePlayer? pp]) async {
     if (type == null) {
       type ??= superResolutionType;
@@ -714,27 +681,26 @@ class PlPlayerController {
     _heartDuration = 0;
     _position.value = Duration.zero;
     // 初始化时清空弹幕，防止上次重叠
-    if (danmakuController != null) {
-      danmakuController!.clear();
-    }
-    int bufferSize =
-        setting.get(SettingBoxKey.expandBuffer, defaultValue: false)
-            ? (videoType.value == 'live' ? 64 * 1024 * 1024 : 32 * 1024 * 1024)
-            : (videoType.value == 'live' ? 16 * 1024 * 1024 : 4 * 1024 * 1024);
+    danmakuController?.clear();
     Player player = _videoPlayerController ??
         Player(
           configuration: PlayerConfiguration(
             // 默认缓冲 4M 大小
-            bufferSize: bufferSize,
+            bufferSize: Pref.expandBuffer
+                ? (videoType.value == 'live'
+                    ? 64 * 1024 * 1024
+                    : 32 * 1024 * 1024)
+                : (videoType.value == 'live'
+                    ? 16 * 1024 * 1024
+                    : 4 * 1024 * 1024),
           ),
         );
     var pp = player.platform as NativePlayer;
-    // 解除倍速限制
-    if (_isPgc) {
-      setShader(superResolutionType, pp);
-    }
     if (_videoPlayerController == null) {
-      String audioNormalization = GStorage.audioNormalization;
+      if (_isPgc) {
+        setShader(superResolutionType, pp);
+      }
+      String audioNormalization = Pref.audioNormalization;
       audioNormalization = switch (audioNormalization) {
         '0' => '',
         '1' => ',${AudioNormalization.dynaudnorm.param}',
@@ -745,25 +711,21 @@ class PlPlayerController {
         "af",
         "scaletempo2=max-speed=8$audioNormalization",
       );
+      if (Platform.isAndroid) {
+        await pp.setProperty("volume-max", "100");
+        String ao =
+            Pref.useOpenSLES ? "opensles,audiotrack" : "audiotrack,opensles";
+        await pp.setProperty("ao", ao);
+      }
+      // video-sync=display-resample
+      await pp.setProperty("video-sync", Pref.videoSync);
+      // vo=gpu-next & gpu-context=android & gpu-api=opengl
+      // await pp.setProperty("vo", "gpu-next");
+      // await pp.setProperty("gpu-context", "android");
+      // await pp.setProperty("gpu-api", "opengl");
+      await player.setAudioTrack(AudioTrack.auto());
     }
-    //  音量不一致
-    if (Platform.isAndroid) {
-      await pp.setProperty("volume-max", "100");
-      String ao = setting.get(SettingBoxKey.useOpenSLES, defaultValue: true)
-          ? "opensles,audiotrack"
-          : "audiotrack,opensles";
-      await pp.setProperty("ao", ao);
-    }
-    // video-sync=display-resample
-    await pp.setProperty("video-sync",
-        setting.get(SettingBoxKey.videoSync, defaultValue: 'display-resample'));
-    // // vo=gpu-next & gpu-context=android & gpu-api=opengl
-    // await pp.setProperty("vo", "gpu-next");
-    // await pp.setProperty("gpu-context", "android");
-    // await pp.setProperty("gpu-api", "opengl");
-    await player.setAudioTrack(
-      AudioTrack.auto(),
-    );
+
     // 音轨
     if (dataSource.audioSource?.isNotEmpty == true) {
       await pp.setProperty(
@@ -777,7 +739,7 @@ class PlPlayerController {
     }
 
     // 字幕
-    if (dataSource.subFiles != '' && dataSource.subFiles != null) {
+    if (dataSource.subFiles?.isNotEmpty == true) {
       await pp.setProperty(
         'sub-files',
         UniversalPlatform.isWindows
@@ -881,10 +843,9 @@ class PlPlayerController {
     }
   }
 
+  late final bool enableAutoEnter = Pref.enableAutoEnter;
   Future<void> autoEnterFullscreen() async {
-    bool autoEnterFullscreen = GStorage.setting
-        .get(SettingBoxKey.enableAutoEnter, defaultValue: false);
-    if (autoEnterFullscreen) {
+    if (enableAutoEnter) {
       Future.delayed(const Duration(milliseconds: 500), () {
         if (dataStatus.status.value != DataStatus.loaded) {
           _dataListenerForEnterFullscreen = dataStatus.status.listen((status) {
@@ -1115,10 +1076,10 @@ class PlPlayerController {
   }
 
   // 还原默认速度
+  double playSpeedDefault = Pref.playSpeedDefault;
   Future<void> setDefaultSpeed() async {
-    double speed = video.get(VideoBoxKey.playSpeedDefault, defaultValue: 1.0);
-    await _videoPlayerController?.setRate(speed);
-    _playbackSpeed.value = speed;
+    await _videoPlayerController?.setRate(playSpeedDefault);
+    _playbackSpeed.value = playSpeedDefault;
   }
 
   /// 播放视频
@@ -1281,8 +1242,8 @@ class PlPlayerController {
   }
 
   /// 读取fit
+  int fitValue = Pref.cacheVideoFit;
   Future<void> getVideoFit() async {
-    int fitValue = video.get(VideoBoxKey.cacheVideoFit, defaultValue: 1);
     var attr = BoxFit.values[fitValue];
     // 由于none与scaleDown涉及视频原始尺寸，需要等待视频加载后再设置，否则尺寸会变为0，出现错误;
     if (attr == BoxFit.none || attr == BoxFit.scaleDown) {
@@ -1291,8 +1252,6 @@ class PlPlayerController {
         _dataListenerForVideoFit = dataStatus.status.listen((status) {
           if (status == DataStatus.loaded) {
             _dataListenerForVideoFit.cancel();
-            int fitValue =
-                video.get(VideoBoxKey.cacheVideoFit, defaultValue: 1);
             var attr = BoxFit.values[fitValue];
             if (attr == BoxFit.none || attr == BoxFit.scaleDown) {
               _videoFit.value = attr;
@@ -1309,16 +1268,9 @@ class PlPlayerController {
 
   /// 设置后台播放
   Future<void> setBackgroundPlay(bool val) async {
+    videoPlayerServiceHandler.enableBackgroundPlay = val;
     setting.put(SettingBoxKey.enableBackgroundPlay, val);
-    videoPlayerServiceHandler.revalidateSetting();
   }
-
-  /// 读取亮度
-  // Future<void> getVideoBrightness() async {
-  //   double brightnessValue =
-  //       video.get(VideoBoxKey.videoBrightness, defaultValue: 0.5);
-  //   setBrightness(brightnessValue);
-  // }
 
   set controls(bool visible) {
     _showControls.value = visible;
@@ -1369,9 +1321,8 @@ class PlPlayerController {
     updateSubtitleStyle();
   }
 
-  late final FullScreenMode mode = FullScreenModeCode.fromCode(
-      setting.get(SettingBoxKey.fullScreenMode, defaultValue: 0));
-  late final horizontalScreen = GStorage.horizontalScreen;
+  late final FullScreenMode mode = FullScreenMode.values[Pref.fullScreenMode];
+  late final horizontalScreen = Pref.horizontalScreen;
 
   // 全屏
   void triggerFullScreen({bool status = true, int duration = 500}) {
@@ -1403,8 +1354,6 @@ class PlPlayerController {
           await landScape();
         }
       } else if (isFullScreen.value && !status) {
-        late bool removeSafeArea = setting
-            .get(SettingBoxKey.videoPlayerRemoveSafeArea, defaultValue: false);
         if (Get.currentRoute.startsWith('/liveRoom') || !removeSafeArea) {
           showStatusBar();
         }
@@ -1500,7 +1449,7 @@ class PlPlayerController {
 
   void setPlayRepeat(PlayRepeat type) {
     playRepeat = type;
-    video.put(VideoBoxKey.playRepeat, type.value);
+    video.put(VideoBoxKey.playRepeat, type.index);
   }
 
   void putDanmakuSettings() {
@@ -1508,9 +1457,9 @@ class PlPlayerController {
       ..put(SettingBoxKey.danmakuWeight, danmakuWeight)
       ..put(SettingBoxKey.danmakuBlockType, blockTypes.toList())
       ..put(SettingBoxKey.danmakuShowArea, showArea)
-      ..put(SettingBoxKey.danmakuOpacity, opacity)
-      ..put(SettingBoxKey.danmakuFontScale, fontSize)
-      ..put(SettingBoxKey.danmakuFontScaleFS, fontSizeFS)
+      ..put(SettingBoxKey.danmakuOpacity, danmakuOpacity)
+      ..put(SettingBoxKey.danmakuFontScale, danmakuFontScale)
+      ..put(SettingBoxKey.danmakuFontScaleFS, danmakuFontScaleFS)
       ..put(SettingBoxKey.danmakuDuration, danmakuDuration)
       ..put(SettingBoxKey.danmakuStaticDuration, danmakuStaticDuration)
       ..put(SettingBoxKey.strokeWidth, strokeWidth)
@@ -1596,7 +1545,7 @@ class PlPlayerController {
         onlyPlayAudio.value ? VideoTrack.no() : VideoTrack.auto());
   }
 
-  late final showSeekPreview = GStorage.showSeekPreview;
+  late final showSeekPreview = Pref.showSeekPreview;
   late bool _isQueryingVideoShot = false;
   Map? videoShot;
   late final RxBool showPreview = false.obs;

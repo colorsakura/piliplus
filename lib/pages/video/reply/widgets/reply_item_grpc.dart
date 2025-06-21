@@ -16,14 +16,14 @@ import 'package:PiliPlus/pages/dynamics/widgets/vote.dart';
 import 'package:PiliPlus/pages/save_panel/view.dart';
 import 'package:PiliPlus/pages/video/controller.dart';
 import 'package:PiliPlus/pages/video/reply/widgets/zan_grpc.dart';
+import 'package:PiliPlus/utils/accounts.dart';
 import 'package:PiliPlus/utils/date_util.dart';
 import 'package:PiliPlus/utils/duration_util.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/feed_back.dart';
-import 'package:PiliPlus/utils/global_data.dart';
 import 'package:PiliPlus/utils/image_util.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
-import 'package:PiliPlus/utils/storage.dart';
+import 'package:PiliPlus/utils/storage_pref.dart';
 import 'package:PiliPlus/utils/url_utils.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -70,8 +70,8 @@ class ReplyItemGrpc extends StatelessWidget {
 
   static final _voteRegExp = RegExp(r"\{vote:\d+?\}");
   static final _timeRegExp = RegExp(r'^\b(?:\d+[:：])?\d+[:：]\d+\b$');
-  static bool enableWordRe =
-      GStorage.setting.get(SettingBoxKey.enableWordRe, defaultValue: false);
+  static bool enableWordRe = Pref.enableWordRe;
+  static int replyLengthLimit = Pref.replyLengthLimit;
 
   @override
   Widget build(BuildContext context) {
@@ -272,10 +272,10 @@ class ReplyItemGrpc extends StatelessWidget {
               );
               TextPainter? textPainter;
               bool? didExceedMaxLines;
-              if (replyLevel == 1 && GlobalData().replyLengthLimit != 0) {
+              if (replyLevel == 1 && replyLengthLimit != 0) {
                 textPainter = TextPainter(
                   text: TextSpan(text: text, style: style),
-                  maxLines: GlobalData().replyLengthLimit,
+                  maxLines: replyLengthLimit,
                   textDirection: Directionality.of(context),
                 )..layout(maxWidth: constraints.maxWidth);
                 didExceedMaxLines = textPainter.didExceedMaxLines;

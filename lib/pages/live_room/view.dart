@@ -17,6 +17,7 @@ import 'package:PiliPlus/services/service_locator.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:PiliPlus/utils/storage.dart';
+import 'package:PiliPlus/utils/storage_key.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:canvas_danmaku/canvas_danmaku.dart';
@@ -109,8 +110,8 @@ class _LiveRoomPageState extends State<LiveRoomPage>
 
   double _getFontSize(bool isFullScreen) {
     return isFullScreen == false || _isPipMode == true
-        ? 15 * plPlayerController.fontSize
-        : 15 * plPlayerController.fontSizeFS;
+        ? 15 * plPlayerController.danmakuFontScale
+        : 15 * plPlayerController.danmakuFontScaleFS;
   }
 
   void videoSourceInit() {
@@ -180,7 +181,7 @@ class _LiveRoomPageState extends State<LiveRoomPage>
               ),
               danmuWidget: Obx(
                 () => AnimatedOpacity(
-                  opacity: plPlayerController.isOpenDanmu.value ? 1 : 0,
+                  opacity: plPlayerController.enableShowDanmaku.value ? 1 : 0,
                   duration: const Duration(milliseconds: 100),
                   child: DanmakuScreen(
                     createdController: (DanmakuController e) {
@@ -191,7 +192,7 @@ class _LiveRoomPageState extends State<LiveRoomPage>
                       fontSize: _getFontSize(isFullScreen),
                       fontWeight: plPlayerController.fontWeight,
                       area: plPlayerController.showArea,
-                      opacity: plPlayerController.opacity,
+                      opacity: plPlayerController.danmakuOpacity,
                       hideTop: plPlayerController.blockTypes.contains(5),
                       hideScroll: plPlayerController.blockTypes.contains(2),
                       hideBottom: plPlayerController.blockTypes.contains(4),
@@ -564,13 +565,13 @@ class _LiveRoomPageState extends State<LiveRoomPage>
                 Obx(
                   () => IconButton(
                     onPressed: () {
-                      plPlayerController.isOpenDanmu.value =
-                          !plPlayerController.isOpenDanmu.value;
+                      plPlayerController.enableShowDanmaku.value =
+                          !plPlayerController.enableShowDanmaku.value;
                       GStorage.setting.put(SettingBoxKey.enableShowDanmaku,
-                          plPlayerController.isOpenDanmu.value);
+                          plPlayerController.enableShowDanmaku.value);
                     },
                     icon: Icon(
-                      plPlayerController.isOpenDanmu.value
+                      plPlayerController.enableShowDanmaku.value
                           ? Icons.subtitles_outlined
                           : Icons.subtitles_off_outlined,
                       color: _color,

@@ -88,7 +88,7 @@ class SearchVideoController
   // sort
   late final List<Map> filterList = ArchiveFilterType.values
       .map((type) => {
-            'label': type.description,
+            'label': type.desc,
             'type': type,
           })
       .toList();

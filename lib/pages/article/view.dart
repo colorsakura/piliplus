@@ -13,7 +13,6 @@ import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/common/badge_type.dart';
 import 'package:PiliPlus/models/common/image_preview_type.dart';
 import 'package:PiliPlus/models/common/image_type.dart';
-import 'package:PiliPlus/models/common/reply/reply_sort_type.dart';
 import 'package:PiliPlus/models/dynamics/result.dart' show DynamicStat;
 import 'package:PiliPlus/pages/article/controller.dart';
 import 'package:PiliPlus/pages/article/widgets/article_ops.dart';
@@ -30,6 +29,8 @@ import 'package:PiliPlus/utils/image_util.dart';
 import 'package:PiliPlus/utils/num_util.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:PiliPlus/utils/storage.dart';
+import 'package:PiliPlus/utils/storage_key.dart';
+import 'package:PiliPlus/utils/storage_pref.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_debounce/easy_throttle.dart';
@@ -59,7 +60,7 @@ class _ArticlePageState extends State<ArticlePage>
   late final AnimationController fabAnimationCtr;
   late final Animation<Offset> _anim;
 
-  late final List<double> _ratio = GStorage.dynamicDetailRatio;
+  late final List<double> _ratio = Pref.dynamicDetailRatio;
 
   bool get _horizontalPreview =>
       context.orientation == Orientation.landscape &&
@@ -709,7 +710,7 @@ class _ArticlePageState extends State<ArticlePage>
                         value: _ratio.first,
                         onChanged: (value) {
                           if (value >= 10 && value <= 90) {
-                            _ratio[0] = value;
+                            _ratio[0] = value.toPrecision(2);
                             _ratio[1] = 100 - value;
                             GStorage.setting.put(
                               SettingBoxKey.dynamicDetailRatio,

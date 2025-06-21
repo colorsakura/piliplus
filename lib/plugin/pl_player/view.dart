@@ -28,7 +28,6 @@ import 'package:PiliPlus/plugin/pl_player/widgets/play_pause_btn.dart';
 import 'package:PiliPlus/utils/duration_util.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/id_utils.dart';
-import 'package:PiliPlus/utils/storage.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_debounce/easy_throttle.dart';
 import 'package:fl_chart/fl_chart.dart';
@@ -107,20 +106,8 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
   final RxBool _volumeInterceptEventStream = false.obs;
 
   late FullScreenMode mode;
-  late int defaultBtmProgressBehavior;
-  late bool enableQuickDouble;
-  late bool fullScreenGestureReverse;
 
   late final RxBool showRestoreScaleBtn = false.obs;
-
-  late final _isRelative = GStorage.useRelativeSlide;
-  late final _offset = _isRelative
-      ? GStorage.sliderDuration / 100
-      : GStorage.sliderDuration * 1000;
-
-  num get sliderScale => _isRelative
-      ? plPlayerController.duration.value.inMilliseconds * _offset
-      : _offset;
 
   Offset _initialFocalPoint = Offset.zero;
   String? _gestureType;
@@ -152,7 +139,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
   }
 
   void doubleTapFuc(String type) {
-    if (!enableQuickDouble) {
+    if (!plPlayerController.enableQuickDouble) {
       onDoubleTapCenter();
       return;
     }
@@ -182,13 +169,6 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
     videoController = plPlayerController.videoController!;
     videoIntroController = widget.videoIntroController;
     pgcIntroController = widget.pgcIntroController;
-    defaultBtmProgressBehavior = GStorage.setting.get(
-        SettingBoxKey.btmProgressBehavior,
-        defaultValue: BtmProgressBehavior.values.first.code);
-    enableQuickDouble = GStorage.setting
-        .get(SettingBoxKey.enableQuickDouble, defaultValue: true);
-    fullScreenGestureReverse = GStorage.setting
-        .get(SettingBoxKey.fullScreenGestureReverse, defaultValue: false);
     Future.microtask(() async {
       try {
         FlutterVolumeController.updateShowSystemUI(true);
@@ -820,7 +800,8 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                 final double width = renderBox.size.width;
                 final Duration pos = Duration(
                     milliseconds: curSliderPosition +
-                        (sliderScale * delta.dx / width).round()); // TODO
+                        (plPlayerController.sliderScale * delta.dx / width)
+                            .round()); // TODO
                 final Duration result =
                     pos.clamp(Duration.zero, plPlayerController.duration.value);
                 final height = renderBox.size.height * 0.125;
@@ -897,14 +878,18 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
 
                 if (cumulativeDy > threshold) {
                   _gestureType = 'center_down';
-                  if (isFullScreen ^ fullScreenGestureReverse) {
-                    fullScreenTrigger(fullScreenGestureReverse);
+                  if (isFullScreen ^
+                      plPlayerController.fullScreenGestureReverse) {
+                    fullScreenTrigger(
+                        plPlayerController.fullScreenGestureReverse);
                   }
                   // if (kDebugMode) debugPrint('center_down:$cumulativeDy');
                 } else if (cumulativeDy < -threshold) {
                   _gestureType = 'center_up';
-                  if (!isFullScreen ^ fullScreenGestureReverse) {
-                    fullScreenTrigger(!fullScreenGestureReverse);
+                  if (!isFullScreen ^
+                      plPlayerController.fullScreenGestureReverse) {
+                    fullScreenTrigger(
+                        !plPlayerController.fullScreenGestureReverse);
                   }
                   // if (kDebugMode) debugPrint('center_up:$cumulativeDy');
                 }
@@ -1007,14 +992,18 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
 
                 if (cumulativeDy > threshold) {
                   _gestureType = 'center_down';
-                  if (isFullScreen ^ fullScreenGestureReverse) {
-                    fullScreenTrigger(fullScreenGestureReverse);
+                  if (isFullScreen ^
+                      plPlayerController.fullScreenGestureReverse) {
+                    fullScreenTrigger(
+                        plPlayerController.fullScreenGestureReverse);
                   }
                   // if (kDebugMode) debugPrint('center_down:$cumulativeDy');
                 } else if (cumulativeDy < -threshold) {
                   _gestureType = 'center_up';
-                  if (!isFullScreen ^ fullScreenGestureReverse) {
-                    fullScreenTrigger(!fullScreenGestureReverse);
+                  if (!isFullScreen ^
+                      plPlayerController.fullScreenGestureReverse) {
+                    fullScreenTrigger(
+                        !plPlayerController.fullScreenGestureReverse);
                   }
                   // if (kDebugMode)   debugPrint('center_up:$cumulativeDy');
                 }
@@ -1363,26 +1352,30 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
             if (plPlayerController.showControls.value) {
               return const SizedBox.shrink();
             }
-            if (defaultBtmProgressBehavior ==
-                BtmProgressBehavior.alwaysHide.code) {
-              return const SizedBox.shrink();
-            }
-            if (defaultBtmProgressBehavior ==
-                    BtmProgressBehavior.onlyShowFullScreen.code &&
-                !isFullScreen) {
-              return const SizedBox.shrink();
-            } else if (defaultBtmProgressBehavior ==
-                    BtmProgressBehavior.onlyHideFullScreen.code &&
-                isFullScreen) {
-              return const SizedBox.shrink();
+
+            switch (plPlayerController.defaultBtmProgressBehavior) {
+              case BtmProgressBehavior.alwaysShow:
+                break;
+              case BtmProgressBehavior.alwaysHide:
+                return const SizedBox.shrink();
+              case BtmProgressBehavior.onlyShowFullScreen:
+                if (!isFullScreen) {
+                  return const SizedBox.shrink();
+                }
+              case BtmProgressBehavior.onlyHideFullScreen:
+                if (isFullScreen) {
+                  return const SizedBox.shrink();
+                }
             }
 
             if (plPlayerController.videoType.value == 'live') {
               return const SizedBox.shrink();
             }
+
             if (value > max || max <= 0) {
               return const SizedBox.shrink();
             }
+
             return Positioned(
                 bottom: -2.2,
                 left: 0,

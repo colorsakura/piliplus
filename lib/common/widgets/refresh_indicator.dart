@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math' as math;
 
+import 'package:PiliPlus/utils/storage_pref.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart' show clampDouble;
 import 'package:flutter/material.dart' hide RefreshIndicator;
@@ -23,8 +24,8 @@ Widget refreshIndicator({
 // The over-scroll distance that moves the indicator to its maximum
 // displacement, as a percentage of the scrollable's container extent.
 
-double displacement = 20;
-double kDragContainerExtentPercentage = 0.25;
+double displacement = Pref.refreshDisplacement;
+double kDragContainerExtentPercentage = Pref.refreshDragPercentage;
 
 // How much the scroll's drag gesture can overshoot the RefreshIndicator's
 // displacement; max displacement = _kDragSizeFactorLimit * displacement.

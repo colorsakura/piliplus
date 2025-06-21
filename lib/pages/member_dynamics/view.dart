@@ -6,8 +6,8 @@ import 'package:PiliPlus/models/dynamics/result.dart';
 import 'package:PiliPlus/pages/dynamics/widgets/dynamic_panel.dart';
 import 'package:PiliPlus/pages/dynamics_tab/view.dart';
 import 'package:PiliPlus/pages/member_dynamics/controller.dart';
+import 'package:PiliPlus/utils/global_data.dart';
 import 'package:PiliPlus/utils/grid.dart';
-import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -26,7 +26,6 @@ class _MemberDynamicsPageState extends State<MemberDynamicsPage>
     with AutomaticKeepAliveClientMixin {
   late MemberDynamicsController _memberDynamicController;
   late int mid;
-  late bool dynamicsWaterfallFlow;
 
   @override
   bool get wantKeepAlive => true;
@@ -38,8 +37,6 @@ class _MemberDynamicsPageState extends State<MemberDynamicsPage>
     final String heroTag = Utils.makeHeroTag(mid);
     _memberDynamicController =
         Get.put(MemberDynamicsController(mid), tag: heroTag);
-    dynamicsWaterfallFlow = GStorage.setting
-        .get(SettingBoxKey.dynamicsWaterfallFlow, defaultValue: true);
   }
 
   @override
@@ -71,9 +68,10 @@ class _MemberDynamicsPageState extends State<MemberDynamicsPage>
 
   Widget _buildContent(LoadingState<List<DynamicItemModel>?> loadingState) {
     return switch (loadingState) {
-      Loading() => DynamicsTabPage.dynSkeleton(dynamicsWaterfallFlow),
+      Loading() =>
+        DynamicsTabPage.dynSkeleton(GlobalData().dynamicsWaterfallFlow),
       Success(:var response) => response?.isNotEmpty == true
-          ? dynamicsWaterfallFlow
+          ? GlobalData().dynamicsWaterfallFlow
               ? SliverWaterfallFlow.extent(
                   maxCrossAxisExtent: Grid.smallCardWidth * 2,
                   crossAxisSpacing: StyleString.safeSpace,

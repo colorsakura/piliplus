@@ -23,8 +23,9 @@ import 'package:PiliPlus/pages/common/multi_select_controller.dart';
 import 'package:PiliPlus/pages/dynamics_tab/controller.dart';
 import 'package:PiliPlus/pages/group_panel/view.dart';
 import 'package:PiliPlus/pages/later/controller.dart';
+import 'package:PiliPlus/utils/accounts.dart';
 import 'package:PiliPlus/utils/feed_back.dart';
-import 'package:PiliPlus/utils/storage.dart';
+import 'package:PiliPlus/utils/storage_pref.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/material.dart';
@@ -289,7 +290,7 @@ class RequestUtils {
 
   static Future<void> checkCreatedDyn(
       {dynamic id, String? dynText, bool isManual = false}) async {
-    if (isManual || GStorage.enableCreateDynAntifraud) {
+    if (isManual || Pref.enableCreateDynAntifraud) {
       try {
         if (id != null) {
           if (!isManual) {

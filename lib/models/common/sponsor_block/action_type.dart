@@ -1,5 +1,10 @@
-enum ActionType { skip, mute, full, poi }
+enum ActionType {
+  skip('跳过'),
+  mute('静音'),
+  full('整个视频'),
+  poi('精彩时刻'),
+  ;
 
-extension ActionTypeExt on ActionType {
-  String get title => const ['跳过', '静音', '整个视频', '精彩时刻'][index];
+  final String title;
+  const ActionType(this.title);
 }

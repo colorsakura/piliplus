@@ -1,6 +1,6 @@
 import 'package:PiliPlus/main.dart';
 import 'package:PiliPlus/utils/extension.dart';
-import 'package:PiliPlus/utils/storage.dart';
+import 'package:PiliPlus/utils/storage_pref.dart';
 import 'package:flex_seed_scheme/flex_seed_scheme.dart';
 import 'package:flutter/material.dart';
 
@@ -12,7 +12,7 @@ class ThemeUtils {
     required FlexSchemeVariant variant,
   }) {
     final appFontWeight =
-        GStorage.appFontWeight.clamp(-1, FontWeight.values.length - 1);
+        Pref.appFontWeight.clamp(-1, FontWeight.values.length - 1);
     final fontWeight =
         appFontWeight == -1 ? null : FontWeight.values[appFontWeight];
     late final textStyle = TextStyle(fontWeight: fontWeight);
@@ -111,10 +111,10 @@ class ThemeUtils {
       ),
     );
     if (isDark) {
-      if (GStorage.isPureBlackTheme) {
+      if (Pref.isPureBlackTheme) {
         themeData = darkenTheme(themeData);
       }
-      if (GStorage.darkVideoPage) {
+      if (Pref.darkVideoPage) {
         MyApp.darkThemeData = themeData;
       }
     }

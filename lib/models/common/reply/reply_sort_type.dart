@@ -1,6 +1,8 @@
-enum ReplySortType { time, like }
+enum ReplySortType {
+  time('最新评论', '最新'),
+  hot('最热评论', '最热');
 
-extension ReplySortTypeExt on ReplySortType {
-  String get title => const ['最新评论', '最热评论'][index];
-  String get label => const ['最新', '最热'][index];
+  final String title;
+  final String label;
+  const ReplySortType(this.title, this.label);
 }

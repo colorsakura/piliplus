@@ -23,7 +23,7 @@ import 'package:PiliPlus/utils/id_utils.dart';
 import 'package:PiliPlus/utils/num_util.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:PiliPlus/utils/request_utils.dart';
-import 'package:PiliPlus/utils/storage.dart';
+import 'package:PiliPlus/utils/storage_pref.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:expandable/expandable.dart';
 import 'package:flutter/gestures.dart';
@@ -128,7 +128,7 @@ class _VideoInfoState extends State<VideoInfo> {
 
   bool isProcessing = false;
 
-  late final _horizontalMemberPage = GStorage.horizontalMemberPage;
+  late final _horizontalMemberPage = Pref.horizontalMemberPage;
 
   Widget _buildVideoTitle(ThemeData theme, [bool isExpand = false]) =>
       videoDetailCtr.plPlayerController.enableSponsorBlock
@@ -219,13 +219,13 @@ class _VideoInfoState extends State<VideoInfo> {
     videoDetailCtr = Get.find<VideoDetailController>(tag: widget.heroTag);
 
     if (videoIntroController.expandableCtr == null) {
-      bool alwaysExapndIntroPanel = GStorage.alwaysExapndIntroPanel;
+      bool alwaysExapndIntroPanel = Pref.alwaysExapndIntroPanel;
 
       videoIntroController.expandableCtr = ExpandableController(
         initialExpanded: alwaysExapndIntroPanel,
       );
 
-      if (!alwaysExapndIntroPanel && GStorage.exapndIntroPanelH) {
+      if (!alwaysExapndIntroPanel && Pref.exapndIntroPanelH) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
           if (context.orientation == Orientation.landscape &&
               videoIntroController.expandableCtr?.expanded == false) {

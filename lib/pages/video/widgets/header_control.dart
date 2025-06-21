@@ -21,11 +21,16 @@ import 'package:PiliPlus/pages/video/introduction/ugc/widgets/menu_row.dart';
 import 'package:PiliPlus/plugin/pl_player/controller.dart';
 import 'package:PiliPlus/plugin/pl_player/models/play_repeat.dart';
 import 'package:PiliPlus/plugin/pl_player/utils/fullscreen.dart';
+import 'package:PiliPlus/services/service_locator.dart';
+import 'package:PiliPlus/utils/accounts.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/image_util.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:PiliPlus/utils/storage.dart';
+import 'package:PiliPlus/utils/storage_key.dart';
+import 'package:PiliPlus/utils/storage_pref.dart';
 import 'package:PiliPlus/utils/utils.dart';
+import 'package:PiliPlus/utils/video_utils.dart';
 import 'package:canvas_danmaku/canvas_danmaku.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
@@ -65,12 +70,11 @@ class HeaderControlState extends State<HeaderControl> {
   String get heroTag => widget.heroTag;
   late VideoIntroController videoIntroController;
   late PgcIntroController pgcIntroController;
-  late bool horizontalScreen;
+  bool get horizontalScreen => videoDetailCtr.horizontalScreen;
   RxString now = ''.obs;
   Timer? clock;
-  late String defaultCDNService;
   bool get isFullScreen => widget.controller.isFullScreen.value;
-  Box get setting => GStorage.setting;
+  Box setting = GStorage.setting;
   late final _coinKey = GlobalKey<ActionItemState>();
   late final _favKey = GlobalKey<ActionItemState>();
 
@@ -84,9 +88,6 @@ class HeaderControlState extends State<HeaderControl> {
     if (videoDetailCtr.videoType != SearchType.video) {
       pgcIntroController = Get.find<PgcIntroController>(tag: heroTag);
     }
-    horizontalScreen = GStorage.horizontalScreen;
-    defaultCDNService = setting.get(SettingBoxKey.CDNService,
-        defaultValue: CDNService.backupUrl.code);
   }
 
   @override
@@ -245,7 +246,7 @@ class HeaderControlState extends State<HeaderControl> {
                   title: const Text('CDN 设置', style: titleStyle),
                   leading: const Icon(MdiIcons.cloudPlusOutline, size: 20),
                   subtitle: Text(
-                    '当前：${CDNService.fromCode(defaultCDNService).description}，无法播放请切换',
+                    '当前：${CDNService.fromCode(VideoUtils.cdnService).desc}，无法播放请切换',
                     style: subTitleStyle,
                   ),
                   onTap: () async {
@@ -258,10 +259,10 @@ class HeaderControlState extends State<HeaderControl> {
                       },
                     );
                     if (result != null) {
-                      defaultCDNService = result;
+                      VideoUtils.cdnService = result;
                       setting.put(SettingBoxKey.CDNService, result);
                       SmartDialog.showToast(
-                          '已设置为 ${CDNService.fromCode(result).description}，正在重载视频');
+                          '已设置为 ${CDNService.fromCode(result).desc}，正在重载视频');
                       setState(() {});
                       videoDetailCtr.queryVideoUrl(
                         videoDetailCtr.playedTime,
@@ -333,8 +334,7 @@ class HeaderControlState extends State<HeaderControl> {
                   onTap: () => {Get.back(), showSetVideoQa()},
                   leading: const Icon(Icons.play_circle_outline, size: 20),
                   title: const Text('选择画质', style: titleStyle),
-                  subtitle: Text(
-                      '当前画质 ${videoDetailCtr.currentVideoQa.description}',
+                  subtitle: Text('当前画质 ${videoDetailCtr.currentVideoQa.desc}',
                       style: subTitleStyle),
                 ),
                 if (videoDetailCtr.currentAudioQa != null)
@@ -344,7 +344,7 @@ class HeaderControlState extends State<HeaderControl> {
                     leading: const Icon(Icons.album_outlined, size: 20),
                     title: const Text('选择音质', style: titleStyle),
                     subtitle: Text(
-                        '当前音质 ${videoDetailCtr.currentAudioQa!.description}',
+                        '当前音质 ${videoDetailCtr.currentAudioQa!.desc}',
                         style: subTitleStyle),
                   ),
                 ListTile(
@@ -361,7 +361,7 @@ class HeaderControlState extends State<HeaderControl> {
                   onTap: () => {Get.back(), showSetRepeat()},
                   leading: const Icon(Icons.repeat, size: 20),
                   title: const Text('播放顺序', style: titleStyle),
-                  subtitle: Text(widget.controller.playRepeat.description,
+                  subtitle: Text(widget.controller.playRepeat.desc,
                       style: subTitleStyle),
                 ),
                 ListTile(
@@ -611,16 +611,15 @@ class HeaderControlState extends State<HeaderControl> {
                       await Connectivity().checkConnectivity().then((res) {
                         if (res.contains(ConnectivityResult.wifi)) {
                           oldQualityDesc =
-                              VideoQuality.fromCode(GStorage.defaultVideoQa)
-                                  .description;
+                              VideoQuality.fromCode(Pref.defaultVideoQa).desc;
                           setting.put(
                             SettingBoxKey.defaultVideoQa,
                             quality,
                           );
                         } else {
-                          oldQualityDesc = VideoQuality.fromCode(
-                                  GStorage.defaultVideoQaCellular)
-                              .description;
+                          oldQualityDesc =
+                              VideoQuality.fromCode(Pref.defaultVideoQaCellular)
+                                  .desc;
                           setting.put(
                             SettingBoxKey.defaultVideoQaCellular,
                             quality,
@@ -628,7 +627,7 @@ class HeaderControlState extends State<HeaderControl> {
                         }
                       });
                       SmartDialog.showToast(
-                        "默认画质由：$oldQualityDesc 变为：${VideoQuality.fromCode(quality).description}",
+                        "默认画质由：$oldQualityDesc 变为：${VideoQuality.fromCode(quality).desc}",
                       );
                     },
                     // 可能包含会员解锁画质
@@ -694,16 +693,15 @@ class HeaderControlState extends State<HeaderControl> {
                       await Connectivity().checkConnectivity().then((res) {
                         if (res.contains(ConnectivityResult.wifi)) {
                           oldQualityDesc =
-                              AudioQuality.fromCode(GStorage.defaultAudioQa)
-                                  .description;
+                              AudioQuality.fromCode(Pref.defaultAudioQa).desc;
                           setting.put(
                             SettingBoxKey.defaultAudioQa,
                             quality,
                           );
                         } else {
-                          oldQualityDesc = AudioQuality.fromCode(
-                                  GStorage.defaultAudioQaCellular)
-                              .description;
+                          oldQualityDesc =
+                              AudioQuality.fromCode(Pref.defaultAudioQaCellular)
+                                  .desc;
                           setting.put(
                             SettingBoxKey.defaultAudioQaCellular,
                             quality,
@@ -711,7 +709,7 @@ class HeaderControlState extends State<HeaderControl> {
                         }
                       });
                       SmartDialog.showToast(
-                        "默认音质由：$oldQualityDesc 变为：${AudioQuality.fromCode(quality).description}",
+                        "默认音质由：$oldQualityDesc 变为：${AudioQuality.fromCode(quality).desc}",
                       );
                     },
                     contentPadding: const EdgeInsets.only(left: 20, right: 20),
@@ -1215,11 +1213,11 @@ class HeaderControlState extends State<HeaderControl> {
     // 显示区域
     double showArea = widget.controller.showArea;
     // 不透明度
-    double opacity = widget.controller.opacity;
+    double opacity = widget.controller.danmakuOpacity;
     // 字体大小
-    double fontSize = widget.controller.fontSize;
+    double fontSize = widget.controller.danmakuFontScale;
     // 全屏字体大小
-    double fontSizeFS = widget.controller.fontSizeFS;
+    double fontSizeFS = widget.controller.danmakuFontScaleFS;
     double danmakuLineHeight = widget.controller.danmakuLineHeight;
     // 弹幕速度
     double danmakuDuration = widget.controller.danmakuDuration;
@@ -1293,7 +1291,7 @@ class HeaderControlState extends State<HeaderControl> {
         void updateFontSizeFS(double val) {
           fontSizeFS = val;
           widget.controller
-            ..fontSizeFS = fontSizeFS
+            ..danmakuFontScaleFS = fontSizeFS
             ..putDanmakuSettings();
           setState(() {});
           if (widget.controller.isFullScreen.value == true) {
@@ -1310,7 +1308,7 @@ class HeaderControlState extends State<HeaderControl> {
         void updateFontSize(double val) {
           fontSize = val;
           widget.controller
-            ..fontSize = fontSize
+            ..danmakuFontScale = fontSize
             ..putDanmakuSettings();
           setState(() {});
           if (widget.controller.isFullScreen.value == false) {
@@ -1353,7 +1351,7 @@ class HeaderControlState extends State<HeaderControl> {
         void updateOpacity(double val) {
           opacity = val;
           widget.controller
-            ..opacity = opacity
+            ..danmakuOpacity = opacity
             ..putDanmakuSettings();
           setState(() {});
           try {
@@ -1769,7 +1767,7 @@ class HeaderControlState extends State<HeaderControl> {
                       Get.back();
                     },
                     contentPadding: const EdgeInsets.only(left: 20, right: 20),
-                    title: Text(i.description),
+                    title: Text(i.desc),
                     trailing: widget.controller.playRepeat == i
                         ? Icon(
                             Icons.done,
@@ -2045,18 +2043,18 @@ class HeaderControlState extends State<HeaderControl> {
                   child: Obx(
                     () => IconButton(
                       tooltip:
-                          "${plPlayerController.isOpenDanmu.value ? '关闭' : '开启'}弹幕",
+                          "${plPlayerController.enableShowDanmaku.value ? '关闭' : '开启'}弹幕",
                       style: ButtonStyle(
                         padding: WidgetStateProperty.all(EdgeInsets.zero),
                       ),
                       onPressed: () {
-                        plPlayerController.isOpenDanmu.value =
-                            !plPlayerController.isOpenDanmu.value;
+                        plPlayerController.enableShowDanmaku.value =
+                            !plPlayerController.enableShowDanmaku.value;
                         setting.put(SettingBoxKey.enableShowDanmaku,
-                            plPlayerController.isOpenDanmu.value);
+                            plPlayerController.enableShowDanmaku.value);
                       },
                       icon: Icon(
-                        plPlayerController.isOpenDanmu.value
+                        plPlayerController.enableShowDanmaku.value
                             ? Icons.subtitles_outlined
                             : Icons.subtitles_off_outlined,
                         size: 19,
@@ -2078,10 +2076,8 @@ class HeaderControlState extends State<HeaderControl> {
                         bool canUsePiP = await Floating().isPipAvailable;
                         widget.controller.hiddenControls(false);
                         if (canUsePiP) {
-                          bool enableBackgroundPlay = setting.get(
-                              SettingBoxKey.enableBackgroundPlay,
-                              defaultValue: true);
-                          if (!enableBackgroundPlay && mounted) {
+                          if (!videoPlayerServiceHandler.enableBackgroundPlay &&
+                              mounted) {
                             final theme = Theme.of(context);
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(

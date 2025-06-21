@@ -10,6 +10,8 @@ import 'package:PiliPlus/models_new/msgfeed_unread/data.dart';
 import 'package:PiliPlus/models_new/single_unread/data.dart';
 import 'package:PiliPlus/services/account_service.dart';
 import 'package:PiliPlus/utils/storage.dart';
+import 'package:PiliPlus/utils/storage_key.dart';
+import 'package:PiliPlus/utils/storage_pref.dart';
 import 'package:PiliPlus/utils/update.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -22,29 +24,32 @@ class MainController extends GetxController
   RxInt dynCount = 0.obs;
 
   StreamController<bool>? bottomBarStream;
-  late bool hideTabBar;
+  late bool hideTabBar = Pref.hideTabBar;
   late dynamic controller;
   RxInt selectedIndex = 0.obs;
 
   late DynamicBadgeMode dynamicBadgeMode;
-  late bool checkDynamic = GStorage.checkDynamic;
-  late int dynamicPeriod = GStorage.dynamicPeriod;
+  late bool checkDynamic = Pref.checkDynamic;
+  late int dynamicPeriod = Pref.dynamicPeriod;
   late int _lastCheckDynamicAt = 0;
   late int dynIndex = -1;
 
   late int homeIndex = -1;
-  late DynamicBadgeMode msgBadgeMode = GStorage.msgBadgeMode;
-  late Set<MsgUnReadType> msgUnReadTypes = GStorage.msgUnReadTypeV2;
+  late DynamicBadgeMode msgBadgeMode = Pref.msgBadgeMode;
+  late Set<MsgUnReadType> msgUnReadTypes = Pref.msgUnReadTypeV2;
   late final RxString msgUnReadCount = ''.obs;
   late int lastCheckUnreadAt = 0;
 
-  late final mainTabBarView = GStorage.mainTabBarView;
-  late bool navSearchStreamDebounce = GStorage.navSearchStreamDebounce;
+  final enableMYBar = Pref.enableMYBar;
+  final useSideBar = Pref.useSideBar;
+  final mainTabBarView = Pref.mainTabBarView;
+  late bool navSearchStreamDebounce = Pref.navSearchStreamDebounce;
+  late final optTabletNav = Pref.optTabletNav;
 
   @override
   void onInit() {
     super.onInit();
-    if (GStorage.autoUpdate) {
+    if (Pref.autoUpdate) {
       Update.checkUpdate();
     }
 
@@ -58,14 +63,10 @@ class MainController extends GetxController
           )
         : PageController(initialPage: selectedIndex.value);
 
-    hideTabBar =
-        GStorage.setting.get(SettingBoxKey.hideTabBar, defaultValue: true);
     if (navigationBars.length > 1 && hideTabBar) {
       bottomBarStream = StreamController<bool>.broadcast();
     }
-    dynamicBadgeMode = DynamicBadgeMode.values[GStorage.setting.get(
-        SettingBoxKey.dynamicBadgeMode,
-        defaultValue: DynamicBadgeMode.number.index)];
+    dynamicBadgeMode = DynamicBadgeMode.values[Pref.dynamicBadgeMode];
 
     dynIndex = navigationBars.indexOf(NavigationBarType.dynamics);
     if (dynamicBadgeMode != DynamicBadgeMode.hidden) {
@@ -193,7 +194,7 @@ class MainController extends GetxController
   void setNavBarConfig() {
     List<int>? navBarSort =
         (GStorage.setting.get(SettingBoxKey.navBarSort) as List?)?.cast();
-    int defaultHomePage = GStorage.defaultHomePage;
+    int defaultHomePage = Pref.defaultHomePage;
     late final List<NavigationBarType> navigationBars;
     if (navBarSort == null) {
       navigationBars = NavigationBarType.values;

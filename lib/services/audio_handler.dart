@@ -3,7 +3,7 @@ import 'package:PiliPlus/models_new/pgc/pgc_info_model/result.dart';
 import 'package:PiliPlus/models_new/video/video_detail/data.dart';
 import 'package:PiliPlus/plugin/pl_player/controller.dart';
 import 'package:PiliPlus/plugin/pl_player/models/play_status.dart';
-import 'package:PiliPlus/utils/storage.dart';
+import 'package:PiliPlus/utils/storage_pref.dart';
 import 'package:audio_service/audio_service.dart';
 import 'package:get/get_utils/get_utils.dart';
 
@@ -25,17 +25,7 @@ Future<VideoPlayerServiceHandler> initAudioService() async {
 
 class VideoPlayerServiceHandler extends BaseAudioHandler with SeekHandler {
   static final List<MediaItem> _item = [];
-  bool enableBackgroundPlay = true;
-  // PlPlayerController player = PlPlayerController.getInstance();
-
-  VideoPlayerServiceHandler() {
-    revalidateSetting();
-  }
-
-  void revalidateSetting() {
-    enableBackgroundPlay = GStorage.setting
-        .get(SettingBoxKey.enableBackgroundPlay, defaultValue: true);
-  }
+  bool enableBackgroundPlay = Pref.enableBackgroundPlay;
 
   @override
   Future<void> play() async {

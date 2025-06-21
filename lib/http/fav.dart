@@ -11,8 +11,8 @@ import 'package:PiliPlus/models_new/fav/fav_pgc/data.dart';
 import 'package:PiliPlus/models_new/fav/fav_topic/data.dart';
 import 'package:PiliPlus/models_new/space/space_fav/data.dart';
 import 'package:PiliPlus/models_new/sub/sub_detail/data.dart';
+import 'package:PiliPlus/utils/accounts.dart';
 import 'package:PiliPlus/utils/app_sign.dart';
-import 'package:PiliPlus/utils/storage.dart' show Accounts;
 import 'package:dio/dio.dart';
 
 class FavHttp {

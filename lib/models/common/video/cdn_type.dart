@@ -29,8 +29,8 @@ enum CDNService {
   String get code => name;
   static final fromCode = values.byName;
 
-  final String description;
+  final String desc;
   final String host;
 
-  const CDNService(this.description, [this.host = '']);
+  const CDNService(this.desc, [this.host = '']);
 }

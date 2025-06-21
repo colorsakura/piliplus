@@ -1,7 +1,6 @@
 import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
 import 'package:PiliPlus/models/common/image_type.dart';
-import 'package:PiliPlus/models/common/theme/theme_type.dart';
 import 'package:PiliPlus/models/user/info.dart';
 import 'package:PiliPlus/pages/mine/controller.dart';
 import 'package:PiliPlus/utils/extension.dart';
@@ -57,7 +56,7 @@ class _MinePageState extends State<MinePage> {
                 style: const ButtonStyle(
                   tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                 ),
-                tooltip: '切换至${_mineController.nextThemeType.description}主题',
+                tooltip: '切换至${_mineController.nextThemeType.desc}主题',
                 onPressed: _mineController.onChangeTheme,
                 icon: _mineController.themeType.value.icon,
               );

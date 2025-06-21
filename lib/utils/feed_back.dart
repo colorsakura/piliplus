@@ -1,7 +1,7 @@
-import 'package:PiliPlus/utils/storage.dart';
+import 'package:PiliPlus/utils/storage_pref.dart';
 import 'package:flutter/services.dart' show HapticFeedback;
 
-bool enableFeedback = GStorage.feedBackEnable;
+bool enableFeedback = Pref.feedBackEnable;
 void feedBack() {
   if (enableFeedback) {
     HapticFeedback.lightImpact();

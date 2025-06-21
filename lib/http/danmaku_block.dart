@@ -1,7 +1,7 @@
 import 'package:PiliPlus/http/api.dart';
 import 'package:PiliPlus/http/init.dart';
 import 'package:PiliPlus/models/user/danmaku_block.dart';
-import 'package:PiliPlus/utils/storage.dart';
+import 'package:PiliPlus/utils/accounts.dart';
 
 class DanmakuFilterHttp {
   static Future danmakuFilter() async {

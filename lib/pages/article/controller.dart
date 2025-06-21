@@ -13,7 +13,7 @@ import 'package:PiliPlus/models_new/article/article_info/data.dart';
 import 'package:PiliPlus/models_new/article/article_view/data.dart';
 import 'package:PiliPlus/pages/common/reply_controller.dart';
 import 'package:PiliPlus/pages/mine/controller.dart';
-import 'package:PiliPlus/utils/storage.dart';
+import 'package:PiliPlus/utils/storage_pref.dart';
 import 'package:PiliPlus/utils/url_utils.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
@@ -31,8 +31,8 @@ class ArticleController extends ReplyController<MainListReply> {
 
   late final RxInt topIndex = 0.obs;
 
-  late final horizontalPreview = GStorage.horizontalPreview;
-  late final showDynActionBar = GStorage.showDynActionBar;
+  late final horizontalPreview = Pref.horizontalPreview;
+  late final showDynActionBar = Pref.showDynActionBar;
 
   @override
   dynamic get sourceId => commentType == 12 ? 'cv$commentId' : id;
@@ -180,7 +180,6 @@ class ArticleController extends ReplyController<MainListReply> {
       mode: mode.value,
       cursorNext: cursorNext,
       offset: paginationReply?.nextOffset,
-      antiGoodsReply: antiGoodsReply,
     );
   }
 

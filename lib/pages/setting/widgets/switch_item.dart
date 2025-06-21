@@ -1,4 +1,6 @@
 import 'package:PiliPlus/utils/storage.dart';
+import 'package:PiliPlus/utils/storage_key.dart';
+import 'package:PiliPlus/utils/storage_pref.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
@@ -38,7 +40,7 @@ class _SetSwitchItemState extends State<SetSwitchItem> {
 
   void setVal() {
     if (widget.setKey == SettingBoxKey.appFontWeight) {
-      val = GStorage.appFontWeight != -1;
+      val = Pref.appFontWeight != -1;
     } else {
       val = GStorage.setting
           .get(widget.setKey, defaultValue: widget.defaultVal ?? false);

@@ -3,6 +3,8 @@ import 'dart:math';
 
 import 'package:PiliPlus/utils/global_data.dart';
 import 'package:PiliPlus/utils/storage.dart';
+import 'package:PiliPlus/utils/storage_key.dart';
+import 'package:PiliPlus/utils/storage_pref.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_navigation/src/dialog/dialog_route.dart';
@@ -59,7 +61,7 @@ class _PayCoinsPageState extends State<PayCoinsPage>
     with TickerProviderStateMixin {
   bool _isPaying = false;
   late final _controller = PageController(viewportFraction: 0.30);
-  late final RxBool _coinWithLike = GStorage.coinWithLike.obs;
+  late final RxBool _coinWithLike = Pref.coinWithLike.obs;
   final _key = GlobalKey();
 
   int get _index => _controller.hasClients ? _controller.page?.round() ?? 0 : 0;

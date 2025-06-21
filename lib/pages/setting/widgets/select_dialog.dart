@@ -4,7 +4,7 @@ import 'package:PiliPlus/http/constants.dart';
 import 'package:PiliPlus/http/video.dart';
 import 'package:PiliPlus/models/common/video/cdn_type.dart';
 import 'package:PiliPlus/models/video/play/url.dart';
-import 'package:PiliPlus/utils/storage.dart';
+import 'package:PiliPlus/utils/storage_pref.dart';
 import 'package:PiliPlus/utils/video_utils.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart' show kDebugMode;
@@ -68,11 +68,11 @@ class CdnSelectDialog extends StatefulWidget {
 class _CdnSelectDialogState extends State<CdnSelectDialog> {
   late final List<ValueNotifier<String?>> _cdnResList;
   late final CancelToken _cancelToken;
-  bool _cdnSpeedTest = false;
+  late final bool _cdnSpeedTest;
 
   @override
   void initState() {
-    _cdnSpeedTest = GStorage.cdnSpeedTest;
+    _cdnSpeedTest = Pref.cdnSpeedTest;
     if (_cdnSpeedTest) {
       _cdnResList = List.generate(
           CDNService.values.length, (_) => ValueNotifier<String?>(null));
@@ -181,8 +181,8 @@ class _CdnSelectDialogState extends State<CdnSelectDialog> {
   Widget build(BuildContext context) {
     return SelectDialog<String>(
       title: 'CDN 设置',
-      values: CDNService.values.map((i) => (i.code, i.description)).toList(),
-      value: GStorage.defaultCDNService,
+      values: CDNService.values.map((i) => (i.code, i.desc)).toList(),
+      value: VideoUtils.cdnService,
       subtitleBuilder: _cdnSpeedTest
           ? (context, index) => ValueListenableBuilder(
                 valueListenable: _cdnResList[index],

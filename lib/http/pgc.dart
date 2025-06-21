@@ -8,7 +8,7 @@ import 'package:PiliPlus/models_new/pgc/pgc_index_result/list.dart';
 import 'package:PiliPlus/models_new/pgc/pgc_review/data.dart';
 import 'package:PiliPlus/models_new/pgc/pgc_timeline/pgc_timeline.dart';
 import 'package:PiliPlus/models_new/pgc/pgc_timeline/result.dart';
-import 'package:PiliPlus/utils/storage.dart' show Accounts;
+import 'package:PiliPlus/utils/accounts.dart';
 import 'package:dio/dio.dart';
 
 class PgcHttp {

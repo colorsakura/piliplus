@@ -10,7 +10,7 @@ import 'package:PiliPlus/pages/common/common_controller.dart';
 import 'package:PiliPlus/pages/dynamics_tab/controller.dart';
 import 'package:PiliPlus/services/account_service.dart';
 import 'package:PiliPlus/utils/extension.dart';
-import 'package:PiliPlus/utils/storage.dart';
+import 'package:PiliPlus/utils/storage_pref.dart';
 import 'package:easy_debounce/easy_throttle.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -31,9 +31,9 @@ class DynamicsController extends GetxController
   int allFollowedUpsTotal = 0;
 
   late int currentMid = -1;
-  late bool showLiveItems = GStorage.expandDynLivePanel;
+  late bool showLiveItems = Pref.expandDynLivePanel;
 
-  final upPanelPosition = GStorage.upPanelPosition;
+  final upPanelPosition = Pref.upPanelPosition;
 
   AccountService accountService = Get.find<AccountService>();
 
@@ -52,8 +52,7 @@ class DynamicsController extends GetxController
     tabController = TabController(
       length: DynamicsTabType.values.length,
       vsync: this,
-      initialIndex: GStorage.setting
-          .get(SettingBoxKey.defaultDynamicType, defaultValue: 0),
+      initialIndex: Pref.defaultDynamicType,
     );
 
     queryFollowUp();
@@ -102,8 +101,7 @@ class DynamicsController extends GetxController
         ..refresh();
     }
     upData.value.errMsg = null;
-    if (GStorage.setting
-        .get(SettingBoxKey.dynamicsShowAllFollowedUp, defaultValue: false)) {
+    if (Pref.dynamicsShowAllFollowedUp) {
       allFollowedUpsPage = 1;
       final f1 = DynamicsHttp.followUp();
       final f2 = FollowHttp.followings(

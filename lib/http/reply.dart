@@ -7,16 +7,13 @@ import 'package:PiliPlus/models_new/emote/package.dart';
 import 'package:PiliPlus/models_new/reply/data.dart';
 import 'package:PiliPlus/models_new/reply/reply.dart';
 import 'package:PiliPlus/models_new/reply2reply/data.dart';
+import 'package:PiliPlus/utils/accounts.dart';
 import 'package:PiliPlus/utils/accounts/account.dart';
-import 'package:PiliPlus/utils/storage.dart';
 import 'package:dio/dio.dart';
 
 class ReplyHttp {
   static final Options _options =
       Options(extra: {'account': AnonymousAccount(), 'checkReply': true});
-
-  static RegExp replyRegExp =
-      RegExp(GStorage.banWordForReply, caseSensitive: false);
 
   static Future<LoadingState> replyList({
     required bool isLogin,
@@ -53,68 +50,68 @@ class ReplyHttp {
           );
     if (res.data['code'] == 0) {
       ReplyData replyData = ReplyData.fromJson(res.data['data']);
-      if (enableFilter != false && replyRegExp.pattern.isNotEmpty) {
-        // topReplies
-        if (replyData.topReplies?.isNotEmpty == true) {
-          replyData.topReplies!.removeWhere((item) {
-            bool hasMatch = replyRegExp.hasMatch(item.content?.message ?? '');
-            // remove subreplies
-            if (!hasMatch) {
-              if (item.replies?.isNotEmpty == true) {
-                item.replies!.removeWhere((item) =>
-                    replyRegExp.hasMatch(item.content?.message ?? ''));
-              }
-            }
-            return hasMatch;
-          });
-        }
+      // if (enableFilter != false && replyRegExp.pattern.isNotEmpty) {
+      //   // topReplies
+      //   if (replyData.topReplies?.isNotEmpty == true) {
+      //     replyData.topReplies!.removeWhere((item) {
+      //       bool hasMatch = replyRegExp.hasMatch(item.content?.message ?? '');
+      //       // remove subreplies
+      //       if (!hasMatch) {
+      //         if (item.replies?.isNotEmpty == true) {
+      //           item.replies!.removeWhere((item) =>
+      //               replyRegExp.hasMatch(item.content?.message ?? ''));
+      //         }
+      //       }
+      //       return hasMatch;
+      //     });
+      //   }
 
-        // replies
-        if (replyData.replies?.isNotEmpty == true) {
-          replyData.replies!.removeWhere((item) {
-            bool hasMatch = replyRegExp.hasMatch(item.content?.message ?? '');
-            // remove subreplies
-            if (!hasMatch) {
-              if (item.replies?.isNotEmpty == true) {
-                item.replies!.removeWhere((item) =>
-                    replyRegExp.hasMatch(item.content?.message ?? ''));
-              }
-            }
-            return hasMatch;
-          });
-        }
-      }
+      //   // replies
+      //   if (replyData.replies?.isNotEmpty == true) {
+      //     replyData.replies!.removeWhere((item) {
+      //       bool hasMatch = replyRegExp.hasMatch(item.content?.message ?? '');
+      //       // remove subreplies
+      //       if (!hasMatch) {
+      //         if (item.replies?.isNotEmpty == true) {
+      //           item.replies!.removeWhere((item) =>
+      //               replyRegExp.hasMatch(item.content?.message ?? ''));
+      //         }
+      //       }
+      //       return hasMatch;
+      //     });
+      //   }
+      // }
 
-      // antiGoodsReply
-      if (antiGoodsReply) {
-        // topReplies
-        if (replyData.topReplies?.isNotEmpty == true) {
-          replyData.topReplies!.removeWhere((item) {
-            bool hasMatch = needRemove(item);
-            // remove subreplies
-            if (!hasMatch) {
-              if (item.replies?.isNotEmpty == true) {
-                item.replies!.removeWhere(needRemove);
-              }
-            }
-            return hasMatch;
-          });
-        }
+      // // antiGoodsReply
+      // if (antiGoodsReply) {
+      //   // topReplies
+      //   if (replyData.topReplies?.isNotEmpty == true) {
+      //     replyData.topReplies!.removeWhere((item) {
+      //       bool hasMatch = needRemove(item);
+      //       // remove subreplies
+      //       if (!hasMatch) {
+      //         if (item.replies?.isNotEmpty == true) {
+      //           item.replies!.removeWhere(needRemove);
+      //         }
+      //       }
+      //       return hasMatch;
+      //     });
+      //   }
 
-        // replies
-        if (replyData.replies?.isNotEmpty == true) {
-          replyData.replies!.removeWhere((item) {
-            bool hasMatch = needRemove(item);
-            // remove subreplies
-            if (!hasMatch) {
-              if (item.replies?.isNotEmpty == true) {
-                item.replies!.removeWhere(needRemove);
-              }
-            }
-            return hasMatch;
-          });
-        }
-      }
+      //   // replies
+      //   if (replyData.replies?.isNotEmpty == true) {
+      //     replyData.replies!.removeWhere((item) {
+      //       bool hasMatch = needRemove(item);
+      //       // remove subreplies
+      //       if (!hasMatch) {
+      //         if (item.replies?.isNotEmpty == true) {
+      //           item.replies!.removeWhere(needRemove);
+      //         }
+      //       }
+      //       return hasMatch;
+      //     });
+      //   }
+      // }
       return Success(replyData);
     } else {
       return Error(res.data['message']);
@@ -161,17 +158,17 @@ class ReplyHttp {
     );
     if (res.data['code'] == 0) {
       ReplyReplyData replyData = ReplyReplyData.fromJson(res.data['data']);
-      if (filterBanWord != false && replyRegExp.pattern.isNotEmpty) {
-        if (replyData.replies?.isNotEmpty == true) {
-          replyData.replies!.removeWhere(
-              (item) => replyRegExp.hasMatch(item.content?.message ?? ''));
-        }
-      }
-      if (antiGoodsReply) {
-        if (replyData.replies?.isNotEmpty == true) {
-          replyData.replies!.removeWhere(needRemove);
-        }
-      }
+      // if (filterBanWord != false && replyRegExp.pattern.isNotEmpty) {
+      //   if (replyData.replies?.isNotEmpty == true) {
+      //     replyData.replies!.removeWhere(
+      //         (item) => replyRegExp.hasMatch(item.content?.message ?? ''));
+      //   }
+      // }
+      // if (antiGoodsReply) {
+      //   if (replyData.replies?.isNotEmpty == true) {
+      //     replyData.replies!.removeWhere(needRemove);
+      //   }
+      // }
       return Success(replyData);
     } else {
       return Error(

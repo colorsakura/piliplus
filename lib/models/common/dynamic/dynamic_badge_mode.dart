@@ -1,5 +1,9 @@
-enum DynamicBadgeMode { hidden, point, number }
+enum DynamicBadgeMode {
+  hidden('隐藏'),
+  point('红点'),
+  number('数字'),
+  ;
 
-extension DynamicBadgeModeExt on DynamicBadgeMode {
-  String get description => const ['隐藏', '红点', '数字'][index];
+  final String desc;
+  const DynamicBadgeMode(this.desc);
 }

@@ -2,16 +2,18 @@ import 'package:PiliPlus/models/common/video/cdn_type.dart';
 import 'package:PiliPlus/models/video/play/url.dart';
 import 'package:PiliPlus/models_new/live/live_room_play_info/codec.dart';
 import 'package:PiliPlus/utils/extension.dart';
-import 'package:PiliPlus/utils/storage.dart';
+import 'package:PiliPlus/utils/storage_pref.dart';
 
 class VideoUtils {
+  static String cdnService = Pref.defaultCDNService;
+  static bool disableAudioCDN = Pref.disableAudioCDN;
+
   static String getCdnUrl(dynamic item, [String? defaultCDNService]) {
     String? backupUrl;
     String? videoUrl;
-    defaultCDNService ??= GStorage.defaultCDNService;
+    defaultCDNService ??= cdnService;
     if (item is AudioItem) {
-      if (GStorage.setting
-          .get(SettingBoxKey.disableAudioCDN, defaultValue: true)) {
+      if (disableAudioCDN) {
         return item.backupUrl?.isNotEmpty == true
             ? item.backupUrl!
             : item.baseUrl ?? "";

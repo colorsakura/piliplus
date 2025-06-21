@@ -43,6 +43,7 @@ import 'package:PiliPlus/utils/duration_util.dart';
 import 'package:PiliPlus/utils/id_utils.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:PiliPlus/utils/storage.dart';
+import 'package:PiliPlus/utils/storage_pref.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:PiliPlus/utils/video_utils.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
@@ -105,7 +106,7 @@ class VideoDetailController extends GetxController
 
   late final headerCtrKey = GlobalKey<HeaderControlState>();
 
-  Box get setting => GStorage.setting;
+  Box setting = GStorage.setting;
 
   late String cacheDecode;
   late String cacheSecondDecode;
@@ -277,20 +278,16 @@ class VideoDetailController extends GetxController
       getMediaList();
     }
 
-    bool defaultShowComment =
-        setting.get(SettingBoxKey.defaultShowComment, defaultValue: false);
+    bool defaultShowComment = Pref.defaultShowComment;
     tabCtr = TabController(
         length: 2, vsync: this, initialIndex: defaultShowComment ? 1 : 0);
-    autoPlay.value =
-        setting.get(SettingBoxKey.autoPlayEnable, defaultValue: false);
+    autoPlay.value = Pref.autoPlayEnable;
     if (autoPlay.value) isShowCover.value = false;
     danmakuCid.value = cid.value;
 
     // 预设的解码格式
-    cacheDecode = setting.get(SettingBoxKey.defaultDecode,
-        defaultValue: VideoDecodeFormatType.values.last.code);
-    cacheSecondDecode = setting.get(SettingBoxKey.secondDecode,
-        defaultValue: VideoDecodeFormatType.values[1].code);
+    cacheDecode = Pref.defaultDecode;
+    cacheSecondDecode = Pref.secondDecode;
     oid.value = IdUtils.bv2av(Get.parameters['bvid']!);
   }
 
@@ -457,7 +454,7 @@ class VideoDetailController extends GetxController
       '$blockServer/api/voteOnSponsorTime',
       queryParameters: {
         'UUID': uuid,
-        'userID': GStorage.blockUserID,
+        'userID': Pref.blockUserID,
         'type': type,
       },
     ).then((res) {
@@ -483,7 +480,7 @@ class VideoDetailController extends GetxController
                           '$blockServer/api/voteOnSponsorTime',
                           queryParameters: {
                             'UUID': segment.UUID,
-                            'userID': GStorage.blockUserID,
+                            'userID': Pref.blockUserID,
                             'category': item.name,
                           },
                         ).then((res) {
@@ -905,10 +902,10 @@ class VideoDetailController extends GetxController
       await plPlayerController.videoPlayerController
           ?.seek(Duration(milliseconds: item.segment.second));
       if (isSkip) {
-        if (GStorage.blockToast) {
+        if (Pref.blockToast) {
           _showBlockToast('已跳过${item.segmentType.shortTitle}片段');
         }
-        if (GStorage.blockTrack) {
+        if (Pref.blockTrack) {
           Request().post(
             '$blockServer/api/viewedVideoSponsorTime',
             queryParameters: {'UUID': item.UUID},
@@ -1135,15 +1132,11 @@ class VideoDetailController extends GetxController
       await Connectivity().checkConnectivity().then((res) {
         plPlayerController
           ..cacheVideoQa = res.contains(ConnectivityResult.wifi)
-              ? setting.get(SettingBoxKey.defaultVideoQa,
-                  defaultValue: VideoQuality.values.last.code)
-              : setting.get(SettingBoxKey.defaultVideoQaCellular,
-                  defaultValue: VideoQuality.high1080.code)
+              ? Pref.defaultVideoQa
+              : Pref.defaultVideoQaCellular
           ..cacheAudioQa = res.contains(ConnectivityResult.wifi)
-              ? setting.get(SettingBoxKey.defaultAudioQa,
-                  defaultValue: AudioQuality.hiRes.code)
-              : setting.get(SettingBoxKey.defaultAudioQaCellular,
-                  defaultValue: AudioQuality.k192.code);
+              ? Pref.defaultAudioQa
+              : Pref.defaultAudioQaCellular;
       });
     }
     var result = await VideoHttp.videoUrl(
@@ -1436,7 +1429,7 @@ class VideoDetailController extends GetxController
     }
   }
 
-  late bool continuePlayingPart = GStorage.continuePlayingPart;
+  late bool continuePlayingPart = Pref.continuePlayingPart;
 
   Future<void> _queryPlayInfo() async {
     var res = await VideoHttp.playInfo(bvid: bvid, cid: cid.value);
@@ -1474,7 +1467,7 @@ class VideoDetailController extends GetxController
         } catch (_) {}
       }
 
-      if (playInfo.viewPoints?.isNotEmpty == true && GStorage.showViewPoints) {
+      if (playInfo.viewPoints?.isNotEmpty == true && Pref.showViewPoints) {
         try {
           viewPointList = playInfo.viewPoints!.map((item) {
             double start =
@@ -1500,7 +1493,7 @@ class VideoDetailController extends GetxController
         int idx = 0;
         subtitles.value = playInfo.subtitle!.subtitles!;
 
-        String preference = GStorage.defaultSubtitlePreference;
+        String preference = Pref.subtitlePreference;
         if (preference != 'off') {
           idx = subtitles.indexWhere((i) => !i.lan!.startsWith('ai')) + 1;
           if (idx == 0) {

@@ -8,7 +8,6 @@ import 'package:PiliPlus/pages/live_search/child/controller.dart';
 import 'package:PiliPlus/pages/live_search/widgets/live_search_room.dart';
 import 'package:PiliPlus/pages/live_search/widgets/live_search_user.dart';
 import 'package:PiliPlus/utils/grid.dart';
-import 'package:PiliPlus/utils/storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -28,8 +27,6 @@ class LiveSearchChildPage extends StatefulWidget {
 
 class _LiveSearchChildPageState extends State<LiveSearchChildPage>
     with AutomaticKeepAliveClientMixin {
-  late final bool dynamicsWaterfallFlow = GStorage.setting
-      .get(SettingBoxKey.dynamicsWaterfallFlow, defaultValue: true);
   LiveSearchChildController get _controller => widget.controller;
 
   @override

@@ -8,7 +8,7 @@ import 'package:PiliPlus/main.dart';
 import 'package:PiliPlus/models/common/publish_panel_type.dart';
 import 'package:PiliPlus/pages/common/common_publish_page.dart';
 import 'package:PiliPlus/pages/emote/view.dart';
-import 'package:PiliPlus/utils/storage.dart';
+import 'package:PiliPlus/utils/storage_pref.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
@@ -75,7 +75,7 @@ class _ReplyPageState extends CommonPublishPageState<ReplyPage> {
   }
 
   late final darkVideoPage =
-      Get.currentRoute.startsWith('/video') && GStorage.darkVideoPage;
+      Get.currentRoute.startsWith('/video') && Pref.darkVideoPage;
   late ThemeData themeData;
 
   @override

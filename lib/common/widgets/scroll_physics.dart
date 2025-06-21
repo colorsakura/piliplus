@@ -1,4 +1,4 @@
-import 'package:PiliPlus/utils/storage.dart';
+import 'package:PiliPlus/utils/storage_pref.dart';
 import 'package:flutter/material.dart';
 
 Widget videoTabBarView({
@@ -73,14 +73,16 @@ class MemberVideoScrollPhysics extends AlwaysScrollableScrollPhysics {
 }
 
 class CustomSpringDescription implements SpringDescription {
-  @override
-  final mass = GStorage.springDescription[0];
+  static final List<double> springDescription = Pref.springDescription;
 
   @override
-  final stiffness = GStorage.springDescription[1];
+  final mass = springDescription[0];
 
   @override
-  final damping = GStorage.springDescription[2];
+  final stiffness = springDescription[1];
+
+  @override
+  final damping = springDescription[2];
 
   CustomSpringDescription._();
 

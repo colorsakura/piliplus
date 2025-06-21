@@ -6,9 +6,9 @@ enum AudioQuality {
   hiRes(30251, 'Hi-Res无损');
 
   final int code;
-  final String description;
+  final String desc;
 
-  const AudioQuality(this.code, this.description);
+  const AudioQuality(this.code, this.desc);
 
   static final _codeMap = {for (var i in values) i.code: i};
 

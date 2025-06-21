@@ -7,6 +7,7 @@ import 'package:PiliPlus/models/search/suggest.dart';
 import 'package:PiliPlus/models_new/search/search_rcmd/data.dart';
 import 'package:PiliPlus/models_new/search/search_trending/data.dart';
 import 'package:PiliPlus/utils/storage.dart';
+import 'package:PiliPlus/utils/storage_pref.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stream_transform/stream_transform.dart';
@@ -27,21 +28,21 @@ class SSearchController extends GetxController {
   late final digitOnlyRegExp = RegExp(r'^\d+$');
 
   // history
-  late final RxBool recordSearchHistory;
+  late final RxBool recordSearchHistory = Pref.recordSearchHistory.obs;
   late final RxList<String> historyList;
 
   // suggestion
-  late final bool searchSuggestion;
+  late final bool searchSuggestion = Pref.searchSuggestion;
   StreamController<String>? _ctr;
   StreamSubscription<String>? _sub;
   late final RxList<SearchSuggestItem> searchSuggestList;
 
   // trending
-  late final bool enableHotKey;
+  late final bool enableHotKey = Pref.enableHotKey;
   late final Rx<LoadingState<SearchTrendingData>> loadingState;
 
   // rcmd
-  late final bool enableSearchRcmd;
+  late final bool enableSearchRcmd = Pref.enableSearchRcmd;
   late final Rx<LoadingState<SearchRcmdData>> recommendData;
 
   @override
@@ -57,13 +58,6 @@ class SSearchController extends GetxController {
     if (Get.parameters['text'] != null) {
       controller.text = Get.parameters['text']!;
     }
-
-    searchSuggestion = GStorage.searchSuggestion;
-    enableHotKey =
-        GStorage.setting.get(SettingBoxKey.enableHotKey, defaultValue: true);
-    enableSearchRcmd = GStorage.setting
-        .get(SettingBoxKey.enableSearchRcmd, defaultValue: true);
-    recordSearchHistory = GStorage.recordSearchHistory.obs;
 
     if (recordSearchHistory.value) {
       historyList =

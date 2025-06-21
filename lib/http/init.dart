@@ -5,10 +5,12 @@ import 'dart:io';
 import 'package:PiliPlus/http/constants.dart';
 import 'package:PiliPlus/http/retry_interceptor.dart';
 import 'package:PiliPlus/http/user.dart';
+import 'package:PiliPlus/utils/accounts.dart';
 import 'package:PiliPlus/utils/accounts/account.dart';
 import 'package:PiliPlus/utils/accounts/account_manager/account_mgr.dart';
 import 'package:PiliPlus/utils/global_data.dart';
 import 'package:PiliPlus/utils/storage.dart';
+import 'package:PiliPlus/utils/storage_pref.dart';
 import 'package:archive/archive.dart';
 import 'package:brotli/brotli.dart';
 import 'package:dio/dio.dart';
@@ -118,10 +120,9 @@ class Request {
         responseDecoder: responseDecoder, // Http2Adapter没有自动解压
         persistentConnection: true);
 
-    final bool enableSystemProxy = GStorage.setting
-        .get(SettingBoxKey.enableSystemProxy, defaultValue: false);
-    final String systemProxyHost = GStorage.defaultSystemProxyHost;
-    final String systemProxyPort = GStorage.defaultSystemProxyPort;
+    final bool enableSystemProxy = Pref.enableSystemProxy;
+    final String systemProxyHost = Pref.systemProxyHost;
+    final String systemProxyPort = Pref.systemProxyPort;
 
     final http11Adapter = IOHttpClientAdapter(createHttpClient: () {
       final client = HttpClient()
@@ -146,28 +147,26 @@ class Request {
     }
 
     dio = Dio(options)
-      ..httpClientAdapter =
-          GStorage.setting.get(SettingBoxKey.enableHttp2, defaultValue: false)
-              ? Http2Adapter(
-                  ConnectionManager(
-                      idleTimeout: const Duration(seconds: 15),
-                      onClientCreate: enableSystemProxy
+      ..httpClientAdapter = Pref.enableHttp2
+          ? Http2Adapter(
+              ConnectionManager(
+                  idleTimeout: const Duration(seconds: 15),
+                  onClientCreate: enableSystemProxy
+                      ? (_, config) {
+                          config
+                            ..proxy = proxy
+                            ..onBadCertificate = (_) => true;
+                        }
+                      : Pref.badCertificateCallback
                           ? (_, config) {
-                              config
-                                ..proxy = proxy
-                                ..onBadCertificate = (_) => true;
+                              config.onBadCertificate = (_) => true;
                             }
-                          : GStorage.badCertificateCallback
-                              ? (_, config) {
-                                  config.onBadCertificate = (_) => true;
-                                }
-                              : null),
-                  fallbackAdapter: http11Adapter)
-              : http11Adapter;
+                          : null),
+              fallbackAdapter: http11Adapter)
+          : http11Adapter;
 
     // 先于其他Interceptor
-    dio.interceptors
-        .add(RetryInterceptor(GStorage.retryCount, GStorage.retryDelay));
+    dio.interceptors.add(RetryInterceptor(Pref.retryCount, Pref.retryDelay));
 
     // 日志拦截器 输出请求、响应内容
     if (kDebugMode) {

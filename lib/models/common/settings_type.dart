@@ -1,1 +1,1 @@
-enum SettingsType { normal, sw1tch, divider }
+enum SettingsType { normal, sw1tch }

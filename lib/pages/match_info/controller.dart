@@ -43,6 +43,5 @@ class MatchInfoController extends ReplyController<MainListReply> {
         mode: mode.value,
         cursorNext: cursorNext,
         offset: paginationReply?.nextOffset,
-        antiGoodsReply: antiGoodsReply,
       );
 }

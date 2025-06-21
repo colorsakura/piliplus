@@ -4,13 +4,14 @@ import 'package:PiliPlus/models/common/theme/theme_type.dart';
 import 'package:PiliPlus/models/user/info.dart';
 import 'package:PiliPlus/models/user/stat.dart';
 import 'package:PiliPlus/services/account_service.dart';
+import 'package:PiliPlus/utils/accounts.dart';
 import 'package:PiliPlus/utils/accounts/account.dart';
 import 'package:PiliPlus/utils/login_utils.dart';
 import 'package:PiliPlus/utils/storage.dart';
+import 'package:PiliPlus/utils/storage_key.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
-import 'package:hive/hive.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 class MineController extends GetxController {
@@ -22,7 +23,6 @@ class MineController extends GetxController {
   AccountService accountService = Get.find<AccountService>();
 
   Rx<ThemeType> themeType = ThemeType.system.obs;
-  Box get setting => GStorage.setting;
   static RxBool anonymity = (Accounts.account.isNotEmpty &&
           !Accounts.get(AccountType.heartbeat).isLogin)
       .obs;
@@ -200,7 +200,7 @@ class MineController extends GetxController {
     try {
       Get.find<MineController>().themeType.value = themeType.value;
     } catch (_) {}
-    setting.put(SettingBoxKey.themeMode, themeType.value.code);
+    GStorage.setting.put(SettingBoxKey.themeMode, themeType.value.index);
     Get.changeThemeMode(themeType.value.toThemeMode);
   }
 

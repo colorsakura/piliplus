@@ -14,7 +14,7 @@ import 'package:PiliPlus/pages/common/common_collapse_slide_page.dart';
 import 'package:PiliPlus/pages/video/controller.dart';
 import 'package:PiliPlus/plugin/pl_player/controller.dart';
 import 'package:PiliPlus/utils/duration_util.dart';
-import 'package:PiliPlus/utils/storage.dart';
+import 'package:PiliPlus/utils/storage_pref.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/material.dart';
@@ -575,7 +575,7 @@ class _PostPanelState extends CommonCollapseSlidePageState<PostPanel> {
       data: {
         'videoID': videoDetailController.bvid,
         'cid': videoDetailController.cid.value.toString(),
-        'userID': GStorage.blockUserID.toString(),
+        'userID': Pref.blockUserID.toString(),
         'userAgent': Constants.userAgent,
         'videoDuration': videoDuration,
         'segments': list!

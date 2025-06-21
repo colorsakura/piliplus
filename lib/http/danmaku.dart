@@ -1,6 +1,6 @@
 import 'package:PiliPlus/http/api.dart';
 import 'package:PiliPlus/http/init.dart';
-import 'package:PiliPlus/utils/storage.dart';
+import 'package:PiliPlus/utils/accounts.dart';
 import 'package:dio/dio.dart';
 
 class DanmakuHttp {

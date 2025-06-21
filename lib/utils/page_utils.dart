@@ -21,7 +21,7 @@ import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/feed_back.dart';
 import 'package:PiliPlus/utils/global_data.dart';
 import 'package:PiliPlus/utils/id_utils.dart';
-import 'package:PiliPlus/utils/storage.dart';
+import 'package:PiliPlus/utils/storage_pref.dart';
 import 'package:PiliPlus/utils/url_utils.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:floating/floating.dart';
@@ -540,7 +540,7 @@ class PageUtils {
     String url, {
     bool off = false,
   }) {
-    if (GStorage.openInBrowser) {
+    if (Pref.openInBrowser) {
       launchURL(url);
     } else {
       if (off) {
@@ -579,7 +579,7 @@ class PageUtils {
     bool inApp = false,
     Map? parameters,
   }) async {
-    if (!inApp && GStorage.openInBrowser) {
+    if (!inApp && Pref.openInBrowser) {
       if (!await PiliScheme.routePushFromUrl(url, selfHandle: true)) {
         launchURL(url);
       }

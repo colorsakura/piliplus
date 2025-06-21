@@ -1,19 +1,42 @@
-import 'package:PiliPlus/pages/setting/widgets/model.dart';
+import 'package:PiliPlus/pages/setting/models/model.dart';
+import 'package:PiliPlus/pages/setting/models/recommend_settings.dart';
 import 'package:flutter/material.dart';
 
-class RecommendSetting extends StatelessWidget {
+class RecommendSetting extends StatefulWidget {
   const RecommendSetting({super.key, this.showAppBar});
 
   final bool? showAppBar;
 
   @override
+  State<RecommendSetting> createState() => _RecommendSettingState();
+}
+
+class _RecommendSettingState extends State<RecommendSetting> {
+  final list = recommendSettings;
+  late final List<SettingsModel> part;
+
+  @override
+  void initState() {
+    super.initState();
+    part = list.sublist(0, 4);
+    list.removeRange(0, 4);
+  }
+
+  @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Scaffold(
-      appBar: showAppBar == false ? null : AppBar(title: const Text('推荐流设置')),
+      appBar: widget.showAppBar == false
+          ? null
+          : AppBar(title: const Text('推荐流设置')),
       body: ListView(
+        padding: EdgeInsets.only(
+          bottom: MediaQuery.paddingOf(context).bottom + 80,
+        ),
         children: [
-          ...recommendSettings.map((item) => item.widget),
+          ...part.map((item) => item.widget),
+          const Divider(height: 1),
+          ...list.map((item) => item.widget),
           ListTile(
             dense: true,
             subtitle: Text(
@@ -25,7 +48,6 @@ class RecommendSetting extends StatelessWidget {
                   color: theme.colorScheme.outline.withValues(alpha: 0.7)),
             ),
           ),
-          SizedBox(height: MediaQuery.paddingOf(context).bottom + 80),
         ],
       ),
     );

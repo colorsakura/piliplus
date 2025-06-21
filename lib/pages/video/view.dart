@@ -43,12 +43,14 @@ import 'package:PiliPlus/plugin/pl_player/utils/fullscreen.dart';
 import 'package:PiliPlus/plugin/pl_player/view.dart';
 import 'package:PiliPlus/services/service_locator.dart';
 import 'package:PiliPlus/services/shutdown_timer_service.dart';
+import 'package:PiliPlus/utils/accounts.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/id_utils.dart';
 import 'package:PiliPlus/utils/image_util.dart';
 import 'package:PiliPlus/utils/num_util.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:PiliPlus/utils/storage.dart';
+import 'package:PiliPlus/utils/storage_key.dart';
 import 'package:auto_orientation/auto_orientation.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_debounce/easy_throttle.dart';
@@ -61,7 +63,6 @@ import 'package:flutter/services.dart' show SystemUiOverlayStyle;
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import 'package:hive/hive.dart';
 import 'package:screen_brightness/screen_brightness.dart';
 
 class VideoDetailPageV extends StatefulWidget {
@@ -83,12 +84,17 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
   late final _introController = ScrollController();
   late String heroTag;
 
-  // 自动退出全屏
-  late bool autoExitFullscreen;
-  late bool autoPlayEnable;
-  late bool enableVerticalExpand;
-  late bool pipNoDanmaku;
-  late bool removeSafeArea;
+  bool get autoExitFullscreen =>
+      videoDetailController.plPlayerController.autoExitFullscreen;
+  bool get autoPlayEnable =>
+      videoDetailController.plPlayerController.autoPlayEnable;
+  bool get enableVerticalExpand =>
+      videoDetailController.plPlayerController.enableVerticalExpand;
+  bool get pipNoDanmaku =>
+      videoDetailController.plPlayerController.pipNoDanmaku;
+  bool get removeSafeArea =>
+      videoDetailController.plPlayerController.removeSafeArea;
+
   bool isShowing = true;
   bool get isFullScreen => plPlayerController?.isFullScreen.value ?? false;
 
@@ -103,8 +109,6 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
       videoDetailController.plPlayerController.horizontalPreview;
 
   StreamSubscription? _listenerFS;
-
-  Box get setting => GStorage.setting;
 
   final GlobalKey relatedVideoPanelKey = GlobalKey();
   final GlobalKey videoPlayerKey = GlobalKey();
@@ -132,15 +136,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
     if (videoDetailController.videoType == SearchType.media_bangumi) {
       pgcIntroController = Get.put(PgcIntroController(), tag: heroTag);
     }
-    autoExitFullscreen =
-        setting.get(SettingBoxKey.enableAutoExit, defaultValue: true);
-    autoPlayEnable =
-        setting.get(SettingBoxKey.autoPlayEnable, defaultValue: false);
-    pipNoDanmaku = setting.get(SettingBoxKey.pipNoDanmaku, defaultValue: false);
-    enableVerticalExpand =
-        setting.get(SettingBoxKey.enableVerticalExpand, defaultValue: false);
-    removeSafeArea = setting.get(SettingBoxKey.videoPlayerRemoveSafeArea,
-        defaultValue: false);
+
     if (removeSafeArea) hideStatusBar();
     videoSourceInit();
     autoScreen();
@@ -1532,22 +1528,22 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                       () => IconButton(
                         onPressed: () {
                           videoDetailController
-                                  .plPlayerController.isOpenDanmu.value =
+                                  .plPlayerController.enableShowDanmaku.value =
                               !videoDetailController
-                                  .plPlayerController.isOpenDanmu.value;
-                          setting.put(
+                                  .plPlayerController.enableShowDanmaku.value;
+                          GStorage.setting.put(
                               SettingBoxKey.enableShowDanmaku,
                               videoDetailController
-                                  .plPlayerController.isOpenDanmu.value);
+                                  .plPlayerController.enableShowDanmaku.value);
                         },
                         icon: Icon(
                           size: 22,
                           videoDetailController
-                                  .plPlayerController.isOpenDanmu.value
+                                  .plPlayerController.enableShowDanmaku.value
                               ? CustomIcon.dm_on
                               : CustomIcon.dm_off,
                           color: videoDetailController
-                                  .plPlayerController.isOpenDanmu.value
+                                  .plPlayerController.enableShowDanmaku.value
                               ? themeData.colorScheme.secondary
                               : themeData.colorScheme.outline,
                         ),

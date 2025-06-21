@@ -62,7 +62,7 @@ import 'package:PiliPlus/pages/webdav/view.dart';
 import 'package:PiliPlus/pages/webview/view.dart';
 import 'package:PiliPlus/pages/whisper/view.dart';
 import 'package:PiliPlus/pages/whisper_detail/view.dart';
-import 'package:PiliPlus/utils/storage.dart';
+import 'package:PiliPlus/utils/storage_pref.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -197,9 +197,10 @@ class CustomGetPage extends GetPage<dynamic> {
     super.transitionDuration,
   }) : super(
           curve: Curves.linear,
-          transition: GStorage.pageTransition,
+          transition: pageTransition,
           showCupertinoParallax: false,
           popGesture: false,
           fullscreenDialog: fullscreen,
         );
+  static Transition pageTransition = Transition.values[Pref.pageTransition];
 }

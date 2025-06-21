@@ -1,34 +1,19 @@
 // 全屏模式
 enum FullScreenMode {
   // 根据内容自适应
-  auto,
+  auto('按视频方向（默认）'),
   // 不改变当前方向
-  none,
+  none('不改变当前方向'),
   // 始终竖屏
-  vertical,
+  vertical('强制竖屏'),
   // 始终横屏
-  horizontal,
+  horizontal('强制竖屏'),
   // 屏幕长宽比<1.25或为竖屏视频时竖屏，否则横屏
-  ratio,
+  ratio('屏幕长宽比<1.25或为竖屏视频时竖屏，否则横屏'),
   // 强制重力转屏（仅安卓）
-  gravity,
-}
+  gravity('忽略系统方向锁定，强制按重力转屏（仅安卓）'),
+  ;
 
-extension FullScreenModeDesc on FullScreenMode {
-  String get description => const [
-        '按视频方向（默认）',
-        '不改变当前方向',
-        '强制竖屏',
-        '强制横屏',
-        '屏幕长宽比<1.25或为竖屏视频时竖屏，否则横屏',
-        '忽略系统方向锁定，强制按重力转屏（仅安卓）'
-      ][index];
-}
-
-extension FullScreenModeCode on FullScreenMode {
-  int get code => index;
-
-  static FullScreenMode fromCode(int code) {
-    return FullScreenMode.values[code];
-  }
+  final String desc;
+  const FullScreenMode(this.desc);
 }

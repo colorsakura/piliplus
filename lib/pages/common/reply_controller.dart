@@ -10,7 +10,7 @@ import 'package:PiliPlus/services/account_service.dart';
 import 'package:PiliPlus/utils/feed_back.dart';
 import 'package:PiliPlus/utils/reply_utils.dart';
 import 'package:PiliPlus/utils/request_utils.dart';
-import 'package:PiliPlus/utils/storage.dart';
+import 'package:PiliPlus/utils/storage_pref.dart';
 import 'package:easy_debounce/easy_throttle.dart';
 import 'package:fixnum/fixnum.dart';
 import 'package:flutter/material.dart';
@@ -21,7 +21,8 @@ import 'package:get/get_navigation/src/dialog/dialog_route.dart';
 abstract class ReplyController<R> extends CommonListController<R, ReplyInfo> {
   RxInt count = (-1).obs;
 
-  Rx<ReplySortType> sortType = ReplySortType.time.obs;
+  late Rx<ReplySortType> sortType;
+  late Rx<Mode> mode;
 
   late final savedReplies = {};
 
@@ -31,17 +32,14 @@ abstract class ReplyController<R> extends CommonListController<R, ReplyInfo> {
   Int64? cursorNext;
   SubjectControl? subjectControl;
   FeedPaginationReply? paginationReply;
-  late Rx<Mode> mode = Mode.MAIN_LIST_HOT.obs;
   late bool hasUpTop = false;
 
   @override
   bool? get hasFooter => true;
 
-  late final antiGoodsReply = GStorage.antiGoodsReply;
-
   // comment antifraud
-  late final _enableCommAntifraud = GStorage.enableCommAntifraud;
-  late final _biliSendCommAntifraud = GStorage.biliSendCommAntifraud;
+  late final _enableCommAntifraud = Pref.enableCommAntifraud;
+  late final _biliSendCommAntifraud = Pref.biliSendCommAntifraud;
   bool get enableCommAntifraud =>
       _enableCommAntifraud || _biliSendCommAntifraud;
   dynamic get sourceId;
@@ -49,16 +47,9 @@ abstract class ReplyController<R> extends CommonListController<R, ReplyInfo> {
   @override
   void onInit() {
     super.onInit();
-    int defaultReplySortIndex = GStorage.setting
-        .get(SettingBoxKey.replySortType, defaultValue: 1) as int;
-    if (defaultReplySortIndex == 2) {
-      GStorage.setting.put(SettingBoxKey.replySortType, 0);
-      defaultReplySortIndex = 0;
-    }
-    sortType.value = ReplySortType.values[defaultReplySortIndex];
-    if (sortType.value == ReplySortType.time) {
-      mode.value = Mode.MAIN_LIST_TIME;
-    }
+    int replySortType = Pref.replySortType;
+    sortType = ReplySortType.values[replySortType].obs;
+    mode = (replySortType == 0 ? Mode.MAIN_LIST_TIME : Mode.MAIN_LIST_HOT).obs;
   }
 
   @override
@@ -100,10 +91,10 @@ abstract class ReplyController<R> extends CommonListController<R, ReplyInfo> {
       feedBack();
       switch (sortType.value) {
         case ReplySortType.time:
-          sortType.value = ReplySortType.like;
+          sortType.value = ReplySortType.hot;
           mode.value = Mode.MAIN_LIST_HOT;
           break;
-        case ReplySortType.like:
+        case ReplySortType.hot:
           sortType.value = ReplySortType.time;
           mode.value = Mode.MAIN_LIST_TIME;
           break;

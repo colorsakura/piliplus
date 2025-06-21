@@ -5,7 +5,7 @@ import 'package:PiliPlus/models/common/dynamic/dynamics_type.dart';
 import 'package:PiliPlus/models/dynamics/article_content_model.dart';
 import 'package:PiliPlus/models/model_avatar.dart';
 import 'package:PiliPlus/models_new/live/live_feed_index/watched_show.dart';
-import 'package:PiliPlus/utils/storage.dart';
+import 'package:PiliPlus/utils/storage_pref.dart';
 
 class DynamicsDataModel {
   bool? hasMore;
@@ -14,7 +14,10 @@ class DynamicsDataModel {
   int? total;
 
   static RegExp banWordForDyn =
-      RegExp(GStorage.banWordForDyn, caseSensitive: false);
+      RegExp(Pref.banWordForDyn, caseSensitive: false);
+  static bool enableFilter = banWordForDyn.pattern.isNotEmpty;
+
+  static bool antiGoodsDyn = Pref.antiGoodsDyn;
 
   DynamicsDataModel.fromJson(
     Map<String, dynamic> json, {
@@ -26,8 +29,6 @@ class DynamicsDataModel {
     List? list = json['items'] as List?;
     if (list != null && list.isNotEmpty) {
       items = <DynamicItemModel>[];
-      late final antiGoodsDyn = GStorage.antiGoodsDyn;
-      late final filterWord = banWordForDyn.pattern.isNotEmpty;
       late final filterBan =
           type != DynamicsTabType.up && tempBannedList?.isNotEmpty == true;
       for (var e in list) {
@@ -39,7 +40,7 @@ class DynamicsDataModel {
                     'ADDITIONAL_TYPE_GOODS')) {
           continue;
         }
-        if (filterWord &&
+        if (enableFilter &&
             banWordForDyn.hasMatch(
                 item.orig?.modules.moduleDynamic?.major?.opus?.summary?.text ??
                     item.modules.moduleDynamic?.major?.opus?.summary?.text ??

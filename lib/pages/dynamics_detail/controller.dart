@@ -6,7 +6,7 @@ import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/dynamics/result.dart';
 import 'package:PiliPlus/pages/common/reply_controller.dart';
 import 'package:PiliPlus/utils/id_utils.dart';
-import 'package:PiliPlus/utils/storage.dart';
+import 'package:PiliPlus/utils/storage_pref.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 
@@ -15,8 +15,8 @@ class DynamicDetailController extends ReplyController<MainListReply> {
   late int replyType;
   late DynamicItemModel dynItem;
 
-  late final horizontalPreview = GStorage.horizontalPreview;
-  late final showDynActionBar = GStorage.showDynActionBar;
+  late final horizontalPreview = Pref.horizontalPreview;
+  late final showDynActionBar = Pref.showDynActionBar;
 
   @override
   dynamic get sourceId => replyType == 1 ? IdUtils.av2bv(oid) : oid;
@@ -61,6 +61,5 @@ class DynamicDetailController extends ReplyController<MainListReply> {
         mode: mode.value,
         cursorNext: cursorNext,
         offset: paginationReply?.nextOffset,
-        antiGoodsReply: antiGoodsReply,
       );
 }

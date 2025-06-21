@@ -13,8 +13,8 @@ import 'package:PiliPlus/pages/dynamics/controller.dart';
 import 'package:PiliPlus/pages/dynamics/widgets/dynamic_panel.dart';
 import 'package:PiliPlus/pages/dynamics_tab/controller.dart';
 import 'package:PiliPlus/pages/main/controller.dart';
+import 'package:PiliPlus/utils/global_data.dart';
 import 'package:PiliPlus/utils/grid.dart';
-import 'package:PiliPlus/utils/storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:waterfall_flow/waterfall_flow.dart';
@@ -66,7 +66,6 @@ class DynamicsTabPage extends CommonPage {
 class _DynamicsTabPageState
     extends CommonPageState<DynamicsTabPage, DynamicsTabController>
     with AutomaticKeepAliveClientMixin {
-  late bool dynamicsWaterfallFlow;
   StreamSubscription? _listener;
   late final MainController _mainController = Get.find<MainController>();
 
@@ -102,8 +101,6 @@ class _DynamicsTabPageState
         }
       });
     }
-    dynamicsWaterfallFlow = GStorage.setting
-        .get(SettingBoxKey.dynamicsWaterfallFlow, defaultValue: true);
   }
 
   @override
@@ -138,9 +135,10 @@ class _DynamicsTabPageState
 
   Widget _buildBody(LoadingState<List<DynamicItemModel>?> loadingState) {
     return switch (loadingState) {
-      Loading() => DynamicsTabPage.dynSkeleton(dynamicsWaterfallFlow),
+      Loading() =>
+        DynamicsTabPage.dynSkeleton(GlobalData().dynamicsWaterfallFlow),
       Success(:var response) => response?.isNotEmpty == true
-          ? dynamicsWaterfallFlow
+          ? GlobalData().dynamicsWaterfallFlow
               ? SliverWaterfallFlow.extent(
                   maxCrossAxisExtent: Grid.smallCardWidth * 2,
                   crossAxisSpacing: StyleString.cardSpace / 2,

@@ -1,33 +1,15 @@
 import 'package:PiliPlus/models/model_video.dart';
-import 'package:PiliPlus/utils/storage.dart';
-import 'package:hive/hive.dart';
+import 'package:PiliPlus/utils/storage_pref.dart';
 
 class RecommendFilter {
-  static late int minDurationForRcmd;
-  static late int minPlayForRcmd;
-  static late int minLikeRatioForRecommend;
-  static late bool exemptFilterForFollowed;
-  static late bool applyFilterToRelatedVideos;
+  static int minDurationForRcmd = Pref.minDurationForRcmd;
+  static int minPlayForRcmd = Pref.minPlayForRcmd;
+  static int minLikeRatioForRecommend = Pref.minLikeRatioForRecommend;
+  static bool exemptFilterForFollowed = Pref.exemptFilterForFollowed;
+  static bool applyFilterToRelatedVideos = Pref.applyFilterToRelatedVideos;
   static RegExp rcmdRegExp =
-      RegExp(GStorage.banWordForRecommend, caseSensitive: false);
-
-  RecommendFilter() {
-    update();
-  }
-
-  static Box get setting => GStorage.setting;
-
-  static void update() {
-    minDurationForRcmd =
-        setting.get(SettingBoxKey.minDurationForRcmd, defaultValue: 0);
-    minPlayForRcmd = setting.get(SettingBoxKey.minPlayForRcmd, defaultValue: 0);
-    minLikeRatioForRecommend =
-        setting.get(SettingBoxKey.minLikeRatioForRecommend, defaultValue: 0);
-    exemptFilterForFollowed =
-        setting.get(SettingBoxKey.exemptFilterForFollowed, defaultValue: true);
-    applyFilterToRelatedVideos = setting
-        .get(SettingBoxKey.applyFilterToRelatedVideos, defaultValue: true);
-  }
+      RegExp(Pref.banWordForRecommend, caseSensitive: false);
+  static bool enableFilter = rcmdRegExp.pattern.isNotEmpty;
 
   static bool filter(BaseVideoItemModel videoItem) {
     //由于相关视频中没有已关注标签，只能视为非关注视频
@@ -48,7 +30,7 @@ class RecommendFilter {
   }
 
   static bool filterTitle(String title) {
-    return (rcmdRegExp.pattern.isNotEmpty && rcmdRegExp.hasMatch(title));
+    return (enableFilter && rcmdRegExp.hasMatch(title));
   }
 
   static bool filterAll(BaseVideoItemModel videoItem) {

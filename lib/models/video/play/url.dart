@@ -219,7 +219,7 @@ class AudioItem extends BaseItem {
   AudioItem();
 
   AudioItem.fromJson(Map<String, dynamic> json) : super.fromJson(json) {
-    quality = AudioQuality.fromCode(json['id']).description;
+    quality = AudioQuality.fromCode(json['id']).desc;
   }
 }
 

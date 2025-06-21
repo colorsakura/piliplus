@@ -13,7 +13,7 @@ import 'package:PiliPlus/pages/common/common_data_controller.dart';
 import 'package:PiliPlus/services/account_service.dart';
 import 'package:PiliPlus/utils/date_util.dart';
 import 'package:PiliPlus/utils/request_utils.dart';
-import 'package:PiliPlus/utils/storage.dart';
+import 'package:PiliPlus/utils/storage_pref.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart'
     show ExtendedNestedScrollViewState;
@@ -102,8 +102,8 @@ class MemberController extends CommonDataController<SpaceData, SpaceData?>
       }
       if (tab2!.isNotEmpty) {
         int initialIndex = -1;
-        MemberTabType memberTab = GStorage.memberTab;
-        if (memberTab != MemberTabType.none) {
+        MemberTabType memberTab = Pref.memberTab;
+        if (memberTab != MemberTabType.def) {
           initialIndex = tab2!.indexWhere((item) {
             return item.param == memberTab.name;
           });

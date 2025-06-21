@@ -1,20 +1,30 @@
-import 'package:PiliPlus/pages/setting/widgets/model.dart';
+import 'package:PiliPlus/pages/setting/models/model.dart';
+import 'package:PiliPlus/pages/setting/models/video_settings.dart';
 import 'package:flutter/material.dart';
 
-class VideoSetting extends StatelessWidget {
+class VideoSetting extends StatefulWidget {
   const VideoSetting({super.key, this.showAppBar});
 
   final bool? showAppBar;
 
   @override
+  State<VideoSetting> createState() => _VideoSettingState();
+}
+
+class _VideoSettingState extends State<VideoSetting> {
+  final settings = videoSettings;
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: showAppBar == false ? null : AppBar(title: const Text('音视频设置')),
+      appBar: widget.showAppBar == false
+          ? null
+          : AppBar(title: const Text('音视频设置')),
       body: ListView(
-        children: [
-          ...videoSettings.map((item) => item.widget),
-          SizedBox(height: MediaQuery.paddingOf(context).bottom + 80),
-        ],
+        padding: EdgeInsets.only(
+          bottom: MediaQuery.paddingOf(context).bottom + 80,
+        ),
+        children: settings.map((item) => item.widget).toList(),
       ),
     );
   }

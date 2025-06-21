@@ -7,7 +7,7 @@ import 'package:PiliPlus/common/widgets/image/nine_grid_view.dart';
 import 'package:PiliPlus/models/common/badge_type.dart';
 import 'package:PiliPlus/models/common/image_preview_type.dart';
 import 'package:PiliPlus/utils/extension.dart';
-import 'package:PiliPlus/utils/storage.dart';
+import 'package:PiliPlus/utils/storage_pref.dart';
 import 'package:flutter/material.dart';
 
 class ImageModel {
@@ -28,7 +28,10 @@ class ImageModel {
   dynamic get safeWidth => width ?? 1;
   dynamic get safeHeight => height ?? 1;
   bool get isLongPic => _isLongPic ??= (safeHeight / safeWidth) > (22 / 9);
-  bool get isLivePhoto => _isLivePhoto ??= liveUrl?.isNotEmpty == true;
+  bool get isLivePhoto =>
+      _isLivePhoto ??= enableLivePhoto && liveUrl?.isNotEmpty == true;
+
+  static bool enableLivePhoto = Pref.enableLivePhoto;
 }
 
 Widget imageView(
@@ -80,8 +83,6 @@ Widget imageView(
     );
   }
 
-  late final enableLivePhoto = GStorage.enableLivePhoto;
-
   int parseSize(size) {
     return switch (size) {
       int() => size,
@@ -100,7 +101,7 @@ Widget imageView(
         initialPage: index,
         imgList: picArr.map(
           (item) {
-            bool isLive = item.isLivePhoto && enableLivePhoto;
+            bool isLive = item.isLivePhoto;
             return SourceModel(
               sourceType:
                   isLive ? SourceType.livePhoto : SourceType.networkImage,

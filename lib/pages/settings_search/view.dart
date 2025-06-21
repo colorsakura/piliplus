@@ -1,6 +1,11 @@
 import 'package:PiliPlus/common/widgets/loading_widget/http_error.dart';
-import 'package:PiliPlus/models/common/settings_type.dart';
-import 'package:PiliPlus/pages/setting/widgets/model.dart';
+import 'package:PiliPlus/pages/setting/models/extra_settings.dart';
+import 'package:PiliPlus/pages/setting/models/model.dart';
+import 'package:PiliPlus/pages/setting/models/play_settings.dart';
+import 'package:PiliPlus/pages/setting/models/privacy_settings.dart';
+import 'package:PiliPlus/pages/setting/models/recommend_settings.dart';
+import 'package:PiliPlus/pages/setting/models/style_settings.dart';
+import 'package:PiliPlus/pages/setting/models/video_settings.dart';
 import 'package:PiliPlus/utils/grid.dart';
 import 'package:easy_debounce/easy_throttle.dart';
 import 'package:flutter/material.dart';
@@ -24,7 +29,7 @@ class _SettingsSearchPageState extends State<SettingsSearchPage> {
     ...videoSettings,
     ...playSettings,
     ...styleSettings,
-  ]..removeWhere((item) => item.settingsType == SettingsType.divider);
+  ];
 
   @override
   void dispose() {

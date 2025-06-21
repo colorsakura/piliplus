@@ -20,20 +20,22 @@ import 'package:PiliPlus/models_new/video/video_detail/video_detail_response.dar
 import 'package:PiliPlus/models_new/video/video_note_list/data.dart';
 import 'package:PiliPlus/models_new/video/video_play_info/data.dart';
 import 'package:PiliPlus/models_new/video/video_relation/data.dart';
+import 'package:PiliPlus/utils/accounts.dart';
 import 'package:PiliPlus/utils/extension.dart';
+import 'package:PiliPlus/utils/global_data.dart';
 import 'package:PiliPlus/utils/id_utils.dart';
 import 'package:PiliPlus/utils/recommend_filter.dart';
-import 'package:PiliPlus/utils/storage.dart';
+import 'package:PiliPlus/utils/storage_pref.dart';
 import 'package:PiliPlus/utils/wbi_sign.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 
 /// view层根据 status 判断渲染逻辑
 class VideoHttp {
-  static bool enableRcmdDynamic =
-      GStorage.setting.get(SettingBoxKey.enableRcmdDynamic, defaultValue: true);
-  static RegExp zoneRegExp =
-      RegExp(GStorage.banWordForZone, caseSensitive: false);
+  static bool p1080 = Pref.p1080;
+  // static bool enableRcmdDynamic = Pref.enableRcmdDynamic;
+  static RegExp zoneRegExp = RegExp(Pref.banWordForZone, caseSensitive: false);
+  static bool enableFilter = zoneRegExp.pattern.isNotEmpty;
 
   // 首页推荐视频
   static Future<LoadingState> rcmdVideoList(
@@ -52,11 +54,11 @@ class VideoHttp {
     );
     if (res.data['code'] == 0) {
       List<RecVideoItemModel> list = <RecVideoItemModel>[];
-      Set<int> blackMids = GStorage.blackMids;
       for (var i in res.data['data']['item']) {
         //过滤掉live与ad，以及拉黑用户
         if (i['goto'] == 'av' &&
-            (i['owner'] != null && !blackMids.contains(i['owner']['mid']))) {
+            (i['owner'] != null &&
+                !GlobalData().blackMids.contains(i['owner']['mid']))) {
           RecVideoItemModel videoItem = RecVideoItemModel.fromJson(i);
           if (!RecommendFilter.filter(videoItem)) {
             list.add(videoItem);
@@ -121,15 +123,15 @@ class VideoHttp {
     );
     if (res.data['code'] == 0) {
       List<RecVideoItemAppModel> list = <RecVideoItemAppModel>[];
-      Set<int> blackMids = GStorage.blackMids;
       for (var i in res.data['data']['items']) {
         // 屏蔽推广和拉黑用户
         if (i['card_goto'] != 'ad_av' &&
             i['card_goto'] != 'ad_web_s' &&
             i['ad_info'] == null &&
-            (!enableRcmdDynamic ? i['card_goto'] != 'picture' : true) &&
-            (i['args'] != null && !blackMids.contains(i['args']['up_id']))) {
-          if (zoneRegExp.pattern.isNotEmpty &&
+            // (!enableRcmdDynamic ? i['card_goto'] != 'picture' : true) &&
+            (i['args'] != null &&
+                !GlobalData().blackMids.contains(i['args']['up_id']))) {
+          if (enableFilter &&
               i['args']?['tname'] != null &&
               zoneRegExp.hasMatch(i['args']['tname'])) {
             continue;
@@ -155,13 +157,12 @@ class VideoHttp {
     );
     if (res.data['code'] == 0) {
       List<HotVideoItemModel> list = <HotVideoItemModel>[];
-      Set<int> blackMids = GStorage.blackMids;
       for (var i in res.data['data']['list']) {
-        if (!blackMids.contains(i['owner']['mid']) &&
+        if (!GlobalData().blackMids.contains(i['owner']['mid']) &&
             !RecommendFilter.filterTitle(i['title']) &&
             !RecommendFilter.filterLikeRatio(
                 i['stat']['like'], i['stat']['view'])) {
-          if (zoneRegExp.pattern.isNotEmpty &&
+          if (enableFilter &&
               i['tname'] != null &&
               zoneRegExp.hasMatch(i['tname'])) {
             continue;
@@ -201,9 +202,7 @@ class VideoHttp {
       'isGaiaAvoided': true,
       'web_location': 1315873,
       // 免登录查看1080p
-      if (!Accounts.get(AccountType.video).isLogin &&
-          GStorage.setting.get(SettingBoxKey.p1080, defaultValue: true))
-        'try_look': 1,
+      if (!Accounts.get(AccountType.video).isLogin && p1080) 'try_look': 1,
     });
 
     late final usePgcApi =
@@ -814,13 +813,12 @@ class VideoHttp {
     );
     if (res.data['code'] == 0) {
       List<HotVideoItemModel> list = <HotVideoItemModel>[];
-      Set<int> blackMids = GStorage.blackMids;
       for (var i in res.data['data']['list']) {
-        if (!blackMids.contains(i['owner']['mid']) &&
+        if (!GlobalData().blackMids.contains(i['owner']['mid']) &&
             !RecommendFilter.filterTitle(i['title']) &&
             !RecommendFilter.filterLikeRatio(
                 i['stat']['like'], i['stat']['view'])) {
-          if (zoneRegExp.pattern.isNotEmpty &&
+          if (enableFilter &&
               i['tname'] != null &&
               zoneRegExp.hasMatch(i['tname'])) {
             continue;

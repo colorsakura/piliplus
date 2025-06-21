@@ -13,9 +13,9 @@ enum VideoQuality {
   super8k(127, '8K 超高清');
 
   final int code;
-  final String description;
+  final String desc;
 
-  const VideoQuality(this.code, this.description);
+  const VideoQuality(this.code, this.desc);
 
   static final _codeMap = {for (var i in values) i.code: i};
 

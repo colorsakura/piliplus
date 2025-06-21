@@ -14,10 +14,10 @@ import 'package:PiliPlus/pages/dynamics/widgets/dynamic_panel.dart';
 import 'package:PiliPlus/pages/dynamics_create/view.dart';
 import 'package:PiliPlus/pages/dynamics_tab/view.dart';
 import 'package:PiliPlus/pages/dynamics_topic/controller.dart';
+import 'package:PiliPlus/utils/global_data.dart';
 import 'package:PiliPlus/utils/grid.dart';
 import 'package:PiliPlus/utils/num_util.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
-import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -36,8 +36,6 @@ class DynTopicPage extends StatefulWidget {
 class _DynTopicPageState extends State<DynTopicPage> {
   final DynTopicController _controller =
       Get.put(DynTopicController(), tag: Utils.generateRandomString(8));
-  final dynamicsWaterfallFlow = GStorage.setting
-      .get(SettingBoxKey.dynamicsWaterfallFlow, defaultValue: true);
 
   @override
   Widget build(BuildContext context) {
@@ -329,9 +327,10 @@ class _DynTopicPageState extends State<DynTopicPage> {
 
   Widget _buildBody(LoadingState<List<TopicCardItem>?> loadingState) {
     return switch (loadingState) {
-      Loading() => DynamicsTabPage.dynSkeleton(dynamicsWaterfallFlow),
+      Loading() =>
+        DynamicsTabPage.dynSkeleton(GlobalData().dynamicsWaterfallFlow),
       Success(:var response) => response?.isNotEmpty == true
-          ? dynamicsWaterfallFlow
+          ? GlobalData().dynamicsWaterfallFlow
               ? SliverWaterfallFlow.extent(
                   maxCrossAxisExtent: Grid.smallCardWidth * 2,
                   crossAxisSpacing: StyleString.cardSpace / 2,

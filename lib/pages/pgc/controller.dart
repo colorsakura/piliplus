@@ -9,7 +9,7 @@ import 'package:PiliPlus/models_new/pgc/pgc_timeline/result.dart';
 import 'package:PiliPlus/pages/common/common_list_controller.dart';
 import 'package:PiliPlus/services/account_service.dart';
 import 'package:PiliPlus/utils/extension.dart';
-import 'package:PiliPlus/utils/storage.dart';
+import 'package:PiliPlus/utils/storage_pref.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -19,7 +19,7 @@ class PgcController
   final HomeTabType tabType;
 
   late final showPgcTimeline =
-      tabType == HomeTabType.bangumi && GStorage.showPgcTimeline;
+      tabType == HomeTabType.bangumi && Pref.showPgcTimeline;
 
   AccountService accountService = Get.find<AccountService>();
 

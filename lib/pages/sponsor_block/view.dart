@@ -8,6 +8,8 @@ import 'package:PiliPlus/models/common/sponsor_block/skip_type.dart';
 import 'package:PiliPlus/pages/setting/slide_color_picker.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:PiliPlus/utils/storage.dart';
+import 'package:PiliPlus/utils/storage_key.dart';
+import 'package:PiliPlus/utils/storage_pref.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show FilteringTextInputFormatter;
@@ -26,27 +28,20 @@ class SponsorBlockPage extends StatefulWidget {
 class _SponsorBlockPageState extends State<SponsorBlockPage> {
   final _url = 'https://github.com/hanydd/BilibiliSponsorBlock';
   final _textController = TextEditingController();
-  late double _blockLimit;
-  late List<Pair<SegmentType, SkipType>> _blockSettings;
-  late List<Color> _blockColor;
-  late String _userId;
-  late bool _blockToast;
-  late String _blockServer;
-  late bool _blockTrack;
-  bool? _serverStatus;
+  double _blockLimit = Pref.blockLimit;
+  final List<Pair<SegmentType, SkipType>> _blockSettings = Pref.blockSettings;
+  final List<Color> _blockColor = Pref.blockColor;
+  String _userId = Pref.blockUserID;
+  bool _blockToast = Pref.blockToast;
+  String _blockServer = Pref.blockServer;
+  bool _blockTrack = Pref.blockTrack;
+  final Rx<bool?> _serverStatus = Rx<bool?>(null);
 
-  Box get setting => GStorage.setting;
+  Box setting = GStorage.setting;
 
   @override
   void initState() {
     super.initState();
-    _blockLimit = GStorage.blockLimit;
-    _blockSettings = GStorage.blockSettings;
-    _blockColor = GStorage.blockColor;
-    _userId = GStorage.blockUserID;
-    _blockToast = GStorage.blockToast;
-    _blockServer = GStorage.blockServer;
-    _blockTrack = GStorage.blockTrack;
     _checkServerStatus();
   }
 
@@ -57,18 +52,10 @@ class _SponsorBlockPageState extends State<SponsorBlockPage> {
   }
 
   void _checkServerStatus() {
-    Request()
-        .get(
-      '$_blockServer/api/status/uptime',
-    )
-        .then((res) {
-      if (mounted) {
-        setState(() {
-          _serverStatus = res.statusCode == 200 &&
-              res.data is String &&
-              Utils.isStringNumeric(res.data);
-        });
-      }
+    Request().get('$_blockServer/api/status/uptime').then((res) {
+      _serverStatus.value = res.statusCode == 200 &&
+          res.data is String &&
+          Utils.isStringNumeric(res.data);
     });
   }
 
@@ -352,30 +339,30 @@ class _SponsorBlockPageState extends State<SponsorBlockPage> {
         },
       );
 
-  Widget _serverStatusItem(ThemeData theme, TextStyle titleStyle) => Builder(
-        builder: (context) {
+  Widget _serverStatusItem(ThemeData theme, TextStyle titleStyle) => Obx(
+        () {
+          String status;
+          Color? color;
+          switch (_serverStatus.value) {
+            case null:
+              status = '——';
+            case true:
+              status = '正常';
+              color = theme.colorScheme.primary;
+            case false:
+              status = '错误';
+              color = theme.colorScheme.error;
+          }
           return ListTile(
             dense: true,
             onTap: () {
-              _serverStatus = null;
-              (context as Element).markNeedsBuild();
+              _serverStatus.value = null;
               _checkServerStatus();
             },
             title: Text('服务器状态', style: titleStyle),
             trailing: Text(
-              _serverStatus == null
-                  ? '——'
-                  : _serverStatus == true
-                      ? '正常'
-                      : '错误',
-              style: TextStyle(
-                fontSize: 13,
-                color: _serverStatus == null
-                    ? null
-                    : _serverStatus == true
-                        ? theme.colorScheme.primary
-                        : theme.colorScheme.error,
-              ),
+              status,
+              style: TextStyle(fontSize: 13, color: color),
             ),
           );
         },

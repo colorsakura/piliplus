@@ -38,6 +38,6 @@ enum ArchiveFilterType {
   // 专栏
   // attention('最多喜欢'),
 
-  final String description;
-  const ArchiveFilterType(this.description);
+  final String desc;
+  const ArchiveFilterType(this.desc);
 }

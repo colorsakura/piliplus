@@ -6,7 +6,7 @@ import 'package:PiliPlus/common/widgets/interactiveviewer_gallery/interactive_vi
 import 'package:PiliPlus/models/common/image_preview_type.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/image_util.dart';
-import 'package:PiliPlus/utils/storage.dart';
+import 'package:PiliPlus/utils/storage_pref.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:device_info_plus/device_info_plus.dart';
@@ -95,7 +95,7 @@ class _InteractiveviewerGalleryState extends State<InteractiveviewerGallery>
 
   late final RxInt currentIndex = widget.initIndex.obs;
 
-  late final int _quality = GStorage.previewQ;
+  late final int _quality = Pref.previewQ;
 
   @override
   void initState() {

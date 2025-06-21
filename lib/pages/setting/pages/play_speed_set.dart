@@ -2,6 +2,8 @@ import 'dart:math';
 
 import 'package:PiliPlus/pages/setting/widgets/switch_item.dart';
 import 'package:PiliPlus/utils/storage.dart';
+import 'package:PiliPlus/utils/storage_key.dart';
+import 'package:PiliPlus/utils/storage_pref.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show FilteringTextInputFormatter;
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -16,10 +18,10 @@ class PlaySpeedPage extends StatefulWidget {
 }
 
 class _PlaySpeedPageState extends State<PlaySpeedPage> {
-  late double playSpeedDefault;
-  late double longPressSpeedDefault;
-  late List<double> speedList;
-  late bool enableAutoLongPressSpeed;
+  late double playSpeedDefault = Pref.playSpeedDefault;
+  late double longPressSpeedDefault = Pref.longPressSpeedDefault;
+  late List<double> speedList = Pref.speedList;
+  late bool enableAutoLongPressSpeed = Pref.enableAutoLongPressSpeed;
   List<({int id, String title, Icon icon})> sheetMenu = [
     (
       id: 1,
@@ -47,22 +49,7 @@ class _PlaySpeedPageState extends State<PlaySpeedPage> {
     ),
   ];
 
-  Box get video => GStorage.video;
-
-  @override
-  void initState() {
-    super.initState();
-    // 默认倍速
-    playSpeedDefault =
-        video.get(VideoBoxKey.playSpeedDefault, defaultValue: 1.0);
-    // 默认长按倍速
-    longPressSpeedDefault =
-        video.get(VideoBoxKey.longPressSpeedDefault, defaultValue: 3.0);
-    // 倍速
-    speedList = GStorage.speedList;
-    enableAutoLongPressSpeed = GStorage.setting
-        .get(SettingBoxKey.enableAutoLongPressSpeed, defaultValue: false);
-  }
+  Box video = GStorage.video;
 
   // 添加自定义倍速
   void onAddSpeed() {
@@ -199,7 +186,7 @@ class _PlaySpeedPageState extends State<PlaySpeedPage> {
           TextButton(
             onPressed: () async {
               await video.delete(VideoBoxKey.speedsList);
-              speedList = GStorage.speedList;
+              speedList = Pref.speedList;
               setState(() {});
             },
             child: const Text('重置'),

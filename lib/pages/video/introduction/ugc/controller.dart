@@ -33,7 +33,7 @@ import 'package:PiliPlus/utils/global_data.dart';
 import 'package:PiliPlus/utils/id_utils.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:PiliPlus/utils/request_utils.dart';
-import 'package:PiliPlus/utils/storage.dart';
+import 'package:PiliPlus/utils/storage_pref.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:expandable/expandable.dart';
 import 'package:flutter/foundation.dart' show kDebugMode;
@@ -64,7 +64,7 @@ class VideoIntroController extends CommonIntroController {
   RxInt lastPlayCid = 0.obs;
 
   // 同时观看
-  bool isShowOnlineTotal = false;
+  final bool isShowOnlineTotal = Pref.enableOnlineTotal;
   late final RxString total = '1'.obs;
   Timer? timer;
   String heroTag = '';
@@ -74,9 +74,8 @@ class VideoIntroController extends CommonIntroController {
 
   ExpandableController? expandableCtr;
 
-  late final showArgueMsg = GStorage.showArgueMsg;
-  late final enableAi =
-      GStorage.setting.get(SettingBoxKey.enableAi, defaultValue: false);
+  late final showArgueMsg = Pref.showArgueMsg;
+  late final enableAi = Pref.enableAi;
 
   @override
   void onInit() {
@@ -113,8 +112,6 @@ class VideoIntroController extends CommonIntroController {
       }
     }
     lastPlayCid.value = int.parse(Get.parameters['cid']!);
-    isShowOnlineTotal = GStorage.setting
-        .get(SettingBoxKey.enableOnlineTotal, defaultValue: false);
     startTimer();
     queryVideoIntro();
   }
@@ -560,7 +557,7 @@ class VideoIntroController extends CommonIntroController {
         reSrc: 11,
       );
       if (res['status']) {
-        GStorage.removeBlackMid(mid);
+        Pref.removeBlackMid(mid);
         followStatus['attribute'] = 0;
       }
       return;

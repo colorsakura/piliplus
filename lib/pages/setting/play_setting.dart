@@ -1,5 +1,5 @@
-import 'package:PiliPlus/pages/setting/widgets/model.dart';
-import 'package:PiliPlus/services/service_locator.dart';
+import 'package:PiliPlus/pages/setting/models/model.dart';
+import 'package:PiliPlus/pages/setting/models/play_settings.dart';
 import 'package:flutter/material.dart';
 
 class PlaySetting extends StatefulWidget {
@@ -12,13 +12,7 @@ class PlaySetting extends StatefulWidget {
 }
 
 class _PlaySettingState extends State<PlaySetting> {
-  @override
-  void dispose() {
-    super.dispose();
-
-    // 重新验证媒体通知后台播放设置
-    videoPlayerServiceHandler.revalidateSetting();
-  }
+  final settings = playSettings;
 
   @override
   Widget build(BuildContext context) {
@@ -27,10 +21,10 @@ class _PlaySettingState extends State<PlaySetting> {
           ? null
           : AppBar(title: const Text('播放器设置')),
       body: ListView(
-        children: [
-          ...playSettings.map((item) => item.widget),
-          SizedBox(height: MediaQuery.paddingOf(context).bottom + 80),
-        ],
+        padding: EdgeInsets.only(
+          bottom: MediaQuery.paddingOf(context).bottom + 80,
+        ),
+        children: settings.map((item) => item.widget).toList(),
       ),
     );
   }

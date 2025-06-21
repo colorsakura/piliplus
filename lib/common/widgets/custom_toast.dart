@@ -1,4 +1,4 @@
-import 'package:PiliPlus/utils/storage.dart';
+import 'package:PiliPlus/utils/storage_pref.dart';
 import 'package:flutter/material.dart';
 
 class CustomToast extends StatelessWidget {
@@ -6,11 +6,11 @@ class CustomToast extends StatelessWidget {
 
   final String msg;
 
+  static double toastOpacity = Pref.defaultToastOp;
+
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
-    final double toastOpacity = GStorage.setting
-        .get(SettingBoxKey.defaultToastOp, defaultValue: 1.0) as double;
     return Container(
       margin:
           EdgeInsets.only(bottom: MediaQuery.paddingOf(context).bottom + 30),

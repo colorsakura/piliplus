@@ -9,7 +9,6 @@ import 'package:PiliPlus/grpc/bilibili/main/community/reply/v1.pb.dart'
     show ReplyInfo;
 import 'package:PiliPlus/http/constants.dart';
 import 'package:PiliPlus/http/loading_state.dart';
-import 'package:PiliPlus/models/common/reply/reply_sort_type.dart';
 import 'package:PiliPlus/models/dynamics/result.dart';
 import 'package:PiliPlus/pages/dynamics/widgets/author_panel.dart';
 import 'package:PiliPlus/pages/dynamics/widgets/dynamic_panel.dart';
@@ -23,6 +22,8 @@ import 'package:PiliPlus/utils/num_util.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:PiliPlus/utils/request_utils.dart';
 import 'package:PiliPlus/utils/storage.dart';
+import 'package:PiliPlus/utils/storage_key.dart';
+import 'package:PiliPlus/utils/storage_pref.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:easy_debounce/easy_throttle.dart';
 import 'package:flutter/material.dart';
@@ -48,7 +49,7 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
   bool _isFabVisible = true;
   bool? _imageStatus;
 
-  late final List<double> _ratio = GStorage.dynamicDetailRatio;
+  late final List<double> _ratio = Pref.dynamicDetailRatio;
 
   bool get _horizontalPreview =>
       context.orientation == Orientation.landscape &&
@@ -285,7 +286,7 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
                             value: _ratio.first,
                             onChanged: (value) {
                               if (value >= 10 && value <= 90) {
-                                _ratio[0] = value;
+                                _ratio[0] = value.toPrecision(2);
                                 _ratio[1] = 100 - value;
                                 GStorage.setting.put(
                                   SettingBoxKey.dynamicDetailRatio,

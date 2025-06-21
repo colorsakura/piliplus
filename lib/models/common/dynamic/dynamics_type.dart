@@ -1,12 +1,11 @@
 enum DynamicsTabType {
-  all,
-  video,
-  pgc,
-  article,
-  up,
-}
+  all('全部'),
+  video('投稿'),
+  pgc('番剧'),
+  article('专栏'),
+  up('UP'),
+  ;
 
-extension DynamicsTabTypeExt on DynamicsTabType {
-  String get values => const ['all', 'video', 'pgc', 'article', 'up'][index];
-  String get labels => const ['全部', '投稿', '番剧', '专栏', 'UP'][index];
+  final String label;
+  const DynamicsTabType(this.label);
 }

@@ -3,10 +3,15 @@ import 'package:PiliPlus/grpc/bilibili/main/community/reply/v1.pb.dart';
 import 'package:PiliPlus/grpc/bilibili/pagination.pb.dart';
 import 'package:PiliPlus/grpc/grpc_repo.dart';
 import 'package:PiliPlus/http/loading_state.dart';
-import 'package:PiliPlus/http/reply.dart';
+import 'package:PiliPlus/utils/storage_pref.dart';
 import 'package:fixnum/fixnum.dart';
 
 class ReplyGrpc {
+  static bool antiGoodsReply = Pref.antiGoodsReply;
+  static RegExp replyRegExp =
+      RegExp(Pref.banWordForReply, caseSensitive: false);
+  static bool enableFilter = replyRegExp.pattern.isNotEmpty;
+
   // static Future replyInfo({required int rpid}) {
   //   return _request(
   //     GrpcUrl.replyInfo,
@@ -28,9 +33,8 @@ class ReplyGrpc {
         reply.content.message.contains(Constants.goodsUrlPrefix);
   }
 
-  static bool needRemoveGrpc(ReplyInfo reply, final bool antiGoodsReply) {
-    return (ReplyHttp.replyRegExp.pattern.isNotEmpty &&
-            ReplyHttp.replyRegExp.hasMatch(reply.content.message)) ||
+  static bool needRemoveGrpc(ReplyInfo reply) {
+    return (enableFilter && replyRegExp.hasMatch(reply.content.message)) ||
         (antiGoodsReply && needRemoveGoodGrpc(reply));
   }
 
@@ -40,7 +44,6 @@ class ReplyGrpc {
     required Mode mode,
     required String? offset,
     required Int64? cursorNext,
-    required final bool antiGoodsReply,
   }) async {
     final res = await GrpcRepo.request(
       GrpcUrl.mainList,
@@ -59,16 +62,15 @@ class ReplyGrpc {
     if (res.isSuccess) {
       final mainListReply = res.data;
       // keyword filter
-      if (mainListReply.hasUpTop() &&
-          needRemoveGrpc(mainListReply.upTop, antiGoodsReply)) {
+      if (mainListReply.hasUpTop() && needRemoveGrpc(mainListReply.upTop)) {
         mainListReply.clearUpTop();
       }
 
       if (mainListReply.replies.isNotEmpty) {
         mainListReply.replies.removeWhere((item) {
-          final hasMatch = needRemoveGrpc(item, antiGoodsReply);
+          final hasMatch = needRemoveGrpc(item);
           if (!hasMatch && item.replies.isNotEmpty) {
-            item.replies.removeWhere((i) => needRemoveGrpc(i, antiGoodsReply));
+            item.replies.removeWhere((i) => needRemoveGrpc(i));
           }
           return hasMatch;
         });
@@ -84,7 +86,6 @@ class ReplyGrpc {
     required int rpid,
     required Mode mode,
     required String? offset,
-    required final bool antiGoodsReply,
   }) async {
     final res = await GrpcRepo.request(
       GrpcUrl.detailList,
@@ -100,10 +101,7 @@ class ReplyGrpc {
       DetailListReply.fromBuffer,
     );
     return res
-      ..dataOrNull
-          ?.root
-          .replies
-          .removeWhere((item) => needRemoveGrpc(item, antiGoodsReply));
+      ..dataOrNull?.root.replies.removeWhere((item) => needRemoveGrpc(item));
   }
 
   static Future<LoadingState<DialogListReply>> dialogList({
@@ -112,7 +110,6 @@ class ReplyGrpc {
     required int root,
     required int dialog,
     required String? offset,
-    required final bool antiGoodsReply,
   }) async {
     final res = await GrpcRepo.request(
       GrpcUrl.dialogList,
@@ -125,9 +122,6 @@ class ReplyGrpc {
       ),
       DialogListReply.fromBuffer,
     );
-    return res
-      ..dataOrNull
-          ?.replies
-          .removeWhere((item) => needRemoveGrpc(item, antiGoodsReply));
+    return res..dataOrNull?.replies.removeWhere((item) => needRemoveGrpc(item));
   }
 }

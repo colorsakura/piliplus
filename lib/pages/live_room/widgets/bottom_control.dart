@@ -3,6 +3,7 @@ import 'package:PiliPlus/plugin/pl_player/controller.dart';
 import 'package:PiliPlus/plugin/pl_player/widgets/common_btn.dart';
 import 'package:PiliPlus/plugin/pl_player/widgets/play_pause_btn.dart';
 import 'package:PiliPlus/utils/storage.dart';
+import 'package:PiliPlus/utils/storage_key.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
@@ -85,14 +86,14 @@ class BottomControl extends StatelessWidget {
                   padding: WidgetStateProperty.all(EdgeInsets.zero),
                 ),
                 onPressed: () {
-                  plPlayerController.isOpenDanmu.value =
-                      !plPlayerController.isOpenDanmu.value;
+                  plPlayerController.enableShowDanmaku.value =
+                      !plPlayerController.enableShowDanmaku.value;
                   GStorage.setting.put(SettingBoxKey.enableShowDanmaku,
-                      plPlayerController.isOpenDanmu.value);
+                      plPlayerController.enableShowDanmaku.value);
                 },
                 icon: Icon(
                   size: 18,
-                  plPlayerController.isOpenDanmu.value
+                  plPlayerController.enableShowDanmaku.value
                       ? Icons.subtitles_outlined
                       : Icons.subtitles_off_outlined,
                   color: Colors.white,

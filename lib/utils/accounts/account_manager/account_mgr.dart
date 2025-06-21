@@ -5,10 +5,11 @@ import 'dart:io';
 import 'package:PiliPlus/http/api.dart';
 import 'package:PiliPlus/http/constants.dart';
 import 'package:PiliPlus/models/common/account_type.dart';
+import 'package:PiliPlus/utils/accounts.dart';
 import 'package:PiliPlus/utils/accounts/account.dart';
 import 'package:PiliPlus/utils/app_sign.dart';
 import 'package:PiliPlus/utils/extension.dart';
-import 'package:PiliPlus/utils/storage.dart';
+import 'package:PiliPlus/utils/storage_pref.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart' show kDebugMode;
@@ -72,7 +73,7 @@ class AccountManager extends Interceptor {
 
   AccountManager();
 
-  String blockServer = GStorage.blockServer;
+  String blockServer = Pref.blockServer;
 
   static String getCookies(List<Cookie> cookies) {
     // Sort cookies by path (longer path first).

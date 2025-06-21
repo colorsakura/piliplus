@@ -4,7 +4,7 @@ import 'package:PiliPlus/grpc/reply.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/pages/common/reply_controller.dart';
 import 'package:PiliPlus/utils/id_utils.dart';
-import 'package:PiliPlus/utils/storage.dart';
+import 'package:PiliPlus/utils/storage_pref.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
@@ -36,7 +36,7 @@ class VideoReplyReplyController extends ReplyController
   int? index;
   AnimationController? controller;
 
-  late final horizontalPreview = GStorage.horizontalPreview;
+  late final horizontalPreview = Pref.horizontalPreview;
 
   @override
   dynamic get sourceId => replyType == 1 ? IdUtils.av2bv(oid) : oid;
@@ -111,7 +111,6 @@ class VideoReplyReplyController extends ReplyController
           root: rpid,
           dialog: dialog!,
           offset: paginationReply?.nextOffset,
-          antiGoodsReply: antiGoodsReply,
         )
       : ReplyGrpc.detailList(
           type: replyType,
@@ -120,7 +119,6 @@ class VideoReplyReplyController extends ReplyController
           rpid: id ?? 0,
           mode: mode.value,
           offset: paginationReply?.nextOffset,
-          antiGoodsReply: antiGoodsReply,
         );
 
   @override

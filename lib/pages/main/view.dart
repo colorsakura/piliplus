@@ -40,17 +40,10 @@ class _MainAppState extends State<MainApp>
   late final _dynamicController = Get.put(DynamicsController());
 
   late int _lastSelectTime = 0;
-  late bool enableMYBar;
-  late bool useSideBar;
 
   @override
   void initState() {
     super.initState();
-    _lastSelectTime = DateTime.now().millisecondsSinceEpoch;
-    enableMYBar =
-        GStorage.setting.get(SettingBoxKey.enableMYBar, defaultValue: true);
-    useSideBar =
-        GStorage.setting.get(SettingBoxKey.useSideBar, defaultValue: false);
     WidgetsBinding.instance.addObserver(this);
   }
 
@@ -198,9 +191,9 @@ class _MainAppState extends State<MainApp>
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                if (useSideBar || !isPortrait) ...[
+                if (_mainController.useSideBar || !isPortrait) ...[
                   _mainController.navigationBars.length > 1
-                      ? context.isTablet && GStorage.optTabletNav
+                      ? context.isTablet && _mainController.optTabletNav
                           ? Column(
                               children: [
                                 const SizedBox(height: 25),
@@ -295,7 +288,7 @@ class _MainAppState extends State<MainApp>
               ],
             ),
           ),
-          bottomNavigationBar: useSideBar || !isPortrait
+          bottomNavigationBar: _mainController.useSideBar || !isPortrait
               ? null
               : StreamBuilder(
                   stream: _mainController.hideTabBar
@@ -311,7 +304,7 @@ class _MainAppState extends State<MainApp>
                       curve: Curves.easeInOutCubicEmphasized,
                       duration: const Duration(milliseconds: 500),
                       offset: Offset(0, snapshot.data ? 0 : 1),
-                      child: enableMYBar
+                      child: _mainController.enableMYBar
                           ? _mainController.navigationBars.length > 1
                               ? Obx(
                                   () => NavigationBar(

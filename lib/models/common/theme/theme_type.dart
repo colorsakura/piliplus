@@ -2,15 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 enum ThemeType {
-  light,
-  dark,
-  system,
-}
+  light('浅色'),
+  dark('深色'),
+  system('跟随系统'),
+  ;
 
-extension ThemeTypeExt on ThemeType {
-  String get description => const ['浅色', '深色', '跟随系统'][index];
-
-  int get code => index;
+  final String desc;
+  const ThemeType(this.desc);
 
   ThemeMode get toThemeMode => switch (this) {
         ThemeType.light => ThemeMode.light,

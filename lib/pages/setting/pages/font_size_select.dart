@@ -1,7 +1,8 @@
 import 'package:PiliPlus/utils/storage.dart';
+import 'package:PiliPlus/utils/storage_key.dart';
+import 'package:PiliPlus/utils/storage_pref.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:hive/hive.dart';
 
 class FontSizeSelectPage extends StatefulWidget {
   const FontSizeSelectPage({super.key});
@@ -12,23 +13,12 @@ class FontSizeSelectPage extends StatefulWidget {
 
 class _FontSizeSelectPageState extends State<FontSizeSelectPage> {
   List<double> list = List.generate(16, (index) => 0.85 + index * 0.05);
-  late double minSize;
-  late double maxSize;
-  late double currentSize;
-
-  Box get setting => GStorage.setting;
-
-  @override
-  void initState() {
-    super.initState();
-    minSize = list.first;
-    maxSize = list.last;
-    currentSize =
-        setting.get(SettingBoxKey.defaultTextScale, defaultValue: 1.0);
-  }
+  late double minSize = list.first;
+  late double maxSize = list.last;
+  double currentSize = Pref.defaultTextScale;
 
   void setFontSize() {
-    setting.put(SettingBoxKey.defaultTextScale, currentSize);
+    GStorage.setting.put(SettingBoxKey.defaultTextScale, currentSize);
     Get
       ..back(result: currentSize)
       ..forceAppUpdate();
