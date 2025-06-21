@@ -13,6 +13,4 @@ enum PlaySpeed {
 
   final double value;
   const PlaySpeed(this.value);
-
-  String get desc => value == 1.0 ? '正常' : value.toString();
 }

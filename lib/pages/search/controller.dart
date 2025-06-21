@@ -59,10 +59,8 @@ class SSearchController extends GetxController {
       controller.text = Get.parameters['text']!;
     }
 
-    if (recordSearchHistory.value) {
-      historyList =
-          List<String>.from(GStorage.historyWord.get('cacheList') ?? []).obs;
-    }
+    historyList =
+        List<String>.from(GStorage.historyWord.get('cacheList') ?? []).obs;
 
     if (searchSuggestion) {
       _ctr = StreamController<String>();

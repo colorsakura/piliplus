@@ -80,7 +80,7 @@ class _SearchPageState extends State<SearchPage> {
             if (_searchController.searchSuggestion) _searchSuggest(),
             if (context.orientation == Orientation.portrait) ...[
               if (_searchController.enableHotKey) hotSearch(theme),
-              if (_searchController.recordSearchHistory.value) _history(theme),
+              _history(theme),
               if (_searchController.enableSearchRcmd) hotSearch(theme, false)
             ] else
               Row(
@@ -97,8 +97,7 @@ class _SearchPageState extends State<SearchPage> {
                         ],
                       ),
                     ),
-                  if (_searchController.recordSearchHistory.value)
-                    Expanded(child: _history(theme)),
+                  Expanded(child: _history(theme)),
                 ],
               ),
           ],
@@ -207,28 +206,6 @@ class _SearchPageState extends State<SearchPage> {
                               ),
                             ),
                           ),
-                          // deprecated
-                          // SizedBox(
-                          //   height: 34,
-                          //   child: TextButton(
-                          //     onPressed: () => Get.toNamed('/dynTopicRcmd'),
-                          //     child: Row(
-                          //       children: [
-                          //         Text(
-                          //           '话题',
-                          //           strutStyle:
-                          //               const StrutStyle(leading: 0, height: 1),
-                          //           style: style,
-                          //         ),
-                          //         Icon(
-                          //           size: 18,
-                          //           Icons.keyboard_arrow_right,
-                          //           color: outline,
-                          //         ),
-                          //       ],
-                          //     ),
-                          //   ),
-                          // ),
                         ],
                       )
                     : text,
@@ -272,23 +249,26 @@ class _SearchPageState extends State<SearchPage> {
   }
 
   Widget _history(ThemeData theme) {
-    final secondary = theme.colorScheme.secondary;
     return Obx(
-      () => Padding(
-        padding: EdgeInsets.fromLTRB(
-          10,
-          context.orientation == Orientation.landscape
-              ? 25
-              : _searchController.enableHotKey
-                  ? 0
-                  : 6,
-          6,
-          25,
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            if (_searchController.historyList.isNotEmpty)
+      () {
+        if (_searchController.historyList.isEmpty) {
+          return const SizedBox.shrink();
+        }
+        final secondary = theme.colorScheme.secondary;
+        return Padding(
+          padding: EdgeInsets.fromLTRB(
+            10,
+            context.orientation == Orientation.landscape
+                ? 25
+                : _searchController.enableHotKey
+                    ? 0
+                    : 6,
+            6,
+            25,
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
               Padding(
                 padding: const EdgeInsets.fromLTRB(6, 0, 6, 6),
                 child: Row(
@@ -301,28 +281,30 @@ class _SearchPageState extends State<SearchPage> {
                     ),
                     const SizedBox(width: 12),
                     Obx(
-                      () => SizedBox(
-                        width: 34,
-                        height: 34,
-                        child: IconButton(
-                          iconSize: 22,
-                          tooltip: _searchController.recordSearchHistory.value
-                              ? '记录搜索'
-                              : '无痕搜索',
-                          icon: _searchController.recordSearchHistory.value
-                              ? historyIcon(theme)
-                              : historyIcon(theme).disable(),
-                          style: IconButton.styleFrom(padding: EdgeInsets.zero),
-                          onPressed: () {
-                            _searchController.recordSearchHistory.value =
-                                !_searchController.recordSearchHistory.value;
-                            GStorage.setting.put(
-                              SettingBoxKey.recordSearchHistory,
-                              _searchController.recordSearchHistory.value,
-                            );
-                          },
-                        ),
-                      ),
+                      () {
+                        bool enable =
+                            _searchController.recordSearchHistory.value;
+                        return SizedBox(
+                          width: 34,
+                          height: 34,
+                          child: IconButton(
+                            iconSize: 22,
+                            tooltip: enable ? '记录搜索' : '无痕搜索',
+                            icon: enable
+                                ? historyIcon(theme)
+                                : historyIcon(theme).disable(),
+                            style:
+                                IconButton.styleFrom(padding: EdgeInsets.zero),
+                            onPressed: () {
+                              enable = !enable;
+                              _searchController.recordSearchHistory.value =
+                                  enable;
+                              GStorage.setting.put(
+                                  SettingBoxKey.recordSearchHistory, enable);
+                            },
+                          ),
+                        );
+                      },
                     ),
                     const Spacer(),
                     SizedBox(
@@ -351,8 +333,7 @@ class _SearchPageState extends State<SearchPage> {
                   ],
                 ),
               ),
-            Obx(
-              () => Wrap(
+              Wrap(
                 spacing: 8,
                 runSpacing: 8,
                 direction: Axis.horizontal,
@@ -367,10 +348,10 @@ class _SearchPageState extends State<SearchPage> {
                     )
                     .toList(),
               ),
-            ),
-          ],
-        ),
-      ),
+            ],
+          ),
+        );
+      },
     );
   }
 
