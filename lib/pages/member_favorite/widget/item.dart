@@ -65,7 +65,6 @@ class MemberFavItem extends StatelessWidget {
             vertical: 5,
           ),
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               AspectRatio(

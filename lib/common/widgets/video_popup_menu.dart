@@ -245,13 +245,16 @@ class VideoCustomActions {
                   ),
                   TextButton(
                     onPressed: () async {
+                      Get.back();
                       var res = await VideoHttp.relationMod(
                         mid: videoItem.owner.mid!,
                         act: 5,
                         reSrc: 11,
                       );
-                      Pref.setBlackMid(videoItem.owner.mid!);
-                      Get.back();
+                      if (res['status']) {
+                        Pref.setBlackMid(videoItem.owner.mid!);
+                        onRemove?.call();
+                      }
                       SmartDialog.showToast(res['msg'] ?? '成功');
                     },
                     child: const Text('确认'),

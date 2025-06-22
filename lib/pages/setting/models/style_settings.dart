@@ -213,7 +213,6 @@ List<SettingsModel> get styleSettings => [
       SettingsModel(
         settingsType: SettingsType.sw1tch,
         title: '动态页显示所有已关注UP主',
-        subtitle: '并以最常访问排序UP',
         leading: const Icon(Icons.people_alt_outlined),
         setKey: SettingBoxKey.dynamicsShowAllFollowedUp,
         defaultVal: false,

@@ -423,7 +423,6 @@ class _EpisodePanelState extends CommonSlidePageState<EpisodePanel> {
               vertical: 5,
             ),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
               spacing: 10,
               children: [
                 if (cover?.isNotEmpty == true)

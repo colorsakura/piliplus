@@ -29,7 +29,6 @@ Widget livePanel(
           );
         },
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             NetworkImgLayer(
@@ -41,7 +40,6 @@ Widget livePanel(
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Text(
                     content.live!.title!,

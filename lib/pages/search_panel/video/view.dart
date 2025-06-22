@@ -113,6 +113,9 @@ class _SearchVideoPanelState extends CommonSearchPanelState<SearchVideoPanel,
           return VideoCardH(
             videoItem: list[index],
             showPubdate: true,
+            onRemove: () => controller.loadingState
+              ..value.data!.removeAt(index)
+              ..refresh(),
           );
         },
         childCount: list.length,

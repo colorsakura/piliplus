@@ -429,7 +429,6 @@ class UserInfoCard extends StatelessWidget {
 
   Column _buildV(BuildContext context, ThemeData theme) => Column(
         mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Stack(
@@ -522,7 +521,6 @@ class UserInfoCard extends StatelessWidget {
 
   Column _buildH(BuildContext context, ThemeData theme) => Column(
         mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // _buildHeader(context),

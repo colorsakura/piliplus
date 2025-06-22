@@ -73,7 +73,6 @@ class VideoCardHMemberVideo extends StatelessWidget {
               child: LayoutBuilder(
                 builder: (BuildContext context, BoxConstraints boxConstraints) {
                   return Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       AspectRatio(

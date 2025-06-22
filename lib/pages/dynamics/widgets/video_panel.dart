@@ -142,7 +142,6 @@ Widget videoSeasonWidget(
 
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
-    mainAxisAlignment: MainAxisAlignment.start,
     children: [
       if (itemContent.cover != null)
         if (floor == 1)

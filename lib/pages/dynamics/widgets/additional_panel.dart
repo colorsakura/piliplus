@@ -48,7 +48,6 @@ Widget addWidget(ThemeData theme, DynamicItemModel item, BuildContext context,
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Text(
                             ugc.title!,

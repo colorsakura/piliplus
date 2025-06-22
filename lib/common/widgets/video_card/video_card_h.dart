@@ -31,6 +31,7 @@ class VideoCardH extends StatelessWidget {
     this.onTap,
     this.onLongPress,
     this.onViewLater,
+    this.onRemove,
   });
   final BaseVideoItemModel videoItem;
   final bool showOwner;
@@ -40,6 +41,7 @@ class VideoCardH extends StatelessWidget {
   final VoidCallback? onTap;
   final VoidCallback? onLongPress;
   final ValueChanged<int>? onViewLater;
+  final VoidCallback? onRemove;
 
   @override
   Widget build(BuildContext context) {
@@ -108,7 +110,6 @@ class VideoCardH extends StatelessWidget {
                 vertical: 5,
               ),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   AspectRatio(
@@ -188,6 +189,7 @@ class VideoCardH extends StatelessWidget {
               size: 29,
               iconSize: 17,
               videoItem: videoItem,
+              onRemove: onRemove,
             ),
           ),
         ],

@@ -34,7 +34,6 @@ class MemberArticleItem extends StatelessWidget {
             vertical: 5,
           ),
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               if (item.originImageUrls?.firstOrNull?.isNotEmpty == true) ...[

@@ -73,35 +73,33 @@ class _SearchPageState extends State<SearchPage> {
           onSubmitted: (value) => _searchController.submit(),
         ),
       ),
-      body: SingleChildScrollView(
+      body: ListView(
         padding: MediaQuery.paddingOf(context).copyWith(top: 0),
-        child: Column(
-          children: [
-            if (_searchController.searchSuggestion) _searchSuggest(),
-            if (context.orientation == Orientation.portrait) ...[
-              if (_searchController.enableHotKey) hotSearch(theme),
-              _history(theme),
-              if (_searchController.enableSearchRcmd) hotSearch(theme, false)
-            ] else
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  if (_searchController.enableHotKey ||
-                      _searchController.enableSearchRcmd)
-                    Expanded(
-                      child: Column(
-                        children: [
-                          if (_searchController.enableHotKey) hotSearch(theme),
-                          if (_searchController.enableSearchRcmd)
-                            hotSearch(theme, false)
-                        ],
-                      ),
+        children: [
+          if (_searchController.searchSuggestion) _searchSuggest(),
+          if (context.orientation == Orientation.portrait) ...[
+            if (_searchController.enableHotKey) hotSearch(theme),
+            _history(theme),
+            if (_searchController.enableSearchRcmd) hotSearch(theme, false)
+          ] else
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                if (_searchController.enableHotKey ||
+                    _searchController.enableSearchRcmd)
+                  Expanded(
+                    child: Column(
+                      children: [
+                        if (_searchController.enableHotKey) hotSearch(theme),
+                        if (_searchController.enableSearchRcmd)
+                          hotSearch(theme, false)
+                      ],
                     ),
-                  Expanded(child: _history(theme)),
-                ],
-              ),
-          ],
-        ),
+                  ),
+                Expanded(child: _history(theme)),
+              ],
+            ),
+        ],
       ),
     );
   }

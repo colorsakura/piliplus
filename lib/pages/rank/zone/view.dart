@@ -79,6 +79,9 @@ class _ZonePageState extends CommonPageState<ZonePage, ZoneController>
                     return VideoCardH(
                       videoItem: item,
                       showPubdate: true,
+                      onRemove: () => controller.loadingState
+                        ..value.data!.removeAt(index)
+                        ..refresh(),
                     );
                   }
                   return PgcRankItem(item: item);

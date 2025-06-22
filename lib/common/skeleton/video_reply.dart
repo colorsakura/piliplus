@@ -36,7 +36,6 @@ class VideoReplySkeleton extends StatelessWidget {
                 const EdgeInsets.only(top: 4, left: 57, right: 6, bottom: 6),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Container(
                   width: 300,

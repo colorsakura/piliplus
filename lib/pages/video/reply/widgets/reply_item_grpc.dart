@@ -437,7 +437,7 @@ class ReplyItemGrpc extends StatelessWidget {
                 final childReply = replies[index];
                 EdgeInsets padding;
                 if (length == 1) {
-                  padding = const EdgeInsets.all(8);
+                  padding = const EdgeInsets.fromLTRB(8, 5, 8, 5);
                 } else {
                   if (index == 0) {
                     padding = const EdgeInsets.fromLTRB(8, 8, 8, 4);
@@ -542,8 +542,8 @@ class ReplyItemGrpc extends StatelessWidget {
                 child: Container(
                   width: double.infinity,
                   padding: length == 1
-                      ? const EdgeInsets.all(8)
-                      : const EdgeInsets.fromLTRB(8, 4, 8, 8),
+                      ? const EdgeInsets.fromLTRB(8, 6, 8, 6)
+                      : const EdgeInsets.fromLTRB(8, 5, 8, 8),
                   child: Text.rich(
                     TextSpan(
                       style: TextStyle(

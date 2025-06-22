@@ -140,7 +140,6 @@ class _ReplyMePageState extends State<ReplyMePage> {
                     ),
                   ),
                   subtitle: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const SizedBox(height: 4),

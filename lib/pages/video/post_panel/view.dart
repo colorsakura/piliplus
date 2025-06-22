@@ -102,18 +102,15 @@ class _PostPanelState extends CommonCollapseSlidePageState<PostPanel> {
               SingleChildScrollView(
                 controller: ScrollController(),
                 physics: const AlwaysScrollableScrollPhysics(),
+                padding: EdgeInsets.only(
+                    bottom: 88 + MediaQuery.paddingOf(context).bottom),
                 child: Column(
-                  children: [
-                    ...List.generate(
-                      list!.length,
-                      (index) {
-                        return _buildItem(theme, index, list![index]);
-                      },
-                    ),
-                    SizedBox(
-                      height: 88 + MediaQuery.paddingOf(context).bottom,
-                    ),
-                  ],
+                  children: List.generate(
+                    list!.length,
+                    (index) {
+                      return _buildItem(theme, index, list![index]);
+                    },
+                  ),
                 ),
               ),
               Positioned(

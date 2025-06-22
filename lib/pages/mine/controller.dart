@@ -181,7 +181,6 @@ class MineController extends GetxController {
                 bottom: MediaQuery.paddingOf(context).bottom + 15,
               ),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   const Icon(MdiIcons.incognitoOff, size: 20),
                   const SizedBox(width: 10),

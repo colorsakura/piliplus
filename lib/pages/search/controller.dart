@@ -24,25 +24,25 @@ class SSearchController extends GetxController {
   int initIndex = 0;
 
   // uid
-  RxBool showUidBtn = false.obs;
+  final RxBool showUidBtn = false.obs;
   late final digitOnlyRegExp = RegExp(r'^\d+$');
 
   // history
-  late final RxBool recordSearchHistory = Pref.recordSearchHistory.obs;
+  final RxBool recordSearchHistory = Pref.recordSearchHistory.obs;
   late final RxList<String> historyList;
 
   // suggestion
-  late final bool searchSuggestion = Pref.searchSuggestion;
+  final bool searchSuggestion = Pref.searchSuggestion;
   StreamController<String>? _ctr;
   StreamSubscription<String>? _sub;
   late final RxList<SearchSuggestItem> searchSuggestList;
 
   // trending
-  late final bool enableHotKey = Pref.enableHotKey;
+  final bool enableHotKey = Pref.enableHotKey;
   late final Rx<LoadingState<SearchTrendingData>> loadingState;
 
   // rcmd
-  late final bool enableSearchRcmd = Pref.enableSearchRcmd;
+  final bool enableSearchRcmd = Pref.enableSearchRcmd;
   late final Rx<LoadingState<SearchRcmdData>> recommendData;
 
   @override
