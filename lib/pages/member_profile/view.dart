@@ -64,9 +64,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
   Future<void> _getInfo() async {
     Map<String, String> data = {
-      'build': '1462100',
+      'build': '2001100',
       'c_locale': 'zh_CN',
-      'channel': 'yingyongbao',
+      'channel': 'master',
       'mobi_app': 'android_hd',
       'platform': 'android',
       's_locale': 'zh_CN',
@@ -336,9 +336,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
     }
     Map<String, String> data = {
       'access_key': accessKey!,
-      'build': '1462100',
+      'build': '2001100',
       'c_locale': 'zh_CN',
-      'channel': 'yingyongbao',
+      'channel': 'master',
       'mobi_app': 'android_hd',
       'platform': 'android',
       's_locale': 'zh_CN',

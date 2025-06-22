@@ -7,7 +7,6 @@ import 'package:PiliPlus/grpc/bilibili/metadata/device.pb.dart';
 import 'package:PiliPlus/grpc/bilibili/metadata/fawkes.pb.dart';
 import 'package:PiliPlus/grpc/bilibili/metadata/locale.pb.dart';
 import 'package:PiliPlus/grpc/bilibili/metadata/network.pb.dart' as network;
-import 'package:PiliPlus/grpc/bilibili/metadata/restriction.pb.dart';
 import 'package:PiliPlus/grpc/google/rpc/status.pb.dart';
 import 'package:PiliPlus/http/constants.dart';
 import 'package:PiliPlus/http/init.dart';
@@ -18,64 +17,16 @@ import 'package:PiliPlus/utils/login_utils.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:archive/archive.dart';
 import 'package:dio/dio.dart';
-import 'package:fixnum/fixnum.dart';
 import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:protobuf/protobuf.dart' show GeneratedMessage;
 
-class GrpcUrl {
-  // static const playerOnline =
-  //     '/bilibili.app.playeronline.v1.PlayerOnline/PlayerOnline';
-  // static const popular = '/bilibili.app.show.v1.Popular/Index';
-
-  // dynamic
-  static const dynV1 = '/bilibili.app.dynamic.v1.Dynamic';
-  static const dynV2 = '/bilibili.app.dynamic.v2.Dynamic';
-  static const opusV2 = '/bilibili.app.dynamic.v2.Opus';
-  static const dynRed = '$dynV1/DynRed';
-  static const opusSpaceFlow = '$opusV2/OpusSpaceFlow';
-  // static const dynSpace = '$dynV2/DynSpace';
-
-  // danmaku
-  static const dmSegMobile = '/bilibili.community.service.dm.v1.DM/DmSegMobile';
-
-  // reply
-  static const reply = '/bilibili.main.community.reply.v1.Reply';
-  static const mainList = '$reply/MainList';
-  static const detailList = '$reply/DetailList';
-  static const dialogList = '$reply/DialogList';
-  // static const replyInfo = '$reply/ReplyInfo';
-
-  // im
-  static const im = '/bilibili.im.interface.v1.ImInterface';
-  static const im2 = '/bilibili.app.im.v1.im';
-  static const sendMsg = '$im/SendMsg';
-  static const shareList = '$im/ShareList';
-  static const sessionMain = '$im2/SessionMain';
-  static const sessionSecondary = '$im2/SessionSecondary';
-  static const clearUnread = '$im2/ClearUnread';
-  static const sessionUpdate = '$im2/SessionUpdate';
-  static const pinSession = '$im2/PinSession';
-  static const unpinSession = '$im2/UnpinSession';
-  static const deleteSessionList = '$im2/DeleteSessionList';
-  static const getImSettings = '$im2/GetImSettings';
-  static const setImSettings = '$im2/SetImSettings';
-  static const keywordBlockingList = '$im2/KeywordBlockingList';
-  static const keywordBlockingAdd = '$im2/KeywordBlockingAdd';
-  static const keywordBlockingDelete = '$im2/KeywordBlockingDelete';
-  static const syncFetchSessionMsgs = '$im/SyncFetchSessionMsgs';
-  static const getTotalUnread = '$im/GetTotalUnread';
-
-  // view
-  static const viewunite = '/bilibili.app.viewunite.v1.View';
-  static const view = '$viewunite/View';
-}
-
-class GrpcRepo {
+class GrpcReq {
   static String? _accessKey = Accounts.main.accessKey;
   static const _build = 2001100;
-  static const _biliChannel = 'bili';
+  static const _versionName = '2.0.1';
+  static const _biliChannel = 'master';
   static const _mobiApp = 'android_hd';
-  static const _phone = 'phone';
+  static const _device = 'android';
 
   static final _buvid = LoginUtils.buvid;
   static final _traceId = IdUtils.genTraceId();
@@ -91,19 +42,20 @@ class GrpcRepo {
     headers['x-bili-metadata-bin'] = base64Encode(Metadata(
       accessKey: _accessKey ?? '',
       mobiApp: _mobiApp,
-      device: _phone,
+      device: _device,
       build: _build,
       channel: _biliChannel,
       buvid: _buvid,
-      platform: _mobiApp,
+      platform: _device,
     ).writeToBuffer());
+    options = Options(headers: headers, responseType: ResponseType.bytes);
   }
 
   static final Map<String, String> headers = {
     Headers.contentTypeHeader: 'application/grpc',
     'grpc-encoding': 'gzip',
     'gzip-accept-encoding': 'gzip,identity',
-    'user-agent': '${Constants.userAgent} grpc-java-cronet/1.36.1',
+    'user-agent': Constants.userAgent,
     'x-bili-gaia-vtoken': '',
     'x-bili-aurora-zone': '',
     'x-bili-trace-id': _traceId,
@@ -111,58 +63,45 @@ class GrpcRepo {
     'buvid': _buvid,
     'bili-http-engine': 'cronet',
     'te': 'trailers',
-    'x-bili-fawkes-req-bin': base64Encode(
-        FawkesReq(appkey: _mobiApp, env: 'prod', sessionId: _sessionId)
-            .writeToBuffer()),
+    'x-bili-fawkes-req-bin': base64Encode(FawkesReq(
+      appkey: _mobiApp,
+      env: 'prod',
+      sessionId: _sessionId,
+    ).writeToBuffer()),
     'x-bili-metadata-bin': base64Encode(Metadata(
       accessKey: _accessKey ?? '',
       mobiApp: _mobiApp,
-      device: _phone,
+      device: _device,
       build: _build,
       channel: _biliChannel,
       buvid: _buvid,
-      platform: _mobiApp,
+      platform: _device,
     ).writeToBuffer()),
     'x-bili-device-bin': base64Encode(Device(
-            appId: 1,
-            build: _build,
-            buvid: _buvid,
-            mobiApp: _mobiApp,
-            platform: _mobiApp,
-            device: _phone,
-            channel: _biliChannel,
-            brand: _phone,
-            model: _phone,
-            osver: '14',
-            fpLocal: '',
-            fpRemote: '',
-            versionName: _build.toString(),
-            fp: '',
-            fts: Int64())
-        .writeToBuffer()),
+      appId: 5,
+      build: _build,
+      buvid: _buvid,
+      mobiApp: _mobiApp,
+      platform: _device,
+      channel: _biliChannel,
+      brand: _device,
+      model: _device,
+      osver: '15',
+      versionName: _versionName,
+    ).writeToBuffer()),
     'x-bili-network-bin': base64Encode(network.Network(
-            type: network.NetworkType.WIFI,
-            tf: network.TFType.TF_UNKNOWN,
-            oid: '')
-        .writeToBuffer()),
-    'x-bili-restriction-bin': base64Encode(Restriction(
-            teenagersMode: false,
-            lessonsMode: false,
-            mode: ModeType.NORMAL,
-            review: false,
-            disableRcmd: false,
-            basicMode: false)
-        .writeToBuffer()),
+      type: network.NetworkType.WIFI,
+    ).writeToBuffer()),
     'x-bili-locale-bin': base64Encode(Locale(
-            cLocale: LocaleIds(language: 'zh', region: 'CN'),
-            sLocale: LocaleIds(language: 'zh', region: 'CN'),
-            simCode: '',
-            timezone: 'Asia/Shanghai')
-        .writeToBuffer()),
+      cLocale: LocaleIds(language: 'zh', region: 'CN', script: 'Hans'),
+      sLocale: LocaleIds(language: 'zh', region: 'CN', script: 'Hans'),
+      timezone: 'Asia/Shanghai',
+    ).writeToBuffer()),
     'x-bili-exps-bin': '',
   };
 
-  static final _unprintableRegExp = RegExp(r"[^\u4e00-\u9fa5，。；！？UP]");
+  static Options options =
+      Options(headers: headers, responseType: ResponseType.bytes);
 
   static Uint8List compressProtobuf(Uint8List proto) {
     proto = const GZipEncoder().encodeBytes(proto);
@@ -186,8 +125,7 @@ class GrpcRepo {
   static Future<LoadingState<T>> request<T>(String url,
       GeneratedMessage request, T Function(Uint8List) grpcParser) async {
     final response = await Request().post(HttpString.appBaseUrl + url,
-        data: compressProtobuf(request.writeToBuffer()),
-        options: Options(headers: headers, responseType: ResponseType.bytes));
+        data: compressProtobuf(request.writeToBuffer()), options: options);
 
     if (response.data is Map) {
       return Error(response.data['message']);
@@ -219,9 +157,7 @@ class GrpcRepo {
                 ? 'CODE: ${grpcMsg.code}(${grpcMsg.message})\nMSG: $errMsg'
                 : errMsg;
           } catch (e) {
-            msg = utf8
-                .decode(msgBytes, allowMalformed: true)
-                .replaceAll(_unprintableRegExp, '');
+            msg = utf8.decode(msgBytes, allowMalformed: true);
           }
         }
         return Error(msg);

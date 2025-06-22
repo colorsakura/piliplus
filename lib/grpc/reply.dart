@@ -1,7 +1,8 @@
 import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/grpc/bilibili/main/community/reply/v1.pb.dart';
 import 'package:PiliPlus/grpc/bilibili/pagination.pb.dart';
-import 'package:PiliPlus/grpc/grpc_repo.dart';
+import 'package:PiliPlus/grpc/grpc_req.dart';
+import 'package:PiliPlus/grpc/url.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/utils/storage_pref.dart';
 import 'package:fixnum/fixnum.dart';
@@ -45,7 +46,7 @@ class ReplyGrpc {
     required String? offset,
     required Int64? cursorNext,
   }) async {
-    final res = await GrpcRepo.request(
+    final res = await GrpcReq.request(
       GrpcUrl.mainList,
       MainListReq(
         oid: Int64(oid),
@@ -87,7 +88,7 @@ class ReplyGrpc {
     required Mode mode,
     required String? offset,
   }) async {
-    final res = await GrpcRepo.request(
+    final res = await GrpcReq.request(
       GrpcUrl.detailList,
       DetailListReq(
         oid: Int64(oid),
@@ -111,7 +112,7 @@ class ReplyGrpc {
     required int dialog,
     required String? offset,
   }) async {
-    final res = await GrpcRepo.request(
+    final res = await GrpcReq.request(
       GrpcUrl.dialogList,
       DialogListReq(
         oid: Int64(oid),

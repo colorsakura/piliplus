@@ -1,13 +1,14 @@
 import 'package:PiliPlus/grpc/bilibili/app/viewunite/v1.pb.dart'
     show ViewReq, ViewReply;
-import 'package:PiliPlus/grpc/grpc_repo.dart';
+import 'package:PiliPlus/grpc/grpc_req.dart';
+import 'package:PiliPlus/grpc/url.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 
 class ViewGrpc {
   static Future<LoadingState<ViewReply>> view({
     required String bvid,
   }) {
-    return GrpcRepo.request(
+    return GrpcReq.request(
       GrpcUrl.view,
       ViewReq(
         bvid: bvid,

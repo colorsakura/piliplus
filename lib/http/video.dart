@@ -76,10 +76,10 @@ class VideoHttp {
     Map<String, String> data = {
       'build': '2001100',
       'c_locale': 'zh_CN',
-      'channel': 'yingyongbao',
+      'channel': 'master',
       'column': '4',
       'device': 'pad',
-      'device_name': 'vivo',
+      'device_name': 'android',
       'device_type': '0',
       'disable_rcmd': '0',
       'flush': '5',

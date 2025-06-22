@@ -1,7 +1,8 @@
 import 'package:PiliPlus/grpc/bilibili/app/im/v1.pb.dart';
 import 'package:PiliPlus/grpc/bilibili/im/interfaces/v1.pb.dart';
 import 'package:PiliPlus/grpc/bilibili/im/type.pb.dart';
-import 'package:PiliPlus/grpc/grpc_repo.dart';
+import 'package:PiliPlus/grpc/grpc_req.dart';
+import 'package:PiliPlus/grpc/url.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:fixnum/fixnum.dart';
 import 'package:protobuf/protobuf.dart' show PbMap;
@@ -14,7 +15,7 @@ class ImGrpc {
     required String content,
     MsgType msgType = MsgType.EN_MSG_TYPE_TEXT,
   }) {
-    return GrpcRepo.request(
+    return GrpcReq.request(
       GrpcUrl.sendMsg,
       ReqSendMsg(
         msg: Msg(
@@ -34,7 +35,7 @@ class ImGrpc {
   }
 
   static Future<LoadingState<RspShareList>> shareList({int size = 10}) {
-    return GrpcRepo.request(
+    return GrpcReq.request(
       GrpcUrl.shareList,
       ReqShareList(size: size),
       RspShareList.fromBuffer,
@@ -46,7 +47,7 @@ class ImGrpc {
     Int64? endSeqno,
     Int64? beginSeqno,
   }) {
-    return GrpcRepo.request(
+    return GrpcReq.request(
       GrpcUrl.syncFetchSessionMsgs,
       ReqSessionMsg(
         talkerId: Int64(talkerId),
@@ -63,7 +64,7 @@ class ImGrpc {
   static Future<LoadingState<SessionMainReply>> sessionMain({
     PbMap<int, Offset>? offset,
   }) {
-    return GrpcRepo.request(
+    return GrpcReq.request(
       GrpcUrl.sessionMain,
       SessionMainReq(
         paginationParams: PaginationParams(offsets: offset),
@@ -76,7 +77,7 @@ class ImGrpc {
     PbMap<int, Offset>? offset,
     SessionPageType? pageType,
   }) {
-    return GrpcRepo.request(
+    return GrpcReq.request(
       GrpcUrl.sessionSecondary,
       SessionSecondaryReq(
         paginationParams: PaginationParams(offsets: offset),
@@ -90,7 +91,7 @@ class ImGrpc {
     SessionPageType? pageType,
     SessionId? sessionId,
   }) {
-    return GrpcRepo.request(
+    return GrpcReq.request(
       GrpcUrl.clearUnread,
       ClearUnreadReq(
         pageType: pageType,
@@ -104,7 +105,7 @@ class ImGrpc {
     SessionPageType? pageType,
     SessionId? sessionId,
   }) {
-    return GrpcRepo.request(
+    return GrpcReq.request(
       GrpcUrl.sessionUpdate,
       SessionUpdateReq(
         pageType: pageType,
@@ -118,7 +119,7 @@ class ImGrpc {
     SessionId? sessionId,
     Int64? topTimeMicros,
   }) {
-    return GrpcRepo.request(
+    return GrpcReq.request(
       GrpcUrl.pinSession,
       PinSessionReq(
         sessionId: sessionId,
@@ -131,7 +132,7 @@ class ImGrpc {
   static Future<LoadingState<UnPinSessionReply>> unpinSession({
     SessionId? sessionId,
   }) {
-    return GrpcRepo.request(
+    return GrpcReq.request(
       GrpcUrl.unpinSession,
       UnPinSessionReq(
         sessionId: sessionId,
@@ -143,7 +144,7 @@ class ImGrpc {
   static Future<LoadingState<DeleteSessionListReply>> deleteSessionList({
     SessionPageType? pageType,
   }) {
-    return GrpcRepo.request(
+    return GrpcReq.request(
       GrpcUrl.deleteSessionList,
       DeleteSessionListReq(
         pageType: pageType,
@@ -154,7 +155,7 @@ class ImGrpc {
 
   static Future<LoadingState<GetImSettingsReply>> getImSettings(
       {IMSettingType? type}) {
-    return GrpcRepo.request(
+    return GrpcReq.request(
       GrpcUrl.getImSettings,
       GetImSettingsReq(
         type: type,
@@ -165,7 +166,7 @@ class ImGrpc {
 
   static Future<LoadingState<SetImSettingsReply>> setImSettings(
       {PbMap<int, Setting>? settings}) {
-    return GrpcRepo.request(
+    return GrpcReq.request(
       GrpcUrl.setImSettings,
       SetImSettingsReq(
         settings: settings,
@@ -175,7 +176,7 @@ class ImGrpc {
   }
 
   static Future<LoadingState<KeywordBlockingListReply>> keywordBlockingList() {
-    return GrpcRepo.request(
+    return GrpcReq.request(
       GrpcUrl.keywordBlockingList,
       KeywordBlockingListReq(),
       KeywordBlockingListReply.fromBuffer,
@@ -184,7 +185,7 @@ class ImGrpc {
 
   static Future<LoadingState<KeywordBlockingAddReply>> keywordBlockingAdd(
       String keyword) {
-    return GrpcRepo.request(
+    return GrpcReq.request(
       GrpcUrl.keywordBlockingAdd,
       KeywordBlockingAddReq(keyword: keyword),
       KeywordBlockingAddReply.fromBuffer,
@@ -193,7 +194,7 @@ class ImGrpc {
 
   static Future<LoadingState<KeywordBlockingDeleteReply>> keywordBlockingDelete(
       String keyword) {
-    return GrpcRepo.request(
+    return GrpcReq.request(
       GrpcUrl.keywordBlockingDelete,
       KeywordBlockingDeleteReq(keyword: keyword),
       KeywordBlockingDeleteReply.fromBuffer,
@@ -202,7 +203,7 @@ class ImGrpc {
 
   static Future<LoadingState<RspTotalUnread>> getTotalUnread(
       {int? unreadType}) {
-    return GrpcRepo.request(
+    return GrpcReq.request(
       GrpcUrl.getTotalUnread,
       ReqTotalUnread(unreadType: unreadType, showUnfollowList: 1),
       RspTotalUnread.fromBuffer,

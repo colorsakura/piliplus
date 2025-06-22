@@ -21,16 +21,17 @@ class Constants {
   static const String traceId =
       '11111111111111111111111111111111:1111111111111111:0:0';
   static const String userAgent =
-      'Mozilla/5.0 BiliDroid/1.46.2 (bbcallen@gmail.com) os/android model/vivo mobi_app/android_hd build/2001100 channel/yingyongbao innerVer/2001100 osVer/14 network/2';
+      'Mozilla/5.0 BiliDroid/2.0.1 (bbcallen@gmail.com) os/android model/android_hd mobi_app/android_hd build/2001100 channel/master innerVer/2001100 osVer/15 network/2';
   static const String statistics =
-      '{"appId":5,"platform":3,"version":"1.46.2","abtest":""}';
+      '{"appId":5,"platform":3,"version":"2.0.1","abtest":""}';
   // 请求时会自动encodeComponent
 
   // app
   static const String userAgentApp =
-      'Mozilla/5.0 BiliDroid/8.43.0 (bbcallen@gmail.com) os/android model/android mobi_app/android build/8430300 channel/bili innerVer/8430300 osVer/15 network/2';
+      'Mozilla/5.0 BiliDroid/8.43.0 (bbcallen@gmail.com) os/android model/android mobi_app/android build/8430300 channel/master innerVer/8430300 osVer/15 network/2';
+
   static const String statisticsApp =
-      '{"appId":5,"platform":3,"version":"8.43.0","abtest":""}';
+      '{"appId":1,"platform":3,"version":"8.43.0","abtest":""}';
 
   static const urlPattern =
       r'https?://[-A-Za-z0-9+&@#/%?=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]';

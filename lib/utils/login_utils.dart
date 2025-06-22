@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import 'package:PiliPlus/grpc/grpc_repo.dart';
+import 'package:PiliPlus/grpc/grpc_req.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/http/user.dart';
 import 'package:PiliPlus/models/common/dynamic/dynamics_type.dart';
@@ -26,7 +26,7 @@ class LoginUtils {
 
   static Future<void> onLoginMain() async {
     final account = Accounts.main;
-    GrpcRepo.updateHeaders(account.accessKey);
+    GrpcReq.updateHeaders(account.accessKey);
     try {
       final cookies = account.cookieJar.toList();
       final webManager = web.CookieManager();
@@ -105,7 +105,7 @@ class LoginUtils {
       ..face.value = ''
       ..isLogin.value = false;
 
-    GrpcRepo.updateHeaders(null);
+    GrpcReq.updateHeaders(null);
 
     await Future.wait([
       web.CookieManager().deleteAllCookies(),
