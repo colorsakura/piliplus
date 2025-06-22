@@ -1,1 +1,8 @@
-enum ContributeType { video, charging, season, series, bangumi }
+enum ContributeType {
+  video,
+  charging,
+  season,
+  series,
+  bangumi,
+  comic,
+}

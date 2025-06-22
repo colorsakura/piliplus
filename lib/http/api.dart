@@ -911,4 +911,8 @@ class Api {
 
   static const String liveShieldUser =
       '${HttpString.liveBaseUrl}/liveact/shield_user';
+
+  static const String spaceComic = '${HttpString.appBaseUrl}/x/v2/space/comic';
+
+  static const String spaceAudio = '/audio/music-service/web/song/upper';
 }

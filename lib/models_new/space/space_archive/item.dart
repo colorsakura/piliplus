@@ -32,6 +32,8 @@ class SpaceArchiveItem extends BaseSimpleVideoItemModel {
   List<Badge>? badges;
   SpaceArchiveSeason? season;
   History? history;
+  String? styles;
+  String? label;
 
   SpaceArchiveItem.fromJson(Map<String, dynamic> json) {
     title = json['title'];
@@ -75,5 +77,7 @@ class SpaceArchiveItem extends BaseSimpleVideoItemModel {
         : SpaceArchiveSeason.fromJson(json['season'] as Map<String, dynamic>);
     stat = PlayStat.fromJson(json);
     owner = Owner(mid: 0, name: json['author']);
+    styles = json['styles'];
+    label = json['label'];
   }
 }
