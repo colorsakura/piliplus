@@ -1,6 +1,7 @@
 import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/common/skeleton/video_card_v.dart';
 import 'package:PiliPlus/common/widgets/loading_widget/http_error.dart';
+import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models_new/member/coin_like_arc/item.dart';
 import 'package:PiliPlus/pages/member_coin_arc/widgets/item.dart';
@@ -43,18 +44,22 @@ class _MemberLikeArcPageState extends State<MemberLikeArcPage> {
       body: SafeArea(
         top: false,
         bottom: false,
-        child: CustomScrollView(
-          slivers: [
-            SliverPadding(
-              padding: EdgeInsets.only(
-                top: StyleString.safeSpace - 5,
-                left: StyleString.safeSpace,
-                right: StyleString.safeSpace,
-                bottom: MediaQuery.paddingOf(context).bottom + 80,
+        child: refreshIndicator(
+          onRefresh: _ctr.onRefresh,
+          child: CustomScrollView(
+            physics: const AlwaysScrollableScrollPhysics(),
+            slivers: [
+              SliverPadding(
+                padding: EdgeInsets.only(
+                  top: StyleString.safeSpace - 5,
+                  left: StyleString.safeSpace,
+                  right: StyleString.safeSpace,
+                  bottom: MediaQuery.paddingOf(context).bottom + 80,
+                ),
+                sliver: Obx(() => _buildBody(_ctr.loadingState.value)),
               ),
-              sliver: Obx(() => _buildBody(_ctr.loadingState.value)),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

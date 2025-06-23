@@ -344,11 +344,13 @@ class RequestUtils {
     if (res['status']) {
       SmartDialog.showToast(!status ? '点赞成功' : '取消赞');
       if (up == 1) {
-        like?.count = count + 1;
-        like?.status = true;
+        like
+          ?..count = count + 1
+          ..status = true;
       } else {
-        like?.count = count - 1;
-        like?.status = false;
+        like
+          ?..count = count - 1
+          ..status = false;
       }
       callback();
     } else {

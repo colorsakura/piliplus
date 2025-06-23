@@ -129,9 +129,9 @@ class _LiveDmBlockPageState extends State<LiveDmBlockPage> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            if (!isPortrait) title,
+                            title,
                             tabBar,
-                            Expanded(child: view)
+                            Expanded(child: view),
                           ],
                         ),
                       ),

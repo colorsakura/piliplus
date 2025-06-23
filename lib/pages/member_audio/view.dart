@@ -35,6 +35,7 @@ class _MemberAudioState extends State<MemberAudio>
     return refreshIndicator(
       onRefresh: _controller.onRefresh,
       child: CustomScrollView(
+        physics: const AlwaysScrollableScrollPhysics(),
         slivers: [
           SliverPadding(
             padding: EdgeInsets.only(

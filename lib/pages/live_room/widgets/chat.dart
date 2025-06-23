@@ -97,18 +97,12 @@ class LiveRoomChat extends StatelessWidget {
   TextSpan _buildMsg(dynamic obj) {
     dynamic emots = obj['emots'];
     dynamic uemote = obj['uemote'];
-    List list = [
+    List<String> list = [
       if (emots != null) ...emots.keys,
       if (uemote is Map) uemote['emoticon_unique'].replaceFirst('upower_', '')
     ];
     if (list.isNotEmpty) {
-      list = list.map((e) {
-        return e.toString().replaceAllMapped(
-              RegExp(r'\[(.*?)\]'),
-              (match) => r'\[' + match.group(1)! + r'\]',
-            );
-      }).toList();
-      RegExp regExp = RegExp(list.join('|'));
+      RegExp regExp = RegExp(list.map(RegExp.escape).join('|'));
       final List<InlineSpan> spanChildren = <InlineSpan>[];
       (obj['text'] as String).splitMapJoin(
         regExp,

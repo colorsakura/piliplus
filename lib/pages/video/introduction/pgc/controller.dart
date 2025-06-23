@@ -494,7 +494,7 @@ class PgcIntroController extends CommonIntroController {
   RxBool isFollowed = false.obs;
   RxInt followStatus = (-1).obs;
 
-  Future<void> queryIsFollowed() async {
+  void queryIsFollowed() {
     // try {
     //   var result = await Request().get(
     //     'https://www.bilibili.com/bangumi/play/ss$seasonId',
@@ -513,8 +513,9 @@ class PgcIntroController extends CommonIntroController {
     ViewGrpc.view(bvid: bvid).then((res) {
       if (res.isSuccess) {
         ViewPgcAny view = ViewPgcAny.fromBuffer(res.data.supplement.value);
-        isFollowed.value = view.ogvData.userStatus.follow == 1;
-        followStatus.value = view.ogvData.userStatus.followStatus;
+        var userStatus = view.ogvData.userStatus;
+        isFollowed.value = userStatus.follow == 1;
+        followStatus.value = userStatus.followStatus;
       }
     });
   }
