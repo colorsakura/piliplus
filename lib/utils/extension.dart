@@ -58,6 +58,16 @@ extension ListExt<T> on List<T>? {
   T getOrElse(int index, {required T Function() orElse}) {
     return getOrNull(index) ?? orElse();
   }
+
+  bool removeFirstWhere(bool Function(T) test) {
+    if (this == null) return false;
+    final index = this!.indexWhere(test);
+    if (index != -1) {
+      this!.removeAt(index);
+      return true;
+    }
+    return false;
+  }
 }
 
 final _regExp = RegExp("^(http:)?//", caseSensitive: false);

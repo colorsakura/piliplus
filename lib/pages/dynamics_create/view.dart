@@ -569,16 +569,8 @@ class _CreateDynPanelState extends CommonPublishPageState<CreateDynPanel> {
               maxLines: null,
               focusNode: focusNode,
               readOnly: readOnly.value,
-              onDelAtUser: (name) =>
-                  mentions?.removeWhere((e) => e.name == name),
-              onChanged: (value) {
-                bool isEmpty = value.trim().isEmpty && pathList.isEmpty;
-                if (!isEmpty && !enablePublish.value) {
-                  enablePublish.value = true;
-                } else if (isEmpty && enablePublish.value) {
-                  enablePublish.value = false;
-                }
-              },
+              onDelAtUser: onDelAtUser,
+              onChanged: onChanged,
               decoration: InputDecoration(
                 hintText: '说点什么吧',
                 hintStyle: TextStyle(color: theme.colorScheme.outline),

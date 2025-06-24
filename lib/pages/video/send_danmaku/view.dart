@@ -370,15 +370,7 @@ class _SendDanmakuPanelState extends CommonPublishPageState<SendDanmakuPanel> {
                     inputFormatters: [
                       LengthLimitingTextInputFormatter(100),
                     ],
-                    onChanged: (value) {
-                      bool isEmpty = value.trim().isEmpty;
-                      if (!isEmpty && !enablePublish.value) {
-                        enablePublish.value = true;
-                      } else if (isEmpty && enablePublish.value) {
-                        enablePublish.value = false;
-                      }
-                      widget.onSave?.call((text: value, mentions: null));
-                    },
+                    onChanged: onChanged,
                     textInputAction: TextInputAction.send,
                     onSubmitted: (value) {
                       if (value.trim().isNotEmpty) {

@@ -26,7 +26,7 @@ abstract class ReplyController<R> extends CommonListController<R, ReplyInfo> {
   late Rx<Mode> mode;
 
   late final savedReplies =
-      <Object, ({String text, Set<MentionItem>? mentions})?>{};
+      <Object, ({String text, List<MentionItem>? mentions})?>{};
 
   AccountService accountService = Get.find<AccountService>();
 

@@ -242,6 +242,7 @@ class _RepostPanelState extends CommonPublishPageState<RepostPanel> {
               ),
               inputFormatters: [LengthLimitingTextInputFormatter(1000)],
               onMention: onMention,
+              onDelAtUser: onDelAtUser,
             ),
           ),
         ),

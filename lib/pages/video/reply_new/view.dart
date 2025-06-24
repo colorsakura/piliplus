@@ -143,15 +143,7 @@ class _ReplyPageState extends CommonPublishPageState<ReplyPage> {
                 maxLines: 8,
                 autofocus: false,
                 readOnly: readOnly.value,
-                onChanged: (value) {
-                  bool isEmpty = value.trim().isEmpty;
-                  if (!isEmpty && !enablePublish.value) {
-                    enablePublish.value = true;
-                  } else if (isEmpty && enablePublish.value) {
-                    enablePublish.value = false;
-                  }
-                  widget.onSave?.call((text: value, mentions: mentions));
-                },
+                onChanged: onChanged,
                 focusNode: focusNode,
                 decoration: InputDecoration(
                   hintText: widget.hint ?? "输入回复内容",
@@ -160,6 +152,7 @@ class _ReplyPageState extends CommonPublishPageState<ReplyPage> {
                 ),
                 style: themeData.textTheme.bodyLarge,
                 onMention: onMention,
+                onDelAtUser: onDelAtUser,
               ),
             ),
           ),

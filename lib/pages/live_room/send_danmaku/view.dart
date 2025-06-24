@@ -107,15 +107,7 @@ class _ReplyPageState extends CommonPublishPageState<LiveSendDmPanel> {
                 maxLines: 2,
                 autofocus: false,
                 readOnly: readOnly.value,
-                onChanged: (value) {
-                  bool isEmpty = value.trim().isEmpty;
-                  if (!isEmpty && !enablePublish.value) {
-                    enablePublish.value = true;
-                  } else if (isEmpty && enablePublish.value) {
-                    enablePublish.value = false;
-                  }
-                  liveRoomController.savedDanmaku = value;
-                },
+                onChanged: onChanged,
                 focusNode: focusNode,
                 decoration: const InputDecoration(
                   hintText: "输入弹幕内容",

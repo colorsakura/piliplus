@@ -245,14 +245,7 @@ class _WhisperDetailPageState
                   controller: editController,
                   minLines: 1,
                   maxLines: 4,
-                  onChanged: (value) {
-                    bool isNotEmpty = value.trim().isNotEmpty;
-                    if (isNotEmpty && !enablePublish.value) {
-                      enablePublish.value = true;
-                    } else if (!isNotEmpty && enablePublish.value) {
-                      enablePublish.value = false;
-                    }
-                  },
+                  onChanged: onChanged,
                   textInputAction: TextInputAction.newline,
                   decoration: InputDecoration(
                     filled: true,

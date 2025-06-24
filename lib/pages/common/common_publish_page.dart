@@ -14,7 +14,6 @@ import 'package:PiliPlus/pages/dynamics_mention/view.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/feed_back.dart';
 import 'package:chat_bottom_container/chat_bottom_container.dart';
-import 'package:collection/collection.dart';
 import 'package:dio/dio.dart';
 import 'package:easy_debounce/easy_throttle.dart';
 import 'package:flutter/material.dart';
@@ -34,9 +33,9 @@ abstract class CommonPublishPage extends StatefulWidget {
   });
 
   final String? initialValue;
-  final Set<MentionItem>? mentions;
+  final List<MentionItem>? mentions;
   final int? imageLengthLimit;
-  final ValueChanged<({String text, Set<MentionItem>? mentions})>? onSave;
+  final ValueChanged<({String text, List<MentionItem>? mentions})>? onSave;
   final bool autofocus;
 }
 
@@ -54,7 +53,7 @@ abstract class CommonPublishPageState<T extends CommonPublishPage>
   late final RxList<String> pathList = <String>[].obs;
   int get limit => widget.imageLengthLimit ?? 9;
 
-  Set<MentionItem>? mentions;
+  List<MentionItem>? mentions;
 
   @override
   void initState() {
@@ -409,8 +408,8 @@ abstract class CommonPublishPageState<T extends CommonPublishPage>
       });
     }
 
-    final pattern =
-        RegExp(mentions!.map((e) => RegExp.escape('@${e.name!}')).join('|'));
+    final pattern = RegExp(
+        mentions!.toSet().map((e) => RegExp.escape('@${e.name!}')).join('|'));
 
     editController.text.splitMapJoin(
       pattern,
@@ -448,7 +447,7 @@ abstract class CommonPublishPageState<T extends CommonPublishPage>
       if (res != null) {
         enablePublish.value = true;
 
-        (mentions ??= <MentionItem>{}).add(res);
+        (mentions ??= <MentionItem>[]).add(res);
 
         String atName = '${fromClick ? '@' : ''}${res.name} ';
         final int cursorPosition = editController.selection.baseOffset;
@@ -463,5 +462,19 @@ abstract class CommonPublishPageState<T extends CommonPublishPage>
         widget.onSave?.call((text: editController.text, mentions: mentions));
       }
     });
+  }
+
+  void onDelAtUser(String name) {
+    mentions!.removeFirstWhere((e) => e.name == name);
+  }
+
+  void onChanged(String value) {
+    bool isEmpty = value.trim().isEmpty;
+    if (!isEmpty && !enablePublish.value) {
+      enablePublish.value = true;
+    } else if (isEmpty && enablePublish.value) {
+      enablePublish.value = false;
+    }
+    widget.onSave?.call((text: value, mentions: mentions));
   }
 }

@@ -3287,6 +3287,7 @@ class EditableTextState extends State<EditableText>
               composing: e.composing,
             ).apply(value);
             widget.onChanged?.call(_value.text);
+            widget.onDelAtUser?.call(match.group(0)!.trim());
             return;
           }
         }
