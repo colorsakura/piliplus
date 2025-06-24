@@ -229,7 +229,7 @@ class _VideoReplyPanelState extends State<VideoReplyPanel>
                     onDismissed: widget.onDismissed,
                     callback: widget.callback,
                     onCheckReply: (item) => _videoReplyController
-                        .onCheckReply(context, item, isManual: true),
+                        .onCheckReply(item, isManual: true),
                     onToggleTop: (item) => _videoReplyController.onToggleTop(
                       item,
                       index,

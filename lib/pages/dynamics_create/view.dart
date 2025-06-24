@@ -1,19 +1,18 @@
-import 'dart:math';
-
 import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/common/widgets/button/icon_button.dart';
 import 'package:PiliPlus/common/widgets/button/toolbar_icon_button.dart';
 import 'package:PiliPlus/common/widgets/custom_icon.dart';
 import 'package:PiliPlus/common/widgets/draggable_sheet/draggable_scrollable_sheet_dyn.dart'
     as dyn_sheet;
-import 'package:PiliPlus/common/widgets/draggable_sheet/draggable_scrollable_sheet_topic.dart'
-    as topic_sheet;
 import 'package:PiliPlus/common/widgets/pair.dart';
+import 'package:PiliPlus/common/widgets/text_field/text_field.dart'
+    as text_field;
 import 'package:PiliPlus/http/dynamics.dart';
 import 'package:PiliPlus/models/common/publish_panel_type.dart';
 import 'package:PiliPlus/models/common/reply/reply_option_type.dart';
 import 'package:PiliPlus/models_new/dynamic/dyn_topic_top/topic_item.dart';
 import 'package:PiliPlus/pages/common/common_publish_page.dart';
+import 'package:PiliPlus/pages/dynamics_mention/controller.dart';
 import 'package:PiliPlus/pages/dynamics_select_topic/controller.dart';
 import 'package:PiliPlus/pages/dynamics_select_topic/view.dart';
 import 'package:PiliPlus/pages/emote/controller.dart';
@@ -77,11 +76,10 @@ class _CreateDynPanelState extends CommonPublishPageState<CreateDynPanel> {
   @override
   void dispose() {
     _titleEditCtr.dispose();
-    try {
-      Get
-        ..delete<EmotePanelController>()
-        ..delete<SelectTopicController>();
-    } catch (_) {}
+    Get
+      ..delete<EmotePanelController>()
+      ..delete<SelectTopicController>()
+      ..delete<DynMentionController>();
     super.dispose();
   }
 
@@ -531,17 +529,28 @@ class _CreateDynPanelState extends CommonPublishPageState<CreateDynPanel> {
 
   Widget get _buildToolbar => Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        child: Obx(
-          () => ToolbarIconButton(
-            onPressed: () => updatePanelType(
-              panelType.value == PanelType.emoji
-                  ? PanelType.keyboard
-                  : PanelType.emoji,
+        child: Row(
+          spacing: 16,
+          children: [
+            Obx(
+              () => ToolbarIconButton(
+                onPressed: () => updatePanelType(
+                  panelType.value == PanelType.emoji
+                      ? PanelType.keyboard
+                      : PanelType.emoji,
+                ),
+                icon: const Icon(Icons.emoji_emotions, size: 22),
+                tooltip: '表情',
+                selected: panelType.value == PanelType.emoji,
+              ),
             ),
-            icon: const Icon(Icons.emoji_emotions, size: 22),
-            tooltip: '表情',
-            selected: panelType.value == PanelType.emoji,
-          ),
+            ToolbarIconButton(
+              onPressed: () => onMention(true),
+              icon: const Icon(Icons.alternate_email, size: 22),
+              tooltip: '@',
+              selected: false,
+            ),
+          ],
         ),
       );
 
@@ -554,12 +563,14 @@ class _CreateDynPanelState extends CommonPublishPageState<CreateDynPanel> {
             }
           },
           child: Obx(
-            () => TextField(
+            () => text_field.TextField(
               controller: editController,
               minLines: 4,
               maxLines: null,
               focusNode: focusNode,
               readOnly: readOnly.value,
+              onDelAtUser: (name) =>
+                  mentions?.removeWhere((e) => e.name == name),
               onChanged: (value) {
                 bool isEmpty = value.trim().isEmpty && pathList.isEmpty;
                 if (!isEmpty && !enablePublish.value) {
@@ -578,6 +589,7 @@ class _CreateDynPanelState extends CommonPublishPageState<CreateDynPanel> {
                 contentPadding: EdgeInsets.zero,
               ),
               inputFormatters: [LengthLimitingTextInputFormatter(1000)],
+              onMention: onMention,
             ),
           ),
         ),
@@ -590,9 +602,11 @@ class _CreateDynPanelState extends CommonPublishPageState<CreateDynPanel> {
   Future<void> onCustomPublish(
       {required String message, List? pictures}) async {
     SmartDialog.showLoading(msg: '正在发布');
+    List<Map<String, dynamic>>? extraContent = getRichContent();
+    final hasMention = extraContent != null;
     var result = await DynamicsHttp.createDynamic(
       mid: Accounts.main.mid,
-      rawText: editController.text,
+      rawText: hasMention ? null : editController.text,
       pics: pictures,
       publishTime: _publishTime.value != null
           ? _publishTime.value!.millisecondsSinceEpoch ~/ 1000
@@ -601,6 +615,7 @@ class _CreateDynPanelState extends CommonPublishPageState<CreateDynPanel> {
       privatePub: _isPrivate.value ? 1 : null,
       title: _titleEditCtr.text,
       topic: topic.value,
+      extraContent: extraContent,
     );
     SmartDialog.dismiss();
     if (result['status']) {
@@ -618,31 +633,16 @@ class _CreateDynPanelState extends CommonPublishPageState<CreateDynPanel> {
     }
   }
 
-  double _offset = 0;
-  Future<void> _onSelectTopic() async {
-    TopicItem? res = await showModalBottomSheet(
-      context: context,
-      useSafeArea: true,
-      isScrollControlled: true,
-      constraints: BoxConstraints(
-        maxWidth: min(600, context.mediaQueryShortestSide),
-      ),
-      builder: (context) => topic_sheet.DraggableScrollableSheet(
-        expand: false,
-        snap: true,
-        minChildSize: 0,
-        maxChildSize: 1,
-        initialChildSize: _offset == 0 ? 0.65 : 1,
-        initialScrollOffset: _offset,
-        snapSizes: const [0.65],
-        builder: (context, scrollController) => SelectTopicPanel(
-          scrollController: scrollController,
-          callback: (offset) => _offset = offset,
-        ),
-      ),
-    );
-    if (res != null) {
-      topic.value = Pair(first: res.id, second: res.name);
-    }
+  double _topicOffset = 0;
+  void _onSelectTopic() {
+    SelectTopicPanel.onSelectTopic(
+      context,
+      offset: _topicOffset,
+      callback: (offset) => _topicOffset = offset,
+    ).then((TopicItem? res) {
+      if (res != null) {
+        topic.value = Pair(first: res.id, second: res.name);
+      }
+    });
   }
 }

@@ -625,7 +625,7 @@ class _ArticlePageState extends State<ArticlePage>
                     upMid: _articleCtr.upMid,
                     callback: _getImageCallback,
                     onCheckReply: (item) =>
-                        _articleCtr.onCheckReply(context, item, isManual: true),
+                        _articleCtr.onCheckReply(item, isManual: true),
                     onToggleTop: (item) => _articleCtr.onToggleTop(
                       item,
                       index,

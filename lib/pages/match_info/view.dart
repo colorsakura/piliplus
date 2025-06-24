@@ -217,8 +217,8 @@ class _MatchInfoPageState extends State<MatchInfoPage> {
                       onDelete: (item, subIndex) =>
                           _controller.onRemove(index, item, subIndex),
                       upMid: _controller.upMid,
-                      onCheckReply: (item) => _controller
-                          .onCheckReply(context, item, isManual: true),
+                      onCheckReply: (item) =>
+                          _controller.onCheckReply(item, isManual: true),
                       onToggleTop: (item) => _controller.onToggleTop(
                         item,
                         index,

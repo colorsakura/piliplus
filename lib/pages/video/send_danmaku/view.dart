@@ -377,7 +377,7 @@ class _SendDanmakuPanelState extends CommonPublishPageState<SendDanmakuPanel> {
                       } else if (isEmpty && enablePublish.value) {
                         enablePublish.value = false;
                       }
-                      widget.onSave?.call(value);
+                      widget.onSave?.call((text: value, mentions: null));
                     },
                     textInputAction: TextInputAction.send,
                     onSubmitted: (value) {

@@ -736,7 +736,7 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
                     upMid: _controller.upMid,
                     callback: _getImageCallback,
                     onCheckReply: (item) =>
-                        _controller.onCheckReply(context, item, isManual: true),
+                        _controller.onCheckReply(item, isManual: true),
                     onToggleTop: (item) => _controller.onToggleTop(
                       item,
                       index,

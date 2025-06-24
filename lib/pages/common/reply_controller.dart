@@ -4,6 +4,7 @@ import 'package:PiliPlus/grpc/bilibili/pagination.pb.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/http/reply.dart';
 import 'package:PiliPlus/models/common/reply/reply_sort_type.dart';
+import 'package:PiliPlus/models_new/dynamic/dyn_mention/item.dart';
 import 'package:PiliPlus/pages/common/common_list_controller.dart';
 import 'package:PiliPlus/pages/video/reply_new/view.dart';
 import 'package:PiliPlus/services/account_service.dart';
@@ -24,7 +25,8 @@ abstract class ReplyController<R> extends CommonListController<R, ReplyInfo> {
   late Rx<ReplySortType> sortType;
   late Rx<Mode> mode;
 
-  late final savedReplies = {};
+  late final savedReplies =
+      <Object, ({String text, Set<MentionItem>? mentions})?>{};
 
   AccountService accountService = Get.find<AccountService>();
 
@@ -125,16 +127,16 @@ abstract class ReplyController<R> extends CommonListController<R, ReplyInfo> {
         .push(
       GetDialogRoute(
         pageBuilder: (buildContext, animation, secondaryAnimation) {
+          final saved = savedReplies[key];
           return ReplyPage(
             oid: oid ?? replyItem!.oid.toInt(),
             root: oid != null ? 0 : replyItem!.id.toInt(),
             parent: oid != null ? 0 : replyItem!.id.toInt(),
             replyType: replyItem?.type.toInt() ?? replyType!,
             replyItem: replyItem,
-            initialValue: savedReplies[key],
-            onSave: (reply) {
-              savedReplies[key] = reply;
-            },
+            initialValue: saved?.text,
+            mentions: saved?.mentions,
+            onSave: (reply) => savedReplies[key] = reply,
             hint: hint,
           );
         },
@@ -157,7 +159,7 @@ abstract class ReplyController<R> extends CommonListController<R, ReplyInfo> {
         .then(
       (res) {
         if (res != null) {
-          savedReplies[key] = null;
+          savedReplies.remove(key);
           ReplyInfo replyInfo = RequestUtils.replyCast(res);
           if (loadingState.value.isSuccess) {
             List<ReplyInfo>? list = loadingState.value.data;
@@ -179,8 +181,8 @@ abstract class ReplyController<R> extends CommonListController<R, ReplyInfo> {
           count.value += 1;
 
           // check reply
-          if (enableCommAntifraud && context.mounted) {
-            onCheckReply(context, replyInfo, isManual: false);
+          if (enableCommAntifraud) {
+            onCheckReply(replyInfo, isManual: false);
           }
         }
       },
@@ -200,8 +202,7 @@ abstract class ReplyController<R> extends CommonListController<R, ReplyInfo> {
     loadingState.refresh();
   }
 
-  void onCheckReply(BuildContext context, ReplyInfo replyInfo,
-      {required bool isManual}) {
+  void onCheckReply(ReplyInfo replyInfo, {required bool isManual}) {
     ReplyUtils.onCheckReply(
       replyInfo: replyInfo,
       biliSendCommAntifraud: _biliSendCommAntifraud,

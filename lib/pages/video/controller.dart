@@ -945,7 +945,7 @@ class VideoDetailController extends GetxController
             bvid: bvid,
             progress: plPlayerController.position.value.inMilliseconds,
             initialValue: savedDanmaku,
-            onSave: (danmaku) => savedDanmaku = danmaku,
+            onSave: (danmaku) => savedDanmaku = danmaku.text,
             callback: (danmakuModel) {
               savedDanmaku = null;
               plPlayerController.danmakuController?.addDanmaku(danmakuModel);

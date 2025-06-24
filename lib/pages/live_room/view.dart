@@ -607,7 +607,7 @@ class _LiveRoomPageState extends State<LiveRoomPage>
           fromEmote: fromEmote,
           liveRoomController: _liveRoomController,
           initialValue: _liveRoomController.savedDanmaku,
-          onSave: (msg) => _liveRoomController.savedDanmaku = msg,
+          onSave: (msg) => _liveRoomController.savedDanmaku = msg.text,
         );
       },
       transitionDuration: const Duration(milliseconds: 500),

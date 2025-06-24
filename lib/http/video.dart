@@ -510,6 +510,7 @@ class VideoHttp {
     int? parent,
     List? pictures,
     bool? syncToDynamic,
+    Map? atNameToMid,
   }) async {
     if (message == '') {
       return {'status': false, 'msg': '请输入评论内容'};
@@ -520,13 +521,16 @@ class VideoHttp {
       if (root != null && root != 0) 'root': root,
       if (parent != null && parent != 0) 'parent': parent,
       'message': message,
+      if (atNameToMid != null)
+        'at_name_to_mid': jsonEncode(atNameToMid), // {"name":uid}
       if (pictures != null) 'pictures': jsonEncode(pictures),
       if (syncToDynamic == true) 'sync_to_dynamic': 1,
       'csrf': Accounts.main.csrf,
     };
     var res = await Request().post(
       Api.replyAdd,
-      data: FormData.fromMap(data),
+      data: data,
+      options: Options(contentType: Headers.formUrlEncodedContentType),
     );
     log(res.toString());
     if (res.data['code'] == 0) {

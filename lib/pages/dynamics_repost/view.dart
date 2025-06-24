@@ -2,15 +2,17 @@ import 'package:PiliPlus/common/widgets/button/toolbar_icon_button.dart';
 import 'package:PiliPlus/common/widgets/draggable_sheet/draggable_scrollable_sheet_dyn.dart'
     show DraggableScrollableSheet;
 import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
+import 'package:PiliPlus/common/widgets/text_field/text_field.dart';
 import 'package:PiliPlus/http/dynamics.dart';
 import 'package:PiliPlus/models/common/publish_panel_type.dart';
 import 'package:PiliPlus/models/dynamics/result.dart';
 import 'package:PiliPlus/pages/common/common_publish_page.dart';
+import 'package:PiliPlus/pages/dynamics_mention/controller.dart';
 import 'package:PiliPlus/pages/emote/controller.dart';
 import 'package:PiliPlus/pages/emote/view.dart';
 import 'package:PiliPlus/utils/accounts.dart';
 import 'package:PiliPlus/utils/request_utils.dart';
-import 'package:flutter/material.dart' hide DraggableScrollableSheet;
+import 'package:flutter/material.dart' hide DraggableScrollableSheet, TextField;
 import 'package:flutter/services.dart' show LengthLimitingTextInputFormatter;
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
@@ -68,9 +70,9 @@ class _RepostPanelState extends CommonPublishPageState<RepostPanel> {
 
   @override
   void dispose() {
-    try {
-      Get.delete<EmotePanelController>();
-    } catch (_) {}
+    Get
+      ..delete<EmotePanelController>()
+      ..delete<DynMentionController>();
     super.dispose();
   }
 
@@ -239,6 +241,7 @@ class _RepostPanelState extends CommonPublishPageState<RepostPanel> {
                 contentPadding: const EdgeInsets.symmetric(vertical: 10),
               ),
               inputFormatters: [LengthLimitingTextInputFormatter(1000)],
+              onMention: onMention,
             ),
           ),
         ),
@@ -323,19 +326,30 @@ class _RepostPanelState extends CommonPublishPageState<RepostPanel> {
 
   Widget get _buildToolbar => Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        child: Obx(
-          () => ToolbarIconButton(
-            onPressed: () {
-              updatePanelType(
-                panelType.value == PanelType.emoji
-                    ? PanelType.keyboard
-                    : PanelType.emoji,
-              );
-            },
-            icon: const Icon(Icons.emoji_emotions, size: 22),
-            tooltip: '表情',
-            selected: panelType.value == PanelType.emoji,
-          ),
+        child: Row(
+          spacing: 16,
+          children: [
+            Obx(
+              () => ToolbarIconButton(
+                onPressed: () {
+                  updatePanelType(
+                    panelType.value == PanelType.emoji
+                        ? PanelType.keyboard
+                        : PanelType.emoji,
+                  );
+                },
+                icon: const Icon(Icons.emoji_emotions, size: 22),
+                tooltip: '表情',
+                selected: panelType.value == PanelType.emoji,
+              ),
+            ),
+            ToolbarIconButton(
+              onPressed: () => onMention(true),
+              icon: const Icon(Icons.alternate_email, size: 22),
+              tooltip: '@',
+              selected: false,
+            ),
+          ],
         ),
       );
 
@@ -403,15 +417,23 @@ class _RepostPanelState extends CommonPublishPageState<RepostPanel> {
   @override
   Future<void> onCustomPublish(
       {required String message, List? pictures}) async {
+    SmartDialog.showLoading();
+    List<Map<String, dynamic>>? content = getRichContent();
+    final hasMention = content != null;
+    List<Map<String, dynamic>>? repostContent =
+        widget.item?.orig != null ? extraContent(widget.item!) : null;
+    if (hasMention && repostContent != null) {
+      content.addAll(repostContent);
+    }
     var result = await DynamicsHttp.createDynamic(
       mid: Accounts.main.mid,
       dynIdStr: widget.item?.idStr ?? widget.dynIdStr,
       rid: widget.rid,
       dynType: widget.dynType,
-      rawText: editController.text,
-      extraContent:
-          widget.item?.orig != null ? extraContent(widget.item!) : null,
+      rawText: hasMention ? null : editController.text,
+      extraContent: content ?? repostContent,
     );
+    SmartDialog.dismiss();
     if (result['status']) {
       Get.back();
       SmartDialog.showToast('转发成功');

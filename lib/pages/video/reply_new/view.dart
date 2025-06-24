@@ -1,15 +1,17 @@
 import 'dart:async';
 
 import 'package:PiliPlus/common/widgets/button/toolbar_icon_button.dart';
+import 'package:PiliPlus/common/widgets/text_field/text_field.dart';
 import 'package:PiliPlus/grpc/bilibili/main/community/reply/v1.pb.dart'
     show ReplyInfo;
 import 'package:PiliPlus/http/video.dart';
 import 'package:PiliPlus/main.dart';
 import 'package:PiliPlus/models/common/publish_panel_type.dart';
 import 'package:PiliPlus/pages/common/common_publish_page.dart';
+import 'package:PiliPlus/pages/dynamics_mention/controller.dart';
 import 'package:PiliPlus/pages/emote/view.dart';
 import 'package:PiliPlus/utils/storage_pref.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide TextField;
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 
@@ -24,6 +26,7 @@ class ReplyPage extends CommonPublishPage {
   const ReplyPage({
     super.key,
     super.initialValue,
+    super.mentions,
     super.imageLengthLimit,
     super.onSave,
     required this.oid,
@@ -65,6 +68,12 @@ class _ReplyPageState extends CommonPublishPageState<ReplyPage> {
           ),
         ),
       );
+
+  @override
+  void dispose() {
+    Get.delete<DynMentionController>();
+    super.dispose();
+  }
 
   @override
   void didChangeDependencies() {
@@ -141,7 +150,7 @@ class _ReplyPageState extends CommonPublishPageState<ReplyPage> {
                   } else if (isEmpty && enablePublish.value) {
                     enablePublish.value = false;
                   }
-                  widget.onSave?.call(value);
+                  widget.onSave?.call((text: value, mentions: mentions));
                 },
                 focusNode: focusNode,
                 decoration: InputDecoration(
@@ -150,6 +159,7 @@ class _ReplyPageState extends CommonPublishPageState<ReplyPage> {
                   hintStyle: const TextStyle(fontSize: 14),
                 ),
                 style: themeData.textTheme.bodyLarge,
+                onMention: onMention,
               ),
             ),
           ),
@@ -163,7 +173,6 @@ class _ReplyPageState extends CommonPublishPageState<ReplyPage> {
         height: 52,
         padding: const EdgeInsets.only(left: 12, right: 12),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Obx(
               () => ToolbarIconButton(
@@ -177,7 +186,7 @@ class _ReplyPageState extends CommonPublishPageState<ReplyPage> {
                 selected: panelType.value == PanelType.keyboard,
               ),
             ),
-            const SizedBox(width: 10),
+            const SizedBox(width: 8),
             Obx(
               () => ToolbarIconButton(
                 tooltip: '表情',
@@ -191,7 +200,7 @@ class _ReplyPageState extends CommonPublishPageState<ReplyPage> {
               ),
             ),
             if (widget.root == 0) ...[
-              const SizedBox(width: 10),
+              const SizedBox(width: 8),
               ToolbarIconButton(
                 tooltip: '图片',
                 selected: false,
@@ -199,32 +208,56 @@ class _ReplyPageState extends CommonPublishPageState<ReplyPage> {
                 onPressed: onPickImage,
               ),
             ],
-            const Spacer(),
-            Obx(
-              () => TextButton.icon(
-                style: TextButton.styleFrom(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 15, vertical: 13),
-                  visualDensity: VisualDensity.compact,
-                  foregroundColor: _syncToDynamic.value
-                      ? themeData.colorScheme.secondary
-                      : themeData.colorScheme.outline,
+            const SizedBox(width: 8),
+            ToolbarIconButton(
+              onPressed: () => onMention(true),
+              icon: const Icon(Icons.alternate_email, size: 22),
+              tooltip: '@',
+              selected: false,
+            ),
+            Expanded(
+              child: Center(
+                child: Obx(
+                  () => TextButton(
+                    style: TextButton.styleFrom(
+                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      padding: const EdgeInsets.all(13),
+                      visualDensity: VisualDensity.compact,
+                      foregroundColor: _syncToDynamic.value
+                          ? themeData.colorScheme.secondary
+                          : themeData.colorScheme.outline,
+                    ),
+                    onPressed: () =>
+                        _syncToDynamic.value = !_syncToDynamic.value,
+                    child: Row(
+                      spacing: 4,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          _syncToDynamic.value
+                              ? Icons.check_box
+                              : Icons.check_box_outline_blank,
+                          size: 22,
+                        ),
+                        const Flexible(
+                          child: Text(
+                            '转到动态',
+                            maxLines: 1,
+                            style: TextStyle(height: 1),
+                            strutStyle: StrutStyle(leading: 0, height: 1),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
-                onPressed: () => _syncToDynamic.value = !_syncToDynamic.value,
-                icon: Icon(
-                  _syncToDynamic.value
-                      ? Icons.check_box
-                      : Icons.check_box_outline_blank,
-                  size: 22,
-                ),
-                label: const Text('转发至动态'),
               ),
             ),
-            const Spacer(),
             Obx(
               () => FilledButton.tonal(
                 onPressed: enablePublish.value ? onPublish : null,
                 style: FilledButton.styleFrom(
+                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                   padding:
                       const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                   visualDensity: VisualDensity.compact,
@@ -249,6 +282,9 @@ class _ReplyPageState extends CommonPublishPageState<ReplyPage> {
       message: widget.replyItem != null && widget.replyItem!.root != 0
           ? ' 回复 @${widget.replyItem!.member.name} : $message'
           : message,
+      atNameToMid: mentions?.isNotEmpty == true
+          ? {for (var e in mentions!) e.name: e.uid}
+          : null,
       pictures: pictures,
       syncToDynamic: _syncToDynamic.value,
     );

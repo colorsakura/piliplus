@@ -11,6 +11,8 @@ import 'package:PiliPlus/models/dynamics/vote_model.dart';
 import 'package:PiliPlus/models_new/article/article_info/data.dart';
 import 'package:PiliPlus/models_new/article/article_list/data.dart';
 import 'package:PiliPlus/models_new/article/article_view/data.dart';
+import 'package:PiliPlus/models_new/dynamic/dyn_mention/data.dart';
+import 'package:PiliPlus/models_new/dynamic/dyn_mention/group.dart';
 import 'package:PiliPlus/models_new/dynamic/dyn_reserve/data.dart';
 import 'package:PiliPlus/models_new/dynamic/dyn_topic_feed/topic_card_list.dart';
 import 'package:PiliPlus/models_new/dynamic/dyn_topic_top/top_details.dart';
@@ -141,11 +143,12 @@ class DynamicsHttp {
         "dyn_req": {
           "content": {
             "contents": [
-              {
-                "raw_text": rawText,
-                "type": 1,
-                "biz_id": "",
-              },
+              if (rawText != null)
+                {
+                  "raw_text": rawText,
+                  "type": 1,
+                  "biz_id": "",
+                },
               ...?extraContent,
             ],
             if (title?.isNotEmpty == true) 'title': title,
@@ -484,6 +487,24 @@ class DynamicsHttp {
       return Success((res.data['data'] as List?)
           ?.map((e) => OpusPicModel.fromJson(e))
           .toList());
+    } else {
+      return Error(res.data['message']);
+    }
+  }
+
+  static Future<LoadingState<List<MentionGroup>?>> dynMention(
+      {String? keyword}) async {
+    final res = await Request().get(
+      Api.dynMention,
+      queryParameters: {
+        if (keyword?.isNotEmpty == true) 'keyword': keyword,
+        'web_location': 333.1365,
+      },
+    );
+    if (res.data['code'] == 0) {
+      return Success(
+        DynMentionData.fromJson(res.data['data']).groups,
+      );
     } else {
       return Error(res.data['message']);
     }
