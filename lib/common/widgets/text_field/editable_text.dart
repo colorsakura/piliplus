@@ -3261,8 +3261,6 @@ class EditableTextState extends State<EditableText>
 
   @override
   void updateEditingValueWithDeltas(List<TextEditingDelta> textEditingDeltas) {
-    TextEditingValue value = _value;
-
     var last = textEditingDeltas.lastOrNull;
     if (last case TextEditingDeltaInsertion e) {
       if (e.textInserted == '@') {
@@ -3279,14 +3277,12 @@ class EditableTextState extends State<EditableText>
               _atUserRegex.firstMatch(text.substring(0, offset));
 
           if (match != null) {
-            _lastKnownRemoteTextEditingValue = value;
-            _value = TextEditingDeltaDeletion(
+            updateEditingValue(TextEditingDeltaDeletion(
               oldText: e.oldText,
               deletedRange: TextRange(start: match.start, end: match.end),
               selection: TextSelection.collapsed(offset: match.start),
               composing: e.composing,
-            ).apply(value);
-            widget.onChanged?.call(_value.text);
+            ).apply(_value));
             widget.onDelAtUser?.call(match.group(0)!.trim());
             return;
           }
@@ -3295,21 +3291,8 @@ class EditableTextState extends State<EditableText>
     }
 
     for (final TextEditingDelta delta in textEditingDeltas) {
-      value = delta.apply(value);
+      updateEditingValue(delta.apply(_value));
     }
-
-    _lastKnownRemoteTextEditingValue = value;
-
-    if (value == _value) {
-      // This is possible, for example, when the numeric keyboard is input,
-      // the engine will notify twice for the same value.
-      // Track at https://github.com/flutter/flutter/issues/65811
-      return;
-    }
-
-    _value = value;
-
-    widget.onChanged?.call(value.text);
   }
 
   @override
