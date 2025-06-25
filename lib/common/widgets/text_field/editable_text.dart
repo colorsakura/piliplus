@@ -3277,12 +3277,15 @@ class EditableTextState extends State<EditableText>
               _atUserRegex.firstMatch(text.substring(0, offset));
 
           if (match != null) {
-            updateEditingValue(TextEditingDeltaDeletion(
-              oldText: e.oldText,
-              deletedRange: TextRange(start: match.start, end: match.end),
-              selection: TextSelection.collapsed(offset: match.start),
-              composing: e.composing,
-            ).apply(_value));
+            userUpdateTextEditingValue(
+              TextEditingDeltaDeletion(
+                oldText: e.oldText,
+                deletedRange: TextRange(start: match.start, end: match.end),
+                selection: TextSelection.collapsed(offset: match.start),
+                composing: e.composing,
+              ).apply(_value),
+              SelectionChangedCause.keyboard,
+            );
             widget.onDelAtUser?.call(match.group(0)!.trim());
             return;
           }
@@ -3290,9 +3293,11 @@ class EditableTextState extends State<EditableText>
       }
     }
 
+    TextEditingValue value = _value;
     for (final TextEditingDelta delta in textEditingDeltas) {
-      updateEditingValue(delta.apply(_value));
+      value = delta.apply(value);
     }
+    updateEditingValue(value);
   }
 
   @override
