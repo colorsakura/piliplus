@@ -17,6 +17,7 @@ import 'package:chat_bottom_container/chat_bottom_container.dart';
 import 'package:dio/dio.dart';
 import 'package:easy_debounce/easy_throttle.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 import 'package:image_cropper/image_cropper.dart';
@@ -206,29 +207,11 @@ abstract class CommonPublishPageState<T extends CommonPublishPage>
   Future<void> onCustomPublish({required String message, List? pictures});
 
   void onChooseEmote(dynamic emote) {
-    enablePublish.value = true;
-    final int cursorPosition = editController.selection.baseOffset;
-    final String currentText = editController.text;
     if (emote is Emote) {
-      final String newText = currentText.substring(0, cursorPosition) +
-          emote.text! +
-          currentText.substring(cursorPosition);
-      editController.value = TextEditingValue(
-        text: newText,
-        selection: TextSelection.collapsed(
-            offset: cursorPosition + emote.text!.length),
-      );
+      onInsertText(emote.text!);
     } else if (emote is Emoticon) {
-      final String newText = currentText.substring(0, cursorPosition) +
-          emote.emoji! +
-          currentText.substring(cursorPosition);
-      editController.value = TextEditingValue(
-        text: newText,
-        selection: TextSelection.collapsed(
-            offset: cursorPosition + emote.emoji!.length),
-      );
+      onInsertText(emote.emoji!);
     }
-    widget.onSave?.call((text: editController.text, mentions: mentions));
   }
 
   Widget? get customPanel => null;
@@ -445,23 +428,65 @@ abstract class CommonPublishPageState<T extends CommonPublishPage>
       callback: (offset) => _mentionOffset = offset,
     ).then((MentionItem? res) {
       if (res != null) {
-        enablePublish.value = true;
-
         (mentions ??= <MentionItem>[]).add(res);
 
         String atName = '${fromClick ? '@' : ''}${res.name} ';
-        final int cursorPosition = editController.selection.baseOffset;
-        final String currentText = editController.text;
-        final String newText =
-            '${currentText.substring(0, cursorPosition)}$atName${currentText.substring(cursorPosition)}';
-        editController.value = TextEditingValue(
-          text: newText,
-          selection:
-              TextSelection.collapsed(offset: cursorPosition + atName.length),
-        );
-        widget.onSave?.call((text: editController.text, mentions: mentions));
+
+        onInsertText(atName);
       }
     });
+  }
+
+  void onInsertText(String text) {
+    if (text.isEmpty) {
+      return;
+    }
+
+    enablePublish.value = true;
+
+    final oldValue = editController.value;
+    final selection = oldValue.selection;
+
+    if (selection.isValid) {
+      TextEditingDelta delta;
+
+      if (selection.isCollapsed) {
+        delta = TextEditingDeltaInsertion(
+          oldText: oldValue.text,
+          textInserted: text,
+          insertionOffset: selection.start,
+          selection: TextSelection.collapsed(
+            offset: selection.start + text.length,
+          ),
+          composing: TextRange.empty,
+        );
+      } else {
+        delta = TextEditingDeltaReplacement(
+          oldText: oldValue.text,
+          replacementText: text,
+          replacedRange: selection,
+          selection: TextSelection.collapsed(
+            offset: selection.start + text.length,
+          ),
+          composing: TextRange.empty,
+        );
+      }
+
+      final newValue = delta.apply(oldValue);
+
+      if (oldValue == newValue) {
+        return;
+      }
+
+      editController.value = newValue;
+    } else {
+      editController.value = TextEditingValue(
+        text: text,
+        selection: TextSelection.collapsed(offset: text.length),
+      );
+    }
+
+    widget.onSave?.call((text: editController.text, mentions: mentions));
   }
 
   void onDelAtUser(String name) {
