@@ -159,6 +159,14 @@ class _MainAppState extends State<MainApp>
     super.dispose();
   }
 
+  void onBack() {
+    if (Platform.isAndroid) {
+      Utils.channel.invokeMethod('back');
+    } else {
+      SystemNavigator.pop();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -166,15 +174,15 @@ class _MainAppState extends State<MainApp>
     return PopScope(
       canPop: false,
       onPopInvokedWithResult: (bool didPop, Object? result) {
-        if (_mainController.selectedIndex.value != 0) {
-          setIndex(0);
-          _mainController.bottomBarStream?.add(true);
-          _homeController.searchBarStream?.add(true);
+        if (_mainController.directExitOnBack) {
+          onBack();
         } else {
-          if (Platform.isAndroid) {
-            Utils.channel.invokeMethod('back');
+          if (_mainController.selectedIndex.value != 0) {
+            setIndex(0);
+            _mainController.bottomBarStream?.add(true);
+            _homeController.searchBarStream?.add(true);
           } else {
-            SystemNavigator.pop();
+            onBack();
           }
         }
       },
