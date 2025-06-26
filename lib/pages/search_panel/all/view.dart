@@ -55,7 +55,6 @@ class _SearchAllPanelState
                   height: 120,
                   child: VideoCardH(
                     videoItem: item,
-                    showPubdate: true,
                   ),
                 ),
               List<SearchPgcItemModel>() => item.length == 1

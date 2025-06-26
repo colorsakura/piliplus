@@ -168,7 +168,6 @@ class _HotPageState extends CommonPageState<HotPage, HotController>
                   }
                   return VideoCardH(
                     videoItem: response[index],
-                    showPubdate: true,
                     onRemove: () => controller.loadingState
                       ..value.data!.removeAt(index)
                       ..refresh(),

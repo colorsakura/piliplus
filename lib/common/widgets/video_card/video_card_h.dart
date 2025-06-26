@@ -24,20 +24,12 @@ class VideoCardH extends StatelessWidget {
   const VideoCardH({
     super.key,
     required this.videoItem,
-    this.showOwner = true,
-    this.showView = true,
-    this.showDanmaku = true,
-    this.showPubdate = false,
     this.onTap,
     this.onLongPress,
     this.onViewLater,
     this.onRemove,
   });
   final BaseVideoItemModel videoItem;
-  final bool showOwner;
-  final bool showView;
-  final bool showDanmaku;
-  final bool showPubdate;
   final VoidCallback? onTap;
   final VoidCallback? onLongPress;
   final ValueChanged<int>? onViewLater;
@@ -199,8 +191,8 @@ class VideoCardH extends StatelessWidget {
 
   Widget content(BuildContext context) {
     final theme = Theme.of(context);
-    String pubdate = showPubdate ? DateUtil.dateFormat(videoItem.pubdate!) : '';
-    if (pubdate != '') pubdate += ' ';
+    String pubdate = DateUtil.dateFormat(videoItem.pubdate!);
+    if (pubdate != '') pubdate += '  ';
     return Expanded(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -242,31 +234,28 @@ class VideoCardH extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
               ),
             ),
-          if (showOwner || showPubdate)
-            Text(
-              "$pubdate ${showOwner ? videoItem.owner.name : ''}",
-              maxLines: 1,
-              style: TextStyle(
-                fontSize: 12,
-                height: 1,
-                color: theme.colorScheme.outline,
-                overflow: TextOverflow.clip,
-              ),
+          Text(
+            "$pubdate${videoItem.owner.name}",
+            maxLines: 1,
+            style: TextStyle(
+              fontSize: 12,
+              height: 1,
+              color: theme.colorScheme.outline,
+              overflow: TextOverflow.clip,
             ),
+          ),
           const SizedBox(height: 3),
           Row(
             spacing: 8,
             children: [
-              if (showView)
-                StatWidget(
-                  type: StatType.play,
-                  value: videoItem.stat.view,
-                ),
-              if (showDanmaku)
-                StatWidget(
-                  type: StatType.danmaku,
-                  value: videoItem.stat.danmu,
-                ),
+              StatWidget(
+                type: StatType.play,
+                value: videoItem.stat.view,
+              ),
+              StatWidget(
+                type: StatType.danmaku,
+                value: videoItem.stat.danmu,
+              ),
             ],
           ),
         ],
