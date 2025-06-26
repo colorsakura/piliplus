@@ -283,12 +283,7 @@ class ReplyItemGrpc extends StatelessWidget {
                   ),
                   const TextSpan(text: ' '),
                 ],
-                buildContent(
-                  context,
-                  theme,
-                  replyItem,
-                  null,
-                ),
+                buildContent(context, theme, replyItem),
               ],
             ),
           ),
@@ -519,12 +514,7 @@ class ReplyItemGrpc extends StatelessWidget {
                                     ? ''
                                     : ' ',
                           ),
-                          buildContent(
-                            context,
-                            theme,
-                            childReply,
-                            replyItem,
-                          ),
+                          buildContent(context, theme, childReply),
                         ],
                       ),
                     ),
@@ -575,11 +565,7 @@ class ReplyItemGrpc extends StatelessWidget {
     BuildContext context,
     ThemeData theme,
     ReplyInfo replyItem,
-    ReplyInfo? fReplyItem,
   ) {
-    // replyItem 当前回复内容
-    // replyReply 查看二楼回复（回复详情）回调
-    // fReplyItem 父级回复内容，用作二楼回复（回复详情）展示
     final Content content = replyItem.content;
     final List<InlineSpan> spanChildren = <InlineSpan>[];
 
@@ -625,7 +611,7 @@ class ReplyItemGrpc extends StatelessWidget {
         String matchStr = match[0]!;
         if (content.emotes.containsKey(matchStr)) {
           // 处理表情
-          final int size = content.emotes[matchStr]!.size.toInt();
+          final size = content.emotes[matchStr]!.size.toInt() * 20.0;
           spanChildren.add(
             WidgetSpan(
               child: NetworkImgLayer(
@@ -633,8 +619,8 @@ class ReplyItemGrpc extends StatelessWidget {
                     ? content.emotes[matchStr]?.gifUrl
                     : content.emotes[matchStr]?.url,
                 type: ImageType.emote,
-                width: size * 20,
-                height: size * 20,
+                width: size,
+                height: size,
               ),
             ),
           );

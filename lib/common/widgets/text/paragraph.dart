@@ -78,7 +78,10 @@ class RenderParagraph extends RenderBox
     SelectionRegistrar? registrar,
     required Color primary,
   })  : assert(text.debugAssertIsValid()),
-        assert(maxLines == null || maxLines > 0),
+        assert(maxLines == null ||
+            (maxLines > 0 &&
+                overflow != TextOverflow.ellipsis &&
+                overflow != TextOverflow.fade)),
         assert(
           identical(textScaler, TextScaler.noScaling) || textScaleFactor == 1.0,
           'textScaleFactor is deprecated and cannot be specified when textScaler is specified.',
@@ -673,6 +676,8 @@ class RenderParagraph extends RenderBox
       );
   TextPainter? _morePainter;
 
+  bool didOverflowHeight = false;
+
   @override
   void performLayout() {
     _lastSelectableFragments?.forEach(
@@ -690,7 +695,7 @@ class RenderParagraph extends RenderBox
     final Size textSize = _textPainter.size;
     size = constraints.constrain(textSize);
 
-    final bool didOverflowHeight =
+    didOverflowHeight =
         size.height < textSize.height || _textPainter.didExceedMaxLines;
 
     if (didOverflowHeight) {
@@ -700,7 +705,10 @@ class RenderParagraph extends RenderBox
         textScaler: textScaler,
         locale: locale,
       )..layout(maxWidth: constraints.maxWidth);
-      size = Size(size.width, size.height + _morePainter!.height);
+      size = Size(
+        size.width,
+        constraints.constrainHeight(size.height + _morePainter!.height),
+      );
     }
 
     final bool didOverflowWidth = size.width < textSize.width;
@@ -764,10 +772,6 @@ class RenderParagraph extends RenderBox
 
   @override
   void paint(PaintingContext context, Offset offset) {
-    if (_needsClipping) {
-      _morePainter?.paint(
-          context.canvas, offset + Offset(0, _textPainter.height));
-    }
     // Text alignment only triggers repaint so it's possible the text layout has
     // been invalidated but performLayout wasn't called at this point. Make sure
     // the TextPainter has a valid layout.
@@ -811,6 +815,13 @@ class RenderParagraph extends RenderBox
         context.canvas.drawRect(Offset.zero & size, paint);
       }
       context.canvas.restore();
+    }
+
+    if (didOverflowHeight) {
+      _morePainter?.paint(
+        context.canvas,
+        offset + Offset(0, _textPainter.height),
+      );
     }
   }
 
