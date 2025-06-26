@@ -6,6 +6,10 @@ class StyleString {
   static const BorderRadius mdRadius = BorderRadius.all(imgRadius);
   static const Radius imgRadius = Radius.circular(10);
   static const double aspectRatio = 16 / 10;
+  static const bottomSheetRadius = BorderRadius.only(
+    topLeft: Radius.circular(18),
+    topRight: Radius.circular(18),
+  );
 }
 
 class Constants {

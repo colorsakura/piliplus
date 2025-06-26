@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/common/widgets/dialog/report.dart';
 import 'package:PiliPlus/common/widgets/pendant_avatar.dart';
 import 'package:PiliPlus/http/constants.dart';
@@ -243,10 +244,7 @@ class AuthorPanel extends StatelessWidget {
             children: [
               InkWell(
                 onTap: Get.back,
-                borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(18),
-                  topRight: Radius.circular(18),
-                ),
+                borderRadius: StyleString.bottomSheetRadius,
                 child: Container(
                   height: 35,
                   padding: const EdgeInsets.only(bottom: 2),

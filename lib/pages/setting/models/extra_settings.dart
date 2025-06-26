@@ -205,11 +205,12 @@ List<SettingsModel> get extraSettings => [
                   TextButton(
                     onPressed: () async {
                       Get.back();
+                      int length = int.tryParse(replyLengthLimit) ?? 6;
                       ReplyItemGrpc.replyLengthLimit =
-                          int.tryParse(replyLengthLimit) ?? 6;
+                          length == 0 ? null : length;
                       await GStorage.setting.put(
                         SettingBoxKey.replyLengthLimit,
-                        ReplyItemGrpc.replyLengthLimit,
+                        length,
                       );
                       setState();
                     },

@@ -1,6 +1,7 @@
 // 内容
 import 'package:PiliPlus/common/widgets/custom_icon.dart';
 import 'package:PiliPlus/common/widgets/image/image_view.dart';
+import 'package:PiliPlus/common/widgets/text/text.dart' as custom_text;
 import 'package:PiliPlus/models/dynamics/result.dart';
 import 'package:PiliPlus/pages/dynamics/widgets/rich_node_panel.dart';
 import 'package:flutter/material.dart';
@@ -68,13 +69,12 @@ Widget content(
                       ? const TextStyle(fontSize: 15)
                       : const TextStyle(fontSize: 16),
                 )
-              : Text.rich(
+              : custom_text.Text.rich(
                   style: floor == 1
                       ? const TextStyle(fontSize: 15)
                       : const TextStyle(fontSize: 14),
                   richNodes,
                   maxLines: isSave ? null : 6,
-                  overflow: isSave ? null : TextOverflow.ellipsis,
                 ),
         if (item.modules.moduleDynamic?.major?.opus?.pics?.isNotEmpty == true)
           LayoutBuilder(

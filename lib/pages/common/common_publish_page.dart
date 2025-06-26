@@ -495,10 +495,11 @@ abstract class CommonPublishPageState<T extends CommonPublishPage>
 
   void onChanged(String value) {
     bool isEmpty = value.trim().isEmpty;
-    if (!isEmpty && !enablePublish.value) {
-      enablePublish.value = true;
-    } else if (isEmpty && enablePublish.value) {
+    if (isEmpty) {
       enablePublish.value = false;
+      mentions?.clear();
+    } else {
+      enablePublish.value = true;
     }
     widget.onSave?.call((text: value, mentions: mentions));
   }

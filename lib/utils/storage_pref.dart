@@ -305,8 +305,13 @@ class Pref {
   static bool get horizontalMemberPage =>
       _setting.get(SettingBoxKey.horizontalMemberPage, defaultValue: false);
 
-  static int get replyLengthLimit =>
-      _setting.get(SettingBoxKey.replyLengthLimit, defaultValue: 6);
+  static int? get replyLengthLimit {
+    int length = _setting.get(SettingBoxKey.replyLengthLimit, defaultValue: 6);
+    if (length <= 0) {
+      return null;
+    }
+    return length;
+  }
 
   static int get defaultPicQa =>
       _setting.get(SettingBoxKey.defaultPicQa, defaultValue: 10);
