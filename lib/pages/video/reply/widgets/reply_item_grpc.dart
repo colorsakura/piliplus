@@ -631,13 +631,12 @@ class ReplyItemGrpc extends StatelessWidget {
                     .hasMatch(matchStr)) {
                   UrlUtils.matchUrlPush(matchStr, '');
                 } else {
-                  RegExpMatch? firstMatch = RegExp(
+                  RegExpMatch? match = RegExp(
                     r'^cv(\d+)$|/read/cv(\d+)|note-app/view\?cvid=(\d+)',
                     caseSensitive: false,
                   ).firstMatch(matchStr);
-                  String? cvid = firstMatch?.group(1) ??
-                      firstMatch?.group(2) ??
-                      firstMatch?.group(3);
+                  String? cvid =
+                      match?.group(1) ?? match?.group(2) ?? match?.group(3);
                   if (cvid != null) {
                     Get.toNamed(
                       '/articlePage',

@@ -289,12 +289,9 @@ class ChatItem extends StatelessWidget {
             for (var i in content['sub_cards'])
               GestureDetector(
                 onTap: () async {
-                  RegExp bvRegex =
-                      RegExp(r'BV[0-9A-Za-z]{10}', caseSensitive: false);
-                  Iterable<Match> matches = bvRegex.allMatches(i['jump_url']);
-                  if (matches.isNotEmpty) {
-                    Match match = matches.first;
-                    String bvid = match.group(0)!;
+                  String? bvid =
+                      IdUtils.bvRegex.firstMatch(i['jump_url'])?.group(0);
+                  if (bvid != null) {
                     try {
                       SmartDialog.showLoading();
                       final int? cid = await SearchHttp.ab2c(bvid: bvid);
@@ -612,15 +609,16 @@ class ChatItem extends StatelessWidget {
       content['content'].splitMapJoin(
         RegExp(r"\[[^\[\]]+\]"),
         onMatch: (Match match) {
-          final String emojiKey = match[0]!;
-          final size = emojiMap[emojiKey]!['size'];
-          if (emojiMap.containsKey(emojiKey)) {
+          final emojiKey = match[0]!;
+          final emoji = emojiMap[emojiKey];
+          if (emoji != null) {
+            final size = emoji['size'];
             children.add(
               WidgetSpan(
                 child: NetworkImgLayer(
                   width: size,
                   height: size,
-                  src: emojiMap[emojiKey]!['url'],
+                  src: emoji['url'],
                   type: ImageType.emote,
                 ),
               ),

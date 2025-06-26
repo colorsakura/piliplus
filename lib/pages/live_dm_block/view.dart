@@ -342,9 +342,8 @@ class _LiveDmBlockPageState extends State<LiveDmBlockPage> {
         onChanged: (val) => value = val,
         decoration: isKeyword ? null : const InputDecoration(hintText: 'UID'),
         keyboardType: isKeyword ? null : TextInputType.number,
-        inputFormatters: isKeyword
-            ? null
-            : [FilteringTextInputFormatter.allow(RegExp(r'\d+'))],
+        inputFormatters:
+            isKeyword ? null : [FilteringTextInputFormatter.digitsOnly],
       ),
       onConfirm: () {
         if (value.isNotEmpty) {

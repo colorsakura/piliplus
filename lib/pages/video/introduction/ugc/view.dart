@@ -632,56 +632,27 @@ class _VideoInfoState extends State<VideoInfo> {
     );
   }
 
+  static final RegExp urlRegExp = RegExp(
+    '${Constants.urlRegex.pattern}|av\\d+|bv[a-z\\d]{10}',
+    caseSensitive: false,
+  );
+
   InlineSpan buildContent(ThemeData theme, VideoDetailData content) {
-    final List descV2 = content.descV2!;
+    if (content.descV2.isNullOrEmpty) {
+      return const TextSpan();
+    }
     // type
     // 1 普通文本
     // 2 @用户
-    final List<TextSpan> spanChildren = List.generate(descV2.length, (index) {
-      final currentDesc = descV2[index];
+    final List<TextSpan> spanChildren = content.descV2!.map((currentDesc) {
       switch (currentDesc.type) {
         case 1:
           final List<InlineSpan> spanChildren = <InlineSpan>[];
-          final RegExp urlRegExp = RegExp(
-            '${Constants.urlRegex.pattern}|av\\d+|bv[a-z\\d]{10}',
-            caseSensitive: false,
-          );
-
           (currentDesc.rawText as String).splitMapJoin(
             urlRegExp,
             onMatch: (Match match) {
               String matchStr = match[0]!;
-              if (RegExp(r'^av\d+$', caseSensitive: false).hasMatch(matchStr)) {
-                try {
-                  int aid = int.parse(matchStr.substring(2));
-                  IdUtils.av2bv(aid);
-                  spanChildren.add(
-                    TextSpan(
-                      text: matchStr,
-                      style: TextStyle(color: theme.colorScheme.primary),
-                      recognizer: TapGestureRecognizer()
-                        ..onTap = () => PiliScheme.videoPush(aid, null),
-                    ),
-                  );
-                } catch (e) {
-                  spanChildren.add(TextSpan(text: matchStr));
-                }
-              } else if (RegExp(r'^bv[a-z\d]{10}$', caseSensitive: false)
-                  .hasMatch(matchStr)) {
-                try {
-                  IdUtils.bv2av(matchStr);
-                  spanChildren.add(
-                    TextSpan(
-                      text: matchStr,
-                      style: TextStyle(color: theme.colorScheme.primary),
-                      recognizer: TapGestureRecognizer()
-                        ..onTap = () => PiliScheme.videoPush(null, matchStr),
-                    ),
-                  );
-                } catch (e) {
-                  spanChildren.add(TextSpan(text: matchStr));
-                }
-              } else {
+              if (matchStr.toLowerCase().startsWith('http')) {
                 spanChildren.add(
                   TextSpan(
                     text: matchStr,
@@ -696,6 +667,35 @@ class _VideoInfoState extends State<VideoInfo> {
                       },
                   ),
                 );
+              } else if (matchStr.startsWith('av')) {
+                try {
+                  int aid = int.parse(matchStr.substring(2));
+                  IdUtils.av2bv(aid);
+                  spanChildren.add(
+                    TextSpan(
+                      text: matchStr,
+                      style: TextStyle(color: theme.colorScheme.primary),
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () => PiliScheme.videoPush(aid, null),
+                    ),
+                  );
+                } catch (e) {
+                  spanChildren.add(TextSpan(text: matchStr));
+                }
+              } else {
+                try {
+                  IdUtils.bv2av(matchStr);
+                  spanChildren.add(
+                    TextSpan(
+                      text: matchStr,
+                      style: TextStyle(color: theme.colorScheme.primary),
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () => PiliScheme.videoPush(null, matchStr),
+                    ),
+                  );
+                } catch (e) {
+                  spanChildren.add(TextSpan(text: matchStr));
+                }
               }
               return '';
             },
@@ -716,7 +716,7 @@ class _VideoInfoState extends State<VideoInfo> {
         default:
           return const TextSpan();
       }
-    });
+    }).toList();
     return TextSpan(children: spanChildren);
   }
 

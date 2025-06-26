@@ -171,9 +171,7 @@ class _WebviewPageState extends State<WebviewPage> {
                 callback: (args) async {
                   WebUri? uri = await controller.getUrl();
                   if (uri != null) {
-                    String? oid = RegExp(r'oid=(\d+)')
-                        .firstMatch(uri.toString())
-                        ?.group(1);
+                    String? oid = uri.queryParameters['oid'];
                     if (oid != null) {
                       PiliScheme.videoPush(int.parse(oid), null);
                     }

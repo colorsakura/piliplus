@@ -141,45 +141,38 @@ class MemberVideoCtr
   }
 
   Future<void> toViewPlayAll() async {
+    if (episodicButton.value.text == '继续播放' &&
+        episodicButton.value.uri?.isNotEmpty == true) {
+      final params = Uri.parse(episodicButton.value.uri!).queryParameters;
+      String? oid = params['oid'];
+      if (oid != null) {
+        var bvid = IdUtils.av2bv(int.parse(oid));
+        var cid = await SearchHttp.ab2c(aid: oid, bvid: bvid);
+        PageUtils.toVideoPage(
+          'bvid=$bvid&cid=$cid',
+          arguments: {
+            'heroTag': Utils.makeHeroTag(oid),
+            'sourceType': 'archive',
+            'mediaId': seasonId ?? seriesId ?? mid,
+            'oid': oid,
+            'favTitle':
+                '$username: ${title ?? episodicButton.value.text ?? '播放全部'}',
+            if (seriesId == null) 'count': count.value,
+            if (seasonId != null || seriesId != null)
+              'mediaType': params['page_type'],
+            'desc': params['desc'] == '1',
+            'sortField': params['sort_field'],
+            'isContinuePlaying': true,
+          },
+        );
+      }
+      return;
+    }
+
     if (loadingState.value.isSuccess) {
       List<SpaceArchiveItem>? list = loadingState.value.data;
 
       if (list.isNullOrEmpty) return;
-
-      if (episodicButton.value.text == '继续播放') {
-        String? oid = RegExp(r'oid=(\d+)')
-            .firstMatch('${episodicButton.value.uri}')
-            ?.group(1);
-        if (oid != null) {
-          var bvid = IdUtils.av2bv(int.parse(oid));
-          var cid = await SearchHttp.ab2c(aid: oid, bvid: bvid);
-          PageUtils.toVideoPage(
-            'bvid=$bvid&cid=$cid',
-            arguments: {
-              'heroTag': Utils.makeHeroTag(oid),
-              'sourceType': 'archive',
-              'mediaId': seasonId ?? seriesId ?? mid,
-              'oid': oid,
-              'favTitle':
-                  '$username: ${title ?? episodicButton.value.text ?? '播放全部'}',
-              if (seriesId == null) 'count': count.value,
-              if (seasonId != null || seriesId != null)
-                'mediaType': RegExp(r'page_type=([\d]+)')
-                    .firstMatch('${episodicButton.value.uri}')
-                    ?.group(1),
-              'desc': RegExp(r'desc=([\d]+)')
-                      .firstMatch('${episodicButton.value.uri}')
-                      ?.group(1) ==
-                  '1',
-              'sortField': RegExp(r'sort_field=([\d]+)')
-                  .firstMatch('${episodicButton.value.uri}')
-                  ?.group(1),
-              'isContinuePlaying': true,
-            },
-          );
-        }
-        return;
-      }
 
       for (SpaceArchiveItem element in list!) {
         if (element.cid == null) {
@@ -207,9 +200,8 @@ class MemberVideoCtr
                   '$username: ${title ?? episodicButton.value.text ?? '播放全部'}',
               if (seriesId == null) 'count': count.value,
               if (seasonId != null || seriesId != null)
-                'mediaType': RegExp(r'page_type=([\d]+)')
-                    .firstMatch('${episodicButton.value.uri}')
-                    ?.group(1),
+                'mediaType': Uri.parse(episodicButton.value.uri!)
+                    .queryParameters['page_type'],
               'desc': desc,
               if (type == ContributeType.video)
                 'sortField': order.value == 'click' ? 2 : 1,

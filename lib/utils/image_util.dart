@@ -232,14 +232,13 @@ class ImageUtil {
     }
   }
 
-  static final regExp =
+  static final _thumbRegex =
       RegExp(r'(@(\d+[a-z]_?)*)(\..*)?$', caseSensitive: false);
-
   static String thumbnailUrl(String? src, [int? quality]) {
     if (src != null && quality != 100) {
       bool hasMatch = false;
       src = src.splitMapJoin(
-        regExp,
+        _thumbRegex,
         onMatch: (Match match) {
           hasMatch = true;
           String suffix = match.group(3) ?? '.webp';

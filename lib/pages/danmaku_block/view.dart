@@ -125,9 +125,8 @@ class _DanmakuBlockPageState extends State<DanmakuBlockPage> {
                 initialValue: filter,
                 onChanged: (value) => filter = value,
                 keyboardType: isUid ? TextInputType.number : null,
-                inputFormatters: isUid
-                    ? [FilteringTextInputFormatter.allow(RegExp(r'\d+'))]
-                    : null,
+                inputFormatters:
+                    isUid ? [FilteringTextInputFormatter.digitsOnly] : null,
               )
             ],
           ),

@@ -1,6 +1,7 @@
 import 'package:PiliPlus/models/common/live_search_type.dart';
 import 'package:PiliPlus/pages/live_search/child/controller.dart';
 import 'package:PiliPlus/utils/extension.dart';
+import 'package:PiliPlus/utils/id_utils.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -35,11 +36,9 @@ class LiveSearchController extends GetxController
     }
   }
 
-  late final regex = RegExp(r'^\d+$');
-
   void submit() {
     if (editingController.text.isNotEmpty) {
-      if (regex.hasMatch(editingController.text)) {
+      if (IdUtils.digitOnlyRegExp.hasMatch(editingController.text)) {
         Get.toNamed('/liveRoom?roomid=${editingController.text}');
       } else {
         hasData.value = true;

@@ -15,8 +15,12 @@ class IdUtils {
       'FcwAPNKTMug3GV5Lj7EJnHpWsx4tb8haYeviqBz6rkCy12mUSDQX9RdoZf';
   static final invData = {for (var (i, c) in data.codeUnits.indexed) c: i};
 
-  static final bvRegex = RegExp(r'bv(1[0-9A-Za-z]{9})', caseSensitive: false);
+  static final bvRegex = RegExp(r'bv[0-9a-zA-Z]{10}', caseSensitive: false);
+  static final bvRegexExact =
+      RegExp(r'^bv[0-9a-zA-Z]{10}$', caseSensitive: false);
   static final avRegex = RegExp(r'av(\d+)', caseSensitive: false);
+  static final avRegexExact = RegExp(r'^av(\d+)$', caseSensitive: false);
+  static final digitOnlyRegExp = RegExp(r'^\d+$');
 
   static void swap<T>(List<T> list, int idx1, int idx2) {
     final idx1Value = list[idx1];
@@ -58,12 +62,12 @@ class IdUtils {
     if (input == null || input.isEmpty) {
       return result;
     }
-    String? bvid = bvRegex.firstMatch(input)?.group(1);
+    String? bvid = bvRegex.firstMatch(input)?.group(0);
 
     late String? aid = avRegex.firstMatch(input)?.group(1);
 
     if (bvid != null) {
-      result['BV'] = 'BV$bvid';
+      result['BV'] = bvid;
     } else if (aid != null) {
       result['AV'] = int.parse(aid);
     }

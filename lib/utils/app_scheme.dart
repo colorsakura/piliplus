@@ -17,6 +17,7 @@ class PiliScheme {
   static late AppLinks appLinks;
   static StreamSubscription? listener;
   static final uriDigitRegExp = RegExp(r'/(\d+)');
+  static final _prefixRegex = RegExp(r'^\S+://');
 
   static void init() {
     // Register our protocol only on Windows platform
@@ -40,7 +41,7 @@ class PiliScheme {
     try {
       if (url.startsWith('//')) {
         url = 'https:$url';
-      } else if (!RegExp(r'^\S+://').hasMatch(url)) {
+      } else if (!_prefixRegex.hasMatch(url)) {
         url = 'https://$url';
       }
       return routePush(
@@ -160,9 +161,7 @@ class PiliScheme {
             // to video
             // bilibili://video/12345678?page=0&h5awaken=random
             String? aid = uriDigitRegExp.firstMatch(path)?.group(1);
-            String? bvid = RegExp(r'/(BV[a-z\d]{10})', caseSensitive: false)
-                .firstMatch(path)
-                ?.group(1);
+            String? bvid = IdUtils.bvRegex.firstMatch(path)?.group(0);
             if (aid != null || bvid != null) {
               if (queryParameters['cid'] != null) {
                 bvid ??= IdUtils.av2bv(int.parse(aid!));
@@ -349,7 +348,7 @@ class PiliScheme {
             // bilibili://following/detail/832703053858603029 (dynId)
             // bilibili://following/detail/12345678?comment_root_id=654321\u0026comment_on=1
             String? cvid = RegExp(r'^/detail/cv(\d+)', caseSensitive: false)
-                .firstMatch(path)
+                .matchAsPrefix(path)
                 ?.group(1);
             if (cvid != null) {
               PageUtils.toDupNamed(
@@ -473,12 +472,8 @@ class PiliScheme {
           parameters: parameters,
         );
       default:
-        String? aid = RegExp(r'^av(\d+)', caseSensitive: false)
-            .firstMatch(path)
-            ?.group(1);
-        String? bvid = RegExp(r'^BV[a-z\d]{10}', caseSensitive: false)
-            .firstMatch(path)
-            ?.group(0);
+        String? aid = IdUtils.avRegexExact.matchAsPrefix(path)?.group(1);
+        String? bvid = IdUtils.bvRegexExact.matchAsPrefix(path)?.group(0);
         if (aid != null || bvid != null) {
           videoPush(
             aid != null ? int.parse(aid) : null,
@@ -621,9 +616,7 @@ class PiliScheme {
             .firstMatch(path)
             ?.group(1);
         String? bvid = uri.queryParameters['bvid'] ??
-            RegExp(r'/(BV[a-z\d]{10})', caseSensitive: false)
-                .firstMatch(path)
-                ?.group(1);
+            IdUtils.bvRegex.firstMatch(path)?.group(0);
         if (bvid != null) {
           if (mediaId != null) {
             final int? cid = await SearchHttp.ab2c(bvid: bvid);
@@ -651,15 +644,11 @@ class PiliScheme {
       case 'bangumi':
         // www.bilibili.com/bangumi/play/ep{eid}?start_progress={offset}&thumb_up_dm_id={dmid}
         if (kDebugMode) debugPrint('番剧');
-        String? id = RegExp(r'(ss|ep)\d+').firstMatch(path)?.group(0);
-        if (id != null) {
-          bool isSeason = id.startsWith('ss');
-          id = id.substring(2);
-          PageUtils.viewPgc(
-            seasonId: isSeason ? id : null,
-            epId: isSeason ? null : id,
-            progress: uri.queryParameters['start_progress'],
-          );
+        bool hasMatch = PageUtils.viewPgcFromUri(
+          path,
+          progress: uri.queryParameters['start_progress'],
+        );
+        if (hasMatch) {
           return true;
         }
         launchURL();

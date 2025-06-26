@@ -184,9 +184,7 @@ SettingsModel getVideoFilterSelectModel({
                   autofocus: true,
                   onChanged: (value) => valueStr = value,
                   keyboardType: TextInputType.number,
-                  inputFormatters: [
-                    FilteringTextInputFormatter.allow(RegExp(r'\d+')),
-                  ],
+                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                   decoration: InputDecoration(suffixText: suffix),
                 ),
                 actions: [

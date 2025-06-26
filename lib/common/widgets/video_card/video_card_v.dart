@@ -16,7 +16,6 @@ import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
-import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 // 视频卡片 - 垂直布局
@@ -29,11 +28,6 @@ class VideoCardV extends StatelessWidget {
     required this.videoItem,
     this.onRemove,
   });
-
-  bool isStringNumeric(String str) {
-    RegExp numericRegex = RegExp(r'^\d+$');
-    return numericRegex.hasMatch(str);
-  }
 
   Future<void> onPushDetail(String heroTag) async {
     String? goto = videoItem.goto;
@@ -58,31 +52,7 @@ class VideoCardV extends StatelessWidget {
       // 动态
       case 'picture':
         try {
-          String type = 'picture';
-          String uri = videoItem.uri!;
-          String id = '';
-          if (uri.startsWith('bilibili://article/')) {
-            type = 'read';
-            RegExp regex = RegExp(r'\d+');
-            Match match = regex.firstMatch(uri)!;
-            String matchedNumber = match.group(0)!;
-            videoItem.param = int.parse(matchedNumber);
-            id = '${videoItem.param}';
-          }
-          if (uri.startsWith('http')) {
-            String id = Uri.parse(uri).path.split('/')[1];
-            if (isStringNumeric(id)) {
-              PageUtils.pushDynFromId(id: id);
-              return;
-            }
-          }
-          Get.toNamed(
-            '/articlePage',
-            parameters: {
-              'id': id,
-              'type': type,
-            },
-          );
+          PiliScheme.routePushFromUrl(videoItem.uri!);
         } catch (err) {
           SmartDialog.showToast(err.toString());
         }

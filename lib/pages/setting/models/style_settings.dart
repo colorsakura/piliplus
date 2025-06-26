@@ -515,7 +515,6 @@ List<SettingsModel> get styleSettings => [
         title: '滑动动画弹簧参数',
         leading: const Icon(Icons.chrome_reader_mode_outlined),
         onTap: (setState) {
-          final numberRegExp = RegExp(r'[\d\.]+');
           List<String> springDescription = CustomSpringDescription
               .springDescription
               .map((i) => i.toString())
@@ -538,7 +537,7 @@ List<SettingsModel> get styleSettings => [
                         springDescription[index] = value;
                       },
                       inputFormatters: [
-                        FilteringTextInputFormatter.allow(numberRegExp)
+                        FilteringTextInputFormatter.allow(RegExp(r'[\d\.]+'))
                       ],
                       decoration: InputDecoration(
                         labelText: const [

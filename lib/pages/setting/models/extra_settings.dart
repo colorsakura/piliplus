@@ -74,9 +74,7 @@ List<SettingsModel> get extraSettings => [
                   onChanged: (value) {
                     dynamicPeriod = int.tryParse(value) ?? 5;
                   },
-                  inputFormatters: [
-                    FilteringTextInputFormatter.allow(RegExp(r'\d+')),
-                  ],
+                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                   decoration: const InputDecoration(suffixText: 'min'),
                 ),
                 actions: [
@@ -187,9 +185,7 @@ List<SettingsModel> get extraSettings => [
                   onChanged: (value) {
                     replyLengthLimit = value;
                   },
-                  inputFormatters: [
-                    FilteringTextInputFormatter.allow(RegExp(r'\d+')),
-                  ],
+                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                   decoration: const InputDecoration(suffixText: '行'),
                 ),
                 actions: [

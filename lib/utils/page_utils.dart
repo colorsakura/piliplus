@@ -102,9 +102,7 @@ class PageUtils {
                       autofocus: true,
                       onChanged: (value) => duration = value,
                       keyboardType: TextInputType.number,
-                      inputFormatters: [
-                        FilteringTextInputFormatter.allow(RegExp(r'\d+')),
-                      ],
+                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                       decoration: const InputDecoration(suffixText: 'min'),
                     ),
                     actions: [
@@ -414,24 +412,13 @@ class PageUtils {
 
       /// 专栏文章查看
       case 'DYNAMIC_TYPE_ARTICLE':
-        String? url = item.modules.moduleDynamic?.major?.opus?.jumpUrl;
-        if (url != null) {
-          if (url.contains('opus') || url.contains('read')) {
-            RegExp digitRegExp = RegExp(r'\d+');
-            Iterable<Match> matches = digitRegExp.allMatches(url);
-            String number = matches.first.group(0)!;
-            toDupNamed(
-              '/articlePage',
-              parameters: {
-                'id': number,
-                'type': url.split('//').last.split('/')[1],
-              },
-            );
-          } else {
-            handleWebview('https:$url');
-          }
-        }
-
+        toDupNamed(
+          '/articlePage',
+          parameters: {
+            'id': item.idStr,
+            'type': 'opus',
+          },
+        );
         break;
       case 'DYNAMIC_TYPE_PGC':
         if (kDebugMode) debugPrint('番剧');
@@ -675,14 +662,16 @@ class PageUtils {
     }
   }
 
-  static bool viewPgcFromUri(String uri) {
-    String? id = RegExp(r'(ep|ss)\d+').firstMatch(uri)?.group(0);
-    if (id != null) {
-      bool isSeason = id.startsWith('ss');
-      id = id.substring(2);
+  static final _pgcRegex = RegExp(r'(ep|ss)(\d+)');
+  static bool viewPgcFromUri(String uri, {String? progress}) {
+    RegExpMatch? match = _pgcRegex.firstMatch(uri);
+    if (match != null) {
+      bool isSeason = match.group(1) == 'ss';
+      String id = match.group(2)!;
       viewPgc(
         seasonId: isSeason ? id : null,
         epId: isSeason ? null : id,
+        progress: progress,
       );
       return true;
     }

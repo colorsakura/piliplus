@@ -53,8 +53,8 @@ class Utils {
     return absolutePaths.join(':');
   }
 
+  static final numericRegex = RegExp(r'^[\d\.]+$');
   static bool isStringNumeric(String str) {
-    RegExp numericRegex = RegExp(r'^[\d\.]+$');
     return numericRegex.hasMatch(str);
   }
 

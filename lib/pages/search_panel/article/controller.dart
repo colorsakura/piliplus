@@ -23,7 +23,7 @@ class SearchArticleController
 
   void jump2Article() {
     String? cvid = RegExp(r'^cv(id)?(\d+)$', caseSensitive: false)
-        .firstMatch(keyword)
+        .matchAsPrefix(keyword)
         ?.group(2);
     if (cvid != null) {
       WidgetsBinding.instance.addPostFrameCallback((_) {

@@ -6,6 +6,7 @@ import 'package:PiliPlus/http/search.dart';
 import 'package:PiliPlus/models/search/suggest.dart';
 import 'package:PiliPlus/models_new/search/search_rcmd/data.dart';
 import 'package:PiliPlus/models_new/search/search_trending/data.dart';
+import 'package:PiliPlus/utils/id_utils.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/storage_pref.dart';
 import 'package:flutter/material.dart';
@@ -25,7 +26,6 @@ class SSearchController extends GetxController {
 
   // uid
   final RxBool showUidBtn = false.obs;
-  late final digitOnlyRegExp = RegExp(r'^\d+$');
 
   // history
   final RxBool recordSearchHistory = Pref.recordSearchHistory.obs;
@@ -82,7 +82,7 @@ class SSearchController extends GetxController {
   }
 
   void validateUid() {
-    showUidBtn.value = digitOnlyRegExp.hasMatch(controller.text);
+    showUidBtn.value = IdUtils.digitOnlyRegExp.hasMatch(controller.text);
   }
 
   void onChange(String value) {

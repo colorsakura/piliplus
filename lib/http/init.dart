@@ -27,8 +27,6 @@ class Request {
   static late AccountManager accountManager;
   static late final Dio dio;
   factory Request() => _instance;
-  // static final _rand = Random();
-  // static final RegExp _spmPrefixExp = RegExp(r'<meta name="spm_prefix" content="([^"]+?)">');
 
   /// 设置cookie
   static Future<void> setCookie() async {
