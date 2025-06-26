@@ -14,6 +14,7 @@ import 'package:PiliPlus/http/video.dart';
 import 'package:PiliPlus/models/common/badge_type.dart';
 import 'package:PiliPlus/models/common/image_type.dart';
 import 'package:PiliPlus/pages/dynamics/widgets/vote.dart';
+import 'package:PiliPlus/pages/save_panel/view.dart';
 import 'package:PiliPlus/pages/video/controller.dart';
 import 'package:PiliPlus/pages/video/reply/widgets/zan_grpc.dart';
 import 'package:PiliPlus/utils/accounts.dart';
@@ -920,6 +921,7 @@ class ReplyItemGrpc extends StatelessWidget {
           if (ownerMid == upMid || ownerMid == item.member.mid)
             ListTile(
               onTap: () async {
+                Get.back();
                 bool? isDelete = await showDialog<bool>(
                   context: context,
                   builder: (context) {
@@ -1061,64 +1063,9 @@ class ReplyItemGrpc extends StatelessWidget {
             title: Text('自由复制', style: style),
           ),
           ListTile(
-            onTap: () async {
+            onTap: () {
               Get.back();
-              bool? isDelete = await showDialog<bool>(
-                context: context,
-                builder: (context) {
-                  final theme = Theme.of(context);
-                  return AlertDialog(
-                    title: const Text('删除评论'),
-                    content: Text.rich(
-                      TextSpan(
-                        children: [
-                          const TextSpan(text: '确定删除这条评论吗？\n\n'),
-                          if (ownerMid != item.member.mid.toInt()) ...[
-                            TextSpan(
-                              text: '@${item.member.name}',
-                              style: TextStyle(
-                                color: theme.colorScheme.primary,
-                              ),
-                            ),
-                            const TextSpan(text: ':\n'),
-                          ],
-                          TextSpan(text: message),
-                        ],
-                      ),
-                    ),
-                    actions: <Widget>[
-                      TextButton(
-                        onPressed: () => Get.back(result: false),
-                        child: Text(
-                          '取消',
-                          style: TextStyle(
-                            color: theme.colorScheme.outline,
-                          ),
-                        ),
-                      ),
-                      TextButton(
-                        onPressed: () => Get.back(result: true),
-                        child: const Text('确定'),
-                      ),
-                    ],
-                  );
-                },
-              );
-              if (isDelete == true) {
-                SmartDialog.showLoading(msg: '删除中...');
-                var result = await VideoHttp.replyDel(
-                  type: item.type.toInt(),
-                  oid: item.oid.toInt(),
-                  rpid: item.id.toInt(),
-                );
-                SmartDialog.dismiss();
-                if (result['status']) {
-                  SmartDialog.showToast('删除成功');
-                  onDelete();
-                } else {
-                  SmartDialog.showToast('删除失败, ${result["msg"]}');
-                }
-              }
+              SavePanel.toSavePanel(upMid: upMid, item: item);
             },
             minLeadingWidth: 0,
             leading: const Icon(Icons.save_alt, size: 19),
