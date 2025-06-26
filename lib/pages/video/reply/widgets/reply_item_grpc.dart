@@ -8,7 +8,7 @@ import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
 import 'package:PiliPlus/common/widgets/pendant_avatar.dart';
 import 'package:PiliPlus/common/widgets/text/text.dart' as custom_text;
 import 'package:PiliPlus/grpc/bilibili/main/community/reply/v1.pb.dart'
-    show ReplyInfo, ReplyControl, Content;
+    show ReplyInfo, ReplyControl, Content, Url;
 import 'package:PiliPlus/http/init.dart';
 import 'package:PiliPlus/http/video.dart';
 import 'package:PiliPlus/models/common/badge_type.dart';
@@ -170,7 +170,7 @@ class ReplyItemGrpc extends StatelessWidget {
     );
   }
 
-  Widget lfAvtar() => PendantAvatar(
+  Widget _buildAvatar() => PendantAvatar(
         avatar: replyItem.member.face,
         size: 34,
         badgeSize: 14,
@@ -201,7 +201,7 @@ class ReplyItemGrpc extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             spacing: 12,
             children: [
-              lfAvtar(),
+              _buildAvatar(),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
@@ -245,7 +245,7 @@ class ReplyItemGrpc extends StatelessWidget {
                           color: theme.colorScheme.outline,
                         ),
                       ),
-                      if (replyItem.replyControl.location.isNotEmpty)
+                      if (replyItem.replyControl.hasLocation())
                         Text(
                           ' • ${replyItem.replyControl.location}',
                           style: TextStyle(
@@ -297,13 +297,11 @@ class ReplyItemGrpc extends StatelessWidget {
               builder: (context, constraints) => imageView(
                 constraints.maxWidth,
                 replyItem.content.pictures
-                    .map(
-                      (item) => ImageModel(
-                        width: item.imgWidth,
-                        height: item.imgHeight,
-                        url: item.imgSrc,
-                      ),
-                    )
+                    .map((item) => ImageModel(
+                          width: item.imgWidth,
+                          height: item.imgHeight,
+                          url: item.imgSrc,
+                        ))
                     .toList(),
                 onViewImage: onViewImage,
                 onDismissed: onDismissed,
@@ -312,12 +310,10 @@ class ReplyItemGrpc extends StatelessWidget {
             ),
           ),
         ],
-        // 操作区域
         if (replyLevel != 0) ...[
           const SizedBox(height: 4),
           buttonAction(context, theme, replyItem.replyControl),
         ],
-        // 一楼的评论
         if (replyLevel == 1 && replyItem.count > Int64.ZERO) ...[
           Padding(
             padding: const EdgeInsets.only(top: 5, bottom: 12),
@@ -328,22 +324,20 @@ class ReplyItemGrpc extends StatelessWidget {
     );
   }
 
-  ButtonStyle get _style => TextButton.styleFrom(
-        padding: EdgeInsets.zero,
-        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-        visualDensity: VisualDensity.compact,
-      );
-
-  // 感谢、回复、复制
   Widget buttonAction(
       BuildContext context, ThemeData theme, ReplyControl replyControl) {
+    final ButtonStyle style = TextButton.styleFrom(
+      padding: EdgeInsets.zero,
+      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+      visualDensity: VisualDensity.compact,
+    );
     return Row(
       children: <Widget>[
         const SizedBox(width: 36),
         SizedBox(
           height: 32,
           child: TextButton(
-            style: _style,
+            style: style,
             onPressed: () {
               feedBack();
               onReply?.call(replyItem);
@@ -371,7 +365,7 @@ class ReplyItemGrpc extends StatelessWidget {
             height: 32,
             child: TextButton(
               onPressed: null,
-              style: _style,
+              style: style,
               child: Text(
                 'UP主觉得很赞',
                 style: TextStyle(
@@ -399,7 +393,7 @@ class ReplyItemGrpc extends StatelessWidget {
             height: 32,
             child: TextButton(
               onPressed: showDialogue,
-              style: _style,
+              style: style,
               child: Text(
                 '查看对话',
                 style: TextStyle(
@@ -524,7 +518,6 @@ class ReplyItemGrpc extends StatelessWidget {
               }),
             if (extraRow)
               InkWell(
-                // 一楼点击【共xx条回复】展开评论详情
                 onTap: () => replyReply?.call(replyItem, null),
                 child: Container(
                   width: double.infinity,
@@ -570,7 +563,7 @@ class ReplyItemGrpc extends StatelessWidget {
     final Content content = replyItem.content;
     final List<InlineSpan> spanChildren = <InlineSpan>[];
 
-    if (content.hasRichText()) {
+    if (content.richText.hasNote()) {
       spanChildren.add(
         TextSpan(
           text: '[笔记] ',
@@ -584,25 +577,97 @@ class ReplyItemGrpc extends StatelessWidget {
       );
     }
 
+    final urlKeys = content.urls.keys;
     // 构建正则表达式
     final List<String> specialTokens = [
       ...content.emotes.keys,
       ...content.topics.keys.map((e) => '#$e#'),
       ...content.atNameToMid.keys.map((e) => '@$e'),
-      ...content.urls.keys,
+      ...urlKeys,
     ];
     String patternStr = [
       ...specialTokens.map(RegExp.escape),
       r'(\b(?:\d+[:：])?\d+[:：]\d+\b)',
       r'(\{vote:\d+?\})',
-      Constants.urlPattern,
+      Constants.urlRegex.pattern,
     ].join('|');
     final RegExp pattern = RegExp(patternStr);
 
-    late List<String> matchedStrs = [];
+    late List<String> matchedUrls = [];
 
     void addPlainTextSpan(str) {
       spanChildren.add(TextSpan(text: str));
+    }
+
+    void addUrl(String matchStr, Url url, {bool addPlainText = false}) {
+      if (url.extra.isWordSearch && !enableWordRe) {
+        if (addPlainText) {
+          addPlainTextSpan(matchStr);
+        }
+        return;
+      }
+      final isCv = url.clickReport.startsWith('{"cvid');
+      final children = [
+        if (!isCv && url.hasPrefixIcon())
+          WidgetSpan(
+            child: CachedNetworkImage(
+              imageUrl: ImageUtil.thumbnailUrl(url.prefixIcon),
+              height: 19,
+              color: theme.colorScheme.primary,
+              placeholder: (context, url) {
+                return const SizedBox.shrink();
+              },
+            ),
+          ),
+        TextSpan(
+          text: isCv ? '[笔记] ' : url.title,
+          style: TextStyle(
+            color: theme.colorScheme.primary,
+          ),
+          recognizer: TapGestureRecognizer()
+            ..onTap = () {
+              if (url.appUrlSchema.isEmpty) {
+                if (RegExp(r'^(av|bv)', caseSensitive: false)
+                    .hasMatch(matchStr)) {
+                  UrlUtils.matchUrlPush(matchStr, '');
+                } else {
+                  RegExpMatch? firstMatch = RegExp(
+                    r'^cv(\d+)$|/read/cv(\d+)|note-app/view\?cvid=(\d+)',
+                    caseSensitive: false,
+                  ).firstMatch(matchStr);
+                  String? cvid = firstMatch?.group(1) ??
+                      firstMatch?.group(2) ??
+                      firstMatch?.group(3);
+                  if (cvid != null) {
+                    Get.toNamed(
+                      '/articlePage',
+                      parameters: {
+                        'id': cvid,
+                        'type': 'read',
+                      },
+                    );
+                    return;
+                  }
+                  PageUtils.handleWebview(matchStr);
+                }
+              } else {
+                if (url.extra.isWordSearch) {
+                  Get.toNamed(
+                    '/searchResult',
+                    parameters: {'keyword': url.title},
+                  );
+                } else {
+                  PageUtils.handleWebview(matchStr);
+                }
+              }
+            },
+        ),
+      ];
+      if (isCv) {
+        spanChildren.insertAll(0, children);
+      } else {
+        spanChildren.addAll(children);
+      }
     }
 
     // 分割文本并处理每个部分
@@ -610,15 +675,16 @@ class ReplyItemGrpc extends StatelessWidget {
       pattern,
       onMatch: (Match match) {
         String matchStr = match[0]!;
+        late final name = matchStr.substring(1);
+        late final topic = matchStr.substring(1, matchStr.length - 1);
         if (content.emotes.containsKey(matchStr)) {
           // 处理表情
-          final size = content.emotes[matchStr]!.size.toInt() * 20.0;
+          final emote = content.emotes[matchStr]!;
+          final size = emote.size.toInt() * 20.0;
           spanChildren.add(
             WidgetSpan(
               child: NetworkImgLayer(
-                src: content.emotes[matchStr]?.hasGifUrl() == true
-                    ? content.emotes[matchStr]?.gifUrl
-                    : content.emotes[matchStr]?.url,
+                src: emote.hasGifUrl() == true ? emote.gifUrl : emote.url,
                 type: ImageType.emote,
                 width: size,
                 height: size,
@@ -626,27 +692,22 @@ class ReplyItemGrpc extends StatelessWidget {
             ),
           );
         } else if (matchStr.startsWith("@") &&
-            content.atNameToMid.containsKey(matchStr.substring(1))) {
+            content.atNameToMid.containsKey(name)) {
           // 处理@用户
-          final String userName = matchStr.substring(1);
-          final userId = content.atNameToMid[userName]!.toString();
           spanChildren.add(
             TextSpan(
               text: matchStr,
-              style: TextStyle(
-                color: theme.colorScheme.primary,
-              ),
+              style: TextStyle(color: theme.colorScheme.primary),
               recognizer: TapGestureRecognizer()
-                ..onTap = () => Get.toNamed('/member?mid=$userId'),
+                ..onTap = () =>
+                    Get.toNamed('/member?mid=${content.atNameToMid[name]}'),
             ),
           );
         } else if (_voteRegExp.hasMatch(matchStr)) {
           spanChildren.add(
             TextSpan(
               text: '投票: ${content.vote.title}',
-              style: TextStyle(
-                color: theme.colorScheme.primary,
-              ),
+              style: TextStyle(color: theme.colorScheme.primary),
               recognizer: TapGestureRecognizer()
                 ..onTap =
                     () => showVoteDialog(context, content.vote.id.toInt()),
@@ -655,142 +716,64 @@ class ReplyItemGrpc extends StatelessWidget {
         } else if (_timeRegExp.hasMatch(matchStr)) {
           matchStr = matchStr.replaceAll('：', ':');
           bool isValid = false;
-          try {
-            List<int> split = matchStr
-                .split(':')
-                .map((item) => int.parse(item))
-                .toList()
-                .reversed
-                .toList();
-            int seek = 0;
-            for (int i = 0; i < split.length; i++) {
-              seek += split[i] * pow(60, i).toInt();
+          if (Get.currentRoute.startsWith('/video')) {
+            try {
+              final ctr = Get.find<VideoDetailController>(
+                  tag: getTag?.call() ?? Get.arguments['heroTag']);
+              int duration = ctr.data.timeLength!;
+              List<int> split = matchStr
+                  .split(':')
+                  .reversed
+                  .map((item) => int.parse(item))
+                  .toList();
+              int seek = 0;
+              for (int i = 0; i < split.length; i++) {
+                seek += split[i] * pow(60, i).toInt();
+              }
+              isValid = seek * 1000 <= duration;
+            } catch (e) {
+              if (kDebugMode) debugPrint('failed to validate: $e');
             }
-            int duration = Get.find<VideoDetailController>(
-                  tag: getTag?.call() ?? Get.arguments['heroTag'],
-                ).data.timeLength ??
-                0;
-            isValid = seek * 1000 <= duration;
-          } catch (e) {
-            if (kDebugMode) debugPrint('failed to validate: $e');
           }
-          bool isVideoPage = Get.currentRoute.startsWith('/video');
           spanChildren.add(
             TextSpan(
               text: isValid ? ' $matchStr ' : matchStr,
-              style: isValid && isVideoPage
-                  ? TextStyle(
-                      color: theme.colorScheme.primary,
-                    )
-                  : null,
+              style:
+                  isValid ? TextStyle(color: theme.colorScheme.primary) : null,
               recognizer: isValid
                   ? (TapGestureRecognizer()
                     ..onTap = () {
                       // 跳转到指定位置
-                      if (isVideoPage) {
-                        try {
-                          SmartDialog.showToast('跳转至：$matchStr');
-                          Get.find<VideoDetailController>(
-                                  tag: Get.arguments['heroTag'])
-                              .plPlayerController
-                              .seekTo(
-                                  Duration(
-                                      seconds:
-                                          DurationUtil.parseDuration(matchStr)),
-                                  type: 'slider');
-                        } catch (e) {
-                          SmartDialog.showToast('跳转失败: $e');
-                        }
+                      try {
+                        SmartDialog.showToast('跳转至：$matchStr');
+                        Get.find<VideoDetailController>(
+                                tag: Get.arguments['heroTag'])
+                            .plPlayerController
+                            .seekTo(
+                                Duration(
+                                    seconds:
+                                        DurationUtil.parseDuration(matchStr)),
+                                type: 'slider');
+                      } catch (e) {
+                        SmartDialog.showToast('跳转失败: $e');
                       }
                     })
                   : null,
             ),
           );
         } else {
-          String appUrlSchema = '';
-          if (content.urls[matchStr] != null &&
-              !matchedStrs.contains(matchStr)) {
-            appUrlSchema = content.urls[matchStr]!.appUrlSchema;
-            if (appUrlSchema.startsWith('bilibili://search') && !enableWordRe) {
-              addPlainTextSpan(matchStr);
-              return "";
-            }
-            spanChildren.addAll(
-              [
-                if (content.urls[matchStr]?.hasPrefixIcon() == true) ...[
-                  WidgetSpan(
-                    child: CachedNetworkImage(
-                      imageUrl: ImageUtil.thumbnailUrl(
-                          content.urls[matchStr]!.prefixIcon),
-                      height: 19,
-                      color: theme.colorScheme.primary,
-                      placeholder: (context, url) {
-                        return const SizedBox.shrink();
-                      },
-                    ),
-                  )
-                ],
-                TextSpan(
-                  text: content.urls[matchStr]!.title,
-                  style: TextStyle(
-                    color: theme.colorScheme.primary,
-                  ),
-                  recognizer: TapGestureRecognizer()
-                    ..onTap = () {
-                      late final String title = content.urls[matchStr]!.title;
-                      if (appUrlSchema == '') {
-                        if (RegExp(r'^(av|bv)', caseSensitive: false)
-                            .hasMatch(matchStr)) {
-                          UrlUtils.matchUrlPush(matchStr, '');
-                        } else {
-                          RegExpMatch? firstMatch = RegExp(
-                            r'^cv(\d+)$|/read/cv(\d+)|note-app/view\?cvid=(\d+)',
-                            caseSensitive: false,
-                          ).firstMatch(matchStr);
-                          String? cvid = firstMatch?.group(1) ??
-                              firstMatch?.group(2) ??
-                              firstMatch?.group(3);
-                          if (cvid != null) {
-                            Get.toNamed(
-                              '/articlePage',
-                              parameters: {
-                                'id': cvid,
-                                'type': 'read',
-                              },
-                            );
-                            return;
-                          }
-                          PageUtils.handleWebview(matchStr);
-                        }
-                      } else {
-                        if (appUrlSchema.startsWith('bilibili://search')) {
-                          Get.toNamed(
-                            '/searchResult',
-                            parameters: {'keyword': title},
-                          );
-                        } else {
-                          PageUtils.handleWebview(matchStr);
-                        }
-                      }
-                    },
-                )
-              ],
-            );
+          final url = content.urls[matchStr];
+          if (url != null && !matchedUrls.contains(matchStr)) {
+            addUrl(matchStr, url, addPlainText: true);
             // 只显示一次
-            matchedStrs.add(matchStr);
-          } else if (matchStr.length > 1 &&
-              content.topics[matchStr.substring(1, matchStr.length - 1)] !=
-                  null) {
+            matchedUrls.add(matchStr);
+          } else if (matchStr.length > 1 && content.topics[topic] != null) {
             spanChildren.add(
               TextSpan(
                 text: matchStr,
-                style: TextStyle(
-                  color: theme.colorScheme.primary,
-                ),
+                style: TextStyle(color: theme.colorScheme.primary),
                 recognizer: TapGestureRecognizer()
                   ..onTap = () {
-                    final String topic =
-                        matchStr.substring(1, matchStr.length - 1);
                     Get.toNamed(
                       '/searchResult',
                       parameters: {'keyword': topic},
@@ -798,13 +781,11 @@ class ReplyItemGrpc extends StatelessWidget {
                   },
               ),
             );
-          } else if (RegExp(Constants.urlPattern).hasMatch(matchStr)) {
+          } else if (Constants.urlRegex.hasMatch(matchStr)) {
             spanChildren.add(
               TextSpan(
                 text: matchStr,
-                style: TextStyle(
-                  color: theme.colorScheme.primary,
-                ),
+                style: TextStyle(color: theme.colorScheme.primary),
                 recognizer: TapGestureRecognizer()
                   ..onTap = () => PageUtils.handleWebview(matchStr),
               ),
@@ -821,59 +802,12 @@ class ReplyItemGrpc extends StatelessWidget {
       },
     );
 
-    if (content.urls.keys.isNotEmpty) {
-      List<String> unmatchedItems = content.urls.keys
-          .toList()
-          .where((item) => !content.message.contains(item))
-          .toList();
+    if (urlKeys.isNotEmpty) {
+      List<String> unmatchedItems =
+          urlKeys.where((url) => !matchedUrls.contains(url)).toList();
       if (unmatchedItems.isNotEmpty) {
-        for (int i = 0; i < unmatchedItems.length; i++) {
-          String patternStr = unmatchedItems[i];
-          if (content.urls[patternStr]?.extra.isWordSearch == true &&
-              !enableWordRe) {
-            continue;
-          }
-          spanChildren.addAll(
-            [
-              if (content.urls[patternStr]?.hasPrefixIcon() == true) ...[
-                WidgetSpan(
-                  child: CachedNetworkImage(
-                    imageUrl: ImageUtil.thumbnailUrl(
-                        content.urls[patternStr]!.prefixIcon),
-                    height: 19,
-                    color: theme.colorScheme.primary,
-                    placeholder: (context, url) {
-                      return const SizedBox.shrink();
-                    },
-                  ),
-                )
-              ],
-              TextSpan(
-                text: content.urls[patternStr]!.title,
-                style: TextStyle(
-                  color: theme.colorScheme.primary,
-                ),
-                recognizer: TapGestureRecognizer()
-                  ..onTap = () {
-                    String? cvid = RegExp(r'note-app/view\?cvid=(\d+)')
-                        .firstMatch(patternStr)
-                        ?.group(1);
-                    if (cvid != null) {
-                      Get.toNamed(
-                        '/articlePage',
-                        parameters: {
-                          'id': cvid,
-                          'type': 'read',
-                        },
-                      );
-                      return;
-                    }
-
-                    PageUtils.handleWebview(patternStr);
-                  },
-              )
-            ],
-          );
+        for (var patternStr in unmatchedItems) {
+          addUrl(patternStr, content.urls[patternStr]!);
         }
       }
     }

@@ -37,8 +37,8 @@ class Constants {
   static const String statisticsApp =
       '{"appId":1,"platform":3,"version":"8.43.0","abtest":""}';
 
-  static const urlPattern =
-      r'https?://[-A-Za-z0-9+&@#/%?=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]';
+  static final urlRegex =
+      RegExp(r'https?://[-A-Za-z0-9+&@#/%?=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]');
 
   static const goodsUrlPrefix = "https://gaoneng.bilibili.com/tetris";
 

@@ -643,7 +643,7 @@ class _VideoInfoState extends State<VideoInfo> {
         case 1:
           final List<InlineSpan> spanChildren = <InlineSpan>[];
           final RegExp urlRegExp = RegExp(
-            '${Constants.urlPattern}|av\\d+|bv[a-z\\d]{10}',
+            '${Constants.urlRegex.pattern}|av\\d+|bv[a-z\\d]{10}',
             caseSensitive: false,
           );
 
