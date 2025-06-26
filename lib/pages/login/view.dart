@@ -478,10 +478,15 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
+  late EdgeInsets padding;
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    padding = MediaQuery.paddingOf(context).copyWith(top: 0) +
+        const EdgeInsets.only(bottom: 25);
     return OrientationBuilder(builder: (context, orientation) {
+      final isLandscape = orientation == Orientation.landscape;
       return Scaffold(
         appBar: AppBar(
           leading: IconButton(
@@ -492,48 +497,49 @@ class _LoginPageState extends State<LoginPage> {
           title: Row(
             children: [
               const Text('登录'),
-              if (orientation == Orientation.landscape) ...[
-                const Spacer(flex: 3),
-                Flexible(
-                  flex: 5,
-                  child: TabBar(
-                    dividerHeight: 0,
-                    tabs: const [
-                      Tab(
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [Icon(Icons.password), Text(' 密码')],
+              if (isLandscape)
+                Expanded(
+                  child: Align(
+                    alignment: Alignment.centerRight,
+                    child: TabBar(
+                      isScrollable: true,
+                      dividerHeight: 0,
+                      tabs: const [
+                        Tab(
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [Icon(Icons.password), Text(' 密码')],
+                          ),
                         ),
-                      ),
-                      Tab(
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [Icon(Icons.sms_outlined), Text(' 短信')],
+                        Tab(
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [Icon(Icons.sms_outlined), Text(' 短信')],
+                          ),
                         ),
-                      ),
-                      Tab(
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [Icon(Icons.qr_code), Text(' 扫码')],
+                        Tab(
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [Icon(Icons.qr_code), Text(' 扫码')],
+                          ),
                         ),
-                      ),
-                      Tab(
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Icon(Icons.cookie_outlined),
-                            Text(' Cookie')
-                          ],
+                        Tab(
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(Icons.cookie_outlined),
+                              Text(' Cookie')
+                            ],
+                          ),
                         ),
-                      ),
-                    ],
-                    controller: _loginPageCtr.tabController,
+                      ],
+                      controller: _loginPageCtr.tabController,
+                    ),
                   ),
                 )
-              ],
             ],
           ),
-          bottom: orientation == Orientation.portrait
+          bottom: !isLandscape
               ? TabBar(
                   tabs: const [
                     Tab(icon: Icon(Icons.password), text: '密码'),
@@ -545,14 +551,12 @@ class _LoginPageState extends State<LoginPage> {
                 )
               : null,
         ),
-        body: NotificationListener(
+        body: NotificationListener<ScrollStartNotification>(
           onNotification: (notification) {
-            if (notification is ScrollUpdateNotification) {
-              if (notification.metrics.axis == Axis.horizontal) {
-                FocusScope.of(context).unfocus();
-              }
+            if (notification.metrics.axis == Axis.horizontal) {
+              FocusScope.of(context).unfocus();
             }
-            return true;
+            return false;
           },
           child: tabBarView(
             controller: _loginPageCtr.tabController,
@@ -570,6 +574,7 @@ class _LoginPageState extends State<LoginPage> {
 
   Widget tabViewOuter(Widget child) {
     return SingleChildScrollView(
+      padding: padding,
       child: Align(
         alignment: Alignment.topCenter,
         child: ConstrainedBox(

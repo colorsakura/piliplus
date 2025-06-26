@@ -58,11 +58,11 @@ Widget imageView(
   } else if (picArr.length == 2) {
     imageWidth = imageHeight = 2 * imageWidth;
   }
+  late final int row = picArr.length == 4 ? 2 : 3;
   BorderRadius borderRadius(index) {
     if (picArr.length == 1) {
       return StyleString.mdRadius;
     }
-    final int row = picArr.length == 4 ? 2 : 3;
     return BorderRadius.only(
       topLeft: index - row >= 0 ||
               ((index - 1) >= 0 && (index - 1) % row < index % row)
