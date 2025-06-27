@@ -41,7 +41,8 @@ class DynamicsHttp {
       'features': 'itemOpusStyle,listOnlyfans',
     };
     var res = await Request().get(Api.followDynamic, queryParameters: data);
-    if (res.data['code'] == 0) {
+    var code = res.data['code'];
+    if (code == 0) {
       try {
         DynamicsDataModel data = DynamicsDataModel.fromJson(
           res.data['data'],
@@ -53,7 +54,7 @@ class DynamicsHttp {
         return Error(err.toString());
       }
     } else {
-      return Error(res.data['message']);
+      return Error(code == 4101132 ? '没有数据' : res.data['message']);
     }
   }
 
