@@ -3,13 +3,14 @@ import 'dart:async';
 import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
 import 'package:PiliPlus/common/widgets/loading_widget/loading_widget.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
+import 'package:PiliPlus/common/widgets/text_field/text_field.dart';
 import 'package:PiliPlus/grpc/bilibili/im/type.pb.dart' show Msg;
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/http/msg.dart';
 import 'package:PiliPlus/models/common/image_type.dart';
 import 'package:PiliPlus/models/common/publish_panel_type.dart';
 import 'package:PiliPlus/models_new/upload_bfs/data.dart';
-import 'package:PiliPlus/pages/common/common_publish_page.dart';
+import 'package:PiliPlus/pages/common/publish/common_rich_text_pub_page.dart';
 import 'package:PiliPlus/pages/emote/view.dart';
 import 'package:PiliPlus/pages/whisper_detail/controller.dart';
 import 'package:PiliPlus/pages/whisper_detail/widget/chat_item.dart';
@@ -17,14 +18,13 @@ import 'package:PiliPlus/pages/whisper_link_setting/view.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/feed_back.dart';
 import 'package:PiliPlus/utils/utils.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart' show LengthLimitingTextInputFormatter;
+import 'package:flutter/material.dart' hide TextField;
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mime/mime.dart';
 
-class WhisperDetailPage extends CommonPublishPage {
+class WhisperDetailPage extends CommonRichTextPubPage {
   const WhisperDetailPage({
     super.key,
     super.autofocus = false,
@@ -35,7 +35,7 @@ class WhisperDetailPage extends CommonPublishPage {
 }
 
 class _WhisperDetailPageState
-    extends CommonPublishPageState<WhisperDetailPage> {
+    extends CommonRichTextPubPageState<WhisperDetailPage> {
   final _whisperDetailController = Get.put(
     WhisperDetailController(),
     tag: Utils.makeHeroTag(Get.parameters['talkerId']),
@@ -239,7 +239,7 @@ class _WhisperDetailPageState
                 }
               },
               child: Obx(
-                () => TextField(
+                () => RichTextField(
                   readOnly: readOnly.value,
                   focusNode: focusNode,
                   controller: editController,
@@ -258,7 +258,7 @@ class _WhisperDetailPageState
                     ),
                     contentPadding: const EdgeInsets.all(10),
                   ),
-                  inputFormatters: [LengthLimitingTextInputFormatter(500)],
+                  // inputFormatters: [LengthLimitingTextInputFormatter(500)],
                 ),
               ),
             ),
@@ -269,7 +269,7 @@ class _WhisperDetailPageState
                 onPressed: () async {
                   if (enablePublish.value) {
                     _whisperDetailController.sendMsg(
-                      message: editController.text,
+                      message: editController.rawText,
                       onClearText: editController.clear,
                     );
                   } else {
@@ -301,7 +301,6 @@ class _WhisperDetailPageState
                           SmartDialog.showLoading(msg: '正在发送');
                           await _whisperDetailController.sendMsg(
                             picMsg: picMsg,
-                            message: editController.text,
                             onClearText: editController.clear,
                           );
                         } else {
@@ -331,7 +330,13 @@ class _WhisperDetailPageState
   Widget? get customPanel => EmotePanel(onChoose: onChooseEmote);
 
   @override
-  Future<void> onCustomPublish({required String message, List? pictures}) {
+  Future<void> onCustomPublish({List? pictures}) {
     throw UnimplementedError();
   }
+
+  @override
+  void onMention([bool fromClick = false]) {}
+
+  @override
+  void onSave() {}
 }

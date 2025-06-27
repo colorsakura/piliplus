@@ -149,16 +149,20 @@ class VideoReplyReplyController extends ReplyController
         .push(
       GetDialogRoute(
         pageBuilder: (buildContext, animation, secondaryAnimation) {
-          final saved = savedReplies[key];
           return ReplyPage(
             oid: oid,
             root: root,
             parent: root,
             replyType: this.replyType,
             replyItem: replyItem,
-            initialValue: saved?.text,
-            mentions: saved?.mentions,
-            onSave: (reply) => savedReplies[key] = reply,
+            items: savedReplies[key],
+            onSave: (reply) {
+              if (reply.isEmpty) {
+                savedReplies.remove(key);
+              } else {
+                savedReplies[key] = reply.toList();
+              }
+            },
           );
         },
         transitionDuration: const Duration(milliseconds: 500),

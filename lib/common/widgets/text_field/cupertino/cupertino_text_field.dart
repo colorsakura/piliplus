@@ -7,6 +7,7 @@ library;
 
 import 'dart:ui' as ui show BoxHeightStyle, BoxWidthStyle;
 
+import 'package:PiliPlus/common/widgets/text_field/controller.dart';
 import 'package:PiliPlus/common/widgets/text_field/cupertino/cupertino_adaptive_text_selection_toolbar.dart';
 import 'package:PiliPlus/common/widgets/text_field/cupertino/cupertino_spell_check_suggestions_toolbar.dart';
 import 'package:PiliPlus/common/widgets/text_field/editable_text.dart';
@@ -23,7 +24,8 @@ import 'package:flutter/cupertino.dart'
         CupertinoSpellCheckSuggestionsToolbar,
         CupertinoAdaptiveTextSelectionToolbar,
         TextSelectionGestureDetectorBuilderDelegate,
-        TextSelectionGestureDetectorBuilder;
+        TextSelectionGestureDetectorBuilder,
+        TextSelectionOverlay;
 import 'package:flutter/foundation.dart' show defaultTargetPlatform;
 import 'package:flutter/gestures.dart';
 import 'package:flutter/rendering.dart';
@@ -114,11 +116,11 @@ enum OverlayVisibilityMode {
 class _CupertinoTextFieldSelectionGestureDetectorBuilder
     extends TextSelectionGestureDetectorBuilder {
   _CupertinoTextFieldSelectionGestureDetectorBuilder(
-      {required _CupertinoTextFieldState state})
+      {required _CupertinoRichTextFieldState state})
       : _state = state,
         super(delegate: state);
 
-  final _CupertinoTextFieldState _state;
+  final _CupertinoRichTextFieldState _state;
 
   @override
   void onSingleTapUp(TapDragUpDetails details) {
@@ -162,7 +164,7 @@ class _CupertinoTextFieldSelectionGestureDetectorBuilder
 /// {@macro flutter.widgets.EditableText.onChanged}
 ///
 /// {@tool dartpad}
-/// This example shows how to set the initial value of the [CupertinoTextField] using
+/// This example shows how to set the initial value of the [CupertinoRichTextField] using
 /// a [controller] that already contains some text.
 ///
 /// ** See code in examples/api/lib/cupertino/text_field/cupertino_text_field.0.dart **
@@ -177,18 +179,18 @@ class _CupertinoTextFieldSelectionGestureDetectorBuilder
 ///
 /// {@macro flutter.material.textfield.wantKeepAlive}
 ///
-/// Remember to call [TextEditingController.dispose] when it is no longer
+/// Remember to call [RichTextEditingController.dispose] when it is no longer
 /// needed. This will ensure we discard any resources used by the object.
 ///
 /// {@macro flutter.widgets.editableText.showCaretOnScreen}
 ///
 /// ## Scrolling Considerations
 ///
-/// If this [CupertinoTextField] is not a descendant of [Scaffold] and is being
+/// If this [CupertinoRichTextField] is not a descendant of [Scaffold] and is being
 /// used within a [Scrollable] or nested [Scrollable]s, consider placing a
 /// [ScrollNotificationObserver] above the root [Scrollable] that contains this
-/// [CupertinoTextField] to ensure proper scroll coordination for
-/// [CupertinoTextField] and its components like [TextSelectionOverlay].
+/// [CupertinoRichTextField] to ensure proper scroll coordination for
+/// [CupertinoRichTextField] and its components like [TextSelectionOverlay].
 ///
 /// See also:
 ///
@@ -197,12 +199,12 @@ class _CupertinoTextFieldSelectionGestureDetectorBuilder
 ///    Design UI conventions.
 ///  * [EditableText], which is the raw text editing control at the heart of a
 ///    [TextField].
-///  * Learn how to use a [TextEditingController] in one of our [cookbook recipes](https://docs.flutter.dev/cookbook/forms/text-field-changes#2-use-a-texteditingcontroller).
+///  * Learn how to use a [RichTextEditingController] in one of our [cookbook recipes](https://docs.flutter.dev/cookbook/forms/text-field-changes#2-use-a-texteditingcontroller).
 ///  * <https://developer.apple.com/design/human-interface-guidelines/ios/controls/text-fields/>
-class CupertinoTextField extends StatefulWidget {
+class CupertinoRichTextField extends StatefulWidget {
   /// Creates an iOS-style text field.
   ///
-  /// To provide a prefilled text entry, pass in a [TextEditingController] with
+  /// To provide a prefilled text entry, pass in a [RichTextEditingController] with
   /// an initial value to the [controller] parameter.
   ///
   /// To provide a hint placeholder text that appears when the text entry is
@@ -238,10 +240,10 @@ class CupertinoTextField extends StatefulWidget {
   ///  * [expands], to allow the widget to size itself to its parent's height.
   ///  * [maxLength], which discusses the precise meaning of "number of
   ///    characters" and how it may differ from the intuitive meaning.
-  const CupertinoTextField({
+  const CupertinoRichTextField({
     super.key,
     this.groupId = EditableText,
-    this.controller,
+    required this.controller,
     this.focusNode,
     this.undoController,
     this.decoration = _kDefaultRoundedBorderDecoration,
@@ -354,7 +356,7 @@ class CupertinoTextField extends StatefulWidget {
 
   /// Creates a borderless iOS-style text field.
   ///
-  /// To provide a prefilled text entry, pass in a [TextEditingController] with
+  /// To provide a prefilled text entry, pass in a [RichTextEditingController] with
   /// an initial value to the [controller] parameter.
   ///
   /// To provide a hint placeholder text that appears when the text entry is
@@ -382,10 +384,10 @@ class CupertinoTextField extends StatefulWidget {
   ///  * [expands], to allow the widget to size itself to its parent's height.
   ///  * [maxLength], which discusses the precise meaning of "number of
   ///    characters" and how it may differ from the intuitive meaning.
-  const CupertinoTextField.borderless({
+  const CupertinoRichTextField.borderless({
     super.key,
     this.groupId = EditableText,
-    this.controller,
+    required this.controller,
     this.focusNode,
     this.undoController,
     this.decoration,
@@ -497,8 +499,8 @@ class CupertinoTextField extends StatefulWidget {
 
   /// Controls the text being edited.
   ///
-  /// If null, this widget will create its own [TextEditingController].
-  final TextEditingController? controller;
+  /// If null, this widget will create its own [RichTextEditingController].
+  final RichTextEditingController controller;
 
   /// {@macro flutter.widgets.Focus.focusNode}
   final FocusNode? focusNode;
@@ -567,7 +569,7 @@ class CupertinoTextField extends StatefulWidget {
   /// Show an iOS-style clear button to clear the current text entry.
   ///
   /// Can be made to appear depending on various text states of the
-  /// [TextEditingController].
+  /// [RichTextEditingController].
   ///
   /// Will only appear if no [suffix] widget is appearing.
   ///
@@ -882,11 +884,11 @@ class CupertinoTextField extends StatefulWidget {
   ///
   /// See also:
   ///  * [spellCheckConfiguration], where this is typically specified for
-  ///    [CupertinoTextField].
+  ///    [CupertinoRichTextField].
   ///  * [SpellCheckConfiguration.spellCheckSuggestionsToolbarBuilder], the
-  ///    parameter for which this is the default value for [CupertinoTextField].
+  ///    parameter for which this is the default value for [CupertinoRichTextField].
   ///  * [TextField.defaultSpellCheckSuggestionsToolbarBuilder], which is like
-  ///    this but specifies the default for [CupertinoTextField].
+  ///    this but specifies the default for [CupertinoRichTextField].
   @visibleForTesting
   static Widget defaultSpellCheckSuggestionsToolbarBuilder(
     BuildContext context,
@@ -900,13 +902,13 @@ class CupertinoTextField extends StatefulWidget {
   final UndoHistoryController? undoController;
 
   @override
-  State<CupertinoTextField> createState() => _CupertinoTextFieldState();
+  State<CupertinoRichTextField> createState() => _CupertinoRichTextFieldState();
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
     properties.add(
-      DiagnosticsProperty<TextEditingController>('controller', controller,
+      DiagnosticsProperty<RichTextEditingController>('controller', controller,
           defaultValue: null),
     );
     properties.add(DiagnosticsProperty<FocusNode>('focusNode', focusNode,
@@ -1111,24 +1113,24 @@ class CupertinoTextField extends StatefulWidget {
 
     return configuration.copyWith(
       misspelledTextStyle: configuration.misspelledTextStyle ??
-          CupertinoTextField.cupertinoMisspelledTextStyle,
+          CupertinoRichTextField.cupertinoMisspelledTextStyle,
       misspelledSelectionColor: configuration.misspelledSelectionColor ??
-          CupertinoTextField.kMisspelledSelectionColor,
+          CupertinoRichTextField.kMisspelledSelectionColor,
       spellCheckSuggestionsToolbarBuilder:
           configuration.spellCheckSuggestionsToolbarBuilder ??
-              CupertinoTextField.defaultSpellCheckSuggestionsToolbarBuilder,
+              CupertinoRichTextField.defaultSpellCheckSuggestionsToolbarBuilder,
     );
   }
 }
 
-class _CupertinoTextFieldState extends State<CupertinoTextField>
-    with RestorationMixin, AutomaticKeepAliveClientMixin<CupertinoTextField>
+class _CupertinoRichTextFieldState extends State<CupertinoRichTextField>
+    with RestorationMixin, AutomaticKeepAliveClientMixin<CupertinoRichTextField>
     implements TextSelectionGestureDetectorBuilderDelegate, AutofillClient {
   final GlobalKey _clearGlobalKey = GlobalKey();
 
-  RestorableTextEditingController? _controller;
-  TextEditingController get _effectiveController =>
-      widget.controller ?? _controller!.value;
+  // RestorableRichTextEditingController? _controller;
+  RichTextEditingController get _effectiveController => widget.controller;
+  // widget.controller ?? _controller!.value;
 
   FocusNode? _focusNode;
   FocusNode get _effectiveFocusNode =>
@@ -1162,23 +1164,23 @@ class _CupertinoTextFieldState extends State<CupertinoTextField>
         _CupertinoTextFieldSelectionGestureDetectorBuilder(
       state: this,
     );
-    if (widget.controller == null) {
-      _createLocalController();
-    }
+    // if (widget.controller == null) {
+    //   _createLocalController();
+    // }
     _effectiveFocusNode.canRequestFocus = widget.enabled;
     _effectiveFocusNode.addListener(_handleFocusChanged);
   }
 
   @override
-  void didUpdateWidget(CupertinoTextField oldWidget) {
+  void didUpdateWidget(CupertinoRichTextField oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (widget.controller == null && oldWidget.controller != null) {
-      _createLocalController(oldWidget.controller!.value);
-    } else if (widget.controller != null && oldWidget.controller == null) {
-      unregisterFromRestoration(_controller!);
-      _controller!.dispose();
-      _controller = null;
-    }
+    // if (widget.controller == null && oldWidget.controller != null) {
+    //   _createLocalController(oldWidget.controller!.value);
+    // } else if (widget.controller != null && oldWidget.controller == null) {
+    //   unregisterFromRestoration(_controller!);
+    //   _controller!.dispose();
+    //   _controller = null;
+    // }
 
     if (widget.focusNode != oldWidget.focusNode) {
       (oldWidget.focusNode ?? _focusNode)?.removeListener(_handleFocusChanged);
@@ -1189,26 +1191,26 @@ class _CupertinoTextFieldState extends State<CupertinoTextField>
 
   @override
   void restoreState(RestorationBucket? oldBucket, bool initialRestore) {
-    if (_controller != null) {
-      _registerController();
-    }
+    // if (_controller != null) {
+    //   _registerController();
+    // }
   }
 
-  void _registerController() {
-    assert(_controller != null);
-    registerForRestoration(_controller!, 'controller');
-    _controller!.value.addListener(updateKeepAlive);
-  }
+  // void _registerController() {
+  //   assert(_controller != null);
+  //   registerForRestoration(_controller!, 'controller');
+  //   _controller!.value.addListener(updateKeepAlive);
+  // }
 
-  void _createLocalController([TextEditingValue? value]) {
-    assert(_controller == null);
-    _controller = value == null
-        ? RestorableTextEditingController()
-        : RestorableTextEditingController.fromValue(value);
-    if (!restorePending) {
-      _registerController();
-    }
-  }
+  // void _createLocalController([TextEditingValue? value]) {
+  //   assert(_controller == null);
+  //   _controller = value == null
+  //       ? RestorableRichTextEditingController()
+  //       : RestorableRichTextEditingController.fromValue(value);
+  //   if (!restorePending) {
+  //     _registerController();
+  //   }
+  // }
 
   @override
   String? get restorationId => widget.restorationId;
@@ -1217,7 +1219,7 @@ class _CupertinoTextFieldState extends State<CupertinoTextField>
   void dispose() {
     _effectiveFocusNode.removeListener(_handleFocusChanged);
     _focusNode?.dispose();
-    _controller?.dispose();
+    // _controller?.dispose();
     super.dispose();
   }
 
@@ -1297,7 +1299,7 @@ class _CupertinoTextFieldState extends State<CupertinoTextField>
   }
 
   @override
-  bool get wantKeepAlive => _controller?.value.text.isNotEmpty ?? false;
+  bool get wantKeepAlive => _effectiveController.value.text.isNotEmpty;
 
   static bool _shouldShowAttachment({
     required OverlayVisibilityMode attachment,
@@ -1489,7 +1491,7 @@ class _CupertinoTextFieldState extends State<CupertinoTextField>
   Widget build(BuildContext context) {
     super.build(context); // See AutomaticKeepAliveClientMixin.
     assert(debugCheckHasDirectionality(context));
-    final TextEditingController controller = _effectiveController;
+    final RichTextEditingController controller = _effectiveController;
 
     TextSelectionControls? textSelectionControls = widget.selectionControls;
     VoidCallback? handleDidGainAccessibilityFocus;
@@ -1608,7 +1610,7 @@ class _CupertinoTextFieldState extends State<CupertinoTextField>
     // ensure that configuration uses Cupertino text style for misspelled words
     // unless a custom style is specified.
     final SpellCheckConfiguration spellCheckConfiguration =
-        CupertinoTextField.inferIOSSpellCheckConfiguration(
+        CupertinoRichTextField.inferIOSSpellCheckConfiguration(
             widget.spellCheckConfiguration);
 
     final Widget paddedEditable = Padding(
@@ -1643,7 +1645,7 @@ class _CupertinoTextFieldState extends State<CupertinoTextField>
             minLines: widget.minLines,
             expands: widget.expands,
             magnifierConfiguration: widget.magnifierConfiguration ??
-                CupertinoTextField._iosMagnifierConfiguration,
+                CupertinoRichTextField._iosMagnifierConfiguration,
             // Only show the selection highlight when the text field is focused.
             selectionColor:
                 _effectiveFocusNode.hasFocus ? selectionColor : null,

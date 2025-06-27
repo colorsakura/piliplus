@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:PiliPlus/common/widgets/text_field/controller.dart';
 import 'package:PiliPlus/http/constants.dart';
 import 'package:PiliPlus/http/live.dart';
 import 'package:PiliPlus/http/video.dart';
@@ -48,7 +49,7 @@ class LiveRoomController extends GetxController {
   late List<({int code, String desc})> acceptQnList = [];
   RxString currentQnDesc = ''.obs;
 
-  String? savedDanmaku;
+  List<RichTextItem>? savedDanmaku;
 
   AccountService accountService = Get.find<AccountService>();
 
@@ -233,6 +234,8 @@ class LiveRoomController extends GetxController {
 
   @override
   void onClose() {
+    savedDanmaku?.clear();
+    savedDanmaku = null;
     scrollController
       ..removeListener(listener)
       ..dispose();

@@ -5,13 +5,12 @@ import 'package:PiliPlus/common/widgets/custom_icon.dart';
 import 'package:PiliPlus/common/widgets/draggable_sheet/draggable_scrollable_sheet_dyn.dart'
     as dyn_sheet;
 import 'package:PiliPlus/common/widgets/pair.dart';
-import 'package:PiliPlus/common/widgets/text_field/text_field.dart'
-    as text_field;
+import 'package:PiliPlus/common/widgets/text_field/text_field.dart';
 import 'package:PiliPlus/http/dynamics.dart';
 import 'package:PiliPlus/models/common/publish_panel_type.dart';
 import 'package:PiliPlus/models/common/reply/reply_option_type.dart';
 import 'package:PiliPlus/models_new/dynamic/dyn_topic_top/topic_item.dart';
-import 'package:PiliPlus/pages/common/common_publish_page.dart';
+import 'package:PiliPlus/pages/common/publish/common_rich_text_pub_page.dart';
 import 'package:PiliPlus/pages/dynamics_mention/controller.dart';
 import 'package:PiliPlus/pages/dynamics_select_topic/controller.dart';
 import 'package:PiliPlus/pages/dynamics_select_topic/view.dart';
@@ -26,7 +25,7 @@ import 'package:flutter/services.dart' show LengthLimitingTextInputFormatter;
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 
-class CreateDynPanel extends CommonPublishPage {
+class CreateDynPanel extends CommonRichTextPubPage {
   const CreateDynPanel({
     super.key,
     super.imageLengthLimit = 18,
@@ -60,7 +59,7 @@ class CreateDynPanel extends CommonPublishPage {
       );
 }
 
-class _CreateDynPanelState extends CommonPublishPageState<CreateDynPanel> {
+class _CreateDynPanelState extends CommonRichTextPubPageState<CreateDynPanel> {
   final RxBool _isPrivate = false.obs;
   final Rx<DateTime?> _publishTime = Rx<DateTime?>(null);
   final Rx<ReplyOptionType> _replyOption = ReplyOptionType.allow.obs;
@@ -550,6 +549,12 @@ class _CreateDynPanelState extends CommonPublishPageState<CreateDynPanel> {
               tooltip: '@',
               selected: false,
             ),
+            // if (kDebugMode)
+            //   ToolbarIconButton(
+            //     onPressed: editController.clear,
+            //     icon: const Icon(Icons.clear, size: 22),
+            //     selected: false,
+            //   ),
           ],
         ),
       );
@@ -563,13 +568,12 @@ class _CreateDynPanelState extends CommonPublishPageState<CreateDynPanel> {
             }
           },
           child: Obx(
-            () => text_field.TextField(
+            () => RichTextField(
               controller: editController,
               minLines: 4,
               maxLines: null,
               focusNode: focusNode,
               readOnly: readOnly.value,
-              onDelAtUser: onDelAtUser,
               onChanged: onChanged,
               decoration: InputDecoration(
                 hintText: '说点什么吧',
@@ -580,8 +584,7 @@ class _CreateDynPanelState extends CommonPublishPageState<CreateDynPanel> {
                 ),
                 contentPadding: EdgeInsets.zero,
               ),
-              inputFormatters: [LengthLimitingTextInputFormatter(1000)],
-              onMention: onMention,
+              // inputFormatters: [LengthLimitingTextInputFormatter(1000)],
             ),
           ),
         ),
@@ -591,14 +594,13 @@ class _CreateDynPanelState extends CommonPublishPageState<CreateDynPanel> {
   Widget? get customPanel => EmotePanel(onChoose: onChooseEmote);
 
   @override
-  Future<void> onCustomPublish(
-      {required String message, List? pictures}) async {
+  Future<void> onCustomPublish({List? pictures}) async {
     SmartDialog.showLoading(msg: '正在发布');
     List<Map<String, dynamic>>? extraContent = getRichContent();
-    final hasMention = extraContent != null;
+    final hasRichText = extraContent != null;
     var result = await DynamicsHttp.createDynamic(
       mid: Accounts.main.mid,
-      rawText: hasMention ? null : editController.text,
+      rawText: hasRichText ? null : editController.text,
       pics: pictures,
       publishTime: _publishTime.value != null
           ? _publishTime.value!.millisecondsSinceEpoch ~/ 1000
@@ -611,13 +613,14 @@ class _CreateDynPanelState extends CommonPublishPageState<CreateDynPanel> {
     );
     SmartDialog.dismiss();
     if (result['status']) {
+      hasPub = true;
       Get.back();
       SmartDialog.showToast('发布成功');
       var id = result['data']?['dyn_id'];
       RequestUtils.insertCreatedDyn(id);
       RequestUtils.checkCreatedDyn(
         id: id,
-        dynText: editController.text,
+        dynText: editController.rawText,
       );
     } else {
       SmartDialog.showToast(result['msg']);
@@ -637,4 +640,7 @@ class _CreateDynPanelState extends CommonPublishPageState<CreateDynPanel> {
       }
     });
   }
+
+  @override
+  void onSave() {}
 }

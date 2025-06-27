@@ -606,8 +606,16 @@ class _LiveRoomPageState extends State<LiveRoomPage>
         return LiveSendDmPanel(
           fromEmote: fromEmote,
           liveRoomController: _liveRoomController,
-          initialValue: _liveRoomController.savedDanmaku,
-          onSave: (msg) => _liveRoomController.savedDanmaku = msg.text,
+          items: _liveRoomController.savedDanmaku,
+          onSave: (msg) {
+            if (msg.isEmpty) {
+              _liveRoomController
+                ..savedDanmaku?.clear()
+                ..savedDanmaku = null;
+            } else {
+              _liveRoomController.savedDanmaku = msg.toList();
+            }
+          },
         );
       },
       transitionDuration: const Duration(milliseconds: 500),

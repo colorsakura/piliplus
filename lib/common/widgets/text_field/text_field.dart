@@ -14,6 +14,7 @@ library;
 import 'dart:ui' as ui show BoxHeightStyle, BoxWidthStyle;
 
 import 'package:PiliPlus/common/widgets/text_field/adaptive_text_selection_toolbar.dart';
+import 'package:PiliPlus/common/widgets/text_field/controller.dart';
 import 'package:PiliPlus/common/widgets/text_field/cupertino/cupertino_spell_check_suggestions_toolbar.dart';
 import 'package:PiliPlus/common/widgets/text_field/cupertino/cupertino_text_field.dart';
 import 'package:PiliPlus/common/widgets/text_field/editable_text.dart';
@@ -32,7 +33,8 @@ import 'package:flutter/cupertino.dart'
         buildTextSpanWithSpellCheckSuggestions,
         CupertinoTextField,
         TextSelectionGestureDetectorBuilderDelegate,
-        TextSelectionGestureDetectorBuilder;
+        TextSelectionGestureDetectorBuilder,
+        TextSelectionOverlay;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart'
@@ -46,7 +48,8 @@ import 'package:flutter/material.dart'
         EditableTextContextMenuBuilder,
         buildTextSpanWithSpellCheckSuggestions,
         TextSelectionGestureDetectorBuilderDelegate,
-        TextSelectionGestureDetectorBuilder;
+        TextSelectionGestureDetectorBuilder,
+        TextSelectionOverlay;
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 
@@ -62,7 +65,7 @@ export 'package:flutter/services.dart'
 // late BuildContext context;
 // late FocusNode myFocusNode;
 
-/// Signature for the [TextField.buildCounter] callback.
+/// Signature for the [RichTextField.buildCounter] callback.
 typedef InputCounterWidgetBuilder = Widget? Function(
   /// The build context for the TextField.
   BuildContext context, {
@@ -79,11 +82,12 @@ typedef InputCounterWidgetBuilder = Widget? Function(
 
 class _TextFieldSelectionGestureDetectorBuilder
     extends TextSelectionGestureDetectorBuilder {
-  _TextFieldSelectionGestureDetectorBuilder({required _TextFieldState state})
+  _TextFieldSelectionGestureDetectorBuilder(
+      {required _RichTextFieldState state})
       : _state = state,
         super(delegate: state);
 
-  final _TextFieldState _state;
+  final _RichTextFieldState _state;
 
   @override
   bool get onUserTapAlwaysCalled => _state.widget.onTapAlwaysCalled;
@@ -119,7 +123,7 @@ class _TextFieldSelectionGestureDetectorBuilder
 /// If [decoration] is non-null (which is the default), the text field requires
 /// one of its ancestors to be a [Material] widget.
 ///
-/// To integrate the [TextField] into a [Form] with other [FormField] widgets,
+/// To integrate the [RichTextField] into a [Form] with other [FormField] widgets,
 /// consider using [TextFormField].
 ///
 /// {@template flutter.material.textfield.wantKeepAlive}
@@ -129,7 +133,7 @@ class _TextFieldSelectionGestureDetectorBuilder
 /// disposed.
 /// {@endtemplate}
 ///
-/// Remember to call [TextEditingController.dispose] on the [TextEditingController]
+/// Remember to call [RichTextEditingController.dispose] on the [RichTextEditingController]
 /// when it is no longer needed. This will ensure we discard any resources used
 /// by the object.
 ///
@@ -141,7 +145,7 @@ class _TextFieldSelectionGestureDetectorBuilder
 /// ## Obscured Input
 ///
 /// {@tool dartpad}
-/// This example shows how to create a [TextField] that will obscure input. The
+/// This example shows how to create a [RichTextField] that will obscure input. The
 /// [InputDecoration] surrounds the field in a border using [OutlineInputBorder]
 /// and adds a label.
 ///
@@ -173,7 +177,7 @@ class _TextFieldSelectionGestureDetectorBuilder
 /// callback.
 ///
 /// Keep in mind you can also always read the current string from a TextField's
-/// [TextEditingController] using [TextEditingController.text].
+/// [RichTextEditingController] using [RichTextEditingController.text].
 ///
 /// ## Handling emojis and other complex characters
 /// {@macro flutter.widgets.EditableText.onChanged}
@@ -196,10 +200,10 @@ class _TextFieldSelectionGestureDetectorBuilder
 ///
 /// ## Scrolling Considerations
 ///
-/// If this [TextField] is not a descendant of [Scaffold] and is being used
+/// If this [RichTextField] is not a descendant of [Scaffold] and is being used
 /// within a [Scrollable] or nested [Scrollable]s, consider placing a
 /// [ScrollNotificationObserver] above the root [Scrollable] that contains this
-/// [TextField] to ensure proper scroll coordination for [TextField] and its
+/// [RichTextField] to ensure proper scroll coordination for [RichTextField] and its
 /// components like [TextSelectionOverlay].
 ///
 /// See also:
@@ -208,7 +212,7 @@ class _TextFieldSelectionGestureDetectorBuilder
 ///  * [InputDecorator], which shows the labels and other visual elements that
 ///    surround the actual text editing widget.
 ///  * [EditableText], which is the raw text editing control at the heart of a
-///    [TextField]. The [EditableText] widget is rarely used directly unless
+///    [RichTextField]. The [EditableText] widget is rarely used directly unless
 ///    you are implementing an entirely different design language, such as
 ///    Cupertino.
 ///  * <https://material.io/design/components/text-fields.html>
@@ -216,7 +220,7 @@ class _TextFieldSelectionGestureDetectorBuilder
 ///  * Cookbook: [Handle changes to a text field](https://docs.flutter.dev/cookbook/forms/text-field-changes)
 ///  * Cookbook: [Retrieve the value of a text field](https://docs.flutter.dev/cookbook/forms/retrieve-input)
 ///  * Cookbook: [Focus and text fields](https://docs.flutter.dev/cookbook/forms/focus)
-class TextField extends StatefulWidget {
+class RichTextField extends StatefulWidget {
   /// Creates a Material Design text field.
   ///
   /// If [decoration] is non-null (which is the default), the text field requires
@@ -236,7 +240,7 @@ class TextField extends StatefulWidget {
   /// field showing how many characters have been entered. If the value is
   /// set to a positive integer it will also display the maximum allowed
   /// number of characters to be entered. If the value is set to
-  /// [TextField.noMaxLength] then only the current length is displayed.
+  /// [RichTextField.noMaxLength] then only the current length is displayed.
   ///
   /// After [maxLength] characters have been input, additional input
   /// is ignored, unless [maxLengthEnforcement] is set to
@@ -261,10 +265,10 @@ class TextField extends StatefulWidget {
   ///
   ///  * [maxLength], which discusses the precise meaning of "number of
   ///    characters" and how it may differ from the intuitive meaning.
-  const TextField({
+  const RichTextField({
     super.key,
     this.groupId = EditableText,
-    this.controller,
+    required this.controller,
     this.focusNode,
     this.undoController,
     this.decoration = const InputDecoration(),
@@ -340,8 +344,6 @@ class TextField extends StatefulWidget {
     this.canRequestFocus = true,
     this.spellCheckConfiguration,
     this.magnifierConfiguration,
-    this.onDelAtUser,
-    this.onMention,
   })  : assert(obscuringCharacter.length == 1),
         smartDashesType = smartDashesType ??
             (obscureText ? SmartDashesType.disabled : SmartDashesType.enabled),
@@ -360,7 +362,7 @@ class TextField extends StatefulWidget {
         assert(!obscureText || maxLines == 1,
             'Obscured fields cannot be multiline.'),
         assert(maxLength == null ||
-            maxLength == TextField.noMaxLength ||
+            maxLength == RichTextField.noMaxLength ||
             maxLength > 0),
         // Assert the following instead of setting it directly to avoid surprising the user by silently changing the value they set.
         assert(
@@ -373,10 +375,6 @@ class TextField extends StatefulWidget {
             (maxLines == 1 ? TextInputType.text : TextInputType.multiline),
         enableInteractiveSelection =
             enableInteractiveSelection ?? (!readOnly || !obscureText);
-
-  final VoidCallback? onMention;
-
-  final ValueChanged<String>? onDelAtUser;
 
   /// The configuration for the magnifier of this text field.
   ///
@@ -398,8 +396,8 @@ class TextField extends StatefulWidget {
 
   /// Controls the text being edited.
   ///
-  /// If null, this widget will create its own [TextEditingController].
-  final TextEditingController? controller;
+  /// If null, this widget will create its own [RichTextEditingController].
+  final RichTextEditingController controller;
 
   /// Defines the keyboard focus for this widget.
   ///
@@ -570,7 +568,7 @@ class TextField extends StatefulWidget {
   /// If set, a character counter will be displayed below the
   /// field showing how many characters have been entered. If set to a number
   /// greater than 0, it will also display the maximum number allowed. If set
-  /// to [TextField.noMaxLength] then only the current character count is displayed.
+  /// to [RichTextField.noMaxLength] then only the current character count is displayed.
   ///
   /// After [maxLength] characters have been input, additional input
   /// is ignored, unless [maxLengthEnforcement] is set to
@@ -579,9 +577,9 @@ class TextField extends StatefulWidget {
   /// The text field enforces the length with a [LengthLimitingTextInputFormatter],
   /// which is evaluated after the supplied [inputFormatters], if any.
   ///
-  /// This value must be either null, [TextField.noMaxLength], or greater than 0.
+  /// This value must be either null, [RichTextField.noMaxLength], or greater than 0.
   /// If null (the default) then there is no limit to the number of characters
-  /// that can be entered. If set to [TextField.noMaxLength], then no limit will
+  /// that can be entered. If set to [RichTextField.noMaxLength], then no limit will
   /// be enforced, but the number of characters entered will still be displayed.
   ///
   /// Whitespace characters (e.g. newline, space, tab) are included in the
@@ -740,7 +738,7 @@ class TextField extends StatefulWidget {
   ///
   /// {@tool dartpad}
   /// This example shows how to use a `TextFieldTapRegion` to wrap a set of
-  /// "spinner" buttons that increment and decrement a value in the [TextField]
+  /// "spinner" buttons that increment and decrement a value in the [RichTextField]
   /// without causing the text field to lose keyboard focus.
   ///
   /// This example includes a generic `SpinnerField<T>` class that you can copy
@@ -770,7 +768,7 @@ class TextField extends StatefulWidget {
   ///
   /// If this property is null, [WidgetStateMouseCursor.textable] will be used.
   ///
-  /// The [mouseCursor] is the only property of [TextField] that controls the
+  /// The [mouseCursor] is the only property of [RichTextField] that controls the
   /// appearance of the mouse pointer. All other properties related to "cursor"
   /// stand for the text cursor, which is usually a blinking vertical line at
   /// the editing position.
@@ -903,7 +901,7 @@ class TextField extends StatefulWidget {
   /// See also:
   ///  * [SpellCheckConfiguration.misspelledTextStyle], the style configured to
   ///    mark misspelled words with.
-  ///  * [CupertinoTextField.cupertinoMisspelledTextStyle], the style configured
+  ///  * [CupertinoRichTextField.cupertinoMisspelledTextStyle], the style configured
   ///    to mark misspelled words with in the Cupertino style.
   static const TextStyle materialMisspelledTextStyle = TextStyle(
     decoration: TextDecoration.underline,
@@ -911,18 +909,18 @@ class TextField extends StatefulWidget {
     decorationStyle: TextDecorationStyle.wavy,
   );
 
-  /// Default builder for [TextField]'s spell check suggestions toolbar.
+  /// Default builder for [RichTextField]'s spell check suggestions toolbar.
   ///
   /// On Apple platforms, builds an iOS-style toolbar. Everywhere else, builds
   /// an Android-style toolbar.
   ///
   /// See also:
   ///  * [spellCheckConfiguration], where this is typically specified for
-  ///    [TextField].
+  ///    [RichTextField].
   ///  * [SpellCheckConfiguration.spellCheckSuggestionsToolbarBuilder], the
-  ///    parameter for which this is the default value for [TextField].
-  ///  * [CupertinoTextField.defaultSpellCheckSuggestionsToolbarBuilder], which
-  ///    is like this but specifies the default for [CupertinoTextField].
+  ///    parameter for which this is the default value for [RichTextField].
+  ///  * [CupertinoRichTextField.defaultSpellCheckSuggestionsToolbarBuilder], which
+  ///    is like this but specifies the default for [CupertinoRichTextField].
   @visibleForTesting
   static Widget defaultSpellCheckSuggestionsToolbarBuilder(
     BuildContext context,
@@ -955,22 +953,22 @@ class TextField extends StatefulWidget {
     }
     return configuration.copyWith(
       misspelledTextStyle: configuration.misspelledTextStyle ??
-          TextField.materialMisspelledTextStyle,
+          RichTextField.materialMisspelledTextStyle,
       spellCheckSuggestionsToolbarBuilder:
           configuration.spellCheckSuggestionsToolbarBuilder ??
-              TextField.defaultSpellCheckSuggestionsToolbarBuilder,
+              RichTextField.defaultSpellCheckSuggestionsToolbarBuilder,
     );
   }
 
   @override
-  State<TextField> createState() => _TextFieldState();
+  State<RichTextField> createState() => _RichTextFieldState();
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
     properties
       ..add(
-        DiagnosticsProperty<TextEditingController>('controller', controller,
+        DiagnosticsProperty<RichTextEditingController>('controller', controller,
             defaultValue: null),
       )
       ..add(DiagnosticsProperty<FocusNode>('focusNode', focusNode,
@@ -1152,12 +1150,12 @@ class TextField extends StatefulWidget {
   }
 }
 
-class _TextFieldState extends State<TextField>
+class _RichTextFieldState extends State<RichTextField>
     with RestorationMixin
     implements TextSelectionGestureDetectorBuilderDelegate, AutofillClient {
-  RestorableTextEditingController? _controller;
-  TextEditingController get _effectiveController =>
-      widget.controller ?? _controller!.value;
+  // RestorableRichTextEditingController? _controller;
+  RichTextEditingController get _effectiveController => widget.controller;
+  // widget.controller ?? _controller!.value;
 
   FocusNode? _focusNode;
   FocusNode get _effectiveFocusNode =>
@@ -1199,11 +1197,13 @@ class _TextFieldState extends State<TextField>
   bool get _hasIntrinsicError =>
       widget.maxLength != null &&
       widget.maxLength! > 0 &&
-      (widget.controller == null
-          ? !restorePending &&
-              _effectiveController.value.text.characters.length >
-                  widget.maxLength!
-          : _effectiveController.value.text.characters.length >
+      (
+          // widget.controller == null
+          //   ? !restorePending &&
+          //       _effectiveController.value.text.characters.length >
+          //           widget.maxLength!
+          //   :
+          _effectiveController.value.text.characters.length >
               widget.maxLength!);
 
   bool get _hasError =>
@@ -1295,9 +1295,9 @@ class _TextFieldState extends State<TextField>
     super.initState();
     _selectionGestureDetectorBuilder =
         _TextFieldSelectionGestureDetectorBuilder(state: this);
-    if (widget.controller == null) {
-      _createLocalController();
-    }
+    // if (widget.controller == null) {
+    //   _createLocalController();
+    // }
     _effectiveFocusNode.canRequestFocus = widget.canRequestFocus && _isEnabled;
     _effectiveFocusNode.addListener(_handleFocusChanged);
     _initStatesController();
@@ -1319,15 +1319,15 @@ class _TextFieldState extends State<TextField>
   }
 
   @override
-  void didUpdateWidget(TextField oldWidget) {
+  void didUpdateWidget(RichTextField oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (widget.controller == null && oldWidget.controller != null) {
-      _createLocalController(oldWidget.controller!.value);
-    } else if (widget.controller != null && oldWidget.controller == null) {
-      unregisterFromRestoration(_controller!);
-      _controller!.dispose();
-      _controller = null;
-    }
+    // if (widget.controller == null && oldWidget.controller != null) {
+    //   _createLocalController(oldWidget.controller!.value);
+    // } else if (widget.controller != null && oldWidget.controller == null) {
+    //   unregisterFromRestoration(_controller!);
+    //   _controller!.dispose();
+    //   _controller = null;
+    // }
 
     if (widget.focusNode != oldWidget.focusNode) {
       (oldWidget.focusNode ?? _focusNode)?.removeListener(_handleFocusChanged);
@@ -1345,11 +1345,11 @@ class _TextFieldState extends State<TextField>
     }
 
     if (widget.statesController == oldWidget.statesController) {
-      _statesController.update(MaterialState.disabled, !_isEnabled);
-      _statesController.update(MaterialState.hovered, _isHovering);
-      _statesController.update(
-          MaterialState.focused, _effectiveFocusNode.hasFocus);
-      _statesController.update(MaterialState.error, _hasError);
+      _statesController
+        ..update(MaterialState.disabled, !_isEnabled)
+        ..update(MaterialState.hovered, _isHovering)
+        ..update(MaterialState.focused, _effectiveFocusNode.hasFocus)
+        ..update(MaterialState.error, _hasError);
     } else {
       oldWidget.statesController?.removeListener(_handleStatesControllerChange);
       if (widget.statesController != null) {
@@ -1362,25 +1362,25 @@ class _TextFieldState extends State<TextField>
 
   @override
   void restoreState(RestorationBucket? oldBucket, bool initialRestore) {
-    if (_controller != null) {
-      _registerController();
-    }
+    // if (_controller != null) {
+    //   _registerController();
+    // }
   }
 
-  void _registerController() {
-    assert(_controller != null);
-    registerForRestoration(_controller!, 'controller');
-  }
+  // void _registerController() {
+  //   assert(_controller != null);
+  //   registerForRestoration(_controller!, 'controller');
+  // }
 
-  void _createLocalController([TextEditingValue? value]) {
-    assert(_controller == null);
-    _controller = value == null
-        ? RestorableTextEditingController()
-        : RestorableTextEditingController.fromValue(value);
-    if (!restorePending) {
-      _registerController();
-    }
-  }
+  // void _createLocalController([TextEditingValue? value]) {
+  //   assert(_controller == null);
+  //   _controller = value == null
+  //       ? RestorableRichTextEditingController()
+  //       : RestorableRichTextEditingController.fromValue(value);
+  //   if (!restorePending) {
+  //     _registerController();
+  //   }
+  // }
 
   @override
   String? get restorationId => widget.restorationId;
@@ -1389,7 +1389,7 @@ class _TextFieldState extends State<TextField>
   void dispose() {
     _effectiveFocusNode.removeListener(_handleFocusChanged);
     _focusNode?.dispose();
-    _controller?.dispose();
+    // _controller?.dispose();
     _statesController.removeListener(_handleStatesControllerChange);
     _internalStatesController?.dispose();
     super.dispose();
@@ -1582,7 +1582,7 @@ class _TextFieldState extends State<TextField>
     ).merge(providedStyle);
     final Brightness keyboardAppearance =
         widget.keyboardAppearance ?? theme.brightness;
-    final TextEditingController controller = _effectiveController;
+    final RichTextEditingController controller = _effectiveController;
     final FocusNode focusNode = _effectiveFocusNode;
     final List<TextInputFormatter> formatters = <TextInputFormatter>[
       ...?widget.inputFormatters,
@@ -1601,14 +1601,15 @@ class _TextFieldState extends State<TextField>
       case TargetPlatform.iOS:
       case TargetPlatform.macOS:
         spellCheckConfiguration =
-            CupertinoTextField.inferIOSSpellCheckConfiguration(
+            CupertinoRichTextField.inferIOSSpellCheckConfiguration(
           widget.spellCheckConfiguration,
         );
       case TargetPlatform.android:
       case TargetPlatform.fuchsia:
       case TargetPlatform.linux:
       case TargetPlatform.windows:
-        spellCheckConfiguration = TextField.inferAndroidSpellCheckConfiguration(
+        spellCheckConfiguration =
+            RichTextField.inferAndroidSpellCheckConfiguration(
           widget.spellCheckConfiguration,
         );
     }
@@ -1804,8 +1805,6 @@ class _TextFieldState extends State<TextField>
           spellCheckConfiguration: spellCheckConfiguration,
           magnifierConfiguration: widget.magnifierConfiguration ??
               TextMagnifier.adaptiveMagnifierConfiguration,
-          onDelAtUser: widget.onDelAtUser,
-          onMention: widget.onMention,
         ),
       ),
     );

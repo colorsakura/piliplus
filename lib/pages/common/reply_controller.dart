@@ -1,10 +1,10 @@
+import 'package:PiliPlus/common/widgets/text_field/controller.dart';
 import 'package:PiliPlus/grpc/bilibili/main/community/reply/v1.pb.dart'
     show MainListReply, ReplyInfo, SubjectControl, Mode;
 import 'package:PiliPlus/grpc/bilibili/pagination.pb.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/http/reply.dart';
 import 'package:PiliPlus/models/common/reply/reply_sort_type.dart';
-import 'package:PiliPlus/models_new/dynamic/dyn_mention/item.dart';
 import 'package:PiliPlus/pages/common/common_list_controller.dart';
 import 'package:PiliPlus/pages/video/reply_new/view.dart';
 import 'package:PiliPlus/services/account_service.dart';
@@ -25,8 +25,7 @@ abstract class ReplyController<R> extends CommonListController<R, ReplyInfo> {
   late Rx<ReplySortType> sortType;
   late Rx<Mode> mode;
 
-  late final savedReplies =
-      <Object, ({String text, List<MentionItem>? mentions})?>{};
+  late final savedReplies = <Object, List<RichTextItem>?>{};
 
   AccountService accountService = Get.find<AccountService>();
 
@@ -127,16 +126,20 @@ abstract class ReplyController<R> extends CommonListController<R, ReplyInfo> {
         .push(
       GetDialogRoute(
         pageBuilder: (buildContext, animation, secondaryAnimation) {
-          final saved = savedReplies[key];
           return ReplyPage(
             oid: oid ?? replyItem!.oid.toInt(),
             root: oid != null ? 0 : replyItem!.id.toInt(),
             parent: oid != null ? 0 : replyItem!.id.toInt(),
             replyType: replyItem?.type.toInt() ?? replyType!,
             replyItem: replyItem,
-            initialValue: saved?.text,
-            mentions: saved?.mentions,
-            onSave: (reply) => savedReplies[key] = reply,
+            items: savedReplies[key],
+            onSave: (reply) {
+              if (reply.isEmpty) {
+                savedReplies.remove(key);
+              } else {
+                savedReplies[key] = reply.toList();
+              }
+            },
             hint: hint,
           );
         },
@@ -237,5 +240,11 @@ abstract class ReplyController<R> extends CommonListController<R, ReplyInfo> {
     } else {
       SmartDialog.showToast(res['msg']);
     }
+  }
+
+  @override
+  void onClose() {
+    savedReplies.clear();
+    super.onClose();
   }
 }

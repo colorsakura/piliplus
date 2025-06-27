@@ -1,13 +1,15 @@
 import 'dart:async';
 
 import 'package:PiliPlus/common/widgets/button/toolbar_icon_button.dart';
+import 'package:PiliPlus/common/widgets/text_field/controller.dart'
+    show RichTextType;
 import 'package:PiliPlus/common/widgets/text_field/text_field.dart';
 import 'package:PiliPlus/grpc/bilibili/main/community/reply/v1.pb.dart'
     show ReplyInfo;
 import 'package:PiliPlus/http/video.dart';
 import 'package:PiliPlus/main.dart';
 import 'package:PiliPlus/models/common/publish_panel_type.dart';
-import 'package:PiliPlus/pages/common/common_publish_page.dart';
+import 'package:PiliPlus/pages/common/publish/common_rich_text_pub_page.dart';
 import 'package:PiliPlus/pages/dynamics_mention/controller.dart';
 import 'package:PiliPlus/pages/emote/view.dart';
 import 'package:PiliPlus/utils/storage_pref.dart';
@@ -15,7 +17,7 @@ import 'package:flutter/material.dart' hide TextField;
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 
-class ReplyPage extends CommonPublishPage {
+class ReplyPage extends CommonRichTextPubPage {
   final int oid;
   final int root;
   final int parent;
@@ -25,8 +27,7 @@ class ReplyPage extends CommonPublishPage {
 
   const ReplyPage({
     super.key,
-    super.initialValue,
-    super.mentions,
+    super.items,
     super.imageLengthLimit,
     super.onSave,
     required this.oid,
@@ -41,7 +42,7 @@ class ReplyPage extends CommonPublishPage {
   State<ReplyPage> createState() => _ReplyPageState();
 }
 
-class _ReplyPageState extends CommonPublishPageState<ReplyPage> {
+class _ReplyPageState extends CommonRichTextPubPageState<ReplyPage> {
   final RxBool _syncToDynamic = false.obs;
 
   Widget get child => SafeArea(
@@ -137,7 +138,7 @@ class _ReplyPageState extends CommonPublishPageState<ReplyPage> {
               }
             },
             child: Obx(
-              () => TextField(
+              () => RichTextField(
                 controller: editController,
                 minLines: 4,
                 maxLines: 8,
@@ -151,8 +152,6 @@ class _ReplyPageState extends CommonPublishPageState<ReplyPage> {
                   hintStyle: const TextStyle(fontSize: 14),
                 ),
                 style: themeData.textTheme.bodyLarge,
-                onMention: onMention,
-                onDelAtUser: onDelAtUser,
               ),
             ),
           ),
@@ -265,8 +264,12 @@ class _ReplyPageState extends CommonPublishPageState<ReplyPage> {
   }
 
   @override
-  Future<void> onCustomPublish(
-      {required String message, List? pictures}) async {
+  Future<void> onCustomPublish({List? pictures}) async {
+    Map<String, int> atNameToMid = {
+      for (var e in editController.items)
+        if (e.type == RichTextType.at) e.rawText: int.parse(e.uid!),
+    };
+    String message = editController.rawText;
     var result = await VideoHttp.replyAdd(
       type: widget.replyType,
       oid: widget.oid,
@@ -275,13 +278,12 @@ class _ReplyPageState extends CommonPublishPageState<ReplyPage> {
       message: widget.replyItem != null && widget.replyItem!.root != 0
           ? ' 回复 @${widget.replyItem!.member.name} : $message'
           : message,
-      atNameToMid: mentions?.isNotEmpty == true
-          ? {for (var e in mentions!) e.name: e.uid}
-          : null,
+      atNameToMid: atNameToMid,
       pictures: pictures,
       syncToDynamic: _syncToDynamic.value,
     );
     if (result['status']) {
+      hasPub = true;
       SmartDialog.showToast(result['data']['success_toast']);
       Get.back(result: result['data']['reply']);
     } else {

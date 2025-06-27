@@ -11,7 +11,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class EmotePanel extends StatefulWidget {
-  final ValueChanged<Emote> onChoose;
+  final Function(Emote emote, double? width, double? height) onChoose;
+
   const EmotePanel({super.key, required this.onChoose});
 
   @override
@@ -46,18 +47,17 @@ class _EmotePanelState extends State<EmotePanel>
                     controller: _emotePanelController.tabController,
                     children: response!.map(
                       (e) {
-                        int size = e.emote!.first.meta!.size!;
-                        int type = e.type!;
+                        double size = e.emote!.first.meta!.size == 1 ? 40 : 60;
+                        bool isTextEmote = e.type == 4;
                         return GridView.builder(
                           padding: const EdgeInsets.only(
                               left: 12, right: 12, bottom: 12),
                           gridDelegate:
                               SliverGridDelegateWithMaxCrossAxisExtent(
-                            maxCrossAxisExtent:
-                                type == 4 ? 100 : (size == 1 ? 40 : 60),
+                            maxCrossAxisExtent: isTextEmote ? 100 : size,
                             crossAxisSpacing: 8,
                             mainAxisSpacing: 8,
-                            mainAxisExtent: size == 1 ? 40 : 60,
+                            mainAxisExtent: size,
                           ),
                           itemCount: e.emote!.length,
                           itemBuilder: (context, index) {
@@ -67,10 +67,17 @@ class _EmotePanelState extends State<EmotePanel>
                               child: InkWell(
                                 borderRadius:
                                     const BorderRadius.all(Radius.circular(8)),
-                                onTap: () => widget.onChoose(item),
+                                onTap: () => widget.onChoose(
+                                    item,
+                                    isTextEmote
+                                        ? null
+                                        : e.emote!.first.meta!.size == 1
+                                            ? 24
+                                            : 42,
+                                    null),
                                 child: Padding(
                                   padding: const EdgeInsets.all(6),
-                                  child: type == 4
+                                  child: isTextEmote
                                       ? Center(
                                           child: Text(
                                             item.text!,
@@ -80,8 +87,8 @@ class _EmotePanelState extends State<EmotePanel>
                                         )
                                       : NetworkImgLayer(
                                           src: item.url!,
-                                          width: size * 38,
-                                          height: size * 38,
+                                          width: size,
+                                          height: size,
                                           semanticsLabel: item.text!,
                                           type: ImageType.emote,
                                           boxFit: BoxFit.contain,

@@ -6,18 +6,17 @@ import 'package:PiliPlus/common/widgets/text_field/text_field.dart';
 import 'package:PiliPlus/http/dynamics.dart';
 import 'package:PiliPlus/models/common/publish_panel_type.dart';
 import 'package:PiliPlus/models/dynamics/result.dart';
-import 'package:PiliPlus/pages/common/common_publish_page.dart';
+import 'package:PiliPlus/pages/common/publish/common_rich_text_pub_page.dart';
 import 'package:PiliPlus/pages/dynamics_mention/controller.dart';
 import 'package:PiliPlus/pages/emote/controller.dart';
 import 'package:PiliPlus/pages/emote/view.dart';
 import 'package:PiliPlus/utils/accounts.dart';
 import 'package:PiliPlus/utils/request_utils.dart';
 import 'package:flutter/material.dart' hide DraggableScrollableSheet, TextField;
-import 'package:flutter/services.dart' show LengthLimitingTextInputFormatter;
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 
-class RepostPanel extends CommonPublishPage {
+class RepostPanel extends CommonRichTextPubPage {
   const RepostPanel({
     super.key,
     this.item,
@@ -48,7 +47,7 @@ class RepostPanel extends CommonPublishPage {
   State<RepostPanel> createState() => _RepostPanelState();
 }
 
-class _RepostPanelState extends CommonPublishPageState<RepostPanel> {
+class _RepostPanelState extends CommonRichTextPubPageState<RepostPanel> {
   late bool _isMax = widget.isMax ?? false;
   bool? _isExpanded;
 
@@ -225,7 +224,7 @@ class _RepostPanelState extends CommonPublishPageState<RepostPanel> {
             }
           },
           child: Obx(
-            () => TextField(
+            () => RichTextField(
               controller: editController,
               minLines: 4,
               maxLines: null,
@@ -240,9 +239,7 @@ class _RepostPanelState extends CommonPublishPageState<RepostPanel> {
                 ),
                 contentPadding: const EdgeInsets.symmetric(vertical: 10),
               ),
-              inputFormatters: [LengthLimitingTextInputFormatter(1000)],
-              onMention: onMention,
-              onDelAtUser: onDelAtUser,
+              // inputFormatters: [LengthLimitingTextInputFormatter(1000)],
             ),
           ),
         ),
@@ -376,7 +373,7 @@ class _RepostPanelState extends CommonPublishPageState<RepostPanel> {
   @override
   Widget? get customPanel => EmotePanel(onChoose: onChooseEmote);
 
-  List<Map<String, dynamic>>? extraContent(DynamicItemModel item) {
+  List<Map<String, dynamic>>? getRepostContent(DynamicItemModel item) {
     try {
       return [
         {"raw_text": "//", "type": 1, "biz_id": ""},
@@ -416,26 +413,26 @@ class _RepostPanelState extends CommonPublishPageState<RepostPanel> {
   }
 
   @override
-  Future<void> onCustomPublish(
-      {required String message, List? pictures}) async {
+  Future<void> onCustomPublish({List? pictures}) async {
     SmartDialog.showLoading();
-    List<Map<String, dynamic>>? content = getRichContent();
-    final hasMention = content != null;
+    List<Map<String, dynamic>>? richContent = getRichContent();
+    final hasRichText = richContent != null;
     List<Map<String, dynamic>>? repostContent =
-        widget.item?.orig != null ? extraContent(widget.item!) : null;
-    if (hasMention && repostContent != null) {
-      content.addAll(repostContent);
+        widget.item?.orig != null ? getRepostContent(widget.item!) : null;
+    if (hasRichText && repostContent != null) {
+      richContent.addAll(repostContent);
     }
     var result = await DynamicsHttp.createDynamic(
       mid: Accounts.main.mid,
       dynIdStr: widget.item?.idStr ?? widget.dynIdStr,
       rid: widget.rid,
       dynType: widget.dynType,
-      rawText: hasMention ? null : editController.text,
-      extraContent: content ?? repostContent,
+      rawText: hasRichText ? null : editController.text,
+      extraContent: richContent ?? repostContent,
     );
     SmartDialog.dismiss();
     if (result['status']) {
+      hasPub = true;
       Get.back();
       SmartDialog.showToast('转发成功');
       widget.callback?.call();
@@ -443,10 +440,13 @@ class _RepostPanelState extends CommonPublishPageState<RepostPanel> {
       RequestUtils.insertCreatedDyn(id);
       RequestUtils.checkCreatedDyn(
         id: id,
-        dynText: editController.text,
+        dynText: editController.rawText,
       );
     } else {
       SmartDialog.showToast(result['msg']);
     }
   }
+
+  @override
+  void onSave() {}
 }

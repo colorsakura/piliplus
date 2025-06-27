@@ -21,12 +21,20 @@ import 'dart:math' as math;
 import 'dart:ui' as ui hide TextStyle;
 import 'dart:ui';
 
+import 'package:PiliPlus/common/widgets/text_field/controller.dart';
+import 'package:PiliPlus/common/widgets/text_field/editable.dart';
 import 'package:PiliPlus/common/widgets/text_field/spell_check.dart';
+import 'package:PiliPlus/common/widgets/text_field/text_selection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart'
-    hide SpellCheckConfiguration, buildTextSpanWithSpellCheckSuggestions;
-import 'package:flutter/rendering.dart';
+    hide
+        SpellCheckConfiguration,
+        buildTextSpanWithSpellCheckSuggestions,
+        TextSelectionOverlay,
+        TextSelectionGestureDetectorBuilder;
+import 'package:flutter/rendering.dart'
+    hide RenderEditable, VerticalCaretMovementRun;
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 
@@ -124,7 +132,7 @@ class _RenderCompositionCallback extends RenderProxyBox {
 /// A controller for an editable text field.
 ///
 /// Whenever the user modifies a text field with an associated
-/// [TextEditingController], the text field updates [value] and the controller
+/// [RichTextEditingController], the text field updates [value] and the controller
 /// notifies its listeners. Listeners can then read the [text] and [selection]
 /// properties to learn what the user has typed or how the selection has been
 /// updated.
@@ -132,7 +140,7 @@ class _RenderCompositionCallback extends RenderProxyBox {
 /// Similarly, if you modify the [text] or [selection] properties, the text
 /// field will be notified and will update itself appropriately.
 ///
-/// A [TextEditingController] can also be used to provide an initial value for a
+/// A [RichTextEditingController] can also be used to provide an initial value for a
 /// text field. If you build a text field with a controller that already has
 /// [text], the text field will use that text as its initial value.
 ///
@@ -150,11 +158,11 @@ class _RenderCompositionCallback extends RenderProxyBox {
 /// controller's [value] instead. Setting [text] will clear the selection
 /// and composing range.
 ///
-/// Remember to [dispose] of the [TextEditingController] when it is no longer
+/// Remember to [dispose] of the [RichTextEditingController] when it is no longer
 /// needed. This will ensure we discard any resources used by the object.
 ///
 /// {@tool dartpad}
-/// This example creates a [TextField] with a [TextEditingController] whose
+/// This example creates a [TextField] with a [RichTextEditingController] whose
 /// change listener forces the entered text to be lower case and keeps the
 /// cursor at the end of the input.
 ///
@@ -164,10 +172,10 @@ class _RenderCompositionCallback extends RenderProxyBox {
 /// See also:
 ///
 ///  * [TextField], which is a Material Design text field that can be controlled
-///    with a [TextEditingController].
+///    with a [RichTextEditingController].
 ///  * [EditableText], which is a raw region of editable text that can be
-///    controlled with a [TextEditingController].
-///  * Learn how to use a [TextEditingController] in one of our [cookbook recipes](https://docs.flutter.dev/cookbook/forms/text-field-changes#2-use-a-texteditingcontroller).
+///    controlled with a [RichTextEditingController].
+///  * Learn how to use a [RichTextEditingController] in one of our [cookbook recipes](https://docs.flutter.dev/cookbook/forms/text-field-changes#2-use-a-texteditingcontroller).
 
 // A time-value pair that represents a key frame in an animation.
 class _KeyFrame {
@@ -273,7 +281,7 @@ class _DiscreteKeyFrameSimulation extends Simulation {
 ///
 /// * The [inputFormatters] will be first applied to the user input.
 ///
-/// * The [controller]'s [TextEditingController.value] will be updated with the
+/// * The [controller]'s [RichTextEditingController.value] will be updated with the
 ///   formatted result, and the [controller]'s listeners will be notified.
 ///
 /// * The [onChanged] callback, if specified, will be called last.
@@ -371,8 +379,8 @@ class _DiscreteKeyFrameSimulation extends Simulation {
 /// | **Intent Class**                        | **Default Behavior**                                 |
 /// | :-------------------------------------- | :--------------------------------------------------- |
 /// | [DoNothingAndStopPropagationTextIntent] | Does nothing in the input field, and prevents the key event from further propagating in the widget tree. |
-/// | [ReplaceTextIntent]                     | Replaces the current [TextEditingValue] in the input field's [TextEditingController], and triggers all related user callbacks and [TextInputFormatter]s. |
-/// | [UpdateSelectionIntent]                 | Updates the current selection in the input field's [TextEditingController], and triggers the [onSelectionChanged] callback. |
+/// | [ReplaceTextIntent]                     | Replaces the current [TextEditingValue] in the input field's [RichTextEditingController], and triggers all related user callbacks and [TextInputFormatter]s. |
+/// | [UpdateSelectionIntent]                 | Updates the current selection in the input field's [RichTextEditingController], and triggers the [onSelectionChanged] callback. |
 /// | [CopySelectionTextIntent]               | Copies or cuts the selected text into the clipboard |
 /// | [PasteTextIntent]                       | Inserts the current text in the clipboard after the caret location, or replaces the selected text if the selection is not collapsed. |
 ///
@@ -573,8 +581,6 @@ class EditableText extends StatefulWidget {
     this.spellCheckConfiguration,
     this.magnifierConfiguration = TextMagnifierConfiguration.disabled,
     this.undoController,
-    this.onDelAtUser,
-    this.onMention,
   })  : assert(obscuringCharacter.length == 1),
         smartDashesType = smartDashesType ??
             (obscureText ? SmartDashesType.disabled : SmartDashesType.enabled),
@@ -634,12 +640,8 @@ class EditableText extends StatefulWidget {
             : inputFormatters,
         showCursor = showCursor ?? !readOnly;
 
-  final VoidCallback? onMention;
-
-  final ValueChanged<String>? onDelAtUser;
-
   /// Controls the text being edited.
-  final TextEditingController controller;
+  final RichTextEditingController controller;
 
   /// Controls whether this widget has keyboard focus.
   final FocusNode focusNode;
@@ -1068,7 +1070,7 @@ class EditableText extends StatefulWidget {
   ///
   /// To be notified of all changes to the TextField's text, cursor,
   /// and selection, one can add a listener to its [controller] with
-  /// [TextEditingController.addListener].
+  /// [RichTextEditingController.addListener].
   ///
   /// [onChanged] is called before [onSubmitted] when user indicates completion
   /// of editing, such as when pressing the "done" button on the keyboard. That
@@ -1104,7 +1106,7 @@ class EditableText extends StatefulWidget {
   ///    runs and can validate and change ("format") the input value.
   ///  * [onEditingComplete], [onSubmitted], [onSelectionChanged]:
   ///    which are more specialized input change notifications.
-  ///  * [TextEditingController], which implements the [Listenable] interface
+  ///  * [RichTextEditingController], which implements the [Listenable] interface
   ///    and notifies its listeners on [TextEditingValue] changes.
   final ValueChanged<String>? onChanged;
 
@@ -1268,7 +1270,7 @@ class EditableText extends StatefulWidget {
   ///
   /// See also:
   ///
-  ///  * [TextEditingController], which implements the [Listenable] interface
+  ///  * [RichTextEditingController], which implements the [Listenable] interface
   ///    and notifies its listeners on [TextEditingValue] changes.
   /// {@endtemplate}
   final List<TextInputFormatter>? inputFormatters;
@@ -1572,7 +1574,7 @@ class EditableText extends StatefulWidget {
   ///
   /// Persisting and restoring the content of the [EditableText] is the
   /// responsibility of the owner of the [controller], who may use a
-  /// [RestorableTextEditingController] for that purpose.
+  /// [RestorableRichTextEditingController] for that purpose.
   ///
   /// See also:
   ///
@@ -1955,8 +1957,8 @@ class EditableText extends StatefulWidget {
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
-    properties.add(
-        DiagnosticsProperty<TextEditingController>('controller', controller));
+    properties.add(DiagnosticsProperty<RichTextEditingController>(
+        'controller', controller));
     properties.add(DiagnosticsProperty<FocusNode>('focusNode', focusNode));
     properties.add(DiagnosticsProperty<bool>('obscureText', obscureText,
         defaultValue: false));
@@ -2373,7 +2375,8 @@ class EditableTextState extends State<EditableText>
     if (selection.isCollapsed || widget.obscureText) {
       return;
     }
-    final String text = textEditingValue.text;
+    // TODO copy
+    String text = textEditingValue.text;
     Clipboard.setData(ClipboardData(text: selection.textInside(text)));
     if (cause == SelectionChangedCause.toolbar) {
       bringIntoView(textEditingValue.selection.extent);
@@ -2388,6 +2391,7 @@ class EditableTextState extends State<EditableText>
         case TargetPlatform.android:
         case TargetPlatform.fuchsia:
           // Collapse the selection and hide the toolbar and handles.
+
           userUpdateTextEditingValue(
             TextEditingValue(
               text: textEditingValue.text,
@@ -2455,13 +2459,37 @@ class EditableTextState extends State<EditableText>
     final TextSelection selection = textEditingValue.selection;
     final int lastSelectionIndex =
         math.max(selection.baseOffset, selection.extentOffset);
-    final TextEditingValue collapsedTextEditingValue =
-        textEditingValue.copyWith(
-      selection: TextSelection.collapsed(offset: lastSelectionIndex),
+    // final TextEditingValue collapsedTextEditingValue =
+    //     textEditingValue.copyWith(
+    //   selection: TextSelection.collapsed(offset: lastSelectionIndex),
+    // );
+    // final newValue = collapsedTextEditingValue.replaced(selection, text);
+
+    widget.controller.syncRichText(
+      selection.isCollapsed
+          ? TextEditingDeltaInsertion(
+              oldText: textEditingValue.text,
+              textInserted: text,
+              insertionOffset: selection.baseOffset,
+              selection: TextSelection.collapsed(offset: lastSelectionIndex),
+              composing: TextRange.empty,
+            )
+          : TextEditingDeltaReplacement(
+              oldText: textEditingValue.text,
+              replacementText: text,
+              replacedRange: selection,
+              selection: TextSelection.collapsed(offset: lastSelectionIndex),
+              composing: TextRange.empty,
+            ),
     );
 
-    userUpdateTextEditingValue(
-        collapsedTextEditingValue.replaced(selection, text), cause);
+    final newValue = _value.copyWith(
+      text: widget.controller.plainText,
+      selection: widget.controller.newSelection,
+    );
+
+    userUpdateTextEditingValue(newValue, cause);
+
     if (cause == SelectionChangedCause.toolbar) {
       // Schedule a call to bringIntoView() after renderEditable updates.
       SchedulerBinding.instance.addPostFrameCallback((_) {
@@ -2481,6 +2509,7 @@ class EditableTextState extends State<EditableText>
       // selecting it.
       return;
     }
+
     userUpdateTextEditingValue(
       textEditingValue.copyWith(
         selection: TextSelection(
@@ -3165,7 +3194,7 @@ class EditableTextState extends State<EditableText>
       // everything else.
       value = _value.copyWith(selection: value.selection);
     }
-    _lastKnownRemoteTextEditingValue = value;
+    _lastKnownRemoteTextEditingValue = _value;
 
     if (value == _value) {
       // This is possible, for example, when the numeric keyboard is input,
@@ -3257,47 +3286,25 @@ class EditableTextState extends State<EditableText>
     }
   }
 
-  static final _atUserRegex = RegExp(r'@[\u4e00-\u9fa5a-zA-Z\d_-]+ $');
-
   @override
   void updateEditingValueWithDeltas(List<TextEditingDelta> textEditingDeltas) {
-    var last = textEditingDeltas.lastOrNull;
-    if (last case TextEditingDeltaInsertion e) {
-      if (e.textInserted == '@') {
-        widget.onMention?.call();
-      }
-    } else if (last case TextEditingDeltaDeletion e) {
-      if (e.textDeleted == ' ') {
-        final selection = _value.selection;
-        if (selection.isCollapsed) {
-          final text = _value.text;
-          final offset = selection.baseOffset;
-
-          RegExpMatch? match =
-              _atUserRegex.firstMatch(text.substring(0, offset));
-
-          if (match != null) {
-            userUpdateTextEditingValue(
-              TextEditingDeltaDeletion(
-                oldText: e.oldText,
-                deletedRange: TextRange(start: match.start, end: match.end),
-                selection: TextSelection.collapsed(offset: match.start),
-                composing: e.composing,
-              ).apply(_value),
-              SelectionChangedCause.keyboard,
-            );
-            widget.onDelAtUser?.call(match.group(0)!.trim());
-            return;
-          }
-        }
-      }
-    }
-
-    TextEditingValue value = _value;
     for (final TextEditingDelta delta in textEditingDeltas) {
-      value = delta.apply(value);
+      widget.controller.syncRichText(delta);
     }
-    updateEditingValue(value);
+
+    final newValue = _value.copyWith(
+      text: widget.controller.plainText,
+      selection: widget.controller.newSelection,
+      composing: textEditingDeltas.lastOrNull?.composing,
+    );
+
+    updateEditingValue(newValue);
+
+    // TextEditingValue value = _value;
+    // for (final TextEditingDelta delta in textEditingDeltas) {
+    //   value = delta.apply(value);
+    // }
+    // updateEditingValue(value);
   }
 
   @override
@@ -3388,6 +3395,10 @@ class EditableTextState extends State<EditableText>
           renderEditable
               .localToGlobal(_lastBoundedOffset! + _floatingCursorOffset),
         );
+
+        // bggRGjQaUbCoE ios single long press
+        _lastTextPosition = widget.controller.dragOffset(_lastTextPosition!);
+
         renderEditable.setFloatingCursor(
             point.state, _lastBoundedOffset!, _lastTextPosition!);
       case FloatingCursorDragState.End:
@@ -4005,6 +4016,7 @@ class EditableTextState extends State<EditableText>
     final EditableTextContextMenuBuilder? contextMenuBuilder =
         widget.contextMenuBuilder;
     final TextSelectionOverlay selectionOverlay = TextSelectionOverlay(
+      controller: widget.controller,
       clipboardStatus: clipboardStatus,
       context: context,
       value: _value,
@@ -4248,6 +4260,15 @@ class EditableTextState extends State<EditableText>
     final bool textCommitted =
         !oldValue.composing.isCollapsed && value.composing.isCollapsed;
     final bool selectionChanged = oldValue.selection != value.selection;
+    // if (!textChanged && selectionChanged) {
+    //   value = value.copyWith(
+    //     selection: widget.controller.updateSelection(
+    //       oldSelection: _value.selection,
+    //       newSelection: value.selection,
+    //       cause: cause,
+    //     ),
+    //   );
+    // }
 
     if (textChanged || textCommitted) {
       // Only apply input formatters if the text has changed (including uncommitted
@@ -5144,10 +5165,34 @@ class EditableTextState extends State<EditableText>
 
   void _replaceText(ReplaceTextIntent intent) {
     final TextEditingValue oldValue = _value;
-    final TextEditingValue newValue = intent.currentTextEditingValue.replaced(
-      intent.replacementRange,
-      intent.replacementText,
+    // final TextEditingValue newValue = intent.currentTextEditingValue.replaced(
+    //   intent.replacementRange,
+    //   intent.replacementText,
+    // );
+    widget.controller.syncRichText(
+      intent.replacementText.isEmpty
+          ? TextEditingDeltaDeletion(
+              oldText: oldValue.text,
+              deletedRange: intent.replacementRange,
+              selection: TextSelection.collapsed(
+                  offset: intent.replacementRange.start),
+              composing: TextRange.empty,
+            )
+          : TextEditingDeltaReplacement(
+              oldText: oldValue.text,
+              replacementText: intent.replacementText,
+              replacedRange: intent.replacementRange,
+              selection: TextSelection.collapsed(
+                  offset: intent.replacementRange.start),
+              composing: TextRange.empty,
+            ),
     );
+
+    final newValue = oldValue.copyWith(
+      text: widget.controller.plainText,
+      selection: widget.controller.newSelection,
+    );
+
     userUpdateTextEditingValue(newValue, intent.cause);
 
     // If there's no change in text and selection (e.g. when selecting and
@@ -5258,6 +5303,7 @@ class EditableTextState extends State<EditableText>
     }
 
     bringIntoView(nextSelection.extent);
+
     userUpdateTextEditingValue(
       _value.copyWith(selection: nextSelection),
       SelectionChangedCause.keyboard,
@@ -5275,8 +5321,17 @@ class EditableTextState extends State<EditableText>
     );
 
     bringIntoView(intent.newSelection.extent);
+
+    // bggRGjQaUbCoE keyboard
+    TextSelection newSelection = intent.newSelection;
+    if (newSelection.isCollapsed) {
+      newSelection = widget.controller.keyboardOffset(newSelection);
+    } else {
+      newSelection = widget.controller.keyboardOffsets(newSelection);
+    }
+
     userUpdateTextEditingValue(
-      intent.currentTextEditingValue.copyWith(selection: intent.newSelection),
+      intent.currentTextEditingValue.copyWith(selection: newSelection),
       intent.cause,
     );
   }
@@ -5358,8 +5413,6 @@ class EditableTextState extends State<EditableText>
         this,
         _characterBoundary,
         _moveBeyondTextBoundary,
-        atUserRegex: _atUserRegex,
-        onDelAtUser: widget.onDelAtUser,
       ),
     ),
     DeleteToNextWordBoundaryIntent: _makeOverridable(
@@ -5623,6 +5676,7 @@ class EditableTextState extends State<EditableText>
                                 child: SizeChangedLayoutNotifier(
                                   child: _Editable(
                                     key: _editableKey,
+                                    controller: widget.controller,
                                     startHandleLayerLink: _startHandleLayerLink,
                                     endHandleLayerLink: _endHandleLayerLink,
                                     inlineSpan: buildTextSpan(),
@@ -5823,6 +5877,7 @@ class _Editable extends MultiChildRenderObjectWidget {
     this.promptRectRange,
     this.promptRectColor,
     required this.clipBehavior,
+    required this.controller,
   }) : super(
             children: WidgetSpan.extractFromInlineSpan(inlineSpan, textScaler));
 
@@ -5864,10 +5919,12 @@ class _Editable extends MultiChildRenderObjectWidget {
   final TextRange? promptRectRange;
   final Color? promptRectColor;
   final Clip clipBehavior;
+  final RichTextEditingController controller;
 
   @override
   RenderEditable createRenderObject(BuildContext context) {
     return RenderEditable(
+      controller: controller,
       text: inlineSpan,
       cursorColor: cursorColor,
       startHandleLayerLink: startHandleLayerLink,
@@ -6200,16 +6257,12 @@ class _DeleteTextAction<T extends DirectionalTextEditingIntent>
   _DeleteTextAction(
     this.state,
     this.getTextBoundary,
-    this._applyTextBoundary, {
-    this.atUserRegex,
-    this.onDelAtUser,
-  });
+    this._applyTextBoundary,
+  );
 
   final EditableTextState state;
   final TextBoundary Function() getTextBoundary;
   final _ApplyTextBoundary _applyTextBoundary;
-  final RegExp? atUserRegex;
-  final ValueChanged<String>? onDelAtUser;
 
   void _hideToolbarIfTextChanged(ReplaceTextIntent intent) {
     if (state._selectionOverlay == null ||
@@ -6255,28 +6308,6 @@ class _DeleteTextAction<T extends DirectionalTextEditingIntent>
       return Actions.invoke(context!, replaceTextIntent);
     }
 
-    final value = state._value;
-    final text = value.text;
-
-    if (!intent.forward) {
-      if (text.isNotEmpty && selection.baseOffset != 0) {
-        String subText = text.substring(0, selection.baseOffset);
-        RegExpMatch? match = atUserRegex?.firstMatch(subText);
-        if (match != null) {
-          onDelAtUser?.call(match.group(0)!.trim());
-          final range = TextRange(start: match.start, end: match.end);
-          final ReplaceTextIntent replaceTextIntent = ReplaceTextIntent(
-            value,
-            '',
-            range,
-            SelectionChangedCause.keyboard,
-          );
-          _hideToolbarIfTextChanged(replaceTextIntent);
-          return Actions.invoke(context!, replaceTextIntent);
-        }
-      }
-    }
-
     final int target =
         _applyTextBoundary(selection.base, intent.forward, getTextBoundary())
             .offset;
@@ -6284,14 +6315,14 @@ class _DeleteTextAction<T extends DirectionalTextEditingIntent>
     final TextRange rangeToDelete = TextSelection(
       baseOffset: intent.forward
           ? atomicBoundary.getLeadingTextBoundaryAt(selection.baseOffset) ??
-              text.length
+              state._value.text.length
           : atomicBoundary
                   .getTrailingTextBoundaryAt(selection.baseOffset - 1) ??
               0,
       extentOffset: target,
     );
     final ReplaceTextIntent replaceTextIntent = ReplaceTextIntent(
-      value,
+      state._value,
       '',
       rangeToDelete,
       SelectionChangedCause.keyboard,

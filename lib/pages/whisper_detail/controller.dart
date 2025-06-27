@@ -65,12 +65,13 @@ class WhisperDetailController extends CommonListController<RspSessionMsg, Msg> {
   }
 
   Future<void> sendMsg({
-    required String message,
+    String? message,
     Map? picMsg,
     required VoidCallback onClearText,
     int? msgType,
     int? index,
   }) async {
+    assert((message != null) ^ (picMsg != null));
     feedBack();
     SmartDialog.dismiss();
     if (!accountService.isLogin.value) {
@@ -81,7 +82,7 @@ class WhisperDetailController extends CommonListController<RspSessionMsg, Msg> {
       senderUid: accountService.mid,
       receiverId: mid!,
       content:
-          msgType == 5 ? message : jsonEncode(picMsg ?? {"content": message}),
+          msgType == 5 ? message! : jsonEncode(picMsg ?? {"content": message!}),
       msgType: MsgType.values[msgType ?? (picMsg != null ? 2 : 1)],
     );
     SmartDialog.dismiss();

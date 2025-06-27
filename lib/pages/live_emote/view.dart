@@ -14,7 +14,7 @@ import 'package:get/get.dart';
 
 class LiveEmotePanel extends StatefulWidget {
   final int roomId;
-  final ValueChanged<Emoticon> onChoose;
+  final Function(Emoticon emote, double? width, double? height) onChoose;
   final ValueChanged<Emoticon> onSendEmoticonUnique;
   const LiveEmotePanel({
     super.key,
@@ -61,6 +61,8 @@ class _LiveEmotePanelState extends State<LiveEmotePanel>
                             max(1, item.emoticons!.first.width! / 80);
                         double heightFac =
                             max(1, item.emoticons!.first.height! / 80);
+                        final width = widthFac * 38;
+                        final height = heightFac * 38;
                         return GridView.builder(
                           padding: const EdgeInsets.only(
                               left: 12, right: 12, bottom: 12),
@@ -81,7 +83,7 @@ class _LiveEmotePanelState extends State<LiveEmotePanel>
                                     const BorderRadius.all(Radius.circular(8)),
                                 onTap: () {
                                   if (item.pkgType == 3) {
-                                    widget.onChoose(e);
+                                    widget.onChoose(e, width, height);
                                   } else {
                                     widget.onSendEmoticonUnique(e);
                                   }
@@ -91,8 +93,8 @@ class _LiveEmotePanelState extends State<LiveEmotePanel>
                                   child: NetworkImgLayer(
                                     boxFit: BoxFit.contain,
                                     src: e.url!,
-                                    width: widthFac * 38,
-                                    height: heightFac * 38,
+                                    width: width,
+                                    height: height,
                                     type: ImageType.emote,
                                     quality: item.pkgType == 3 ? null : 80,
                                   ),
