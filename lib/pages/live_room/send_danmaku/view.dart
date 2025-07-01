@@ -198,4 +198,7 @@ class _ReplyPageState extends CommonRichTextPubPageState<LiveSendDmPanel> {
       SmartDialog.showToast(res['msg']);
     }
   }
+
+  @override
+  void onMention([bool fromClick = false]) {}
 }

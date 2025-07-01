@@ -183,7 +183,7 @@ class RichTextItem {
     if (insertionOffset == 0 && range.start == 0) {
       final insertedLength = delta.textInserted.length;
       controller.newSelection = TextSelection.collapsed(offset: insertedLength);
-      if (isText && delta.isText) {
+      if (!isRich && delta.isText) {
         text = delta.textInserted + text;
         range = TextRange(start: range.start, end: range.start + text.length);
         return null;
@@ -232,7 +232,7 @@ class RichTextItem {
       return [insertedItem];
     }
 
-    if (isText &&
+    if (!isRich &&
         range.start < insertionOffset &&
         range.end > insertionOffset) {
       final leadingText = text.substring(0, insertionOffset - range.start);
@@ -375,7 +375,7 @@ class RichTextItem {
     }
 
     if (range.start < replacedRange.start && range.end > replacedRange.end) {
-      if (isText) {
+      if (!isRich) {
         if (delta.isText) {
           text = text.replaceRange(
             replacedRange.start - range.start,
@@ -451,7 +451,7 @@ class RichTextItem {
     }
 
     if (range.start < replacedRange.start && range.end <= replacedRange.end) {
-      if (isText) {
+      if (!isRich) {
         if (delta.isText) {
           text = text.replaceRange(
             text.length - (range.end - replacedRange.start),
@@ -496,7 +496,7 @@ class RichTextItem {
 
     if (range.start >= replacedRange.start && range.end > replacedRange.end) {
       if (range.start > replacedRange.start) {
-        if (isText) {
+        if (!isRich) {
           text = text.substring(replacedRange.end - range.start);
           final start = replacedRange.start + delta.replacementText.length;
           range = TextRange(start: start, end: start + text.length);
@@ -504,7 +504,7 @@ class RichTextItem {
         }
         return (remove: true, toAdd: null);
       }
-      if (isText) {
+      if (!isRich) {
         if (delta.isText) {
           text = text.replaceRange(
             0,
@@ -551,7 +551,7 @@ class RichTextItem {
     return '\ntype: [${type.name}],'
         'text: [$text],'
         'rawText: [$_rawText],'
-        '\nrange: [$range]\n';
+        '\nrange: [TextRange(start: ${range.start}, end: ${range.end})]\n';
   }
 }
 
@@ -602,10 +602,6 @@ class RichTextEditingController extends TextEditingController {
   }
 
   void syncRichText(TextEditingDelta delta) {
-    if (text.isEmpty) {
-      items.clear();
-    }
-
     int? addIndex;
     List<RichTextItem>? toAdd;
 
@@ -617,6 +613,7 @@ class RichTextEditingController extends TextEditingController {
         if (e.textInserted == '@') {
           onMention?.call();
         }
+
         if (items.isEmpty) {
           final config = delta.config;
           items.add(
@@ -724,7 +721,19 @@ class RichTextEditingController extends TextEditingController {
     //   return TextSpan(style: style, text: text);
     // }
 
-    // debugPrint('$items,,\n$selection');
+    // bool isValid = true;
+    // int cursor = 0;
+    // for (var e in items) {
+    //   final range = e.range;
+    //   if (range.start == cursor) {
+    //     cursor = range.end;
+    //   } else {
+    //     isValid = false;
+    //     break;
+    //   }
+    // }
+    // debugPrint('isValid: $isValid');
+    // debugPrint('$items\n$selection');
 
     return TextSpan(
       style: style,

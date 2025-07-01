@@ -17,6 +17,7 @@
 library;
 
 import 'dart:async';
+import 'dart:io' show Platform;
 import 'dart:math' as math;
 import 'dart:ui' as ui hide TextStyle;
 import 'dart:ui';
@@ -3171,7 +3172,8 @@ class EditableTextState extends State<EditableText>
   TextEditingValue get currentTextEditingValue => _value;
 
   @override
-  void updateEditingValue(TextEditingValue value) {
+  void updateEditingValue(TextEditingValue value,
+      {TextEditingValue? remoteValue}) {
     // This method handles text editing state updates from the platform text
     // input plugin. The [EditableText] may not have the focus or an open input
     // connection, as autofill can update a disconnected [EditableText].
@@ -3194,9 +3196,12 @@ class EditableTextState extends State<EditableText>
       // everything else.
       value = _value.copyWith(selection: value.selection);
     }
-    _lastKnownRemoteTextEditingValue = _value;
+    _lastKnownRemoteTextEditingValue = remoteValue ?? value;
 
     if (value == _value) {
+      if (remoteValue != null && Platform.isIOS) {
+        _updateRemoteEditingValueIfNeeded();
+      }
       // This is possible, for example, when the numeric keyboard is input,
       // the engine will notify twice for the same value.
       // Track at https://github.com/flutter/flutter/issues/65811
@@ -3288,8 +3293,10 @@ class EditableTextState extends State<EditableText>
 
   @override
   void updateEditingValueWithDeltas(List<TextEditingDelta> textEditingDeltas) {
+    TextEditingValue remoteValue = _value;
     for (final TextEditingDelta delta in textEditingDeltas) {
       widget.controller.syncRichText(delta);
+      remoteValue = delta.apply(remoteValue);
     }
 
     final newValue = _value.copyWith(
@@ -3298,7 +3305,7 @@ class EditableTextState extends State<EditableText>
       composing: textEditingDeltas.lastOrNull?.composing,
     );
 
-    updateEditingValue(newValue);
+    updateEditingValue(newValue, remoteValue: remoteValue);
 
     // TextEditingValue value = _value;
     // for (final TextEditingDelta delta in textEditingDeltas) {

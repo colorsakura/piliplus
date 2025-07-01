@@ -31,8 +31,6 @@ abstract class CommonRichTextPubPage
 
 abstract class CommonRichTextPubPageState<T extends CommonRichTextPubPage>
     extends CommonPublishPageState<T> {
-  bool? hasPub;
-
   @override
   late final RichTextEditingController editController =
       RichTextEditingController(
