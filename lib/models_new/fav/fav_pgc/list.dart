@@ -201,7 +201,7 @@ class FavPgcItemModel with MultiSelectData {
                 json['config_attrs'] as Map<String, dynamic>),
         followStatus: json['follow_status'] as int?,
         isNew: json['is_new'] as int?,
-        progress: json['progress'] as String?,
+        progress: json['progress'] == '' ? null : json['progress'],
         bothFollow: json['both_follow'] as bool?,
         subtitle25: json['subtitle_25'] as String?,
       );

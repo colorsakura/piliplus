@@ -96,6 +96,12 @@ class PgcCardV extends StatelessWidget {
                 item.progress!,
                 maxLines: 1,
                 style: style,
+              )
+            else if (item.newEp?.indexShow != null)
+              Text(
+                item.newEp!.indexShow!,
+                maxLines: 1,
+                style: style,
               ),
           ],
         ),
