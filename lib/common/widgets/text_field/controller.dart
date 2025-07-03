@@ -763,6 +763,7 @@ class RichTextEditingController extends TextEditingController {
             final emote = e.emote;
             if (emote != null) {
               return WidgetSpan(
+                alignment: PlaceholderAlignment.middle,
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 2),
                   child: NetworkImgLayer(

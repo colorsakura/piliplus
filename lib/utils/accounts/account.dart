@@ -73,10 +73,12 @@ class LoginAccount implements Account {
 
   LoginAccount(this.cookieJar, this.accessKey, this.refresh,
       [Set<AccountType>? type])
-      : type = type ?? {};
+      : type = type ?? {} {
+    cookieJar.setBuvid3();
+  }
 
   LoginAccount.fromJson(Map json) {
-    cookieJar = BiliCookieJar.fromJson(json['cookies']);
+    cookieJar = BiliCookieJar.fromJson(json['cookies'])..setBuvid3();
     accessKey = json['accessKey'];
     refresh = json['refresh'];
     type = (json['type'] as Iterable?)
