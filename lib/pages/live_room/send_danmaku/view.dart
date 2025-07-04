@@ -200,5 +200,7 @@ class _ReplyPageState extends CommonRichTextPubPageState<LiveSendDmPanel> {
   }
 
   @override
-  void onMention([bool fromClick = false]) {}
+  Future<void> onMention([bool fromClick = false]) {
+    return Future.value();
+  }
 }

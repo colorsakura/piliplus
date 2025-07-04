@@ -26,7 +26,7 @@ import 'package:flutter/services.dart';
 /// created by bggRGjQaUbCoE on 2025/6/27
 ///
 
-enum RichTextType { text, composing, at, emoji }
+enum RichTextType { text, composing, at, emoji, vote }
 
 class Emote {
   late String url;
@@ -43,20 +43,20 @@ class Emote {
 mixin RichTextTypeMixin {
   RichTextType get type;
   Emote? get emote;
-  String? get uid;
+  String? get id;
   String? get rawText;
 }
 
 extension TextEditingDeltaExt on TextEditingDelta {
-  ({RichTextType type, String? rawText, Emote? emote, String? uid}) get config {
+  ({RichTextType type, String? rawText, Emote? emote, String? id}) get config {
     if (this case RichTextTypeMixin e) {
-      return (type: e.type, rawText: e.rawText, emote: e.emote, uid: e.uid);
+      return (type: e.type, rawText: e.rawText, emote: e.emote, id: e.id);
     }
     return (
       type: composing.isValid ? RichTextType.composing : RichTextType.text,
       rawText: null,
       emote: null,
-      uid: null
+      id: null
     );
   }
 
@@ -82,7 +82,7 @@ class RichTextEditingDeltaInsertion extends TextEditingDeltaInsertion
     required super.composing,
     RichTextType? type,
     this.emote,
-    this.uid,
+    this.id,
     this.rawText,
   }) {
     this.type = type ??
@@ -96,7 +96,7 @@ class RichTextEditingDeltaInsertion extends TextEditingDeltaInsertion
   final Emote? emote;
 
   @override
-  final String? uid;
+  final String? id;
 
   @override
   final String? rawText;
@@ -112,7 +112,7 @@ class RichTextEditingDeltaReplacement extends TextEditingDeltaReplacement
     required super.composing,
     RichTextType? type,
     this.emote,
-    this.uid,
+    this.id,
     this.rawText,
   }) {
     this.type = type ??
@@ -126,7 +126,7 @@ class RichTextEditingDeltaReplacement extends TextEditingDeltaReplacement
   final Emote? emote;
 
   @override
-  final String? uid;
+  final String? id;
 
   @override
   final String? rawText;
@@ -138,7 +138,7 @@ class RichTextItem {
   String? _rawText;
   late TextRange range;
   Emote? emote;
-  String? uid;
+  String? id;
 
   String get rawText => _rawText ?? text;
 
@@ -146,7 +146,7 @@ class RichTextItem {
 
   bool get isComposing => type == RichTextType.composing;
 
-  bool get isRich => type == RichTextType.at || type == RichTextType.emoji;
+  bool get isRich => !isText && !isComposing;
 
   RichTextItem({
     this.type = RichTextType.text,
@@ -154,7 +154,7 @@ class RichTextItem {
     String? rawText,
     required this.range,
     this.emote,
-    this.uid,
+    this.id,
   }) {
     _rawText = rawText;
   }
@@ -164,7 +164,7 @@ class RichTextItem {
     String? rawText,
     this.type = RichTextType.text,
     this.emote,
-    this.uid,
+    this.id,
   }) {
     range = TextRange(start: 0, end: text.length);
     _rawText = rawText;
@@ -198,7 +198,7 @@ class RichTextItem {
         rawText: config.rawText,
         type: config.type,
         emote: config.emote,
-        uid: config.uid,
+        id: config.id,
       );
       return [insertedItem];
     }
@@ -224,7 +224,7 @@ class RichTextItem {
       final insertedItem = RichTextItem(
         type: config.type,
         emote: config.emote,
-        uid: config.uid,
+        id: config.id,
         text: delta.textInserted,
         rawText: config.rawText,
         range: TextRange(start: insertionOffset, end: end),
@@ -251,7 +251,7 @@ class RichTextItem {
       final insertedItem = RichTextItem(
         type: config.type,
         emote: config.emote,
-        uid: config.uid,
+        id: config.id,
         text: delta.textInserted,
         rawText: config.rawText,
         range: TextRange(start: insertionOffset, end: insertEnd),
@@ -397,7 +397,7 @@ class RichTextItem {
           final insertedItem = RichTextItem(
             type: config.type,
             emote: config.emote,
-            uid: config.uid,
+            id: config.id,
             text: delta.replacementText,
             rawText: config.rawText,
             range: TextRange(
@@ -427,7 +427,7 @@ class RichTextItem {
       text = delta.replacementText;
       type = config.type;
       emote = config.emote;
-      uid = config.uid;
+      id = config.id;
       final end = range.start + text.length;
       range = TextRange(start: range.start, end: end);
       controller.newSelection = TextSelection.collapsed(offset: end);
@@ -441,7 +441,7 @@ class RichTextItem {
         _rawText = config.rawText;
         type = config.type;
         emote = config.emote;
-        uid = config.uid;
+        id = config.id;
         final end = range.start + text.length;
         range = TextRange(start: range.start, end: end);
         controller.newSelection = TextSelection.collapsed(offset: end);
@@ -476,7 +476,7 @@ class RichTextItem {
             rawText: config.rawText,
             type: config.type,
             emote: config.emote,
-            uid: config.uid,
+            id: config.id,
             range: TextRange(start: replacedRange.start, end: end),
           );
           controller.newSelection = TextSelection.collapsed(offset: end);
@@ -487,7 +487,7 @@ class RichTextItem {
       final config = delta.config;
       type = config.type;
       emote = config.emote;
-      uid = config.uid;
+      id = config.id;
       final end = range.start + text.length;
       range = TextRange(start: range.start, end: end);
       controller.newSelection = TextSelection.collapsed(offset: end);
@@ -523,7 +523,7 @@ class RichTextItem {
             rawText: config.rawText,
             type: config.type,
             emote: config.emote,
-            uid: config.uid,
+            id: config.id,
             range: TextRange(start: range.start, end: end),
           );
           controller.newSelection = TextSelection.collapsed(offset: end);
@@ -536,7 +536,7 @@ class RichTextItem {
       final config = delta.config;
       type = config.type;
       emote = config.emote;
-      uid = config.uid;
+      id = config.id;
       final end = range.start + text.length;
       range = TextRange(start: range.start, end: end);
       controller.newSelection = TextSelection.collapsed(offset: end);
@@ -622,7 +622,7 @@ class RichTextEditingController extends TextEditingController {
               rawText: config.rawText,
               type: config.type,
               emote: config.emote,
-              uid: config.uid,
+              id: config.id,
             ),
           );
           newSelection =
@@ -732,7 +732,7 @@ class RichTextEditingController extends TextEditingController {
     //     break;
     //   }
     // }
-    // debugPrint('isValid: $isValid');
+    // debugPrint('isValid: $isValid,,${text.length},,${plainText.length}');
     // debugPrint('$items\n$selection');
 
     return TextSpan(
@@ -777,6 +777,25 @@ class RichTextEditingController extends TextEditingController {
               );
             }
             return TextSpan(text: e.text);
+          case RichTextType.vote:
+            richStyle ??= (style ?? const TextStyle())
+                .copyWith(color: Theme.of(context).colorScheme.primary);
+            return TextSpan(
+              children: [
+                WidgetSpan(
+                  alignment: PlaceholderAlignment.middle,
+                  child: Icon(
+                    Icons.bar_chart_rounded,
+                    size: 22,
+                    color: richStyle!.color,
+                  ),
+                ),
+                TextSpan(
+                  text: '${e.rawText} ',
+                  style: richStyle,
+                ),
+              ],
+            );
         }
       }).toList(),
     );

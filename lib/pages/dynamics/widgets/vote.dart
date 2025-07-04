@@ -146,14 +146,14 @@ class _VotePanelState extends State<VotePanel> {
       child: Builder(
         builder: (context) {
           final opt = _voteInfo.options[index];
-          final selected = groupValue.contains(opt.optidx);
+          final selected = groupValue.contains(opt.optIdx);
           return PercentageChip(
-            label: opt.optdesc!,
+            label: opt.optDesc!,
             percentage: _showPercentage ? _percentage[index] : null,
             selected: selected,
             onSelected: !_enabled || (groupValue.length >= _maxCnt && !selected)
                 ? null
-                : (value) => _onSelected(context, value, opt.optidx!),
+                : (value) => _onSelected(context, value, opt.optIdx!),
           );
         },
       ),

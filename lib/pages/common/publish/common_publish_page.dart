@@ -48,7 +48,9 @@ abstract class CommonPublishPageState<T extends CommonPublishPage>
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addObserver(this);
+    if (Platform.isAndroid) {
+      WidgetsBinding.instance.addObserver(this);
+    }
 
     initPubState();
 
@@ -68,7 +70,9 @@ abstract class CommonPublishPageState<T extends CommonPublishPage>
     }
     focusNode.dispose();
     editController.dispose();
-    WidgetsBinding.instance.removeObserver(this);
+    if (Platform.isAndroid) {
+      WidgetsBinding.instance.removeObserver(this);
+    }
     super.dispose();
   }
 
@@ -83,6 +87,7 @@ abstract class CommonPublishPageState<T extends CommonPublishPage>
       if (mounted &&
           widget.autofocus &&
           panelType.value == PanelType.keyboard) {
+        controller.restoreChatPanel();
         WidgetsBinding.instance.addPostFrameCallback((_) {
           if (focusNode.hasFocus) {
             focusNode.unfocus();

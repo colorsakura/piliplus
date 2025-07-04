@@ -4,6 +4,7 @@ import 'package:PiliPlus/pages/article_list/view.dart';
 import 'package:PiliPlus/pages/blacklist/view.dart';
 import 'package:PiliPlus/pages/danmaku_block/view.dart';
 import 'package:PiliPlus/pages/dynamics/view.dart';
+import 'package:PiliPlus/pages/dynamics_create_vote/view.dart';
 import 'package:PiliPlus/pages/dynamics_detail/view.dart';
 import 'package:PiliPlus/pages/dynamics_topic/view.dart';
 import 'package:PiliPlus/pages/dynamics_topic_rcmd/view.dart';
@@ -186,6 +187,7 @@ class Routes {
     CustomGetPage(name: '/msgLikeDetail', page: () => const LikeDetailPage()),
     CustomGetPage(
         name: '/liveDmBlockPage', page: () => const LiveDmBlockPage()),
+    CustomGetPage(name: '/createVote', page: () => const CreateVotePage()),
   ];
 }
 

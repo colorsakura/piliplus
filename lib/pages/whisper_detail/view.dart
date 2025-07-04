@@ -335,7 +335,9 @@ class _WhisperDetailPageState
   }
 
   @override
-  void onMention([bool fromClick = false]) {}
+  Future<void> onMention([bool fromClick = false]) {
+    return Future.value();
+  }
 
   @override
   void onSave() {}

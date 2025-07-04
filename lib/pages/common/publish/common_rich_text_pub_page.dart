@@ -66,9 +66,9 @@ abstract class CommonRichTextPubPageState<T extends CommonRichTextPubPage>
       clipBehavior: Clip.none,
       children: [
         GestureDetector(
-          onTap: () {
+          onTap: () async {
             controller.keepChatPanel();
-            context.imageView(
+            await context.imageView(
               imgList: pathList
                   .map((path) => SourceModel(
                         url: path,
@@ -77,6 +77,7 @@ abstract class CommonRichTextPubPageState<T extends CommonRichTextPubPage>
                   .toList(),
               initialPage: index,
             );
+            controller.restoreChatPanel();
           },
           onLongPress: onClear,
           child: ClipRRect(
@@ -193,31 +194,47 @@ abstract class CommonRichTextPubPageState<T extends CommonRichTextPubPage>
 
   List<Map<String, dynamic>>? getRichContent() {
     if (editController.items.isEmpty) return null;
-    return editController.items.map((e) {
-      return switch (e.type) {
-        RichTextType.text || RichTextType.composing => <String, dynamic>{
+    final list = <Map<String, dynamic>>[];
+    for (var e in editController.items) {
+      switch (e.type) {
+        case RichTextType.text || RichTextType.composing:
+          list.add({
             "raw_text": e.text,
             "type": 1,
             "biz_id": "",
-          },
-        RichTextType.at => <String, dynamic>{
+          });
+        case RichTextType.at:
+          list.add({
             "raw_text": '@${e.rawText}',
             "type": 2,
-            "biz_id": e.uid,
-          },
-        RichTextType.emoji => <String, dynamic>{
+            "biz_id": e.id,
+          });
+        case RichTextType.emoji:
+          list.add({
             "raw_text": e.rawText,
             "type": 9,
             "biz_id": "",
-          },
-      };
-    }).toList();
+          });
+        case RichTextType.vote:
+          list.add({
+            "raw_text": e.rawText,
+            "type": 4,
+            "biz_id": e.id,
+          });
+          list.add({
+            "raw_text": ' ',
+            "type": 1,
+            "biz_id": "",
+          });
+      }
+    }
+    return list;
   }
 
   double _mentionOffset = 0;
-  void onMention([bool fromClick = false]) {
+  Future<void> onMention([bool fromClick = false]) async {
     controller.keepChatPanel();
-    DynMentionPanel.onDynMention(
+    await DynMentionPanel.onDynMention(
       context,
       offset: _mentionOffset,
       callback: (offset) => _mentionOffset = offset,
@@ -227,11 +244,12 @@ abstract class CommonRichTextPubPageState<T extends CommonRichTextPubPage>
           '@${res.name} ',
           RichTextType.at,
           rawText: res.name,
-          uid: res.uid,
+          id: res.uid,
           fromClick: fromClick,
         );
       }
     });
+    controller.restoreChatPanel();
   }
 
   void onInsertText(
@@ -239,7 +257,7 @@ abstract class CommonRichTextPubPageState<T extends CommonRichTextPubPage>
     RichTextType type, {
     String? rawText,
     Emote? emote,
-    String? uid,
+    String? id,
     bool? fromClick,
   }) {
     if (text.isEmpty) {
@@ -268,7 +286,7 @@ abstract class CommonRichTextPubPageState<T extends CommonRichTextPubPage>
             rawText: rawText,
             type: type,
             emote: emote,
-            uid: uid,
+            id: id,
           );
         } else {
           delta = RichTextEditingDeltaInsertion(
@@ -282,7 +300,7 @@ abstract class CommonRichTextPubPageState<T extends CommonRichTextPubPage>
             rawText: rawText,
             type: type,
             emote: emote,
-            uid: uid,
+            id: id,
           );
         }
       } else {
@@ -297,7 +315,7 @@ abstract class CommonRichTextPubPageState<T extends CommonRichTextPubPage>
           rawText: rawText,
           type: type,
           emote: emote,
-          uid: uid,
+          id: id,
         );
       }
 
@@ -308,8 +326,8 @@ abstract class CommonRichTextPubPageState<T extends CommonRichTextPubPage>
       }
 
       editController
-        ..value = newValue
-        ..syncRichText(delta);
+        ..syncRichText(delta)
+        ..value = newValue.copyWith(selection: editController.newSelection);
     } else {
       editController.value = TextEditingValue(
         text: text,
@@ -327,7 +345,7 @@ abstract class CommonRichTextPubPageState<T extends CommonRichTextPubPage>
               end: text.length,
             ),
             emote: emote,
-            uid: uid,
+            id: id,
           ),
         );
     }

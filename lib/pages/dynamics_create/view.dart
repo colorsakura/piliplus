@@ -5,12 +5,15 @@ import 'package:PiliPlus/common/widgets/custom_icon.dart';
 import 'package:PiliPlus/common/widgets/draggable_sheet/draggable_scrollable_sheet_dyn.dart'
     as dyn_sheet;
 import 'package:PiliPlus/common/widgets/pair.dart';
+import 'package:PiliPlus/common/widgets/text_field/controller.dart';
 import 'package:PiliPlus/common/widgets/text_field/text_field.dart';
 import 'package:PiliPlus/http/dynamics.dart';
 import 'package:PiliPlus/models/common/publish_panel_type.dart';
 import 'package:PiliPlus/models/common/reply/reply_option_type.dart';
+import 'package:PiliPlus/models/dynamics/vote_model.dart';
 import 'package:PiliPlus/models_new/dynamic/dyn_topic_top/topic_item.dart';
 import 'package:PiliPlus/pages/common/publish/common_rich_text_pub_page.dart';
+import 'package:PiliPlus/pages/dynamics_create_vote/view.dart';
 import 'package:PiliPlus/pages/dynamics_mention/controller.dart';
 import 'package:PiliPlus/pages/dynamics_select_topic/controller.dart';
 import 'package:PiliPlus/pages/dynamics_select_topic/view.dart';
@@ -341,7 +344,6 @@ class _CreateDynPanelState extends CommonRichTextPubPageState<CreateDynPanel> {
     return PopupMenuButton<bool>(
       requestFocus: false,
       initialValue: _isPrivate.value,
-      onOpened: controller.keepChatPanel,
       onSelected: (value) => _isPrivate.value = value,
       itemBuilder: (context) => List.generate(
         2,
@@ -398,7 +400,6 @@ class _CreateDynPanelState extends CommonRichTextPubPageState<CreateDynPanel> {
     return PopupMenuButton<ReplyOptionType>(
       requestFocus: false,
       initialValue: _replyOption.value,
-      onOpened: controller.keepChatPanel,
       onSelected: (item) => _replyOption.value = item,
       itemBuilder: (context) => ReplyOptionType.values
           .map(
@@ -547,6 +548,55 @@ class _CreateDynPanelState extends CommonRichTextPubPageState<CreateDynPanel> {
               onPressed: () => onMention(true),
               icon: const Icon(Icons.alternate_email, size: 22),
               tooltip: '@',
+              selected: false,
+            ),
+            ToolbarIconButton(
+              onPressed: () async {
+                controller.keepChatPanel();
+                RichTextItem? voteItem = editController.items
+                    .firstWhereOrNull((e) => e.type == RichTextType.vote);
+                VoteInfo? voteInfo = await Navigator.of(context).push(
+                  GetPageRoute(
+                      page: () => CreateVotePage(
+                          voteId: voteItem?.id == null
+                              ? null
+                              : int.parse(voteItem!.id!))),
+                );
+                if (voteInfo != null) {
+                  if (voteItem != null) {
+                    final delta = RichTextEditingDeltaReplacement(
+                      oldText: editController.text,
+                      replacementText: ' ${voteInfo.title} ',
+                      replacedRange: voteItem.range,
+                      selection: editController.selection,
+                      composing: TextRange.empty,
+                      type: RichTextType.vote,
+                      id: voteInfo.voteId.toString(),
+                      rawText: voteInfo.title,
+                    );
+                    final newValue = delta.apply(editController.value);
+                    editController
+                      ..syncRichText(delta)
+                      ..value = newValue.copyWith(
+                        selection: editController.newSelection,
+                      );
+                  } else {
+                    onInsertText(
+                      '我发起了一个投票',
+                      RichTextType.text,
+                    );
+                    onInsertText(
+                      ' ${voteInfo.title} ',
+                      RichTextType.vote,
+                      rawText: voteInfo.title,
+                      id: voteInfo.voteId.toString(),
+                    );
+                  }
+                }
+                controller.restoreChatPanel();
+              },
+              icon: const Icon(Icons.bar_chart_rounded, size: 22),
+              tooltip: '投票',
               selected: false,
             ),
             // if (kDebugMode)

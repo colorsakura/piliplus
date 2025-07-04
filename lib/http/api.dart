@@ -917,4 +917,8 @@ class Api {
   static const String spaceAudio = '/audio/music-service/web/song/upper';
 
   static const String dynMention = '/x/polymer/web-dynamic/v1/mention/search';
+
+  static const String createVote = '/x/vote/create';
+
+  static const String updateVote = '/x/vote/update';
 }

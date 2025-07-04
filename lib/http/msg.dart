@@ -168,7 +168,7 @@ class MsgHttp {
   }
 
   static Future uploadBfs({
-    dynamic path,
+    required String path,
     String? category,
     String? biz,
     CancelToken? cancelToken,

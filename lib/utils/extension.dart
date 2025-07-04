@@ -85,14 +85,14 @@ extension BuildContextExt on BuildContext {
         : const Color(0xFFD44E7D);
   }
 
-  void imageView({
+  Future<void> imageView({
     int initialPage = 0,
     required List<SourceModel> imgList,
     ValueChanged<int>? onDismissed,
     int? quality,
   }) {
     bool isMemberPage = Get.currentRoute.startsWith('/member?');
-    Navigator.of(this).push(
+    return Navigator.of(this).push(
       HeroDialogRoute(
         builder: (context) => InteractiveviewerGallery(
           sources: imgList,

@@ -510,4 +510,30 @@ class DynamicsHttp {
       return Error(res.data['message']);
     }
   }
+
+  static Future<LoadingState<int?>> createVote(VoteInfo voteInfo) async {
+    final res = await Request().post(
+      Api.createVote,
+      queryParameters: {'csrf': Accounts.main.csrf},
+      data: {'vote_info': voteInfo.toJson()},
+    );
+    if (res.data['code'] == 0) {
+      return Success(res.data['data']?['vote_id']);
+    } else {
+      return Error(res.data['message']);
+    }
+  }
+
+  static Future<LoadingState<int?>> updateVote(VoteInfo voteInfo) async {
+    final res = await Request().post(
+      Api.updateVote,
+      queryParameters: {'csrf': Accounts.main.csrf},
+      data: {'vote_info': voteInfo.toJson()},
+    );
+    if (res.data['code'] == 0) {
+      return Success(res.data['data']?['vote_id']);
+    } else {
+      return Error(res.data['message']);
+    }
+  }
 }
