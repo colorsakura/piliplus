@@ -11,7 +11,6 @@ import 'package:PiliPlus/models_new/space/space/setting.dart';
 import 'package:PiliPlus/models_new/space/space/tab2.dart';
 import 'package:PiliPlus/pages/common/common_data_controller.dart';
 import 'package:PiliPlus/services/account_service.dart';
-import 'package:PiliPlus/utils/date_util.dart';
 import 'package:PiliPlus/utils/request_utils.dart';
 import 'package:PiliPlus/utils/storage_pref.dart';
 import 'package:PiliPlus/utils/utils.dart';
@@ -32,7 +31,6 @@ class MemberController extends CommonDataController<SpaceData, SpaceData?>
 
   Live? live;
   int? silence;
-  String? endTime;
 
   int? isFollowed; // 被关注
   RxInt relation = 0.obs;
@@ -84,15 +82,6 @@ class MemberController extends CommonDataController<SpaceData, SpaceData?>
     if ((data.ugcSeason?.count != null && data.ugcSeason?.count != 0) ||
         data.series?.item?.isNotEmpty == true) {
       hasSeasonOrSeries = true;
-    }
-    if (data.card?.endTime != null) {
-      if (data.card!.endTime == 0) {
-        endTime = ': 永久封禁';
-      } else if (data.card!.endTime! >
-          DateTime.now().millisecondsSinceEpoch ~/ 1000) {
-        endTime =
-            '：至 ${DateUtil.longFormatDs.format(DateTime.fromMillisecondsSinceEpoch(data.card!.endTime! * 1000))}';
-      }
     }
     tab2?.retainWhere((item) => implTabs.contains(item.param));
     if (tab2?.isNotEmpty == true) {

@@ -325,7 +325,6 @@ class _MemberPageState extends State<MemberPage> {
                 onFollow: () => _userController.onFollow(context),
                 live: _userController.live,
                 silence: _userController.silence,
-                endTime: _userController.endTime,
               ),
             )
           : GestureDetector(

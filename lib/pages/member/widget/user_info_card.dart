@@ -25,7 +25,6 @@ class UserInfoCard extends StatelessWidget {
     required this.onFollow,
     this.live,
     this.silence,
-    this.endTime,
   });
 
   final bool isV;
@@ -36,7 +35,6 @@ class UserInfoCard extends StatelessWidget {
   final VoidCallback onFollow;
   final Live? live;
   final int? silence;
-  final String? endTime;
 
   @override
   Widget build(BuildContext context) {
@@ -283,7 +281,7 @@ class UserInfoCard extends StatelessWidget {
                       ),
                     ),
                     TextSpan(
-                      text: ' 该账号封禁中${endTime ?? ''}',
+                      text: ' 该账号封禁中',
                       style: TextStyle(
                         color: isLight
                             ? theme.colorScheme.onErrorContainer
