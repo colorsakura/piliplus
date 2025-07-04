@@ -327,7 +327,7 @@ abstract class CommonRichTextPubPageState<T extends CommonRichTextPubPage>
 
       editController
         ..syncRichText(delta)
-        ..value = newValue.copyWith(selection: editController.newSelection);
+        ..value = newValue;
     } else {
       editController.value = TextEditingValue(
         text: text,

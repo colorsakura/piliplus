@@ -564,11 +564,15 @@ class _CreateDynPanelState extends CommonRichTextPubPageState<CreateDynPanel> {
                 );
                 if (voteInfo != null) {
                   if (voteItem != null) {
+                    final range = voteItem.range;
+                    final text = ' ${voteInfo.title} ';
+                    final selection = TextSelection.collapsed(
+                        offset: range.start + text.length);
                     final delta = RichTextEditingDeltaReplacement(
                       oldText: editController.text,
-                      replacementText: ' ${voteInfo.title} ',
-                      replacedRange: voteItem.range,
-                      selection: editController.selection,
+                      replacementText: text,
+                      replacedRange: range,
+                      selection: selection,
                       composing: TextRange.empty,
                       type: RichTextType.vote,
                       id: voteInfo.voteId.toString(),
@@ -577,9 +581,7 @@ class _CreateDynPanelState extends CommonRichTextPubPageState<CreateDynPanel> {
                     final newValue = delta.apply(editController.value);
                     editController
                       ..syncRichText(delta)
-                      ..value = newValue.copyWith(
-                        selection: editController.newSelection,
-                      );
+                      ..value = newValue;
                   } else {
                     onInsertText(
                       '我发起了一个投票',
