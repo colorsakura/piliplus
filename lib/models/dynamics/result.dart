@@ -41,12 +41,12 @@ class DynamicsDataModel {
           continue;
         }
         if (enableFilter &&
-            banWordForDyn.hasMatch(
-                item.orig?.modules.moduleDynamic?.major?.opus?.summary?.text ??
-                    item.modules.moduleDynamic?.major?.opus?.summary?.text ??
-                    item.orig?.modules.moduleDynamic?.desc?.text ??
-                    item.modules.moduleDynamic?.desc?.text ??
-                    '')) {
+            banWordForDyn.hasMatch((item.orig?.modules.moduleDynamic?.major
+                        ?.opus?.summary?.text ??
+                    '') +
+                (item.modules.moduleDynamic?.major?.opus?.summary?.text ?? '') +
+                (item.orig?.modules.moduleDynamic?.desc?.text ?? '') +
+                (item.modules.moduleDynamic?.desc?.text ?? ''))) {
           continue;
         }
         if (filterBan &&

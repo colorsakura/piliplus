@@ -91,28 +91,30 @@ class _VotePanelState extends State<VotePanel> {
         if (_enabled)
           Padding(
             padding: const EdgeInsets.only(top: 16),
-            child: OutlinedButton(
-              onPressed: groupValue.isNotEmpty
-                  ? () async {
-                      final res = await widget.callback(
-                        groupValue,
-                        anonymity,
-                      );
-                      if (res.isSuccess) {
-                        if (mounted) {
-                          setState(() {
-                            _enabled = false;
-                            _showPercentage = true;
-                            _voteInfo = res.data;
-                            _percentage = _cnt2Percentage(_voteInfo.options);
-                          });
+            child: Obx(
+              () => OutlinedButton(
+                onPressed: groupValue.isNotEmpty
+                    ? () async {
+                        final res = await widget.callback(
+                          groupValue,
+                          anonymity,
+                        );
+                        if (res.isSuccess) {
+                          if (mounted) {
+                            setState(() {
+                              _enabled = false;
+                              _showPercentage = true;
+                              _voteInfo = res.data;
+                              _percentage = _cnt2Percentage(_voteInfo.options);
+                            });
+                          }
+                        } else {
+                          res.toast();
                         }
-                      } else {
-                        res.toast();
                       }
-                    }
-                  : null,
-              child: const Center(child: Text('投票')),
+                    : null,
+                child: const Center(child: Text('投票')),
+              ),
             ),
           ),
       ],

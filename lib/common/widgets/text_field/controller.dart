@@ -917,7 +917,7 @@ class RichTextEditingController extends TextEditingController {
       }
       if (offset > range.start && offset < range.end) {
         if (e.isRich) {
-          if (offset < value.selection.baseOffset) {
+          if (offset < selection.baseOffset) {
             return newSelection.copyWith(
                 baseOffset: range.start, extentOffset: range.start);
           } else {
