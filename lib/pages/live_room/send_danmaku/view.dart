@@ -102,6 +102,7 @@ class _ReplyPageState extends CommonRichTextPubPageState<LiveSendDmPanel> {
             },
             child: Obx(
               () => RichTextField(
+                key: key,
                 controller: editController,
                 minLines: 1,
                 maxLines: 2,

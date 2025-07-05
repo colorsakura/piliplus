@@ -3251,7 +3251,7 @@ class EditableTextState extends State<EditableText>
     // to make sure the user can see the changes they just made. Programmatic
     // changes to `textEditingValue` do not trigger the behavior even if the
     // text field is focused.
-    _scheduleShowCaretOnScreen(withAnimation: true);
+    scheduleShowCaretOnScreen(withAnimation: true);
   }
 
   bool _checkNeedsAdjustAffinity(TextEditingValue value) {
@@ -4119,7 +4119,7 @@ class EditableTextState extends State<EditableText>
 
   bool _showCaretOnScreenScheduled = false;
 
-  void _scheduleShowCaretOnScreen({required bool withAnimation}) {
+  void scheduleShowCaretOnScreen({required bool withAnimation}) {
     if (_showCaretOnScreenScheduled) {
       return;
     }
@@ -4217,7 +4217,7 @@ class EditableTextState extends State<EditableText>
       if (_lastBottomViewInset < view.viewInsets.bottom) {
         // Because the metrics change signal from engine will come here every frame
         // (on both iOS and Android). So we don't need to show caret with animation.
-        _scheduleShowCaretOnScreen(withAnimation: false);
+        scheduleShowCaretOnScreen(withAnimation: false);
       }
     }
     _lastBottomViewInset = view.viewInsets.bottom;
@@ -4518,7 +4518,7 @@ class EditableTextState extends State<EditableText>
       WidgetsBinding.instance.addObserver(this);
       _lastBottomViewInset = View.of(context).viewInsets.bottom;
       if (!widget.readOnly) {
-        _scheduleShowCaretOnScreen(withAnimation: true);
+        scheduleShowCaretOnScreen(withAnimation: true);
       }
       final TextSelection? updatedSelection = _adjustedSelectionWhenFocused();
       if (updatedSelection != null) {
@@ -4747,7 +4747,7 @@ class EditableTextState extends State<EditableText>
     final bool shouldShowCaret =
         widget.readOnly ? _value.selection != value.selection : _value != value;
     if (shouldShowCaret) {
-      _scheduleShowCaretOnScreen(withAnimation: true);
+      scheduleShowCaretOnScreen(withAnimation: true);
     }
 
     // Even if the value doesn't change, it may be necessary to focus and build

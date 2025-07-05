@@ -621,6 +621,7 @@ class _CreateDynPanelState extends CommonRichTextPubPageState<CreateDynPanel> {
           },
           child: Obx(
             () => RichTextField(
+              key: key,
               controller: editController,
               minLines: 4,
               maxLines: null,

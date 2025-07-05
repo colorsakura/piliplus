@@ -240,6 +240,7 @@ class _WhisperDetailPageState
               },
               child: Obx(
                 () => RichTextField(
+                  key: key,
                   readOnly: readOnly.value,
                   focusNode: focusNode,
                   controller: editController,

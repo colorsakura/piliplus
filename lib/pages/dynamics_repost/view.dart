@@ -225,6 +225,7 @@ class _RepostPanelState extends CommonRichTextPubPageState<RepostPanel> {
           },
           child: Obx(
             () => RichTextField(
+              key: key,
               controller: editController,
               minLines: 4,
               maxLines: null,

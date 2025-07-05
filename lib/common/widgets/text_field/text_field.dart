@@ -82,12 +82,11 @@ typedef InputCounterWidgetBuilder = Widget? Function(
 
 class _TextFieldSelectionGestureDetectorBuilder
     extends TextSelectionGestureDetectorBuilder {
-  _TextFieldSelectionGestureDetectorBuilder(
-      {required _RichTextFieldState state})
+  _TextFieldSelectionGestureDetectorBuilder({required RichTextFieldState state})
       : _state = state,
         super(delegate: state);
 
-  final _RichTextFieldState _state;
+  final RichTextFieldState _state;
 
   @override
   bool get onUserTapAlwaysCalled => _state.widget.onTapAlwaysCalled;
@@ -961,7 +960,7 @@ class RichTextField extends StatefulWidget {
   }
 
   @override
-  State<RichTextField> createState() => _RichTextFieldState();
+  State<RichTextField> createState() => RichTextFieldState();
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
@@ -1150,7 +1149,7 @@ class RichTextField extends StatefulWidget {
   }
 }
 
-class _RichTextFieldState extends State<RichTextField>
+class RichTextFieldState extends State<RichTextField>
     with RestorationMixin
     implements TextSelectionGestureDetectorBuilderDelegate, AutofillClient {
   // RestorableRichTextEditingController? _controller;
@@ -1911,6 +1910,10 @@ class _RichTextFieldState extends State<RichTextField>
         ),
       ),
     );
+  }
+
+  void scheduleShowCaretOnScreen({required bool withAnimation}) {
+    _editableText?.scheduleShowCaretOnScreen(withAnimation: withAnimation);
   }
 }
 

@@ -139,6 +139,7 @@ class _ReplyPageState extends CommonRichTextPubPageState<ReplyPage> {
             },
             child: Obx(
               () => RichTextField(
+                key: key,
                 controller: editController,
                 minLines: 4,
                 maxLines: 8,

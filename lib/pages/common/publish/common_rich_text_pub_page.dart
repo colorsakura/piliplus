@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:PiliPlus/common/widgets/button/icon_button.dart';
 import 'package:PiliPlus/common/widgets/text_field/controller.dart';
+import 'package:PiliPlus/common/widgets/text_field/text_field.dart';
 import 'package:PiliPlus/models/common/image_preview_type.dart';
 import 'package:PiliPlus/models_new/dynamic/dyn_mention/item.dart';
 import 'package:PiliPlus/models_new/emote/emote.dart' as e;
@@ -31,6 +32,8 @@ abstract class CommonRichTextPubPage
 
 abstract class CommonRichTextPubPageState<T extends CommonRichTextPubPage>
     extends CommonPublishPageState<T> {
+  final key = GlobalKey<RichTextFieldState>();
+
   @override
   late final RichTextEditingController editController =
       RichTextEditingController(
@@ -329,10 +332,6 @@ abstract class CommonRichTextPubPageState<T extends CommonRichTextPubPage>
         ..syncRichText(delta)
         ..value = newValue;
     } else {
-      editController.value = TextEditingValue(
-        text: text,
-        selection: TextSelection.collapsed(offset: text.length),
-      );
       editController.items
         ..clear()
         ..add(
@@ -348,7 +347,13 @@ abstract class CommonRichTextPubPageState<T extends CommonRichTextPubPage>
             id: id,
           ),
         );
+      editController.value = TextEditingValue(
+        text: text,
+        selection: TextSelection.collapsed(offset: text.length),
+      );
     }
+
+    key.currentState?.scheduleShowCaretOnScreen(withAnimation: true);
   }
 
   @override
