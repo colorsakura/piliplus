@@ -12,27 +12,30 @@ import 'package:flutter/material.dart';
 
 class ImageModel {
   ImageModel({
-    required this.width,
-    required this.height,
+    required num? width,
+    required num? height,
     required this.url,
     this.liveUrl,
-  });
+  }) {
+    this.width = width == null || width == 0 ? 1 : width;
+    this.height = height == null || height == 0 ? 1 : height;
+  }
 
-  dynamic width;
-  dynamic height;
+  late num width;
+  late num height;
   String url;
   String? liveUrl;
   bool? _isLongPic;
   bool? _isLivePhoto;
 
-  dynamic get safeWidth => width ?? 1;
-  dynamic get safeHeight => height ?? 1;
-  bool get isLongPic => _isLongPic ??= (safeHeight / safeWidth) > (22 / 9);
+  bool get isLongPic => _isLongPic ??= (height / width) > _maxRatio;
   bool get isLivePhoto =>
       _isLivePhoto ??= enableLivePhoto && liveUrl?.isNotEmpty == true;
 
   static bool enableLivePhoto = Pref.enableLivePhoto;
 }
+
+const double _maxRatio = 22 / 9;
 
 Widget imageView(
   double maxWidth,
@@ -44,17 +47,16 @@ Widget imageView(
   double imageWidth = (maxWidth - 2 * 5) / 3;
   double imageHeight = imageWidth;
   if (picArr.length == 1) {
-    dynamic width = picArr[0].safeWidth;
-    dynamic height = picArr[0].safeHeight;
+    dynamic width = picArr[0].width;
+    dynamic height = picArr[0].height;
     double ratioWH = width / height;
     double ratioHW = height / width;
-    double maxRatio = 22 / 9;
     imageWidth = ratioWH > 1.5
         ? maxWidth
         : (ratioWH >= 1 || (height > width && ratioHW < 1.5))
             ? 2 * imageWidth
             : 1.5 * imageWidth;
-    imageHeight = imageWidth * min(ratioHW, maxRatio);
+    imageHeight = imageWidth * min(ratioHW, _maxRatio);
   } else if (picArr.length == 2) {
     imageWidth = imageHeight = 2 * imageWidth;
   }
@@ -144,7 +146,7 @@ Widget imageView(
                   width: imageWidth,
                   height: imageHeight,
                   isLongPic: () => item.isLongPic,
-                  callback: () => item.safeWidth <= item.safeHeight,
+                  callback: () => item.width <= item.height,
                   getPlaceHolder: () {
                     return Container(
                       width: imageWidth,
