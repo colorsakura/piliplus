@@ -47,115 +47,109 @@ Widget module(
           orig.modules.moduleDynamic?.major?.type == 'MAJOR_TYPE_NONE';
       late final isNormalAuth =
           orig.modules.moduleAuthor!.type == 'AUTHOR_TYPE_NORMAL';
-      return orig.type == 'DYNAMIC_TYPE_NONE'
-          ? const SizedBox.shrink()
-          : InkWell(
-              onTap: isNoneMajor
-                  ? null
-                  : () => PageUtils.pushDynDetail(orig, floor + 1),
-              onLongPress: isNoneMajor
-                  ? null
-                  : () {
-                      String? title, cover, bvid;
-                      late var origMajor = orig.modules.moduleDynamic?.major;
-                      late var major = item.modules.moduleDynamic?.major;
-                      switch (orig.type) {
-                        case 'DYNAMIC_TYPE_AV':
-                          title = origMajor?.archive?.title;
-                          cover = origMajor?.archive?.cover;
-                          bvid = origMajor?.archive?.bvid;
-                          break;
-                        case 'DYNAMIC_TYPE_UGC_SEASON':
-                          title = origMajor?.ugcSeason?.title;
-                          cover = origMajor?.ugcSeason?.cover;
-                          bvid = origMajor?.ugcSeason?.bvid;
-                          break;
-                        case 'DYNAMIC_TYPE_PGC' || 'DYNAMIC_TYPE_PGC_UNION':
-                          title = origMajor?.pgc?.title;
-                          cover = origMajor?.pgc?.cover;
-                          break;
-                        case 'DYNAMIC_TYPE_LIVE_RCMD':
-                          title = major?.liveRcmd?.title;
-                          cover = major?.liveRcmd?.cover;
-                          break;
-                        case 'DYNAMIC_TYPE_LIVE':
-                          title = major?.live?.title;
-                          cover = major?.live?.cover;
-                          break;
-                        default:
-                          return;
-                      }
-                      imageSaveDialog(
-                        title: title,
-                        cover: cover,
-                        bvid: bvid,
-                      );
-                    },
-              child: Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
-                color: theme.dividerColor.withValues(alpha: 0.08),
-                child: isNoneMajor
-                    ? Row(
-                        children: [
-                          Icon(
-                            Icons.error,
-                            size: 18,
-                            color: theme.colorScheme.outline,
-                          ),
-                          const SizedBox(width: 5),
-                          Text(
-                            orig.modules.moduleDynamic?.major?.none?.tips ??
-                                'NONE',
-                            style: TextStyle(color: theme.colorScheme.outline),
-                          ),
-                        ],
-                      )
-                    : Column(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [
-                              GestureDetector(
-                                onTap: isNormalAuth
-                                    ? () => Get.toNamed(
-                                        '/member?mid=${orig.modules.moduleAuthor!.mid}')
-                                    : null,
-                                child: Text(
-                                  '${isNormalAuth ? '@' : ''}${orig.modules.moduleAuthor!.name}',
-                                  style: TextStyle(
-                                      color: theme.colorScheme.primary),
-                                ),
-                              ),
-                              const SizedBox(width: 6),
-                              Text(
-                                DateUtil.dateFormat(
-                                    orig.modules.moduleAuthor!.pubTs),
-                                style: TextStyle(
-                                    color: theme.colorScheme.outline,
-                                    fontSize:
-                                        theme.textTheme.labelSmall!.fontSize),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 5),
-                          content(
-                              theme, isSave, context, orig, isDetail, callback,
-                              floor: floor + 1),
-                          module(
-                              theme, isSave, orig, context, isDetail, callback,
-                              floor: floor + 1),
-                          if (orig.modules.moduleDynamic?.additional != null)
-                            addWidget(theme, orig, context, floor: floor + 1),
-                          if (orig.modules.moduleDynamic?.major?.blocked !=
-                              null)
-                            blockedItem(theme,
-                                orig.modules.moduleDynamic!.major!.blocked!),
-                        ],
-                      ),
+      if (isNoneMajor) {
+        if (orig.modules.moduleDynamic?.major?.none?.tips?.isNotEmpty == true) {
+          return Container(
+            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
+            color: theme.dividerColor.withValues(alpha: 0.08),
+            child: Row(
+              children: [
+                Icon(
+                  Icons.error,
+                  size: 18,
+                  color: theme.colorScheme.outline,
+                ),
+                const SizedBox(width: 5),
+                Text(
+                  orig.modules.moduleDynamic!.major!.none!.tips!,
+                  style: TextStyle(color: theme.colorScheme.outline),
+                ),
+              ],
+            ),
+          );
+        } else {
+          return const SizedBox.shrink();
+        }
+      }
+      return InkWell(
+        onTap: () => PageUtils.pushDynDetail(orig, floor + 1),
+        onLongPress: () {
+          String? title, cover, bvid;
+          late var origMajor = orig.modules.moduleDynamic?.major;
+          late var major = item.modules.moduleDynamic?.major;
+          switch (orig.type) {
+            case 'DYNAMIC_TYPE_AV':
+              title = origMajor?.archive?.title;
+              cover = origMajor?.archive?.cover;
+              bvid = origMajor?.archive?.bvid;
+              break;
+            case 'DYNAMIC_TYPE_UGC_SEASON':
+              title = origMajor?.ugcSeason?.title;
+              cover = origMajor?.ugcSeason?.cover;
+              bvid = origMajor?.ugcSeason?.bvid;
+              break;
+            case 'DYNAMIC_TYPE_PGC' || 'DYNAMIC_TYPE_PGC_UNION':
+              title = origMajor?.pgc?.title;
+              cover = origMajor?.pgc?.cover;
+              break;
+            case 'DYNAMIC_TYPE_LIVE_RCMD':
+              title = major?.liveRcmd?.title;
+              cover = major?.liveRcmd?.cover;
+              break;
+            case 'DYNAMIC_TYPE_LIVE':
+              title = major?.live?.title;
+              cover = major?.live?.cover;
+              break;
+            default:
+              return;
+          }
+          imageSaveDialog(
+            title: title,
+            cover: cover,
+            bvid: bvid,
+          );
+        },
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
+          color: theme.dividerColor.withValues(alpha: 0.08),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  GestureDetector(
+                    onTap: isNormalAuth
+                        ? () => Get.toNamed(
+                            '/member?mid=${orig.modules.moduleAuthor!.mid}')
+                        : null,
+                    child: Text(
+                      '${isNormalAuth ? '@' : ''}${orig.modules.moduleAuthor!.name}',
+                      style: TextStyle(color: theme.colorScheme.primary),
+                    ),
+                  ),
+                  const SizedBox(width: 6),
+                  Text(
+                    DateUtil.dateFormat(orig.modules.moduleAuthor!.pubTs),
+                    style: TextStyle(
+                        color: theme.colorScheme.outline,
+                        fontSize: theme.textTheme.labelSmall!.fontSize),
+                  ),
+                ],
               ),
-            );
+              const SizedBox(height: 5),
+              content(theme, isSave, context, orig, isDetail, callback,
+                  floor: floor + 1),
+              module(theme, isSave, orig, context, isDetail, callback,
+                  floor: floor + 1),
+              if (orig.modules.moduleDynamic?.additional != null)
+                addWidget(theme, orig, context, floor: floor + 1),
+              if (orig.modules.moduleDynamic?.major?.blocked != null)
+                blockedItem(theme, orig.modules.moduleDynamic!.major!.blocked!),
+            ],
+          ),
+        ),
+      );
     // 直播
     case 'DYNAMIC_TYPE_LIVE_RCMD':
       return liveRcmdPanel(theme, isDetail, item, context, floor: floor);
