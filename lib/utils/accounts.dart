@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:PiliPlus/http/init.dart';
 import 'package:PiliPlus/models/common/account_type.dart';
 import 'package:PiliPlus/pages/mine/controller.dart';
 import 'package:PiliPlus/utils/accounts/account.dart';
@@ -55,7 +56,7 @@ class Accounts {
     }
   }
 
-  static void refresh() {
+  static Future<void> refresh() async {
     for (var a in account.values) {
       for (var t in a.type) {
         accountMode[t] = a;
@@ -64,9 +65,9 @@ class Accounts {
     for (var type in AccountType.values) {
       accountMode[type] ??= AnonymousAccount();
     }
-    // await Future.wait((accountMode.values.toSet()
-    //       ..retainWhere((i) => !i.activited))
-    //     .map((i) => Request.buvidActive(i)));
+    await Future.wait((accountMode.values.toSet()
+          ..retainWhere((i) => !i.activited))
+        .map((i) => Request.buvidActive(i)));
   }
 
   static Future<void> clear() async {
@@ -75,7 +76,7 @@ class Accounts {
       accountMode[i] = AnonymousAccount();
     }
     await AnonymousAccount().delete();
-    // Request.buvidActive(AnonymousAccount());
+    Request.buvidActive(AnonymousAccount());
   }
 
   static void close() {
@@ -98,7 +99,7 @@ class Accounts {
     await (accountMode[key]?..type.remove(key))?.onChange();
     accountMode[key] = account..type.add(key);
     await account.onChange();
-    // if (!account.activited) await Request.buvidActive(account);
+    if (!account.activited) await Request.buvidActive(account);
     switch (key) {
       case AccountType.main:
         await (account.isLogin

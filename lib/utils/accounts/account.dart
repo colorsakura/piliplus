@@ -15,7 +15,7 @@ abstract class Account {
   late String csrf;
   final Map<String, String> headers = const {};
 
-  // bool activited = false;
+  bool activited = false;
 
   Future<void> delete();
   Future<void> onChange();
@@ -39,6 +39,9 @@ class LoginAccount implements Account {
   @override
   @HiveField(3)
   late final Set<AccountType> type;
+
+  @override
+  bool activited = false;
 
   @override
   late final int mid = int.parse(_midStr);
@@ -112,6 +115,9 @@ class AnonymousAccount implements Account {
   String csrf = '';
   @override
   final Map<String, String> headers = const {};
+
+  @override
+  bool activited = false;
 
   @override
   Future<void> delete() async {
