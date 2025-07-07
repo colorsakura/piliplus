@@ -6,7 +6,6 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 
 class SysMsgController
     extends CommonListController<List<MsgSysItem>?, MsgSysItem> {
-  final pageSize = 20;
   int? cursor;
 
   @override
@@ -21,9 +20,6 @@ class SysMsgController
       msgSysUpdateCursor(dataList.first.cursor);
     }
     cursor = dataList.last.cursor;
-    if (!isEnd && dataList.length + 1 < pageSize) {
-      isEnd = true;
-    }
   }
 
   void msgSysUpdateCursor(int? cursor) {
@@ -54,5 +50,5 @@ class SysMsgController
 
   @override
   Future<LoadingState<List<MsgSysItem>?>> customGetData() =>
-      MsgHttp.msgFeedNotify(cursor: cursor, pageSize: pageSize);
+      MsgHttp.msgFeedNotify(cursor: cursor);
 }

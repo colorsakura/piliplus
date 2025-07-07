@@ -648,7 +648,7 @@ class _ArticlePageState extends State<ArticlePage>
     return SliverPersistentHeader(
       pinned: true,
       delegate: CustomSliverPersistentHeaderDelegate(
-        extent: 40,
+        extent: 45,
         bgColor: theme.colorScheme.surface,
         child: Container(
           height: 45,

@@ -25,16 +25,11 @@ class _CreateVotePageState extends State<CreateVotePage> {
       tag: Utils.generateRandomString(8));
   late final imagePicker = ImagePicker();
 
-  late Divider _divider;
   late TextStyle _leadingStyle;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    _divider = Divider(
-      height: 1,
-      color: theme.colorScheme.outline.withValues(alpha: 0.1),
-    );
     _leadingStyle = TextStyle(
       fontSize: 15,
       color: theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.9),
@@ -42,7 +37,10 @@ class _CreateVotePageState extends State<CreateVotePage> {
     final padding = MediaQuery.paddingOf(context);
     final divider = [
       const SizedBox(height: 10),
-      _divider,
+      Divider(
+        height: 1,
+        color: theme.colorScheme.outline.withValues(alpha: 0.1),
+      ),
       const SizedBox(height: 10),
     ];
     return Scaffold(

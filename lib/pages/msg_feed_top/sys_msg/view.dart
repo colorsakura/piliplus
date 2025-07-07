@@ -23,6 +23,8 @@ class SysMsgPage extends StatefulWidget {
 
 class _SysMsgPageState extends State<SysMsgPage> {
   late final _sysMsgController = Get.put(SysMsgController());
+  late final RegExp urlRegExp = RegExp(
+      r'#\{([^}]*)\}\{([^}]*)\}|https?:\/\/[^\s/\$.?#].[^\s]*|www\.[^\s/\$.?#].[^\s]*|【(.*?)】|（(\d+)）');
 
   @override
   Widget build(BuildContext context) {
@@ -96,8 +98,8 @@ class _SysMsgPageState extends State<SysMsgPage> {
                         ),
                       ),
                       const SizedBox(height: 5),
-                      SizedBox(
-                        width: double.infinity,
+                      Align(
+                        alignment: Alignment.centerRight,
                         child: Text(
                           "${item.timeAt}",
                           maxLines: 1,
@@ -106,7 +108,6 @@ class _SysMsgPageState extends State<SysMsgPage> {
                             fontSize: 13,
                             color: theme.colorScheme.outline,
                           ),
-                          textAlign: TextAlign.end,
                         ),
                       ),
                     ],
@@ -125,8 +126,6 @@ class _SysMsgPageState extends State<SysMsgPage> {
 
   InlineSpan _buildContent(ThemeData theme, String content) {
     final List<InlineSpan> spanChildren = <InlineSpan>[];
-    RegExp urlRegExp = RegExp(
-        r'#\{([^}]*)\}\{([^}]*)\}|https?:\/\/[^\s/\$.?#].[^\s]*|www\.[^\s/\$.?#].[^\s]*|【(.*?)】|（(\d+)）');
     content.splitMapJoin(
       urlRegExp,
       onMatch: (Match match) {

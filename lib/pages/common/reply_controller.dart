@@ -113,10 +113,10 @@ abstract class ReplyController<R> extends CommonListController<R, ReplyInfo> {
     assert(replyItem != null || (oid != null && replyType != null));
     String? hint;
     try {
-      if (subjectControl != null) {
-        if (subjectControl!.hasSwitcherType() &&
-            subjectControl!.switcherType != 1 &&
-            subjectControl!.hasRootText()) {
+      if (subjectControl != null && subjectControl!.hasRootText()) {
+        if ((subjectControl!.hasSwitcherType() &&
+                subjectControl!.switcherType != 1) ||
+            subjectControl!.rootText.contains('可发评论')) {
           hint = subjectControl!.rootText;
         }
       }

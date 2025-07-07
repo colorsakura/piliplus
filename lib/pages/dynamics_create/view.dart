@@ -597,7 +597,7 @@ class _CreateDynPanelState extends CommonRichTextPubPageState<CreateDynPanel> {
                 }
                 controller.restoreChatPanel();
               },
-              icon: const Icon(Icons.bar_chart_rounded, size: 22),
+              icon: const Icon(Icons.bar_chart_rounded, size: 24),
               tooltip: '投票',
               selected: false,
             ),
