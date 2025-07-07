@@ -1009,29 +1009,27 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                   child: videoPlayer(videoWidth, videoHeight),
                 ),
                 Expanded(
-                  child: Expanded(
-                    child: Scaffold(
-                      key: videoDetailController.childKey,
-                      resizeToAvoidBottomInset: false,
-                      backgroundColor: Colors.transparent,
-                      body: Column(
-                        children: [
-                          buildTabbar(
-                            showIntro: false,
-                            showReply: videoDetailController.showReply,
+                  child: Scaffold(
+                    key: videoDetailController.childKey,
+                    resizeToAvoidBottomInset: false,
+                    backgroundColor: Colors.transparent,
+                    body: Column(
+                      children: [
+                        buildTabbar(
+                          showIntro: false,
+                          showReply: videoDetailController.showReply,
+                        ),
+                        Expanded(
+                          child: videoTabBarView(
+                            controller: videoDetailController.tabCtr,
+                            children: [
+                              if (videoDetailController.showReply)
+                                videoReplyPanel(),
+                              if (_shouldShowSeasonPanel) seasonPanel,
+                            ],
                           ),
-                          Expanded(
-                            child: videoTabBarView(
-                              controller: videoDetailController.tabCtr,
-                              children: [
-                                if (videoDetailController.showReply)
-                                  videoReplyPanel(),
-                                if (_shouldShowSeasonPanel) seasonPanel,
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
@@ -1428,8 +1426,9 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
       videoDetailController.tabCtr = TabController(
         vsync: this,
         length: tabs.length,
-        initialIndex:
-            videoDetailController.tabCtr.index.clamp(0, tabs.length - 1),
+        initialIndex: tabs.isEmpty
+            ? 0
+            : videoDetailController.tabCtr.index.clamp(0, tabs.length - 1),
       );
     }
 
