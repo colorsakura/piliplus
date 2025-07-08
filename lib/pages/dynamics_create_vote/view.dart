@@ -35,14 +35,11 @@ class _CreateVotePageState extends State<CreateVotePage> {
       color: theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.9),
     );
     final padding = MediaQuery.paddingOf(context);
-    final divider = [
-      const SizedBox(height: 10),
-      Divider(
-        height: 1,
-        color: theme.colorScheme.outline.withValues(alpha: 0.1),
-      ),
-      const SizedBox(height: 10),
-    ];
+    final divider = Divider(
+      height: 20,
+      thickness: 1,
+      color: theme.colorScheme.outline.withValues(alpha: 0.1),
+    );
     return Scaffold(
       appBar: AppBar(
         title: Text('${_controller.voteId != null ? '' : '发起'}投票'),
@@ -74,7 +71,7 @@ class _CreateVotePageState extends State<CreateVotePage> {
               inputFormatters: [LengthLimitingTextInputFormatter(32)],
             ),
           ),
-          ...divider,
+          divider,
           Obx(
             () => _buildInput(
               theme,
@@ -85,7 +82,7 @@ class _CreateVotePageState extends State<CreateVotePage> {
               inputFormatters: [LengthLimitingTextInputFormatter(100)],
             ),
           ),
-          ...divider,
+          divider,
           const SizedBox(height: 40),
           Obx(
             () {
@@ -118,7 +115,7 @@ class _CreateVotePageState extends State<CreateVotePage> {
                     hintText: '选项内容，最多20字',
                     inputFormatters: [LengthLimitingTextInputFormatter(20)],
                   ))
-                  ..addAll(divider);
+                  ..add(divider);
               }
               return Column(
                 mainAxisSize: MainAxisSize.min,
@@ -188,7 +185,7 @@ class _CreateVotePageState extends State<CreateVotePage> {
             ],
           ),
           const SizedBox(height: 4),
-          ...divider,
+          divider,
           Row(
             spacing: 12,
             children: [
@@ -238,7 +235,7 @@ class _CreateVotePageState extends State<CreateVotePage> {
               ),
             ],
           ),
-          ...divider,
+          divider,
           const SizedBox(height: 40),
           Obx(() {
             final canCreate = _controller.canCreate.value;
