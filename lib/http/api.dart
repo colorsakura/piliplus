@@ -923,4 +923,10 @@ class Api {
   static const String createVote = '/x/vote/create';
 
   static const String updateVote = '/x/vote/update';
+
+  static const String createReserve = '/x/new-reserve/up/reserve/create';
+
+  static const String updateReserve = '/x/new-reserve/up/reserve/update';
+
+  static const String reserveInfo = '/x/new-reserve/up/reserve/info';
 }

@@ -157,6 +157,7 @@ abstract class ReplyController<R> extends CommonListController<R, ReplyInfo> {
             child: child,
           );
         },
+        settings: RouteSettings(arguments: Get.arguments),
       ),
     )
         .then(

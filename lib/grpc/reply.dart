@@ -125,4 +125,26 @@ class ReplyGrpc {
     );
     return res..dataOrNull?.replies.removeWhere((item) => needRemoveGrpc(item));
   }
+
+  static Future<LoadingState<SearchItemReply>> searchItem({
+    required int page,
+    required SearchItemType itemType,
+    required int oid,
+    int type = 1,
+    String? keyword,
+  }) {
+    return GrpcReq.request(
+      GrpcUrl.searchItem,
+      SearchItemReq(
+        cursor: SearchItemCursorReq(
+          next: Int64(page),
+          itemType: itemType,
+        ),
+        oid: Int64(oid),
+        type: Int64(type),
+        keyword: keyword,
+      ),
+      SearchItemReply.fromBuffer,
+    );
+  }
 }

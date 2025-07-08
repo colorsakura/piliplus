@@ -107,13 +107,14 @@ abstract class CommonPublishPageState<T extends CommonPublishPage>
 
   void updatePanelType(PanelType type) {
     final isSwitchToKeyboard = PanelType.keyboard == type;
-    final isSwitchToEmojiPanel = PanelType.emoji == type;
+    final isSwitchToEmojiPanel =
+        PanelType.emoji == type || PanelType.more == type;
     bool isUpdated = false;
     switch (type) {
       case PanelType.keyboard:
         updateInputView(isReadOnly: false);
         break;
-      case PanelType.emoji:
+      case PanelType.emoji || PanelType.more:
         isUpdated = updateInputView(isReadOnly: true);
         break;
       default:
@@ -174,7 +175,9 @@ abstract class CommonPublishPageState<T extends CommonPublishPage>
     );
   }
 
-  Widget buildPanelContainer([Color? panelBgColor]) {
+  Widget buildMorePanel(ThemeData theme) => throw UnimplementedError();
+
+  Widget buildPanelContainer(ThemeData theme, [Color? panelBgColor]) {
     return ChatBottomPanelContainer<PanelType>(
       controller: controller,
       inputFocusNode: focusNode,
@@ -183,12 +186,13 @@ abstract class CommonPublishPageState<T extends CommonPublishPage>
         switch (type) {
           case PanelType.emoji:
             return buildEmojiPickerPanel();
+          case PanelType.more:
+            return buildMorePanel(theme);
           default:
             return const SizedBox.shrink();
         }
       },
       onPanelTypeChange: (panelType, data) {
-        // if (kDebugMode) debugPrint('panelType: $panelType');
         switch (panelType) {
           case ChatBottomPanelType.none:
             this.panelType.value = PanelType.none;
@@ -198,14 +202,7 @@ abstract class CommonPublishPageState<T extends CommonPublishPage>
             break;
           case ChatBottomPanelType.other:
             if (data == null) return;
-            switch (data) {
-              case PanelType.emoji:
-                this.panelType.value = PanelType.emoji;
-                break;
-              default:
-                this.panelType.value = PanelType.none;
-                break;
-            }
+            this.panelType.value = data;
             break;
         }
       },

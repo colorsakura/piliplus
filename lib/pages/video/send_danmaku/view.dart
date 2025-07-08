@@ -134,30 +134,6 @@ class _SendDanmakuPanelState extends CommonTextPubPageState<SendDanmakuPanel> {
         ),
       );
 
-  Widget get child => SafeArea(
-        bottom: false,
-        child: Align(
-          alignment: Alignment.bottomCenter,
-          child: Container(
-            constraints: const BoxConstraints(maxWidth: 450),
-            decoration: BoxDecoration(
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(12),
-                topRight: Radius.circular(12),
-              ),
-              color: themeData.colorScheme.surface,
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                _buildInputView(),
-                buildPanelContainer(Colors.transparent),
-              ],
-            ),
-          ),
-        ),
-      );
-
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -170,6 +146,29 @@ class _SendDanmakuPanelState extends CommonTextPubPageState<SendDanmakuPanel> {
 
   @override
   Widget build(BuildContext context) {
+    Widget child = SafeArea(
+      bottom: false,
+      child: Align(
+        alignment: Alignment.bottomCenter,
+        child: Container(
+          constraints: const BoxConstraints(maxWidth: 450),
+          decoration: BoxDecoration(
+            borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(12),
+              topRight: Radius.circular(12),
+            ),
+            color: themeData.colorScheme.surface,
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              _buildInputView(),
+              buildPanelContainer(themeData, Colors.transparent),
+            ],
+          ),
+        ),
+      ),
+    );
     return widget.darkVideoPage ? Theme(data: themeData, child: child) : child;
   }
 

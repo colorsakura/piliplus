@@ -1,9 +1,11 @@
 import 'dart:io';
 
 import 'package:PiliPlus/common/widgets/button/icon_button.dart';
+import 'package:PiliPlus/common/widgets/button/toolbar_icon_button.dart';
 import 'package:PiliPlus/common/widgets/text_field/controller.dart';
 import 'package:PiliPlus/common/widgets/text_field/text_field.dart';
 import 'package:PiliPlus/models/common/image_preview_type.dart';
+import 'package:PiliPlus/models/common/publish_panel_type.dart';
 import 'package:PiliPlus/models_new/dynamic/dyn_mention/item.dart';
 import 'package:PiliPlus/models_new/emote/emote.dart' as e;
 import 'package:PiliPlus/models_new/live/live_emote/emoticon.dart';
@@ -14,6 +16,7 @@ import 'package:easy_debounce/easy_throttle.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
+import 'package:get/get.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -200,7 +203,7 @@ abstract class CommonRichTextPubPageState<T extends CommonRichTextPubPage>
     final list = <Map<String, dynamic>>[];
     for (var e in editController.items) {
       switch (e.type) {
-        case RichTextType.text || RichTextType.composing:
+        case RichTextType.text || RichTextType.composing || RichTextType.common:
           list.add({
             "raw_text": e.text,
             "type": 1,
@@ -360,4 +363,51 @@ abstract class CommonRichTextPubPageState<T extends CommonRichTextPubPage>
   void onSave() {
     widget.onSave?.call(editController.items);
   }
+
+  Widget get emojiBtn => Obx(
+        () {
+          final isEmoji = panelType.value == PanelType.emoji;
+          return ToolbarIconButton(
+            tooltip: isEmoji ? '输入' : '表情',
+            onPressed: () {
+              if (isEmoji) {
+                updatePanelType(PanelType.keyboard);
+              } else {
+                updatePanelType(PanelType.emoji);
+              }
+            },
+            icon: isEmoji
+                ? const Icon(Icons.keyboard, size: 22)
+                : const Icon(Icons.emoji_emotions, size: 22),
+            selected: isEmoji,
+          );
+        },
+      );
+
+  Widget get atBtn => ToolbarIconButton(
+        onPressed: () => onMention(true),
+        icon: const Icon(Icons.alternate_email, size: 22),
+        tooltip: '@',
+        selected: false,
+      );
+
+  Widget get moreBtn => Obx(
+        () {
+          final isMore = panelType.value == PanelType.more;
+          return ToolbarIconButton(
+            tooltip: isMore ? '输入' : '更多',
+            onPressed: () {
+              if (isMore) {
+                updatePanelType(PanelType.keyboard);
+              } else {
+                updatePanelType(PanelType.more);
+              }
+            },
+            icon: isMore
+                ? const Icon(Icons.keyboard, size: 22)
+                : const Icon(Icons.add_circle_outline, size: 22),
+            selected: isMore,
+          );
+        },
+      );
 }

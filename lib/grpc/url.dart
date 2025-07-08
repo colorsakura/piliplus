@@ -21,6 +21,7 @@ class GrpcUrl {
   static const detailList = '$reply/DetailList';
   static const dialogList = '$reply/DialogList';
   // static const replyInfo = '$reply/ReplyInfo';
+  static const searchItem = '$reply/SearchItem';
 
   // im
   static const im = '/bilibili.im.interface.v1.ImInterface';

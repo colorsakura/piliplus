@@ -1,3 +1,5 @@
+import 'dart:math' show max;
+
 import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/common/widgets/button/icon_button.dart';
 import 'package:PiliPlus/common/widgets/button/toolbar_icon_button.dart';
@@ -11,8 +13,10 @@ import 'package:PiliPlus/http/dynamics.dart';
 import 'package:PiliPlus/models/common/publish_panel_type.dart';
 import 'package:PiliPlus/models/common/reply/reply_option_type.dart';
 import 'package:PiliPlus/models/dynamics/vote_model.dart';
+import 'package:PiliPlus/models_new/dynamic/dyn_reserve_info/data.dart';
 import 'package:PiliPlus/models_new/dynamic/dyn_topic_top/topic_item.dart';
 import 'package:PiliPlus/pages/common/publish/common_rich_text_pub_page.dart';
+import 'package:PiliPlus/pages/dynamics_create_reserve/view.dart';
 import 'package:PiliPlus/pages/dynamics_create_vote/view.dart';
 import 'package:PiliPlus/pages/dynamics_mention/controller.dart';
 import 'package:PiliPlus/pages/dynamics_select_topic/controller.dart';
@@ -21,6 +25,7 @@ import 'package:PiliPlus/pages/emote/controller.dart';
 import 'package:PiliPlus/pages/emote/view.dart';
 import 'package:PiliPlus/utils/accounts.dart';
 import 'package:PiliPlus/utils/date_util.dart';
+import 'package:PiliPlus/utils/grid.dart';
 import 'package:PiliPlus/utils/request_utils.dart';
 import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/material.dart' hide DraggableScrollableSheet;
@@ -68,6 +73,7 @@ class _CreateDynPanelState extends CommonRichTextPubPageState<CreateDynPanel> {
   final Rx<ReplyOptionType> _replyOption = ReplyOptionType.allow.obs;
   final _titleEditCtr = TextEditingController();
   final Rx<Pair<int, String>?> topic = Rx<Pair<int, String>?>(null);
+  final Rx<ReserveInfoData?> _reserveCard = Rx<ReserveInfoData?>(null);
 
   @override
   void initState() {
@@ -202,6 +208,7 @@ class _CreateDynPanelState extends CommonRichTextPubPageState<CreateDynPanel> {
                 child: _buildEditWidget(theme),
               ),
               const SizedBox(height: 16),
+              _buildReserveItem(theme),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Row(
@@ -226,7 +233,7 @@ class _CreateDynPanelState extends CommonRichTextPubPageState<CreateDynPanel> {
           ),
         ),
         _buildToolbar,
-        buildPanelContainer(Colors.transparent),
+        buildPanelContainer(theme, Colors.transparent),
       ],
     );
   }
@@ -460,9 +467,10 @@ class _CreateDynPanelState extends CommonRichTextPubPageState<CreateDynPanel> {
           ),
           onPressed: _isPrivate.value
               ? null
-              : () {
+              : () async {
+                  controller.keepChatPanel();
                   DateTime nowDate = DateTime.now();
-                  showDatePicker(
+                  final selectedDate = await showDatePicker(
                     context: context,
                     initialDate: nowDate,
                     firstDate: nowDate,
@@ -471,45 +479,42 @@ class _CreateDynPanelState extends CommonRichTextPubPageState<CreateDynPanel> {
                       nowDate.month,
                       nowDate.day + 7,
                     ),
-                  ).then(
-                    (selectedDate) {
-                      if (selectedDate != null && mounted) {
-                        TimeOfDay nowTime = TimeOfDay.now();
-                        showTimePicker(
-                          context: context,
-                          initialTime: nowTime.replacing(
-                            hour: nowTime.minute + 6 >= 60
-                                ? (nowTime.hour + 1) % 24
-                                : nowTime.hour,
-                            minute: (nowTime.minute + 6) % 60,
-                          ),
-                        ).then((selectedTime) {
-                          if (selectedTime != null) {
-                            if (selectedDate.day == nowDate.day) {
-                              if (selectedTime.hour < nowTime.hour) {
-                                SmartDialog.showToast('时间设置错误，至少选择6分钟之后');
-                                return;
-                              } else if (selectedTime.hour == nowTime.hour) {
-                                if (selectedTime.minute < nowTime.minute + 6) {
-                                  if (selectedDate.day == nowDate.day) {
-                                    SmartDialog.showToast('时间设置错误，至少选择6分钟之后');
-                                  }
-                                  return;
-                                }
-                              }
-                            }
-                            _publishTime.value = DateTime(
-                              selectedDate.year,
-                              selectedDate.month,
-                              selectedDate.day,
-                              selectedTime.hour,
-                              selectedTime.minute,
-                            );
-                          }
-                        });
-                      }
-                    },
                   );
+                  if (selectedDate != null && mounted) {
+                    TimeOfDay nowTime = TimeOfDay.now();
+                    final selectedTime = await showTimePicker(
+                      context: context,
+                      initialTime: nowTime.replacing(
+                        hour: nowTime.minute + 6 >= 60
+                            ? (nowTime.hour + 1) % 24
+                            : nowTime.hour,
+                        minute: (nowTime.minute + 6) % 60,
+                      ),
+                    );
+                    if (selectedTime != null) {
+                      if (selectedDate.day == nowDate.day) {
+                        if (selectedTime.hour < nowTime.hour) {
+                          SmartDialog.showToast('时间设置错误，至少选择6分钟之后');
+                          return;
+                        } else if (selectedTime.hour == nowTime.hour) {
+                          if (selectedTime.minute < nowTime.minute + 6) {
+                            if (selectedDate.day == nowDate.day) {
+                              SmartDialog.showToast('时间设置错误，至少选择6分钟之后');
+                            }
+                            return;
+                          }
+                        }
+                      }
+                      _publishTime.value = DateTime(
+                        selectedDate.year,
+                        selectedDate.month,
+                        selectedDate.day,
+                        selectedTime.hour,
+                        selectedTime.minute,
+                      );
+                    }
+                  }
+                  controller.restoreChatPanel();
                 },
           child: const Text('定时发布'),
         )
@@ -532,75 +537,10 @@ class _CreateDynPanelState extends CommonRichTextPubPageState<CreateDynPanel> {
         child: Row(
           spacing: 16,
           children: [
-            Obx(
-              () => ToolbarIconButton(
-                onPressed: () => updatePanelType(
-                  panelType.value == PanelType.emoji
-                      ? PanelType.keyboard
-                      : PanelType.emoji,
-                ),
-                icon: const Icon(Icons.emoji_emotions, size: 22),
-                tooltip: '表情',
-                selected: panelType.value == PanelType.emoji,
-              ),
-            ),
-            ToolbarIconButton(
-              onPressed: () => onMention(true),
-              icon: const Icon(Icons.alternate_email, size: 22),
-              tooltip: '@',
-              selected: false,
-            ),
-            ToolbarIconButton(
-              onPressed: () async {
-                controller.keepChatPanel();
-                RichTextItem? voteItem = editController.items
-                    .firstWhereOrNull((e) => e.type == RichTextType.vote);
-                VoteInfo? voteInfo = await Navigator.of(context).push(
-                  GetPageRoute(
-                      page: () => CreateVotePage(
-                          voteId: voteItem?.id == null
-                              ? null
-                              : int.parse(voteItem!.id!))),
-                );
-                if (voteInfo != null) {
-                  if (voteItem != null) {
-                    final range = voteItem.range;
-                    final text = ' ${voteInfo.title} ';
-                    final selection = TextSelection.collapsed(
-                        offset: range.start + text.length);
-                    final delta = RichTextEditingDeltaReplacement(
-                      oldText: editController.text,
-                      replacementText: text,
-                      replacedRange: range,
-                      selection: selection,
-                      composing: TextRange.empty,
-                      type: RichTextType.vote,
-                      id: voteInfo.voteId.toString(),
-                      rawText: voteInfo.title,
-                    );
-                    final newValue = delta.apply(editController.value);
-                    editController
-                      ..syncRichText(delta)
-                      ..value = newValue;
-                  } else {
-                    onInsertText(
-                      '我发起了一个投票',
-                      RichTextType.text,
-                    );
-                    onInsertText(
-                      ' ${voteInfo.title} ',
-                      RichTextType.vote,
-                      rawText: voteInfo.title,
-                      id: voteInfo.voteId.toString(),
-                    );
-                  }
-                }
-                controller.restoreChatPanel();
-              },
-              icon: const Icon(Icons.bar_chart_rounded, size: 24),
-              tooltip: '投票',
-              selected: false,
-            ),
+            emojiBtn,
+            atBtn,
+            voteBtn,
+            moreBtn,
             // if (kDebugMode)
             //   ToolbarIconButton(
             //     onPressed: editController.clear,
@@ -609,6 +549,121 @@ class _CreateDynPanelState extends CommonRichTextPubPageState<CreateDynPanel> {
             //   ),
           ],
         ),
+      );
+
+  @override
+  Widget buildMorePanel(ThemeData theme) {
+    double height = context.isTablet ? 300 : 170;
+    final keyboardHeight = controller.keyboardHeight;
+    if (keyboardHeight != 0) {
+      height = max(height, keyboardHeight);
+    }
+
+    Widget item({
+      required VoidCallback onTap,
+      required Icon icon,
+      required String title,
+    }) {
+      return GestureDetector(
+        onTap: onTap,
+        child: Column(
+          spacing: 5,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            AspectRatio(
+              aspectRatio: 1,
+              child: Container(
+                decoration: BoxDecoration(
+                  color: theme.colorScheme.onInverseSurface,
+                  borderRadius: const BorderRadius.all(Radius.circular(6)),
+                ),
+                alignment: Alignment.center,
+                child: icon,
+              ),
+            ),
+            Text(
+              title,
+              maxLines: 1,
+              style: const TextStyle(fontSize: 13),
+            ),
+          ],
+        ),
+      );
+    }
+
+    final color = theme.colorScheme.onSurfaceVariant;
+
+    return SizedBox(
+      height: height,
+      child: GridView(
+        padding: const EdgeInsets.only(left: 12, bottom: 12, right: 12),
+        gridDelegate: const SliverGridDelegateWithExtentAndRatio(
+          maxCrossAxisExtent: 65,
+          mainAxisSpacing: 12,
+          crossAxisSpacing: 12,
+          mainAxisExtent: 25,
+        ),
+        children: [
+          item(
+            onTap: _onReserve,
+            icon: Icon(CustomIcon.live_reserve, size: 28, color: color),
+            title: '直播预约',
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget get voteBtn => ToolbarIconButton(
+        onPressed: () async {
+          controller.keepChatPanel();
+          RichTextItem? voteItem = editController.items
+              .firstWhereOrNull((e) => e.type == RichTextType.vote);
+          VoteInfo? voteInfo = await Navigator.of(context).push(
+            GetPageRoute(
+                page: () => CreateVotePage(
+                    voteId: voteItem?.id == null
+                        ? null
+                        : int.parse(voteItem!.id!))),
+          );
+          if (voteInfo != null) {
+            if (voteItem != null) {
+              final range = voteItem.range;
+              final text = ' ${voteInfo.title} ';
+              final selection =
+                  TextSelection.collapsed(offset: range.start + text.length);
+              final delta = RichTextEditingDeltaReplacement(
+                oldText: editController.text,
+                replacementText: text,
+                replacedRange: range,
+                selection: selection,
+                composing: TextRange.empty,
+                type: RichTextType.vote,
+                id: voteInfo.voteId.toString(),
+                rawText: voteInfo.title,
+              );
+              final newValue = delta.apply(editController.value);
+              editController
+                ..syncRichText(delta)
+                ..value = newValue;
+            } else {
+              onInsertText(
+                '我发起了一个投票',
+                RichTextType.text,
+              );
+              onInsertText(
+                ' ${voteInfo.title} ',
+                RichTextType.vote,
+                rawText: voteInfo.title,
+                id: voteInfo.voteId.toString(),
+              );
+            }
+          }
+          controller.restoreChatPanel();
+        },
+        icon: const Icon(Icons.bar_chart_rounded, size: 24),
+        tooltip: '投票',
+        selected: false,
       );
 
   Widget _buildEditWidget(ThemeData theme) => Form(
@@ -651,6 +706,7 @@ class _CreateDynPanelState extends CommonRichTextPubPageState<CreateDynPanel> {
     SmartDialog.showLoading(msg: '正在发布');
     List<Map<String, dynamic>>? extraContent = getRichContent();
     final hasRichText = extraContent != null;
+    final reserveCard = _reserveCard.value;
     var result = await DynamicsHttp.createDynamic(
       mid: Accounts.main.mid,
       rawText: hasRichText ? null : editController.text,
@@ -663,6 +719,16 @@ class _CreateDynPanelState extends CommonRichTextPubPageState<CreateDynPanel> {
       title: _titleEditCtr.text,
       topic: topic.value,
       extraContent: extraContent,
+      attachCard: reserveCard == null
+          ? null
+          : {
+              "common_card": {
+                "type": 14,
+                "biz_id": reserveCard.id,
+                "reserve_source": 0,
+                "reserve_lottery": 0,
+              },
+            },
     );
     SmartDialog.dismiss();
     if (result['status']) {
@@ -682,18 +748,86 @@ class _CreateDynPanelState extends CommonRichTextPubPageState<CreateDynPanel> {
   }
 
   double _topicOffset = 0;
-  void _onSelectTopic() {
-    SelectTopicPanel.onSelectTopic(
+  Future<void> _onSelectTopic() async {
+    controller.keepChatPanel();
+    TopicItem? res = await SelectTopicPanel.onSelectTopic(
       context,
       offset: _topicOffset,
       callback: (offset) => _topicOffset = offset,
-    ).then((TopicItem? res) {
-      if (res != null) {
-        topic.value = Pair(first: res.id, second: res.name);
-      }
-    });
+    );
+    if (res != null) {
+      topic.value = Pair(first: res.id, second: res.name);
+    }
+    controller.restoreChatPanel();
   }
 
   @override
   void onSave() {}
+
+  Widget _buildReserveItem(ThemeData theme) {
+    return Obx(
+      () {
+        final reserveCard = _reserveCard.value;
+        if (reserveCard == null) {
+          return const SizedBox.shrink();
+        }
+        return Stack(
+          clipBehavior: Clip.none,
+          children: [
+            GestureDetector(
+              onTap: _onReserve,
+              child: Container(
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  borderRadius: const BorderRadius.all(Radius.circular(8)),
+                  color: theme.colorScheme.onInverseSurface,
+                ),
+                margin: const EdgeInsets.only(left: 16, right: 16, bottom: 10),
+                padding: const EdgeInsets.fromLTRB(12, 12, 30, 12),
+                child: Column(
+                  spacing: 3,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('直播预约: ${reserveCard.title}'),
+                    Text(
+                      '${DateUtil.longFormatD.format(
+                        DateTime.fromMillisecondsSinceEpoch(
+                            reserveCard.livePlanStartTime! * 1000),
+                      )} 直播',
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Positioned(
+              right: 18,
+              top: 2,
+              child: iconButton(
+                context: context,
+                size: 30,
+                iconSize: 18,
+                icon: Icons.clear,
+                onPressed: () => _reserveCard.value = null,
+                bgColor: Colors.transparent,
+                iconColor: theme.colorScheme.onSurfaceVariant,
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> _onReserve() async {
+    controller.keepChatPanel();
+    ReserveInfoData? reserveInfo = await Navigator.of(context).push(
+      GetPageRoute(
+        page: () => CreateReservePage(sid: _reserveCard.value?.id),
+      ),
+    );
+    if (reserveInfo != null) {
+      _reserveCard.value = reserveInfo;
+    }
+    controller.restoreChatPanel();
+  }
 }

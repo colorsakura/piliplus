@@ -1,4 +1,3 @@
-import 'package:PiliPlus/common/widgets/button/toolbar_icon_button.dart';
 import 'package:PiliPlus/common/widgets/draggable_sheet/draggable_scrollable_sheet_dyn.dart'
     show DraggableScrollableSheet;
 import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
@@ -96,7 +95,7 @@ class _RepostPanelState extends CommonRichTextPubPageState<RepostPanel> {
                 ),
               ),
               _buildToolbar,
-              buildPanelContainer(Colors.transparent),
+              buildPanelContainer(theme, Colors.transparent),
             ] else ...[
               ..._buildEditPanel(theme),
               ..._biuldDismiss(theme),
@@ -328,26 +327,8 @@ class _RepostPanelState extends CommonRichTextPubPageState<RepostPanel> {
         child: Row(
           spacing: 16,
           children: [
-            Obx(
-              () => ToolbarIconButton(
-                onPressed: () {
-                  updatePanelType(
-                    panelType.value == PanelType.emoji
-                        ? PanelType.keyboard
-                        : PanelType.emoji,
-                  );
-                },
-                icon: const Icon(Icons.emoji_emotions, size: 22),
-                tooltip: '表情',
-                selected: panelType.value == PanelType.emoji,
-              ),
-            ),
-            ToolbarIconButton(
-              onPressed: () => onMention(true),
-              icon: const Icon(Icons.alternate_email, size: 22),
-              tooltip: '@',
-              selected: false,
-            ),
+            emojiBtn,
+            atBtn,
           ],
         ),
       );

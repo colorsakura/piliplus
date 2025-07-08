@@ -127,7 +127,7 @@ class _WhisperDetailPageState
             ),
             if (_whisperDetailController.mid != null) ...[
               _buildInputView(theme),
-              buildPanelContainer(theme.colorScheme.onInverseSurface),
+              buildPanelContainer(theme, theme.colorScheme.onInverseSurface),
             ] else
               SizedBox(height: MediaQuery.paddingOf(context).bottom),
           ],

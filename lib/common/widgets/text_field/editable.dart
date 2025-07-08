@@ -2305,18 +2305,18 @@ class RenderEditable extends RenderBox
       localPos: localPos,
       lastTapDownPosition: _lastTapDownPosition!,
     );
-    position = TextPosition(offset: newOffset);
+    final newSelection = TextSelection.collapsed(offset: newOffset);
 
-    final TextRange word = _textPainter.getWordBoundary(position);
-    late TextSelection newSelection;
-    if (position.offset <= word.start) {
-      newSelection = TextSelection.collapsed(offset: word.start);
-    } else {
-      newSelection = TextSelection.collapsed(
-        offset: word.end,
-        affinity: TextAffinity.upstream,
-      );
-    }
+    // final TextRange word = _textPainter.getWordBoundary(position);
+    // late TextSelection newSelection;
+    // if (position.offset <= word.start) {
+    //   newSelection = TextSelection.collapsed(offset: word.start);
+    // } else {
+    //   newSelection = TextSelection.collapsed(
+    //     offset: word.end,
+    //     affinity: TextAffinity.upstream,
+    //   );
+    // }
     _setSelection(newSelection, cause);
   }
 

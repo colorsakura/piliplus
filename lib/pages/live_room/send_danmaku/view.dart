@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:PiliPlus/common/widgets/button/toolbar_icon_button.dart';
 import 'package:PiliPlus/common/widgets/text_field/text_field.dart';
 import 'package:PiliPlus/http/live.dart';
 import 'package:PiliPlus/models/common/publish_panel_type.dart';
@@ -66,7 +65,7 @@ class _ReplyPageState extends CommonRichTextPubPageState<LiveSendDmPanel> {
             mainAxisSize: MainAxisSize.min,
             children: [
               ...buildInputView(theme),
-              buildPanelContainer(Colors.transparent),
+              buildPanelContainer(theme, Colors.transparent),
             ],
           ),
         ),
@@ -132,31 +131,7 @@ class _ReplyPageState extends CommonRichTextPubPageState<LiveSendDmPanel> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Obx(
-              () => ToolbarIconButton(
-                tooltip: '输入',
-                onPressed: () {
-                  if (panelType.value != PanelType.keyboard) {
-                    updatePanelType(PanelType.keyboard);
-                  }
-                },
-                icon: const Icon(Icons.keyboard, size: 22),
-                selected: panelType.value == PanelType.keyboard,
-              ),
-            ),
-            const SizedBox(width: 10),
-            Obx(
-              () => ToolbarIconButton(
-                tooltip: '表情',
-                onPressed: () {
-                  if (panelType.value != PanelType.emoji) {
-                    updatePanelType(PanelType.emoji);
-                  }
-                },
-                icon: const Icon(Icons.emoji_emotions, size: 22),
-                selected: panelType.value == PanelType.emoji,
-              ),
-            ),
+            emojiBtn,
             const Spacer(),
             Obx(
               () => FilledButton.tonal(
