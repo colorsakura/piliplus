@@ -273,6 +273,25 @@ class DynamicsHttp {
     }
   }
 
+  static Future rmTop({
+    required dynamic dynamicId,
+  }) async {
+    var res = await Request().post(
+      Api.rmTopDyn,
+      queryParameters: {
+        'csrf': Accounts.main.csrf,
+      },
+      data: {
+        'dyn_str': dynamicId,
+      },
+    );
+    if (res.data['code'] == 0) {
+      return {'status': true};
+    } else {
+      return {'status': false, 'msg': res.data['message']};
+    }
+  }
+
   static Future articleInfo({
     required dynamic cvId,
   }) async {

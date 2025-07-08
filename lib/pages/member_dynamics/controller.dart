@@ -61,7 +61,9 @@ class MemberDynamicsController
   }
 
   Future<void> onSetTop(bool isTop, dynamic dynamicId) async {
-    var res = await DynamicsHttp.setTop(dynamicId: dynamicId);
+    var res = isTop
+        ? await DynamicsHttp.rmTop(dynamicId: dynamicId)
+        : await DynamicsHttp.setTop(dynamicId: dynamicId);
     if (res['status']) {
       List<DynamicItemModel> list = loadingState.value.data!;
       list[0].modules.moduleTag = null;

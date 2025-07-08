@@ -61,15 +61,6 @@ class DynamicsTabController
     }
   }
 
-  Future<void> onSetTop(bool isTop, dynamic dynamicId) async {
-    var res = await DynamicsHttp.setTop(dynamicId: dynamicId);
-    if (res['status']) {
-      SmartDialog.showToast('${isTop ? '取消' : ''}置顶成功');
-    } else {
-      SmartDialog.showToast(res['msg']);
-    }
-  }
-
   @override
   Future<void> onReload() {
     scrollController.jumpToTop();
