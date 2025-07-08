@@ -617,67 +617,59 @@ class ChatItem extends StatelessWidget {
     required dynamic content,
     required Color textColor,
   }) {
-    late final style = TextStyle(
-      color: textColor,
-      letterSpacing: 0.6,
-      height: 1.5,
-    );
+    final style = TextStyle(color: textColor, letterSpacing: 0.6, height: 1.5);
+    final List<InlineSpan> children = [];
+    late final Map<String, Map> emojiMap = {};
+    final List<String> patterns = [Constants.urlRegex.pattern];
     if (eInfos != null) {
-      final List<InlineSpan> children = [];
-      Map<String, Map> emojiMap = {};
       for (var e in eInfos!) {
-        emojiMap[e.text] = {
+        emojiMap[e.text] ??= {
           'url': e.hasGifUrl() ? e.gifUrl : e.url,
-          'size': e.size * 24.0,
+          'size': e.size * 22.0,
         };
       }
-      final regex = RegExp(
-        [
-          ...emojiMap.keys.map(RegExp.escape),
-          Constants.urlRegex.pattern,
-        ].join('|'),
-      );
-      content['content'].splitMapJoin(
-        regex,
-        onMatch: (Match match) {
-          final matchStr = match[0]!;
-          if (matchStr.startsWith('[')) {
-            final emoji = emojiMap[matchStr];
-            if (emoji != null) {
-              final size = emoji['size'];
-              children.add(
-                WidgetSpan(
-                  child: NetworkImgLayer(
-                    width: size,
-                    height: size,
-                    src: emoji['url'],
-                    type: ImageType.emote,
-                  ),
-                ),
-              );
-            } else {
-              children.add(TextSpan(text: matchStr, style: style));
-            }
-          } else {
+      patterns.addAll(emojiMap.keys.map(RegExp.escape));
+    }
+    final regex = RegExp(patterns.join('|'));
+    content['content'].splitMapJoin(
+      regex,
+      onMatch: (Match match) {
+        final matchStr = match[0]!;
+        if (matchStr.startsWith('[')) {
+          final emoji = emojiMap[matchStr];
+          if (emoji != null) {
+            final size = emoji['size'];
             children.add(
-              TextSpan(
-                text: matchStr,
-                style: style.copyWith(color: theme.colorScheme.primary),
-                recognizer: TapGestureRecognizer()
-                  ..onTap = () => PiliScheme.routePushFromUrl(matchStr),
+              WidgetSpan(
+                child: NetworkImgLayer(
+                  width: size,
+                  height: size,
+                  src: emoji['url'],
+                  type: ImageType.emote,
+                ),
               ),
             );
+          } else {
+            children.add(TextSpan(text: matchStr, style: style));
           }
-          return '';
-        },
-        onNonMatch: (String text) {
-          children.add(TextSpan(text: text, style: style));
-          return '';
-        },
-      );
-      return SelectableText.rich(TextSpan(children: children));
-    }
-    return SelectableText(content['content'], style: style);
+        } else {
+          children.add(
+            TextSpan(
+              text: matchStr,
+              style: style.copyWith(color: theme.colorScheme.primary),
+              recognizer: TapGestureRecognizer()
+                ..onTap = () => PiliScheme.routePushFromUrl(matchStr),
+            ),
+          );
+        }
+        return '';
+      },
+      onNonMatch: (String text) {
+        children.add(TextSpan(text: text, style: style));
+        return '';
+      },
+    );
+    return SelectableText.rich(TextSpan(children: children));
   }
 
   Widget msgTypeNotifyMsg_10(ThemeData theme, content) {

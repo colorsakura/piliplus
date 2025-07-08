@@ -266,10 +266,12 @@ class _ReplyPageState extends CommonRichTextPubPageState<ReplyPage> {
 
   @override
   Future<void> onCustomPublish({List? pictures}) async {
-    Map<String, int> atNameToMid = {
-      for (var e in editController.items)
-        if (e.type == RichTextType.at) e.rawText: int.parse(e.id!),
-    };
+    Map<String, int> atNameToMid = {};
+    for (var e in editController.items) {
+      if (e.type == RichTextType.at) {
+        atNameToMid[e.rawText] ??= int.parse(e.id!);
+      }
+    }
     String message = editController.rawText;
     var result = await VideoHttp.replyAdd(
       type: widget.replyType,
