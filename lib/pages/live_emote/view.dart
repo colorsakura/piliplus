@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:PiliPlus/common/widgets/custom_tooltip.dart';
 import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
 import 'package:PiliPlus/common/widgets/loading_widget/loading_widget.dart';
 import 'package:PiliPlus/common/widgets/scroll_physics.dart';
@@ -44,6 +45,7 @@ class _LiveEmotePanelState extends State<LiveEmotePanel>
   }
 
   Widget _buildBody(LoadingState<List<LiveEmoteDatum>?> loadingState) {
+    late final color = Theme.of(context).colorScheme.onInverseSurface;
     return switch (loadingState) {
       Loading() => loadingWidget,
       Success(:var response) => response?.isNotEmpty == true
@@ -88,15 +90,49 @@ class _LiveEmotePanelState extends State<LiveEmotePanel>
                                     widget.onSendEmoticonUnique(e);
                                   }
                                 },
-                                child: Padding(
-                                  padding: const EdgeInsets.all(6),
-                                  child: NetworkImgLayer(
-                                    boxFit: BoxFit.contain,
-                                    src: e.url!,
-                                    width: width,
-                                    height: height,
-                                    type: ImageType.emote,
-                                    quality: item.pkgType == 3 ? null : 80,
+                                child: CustomTooltip(
+                                  indicator: () => CustomPaint(
+                                    size: const Size(14, 8),
+                                    painter: TrianglePainter(color),
+                                  ),
+                                  overlayWidget: () => Container(
+                                    padding: const EdgeInsets.all(8),
+                                    decoration: BoxDecoration(
+                                      color: color,
+                                      borderRadius: const BorderRadius.all(
+                                          Radius.circular(8)),
+                                    ),
+                                    child: Column(
+                                      spacing: 4,
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        NetworkImgLayer(
+                                          src: e.url!,
+                                          width: 65,
+                                          height: 65,
+                                          type: ImageType.emote,
+                                          boxFit: BoxFit.contain,
+                                        ),
+                                        Text(
+                                          e.emoji!.startsWith('[')
+                                              ? e.emoji!.substring(
+                                                  1, e.emoji!.length - 1)
+                                              : e.emoji!,
+                                          style: const TextStyle(fontSize: 12),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(6),
+                                    child: NetworkImgLayer(
+                                      boxFit: BoxFit.contain,
+                                      src: e.url!,
+                                      width: width,
+                                      height: height,
+                                      type: ImageType.emote,
+                                      quality: item.pkgType == 3 ? null : 80,
+                                    ),
                                   ),
                                 ),
                               ),
