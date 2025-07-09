@@ -715,24 +715,22 @@ class ReplyItemGrpc extends StatelessWidget {
         } else if (_timeRegExp.hasMatch(matchStr)) {
           matchStr = matchStr.replaceAll('：', ':');
           bool isValid = false;
-          if (Get.currentRoute.startsWith('/video')) {
-            try {
-              final ctr = Get.find<VideoDetailController>(
-                  tag: getTag?.call() ?? Get.arguments['heroTag']);
-              int duration = ctr.data.timeLength!;
-              List<int> split = matchStr
-                  .split(':')
-                  .reversed
-                  .map((item) => int.parse(item))
-                  .toList();
-              int seek = 0;
-              for (int i = 0; i < split.length; i++) {
-                seek += split[i] * pow(60, i).toInt();
-              }
-              isValid = seek * 1000 <= duration;
-            } catch (e) {
-              if (kDebugMode) debugPrint('failed to validate: $e');
+          try {
+            final ctr = Get.find<VideoDetailController>(
+                tag: getTag?.call() ?? Get.arguments['heroTag']);
+            int duration = ctr.data.timeLength!;
+            List<int> split = matchStr
+                .split(':')
+                .reversed
+                .map((item) => int.parse(item))
+                .toList();
+            int seek = 0;
+            for (int i = 0; i < split.length; i++) {
+              seek += split[i] * pow(60, i).toInt();
             }
+            isValid = seek * 1000 <= duration;
+          } catch (e) {
+            if (kDebugMode) debugPrint('failed to validate: $e');
           }
           spanChildren.add(
             TextSpan(

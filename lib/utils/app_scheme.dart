@@ -8,7 +8,6 @@ import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:PiliPlus/utils/url_utils.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:app_links/app_links.dart';
-import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
@@ -459,7 +458,7 @@ class PiliScheme {
             return false;
           default:
             if (!selfHandle) {
-              if (kDebugMode) debugPrint('$uri');
+              // if (kDebugMode) debugPrint('$uri');
               SmartDialog.showToast('未知路径:$uri，请截图反馈给开发者');
             }
             return false;
@@ -483,7 +482,7 @@ class PiliScheme {
           return true;
         }
         if (!selfHandle) {
-          if (kDebugMode) debugPrint('$uri');
+          // if (kDebugMode) debugPrint('$uri');
           SmartDialog.showToast('未知路径:$uri，请截图反馈给开发者');
         }
         return false;
@@ -583,11 +582,11 @@ class PiliScheme {
       launchURL();
       return false;
     }
-    final String? area =
-        pathSegments.first == 'mobile' || pathSegments.first == 'h5'
-            ? pathSegments.getOrNull(1)
-            : pathSegments.first;
-    if (kDebugMode) debugPrint('area: $area');
+    final first = pathSegments.first;
+    final String? area = const ['mobile', 'h5', 'v'].contains(first)
+        ? pathSegments.getOrNull(1)
+        : first;
+    // if (kDebugMode) debugPrint('area: $area');
     switch (area) {
       case 'note' || 'note-app':
         String? id = uri.queryParameters['cvid'];
@@ -643,7 +642,7 @@ class PiliScheme {
         return false;
       case 'bangumi':
         // www.bilibili.com/bangumi/play/ep{eid}?start_progress={offset}&thumb_up_dm_id={dmid}
-        if (kDebugMode) debugPrint('番剧');
+        // if (kDebugMode) debugPrint('番剧');
         bool hasMatch = PageUtils.viewPgcFromUri(
           path,
           progress: uri.queryParameters['start_progress'],
@@ -654,7 +653,7 @@ class PiliScheme {
         launchURL();
         return false;
       case 'video':
-        if (kDebugMode) debugPrint('投稿');
+        // if (kDebugMode) debugPrint('投稿');
         final Map<String, dynamic> map = IdUtils.matchAvorBv(input: path);
         if (map.isNotEmpty) {
           final queryParameters = uri.queryParameters;
@@ -685,7 +684,7 @@ class PiliScheme {
           launchURL();
           return false;
         }
-        if (kDebugMode) debugPrint('专栏');
+        // if (kDebugMode) debugPrint('专栏');
         String? id =
             RegExp(r'cv(\d+)', caseSensitive: false).firstMatch(path)?.group(1);
         if (id != null) {
@@ -702,7 +701,7 @@ class PiliScheme {
         launchURL();
         return false;
       case 'space':
-        if (kDebugMode) debugPrint('个人空间');
+        // if (kDebugMode) debugPrint('个人空间');
         String? mid = uriDigitRegExp.firstMatch(path)?.group(1);
         if (mid != null) {
           PageUtils.toDupNamed(
@@ -728,7 +727,7 @@ class PiliScheme {
         }
         launchURL();
         return false;
-      case 'topic-detail':
+      case 'topic' || 'topic-detail':
         String? id = uri.queryParameters['topic_id'];
         if (id != null) {
           PageUtils.toDupNamed(
@@ -791,7 +790,7 @@ class PiliScheme {
         }
         launchURL();
         return false;
-      case 'match' || 'v':
+      case 'match' || 'game':
         if (path.contains('match/data/detail') ||
             path.contains('match/singledata')) {
           String? cid = uriDigitRegExp.firstMatch(path)?.group(1);
