@@ -208,13 +208,8 @@ class _DynMentionPanelState extends State<DynMentionPanel> {
                           _controller.showBtn.value = false;
                           return;
                         }
-                        Get.back(result: _controller.mentionList!.toSet());
-                        for (var e in _controller.mentionList!) {
-                          e.checked = null;
-                        }
-                        _controller
-                          ..mentionList!.clear()
-                          ..showBtn.value = false;
+                        Get.back(result: _controller.mentionList);
+                        _controller.showBtn.value = false;
                       },
                       child: const Icon(Icons.check),
                     ),

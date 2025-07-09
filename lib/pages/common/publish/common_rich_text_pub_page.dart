@@ -248,10 +248,12 @@ abstract class CommonRichTextPubPageState<T extends CommonRichTextPubPage>
     if (res != null) {
       if (res is MentionItem) {
         _onInsertUser(res, fromClick);
-      } else if (res is Iterable<MentionItem>) {
+      } else if (res is Set<MentionItem>) {
         for (var e in res) {
+          e.checked = null;
           _onInsertUser(e, fromClick);
         }
+        res.clear();
       }
     }
     controller.restoreChatPanel();
