@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:PiliPlus/common/widgets/custom_sliver_persistent_header_delegate.dart';
 import 'package:PiliPlus/common/widgets/draggable_sheet/draggable_scrollable_sheet_topic.dart'
     as topic_sheet;
+import 'package:PiliPlus/common/widgets/loading_widget/http_error.dart';
 import 'package:PiliPlus/common/widgets/loading_widget/loading_widget.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models_new/dynamic/dyn_mention/group.dart';
@@ -162,7 +163,31 @@ class _DynMentionPanelState extends State<DynMentionPanel> {
           ),
         ),
         Expanded(
-          child: Obx(() => _buildBody(theme, _controller.loadingState.value)),
+          child: NotificationListener<ScrollNotification>(
+            onNotification: (notification) {
+              if (notification is UserScrollNotification) {
+                if (_controller.focusNode.hasFocus) {
+                  _controller.focusNode.unfocus();
+                }
+              } else if (notification is ScrollEndNotification) {
+                widget.callback?.call(notification.metrics.pixels);
+              }
+              return false;
+            },
+            child: CustomScrollView(
+              controller: widget.scrollController,
+              slivers: [
+                Obx(() => _buildBody(theme, _controller.loadingState.value)),
+                SliverToBoxAdapter(
+                  child: SizedBox(
+                    height: MediaQuery.paddingOf(context).bottom +
+                        MediaQuery.viewInsetsOf(context).bottom +
+                        80,
+                  ),
+                ),
+              ],
+            ),
+          ),
         ),
       ],
     );
@@ -171,73 +196,50 @@ class _DynMentionPanelState extends State<DynMentionPanel> {
   Widget _buildBody(
       ThemeData theme, LoadingState<List<MentionGroup>?> loadingState) {
     return switch (loadingState) {
-      Loading() => loadingWidget,
+      Loading() => SliverPadding(
+          padding: const EdgeInsets.only(top: 8),
+          sliver: linearLoading,
+        ),
       Success<List<MentionGroup>?>(:var response) =>
         response?.isNotEmpty == true
-            ? NotificationListener<ScrollNotification>(
-                onNotification: (notification) {
-                  if (notification is UserScrollNotification) {
-                    if (_controller.focusNode.hasFocus) {
-                      _controller.focusNode.unfocus();
-                    }
-                  } else if (notification is ScrollEndNotification) {
-                    widget.callback?.call(notification.metrics.pixels);
+            ? SliverMainAxisGroup(
+                slivers: response!.map((group) {
+                  if (group.items.isNullOrEmpty) {
+                    return const SliverToBoxAdapter();
                   }
-                  return false;
-                },
-                child: CustomScrollView(
-                  controller: widget.scrollController,
-                  slivers: [
-                    ...response!.map((group) {
-                      if (group.items!.isNullOrEmpty) {
-                        return const SliverToBoxAdapter();
-                      }
-                      return SliverMainAxisGroup(
-                        slivers: [
-                          SliverPersistentHeader(
-                            pinned: true,
-                            delegate: CustomSliverPersistentHeaderDelegate(
-                              extent: 40,
-                              bgColor: theme.colorScheme.surface,
-                              child: Container(
-                                height: 40,
-                                alignment: Alignment.centerLeft,
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 16),
-                                child: Text(group.groupName!),
-                              ),
-                            ),
+                  return SliverMainAxisGroup(
+                    slivers: [
+                      SliverPersistentHeader(
+                        pinned: true,
+                        delegate: CustomSliverPersistentHeaderDelegate(
+                          extent: 40,
+                          bgColor: theme.colorScheme.surface,
+                          child: Container(
+                            height: 40,
+                            alignment: Alignment.centerLeft,
+                            padding: const EdgeInsets.symmetric(horizontal: 16),
+                            child: Text(group.groupName!),
                           ),
-                          SliverList.builder(
-                            itemCount: group.items!.length,
-                            itemBuilder: (context, index) {
-                              return DynMentionItem(
-                                item: group.items![index],
-                                onTap: (e) => Get.back(result: e),
-                              );
-                            },
-                          ),
-                        ],
-                      );
-                    }),
-                    SliverToBoxAdapter(
-                      child: SizedBox(
-                        height: MediaQuery.paddingOf(context).bottom +
-                            MediaQuery.viewInsetsOf(context).bottom +
-                            80,
+                        ),
                       ),
-                    ),
-                  ],
-                ),
+                      SliverList.builder(
+                        itemCount: group.items!.length,
+                        itemBuilder: (context, index) {
+                          return DynMentionItem(
+                            item: group.items![index],
+                            onTap: (e) => Get.back(result: e),
+                          );
+                        },
+                      ),
+                    ],
+                  );
+                }).toList(),
               )
-            : _errWidget(),
-      Error(:var errMsg) => _errWidget(errMsg),
+            : HttpError(onReload: _controller.onReload),
+      Error(:var errMsg) => HttpError(
+          errMsg: errMsg,
+          onReload: _controller.onReload,
+        ),
     };
   }
-
-  Widget _errWidget([String? errMsg]) => scrollErrorWidget(
-        errMsg: errMsg,
-        controller: widget.scrollController,
-        onReload: _controller.onReload,
-      );
 }

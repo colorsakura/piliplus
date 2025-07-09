@@ -160,7 +160,19 @@ class _SelectTopicPanelState extends State<SelectTopicPanel> {
           ),
         ),
         Expanded(
-          child: Obx(() => _buildBody(theme, _controller.loadingState.value)),
+          child: NotificationListener<ScrollNotification>(
+            onNotification: (notification) {
+              if (notification is UserScrollNotification) {
+                if (_controller.focusNode.hasFocus) {
+                  _controller.focusNode.unfocus();
+                }
+              } else if (notification is ScrollEndNotification) {
+                widget.callback?.call(notification.metrics.pixels);
+              }
+              return false;
+            },
+            child: Obx(() => _buildBody(theme, _controller.loadingState.value)),
+          ),
         ),
       ],
     );
@@ -171,35 +183,23 @@ class _SelectTopicPanelState extends State<SelectTopicPanel> {
     return switch (loadingState) {
       Loading() => loadingWidget,
       Success<List<TopicItem>?>(:var response) => response?.isNotEmpty == true
-          ? NotificationListener<ScrollNotification>(
-              onNotification: (notification) {
-                if (notification is UserScrollNotification) {
-                  if (_controller.focusNode.hasFocus) {
-                    _controller.focusNode.unfocus();
-                  }
-                } else if (notification is ScrollEndNotification) {
-                  widget.callback?.call(notification.metrics.pixels);
-                }
-                return false;
-              },
-              child: ListView.builder(
-                padding: EdgeInsets.only(
-                  bottom: MediaQuery.paddingOf(context).bottom +
-                      MediaQuery.viewInsetsOf(context).bottom +
-                      80,
-                ),
-                controller: widget.scrollController,
-                itemBuilder: (context, index) {
-                  if (index == response.length - 1) {
-                    _controller.onLoadMore();
-                  }
-                  return DynTopicItem(
-                    item: response[index],
-                    onTap: (item) => Get.back(result: item),
-                  );
-                },
-                itemCount: response!.length,
+          ? ListView.builder(
+              padding: EdgeInsets.only(
+                bottom: MediaQuery.paddingOf(context).bottom +
+                    MediaQuery.viewInsetsOf(context).bottom +
+                    80,
               ),
+              controller: widget.scrollController,
+              itemBuilder: (context, index) {
+                if (index == response.length - 1) {
+                  _controller.onLoadMore();
+                }
+                return DynTopicItem(
+                  item: response[index],
+                  onTap: (item) => Get.back(result: item),
+                );
+              },
+              itemCount: response!.length,
             )
           : _errWidget(),
       Error(:var errMsg) => _errWidget(errMsg),

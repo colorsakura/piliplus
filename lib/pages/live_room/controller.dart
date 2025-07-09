@@ -255,7 +255,7 @@ class LiveRoomController extends GetxController {
   }
 
   void initDm(LiveDmInfoData info) {
-    if (info.hostList!.isNullOrEmpty) {
+    if (info.hostList.isNullOrEmpty) {
       return;
     }
     msgStream = LiveMessageStream(

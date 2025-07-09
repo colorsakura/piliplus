@@ -143,7 +143,7 @@ class _PgcPageState extends CommonPageState<PgcPage, PgcController>
                         child: TabBarView(
                             physics: const NeverScrollableScrollPhysics(),
                             children: response.map((item) {
-                              if (item.episodes!.isNullOrEmpty) {
+                              if (item.episodes.isNullOrEmpty) {
                                 return const SizedBox.shrink();
                               }
                               return ListView.builder(
