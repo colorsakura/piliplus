@@ -114,6 +114,10 @@ abstract class ReplyController<R> extends CommonListController<R, ReplyInfo> {
     String? hint;
     try {
       if (subjectControl != null && subjectControl!.hasRootText()) {
+        if (subjectControl!.inputDisable) {
+          SmartDialog.showToast(subjectControl!.rootText);
+          return;
+        }
         if ((subjectControl!.hasSwitcherType() &&
                 subjectControl!.switcherType != 1) ||
             subjectControl!.rootText.contains('可发评论')) {
