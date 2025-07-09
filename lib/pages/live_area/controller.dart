@@ -12,6 +12,7 @@ class LiveAreaController
   AccountService accountService = Get.find<AccountService>();
 
   late final isEditing = false.obs;
+  late final favInfo = {};
 
   @override
   void onInit() {

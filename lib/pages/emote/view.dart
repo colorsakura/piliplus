@@ -124,7 +124,7 @@ class _EmotePanelState extends State<EmotePanel>
                               type: MaterialType.transparency,
                               child: InkWell(
                                 borderRadius:
-                                    const BorderRadius.all(Radius.circular(8)),
+                                    const BorderRadius.all(Radius.circular(6)),
                                 onTap: () => widget.onChoose(
                                     item,
                                     isTextEmote

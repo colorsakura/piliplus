@@ -8,8 +8,6 @@ class AreaItem {
   int? areaType;
   int? tagType;
 
-  bool? isFav;
-
   AreaItem({
     this.id,
     this.name,

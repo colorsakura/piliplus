@@ -82,7 +82,7 @@ class _LiveEmotePanelState extends State<LiveEmotePanel>
                               type: MaterialType.transparency,
                               child: InkWell(
                                 borderRadius:
-                                    const BorderRadius.all(Radius.circular(8)),
+                                    const BorderRadius.all(Radius.circular(6)),
                                 onTap: () {
                                   if (item.pkgType == 3) {
                                     widget.onChoose(e, width, height);
