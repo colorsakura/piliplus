@@ -1,5 +1,6 @@
 import 'package:PiliPlus/models_new/history/history.dart';
-import 'package:PiliPlus/pages/common/multi_select_controller.dart';
+import 'package:PiliPlus/pages/common/multi_select_controller.dart'
+    show MultiSelectData;
 
 class HistoryItemModel with MultiSelectData {
   String? title;

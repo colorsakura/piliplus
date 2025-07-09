@@ -8,7 +8,6 @@ import 'package:PiliPlus/common/widgets/loading_widget/http_error.dart';
 import 'package:PiliPlus/common/widgets/loading_widget/loading_widget.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models_new/dynamic/dyn_mention/group.dart';
-import 'package:PiliPlus/models_new/dynamic/dyn_mention/item.dart';
 import 'package:PiliPlus/pages/dynamics_mention/controller.dart';
 import 'package:PiliPlus/pages/dynamics_mention/widgets/item.dart';
 import 'package:PiliPlus/utils/extension.dart';
@@ -26,12 +25,12 @@ class DynMentionPanel extends StatefulWidget {
   final ScrollController? scrollController;
   final ValueChanged<double>? callback;
 
-  static Future<MentionItem?> onDynMention(
+  static Future onDynMention(
     BuildContext context, {
     double offset = 0,
     ValueChanged<double>? callback,
   }) {
-    return showModalBottomSheet<MentionItem?>(
+    return showModalBottomSheet(
       context: Get.context!,
       useSafeArea: true,
       isScrollControlled: true,
@@ -89,6 +88,8 @@ class _DynMentionPanelState extends State<DynMentionPanel> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final padding = MediaQuery.paddingOf(context).bottom;
+    final viewInset = MediaQuery.viewInsetsOf(context).bottom;
     return Column(
       children: [
         SizedBox(
@@ -163,30 +164,64 @@ class _DynMentionPanelState extends State<DynMentionPanel> {
           ),
         ),
         Expanded(
-          child: NotificationListener<ScrollNotification>(
-            onNotification: (notification) {
-              if (notification is UserScrollNotification) {
-                if (_controller.focusNode.hasFocus) {
-                  _controller.focusNode.unfocus();
-                }
-              } else if (notification is ScrollEndNotification) {
-                widget.callback?.call(notification.metrics.pixels);
-              }
-              return false;
-            },
-            child: CustomScrollView(
-              controller: widget.scrollController,
-              slivers: [
-                Obx(() => _buildBody(theme, _controller.loadingState.value)),
-                SliverToBoxAdapter(
-                  child: SizedBox(
-                    height: MediaQuery.paddingOf(context).bottom +
-                        MediaQuery.viewInsetsOf(context).bottom +
-                        80,
-                  ),
+          child: Stack(
+            clipBehavior: Clip.none,
+            children: [
+              NotificationListener<ScrollNotification>(
+                onNotification: (notification) {
+                  if (notification is UserScrollNotification) {
+                    if (_controller.focusNode.hasFocus) {
+                      _controller.focusNode.unfocus();
+                    }
+                  } else if (notification is ScrollEndNotification) {
+                    widget.callback?.call(notification.metrics.pixels);
+                  }
+                  return false;
+                },
+                child: CustomScrollView(
+                  controller: widget.scrollController,
+                  slivers: [
+                    Obx(() =>
+                        _buildBody(theme, _controller.loadingState.value)),
+                    SliverToBoxAdapter(
+                      child: SizedBox(
+                        height: padding + viewInset + 80,
+                      ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+              Obx(() {
+                return Positioned(
+                  right: 16,
+                  bottom: padding +
+                      16 +
+                      (_controller.showBtn.value ? viewInset : 0),
+                  child: AnimatedSlide(
+                    offset: _controller.showBtn.value
+                        ? Offset.zero
+                        : const Offset(0, 3),
+                    duration: const Duration(milliseconds: 120),
+                    child: FloatingActionButton(
+                      onPressed: () {
+                        if (_controller.mentionList.isNullOrEmpty) {
+                          _controller.showBtn.value = false;
+                          return;
+                        }
+                        Get.back(result: _controller.mentionList!.toSet());
+                        for (var e in _controller.mentionList!) {
+                          e.checked = null;
+                        }
+                        _controller
+                          ..mentionList!.clear()
+                          ..showBtn.value = false;
+                      },
+                      child: const Icon(Icons.check),
+                    ),
+                  ),
+                );
+              }),
+            ],
           ),
         ),
       ],
@@ -200,42 +235,44 @@ class _DynMentionPanelState extends State<DynMentionPanel> {
           padding: const EdgeInsets.only(top: 8),
           sliver: linearLoading,
         ),
-      Success<List<MentionGroup>?>(:var response) =>
-        response?.isNotEmpty == true
-            ? SliverMainAxisGroup(
-                slivers: response!.map((group) {
-                  if (group.items.isNullOrEmpty) {
-                    return const SliverToBoxAdapter();
-                  }
-                  return SliverMainAxisGroup(
-                    slivers: [
-                      SliverPersistentHeader(
-                        pinned: true,
-                        delegate: CustomSliverPersistentHeaderDelegate(
-                          extent: 40,
-                          bgColor: theme.colorScheme.surface,
-                          child: Container(
-                            height: 40,
-                            alignment: Alignment.centerLeft,
-                            padding: const EdgeInsets.symmetric(horizontal: 16),
-                            child: Text(group.groupName!),
-                          ),
+      Success<List<MentionGroup>?>(:var response) => response?.isNotEmpty ==
+              true
+          ? SliverMainAxisGroup(
+              slivers: response!.map((group) {
+                if (group.items.isNullOrEmpty) {
+                  return const SliverToBoxAdapter();
+                }
+                return SliverMainAxisGroup(
+                  slivers: [
+                    SliverPersistentHeader(
+                      pinned: true,
+                      delegate: CustomSliverPersistentHeaderDelegate(
+                        extent: 40,
+                        bgColor: theme.colorScheme.surface,
+                        child: Container(
+                          height: 40,
+                          alignment: Alignment.centerLeft,
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          child: Text(group.groupName!),
                         ),
                       ),
-                      SliverList.builder(
-                        itemCount: group.items!.length,
-                        itemBuilder: (context, index) {
-                          return DynMentionItem(
-                            item: group.items![index],
-                            onTap: (e) => Get.back(result: e),
-                          );
-                        },
-                      ),
-                    ],
-                  );
-                }).toList(),
-              )
-            : HttpError(onReload: _controller.onReload),
+                    ),
+                    SliverList.builder(
+                      itemCount: group.items!.length,
+                      itemBuilder: (context, index) {
+                        final item = group.items![index];
+                        return DynMentionItem(
+                          item: item,
+                          onTap: () => Get.back(result: item),
+                          onCheck: (value) => _controller.onCheck(value, item),
+                        );
+                      },
+                    ),
+                  ],
+                );
+              }).toList(),
+            )
+          : HttpError(onReload: _controller.onReload),
       Error(:var errMsg) => HttpError(
           errMsg: errMsg,
           onReload: _controller.onReload,

@@ -240,22 +240,31 @@ abstract class CommonRichTextPubPageState<T extends CommonRichTextPubPage>
   double _mentionOffset = 0;
   Future<void> onMention([bool fromClick = false]) async {
     controller.keepChatPanel();
-    await DynMentionPanel.onDynMention(
+    final res = await DynMentionPanel.onDynMention(
       context,
       offset: _mentionOffset,
       callback: (offset) => _mentionOffset = offset,
-    ).then((MentionItem? res) {
-      if (res != null) {
-        onInsertText(
-          '@${res.name} ',
-          RichTextType.at,
-          rawText: res.name,
-          id: res.uid,
-          fromClick: fromClick,
-        );
+    );
+    if (res != null) {
+      if (res is MentionItem) {
+        _onInsertUser(res, fromClick);
+      } else if (res is Iterable<MentionItem>) {
+        for (var e in res) {
+          _onInsertUser(e, fromClick);
+        }
       }
-    });
+    }
     controller.restoreChatPanel();
+  }
+
+  void _onInsertUser(MentionItem e, bool fromClick) {
+    onInsertText(
+      '@${e.name} ',
+      RichTextType.at,
+      rawText: e.name,
+      id: e.uid,
+      fromClick: fromClick,
+    );
   }
 
   void onInsertText(

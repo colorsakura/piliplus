@@ -11,7 +11,8 @@ import 'package:PiliPlus/models_new/fav/fav_pgc/rights.dart';
 import 'package:PiliPlus/models_new/fav/fav_pgc/section.dart';
 import 'package:PiliPlus/models_new/fav/fav_pgc/series.dart';
 import 'package:PiliPlus/models_new/fav/fav_pgc/stat.dart';
-import 'package:PiliPlus/pages/common/multi_select_controller.dart';
+import 'package:PiliPlus/pages/common/multi_select_controller.dart'
+    show MultiSelectData;
 
 class FavPgcItemModel with MultiSelectData {
   int? seasonId;

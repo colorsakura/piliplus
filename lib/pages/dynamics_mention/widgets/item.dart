@@ -9,10 +9,12 @@ class DynMentionItem extends StatelessWidget {
     super.key,
     required this.item,
     required this.onTap,
+    required this.onCheck,
   });
 
   final MentionItem item;
-  final ValueChanged<MentionItem> onTap;
+  final VoidCallback onTap;
+  final ValueChanged<bool?> onCheck;
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +22,7 @@ class DynMentionItem extends StatelessWidget {
       type: MaterialType.transparency,
       child: ListTile(
         dense: true,
-        onTap: () => onTap(item),
+        onTap: onTap,
         leading: NetworkImgLayer(
           src: item.face,
           width: 42,
@@ -34,6 +36,15 @@ class DynMentionItem extends StatelessWidget {
         subtitle: Text(
           '${NumUtil.numFormat(item.fans)}粉丝',
           style: TextStyle(color: Theme.of(context).colorScheme.outline),
+        ),
+        trailing: Checkbox(
+          tristate: false,
+          value: item.checked ?? false,
+          onChanged: (value) {
+            item.checked = value;
+            (context as Element).markNeedsBuild();
+            onCheck(value);
+          },
         ),
       ),
     );

@@ -1,11 +1,11 @@
-import 'package:PiliPlus/pages/common/multi_select_controller.dart';
-
 import 'package:PiliPlus/models_new/later/bangumi.dart';
 import 'package:PiliPlus/models_new/later/dimension.dart';
 import 'package:PiliPlus/models_new/later/owner.dart';
 import 'package:PiliPlus/models_new/later/page.dart';
 import 'package:PiliPlus/models_new/later/rights.dart';
 import 'package:PiliPlus/models_new/later/stat.dart';
+import 'package:PiliPlus/pages/common/multi_select_controller.dart'
+    show MultiSelectData;
 
 class LaterItemModel with MultiSelectData {
   int? aid;

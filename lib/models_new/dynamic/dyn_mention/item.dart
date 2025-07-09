@@ -1,4 +1,7 @@
-class MentionItem {
+import 'package:PiliPlus/pages/common/multi_select_controller.dart'
+    show MultiSelectData;
+
+class MentionItem with MultiSelectData {
   String? face;
   int? fans;
   String? name;
