@@ -83,7 +83,7 @@ class _RepostPanelState extends CommonRichTextPubPageState<RepostPanel> {
           mainAxisSize: _isMax ? MainAxisSize.max : MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _isMax ? const SizedBox(height: 16) : const SizedBox(height: 10),
+            if (!_isMax) const SizedBox(height: 10),
             _buildAppBar(theme),
             if (_isMax) ...[
               Expanded(
@@ -237,7 +237,7 @@ class _RepostPanelState extends CommonRichTextPubPageState<RepostPanel> {
                   borderSide: BorderSide.none,
                   gapPadding: 0,
                 ),
-                contentPadding: const EdgeInsets.symmetric(vertical: 10),
+                contentPadding: EdgeInsets.zero,
               ),
               // inputFormatters: [LengthLimitingTextInputFormatter(1000)],
             ),
@@ -267,11 +267,10 @@ class _RepostPanelState extends CommonRichTextPubPageState<RepostPanel> {
           ],
         )
       : Container(
-          height: 34,
-          padding: const EdgeInsets.symmetric(horizontal: 16),
+          height: 66,
+          padding: const EdgeInsets.all(16),
           child: Stack(
             clipBehavior: Clip.none,
-            alignment: Alignment.center,
             children: [
               Align(
                 alignment: Alignment.centerLeft,
@@ -367,15 +366,15 @@ class _RepostPanelState extends CommonRichTextPubPageState<RepostPanel> {
         {"raw_text": ":", "type": 1, "biz_id": ""},
         ...item.modules.moduleDynamic!.desc!.richTextNodes!.map(
           (e) {
-            int? type;
-            String? bizId;
+            int type;
+            String bizId;
             switch (e.type) {
               case 'RICH_TEXT_NODE_TYPE_EMOJI':
                 type = 9;
                 bizId = '';
               case 'RICH_TEXT_NODE_TYPE_AT':
                 type = 2;
-                bizId = e.rid;
+                bizId = e.rid ?? '';
               case 'RICH_TEXT_NODE_TYPE_TEXT':
               default:
                 type = 1;
