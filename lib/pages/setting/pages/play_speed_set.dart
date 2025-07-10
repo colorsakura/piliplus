@@ -85,7 +85,10 @@ class _PlaySpeedPageState extends State<PlaySpeedPage> {
           actions: [
             TextButton(
               onPressed: Get.back,
-              child: const Text('取消'),
+              child: Text(
+                '取消',
+                style: TextStyle(color: Theme.of(context).colorScheme.outline),
+              ),
             ),
             TextButton(
               onPressed: () {

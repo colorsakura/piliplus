@@ -20,7 +20,13 @@ class HistoryBaseController extends GetxController {
           title: const Text('提示'),
           content: const Text('啊叻？你要清空历史记录功能吗？'),
           actions: [
-            TextButton(onPressed: Get.back, child: const Text('取消')),
+            TextButton(
+              onPressed: Get.back,
+              child: Text(
+                '取消',
+                style: TextStyle(color: Theme.of(context).colorScheme.outline),
+              ),
+            ),
             TextButton(
               onPressed: () async {
                 Get.back();
@@ -33,7 +39,7 @@ class HistoryBaseController extends GetxController {
                 }
               },
               child: const Text('确认清空'),
-            )
+            ),
           ],
         );
       },
@@ -50,7 +56,13 @@ class HistoryBaseController extends GetxController {
           content:
               Text(!pauseStatus.value ? '啊叻？你要暂停历史记录功能吗？' : '啊叻？要恢复历史记录功能吗？'),
           actions: [
-            TextButton(onPressed: Get.back, child: const Text('取消')),
+            TextButton(
+              onPressed: Get.back,
+              child: Text(
+                '取消',
+                style: TextStyle(color: Theme.of(context).colorScheme.outline),
+              ),
+            ),
             TextButton(
               onPressed: () async {
                 SmartDialog.showLoading(msg: '请求中');
@@ -66,7 +78,7 @@ class HistoryBaseController extends GetxController {
                 Get.back();
               },
               child: Text(!pauseStatus.value ? '确认暂停' : '确认恢复'),
-            )
+            ),
           ],
         );
       },

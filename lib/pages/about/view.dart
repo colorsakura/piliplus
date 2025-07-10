@@ -60,6 +60,7 @@ class _AboutPageState extends State<AboutPage> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    const style = TextStyle(fontSize: 15);
     final outline = theme.colorScheme.outline;
     final subTitleStyle = TextStyle(fontSize: 13, color: outline);
     return Scaffold(
@@ -222,7 +223,8 @@ Commit Hash: ${BuildConfig.commitHash}''',
                 clipBehavior: Clip.hardEdge,
                 children: [
                   ListTile(
-                    title: const Text('导出'),
+                    dense: true,
+                    title: const Text('导出', style: style),
                     onTap: () {
                       Get.back();
                       String res = jsonEncode(Accounts.account.toMap());
@@ -230,7 +232,8 @@ Commit Hash: ${BuildConfig.commitHash}''',
                     },
                   ),
                   ListTile(
-                    title: const Text('导入'),
+                    dense: true,
+                    title: const Text('导入', style: style),
                     onTap: () async {
                       Get.back();
                       ClipboardData? data =
@@ -302,7 +305,8 @@ Commit Hash: ${BuildConfig.commitHash}''',
                   title: const Text('导入/导出设置'),
                   children: [
                     ListTile(
-                      title: const Text('导出设置至剪贴板'),
+                      dense: true,
+                      title: const Text('导出设置至剪贴板', style: style),
                       onTap: () {
                         Get.back();
                         String data = GStorage.exportAllSettings();
@@ -310,7 +314,8 @@ Commit Hash: ${BuildConfig.commitHash}''',
                       },
                     ),
                     ListTile(
-                      title: const Text('从剪贴板导入设置'),
+                      dense: true,
+                      title: const Text('从剪贴板导入设置', style: style),
                       onTap: () async {
                         Get.back();
                         ClipboardData? data =
@@ -368,16 +373,13 @@ Commit Hash: ${BuildConfig.commitHash}''',
             onTap: () => showDialog(
               context: context,
               builder: (context) {
-                return AlertDialog(
-                  title: const Text('重置所有设置'),
-                  content: const Text('是否重置所有设置？'),
-                  actions: [
-                    TextButton(
-                      onPressed: Get.back,
-                      child: const Text('取消'),
-                    ),
-                    TextButton(
-                      onPressed: () async {
+                return SimpleDialog(
+                  clipBehavior: Clip.hardEdge,
+                  title: const Text('是否重置所有设置？'),
+                  children: [
+                    ListTile(
+                      dense: true,
+                      onTap: () async {
                         Get.back();
                         await Future.wait([
                           GStorage.setting.clear(),
@@ -385,10 +387,11 @@ Commit Hash: ${BuildConfig.commitHash}''',
                         ]);
                         SmartDialog.showToast('重置成功');
                       },
-                      child: const Text('重置可导出的设置'),
+                      title: const Text('重置可导出的设置', style: style),
                     ),
-                    TextButton(
-                      onPressed: () async {
+                    ListTile(
+                      dense: true,
+                      onTap: () async {
                         Get.back();
                         await Future.wait([
                           GStorage.userInfo.clear(),
@@ -400,7 +403,7 @@ Commit Hash: ${BuildConfig.commitHash}''',
                         ]);
                         SmartDialog.showToast('重置成功');
                       },
-                      child: const Text('重置所有数据（含登录信息）'),
+                      title: const Text('重置所有数据（含登录信息）', style: style),
                     ),
                   ],
                 );
