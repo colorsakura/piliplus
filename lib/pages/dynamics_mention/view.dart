@@ -243,6 +243,7 @@ class _DynMentionPanelState extends State<DynMentionPanel> {
                       pinned: true,
                       delegate: CustomSliverPersistentHeaderDelegate(
                         extent: 40,
+                        needRebuild: true,
                         bgColor: theme.colorScheme.surface,
                         child: Container(
                           height: 40,

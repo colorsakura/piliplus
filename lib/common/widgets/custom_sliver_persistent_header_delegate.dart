@@ -6,12 +6,14 @@ class CustomSliverPersistentHeaderDelegate
     required this.child,
     required this.bgColor,
     double extent = 45,
+    this.needRebuild,
   })  : _minExtent = extent,
         _maxExtent = extent;
   final double _minExtent;
   final double _maxExtent;
   final Widget child;
   final Color? bgColor;
+  final bool? needRebuild;
 
   @override
   Widget build(
@@ -44,8 +46,8 @@ class CustomSliverPersistentHeaderDelegate
   double get minExtent => _minExtent;
 
   @override
-  bool shouldRebuild(
-      covariant CustomSliverPersistentHeaderDelegate oldDelegate) {
-    return oldDelegate.bgColor != bgColor;
+  bool shouldRebuild(CustomSliverPersistentHeaderDelegate oldDelegate) {
+    return oldDelegate.bgColor != bgColor ||
+        (needRebuild == true && oldDelegate.child != child);
   }
 }
