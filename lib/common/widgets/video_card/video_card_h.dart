@@ -38,10 +38,20 @@ class VideoCardH extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String type = 'video';
+    String? badge;
     if (videoItem case SearchVideoItemModel item) {
       var typeOrNull = item.type;
       if (typeOrNull?.isNotEmpty == true) {
         type = typeOrNull!;
+      }
+      if (item.isUnionVideo == 1) {
+        badge = '合作';
+      }
+    } else if (videoItem case HotVideoItemModel item) {
+      if (item.isCooperation == 1) {
+        badge = '合作';
+      } else {
+        badge = item.pgcLabel;
       }
     }
     return Material(
@@ -123,9 +133,9 @@ class VideoCardH extends StatelessWidget {
                               width: maxWidth,
                               height: maxHeight,
                             ),
-                            if (videoItem case HotVideoItemModel item)
+                            if (badge != null)
                               PBadge(
-                                text: item.pgcLabel,
+                                text: badge,
                                 top: 6.0,
                                 right: 6.0,
                               ),

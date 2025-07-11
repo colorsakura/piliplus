@@ -101,6 +101,12 @@ class VideoCardHLater extends StatelessWidget {
                             right: 6.0,
                             type: PBadgeType.error,
                           )
+                        else if (videoItem.rights?.isCooperation == 1)
+                          const PBadge(
+                            text: '合作',
+                            top: 6.0,
+                            right: 6.0,
+                          )
                         else if (videoItem.pgcLabel != null)
                           PBadge(
                             text: videoItem.pgcLabel,

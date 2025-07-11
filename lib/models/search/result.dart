@@ -75,6 +75,7 @@ class SearchVideoItemModel extends BaseVideoItemModel {
   String? arcurl;
   String? tag;
   int? ctime;
+  int? isUnionVideo;
 
   List<({bool isEm, String text})>? titleList;
 
@@ -93,6 +94,7 @@ class SearchVideoItemModel extends BaseVideoItemModel {
     duration = DurationUtil.parseDuration(json['duration']);
     owner = SearchOwner.fromJson(json);
     stat = SearchStat.fromJson(json);
+    isUnionVideo = json['is_union_video'];
   }
 }
 

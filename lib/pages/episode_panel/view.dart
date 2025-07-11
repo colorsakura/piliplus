@@ -340,6 +340,7 @@ class _EpisodePanelState extends CommonSlidePageState<EpisodePanel> {
     int? pubdate;
     int? view;
     int? danmaku;
+    bool? isCharging;
 
     switch (episode) {
       case Part part:
@@ -356,6 +357,9 @@ class _EpisodePanelState extends CommonSlidePageState<EpisodePanel> {
         pubdate = item.arc?.pubdate;
         view = item.arc?.stat?.view;
         danmaku = item.arc?.stat?.danmaku;
+        if (item.attribute == 8) {
+          isCharging = true;
+        }
         break;
       case pgc.EpisodeItem item:
         bvid = item.bvid;
@@ -445,7 +449,14 @@ class _EpisodePanelState extends CommonSlidePageState<EpisodePanel> {
                                 bottom: 6.0,
                                 type: PBadgeType.gray,
                               ),
-                            if (episode.badge != null)
+                            if (isCharging == true)
+                              const PBadge(
+                                text: '充电专属',
+                                top: 6,
+                                right: 6,
+                                type: PBadgeType.error,
+                              )
+                            else if (episode.badge != null)
                               PBadge(
                                 text: episode.badge,
                                 top: 6,

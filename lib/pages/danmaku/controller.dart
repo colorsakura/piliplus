@@ -57,6 +57,9 @@ class PlDanmakuController {
 
         final shouldFilter = plPlayerController.filters.count != 0;
         for (final element in data.elems) {
+          if (element.mode == 7 && !plPlayerController.showSpecialDanmaku) {
+            continue;
+          }
           if (accountService.isLogin.value) {
             element.isSelf = element.midHash == plPlayerController.midHash;
           }

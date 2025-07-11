@@ -17,8 +17,8 @@ class HotVideoItemModel extends BaseRecVideoItemModel with MultiSelectData {
   String? pubLocation;
   String? pgcLabel;
   String? redirectUrl;
-
   num? progress;
+  int? isCooperation;
 
   HotVideoItemModel.fromJson(Map<String, dynamic> json) {
     aid = json["aid"];
@@ -47,6 +47,7 @@ class HotVideoItemModel extends BaseRecVideoItemModel with MultiSelectData {
     redirectUrl = json['redirect_url'];
     // uri = json['uri']; // 仅在稍后再看存在
     progress = json['progress'];
+    isCooperation = json['rights']?['is_cooperation'];
   }
 
   // @override
