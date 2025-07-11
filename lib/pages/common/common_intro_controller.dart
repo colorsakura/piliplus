@@ -14,7 +14,7 @@ abstract class CommonIntroController extends GetxController {
   // 是否点赞
   RxBool hasLike = false.obs;
   // 投币数量
-  final RxInt coinNum = 0.obs;
+  final RxNum coinNum = RxNum(0);
   // 是否投币
   bool get hasCoin => coinNum.value != 0;
   // 是否收藏

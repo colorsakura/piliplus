@@ -1,5 +1,5 @@
 class PgcLCF {
-  int? coinNumber;
+  num? coinNumber;
   int? favorite;
   int? isOriginal;
   int? like;

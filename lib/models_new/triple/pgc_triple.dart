@@ -1,6 +1,6 @@
 class PgcTriple {
-  int? coin;
-  int? coinNumber;
+  num? coin;
+  num? coinNumber;
   int? favorite;
   int? fmid;
   int? follow;

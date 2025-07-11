@@ -5,7 +5,7 @@ class Stats {
   int? dislike;
   int? reply;
   int? share;
-  int? coin;
+  num? coin;
   int? dynam1c;
 
   Stats({
@@ -26,7 +26,7 @@ class Stats {
         dislike: json['dislike'] as int?,
         reply: json['reply'] as int?,
         share: json['share'] as int?,
-        coin: json['coin'] as int?,
+        coin: json['coin'] as num?,
         dynam1c: json['dynamic'] as int?,
       );
 }

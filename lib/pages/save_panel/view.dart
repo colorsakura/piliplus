@@ -368,10 +368,9 @@ class _SavePanelState extends State<SavePanel> {
                                           if (pubdate != null) ...[
                                             const Spacer(),
                                             Text(
-                                              DateTime.fromMillisecondsSinceEpoch(
-                                                      pubdate! * 1000)
-                                                  .toString()
-                                                  .substring(0, 19),
+                                              DateUtil.format(pubdate,
+                                                  format:
+                                                      DateUtil.longFormatDs),
                                               style: TextStyle(
                                                 color:
                                                     theme.colorScheme.outline,

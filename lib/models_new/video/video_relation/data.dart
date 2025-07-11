@@ -4,7 +4,7 @@ class VideoRelation {
   bool? seasonFav;
   bool? like;
   bool? dislike;
-  int? coin;
+  num? coin;
 
   VideoRelation({
     this.attention,
@@ -21,6 +21,6 @@ class VideoRelation {
         seasonFav: json['season_fav'] as bool?,
         like: json['like'] as bool?,
         dislike: json['dislike'] as bool?,
-        coin: json['coin'] as int?,
+        coin: json['coin'] as num?,
       );
 }

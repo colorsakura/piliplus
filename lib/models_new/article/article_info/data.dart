@@ -5,7 +5,7 @@ class ArticleInfoData {
   int? like;
   bool? attention;
   bool? favorite;
-  int? coin;
+  num? coin;
   Stats? stats;
   String? title;
   String? bannerUrl;
@@ -57,7 +57,7 @@ class ArticleInfoData {
         like: json['like'] as int?,
         attention: json['attention'] as bool?,
         favorite: json['favorite'] as bool?,
-        coin: json['coin'] as int?,
+        coin: json['coin'] as num?,
         stats: json['stats'] == null
             ? null
             : Stats.fromJson(json['stats'] as Map<String, dynamic>),

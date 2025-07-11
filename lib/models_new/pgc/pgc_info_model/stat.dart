@@ -1,5 +1,5 @@
 class Stat {
-  int? coins;
+  num? coins;
   int? danmakus;
   int? favorite;
   int? favorites;

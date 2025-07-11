@@ -131,6 +131,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 padding: const EdgeInsets.symmetric(vertical: 5),
                 child: ClipOval(
                   child: CachedNetworkImage(
+                    width: 55,
+                    height: 55,
                     imageUrl: ImageUtil.thumbnailUrl(response.face),
                   ),
                 ),
@@ -190,11 +192,11 @@ class _EditProfilePageState extends State<EditProfilePage> {
             _item(
               theme: theme,
               title: '个性签名',
-              text: response.sign.isNullOrEmpty ? '无' : response.sign!,
+              text: response.sign,
               onTap: () => _editDialog(
                 type: ProfileType.sign,
                 title: '个性签名',
-                text: response.sign!,
+                text: response.sign ?? '',
               ),
             ),
             divider1,
@@ -273,6 +275,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
     required String text,
   }) {
     _textController.text = text;
+    final lines = type == ProfileType.uname ? 1 : 4;
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -281,8 +284,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
           title: Text('修改$title'),
           content: TextField(
             controller: _textController,
-            minLines: type == ProfileType.uname ? 1 : 4,
-            maxLines: type == ProfileType.uname ? 1 : 4,
+            minLines: lines,
+            maxLines: lines,
             autofocus: true,
             style: const TextStyle(fontSize: 14),
             textInputAction:
@@ -427,18 +430,20 @@ class _EditProfilePageState extends State<EditProfilePage> {
           fontWeight: FontWeight.normal,
         ),
       ),
-      trailing: Row(
-        mainAxisSize: MainAxisSize.min,
+      title: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
         children: [
           if (text != null)
-            Text(
-              text,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.normal,
-                color: theme.colorScheme.outline,
+            Flexible(
+              child: Text(
+                text,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.normal,
+                  color: theme.colorScheme.outline,
+                ),
               ),
             )
           else if (widget != null)
@@ -448,6 +453,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
               Icons.keyboard_arrow_right,
               color: theme.colorScheme.outline,
             )
+          else
+            const SizedBox(width: 24)
         ],
       ),
     );

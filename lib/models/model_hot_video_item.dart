@@ -61,7 +61,7 @@ class HotVideoItemModel extends BaseRecVideoItemModel with MultiSelectData {
 class HotStat extends Stat {
   int? reply;
   int? favorite;
-  int? coin;
+  num? coin;
   int? share;
   int? nowRank;
   int? hisRank;

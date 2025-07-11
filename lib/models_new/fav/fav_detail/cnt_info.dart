@@ -6,7 +6,7 @@ class CntInfo {
   int? share;
   int? reply;
   int? danmaku;
-  int? coin;
+  num? coin;
   int? vt;
   int? playSwitch;
   String? viewText1;
@@ -33,7 +33,7 @@ class CntInfo {
         share: json['share'] as int?,
         reply: json['reply'] as int?,
         danmaku: json['danmaku'] as int?,
-        coin: json['coin'] as int?,
+        coin: json['coin'] as num?,
         vt: json['vt'] as int?,
         playSwitch: json['play_switch'] as int?,
         viewText1: json['view_text_1'] as String?,

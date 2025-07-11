@@ -4,7 +4,7 @@ class Stat {
   int? danmaku;
   int? reply;
   int? favorite;
-  int? coin;
+  num? coin;
   int? share;
   int? nowRank;
   int? hisRank;
@@ -35,7 +35,7 @@ class Stat {
         danmaku: json['danmaku'] as int?,
         reply: json['reply'] as int?,
         favorite: json['favorite'] as int?,
-        coin: json['coin'] as int?,
+        coin: json['coin'] as num?,
         share: json['share'] as int?,
         nowRank: json['now_rank'] as int?,
         hisRank: json['his_rank'] as int?,

@@ -238,7 +238,8 @@ class ReplyItemGrpc extends StatelessWidget {
                     children: <Widget>[
                       Text(
                         replyLevel == 0
-                            ? DateUtil.longFormatDs.format(DateTime.now())
+                            ? DateUtil.format(replyItem.ctime.toInt(),
+                                format: DateUtil.longFormatDs)
                             : DateUtil.dateFormat(replyItem.ctime.toInt()),
                         style: TextStyle(
                           fontSize: theme.textTheme.labelSmall!.fontSize,

@@ -21,7 +21,7 @@ class SpaceAudioItem {
   int? limit;
   int? activityId;
   String? limitdesc;
-  int? coinNum;
+  num? coinNum;
   int? ctime;
   Statistic? statistic;
   dynamic vipInfo;
@@ -78,7 +78,7 @@ class SpaceAudioItem {
         limit: json['limit'] as int?,
         activityId: json['activityId'] as int?,
         limitdesc: json['limitdesc'] as String?,
-        coinNum: json['coin_num'] as int?,
+        coinNum: json['coin_num'] as num?,
         ctime: json['ctime'] as int?,
         statistic: json['statistic'] == null
             ? null

@@ -2,7 +2,7 @@ class AccountMyInfoData {
   int? mid;
   String? name;
   String? sign;
-  int? coins;
+  num? coins;
   String? birthday;
   String? face;
   int? faceNftNew;
@@ -46,7 +46,7 @@ class AccountMyInfoData {
         mid: json['mid'] as int?,
         name: json['name'] as String?,
         sign: json['sign'] as String?,
-        coins: json['coins'] as int?,
+        coins: json['coins'] as num?,
         birthday: json['birthday'] as String?,
         face: json['face'] as String?,
         faceNftNew: json['face_nft_new'] as int?,
