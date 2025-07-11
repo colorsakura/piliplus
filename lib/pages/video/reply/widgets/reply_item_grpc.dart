@@ -290,7 +290,6 @@ class ReplyItemGrpc extends StatelessWidget {
           ),
         ),
         if (replyItem.content.pictures.isNotEmpty) ...[
-          const SizedBox(height: 4),
           Padding(
             padding: padding,
             child: LayoutBuilder(
@@ -309,6 +308,7 @@ class ReplyItemGrpc extends StatelessWidget {
               ),
             ),
           ),
+          const SizedBox(height: 4),
         ],
         if (replyLevel != 0) ...[
           const SizedBox(height: 4),
