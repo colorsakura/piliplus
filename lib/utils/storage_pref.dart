@@ -722,4 +722,7 @@ class Pref {
 
   static bool get directExitOnBack =>
       _setting.get(SettingBoxKey.directExitOnBack, defaultValue: false);
+
+  static bool get historyPause =>
+      _localCache.get(LocalCacheKey.historyPause, defaultValue: false);
 }

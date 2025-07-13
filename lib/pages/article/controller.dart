@@ -5,6 +5,7 @@ import 'package:PiliPlus/http/dynamics.dart';
 import 'package:PiliPlus/http/fav.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/http/video.dart';
+import 'package:PiliPlus/models/common/account_type.dart';
 import 'package:PiliPlus/models/dynamics/article_content_model.dart'
     show ArticleContentModel;
 import 'package:PiliPlus/models/dynamics/result.dart';
@@ -12,7 +13,7 @@ import 'package:PiliPlus/models/model_avatar.dart';
 import 'package:PiliPlus/models_new/article/article_info/data.dart';
 import 'package:PiliPlus/models_new/article/article_view/data.dart';
 import 'package:PiliPlus/pages/common/reply_controller.dart';
-import 'package:PiliPlus/pages/mine/controller.dart';
+import 'package:PiliPlus/utils/accounts.dart';
 import 'package:PiliPlus/utils/storage_pref.dart';
 import 'package:PiliPlus/utils/url_utils.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -161,7 +162,7 @@ class ArticleController extends ReplyController<MainListReply> {
     }
     if (isLoaded.value) {
       queryData();
-      if (accountService.isLogin.value && !MineController.anonymity.value) {
+      if (Accounts.get(AccountType.heartbeat).isLogin && !Pref.historyPause) {
         VideoHttp.historyReport(aid: commentId, type: 5);
       }
     }

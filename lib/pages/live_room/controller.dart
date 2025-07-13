@@ -5,12 +5,12 @@ import 'package:PiliPlus/common/widgets/text_field/controller.dart';
 import 'package:PiliPlus/http/constants.dart';
 import 'package:PiliPlus/http/live.dart';
 import 'package:PiliPlus/http/video.dart';
+import 'package:PiliPlus/models/common/account_type.dart';
 import 'package:PiliPlus/models/common/video/live_quality.dart';
 import 'package:PiliPlus/models_new/live/live_dm_info/data.dart';
 import 'package:PiliPlus/models_new/live/live_room_info_h5/data.dart';
 import 'package:PiliPlus/models_new/live/live_room_play_info/codec.dart';
 import 'package:PiliPlus/models_new/live/live_room_play_info/data.dart';
-import 'package:PiliPlus/pages/mine/controller.dart';
 import 'package:PiliPlus/plugin/pl_player/controller.dart';
 import 'package:PiliPlus/plugin/pl_player/models/data_source.dart';
 import 'package:PiliPlus/services/account_service.dart';
@@ -52,6 +52,7 @@ class LiveRoomController extends GetxController {
   List<RichTextItem>? savedDanmaku;
 
   AccountService accountService = Get.find<AccountService>();
+  late final isLogin = accountService.isLogin.value;
 
   LiveDmInfoData? dmInfo;
 
@@ -60,7 +61,7 @@ class LiveRoomController extends GetxController {
     super.onInit();
     roomId = int.parse(Get.parameters['roomid']!);
     queryLiveInfoH5();
-    if (accountService.isLogin.value && !MineController.anonymity.value) {
+    if (Accounts.get(AccountType.heartbeat).isLogin && !Pref.historyPause) {
       VideoHttp.roomEntryAction(roomId: roomId);
     }
   }
@@ -288,7 +289,7 @@ class LiveRoomController extends GetxController {
                 extra['content'],
                 color: DmUtils.decimalToColor(extra['color']),
                 type: DmUtils.getPosition(extra['mode']),
-                selfSend: uid == accountService.mid,
+                selfSend: isLogin && uid == accountService.mid,
               ),
             );
             WidgetsBinding.instance

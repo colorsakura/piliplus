@@ -463,8 +463,7 @@ class PlPlayerController {
 
   // 添加一个私有构造函数
   PlPlayerController._() {
-    if (!Accounts.get(AccountType.heartbeat).isLogin ||
-        GStorage.localCache.get(LocalCacheKey.historyPause) == true) {
+    if (!Accounts.get(AccountType.heartbeat).isLogin || Pref.historyPause) {
       enableHeart = false;
     }
 
