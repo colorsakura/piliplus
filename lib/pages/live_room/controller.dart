@@ -187,20 +187,22 @@ class LiveRoomController extends GetxController {
       LiveHttp.liveRoomDanmaPrefetch(roomId: roomId).then((v) {
         if (v['status']) {
           if ((v['data'] as List?)?.isNotEmpty == true) {
-            messages.addAll((v['data'] as List)
-                .map((obj) => {
-                      'name': obj['user']['base']['name'],
-                      'uid': obj['user']['uid'],
-                      'text': obj['text'],
-                      'emots': obj['emots'],
-                      'uemote': obj['emoticon']['emoticon_unique'] != ""
-                          ? obj['emoticon']
-                          : null,
-                    })
-                .toList());
-            WidgetsBinding.instance.addPostFrameCallback(
-              (_) => scrollToBottom(),
-            );
+            try {
+              messages.addAll((v['data'] as List)
+                  .map((obj) => {
+                        'name': obj['user']['base']['name'],
+                        'uid': obj['user']['uid'],
+                        'text': obj['text'],
+                        'emots': obj['emots'],
+                        'uemote': obj['emoticon']['emoticon_unique'] != ""
+                            ? obj['emoticon']
+                            : null,
+                      })
+                  .toList());
+              WidgetsBinding.instance.addPostFrameCallback(
+                (_) => scrollToBottom(),
+              );
+            } catch (_) {}
           }
         }
       });
@@ -268,34 +270,36 @@ class LiveRoomController extends GetxController {
           .toList(),
     )
       ..addEventListener((obj) {
-        if (obj['cmd'] == 'DANMU_MSG') {
-          // logger.i(' 原始弹幕消息 ======> ${jsonEncode(obj)}');
-          final info = obj['info'];
-          final first = info[0];
-          final content = first[15];
-          final extra = jsonDecode(content['extra']);
-          final user = content['user'];
-          final uid = user['uid'];
-          messages.add({
-            'name': user['base']['name'],
-            'uid': uid,
-            'text': info[1],
-            'emots': extra['emots'],
-            'uemote': first[13],
-          });
-          if (showDanmaku) {
-            controller?.addDanmaku(
-              DanmakuContentItem(
-                extra['content'],
-                color: DmUtils.decimalToColor(extra['color']),
-                type: DmUtils.getPosition(extra['mode']),
-                selfSend: isLogin && uid == accountService.mid,
-              ),
-            );
-            WidgetsBinding.instance
-                .addPostFrameCallback((_) => scrollToBottom());
+        try {
+          if (obj['cmd'] == 'DANMU_MSG') {
+            // logger.i(' 原始弹幕消息 ======> ${jsonEncode(obj)}');
+            final info = obj['info'];
+            final first = info[0];
+            final content = first[15];
+            final extra = jsonDecode(content['extra']);
+            final user = content['user'];
+            final uid = user['uid'];
+            messages.add({
+              'name': user['base']['name'],
+              'uid': uid,
+              'text': info[1],
+              'emots': extra['emots'],
+              'uemote': first[13],
+            });
+            if (showDanmaku) {
+              controller?.addDanmaku(
+                DanmakuContentItem(
+                  extra['content'],
+                  color: DmUtils.decimalToColor(extra['color']),
+                  type: DmUtils.getPosition(extra['mode']),
+                  selfSend: isLogin && uid == accountService.mid,
+                ),
+              );
+              WidgetsBinding.instance
+                  .addPostFrameCallback((_) => scrollToBottom());
+            }
           }
-        }
+        } catch (_) {}
       })
       ..init();
   }

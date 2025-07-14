@@ -22,7 +22,7 @@ class SpaceTab {
   bool? opus;
   bool? cheeseVideo;
   bool? brand;
-  bool? hasItem;
+  // bool? hasItem;
 
   SpaceTab({
     this.archive,
@@ -74,6 +74,6 @@ class SpaceTab {
     opus = json['opus'] as bool?;
     cheeseVideo = json['cheese_video'] as bool?;
     brand = json['brand'] as bool?;
-    hasItem = json.values.any((e) => e == true);
+    // hasItem = json.values.any((e) => e == true);
   }
 }

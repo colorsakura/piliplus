@@ -85,7 +85,7 @@ class MemberController extends CommonDataController<SpaceData, SpaceData?>
     }
     tab2?.retainWhere((item) => implTabs.contains(item.param));
     if (tab2?.isNotEmpty == true) {
-      if (data.tab!.hasItem != true && tab2!.first.param == 'home') {
+      if (data.hasItem != true && tab2!.first.param == 'home') {
         // remove empty home tab
         tab2!.removeAt(0);
       }
