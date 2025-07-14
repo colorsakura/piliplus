@@ -130,7 +130,10 @@ Widget module(
                   ),
                   const SizedBox(width: 6),
                   Text(
-                    DateUtil.dateFormat(orig.modules.moduleAuthor!.pubTs),
+                    isSave
+                        ? DateUtil.format(orig.modules.moduleAuthor!.pubTs,
+                            format: DateUtil.longFormatDs)
+                        : DateUtil.dateFormat(orig.modules.moduleAuthor!.pubTs),
                     style: TextStyle(
                         color: theme.colorScheme.outline,
                         fontSize: theme.textTheme.labelSmall!.fontSize),
