@@ -929,4 +929,10 @@ class Api {
   static const String updateReserve = '/x/new-reserve/up/reserve/update';
 
   static const String reserveInfo = '/x/new-reserve/up/reserve/info';
+
+  static const String loginLog = '/x/member/web/login/log';
+
+  static const String expLog = '/x/member/web/exp/log';
+
+  static const String moralLog = '/x/member/web/moral/log';
 }

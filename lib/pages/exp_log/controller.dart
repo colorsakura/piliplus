@@ -4,8 +4,7 @@ import 'package:PiliPlus/models_new/coin_log/data.dart';
 import 'package:PiliPlus/models_new/coin_log/list.dart';
 import 'package:PiliPlus/pages/common/common_list_controller.dart';
 
-class MemberCoinLogController
-    extends CommonListController<CoinLogData, CoinLogItem> {
+class ExpLogController extends CommonListController<CoinLogData, CoinLogItem> {
   @override
   void onInit() {
     super.onInit();
@@ -18,5 +17,5 @@ class MemberCoinLogController
   }
 
   @override
-  Future<LoadingState<CoinLogData>> customGetData() => UserHttp.coinLog();
+  Future<LoadingState<CoinLogData>> customGetData() => UserHttp.expLog();
 }

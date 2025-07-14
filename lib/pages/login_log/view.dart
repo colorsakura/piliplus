@@ -1,25 +1,25 @@
 import 'package:PiliPlus/common/widgets/loading_widget/http_error.dart';
 import 'package:PiliPlus/common/widgets/loading_widget/loading_widget.dart';
 import 'package:PiliPlus/http/loading_state.dart';
-import 'package:PiliPlus/models_new/coin_log/list.dart';
-import 'package:PiliPlus/pages/member_coin_log/controller.dart';
+import 'package:PiliPlus/models_new/login_log/list.dart';
+import 'package:PiliPlus/pages/login_log/controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class MemberCoinLogPage extends StatefulWidget {
-  const MemberCoinLogPage({super.key});
+class LoginLogPage extends StatefulWidget {
+  const LoginLogPage({super.key});
 
   @override
-  State<MemberCoinLogPage> createState() => _MemberCoinLogPageState();
+  State<LoginLogPage> createState() => _LoginLogPageState();
 }
 
-class _MemberCoinLogPageState extends State<MemberCoinLogPage> {
-  late final _controller = Get.put(MemberCoinLogController());
+class _LoginLogPageState extends State<LoginLogPage> {
+  late final _controller = Get.put(LoginLogController());
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('硬币记录')),
+      appBar: AppBar(title: const Text('登录记录')),
       body: SafeArea(
         top: false,
         bottom: false,
@@ -44,7 +44,7 @@ class _MemberCoinLogPageState extends State<MemberCoinLogPage> {
     );
   }
 
-  Widget _buildBody(LoadingState<List<CoinLogItem>?> loadingState) {
+  Widget _buildBody(LoadingState<List<LoginLogItem>?> loadingState) {
     return switch (loadingState) {
       Loading() => linearLoading,
       Success(:var response) => response?.isNotEmpty == true
@@ -70,10 +70,10 @@ class _MemberCoinLogPageState extends State<MemberCoinLogPage> {
                       child: ColoredBox(
                         color: them.colorScheme.onInverseSurface,
                         child: _item(
-                          const CoinLogItem(
-                            time: '时间',
-                            delta: '变化',
-                            reason: '原因',
+                          LoginLogItem(
+                            timeAt: '时间',
+                            ip: '变化',
+                            geo: '地理位置',
                           ),
                           dividerV,
                           isHeader: true,
@@ -101,7 +101,7 @@ class _MemberCoinLogPageState extends State<MemberCoinLogPage> {
     };
   }
 
-  Widget _item(CoinLogItem item, Widget divider, {bool isHeader = false}) {
+  Widget _item(LoginLogItem item, Widget divider, {bool isHeader = false}) {
     Widget text(int flex, String text) => Expanded(
           flex: flex,
           child: Padding(
@@ -122,11 +122,11 @@ class _MemberCoinLogPageState extends State<MemberCoinLogPage> {
     Widget content = Row(
       children: [
         divider,
-        text(3, item.time),
+        text(3, item.timeAt),
         divider,
-        text(1, item.delta),
+        text(2, item.ip),
         divider,
-        text(4, item.reason),
+        text(3, item.geo),
         divider,
       ],
     );

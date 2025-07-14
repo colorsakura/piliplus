@@ -7,6 +7,7 @@ import 'package:PiliPlus/models/user/stat.dart';
 import 'package:PiliPlus/models_new/coin_log/data.dart';
 import 'package:PiliPlus/models_new/history/data.dart';
 import 'package:PiliPlus/models_new/later/data.dart';
+import 'package:PiliPlus/models_new/login_log/data.dart';
 import 'package:PiliPlus/models_new/media_list/data.dart';
 import 'package:PiliPlus/models_new/space_setting/data.dart';
 import 'package:PiliPlus/models_new/sub/sub/data.dart';
@@ -402,6 +403,36 @@ class UserHttp {
   static Future<LoadingState<CoinLogData>> coinLog() async {
     final res = await Request().get(
       Api.coinLog,
+      queryParameters: {
+        'jsonp': 'jsonp',
+        'web_location': '333.33',
+      },
+    );
+    if (res.data['code'] == 0) {
+      return Success(CoinLogData.fromJson(res.data['data']));
+    } else {
+      return Error(res.data['message']);
+    }
+  }
+
+  static Future<LoadingState<LoginLogData>> loginLog() async {
+    final res = await Request().get(
+      Api.loginLog,
+      queryParameters: {
+        'jsonp': 'jsonp',
+        'web_location': '333.33',
+      },
+    );
+    if (res.data['code'] == 0) {
+      return Success(LoginLogData.fromJson(res.data['data']));
+    } else {
+      return Error(res.data['message']);
+    }
+  }
+
+  static Future<LoadingState<CoinLogData>> expLog() async {
+    final res = await Request().get(
+      Api.expLog,
       queryParameters: {
         'jsonp': 'jsonp',
         'web_location': '333.33',

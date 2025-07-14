@@ -59,6 +59,7 @@ class _BlackListPageState extends State<BlackListPage> {
   }
 
   Widget _buildBody(LoadingState<List<BlackListItem>?> loadingState) {
+    late final style = TextStyle(color: Theme.of(context).colorScheme.outline);
     return switch (loadingState) {
       Loading() => SliverList.builder(
           itemCount: 12,
@@ -89,10 +90,9 @@ class _BlackListPageState extends State<BlackListPage> {
                     style: const TextStyle(fontSize: 14),
                   ),
                   subtitle: Text(
-                    DateUtil.dateFormat(item.mtime),
+                    '添加时间: ${DateUtil.format(item.mtime, format: DateUtil.longFormatDs)}',
                     maxLines: 1,
-                    style:
-                        TextStyle(color: Theme.of(context).colorScheme.outline),
+                    style: style,
                     overflow: TextOverflow.ellipsis,
                   ),
                   dense: true,

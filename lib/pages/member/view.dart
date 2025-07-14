@@ -4,9 +4,11 @@ import 'package:PiliPlus/common/widgets/loading_widget/loading_widget.dart';
 import 'package:PiliPlus/common/widgets/scroll_physics.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models_new/space/space/data.dart';
+import 'package:PiliPlus/pages/coin_log/view.dart';
+import 'package:PiliPlus/pages/exp_log/view.dart';
+import 'package:PiliPlus/pages/login_log/view.dart';
 import 'package:PiliPlus/pages/member/controller.dart';
 import 'package:PiliPlus/pages/member/widget/user_info_card.dart';
-import 'package:PiliPlus/pages/member_coin_log/view.dart';
 import 'package:PiliPlus/pages/member_contribute/view.dart';
 import 'package:PiliPlus/pages/member_dynamics/view.dart';
 import 'package:PiliPlus/pages/member_favorite/view.dart';
@@ -158,13 +160,35 @@ class _MemberPageState extends State<MemberPage> {
                       ),
                     ),
                   PopupMenuItem(
-                    onTap: () => Get.to(const MemberCoinLogPage()),
+                    onTap: () => Get.to(const LoginLogPage()),
                     child: const Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Icon(FontAwesomeIcons.b, size: 18),
+                        Icon(Icons.login, size: 18),
+                        SizedBox(width: 10),
+                        Text('登录记录'),
+                      ],
+                    ),
+                  ),
+                  PopupMenuItem(
+                    onTap: () => Get.to(const CoinLogPage()),
+                    child: const Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(FontAwesomeIcons.b, size: 16),
                         SizedBox(width: 10),
                         Text('硬币记录'),
+                      ],
+                    ),
+                  ),
+                  PopupMenuItem(
+                    onTap: () => Get.to(const ExpLogPage()),
+                    child: const Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(Icons.linear_scale, size: 18),
+                        SizedBox(width: 10),
+                        Text('经验记录'),
                       ],
                     ),
                   ),

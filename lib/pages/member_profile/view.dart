@@ -177,7 +177,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
               onTap: () => showDatePicker(
                 context: context,
                 initialDate: DateTime.parse(response.birthday!),
-                firstDate: DateTime(1900, 1, 1),
+                firstDate: DateTime(0001, 1, 1),
                 lastDate: DateTime.now(),
               ).then((res) {
                 if (res != null) {
