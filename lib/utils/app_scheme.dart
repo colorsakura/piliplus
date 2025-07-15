@@ -438,6 +438,7 @@ class PiliScheme {
             return false;
           // bilibili://browser/?url=https%3A%2F%2Fwww.bilibili.com%2F
           case 'browser':
+            if (selfHandle) return false;
             final url = uri.queryParameters['url'];
             if (url != null) {
               _toWebview(url, off, parameters);
