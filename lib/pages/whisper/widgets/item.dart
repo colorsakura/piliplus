@@ -30,6 +30,13 @@ class WhisperSessionItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final resource =
+        item.sessionInfo.avatar.fallbackLayers.layers.first.resource;
+    final avatar = resource.hasResImage()
+        ? resource.resImage.imageSrc.remote.url
+        : resource.hasResAnimation()
+            ? resource.resAnimation.webpSrc.remote.url
+            : resource.resNativeDraw.drawSrc.remote.url;
     Map? vipInfo = item.sessionInfo.hasVipInfo()
         ? jsonDecode(item.sessionInfo.vipInfo)
         : null;
@@ -100,8 +107,7 @@ class WhisperSessionItem extends StatelessWidget {
             arguments: {
               'talkerId': item.id.privateId.talkerUid.toInt(),
               'name': item.sessionInfo.sessionName,
-              'face': item.sessionInfo.avatar.fallbackLayers.layers.first
-                  .resource.resImage.imageSrc.remote.url,
+              'face': avatar,
               if (item.sessionInfo.avatar.hasMid())
                 'mid': item.sessionInfo.avatar.mid.toInt(),
             },
@@ -159,8 +165,7 @@ class WhisperSessionItem extends StatelessWidget {
             child: PendantAvatar(
               size: 42,
               badgeSize: 14,
-              avatar: item.sessionInfo.avatar.fallbackLayers.layers.first
-                  .resource.resImage.imageSrc.remote.url,
+              avatar: avatar,
               garbPendantImage:
                   pendant?.resImage.imageSrc.remote.hasUrl() == true
                       ? pendant!.resImage.imageSrc.remote.url
