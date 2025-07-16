@@ -171,6 +171,7 @@ class _LiveRoomPageState extends State<LiveRoomPage>
                 upName: roomInfoH5?.anchorInfo?.baseInfo?.uname,
                 plPlayerController: plPlayerController,
                 onSendDanmaku: onSendDanmaku,
+                onPlayAudio: _liveRoomController.queryLiveInfo,
               ),
               bottomControl: BottomControl(
                 plPlayerController: plPlayerController,

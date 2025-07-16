@@ -10,17 +10,19 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 
 class LiveHeaderControl extends StatelessWidget {
   const LiveHeaderControl({
+    super.key,
     required this.title,
     required this.upName,
     required this.plPlayerController,
     required this.onSendDanmaku,
-    super.key,
+    required this.onPlayAudio,
   });
 
   final String? title;
   final String? upName;
   final PlPlayerController plPlayerController;
   final VoidCallback onSendDanmaku;
+  final VoidCallback onPlayAudio;
 
   @override
   Widget build(BuildContext context) {
@@ -95,7 +97,11 @@ class LiveHeaderControl extends StatelessWidget {
               width: 35,
               height: 35,
               child: IconButton(
-                onPressed: plPlayerController.setOnlyPlayAudio,
+                onPressed: () {
+                  plPlayerController.onlyPlayAudio.value =
+                      !plPlayerController.onlyPlayAudio.value;
+                  onPlayAudio();
+                },
                 style: ButtonStyle(
                   padding: WidgetStateProperty.all(EdgeInsets.zero),
                 ),

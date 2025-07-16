@@ -64,7 +64,7 @@ class LiveHttp {
     }
   }
 
-  static Future liveRoomInfo({roomId, qn}) async {
+  static Future liveRoomInfo({roomId, qn, bool onlyAudio = false}) async {
     var res = await Request().get(
       Api.liveRoomInfo,
       queryParameters: {
@@ -77,6 +77,7 @@ class LiveHttp {
         'ptype': 8,
         'dolby': 5,
         'panorama': 1,
+        if (onlyAudio) 'only_audio': 1,
       },
     );
     if (res.data['code'] == 0) {

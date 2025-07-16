@@ -93,7 +93,11 @@ class LiveRoomController extends GetxController {
             : Pref.liveQualityCellular;
       });
     }
-    var res = await LiveHttp.liveRoomInfo(roomId: roomId, qn: currentQn);
+    var res = await LiveHttp.liveRoomInfo(
+      roomId: roomId,
+      qn: currentQn,
+      onlyAudio: plPlayerController.onlyPlayAudio.value,
+    );
     if (res['status']) {
       RoomPlayInfoData data = res['data'];
       if (data.liveStatus != 1) {
