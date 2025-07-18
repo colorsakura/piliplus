@@ -132,6 +132,37 @@ class _VideoInfoState extends State<VideoInfo> {
 
   late final _horizontalMemberPage = Pref.horizontalMemberPage;
 
+  WidgetSpan _labelWidget(String text, Color bgColor, Color textColor) {
+    return WidgetSpan(
+      alignment: PlaceholderAlignment.middle,
+      child: Container(
+        padding: const EdgeInsets.symmetric(
+          horizontal: 4,
+          vertical: 3,
+        ),
+        decoration: BoxDecoration(
+          color: bgColor,
+          borderRadius: const BorderRadius.all(Radius.circular(4)),
+        ),
+        child: Text(
+          text,
+          textScaler: TextScaler.noScaling,
+          strutStyle: const StrutStyle(
+            leading: 0,
+            height: 1,
+            fontSize: 12,
+          ),
+          style: TextStyle(
+            height: 1,
+            fontSize: 12,
+            fontWeight: FontWeight.bold,
+            color: textColor,
+          ),
+        ),
+      ),
+    );
+  }
+
   Widget _buildVideoTitle(ThemeData theme, [bool isExpand = false]) {
     late final isDark = theme.brightness == Brightness.dark;
     Widget child() => Text.rich(
@@ -171,7 +202,11 @@ class _VideoInfoState extends State<VideoInfo> {
                         Text(
                           videoDetailCtr.videoLabel.value,
                           textScaler: TextScaler.noScaling,
-                          strutStyle: const StrutStyle(leading: 0, height: 1),
+                          strutStyle: const StrutStyle(
+                            leading: 0,
+                            height: 1,
+                            fontSize: 13,
+                          ),
                           style: TextStyle(
                             height: 1,
                             fontSize: 13,
@@ -185,33 +220,21 @@ class _VideoInfoState extends State<VideoInfo> {
                 const TextSpan(text: ' '),
               ],
               if (videoDetail.isUpowerExclusive == true) ...[
-                WidgetSpan(
-                  alignment: PlaceholderAlignment.middle,
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 4,
-                      vertical: 2,
-                    ),
-                    decoration: BoxDecoration(
-                      color: isDark
-                          ? theme.colorScheme.error
-                          : theme.colorScheme.errorContainer,
-                      borderRadius: const BorderRadius.all(Radius.circular(4)),
-                    ),
-                    child: Text(
-                      '充电专属',
-                      textScaler: TextScaler.noScaling,
-                      strutStyle: const StrutStyle(leading: 0, height: 1),
-                      style: TextStyle(
-                        height: 1,
-                        fontSize: 12,
-                        fontWeight: FontWeight.bold,
-                        color: isDark
-                            ? theme.colorScheme.onError
-                            : theme.colorScheme.onErrorContainer,
-                      ),
-                    ),
-                  ),
+                _labelWidget(
+                  '充电专属',
+                  isDark
+                      ? theme.colorScheme.error
+                      : theme.colorScheme.errorContainer,
+                  isDark
+                      ? theme.colorScheme.onError
+                      : theme.colorScheme.onErrorContainer,
+                ),
+                const TextSpan(text: ' '),
+              ] else if (videoDetail.rights?.isSteinGate == 1) ...[
+                _labelWidget(
+                  '互动视频',
+                  theme.colorScheme.secondaryContainer,
+                  theme.colorScheme.onSecondaryContainer,
                 ),
                 const TextSpan(text: ' '),
               ],
