@@ -148,7 +148,7 @@ class DynamicsController extends GetxController
       var res = await DynamicsHttp.followUp();
       if (res.isSuccess) {
         upData.value = res.data;
-        if (upData.value.upList!.isEmpty) {
+        if (upData.value.upList.isNullOrEmpty) {
           mid.value = -1;
         }
       } else {
