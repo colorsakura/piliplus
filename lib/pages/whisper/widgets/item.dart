@@ -110,6 +110,7 @@ class WhisperSessionItem extends StatelessWidget {
               'face': avatar,
               if (item.sessionInfo.avatar.hasMid())
                 'mid': item.sessionInfo.avatar.mid.toInt(),
+              'isLive': item.sessionInfo.isLive,
             },
           );
           return;
@@ -214,7 +215,11 @@ class WhisperSessionItem extends StatelessWidget {
                     text: item.sessionInfo.userLabel.style.borderedLabel.text,
                   ),
                 if (item.sessionInfo.isLive)
-                  Image.asset('assets/images/live/live.gif', height: 15),
+                  Image.asset(
+                    'assets/images/live/live.gif',
+                    height: 15,
+                    filterQuality: FilterQuality.low,
+                  ),
               ],
             ),
           ),

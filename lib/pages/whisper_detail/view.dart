@@ -82,14 +82,24 @@ class _WhisperDetailPageState
                 src: _whisperDetailController.face,
               ),
               const SizedBox(width: 6),
-              Expanded(
+              Flexible(
                 child: Text(
                   _whisperDetailController.name,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: theme.textTheme.titleMedium,
+                  style: const TextStyle(height: 1, fontSize: 16),
+                  strutStyle:
+                      const StrutStyle(leading: 0, height: 1, fontSize: 16),
                 ),
               ),
+              if (_whisperDetailController.isLive) ...[
+                const SizedBox(width: 10),
+                Image.asset(
+                  'assets/images/live/live.gif',
+                  height: 16,
+                  filterQuality: FilterQuality.low,
+                ),
+              ],
             ],
           ),
         ),

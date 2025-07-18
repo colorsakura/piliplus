@@ -23,6 +23,7 @@ class WhisperDetailController extends CommonListController<RspSessionMsg, Msg> {
   final String name = Get.arguments['name'];
   final String face = Get.arguments['face'];
   final int? mid = Get.arguments['mid'];
+  final bool isLive = Get.arguments['isLive'];
 
   Int64? msgSeqno;
 
