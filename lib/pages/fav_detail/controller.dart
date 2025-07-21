@@ -1,5 +1,6 @@
 import 'package:PiliPlus/http/fav.dart';
 import 'package:PiliPlus/http/loading_state.dart';
+import 'package:PiliPlus/models/common/fav_order_type.dart';
 import 'package:PiliPlus/models_new/fav/fav_detail/data.dart';
 import 'package:PiliPlus/models_new/fav/fav_detail/media.dart';
 import 'package:PiliPlus/models_new/fav/fav_folder/list.dart';
@@ -19,6 +20,7 @@ class FavDetailController
   late String heroTag;
   final Rx<FavFolderInfo> folderInfo = FavFolderInfo().obs;
   final Rx<bool?> isOwner = Rx<bool?>(null);
+  final Rx<FavOrderType> order = FavOrderType.mtime.obs;
 
   AccountService accountService = Get.find<AccountService>();
 
@@ -84,6 +86,7 @@ class FavDetailController
         pn: page,
         ps: 20,
         mediaId: mediaId,
+        order: order.value,
       );
 
   void onDelChecked(BuildContext context) {

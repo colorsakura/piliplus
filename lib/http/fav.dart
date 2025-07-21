@@ -2,6 +2,7 @@ import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/http/api.dart';
 import 'package:PiliPlus/http/init.dart';
 import 'package:PiliPlus/http/loading_state.dart';
+import 'package:PiliPlus/models/common/fav_order_type.dart';
 import 'package:PiliPlus/models_new/fav/fav_article/data.dart';
 import 'package:PiliPlus/models_new/fav/fav_detail/data.dart';
 import 'package:PiliPlus/models_new/fav/fav_folder/data.dart';
@@ -48,13 +49,14 @@ class FavHttp {
     }
   }
 
-  static Future<LoadingState<FavDetailData>> userFavFolderDetail(
-      {required int mediaId,
-      required int pn,
-      required int ps,
-      String keyword = '',
-      String order = 'mtime',
-      int type = 0}) async {
+  static Future<LoadingState<FavDetailData>> userFavFolderDetail({
+    required int mediaId,
+    required int pn,
+    required int ps,
+    String keyword = '',
+    FavOrderType order = FavOrderType.mtime,
+    int type = 0,
+  }) async {
     var res = await Request().get(
       Api.favResourceList,
       queryParameters: {
@@ -62,7 +64,7 @@ class FavHttp {
         'pn': pn,
         'ps': ps,
         'keyword': keyword,
-        'order': order,
+        'order': order.name,
         'type': type,
         'tid': 0,
         'platform': 'web'

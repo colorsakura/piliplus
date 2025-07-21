@@ -7,6 +7,7 @@ import 'package:PiliPlus/common/widgets/loading_widget/http_error.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/http/fav.dart';
 import 'package:PiliPlus/http/loading_state.dart';
+import 'package:PiliPlus/models/common/fav_order_type.dart';
 import 'package:PiliPlus/models_new/fav/fav_detail/data.dart';
 import 'package:PiliPlus/models_new/fav/fav_detail/media.dart';
 import 'package:PiliPlus/models_new/fav/fav_folder/list.dart';
@@ -160,6 +161,24 @@ class _FavDetailPageState extends State<FavDetailPage> {
                 icon: const Icon(Icons.share),
               );
       }),
+      Obx(
+        () {
+          return PopupMenuButton<FavOrderType>(
+            icon: const Icon(Icons.sort),
+            initialValue: _favDetailController.order.value,
+            tooltip: '排序方式',
+            onSelected: (value) => _favDetailController
+              ..order.value = value
+              ..onReload(),
+            itemBuilder: (context) => FavOrderType.values
+                .map((e) => PopupMenuItem(
+                      value: e,
+                      child: Text(e.label),
+                    ))
+                .toList(),
+          );
+        },
+      ),
       PopupMenuButton(
         icon: const Icon(Icons.more_vert),
         itemBuilder: (context) {

@@ -12,6 +12,8 @@ abstract class CommonSearchPageState<S extends CommonSearchPage, R, T>
     extends State<S> {
   CommonSearchController<R, T> get controller;
 
+  List<Widget>? extraActions;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,7 +25,8 @@ abstract class CommonSearchPageState<S extends CommonSearchPage, R, T>
             onPressed: controller.onRefresh,
             icon: const Icon(Icons.search_outlined, size: 22),
           ),
-          const SizedBox(width: 10)
+          ...?extraActions,
+          const SizedBox(width: 10),
         ],
         title: TextField(
           autofocus: true,
