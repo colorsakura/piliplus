@@ -1,3 +1,4 @@
+import 'package:PiliPlus/common/widgets/scroll_physics.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/http/member.dart';
 import 'package:PiliPlus/http/search.dart';
@@ -14,7 +15,8 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 
 class MemberVideoCtr
-    extends CommonListController<SpaceArchiveData, SpaceArchiveItem> {
+    extends CommonListController<SpaceArchiveData, SpaceArchiveItem>
+    with ReloadMixin {
   MemberVideoCtr({
     required this.type,
     required this.mid,
@@ -212,8 +214,6 @@ class MemberVideoCtr
       }
     }
   }
-
-  bool reload = false;
 
   @override
   Future<void> onReload() {

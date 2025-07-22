@@ -246,9 +246,9 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
 
   // 动态构建底部控制条
   Widget buildBottomControl() {
-    bool isSeason = videoIntroController?.videoDetail.value.ugcSeason != null;
-    bool isPage = videoIntroController?.videoDetail.value.pages != null &&
-        videoIntroController!.videoDetail.value.pages!.length > 1;
+    final videoDetail = videoIntroController?.videoDetail.value;
+    bool isSeason = videoDetail?.ugcSeason != null;
+    bool isPage = videoDetail?.pages != null && videoDetail!.pages!.length > 1;
     bool isPgc = pgcIntroController != null;
     bool anySeason = isSeason || isPage || isPgc;
     double widgetWidth =
@@ -465,9 +465,10 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
             int currentCid = plPlayerController.cid;
             String bvid = plPlayerController.bvid;
             List episodes = [];
+            final videoDetail = videoIntroController!.videoDetail.value;
             if (isSeason) {
               final List<SectionItem> sections =
-                  videoIntroController!.videoDetail.value.ugcSeason!.sections!;
+                  videoDetail.ugcSeason!.sections!;
               for (int i = 0; i < sections.length; i++) {
                 final List<EpisodeItem> episodesList = sections[i].episodes!;
                 for (int j = 0; j < episodesList.length; j++) {
@@ -479,17 +480,14 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                 }
               }
             } else if (isPage) {
-              final List<Part> pages =
-                  videoIntroController!.videoDetail.value.pages!;
+              final List<Part> pages = videoDetail.pages!;
               episodes = pages;
             } else if (isPgc) {
               episodes = pgcIntroController!.pgcItem.episodes!;
             }
             widget.showEpisodes?.call(
               index,
-              isSeason
-                  ? videoIntroController?.videoDetail.value.ugcSeason!
-                  : null,
+              isSeason ? videoDetail.ugcSeason! : null,
               isSeason ? null : episodes,
               bvid,
               IdUtils.bv2av(bvid),

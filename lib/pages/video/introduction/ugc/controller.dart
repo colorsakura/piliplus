@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:PiliPlus/common/widgets/scroll_physics.dart';
 import 'package:PiliPlus/http/api.dart';
 import 'package:PiliPlus/http/constants.dart';
 import 'package:PiliPlus/http/fav.dart';
@@ -43,7 +44,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 
-class VideoIntroController extends CommonIntroController {
+class VideoIntroController extends CommonIntroController with ReloadMixin {
   String heroTag = '';
 
   late ExpandableController expandableCtr;
@@ -177,11 +178,11 @@ class VideoIntroController extends CommonIntroController {
         }
       });
     } else {
-      if (videoDetail.value.owner == null) {
+      final mid = videoDetail.value.owner?.mid;
+      if (mid == null) {
         return;
       }
-      var result =
-          await MemberHttp.memberCardInfo(mid: videoDetail.value.owner!.mid!);
+      var result = await MemberHttp.memberCardInfo(mid: mid);
       if (result['status']) {
         userStat.value = result['data'];
       }
@@ -402,6 +403,7 @@ class VideoIntroController extends CommonIntroController {
     showDialog(
         context: context,
         builder: (_) {
+          final videoDetail = this.videoDetail.value;
           String videoUrl = '${HttpString.baseUrl}/video/$bvid';
           return AlertDialog(
             clipBehavior: Clip.hardEdge,
@@ -439,8 +441,8 @@ class VideoIntroController extends CommonIntroController {
                   ),
                   onTap: () {
                     Get.back();
-                    Utils.shareText('${videoDetail.value.title} '
-                        'UP主: ${videoDetail.value.owner!.name!}'
+                    Utils.shareText('${videoDetail.title} '
+                        'UP主: ${videoDetail.owner!.name!}'
                         ' - $videoUrl');
                   },
                 ),
@@ -457,11 +459,11 @@ class VideoIntroController extends CommonIntroController {
                       isScrollControlled: true,
                       useSafeArea: true,
                       builder: (context) => RepostPanel(
-                        rid: videoDetail.value.aid,
+                        rid: videoDetail.aid,
                         dynType: 8,
-                        pic: videoDetail.value.pic,
-                        title: videoDetail.value.title,
-                        uname: videoDetail.value.owner?.name,
+                        pic: videoDetail.pic,
+                        title: videoDetail.title,
+                        uname: videoDetail.owner?.name,
                       ),
                     );
                   },
@@ -478,13 +480,13 @@ class VideoIntroController extends CommonIntroController {
                       PageUtils.pmShare(
                         context,
                         content: {
-                          "id": videoDetail.value.aid!.toString(),
-                          "title": videoDetail.value.title!,
-                          "headline": videoDetail.value.title!,
+                          "id": videoDetail.aid!.toString(),
+                          "title": videoDetail.title!,
+                          "headline": videoDetail.title!,
                           "source": 5,
-                          "thumb": videoDetail.value.pic!,
-                          "author": videoDetail.value.owner!.name!,
-                          "author_id": videoDetail.value.owner!.mid!.toString(),
+                          "thumb": videoDetail.pic!,
+                          "author": videoDetail.owner!.name!,
+                          "author_id": videoDetail.owner!.mid!.toString(),
                         },
                       );
                     } catch (e) {
@@ -599,6 +601,7 @@ class VideoIntroController extends CommonIntroController {
       ..queryVideoUrl();
 
     if (this.bvid != bvid) {
+      reload = true;
       aiConclusionResult = null;
 
       if (cover is String && cover.isNotEmpty) {
@@ -675,15 +678,16 @@ class VideoIntroController extends CommonIntroController {
     bool isPages = false;
 
     final videoDetailCtr = Get.find<VideoDetailController>(tag: heroTag);
+    final videoDetail = this.videoDetail.value;
 
-    if (!skipPages && (videoDetail.value.pages?.length ?? 0) > 1) {
+    if (!skipPages && (videoDetail.pages?.length ?? 0) > 1) {
       isPages = true;
-      final List<Part> pages = videoDetail.value.pages!;
+      final List<Part> pages = videoDetail.pages!;
       episodes.addAll(pages);
     } else if (videoDetailCtr.isPlayAll) {
       episodes.addAll(videoDetailCtr.mediaList);
-    } else if (videoDetail.value.ugcSeason != null) {
-      final UgcSeason ugcSeason = videoDetail.value.ugcSeason!;
+    } else if (videoDetail.ugcSeason != null) {
+      final UgcSeason ugcSeason = videoDetail.ugcSeason!;
       final List<SectionItem> sections = ugcSeason.sections!;
       for (int i = 0; i < sections.length; i++) {
         final List<EpisodeItem> episodesList = sections[i].episodes!;
@@ -694,9 +698,9 @@ class VideoIntroController extends CommonIntroController {
     final int currentIndex = episodes.indexWhere((e) =>
         e.cid ==
         (skipPages
-            ? videoDetail.value.isPageReversed == true
-                ? videoDetail.value.pages!.last.cid
-                : videoDetail.value.pages!.first.cid
+            ? videoDetail.isPageReversed == true
+                ? videoDetail.pages!.last.cid
+                : videoDetail.pages!.first.cid
             : lastPlayCid.value));
     int prevIndex = currentIndex - 1;
     final PlayRepeat playRepeat = videoDetailCtr.plPlayerController.playRepeat;
@@ -704,7 +708,7 @@ class VideoIntroController extends CommonIntroController {
     // 列表循环
     if (prevIndex < 0) {
       if (isPages &&
-          (videoDetailCtr.isPlayAll || videoDetail.value.ugcSeason != null)) {
+          (videoDetailCtr.isPlayAll || videoDetail.ugcSeason != null)) {
         return prevPlay(true);
       }
       if (playRepeat == PlayRepeat.listCycle) {
@@ -726,16 +730,17 @@ class VideoIntroController extends CommonIntroController {
       final List episodes = [];
       bool isPages = false;
       final videoDetailCtr = Get.find<VideoDetailController>(tag: heroTag);
+      final videoDetail = this.videoDetail.value;
 
       // part -> playall -> season
-      if (!skipPages && (videoDetail.value.pages?.length ?? 0) > 1) {
+      if (!skipPages && (videoDetail.pages?.length ?? 0) > 1) {
         isPages = true;
-        final List<Part> pages = videoDetail.value.pages!;
+        final List<Part> pages = videoDetail.pages!;
         episodes.addAll(pages);
       } else if (videoDetailCtr.isPlayAll) {
         episodes.addAll(videoDetailCtr.mediaList);
-      } else if (videoDetail.value.ugcSeason != null) {
-        final UgcSeason ugcSeason = videoDetail.value.ugcSeason!;
+      } else if (videoDetail.ugcSeason != null) {
+        final UgcSeason ugcSeason = videoDetail.ugcSeason!;
         final List<SectionItem> sections = ugcSeason.sections!;
         for (int i = 0; i < sections.length; i++) {
           final List<EpisodeItem> episodesList = sections[i].episodes!;
@@ -757,9 +762,9 @@ class VideoIntroController extends CommonIntroController {
       final int currentIndex = episodes.indexWhere((e) =>
           e.cid ==
           (skipPages
-              ? videoDetail.value.isPageReversed == true
-                  ? videoDetail.value.pages!.last.cid
-                  : videoDetail.value.pages!.first.cid
+              ? videoDetail.isPageReversed == true
+                  ? videoDetail.pages!.last.cid
+                  : videoDetail.pages!.first.cid
               : videoDetailCtr.cid.value));
 
       int nextIndex = currentIndex + 1;
@@ -773,7 +778,7 @@ class VideoIntroController extends CommonIntroController {
       // 列表循环
       if (nextIndex >= episodes.length) {
         if (isPages &&
-            (videoDetailCtr.isPlayAll || videoDetail.value.ugcSeason != null)) {
+            (videoDetailCtr.isPlayAll || videoDetail.ugcSeason != null)) {
           return nextPlay(true);
         }
 

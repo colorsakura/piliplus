@@ -88,10 +88,11 @@ class _SavePanelState extends State<SavePanel> {
         try {
           final heroTag = Get.arguments?['heroTag'];
           late final ctr = Get.find<VideoIntroController>(tag: heroTag);
-          cover = ctr.videoDetail.value.pic;
-          title = ctr.videoDetail.value.title;
-          pubdate = ctr.videoDetail.value.pubdate;
-          uname = ctr.videoDetail.value.owner?.name;
+          final videoDetail = ctr.videoDetail.value;
+          cover = videoDetail.pic;
+          title = videoDetail.title;
+          pubdate = videoDetail.pubdate;
+          uname = videoDetail.owner?.name;
         } catch (_) {}
         uri =
             'bilibili://video/${_item.oid}?comment_root_id=${hasRoot ? _item.root : _item.id}${hasRoot ? '&comment_secondary_id=${_item.id}' : ''}';

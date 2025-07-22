@@ -65,7 +65,7 @@ class _MemberVideoState extends State<MemberVideo>
         refreshIndicator(
           onRefresh: _controller.onRefresh,
           child: CustomScrollView(
-            physics: MemberVideoScrollPhysics(controller: _controller),
+            physics: ReloadScrollPhysics(controller: _controller),
             slivers: [
               SliverPadding(
                 padding: EdgeInsets.only(

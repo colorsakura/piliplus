@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
 import 'package:PiliPlus/common/widgets/pendant_avatar.dart';
-import 'package:PiliPlus/common/widgets/self_sized_horizontal_list.dart';
+import 'package:PiliPlus/common/widgets/scroll_physics.dart';
 import 'package:PiliPlus/common/widgets/stat/stat.dart';
 import 'package:PiliPlus/models/common/image_type.dart';
 import 'package:PiliPlus/models/common/stat_type.dart';
@@ -96,6 +96,7 @@ class _VideoIntroPanelState extends State<VideoIntroPanel>
             () {
               VideoDetailData videoDetail = introController.videoDetail.value;
               bool isLoading = videoDetail.bvid == null;
+              int? mid = videoDetail.owner?.mid;
               return SliverToBoxAdapter(
                 child: GestureDetector(
                   behavior: HitTestBehavior.opaque,
@@ -121,7 +122,6 @@ class _VideoIntroPanelState extends State<VideoIntroPanel>
                                   child: _buildAvatar(
                                     theme,
                                     () {
-                                      int? mid = videoDetail.owner?.mid;
                                       if (mid != null) {
                                         feedBack();
                                         if (context.orientation ==
@@ -142,16 +142,16 @@ class _VideoIntroPanelState extends State<VideoIntroPanel>
                               followButton(context, theme),
                             ] else
                               Expanded(
-                                child: SelfSizedHorizontalList(
-                                  gapSize: 25,
-                                  itemCount: videoDetail.staff!.length,
-                                  childBuilder: (index) {
-                                    return _buildStaff(
-                                      theme,
-                                      videoDetail.owner?.mid,
-                                      videoDetail.staff![index],
-                                    );
-                                  },
+                                child: SingleChildScrollView(
+                                  scrollDirection: Axis.horizontal,
+                                  physics: ReloadScrollPhysics(
+                                      controller: introController),
+                                  child: Row(
+                                    spacing: 25,
+                                    children: videoDetail.staff!
+                                        .map((e) => _buildStaff(theme, mid, e))
+                                        .toList(),
+                                  ),
                                 ),
                               ),
                             if (isHorizontal) ...[
@@ -194,9 +194,7 @@ class _VideoIntroPanelState extends State<VideoIntroPanel>
                           if (introController.enableAi) _aiBtn,
                         ],
                       ),
-                      if (introController.videoDetail.value.argueInfo?.argueMsg
-                                  ?.isNotEmpty ==
-                              true &&
+                      if (videoDetail.argueInfo?.argueMsg?.isNotEmpty == true &&
                           introController.showArgueMsg) ...[
                         const SizedBox(height: 2),
                         Text.rich(
@@ -212,8 +210,7 @@ class _VideoIntroPanelState extends State<VideoIntroPanel>
                               ),
                               const WidgetSpan(child: SizedBox(width: 2)),
                               TextSpan(
-                                text:
-                                    '${introController.videoDetail.value.argueInfo!.argueMsg}',
+                                text: '${videoDetail.argueInfo!.argueMsg}',
                               )
                             ],
                           ),
@@ -232,19 +229,17 @@ class _VideoIntroPanelState extends State<VideoIntroPanel>
                           children: [
                             const SizedBox(height: 8),
                             GestureDetector(
-                              onTap: () => Utils.copyText(
-                                  '${introController.videoDetail.value.bvid}'),
+                              onTap: () =>
+                                  Utils.copyText('${videoDetail.bvid}'),
                               child: Text(
-                                introController.videoDetail.value.bvid ?? '',
+                                videoDetail.bvid ?? '',
                                 style: TextStyle(
                                   fontSize: 14,
                                   color: theme.colorScheme.secondary,
                                 ),
                               ),
                             ),
-                            if (introController
-                                    .videoDetail.value.descV2?.isNotEmpty ==
-                                true) ...[
+                            if (videoDetail.descV2?.isNotEmpty == true) ...[
                               const SizedBox(height: 8),
                               SelectableText.rich(
                                 style: const TextStyle(
@@ -252,8 +247,7 @@ class _VideoIntroPanelState extends State<VideoIntroPanel>
                                 ),
                                 TextSpan(
                                   children: [
-                                    buildContent(theme,
-                                        introController.videoDetail.value),
+                                    buildContent(theme, videoDetail),
                                   ],
                                 ),
                               ),

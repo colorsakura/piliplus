@@ -1,4 +1,3 @@
-import 'package:PiliPlus/pages/member_video/controller.dart';
 import 'package:PiliPlus/utils/storage_pref.dart';
 import 'package:flutter/material.dart';
 
@@ -46,14 +45,18 @@ class CustomTabBarViewClampingScrollPhysics extends ClampingScrollPhysics {
   SpringDescription get spring => CustomSpringDescription();
 }
 
-class MemberVideoScrollPhysics extends AlwaysScrollableScrollPhysics {
-  const MemberVideoScrollPhysics({super.parent, required this.controller});
+mixin ReloadMixin {
+  late bool reload = false;
+}
 
-  final MemberVideoCtr controller;
+class ReloadScrollPhysics extends AlwaysScrollableScrollPhysics {
+  const ReloadScrollPhysics({super.parent, required this.controller});
+
+  final ReloadMixin controller;
 
   @override
-  MemberVideoScrollPhysics applyTo(ScrollPhysics? ancestor) {
-    return MemberVideoScrollPhysics(
+  ReloadScrollPhysics applyTo(ScrollPhysics? ancestor) {
+    return ReloadScrollPhysics(
         parent: buildParent(ancestor), controller: controller);
   }
 
