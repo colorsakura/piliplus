@@ -515,14 +515,20 @@ class _SponsorBlockPageState extends State<SponsorBlockPage> {
                 ),
               ),
               Builder(
-                builder: (context) {
-                  return PopupMenuButton(
+                builder: (btnContext) {
+                  return PopupMenuButton<SkipType>(
                     initialValue: item.second,
                     onSelected: (e) {
+                      final updateItem = e == SkipType.disable ||
+                          item.second == SkipType.disable;
                       item.second = e;
                       setting.put(SettingBoxKey.blockSettings,
                           _blockSettings.map((e) => e.second.index).toList());
-                      (context as Element).markNeedsBuild();
+                      if (updateItem) {
+                        (context as Element).markNeedsBuild();
+                      } else {
+                        (btnContext as Element).markNeedsBuild();
+                      }
                     },
                     itemBuilder: (context) => SkipType.values
                         .map((item) => PopupMenuItem<SkipType>(
