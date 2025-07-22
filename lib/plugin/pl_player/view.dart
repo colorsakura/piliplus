@@ -627,8 +627,8 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
               size: 24,
               color: Colors.white,
             ),
-            onTap: () => plPlayerController.triggerFullScreen(
-                status: !isFullScreen, duration: 800),
+            onTap: () =>
+                plPlayerController.triggerFullScreen(status: !isFullScreen),
           ),
         ),
       ),
@@ -876,8 +876,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                         details.localFocalPoint.dy - _initialFocalPoint.dy;
 
                     void fullScreenTrigger(bool status) {
-                      plPlayerController.triggerFullScreen(
-                          status: status, duration: 800);
+                      plPlayerController.triggerFullScreen(status: status);
                     }
 
                     if (cumulativeDy > threshold) {

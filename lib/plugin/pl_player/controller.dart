@@ -1324,49 +1324,54 @@ class PlPlayerController {
   late final horizontalScreen = Pref.horizontalScreen;
 
   // 全屏
-  void triggerFullScreen({bool status = true, int duration = 500}) {
-    EasyThrottle.throttle('fullScreen', Duration(milliseconds: duration),
-        () async {
-      stopScreenTimer();
+  bool fsProcessing = false;
+  Future<void> triggerFullScreen({bool status = true}) async {
+    if (fsProcessing) {
+      return;
+    }
+    fsProcessing = true;
 
-      if (!isFullScreen.value && status) {
-        hideStatusBar();
+    if (!isFullScreen.value && status) {
+      hideStatusBar();
 
-        /// 按照视频宽高比决定全屏方向
-        toggleFullScreen(true);
+      /// 按照视频宽高比决定全屏方向
+      toggleFullScreen(true);
 
-        /// 进入全屏
-        if (mode == FullScreenMode.none) {
-          return;
-        }
-        if (mode == FullScreenMode.gravity) {
-          fullAutoModeForceSensor();
-          return;
-        }
-        if (mode == FullScreenMode.vertical ||
-            (mode == FullScreenMode.auto && direction.value == 'vertical') ||
-            (mode == FullScreenMode.ratio &&
-                (Get.height / Get.width < 1.25 ||
-                    direction.value == 'vertical'))) {
-          await verticalScreenForTwoSeconds();
-        } else {
-          await landScape();
-        }
-      } else if (isFullScreen.value && !status) {
-        if (Get.currentRoute.startsWith('/liveRoom') || !removeSafeArea) {
-          showStatusBar();
-        }
-        toggleFullScreen(false);
-        if (mode == FullScreenMode.none) {
-          return;
-        }
-        if (!horizontalScreen) {
-          await verticalScreenForTwoSeconds();
-        } else {
-          await autoScreen();
-        }
+      /// 进入全屏
+      if (mode == FullScreenMode.none) {
+        fsProcessing = false;
+        return;
       }
-    });
+      if (mode == FullScreenMode.gravity) {
+        fullAutoModeForceSensor();
+        fsProcessing = false;
+        return;
+      }
+      if (mode == FullScreenMode.vertical ||
+          (mode == FullScreenMode.auto && direction.value == 'vertical') ||
+          (mode == FullScreenMode.ratio &&
+              (Get.height / Get.width < 1.25 ||
+                  direction.value == 'vertical'))) {
+        await verticalScreenForTwoSeconds();
+      } else {
+        await landScape();
+      }
+    } else if (isFullScreen.value && !status) {
+      if (Get.currentRoute.startsWith('/liveRoom') || !removeSafeArea) {
+        showStatusBar();
+      }
+      toggleFullScreen(false);
+      if (mode == FullScreenMode.none) {
+        fsProcessing = false;
+        return;
+      }
+      if (!horizontalScreen) {
+        await verticalScreenForTwoSeconds();
+      } else {
+        await autoScreen();
+      }
+    }
+    fsProcessing = false;
   }
 
   void addPositionListener(Function(Duration position) listener) =>

@@ -7,12 +7,6 @@ import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
-Timer? screenTimer;
-void stopScreenTimer() {
-  screenTimer?.cancel();
-  screenTimer = null;
-}
-
 //横屏
 Future<void> landScape() async {
   dynamic document;
@@ -40,10 +34,7 @@ Future<void> verticalScreenForTwoSeconds() async {
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
   ]);
-  screenTimer = Timer(const Duration(seconds: 2), () {
-    autoScreen();
-    screenTimer = null;
-  });
+  await autoScreen();
 }
 
 //竖屏
@@ -54,8 +45,9 @@ Future<void> verticalScreen() async {
 }
 
 //全向
+bool allowRotateScreen = Pref.allowRotateScreen;
 Future<void> autoScreen() async {
-  if (!Pref.allowRotateScreen) {
+  if (!allowRotateScreen) {
     return;
   }
   await SystemChrome.setPreferredOrientations([

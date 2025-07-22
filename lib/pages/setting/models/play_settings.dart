@@ -7,6 +7,8 @@ import 'package:PiliPlus/pages/setting/models/model.dart';
 import 'package:PiliPlus/pages/setting/widgets/select_dialog.dart';
 import 'package:PiliPlus/plugin/pl_player/models/bottom_progress_behavior.dart';
 import 'package:PiliPlus/plugin/pl_player/models/fullscreen_mode.dart';
+import 'package:PiliPlus/plugin/pl_player/utils/fullscreen.dart'
+    show allowRotateScreen;
 import 'package:PiliPlus/services/service_locator.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/storage_key.dart';
@@ -152,6 +154,7 @@ List<SettingsModel> get playSettings => [
         leading: const Icon(Icons.screen_rotation_alt_outlined),
         setKey: SettingBoxKey.allowRotateScreen,
         defaultVal: true,
+        onChanged: (value) => allowRotateScreen = value,
       ),
       SettingsModel(
         settingsType: SettingsType.sw1tch,
