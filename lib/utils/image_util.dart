@@ -4,7 +4,6 @@ import 'package:PiliPlus/http/init.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/global_data.dart';
 import 'package:PiliPlus/utils/utils.dart';
-import 'package:device_info_plus/device_info_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -90,8 +89,7 @@ class ImageUtil {
   static Future<bool> checkPermissionDependOnSdkInt(
       BuildContext context) async {
     if (Platform.isAndroid) {
-      final androidInfo = await DeviceInfoPlugin().androidInfo;
-      if (androidInfo.version.sdkInt <= 32) {
+      if (await Utils.sdkInt <= 32) {
         if (!context.mounted) return false;
         return requestStoragePer(context);
       } else {

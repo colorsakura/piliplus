@@ -2,8 +2,8 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:PiliPlus/utils/storage_pref.dart';
+import 'package:PiliPlus/utils/utils.dart';
 import 'package:auto_orientation/auto_orientation.dart';
-import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
@@ -76,8 +76,7 @@ Future<void> showStatusBar() async {
     if (kIsWeb) {
       document.exitFullscreen();
     } else if (Platform.isAndroid || Platform.isIOS) {
-      if (Platform.isAndroid &&
-          (await DeviceInfoPlugin().androidInfo).version.sdkInt < 29) {
+      if (Platform.isAndroid && (await Utils.sdkInt < 29)) {
         mode = SystemUiMode.manual;
       }
       await SystemChrome.setEnabledSystemUIMode(

@@ -9,7 +9,6 @@ import 'package:PiliPlus/utils/image_util.dart';
 import 'package:PiliPlus/utils/storage_pref.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:device_info_plus/device_info_plus.dart';
 import 'package:easy_debounce/easy_throttle.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -131,8 +130,7 @@ class _InteractiveviewerGalleryState extends State<InteractiveviewerGallery>
         SystemUiMode.immersiveSticky,
       );
     }
-    if (Platform.isAndroid &&
-        (await DeviceInfoPlugin().androidInfo).version.sdkInt < 29) {
+    if (Platform.isAndroid && (await Utils.sdkInt < 29)) {
       mode = SystemUiMode.manual;
     }
   }

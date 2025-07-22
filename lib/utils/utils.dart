@@ -15,6 +15,16 @@ class Utils {
 
   static const channel = MethodChannel("PiliPlus");
 
+  static int? _sdkInt;
+
+  static Future<int> get sdkInt async {
+    if (_sdkInt != null) {
+      return _sdkInt!;
+    }
+    _sdkInt = (await DeviceInfoPlugin().androidInfo).version.sdkInt;
+    return _sdkInt!;
+  }
+
   static bool? _isIpad;
 
   static Future<bool> isIpad() async {
