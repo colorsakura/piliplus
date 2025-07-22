@@ -1,3 +1,4 @@
+import 'package:PiliPlus/pages/member_video/controller.dart';
 import 'package:PiliPlus/utils/storage_pref.dart';
 import 'package:flutter/material.dart';
 
@@ -46,11 +47,14 @@ class CustomTabBarViewClampingScrollPhysics extends ClampingScrollPhysics {
 }
 
 class MemberVideoScrollPhysics extends AlwaysScrollableScrollPhysics {
-  const MemberVideoScrollPhysics({super.parent});
+  const MemberVideoScrollPhysics({super.parent, required this.controller});
+
+  final MemberVideoCtr controller;
 
   @override
   MemberVideoScrollPhysics applyTo(ScrollPhysics? ancestor) {
-    return MemberVideoScrollPhysics(parent: buildParent(ancestor));
+    return MemberVideoScrollPhysics(
+        parent: buildParent(ancestor), controller: controller);
   }
 
   @override
@@ -60,7 +64,8 @@ class MemberVideoScrollPhysics extends AlwaysScrollableScrollPhysics {
     required bool isScrolling,
     required double velocity,
   }) {
-    if (newPosition.maxScrollExtent < oldPosition.maxScrollExtent) {
+    if (controller.reload) {
+      controller.reload = false;
       return 0;
     }
     return super.adjustPositionForNewDimensions(

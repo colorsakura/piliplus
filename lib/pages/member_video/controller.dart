@@ -213,8 +213,11 @@ class MemberVideoCtr
     }
   }
 
+  bool reload = false;
+
   @override
   Future<void> onReload() {
+    reload = true;
     isLocating.value = null;
     return super.onReload();
   }
