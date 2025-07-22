@@ -145,14 +145,14 @@ class HeaderControlState extends State<HeaderControl> {
                     leading: const Icon(Icons.note_alt_outlined, size: 20),
                     title: const Text('查看笔记', style: titleStyle),
                   ),
-                if (widget.videoDetailCtr.videoItem['pic'] != null)
+                if (widget.videoDetailCtr.cover.value.isNotEmpty)
                   ListTile(
                     dense: true,
                     onTap: () {
                       Get.back();
                       ImageUtil.downloadImg(
                         context,
-                        [widget.videoDetailCtr.videoItem['pic']],
+                        [widget.videoDetailCtr.cover.value],
                       );
                     },
                     leading: const Icon(Icons.image_outlined, size: 20),

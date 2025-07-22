@@ -12,18 +12,18 @@ abstract class CommonIntroController extends GetxController {
   String bvid = Get.parameters['bvid']!;
 
   // 是否点赞
-  RxBool hasLike = false.obs;
+  final RxBool hasLike = false.obs;
   // 投币数量
   final RxNum coinNum = RxNum(0);
   // 是否投币
   bool get hasCoin => coinNum.value != 0;
   // 是否收藏
-  RxBool hasFav = false.obs;
+  final RxBool hasFav = false.obs;
 
-  List<VideoTagItem>? videoTags;
+  final Rx<List<VideoTagItem>?> videoTags = Rx<List<VideoTagItem>?>(null);
 
   Set? favIds;
-  Rx<FavFolderData> favFolderData = FavFolderData().obs;
+  final Rx<FavFolderData> favFolderData = FavFolderData().obs;
 
   AccountService accountService = Get.find<AccountService>();
 
@@ -54,10 +54,10 @@ abstract class CommonIntroController extends GetxController {
   }
 
   Future<void> queryVideoTags() async {
-    videoTags = null;
+    videoTags.value = null;
     var result = await UserHttp.videoTags(bvid: bvid);
     if (result['status']) {
-      videoTags = result['data'];
+      videoTags.value = result['data'];
     }
   }
 }

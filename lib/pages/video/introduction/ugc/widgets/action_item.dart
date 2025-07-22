@@ -11,7 +11,6 @@ class ActionItem extends StatefulWidget {
   final Icon? selectIcon;
   final VoidCallback? onTap;
   final VoidCallback? onLongPress;
-  final bool? isLoading;
   final String? text;
   final bool selectStatus;
   final String semanticsLabel;
@@ -26,7 +25,6 @@ class ActionItem extends StatefulWidget {
     this.selectIcon,
     this.onTap,
     this.onLongPress,
-    this.isLoading,
     this.text,
     this.selectStatus = false,
     this.needAnim = false,
@@ -178,26 +176,22 @@ class ActionItemState extends State<ActionItem>
                   ],
                 ),
                 if (widget.text != null)
-                  AnimatedOpacity(
-                    opacity: widget.isLoading! ? 0 : 1,
-                    duration: const Duration(milliseconds: 200),
-                    child: AnimatedSwitcher(
-                      duration: const Duration(milliseconds: 300),
-                      transitionBuilder:
-                          (Widget child, Animation<double> animation) {
-                        return ScaleTransition(scale: animation, child: child);
-                      },
-                      child: Text(
-                        widget.text!,
-                        key: ValueKey<String>(widget.text!),
-                        style: TextStyle(
-                          color: widget.selectStatus
-                              ? theme.colorScheme.primary
-                              : theme.colorScheme.outline,
-                          fontSize: theme.textTheme.labelSmall!.fontSize,
-                        ),
-                        semanticsLabel: "",
+                  AnimatedSwitcher(
+                    duration: const Duration(milliseconds: 300),
+                    transitionBuilder:
+                        (Widget child, Animation<double> animation) {
+                      return ScaleTransition(scale: animation, child: child);
+                    },
+                    child: Text(
+                      widget.text!,
+                      key: ValueKey(widget.text!),
+                      style: TextStyle(
+                        color: widget.selectStatus
+                            ? theme.colorScheme.primary
+                            : theme.colorScheme.outline,
+                        fontSize: theme.textTheme.labelSmall!.fontSize,
                       ),
+                      semanticsLabel: "",
                     ),
                   ),
               ],

@@ -16,6 +16,7 @@ import 'package:PiliPlus/models_new/pgc/pgc_rank/pgc_rank_item_model.dart';
 import 'package:PiliPlus/models_new/triple/pgc_triple.dart';
 import 'package:PiliPlus/models_new/triple/ugc_triple.dart';
 import 'package:PiliPlus/models_new/video/video_ai_conclusion/data.dart';
+import 'package:PiliPlus/models_new/video/video_detail/data.dart';
 import 'package:PiliPlus/models_new/video/video_detail/video_detail_response.dart';
 import 'package:PiliPlus/models_new/video/video_note_list/data.dart';
 import 'package:PiliPlus/models_new/video/video_play_info/data.dart';
@@ -251,30 +252,15 @@ class VideoHttp {
   }
 
   // 视频信息 标题、简介
-  static Future videoIntro({required String bvid}) async {
+  static Future<LoadingState<VideoDetailData>> videoIntro(
+      {required String bvid}) async {
     var res =
         await Request().get(Api.videoIntro, queryParameters: {'bvid': bvid});
-    VideoDetailResponse result = VideoDetailResponse.fromJson(res.data);
-    if (result.code == 0) {
-      return {
-        'status': true,
-        'data': result.data!,
-      };
+    VideoDetailResponse data = VideoDetailResponse.fromJson(res.data);
+    if (data.code == 0) {
+      return Success(data.data!);
     } else {
-      // Map errMap = {
-      //   -400: '请求错误',
-      //   -403: '权限不足',
-      //   -404: '视频资源失效',
-      //   62002: '稿件不可见',
-      //   62004: '稿件审核中',
-      // };
-      return {
-        'status': false,
-        'data': result.data,
-        'code': result.code,
-        'msg': result.message,
-        // 'msg': errMap[result.code] ?? '请求异常',
-      };
+      return Error(data.message);
     }
   }
 

@@ -751,7 +751,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                                                         context,
                                                         [
                                                           videoDetailController
-                                                              .videoItem['pic']
+                                                              .cover.value
                                                         ],
                                                       );
                                                       break;
@@ -772,8 +772,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                                                       child: Text('查看笔记'),
                                                     ),
                                                   if (videoDetailController
-                                                          .videoItem['pic'] !=
-                                                      null)
+                                                      .cover.value.isNotEmpty)
                                                     const PopupMenuItem<String>(
                                                       value: 'savePic',
                                                       child: Text('保存封面'),
@@ -1288,7 +1287,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                           case 'savePic':
                             ImageUtil.downloadImg(
                               context,
-                              [videoDetailController.videoItem['pic']],
+                              [videoDetailController.cover.value],
                             );
                             break;
                         }
@@ -1304,7 +1303,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                             value: 'note',
                             child: Text('查看笔记'),
                           ),
-                        if (videoDetailController.videoItem['pic'] != null)
+                        if (videoDetailController.cover.value.isNotEmpty)
                           const PopupMenuItem<String>(
                             value: 'savePic',
                             child: Text('保存封面'),
@@ -1584,10 +1583,8 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                         onTap: handlePlay,
                         child: Obx(
                           () => CachedNetworkImage(
-                            imageUrl: (videoDetailController.videoItem['pic']
-                                        as String?)
-                                    ?.http2https ??
-                                '',
+                            imageUrl:
+                                videoDetailController.cover.value.http2https,
                             width: videoWidth,
                             height: videoHeight,
                             fit: BoxFit.cover,
@@ -1857,7 +1854,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                     videoIntroController: videoIntroController,
                     type: EpisodeType.part,
                     list: [videoIntroController.videoDetail.value.pages!],
-                    cover: videoDetailController.videoItem['pic'],
+                    cover: videoDetailController.cover.value,
                     bvid: videoDetailController.bvid,
                     aid: IdUtils.bv2av(videoDetailController.bvid),
                     cid: videoDetailController.cid.value,
@@ -1905,7 +1902,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                   videoIntroController: videoIntroController,
                   type: EpisodeType.season,
                   initialTabIndex: videoDetailController.seasonIndex.value,
-                  cover: videoDetailController.videoItem['pic'],
+                  cover: videoDetailController.cover.value,
                   seasonId:
                       videoIntroController.videoDetail.value.ugcSeason!.id,
                   list: videoIntroController
@@ -2034,7 +2031,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
               : episodes is List<Part>
                   ? EpisodeType.part
                   : EpisodeType.pgc,
-          cover: videoDetailController.videoItem['pic'],
+          cover: videoDetailController.cover.value,
           enableSlide: enableSlide,
           initialTabIndex: index ?? 0,
           bvid: bvid,

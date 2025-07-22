@@ -167,7 +167,6 @@ class PiliScheme {
                 PageUtils.toVideoPage(
                   'bvid=$bvid&cid=${queryParameters['cid']}',
                   arguments: {
-                    'pic': null,
                     'heroTag': Utils.makeHeroTag(aid),
                     if (queryParameters['dm_progress'] != null)
                       'progress': int.tryParse(queryParameters['dm_progress']!),
@@ -877,7 +876,6 @@ class PiliScheme {
         PageUtils.toVideoPage(
           'bvid=$bvid&cid=$cid',
           arguments: {
-            'pic': null,
             'heroTag': Utils.makeHeroTag(aid),
             if (progress != null) 'progress': int.tryParse(progress),
           },

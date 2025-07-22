@@ -334,7 +334,7 @@ class PgcIntroController extends CommonIntroController {
           ..danmakuCid.value = cid
           ..queryVideoUrl();
     if (cover is String && cover.isNotEmpty) {
-      videoDetailCtr.videoItem['pic'] = cover;
+      videoDetailCtr.cover.value = cover;
     }
 
     // 重新请求评论

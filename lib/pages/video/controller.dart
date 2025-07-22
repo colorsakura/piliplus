@@ -63,31 +63,30 @@ class VideoDetailController extends GetxController
     with GetTickerProviderStateMixin {
   /// 路由传参
   String bvid = Get.parameters['bvid']!;
-  RxInt cid = int.parse(Get.parameters['cid']!).obs;
-  RxInt danmakuCid = 0.obs;
-  String heroTag = Get.arguments['heroTag'];
-  // 视频详情
-  RxMap videoItem = {}.obs;
+  final RxInt cid = int.parse(Get.parameters['cid']!).obs;
+  final RxInt danmakuCid = 0.obs;
+  final heroTag = Get.arguments['heroTag'];
+  final RxString cover = ''.obs;
   // 视频类型 默认投稿视频
-  SearchType videoType = Get.arguments['videoType'] ?? SearchType.video;
+  final videoType = Get.arguments['videoType'] ?? SearchType.video;
 
   /// tabs相关配置
   late TabController tabCtr;
 
   // 请求返回的视频信息
   late PlayUrlModel data;
-  Rx<LoadingState> videoState = LoadingState.loading().obs;
+  final Rx<LoadingState> videoState = LoadingState.loading().obs;
 
   /// 播放器配置 画质 音质 解码格式
   late VideoQuality currentVideoQa;
   AudioQuality? currentAudioQa;
   late VideoDecodeFormatType currentDecodeFormats;
   // 是否开始自动播放 存在多p的情况下，第二p需要为true
-  RxBool autoPlay = true.obs;
+  final RxBool autoPlay = true.obs;
   // 封面图的展示
-  RxBool isShowCover = true.obs;
+  final RxBool isShowCover = true.obs;
 
-  RxInt oid = 0.obs;
+  final RxInt oid = 0.obs;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final childKey = GlobalKey<ScaffoldState>();
@@ -116,13 +115,13 @@ class VideoDetailController extends GetxController
       : plPlayerController.showBangumiReply;
 
   int? seasonCid;
-  late RxInt seasonIndex = 0.obs;
+  late final RxInt seasonIndex = 0.obs;
 
   PlayerStatus? playerStatus;
   StreamSubscription<Duration>? positionSubscription;
 
   late final scrollKey = GlobalKey<ExtendedNestedScrollViewState>();
-  late RxString direction = 'horizontal'.obs;
+  late final RxString direction = 'horizontal'.obs;
   late final RxDouble scrollRatio = 0.0.obs;
   late final ScrollController scrollCtr = ScrollController()
     ..addListener(scrollListener);
@@ -235,7 +234,7 @@ class VideoDetailController extends GetxController
 // 页面来源 稍后再看 收藏夹
   String sourceType = 'normal';
   late bool _mediaDesc = false;
-  late RxList<MediaListItemModel> mediaList = <MediaListItemModel>[].obs;
+  late final RxList<MediaListItemModel> mediaList = <MediaListItemModel>[].obs;
   late String watchLaterTitle = '';
   bool get isPlayAll =>
       const ['watchLater', 'fav', 'archive', 'playlist'].contains(sourceType);
@@ -255,18 +254,21 @@ class VideoDetailController extends GetxController
     super.onInit();
     var keys = Get.arguments.keys.toList();
     if (keys.isNotEmpty) {
-      if (keys.contains('videoItem')) {
+      if (keys.contains('pic')) {
+        cover.value = Get.arguments['pic'];
+      } else if (keys.contains('videoItem')) {
         var args = Get.arguments['videoItem'];
         try {
           if (args.pic != null && args.pic != '') {
-            videoItem['pic'] = args.pic;
-          } else if (args.cover != null && args.cover != '') {
-            videoItem['pic'] = args.cover;
+            cover.value = args.pic;
           }
-        } catch (_) {}
-      }
-      if (keys.contains('pic')) {
-        videoItem['pic'] = Get.arguments['pic'];
+        } catch (_) {
+          try {
+            if (args.cover != null && args.cover != '') {
+              cover.value = args.cover;
+            }
+          } catch (_) {}
+        }
       }
     }
 

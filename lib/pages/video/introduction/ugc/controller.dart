@@ -9,6 +9,7 @@ import 'package:PiliPlus/http/member.dart';
 import 'package:PiliPlus/http/search.dart';
 import 'package:PiliPlus/http/user.dart';
 import 'package:PiliPlus/http/video.dart';
+import 'package:PiliPlus/member_card_info/data.dart';
 import 'package:PiliPlus/models_new/triple/ugc_triple.dart';
 import 'package:PiliPlus/models_new/video/video_ai_conclusion/data.dart';
 import 'package:PiliPlus/models_new/video/video_ai_conclusion/model_result.dart';
@@ -42,75 +43,69 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 
 class VideoIntroController extends CommonIntroController {
-  // 视频详情 上个页面传入
-  Map videoItem = {};
-  late final RxMap staffRelations = {}.obs;
+  String heroTag = '';
 
-  // 视频详情 请求返回
-  Rx<VideoDetailData> videoDetail = VideoDetailData().obs;
+  late ExpandableController expandableCtr;
+
+  final RxBool status = true.obs;
+  final Rx<VideoDetailData> videoDetail = VideoDetailData().obs;
 
   // up主粉丝数
-  RxMap<String, dynamic> userStat = RxMap<String, dynamic>({'follower': '-'});
+  final Rx<MemberCardInfoData> userStat = MemberCardInfoData().obs;
+  // 关注状态 默认未关注
+  late final RxMap followStatus = {}.obs;
+  late final RxMap staffRelations = {}.obs;
 
   // 是否点踩
-  RxBool hasDislike = false.obs;
+  final RxBool hasDislike = false.obs;
 
   // 是否稍后再看
-  RxBool hasLater = false.obs;
+  final RxBool hasLater = false.obs;
 
-  // 关注状态 默认未关注
-  RxMap followStatus = {}.obs;
-
-  RxInt lastPlayCid = 0.obs;
+  final RxInt lastPlayCid = 0.obs;
 
   // 同时观看
   final bool isShowOnlineTotal = Pref.enableOnlineTotal;
   late final RxString total = '1'.obs;
   Timer? timer;
-  String heroTag = '';
-  AiConclusionResult? aiConclusionResult;
-  RxMap<String, dynamic> queryVideoIntroData =
-      RxMap<String, dynamic>({"status": true});
-
-  ExpandableController? expandableCtr;
 
   late final showArgueMsg = Pref.showArgueMsg;
   late final enableAi = Pref.enableAi;
+  late final horizontalMemberPage = Pref.horizontalMemberPage;
+
+  AiConclusionResult? aiConclusionResult;
 
   @override
   void onInit() {
     super.onInit();
+    bool alwaysExapndIntroPanel = Pref.alwaysExapndIntroPanel;
+    expandableCtr =
+        ExpandableController(initialExpanded: alwaysExapndIntroPanel);
+    if (!alwaysExapndIntroPanel && Pref.exapndIntroPanelH) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (Get.context!.orientation == Orientation.landscape &&
+            expandableCtr.expanded == false) {
+          expandableCtr.toggle();
+        }
+      });
+    }
+
     try {
       if (heroTag.isEmpty) {
         heroTag = Get.arguments['heroTag'];
       }
     } catch (_) {}
-    if (Get.arguments.isNotEmpty) {
-      if (Get.arguments.containsKey('videoItem')) {
-        var args = Get.arguments['videoItem'];
-        var keys = Get.arguments.keys.toList();
-        try {
-          if (args.pic != null && args.pic != '') {
-            videoItem['pic'] = args.pic;
-          } else if (args.cover != null && args.cover != '') {
-            videoItem['pic'] = args.cover;
-          }
-        } catch (_) {}
-        if (args.title is String) {
-          videoItem['title'] = args.title;
-        } else {
-          String str = '';
-          for (Map map in args.title) {
-            str += map['text'];
-          }
-          videoItem['title'] = str;
+    try {
+      var videoItem = Get.arguments['videoItem'];
+      if (videoItem != null) {
+        if (videoItem.title case String e) {
+          videoDetail.value.title = e;
+        } else if (videoItem.title case List list) {
+          videoDetail.value.title =
+              list.fold<String>('', (prev, val) => prev + val['text']);
         }
-        videoItem
-          ..['stat'] = keys.contains('stat') ? args.stat : null
-          ..['pubdate'] = keys.contains('pubdate') ? args.pubdate : null
-          ..['owner'] = keys.contains('owner') ? args.owner : null;
       }
-    }
+    } catch (_) {}
     lastPlayCid.value = int.parse(Get.parameters['cid']!);
     startTimer();
     queryVideoIntro();
@@ -119,9 +114,9 @@ class VideoIntroController extends CommonIntroController {
   // 获取视频简介&分p
   Future<void> queryVideoIntro() async {
     queryVideoTags();
-    var result = await VideoHttp.videoIntro(bvid: bvid);
-    if (result['status']) {
-      VideoDetailData data = result['data'];
+    var res = await VideoHttp.videoIntro(bvid: bvid);
+    if (res.isSuccess) {
+      VideoDetailData data = res.data;
       videoPlayerServiceHandler.onVideoDetailChange(data, data.cid!, heroTag);
       if (videoDetail.value.ugcSeason?.id == data.ugcSeason?.id) {
         // keep reversed season
@@ -134,15 +129,13 @@ class VideoIntroController extends CommonIntroController {
           ..isPageReversed = videoDetail.value.isPageReversed;
       }
       videoDetail.value = data;
-      videoItem['staff'] = data.staff;
       try {
         final videoDetailController =
             Get.find<VideoDetailController>(tag: heroTag);
-        if (videoDetailController.videoItem['pic'] == null ||
-            videoDetailController.videoItem['pic'] == '' ||
+        if (videoDetailController.cover.value.isEmpty ||
             (videoDetailController.videoUrl.isNullOrEmpty &&
                 !videoDetailController.isQuerying)) {
-          videoDetailController.videoItem['pic'] = data.pic;
+          videoDetailController.cover.value = data.pic ?? '';
         }
         if (videoDetailController.showReply) {
           try {
@@ -157,12 +150,12 @@ class VideoIntroController extends CommonIntroController {
           lastPlayCid.value == 0) {
         lastPlayCid.value = videoDetail.value.pages!.first.cid!;
       }
-      queryUserStat();
+      queryUserStat(data.staff);
     } else {
-      SmartDialog.showToast(
-          "${result['code']} ${result['msg']} ${result['data']}");
+      res.toast();
+      status.value = false;
     }
-    queryVideoIntroData.addAll(result);
+
     if (accountService.isLogin.value) {
       queryAllStatus();
       queryFollowStatus();
@@ -170,15 +163,11 @@ class VideoIntroController extends CommonIntroController {
   }
 
   // 获取up主粉丝数
-  Future<void> queryUserStat() async {
-    if (videoItem['staff']?.isNotEmpty == true) {
+  Future<void> queryUserStat(List<Staff>? staff) async {
+    if (staff?.isNotEmpty == true) {
       Request().get(
         Api.relations,
-        queryParameters: {
-          'fids': (videoItem['staff'] as List<Staff>)
-              .map((item) => item.mid)
-              .join(',')
-        },
+        queryParameters: {'fids': staff!.map((item) => item.mid).join(',')},
       ).then((res) {
         if (res.data['code'] == 0) {
           staffRelations.addAll({
@@ -194,7 +183,7 @@ class VideoIntroController extends CommonIntroController {
       var result =
           await MemberHttp.memberCardInfo(mid: videoDetail.value.owner!.mid!);
       if (result['status']) {
-        userStat.addAll(result['data']);
+        userStat.value = result['data'];
       }
     }
   }
@@ -323,8 +312,7 @@ class VideoIntroController extends CommonIntroController {
       return;
     }
 
-    int copyright =
-        (queryVideoIntroData['data'] as VideoDetailData?)?.copyright ?? 1;
+    int copyright = videoDetail.value.copyright ?? 1;
     if ((copyright != 1 && coinNum.value >= 1) || coinNum.value >= 2) {
       SmartDialog.showToast('达到投币上限啦~');
       return;
@@ -528,7 +516,8 @@ class VideoIntroController extends CommonIntroController {
 
   // 查询关注状态
   Future<void> queryFollowStatus() async {
-    if (videoDetail.value.owner == null) {
+    if (videoDetail.value.owner == null ||
+        videoDetail.value.staff?.isNotEmpty == true) {
       return;
     }
     var result = await UserHttp.hasFollow(videoDetail.value.owner!.mid!);
@@ -588,7 +577,7 @@ class VideoIntroController extends CommonIntroController {
         PageUtils.toVideoPage(
           'bvid=$bvid&cid=$cid',
           arguments: {
-            if (cover != null) 'pic': cover,
+            'pic': cover,
             'heroTag': Utils.makeHeroTag(bvid),
           },
         );
@@ -608,8 +597,10 @@ class VideoIntroController extends CommonIntroController {
       ..queryVideoUrl();
 
     if (this.bvid != bvid) {
+      aiConclusionResult = null;
+
       if (cover is String && cover.isNotEmpty) {
-        videoDetailCtr.videoItem['pic'] = cover;
+        videoDetailCtr.cover.value = cover;
       }
 
       // 重新请求相关视频
@@ -672,8 +663,7 @@ class VideoIntroController extends CommonIntroController {
   @override
   void onClose() {
     canelTimer();
-    expandableCtr?.dispose();
-    expandableCtr = null;
+    expandableCtr.dispose();
     super.onClose();
   }
 
