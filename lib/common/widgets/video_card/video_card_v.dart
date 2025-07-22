@@ -43,8 +43,8 @@ class VideoCardV extends StatelessWidget {
           PageUtils.toVideoPage(
             'bvid=$bvid&cid=$cid',
             arguments: {
-              'pic': videoItem.cover,
               'heroTag': heroTag,
+              'videoItem': videoItem,
             },
           );
         }

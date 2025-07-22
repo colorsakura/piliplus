@@ -164,25 +164,28 @@ class _VideoIntroPanelState extends State<VideoIntroPanel>
                         ),
                       ),
                       const SizedBox(height: 8),
-                      ExpandablePanel(
-                        controller: introController.expandableCtr,
-                        collapsed: GestureDetector(
-                          onLongPress: () {
-                            Feedback.forLongPress(context);
-                            Utils.copyText(videoDetail.title ?? '');
-                          },
-                          child: _buildVideoTitle(theme, videoDetail),
+                      if (isLoading)
+                        _buildVideoTitle(theme, videoDetail)
+                      else
+                        ExpandablePanel(
+                          controller: introController.expandableCtr,
+                          collapsed: GestureDetector(
+                            onLongPress: () {
+                              Feedback.forLongPress(context);
+                              Utils.copyText(videoDetail.title ?? '');
+                            },
+                            child: _buildVideoTitle(theme, videoDetail),
+                          ),
+                          expanded: GestureDetector(
+                            onLongPress: () {
+                              Feedback.forLongPress(context);
+                              Utils.copyText(videoDetail.title ?? '');
+                            },
+                            child: _buildVideoTitle(theme, videoDetail,
+                                isExpand: true),
+                          ),
+                          theme: expandTheme,
                         ),
-                        expanded: GestureDetector(
-                          onLongPress: () {
-                            Feedback.forLongPress(context);
-                            Utils.copyText(videoDetail.title ?? '');
-                          },
-                          child: _buildVideoTitle(theme, videoDetail,
-                              isExpand: true),
-                        ),
-                        theme: expandTheme,
-                      ),
                       const SizedBox(height: 8),
                       Stack(
                         clipBehavior: Clip.none,
@@ -508,8 +511,9 @@ class _VideoIntroPanelState extends State<VideoIntroPanel>
                   handleState(videoIntroController.actionOneThree),
               selectStatus: videoIntroController.hasLike.value,
               semanticsLabel: '点赞',
-              text:
-                  !isLoading ? NumUtil.numFormat(videoDetail.stat!.like!) : '-',
+              text: !isLoading
+                  ? NumUtil.numFormat(videoDetail.stat!.like!)
+                  : null,
               needAnim: true,
               hasTriple: videoIntroController.hasLike.value &&
                   videoIntroController.hasCoin &&
@@ -544,8 +548,9 @@ class _VideoIntroPanelState extends State<VideoIntroPanel>
               onTap: () => handleState(videoIntroController.actionCoinVideo),
               selectStatus: videoIntroController.hasCoin,
               semanticsLabel: '投币',
-              text:
-                  !isLoading ? NumUtil.numFormat(videoDetail.stat!.coin!) : '-',
+              text: !isLoading
+                  ? NumUtil.numFormat(videoDetail.stat!.coin!)
+                  : null,
               needAnim: true,
             ),
           ),
@@ -561,7 +566,7 @@ class _VideoIntroPanelState extends State<VideoIntroPanel>
               semanticsLabel: '收藏',
               text: !isLoading
                   ? NumUtil.numFormat(videoDetail.stat!.favorite!)
-                  : '-',
+                  : null,
               needAnim: true,
             ),
           ),
@@ -581,7 +586,7 @@ class _VideoIntroPanelState extends State<VideoIntroPanel>
             selectStatus: false,
             semanticsLabel: '分享',
             text:
-                !isLoading ? NumUtil.numFormat(videoDetail.stat!.share!) : '分享',
+                !isLoading ? NumUtil.numFormat(videoDetail.stat!.share!) : null,
           ),
         ],
       ),

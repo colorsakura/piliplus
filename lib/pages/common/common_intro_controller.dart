@@ -54,10 +54,11 @@ abstract class CommonIntroController extends GetxController {
   }
 
   Future<void> queryVideoTags() async {
-    videoTags.value = null;
     var result = await UserHttp.videoTags(bvid: bvid);
     if (result['status']) {
       videoTags.value = result['data'];
+    } else {
+      videoTags.value = null;
     }
   }
 }

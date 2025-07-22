@@ -121,84 +121,78 @@ class ActionItemState extends State<ActionItem>
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return widget.expand == false
-        ? _buildItem(theme)
-        : Expanded(child: _buildItem(theme));
-  }
-
-  Widget _buildItem(ThemeData theme) => Semantics(
-        label: (widget.text ?? "") +
-            (widget.selectStatus ? "已" : "") +
-            widget.semanticsLabel,
-        child: Material(
-          type: MaterialType.transparency,
-          child: InkWell(
-            borderRadius: const BorderRadius.all(Radius.circular(6)),
-            onTap: _isThumbsUp
-                ? null
-                : () {
-                    feedBack();
-                    widget.onTap?.call();
-                  },
-            onLongPress: _isThumbsUp ? null : widget.onLongPress,
-            onTapDown: _isThumbsUp ? (details) => _startLongPress() : null,
-            onTapUp: _isThumbsUp ? (details) => _cancelLongPress() : null,
-            onTapCancel: _isThumbsUp ? () => _cancelLongPress(true) : null,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+    final hasText = widget.text != null;
+    final text = Text(
+      hasText ? widget.text! : '-',
+      key: hasText ? ValueKey(widget.text!) : null,
+      style: TextStyle(
+        color: widget.selectStatus
+            ? theme.colorScheme.primary
+            : theme.colorScheme.outline,
+        fontSize: theme.textTheme.labelSmall!.fontSize,
+      ),
+    );
+    final child = Material(
+      type: MaterialType.transparency,
+      child: InkWell(
+        borderRadius: const BorderRadius.all(Radius.circular(6)),
+        onTap: _isThumbsUp
+            ? null
+            : () {
+                feedBack();
+                widget.onTap?.call();
+              },
+        onLongPress: _isThumbsUp ? null : widget.onLongPress,
+        onTapDown: _isThumbsUp ? (details) => _startLongPress() : null,
+        onTapUp: _isThumbsUp ? (details) => _cancelLongPress() : null,
+        onTapCancel: _isThumbsUp ? () => _cancelLongPress(true) : null,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Stack(
+              clipBehavior: Clip.none,
+              alignment: Alignment.center,
               children: [
-                Stack(
-                  clipBehavior: Clip.none,
-                  alignment: Alignment.center,
-                  children: [
-                    if (widget.needAnim)
-                      AnimatedBuilder(
-                        animation: _animation!,
-                        builder: (context, child) => CustomPaint(
-                          size: const Size(28, 28),
-                          painter: _ArcPainter(
-                            color: theme.colorScheme.primary,
-                            sweepAngle: _animation!.value,
-                          ),
-                        ),
-                      )
-                    else
-                      const SizedBox(width: 28, height: 28),
-                    Icon(
-                      widget.selectStatus
-                          ? widget.selectIcon!.icon!
-                          : widget.icon.icon,
-                      size: 18,
-                      color: widget.selectStatus
-                          ? theme.colorScheme.primary
-                          : widget.icon.color ?? theme.colorScheme.outline,
-                    ),
-                  ],
-                ),
-                if (widget.text != null)
-                  AnimatedSwitcher(
-                    duration: const Duration(milliseconds: 300),
-                    transitionBuilder:
-                        (Widget child, Animation<double> animation) {
-                      return ScaleTransition(scale: animation, child: child);
-                    },
-                    child: Text(
-                      widget.text!,
-                      key: ValueKey(widget.text!),
-                      style: TextStyle(
-                        color: widget.selectStatus
-                            ? theme.colorScheme.primary
-                            : theme.colorScheme.outline,
-                        fontSize: theme.textTheme.labelSmall!.fontSize,
+                if (widget.needAnim)
+                  AnimatedBuilder(
+                    animation: _animation!,
+                    builder: (context, child) => CustomPaint(
+                      size: const Size(28, 28),
+                      painter: _ArcPainter(
+                        color: theme.colorScheme.primary,
+                        sweepAngle: _animation!.value,
                       ),
-                      semanticsLabel: "",
                     ),
-                  ),
+                  )
+                else
+                  const SizedBox(width: 28, height: 28),
+                Icon(
+                  widget.selectStatus
+                      ? widget.selectIcon!.icon!
+                      : widget.icon.icon,
+                  size: 18,
+                  color: widget.selectStatus
+                      ? theme.colorScheme.primary
+                      : widget.icon.color ?? theme.colorScheme.outline,
+                ),
               ],
             ),
-          ),
+            if (widget.text != null)
+              AnimatedSwitcher(
+                duration: const Duration(milliseconds: 300),
+                transitionBuilder: (Widget child, Animation<double> animation) {
+                  return ScaleTransition(scale: animation, child: child);
+                },
+                child: text,
+              )
+            else
+              text
+          ],
         ),
-      );
+      ),
+    );
+    return widget.expand == false ? child : Expanded(child: child);
+  }
 }
 
 class _ArcPainter extends CustomPainter {
