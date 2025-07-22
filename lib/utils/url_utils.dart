@@ -54,7 +54,7 @@ class UrlUtils {
       if (cid != null) {
         PageUtils.toVideoPage(
           'bvid=$bvid&cid=$cid',
-          arguments: <String, String?>{
+          arguments: {
             'heroTag': Utils.makeHeroTag(bvid),
           },
           preventDuplicates: false,

@@ -36,10 +36,11 @@ class _WhisperSecPageState extends State<WhisperSecPage> {
         title: Text(widget.name),
         actions: [
           Obx(() {
-            if (_controller.threeDotItems.value?.isNotEmpty == true) {
+            final threeDotItems = _controller.threeDotItems.value;
+            if (threeDotItems?.isNotEmpty == true) {
               return PopupMenuButton(
                 itemBuilder: (context) {
-                  return _controller.threeDotItems.value!
+                  return threeDotItems!
                       .map((e) => PopupMenuItem(
                             onTap: () => e.type.action(
                               context: context,

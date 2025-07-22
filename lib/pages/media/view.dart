@@ -119,33 +119,36 @@ class _MediaPageState extends CommonPageState<MediaPage, MediaController>
           title: Padding(
             padding: const EdgeInsets.only(left: 10),
             child: Obx(
-              () => Text.rich(
-                TextSpan(
-                  children: [
-                    TextSpan(
-                      text: '我的收藏  ',
-                      style: TextStyle(
-                          fontSize: theme.textTheme.titleMedium!.fontSize,
-                          fontWeight: FontWeight.bold),
-                    ),
-                    if (controller.count.value != -1)
+              () {
+                final count = controller.count.value;
+                return Text.rich(
+                  TextSpan(
+                    children: [
                       TextSpan(
-                        text: "${controller.count.value}  ",
+                        text: '我的收藏  ',
                         style: TextStyle(
-                          fontSize: theme.textTheme.titleSmall!.fontSize,
+                            fontSize: theme.textTheme.titleMedium!.fontSize,
+                            fontWeight: FontWeight.bold),
+                      ),
+                      if (count != -1)
+                        TextSpan(
+                          text: "$count  ",
+                          style: TextStyle(
+                            fontSize: theme.textTheme.titleSmall!.fontSize,
+                            color: theme.colorScheme.primary,
+                          ),
+                        ),
+                      WidgetSpan(
+                        child: Icon(
+                          Icons.arrow_forward_ios,
+                          size: 18,
                           color: theme.colorScheme.primary,
                         ),
                       ),
-                    WidgetSpan(
-                      child: Icon(
-                        Icons.arrow_forward_ios,
-                        size: 18,
-                        color: theme.colorScheme.primary,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+                    ],
+                  ),
+                );
+              },
             ),
           ),
           trailing: IconButton(

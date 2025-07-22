@@ -83,26 +83,29 @@ class _LivePageState extends CommonPageState<LivePage, LiveController>
                       late final item = data
                           .second!.cardData!.areaEntranceV3!.list![index - 1];
                       return Obx(
-                        () => SearchText(
-                          fontSize: 14,
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 8,
-                            vertical: 3,
-                          ),
-                          text: index == 0 ? '推荐' : '${item.title}',
-                          bgColor: index == controller.areaIndex.value
-                              ? theme.colorScheme.secondaryContainer
-                              : Colors.transparent,
-                          textColor: index == controller.areaIndex.value
-                              ? theme.colorScheme.onSecondaryContainer
-                              : null,
-                          onTap: (value) {
-                            controller.onSelectArea(
-                              index,
-                              index == 0 ? null : item,
-                            );
-                          },
-                        ),
+                        () {
+                          final isCurr = index == controller.areaIndex.value;
+                          return SearchText(
+                            fontSize: 14,
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 8,
+                              vertical: 3,
+                            ),
+                            text: index == 0 ? '推荐' : '${item.title}',
+                            bgColor: isCurr
+                                ? theme.colorScheme.secondaryContainer
+                                : Colors.transparent,
+                            textColor: isCurr
+                                ? theme.colorScheme.onSecondaryContainer
+                                : null,
+                            onTap: (value) {
+                              controller.onSelectArea(
+                                index,
+                                index == 0 ? null : item,
+                              );
+                            },
+                          );
+                        },
                       );
                     },
                     itemCount:
@@ -153,26 +156,29 @@ class _LivePageState extends CommonPageState<LivePage, LiveController>
                   childBuilder: (index) {
                     late final item = controller.newTags![index];
                     return Obx(
-                      () => SearchText(
-                        fontSize: 13,
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 8,
-                          vertical: 3,
-                        ),
-                        text: '${item.name}',
-                        bgColor: index == controller.tagIndex.value
-                            ? theme.colorScheme.secondaryContainer
-                            : Colors.transparent,
-                        textColor: index == controller.tagIndex.value
-                            ? theme.colorScheme.onSecondaryContainer
-                            : null,
-                        onTap: (value) {
-                          controller.onSelectTag(
-                            index,
-                            item.sortType,
-                          );
-                        },
-                      ),
+                      () {
+                        final isCurr = index == controller.tagIndex.value;
+                        return SearchText(
+                          fontSize: 13,
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 8,
+                            vertical: 3,
+                          ),
+                          text: '${item.name}',
+                          bgColor: isCurr
+                              ? theme.colorScheme.secondaryContainer
+                              : Colors.transparent,
+                          textColor: isCurr
+                              ? theme.colorScheme.onSecondaryContainer
+                              : null,
+                          onTap: (value) {
+                            controller.onSelectTag(
+                              index,
+                              item.sortType,
+                            );
+                          },
+                        );
+                      },
                     );
                   },
                   itemCount: controller.newTags!.length,

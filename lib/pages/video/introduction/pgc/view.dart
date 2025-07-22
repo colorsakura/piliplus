@@ -124,7 +124,7 @@ class _PgcIntroPageState extends State<PgcIntroPage>
                 Expanded(
                   child: GestureDetector(
                     onTap: () => widget.showIntroDetail(
-                        item, pgcIntroController.videoTags),
+                        item, pgcIntroController.videoTags.value),
                     behavior: HitTestBehavior.opaque,
                     child: SizedBox(
                       height: isLandscape ? 115 : 115 / 0.75,
@@ -147,55 +147,56 @@ class _PgcIntroPageState extends State<PgcIntroPage>
                                 ),
                               ),
                               Obx(
-                                () => FilledButton.tonal(
-                                  style: FilledButton.styleFrom(
-                                    tapTargetSize:
-                                        MaterialTapTargetSize.shrinkWrap,
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 20,
-                                      vertical: 10,
+                                () {
+                                  final isFollowed =
+                                      pgcIntroController.isFollowed.value;
+                                  final followStatus =
+                                      pgcIntroController.followStatus.value;
+                                  return FilledButton.tonal(
+                                    style: FilledButton.styleFrom(
+                                      tapTargetSize:
+                                          MaterialTapTargetSize.shrinkWrap,
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 20,
+                                        vertical: 10,
+                                      ),
+                                      visualDensity: VisualDensity.compact,
+                                      foregroundColor: isFollowed
+                                          ? theme.colorScheme.outline
+                                          : null,
+                                      backgroundColor: isFollowed
+                                          ? theme.colorScheme.onInverseSurface
+                                          : null,
                                     ),
-                                    visualDensity: VisualDensity.compact,
-                                    foregroundColor:
-                                        pgcIntroController.isFollowed.value
-                                            ? theme.colorScheme.outline
-                                            : null,
-                                    backgroundColor:
-                                        pgcIntroController.isFollowed.value
-                                            ? theme.colorScheme.onInverseSurface
-                                            : null,
-                                  ),
-                                  onPressed: pgcIntroController
-                                              .followStatus.value ==
-                                          -1
-                                      ? null
-                                      : () {
-                                          if (pgcIntroController
-                                              .isFollowed.value) {
-                                            showPgcFollowDialog(
-                                              context: context,
-                                              type: pgcIntroController.type,
-                                              followStatus: pgcIntroController
-                                                  .followStatus.value,
-                                              onUpdateStatus: (followStatus) {
-                                                if (followStatus == -1) {
-                                                  pgcIntroController.pgcDel();
-                                                } else {
-                                                  pgcIntroController
-                                                      .pgcUpdate(followStatus);
-                                                }
-                                              },
-                                            );
-                                          } else {
-                                            pgcIntroController.pgcAdd();
-                                          }
-                                        },
-                                  child: Text(
-                                    pgcIntroController.isFollowed.value
-                                        ? '已${pgcIntroController.type}'
-                                        : '${pgcIntroController.type}',
-                                  ),
-                                ),
+                                    onPressed: followStatus == -1
+                                        ? null
+                                        : () {
+                                            if (isFollowed) {
+                                              showPgcFollowDialog(
+                                                context: context,
+                                                type: pgcIntroController.type,
+                                                followStatus: followStatus,
+                                                onUpdateStatus: (followStatus) {
+                                                  if (followStatus == -1) {
+                                                    pgcIntroController.pgcDel();
+                                                  } else {
+                                                    pgcIntroController
+                                                        .pgcUpdate(
+                                                            followStatus);
+                                                  }
+                                                },
+                                              );
+                                            } else {
+                                              pgcIntroController.pgcAdd();
+                                            }
+                                          },
+                                    child: Text(
+                                      isFollowed
+                                          ? '已${pgcIntroController.type}'
+                                          : '${pgcIntroController.type}',
+                                    ),
+                                  );
+                                },
                               ),
                             ],
                           ),

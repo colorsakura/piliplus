@@ -164,12 +164,16 @@ class _SubDetailPageState extends State<SubDetailPage> {
                     ),
                     const Spacer(),
                     Obx(
-                      () => _subDetailController.mediaCount.value == 0
-                          ? const SizedBox.shrink()
-                          : Text(
-                              '共${_subDetailController.mediaCount.value}条视频',
-                              style: style,
-                            ),
+                      () {
+                        final mediaCount =
+                            _subDetailController.mediaCount.value;
+                        return mediaCount == 0
+                            ? const SizedBox.shrink()
+                            : Text(
+                                '共$mediaCount条视频',
+                                style: style,
+                              );
+                      },
                     ),
                     Obx(
                       () => Text(

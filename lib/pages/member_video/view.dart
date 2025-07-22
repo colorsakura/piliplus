@@ -134,43 +134,47 @@ class _MemberVideoState extends State<MemberVideo>
                       child: Row(
                         children: [
                           const SizedBox(width: 8),
-                          Obx(
-                            () => Padding(
-                              padding: const EdgeInsets.only(left: 6),
-                              child: Text(
-                                _controller.count.value != -1
-                                    ? '共${_controller.count.value}视频'
-                                    : '',
-                                style: const TextStyle(fontSize: 13),
-                              ),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 6),
+                            child: Obx(
+                              () {
+                                final count = _controller.count.value;
+                                return Text(
+                                  count != -1 ? '共$count视频' : '',
+                                  style: const TextStyle(fontSize: 13),
+                                );
+                              },
                             ),
                           ),
                           Obx(
-                            () => _controller.episodicButton.value.uri != null
-                                ? Container(
-                                    height: 35,
-                                    padding: EdgeInsets.only(
-                                        left: _controller.count.value != -1
-                                            ? 6
-                                            : 0),
-                                    child: TextButton.icon(
-                                      onPressed: _controller.toViewPlayAll,
-                                      icon: Icon(
-                                        Icons.play_circle_outline_rounded,
-                                        size: 16,
-                                        color: theme.colorScheme.secondary,
-                                      ),
-                                      label: Text(
-                                        _controller.episodicButton.value.text ??
-                                            '播放全部',
-                                        style: TextStyle(
-                                          fontSize: 13,
+                            () {
+                              final episodicButton =
+                                  _controller.episodicButton.value;
+                              return episodicButton.uri?.isNotEmpty == true
+                                  ? Container(
+                                      height: 35,
+                                      padding: EdgeInsets.only(
+                                          left: _controller.count.value != -1
+                                              ? 6
+                                              : 0),
+                                      child: TextButton.icon(
+                                        onPressed: _controller.toViewPlayAll,
+                                        icon: Icon(
+                                          Icons.play_circle_outline_rounded,
+                                          size: 16,
                                           color: theme.colorScheme.secondary,
                                         ),
+                                        label: Text(
+                                          episodicButton.text ?? '播放全部',
+                                          style: TextStyle(
+                                            fontSize: 13,
+                                            color: theme.colorScheme.secondary,
+                                          ),
+                                        ),
                                       ),
-                                    ),
-                                  )
-                                : const SizedBox.shrink(),
+                                    )
+                                  : const SizedBox.shrink();
+                            },
                           ),
                           const Spacer(),
                           SizedBox(

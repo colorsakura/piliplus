@@ -276,9 +276,10 @@ class _WhisperDetailPageState
           ),
           Obx(
             () {
+              final enablePublish = this.enablePublish.value;
               return IconButton(
                 onPressed: () async {
-                  if (enablePublish.value) {
+                  if (enablePublish) {
                     _whisperDetailController.sendMsg(
                       message: editController.rawText,
                       onClearText: editController.clear,
@@ -325,10 +326,10 @@ class _WhisperDetailPageState
                     }
                   }
                 },
-                icon: Icon(enablePublish.value
+                icon: Icon(enablePublish
                     ? Icons.send
                     : Icons.add_photo_alternate_outlined),
-                tooltip: enablePublish.value ? '发送' : '图片',
+                tooltip: enablePublish ? '发送' : '图片',
               );
             },
           ),

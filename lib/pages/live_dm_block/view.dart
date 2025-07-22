@@ -187,23 +187,27 @@ class _LiveDmBlockPageState extends State<LiveDmBlockPage> {
     return [
       const SizedBox(height: 6),
       Obx(
-        () => Row(
-          spacing: 10,
-          children: [
-            Text('屏蔽${_controller.isEnable.value ? '已' : '未'}开启'),
-            Transform.scale(
-              scale: .8,
-              child: Switch(
-                value: _controller.isEnable.value,
-                onChanged: _controller.setEnable,
+        () {
+          final isEnable = _controller.isEnable.value;
+          return Row(
+            spacing: 10,
+            children: [
+              Text('屏蔽${isEnable ? '已' : '未'}开启'),
+              Transform.scale(
+                scale: .8,
+                child: Switch(
+                  value: isEnable,
+                  onChanged: _controller.setEnable,
+                ),
               ),
-            ),
-          ],
-        ),
+            ],
+          );
+        },
       ),
       const SizedBox(height: 6),
       Obx(
         () {
+          final level = _controller.level.value;
           return Row(
             children: [
               const Text('用户等级'),
@@ -214,23 +218,22 @@ class _LiveDmBlockPageState extends State<LiveDmBlockPage> {
                 year2023: true,
                 inactiveColor: theme.colorScheme.onInverseSurface,
                 padding: const EdgeInsets.only(left: 20, right: 25),
-                value: _controller.level.value.toDouble(),
-                onChangeStart: (value) =>
-                    _controller.oldLevel = _controller.level.value,
+                value: level.toDouble(),
+                onChangeStart: (value) => _controller.oldLevel = level,
                 onChanged: (value) =>
                     _controller.level.value = value.round().clamp(0, 60),
                 onChangeEnd: (value) {
-                  if (_controller.oldLevel != _controller.level.value) {
+                  if (_controller.oldLevel != level) {
                     _controller.setSilent(
                       LiveDmSilentType.level,
-                      _controller.level.value,
+                      level,
                       onError: () =>
                           _controller.level.value = _controller.oldLevel ?? 0,
                     );
                   }
                 },
               ),
-              Text('${_controller.level.value} 以下')
+              Text('$level 以下')
             ],
           );
         },

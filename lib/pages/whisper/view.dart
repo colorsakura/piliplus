@@ -27,9 +27,10 @@ class _WhisperPageState extends State<WhisperPage> {
         title: const Text('消息'),
         actions: [
           Obx(() {
-            if (_controller.outsideItem.value?.isNotEmpty == true) {
+            final outsideItem = _controller.outsideItem.value;
+            if (outsideItem?.isNotEmpty == true) {
               return Row(
-                  children: _controller.outsideItem.value!.map((e) {
+                  children: outsideItem!.map((e) {
                 return IconButton(
                   tooltip: e.hasTitle() ? e.title : null,
                   onPressed: () => e.type.action(
@@ -43,10 +44,11 @@ class _WhisperPageState extends State<WhisperPage> {
             return const SizedBox.shrink();
           }),
           Obx(() {
-            if (_controller.threeDotItems.value?.isNotEmpty == true) {
+            final threeDotItems = _controller.threeDotItems.value;
+            if (threeDotItems?.isNotEmpty == true) {
               return PopupMenuButton(
                 itemBuilder: (context) {
-                  return _controller.threeDotItems.value!
+                  return threeDotItems!
                       .map((e) => PopupMenuItem(
                             onTap: () => e.type.action(
                               context: context,

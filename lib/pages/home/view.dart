@@ -253,17 +253,18 @@ Widget msgBadge(MainController mainController) {
     Get.toNamed('/whisper');
   }
 
+  final msgUnReadCount = mainController.msgUnReadCount.value;
   return GestureDetector(
     onTap: toWhisper,
     child: Badge(
       isLabelVisible: mainController.msgBadgeMode != DynamicBadgeMode.hidden &&
-          mainController.msgUnReadCount.value.isNotEmpty,
+          msgUnReadCount.isNotEmpty,
       alignment: mainController.msgBadgeMode == DynamicBadgeMode.number
           ? const Alignment(0, -0.5)
           : const Alignment(0.5, -0.5),
       label: mainController.msgBadgeMode == DynamicBadgeMode.number &&
-              mainController.msgUnReadCount.value.isNotEmpty
-          ? Text(mainController.msgUnReadCount.value.toString())
+              msgUnReadCount.isNotEmpty
+          ? Text(msgUnReadCount)
           : null,
       child: IconButton(
         tooltip: '消息',

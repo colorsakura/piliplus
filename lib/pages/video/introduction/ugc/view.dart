@@ -259,12 +259,11 @@ class _VideoIntroPanelState extends State<VideoIntroPanel>
                               ),
                             ],
                             Obx(() {
-                              if (introController
-                                  .videoTags.value.isNullOrEmpty) {
+                              final videoTags = introController.videoTags.value;
+                              if (videoTags.isNullOrEmpty) {
                                 return const SizedBox.shrink();
                               }
-                              return _buildTags(
-                                  introController.videoTags.value!);
+                              return _buildTags(videoTags!);
                             })
                           ],
                         ),
@@ -366,86 +365,90 @@ class _VideoIntroPanelState extends State<VideoIntroPanel>
   Widget _buildVideoTitle(ThemeData theme, VideoDetailData videoDetail,
       {bool isExpand = false}) {
     late final isDark = theme.brightness == Brightness.dark;
-    Widget child() => Text.rich(
-          TextSpan(
-            children: [
-              if (videoDetailCtr.videoLabel.value.isNotEmpty) ...[
-                WidgetSpan(
-                  alignment: PlaceholderAlignment.middle,
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 4,
-                      vertical: 2,
-                    ),
-                    decoration: BoxDecoration(
-                      color: theme.colorScheme.secondaryContainer,
-                      borderRadius: const BorderRadius.all(Radius.circular(4)),
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Stack(
-                          clipBehavior: Clip.none,
-                          alignment: Alignment.center,
-                          children: [
-                            Icon(
-                              Icons.shield_outlined,
-                              size: 16,
-                              color: theme.colorScheme.onSecondaryContainer,
-                            ),
-                            Icon(
-                              Icons.play_arrow_rounded,
-                              size: 12,
-                              color: theme.colorScheme.onSecondaryContainer,
-                            ),
-                          ],
-                        ),
-                        Text(
-                          videoDetailCtr.videoLabel.value,
-                          textScaler: TextScaler.noScaling,
-                          strutStyle: const StrutStyle(
-                            leading: 0,
-                            height: 1,
-                            fontSize: 13,
-                          ),
-                          style: TextStyle(
-                            height: 1,
-                            fontSize: 13,
+    Widget child() {
+      final videoLabel = videoDetailCtr.videoLabel.value;
+      return Text.rich(
+        TextSpan(
+          children: [
+            if (videoLabel.isNotEmpty) ...[
+              WidgetSpan(
+                alignment: PlaceholderAlignment.middle,
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 4,
+                    vertical: 2,
+                  ),
+                  decoration: BoxDecoration(
+                    color: theme.colorScheme.secondaryContainer,
+                    borderRadius: const BorderRadius.all(Radius.circular(4)),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Stack(
+                        clipBehavior: Clip.none,
+                        alignment: Alignment.center,
+                        children: [
+                          Icon(
+                            Icons.shield_outlined,
+                            size: 16,
                             color: theme.colorScheme.onSecondaryContainer,
                           ),
+                          Icon(
+                            Icons.play_arrow_rounded,
+                            size: 12,
+                            color: theme.colorScheme.onSecondaryContainer,
+                          ),
+                        ],
+                      ),
+                      Text(
+                        videoLabel,
+                        textScaler: TextScaler.noScaling,
+                        strutStyle: const StrutStyle(
+                          leading: 0,
+                          height: 1,
+                          fontSize: 13,
                         ),
-                      ],
-                    ),
+                        style: TextStyle(
+                          height: 1,
+                          fontSize: 13,
+                          color: theme.colorScheme.onSecondaryContainer,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-                const TextSpan(text: ' '),
-              ],
-              if (videoDetail.isUpowerExclusive == true) ...[
-                _labelWidget(
-                  '充电专属',
-                  isDark
-                      ? theme.colorScheme.error
-                      : theme.colorScheme.errorContainer,
-                  isDark
-                      ? theme.colorScheme.onError
-                      : theme.colorScheme.onErrorContainer,
-                ),
-                const TextSpan(text: ' '),
-              ] else if (videoDetail.rights?.isSteinGate == 1) ...[
-                _labelWidget(
-                  '互动视频',
-                  theme.colorScheme.secondaryContainer,
-                  theme.colorScheme.onSecondaryContainer,
-                ),
-                const TextSpan(text: ' '),
-              ],
-              TextSpan(text: videoDetail.title ?? ''),
+              ),
+              const TextSpan(text: ' '),
             ],
-          ),
-          maxLines: isExpand ? null : 2,
-          overflow: isExpand ? null : TextOverflow.ellipsis,
-          style: const TextStyle(fontSize: 16),
-        );
+            if (videoDetail.isUpowerExclusive == true) ...[
+              _labelWidget(
+                '充电专属',
+                isDark
+                    ? theme.colorScheme.error
+                    : theme.colorScheme.errorContainer,
+                isDark
+                    ? theme.colorScheme.onError
+                    : theme.colorScheme.onErrorContainer,
+              ),
+              const TextSpan(text: ' '),
+            ] else if (videoDetail.rights?.isSteinGate == 1) ...[
+              _labelWidget(
+                '互动视频',
+                theme.colorScheme.secondaryContainer,
+                theme.colorScheme.onSecondaryContainer,
+              ),
+              const TextSpan(text: ' '),
+            ],
+            TextSpan(text: videoDetail.title ?? ''),
+          ],
+        ),
+        maxLines: isExpand ? null : 2,
+        overflow: isExpand ? null : TextOverflow.ellipsis,
+        style: const TextStyle(fontSize: 16),
+      );
+    }
+
     if (videoDetailCtr.plPlayerController.enableSponsorBlock) {
       return Obx(child);
     }

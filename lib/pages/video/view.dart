@@ -98,11 +98,13 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
   bool isShowing = true;
   bool get isFullScreen => plPlayerController?.isFullScreen.value ?? false;
 
-  bool get _shouldShowSeasonPanel =>
-      (videoIntroController.videoDetail.value.ugcSeason != null ||
-          ((videoIntroController.videoDetail.value.pages?.length ?? 0) > 1)) &&
-      context.orientation == Orientation.landscape &&
-      videoDetailController.plPlayerController.horizontalSeasonPanel;
+  bool get _shouldShowSeasonPanel {
+    final videoDetail = videoIntroController.videoDetail.value;
+    return (videoDetail.ugcSeason != null ||
+            ((videoDetail.pages?.length ?? 0) > 1)) &&
+        context.orientation == Orientation.landscape &&
+        videoDetailController.plPlayerController.horizontalSeasonPanel;
+  }
 
   bool get _horizontalPreview =>
       context.orientation == Orientation.landscape &&
@@ -403,9 +405,9 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
       }
     }
     super.didPopNext();
-    videoDetailController.autoPlay.value =
-        !videoDetailController.isShowCover.value;
-    if (!videoDetailController.isShowCover.value) {
+    final isShowCover = videoDetailController.isShowCover.value;
+    videoDetailController.autoPlay.value = !isShowCover;
+    if (!isShowCover) {
       await videoDetailController.playerInit(
         autoplay: videoDetailController.playerStatus == PlayerStatus.playing,
       );
@@ -504,10 +506,10 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                 preferredSize: const Size.fromHeight(0),
                 child: Obx(
                   () {
-                    bool shouldShow =
-                        videoDetailController.scrollRatio.value != 0 &&
-                            videoDetailController.scrollCtr.offset != 0 &&
-                            isPortrait;
+                    final scrollRatio = videoDetailController.scrollRatio.value;
+                    bool shouldShow = scrollRatio != 0 &&
+                        videoDetailController.scrollCtr.offset != 0 &&
+                        isPortrait;
                     return Stack(
                       clipBehavior: Clip.none,
                       children: [
@@ -527,9 +529,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                         if (shouldShow)
                           AppBar(
                             backgroundColor: themeData.colorScheme.surface
-                                .withValues(
-                                    alpha: videoDetailController
-                                        .scrollRatio.value),
+                                .withValues(alpha: scrollRatio),
                             toolbarHeight: 0,
                             systemOverlayStyle: Platform.isAndroid
                                 ? SystemUiOverlayStyle(
@@ -1523,29 +1523,28 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                     width: 38,
                     height: 38,
                     child: Obx(
-                      () => IconButton(
-                        onPressed: () {
-                          videoDetailController
-                                  .plPlayerController.enableShowDanmaku.value =
-                              !videoDetailController
-                                  .plPlayerController.enableShowDanmaku.value;
-                          GStorage.setting.put(
-                              SettingBoxKey.enableShowDanmaku,
-                              videoDetailController
-                                  .plPlayerController.enableShowDanmaku.value);
-                        },
-                        icon: Icon(
-                          size: 22,
-                          videoDetailController
-                                  .plPlayerController.enableShowDanmaku.value
-                              ? CustomIcon.dm_on
-                              : CustomIcon.dm_off,
-                          color: videoDetailController
-                                  .plPlayerController.enableShowDanmaku.value
-                              ? themeData.colorScheme.secondary
-                              : themeData.colorScheme.outline,
-                        ),
-                      ),
+                      () {
+                        final enableShowDanmaku = videoDetailController
+                            .plPlayerController.enableShowDanmaku.value;
+                        return IconButton(
+                          onPressed: () {
+                            final newVal = !enableShowDanmaku;
+                            videoDetailController.plPlayerController
+                                .enableShowDanmaku.value = newVal;
+                            GStorage.setting
+                                .put(SettingBoxKey.enableShowDanmaku, newVal);
+                          },
+                          icon: Icon(
+                            size: 22,
+                            enableShowDanmaku
+                                ? CustomIcon.dm_on
+                                : CustomIcon.dm_off,
+                            color: enableShowDanmaku
+                                ? themeData.colorScheme.secondary
+                                : themeData.colorScheme.outline,
+                          ),
+                        );
+                      },
                     ),
                   ),
                   const SizedBox(width: 14),

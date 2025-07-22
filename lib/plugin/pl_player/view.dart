@@ -1134,17 +1134,17 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                               const Text('/', style: textStyle),
                               const SizedBox(width: 2),
                               Obx(
-                                () => Text(
-                                  plPlayerController.durationSeconds.value
-                                              .inMinutes >=
-                                          60
-                                      ? printDurationWithHours(
-                                          plPlayerController
-                                              .durationSeconds.value)
-                                      : printDuration(plPlayerController
-                                          .durationSeconds.value),
-                                  style: textStyle,
-                                ),
+                                () {
+                                  final durationSeconds =
+                                      plPlayerController.durationSeconds.value;
+                                  return Text(
+                                    durationSeconds.inMinutes >= 60
+                                        ? printDurationWithHours(
+                                            durationSeconds)
+                                        : printDuration(durationSeconds),
+                                    style: textStyle,
+                                  );
+                                },
                               ),
                             ],
                           ),
@@ -1250,33 +1250,35 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
 
             // 头部、底部控制条
             Obx(
-              () => Positioned.fill(
-                child: ClipRect(
-                  child: Column(
-                    children: [
-                      AppBarAni(
-                        controller: animationController,
-                        visible: !plPlayerController.controlsLock.value &&
-                            plPlayerController.showControls.value,
-                        position: 'top',
-                        child: widget.headerControl,
-                      ),
-                      const Spacer(),
-                      AppBarAni(
-                        controller: animationController,
-                        visible: !plPlayerController.controlsLock.value &&
-                            plPlayerController.showControls.value,
-                        position: 'bottom',
-                        child: widget.bottomControl ??
-                            BottomControl(
-                              controller: plPlayerController,
-                              buildBottomControl: buildBottomControl,
-                            ),
-                      ),
-                    ],
+              () {
+                final visible = !plPlayerController.controlsLock.value &&
+                    plPlayerController.showControls.value;
+                return Positioned.fill(
+                  child: ClipRect(
+                    child: Column(
+                      children: [
+                        AppBarAni(
+                          controller: animationController,
+                          visible: visible,
+                          position: 'top',
+                          child: widget.headerControl,
+                        ),
+                        const Spacer(),
+                        AppBarAni(
+                          controller: animationController,
+                          visible: visible,
+                          position: 'bottom',
+                          child: widget.bottomControl ??
+                              BottomControl(
+                                controller: plPlayerController,
+                                buildBottomControl: buildBottomControl,
+                              ),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              ),
+                );
+              },
             ),
 
             // if (BuildConfig.isDebug)

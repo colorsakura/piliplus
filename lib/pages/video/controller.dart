@@ -255,17 +255,17 @@ class VideoDetailController extends GetxController
     var keys = Get.arguments.keys.toList();
     if (keys.isNotEmpty) {
       if (keys.contains('pic')) {
-        cover.value = Get.arguments['pic'];
+        cover.value = Get.arguments['pic'] ?? '';
       } else if (keys.contains('videoItem')) {
         var args = Get.arguments['videoItem'];
         try {
-          if (args.pic != null && args.pic != '') {
-            cover.value = args.pic;
+          if (args.cover != null && args.cover != '') {
+            cover.value = args.cover;
           }
         } catch (_) {
           try {
-            if (args.cover != null && args.cover != '') {
-              cover.value = args.cover;
+            if (args.pic != null && args.pic != '') {
+              cover.value = args.pic;
             }
           } catch (_) {}
         }

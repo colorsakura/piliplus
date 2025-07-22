@@ -70,8 +70,8 @@ class _DynTopicPageState extends State<DynTopicPage> {
             slivers: [
               Obx(() => _buildAppBar(theme, _controller.topState.value)),
               Obx(() {
-                if (_controller.topicSortByConf.value?.allSortBy?.isNotEmpty ==
-                    true) {
+                final allSortBy = _controller.topicSortByConf.value?.allSortBy;
+                if (allSortBy != null && allSortBy.isNotEmpty) {
                   return SliverPersistentHeader(
                     pinned: true,
                     delegate: CustomSliverPersistentHeaderDelegate(
@@ -94,18 +94,13 @@ class _DynTopicPageState extends State<DynTopicPage> {
                                 borderRadius:
                                     const BorderRadius.all(Radius.circular(25)),
                                 onPressed: (index) {
-                                  _controller.onSort(_controller.topicSortByConf
-                                      .value!.allSortBy![index].sortBy!);
+                                  _controller.onSort(allSortBy[index].sortBy!);
                                   (context as Element).markNeedsBuild();
                                 },
-                                isSelected: _controller
-                                    .topicSortByConf.value!.allSortBy!
-                                    .map((e) {
+                                isSelected: allSortBy.map((e) {
                                   return e.sortBy == _controller.sortBy;
                                 }).toList(),
-                                children: _controller
-                                    .topicSortByConf.value!.allSortBy!
-                                    .map((e) {
+                                children: allSortBy.map((e) {
                                   return Text(
                                     e.sortName!,
                                     style: const TextStyle(

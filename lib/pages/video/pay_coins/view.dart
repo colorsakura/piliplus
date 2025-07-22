@@ -389,11 +389,10 @@ class _PayCoinsPageState extends State<PayCoinsPage>
                     children: [
                       GestureDetector(
                         onTap: () {
-                          _coinWithLike.value = !_coinWithLike.value;
-                          GStorage.setting.put(
-                            SettingBoxKey.coinWithLike,
-                            _coinWithLike.value,
-                          );
+                          final newVal = !_coinWithLike.value;
+                          _coinWithLike.value = newVal;
+                          GStorage.setting
+                              .put(SettingBoxKey.coinWithLike, newVal);
                         },
                         child: Row(
                           mainAxisSize: MainAxisSize.min,

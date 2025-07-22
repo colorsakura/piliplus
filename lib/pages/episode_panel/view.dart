@@ -593,8 +593,9 @@ class _EpisodePanelState extends CommonSlidePageState<EpisodePanel> {
               icon: Icons.vertical_align_top,
               onPressed: () {
                 try {
-                  _itemScrollController[_currentTabIndex.value].scrollTo(
-                    index: !_isReversed[_currentTabIndex.value]
+                  final currentTabIndex = _currentTabIndex.value;
+                  _itemScrollController[currentTabIndex].scrollTo(
+                    index: !_isReversed[currentTabIndex]
                         ? 0
                         : _getCurrEpisodes.length - 1,
                     duration: const Duration(milliseconds: 200),
@@ -609,8 +610,9 @@ class _EpisodePanelState extends CommonSlidePageState<EpisodePanel> {
               icon: Icons.vertical_align_bottom,
               onPressed: () {
                 try {
-                  _itemScrollController[_currentTabIndex.value].scrollTo(
-                    index: !_isReversed[_currentTabIndex.value]
+                  final currentTabIndex = _currentTabIndex.value;
+                  _itemScrollController[currentTabIndex].scrollTo(
+                    index: !_isReversed[currentTabIndex]
                         ? _getCurrEpisodes.length - 1
                         : 0,
                     duration: const Duration(milliseconds: 200),
@@ -625,11 +627,12 @@ class _EpisodePanelState extends CommonSlidePageState<EpisodePanel> {
               icon: Icons.my_location,
               onPressed: () async {
                 try {
-                  if (_currentTabIndex.value != widget.initialTabIndex) {
+                  final currentTabIndex = _currentTabIndex.value;
+                  if (currentTabIndex != widget.initialTabIndex) {
                     _tabController.animateTo(widget.initialTabIndex);
                     await Future.delayed(const Duration(milliseconds: 225));
                   }
-                  _itemScrollController[_currentTabIndex.value].scrollTo(
+                  _itemScrollController[currentTabIndex].scrollTo(
                     index: _currentItemIndex,
                     duration: const Duration(milliseconds: 200),
                   );
@@ -646,16 +649,19 @@ class _EpisodePanelState extends CommonSlidePageState<EpisodePanel> {
               ),
             const Spacer(),
             Obx(
-              () => mediumButton(
-                tooltip: _isReversed[_currentTabIndex.value] ? '顺序' : '倒序',
-                icon: !_isReversed[_currentTabIndex.value]
-                    ? MdiIcons.sortNumericAscending
-                    : MdiIcons.sortNumericDescending,
-                onPressed: () => setState(() {
-                  _isReversed[_currentTabIndex.value] =
-                      !_isReversed[_currentTabIndex.value];
-                }),
-              ),
+              () {
+                final currentTabIndex = _currentTabIndex.value;
+                return mediumButton(
+                  tooltip: _isReversed[currentTabIndex] ? '顺序' : '倒序',
+                  icon: !_isReversed[currentTabIndex]
+                      ? MdiIcons.sortNumericAscending
+                      : MdiIcons.sortNumericDescending,
+                  onPressed: () => setState(() {
+                    _isReversed[currentTabIndex] =
+                        !_isReversed[currentTabIndex];
+                  }),
+                );
+              },
             ),
             if (widget.onClose != null)
               mediumButton(

@@ -93,16 +93,18 @@ class _MediaListPanelState
             backgroundColor: Colors.transparent,
             actions: [
               Obx(
-                () => mediumButton(
-                  tooltip: desc.value ? '顺序播放' : '倒序播放',
-                  icon: desc.value
-                      ? MdiIcons.sortAscending
-                      : MdiIcons.sortDescending,
-                  onPressed: () {
-                    widget.onReverse();
-                    desc.value = !desc.value;
-                  },
-                ),
+                () {
+                  final desc = this.desc.value;
+                  return mediumButton(
+                    tooltip: desc ? '顺序播放' : '倒序播放',
+                    icon:
+                        desc ? MdiIcons.sortAscending : MdiIcons.sortDescending,
+                    onPressed: () {
+                      widget.onReverse();
+                      this.desc.value = !desc;
+                    },
+                  );
+                },
               ),
               mediumButton(
                 tooltip: '关闭',

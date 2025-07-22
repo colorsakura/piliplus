@@ -238,12 +238,15 @@ class _VideoReplyReplyPanelState
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Obx(
-              () => _controller.count.value != -1
-                  ? Text(
-                      '相关回复共${NumUtil.numFormat(_controller.count.value)}条',
-                      style: const TextStyle(fontSize: 13),
-                    )
-                  : const SizedBox.shrink(),
+              () {
+                final count = _controller.count.value;
+                return count != -1
+                    ? Text(
+                        '相关回复共${NumUtil.numFormat(count)}条',
+                        style: const TextStyle(fontSize: 13),
+                      )
+                    : const SizedBox.shrink();
+              },
             ),
             SizedBox(
               height: 35,

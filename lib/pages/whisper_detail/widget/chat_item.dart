@@ -323,7 +323,7 @@ class ChatItem extends StatelessWidget {
                       if (cid != null) {
                         PageUtils.toVideoPage(
                           'bvid=$bvid&cid=$cid',
-                          arguments: <String, String?>{
+                          arguments: {
                             'pic': i['cover_url'],
                             'heroTag': Utils.makeHeroTag(bvid),
                           },
@@ -413,7 +413,7 @@ class ChatItem extends StatelessWidget {
                     PageUtils.toVideoPage(
                       'bvid=$bvid&cid=$cid',
                       arguments: {
-                        'pic': content['thumb'],
+                        'pic': content['cover'],
                         'heroTag': Utils.makeHeroTag(bvid),
                       },
                     );
@@ -496,7 +496,7 @@ class ChatItem extends StatelessWidget {
           if (cid != null) {
             PageUtils.toVideoPage(
               'bvid=$bvid&cid=$cid',
-              arguments: <String, String?>{
+              arguments: {
                 'pic': content['thumb'],
                 'heroTag': Utils.makeHeroTag(bvid),
               },

@@ -103,8 +103,10 @@ class _MemberOpusState extends State<MemberOpus>
               ),
               icon: const Icon(size: 20, Icons.sort),
               label: Obx(
-                () => Text(_controller.type.value.text ??
-                    _controller.type.value.tabName!),
+                () {
+                  final type = _controller.type.value;
+                  return Text(type.text ?? type.tabName!);
+                },
               ),
             ),
           ),

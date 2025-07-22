@@ -100,10 +100,10 @@ class _ViewPointsPageState
       itemBuilder: (context, index) {
         Segment segment = videoDetailController.viewPointList[index];
         if (currentIndex == -1 && segment.from != null && segment.to != null) {
-          if (videoDetailController.plPlayerController.positionSeconds.value >=
-                  segment.from! &&
-              videoDetailController.plPlayerController.positionSeconds.value <
-                  segment.to!) {
+          final positionSeconds =
+              videoDetailController.plPlayerController.positionSeconds.value;
+          if (positionSeconds >= segment.from! &&
+              positionSeconds < segment.to!) {
             currentIndex = index;
           }
         }

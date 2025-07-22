@@ -87,10 +87,10 @@ class _DynamicsPageState extends State<DynamicsPage>
         height: isTop ? 76 : null,
         child: Obx(
           () {
-            if (_dynamicsController.upData.value.upList == null &&
-                _dynamicsController.upData.value.liveUsers == null) {
+            final upData = _dynamicsController.upData.value;
+            if (upData.upList == null && upData.liveUsers == null) {
               return const SizedBox.shrink();
-            } else if (_dynamicsController.upData.value.errMsg != null) {
+            } else if (upData.errMsg != null) {
               return Center(
                 child: IconButton(
                   icon: const Icon(Icons.refresh),

@@ -10,6 +10,7 @@ import 'package:PiliPlus/http/search.dart';
 import 'package:PiliPlus/http/user.dart';
 import 'package:PiliPlus/http/video.dart';
 import 'package:PiliPlus/member_card_info/data.dart';
+import 'package:PiliPlus/models_new/fav/fav_folder/data.dart';
 import 'package:PiliPlus/models_new/triple/ugc_triple.dart';
 import 'package:PiliPlus/models_new/video/video_ai_conclusion/data.dart';
 import 'package:PiliPlus/models_new/video/video_ai_conclusion/model_result.dart';
@@ -145,10 +146,9 @@ class VideoIntroController extends CommonIntroController {
           } catch (_) {}
         }
       } catch (_) {}
-      if (videoDetail.value.pages != null &&
-          videoDetail.value.pages!.isNotEmpty &&
-          lastPlayCid.value == 0) {
-        lastPlayCid.value = videoDetail.value.pages!.first.cid!;
+      final pages = videoDetail.value.pages;
+      if (pages != null && pages.isNotEmpty && lastPlayCid.value == 0) {
+        lastPlayCid.value = pages.first.cid!;
       }
       queryUserStat(data.staff);
     } else {
@@ -338,8 +338,9 @@ class VideoIntroController extends CommonIntroController {
       SmartDialog.showLoading(msg: '请求中');
       queryVideoInFolder().then((res) async {
         if (res['status']) {
-          int defaultFolderId = favFolderData.value.list!.first.id;
-          bool notInDefFolder = favFolderData.value.list!.first.favState! == 0;
+          final first = favFolderData.value.list!.first;
+          int defaultFolderId = first.id;
+          bool notInDefFolder = first.favState! == 0;
           var result = await FavHttp.favVideo(
             aid: IdUtils.bv2av(bvid),
             addIds: notInDefFolder ? '$defaultFolderId' : '',
@@ -505,8 +506,9 @@ class VideoIntroController extends CommonIntroController {
       rid: IdUtils.bv2av(bvid),
     );
     if (result['status']) {
-      favFolderData.value = result['data'];
-      favIds = favFolderData.value.list
+      FavFolderData data = result['data'];
+      favFolderData.value = data;
+      favIds = data.list
           ?.where((item) => item.favState == 1)
           .map((item) => item.id)
           .toSet();
@@ -516,11 +518,11 @@ class VideoIntroController extends CommonIntroController {
 
   // 查询关注状态
   Future<void> queryFollowStatus() async {
-    if (videoDetail.value.owner == null ||
-        videoDetail.value.staff?.isNotEmpty == true) {
+    final videoDetail = this.videoDetail.value;
+    if (videoDetail.owner == null || videoDetail.staff?.isNotEmpty == true) {
       return;
     }
-    var result = await UserHttp.hasFollow(videoDetail.value.owner!.mid!);
+    var result = await UserHttp.hasFollow(videoDetail.owner!.mid!);
     if (result['status']) {
       Map data = result['data'];
       if (data['special'] == 1) data['attribute'] = -10;

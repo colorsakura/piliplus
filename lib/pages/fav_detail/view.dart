@@ -45,53 +45,56 @@ class _FavDetailPageState extends State<FavDetailPage> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Obx(
-      () => PopScope(
-        canPop: !_favDetailController.enableMultiSelect.value,
-        onPopInvokedWithResult: (didPop, result) {
-          if (_favDetailController.enableMultiSelect.value) {
-            _favDetailController.handleSelect();
-          }
-        },
-        child: Scaffold(
-          resizeToAvoidBottomInset: false,
-          floatingActionButton: Obx(
-            () => _favDetailController.folderInfo.value.mediaCount > 0
-                ? FloatingActionButton.extended(
-                    onPressed: _favDetailController.toViewPlayAll,
-                    label: const Text('播放全部'),
-                    icon: const Icon(Icons.playlist_play),
-                  )
-                : const SizedBox.shrink(),
-          ),
-          body: SafeArea(
-            top: false,
-            bottom: false,
-            child: refreshIndicator(
-              onRefresh: _favDetailController.onRefresh,
-              child: CustomScrollView(
-                physics: const AlwaysScrollableScrollPhysics(),
-                controller: _favDetailController.scrollController,
-                slivers: [
-                  _buildHeader(theme),
-                  SliverPadding(
-                    padding: EdgeInsets.only(
-                      bottom: MediaQuery.paddingOf(context).bottom + 85,
+      () {
+        final enableMultiSelect = _favDetailController.enableMultiSelect.value;
+        return PopScope(
+          canPop: !enableMultiSelect,
+          onPopInvokedWithResult: (didPop, result) {
+            if (enableMultiSelect) {
+              _favDetailController.handleSelect();
+            }
+          },
+          child: Scaffold(
+            resizeToAvoidBottomInset: false,
+            floatingActionButton: Obx(
+              () => _favDetailController.folderInfo.value.mediaCount > 0
+                  ? FloatingActionButton.extended(
+                      onPressed: _favDetailController.toViewPlayAll,
+                      label: const Text('播放全部'),
+                      icon: const Icon(Icons.playlist_play),
+                    )
+                  : const SizedBox.shrink(),
+            ),
+            body: SafeArea(
+              top: false,
+              bottom: false,
+              child: refreshIndicator(
+                onRefresh: _favDetailController.onRefresh,
+                child: CustomScrollView(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  controller: _favDetailController.scrollController,
+                  slivers: [
+                    _buildHeader(enableMultiSelect, theme),
+                    SliverPadding(
+                      padding: EdgeInsets.only(
+                        bottom: MediaQuery.paddingOf(context).bottom + 85,
+                      ),
+                      sliver: Obx(() => _buildBody(enableMultiSelect, theme,
+                          _favDetailController.loadingState.value)),
                     ),
-                    sliver: Obx(() => _buildBody(
-                        theme, _favDetailController.loadingState.value)),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 
-  Widget _buildHeader(ThemeData theme) {
+  Widget _buildHeader(bool enableMultiSelect, ThemeData theme) {
     return SliverAppBar.medium(
-      leading: _favDetailController.enableMultiSelect.value
+      leading: enableMultiSelect
           ? Row(
               children: [
                 IconButton(
@@ -99,16 +102,20 @@ class _FavDetailPageState extends State<FavDetailPage> {
                   onPressed: _favDetailController.handleSelect,
                   icon: const Icon(Icons.close_outlined),
                 ),
-                Text(
-                  '已选: ${_favDetailController.checkedCount.value}',
-                  style: const TextStyle(fontSize: 15),
+                Obx(
+                  () {
+                    return Text(
+                      '已选: ${_favDetailController.checkedCount.value}',
+                      style: const TextStyle(fontSize: 15),
+                    );
+                  },
                 ),
               ],
             )
           : null,
       expandedHeight: kToolbarHeight + 130,
       pinned: true,
-      title: _favDetailController.enableMultiSelect.value
+      title: enableMultiSelect
           ? null
           : Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -123,9 +130,7 @@ class _FavDetailPageState extends State<FavDetailPage> {
                 )
               ],
             ),
-      actions: _favDetailController.enableMultiSelect.value
-          ? _selectActions(theme)
-          : _actions(theme),
+      actions: enableMultiSelect ? _selectActions(theme) : _actions(theme),
       flexibleSpace: _flexibleSpace(theme),
     );
   }
@@ -182,9 +187,10 @@ class _FavDetailPageState extends State<FavDetailPage> {
       PopupMenuButton(
         icon: const Icon(Icons.more_vert),
         itemBuilder: (context) {
+          final isOwner = _favDetailController.isOwner.value ?? false;
           final folderInfo = _favDetailController.folderInfo.value;
           return [
-            if (_favDetailController.isOwner.value == true) ...[
+            if (isOwner) ...[
               PopupMenuItem(
                 onTap: _favDetailController.onSort,
                 child: const Text('排序'),
@@ -222,7 +228,7 @@ class _FavDetailPageState extends State<FavDetailPage> {
                 ),
                 child: const Text('分享至动态'),
               ),
-            if (_favDetailController.isOwner.value == true) ...<PopupMenuEntry>[
+            if (isOwner) ...<PopupMenuEntry>[
               PopupMenuItem(
                 onTap: _favDetailController.cleanFav,
                 child: const Text('清除失效内容'),
@@ -430,8 +436,8 @@ class _FavDetailPageState extends State<FavDetailPage> {
     );
   }
 
-  Widget _buildBody(
-      ThemeData theme, LoadingState<List<FavDetailItemModel>?> loadingState) {
+  Widget _buildBody(bool enableMultiSelect, ThemeData theme,
+      LoadingState<List<FavDetailItemModel>?> loadingState) {
     return switch (loadingState) {
       Loading() => SliverGrid(
           gridDelegate: Grid.videoCardHDelegate(context),
@@ -461,6 +467,7 @@ class _FavDetailPageState extends State<FavDetailPage> {
                       ),
                     );
                   }
+                  final isOwner = _favDetailController.isOwner.value ?? false;
                   FavDetailItemModel item = response[index];
                   return Stack(
                     clipBehavior: Clip.none,
@@ -468,7 +475,7 @@ class _FavDetailPageState extends State<FavDetailPage> {
                       Positioned.fill(
                         child: FavVideoCardH(
                           item: item,
-                          onDelFav: _favDetailController.isOwner.value == true
+                          onDelFav: isOwner
                               ? () => _favDetailController.onCancelFav(
                                     index,
                                     item.id!,
@@ -490,25 +497,22 @@ class _FavDetailPageState extends State<FavDetailPage> {
                                 'count': folderInfo.mediaCount,
                                 'desc': true,
                                 'isContinuePlaying': index != 0,
-                                'isOwner':
-                                    _favDetailController.isOwner.value ?? false,
+                                'isOwner': isOwner,
                               },
                             );
                           },
-                          onTap: _favDetailController.enableMultiSelect.value
+                          onTap: enableMultiSelect
                               ? () => _favDetailController.onSelect(item)
                               : null,
-                          onLongPress:
-                              _favDetailController.isOwner.value == true
-                                  ? () {
-                                      if (!_favDetailController
-                                          .enableMultiSelect.value) {
-                                        _favDetailController
-                                            .enableMultiSelect.value = true;
-                                        _favDetailController.onSelect(item);
-                                      }
-                                    }
-                                  : null,
+                          onLongPress: isOwner
+                              ? () {
+                                  if (!enableMultiSelect) {
+                                    _favDetailController
+                                        .enableMultiSelect.value = true;
+                                    _favDetailController.onSelect(item);
+                                  }
+                                }
+                              : null,
                         ),
                       ),
                       Positioned(

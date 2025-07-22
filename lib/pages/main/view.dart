@@ -368,14 +368,18 @@ class _MainAppState extends State<MainApp>
     final icon = selected ? type.selectIcon : type.icon;
     return type == NavigationBarType.dynamics
         ? Obx(
-            () => Badge(
-              isLabelVisible: _mainController.dynCount.value > 0,
-              label: _mainController.dynamicBadgeMode == DynamicBadgeMode.number
-                  ? Text(_mainController.dynCount.value.toString())
-                  : null,
-              padding: const EdgeInsets.symmetric(horizontal: 6),
-              child: icon,
-            ),
+            () {
+              final dynCount = _mainController.dynCount.value;
+              return Badge(
+                isLabelVisible: dynCount > 0,
+                label:
+                    _mainController.dynamicBadgeMode == DynamicBadgeMode.number
+                        ? Text(dynCount.toString())
+                        : null,
+                padding: const EdgeInsets.symmetric(horizontal: 6),
+                child: icon,
+              );
+            },
           )
         : icon;
   }

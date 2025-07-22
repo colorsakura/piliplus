@@ -155,16 +155,17 @@ class FavDetailController
           if (element.bvid != list.first.bvid) {
             SmartDialog.showToast('已跳过不支持播放的视频');
           }
+          final folderInfo = this.folderInfo.value;
           PageUtils.toVideoPage(
             'bvid=${element.bvid}&cid=${element.ugc!.firstCid}',
             arguments: {
               'videoItem': element,
               'heroTag': Utils.makeHeroTag(element.bvid),
               'sourceType': 'fav',
-              'mediaId': folderInfo.value.id,
+              'mediaId': folderInfo.id,
               'oid': element.id,
-              'favTitle': folderInfo.value.title,
-              'count': folderInfo.value.mediaCount,
+              'favTitle': folderInfo.title,
+              'count': folderInfo.mediaCount,
               'desc': true,
               'isOwner': isOwner.value ?? false,
             },

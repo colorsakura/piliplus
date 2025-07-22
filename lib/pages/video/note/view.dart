@@ -64,10 +64,10 @@ class _NoteListPageState extends CommonSlidePageState<NoteListPage> {
               titleSpacing: 16,
               toolbarHeight: 45,
               backgroundColor: Colors.transparent,
-              title: Obx(
-                () => Text(
-                    '笔记${_controller.count.value == -1 ? '' : '(${_controller.count.value})'}'),
-              ),
+              title: Obx(() {
+                final count = _controller.count.value;
+                return Text('笔记${count == -1 ? '' : '($count)'}');
+              }),
               bottom: PreferredSize(
                 preferredSize: const Size.fromHeight(1),
                 child: Divider(

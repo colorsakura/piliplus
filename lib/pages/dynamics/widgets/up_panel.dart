@@ -20,18 +20,19 @@ class UpPanel extends StatefulWidget {
 }
 
 class _UpPanelState extends State<UpPanel> {
-  List<UpItem>? get upList => widget.dynamicsController.upData.value.upList;
-  List<LiveUserItem>? get liveList =>
-      widget.dynamicsController.upData.value.liveUsers?.items;
   late final isTop =
       widget.dynamicsController.upPanelPosition == UpPanelPosition.top;
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    if (!widget.dynamicsController.accountService.isLogin.value) {
+    final accountService = widget.dynamicsController.accountService;
+    if (!accountService.isLogin.value) {
       return const SizedBox.shrink();
     }
+    final theme = Theme.of(context);
+    final upData = widget.dynamicsController.upData.value;
+    final List<UpItem>? upList = upData.upList;
+    final List<LiveUserItem>? liveList = upData.liveUsers?.items;
     return CustomScrollView(
       scrollDirection: isTop ? Axis.horizontal : Axis.vertical,
       physics: const AlwaysScrollableScrollPhysics(),
@@ -57,8 +58,7 @@ class _UpPanelState extends State<UpPanel> {
                 TextSpan(
                   children: [
                     TextSpan(
-                      text:
-                          'Live(${widget.dynamicsController.upData.value.liveUsers?.count ?? 0})',
+                      text: 'Live(${upData.liveUsers?.count ?? 0})',
                     ),
                     if (!isTop) ...[
                       const TextSpan(text: '\n'),
@@ -94,7 +94,7 @@ class _UpPanelState extends State<UpPanel> {
           SliverList.builder(
             itemCount: liveList!.length,
             itemBuilder: (context, index) {
-              return upItemBuild(theme, liveList![index]);
+              return upItemBuild(theme, liveList[index]);
             },
           ),
         SliverToBoxAdapter(
@@ -106,8 +106,8 @@ class _UpPanelState extends State<UpPanel> {
               theme,
               UpItem(
                 uname: '我',
-                face: widget.dynamicsController.accountService.face.value,
-                mid: widget.dynamicsController.accountService.mid,
+                face: accountService.face.value,
+                mid: accountService.mid,
               ),
             ),
           ),
@@ -116,7 +116,7 @@ class _UpPanelState extends State<UpPanel> {
           SliverList.builder(
             itemCount: upList!.length,
             itemBuilder: (context, index) {
-              return upItemBuild(theme, upList![index]);
+              return upItemBuild(theme, upList[index]);
             },
           ),
         if (!isTop) const SliverToBoxAdapter(child: SizedBox(height: 200)),

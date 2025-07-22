@@ -43,13 +43,14 @@ class _FavPanelState extends State<FavPanel> {
   }
 
   Widget get _buildBody {
+    late final list = widget.ctr.favFolderData.value.list!;
     return switch (loadingState) {
       Loading() => loadingWidget,
       Success() => ListView.builder(
           controller: widget.scrollController,
-          itemCount: widget.ctr.favFolderData.value.list!.length,
+          itemCount: list.length,
           itemBuilder: (context, index) {
-            FavFolderInfo item = widget.ctr.favFolderData.value.list![index];
+            FavFolderInfo item = list[index];
             return Material(
               type: MaterialType.transparency,
               child: Builder(

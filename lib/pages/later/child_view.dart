@@ -77,6 +77,8 @@ class _LaterViewChildPageState extends State<LaterViewChildPage>
                     _laterController.onLoadMore();
                   }
                   var videoItem = response[index];
+                  final enableMultiSelect =
+                      _laterController.baseCtr.enableMultiSelect.value;
                   return Stack(
                     clipBehavior: Clip.none,
                     children: [
@@ -99,12 +101,11 @@ class _LaterViewChildPageState extends State<LaterViewChildPage>
                             },
                           );
                         },
-                        onTap: !_laterController.baseCtr.enableMultiSelect.value
+                        onTap: !enableMultiSelect
                             ? null
                             : () => _laterController.onSelect(videoItem),
                         onLongPress: () {
-                          if (!_laterController
-                              .baseCtr.enableMultiSelect.value) {
+                          if (!enableMultiSelect) {
                             _laterController.baseCtr.enableMultiSelect.value =
                                 true;
                             _laterController.onSelect(videoItem);

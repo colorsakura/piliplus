@@ -188,13 +188,14 @@ class MemberController extends CommonDataController<SpaceData, SpaceData?>
   }
 
   Future<void> _onBlock() async {
+    final isBlocked = relation.value == 128;
     var res = await VideoHttp.relationMod(
       mid: mid,
-      act: relation.value != 128 ? 5 : 6,
+      act: isBlocked ? 6 : 5,
       reSrc: 11,
     );
     if (res['status']) {
-      relation.value = relation.value != 128 ? 128 : 0;
+      relation.value = isBlocked ? 0 : 128;
     }
   }
 
@@ -212,9 +213,7 @@ class MemberController extends CommonDataController<SpaceData, SpaceData?>
         context: context,
         mid: mid,
         isFollow: isFollow,
-        callback: (attribute) {
-          relation.value = attribute;
-        },
+        callback: (attribute) => relation.value = attribute,
       );
     }
   }

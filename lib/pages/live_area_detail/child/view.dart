@@ -87,26 +87,29 @@ class _LiveAreaChildPageState extends State<LiveAreaChildPage>
                     childBuilder: (index) {
                       late final item = _controller.newTags![index];
                       return Obx(
-                        () => SearchText(
-                          fontSize: 14,
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 8,
-                            vertical: 3,
-                          ),
-                          text: '${item.name}',
-                          bgColor: index == _controller.tagIndex.value
-                              ? theme.colorScheme.secondaryContainer
-                              : Colors.transparent,
-                          textColor: index == _controller.tagIndex.value
-                              ? theme.colorScheme.onSecondaryContainer
-                              : null,
-                          onTap: (value) {
-                            _controller.onSelectTag(
-                              index,
-                              item.sortType,
-                            );
-                          },
-                        ),
+                        () {
+                          final isCurr = index == _controller.tagIndex.value;
+                          return SearchText(
+                            fontSize: 14,
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 8,
+                              vertical: 3,
+                            ),
+                            text: '${item.name}',
+                            bgColor: isCurr
+                                ? theme.colorScheme.secondaryContainer
+                                : Colors.transparent,
+                            textColor: isCurr
+                                ? theme.colorScheme.onSecondaryContainer
+                                : null,
+                            onTap: (value) {
+                              _controller.onSelectTag(
+                                index,
+                                item.sortType,
+                              );
+                            },
+                          );
+                        },
                       );
                     },
                     itemCount: _controller.newTags!.length,

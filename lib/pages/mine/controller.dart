@@ -88,8 +88,9 @@ class MineController extends GetxController {
       SmartDialog.showToast('请先登录');
       return;
     }
-    anonymity.value = !anonymity.value;
-    if (anonymity.value) {
+    final newVal = !anonymity.value;
+    anonymity.value = newVal;
+    if (newVal) {
       SmartDialog.dismiss();
       SmartDialog.show<bool>(
         clickMaskDismiss: false,
@@ -195,12 +196,13 @@ class MineController extends GetxController {
   }
 
   void onChangeTheme() {
-    themeType.value = nextThemeType;
+    final newVal = nextThemeType;
+    themeType.value = newVal;
     try {
-      Get.find<MineController>().themeType.value = themeType.value;
+      Get.find<MineController>().themeType.value = newVal;
     } catch (_) {}
-    GStorage.setting.put(SettingBoxKey.themeMode, themeType.value.index);
-    Get.changeThemeMode(themeType.value.toThemeMode);
+    GStorage.setting.put(SettingBoxKey.themeMode, newVal.index);
+    Get.changeThemeMode(newVal.toThemeMode);
   }
 
   void pushFollow() {

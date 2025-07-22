@@ -133,9 +133,10 @@ class LiveRoomController extends GetxController {
   Future<void> queryLiveInfoH5() async {
     var res = await LiveHttp.liveRoomInfoH5(roomId: roomId);
     if (res['status']) {
-      roomInfoH5.value = res['data'];
+      RoomInfoH5Data data = res['data'];
+      roomInfoH5.value = data;
       videoPlayerServiceHandler.onVideoDetailChange(
-        roomInfoH5.value,
+        data,
         roomId,
         heroTag,
       );

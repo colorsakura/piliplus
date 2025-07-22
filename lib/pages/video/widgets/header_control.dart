@@ -277,45 +277,53 @@ class HeaderControlState extends State<HeaderControl> {
                     spacing: 10,
                     children: [
                       Obx(
-                        () => ActionRowLineItem(
-                          iconData: Icons.flip,
-                          onTap: () => widget.controller.flipX.value =
-                              !widget.controller.flipX.value,
-                          text: " 左右翻转 ",
-                          selectStatus: widget.controller.flipX.value,
-                        ),
+                        () {
+                          final flipX = widget.controller.flipX.value;
+                          return ActionRowLineItem(
+                            iconData: Icons.flip,
+                            onTap: () => widget.controller.flipX.value = !flipX,
+                            text: " 左右翻转 ",
+                            selectStatus: flipX,
+                          );
+                        },
                       ),
                       Obx(
-                        () => ActionRowLineItem(
-                          icon: Transform.rotate(
-                            angle: pi / 2,
-                            child: Icon(
-                              Icons.flip,
-                              size: 13,
-                              color: widget.controller.flipY.value
-                                  ? theme.colorScheme.onSecondaryContainer
-                                  : theme.colorScheme.outline,
+                        () {
+                          final flipY = widget.controller.flipY.value;
+                          return ActionRowLineItem(
+                            icon: Transform.rotate(
+                              angle: pi / 2,
+                              child: Icon(
+                                Icons.flip,
+                                size: 13,
+                                color: flipY
+                                    ? theme.colorScheme.onSecondaryContainer
+                                    : theme.colorScheme.outline,
+                              ),
                             ),
-                          ),
-                          onTap: () {
-                            widget.controller.flipY.value =
-                                !widget.controller.flipY.value;
-                          },
-                          text: " 上下翻转 ",
-                          selectStatus: widget.controller.flipY.value,
-                        ),
+                            onTap: () {
+                              widget.controller.flipY.value = !flipY;
+                            },
+                            text: " 上下翻转 ",
+                            selectStatus: flipY,
+                          );
+                        },
                       ),
                       Obx(
-                        () => ActionRowLineItem(
-                          iconData: Icons.headphones,
-                          onTap: () {
-                            widget.controller.onlyPlayAudio.value =
-                                !widget.controller.onlyPlayAudio.value;
-                            widget.videoDetailCtr.playerInit();
-                          },
-                          text: " 听视频 ",
-                          selectStatus: widget.controller.onlyPlayAudio.value,
-                        ),
+                        () {
+                          final onlyPlayAudio =
+                              widget.controller.onlyPlayAudio.value;
+                          return ActionRowLineItem(
+                            iconData: Icons.headphones,
+                            onTap: () {
+                              widget.controller.onlyPlayAudio.value =
+                                  !onlyPlayAudio;
+                              widget.videoDetailCtr.playerInit();
+                            },
+                            text: " 听视频 ",
+                            selectStatus: onlyPlayAudio,
+                          );
+                        },
                       ),
                       Obx(
                         () => ActionRowLineItem(
@@ -2042,26 +2050,28 @@ class HeaderControlState extends State<HeaderControl> {
                   width: 42,
                   height: 34,
                   child: Obx(
-                    () => IconButton(
-                      tooltip:
-                          "${plPlayerController.enableShowDanmaku.value ? '关闭' : '开启'}弹幕",
-                      style: ButtonStyle(
-                        padding: WidgetStateProperty.all(EdgeInsets.zero),
-                      ),
-                      onPressed: () {
-                        plPlayerController.enableShowDanmaku.value =
-                            !plPlayerController.enableShowDanmaku.value;
-                        setting.put(SettingBoxKey.enableShowDanmaku,
-                            plPlayerController.enableShowDanmaku.value);
-                      },
-                      icon: Icon(
-                        plPlayerController.enableShowDanmaku.value
-                            ? Icons.subtitles_outlined
-                            : Icons.subtitles_off_outlined,
-                        size: 19,
-                        color: Colors.white,
-                      ),
-                    ),
+                    () {
+                      final enableShowDanmaku =
+                          plPlayerController.enableShowDanmaku.value;
+                      return IconButton(
+                        tooltip: "${enableShowDanmaku ? '关闭' : '开启'}弹幕",
+                        style: ButtonStyle(
+                          padding: WidgetStateProperty.all(EdgeInsets.zero),
+                        ),
+                        onPressed: () {
+                          final newVal = !enableShowDanmaku;
+                          plPlayerController.enableShowDanmaku.value = newVal;
+                          setting.put(SettingBoxKey.enableShowDanmaku, newVal);
+                        },
+                        icon: Icon(
+                          enableShowDanmaku
+                              ? Icons.subtitles_outlined
+                              : Icons.subtitles_off_outlined,
+                          size: 19,
+                          color: Colors.white,
+                        ),
+                      );
+                    },
                   ),
                 ),
                 if (Platform.isAndroid)

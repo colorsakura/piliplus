@@ -129,12 +129,13 @@ class _HorizontalMemberPageState extends State<HorizontalMemberPage> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Obx(
-                () => Text(
-                  _controller.count.value != -1
-                      ? '共${_controller.count.value}视频'
-                      : '',
-                  style: const TextStyle(fontSize: 13),
-                ),
+                () {
+                  final count = _controller.count.value;
+                  return Text(
+                    count != -1 ? '共$count视频' : '',
+                    style: const TextStyle(fontSize: 13),
+                  );
+                },
               ),
               SizedBox(
                 height: 35,

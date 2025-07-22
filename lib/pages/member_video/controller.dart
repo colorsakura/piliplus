@@ -141,9 +141,10 @@ class MemberVideoCtr
   }
 
   Future<void> toViewPlayAll() async {
-    if (episodicButton.value.text == '继续播放' &&
-        episodicButton.value.uri?.isNotEmpty == true) {
-      final params = Uri.parse(episodicButton.value.uri!).queryParameters;
+    final episodicButton = this.episodicButton.value;
+    if (episodicButton.text == '继续播放' &&
+        episodicButton.uri?.isNotEmpty == true) {
+      final params = Uri.parse(episodicButton.uri!).queryParameters;
       String? oid = params['oid'];
       if (oid != null) {
         var bvid = IdUtils.av2bv(int.parse(oid));
@@ -155,8 +156,7 @@ class MemberVideoCtr
             'sourceType': 'archive',
             'mediaId': seasonId ?? seriesId ?? mid,
             'oid': oid,
-            'favTitle':
-                '$username: ${title ?? episodicButton.value.text ?? '播放全部'}',
+            'favTitle': '$username: ${title ?? episodicButton.text ?? '播放全部'}',
             if (seriesId == null) 'count': count.value,
             if (seasonId != null || seriesId != null)
               'mediaType': params['page_type'],
@@ -197,11 +197,11 @@ class MemberVideoCtr
               'mediaId': seasonId ?? seriesId ?? mid,
               'oid': IdUtils.bv2av(element.bvid!),
               'favTitle':
-                  '$username: ${title ?? episodicButton.value.text ?? '播放全部'}',
+                  '$username: ${title ?? episodicButton.text ?? '播放全部'}',
               if (seriesId == null) 'count': count.value,
               if (seasonId != null || seriesId != null)
-                'mediaType': Uri.parse(episodicButton.value.uri!)
-                    .queryParameters['page_type'],
+                'mediaType':
+                    Uri.parse(episodicButton.uri!).queryParameters['page_type'],
               'desc': desc,
               if (type == ContributeType.video)
                 'sortField': order.value == 'click' ? 2 : 1,

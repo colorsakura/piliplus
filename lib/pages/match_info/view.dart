@@ -273,17 +273,20 @@ class _MatchInfoPageState extends State<MatchInfoPage> {
           child: Row(
             children: [
               Obx(
-                () => AnimatedSwitcher(
-                  duration: const Duration(milliseconds: 400),
-                  transitionBuilder:
-                      (Widget child, Animation<double> animation) {
-                    return ScaleTransition(scale: animation, child: child);
-                  },
-                  child: Text(
-                    '${_controller.count.value == -1 ? 0 : NumUtil.numFormat(_controller.count.value)}条回复',
-                    key: ValueKey<int>(_controller.count.value),
-                  ),
-                ),
+                () {
+                  final count = _controller.count.value;
+                  return AnimatedSwitcher(
+                    duration: const Duration(milliseconds: 400),
+                    transitionBuilder:
+                        (Widget child, Animation<double> animation) {
+                      return ScaleTransition(scale: animation, child: child);
+                    },
+                    child: Text(
+                      '${count == -1 ? 0 : NumUtil.numFormat(count)}条回复',
+                      key: ValueKey<int>(count),
+                    ),
+                  );
+                },
               ),
               const Spacer(),
               SizedBox(

@@ -244,27 +244,29 @@ class _LiveRoomPageState extends State<LiveRoomPage>
           clipBehavior: Clip.none,
           children: [
             Obx(
-              () => isFullScreen
-                  ? const SizedBox.shrink()
-                  : Positioned.fill(
-                      child: Opacity(
-                        opacity: 0.6,
-                        child: _liveRoomController.roomInfoH5.value?.roomInfo
-                                    ?.appBackground?.isNotEmpty ==
-                                true
-                            ? CachedNetworkImage(
-                                fit: BoxFit.cover,
-                                width: Get.width,
-                                height: Get.height,
-                                imageUrl: _liveRoomController.roomInfoH5.value!
-                                    .roomInfo!.appBackground!.http2https,
-                              )
-                            : Image.asset(
-                                'assets/images/live/default_bg.webp',
-                                fit: BoxFit.cover,
-                              ),
-                      ),
-                    ),
+              () {
+                if (isFullScreen) {
+                  return const SizedBox.shrink();
+                }
+                final appBackground = _liveRoomController
+                    .roomInfoH5.value?.roomInfo?.appBackground;
+                return Positioned.fill(
+                  child: Opacity(
+                    opacity: 0.6,
+                    child: appBackground?.isNotEmpty == true
+                        ? CachedNetworkImage(
+                            fit: BoxFit.cover,
+                            width: Get.width,
+                            height: Get.height,
+                            imageUrl: appBackground!.http2https,
+                          )
+                        : Image.asset(
+                            'assets/images/live/default_bg.webp',
+                            fit: BoxFit.cover,
+                          ),
+                  ),
+                );
+              },
             ),
             SafeArea(
               top: !isFullScreen,
@@ -564,20 +566,24 @@ class _LiveRoomPageState extends State<LiveRoomPage>
             child: Row(
               children: [
                 Obx(
-                  () => IconButton(
-                    onPressed: () {
-                      plPlayerController.enableShowDanmaku.value =
-                          !plPlayerController.enableShowDanmaku.value;
-                      GStorage.setting.put(SettingBoxKey.enableShowDanmaku,
-                          plPlayerController.enableShowDanmaku.value);
-                    },
-                    icon: Icon(
-                      plPlayerController.enableShowDanmaku.value
-                          ? Icons.subtitles_outlined
-                          : Icons.subtitles_off_outlined,
-                      color: _color,
-                    ),
-                  ),
+                  () {
+                    final enableShowDanmaku =
+                        plPlayerController.enableShowDanmaku.value;
+                    return IconButton(
+                      onPressed: () {
+                        final newVal = !enableShowDanmaku;
+                        plPlayerController.enableShowDanmaku.value = newVal;
+                        GStorage.setting
+                            .put(SettingBoxKey.enableShowDanmaku, newVal);
+                      },
+                      icon: Icon(
+                        enableShowDanmaku
+                            ? Icons.subtitles_outlined
+                            : Icons.subtitles_off_outlined,
+                        color: _color,
+                      ),
+                    );
+                  },
                 ),
                 Expanded(
                   child: Text(

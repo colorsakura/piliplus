@@ -70,10 +70,11 @@ class _SearchTrendingPageState extends State<SearchTrendingPage> {
           preferredSize: const Size.fromHeight(56),
           child: Obx(
             () {
-              final flag = removePadding || _scrollRatio.value >= 0.5;
+              final scrollRatio = _scrollRatio.value;
+              final flag = removePadding || scrollRatio >= 0.5;
               return AppBar(
                 title: Opacity(
-                  opacity: _scrollRatio.value,
+                  opacity: scrollRatio,
                   child: Text(
                     'bilibili热搜',
                     style: TextStyle(
@@ -81,8 +82,8 @@ class _SearchTrendingPageState extends State<SearchTrendingPage> {
                     ),
                   ),
                 ),
-                backgroundColor: theme.colorScheme.surface
-                    .withValues(alpha: _scrollRatio.value),
+                backgroundColor:
+                    theme.colorScheme.surface.withValues(alpha: scrollRatio),
                 foregroundColor: flag ? null : Colors.white,
                 systemOverlayStyle: flag
                     ? null
@@ -90,7 +91,7 @@ class _SearchTrendingPageState extends State<SearchTrendingPage> {
                         statusBarBrightness: Brightness.dark,
                         statusBarIconBrightness: Brightness.light,
                       ),
-                bottom: _scrollRatio.value == 1
+                bottom: scrollRatio == 1
                     ? PreferredSize(
                         preferredSize: const Size.fromHeight(1),
                         child: Divider(

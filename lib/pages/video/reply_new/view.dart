@@ -192,38 +192,40 @@ class _ReplyPageState extends CommonRichTextPubPageState<ReplyPage> {
             Expanded(
               child: Center(
                 child: Obx(
-                  () => TextButton(
-                    style: TextButton.styleFrom(
-                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                      padding: const EdgeInsets.all(13),
-                      visualDensity: VisualDensity.compact,
-                      foregroundColor: _syncToDynamic.value
-                          ? themeData.colorScheme.secondary
-                          : themeData.colorScheme.outline,
-                    ),
-                    onPressed: () =>
-                        _syncToDynamic.value = !_syncToDynamic.value,
-                    child: Row(
-                      spacing: 4,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(
-                          _syncToDynamic.value
-                              ? Icons.check_box
-                              : Icons.check_box_outline_blank,
-                          size: 22,
-                        ),
-                        const Flexible(
-                          child: Text(
-                            '转到动态',
-                            maxLines: 1,
-                            style: TextStyle(height: 1),
-                            strutStyle: StrutStyle(leading: 0, height: 1),
+                  () {
+                    final syncToDynamic = _syncToDynamic.value;
+                    return TextButton(
+                      style: TextButton.styleFrom(
+                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                        padding: const EdgeInsets.all(13),
+                        visualDensity: VisualDensity.compact,
+                        foregroundColor: syncToDynamic
+                            ? themeData.colorScheme.secondary
+                            : themeData.colorScheme.outline,
+                      ),
+                      onPressed: () => _syncToDynamic.value = !syncToDynamic,
+                      child: Row(
+                        spacing: 4,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            syncToDynamic
+                                ? Icons.check_box
+                                : Icons.check_box_outline_blank,
+                            size: 22,
                           ),
-                        ),
-                      ],
-                    ),
-                  ),
+                          const Flexible(
+                            child: Text(
+                              '转到动态',
+                              maxLines: 1,
+                              style: TextStyle(height: 1),
+                              strutStyle: StrutStyle(leading: 0, height: 1),
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
                 ),
               ),
             ),

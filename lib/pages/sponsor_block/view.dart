@@ -485,6 +485,7 @@ class _SponsorBlockPageState extends State<SponsorBlockPage> {
     return Builder(
       builder: (context) {
         Color color = _blockColor[index];
+        final isDisable = item.second == SkipType.disable;
         return ListTile(
           dense: true,
           enabled: item.second != SkipType.disable,
@@ -519,8 +520,7 @@ class _SponsorBlockPageState extends State<SponsorBlockPage> {
                   return PopupMenuButton<SkipType>(
                     initialValue: item.second,
                     onSelected: (e) {
-                      final updateItem = e == SkipType.disable ||
-                          item.second == SkipType.disable;
+                      final updateItem = isDisable || e == SkipType.disable;
                       item.second = e;
                       setting.put(SettingBoxKey.blockSettings,
                           _blockSettings.map((e) => e.second.index).toList());
@@ -546,7 +546,7 @@ class _SponsorBlockPageState extends State<SponsorBlockPage> {
                             style: TextStyle(
                               height: 1,
                               fontSize: 14,
-                              color: item.second == SkipType.disable
+                              color: isDisable
                                   ? theme.colorScheme.outline
                                       .withValues(alpha: 0.7)
                                   : theme.colorScheme.secondary,
@@ -556,7 +556,7 @@ class _SponsorBlockPageState extends State<SponsorBlockPage> {
                           Icon(
                             MdiIcons.unfoldMoreHorizontal,
                             size: MediaQuery.textScalerOf(context).scale(14),
-                            color: item.second == SkipType.disable
+                            color: isDisable
                                 ? theme.colorScheme.outline
                                     .withValues(alpha: 0.7)
                                 : theme.colorScheme.secondary,
@@ -573,9 +573,7 @@ class _SponsorBlockPageState extends State<SponsorBlockPage> {
             item.first.description,
             style: TextStyle(
               fontSize: 12,
-              color: item.second == SkipType.disable
-                  ? null
-                  : theme.colorScheme.outline,
+              color: isDisable ? null : theme.colorScheme.outline,
             ),
           ),
         );

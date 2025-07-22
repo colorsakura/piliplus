@@ -55,7 +55,8 @@ abstract class ReplyController<R> extends CommonListController<R, ReplyInfo> {
 
   @override
   void checkIsEnd(int length) {
-    if (count.value != -1 && length >= count.value) {
+    final count = this.count.value;
+    if (count != -1 && length >= count) {
       isEnd = true;
     }
   }

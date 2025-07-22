@@ -375,12 +375,15 @@ class _PgcReviewChildPageState extends State<PgcReviewChildPage>
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Obx(
-                  () => _controller.count.value == null
-                      ? const SizedBox.shrink()
-                      : Text(
-                          '${NumUtil.numFormat(_controller.count.value)}条点评',
-                          style: const TextStyle(fontSize: 13),
-                        ),
+                  () {
+                    final count = _controller.count.value;
+                    return count == null
+                        ? const SizedBox.shrink()
+                        : Text(
+                            '${NumUtil.numFormat(count)}条点评',
+                            style: const TextStyle(fontSize: 13),
+                          );
+                  },
                 ),
                 SizedBox(
                   height: 35,
