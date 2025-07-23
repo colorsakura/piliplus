@@ -128,7 +128,7 @@ class VideoCardVMemberHome extends StatelessWidget {
                 },
               ),
             ),
-            content(context)
+            content(context),
           ],
         ),
       ),

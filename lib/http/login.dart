@@ -57,7 +57,7 @@ class LoginHttp {
       'status': res.data['code'] == 0,
       'code': res.data['code'],
       'data': res.data['data'],
-      'msg': res.data['message']
+      'msg': res.data['message'],
     };
   }
 
@@ -107,8 +107,9 @@ class LoginHttp {
       'gee_validate': ?geeValidate,
       'local_id': buvid,
       // https://chinggg.github.io/post/appre/
-      'login_session_id':
-          md5.convert(utf8.encode(buvid + timestamp.toString())).toString(),
+      'login_session_id': md5
+          .convert(utf8.encode(buvid + timestamp.toString()))
+          .toString(),
       'mobi_app': 'android_hd',
       'platform': 'android',
       'recaptcha_token': ?recaptchaToken,
@@ -135,7 +136,7 @@ class LoginHttp {
         'status': false,
         'code': res.data['code'],
         'msg': res.data['message'],
-        'data': res.data['data']
+        'data': res.data['data'],
       };
     }
   }
@@ -191,8 +192,9 @@ class LoginHttp {
     String? recaptchaToken,
   }) async {
     dynamic publicKey = RSAKeyParser().parse(key);
-    String passwordEncrypted =
-        Encrypter(RSA(publicKey: publicKey)).encrypt(salt + password).base64;
+    String passwordEncrypted = Encrypter(
+      RSA(publicKey: publicKey),
+    ).encrypt(salt + password).base64;
 
     Map<String, String> data = {
       'bili_local_id': deviceId,
@@ -206,9 +208,11 @@ class LoginHttp {
       'device_name': 'vivo',
       'device_platform': 'Android14vivo',
       'disable_rcmd': '0',
-      'dt': Uri.encodeComponent(Encrypter(RSA(publicKey: publicKey))
-          .encrypt(Utils.generateRandomString(16))
-          .base64),
+      'dt': Uri.encodeComponent(
+        Encrypter(
+          RSA(publicKey: publicKey),
+        ).encrypt(Utils.generateRandomString(16)).base64,
+      ),
       'from_pv': 'main.homepage.avatar-nologin.all.click',
       'from_url': Uri.encodeComponent('bilibili://pegasus/promo'),
       'gee_challenge': ?geeChallenge,
@@ -247,7 +251,7 @@ class LoginHttp {
         'status': false,
         'code': res.data['code'],
         'msg': res.data['message'],
-        'data': res.data['data']
+        'data': res.data['data'],
       };
     }
   }
@@ -277,9 +281,11 @@ class LoginHttp {
       'device_platform': 'Android14vivo',
       // 'device_tourist_id': '',
       'disable_rcmd': '0',
-      'dt': Uri.encodeComponent(Encrypter(RSA(publicKey: publicKey))
-          .encrypt(Utils.generateRandomString(16))
-          .base64),
+      'dt': Uri.encodeComponent(
+        Encrypter(
+          RSA(publicKey: publicKey),
+        ).encrypt(Utils.generateRandomString(16)).base64,
+      ),
       'from_pv': 'main.my-information.my-login.0.click',
       'from_url': Uri.encodeComponent('bilibili://user_center/mine'),
       'local_id': buvid,
@@ -308,7 +314,7 @@ class LoginHttp {
         'status': false,
         'code': res.data['code'],
         'msg': res.data['message'],
-        'data': res.data['data']
+        'data': res.data['data'],
       };
     }
   }
@@ -330,7 +336,7 @@ class LoginHttp {
         'status': false,
         'code': res.data['code'],
         'msg': res.data['message'],
-        'data': res.data['data']
+        'data': res.data['data'],
       };
     }
   }
@@ -346,7 +352,7 @@ class LoginHttp {
         'status': false,
         'code': res.data['code'],
         'msg': res.data['message'],
-        'data': res.data['data']
+        'data': res.data['data'],
       };
     }
   }
@@ -374,10 +380,12 @@ class LoginHttp {
     var res = await Request().post(
       Api.safeCenterSmsCode,
       data: data,
-      options:
-          Options(contentType: Headers.formUrlEncodedContentType, headers: {
-        "Referer": refererUrl,
-      }),
+      options: Options(
+        contentType: Headers.formUrlEncodedContentType,
+        headers: {
+          "Referer": refererUrl,
+        },
+      ),
     );
 
     if (res.data['code'] == 0) {
@@ -387,7 +395,7 @@ class LoginHttp {
         'status': false,
         'code': res.data['code'],
         'msg': res.data['message'],
-        'data': res.data['data']
+        'data': res.data['data'],
       };
     }
   }
@@ -414,10 +422,12 @@ class LoginHttp {
     var res = await Request().post(
       Api.safeCenterSmsVerify,
       data: data,
-      options:
-          Options(contentType: Headers.formUrlEncodedContentType, headers: {
-        "Referer": refererUrl,
-      }),
+      options: Options(
+        contentType: Headers.formUrlEncodedContentType,
+        headers: {
+          "Referer": refererUrl,
+        },
+      ),
     );
 
     if (res.data['code'] == 0) {
@@ -427,7 +437,7 @@ class LoginHttp {
         'status': false,
         'code': res.data['code'],
         'msg': res.data['message'],
-        'data': res.data['data']
+        'data': res.data['data'],
       };
     }
   }
@@ -473,7 +483,7 @@ class LoginHttp {
         'status': false,
         'code': res.data['code'],
         'msg': res.data['message'],
-        'data': res.data['data']
+        'data': res.data['data'],
       };
     }
   }
@@ -483,8 +493,9 @@ class LoginHttp {
       Api.logout,
       data: {'biliCSRF': account.csrf},
       options: Options(
-          contentType: Headers.formUrlEncodedContentType,
-          extra: {'account': account}),
+        contentType: Headers.formUrlEncodedContentType,
+        extra: {'account': account},
+      ),
     );
     return {'status': res.data['code'] == 0, 'msg': res.data['message']};
   }

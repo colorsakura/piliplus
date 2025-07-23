@@ -84,63 +84,75 @@ class _HistoryPageState extends State<HistoryPage>
                                   // 处理菜单项选择的逻辑
                                   switch (type) {
                                     case 'pause':
-                                      _historyController.baseCtr
-                                          .onPauseHistory(context);
+                                      _historyController.baseCtr.onPauseHistory(
+                                        context,
+                                      );
                                       break;
                                     case 'clear':
-                                      _historyController.baseCtr
-                                          .onClearHistory(context, () {
-                                        _historyController.loadingState.value =
-                                            const Success(null);
-                                        if (_historyController.tabController !=
-                                            null) {
-                                          for (final item
-                                              in _historyController.tabs) {
-                                            try {
-                                              Get.find<HistoryController>(
-                                                      tag: item.type)
-                                                  .loadingState
-                                                  .value = const Success(null);
-                                            } catch (_) {}
+                                      _historyController.baseCtr.onClearHistory(
+                                        context,
+                                        () {
+                                          _historyController
+                                              .loadingState
+                                              .value = const Success(
+                                            null,
+                                          );
+                                          if (_historyController
+                                                  .tabController !=
+                                              null) {
+                                            for (final item
+                                                in _historyController.tabs) {
+                                              try {
+                                                Get.find<HistoryController>(
+                                                      tag: item.type,
+                                                    ).loadingState.value =
+                                                    const Success(null);
+                                              } catch (_) {}
+                                            }
                                           }
-                                        }
-                                      });
+                                        },
+                                      );
                                       break;
                                     case 'del':
                                       currCtr().onDelHistory();
                                       break;
                                     case 'multiple':
-                                      _historyController.baseCtr
-                                          .enableMultiSelect.value = true;
+                                      _historyController
+                                              .baseCtr
+                                              .enableMultiSelect
+                                              .value =
+                                          true;
                                       break;
                                   }
                                 },
                                 itemBuilder: (BuildContext context) =>
                                     <PopupMenuEntry<String>>[
-                                  PopupMenuItem<String>(
-                                    value: 'pause',
-                                    child: Obx(
-                                      () => Text(
-                                        !_historyController
-                                                .baseCtr.pauseStatus.value
-                                            ? '暂停观看记录'
-                                            : '恢复观看记录',
+                                      PopupMenuItem<String>(
+                                        value: 'pause',
+                                        child: Obx(
+                                          () => Text(
+                                            !_historyController
+                                                    .baseCtr
+                                                    .pauseStatus
+                                                    .value
+                                                ? '暂停观看记录'
+                                                : '恢复观看记录',
+                                          ),
+                                        ),
                                       ),
-                                    ),
-                                  ),
-                                  const PopupMenuItem<String>(
-                                    value: 'clear',
-                                    child: Text('清空观看记录'),
-                                  ),
-                                  const PopupMenuItem<String>(
-                                    value: 'del',
-                                    child: Text('删除已看记录'),
-                                  ),
-                                  const PopupMenuItem<String>(
-                                    value: 'multiple',
-                                    child: Text('多选删除'),
-                                  ),
-                                ],
+                                      const PopupMenuItem<String>(
+                                        value: 'clear',
+                                        child: Text('清空观看记录'),
+                                      ),
+                                      const PopupMenuItem<String>(
+                                        value: 'del',
+                                        child: Text('删除已看记录'),
+                                      ),
+                                      const PopupMenuItem<String>(
+                                        value: 'multiple',
+                                        child: Text('多选删除'),
+                                      ),
+                                    ],
                               ),
                               const SizedBox(width: 6),
                             ],
@@ -167,8 +179,8 @@ class _HistoryPageState extends State<HistoryPage>
                                 child: Text(
                                   '删除',
                                   style: TextStyle(
-                                      color:
-                                          Theme.of(context).colorScheme.error),
+                                    color: Theme.of(context).colorScheme.error,
+                                  ),
                                 ),
                               ),
                               const SizedBox(width: 6),
@@ -187,13 +199,16 @@ class _HistoryPageState extends State<HistoryPage>
                                   controller: _historyController.tabController,
                                   onTap: (index) {
                                     if (!_historyController
-                                        .tabController!.indexIsChanging) {
+                                        .tabController!
+                                        .indexIsChanging) {
                                       currCtr().scrollController.animToTop();
                                     } else {
                                       if (enableMultiSelect) {
-                                        currCtr(_historyController
-                                                .tabController!.previousIndex)
-                                            .handleSelect();
+                                        currCtr(
+                                          _historyController
+                                              .tabController!
+                                              .previousIndex,
+                                        ).handleSelect();
                                       }
                                     }
                                   },
@@ -213,7 +228,8 @@ class _HistoryPageState extends State<HistoryPage>
                                         _historyController.tabController,
                                     children: [
                                       KeepAliveWrapper(
-                                          builder: (context) => _buildPage),
+                                        builder: (context) => _buildPage,
+                                      ),
                                       ..._historyController.tabs.map(
                                         (item) => HistoryPage(type: item.type),
                                       ),
@@ -236,61 +252,61 @@ class _HistoryPageState extends State<HistoryPage>
   }
 
   Widget get _buildPage => refreshIndicator(
-        onRefresh: _historyController.onRefresh,
-        child: CustomScrollView(
-          physics: const AlwaysScrollableScrollPhysics(),
-          controller: _historyController.scrollController,
-          slivers: [
-            SliverPadding(
-              padding: EdgeInsets.only(
-                top: StyleString.safeSpace - 5,
-                bottom: MediaQuery.paddingOf(context).bottom + 80,
-              ),
-              sliver:
-                  Obx(() => _buildBody(_historyController.loadingState.value)),
-            ),
-          ],
+    onRefresh: _historyController.onRefresh,
+    child: CustomScrollView(
+      physics: const AlwaysScrollableScrollPhysics(),
+      controller: _historyController.scrollController,
+      slivers: [
+        SliverPadding(
+          padding: EdgeInsets.only(
+            top: StyleString.safeSpace - 5,
+            bottom: MediaQuery.paddingOf(context).bottom + 80,
+          ),
+          sliver: Obx(() => _buildBody(_historyController.loadingState.value)),
         ),
-      );
+      ],
+    ),
+  );
 
   Widget _buildBody(LoadingState<List<HistoryItemModel>?> loadingState) {
     return switch (loadingState) {
       Loading() => SliverGrid(
-          gridDelegate: Grid.videoCardHDelegate(context),
-          delegate: SliverChildBuilderDelegate(
-            (context, index) {
-              return const VideoCardHSkeleton();
-            },
-            childCount: 10,
-          ),
+        gridDelegate: Grid.videoCardHDelegate(context),
+        delegate: SliverChildBuilderDelegate(
+          (context, index) {
+            return const VideoCardHSkeleton();
+          },
+          childCount: 10,
         ),
-      Success(:var response) => response?.isNotEmpty == true
-          ? SliverGrid(
-              gridDelegate: Grid.videoCardHDelegate(context),
-              delegate: SliverChildBuilderDelegate(
-                (context, index) {
-                  if (index == response.length - 1) {
-                    _historyController.onLoadMore();
-                  }
-                  final item = response[index];
-                  return HistoryItem(
-                    item: item,
-                    ctr: _historyController.baseCtr,
-                    onChoose: () => _historyController.onSelect(item),
-                    onDelete: (kid, business) =>
-                        _historyController.delHistory(item),
-                  );
-                },
-                childCount: response!.length,
+      ),
+      Success(:var response) =>
+        response?.isNotEmpty == true
+            ? SliverGrid(
+                gridDelegate: Grid.videoCardHDelegate(context),
+                delegate: SliverChildBuilderDelegate(
+                  (context, index) {
+                    if (index == response.length - 1) {
+                      _historyController.onLoadMore();
+                    }
+                    final item = response[index];
+                    return HistoryItem(
+                      item: item,
+                      ctr: _historyController.baseCtr,
+                      onChoose: () => _historyController.onSelect(item),
+                      onDelete: (kid, business) =>
+                          _historyController.delHistory(item),
+                    );
+                  },
+                  childCount: response!.length,
+                ),
+              )
+            : HttpError(
+                onReload: _historyController.onReload,
               ),
-            )
-          : HttpError(
-              onReload: _historyController.onReload,
-            ),
       Error(:var errMsg) => HttpError(
-          errMsg: errMsg,
-          onReload: _historyController.onReload,
-        ),
+        errMsg: errMsg,
+        onReload: _historyController.onReload,
+      ),
     };
   }
 

@@ -91,8 +91,10 @@ class BottomControl extends StatelessWidget {
                   onPressed: () {
                     final newVal = !enableShowDanmaku;
                     plPlayerController.enableShowDanmaku.value = newVal;
-                    GStorage.setting
-                        .put(SettingBoxKey.enableShowDanmaku, newVal);
+                    GStorage.setting.put(
+                      SettingBoxKey.enableShowDanmaku,
+                      newVal,
+                    );
                   },
                   icon: Icon(
                     size: 18,
@@ -122,8 +124,10 @@ class BottomControl extends StatelessWidget {
                       onTap: () => plPlayerController.toggleVideoFit(boxFit),
                       child: Text(
                         boxFit.desc,
-                        style:
-                            const TextStyle(color: Colors.white, fontSize: 13),
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 13,
+                        ),
                       ),
                     );
                   }).toList();
@@ -156,8 +160,10 @@ class BottomControl extends StatelessWidget {
                       onTap: () => liveRoomCtr.changeQn(e.code),
                       child: Text(
                         e.desc,
-                        style:
-                            const TextStyle(color: Colors.white, fontSize: 13),
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 13,
+                        ),
                       ),
                     );
                   }).toList();
@@ -174,7 +180,8 @@ class BottomControl extends StatelessWidget {
               color: Colors.white,
             ),
             onTap: () => plPlayerController.triggerFullScreen(
-                status: !plPlayerController.isFullScreen.value),
+              status: !plPlayerController.isFullScreen.value,
+            ),
           ),
         ],
       ),

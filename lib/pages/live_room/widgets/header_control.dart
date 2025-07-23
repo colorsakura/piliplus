@@ -63,14 +63,20 @@ class LiveHeaderControl extends StatelessWidget {
                     title!,
                     maxLines: 1,
                     style: const TextStyle(
-                        fontSize: 15, height: 1, color: Colors.white),
+                      fontSize: 15,
+                      height: 1,
+                      color: Colors.white,
+                    ),
                   ),
                   if (isFullScreen && upName != null)
                     Text(
                       upName!,
                       maxLines: 1,
                       style: const TextStyle(
-                          fontSize: 12, height: 1, color: Colors.white),
+                        fontSize: 12,
+                        height: 1,
+                        color: Colors.white,
+                      ),
                     ),
                 ],
               ),
@@ -139,7 +145,8 @@ class LiveHeaderControl extends StatelessWidget {
                       floating.enable(
                         plPlayerController.direction.value == 'vertical'
                             ? const EnableManual(
-                                aspectRatio: Rational.vertical())
+                                aspectRatio: Rational.vertical(),
+                              )
                             : const EnableManual(),
                       );
                     }

@@ -24,15 +24,15 @@ class Stat {
   });
 
   factory Stat.fromJson(Map<String, dynamic> json) => Stat(
-        coins: json["coins"],
-        danmakus: json["danmakus"],
-        favorite: json["favorite"],
-        favorites: json["favorites"],
-        followText: json["follow_text"],
-        likes: json["likes"],
-        reply: json["reply"],
-        share: json["share"],
-        views: json["views"],
-        vt: json["vt"],
-      );
+    coins: json["coins"],
+    danmakus: json["danmakus"],
+    favorite: json["favorite"],
+    favorites: json["favorites"],
+    followText: json["follow_text"],
+    likes: json["likes"],
+    reply: json["reply"],
+    share: json["share"],
+    views: json["views"],
+    vt: json["vt"],
+  );
 }

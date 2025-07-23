@@ -23,8 +23,10 @@ class ImageUtil {
   static Future<void> onShareImg(String url) async {
     try {
       SmartDialog.showLoading();
-      var response = await Request()
-          .get(url, options: Options(responseType: ResponseType.bytes));
+      var response = await Request().get(
+        url,
+        options: Options(responseType: ResponseType.bytes),
+      );
       final temp = await getTemporaryDirectory();
       SmartDialog.dismiss();
       var name = Utils.getFileName(url);
@@ -63,7 +65,7 @@ class ImageUtil {
               TextButton(
                 onPressed: openAppSettings,
                 child: Text('去授权'),
-              )
+              ),
             ],
           );
         },
@@ -87,7 +89,8 @@ class ImageUtil {
   }
 
   static Future<bool> checkPermissionDependOnSdkInt(
-      BuildContext context) async {
+    BuildContext context,
+  ) async {
     if (Platform.isAndroid) {
       if (await Utils.sdkInt <= 32) {
         if (!context.mounted) return false;
@@ -161,7 +164,9 @@ class ImageUtil {
   }
 
   static Future<bool> downloadImg(
-      BuildContext context, List<String> imgList) async {
+    BuildContext context,
+    List<String> imgList,
+  ) async {
     if (!await checkPermissionDependOnSdkInt(context)) return false;
     final cancelToken = CancelToken();
     SmartDialog.showLoading(
@@ -230,8 +235,10 @@ class ImageUtil {
     }
   }
 
-  static final _thumbRegex =
-      RegExp(r'(@(\d+[a-z]_?)*)(\..*)?$', caseSensitive: false);
+  static final _thumbRegex = RegExp(
+    r'(@(\d+[a-z]_?)*)(\..*)?$',
+    caseSensitive: false,
+  );
   static String thumbnailUrl(String? src, [int? quality]) {
     if (src != null && quality != 100) {
       bool hasMatch = false;

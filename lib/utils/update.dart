@@ -26,7 +26,7 @@ class Update {
       }
       int latest =
           DateTime.parse(res.data[0]['created_at']).millisecondsSinceEpoch ~/
-              1000;
+          1000;
       if (BuildConfig.buildTime >= latest) {
         if (!isAuto) {
           SmartDialog.showToast('已是最新版本');
@@ -52,7 +52,8 @@ class Update {
                       Text('${res.data[0]['body']}'),
                       TextButton(
                         onPressed: () => PageUtils.launchURL(
-                            'https://github.com/bggRGjQaUbCoE/PiliPlus/commits/main'),
+                          'https://github.com/bggRGjQaUbCoE/PiliPlus/commits/main',
+                        ),
                         child: Text(
                           "点此查看完整更新(即commit)内容",
                           style: TextStyle(
@@ -125,7 +126,8 @@ class Update {
       }
     } catch (_) {
       PageUtils.launchURL(
-          'https://github.com/bggRGjQaUbCoE/PiliPlus/releases/latest');
+        'https://github.com/bggRGjQaUbCoE/PiliPlus/releases/latest',
+      );
     }
   }
 }

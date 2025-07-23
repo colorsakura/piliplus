@@ -189,7 +189,8 @@ class _PgcReviewPostPanelState
             left: 12,
             right: 12,
             top: 6,
-            bottom: MediaQuery.paddingOf(context).bottom +
+            bottom:
+                MediaQuery.paddingOf(context).bottom +
                 MediaQuery.viewInsetsOf(context).bottom +
                 6,
           ),

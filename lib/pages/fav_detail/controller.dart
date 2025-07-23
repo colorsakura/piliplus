@@ -118,8 +118,10 @@ class FavDetailController
                 );
                 if (result['status']) {
                   List<FavDetailItemModel> dataList = loadingState.value.data!;
-                  List<FavDetailItemModel> remainList =
-                      dataList.toSet().difference(list.toSet()).toList();
+                  List<FavDetailItemModel> remainList = dataList
+                      .toSet()
+                      .difference(list.toSet())
+                      .toList();
                   folderInfo
                     ..value.mediaCount -= list.length
                     ..refresh();
@@ -136,7 +138,7 @@ class FavDetailController
                 }
               },
               child: const Text('确认'),
-            )
+            ),
           ],
         );
       },

@@ -81,8 +81,9 @@ class VideoIntroController extends CommonIntroController with ReloadMixin {
   void onInit() {
     super.onInit();
     bool alwaysExapndIntroPanel = Pref.alwaysExapndIntroPanel;
-    expandableCtr =
-        ExpandableController(initialExpanded: alwaysExapndIntroPanel);
+    expandableCtr = ExpandableController(
+      initialExpanded: alwaysExapndIntroPanel,
+    );
     if (!alwaysExapndIntroPanel && Pref.exapndIntroPanelH) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (Get.context!.orientation == Orientation.landscape &&
@@ -103,8 +104,10 @@ class VideoIntroController extends CommonIntroController with ReloadMixin {
         if (videoItem.title case String e) {
           videoDetail.value.title = e;
         } else if (videoItem.title case List list) {
-          videoDetail.value.title =
-              list.fold<String>('', (prev, val) => prev + val['text']);
+          videoDetail.value.title = list.fold<String>(
+            '',
+            (prev, val) => prev + val['text'],
+          );
         }
       }
     } catch (_) {}
@@ -132,8 +135,9 @@ class VideoIntroController extends CommonIntroController with ReloadMixin {
       }
       videoDetail.value = data;
       try {
-        final videoDetailController =
-            Get.find<VideoDetailController>(tag: heroTag);
+        final videoDetailController = Get.find<VideoDetailController>(
+          tag: heroTag,
+        );
         if (videoDetailController.cover.value.isEmpty ||
             (videoDetailController.videoUrl.isNullOrEmpty &&
                 !videoDetailController.isQuerying)) {
@@ -141,8 +145,9 @@ class VideoIntroController extends CommonIntroController with ReloadMixin {
         }
         if (videoDetailController.showReply) {
           try {
-            final videoReplyController =
-                Get.find<VideoReplyController>(tag: heroTag);
+            final videoReplyController = Get.find<VideoReplyController>(
+              tag: heroTag,
+            );
             videoReplyController.count.value = data.stat?.reply ?? 0;
           } catch (_) {}
         }
@@ -166,17 +171,19 @@ class VideoIntroController extends CommonIntroController with ReloadMixin {
   // 获取up主粉丝数
   Future<void> queryUserStat(List<Staff>? staff) async {
     if (staff?.isNotEmpty == true) {
-      Request().get(
-        Api.relations,
-        queryParameters: {'fids': staff!.map((item) => item.mid).join(',')},
-      ).then((res) {
-        if (res.data['code'] == 0) {
-          staffRelations.addAll({
-            'status': true,
-            if (res.data['data'] != null) ...res.data['data'],
+      Request()
+          .get(
+            Api.relations,
+            queryParameters: {'fids': staff!.map((item) => item.mid).join(',')},
+          )
+          .then((res) {
+            if (res.data['code'] == 0) {
+              staffRelations.addAll({
+                'status': true,
+                if (res.data['data'] != null) ...res.data['data'],
+              });
+            }
           });
-        }
-      });
     } else {
       final mid = videoDetail.value.owner?.mid;
       if (mid == null) {
@@ -258,8 +265,10 @@ class VideoIntroController extends CommonIntroController with ReloadMixin {
       SmartDialog.showToast('账号未登录');
       return;
     }
-    var result =
-        await VideoHttp.dislikeVideo(bvid: bvid, type: !hasDislike.value);
+    var result = await VideoHttp.dislikeVideo(
+      bvid: bvid,
+      type: !hasDislike.value,
+    );
     if (result['status']) {
       if (!hasDislike.value) {
         SmartDialog.showToast('点踩成功');
@@ -401,103 +410,106 @@ class VideoIntroController extends CommonIntroController with ReloadMixin {
   // 分享视频
   void actionShareVideo(BuildContext context) {
     showDialog(
-        context: context,
-        builder: (_) {
-          final videoDetail = this.videoDetail.value;
-          String videoUrl = '${HttpString.baseUrl}/video/$bvid';
-          return AlertDialog(
-            clipBehavior: Clip.hardEdge,
-            contentPadding: const EdgeInsets.symmetric(vertical: 12),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                ListTile(
-                  dense: true,
-                  title: const Text(
-                    '复制链接',
-                    style: TextStyle(fontSize: 14),
-                  ),
-                  onTap: () {
-                    Get.back();
-                    Utils.copyText(videoUrl);
-                  },
+      context: context,
+      builder: (_) {
+        final videoDetail = this.videoDetail.value;
+        String videoUrl = '${HttpString.baseUrl}/video/$bvid';
+        return AlertDialog(
+          clipBehavior: Clip.hardEdge,
+          contentPadding: const EdgeInsets.symmetric(vertical: 12),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ListTile(
+                dense: true,
+                title: const Text(
+                  '复制链接',
+                  style: TextStyle(fontSize: 14),
                 ),
-                ListTile(
-                  dense: true,
-                  title: const Text(
-                    '其它app打开',
-                    style: TextStyle(fontSize: 14),
-                  ),
-                  onTap: () {
-                    Get.back();
-                    PageUtils.launchURL(videoUrl);
-                  },
+                onTap: () {
+                  Get.back();
+                  Utils.copyText(videoUrl);
+                },
+              ),
+              ListTile(
+                dense: true,
+                title: const Text(
+                  '其它app打开',
+                  style: TextStyle(fontSize: 14),
                 ),
-                ListTile(
-                  dense: true,
-                  title: const Text(
-                    '分享视频',
-                    style: TextStyle(fontSize: 14),
-                  ),
-                  onTap: () {
-                    Get.back();
-                    Utils.shareText('${videoDetail.title} '
-                        'UP主: ${videoDetail.owner!.name!}'
-                        ' - $videoUrl');
-                  },
+                onTap: () {
+                  Get.back();
+                  PageUtils.launchURL(videoUrl);
+                },
+              ),
+              ListTile(
+                dense: true,
+                title: const Text(
+                  '分享视频',
+                  style: TextStyle(fontSize: 14),
                 ),
-                ListTile(
-                  dense: true,
-                  title: const Text(
-                    '分享至动态',
-                    style: TextStyle(fontSize: 14),
-                  ),
-                  onTap: () {
-                    Get.back();
-                    showModalBottomSheet(
-                      context: context,
-                      isScrollControlled: true,
-                      useSafeArea: true,
-                      builder: (context) => RepostPanel(
-                        rid: videoDetail.aid,
-                        dynType: 8,
-                        pic: videoDetail.pic,
-                        title: videoDetail.title,
-                        uname: videoDetail.owner?.name,
-                      ),
+                onTap: () {
+                  Get.back();
+                  Utils.shareText(
+                    '${videoDetail.title} '
+                    'UP主: ${videoDetail.owner!.name!}'
+                    ' - $videoUrl',
+                  );
+                },
+              ),
+              ListTile(
+                dense: true,
+                title: const Text(
+                  '分享至动态',
+                  style: TextStyle(fontSize: 14),
+                ),
+                onTap: () {
+                  Get.back();
+                  showModalBottomSheet(
+                    context: context,
+                    isScrollControlled: true,
+                    useSafeArea: true,
+                    builder: (context) => RepostPanel(
+                      rid: videoDetail.aid,
+                      dynType: 8,
+                      pic: videoDetail.pic,
+                      title: videoDetail.title,
+                      uname: videoDetail.owner?.name,
+                    ),
+                  );
+                },
+              ),
+              ListTile(
+                dense: true,
+                title: const Text(
+                  '分享至消息',
+                  style: TextStyle(fontSize: 14),
+                ),
+                onTap: () {
+                  Get.back();
+                  try {
+                    PageUtils.pmShare(
+                      context,
+                      content: {
+                        "id": videoDetail.aid!.toString(),
+                        "title": videoDetail.title!,
+                        "headline": videoDetail.title!,
+                        "source": 5,
+                        "thumb": videoDetail.pic!,
+                        "author": videoDetail.owner!.name!,
+                        "author_id": videoDetail.owner!.mid!.toString(),
+                      },
                     );
-                  },
-                ),
-                ListTile(
-                  dense: true,
-                  title: const Text(
-                    '分享至消息',
-                    style: TextStyle(fontSize: 14),
-                  ),
-                  onTap: () {
-                    Get.back();
-                    try {
-                      PageUtils.pmShare(
-                        context,
-                        content: {
-                          "id": videoDetail.aid!.toString(),
-                          "title": videoDetail.title!,
-                          "headline": videoDetail.title!,
-                          "source": 5,
-                          "thumb": videoDetail.pic!,
-                          "author": videoDetail.owner!.name!,
-                          "author_id": videoDetail.owner!.mid!.toString(),
-                        },
-                      );
-                    } catch (e) {
-                      SmartDialog.showToast(e.toString());
-                    }
-                  },
-                ),
-              ],
-            ),
-          );
-        });
+                  } catch (e) {
+                    SmartDialog.showToast(e.toString());
+                  }
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
   }
 
   @override
@@ -695,13 +707,15 @@ class VideoIntroController extends CommonIntroController with ReloadMixin {
       }
     }
 
-    final int currentIndex = episodes.indexWhere((e) =>
-        e.cid ==
-        (skipPages
-            ? videoDetail.isPageReversed == true
-                ? videoDetail.pages!.last.cid
-                : videoDetail.pages!.first.cid
-            : lastPlayCid.value));
+    final int currentIndex = episodes.indexWhere(
+      (e) =>
+          e.cid ==
+          (skipPages
+              ? videoDetail.isPageReversed == true
+                    ? videoDetail.pages!.last.cid
+                    : videoDetail.pages!.first.cid
+              : lastPlayCid.value),
+    );
     int prevIndex = currentIndex - 1;
     final PlayRepeat playRepeat = videoDetailCtr.plPlayerController.playRepeat;
 
@@ -759,13 +773,15 @@ class VideoIntroController extends CommonIntroController with ReloadMixin {
         return false;
       }
 
-      final int currentIndex = episodes.indexWhere((e) =>
-          e.cid ==
-          (skipPages
-              ? videoDetail.isPageReversed == true
-                  ? videoDetail.pages!.last.cid
-                  : videoDetail.pages!.first.cid
-              : videoDetailCtr.cid.value));
+      final int currentIndex = episodes.indexWhere(
+        (e) =>
+            e.cid ==
+            (skipPages
+                ? videoDetail.isPageReversed == true
+                      ? videoDetail.pages!.last.cid
+                      : videoDetail.pages!.first.cid
+                : videoDetailCtr.cid.value),
+      );
 
       int nextIndex = currentIndex + 1;
 

@@ -82,8 +82,9 @@ class WhisperDetailController extends CommonListController<RspSessionMsg, Msg> {
     var result = await ImGrpc.sendMsg(
       senderUid: accountService.mid,
       receiverId: mid!,
-      content:
-          msgType == 5 ? message! : jsonEncode(picMsg ?? {"content": message!}),
+      content: msgType == 5
+          ? message!
+          : jsonEncode(picMsg ?? {"content": message!}),
       msgType: MsgType.values[msgType ?? (picMsg != null ? 2 : 1)],
     );
     SmartDialog.dismiss();

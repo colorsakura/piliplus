@@ -21,8 +21,10 @@ class LiveDmBlockPage extends StatefulWidget {
 }
 
 class _LiveDmBlockPageState extends State<LiveDmBlockPage> {
-  final _controller =
-      Get.put(LiveDmBlockController(), tag: Utils.generateRandomString(8));
+  final _controller = Get.put(
+    LiveDmBlockController(),
+    tag: Utils.generateRandomString(8),
+  );
   late bool isPortrait;
 
   @override
@@ -32,7 +34,10 @@ class _LiveDmBlockPageState extends State<LiveDmBlockPage> {
 
     Widget tabBar = TabBar(
       controller: _controller.tabController,
-      tabs: const [Tab(text: '关键词'), Tab(text: '用户')],
+      tabs: const [
+        Tab(text: '关键词'),
+        Tab(text: '用户'),
+      ],
     );
 
     Widget view = tabBarView(
@@ -51,7 +56,10 @@ class _LiveDmBlockPageState extends State<LiveDmBlockPage> {
 
     Widget title = Padding(
       padding: EdgeInsets.only(
-          top: isPortrait ? 18 : 0, left: isPortrait ? 0 : 12, bottom: 12),
+        top: isPortrait ? 18 : 0,
+        left: isPortrait ? 0 : 12,
+        bottom: 12,
+      ),
       child: const Text(
         '关键词屏蔽',
         style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
@@ -90,8 +98,10 @@ class _LiveDmBlockPageState extends State<LiveDmBlockPage> {
                       return [
                         SliverToBoxAdapter(child: left),
                         SliverOverlapAbsorber(
-                          handle: ExtendedNestedScrollView
-                              .sliverOverlapAbsorberHandleFor(context),
+                          handle:
+                              ExtendedNestedScrollView.sliverOverlapAbsorberHandleFor(
+                                context,
+                              ),
                           sliver: SliverPersistentHeader(
                             pinned: true,
                             delegate: CustomSliverPersistentHeaderDelegate(
@@ -107,9 +117,10 @@ class _LiveDmBlockPageState extends State<LiveDmBlockPage> {
                       builder: (context, _) {
                         return Padding(
                           padding: EdgeInsets.only(
-                            top: ExtendedNestedScrollView
-                                        .sliverOverlapAbsorberHandleFor(context)
-                                    .layoutExtent ??
+                            top:
+                                ExtendedNestedScrollView.sliverOverlapAbsorberHandleFor(
+                                  context,
+                                ).layoutExtent ??
                                 0,
                           ),
                           child: view,
@@ -233,7 +244,7 @@ class _LiveDmBlockPageState extends State<LiveDmBlockPage> {
                   }
                 },
               ),
-              Text('$level 以下')
+              Text('$level 以下'),
             ],
           );
         },
@@ -273,10 +284,16 @@ class _LiveDmBlockPageState extends State<LiveDmBlockPage> {
     ];
   }
 
-  Widget _headerBtn(ThemeData theme, bool isEnable, IconData icon, String name,
-      VoidCallback onTap) {
-    final color =
-        isEnable ? theme.colorScheme.primary : theme.colorScheme.outline;
+  Widget _headerBtn(
+    ThemeData theme,
+    bool isEnable,
+    IconData icon,
+    String name,
+    VoidCallback onTap,
+  ) {
+    final color = isEnable
+        ? theme.colorScheme.primary
+        : theme.colorScheme.outline;
 
     Widget top = Container(
       width: 42,
@@ -285,7 +302,8 @@ class _LiveDmBlockPageState extends State<LiveDmBlockPage> {
       decoration: isEnable
           ? BoxDecoration(
               border: Border.all(color: color),
-              borderRadius: const BorderRadius.all(Radius.circular(4)))
+              borderRadius: const BorderRadius.all(Radius.circular(4)),
+            )
           : null,
       child: Icon(icon, color: color),
     );
@@ -345,8 +363,9 @@ class _LiveDmBlockPageState extends State<LiveDmBlockPage> {
         onChanged: (val) => value = val,
         decoration: isKeyword ? null : const InputDecoration(hintText: 'UID'),
         keyboardType: isKeyword ? null : TextInputType.number,
-        inputFormatters:
-            isKeyword ? null : [FilteringTextInputFormatter.digitsOnly],
+        inputFormatters: isKeyword
+            ? null
+            : [FilteringTextInputFormatter.digitsOnly],
       ),
       onConfirm: () {
         if (value.isNotEmpty) {

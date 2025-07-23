@@ -168,16 +168,16 @@ class DynamicsHttp {
           "scene": rid != null
               ? 5
               : dynIdStr != null
-                  ? 4
-                  : pics != null
-                      ? 2
-                      : 1,
+              ? 4
+              : pics != null
+              ? 2
+              : 1,
           'pics': ?pics,
           "attach_card": attachCard,
           "upload_id":
               "${rid != null ? 0 : mid}_${DateTime.now().millisecondsSinceEpoch ~/ 1000}_${Utils.random.nextInt(9000) + 1000}",
           "meta": {
-            "app_meta": {"from": "create.dynamic.web", "mobi_app": "web"}
+            "app_meta": {"from": "create.dynamic.web", "mobi_app": "web"},
           },
           if (topic != null)
             "topic": {
@@ -185,7 +185,7 @@ class DynamicsHttp {
               "name": topic.second,
               "from_source": "dyn.web.list",
               "from_topic_id": 0,
-            }
+            },
         },
         if (dynIdStr != null || rid != null)
           "web_repost_src": {
@@ -194,8 +194,8 @@ class DynamicsHttp {
               "revs_id": {
                 "dyn_type": dynType,
                 "rid": rid,
-              }
-          }
+              },
+          },
       },
     );
     if (res.data['code'] == 0) {
@@ -309,15 +309,16 @@ class DynamicsHttp {
     if (res.data['code'] == 0) {
       return {
         'status': true,
-        'data': ArticleInfoData.fromJson(res.data['data'])
+        'data': ArticleInfoData.fromJson(res.data['data']),
       };
     } else {
       return {'status': false, 'msg': res.data['message']};
     }
   }
 
-  static Future<LoadingState<ArticleViewData>> articleView(
-      {required dynamic cvId}) async {
+  static Future<LoadingState<ArticleViewData>> articleView({
+    required dynamic cvId,
+  }) async {
     final res = await Request().get(
       Api.articleView,
       queryParameters: await WbiSign.makSign({
@@ -333,8 +334,9 @@ class DynamicsHttp {
     }
   }
 
-  static Future<LoadingState<DynamicItemModel>> opusDetail(
-      {required dynamic opusId}) async {
+  static Future<LoadingState<DynamicItemModel>> opusDetail({
+    required dynamic opusId,
+  }) async {
     final res = await Request().get(
       Api.opusDetail,
       queryParameters: await WbiSign.makSign({
@@ -351,8 +353,10 @@ class DynamicsHttp {
   }
 
   static Future<LoadingState<VoteInfo>> voteInfo(dynamic voteId) async {
-    final res =
-        await Request().get(Api.voteInfo, queryParameters: {'vote_id': voteId});
+    final res = await Request().get(
+      Api.voteInfo,
+      queryParameters: {'vote_id': voteId},
+    );
     if (res.data['code'] == 0) {
       return Success(VoteInfo.fromSeparatedJson(res.data['data']));
     } else {
@@ -375,12 +379,14 @@ class DynamicsHttp {
       'op_bit': 0,
       'dynamic_id': dynamicId ?? 0,
       'csrf_token': csrf,
-      'csrf': csrf
+      'csrf': csrf,
     };
-    final res = await Request().post(Api.doVote,
-        queryParameters: {'csrf': csrf},
-        data: data,
-        options: Options(contentType: Headers.jsonContentType));
+    final res = await Request().post(
+      Api.doVote,
+      queryParameters: {'csrf': csrf},
+      data: data,
+      options: Options(contentType: Headers.jsonContentType),
+    );
     if (res.data['code'] == 0) {
       return Success(VoteInfo.fromJson(res.data['data']['vote_info']));
     } else {
@@ -471,15 +477,16 @@ class DynamicsHttp {
     if (res.data['code'] == 0) {
       return {
         'status': true,
-        'data': DynReserveData.fromJson(res.data['data'])
+        'data': DynReserveData.fromJson(res.data['data']),
       };
     } else {
       return {'status': false, 'msg': res.data['message']};
     }
   }
 
-  static Future<LoadingState<List<TopicItem>?>> dynTopicRcmd(
-      {int ps = 25}) async {
+  static Future<LoadingState<List<TopicItem>?>> dynTopicRcmd({
+    int ps = 25,
+  }) async {
     final res = await Request().get(
       Api.dynTopicRcmd,
       queryParameters: {
@@ -489,9 +496,11 @@ class DynamicsHttp {
       },
     );
     if (res.data['code'] == 0) {
-      return Success((res.data['data']?['topic_items'] as List?)
-          ?.map((e) => TopicItem.fromJson(e))
-          .toList());
+      return Success(
+        (res.data['data']?['topic_items'] as List?)
+            ?.map((e) => TopicItem.fromJson(e))
+            .toList(),
+      );
     } else {
       return Error(res.data['message']);
     }
@@ -506,16 +515,19 @@ class DynamicsHttp {
       },
     );
     if (res.data['code'] == 0) {
-      return Success((res.data['data'] as List?)
-          ?.map((e) => OpusPicModel.fromJson(e))
-          .toList());
+      return Success(
+        (res.data['data'] as List?)
+            ?.map((e) => OpusPicModel.fromJson(e))
+            .toList(),
+      );
     } else {
       return Error(res.data['message']);
     }
   }
 
-  static Future<LoadingState<List<MentionGroup>?>> dynMention(
-      {String? keyword}) async {
+  static Future<LoadingState<List<MentionGroup>?>> dynMention({
+    String? keyword,
+  }) async {
     final res = await Request().get(
       Api.dynMention,
       queryParameters: {

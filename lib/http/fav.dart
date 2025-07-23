@@ -67,7 +67,7 @@ class FavHttp {
         'order': order.name,
         'type': type,
         'tid': 0,
-        'platform': 'web'
+        'platform': 'web',
       },
     );
     if (res.data['code'] == 0) {
@@ -444,15 +444,17 @@ class FavHttp {
   static Future deleteFolder({
     required List<dynamic> mediaIds,
   }) async {
-    var res = await Request().post(Api.deleteFolder,
-        data: {
-          'media_ids': mediaIds.join(','),
-          'platform': 'web',
-          'csrf': Accounts.main.csrf,
-        },
-        options: Options(
-          contentType: Headers.formUrlEncodedContentType,
-        ));
+    var res = await Request().post(
+      Api.deleteFolder,
+      data: {
+        'media_ids': mediaIds.join(','),
+        'platform': 'web',
+        'csrf': Accounts.main.csrf,
+      },
+      options: Options(
+        contentType: Headers.formUrlEncodedContentType,
+      ),
+    );
     if (res.data['code'] == 0) {
       return {'status': true, 'data': res.data['data']};
     } else {
@@ -468,18 +470,20 @@ class FavHttp {
     required String cover,
     required String intro,
   }) async {
-    var res = await Request().post(isAdd ? Api.addFolder : Api.editFolder,
-        data: {
-          'title': title,
-          'intro': intro,
-          'privacy': privacy,
-          'cover': cover.isNotEmpty ? Uri.encodeFull(cover) : cover,
-          'csrf': Accounts.main.csrf,
-          'media_id': ?mediaId,
-        },
-        options: Options(
-          contentType: Headers.formUrlEncodedContentType,
-        ));
+    var res = await Request().post(
+      isAdd ? Api.addFolder : Api.editFolder,
+      data: {
+        'title': title,
+        'intro': intro,
+        'privacy': privacy,
+        'cover': cover.isNotEmpty ? Uri.encodeFull(cover) : cover,
+        'csrf': Accounts.main.csrf,
+        'media_id': ?mediaId,
+      },
+      options: Options(
+        contentType: Headers.formUrlEncodedContentType,
+      ),
+    );
     if (res.data['code'] == 0) {
       return {'status': true, 'data': FavFolderInfo.fromJson(res.data['data'])};
     } else {
@@ -554,9 +558,11 @@ class FavHttp {
       ),
     );
     if (res.data['code'] == 0) {
-      return Success((res.data['data'] as List?)
-          ?.map((e) => SpaceFavData.fromJson(e))
-          .toList());
+      return Success(
+        (res.data['data'] as List?)
+            ?.map((e) => SpaceFavData.fromJson(e))
+            .toList(),
+      );
     } else {
       return Error(res.data['message']);
     }
@@ -574,7 +580,7 @@ class FavHttp {
       data: {
         "entity": {
           "object_id_str": opusId,
-          "type": {"biz": 2}
+          "type": {"biz": 2},
         },
         "action": action, // 3 fav, 4 unfav
       },
@@ -644,11 +650,11 @@ class FavHttp {
     var res = await Request().post(
       isFav
           ? isCopy
-              ? Api.copyFav
-              : Api.moveFav
+                ? Api.copyFav
+                : Api.moveFav
           : isCopy
-              ? Api.copyToview
-              : Api.moveToview,
+          ? Api.copyToview
+          : Api.moveToview,
       data: {
         'src_media_id': ?srcMediaId,
         'tar_media_id': tarMediaId,

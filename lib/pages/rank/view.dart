@@ -64,8 +64,9 @@ class _RankPageState extends State<RankPage>
                               flex: 1,
                               child: Container(
                                 alignment: Alignment.center,
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 7),
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 7,
+                                ),
                                 child: Text(
                                   RankType.values[index].label,
                                   style: TextStyle(
@@ -94,10 +95,12 @@ class _RankPageState extends State<RankPage>
             physics: const NeverScrollableScrollPhysics(),
             controller: _rankController.tabController,
             children: RankType.values
-                .map((item) => ZonePage(
-                      rid: item.rid,
-                      seasonType: item.seasonType,
-                    ))
+                .map(
+                  (item) => ZonePage(
+                    rid: item.rid,
+                    seasonType: item.seasonType,
+                  ),
+                )
                 .toList(),
           ),
         ),

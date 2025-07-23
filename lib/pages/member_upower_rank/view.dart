@@ -57,8 +57,9 @@ class _UpowerRankPageState extends State<UpowerRankPage>
             padding: EdgeInsets.only(
               bottom: MediaQuery.paddingOf(context).bottom + 80,
             ),
-            sliver:
-                Obx(() => _bilidBody(theme, _controller.loadingState.value)),
+            sliver: Obx(
+              () => _bilidBody(theme, _controller.loadingState.value),
+            ),
           ),
         ],
       ),
@@ -71,7 +72,8 @@ class _UpowerRankPageState extends State<UpowerRankPage>
             return name == null
                 ? const SizedBox.shrink()
                 : Text(
-                    '$name 充电排行榜${_controller.memberTotal == 0 ? '' : '(${_controller.memberTotal})'}');
+                    '$name 充电排行榜${_controller.memberTotal == 0 ? '' : '(${_controller.memberTotal})'}',
+                  );
           }),
         ),
         body: SafeArea(
@@ -94,21 +96,25 @@ class _UpowerRankPageState extends State<UpowerRankPage>
                                     isScrollable: true,
                                     tabAlignment: TabAlignment.start,
                                     tabs: tabs
-                                        .map((e) => Tab(
+                                        .map(
+                                          (e) => Tab(
                                             text:
-                                                '${e.name!}(${e.memberTotal ?? 0})'))
+                                                '${e.name!}(${e.memberTotal ?? 0})',
+                                          ),
+                                        )
                                         .toList(),
                                     onTap: (index) {
-                                      if (!DefaultTabController.of(context)
-                                          .indexIsChanging) {
+                                      if (!DefaultTabController.of(
+                                        context,
+                                      ).indexIsChanging) {
                                         try {
                                           if (index == 0) {
                                             _controller.animateToTop();
                                           } else {
                                             Get.find<UpowerRankController>(
-                                                    tag:
-                                                        '$_tag${tabs[index].privilegeType}')
-                                                .animateToTop();
+                                              tag:
+                                                  '$_tag${tabs[index].privilegeType}',
+                                            ).animateToTop();
                                           }
                                         } catch (_) {}
                                       }
@@ -118,15 +124,17 @@ class _UpowerRankPageState extends State<UpowerRankPage>
                                     child: tabBarView(
                                       children: [
                                         KeepAliveWrapper(
-                                            builder: (context) => child),
+                                          builder: (context) => child,
+                                        ),
                                         ...tabs
                                             .sublist(1)
-                                            .map((e) => UpowerRankPage(
-                                                  upMid: _upMid,
-                                                  tag: _tag,
-                                                  privilegeType:
-                                                      e.privilegeType,
-                                                ))
+                                            .map(
+                                              (e) => UpowerRankPage(
+                                                upMid: _upMid,
+                                                tag: _tag,
+                                                privilegeType: e.privilegeType,
+                                              ),
+                                            ),
                                       ],
                                     ),
                                   ),
@@ -148,17 +156,19 @@ class _UpowerRankPageState extends State<UpowerRankPage>
   }
 
   Widget _bilidBody(
-      ThemeData theme, LoadingState<List<UpowerRankInfo>?> loadingState) {
+    ThemeData theme,
+    LoadingState<List<UpowerRankInfo>?> loadingState,
+  ) {
     late final width = MediaQuery.textScalerOf(context).scale(32);
     return switch (loadingState) {
       Loading() => const SliverToBoxAdapter(
-          child: SizedBox(
-            height: 125,
-            child: Center(
-              child: CircularProgressIndicator(),
-            ),
+        child: SizedBox(
+          height: 125,
+          child: Center(
+            child: CircularProgressIndicator(),
           ),
         ),
+      ),
       Success<List<UpowerRankInfo>?>(:var response) =>
         response?.isNotEmpty == true
             ? SliverList.builder(
@@ -229,9 +239,9 @@ class _UpowerRankPageState extends State<UpowerRankPage>
               )
             : HttpError(onReload: _controller.onReload),
       Error(:var errMsg) => HttpError(
-          errMsg: errMsg,
-          onReload: _controller.onReload,
-        ),
+        errMsg: errMsg,
+        onReload: _controller.onReload,
+      ),
     };
   }
 

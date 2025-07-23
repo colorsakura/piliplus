@@ -81,12 +81,15 @@ class UserHttp {
     int? max,
     int? viewAt,
   }) async {
-    var res = await Request().get(Api.historyList, queryParameters: {
-      'type': type,
-      'ps': 20,
-      'max': max ?? 0,
-      'view_at': viewAt ?? 0,
-    });
+    var res = await Request().get(
+      Api.historyList,
+      queryParameters: {
+        'type': type,
+        'ps': 20,
+        'max': max ?? 0,
+        'view_at': viewAt ?? 0,
+      },
+    );
     if (res.data['code'] == 0) {
       return Success(HistoryData.fromJson(res.data['data']));
     } else {
@@ -151,7 +154,7 @@ class UserHttp {
   static Future toViewDel({required List<int?> aids}) async {
     final Map<String, dynamic> params = {
       'csrf': Accounts.main.csrf,
-      'resources': aids.join(',')
+      'resources': aids.join(','),
     };
     var res = await Request().post(
       Api.toViewDel,
@@ -235,8 +238,10 @@ class UserHttp {
   }
 
   // 搜索历史记录
-  static Future<LoadingState<HistoryData>> searchHistory(
-      {required int pn, required String keyword}) async {
+  static Future<LoadingState<HistoryData>> searchHistory({
+    required int pn,
+    required String keyword,
+  }) async {
     var res = await Request().get(
       Api.searchHistory,
       queryParameters: {
@@ -275,8 +280,10 @@ class UserHttp {
   }
 
   static Future<Map<String, dynamic>> videoTags({required String bvid}) async {
-    var res =
-        await Request().get(Api.videoTags, queryParameters: {'bvid': bvid});
+    var res = await Request().get(
+      Api.videoTags,
+      queryParameters: {'bvid': bvid},
+    );
     if (res.data['code'] == 0) {
       List<VideoTagItem>? list = (res.data['data'] as List?)
           ?.map((e) => VideoTagItem.fromJson(e))

@@ -72,7 +72,8 @@ class _MemberVideoState extends State<MemberVideo>
                   bottom: MediaQuery.paddingOf(context).bottom + 80,
                 ),
                 sliver: Obx(
-                    () => _buildBody(theme, _controller.loadingState.value)),
+                  () => _buildBody(theme, _controller.loadingState.value),
+                ),
               ),
             ],
           ),
@@ -105,135 +106,141 @@ class _MemberVideoState extends State<MemberVideo>
   }
 
   Widget _buildBody(
-      ThemeData theme, LoadingState<List<SpaceArchiveItem>?> loadingState) {
+    ThemeData theme,
+    LoadingState<List<SpaceArchiveItem>?> loadingState,
+  ) {
     return switch (loadingState) {
       Loading() => SliverPadding(
-          padding:
-              widget.isSingle ? const EdgeInsets.only(top: 7) : EdgeInsets.zero,
-          sliver: SliverGrid(
-            gridDelegate: Grid.videoCardHDelegate(context),
-            delegate: SliverChildBuilderDelegate(
-              (context, index) {
-                return const VideoCardHSkeleton();
-              },
-              childCount: 10,
-            ),
+        padding: widget.isSingle
+            ? const EdgeInsets.only(top: 7)
+            : EdgeInsets.zero,
+        sliver: SliverGrid(
+          gridDelegate: Grid.videoCardHDelegate(context),
+          delegate: SliverChildBuilderDelegate(
+            (context, index) {
+              return const VideoCardHSkeleton();
+            },
+            childCount: 10,
           ),
         ),
-      Success(:var response) => response?.isNotEmpty == true
-          ? SliverMainAxisGroup(
-              slivers: [
-                SliverPersistentHeader(
-                  pinned: false,
-                  floating: true,
-                  delegate: CustomSliverPersistentHeaderDelegate(
-                    extent: 40,
-                    bgColor: theme.colorScheme.surface,
-                    child: SizedBox(
-                      height: 40,
-                      child: Row(
-                        children: [
-                          const SizedBox(width: 8),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 6),
-                            child: Obx(
-                              () {
-                                final count = _controller.count.value;
-                                return Text(
-                                  count != -1 ? '共$count视频' : '',
-                                  style: const TextStyle(fontSize: 13),
-                                );
-                              },
+      ),
+      Success(:var response) =>
+        response?.isNotEmpty == true
+            ? SliverMainAxisGroup(
+                slivers: [
+                  SliverPersistentHeader(
+                    pinned: false,
+                    floating: true,
+                    delegate: CustomSliverPersistentHeaderDelegate(
+                      extent: 40,
+                      bgColor: theme.colorScheme.surface,
+                      child: SizedBox(
+                        height: 40,
+                        child: Row(
+                          children: [
+                            const SizedBox(width: 8),
+                            Padding(
+                              padding: const EdgeInsets.only(left: 6),
+                              child: Obx(
+                                () {
+                                  final count = _controller.count.value;
+                                  return Text(
+                                    count != -1 ? '共$count视频' : '',
+                                    style: const TextStyle(fontSize: 13),
+                                  );
+                                },
+                              ),
                             ),
-                          ),
-                          Obx(
-                            () {
-                              final episodicButton =
-                                  _controller.episodicButton.value;
-                              return episodicButton.uri?.isNotEmpty == true
-                                  ? Container(
-                                      height: 35,
-                                      padding: EdgeInsets.only(
+                            Obx(
+                              () {
+                                final episodicButton =
+                                    _controller.episodicButton.value;
+                                return episodicButton.uri?.isNotEmpty == true
+                                    ? Container(
+                                        height: 35,
+                                        padding: EdgeInsets.only(
                                           left: _controller.count.value != -1
                                               ? 6
-                                              : 0),
-                                      child: TextButton.icon(
-                                        onPressed: _controller.toViewPlayAll,
-                                        icon: Icon(
-                                          Icons.play_circle_outline_rounded,
-                                          size: 16,
-                                          color: theme.colorScheme.secondary,
+                                              : 0,
                                         ),
-                                        label: Text(
-                                          episodicButton.text ?? '播放全部',
-                                          style: TextStyle(
-                                            fontSize: 13,
+                                        child: TextButton.icon(
+                                          onPressed: _controller.toViewPlayAll,
+                                          icon: Icon(
+                                            Icons.play_circle_outline_rounded,
+                                            size: 16,
                                             color: theme.colorScheme.secondary,
                                           ),
+                                          label: Text(
+                                            episodicButton.text ?? '播放全部',
+                                            style: TextStyle(
+                                              fontSize: 13,
+                                              color:
+                                                  theme.colorScheme.secondary,
+                                            ),
+                                          ),
                                         ),
-                                      ),
-                                    )
-                                  : const SizedBox.shrink();
-                            },
-                          ),
-                          const Spacer(),
-                          SizedBox(
-                            height: 35,
-                            child: TextButton.icon(
-                              onPressed: _controller.queryBySort,
-                              icon: Icon(
-                                Icons.sort,
-                                size: 16,
-                                color: theme.colorScheme.secondary,
-                              ),
-                              label: Obx(
-                                () => Text(
-                                  widget.type == ContributeType.video
-                                      ? _controller.order.value == 'pubdate'
-                                          ? '最新发布'
-                                          : '最多播放'
-                                      : _controller.sort.value == 'desc'
-                                          ? '默认'
-                                          : '倒序',
-                                  style: TextStyle(
-                                    fontSize: 13,
-                                    color: theme.colorScheme.secondary,
+                                      )
+                                    : const SizedBox.shrink();
+                              },
+                            ),
+                            const Spacer(),
+                            SizedBox(
+                              height: 35,
+                              child: TextButton.icon(
+                                onPressed: _controller.queryBySort,
+                                icon: Icon(
+                                  Icons.sort,
+                                  size: 16,
+                                  color: theme.colorScheme.secondary,
+                                ),
+                                label: Obx(
+                                  () => Text(
+                                    widget.type == ContributeType.video
+                                        ? _controller.order.value == 'pubdate'
+                                              ? '最新发布'
+                                              : '最多播放'
+                                        : _controller.sort.value == 'desc'
+                                        ? '默认'
+                                        : '倒序',
+                                    style: TextStyle(
+                                      fontSize: 13,
+                                      color: theme.colorScheme.secondary,
+                                    ),
                                   ),
                                 ),
                               ),
                             ),
-                          ),
-                          const SizedBox(width: 8),
-                        ],
+                            const SizedBox(width: 8),
+                          ],
+                        ),
                       ),
                     ),
                   ),
-                ),
-                SliverGrid(
-                  gridDelegate: Grid.videoCardHDelegate(context),
-                  delegate: SliverChildBuilderDelegate(
-                    (context, index) {
-                      if (widget.type != ContributeType.season &&
-                          index == response.length - 1) {
-                        _controller.onLoadMore();
-                      }
-                      return VideoCardHMemberVideo(
-                        videoItem: response[index],
-                        fromViewAid: _controller.fromViewAid,
-                      );
-                    },
-                    childCount: response!.length,
+                  SliverGrid(
+                    gridDelegate: Grid.videoCardHDelegate(context),
+                    delegate: SliverChildBuilderDelegate(
+                      (context, index) {
+                        if (widget.type != ContributeType.season &&
+                            index == response.length - 1) {
+                          _controller.onLoadMore();
+                        }
+                        return VideoCardHMemberVideo(
+                          videoItem: response[index],
+                          fromViewAid: _controller.fromViewAid,
+                        );
+                      },
+                      childCount: response!.length,
+                    ),
                   ),
-                ),
-              ],
-            )
-          : HttpError(
-              onReload: _controller.onReload,
-            ),
+                ],
+              )
+            : HttpError(
+                onReload: _controller.onReload,
+              ),
       Error(:var errMsg) => HttpError(
-          errMsg: errMsg,
-          onReload: _controller.onReload,
-        ),
+        errMsg: errMsg,
+        onReload: _controller.onReload,
+      ),
     };
   }
 }

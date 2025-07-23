@@ -94,8 +94,9 @@ class _ViewPointsPageState
     return ListView.separated(
       controller: ScrollController(),
       physics: const AlwaysScrollableScrollPhysics(),
-      padding:
-          EdgeInsets.only(bottom: MediaQuery.paddingOf(context).bottom + 80),
+      padding: EdgeInsets.only(
+        bottom: MediaQuery.paddingOf(context).bottom + 80,
+      ),
       itemCount: videoDetailController.viewPointList.length,
       itemBuilder: (context, index) {
         Segment segment = videoDetailController.viewPointList[index];
@@ -113,8 +114,9 @@ class _ViewPointsPageState
               ? () {
                   currentIndex = index;
                   plPlayerController?.danmakuController?.clear();
-                  plPlayerController?.videoPlayerController
-                      ?.seek(Duration(seconds: segment.from!));
+                  plPlayerController?.videoPlayerController?.seek(
+                    Duration(seconds: segment.from!),
+                  );
                   Get.back();
                 }
               : null,
@@ -123,8 +125,9 @@ class _ViewPointsPageState
                   margin: const EdgeInsets.symmetric(vertical: 6),
                   decoration: currentIndex == index
                       ? BoxDecoration(
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(6)),
+                          borderRadius: const BorderRadius.all(
+                            Radius.circular(6),
+                          ),
                           border: Border.all(
                             width: 1.8,
                             strokeAlign: BorderSide.strokeAlignOutside,

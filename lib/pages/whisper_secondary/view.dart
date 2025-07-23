@@ -41,18 +41,20 @@ class _WhisperSecPageState extends State<WhisperSecPage> {
               return PopupMenuButton(
                 itemBuilder: (context) {
                   return threeDotItems!
-                      .map((e) => PopupMenuItem(
-                            onTap: () => e.type.action(
-                              context: context,
-                              controller: _controller,
-                            ),
-                            child: Row(
-                              children: [
-                                e.type.icon,
-                                Text('  ${e.title}'),
-                              ],
-                            ),
-                          ))
+                      .map(
+                        (e) => PopupMenuItem(
+                          onTap: () => e.type.action(
+                            context: context,
+                            controller: _controller,
+                          ),
+                          child: Row(
+                            children: [
+                              e.type.icon,
+                              Text('  ${e.title}'),
+                            ],
+                          ),
+                        ),
+                      )
                       .toList();
                 },
               );
@@ -68,9 +70,10 @@ class _WhisperSecPageState extends State<WhisperSecPage> {
           slivers: [
             SliverPadding(
               padding: EdgeInsets.only(
-                  bottom: MediaQuery.paddingOf(context).bottom + 80),
+                bottom: MediaQuery.paddingOf(context).bottom + 80,
+              ),
               sliver: Obx(() => _buildBody(_controller.loadingState.value)),
-            )
+            ),
           ],
         ),
       ),
@@ -86,37 +89,39 @@ class _WhisperSecPageState extends State<WhisperSecPage> {
     );
     return switch (loadingState) {
       Loading() => SliverList.builder(
-          itemCount: 12,
-          itemBuilder: (context, index) {
-            return const WhisperItemSkeleton();
-          },
-        ),
-      Success(:var response) => response?.isNotEmpty == true
-          ? SliverList.separated(
-              itemCount: response!.length,
-              itemBuilder: (context, index) {
-                if (index == response.length - 1) {
-                  _controller.onLoadMore();
-                }
-                final item = response[index];
-                return WhisperSessionItem(
-                  item: item,
-                  onSetTop: (isTop, talkerId) =>
-                      _controller.onSetTop(item, index, isTop, talkerId),
-                  onSetMute: (isMuted, talkerUid) =>
-                      _controller.onSetMute(item, isMuted, talkerUid),
-                  onRemove: (talkerId) => _controller.onRemove(index, talkerId),
-                );
-              },
-              separatorBuilder: (context, index) => divider,
-            )
-          : HttpError(
-              onReload: _controller.onReload,
-            ),
+        itemCount: 12,
+        itemBuilder: (context, index) {
+          return const WhisperItemSkeleton();
+        },
+      ),
+      Success(:var response) =>
+        response?.isNotEmpty == true
+            ? SliverList.separated(
+                itemCount: response!.length,
+                itemBuilder: (context, index) {
+                  if (index == response.length - 1) {
+                    _controller.onLoadMore();
+                  }
+                  final item = response[index];
+                  return WhisperSessionItem(
+                    item: item,
+                    onSetTop: (isTop, talkerId) =>
+                        _controller.onSetTop(item, index, isTop, talkerId),
+                    onSetMute: (isMuted, talkerUid) =>
+                        _controller.onSetMute(item, isMuted, talkerUid),
+                    onRemove: (talkerId) =>
+                        _controller.onRemove(index, talkerId),
+                  );
+                },
+                separatorBuilder: (context, index) => divider,
+              )
+            : HttpError(
+                onReload: _controller.onReload,
+              ),
       Error(:var errMsg) => HttpError(
-          errMsg: errMsg,
-          onReload: _controller.onReload,
-        ),
+        errMsg: errMsg,
+        onReload: _controller.onReload,
+      ),
     };
   }
 }

@@ -12,8 +12,9 @@ import 'package:PiliPlus/utils/accounts/account.dart';
 import 'package:dio/dio.dart';
 
 class ReplyHttp {
-  static final Options _options =
-      Options(extra: {'account': AnonymousAccount(), 'checkReply': true});
+  static final Options _options = Options(
+    extra: {'account': AnonymousAccount(), 'checkReply': true},
+  );
 
   static Future<LoadingState> replyList({
     required bool isLogin,
@@ -229,12 +230,16 @@ class ReplyHttp {
     }
   }
 
-  static Future<LoadingState<List<Package>?>> getEmoteList(
-      {String? business}) async {
-    var res = await Request().get(Api.myEmote, queryParameters: {
-      'business': business ?? 'reply',
-      'web_location': '333.1245',
-    });
+  static Future<LoadingState<List<Package>?>> getEmoteList({
+    String? business,
+  }) async {
+    var res = await Request().get(
+      Api.myEmote,
+      queryParameters: {
+        'business': business ?? 'reply',
+        'web_location': '333.1245',
+      },
+    );
     if (res.data['code'] == 0) {
       return Success(EmoteModelData.fromJson(res.data['data']).packages);
     } else {

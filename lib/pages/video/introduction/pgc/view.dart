@@ -96,7 +96,7 @@ class _PgcIntroPageState extends State<PgcIntroPage>
                           imgList: [
                             SourceModel(
                               url: item.cover!,
-                            )
+                            ),
                           ],
                           onDismissed: videoDetailCtr.onDismissed,
                         );
@@ -124,7 +124,9 @@ class _PgcIntroPageState extends State<PgcIntroPage>
                 Expanded(
                   child: GestureDetector(
                     onTap: () => widget.showIntroDetail(
-                        item, pgcIntroController.videoTags.value),
+                      item,
+                      pgcIntroController.videoTags.value,
+                    ),
                     behavior: HitTestBehavior.opaque,
                     child: SizedBox(
                       height: isLandscape ? 115 : 115 / 0.75,
@@ -182,7 +184,8 @@ class _PgcIntroPageState extends State<PgcIntroPage>
                                                   } else {
                                                     pgcIntroController
                                                         .pgcUpdate(
-                                                            followStatus);
+                                                          followStatus,
+                                                        );
                                                   }
                                                 },
                                               );
@@ -214,7 +217,7 @@ class _PgcIntroPageState extends State<PgcIntroPage>
                               if (isLandscape) ...[
                                 areasAndPubTime(theme, item),
                                 newEpDesc(theme, item),
-                              ]
+                              ],
                             ],
                           ),
                           SizedBox(height: isLandscape ? 2 : 6),
@@ -251,7 +254,7 @@ class _PgcIntroPageState extends State<PgcIntroPage>
                 changeFuc: pgcIntroController.changeSeasonOrbangu,
                 showEpisodes: widget.showEpisodes,
                 newEp: item.newEp,
-              )
+              ),
             ],
           ],
         ),
@@ -259,8 +262,11 @@ class _PgcIntroPageState extends State<PgcIntroPage>
     );
   }
 
-  Widget actionGrid(ThemeData theme, PgcInfoModel item,
-      PgcIntroController pgcIntroController) {
+  Widget actionGrid(
+    ThemeData theme,
+    PgcInfoModel item,
+    PgcIntroController pgcIntroController,
+  ) {
     return SizedBox(
       height: 48,
       child: Row(
@@ -275,7 +281,8 @@ class _PgcIntroPageState extends State<PgcIntroPage>
               semanticsLabel: '点赞',
               text: NumUtil.numFormat(item.stat!.likes),
               needAnim: true,
-              hasTriple: pgcIntroController.hasLike.value &&
+              hasTriple:
+                  pgcIntroController.hasLike.value &&
                   pgcIntroController.hasCoin &&
                   pgcIntroController.hasFav.value,
               callBack: (start) {
@@ -308,8 +315,10 @@ class _PgcIntroPageState extends State<PgcIntroPage>
               icon: const Icon(FontAwesomeIcons.star),
               selectIcon: const Icon(FontAwesomeIcons.solidStar),
               onTap: () => pgcIntroController.showFavBottomSheet(context),
-              onLongPress: () => pgcIntroController.showFavBottomSheet(context,
-                  type: 'longPress'),
+              onLongPress: () => pgcIntroController.showFavBottomSheet(
+                context,
+                type: 'longPress',
+              ),
               selectStatus: pgcIntroController.hasFav.value,
               semanticsLabel: '收藏',
               text: NumUtil.numFormat(item.stat!.favorite),

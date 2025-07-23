@@ -72,8 +72,8 @@ class MemberController extends CommonDataController<SpaceData, SpaceData?>
     } else {
       relation.value = data.card?.relation?.isFollow == 1
           ? data.relSpecial == 1
-              ? -10
-              : data.card?.relation?.status ?? 2
+                ? -10
+                : data.card?.relation?.status ?? 2
           : 0;
     }
     tab2 = data.tab2;
@@ -147,9 +147,9 @@ class MemberController extends CommonDataController<SpaceData, SpaceData?>
 
   @override
   Future<LoadingState<SpaceData>> customGetData() => MemberHttp.space(
-        mid: mid,
-        fromViewAid: fromViewAid,
-      );
+    mid: mid,
+    fromViewAid: fromViewAid,
+  );
 
   void blockUser(BuildContext context) {
     if (!accountService.isLogin.value) {
@@ -176,7 +176,7 @@ class MemberController extends CommonDataController<SpaceData, SpaceData?>
                 _onBlock();
               },
               child: const Text('确认'),
-            )
+            ),
           ],
         );
       },

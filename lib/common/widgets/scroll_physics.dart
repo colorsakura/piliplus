@@ -4,22 +4,20 @@ import 'package:flutter/material.dart';
 Widget videoTabBarView({
   required List<Widget> children,
   TabController? controller,
-}) =>
-    TabBarView(
-      physics: const CustomTabBarViewClampingScrollPhysics(),
-      controller: controller,
-      children: children,
-    );
+}) => TabBarView(
+  physics: const CustomTabBarViewClampingScrollPhysics(),
+  controller: controller,
+  children: children,
+);
 
 Widget tabBarView({
   required List<Widget> children,
   TabController? controller,
-}) =>
-    TabBarView(
-      physics: const CustomTabBarViewScrollPhysics(),
-      controller: controller,
-      children: children,
-    );
+}) => TabBarView(
+  physics: const CustomTabBarViewScrollPhysics(),
+  controller: controller,
+  children: children,
+);
 
 class CustomTabBarViewScrollPhysics extends ScrollPhysics {
   const CustomTabBarViewScrollPhysics({super.parent});
@@ -57,7 +55,9 @@ class ReloadScrollPhysics extends AlwaysScrollableScrollPhysics {
   @override
   ReloadScrollPhysics applyTo(ScrollPhysics? ancestor) {
     return ReloadScrollPhysics(
-        parent: buildParent(ancestor), controller: controller);
+      parent: buildParent(ancestor),
+      controller: controller,
+    );
   }
 
   @override

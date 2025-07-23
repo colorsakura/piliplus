@@ -83,7 +83,7 @@ class LiveHttp {
     if (res.data['code'] == 0) {
       return {
         'status': true,
-        'data': RoomPlayInfoData.fromJson(res.data['data'])
+        'data': RoomPlayInfoData.fromJson(res.data['data']),
       };
     } else {
       return {'status': false, 'msg': res.data['message']};
@@ -91,13 +91,16 @@ class LiveHttp {
   }
 
   static Future liveRoomInfoH5({roomId, qn}) async {
-    var res = await Request().get(Api.liveRoomInfoH5, queryParameters: {
-      'room_id': roomId,
-    });
+    var res = await Request().get(
+      Api.liveRoomInfoH5,
+      queryParameters: {
+        'room_id': roomId,
+      },
+    );
     if (res.data['code'] == 0) {
       return {
         'status': true,
-        'data': RoomInfoH5Data.fromJson(res.data['data'])
+        'data': RoomInfoH5Data.fromJson(res.data['data']),
       };
     } else {
       return {'status': false, 'msg': res.data['message']};
@@ -133,15 +136,16 @@ class LiveHttp {
     if (res.data['code'] == 0) {
       return {
         'status': true,
-        'data': LiveDmInfoData.fromJson(res.data['data'])
+        'data': LiveDmInfoData.fromJson(res.data['data']),
       };
     } else {
       return {'status': false, 'msg': res.data['message']};
     }
   }
 
-  static Future<LoadingState<List<LiveEmoteDatum>?>> getLiveEmoticons(
-      {required int roomId}) async {
+  static Future<LoadingState<List<LiveEmoteDatum>?>> getLiveEmoticons({
+    required int roomId,
+  }) async {
     var res = await Request().get(
       Api.getLiveEmoticons,
       queryParameters: {
@@ -295,9 +299,11 @@ class LiveHttp {
       queryParameters: params,
     );
     if (res.data['code'] == 0) {
-      return Success((res.data['data']?['list'] as List?)
-          ?.map((e) => AreaList.fromJson(e))
-          .toList());
+      return Success(
+        (res.data['data']?['list'] as List?)
+            ?.map((e) => AreaList.fromJson(e))
+            .toList(),
+      );
     } else {
       return Error(res.data['message']);
     }
@@ -331,10 +337,12 @@ class LiveHttp {
     );
 
     if (res.data['code'] == 0) {
-      return Success((res.data['data']?['tags'] as List?)
-              ?.map((e) => AreaItem.fromJson(e))
-              .toList() ??
-          <AreaItem>[]);
+      return Success(
+        (res.data['data']?['tags'] as List?)
+                ?.map((e) => AreaItem.fromJson(e))
+                .toList() ??
+            <AreaItem>[],
+      );
     } else {
       return Error(res.data['message']);
     }
@@ -409,9 +417,9 @@ class LiveHttp {
       queryParameters: params,
     );
     if (res.data['code'] == 0) {
-      return Success((res.data['data'] as List?)
-          ?.map((e) => AreaItem.fromJson(e))
-          .toList());
+      return Success(
+        (res.data['data'] as List?)?.map((e) => AreaItem.fromJson(e)).toList(),
+      );
     } else {
       return Error(res.data['message']);
     }
@@ -458,7 +466,8 @@ class LiveHttp {
   }
 
   static Future<LoadingState<ShieldInfo?>> getLiveInfoByUser(
-      dynamic roomId) async {
+    dynamic roomId,
+  ) async {
     var res = await Request().get(
       Api.getLiveInfoByUser,
       queryParameters: await WbiSign.makSign({

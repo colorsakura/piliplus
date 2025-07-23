@@ -6,8 +6,10 @@ class CustomProxy {
   Future<void> init() async {
     Map<String, String>? proxy = await SystemProxy.getProxySettings();
     if (proxy != null) {
-      HttpOverrides.global =
-          ProxiedHttpOverrides(proxy['host']!, proxy['port']!);
+      HttpOverrides.global = ProxiedHttpOverrides(
+        proxy['host']!,
+        proxy['port']!,
+      );
     }
   }
 }

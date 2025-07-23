@@ -31,8 +31,10 @@ class FavDetailPage extends StatefulWidget {
 }
 
 class _FavDetailPageState extends State<FavDetailPage> {
-  late final FavDetailController _favDetailController =
-      Get.put(FavDetailController(), tag: Utils.makeHeroTag(mediaId));
+  late final FavDetailController _favDetailController = Get.put(
+    FavDetailController(),
+    tag: Utils.makeHeroTag(mediaId),
+  );
   late String mediaId;
 
   @override
@@ -79,8 +81,13 @@ class _FavDetailPageState extends State<FavDetailPage> {
                       padding: EdgeInsets.only(
                         bottom: MediaQuery.paddingOf(context).bottom + 85,
                       ),
-                      sliver: Obx(() => _buildBody(enableMultiSelect, theme,
-                          _favDetailController.loadingState.value)),
+                      sliver: Obx(
+                        () => _buildBody(
+                          enableMultiSelect,
+                          theme,
+                          _favDetailController.loadingState.value,
+                        ),
+                      ),
                     ),
                   ],
                 ),
@@ -127,7 +134,7 @@ class _FavDetailPageState extends State<FavDetailPage> {
                 Text(
                   '共${_favDetailController.folderInfo.value.mediaCount}条视频',
                   style: theme.textTheme.labelMedium,
-                )
+                ),
               ],
             ),
       actions: enableMultiSelect ? _selectActions(theme) : _actions(theme),
@@ -162,7 +169,8 @@ class _FavDetailPageState extends State<FavDetailPage> {
                 iconSize: 22,
                 tooltip: '分享',
                 onPressed: () => Utils.shareText(
-                    'https://www.bilibili.com/medialist/detail/ml${_favDetailController.mediaId}'),
+                  'https://www.bilibili.com/medialist/detail/ml${_favDetailController.mediaId}',
+                ),
                 icon: const Icon(Icons.share),
               );
       }),
@@ -176,10 +184,12 @@ class _FavDetailPageState extends State<FavDetailPage> {
               ..order.value = value
               ..onReload(),
             itemBuilder: (context) => FavOrderType.values
-                .map((e) => PopupMenuItem(
-                      value: e,
-                      child: Text(e.label),
-                    ))
+                .map(
+                  (e) => PopupMenuItem(
+                    value: e,
+                    child: Text(e.label),
+                  ),
+                )
                 .toList(),
           );
         },
@@ -196,14 +206,15 @@ class _FavDetailPageState extends State<FavDetailPage> {
                 child: const Text('排序'),
               ),
               PopupMenuItem(
-                onTap: () => Get.toNamed(
-                  '/createFav',
-                  parameters: {'mediaId': mediaId},
-                )?.then((res) {
-                  if (res is FavFolderInfo) {
-                    _favDetailController.folderInfo.value = res;
-                  }
-                }),
+                onTap: () =>
+                    Get.toNamed(
+                      '/createFav',
+                      parameters: {'mediaId': mediaId},
+                    )?.then((res) {
+                      if (res is FavFolderInfo) {
+                        _favDetailController.folderInfo.value = res;
+                      }
+                    }),
                 child: const Text('编辑信息'),
               ),
             ] else
@@ -241,13 +252,13 @@ class _FavDetailPageState extends State<FavDetailPage> {
                     title: '确定删除该收藏夹?',
                     onConfirm: () =>
                         FavHttp.deleteFolder(mediaIds: [mediaId]).then((res) {
-                      if (res['status']) {
-                        SmartDialog.showToast('删除成功');
-                        Get.back(result: true);
-                      } else {
-                        SmartDialog.showToast(res['msg']);
-                      }
-                    }),
+                          if (res['status']) {
+                            SmartDialog.showToast('删除成功');
+                            Get.back(result: true);
+                          } else {
+                            SmartDialog.showToast(res['msg']);
+                          }
+                        }),
                   ),
                   child: Text(
                     '删除',
@@ -266,63 +277,63 @@ class _FavDetailPageState extends State<FavDetailPage> {
   }
 
   List<Widget> _selectActions(ThemeData theme) => [
-        TextButton(
-          style: TextButton.styleFrom(
-            visualDensity: VisualDensity.compact,
-          ),
-          onPressed: () => _favDetailController.handleSelect(true),
-          child: const Text('全选'),
-        ),
-        TextButton(
-          style: TextButton.styleFrom(
-            visualDensity: VisualDensity.compact,
-          ),
-          onPressed: () =>
-              RequestUtils.onCopyOrMove<FavDetailData, FavDetailItemModel>(
+    TextButton(
+      style: TextButton.styleFrom(
+        visualDensity: VisualDensity.compact,
+      ),
+      onPressed: () => _favDetailController.handleSelect(true),
+      child: const Text('全选'),
+    ),
+    TextButton(
+      style: TextButton.styleFrom(
+        visualDensity: VisualDensity.compact,
+      ),
+      onPressed: () =>
+          RequestUtils.onCopyOrMove<FavDetailData, FavDetailItemModel>(
             context: context,
             isCopy: true,
             ctr: _favDetailController,
             mediaId: _favDetailController.mediaId,
             mid: _favDetailController.accountService.mid,
           ),
-          child: Text(
-            '复制',
-            style: TextStyle(
-              color: theme.colorScheme.onSurfaceVariant,
-            ),
-          ),
+      child: Text(
+        '复制',
+        style: TextStyle(
+          color: theme.colorScheme.onSurfaceVariant,
         ),
-        TextButton(
-          style: TextButton.styleFrom(
-            visualDensity: VisualDensity.compact,
-          ),
-          onPressed: () =>
-              RequestUtils.onCopyOrMove<FavDetailData, FavDetailItemModel>(
+      ),
+    ),
+    TextButton(
+      style: TextButton.styleFrom(
+        visualDensity: VisualDensity.compact,
+      ),
+      onPressed: () =>
+          RequestUtils.onCopyOrMove<FavDetailData, FavDetailItemModel>(
             context: context,
             isCopy: false,
             ctr: _favDetailController,
             mediaId: _favDetailController.mediaId,
             mid: _favDetailController.accountService.mid,
           ),
-          child: Text(
-            '移动',
-            style: TextStyle(
-              color: theme.colorScheme.onSurfaceVariant,
-            ),
-          ),
+      child: Text(
+        '移动',
+        style: TextStyle(
+          color: theme.colorScheme.onSurfaceVariant,
         ),
-        TextButton(
-          style: TextButton.styleFrom(
-            visualDensity: VisualDensity.compact,
-          ),
-          onPressed: () => _favDetailController.onDelChecked(context),
-          child: Text(
-            '删除',
-            style: TextStyle(color: theme.colorScheme.error),
-          ),
-        ),
-        const SizedBox(width: 10),
-      ];
+      ),
+    ),
+    TextButton(
+      style: TextButton.styleFrom(
+        visualDensity: VisualDensity.compact,
+      ),
+      onPressed: () => _favDetailController.onDelChecked(context),
+      child: Text(
+        '删除',
+        style: TextStyle(color: theme.colorScheme.error),
+      ),
+    ),
+    const SizedBox(width: 10),
+  ];
 
   Widget _flexibleSpace(ThemeData theme) {
     final style = TextStyle(
@@ -371,8 +382,9 @@ class _FavDetailPageState extends State<FavDetailPage> {
                             iconSize: 18,
                             tooltip: '${isFav ? '取消' : ''}收藏',
                             onPressed: () => _favDetailController.onFav(isFav),
-                            icon:
-                                isFav ? Icons.favorite : Icons.favorite_border,
+                            icon: isFav
+                                ? Icons.favorite
+                                : Icons.favorite_border,
                             bgColor: isFav
                                 ? null
                                 : theme.colorScheme.onInverseSurface,
@@ -381,7 +393,7 @@ class _FavDetailPageState extends State<FavDetailPage> {
                                 : theme.colorScheme.onSurfaceVariant,
                           );
                         }),
-                      )
+                      ),
                     ],
                   ),
                   if (folderInfo.title.isNotEmpty)
@@ -399,7 +411,8 @@ class _FavDetailPageState extends State<FavDetailPage> {
                           ),
                           GestureDetector(
                             onTap: () => Get.toNamed(
-                                '/member?mid=${folderInfo.upper!.mid}'),
+                              '/member?mid=${folderInfo.upper!.mid}',
+                            ),
                             child: Text(
                               folderInfo.upper!.name!,
                               style: TextStyle(
@@ -436,126 +449,139 @@ class _FavDetailPageState extends State<FavDetailPage> {
     );
   }
 
-  Widget _buildBody(bool enableMultiSelect, ThemeData theme,
-      LoadingState<List<FavDetailItemModel>?> loadingState) {
+  Widget _buildBody(
+    bool enableMultiSelect,
+    ThemeData theme,
+    LoadingState<List<FavDetailItemModel>?> loadingState,
+  ) {
     return switch (loadingState) {
       Loading() => SliverGrid(
-          gridDelegate: Grid.videoCardHDelegate(context),
-          delegate: SliverChildBuilderDelegate(
-            (context, index) {
-              return const VideoCardHSkeleton();
-            },
-            childCount: 10,
-          ),
+        gridDelegate: Grid.videoCardHDelegate(context),
+        delegate: SliverChildBuilderDelegate(
+          (context, index) {
+            return const VideoCardHSkeleton();
+          },
+          childCount: 10,
         ),
-      Success(:var response) => response?.isNotEmpty == true
-          ? SliverGrid(
-              gridDelegate: Grid.videoCardHDelegate(context),
-              delegate: SliverChildBuilderDelegate(
-                (context, index) {
-                  if (index == response.length) {
-                    _favDetailController.onLoadMore();
-                    return Container(
-                      height: 60,
-                      alignment: Alignment.center,
-                      child: Text(
-                        _favDetailController.isEnd ? '没有更多了' : '加载中...',
-                        style: TextStyle(
-                          color: theme.colorScheme.outline,
-                          fontSize: 13,
+      ),
+      Success(:var response) =>
+        response?.isNotEmpty == true
+            ? SliverGrid(
+                gridDelegate: Grid.videoCardHDelegate(context),
+                delegate: SliverChildBuilderDelegate(
+                  (context, index) {
+                    if (index == response.length) {
+                      _favDetailController.onLoadMore();
+                      return Container(
+                        height: 60,
+                        alignment: Alignment.center,
+                        child: Text(
+                          _favDetailController.isEnd ? '没有更多了' : '加载中...',
+                          style: TextStyle(
+                            color: theme.colorScheme.outline,
+                            fontSize: 13,
+                          ),
                         ),
-                      ),
-                    );
-                  }
-                  final isOwner = _favDetailController.isOwner.value ?? false;
-                  FavDetailItemModel item = response[index];
-                  return Stack(
-                    clipBehavior: Clip.none,
-                    children: [
-                      Positioned.fill(
-                        child: FavVideoCardH(
-                          item: item,
-                          onDelFav: isOwner
-                              ? () => _favDetailController.onCancelFav(
+                      );
+                    }
+                    final isOwner = _favDetailController.isOwner.value ?? false;
+                    FavDetailItemModel item = response[index];
+                    return Stack(
+                      clipBehavior: Clip.none,
+                      children: [
+                        Positioned.fill(
+                          child: FavVideoCardH(
+                            item: item,
+                            onDelFav: isOwner
+                                ? () => _favDetailController.onCancelFav(
                                     index,
                                     item.id!,
                                     item.type!,
                                   )
-                              : null,
-                          onViewFav: () {
-                            final folderInfo =
-                                _favDetailController.folderInfo.value;
-                            PageUtils.toVideoPage(
-                              'bvid=${item.bvid}&cid=${item.ugc?.firstCid}',
-                              arguments: {
-                                'videoItem': item,
-                                'heroTag': Utils.makeHeroTag(item.bvid),
-                                'sourceType': 'fav',
-                                'mediaId': folderInfo.id,
-                                'oid': item.id,
-                                'favTitle': folderInfo.title,
-                                'count': folderInfo.mediaCount,
-                                'desc': true,
-                                'isContinuePlaying': index != 0,
-                                'isOwner': isOwner,
-                              },
-                            );
-                          },
-                          onTap: enableMultiSelect
-                              ? () => _favDetailController.onSelect(item)
-                              : null,
-                          onLongPress: isOwner
-                              ? () {
-                                  if (!enableMultiSelect) {
-                                    _favDetailController
-                                        .enableMultiSelect.value = true;
-                                    _favDetailController.onSelect(item);
+                                : null,
+                            onViewFav: () {
+                              final folderInfo =
+                                  _favDetailController.folderInfo.value;
+                              PageUtils.toVideoPage(
+                                'bvid=${item.bvid}&cid=${item.ugc?.firstCid}',
+                                arguments: {
+                                  'videoItem': item,
+                                  'heroTag': Utils.makeHeroTag(item.bvid),
+                                  'sourceType': 'fav',
+                                  'mediaId': folderInfo.id,
+                                  'oid': item.id,
+                                  'favTitle': folderInfo.title,
+                                  'count': folderInfo.mediaCount,
+                                  'desc': true,
+                                  'isContinuePlaying': index != 0,
+                                  'isOwner': isOwner,
+                                },
+                              );
+                            },
+                            onTap: enableMultiSelect
+                                ? () => _favDetailController.onSelect(item)
+                                : null,
+                            onLongPress: isOwner
+                                ? () {
+                                    if (!enableMultiSelect) {
+                                      _favDetailController
+                                              .enableMultiSelect
+                                              .value =
+                                          true;
+                                      _favDetailController.onSelect(item);
+                                    }
                                   }
-                                }
-                              : null,
+                                : null,
+                          ),
                         ),
-                      ),
-                      Positioned(
-                        top: 5,
-                        left: 12,
-                        bottom: 5,
-                        child: IgnorePointer(
-                          child: LayoutBuilder(
-                            builder: (context, constraints) => AnimatedOpacity(
-                              opacity: item.checked == true ? 1 : 0,
-                              duration: const Duration(milliseconds: 200),
-                              child: Container(
-                                alignment: Alignment.center,
-                                height: constraints.maxHeight,
-                                width: constraints.maxHeight *
-                                    StyleString.aspectRatio,
-                                decoration: BoxDecoration(
-                                  borderRadius: StyleString.mdRadius,
-                                  color: Colors.black.withValues(alpha: 0.6),
-                                ),
-                                child: SizedBox(
-                                  width: 34,
-                                  height: 34,
-                                  child: AnimatedScale(
-                                    scale: item.checked == true ? 1 : 0,
-                                    duration: const Duration(milliseconds: 250),
-                                    curve: Curves.easeInOut,
-                                    child: IconButton(
-                                      style: ButtonStyle(
-                                        padding: WidgetStateProperty.all(
-                                            EdgeInsets.zero),
-                                        backgroundColor:
-                                            WidgetStateProperty.resolveWith(
-                                          (states) {
-                                            return theme.colorScheme.surface
-                                                .withValues(alpha: 0.8);
-                                          },
-                                        ),
+                        Positioned(
+                          top: 5,
+                          left: 12,
+                          bottom: 5,
+                          child: IgnorePointer(
+                            child: LayoutBuilder(
+                              builder: (context, constraints) => AnimatedOpacity(
+                                opacity: item.checked == true ? 1 : 0,
+                                duration: const Duration(milliseconds: 200),
+                                child: Container(
+                                  alignment: Alignment.center,
+                                  height: constraints.maxHeight,
+                                  width:
+                                      constraints.maxHeight *
+                                      StyleString.aspectRatio,
+                                  decoration: BoxDecoration(
+                                    borderRadius: StyleString.mdRadius,
+                                    color: Colors.black.withValues(alpha: 0.6),
+                                  ),
+                                  child: SizedBox(
+                                    width: 34,
+                                    height: 34,
+                                    child: AnimatedScale(
+                                      scale: item.checked == true ? 1 : 0,
+                                      duration: const Duration(
+                                        milliseconds: 250,
                                       ),
-                                      onPressed: null,
-                                      icon: Icon(
-                                        Icons.done_all_outlined,
-                                        color: theme.colorScheme.primary,
+                                      curve: Curves.easeInOut,
+                                      child: IconButton(
+                                        style: ButtonStyle(
+                                          padding: WidgetStateProperty.all(
+                                            EdgeInsets.zero,
+                                          ),
+                                          backgroundColor:
+                                              WidgetStateProperty.resolveWith(
+                                                (states) {
+                                                  return theme
+                                                      .colorScheme
+                                                      .surface
+                                                      .withValues(alpha: 0.8);
+                                                },
+                                              ),
+                                        ),
+                                        onPressed: null,
+                                        icon: Icon(
+                                          Icons.done_all_outlined,
+                                          color: theme.colorScheme.primary,
+                                        ),
                                       ),
                                     ),
                                   ),
@@ -564,20 +590,19 @@ class _FavDetailPageState extends State<FavDetailPage> {
                             ),
                           ),
                         ),
-                      ),
-                    ],
-                  );
-                },
-                childCount: response!.length + 1,
+                      ],
+                    );
+                  },
+                  childCount: response!.length + 1,
+                ),
+              )
+            : HttpError(
+                onReload: _favDetailController.onReload,
               ),
-            )
-          : HttpError(
-              onReload: _favDetailController.onReload,
-            ),
       Error(:var errMsg) => HttpError(
-          errMsg: errMsg,
-          onReload: _favDetailController.onReload,
-        ),
+        errMsg: errMsg,
+        onReload: _favDetailController.onReload,
+      ),
     };
   }
 }

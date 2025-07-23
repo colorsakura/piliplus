@@ -63,20 +63,25 @@ class LoginAccount implements Account {
 
   @override
   Map<String, dynamic>? toJson() => {
-        'cookies': cookieJar.toJson(),
-        'accessKey': accessKey,
-        'refresh': refresh,
-        'type': type.map((i) => i.index).toList()
-      };
+    'cookies': cookieJar.toJson(),
+    'accessKey': accessKey,
+    'refresh': refresh,
+    'type': type.map((i) => i.index).toList(),
+  };
 
   late final String _midStr = cookieJar
-      .domainCookies['bilibili.com']!['/']!['DedeUserID']!.cookie.value;
+      .domainCookies['bilibili.com']!['/']!['DedeUserID']!
+      .cookie
+      .value;
 
   late final Box<LoginAccount> _box = Accounts.account;
 
-  LoginAccount(this.cookieJar, this.accessKey, this.refresh,
-      [Set<AccountType>? type])
-      : type = type ?? {} {
+  LoginAccount(
+    this.cookieJar,
+    this.accessKey,
+    this.refresh, [
+    Set<AccountType>? type,
+  ]) : type = type ?? {} {
     cookieJar.setBuvid3();
   }
 
@@ -84,7 +89,8 @@ class LoginAccount implements Account {
     cookieJar = BiliCookieJar.fromJson(json['cookies'])..setBuvid3();
     accessKey = json['accessKey'];
     refresh = json['refresh'];
-    type = (json['type'] as Iterable?)
+    type =
+        (json['type'] as Iterable?)
             ?.map((i) => AccountType.values[i])
             .toSet() ??
         {};
@@ -164,8 +170,7 @@ extension BiliCookieJar on DefaultCookieJar {
   }
 
   List<Cookie> toList() =>
-      domainCookies['bilibili.com']?['/']
-          ?.entries
+      domainCookies['bilibili.com']?['/']?.entries
           .map((i) => i.value.cookie)
           .toList() ??
       [];
@@ -173,7 +178,8 @@ extension BiliCookieJar on DefaultCookieJar {
   void setBuvid3() {
     domainCookies['bilibili.com'] ??= {'/': {}};
     domainCookies['bilibili.com']!['/']!['buvid3'] ??= SerializableCookie(
-        Cookie('buvid3', IdUtils.genBuvid3())..setBiliDomain());
+      Cookie('buvid3', IdUtils.genBuvid3())..setBiliDomain(),
+    );
   }
 
   static DefaultCookieJar fromJson(Map json) =>
@@ -181,7 +187,9 @@ extension BiliCookieJar on DefaultCookieJar {
         ..domainCookies['bilibili.com'] = {
           '/': {
             for (var i in json.entries)
-              i.key: SerializableCookie(Cookie(i.key, i.value)..setBiliDomain())
+              i.key: SerializableCookie(
+                Cookie(i.key, i.value)..setBiliDomain(),
+              ),
           },
         };
 
@@ -191,7 +199,8 @@ extension BiliCookieJar on DefaultCookieJar {
           '/': {
             for (var i in cookies)
               i['name']!: SerializableCookie(
-                  Cookie(i['name']!, i['value']!)..setBiliDomain()),
+                Cookie(i['name']!, i['value']!)..setBiliDomain(),
+              ),
           },
         };
 }

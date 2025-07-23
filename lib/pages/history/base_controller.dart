@@ -11,7 +11,7 @@ class HistoryBaseController extends GetxController {
   RxBool enableMultiSelect = false.obs;
   RxInt checkedCount = 0.obs;
 
-// 清空观看历史
+  // 清空观看历史
   void onClearHistory(BuildContext context, VoidCallback onSuccess) {
     showDialog(
       context: context,
@@ -71,8 +71,10 @@ class HistoryBaseController extends GetxController {
                 if (res.data['code'] == 0) {
                   SmartDialog.showToast(pauseStatus ? '暂停观看历史' : '恢复观看历史');
                   this.pauseStatus.value = pauseStatus;
-                  GStorage.localCache
-                      .put(LocalCacheKey.historyPause, pauseStatus);
+                  GStorage.localCache.put(
+                    LocalCacheKey.historyPause,
+                    pauseStatus,
+                  );
                 }
                 Get.back();
               },

@@ -91,8 +91,8 @@ class _LaterPageState extends State<LaterPage>
                     tabs: LaterViewType.values.map((item) {
                       final count = _baseCtr.counts[item];
                       return Tab(
-                          text:
-                              '${item.title}${count != -1 ? '($count)' : ''}');
+                        text: '${item.title}${count != -1 ? '($count)' : ''}',
+                      );
                     }).toList(),
                     onTap: (_) {
                       if (!_tabController.indexIsChanging) {
@@ -167,8 +167,10 @@ class _LaterPageState extends State<LaterPage>
                       ..onReload();
                   },
                   child: Padding(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 6,
+                    ),
                     child: Text.rich(
                       TextSpan(
                         children: [
@@ -208,8 +210,10 @@ class _LaterPageState extends State<LaterPage>
             child: PopupMenuButton(
               tooltip: '清空',
               child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 6,
+                ),
                 child: Text.rich(
                   TextSpan(
                     children: [

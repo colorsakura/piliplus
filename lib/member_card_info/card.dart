@@ -20,17 +20,18 @@ class Card {
   });
 
   factory Card.fromJson(Map<String, dynamic> json) => Card(
-        mid: json['mid'] as String?,
-        name: json['name'] as String?,
-        face: json['face'] as String?,
-        fans: json['fans'] as int?,
-        attention: json['attention'] as int?,
-        officialVerify: json['official_verify'] == null
-            ? null
-            : BaseOfficialVerify.fromJson(
-                json['official_verify'] as Map<String, dynamic>),
-        vip: json['vip'] == null
-            ? null
-            : Vip.fromJson(json['vip'] as Map<String, dynamic>),
-      );
+    mid: json['mid'] as String?,
+    name: json['name'] as String?,
+    face: json['face'] as String?,
+    fans: json['fans'] as int?,
+    attention: json['attention'] as int?,
+    officialVerify: json['official_verify'] == null
+        ? null
+        : BaseOfficialVerify.fromJson(
+            json['official_verify'] as Map<String, dynamic>,
+          ),
+    vip: json['vip'] == null
+        ? null
+        : Vip.fromJson(json['vip'] as Map<String, dynamic>),
+  );
 }

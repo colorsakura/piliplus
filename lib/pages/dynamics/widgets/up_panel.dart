@@ -135,7 +135,8 @@ class _UpPanelState extends State<UpPanel> {
   }
 
   Widget upItemBuild(ThemeData theme, UserItem data) {
-    bool isCurrent = widget.dynamicsController.currentMid == data.mid ||
+    bool isCurrent =
+        widget.dynamicsController.currentMid == data.mid ||
         widget.dynamicsController.currentMid == -1;
     final isLive = data is LiveUserItem;
     return SizedBox(
@@ -191,11 +192,13 @@ class _UpPanelState extends State<UpPanel> {
                       label: isLive ? const Text(' Live ') : null,
                       textColor: theme.colorScheme.onSecondaryContainer,
                       alignment: AlignmentDirectional.topStart,
-                      isLabelVisible: isLive ||
+                      isLabelVisible:
+                          isLive ||
                           (data is UpItem && (data.hasUpdate ?? false)),
                       backgroundColor: isLive
-                          ? theme.colorScheme.secondaryContainer
-                              .withValues(alpha: 0.75)
+                          ? theme.colorScheme.secondaryContainer.withValues(
+                              alpha: 0.75,
+                            )
                           : theme.colorScheme.primary,
                     ),
                   ),

@@ -175,8 +175,10 @@ class SearchHttp {
     }
   }
 
-  static Future<LoadingState<PgcInfoModel>> pgcInfoNew(
-      {int? seasonId, int? epId}) async {
+  static Future<LoadingState<PgcInfoModel>> pgcInfoNew({
+    int? seasonId,
+    int? epId,
+  }) async {
     var res = await Request().get(
       Api.pgcInfo,
       queryParameters: {
@@ -226,8 +228,9 @@ class SearchHttp {
     }
   }
 
-  static Future<LoadingState<SearchTrendingData>> searchTrending(
-      {int limit = 30}) async {
+  static Future<LoadingState<SearchTrendingData>> searchTrending({
+    int limit = 30,
+  }) async {
     final res = await Request().get(
       Api.searchTrending,
       queryParameters: {

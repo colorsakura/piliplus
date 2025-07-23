@@ -16,8 +16,9 @@ Future<void> landScape() async {
     } else if (Platform.isAndroid || Platform.isIOS) {
       await AutoOrientation.landscapeAutoMode(forceSensor: true);
     } else if (Platform.isMacOS || Platform.isWindows || Platform.isLinux) {
-      await const MethodChannel('com.alexmercerind/media_kit_video')
-          .invokeMethod(
+      await const MethodChannel(
+        'com.alexmercerind/media_kit_video',
+      ).invokeMethod(
         'Utils.EnterNativeFullscreen',
       );
     }
@@ -84,8 +85,9 @@ Future<void> showStatusBar() async {
         overlays: SystemUiOverlay.values,
       );
     } else if (Platform.isMacOS || Platform.isWindows || Platform.isLinux) {
-      await const MethodChannel('com.alexmercerind/media_kit_video')
-          .invokeMethod(
+      await const MethodChannel(
+        'com.alexmercerind/media_kit_video',
+      ).invokeMethod(
         'Utils.ExitNativeFullscreen',
       );
     }

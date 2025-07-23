@@ -20,65 +20,65 @@ class _MinePageState extends State<MinePage> {
     ..queryUserInfo();
 
   Widget _header(ThemeData theme) => Row(
-        children: [
-          const SizedBox(width: 12),
-          Image.asset(
-            'assets/images/logo/logo.png',
-            width: 35,
-          ),
-          const SizedBox(width: 5),
-          Text(
-            'PiliPlus',
-            style: theme.textTheme.titleMedium,
-          ),
-          const Spacer(),
-          Obx(
-            () {
-              final anonymity = MineController.anonymity.value;
-              return IconButton(
-                iconSize: 40.0,
-                padding: const EdgeInsets.all(8),
-                style: const ButtonStyle(
-                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                ),
-                tooltip: "${anonymity ? '退出' : '进入'}无痕模式",
-                onPressed: MineController.onChangeAnonymity,
-                icon: anonymity
-                    ? const Icon(MdiIcons.incognito, size: 24)
-                    : const Icon(MdiIcons.incognitoOff, size: 24),
-              );
-            },
-          ),
-          Obx(
-            () {
-              return IconButton(
-                iconSize: 40.0,
-                padding: const EdgeInsets.all(8),
-                style: const ButtonStyle(
-                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                ),
-                tooltip: '切换至${_mineController.nextThemeType.desc}主题',
-                onPressed: _mineController.onChangeTheme,
-                icon: _mineController.themeType.value.icon,
-              );
-            },
-          ),
-          IconButton(
+    children: [
+      const SizedBox(width: 12),
+      Image.asset(
+        'assets/images/logo/logo.png',
+        width: 35,
+      ),
+      const SizedBox(width: 5),
+      Text(
+        'PiliPlus',
+        style: theme.textTheme.titleMedium,
+      ),
+      const Spacer(),
+      Obx(
+        () {
+          final anonymity = MineController.anonymity.value;
+          return IconButton(
             iconSize: 40.0,
             padding: const EdgeInsets.all(8),
             style: const ButtonStyle(
               tapTargetSize: MaterialTapTargetSize.shrinkWrap,
             ),
-            tooltip: '设置',
-            onPressed: () => {
-              Get.back(),
-              Get.toNamed('/setting', preventDuplicates: false),
-            },
-            icon: const Icon(MdiIcons.cogs, size: 24),
-          ),
-          const SizedBox(width: 10),
-        ],
-      );
+            tooltip: "${anonymity ? '退出' : '进入'}无痕模式",
+            onPressed: MineController.onChangeAnonymity,
+            icon: anonymity
+                ? const Icon(MdiIcons.incognito, size: 24)
+                : const Icon(MdiIcons.incognitoOff, size: 24),
+          );
+        },
+      ),
+      Obx(
+        () {
+          return IconButton(
+            iconSize: 40.0,
+            padding: const EdgeInsets.all(8),
+            style: const ButtonStyle(
+              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+            ),
+            tooltip: '切换至${_mineController.nextThemeType.desc}主题',
+            onPressed: _mineController.onChangeTheme,
+            icon: _mineController.themeType.value.icon,
+          );
+        },
+      ),
+      IconButton(
+        iconSize: 40.0,
+        padding: const EdgeInsets.all(8),
+        style: const ButtonStyle(
+          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+        ),
+        tooltip: '设置',
+        onPressed: () => {
+          Get.back(),
+          Get.toNamed('/setting', preventDuplicates: false),
+        },
+        icon: const Icon(MdiIcons.cogs, size: 24),
+      ),
+      const SizedBox(width: 10),
+    ],
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -174,7 +174,11 @@ class _MinePageState extends State<MinePage> {
                             ),
                           ),
                           Image.asset(
-                            'assets/images/lv/lv${levelInfo == null ? 0 : userInfo.isSeniorMember == 1 ? '6_s' : levelInfo.currentLevel}.png',
+                            'assets/images/lv/lv${levelInfo == null
+                                ? 0
+                                : userInfo.isSeniorMember == 1
+                                ? '6_s'
+                                : levelInfo.currentLevel}.png',
                             height: 10,
                           ),
                         ],
@@ -242,7 +246,8 @@ class _MinePageState extends State<MinePage> {
                             : 0,
                         backgroundColor: theme.colorScheme.inversePrimary,
                         valueColor: AlwaysStoppedAnimation<Color>(
-                            theme.colorScheme.primary),
+                          theme.colorScheme.primary,
+                        ),
                       ),
                     ],
                   ),

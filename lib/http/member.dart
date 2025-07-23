@@ -99,7 +99,8 @@ class MemberHttp {
     );
     if (res.data['code'] == 0) {
       return Success(
-          SpaceSsData.fromJson(res.data['data']?['items_lists'] ?? {}));
+        SpaceSsData.fromJson(res.data['data']?['items_lists'] ?? {}),
+      );
     } else {
       return Error(res.data['message']);
     }
@@ -172,7 +173,7 @@ class MemberHttp {
         'ps': 20,
         'order': 1,
         'uid': mid,
-        'web_location': 333.1387
+        'web_location': 333.1387,
       },
     );
     if (res.data['code'] == 0) {
@@ -286,7 +287,7 @@ class MemberHttp {
     if (res.data['code'] == 0) {
       return {
         'status': true,
-        'data': MemberInfoModel.fromJson(res.data['data'])
+        'data': MemberInfoModel.fromJson(res.data['data']),
       };
     } else {
       return {'status': false, 'msg': res.data['message']};
@@ -313,7 +314,7 @@ class MemberHttp {
     if (res.data['code'] == 0) {
       return {
         'status': true,
-        'data': MemberCardInfoData.fromJson(res.data['data'])
+        'data': MemberCardInfoData.fromJson(res.data['data']),
       };
     } else {
       return {'status': false, 'msg': res.data['message']};
@@ -349,11 +350,13 @@ class MemberHttp {
     var res = await Request().get(
       Api.searchArchive,
       queryParameters: params,
-      options: Options(headers: {
-        HttpHeaders.userAgentHeader: Request.headerUa(type: 'pc'),
-        HttpHeaders.refererHeader: '${HttpString.spaceBaseUrl}/$mid',
-        'origin': HttpString.spaceBaseUrl,
-      }),
+      options: Options(
+        headers: {
+          HttpHeaders.userAgentHeader: Request.headerUa(type: 'pc'),
+          HttpHeaders.refererHeader: '${HttpString.spaceBaseUrl}/$mid',
+          'origin': HttpString.spaceBaseUrl,
+        },
+      ),
     );
     if (res.data['code'] == 0) {
       return Success(SearchArchiveData.fromJson(res.data['data']));
@@ -465,7 +468,7 @@ class MemberHttp {
         'status': true,
         'data': res.data['data']
             .map<MemberTagItemModel>((e) => MemberTagItemModel.fromJson(e))
-            .toList()
+            .toList(),
       };
     } else {
       return {'status': false, 'msg': res.data['message']};
@@ -502,7 +505,7 @@ class MemberHttp {
       Api.addUsers,
       queryParameters: {
         'x-bili-device-req-json':
-            '{"platform":"web","device":"pc","spmid":"333.1387"}'
+            '{"platform":"web","device":"pc","spmid":"333.1387"}',
       },
       data: {
         'fids': fids.join(','),
@@ -538,10 +541,13 @@ class MemberHttp {
       },
     );
     if (res.data['code'] == 0) {
-      return Success(FollowData(
+      return Success(
+        FollowData(
           list: (res.data['data'] as List?)
               ?.map<FollowItemModel>((e) => FollowItemModel.fromJson(e))
-              .toList()));
+              .toList(),
+        ),
+      );
     } else {
       return Error(res.data['message']);
     }
@@ -622,7 +628,7 @@ class MemberHttp {
         'status': true,
         'data': res.data['data']
             .map<MemberTagItemModel>((e) => MemberTagItemModel.fromJson(e))
-            .toList()
+            .toList(),
       };
     } else {
       return {'status': false, 'msg': res.data['message']};
@@ -631,8 +637,10 @@ class MemberHttp {
 
   // 获取up播放数、点赞数
   static Future memberView({required int mid}) async {
-    var res = await Request()
-        .get(Api.getMemberViewApi, queryParameters: {'mid': mid});
+    var res = await Request().get(
+      Api.getMemberViewApi,
+      queryParameters: {'mid': mid},
+    );
     if (res.data['code'] == 0) {
       return {'status': true, 'data': res.data['data']};
     } else {
@@ -658,11 +666,14 @@ class MemberHttp {
       'web_location': 333.999,
     };
     Map params = await WbiSign.makSign(data);
-    var res = await Request().get(Api.followSearch, queryParameters: {
-      ...data,
-      'w_rid': params['w_rid'],
-      'wts': params['wts'],
-    });
+    var res = await Request().get(
+      Api.followSearch,
+      queryParameters: {
+        ...data,
+        'w_rid': params['w_rid'],
+        'wts': params['wts'],
+      },
+    );
     if (res.data['code'] == 0) {
       return Success(FollowData.fromJson(res.data['data']));
     } else {

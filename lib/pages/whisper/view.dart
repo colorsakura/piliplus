@@ -30,16 +30,17 @@ class _WhisperPageState extends State<WhisperPage> {
             final outsideItem = _controller.outsideItem.value;
             if (outsideItem?.isNotEmpty == true) {
               return Row(
-                  children: outsideItem!.map((e) {
-                return IconButton(
-                  tooltip: e.hasTitle() ? e.title : null,
-                  onPressed: () => e.type.action(
-                    context: context,
-                    controller: _controller,
-                  ),
-                  icon: e.type.icon,
-                );
-              }).toList());
+                children: outsideItem!.map((e) {
+                  return IconButton(
+                    tooltip: e.hasTitle() ? e.title : null,
+                    onPressed: () => e.type.action(
+                      context: context,
+                      controller: _controller,
+                    ),
+                    icon: e.type.icon,
+                  );
+                }).toList(),
+              );
             }
             return const SizedBox.shrink();
           }),
@@ -49,18 +50,20 @@ class _WhisperPageState extends State<WhisperPage> {
               return PopupMenuButton(
                 itemBuilder: (context) {
                   return threeDotItems!
-                      .map((e) => PopupMenuItem(
-                            onTap: () => e.type.action(
-                              context: context,
-                              controller: _controller,
-                            ),
-                            child: Row(
-                              children: [
-                                e.type.icon,
-                                Text('  ${e.title}'),
-                              ],
-                            ),
-                          ))
+                      .map(
+                        (e) => PopupMenuItem(
+                          onTap: () => e.type.action(
+                            context: context,
+                            controller: _controller,
+                          ),
+                          child: Row(
+                            children: [
+                              e.type.icon,
+                              Text('  ${e.title}'),
+                            ],
+                          ),
+                        ),
+                      )
                       .toList();
                 },
               );
@@ -96,37 +99,39 @@ class _WhisperPageState extends State<WhisperPage> {
     );
     return switch (loadingState) {
       Loading() => SliverList.builder(
-          itemCount: 12,
-          itemBuilder: (context, index) {
-            return const WhisperItemSkeleton();
-          },
-        ),
-      Success(:var response) => response?.isNotEmpty == true
-          ? SliverList.separated(
-              itemCount: response!.length,
-              itemBuilder: (context, index) {
-                if (index == response.length - 1) {
-                  _controller.onLoadMore();
-                }
-                final item = response[index];
-                return WhisperSessionItem(
-                  item: item,
-                  onSetTop: (isTop, id) =>
-                      _controller.onSetTop(item, index, isTop, id),
-                  onSetMute: (isMuted, talkerUid) =>
-                      _controller.onSetMute(item, isMuted, talkerUid),
-                  onRemove: (talkerId) => _controller.onRemove(index, talkerId),
-                );
-              },
-              separatorBuilder: (context, index) => divider,
-            )
-          : HttpError(
-              onReload: _controller.onReload,
-            ),
+        itemCount: 12,
+        itemBuilder: (context, index) {
+          return const WhisperItemSkeleton();
+        },
+      ),
+      Success(:var response) =>
+        response?.isNotEmpty == true
+            ? SliverList.separated(
+                itemCount: response!.length,
+                itemBuilder: (context, index) {
+                  if (index == response.length - 1) {
+                    _controller.onLoadMore();
+                  }
+                  final item = response[index];
+                  return WhisperSessionItem(
+                    item: item,
+                    onSetTop: (isTop, id) =>
+                        _controller.onSetTop(item, index, isTop, id),
+                    onSetMute: (isMuted, talkerUid) =>
+                        _controller.onSetMute(item, isMuted, talkerUid),
+                    onRemove: (talkerId) =>
+                        _controller.onRemove(index, talkerId),
+                  );
+                },
+                separatorBuilder: (context, index) => divider,
+              )
+            : HttpError(
+                onReload: _controller.onReload,
+              ),
       Error(:var errMsg) => HttpError(
-          errMsg: errMsg,
-          onReload: _controller.onReload,
-        ),
+        errMsg: errMsg,
+        onReload: _controller.onReload,
+      ),
     };
   }
 

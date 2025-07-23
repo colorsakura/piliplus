@@ -17,8 +17,13 @@ class FavSearchPage extends CommonSearchPage {
   State<FavSearchPage> createState() => _FavSearchPageState();
 }
 
-class _FavSearchPageState extends CommonSearchPageState<FavSearchPage,
-    FavDetailData, FavDetailItemModel> {
+class _FavSearchPageState
+    extends
+        CommonSearchPageState<
+          FavSearchPage,
+          FavDetailData,
+          FavDetailItemModel
+        > {
   @override
   final FavSearchController controller = Get.put(
     FavSearchController(),
@@ -27,26 +32,28 @@ class _FavSearchPageState extends CommonSearchPageState<FavSearchPage,
 
   @override
   List<Widget>? get extraActions => [
-        Obx(
-          () {
-            return PopupMenuButton<FavOrderType>(
-              icon: const Icon(Icons.sort),
-              requestFocus: false,
-              initialValue: controller.order.value,
-              tooltip: '排序方式',
-              onSelected: (value) => controller
-                ..order.value = value
-                ..onReload(),
-              itemBuilder: (context) => FavOrderType.values
-                  .map((e) => PopupMenuItem(
-                        value: e,
-                        child: Text(e.label),
-                      ))
-                  .toList(),
-            );
-          },
-        ),
-      ];
+    Obx(
+      () {
+        return PopupMenuButton<FavOrderType>(
+          icon: const Icon(Icons.sort),
+          requestFocus: false,
+          initialValue: controller.order.value,
+          tooltip: '排序方式',
+          onSelected: (value) => controller
+            ..order.value = value
+            ..onReload(),
+          itemBuilder: (context) => FavOrderType.values
+              .map(
+                (e) => PopupMenuItem(
+                  value: e,
+                  child: Text(e.label),
+                ),
+              )
+              .toList(),
+        );
+      },
+    ),
+  ];
 
   @override
   Widget buildList(List<FavDetailItemModel> list) {
@@ -63,10 +70,10 @@ class _FavSearchPageState extends CommonSearchPageState<FavSearchPage,
             item: item,
             onDelFav: controller.isOwner == true
                 ? () => controller.onCancelFav(
-                      index,
-                      item.id!,
-                      item.type,
-                    )
+                    index,
+                    item.id!,
+                    item.type,
+                  )
                 : null,
             onViewFav: () => PageUtils.toVideoPage(
               'bvid=${item.bvid}&cid=${item.ugc?.firstCid}',
