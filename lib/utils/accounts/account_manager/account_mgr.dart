@@ -95,18 +95,18 @@ class AccountManager extends Interceptor {
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
     final path = options.path;
 
-    if (_skipCookie(path)) return handler.next(options);
+    late final Account account = options.extra['account'] ?? _findAccount(path);
 
-    final Account account = options.extra['account'] ?? _findAccount(path);
+    if (_skipCookie(path) || account is NoAccount) return handler.next(options);
 
-    if (account.isLogin) {
-      options.headers.addAll(account.headers);
-    } else if (path == Api.heartBeat) {
+    if (!account.isLogin && path == Api.heartBeat) {
       return handler.reject(
         DioException.requestCancelled(requestOptions: options, reason: null),
         false,
       );
     }
+
+    options.headers.addAll(account.headers);
 
     // app端不需要管理cookie
     if (path.startsWith(HttpString.appBaseUrl)) {
@@ -130,11 +130,6 @@ class AccountManager extends Interceptor {
       }
       return handler.next(options);
     } else {
-      if (account is AnonymousAccount && options.extra['checkReply'] == true) {
-        options.headers[HttpHeaders.cookieHeader] = '';
-        handler.next(options);
-        return;
-      }
       account.cookieJar
           .loadForRequest(options.uri)
           .then((cookies) {

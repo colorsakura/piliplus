@@ -115,13 +115,7 @@ class Request {
       receiveTimeout: const Duration(milliseconds: 10000),
       //Http请求头.
       headers: {
-        'connection': 'keep-alive',
-        'accept-encoding': 'br,gzip',
         'user-agent': 'Dart/3.6 (dart:io)', // Http2Adapter不会自动添加标头
-        'referer': HttpString.baseUrl,
-        'env': 'prod',
-        'app-key': 'android64',
-        'x-bili-aurora-zone': 'sh001',
       },
       responseDecoder: responseDecoder, // Http2Adapter没有自动解压
       persistentConnection: true,
@@ -205,14 +199,7 @@ class Request {
     Map<String, dynamic>? queryParameters,
     Options? options,
     CancelToken? cancelToken,
-    String? uaType,
   }) async {
-    if (uaType != null) {
-      options ??= Options();
-      options.headers ??= <String, dynamic>{};
-      options.headers!['user-agent'] = headerUa(type: uaType);
-    }
-
     try {
       return await dio.get<T>(
         url,

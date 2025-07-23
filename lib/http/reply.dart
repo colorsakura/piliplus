@@ -12,8 +12,9 @@ import 'package:PiliPlus/utils/accounts/account.dart';
 import 'package:dio/dio.dart';
 
 class ReplyHttp {
-  static final Options _options = Options(
-    extra: {'account': AnonymousAccount(), 'checkReply': true},
+  static final Options options = Options(
+    headers: {...Constants.baseHeaders, 'cookie': ''},
+    extra: {'account': NoAccount()},
   );
 
   static Future<LoadingState> replyList({
@@ -36,7 +37,7 @@ class ReplyHttp {
                   '{"offset":"${nextOffset.replaceAll('"', '\\"')}"}',
               'mode': sort + 2, //2:按时间排序；3：按热度排序
             },
-            options: !isLogin ? _options : null,
+            options: !isLogin ? options : null,
           )
         : await Request().get(
             Api.replyList,
@@ -47,7 +48,7 @@ class ReplyHttp {
               'pn': page,
               'ps': 20,
             },
-            options: !isLogin ? _options : null,
+            options: !isLogin ? options : null,
           );
     if (res.data['code'] == 0) {
       ReplyData replyData = ReplyData.fromJson(res.data['data']);
@@ -155,7 +156,7 @@ class ReplyHttp {
         'sort': 1,
         if (isLogin) 'csrf': Accounts.main.csrf,
       },
-      options: !isLogin ? _options : null,
+      options: !isLogin ? options : null,
     );
     if (res.data['code'] == 0) {
       ReplyReplyData replyData = ReplyReplyData.fromJson(res.data['data']);

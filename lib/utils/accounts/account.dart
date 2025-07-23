@@ -1,3 +1,4 @@
+import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/models/common/account_type.dart';
 import 'package:PiliPlus/utils/accounts.dart';
 import 'package:PiliPlus/utils/id_utils.dart';
@@ -48,9 +49,11 @@ class LoginAccount implements Account {
 
   @override
   late final Map<String, String> headers = {
+    ...Constants.baseHeaders,
     'x-bili-mid': _midStr,
     'x-bili-aurora-eid': IdUtils.genAuroraEid(mid),
   };
+
   @override
   late String csrf =
       cookieJar.domainCookies['bilibili.com']!['/']!['bili_jct']!.cookie.value;
@@ -120,7 +123,7 @@ class AnonymousAccount implements Account {
   @override
   String csrf = '';
   @override
-  final Map<String, String> headers = const {};
+  final Map<String, String> headers = Constants.baseHeaders;
 
   @override
   bool activited = false;
@@ -203,4 +206,54 @@ extension BiliCookieJar on DefaultCookieJar {
               ),
           },
         };
+}
+
+class NoAccount implements Account {
+  @override
+  String? accessKey;
+
+  @override
+  bool activited = false;
+
+  @override
+  DefaultCookieJar cookieJar = DefaultCookieJar();
+
+  @override
+  String csrf = '';
+
+  @override
+  String? refresh;
+
+  @override
+  Set<AccountType> type = const {};
+
+  @override
+  Future<void> delete() {
+    return Future.value();
+  }
+
+  @override
+  final Map<String, String> headers = const {};
+
+  @override
+  bool isLogin = false;
+
+  @override
+  int mid = 0;
+
+  @override
+  Future<void> onChange() {
+    return Future.value();
+  }
+
+  @override
+  Map<String, dynamic>? toJson() {
+    return null;
+  }
+
+  NoAccount._();
+
+  static final _instance = NoAccount._();
+
+  factory NoAccount() => _instance;
 }

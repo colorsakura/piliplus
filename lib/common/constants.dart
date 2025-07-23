@@ -1,3 +1,4 @@
+import 'package:PiliPlus/http/constants.dart';
 import 'package:flutter/material.dart';
 
 class StyleString {
@@ -36,6 +37,15 @@ class Constants {
 
   static const String statisticsApp =
       '{"appId":1,"platform":3,"version":"8.43.0","abtest":""}';
+
+  static const baseHeaders = {
+    'connection': 'keep-alive',
+    'accept-encoding': 'br,gzip',
+    'referer': HttpString.baseUrl,
+    'env': 'prod',
+    'app-key': 'android64',
+    'x-bili-aurora-zone': 'sh001',
+  };
 
   static final urlRegex = RegExp(
     r'https?://[-A-Za-z0-9+&@#/%?=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]',

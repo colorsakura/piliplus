@@ -3,6 +3,7 @@ import 'package:PiliPlus/http/api.dart';
 import 'package:PiliPlus/http/constants.dart';
 import 'package:PiliPlus/http/init.dart';
 import 'package:PiliPlus/http/loading_state.dart';
+import 'package:PiliPlus/http/reply.dart';
 import 'package:PiliPlus/models/common/dynamic/dynamics_type.dart';
 import 'package:PiliPlus/models/common/reply/reply_option_type.dart';
 import 'package:PiliPlus/models/dynamics/result.dart';
@@ -19,7 +20,6 @@ import 'package:PiliPlus/models_new/dynamic/dyn_topic_feed/topic_card_list.dart'
 import 'package:PiliPlus/models_new/dynamic/dyn_topic_top/top_details.dart';
 import 'package:PiliPlus/models_new/dynamic/dyn_topic_top/topic_item.dart';
 import 'package:PiliPlus/utils/accounts.dart';
-import 'package:PiliPlus/utils/accounts/account.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:PiliPlus/utils/wbi_sign.dart';
 import 'package:dio/dio.dart';
@@ -232,9 +232,7 @@ class DynamicsHttp {
             '{"platform":"web","device":"pc","spmid":"333.1330"}',
         if (!clearCookie && Accounts.main.isLogin) 'csrf': Accounts.main.csrf,
       },
-      options: clearCookie
-          ? Options(extra: {'account': AnonymousAccount(), 'checkReply': true})
-          : null,
+      options: clearCookie ? ReplyHttp.options : null,
     );
     if (res.data['code'] == 0) {
       try {
