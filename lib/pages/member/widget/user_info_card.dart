@@ -344,6 +344,7 @@ class UserInfoCard extends StatelessWidget {
                           'name': card.name,
                           'face': card.face,
                           'mid': mid,
+                          'isLive': live?.liveStatus == 1,
                         },
                       );
                     }
