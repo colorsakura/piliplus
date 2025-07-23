@@ -17,7 +17,7 @@ class ActionItem extends StatefulWidget {
   final bool needAnim;
   final bool hasTriple;
   final ValueChanged<bool>? callBack;
-  final bool? expand;
+  final bool expand;
 
   const ActionItem({
     super.key,
@@ -31,7 +31,7 @@ class ActionItem extends StatefulWidget {
     this.hasTriple = false,
     this.callBack,
     required this.semanticsLabel,
-    this.expand,
+    this.expand = true,
   });
 
   @override
@@ -121,17 +121,29 @@ class ActionItemState extends State<ActionItem>
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final hasText = widget.text != null;
-    final text = Text(
-      hasText ? widget.text! : '-',
-      key: hasText ? ValueKey(widget.text!) : null,
-      style: TextStyle(
-        color: widget.selectStatus
-            ? theme.colorScheme.primary
-            : theme.colorScheme.outline,
-        fontSize: theme.textTheme.labelSmall!.fontSize,
-      ),
-    );
+    Widget? text;
+    if (widget.expand) {
+      final hasText = widget.text != null;
+      text = Text(
+        hasText ? widget.text! : '-',
+        key: hasText ? ValueKey(widget.text!) : null,
+        style: TextStyle(
+          color: widget.selectStatus
+              ? theme.colorScheme.primary
+              : theme.colorScheme.outline,
+          fontSize: theme.textTheme.labelSmall!.fontSize,
+        ),
+      );
+      if (hasText) {
+        text = AnimatedSwitcher(
+          duration: const Duration(milliseconds: 300),
+          transitionBuilder: (Widget child, Animation<double> animation) {
+            return ScaleTransition(scale: animation, child: child);
+          },
+          child: text,
+        );
+      }
+    }
     final child = Material(
       type: MaterialType.transparency,
       child: InkWell(
@@ -177,21 +189,12 @@ class ActionItemState extends State<ActionItem>
                 ),
               ],
             ),
-            if (widget.text != null)
-              AnimatedSwitcher(
-                duration: const Duration(milliseconds: 300),
-                transitionBuilder: (Widget child, Animation<double> animation) {
-                  return ScaleTransition(scale: animation, child: child);
-                },
-                child: text,
-              )
-            else
-              text
+            ?text,
           ],
         ),
       ),
     );
-    return widget.expand == false ? child : Expanded(child: child);
+    return widget.expand ? Expanded(child: child) : child;
   }
 }
 
