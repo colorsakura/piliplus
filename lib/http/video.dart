@@ -188,10 +188,10 @@ class VideoHttp {
     bool? forcePgcApi,
   }) async {
     final params = await WbiSign.makSign({
-      if (avid != null) 'avid': avid,
-      if (bvid != null) 'bvid': bvid,
-      if (epid != null) 'ep_id': epid,
-      if (seasonId != null) 'season_id': seasonId,
+      'avid': ?avid,
+      'bvid': ?bvid,
+      'ep_id': ?epid,
+      'season_id': ?seasonId,
       'cid': cid,
       'qn': qn ?? 80,
       // 获取所有格式的视频
@@ -444,8 +444,8 @@ class VideoHttp {
     var res = await Request().get(Api.feedDislike, queryParameters: {
       'goto': goto,
       'id': id,
-      if (reasonId != null) 'reason_id': reasonId,
-      if (feedbackId != null) 'feedback_id': feedbackId,
+      'reason_id': ?reasonId,
+      'feedback_id': ?feedbackId,
       'build': '1',
       'mobi_app': 'android',
     });
@@ -468,8 +468,8 @@ class VideoHttp {
     var res = await Request().get(Api.feedDislikeCancel, queryParameters: {
       'goto': goto,
       'id': id,
-      if (reasonId != null) 'reason_id': reasonId,
-      if (feedbackId != null) 'feedback_id': feedbackId,
+      'reason_id': ?reasonId,
+      'feedback_id': ?feedbackId,
       'build': '1',
       'mobi_app': 'android',
     });
@@ -604,8 +604,8 @@ class VideoHttp {
     type,
   }) async {
     await Request().post(Api.historyReport, queryParameters: {
-      if (aid != null) 'aid': aid,
-      if (type != null) 'type': type,
+      'aid': ?aid,
+      'type': ?type,
       'csrf': Accounts.main.csrf,
     });
   }
@@ -622,10 +622,10 @@ class VideoHttp {
     await Request().post(Api.heartBeat, queryParameters: {
       'bvid': bvid,
       'cid': cid,
-      if (epid != null) 'epid': epid,
-      if (seasonId != null) 'sid': seasonId,
+      'epid': ?epid,
+      'sid': ?seasonId,
       if (epid != null) 'type': 4,
-      if (subType != null) 'sub_type': subType,
+      'sub_type': ?subType,
       'played_time': progress,
       'csrf': Accounts.main.csrf,
     });
@@ -747,8 +747,8 @@ class VideoHttp {
     var res = await Request().get(
       Api.playInfo,
       queryParameters: {
-        if (aid != null) 'aid': aid,
-        if (bvid != null) 'bvid': bvid,
+        'aid': ?aid,
+        'bvid': ?bvid,
         'cid': cid,
       },
     );
@@ -873,7 +873,7 @@ class VideoHttp {
         'oid_type': 0,
         'pn': page,
         'ps': 10,
-        if (uperMid != null) 'uper_mid': uperMid,
+        'uper_mid': ?uperMid,
       },
     );
     if (res.data['code'] == 0) {

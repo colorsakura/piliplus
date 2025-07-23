@@ -31,7 +31,7 @@ class LiveHttp {
         'msg': msg,
         'color': 16777215,
         'mode': 1,
-        if (dmType != null) 'dm_type': dmType,
+        'dm_type': ?dmType,
         if (emoticonOptions != null)
           'emoticonOptions': emoticonOptions
         else ...{
@@ -228,8 +228,8 @@ class LiveHttp {
       if (isLogin) 'access_key': Accounts.main.accessKey,
       'appkey': Constants.appKey,
       'actionKey': 'appkey',
-      if (areaId != null) 'area_id': areaId,
-      if (parentAreaId != null) 'parent_area_id': parentAreaId,
+      'area_id': ?areaId,
+      'parent_area_id': ?parentAreaId,
       'build': '8430300',
       'c_locale': 'zh_CN',
       'device': 'pad',
@@ -245,7 +245,7 @@ class LiveHttp {
       'page_size': '20',
       'platform': 'android',
       'qn': '0',
-      if (sortType != null) 'sort_type': sortType,
+      'sort_type': ?sortType,
       'tag_version': '1',
       's_locale': 'zh_CN',
       'scale': '2',

@@ -342,7 +342,7 @@ class FavHttp {
       queryParameters: {
         'vmid': mid,
         'type': type,
-        if (followStatus != null) 'follow_status': followStatus,
+        'follow_status': ?followStatus,
         'pn': pn,
       },
     );
@@ -475,7 +475,7 @@ class FavHttp {
           'privacy': privacy,
           'cover': cover.isNotEmpty ? Uri.encodeFull(cover) : cover,
           'csrf': Accounts.main.csrf,
-          if (mediaId != null) 'media_id': mediaId,
+          'media_id': ?mediaId,
         },
         options: Options(
           contentType: Headers.formUrlEncodedContentType,
@@ -650,9 +650,9 @@ class FavHttp {
               ? Api.copyToview
               : Api.moveToview,
       data: {
-        if (srcMediaId != null) 'src_media_id': srcMediaId,
+        'src_media_id': ?srcMediaId,
         'tar_media_id': tarMediaId,
-        if (mid != null) 'mid': mid,
+        'mid': ?mid,
         'resources': resources.join(','),
         'platform': 'web',
         'csrf': Accounts.main.csrf,
@@ -689,7 +689,7 @@ class FavHttp {
       queryParameters: {
         'up_mid': mid,
         'rid': rid,
-        if (type != null) 'type': type,
+        'type': ?type,
       },
     );
     if (res.data['code'] == 0) {

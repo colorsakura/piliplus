@@ -59,13 +59,13 @@ class SearchHttp {
       'keyword': keyword,
       'page': page,
       if (order?.isNotEmpty == true) 'order': order,
-      if (duration != null) 'duration': duration,
-      if (tids != null) 'tids': tids,
-      if (orderSort != null) 'order_sort': orderSort,
-      if (userType != null) 'user_type': userType,
-      if (categoryId != null) 'category_id': categoryId,
-      if (pubBegin != null) 'pubtime_begin_s': pubBegin,
-      if (pubEnd != null) 'pubtime_end_s': pubEnd,
+      'duration': ?duration,
+      'tids': ?tids,
+      'order_sort': ?orderSort,
+      'user_type': ?userType,
+      'category_id': ?categoryId,
+      'pubtime_begin_s': ?pubBegin,
+      'pubtime_end_s': ?pubEnd,
     };
     var res = await Request().get(
       Api.searchByType,
@@ -126,13 +126,13 @@ class SearchHttp {
       'keyword': keyword,
       'page': page,
       if (order?.isNotEmpty == true) 'order': order,
-      if (duration != null) 'duration': duration,
-      if (tids != null) 'tids': tids,
-      if (orderSort != null) 'order_sort': orderSort,
-      if (userType != null) 'user_type': userType,
-      if (categoryId != null) 'category_id': categoryId,
-      if (pubBegin != null) 'pubtime_begin_s': pubBegin,
-      if (pubEnd != null) 'pubtime_end_s': pubEnd,
+      'duration': ?duration,
+      'tids': ?tids,
+      'order_sort': ?orderSort,
+      'user_type': ?userType,
+      'category_id': ?categoryId,
+      'pubtime_begin_s': ?pubBegin,
+      'pubtime_end_s': ?pubEnd,
     };
     var res = await Request().get(
       Api.searchAll,
@@ -157,8 +157,8 @@ class SearchHttp {
     var res = await Request().get(
       Api.ab2c,
       queryParameters: {
-        if (aid != null) 'aid': aid,
-        if (bvid != null) 'bvid': bvid,
+        'aid': ?aid,
+        'bvid': ?bvid,
       },
     );
     if (res.data['code'] == 0) {
@@ -180,8 +180,8 @@ class SearchHttp {
     var res = await Request().get(
       Api.pgcInfo,
       queryParameters: {
-        if (seasonId != null) 'season_id': seasonId,
-        if (epId != null) 'ep_id': epId,
+        'season_id': ?seasonId,
+        'ep_id': ?epId,
       },
     );
     if (res.data['code'] == 0) {
@@ -195,7 +195,7 @@ class SearchHttp {
     var res = await Request().get(
       Api.episodeInfo,
       queryParameters: {
-        if (epId != null) 'ep_id': epId,
+        'ep_id': ?epId,
       },
     );
     if (res.data['code'] == 0) {
@@ -212,8 +212,8 @@ class SearchHttp {
     var res = await Request().get(
       Api.pgcInfo,
       queryParameters: {
-        if (seasonId != null) 'season_id': seasonId,
-        if (epId != null) 'ep_id': epId,
+        'season_id': ?seasonId,
+        'ep_id': ?epId,
       },
     );
     if (res.data['code'] == 0) {

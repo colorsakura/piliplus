@@ -1415,7 +1415,7 @@ class VideoDetailController extends GetxController
         queryParameters: {
           'bvid': bvid,
           'graph_version': graphVersion,
-          if (edgeId != null) 'edge_id': edgeId,
+          'edge_id': ?edgeId,
         },
       );
       if (res.data['code'] == 0) {

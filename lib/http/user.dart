@@ -135,8 +135,8 @@ class UserHttp {
     var res = await Request().post(
       Api.toViewLater,
       queryParameters: {
-        if (aid != null) 'aid': aid,
-        if (bvid != null) 'bvid': bvid,
+        'aid': ?aid,
+        'bvid': ?bvid,
         'csrf': Accounts.main.csrf,
       },
     );
@@ -189,7 +189,7 @@ class UserHttp {
     var res = await Request().post(
       Api.toViewClear,
       queryParameters: {
-        if (cleanType != null) 'clean_type': cleanType,
+        'clean_type': ?cleanType,
         'csrf': Accounts.main.csrf,
       },
     );
@@ -305,8 +305,8 @@ class UserHttp {
         'mobi_app': 'web',
         'type': type,
         'biz_id': bizId,
-        if (oid != null) 'oid': oid,
-        if (otype != null) 'otype': otype, // ugc:2 // pgc: 24
+        'oid': ?oid,
+        'otype': ?otype, // ugc:2 // pgc: 24
         'ps': ps,
         'direction': direction,
         'desc': desc,

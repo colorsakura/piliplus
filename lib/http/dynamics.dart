@@ -158,8 +158,8 @@ class DynamicsHttp {
           },
           if (privatePub != null || replyOption != null || publishTime != null)
             "option": {
-              if (privatePub != null) 'private_pub': privatePub,
-              if (publishTime != null) "timer_pub_time": publishTime,
+              'private_pub': ?privatePub,
+              "timer_pub_time": ?publishTime,
               if (replyOption == ReplyOptionType.close)
                 "close_comment": 1
               else if (replyOption == ReplyOptionType.choose)
@@ -172,7 +172,7 @@ class DynamicsHttp {
                   : pics != null
                       ? 2
                       : 1,
-          if (pics != null) 'pics': pics,
+          'pics': ?pics,
           "attach_card": attachCard,
           "upload_id":
               "${rid != null ? 0 : mid}_${DateTime.now().millisecondsSinceEpoch ~/ 1000}_${Utils.random.nextInt(9000) + 1000}",
@@ -189,7 +189,7 @@ class DynamicsHttp {
         },
         if (dynIdStr != null || rid != null)
           "web_repost_src": {
-            if (dynIdStr != null) "dyn_id_str": dynIdStr,
+            "dyn_id_str": ?dynIdStr,
             if (rid != null)
               "revs_id": {
                 "dyn_type": dynType,
@@ -222,9 +222,9 @@ class DynamicsHttp {
       Api.dynamicDetail,
       queryParameters: {
         'timezone_offset': -480,
-        if (id != null) 'id': id,
-        if (rid != null) 'rid': rid,
-        if (type != null) 'type': type,
+        'id': ?id,
+        'rid': ?rid,
+        'type': ?type,
         'features': 'itemOpusStyle',
         'gaia_source': 'Athena',
         'web_location': '333.1330',

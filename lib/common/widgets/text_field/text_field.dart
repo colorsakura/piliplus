@@ -507,7 +507,7 @@ class RichTextField extends StatefulWidget {
   /// to its controller. When the widget gains the or loses the focus it will
   /// [WidgetStatesController.update] its controller's [WidgetStatesController.value]
   /// and notify listeners of the change.
-  final MaterialStatesController? statesController;
+  final WidgetStatesController? statesController;
 
   /// {@macro flutter.widgets.editableText.obscuringCharacter}
   final String obscuringCharacter;
@@ -1345,10 +1345,10 @@ class RichTextFieldState extends State<RichTextField>
 
     if (widget.statesController == oldWidget.statesController) {
       _statesController
-        ..update(MaterialState.disabled, !_isEnabled)
-        ..update(MaterialState.hovered, _isHovering)
-        ..update(MaterialState.focused, _effectiveFocusNode.hasFocus)
-        ..update(MaterialState.error, _hasError);
+        ..update(WidgetState.disabled, !_isEnabled)
+        ..update(WidgetState.hovered, _isHovering)
+        ..update(WidgetState.focused, _effectiveFocusNode.hasFocus)
+        ..update(WidgetState.error, _hasError);
     } else {
       oldWidget.statesController?.removeListener(_handleStatesControllerChange);
       if (widget.statesController != null) {
@@ -1437,7 +1437,7 @@ class RichTextFieldState extends State<RichTextField>
       // highlight.
     });
     _statesController.update(
-        MaterialState.focused, _effectiveFocusNode.hasFocus);
+        WidgetState.focused, _effectiveFocusNode.hasFocus);
   }
 
   void _handleSelectionChanged(
@@ -1487,30 +1487,30 @@ class RichTextFieldState extends State<RichTextField>
       setState(() {
         _isHovering = hovering;
       });
-      _statesController.update(MaterialState.hovered, _isHovering);
+      _statesController.update(WidgetState.hovered, _isHovering);
     }
   }
 
   // Material states controller.
-  MaterialStatesController? _internalStatesController;
+  WidgetStatesController? _internalStatesController;
 
   void _handleStatesControllerChange() {
     // Force a rebuild to resolve MaterialStateProperty properties.
     setState(() {});
   }
 
-  MaterialStatesController get _statesController =>
+  WidgetStatesController get _statesController =>
       widget.statesController ?? _internalStatesController!;
 
   void _initStatesController() {
     if (widget.statesController == null) {
-      _internalStatesController = MaterialStatesController();
+      _internalStatesController = WidgetStatesController();
     }
-    _statesController.update(MaterialState.disabled, !_isEnabled);
-    _statesController.update(MaterialState.hovered, _isHovering);
+    _statesController.update(WidgetState.disabled, !_isEnabled);
+    _statesController.update(WidgetState.hovered, _isHovering);
     _statesController.update(
-        MaterialState.focused, _effectiveFocusNode.hasFocus);
-    _statesController.update(MaterialState.error, _hasError);
+        WidgetState.focused, _effectiveFocusNode.hasFocus);
+    _statesController.update(WidgetState.error, _hasError);
     _statesController.addListener(_handleStatesControllerChange);
   }
 
@@ -1543,14 +1543,14 @@ class RichTextFieldState extends State<RichTextField>
 
   TextStyle _getInputStyleForState(TextStyle style) {
     final ThemeData theme = Theme.of(context);
-    final TextStyle stateStyle = MaterialStateProperty.resolveAs(
+    final TextStyle stateStyle = WidgetStateProperty.resolveAs(
       theme.useMaterial3
           ? _m3StateInputStyle(context)!
           : _m2StateInputStyle(context)!,
       _statesController.value,
     );
     final TextStyle providedStyle =
-        MaterialStateProperty.resolveAs(style, _statesController.value);
+        WidgetStateProperty.resolveAs(style, _statesController.value);
     return providedStyle.merge(stateStyle);
   }
 
@@ -1570,7 +1570,7 @@ class RichTextFieldState extends State<RichTextField>
     final ThemeData theme = Theme.of(context);
     final DefaultSelectionStyle selectionStyle =
         DefaultSelectionStyle.of(context);
-    final TextStyle? providedStyle = MaterialStateProperty.resolveAs(
+    final TextStyle? providedStyle = WidgetStateProperty.resolveAs(
       widget.style,
       _statesController.value,
     );
@@ -1828,8 +1828,8 @@ class RichTextFieldState extends State<RichTextField>
       );
     }
     final MouseCursor effectiveMouseCursor =
-        MaterialStateProperty.resolveAs<MouseCursor>(
-      widget.mouseCursor ?? MaterialStateMouseCursor.textable,
+        WidgetStateProperty.resolveAs<MouseCursor>(
+      widget.mouseCursor ?? WidgetStateMouseCursor.textable,
       _statesController.value,
     );
 
@@ -1918,9 +1918,9 @@ class RichTextFieldState extends State<RichTextField>
 }
 
 TextStyle? _m2StateInputStyle(BuildContext context) =>
-    MaterialStateTextStyle.resolveWith((Set<MaterialState> states) {
+    WidgetStateTextStyle.resolveWith((Set<WidgetState> states) {
       final ThemeData theme = Theme.of(context);
-      if (states.contains(MaterialState.disabled)) {
+      if (states.contains(WidgetState.disabled)) {
         return TextStyle(color: theme.disabledColor);
       }
       return TextStyle(color: theme.textTheme.titleMedium?.color);
@@ -1940,8 +1940,8 @@ TextStyle _m2CounterErrorStyle(BuildContext context) => Theme.of(context)
 
 // dart format off
 TextStyle? _m3StateInputStyle(BuildContext context) =>
-    MaterialStateTextStyle.resolveWith((Set<MaterialState> states) {
-      if (states.contains(MaterialState.disabled)) {
+    WidgetStateTextStyle.resolveWith((Set<WidgetState> states) {
+      if (states.contains(WidgetState.disabled)) {
         return TextStyle(
             color: Theme.of(context)
                 .textTheme
