@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:PiliPlus/common/widgets/scroll_physics.dart';
 import 'package:PiliPlus/http/api.dart';
@@ -200,6 +201,13 @@ class VideoIntroController extends CommonIntroController with ReloadMixin {
     var result = await VideoHttp.videoRelation(bvid: bvid);
     if (result['status']) {
       VideoRelation data = result['data'];
+      late final stat = videoDetail.value.stat!;
+      if (data.like!) {
+        stat.like = max(1, stat.like);
+      }
+      if (data.favorite!) {
+        stat.favorite = max(1, stat.favorite);
+      }
       hasLike.value = data.like!;
       hasDislike.value = data.dislike!;
       coinNum.value = data.coin!;
@@ -222,12 +230,21 @@ class VideoIntroController extends CommonIntroController with ReloadMixin {
     var result = await VideoHttp.oneThree(bvid: bvid);
     if (result['status']) {
       UgcTriple data = result['data'];
-      hasLike.value = data.like!;
-      if (data.coin == true) {
+      late final stat = videoDetail.value.stat!;
+      if (data.like != hasLike.value) {
+        stat.like++;
+        hasLike.value = true;
+      }
+      if (data.coin != hasCoin) {
+        stat.coin += 2;
         coinNum.value = 2;
         GlobalData().afterCoin(2);
       }
-      hasFav.value = data.fav!;
+      if (data.fav != hasFav.value) {
+        stat.favorite++;
+        hasFav.value = true;
+      }
+      hasDislike.value = false;
       SmartDialog.showToast('三连成功');
     } else {
       SmartDialog.showToast(result['msg']);
@@ -240,20 +257,17 @@ class VideoIntroController extends CommonIntroController with ReloadMixin {
       SmartDialog.showToast('账号未登录');
       return;
     }
-    if (videoDetail.value.stat?.like == null) {
+    if (videoDetail.value.stat == null) {
       return;
     }
-    var result = await VideoHttp.likeVideo(bvid: bvid, type: !hasLike.value);
+    final newVal = !hasLike.value;
+    var result = await VideoHttp.likeVideo(bvid: bvid, type: newVal);
     if (result['status']) {
-      if (!hasLike.value) {
-        SmartDialog.showToast(result['data']['toast']);
-        hasLike.value = true;
+      SmartDialog.showToast(newVal ? result['data']['toast'] : '取消赞');
+      videoDetail.value.stat!.like += newVal ? 1 : -1;
+      hasLike.value = newVal;
+      if (newVal) {
         hasDislike.value = false;
-        videoDetail.value.stat!.like = videoDetail.value.stat!.like! + 1;
-      } else if (hasLike.value) {
-        SmartDialog.showToast('取消赞');
-        hasLike.value = false;
-        videoDetail.value.stat!.like = videoDetail.value.stat!.like! - 1;
       }
     } else {
       SmartDialog.showToast(result['msg']);
@@ -273,7 +287,10 @@ class VideoIntroController extends CommonIntroController with ReloadMixin {
       if (!hasDislike.value) {
         SmartDialog.showToast('点踩成功');
         hasDislike.value = true;
-        hasLike.value = false;
+        if (hasLike.value) {
+          videoDetail.value.stat!.like--;
+          hasLike.value = false;
+        }
       } else {
         SmartDialog.showToast('取消踩');
         hasDislike.value = false;
@@ -292,8 +309,7 @@ class VideoIntroController extends CommonIntroController with ReloadMixin {
   }
 
   Future<void> coinVideo(int coin, [bool selectLike = false]) async {
-    if (videoDetail.value.stat?.coin == null) {
-      // not init
+    if (videoDetail.value.stat == null) {
       return;
     }
     var res = await VideoHttp.coinVideo(
@@ -305,10 +321,10 @@ class VideoIntroController extends CommonIntroController with ReloadMixin {
       SmartDialog.showToast('投币成功');
       coinNum.value += coin;
       GlobalData().afterCoin(coin);
-      videoDetail.value.stat!.coin = videoDetail.value.stat!.coin! + coin;
+      final stat = videoDetail.value.stat!..coin += coin;
       if (selectLike && !hasLike.value) {
+        stat.like++;
         hasLike.value = true;
-        videoDetail.value.stat!.like = videoDetail.value.stat!.like! + 1;
       }
     } else {
       SmartDialog.showToast(res['msg']);
@@ -348,18 +364,17 @@ class VideoIntroController extends CommonIntroController with ReloadMixin {
       SmartDialog.showLoading(msg: '请求中');
       queryVideoInFolder().then((res) async {
         if (res['status']) {
-          final favFolderInfo = this.favFolderInfo;
-          final defaultFolderId = favFolderInfo.id;
-          final isFav = favFolderInfo.favState == 1;
-          var result = isFav
+          final hasFav = this.hasFav.value;
+          var result = hasFav
               ? await FavHttp.unfavAll(rid: IdUtils.bv2av(bvid), type: 2)
               : await FavHttp.favVideo(
                   resources: '${IdUtils.bv2av(bvid)}:2',
-                  addIds: defaultFolderId.toString(),
+                  addIds: favFolderId.toString(),
                 );
           SmartDialog.dismiss();
           if (result['status']) {
-            hasFav.value = !isFav;
+            videoDetail.value.stat!.favorite += hasFav ? -1 : 1;
+            this.hasFav.value = !hasFav;
             SmartDialog.showToast('✅ 快速收藏/取消收藏成功');
           } else {
             SmartDialog.showToast(result['msg']);
@@ -398,8 +413,12 @@ class VideoIntroController extends CommonIntroController with ReloadMixin {
     SmartDialog.dismiss();
     if (result['status']) {
       Get.back();
-      hasFav.value =
+      final newVal =
           addMediaIdsNew.isNotEmpty || favIds?.length != delMediaIdsNew.length;
+      if (hasFav.value != newVal) {
+        videoDetail.value.stat!.favorite += newVal ? 1 : -1;
+        hasFav.value = newVal;
+      }
       SmartDialog.showToast('操作成功');
     } else {
       SmartDialog.showToast(result['msg']);

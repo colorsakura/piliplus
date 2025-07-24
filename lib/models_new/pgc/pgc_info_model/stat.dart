@@ -1,22 +1,22 @@
 class Stat {
-  num? coins;
+  num coins;
   int? danmakus;
-  int? favorite;
+  int favorite;
   int? favorites;
   String? followText;
-  int? likes;
+  int likes;
   int? reply;
   int? share;
   int? views;
   int? vt;
 
   Stat({
-    this.coins,
+    required this.coins,
     this.danmakus,
-    this.favorite,
+    required this.favorite,
     this.favorites,
     this.followText,
-    this.likes,
+    required this.likes,
     this.reply,
     this.share,
     this.views,
@@ -24,12 +24,12 @@ class Stat {
   });
 
   factory Stat.fromJson(Map<String, dynamic> json) => Stat(
-    coins: json["coins"],
+    coins: json["coins"] ?? 0,
     danmakus: json["danmakus"],
-    favorite: json["favorite"],
+    favorite: json["favorite"] ?? 0,
     favorites: json["favorites"],
     followText: json["follow_text"],
-    likes: json["likes"],
+    likes: json["likes"] ?? 0,
     reply: json["reply"],
     share: json["share"],
     views: json["views"],
