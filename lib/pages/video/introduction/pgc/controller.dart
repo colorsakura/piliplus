@@ -130,19 +130,18 @@ class PgcIntroController extends CommonIntroController {
       SmartDialog.showLoading(msg: '请求中');
       queryVideoInFolder().then((res) async {
         if (res['status']) {
-          int defaultFolderId = favFolderData.value.list!.first.id;
-          int favStatus = favFolderData.value.list!.first.favState!;
-          var result = await FavHttp.favVideo(
-            aid: epId,
-            type: 24,
-            addIds: favStatus == 0 ? '$defaultFolderId' : '',
-            delIds: favStatus == 1 ? '$defaultFolderId' : '',
-          );
+          final favFolderInfo = this.favFolderInfo;
+          final defaultFolderId = favFolderInfo.id;
+          final isFav = favFolderInfo.favState == 1;
+          var result = isFav
+              ? await FavHttp.unfavAll(rid: epId, type: 24)
+              : await FavHttp.favVideo(
+                  resources: '$epId:24',
+                  addIds: defaultFolderId.toString(),
+                );
           SmartDialog.dismiss();
           if (result['status']) {
-            // 重新获取收藏状态
-            await Future.delayed(const Duration(milliseconds: 255));
-            await queryPgcLikeCoinFav();
+            hasFav.value = !isFav;
             SmartDialog.showToast('✅ 快速收藏/取消收藏成功');
           } else {
             SmartDialog.showToast(result['msg']);
@@ -171,17 +170,15 @@ class PgcIntroController extends CommonIntroController {
       }
     } catch (_) {}
     var result = await FavHttp.favVideo(
-      aid: epId,
-      type: 24,
+      resources: '$epId:24',
       addIds: addMediaIdsNew.join(','),
       delIds: delMediaIdsNew.join(','),
     );
     if (result['status']) {
       SmartDialog.showToast('操作成功');
       Get.back();
-      Future.delayed(const Duration(milliseconds: 255), () {
-        queryPgcLikeCoinFav();
-      });
+      hasFav.value =
+          addMediaIdsNew.isNotEmpty || favIds?.length != delMediaIdsNew.length;
     } else {
       SmartDialog.showToast(result['msg']);
     }

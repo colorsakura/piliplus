@@ -406,8 +406,8 @@ class VideoDetailController extends GetxController
                   }
                   SmartDialog.showToast(res['msg']);
                 } else {
-                  var res = await FavHttp.delFav(
-                    ids: ['${item.aid}:${item.type}'],
+                  var res = await FavHttp.favVideo(
+                    resources: '${item.aid}:${item.type}',
                     delIds: '${Get.arguments?['mediaId']}',
                   );
                   if (res['status']) {

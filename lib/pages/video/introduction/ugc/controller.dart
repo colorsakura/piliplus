@@ -348,19 +348,18 @@ class VideoIntroController extends CommonIntroController with ReloadMixin {
       SmartDialog.showLoading(msg: '请求中');
       queryVideoInFolder().then((res) async {
         if (res['status']) {
-          final first = favFolderData.value.list!.first;
-          int defaultFolderId = first.id;
-          bool notInDefFolder = first.favState! == 0;
-          var result = await FavHttp.favVideo(
-            aid: IdUtils.bv2av(bvid),
-            addIds: notInDefFolder ? '$defaultFolderId' : '',
-            delIds: !notInDefFolder ? '$defaultFolderId' : '',
-          );
+          final favFolderInfo = this.favFolderInfo;
+          final defaultFolderId = favFolderInfo.id;
+          final isFav = favFolderInfo.favState == 1;
+          var result = isFav
+              ? await FavHttp.unfavAll(rid: IdUtils.bv2av(bvid), type: 2)
+              : await FavHttp.favVideo(
+                  resources: '${IdUtils.bv2av(bvid)}:2',
+                  addIds: defaultFolderId.toString(),
+                );
           SmartDialog.dismiss();
           if (result['status']) {
-            hasFav.value = !hasFav.value || (hasFav.value && notInDefFolder);
-            // 重新获取收藏状态
-            // await queryHasFavVideo();
+            hasFav.value = !isFav;
             SmartDialog.showToast('✅ 快速收藏/取消收藏成功');
           } else {
             SmartDialog.showToast(result['msg']);
@@ -392,7 +391,7 @@ class VideoIntroController extends CommonIntroController with ReloadMixin {
     }
     SmartDialog.showLoading(msg: '请求中');
     var result = await FavHttp.favVideo(
-      aid: IdUtils.bv2av(bvid),
+      resources: '${IdUtils.bv2av(bvid)}:2',
       addIds: addMediaIdsNew.join(','),
       delIds: delMediaIdsNew.join(','),
     );

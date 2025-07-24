@@ -63,8 +63,8 @@ class FavDetailController
   }
 
   Future<void> onCancelFav(int index, int id, int type) async {
-    var result = await FavHttp.delFav(
-      ids: ['$id:$type'],
+    var result = await FavHttp.favVideo(
+      resources: '$id:$type',
       delIds: mediaId.toString(),
     );
     if (result['status']) {
@@ -112,8 +112,10 @@ class FavDetailController
                 List<FavDetailItemModel> list = loadingState.value.data!
                     .where((e) => e.checked == true)
                     .toList();
-                var result = await FavHttp.delFav(
-                  ids: list.map((item) => '${item.id}:${item.type}').toList(),
+                var result = await FavHttp.favVideo(
+                  resources: list
+                      .map((item) => '${item.id}:${item.type}')
+                      .join(','),
                   delIds: mediaId.toString(),
                 );
                 if (result['status']) {

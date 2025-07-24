@@ -593,16 +593,17 @@ class FavHttp {
   }
 
   // （取消）收藏
-  static Future delFav({
-    List? ids,
+  static Future favVideo({
+    required String resources,
+    String? addIds,
     String? delIds,
   }) async {
     var res = await Request().post(
-      Api.delFav,
+      Api.favVideo,
       data: {
-        'resources': ids?.join(','),
-        'media_id': delIds,
-        'platform': 'web',
+        'resources': resources,
+        'add_media_ids': addIds ?? '',
+        'del_media_ids': delIds ?? '',
         'csrf': Accounts.main.csrf,
       },
       options: Options(contentType: Headers.formUrlEncodedContentType),
@@ -615,19 +616,15 @@ class FavHttp {
   }
 
   // （取消）收藏
-  static Future favVideo({
-    int? aid,
-    String? addIds,
-    String? delIds,
-    int? type,
+  static Future unfavAll({
+    required rid,
+    required type,
   }) async {
     var res = await Request().post(
-      Api.favVideo,
+      Api.unfavAll,
       data: {
-        'rid': aid,
-        'type': type ?? 2,
-        'add_media_ids': addIds ?? '',
-        'del_media_ids': delIds ?? '',
+        'rid': rid,
+        'type': type,
         'csrf': Accounts.main.csrf,
       },
       options: Options(contentType: Headers.formUrlEncodedContentType),

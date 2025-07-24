@@ -774,4 +774,6 @@ class Pref {
 
   static bool get historyPause =>
       _localCache.get(LocalCacheKey.historyPause, defaultValue: false);
+
+  static int? get quickFavId => _setting.get(SettingBoxKey.quickFavId);
 }

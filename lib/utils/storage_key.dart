@@ -131,7 +131,8 @@ class SettingBoxKey {
       enableLog = 'enableLog',
       memberTab = 'memberTab',
       dynamicDetailRatio = 'dynamicDetailRatio',
-      directExitOnBack = 'directExitOnBack';
+      directExitOnBack = 'directExitOnBack',
+      quickFavId = 'quickFavId';
 
   static const String subtitlePreference = 'subtitlePreference',
       enableDragSubtitle = 'enableDragSubtitle',

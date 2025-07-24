@@ -38,10 +38,9 @@ class FavSearchController
 
   Future<void> onCancelFav(int index, int id, int? type) async {
     var result = await FavHttp.favVideo(
-      aid: id,
+      resources: '$id:$type',
       addIds: '',
       delIds: mediaId.toString(),
-      type: type,
     );
     if (result['status']) {
       loadingState

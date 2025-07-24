@@ -1,8 +1,11 @@
 import 'package:PiliPlus/http/user.dart';
 import 'package:PiliPlus/models_new/fav/fav_folder/data.dart';
+import 'package:PiliPlus/models_new/fav/fav_folder/list.dart';
 import 'package:PiliPlus/models_new/video/video_tag/data.dart';
 import 'package:PiliPlus/services/account_service.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
+import 'package:PiliPlus/utils/storage.dart';
+import 'package:PiliPlus/utils/storage_key.dart';
 import 'package:PiliPlus/utils/storage_pref.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -32,6 +35,21 @@ abstract class CommonIntroController extends GetxController {
   Future<void> actionFavVideo({String type = 'choose'});
 
   late final enableQuickFav = Pref.enableQuickFav;
+  late int? quickFavId = Pref.quickFavId;
+
+  FavFolderInfo get favFolderInfo {
+    final list = favFolderData.value.list!;
+    if (quickFavId != null) {
+      final folderInfo = list.firstWhereOrNull((e) => e.id == quickFavId);
+      if (folderInfo != null) {
+        return folderInfo;
+      } else {
+        quickFavId = null;
+        GStorage.setting.delete(SettingBoxKey.quickFavId);
+      }
+    }
+    return list.first;
+  }
 
   // 收藏
   void showFavBottomSheet(BuildContext context, {type = 'tap'}) {

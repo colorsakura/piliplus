@@ -3,8 +3,10 @@ import 'dart:math' show pi, max;
 
 import 'package:PiliPlus/common/widgets/image/image_view.dart';
 import 'package:PiliPlus/common/widgets/pendant_avatar.dart';
+import 'package:PiliPlus/common/widgets/radio_widget.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/grpc/reply.dart';
+import 'package:PiliPlus/http/fav.dart';
 import 'package:PiliPlus/models/common/audio_normalization.dart';
 import 'package:PiliPlus/models/common/dynamic/dynamics_type.dart';
 import 'package:PiliPlus/models/common/member/tab_type.dart';
@@ -12,6 +14,7 @@ import 'package:PiliPlus/models/common/reply/reply_sort_type.dart';
 import 'package:PiliPlus/models/common/settings_type.dart';
 import 'package:PiliPlus/models/common/super_resolution_type.dart';
 import 'package:PiliPlus/models/dynamics/result.dart';
+import 'package:PiliPlus/models_new/fav/fav_folder/data.dart';
 import 'package:PiliPlus/pages/common/common_slide_page.dart';
 import 'package:PiliPlus/pages/home/controller.dart';
 import 'package:PiliPlus/pages/hot/controller.dart';
@@ -20,7 +23,9 @@ import 'package:PiliPlus/pages/setting/models/model.dart';
 import 'package:PiliPlus/pages/setting/widgets/select_dialog.dart';
 import 'package:PiliPlus/pages/setting/widgets/slide_dialog.dart';
 import 'package:PiliPlus/pages/video/reply/widgets/reply_item_grpc.dart';
+import 'package:PiliPlus/utils/accounts.dart';
 import 'package:PiliPlus/utils/cache_manage.dart';
+import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/feed_back.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/storage_key.dart';
@@ -774,9 +779,51 @@ List<SettingsModel> get extraSettings => [
   SettingsModel(
     settingsType: SettingsType.sw1tch,
     title: '快速收藏',
-    subtitle: '点按收藏至默认，长按选择文件夹',
+    subtitle: '点击设置默认收藏夹\n点按收藏至默认，长按选择文件夹',
     leading: const Icon(Icons.bookmark_add_outlined),
     setKey: SettingBoxKey.enableQuickFav,
+    onTap: () async {
+      if (Accounts.main.isLogin) {
+        final res = await FavHttp.allFavFolders(Accounts.main.mid);
+        if (res['status']) {
+          final FavFolderData data = res['data'];
+          final list = data.list;
+          if (list.isNullOrEmpty) {
+            return;
+          }
+          final quickFavId = Pref.quickFavId;
+          Get.dialog(
+            AlertDialog(
+              clipBehavior: Clip.hardEdge,
+              title: const Text('选择默认收藏夹'),
+              contentPadding: const EdgeInsets.only(top: 5, bottom: 18),
+              content: SingleChildScrollView(
+                child: Builder(
+                  builder: (context) => Column(
+                    children: List.generate(list!.length, (index) {
+                      final item = list[index];
+                      return RadioWidget(
+                        padding: const EdgeInsets.only(left: 14),
+                        title: item.title,
+                        groupValue: quickFavId,
+                        value: item.id,
+                        onChanged: (value) {
+                          Get.back();
+                          GStorage.setting.put(SettingBoxKey.quickFavId, value);
+                          SmartDialog.showToast('设置成功');
+                        },
+                      );
+                    }),
+                  ),
+                ),
+              ),
+            ),
+          );
+        } else {
+          SmartDialog.showToast('${res['msg']}');
+        }
+      }
+    },
     defaultVal: false,
   ),
   SettingsModel(
