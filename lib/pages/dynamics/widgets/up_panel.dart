@@ -20,29 +20,28 @@ class UpPanel extends StatefulWidget {
 }
 
 class _UpPanelState extends State<UpPanel> {
-  late final isTop =
-      widget.dynamicsController.upPanelPosition == UpPanelPosition.top;
+  late final controller = widget.dynamicsController;
+  late final isTop = controller.upPanelPosition == UpPanelPosition.top;
 
   @override
   Widget build(BuildContext context) {
-    final accountService = widget.dynamicsController.accountService;
+    final accountService = controller.accountService;
     if (!accountService.isLogin.value) {
       return const SizedBox.shrink();
     }
     final theme = Theme.of(context);
-    final upData = widget.dynamicsController.upData.value;
+    final upData = controller.upData.value;
     final List<UpItem>? upList = upData.upList;
     final List<LiveUserItem>? liveList = upData.liveUsers?.items;
     return CustomScrollView(
       scrollDirection: isTop ? Axis.horizontal : Axis.vertical,
       physics: const AlwaysScrollableScrollPhysics(),
-      controller: widget.dynamicsController.scrollController,
+      controller: controller.scrollController,
       slivers: [
         SliverToBoxAdapter(
           child: InkWell(
             onTap: () => setState(() {
-              widget.dynamicsController.showLiveItems =
-                  !widget.dynamicsController.showLiveItems;
+              controller.showLiveItems = !controller.showLiveItems;
             }),
             onLongPress: () => Get.to(const LiveFollowPage()),
             child: Container(
@@ -65,7 +64,7 @@ class _UpPanelState extends State<UpPanel> {
                       WidgetSpan(
                         alignment: PlaceholderAlignment.middle,
                         child: Icon(
-                          widget.dynamicsController.showLiveItems
+                          controller.showLiveItems
                               ? Icons.expand_less
                               : Icons.expand_more,
                           size: 12,
@@ -76,7 +75,7 @@ class _UpPanelState extends State<UpPanel> {
                       WidgetSpan(
                         alignment: PlaceholderAlignment.middle,
                         child: Icon(
-                          widget.dynamicsController.showLiveItems
+                          controller.showLiveItems
                               ? Icons.keyboard_arrow_right
                               : Icons.keyboard_arrow_left,
                           color: theme.colorScheme.primary,
@@ -89,8 +88,7 @@ class _UpPanelState extends State<UpPanel> {
             ),
           ),
         ),
-        if (widget.dynamicsController.showLiveItems &&
-            liveList?.isNotEmpty == true)
+        if (controller.showLiveItems && liveList?.isNotEmpty == true)
           SliverList.builder(
             itemCount: liveList!.length,
             itemBuilder: (context, index) {
@@ -125,7 +123,7 @@ class _UpPanelState extends State<UpPanel> {
   }
 
   void _onSelect(UserItem data) {
-    widget.dynamicsController
+    controller
       ..currentMid = data.mid
       ..onSelectUp(data.mid);
 
@@ -135,10 +133,9 @@ class _UpPanelState extends State<UpPanel> {
   }
 
   Widget upItemBuild(ThemeData theme, UserItem data) {
-    bool isCurrent =
-        widget.dynamicsController.currentMid == data.mid ||
-        widget.dynamicsController.currentMid == -1;
+    final currentMid = controller.currentMid;
     final isLive = data is LiveUserItem;
+    bool isCurrent = isLive || currentMid == data.mid || currentMid == -1;
     return SizedBox(
       height: 76,
       width: isTop ? 70 : null,
@@ -153,7 +150,7 @@ class _UpPanelState extends State<UpPanel> {
               Get.toNamed('/liveRoom?roomid=${data.roomId}');
           }
         },
-        onDoubleTap: data is LiveUserItem ? () => _onSelect(data) : null,
+        onDoubleTap: isLive ? () => _onSelect(data) : null,
         onLongPress: data.mid == -1
             ? null
             : () => Get.toNamed('/member?mid=${data.mid}'),
@@ -192,9 +189,7 @@ class _UpPanelState extends State<UpPanel> {
                       label: isLive ? const Text(' Live ') : null,
                       textColor: theme.colorScheme.onSecondaryContainer,
                       alignment: AlignmentDirectional.topStart,
-                      isLabelVisible:
-                          isLive ||
-                          (data is UpItem && (data.hasUpdate ?? false)),
+                      isLabelVisible: isLive || (data.hasUpdate ?? false),
                       backgroundColor: isLive
                           ? theme.colorScheme.secondaryContainer.withValues(
                               alpha: 0.75,
@@ -212,7 +207,7 @@ class _UpPanelState extends State<UpPanel> {
                   maxLines: 2,
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    color: widget.dynamicsController.currentMid == data.mid
+                    color: currentMid == data.mid
                         ? theme.colorScheme.primary
                         : theme.colorScheme.outline,
                     height: 1.1,

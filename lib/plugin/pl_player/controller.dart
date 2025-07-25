@@ -472,10 +472,10 @@ class PlPlayerController {
       enableHeart = false;
     }
 
-    if (Platform.isAndroid) {
+    if (Platform.isAndroid && autoPiP) {
       Utils.channel.setMethodCallHandler((call) async {
         if (call.method == 'onUserLeaveHint') {
-          if (autoPiP && playerStatus.status.value == PlayerStatus.playing) {
+          if (playerStatus.status.value == PlayerStatus.playing) {
             enterPip();
           }
         }
