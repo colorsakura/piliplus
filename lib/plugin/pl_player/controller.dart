@@ -93,9 +93,9 @@ class PlPlayerController {
   final RxBool _controlsLock = false.obs;
   final RxBool _isFullScreen = false.obs;
   // 默认投稿视频格式
-  static final RxString _videoType = 'archive'.obs;
+  bool _isLive = false;
 
-  final RxString _direction = 'horizontal'.obs;
+  bool _isVertical = false;
 
   final Rx<BoxFit> _videoFit = Rx(BoxFit.contain);
   late StreamSubscription<DataStatus> _dataListenerForVideoFit;
@@ -241,12 +241,12 @@ class PlPlayerController {
   RxBool get isFullScreen => _isFullScreen;
 
   /// 全屏方向
-  RxString get direction => _direction;
+  bool get isVertical => _isVertical;
 
   RxInt get playerCount => _playerCount;
 
   ///
-  RxString get videoType => _videoType;
+  bool get isLive => _isLive;
 
   /// 弹幕开关
   RxBool enableShowDanmaku = Pref.enableShowDanmaku.obs;
@@ -467,7 +467,8 @@ class PlPlayerController {
   Box video = GStorage.video;
 
   // 添加一个私有构造函数
-  PlPlayerController._() {
+  PlPlayerController._({bool isLive = false}) {
+    _isLive = isLive;
     if (!Accounts.get(AccountType.heartbeat).isLogin || Pref.historyPause) {
       enableHeart = false;
     }
@@ -492,13 +493,10 @@ class PlPlayerController {
   }
 
   // 获取实例 传参
-  static PlPlayerController getInstance({
-    String videoType = 'archive',
-  }) {
+  static PlPlayerController getInstance({bool isLive = false}) {
     // 如果实例尚未创建，则创建一个新实例
-    _instance ??= PlPlayerController._();
+    _instance ??= PlPlayerController._(isLive: isLive);
     _instance!._playerCount.value += 1;
-    _videoType.value = videoType;
     return _instance!;
   }
 
@@ -520,7 +518,7 @@ class PlPlayerController {
     int? height,
     Duration? duration,
     // 方向
-    String? direction,
+    bool? isVertical,
     // 记录历史记录
     String bvid = '',
     int cid = 0,
@@ -544,7 +542,7 @@ class PlPlayerController {
       // 初始化数据加载状态
       dataStatus.status.value = DataStatus.loading;
       // 初始化全屏方向
-      _direction.value = direction ?? 'horizontal';
+      _isVertical = isVertical ?? false;
       _bvid = bvid;
       _cid = cid;
       _epid = epid;
@@ -697,12 +695,8 @@ class PlPlayerController {
           configuration: PlayerConfiguration(
             // 默认缓冲 4M 大小
             bufferSize: Pref.expandBuffer
-                ? (videoType.value == 'live'
-                      ? 64 * 1024 * 1024
-                      : 32 * 1024 * 1024)
-                : (videoType.value == 'live'
-                      ? 16 * 1024 * 1024
-                      : 4 * 1024 * 1024),
+                ? (isLive ? 64 * 1024 * 1024 : 32 * 1024 * 1024)
+                : (isLive ? 16 * 1024 * 1024 : 4 * 1024 * 1024),
           ),
         );
     var pp = player.platform as NativePlayer;
@@ -833,7 +827,7 @@ class PlPlayerController {
   Future<void> _initializePlayer() async {
     if (_instance == null) return;
     // 设置倍速
-    if (videoType.value == 'live') {
+    if (isLive) {
       await setPlaybackSpeed(1.0);
     } else {
       if (_videoPlayerController?.state.rate != _playbackSpeed.value) {
@@ -891,7 +885,7 @@ class PlPlayerController {
         videoPlayerServiceHandler.onStatusChange(
           playerStatus.status.value,
           isBuffering.value,
-          videoType.value == 'live',
+          isLive,
         );
 
         /// 触发回调事件
@@ -941,12 +935,12 @@ class PlPlayerController {
         videoPlayerServiceHandler.onStatusChange(
           playerStatus.status.value,
           event,
-          videoType.value == 'live',
+          isLive,
         );
       }),
       videoPlayerController!.stream.error.listen((String event) {
         // 直播的错误提示没有参考价值，均不予显示
-        if (videoType.value == 'live') return;
+        if (isLive) return;
         if (event.startsWith("Failed to open https://") ||
             event.startsWith("Can not open external file https://") ||
             //tcp: ffurl_read returned 0xdfb9b0bb
@@ -957,11 +951,12 @@ class PlPlayerController {
             const Duration(milliseconds: 10000),
             () {
               Future.delayed(const Duration(milliseconds: 3000), () async {
-                if (kDebugMode) {
-                  debugPrint("isBuffering.value: ${isBuffering.value}");
-                }
-                if (kDebugMode)
-                  debugPrint("_buffered.value: ${_buffered.value}");
+                // if (kDebugMode) {
+                //   debugPrint("isBuffering.value: ${isBuffering.value}");
+                // }
+                // if (kDebugMode) {
+                //   debugPrint("_buffered.value: ${_buffered.value}");
+                // }
                 if (isBuffering.value && _buffered.value == Duration.zero) {
                   SmartDialog.showToast(
                     '视频链接打开失败，重试中',
@@ -998,7 +993,7 @@ class PlPlayerController {
         videoPlayerServiceHandler.onStatusChange(
           event,
           isBuffering.value,
-          videoType.value == 'live',
+          isLive,
         );
       }),
       onPositionChanged.listen((Duration event) {
@@ -1286,7 +1281,7 @@ class PlPlayerController {
         });
       }
       // fill不应该在竖屏视频生效
-    } else if (attr == BoxFit.fill && direction.value == 'vertical') {
+    } else if (attr == BoxFit.fill && isVertical) {
       attr = BoxFit.contain;
     }
     _videoFit.value = attr;
@@ -1312,7 +1307,7 @@ class PlPlayerController {
 
   /// 设置长按倍速状态 live模式下禁用
   Future<void> setLongPressStatus(bool val) async {
-    if (videoType.value == 'live') {
+    if (isLive) {
       return;
     }
     if (controlsLock.value) {
@@ -1376,10 +1371,9 @@ class PlPlayerController {
         return;
       }
       if (mode == FullScreenMode.vertical ||
-          (mode == FullScreenMode.auto && direction.value == 'vertical') ||
+          (mode == FullScreenMode.auto && isVertical) ||
           (mode == FullScreenMode.ratio &&
-              (Get.height / Get.width < 1.25 ||
-                  direction.value == 'vertical'))) {
+              (Get.height / Get.width < 1.25 || isVertical))) {
         await verticalScreenForTwoSeconds();
       } else {
         await landScape();
@@ -1445,7 +1439,7 @@ class PlPlayerController {
         return;
       }
     }
-    if (videoType.value == 'live') {
+    if (isLive) {
       return;
     }
     bool isComplete =
@@ -1512,9 +1506,9 @@ class PlPlayerController {
       ..put(SettingBoxKey.subtitleFontWeight, subtitleFontWeight);
   }
 
-  Future<void> dispose({String type = 'single'}) async {
+  Future<void> dispose() async {
     // 每次减1，最后销毁
-    if (type == 'single' && playerCount.value > 1) {
+    if (playerCount.value > 1) {
       _playerCount.value -= 1;
       _heartDuration = 0;
       if (!Get.previousRoute.startsWith('/video')) {

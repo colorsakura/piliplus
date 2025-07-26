@@ -2342,7 +2342,7 @@ class HeaderControlState extends State<HeaderControl> {
                             onTap: () => videoIntroController
                                 .showFavBottomSheet(context),
                             onLongPress: () => videoIntroController
-                                .showFavBottomSheet(context, type: 'longPress'),
+                                .showFavBottomSheet(context, isLongPress: true),
                             selectStatus: videoIntroController.hasFav.value,
                             semanticsLabel: '收藏',
                             needAnim: true,
@@ -2442,7 +2442,7 @@ class HeaderControlState extends State<HeaderControl> {
                             onTap: () =>
                                 pgcIntroController.showFavBottomSheet(context),
                             onLongPress: () => pgcIntroController
-                                .showFavBottomSheet(context, type: 'longPress'),
+                                .showFavBottomSheet(context, isLongPress: true),
                             selectStatus: pgcIntroController.hasFav.value,
                             semanticsLabel: '收藏',
                             needAnim: true,

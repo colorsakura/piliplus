@@ -93,7 +93,7 @@ class DynamicsController extends GetxController
   }
 
   late bool isQuerying = false;
-  Future<void> queryFollowUp({String type = 'init'}) async {
+  Future<void> queryFollowUp() async {
     if (isQuerying) return;
     isQuerying = true;
     if (!accountService.isLogin.value) {

@@ -940,8 +940,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
       final double width = size.width;
       final double height = size.height;
       final padding = MediaQuery.paddingOf(context);
-      if (enableVerticalExpand &&
-          videoDetailController.direction.value == 'vertical') {
+      if (enableVerticalExpand && videoDetailController.isVertical.value) {
         final double videoHeight =
             height - (removeSafeArea ? 0 : padding.vertical);
         final double videoWidth = videoHeight * 9 / 16;
@@ -1026,8 +1025,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
       final double width = size.width;
       final double height = size.height;
       final padding = MediaQuery.paddingOf(context);
-      if (enableVerticalExpand &&
-          videoDetailController.direction.value == 'vertical') {
+      if (enableVerticalExpand && videoDetailController.isVertical.value) {
         final double videoHeight = height - (removeSafeArea ? 0 : padding.top);
         final double videoWidth = videoHeight * 9 / 16;
         return Row(

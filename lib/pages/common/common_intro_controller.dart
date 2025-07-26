@@ -31,7 +31,7 @@ abstract class CommonIntroController extends GetxController {
 
   Future queryVideoInFolder();
 
-  Future<void> actionFavVideo({String type = 'choose'});
+  Future<void> actionFavVideo({bool isQuick = false});
 
   late final enableQuickFav = Pref.enableQuickFav;
   int? quickFavId;
@@ -54,7 +54,7 @@ abstract class CommonIntroController extends GetxController {
   }
 
   // 收藏
-  void showFavBottomSheet(BuildContext context, {type = 'tap'}) {
+  void showFavBottomSheet(BuildContext context, {bool isLongPress = false}) {
     if (!accountService.isLogin.value) {
       SmartDialog.showToast('账号未登录');
       return;
@@ -63,12 +63,12 @@ abstract class CommonIntroController extends GetxController {
     // 点按 收藏至默认文件夹
     // 长按选择文件夹
     if (enableQuickFav) {
-      if (type == 'tap') {
-        actionFavVideo(type: 'default');
+      if (!isLongPress) {
+        actionFavVideo(isQuick: true);
       } else {
         PageUtils.showFavBottomSheet(context: context, ctr: this);
       }
-    } else if (type != 'longPress') {
+    } else if (!isLongPress) {
       PageUtils.showFavBottomSheet(context: context, ctr: this);
     }
   }

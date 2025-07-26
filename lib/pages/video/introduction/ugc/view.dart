@@ -579,7 +579,7 @@ class _VideoIntroPanelState extends State<VideoIntroPanel>
               onTap: () => videoIntroController.showFavBottomSheet(context),
               onLongPress: () => videoIntroController.showFavBottomSheet(
                 context,
-                type: 'longPress',
+                isLongPress: true,
               ),
               selectStatus: videoIntroController.hasFav.value,
               semanticsLabel: '收藏',

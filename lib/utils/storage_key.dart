@@ -134,7 +134,7 @@ class SettingBoxKey {
       directExitOnBack = 'directExitOnBack',
       quickFavId = 'quickFavId';
 
-  static const String subtitlePreference = 'subtitlePreference',
+  static const String subtitlePreferenceV2 = 'subtitlePreferenceV2',
       enableDragSubtitle = 'enableDragSubtitle',
       subtitlePaddingH = 'subtitlePaddingH',
       subtitlePaddingB = 'subtitlePaddingB',

@@ -34,7 +34,7 @@ class PgcIntroController extends CommonIntroController {
       ? int.tryParse(Get.parameters['epId']!)
       : null;
 
-  late dynamic type =
+  late final String pgcType =
       Get.parameters['type'] == '1' || Get.parameters['type'] == '4'
       ? '追番'
       : '追剧';
@@ -139,9 +139,9 @@ class PgcIntroController extends CommonIntroController {
 
   // （取消）收藏 pgc
   @override
-  Future<void> actionFavVideo({String type = 'choose'}) async {
+  Future<void> actionFavVideo({bool isQuick = false}) async {
     // 收藏至默认文件夹
-    if (type == 'default') {
+    if (isQuick) {
       SmartDialog.showLoading(msg: '请求中');
       queryVideoInFolder().then((res) async {
         if (res['status']) {

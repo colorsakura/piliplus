@@ -18,6 +18,7 @@ import 'package:PiliPlus/models/common/sponsor_block/segment_model.dart';
 import 'package:PiliPlus/models/common/sponsor_block/segment_type.dart';
 import 'package:PiliPlus/models/common/sponsor_block/skip_type.dart';
 import 'package:PiliPlus/models/common/video/audio_quality.dart';
+import 'package:PiliPlus/models/common/video/subtitle_pref_type.dart';
 import 'package:PiliPlus/models/common/video/video_decode_type.dart';
 import 'package:PiliPlus/models/common/video/video_quality.dart';
 import 'package:PiliPlus/models/video/play/url.dart';
@@ -69,7 +70,7 @@ class VideoDetailController extends GetxController
   final heroTag = Get.arguments['heroTag'];
   final RxString cover = ''.obs;
   // 视频类型 默认投稿视频
-  final videoType = Get.arguments['videoType'] ?? SearchType.video;
+  final SearchType videoType = Get.arguments['videoType'] ?? SearchType.video;
 
   /// tabs相关配置
   late TabController tabCtr;
@@ -122,7 +123,7 @@ class VideoDetailController extends GetxController
   StreamSubscription<Duration>? positionSubscription;
 
   late final scrollKey = GlobalKey<ExtendedNestedScrollViewState>();
-  late final RxString direction = 'horizontal'.obs;
+  late final RxBool isVertical = false.obs;
   late final RxDouble scrollRatio = 0.0.obs;
   late final ScrollController scrollCtr = ScrollController()
     ..addListener(scrollListener);
@@ -150,21 +151,17 @@ class VideoDetailController extends GetxController
   }
 
   void setVideoHeight() {
-    String direction = firstVideo.width != null && firstVideo.height != null
-        ? firstVideo.width! > firstVideo.height!
-              ? 'horizontal'
-              : 'vertical'
-        : 'horizontal';
+    final isVertical = firstVideo.width != null && firstVideo.height != null
+        ? firstVideo.width! < firstVideo.height!
+        : false;
     if (!scrollCtr.hasClients) {
-      videoHeight = direction == 'vertical' ? maxVideoHeight : minVideoHeight;
-      this.direction.value = direction;
+      videoHeight = isVertical ? maxVideoHeight : minVideoHeight;
+      this.isVertical.value = isVertical;
       return;
     }
-    if (this.direction.value != direction) {
-      this.direction.value = direction;
-      double videoHeight = direction == 'vertical'
-          ? maxVideoHeight
-          : minVideoHeight;
+    if (this.isVertical.value != isVertical) {
+      this.isVertical.value = isVertical;
+      double videoHeight = isVertical ? maxVideoHeight : minVideoHeight;
       if (this.videoHeight != videoHeight) {
         if (videoHeight > this.videoHeight) {
           // current minVideoHeight
@@ -1140,7 +1137,7 @@ class VideoDetailController extends GetxController
               ? null
               : Duration(milliseconds: data.timeLength!)),
       // 宽>高 水平 否则 垂直
-      direction: direction.value,
+      isVertical: isVertical.value,
       bvid: bvid,
       cid: cid.value,
       autoplay: autoplay ?? autoPlay.value,
@@ -1562,12 +1559,13 @@ class VideoDetailController extends GetxController
         int idx = 0;
         subtitles.value = playInfo.subtitle!.subtitles!;
 
-        String preference = Pref.subtitlePreference;
-        if (preference != 'off') {
+        SubtitlePrefType preference =
+            SubtitlePrefType.values[Pref.subtitlePreferenceV2];
+        if (preference != SubtitlePrefType.off) {
           idx = subtitles.indexWhere((i) => !i.lan!.startsWith('ai')) + 1;
           if (idx == 0) {
-            if (preference == 'on' ||
-                (preference == 'auto' &&
+            if (preference == SubtitlePrefType.on ||
+                (preference == SubtitlePrefType.auto &&
                     (await FlutterVolumeController.getVolume() ?? 0) <= 0)) {
               idx = 1;
             }

@@ -176,7 +176,8 @@ class _PgcIntroPageState extends State<PgcIntroPage>
                                             if (isFollowed) {
                                               showPgcFollowDialog(
                                                 context: context,
-                                                type: pgcIntroController.type,
+                                                type:
+                                                    pgcIntroController.pgcType,
                                                 followStatus: followStatus,
                                                 onUpdateStatus: (followStatus) {
                                                   if (followStatus == -1) {
@@ -195,8 +196,8 @@ class _PgcIntroPageState extends State<PgcIntroPage>
                                           },
                                     child: Text(
                                       isFollowed
-                                          ? '已${pgcIntroController.type}'
-                                          : '${pgcIntroController.type}',
+                                          ? '已${pgcIntroController.pgcType}'
+                                          : pgcIntroController.pgcType,
                                     ),
                                   );
                                 },
@@ -317,7 +318,7 @@ class _PgcIntroPageState extends State<PgcIntroPage>
               onTap: () => pgcIntroController.showFavBottomSheet(context),
               onLongPress: () => pgcIntroController.showFavBottomSheet(
                 context,
-                type: 'longPress',
+                isLongPress: true,
               ),
               selectStatus: pgcIntroController.hasFav.value,
               semanticsLabel: '收藏',

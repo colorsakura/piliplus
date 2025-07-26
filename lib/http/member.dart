@@ -6,6 +6,7 @@ import 'package:PiliPlus/http/api.dart';
 import 'package:PiliPlus/http/constants.dart';
 import 'package:PiliPlus/http/init.dart';
 import 'package:PiliPlus/http/loading_state.dart';
+import 'package:PiliPlus/http/ua_type.dart';
 import 'package:PiliPlus/models/common/member/contribute_type.dart';
 import 'package:PiliPlus/models/dynamics/result.dart';
 import 'package:PiliPlus/models/member/info.dart';
@@ -280,7 +281,7 @@ class MemberHttp {
         headers: {
           'origin': 'https://space.bilibili.com',
           'referer': 'https://space.bilibili.com/$mid/dynamic',
-          'user-agent': Request.headerUa(type: 'pc'),
+          'user-agent': UaType.pc.ua,
         },
       ),
     );
@@ -352,7 +353,7 @@ class MemberHttp {
       queryParameters: params,
       options: Options(
         headers: {
-          HttpHeaders.userAgentHeader: Request.headerUa(type: 'pc'),
+          HttpHeaders.userAgentHeader: UaType.pc.ua,
           HttpHeaders.refererHeader: '${HttpString.spaceBaseUrl}/$mid',
           'origin': HttpString.spaceBaseUrl,
         },

@@ -186,9 +186,9 @@ class Pref {
     defaultValue: BtmProgressBehavior.alwaysShow.index,
   );
 
-  static String get subtitlePreference => _setting.get(
-    SettingBoxKey.subtitlePreference,
-    defaultValue: SubtitlePrefType.off.code,
+  static int get subtitlePreferenceV2 => _setting.get(
+    SettingBoxKey.subtitlePreferenceV2,
+    defaultValue: SubtitlePrefType.off.index,
   );
 
   static bool get useRelativeSlide =>

@@ -358,9 +358,9 @@ class VideoIntroController extends CommonIntroController with ReloadMixin {
 
   // （取消）收藏
   @override
-  Future<void> actionFavVideo({String type = 'choose'}) async {
+  Future<void> actionFavVideo({bool isQuick = false}) async {
     // 收藏至默认文件夹
-    if (type == 'default') {
+    if (isQuick) {
       SmartDialog.showLoading(msg: '请求中');
       queryVideoInFolder().then((res) async {
         if (res['status']) {

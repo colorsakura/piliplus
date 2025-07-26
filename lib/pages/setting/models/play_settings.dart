@@ -95,22 +95,22 @@ List<SettingsModel> get playSettings => [
     title: '自动启用字幕',
     leading: const Icon(Icons.closed_caption_outlined),
     getSubtitle: () =>
-        '当前选择偏好：${SubtitlePrefTypeExt.fromCode(Pref.subtitlePreference)!.description}',
+        '当前选择偏好：${SubtitlePrefType.values[Pref.subtitlePreferenceV2].desc}',
     onTap: (setState) async {
-      String? result = await showDialog(
+      int? result = await showDialog(
         context: Get.context!,
         builder: (context) {
-          return SelectDialog<String>(
+          return SelectDialog<int>(
             title: '字幕选择偏好',
-            value: Pref.subtitlePreference,
+            value: Pref.subtitlePreferenceV2,
             values: SubtitlePrefType.values
-                .map((e) => (e.code, e.description))
+                .map((e) => (e.index, e.desc))
                 .toList(),
           );
         },
       );
       if (result != null) {
-        await GStorage.setting.put(SettingBoxKey.subtitlePreference, result);
+        await GStorage.setting.put(SettingBoxKey.subtitlePreferenceV2, result);
         setState();
       }
     },
