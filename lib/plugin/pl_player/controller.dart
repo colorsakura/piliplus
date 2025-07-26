@@ -1230,7 +1230,7 @@ class PlPlayerController {
   /// 亮度
   Future<void> getCurrentBrightness() async {
     try {
-      _currentBrightness.value = await ScreenBrightness().application;
+      _currentBrightness.value = await ScreenBrightness.instance.application;
     } catch (e) {
       throw 'Failed to get current brightness';
       //return 0;
@@ -1244,7 +1244,7 @@ class PlPlayerController {
   Future<void> setBrightness(double brightness) async {
     try {
       this.brightness.value = brightness;
-      ScreenBrightness().setApplicationScreenBrightness(brightness);
+      ScreenBrightness.instance.setApplicationScreenBrightness(brightness);
       // setVideoBrightness();
     } catch (e) {
       throw 'Failed to set brightness';

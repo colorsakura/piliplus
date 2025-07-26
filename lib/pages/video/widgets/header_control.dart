@@ -888,22 +888,24 @@ class HeaderControlState extends State<HeaderControl> {
                                 SmartDialog.showToast('已保存');
                               }
                             } catch (e) {
-                              Share.shareXFiles(
-                                [
-                                  XFile.fromData(
-                                    res.data,
-                                    name: name,
-                                    mimeType: 'application/json',
-                                  ),
-                                ],
-                                sharePositionOrigin: await Utils.isIpad()
-                                    ? Rect.fromLTWH(
-                                        0,
-                                        0,
-                                        Get.width,
-                                        Get.height / 2,
-                                      )
-                                    : null,
+                              SharePlus.instance.share(
+                                ShareParams(
+                                  files: [
+                                    XFile.fromData(
+                                      res.data,
+                                      name: name,
+                                      mimeType: 'text/plain',
+                                    ),
+                                  ],
+                                  sharePositionOrigin: await Utils.isIpad()
+                                      ? Rect.fromLTWH(
+                                          0,
+                                          0,
+                                          Get.width,
+                                          Get.height / 2,
+                                        )
+                                      : null,
+                                ),
                               );
                             }
                           }

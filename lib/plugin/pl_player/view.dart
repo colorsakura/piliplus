@@ -194,8 +194,10 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
 
     Future.microtask(() async {
       try {
-        _brightnessValue.value = await ScreenBrightness().application;
-        _listener = ScreenBrightness().onApplicationScreenBrightnessChanged
+        _brightnessValue.value = await ScreenBrightness.instance.application;
+        _listener = ScreenBrightness
+            .instance
+            .onApplicationScreenBrightnessChanged
             .listen((double value) {
               if (mounted) {
                 _brightnessValue.value = value;
@@ -224,7 +226,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
 
   Future<void> setBrightness(double value) async {
     try {
-      await ScreenBrightness().setApplicationScreenBrightness(value);
+      await ScreenBrightness.instance.setApplicationScreenBrightness(value);
     } catch (_) {}
     _brightnessIndicator.value = true;
     _brightnessTimer?.cancel();

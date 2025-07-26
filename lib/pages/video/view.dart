@@ -325,7 +325,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
 
     WidgetsBinding.instance.removeObserver(this);
     if (!Get.previousRoute.startsWith('/video')) {
-      ScreenBrightness().resetApplicationScreenBrightness();
+      ScreenBrightness.instance.resetApplicationScreenBrightness();
       PlPlayerController.setPlayCallBack(null);
     }
     videoDetailController.positionSubscription?.cancel();
@@ -361,7 +361,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
 
     WidgetsBinding.instance.removeObserver(this);
 
-    ScreenBrightness().resetApplicationScreenBrightness();
+    ScreenBrightness.instance.resetApplicationScreenBrightness();
 
     videoDetailController.positionSubscription?.cancel();
     videoIntroController.canelTimer();
@@ -405,14 +405,14 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
           videoDetailController.brightness!,
         );
         if (videoDetailController.brightness != -1.0) {
-          ScreenBrightness().setApplicationScreenBrightness(
+          ScreenBrightness.instance.setApplicationScreenBrightness(
             videoDetailController.brightness!,
           );
         } else {
-          ScreenBrightness().resetApplicationScreenBrightness();
+          ScreenBrightness.instance.resetApplicationScreenBrightness();
         }
       } else {
-        ScreenBrightness().resetApplicationScreenBrightness();
+        ScreenBrightness.instance.resetApplicationScreenBrightness();
       }
     }
     super.didPopNext();

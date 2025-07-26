@@ -33,15 +33,13 @@ class ImageUtil {
       var path = '${temp.path}/$name';
       File(path).writeAsBytesSync(response.data);
 
-      Rect? sharePositionOrigin;
-      if (await Utils.isIpad()) {
-        sharePositionOrigin = Rect.fromLTWH(0, 0, Get.width, Get.height / 2);
-      }
-
-      Share.shareXFiles(
-        [XFile(path)],
-        subject: url,
-        sharePositionOrigin: sharePositionOrigin,
+      SharePlus.instance.share(
+        ShareParams(
+          files: [XFile(path)],
+          sharePositionOrigin: await Utils.isIpad()
+              ? Rect.fromLTWH(0, 0, Get.width, Get.height / 2)
+              : null,
+        ),
       );
     } catch (e) {
       SmartDialog.showToast(e.toString());
