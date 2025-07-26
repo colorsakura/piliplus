@@ -18,6 +18,7 @@ import 'package:PiliPlus/models/common/sponsor_block/segment_model.dart';
 import 'package:PiliPlus/models/common/sponsor_block/segment_type.dart';
 import 'package:PiliPlus/models/common/sponsor_block/skip_type.dart';
 import 'package:PiliPlus/models/common/video/audio_quality.dart';
+import 'package:PiliPlus/models/common/video/source_type.dart';
 import 'package:PiliPlus/models/common/video/subtitle_pref_type.dart';
 import 'package:PiliPlus/models/common/video/video_decode_type.dart';
 import 'package:PiliPlus/models/common/video/video_quality.dart';
@@ -39,6 +40,7 @@ import 'package:PiliPlus/pages/video/send_danmaku/view.dart';
 import 'package:PiliPlus/pages/video/widgets/header_control.dart';
 import 'package:PiliPlus/plugin/pl_player/controller.dart';
 import 'package:PiliPlus/plugin/pl_player/models/data_source.dart';
+import 'package:PiliPlus/plugin/pl_player/models/heart_beat_type.dart';
 import 'package:PiliPlus/plugin/pl_player/models/play_status.dart';
 import 'package:PiliPlus/utils/duration_util.dart';
 import 'package:PiliPlus/utils/id_utils.dart';
@@ -234,18 +236,11 @@ class VideoDetailController extends GetxController
   }
 
   // 页面来源 稍后再看 收藏夹
-  String sourceType = 'normal';
+  SourceType sourceType = Get.arguments['sourceType'] ?? SourceType.normal;
   late bool _mediaDesc = false;
   late final RxList<MediaListItemModel> mediaList = <MediaListItemModel>[].obs;
   late String watchLaterTitle = '';
-  bool get isPlayAll =>
-      const ['watchLater', 'fav', 'archive', 'playlist'].contains(sourceType);
-  int get _mediaType => switch (sourceType) {
-    'archive' => 1,
-    'watchLater' => 2,
-    'fav' || 'playlist' => 3,
-    _ => -1,
-  };
+  bool get isPlayAll => sourceType != SourceType.normal;
 
   late dynamic epId = Get.parameters['epId'];
   late dynamic seasonId = Get.parameters['seasonId'];
@@ -274,9 +269,7 @@ class VideoDetailController extends GetxController
       }
     }
 
-    sourceType = Get.arguments['sourceType'] ?? 'normal';
-
-    if (sourceType != 'normal') {
+    if (isPlayAll) {
       watchLaterTitle = Get.arguments['favTitle'];
       _mediaDesc = Get.arguments['desc'];
       getMediaList();
@@ -308,7 +301,7 @@ class VideoDetailController extends GetxController
       return;
     }
     var res = await UserHttp.getMediaList(
-      type: Get.arguments['mediaType'] ?? _mediaType,
+      type: Get.arguments['mediaType'] ?? sourceType.mediaType,
       bizId: Get.arguments['mediaId'] ?? -1,
       ps: 20,
       direction: isLoadPrevious ? true : false,
@@ -392,10 +385,11 @@ class VideoDetailController extends GetxController
             ? () => getMediaList(isLoadPrevious: true)
             : null,
         onDelete:
-            sourceType == 'watchLater' ||
-                (sourceType == 'fav' && Get.arguments?['isOwner'] == true)
+            sourceType == SourceType.watchLater ||
+                (sourceType == SourceType.fav &&
+                    Get.arguments?['isOwner'] == true)
             ? (item, index) async {
-                if (sourceType == 'watchLater') {
+                if (sourceType == SourceType.watchLater) {
                   var res = await UserHttp.toViewDel(
                     aids: [item.aid],
                   );
@@ -1598,7 +1592,7 @@ class VideoDetailController extends GetxController
                     ? -1
                     : playedTime!.inSeconds
               : playedTime!.inSeconds,
-          type: 'status',
+          type: HeartBeatType.status,
           isManual: true,
           bvid: bvid,
           cid: cid.value,

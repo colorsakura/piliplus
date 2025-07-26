@@ -1,6 +1,7 @@
 import 'package:PiliPlus/http/fav.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/common/fav_order_type.dart';
+import 'package:PiliPlus/models/common/video/source_type.dart';
 import 'package:PiliPlus/models_new/fav/fav_detail/data.dart';
 import 'package:PiliPlus/models_new/fav/fav_detail/media.dart';
 import 'package:PiliPlus/models_new/fav/fav_folder/list.dart';
@@ -165,7 +166,7 @@ class FavDetailController
             arguments: {
               'videoItem': element,
               'heroTag': Utils.makeHeroTag(element.bvid),
-              'sourceType': 'fav',
+              'sourceType': SourceType.fav,
               'mediaId': folderInfo.id,
               'oid': element.id,
               'favTitle': folderInfo.title,

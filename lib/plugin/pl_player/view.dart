@@ -949,7 +949,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                     } else {
                       plPlayerController.seekTo(
                         plPlayerController.sliderPosition.value,
-                        type: 'slider',
+                        isSeek: false,
                       );
                     }
                     plPlayerController.onChangedSliderEnd();
@@ -1769,10 +1769,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                                       player.state.duration,
                                     );
                                     plPlayerController
-                                      ..seekTo(
-                                        result,
-                                        type: 'slider',
-                                      )
+                                      ..seekTo(result, isSeek: false)
                                       ..play();
                                   },
                                 ),
@@ -1803,10 +1800,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                                       player.state.duration,
                                     );
                                     plPlayerController
-                                      ..seekTo(
-                                        result,
-                                        type: 'slider',
-                                      )
+                                      ..seekTo(result, isSeek: false)
                                       ..play();
                                   },
                                 ),

@@ -16,6 +16,7 @@ import 'package:PiliPlus/plugin/pl_player/models/bottom_progress_behavior.dart';
 import 'package:PiliPlus/plugin/pl_player/models/data_source.dart';
 import 'package:PiliPlus/plugin/pl_player/models/data_status.dart';
 import 'package:PiliPlus/plugin/pl_player/models/fullscreen_mode.dart';
+import 'package:PiliPlus/plugin/pl_player/models/heart_beat_type.dart';
 import 'package:PiliPlus/plugin/pl_player/models/play_repeat.dart';
 import 'package:PiliPlus/plugin/pl_player/models/play_status.dart';
 import 'package:PiliPlus/plugin/pl_player/utils/fullscreen.dart';
@@ -449,8 +450,11 @@ class PlPlayerController {
     }
   }
 
-  static Future<void> seekToIfExists(Duration position, {type = 'seek'}) async {
-    await _instance?.seekTo(position, type: type);
+  static Future<void> seekToIfExists(
+    Duration position, {
+    bool isSeek = true,
+  }) async {
+    await _instance?.seekTo(position, isSeek: isSeek);
   }
 
   static double? getVolumeIfExists() {
@@ -635,7 +639,7 @@ class PlPlayerController {
     return shadersDirectory;
   }
 
-  bool get _isPgc =>
+  late final _isPgc =
       Get.parameters['type'] == '1' || Get.parameters['type'] == '4';
   late int superResolutionType = _isPgc ? Pref.superResolutionType : 0;
   Future<void> setShader([int? type, NativePlayer? pp]) async {
@@ -893,7 +897,7 @@ class PlPlayerController {
           element(event ? PlayerStatus.playing : PlayerStatus.paused);
         }
         if (videoPlayerController!.state.position.inSeconds != 0) {
-          makeHeartBeat(positionSeconds.value, type: 'status');
+          makeHeartBeat(positionSeconds.value, type: HeartBeatType.status);
         }
       }),
       videoPlayerController!.stream.completed.listen((event) {
@@ -907,7 +911,7 @@ class PlPlayerController {
         } else {
           // playerStatus.status.value = PlayerStatus.playing;
         }
-        makeHeartBeat(positionSeconds.value, type: 'completed');
+        makeHeartBeat(positionSeconds.value, type: HeartBeatType.completed);
       }),
       videoPlayerController!.stream.position.listen((event) {
         _position.value = event;
@@ -1014,7 +1018,7 @@ class PlPlayerController {
   }
 
   /// 跳转至指定位置
-  Future<void> seekTo(Duration position, {type = 'seek'}) async {
+  Future<void> seekTo(Duration position, {bool isSeek = true}) async {
     // if (position >= duration.value) {
     //   position = duration.value - const Duration(milliseconds: 100);
     // }
@@ -1028,7 +1032,7 @@ class PlPlayerController {
     updatePositionSecond();
     _heartDuration = position.inSeconds;
     if (duration.value.inSeconds != 0) {
-      if (type != 'slider') {
+      if (isSeek) {
         /// 拖动进度条调节时，不等待第一帧，防止抖动
         await _videoPlayerController?.stream.buffer.first;
       }
@@ -1107,7 +1111,7 @@ class PlPlayerController {
     // repeat为true，将从头播放
     if (repeat) {
       // await seekTo(Duration.zero);
-      await seekTo(Duration.zero, type: "slider");
+      await seekTo(Duration.zero, isSeek: false);
     }
 
     await _videoPlayerController?.play();
@@ -1424,7 +1428,7 @@ class PlPlayerController {
   // 记录播放记录
   Future<void> makeHeartBeat(
     int progress, {
-    type = 'playing',
+    HeartBeatType type = HeartBeatType.playing,
     bool isManual = false,
     dynamic bvid,
     dynamic cid,
@@ -1444,13 +1448,13 @@ class PlPlayerController {
     }
     bool isComplete =
         playerStatus.status.value == PlayerStatus.completed ||
-        type == 'completed';
+        type == HeartBeatType.completed;
     if ((durationSeconds.value - position.value).inMilliseconds > 1000) {
       isComplete = false;
     }
     // 播放状态变化时，更新
 
-    if (type == 'status' || type == 'completed') {
+    if (type == HeartBeatType.status || type == HeartBeatType.completed) {
       await VideoHttp.heartBeat(
         bvid: bvid ?? _bvid,
         cid: cid ?? _cid,

@@ -103,7 +103,7 @@ class BottomControl extends StatelessWidget {
                             ..onChangedSlider(duration.inSeconds.toDouble())
                             ..seekTo(
                               Duration(seconds: duration.inSeconds),
-                              type: 'slider',
+                              isSeek: false,
                             );
                           SemanticsService.announce(
                             "${(duration.inSeconds / max * 100).round()}%",
