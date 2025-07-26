@@ -47,6 +47,7 @@ import 'package:PiliPlus/utils/storage_pref.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:PiliPlus/utils/video_utils.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:dio/dio.dart' show Options;
 import 'package:easy_debounce/easy_throttle.dart';
 import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart';
 import 'package:flutter/foundation.dart' show kDebugMode;
@@ -700,6 +701,7 @@ class VideoDetailController extends GetxController
         'videoID': bvid,
         'cid': cid.value,
       },
+      options: Options(validateStatus: (status) => true),
     );
     if (result.statusCode == 200) {
       if (result.data case List list) {

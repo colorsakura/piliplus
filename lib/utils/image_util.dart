@@ -23,24 +23,20 @@ class ImageUtil {
   static Future<void> onShareImg(String url) async {
     try {
       SmartDialog.showLoading();
-      var response = await Request().get(
-        url,
-        options: Options(responseType: ResponseType.bytes),
-      );
       final temp = await getTemporaryDirectory();
+      var path = '${temp.path}/${Utils.getFileName(url)}';
+      var res = await Request().downloadFile(url.http2https, path);
       SmartDialog.dismiss();
-      var name = Utils.getFileName(url);
-      var path = '${temp.path}/$name';
-      File(path).writeAsBytesSync(response.data);
-
-      SharePlus.instance.share(
-        ShareParams(
-          files: [XFile(path)],
-          sharePositionOrigin: await Utils.isIpad()
-              ? Rect.fromLTWH(0, 0, Get.width, Get.height / 2)
-              : null,
-        ),
-      );
+      if (res.statusCode == 200) {
+        SharePlus.instance.share(
+          ShareParams(
+            files: [XFile(path)],
+            sharePositionOrigin: await Utils.isIpad()
+                ? Rect.fromLTWH(0, 0, Get.width, Get.height / 2)
+                : null,
+          ),
+        );
+      }
     } catch (e) {
       SmartDialog.showToast(e.toString());
     }
@@ -119,10 +115,12 @@ class ImageUtil {
       String videoName = "video_${Utils.getFileName(liveUrl)}";
       String videoPath = '$tmpPath/$videoName';
 
-      await Request.dio.download(liveUrl, videoPath);
+      final res = await Request().downloadFile(liveUrl.http2https, videoPath);
+      if (res.statusCode != 200) throw '${res.statusCode}';
 
       if (Platform.isIOS) {
-        await Request.dio.download(url, imagePath);
+        final res1 = await Request().downloadFile(url.http2https, imagePath);
+        if (res1.statusCode != 200) throw '${res1.statusCode}';
         SmartDialog.showLoading(msg: '正在保存');
         bool success = await LivePhotoMaker.create(
           coverImage: imagePath,

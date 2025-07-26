@@ -258,7 +258,7 @@ class Request {
     CancelToken? cancelToken,
   }) async {
     try {
-      final response = await dio.download(
+      return await dio.download(
         urlPath,
         savePath,
         cancelToken: cancelToken,
@@ -268,7 +268,6 @@ class Request {
         // },
       );
       // if (kDebugMode) debugPrint('downloadFile success: ${response.data}');
-      return response;
     } on DioException catch (e) {
       // if (kDebugMode) debugPrint('downloadFile error: $e');
       return Response(
