@@ -20,7 +20,6 @@ import 'package:PiliPlus/plugin/pl_player/models/double_tap_type.dart';
 import 'package:PiliPlus/plugin/pl_player/models/duration.dart';
 import 'package:PiliPlus/plugin/pl_player/models/fullscreen_mode.dart';
 import 'package:PiliPlus/plugin/pl_player/models/gesture_type.dart';
-import 'package:PiliPlus/plugin/pl_player/utils.dart';
 import 'package:PiliPlus/plugin/pl_player/widgets/app_bar_ani.dart';
 import 'package:PiliPlus/plugin/pl_player/widgets/backward_seek.dart';
 import 'package:PiliPlus/plugin/pl_player/widgets/bottom_control.dart';
@@ -1177,14 +1176,13 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                               const SizedBox(width: 2),
                               Obx(
                                 () {
-                                  final durationSeconds =
-                                      plPlayerController.durationSeconds.value;
                                   return Text(
-                                    durationSeconds.inMinutes >= 60
-                                        ? printDurationWithHours(
-                                            durationSeconds,
-                                          )
-                                        : printDuration(durationSeconds),
+                                    DurationUtil.formatDuration(
+                                      plPlayerController
+                                          .durationSeconds
+                                          .value
+                                          .inSeconds,
+                                    ),
                                     style: textStyle,
                                   );
                                 },

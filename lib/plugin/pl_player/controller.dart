@@ -1165,7 +1165,10 @@ class PlPlayerController {
     updateSliderPositionSecond();
   }
 
-  void onChangedSliderStart() {
+  void onChangedSliderStart([Duration? value]) {
+    if (value != null) {
+      _sliderTempPosition.value = value;
+    }
     _isSliderMoving.value = true;
   }
 

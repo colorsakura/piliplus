@@ -65,7 +65,7 @@ class BottomControl extends StatelessWidget {
                         thumbRadius: 7,
                         onDragStart: (duration) {
                           feedBack();
-                          controller.onChangedSliderStart();
+                          controller.onChangedSliderStart(duration.timeStamp);
                         },
                         onDragUpdate: (duration) {
                           double newProgress =
