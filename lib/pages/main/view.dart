@@ -39,6 +39,7 @@ class _MainAppState extends State<MainApp>
   late final _homeController = Get.put(HomeController());
   late final _dynamicController = Get.put(DynamicsController());
 
+  static const _period = 5 * 60 * 1000;
   late int _lastSelectTime = 0;
 
   @override
@@ -85,7 +86,7 @@ class _MainAppState extends State<MainApp>
         return;
       }
       int now = DateTime.now().millisecondsSinceEpoch;
-      if (now - _homeController.lateCheckSearchAt >= 5 * 60 * 1000) {
+      if (now - _homeController.lateCheckSearchAt >= _period) {
         _homeController
           ..lateCheckSearchAt = now
           ..querySearchDefault();
@@ -103,7 +104,7 @@ class _MainAppState extends State<MainApp>
         return;
       }
       int now = DateTime.now().millisecondsSinceEpoch;
-      if (now - _mainController.lastCheckUnreadAt >= 5 * 60 * 1000) {
+      if (now - _mainController.lastCheckUnreadAt >= _period) {
         _mainController
           ..lastCheckUnreadAt = now
           ..queryUnreadMsg();

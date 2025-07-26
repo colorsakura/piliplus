@@ -773,7 +773,14 @@ List<SettingsModel> get extraSettings => [
     setKey: SettingBoxKey.enableSearchWord,
     defaultVal: true,
     onChanged: (val) {
-      Get.find<HomeController>().defaultSearch.value = '';
+      try {
+        final controller = Get.find<HomeController>()..enableSearchWord = val;
+        if (val) {
+          controller.querySearchDefault();
+        } else {
+          controller.defaultSearch.value = '';
+        }
+      } catch (_) {}
     },
   ),
   SettingsModel(

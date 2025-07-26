@@ -204,19 +204,17 @@ class _HomePageState extends State<HomePage>
                   semanticLabel: '搜索',
                 ),
                 const SizedBox(width: 10),
-                if (_homeController.enableSearchWord) ...[
-                  Expanded(
-                    child: Obx(
-                      () => Text(
-                        _homeController.defaultSearch.value,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(color: theme.colorScheme.outline),
-                      ),
+                Expanded(
+                  child: Obx(
+                    () => Text(
+                      _homeController.defaultSearch.value,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(color: theme.colorScheme.outline),
                     ),
                   ),
-                  const SizedBox(width: 2),
-                ],
+                ),
+                const SizedBox(width: 5),
               ],
             ),
           ),

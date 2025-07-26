@@ -68,7 +68,7 @@ class _SearchPageState extends State<SearchPage> {
           textInputAction: TextInputAction.search,
           onChanged: _searchController.onChange,
           decoration: InputDecoration(
-            hintText: _searchController.hintText,
+            hintText: _searchController.hintText ?? '搜索',
             border: InputBorder.none,
           ),
           onSubmitted: (value) => _searchController.submit(),

@@ -24,7 +24,7 @@ class HomeController extends GetxController
   final bool hideSearchBar = Pref.hideSearchBar;
   final bool useSideBar = Pref.useSideBar;
 
-  final bool enableSearchWord = Pref.enableSearchWord;
+  bool enableSearchWord = Pref.enableSearchWord;
   late RxString defaultSearch = ''.obs;
   late int lateCheckSearchAt = 0;
 
