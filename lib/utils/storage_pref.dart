@@ -41,7 +41,7 @@ class Pref {
   );
 
   static Set<int> get blackMids =>
-      _localCache.get(LocalCacheKey.blackMids, defaultValue: const <int>{});
+      _localCache.get(LocalCacheKey.blackMids, defaultValue: <int>{});
 
   static set blackMids(Set<int> blackMidsSet) {
     _localCache.put(LocalCacheKey.blackMids, blackMidsSet);
