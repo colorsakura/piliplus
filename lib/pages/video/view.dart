@@ -2148,14 +2148,16 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
     }
 
     void changeEpisode(episode) {
+      final isEpisode = episode is BaseEpisodeItem;
+      final isPgc = episode is pgc.EpisodeItem;
       videoIntroController.changeSeasonOrbangu(
-        episode is pgc.EpisodeItem ? episode.epId : null,
-        episode.runtimeType.toString() == "EpisodeItem" ? episode.bvid : bvid,
+        isPgc ? episode.epId : null,
+        isEpisode ? episode.bvid : bvid,
         episode.cid,
-        episode.runtimeType.toString() == "EpisodeItem" ? episode.aid : aid,
+        isEpisode ? episode.aid : aid,
         episode is EpisodeItem
             ? episode.arc?.pic
-            : episode is pgc.EpisodeItem
+            : isPgc
             ? episode.cover
             : null,
       );

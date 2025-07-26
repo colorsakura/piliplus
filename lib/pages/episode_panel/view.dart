@@ -402,15 +402,12 @@ class _EpisodePanelState extends CommonSlidePageState<EpisodePanel> {
             if (!widget.showTitle) {
               _currentItemIndex = index;
             }
+            final isEpisode = episode is ugc.BaseEpisodeItem;
             widget.changeFucCall(
               episode is pgc.EpisodeItem ? episode.epId : null,
-              episode.runtimeType.toString() == "EpisodeItem"
-                  ? episode.bvid
-                  : widget.bvid,
+              isEpisode ? episode.bvid : widget.bvid,
               episode.cid,
-              episode.runtimeType.toString() == "EpisodeItem"
-                  ? episode.aid
-                  : widget.aid,
+              isEpisode ? episode.aid : widget.aid,
               cover,
             );
             if (widget.type == EpisodeType.season) {
