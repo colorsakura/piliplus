@@ -164,7 +164,7 @@ List<SettingsModel> get playSettings => [
     setKey: SettingBoxKey.continuePlayInBackground,
     defaultVal: false,
   ),
-  if (Platform.isAndroid)
+  if (Platform.isAndroid) ...[
     SettingsModel(
       settingsType: SettingsType.sw1tch,
       title: '后台画中画',
@@ -178,7 +178,6 @@ List<SettingsModel> get playSettings => [
         }
       },
     ),
-  if (Platform.isAndroid)
     SettingsModel(
       settingsType: SettingsType.sw1tch,
       title: '画中画不加载弹幕',
@@ -187,6 +186,7 @@ List<SettingsModel> get playSettings => [
       setKey: SettingBoxKey.pipNoDanmaku,
       defaultVal: false,
     ),
+  ],
   SettingsModel(
     settingsType: SettingsType.sw1tch,
     title: '全屏手势反向',
