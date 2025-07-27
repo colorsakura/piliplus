@@ -7,7 +7,7 @@ class FollowHttp {
   static Future<LoadingState<FollowData>> followings({
     int? vmid,
     int? pn,
-    int? ps,
+    int ps = 50,
     String orderType = '',
   }) async {
     var res = await Request().get(
@@ -32,7 +32,7 @@ class FollowHttp {
   static Future<LoadingState<FollowData>> followingsNew({
     int? vmid,
     int? pn,
-    int? ps,
+    int ps = 20,
     String orderType = '', // ''=>最近关注，'attention'=>最常访问
   }) async {
     var res = await Request().get(

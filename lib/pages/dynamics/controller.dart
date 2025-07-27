@@ -67,7 +67,6 @@ class DynamicsController extends GetxController
     var res = await FollowHttp.followings(
       vmid: accountService.mid,
       pn: allFollowedUpsPage,
-      ps: 50,
       orderType: 'attention',
     );
     if (res.isSuccess) {
@@ -108,7 +107,6 @@ class DynamicsController extends GetxController
       final f2 = FollowHttp.followings(
         vmid: accountService.mid,
         pn: allFollowedUpsPage,
-        ps: 50,
         orderType: 'attention',
       );
       final res0 = await f1;

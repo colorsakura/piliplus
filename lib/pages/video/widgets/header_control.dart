@@ -870,19 +870,17 @@ class HeaderControlState extends State<HeaderControl> {
                         try {
                           final res = await Dio().get(
                             item.subtitleUrl!.http2https,
-                            options: Options(
-                              responseType: ResponseType.bytes,
-                            ),
+                            options: Options(responseType: ResponseType.bytes),
                           );
                           if (res.statusCode == 200) {
                             final name =
-                                '${videoIntroController.videoDetail.value.title}-${videoDetailCtr.bvid}-${videoDetailCtr.cid.value}-${item.lanDoc}';
+                                '${videoIntroController.videoDetail.value.title}-${videoDetailCtr.bvid}-${videoDetailCtr.cid.value}-${item.lanDoc}.json';
                             try {
                               DocumentFileSavePlusPlatform.instance
                                   .saveMultipleFiles(
                                     dataList: [res.data],
                                     fileNameList: [name],
-                                    mimeTypeList: ['text/plain'],
+                                    mimeTypeList: [Headers.jsonContentType],
                                   );
                               if (Platform.isAndroid) {
                                 SmartDialog.showToast('已保存');
@@ -894,7 +892,7 @@ class HeaderControlState extends State<HeaderControl> {
                                     XFile.fromData(
                                       res.data,
                                       name: name,
-                                      mimeType: 'text/plain',
+                                      mimeType: Headers.jsonContentType,
                                     ),
                                   ],
                                   sharePositionOrigin: await Utils.isIpad()

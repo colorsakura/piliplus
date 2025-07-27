@@ -816,7 +816,7 @@ class VideoHttp {
     }
   }
 
-  static Future vttSubtitles(String subtitleUrl) async {
+  static Future<String?> vttSubtitles(String subtitleUrl) async {
     String subtitleTimecode(num seconds) {
       int h = seconds ~/ 3600;
       seconds %= 3600;
@@ -842,8 +842,8 @@ class VideoHttp {
 
     var res = await Request().get("https:$subtitleUrl");
 
-    if (res.data?['body'] is List) {
-      return await compute(processList, res.data['body'] as List);
+    if (res.data?['body'] case List list) {
+      return compute<List, String>(processList, list);
     }
     return null;
   }

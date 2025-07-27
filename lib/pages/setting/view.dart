@@ -42,42 +42,42 @@ class _SettingPageState extends State<SettingPage> {
   final RxBool _noAccount = Accounts.accountMode.isEmpty.obs;
   late bool _isPortrait;
 
-  final List<_SettingsModel> _items = [
-    const _SettingsModel(
+  final List<_SettingsModel> _items = const [
+    _SettingsModel(
       type: SettingType.privacySetting,
       subtitle: '黑名单、无痕模式',
       icon: Icons.privacy_tip_outlined,
     ),
-    const _SettingsModel(
+    _SettingsModel(
       type: SettingType.recommendSetting,
       subtitle: '推荐来源（web/app）、刷新保留内容、过滤器',
       icon: Icons.explore_outlined,
     ),
-    const _SettingsModel(
+    _SettingsModel(
       type: SettingType.videoSetting,
       subtitle: '画质、音质、解码、缓冲、音频输出等',
       icon: Icons.video_settings_outlined,
     ),
-    const _SettingsModel(
+    _SettingsModel(
       type: SettingType.playSetting,
       subtitle: '双击/长按、全屏、后台播放、弹幕、字幕、底部进度条等',
       icon: Icons.touch_app_outlined,
     ),
-    const _SettingsModel(
+    _SettingsModel(
       type: SettingType.styleSetting,
       subtitle: '横屏适配（平板）、侧栏、列宽、首页、动态红点、主题、字号、图片、帧率等',
       icon: Icons.style_outlined,
     ),
-    const _SettingsModel(
+    _SettingsModel(
       type: SettingType.extraSetting,
       subtitle: '震动、搜索、收藏、ai、评论、动态、代理、更新检查等',
       icon: Icons.extension_outlined,
     ),
-    const _SettingsModel(
+    _SettingsModel(
       type: SettingType.webdavSetting,
       icon: MdiIcons.databaseCogOutline,
     ),
-    const _SettingsModel(
+    _SettingsModel(
       type: SettingType.about,
       icon: Icons.info_outline,
     ),

@@ -526,12 +526,12 @@ class MemberHttp {
   }
 
   // 获取某分组下的up
-  static Future<LoadingState<FollowData>> followUpGroup(
+  static Future<LoadingState<FollowData>> followUpGroup({
     int? mid,
     int? tagid,
     int? pn,
-    int? ps,
-  ) async {
+    int ps = 20,
+  }) async {
     var res = await Request().get(
       Api.followUpGroup,
       queryParameters: {

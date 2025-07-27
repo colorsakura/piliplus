@@ -1435,7 +1435,7 @@ class VideoDetailController extends GetxController
       return;
     }
 
-    void setSub(subtitle) {
+    void setSub(String subtitle) {
       plPlayerController.videoPlayerController?.setSubtitleTrack(
         SubtitleTrack.data(
           subtitle,
