@@ -36,15 +36,13 @@ class MainController extends GetxController
   late bool checkDynamic = Pref.checkDynamic;
   late int dynamicPeriod = Pref.dynamicPeriod * 60 * 1000;
   late int _lastCheckDynamicAt = 0;
-  late int dynIndex = -1;
+  late bool hasDyn = false;
   late final DynamicsController dynamicController = Get.put(
     DynamicsController(),
   );
 
-  late int homeIndex = -1;
-  late final HomeController? homeController = homeIndex == -1
-      ? null
-      : Get.put(HomeController());
+  late bool hasHome = false;
+  late final HomeController homeController = Get.put(HomeController());
 
   late DynamicBadgeMode msgBadgeMode = Pref.msgBadgeMode;
   late Set<MsgUnReadType> msgUnReadTypes = Pref.msgUnReadTypeV2;
@@ -84,9 +82,9 @@ class MainController extends GetxController
     }
     dynamicBadgeMode = DynamicBadgeMode.values[Pref.dynamicBadgeMode];
 
-    dynIndex = navigationBars.indexOf(NavigationBarType.dynamics);
+    hasDyn = navigationBars.contains(NavigationBarType.dynamics);
     if (dynamicBadgeMode != DynamicBadgeMode.hidden) {
-      if (dynIndex != -1) {
+      if (hasDyn) {
         if (checkDynamic) {
           _lastCheckDynamicAt = DateTime.now().millisecondsSinceEpoch;
         }
@@ -94,9 +92,9 @@ class MainController extends GetxController
       }
     }
 
-    homeIndex = navigationBars.indexOf(NavigationBarType.home);
+    hasHome = navigationBars.contains(NavigationBarType.home);
     if (msgBadgeMode != DynamicBadgeMode.hidden) {
-      if (homeIndex != -1) {
+      if (hasHome) {
         lastCheckUnreadAt = DateTime.now().millisecondsSinceEpoch;
         queryUnreadMsg();
       }
@@ -152,7 +150,7 @@ class MainController extends GetxController
 
   Future<void> queryUnreadMsg([bool isChangeType = false]) async {
     if (!accountService.isLogin.value ||
-        homeIndex == -1 ||
+        !hasHome ||
         msgUnReadTypes.isEmpty ||
         msgBadgeMode == DynamicBadgeMode.hidden) {
       msgUnReadCount.value = '';
@@ -178,7 +176,7 @@ class MainController extends GetxController
   }
 
   void getUnreadDynamic() {
-    if (!accountService.isLogin.value || dynIndex == -1) {
+    if (!accountService.isLogin.value || !hasDyn) {
       return;
     }
     DynGrpc.dynRed().then((res) {
@@ -189,12 +187,12 @@ class MainController extends GetxController
   }
 
   void setDynCount([int count = 0]) {
-    if (dynIndex == -1) return;
+    if (!hasDyn) return;
     dynCount.value = count;
   }
 
   void checkUnreadDynamic() {
-    if (dynIndex == -1 ||
+    if (!hasDyn ||
         !accountService.isLogin.value ||
         dynamicBadgeMode == DynamicBadgeMode.hidden ||
         !checkDynamic) {
@@ -227,14 +225,14 @@ class MainController extends GetxController
   }
 
   void checkDefaultSearch([bool shouldCheck = false]) {
-    if (homeController?.enableSearchWord == true) {
+    if (hasHome && homeController.enableSearchWord) {
       if (shouldCheck &&
           navigationBars[selectedIndex.value] != NavigationBarType.home) {
         return;
       }
       int now = DateTime.now().millisecondsSinceEpoch;
-      if (now - homeController!.lateCheckSearchAt >= _period) {
-        homeController!
+      if (now - homeController.lateCheckSearchAt >= _period) {
+        homeController
           ..lateCheckSearchAt = now
           ..querySearchDefault();
       }
@@ -243,7 +241,7 @@ class MainController extends GetxController
 
   void checkUnread([bool shouldCheck = false]) {
     if (accountService.isLogin.value &&
-        homeIndex != -1 &&
+        hasHome &&
         msgBadgeMode != DynamicBadgeMode.hidden) {
       if (shouldCheck &&
           navigationBars[selectedIndex.value] != NavigationBarType.home) {
@@ -289,7 +287,7 @@ class MainController extends GetxController
           const Duration(milliseconds: 500),
           () {
             if (currentNav == NavigationBarType.home) {
-              homeController!.onRefresh();
+              homeController.onRefresh();
             } else if (currentNav == NavigationBarType.dynamics) {
               dynamicController.onRefresh();
             }
@@ -297,12 +295,18 @@ class MainController extends GetxController
         );
       } else {
         if (currentNav == NavigationBarType.home) {
-          homeController!.toTopOrRefresh();
+          homeController.toTopOrRefresh();
         } else if (currentNav == NavigationBarType.dynamics) {
           dynamicController.toTopOrRefresh();
         }
       }
       _lastSelectTime = now;
+    }
+  }
+
+  void setSearchBar() {
+    if (hasHome) {
+      homeController.searchBarStream?.add(true);
     }
   }
 
