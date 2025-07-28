@@ -48,6 +48,7 @@ class _MediaPageState extends CommonPageState<MinePage, MineController>
   Widget build(BuildContext context) {
     super.build(context);
     final theme = Theme.of(context);
+    final secondary = theme.colorScheme.secondary;
     return Column(
       children: [
         const SizedBox(height: 10),
@@ -60,12 +61,12 @@ class _MediaPageState extends CommonPageState<MinePage, MineController>
               controller: controller.scrollController,
               physics: const AlwaysScrollableScrollPhysics(),
               children: [
-                _buildUserInfo(theme),
-                _buildActions(theme.colorScheme.primary),
+                _buildUserInfo(theme, secondary),
+                _buildActions(secondary),
                 Obx(
                   () => controller.loadingState.value is Loading
                       ? const SizedBox.shrink()
-                      : _buildFav(theme),
+                      : _buildFav(theme, secondary),
                 ),
               ],
             ),
@@ -172,7 +173,7 @@ class _MediaPageState extends CommonPageState<MinePage, MineController>
     );
   }
 
-  Widget _buildUserInfo(ThemeData theme) {
+  Widget _buildUserInfo(ThemeData theme, Color secondary) {
     final style = TextStyle(
       fontSize: theme.textTheme.titleMedium!.fontSize,
       fontWeight: FontWeight.bold,
@@ -187,7 +188,7 @@ class _MediaPageState extends CommonPageState<MinePage, MineController>
     final coinValStyle = TextStyle(
       fontSize: theme.textTheme.labelMedium!.fontSize,
       fontWeight: FontWeight.bold,
-      color: theme.colorScheme.primary,
+      color: secondary,
     );
     return Obx(() {
       final UserInfoData userInfo = controller.userInfo.value;
@@ -305,10 +306,10 @@ class _MediaPageState extends CommonPageState<MinePage, MineController>
                           value: levelInfo != null
                               ? (levelInfo.currentExp! / levelInfo.nextExp!)
                               : 0,
-                          backgroundColor: theme.colorScheme.inversePrimary,
-                          valueColor: AlwaysStoppedAnimation<Color>(
-                            theme.colorScheme.primary,
+                          backgroundColor: theme.colorScheme.outline.withValues(
+                            alpha: 0.4,
                           ),
+                          valueColor: AlwaysStoppedAnimation<Color>(secondary),
                         ),
                       ),
                     ],
@@ -384,7 +385,7 @@ class _MediaPageState extends CommonPageState<MinePage, MineController>
     );
   }
 
-  Widget _buildFav(ThemeData theme) {
+  Widget _buildFav(ThemeData theme, Color secondary) {
     return Column(
       children: [
         Divider(
@@ -416,14 +417,14 @@ class _MediaPageState extends CommonPageState<MinePage, MineController>
                       text: "${controller.favFoldercount}  ",
                       style: TextStyle(
                         fontSize: theme.textTheme.titleSmall!.fontSize,
-                        color: theme.colorScheme.primary,
+                        color: secondary,
                       ),
                     ),
                   WidgetSpan(
                     child: Icon(
                       Icons.arrow_forward_ios,
                       size: 18,
-                      color: theme.colorScheme.primary,
+                      color: secondary,
                     ),
                   ),
                 ],
@@ -439,14 +440,18 @@ class _MediaPageState extends CommonPageState<MinePage, MineController>
         SizedBox(
           width: double.infinity,
           height: 200,
-          child: _buildFavBody(theme, controller.loadingState.value),
+          child: _buildFavBody(theme, secondary, controller.loadingState.value),
         ),
         const SizedBox(height: 100),
       ],
     );
   }
 
-  Widget _buildFavBody(ThemeData theme, LoadingState loadingState) {
+  Widget _buildFavBody(
+    ThemeData theme,
+    Color secondary,
+    LoadingState loadingState,
+  ) {
     return switch (loadingState) {
       Loading() => const SizedBox.shrink(),
       Success(:var response) => Builder(
@@ -469,7 +474,7 @@ class _MediaPageState extends CommonPageState<MinePage, MineController>
                       style: ButtonStyle(
                         padding: WidgetStateProperty.all(EdgeInsets.zero),
                         backgroundColor: WidgetStatePropertyAll(
-                          theme.colorScheme.primaryContainer.withValues(
+                          theme.colorScheme.secondaryContainer.withValues(
                             alpha: 0.5,
                           ),
                         ),
@@ -483,7 +488,7 @@ class _MediaPageState extends CommonPageState<MinePage, MineController>
                       icon: Icon(
                         Icons.arrow_forward_ios,
                         size: 18,
-                        color: theme.colorScheme.primary,
+                        color: secondary,
                       ),
                     ),
                   ),
