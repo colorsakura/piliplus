@@ -184,20 +184,17 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
       videoDetailController.plPlayerController.showDanmaku = true;
 
       // 修复从后台恢复时全屏状态下屏幕方向错误的问题
-      if (plPlayerController?.isFullScreen.value == true) {
-        // 延迟一点执行，确保应用完全恢复
-        Future.delayed(const Duration(milliseconds: 100), () async {
+      if (isFullScreen && Platform.isIOS) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
           // 根据视频方向重新设置屏幕方向
-          final isVertical = plPlayerController?.isVertical ?? false;
+          final isVertical = videoDetailController.isVertical.value;
           final mode = plPlayerController?.mode;
 
-          if (mode == FullScreenMode.vertical ||
+          if (!(mode == FullScreenMode.vertical ||
               (mode == FullScreenMode.auto && isVertical) ||
               (mode == FullScreenMode.ratio &&
-                  (Get.height / Get.width < 1.25 || isVertical))) {
-            await verticalScreenForTwoSeconds();
-          } else {
-            await landScape();
+                  (Get.height / Get.width < 1.25 || isVertical)))) {
+            landScape();
           }
         });
       }
