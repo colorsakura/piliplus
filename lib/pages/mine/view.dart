@@ -55,20 +55,23 @@ class _MediaPageState extends CommonPageState<MinePage, MineController>
         _buildHeaderActions,
         const SizedBox(height: 10),
         Expanded(
-          child: refreshIndicator(
-            onRefresh: controller.onRefresh,
-            child: ListView(
-              controller: controller.scrollController,
-              physics: const AlwaysScrollableScrollPhysics(),
-              children: [
-                _buildUserInfo(theme, secondary),
-                _buildActions(secondary),
-                Obx(
-                  () => controller.loadingState.value is Loading
-                      ? const SizedBox.shrink()
-                      : _buildFav(theme, secondary),
-                ),
-              ],
+          child: Material(
+            type: MaterialType.transparency,
+            child: refreshIndicator(
+              onRefresh: controller.onRefresh,
+              child: ListView(
+                controller: controller.scrollController,
+                physics: const AlwaysScrollableScrollPhysics(),
+                children: [
+                  _buildUserInfo(theme, secondary),
+                  _buildActions(secondary),
+                  Obx(
+                    () => controller.loadingState.value is Loading
+                        ? const SizedBox.shrink()
+                        : _buildFav(theme, secondary),
+                  ),
+                ],
+              ),
             ),
           ),
         ),

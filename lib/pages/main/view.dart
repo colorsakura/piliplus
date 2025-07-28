@@ -5,6 +5,7 @@ import 'package:PiliPlus/common/widgets/tabs.dart';
 import 'package:PiliPlus/models/common/dynamic/dynamic_badge_mode.dart';
 import 'package:PiliPlus/models/common/image_type.dart';
 import 'package:PiliPlus/models/common/nav_bar_config.dart';
+import 'package:PiliPlus/pages/home/controller.dart';
 import 'package:PiliPlus/pages/home/view.dart';
 import 'package:PiliPlus/pages/main/controller.dart';
 import 'package:PiliPlus/pages/mine/controller.dart';
@@ -100,8 +101,10 @@ class _MainAppState extends State<MainApp>
           if (_mainController.selectedIndex.value != 0) {
             _mainController
               ..setIndex(0)
-              ..bottomBarStream?.add(true)
-              ..homeController?.searchBarStream?.add(true);
+              ..bottomBarStream?.add(true);
+            try {
+              Get.find<HomeController>().searchBarStream?.add(true);
+            } catch (_) {}
           } else {
             onBack();
           }
