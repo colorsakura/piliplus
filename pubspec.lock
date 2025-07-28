@@ -2058,10 +2058,11 @@ packages:
   webdav_client:
     dependency: "direct main"
     description:
-      name: webdav_client
-      sha256: "682fffc50b61dc0e8f46717171db03bf9caaa17347be41c0c91e297553bf86b2"
-      url: "https://pub.dev"
-    source: hosted
+      path: "."
+      ref: main
+      resolved-ref: "2f669c98fb81cff1c64fee93466a1475c77e4273"
+      url: "https://github.com/wgh136/webdav_client.git"
+    source: git
     version: "1.2.2"
   win32:
     dependency: transitive
