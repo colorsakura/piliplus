@@ -99,7 +99,8 @@ List<SettingsModel> get extraSettings => [
                     SettingBoxKey.dynamicPeriod,
                     dynamicPeriod,
                   );
-                  Get.find<MainController>().dynamicPeriod = dynamicPeriod;
+                  Get.find<MainController>().dynamicPeriod =
+                      dynamicPeriod * 60 * 1000;
                 },
                 child: const Text('确定'),
               ),

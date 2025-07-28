@@ -104,8 +104,7 @@ class _HomePageState extends State<HomePage>
                         child: Material(
                           type: MaterialType.transparency,
                           child: InkWell(
-                            onTap: () =>
-                                _homeController.showUserInfoDialog(context),
+                            onTap: _mainController.toMinePage,
                             splashColor: theme.colorScheme.primaryContainer
                                 .withValues(alpha: 0.3),
                             customBorder: const CircleBorder(),
@@ -141,8 +140,7 @@ class _HomePageState extends State<HomePage>
                   )
                 : defaultUser(
                     theme: theme,
-                    onPressed: () =>
-                        _homeController.showUserInfoDialog(context),
+                    onPressed: _mainController.toMinePage,
                   ),
           ),
         ),
@@ -235,9 +233,9 @@ Widget defaultUser({
       tooltip: '默认用户头像',
       style: ButtonStyle(
         padding: WidgetStateProperty.all(EdgeInsets.zero),
-        backgroundColor: WidgetStateProperty.resolveWith((states) {
-          return theme.colorScheme.onInverseSurface;
-        }),
+        backgroundColor: WidgetStatePropertyAll(
+          theme.colorScheme.onInverseSurface,
+        ),
       ),
       onPressed: onPressed,
       icon: Icon(

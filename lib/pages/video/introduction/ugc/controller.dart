@@ -592,9 +592,7 @@ class VideoIntroController extends CommonIntroController with ReloadMixin {
         followStatus: followStatus,
         callback: (attribute) {
           followStatus['attribute'] = attribute;
-          Future.delayed(const Duration(milliseconds: 500), () {
-            queryFollowStatus();
-          });
+          Future.delayed(const Duration(milliseconds: 500), queryFollowStatus);
         },
       );
     }

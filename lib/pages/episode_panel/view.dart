@@ -141,9 +141,7 @@ class _EpisodePanelState extends CommonSlidePageState<EpisodePanel> {
         widget.initialTabIndex,
         duration: const Duration(milliseconds: 200),
       );
-      Future.delayed(const Duration(milliseconds: 300)).whenComplete(() {
-        jumpToCurrent();
-      });
+      Future.delayed(const Duration(milliseconds: 300), jumpToCurrent);
     } else {
       jumpToCurrent();
     }

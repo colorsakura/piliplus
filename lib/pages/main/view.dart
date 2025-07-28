@@ -5,18 +5,13 @@ import 'package:PiliPlus/common/widgets/tabs.dart';
 import 'package:PiliPlus/models/common/dynamic/dynamic_badge_mode.dart';
 import 'package:PiliPlus/models/common/image_type.dart';
 import 'package:PiliPlus/models/common/nav_bar_config.dart';
-import 'package:PiliPlus/pages/dynamics/controller.dart';
-import 'package:PiliPlus/pages/dynamics/view.dart';
-import 'package:PiliPlus/pages/home/controller.dart';
 import 'package:PiliPlus/pages/home/view.dart';
 import 'package:PiliPlus/pages/main/controller.dart';
 import 'package:PiliPlus/pages/mine/controller.dart';
 import 'package:PiliPlus/utils/app_scheme.dart';
 import 'package:PiliPlus/utils/extension.dart';
-import 'package:PiliPlus/utils/feed_back.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/utils.dart';
-import 'package:easy_debounce/easy_throttle.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -36,11 +31,6 @@ class MainApp extends StatefulWidget {
 class _MainAppState extends State<MainApp>
     with RouteAware, WidgetsBindingObserver {
   final MainController _mainController = Get.put(MainController());
-  late final _homeController = Get.put(HomeController());
-  late final _dynamicController = Get.put(DynamicsController());
-
-  static const _period = 5 * 60 * 1000;
-  late int _lastSelectTime = 0;
 
   @override
   void initState() {
@@ -57,9 +47,10 @@ class _MainAppState extends State<MainApp>
   @override
   void didPopNext() {
     WidgetsBinding.instance.addObserver(this);
-    _mainController.checkUnreadDynamic();
-    _checkDefaultSearch(true);
-    _checkUnread(context.orientation == Orientation.portrait);
+    _mainController
+      ..checkUnreadDynamic()
+      ..checkDefaultSearch(true)
+      ..checkUnread(context.orientation == Orientation.portrait);
     super.didPopNext();
   }
 
@@ -72,85 +63,10 @@ class _MainAppState extends State<MainApp>
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
-      _mainController.checkUnreadDynamic();
-      _checkDefaultSearch(true);
-      _checkUnread(context.orientation == Orientation.portrait);
-    }
-  }
-
-  void _checkDefaultSearch([bool shouldCheck = false]) {
-    if (_mainController.homeIndex != -1 && _homeController.enableSearchWord) {
-      if (shouldCheck &&
-          _mainController.navigationBars[_mainController.selectedIndex.value] !=
-              NavigationBarType.home) {
-        return;
-      }
-      int now = DateTime.now().millisecondsSinceEpoch;
-      if (now - _homeController.lateCheckSearchAt >= _period) {
-        _homeController
-          ..lateCheckSearchAt = now
-          ..querySearchDefault();
-      }
-    }
-  }
-
-  void _checkUnread([bool shouldCheck = false]) {
-    if (_mainController.accountService.isLogin.value &&
-        _mainController.homeIndex != -1 &&
-        _mainController.msgBadgeMode != DynamicBadgeMode.hidden) {
-      if (shouldCheck &&
-          _mainController.navigationBars[_mainController.selectedIndex.value] !=
-              NavigationBarType.home) {
-        return;
-      }
-      int now = DateTime.now().millisecondsSinceEpoch;
-      if (now - _mainController.lastCheckUnreadAt >= _period) {
-        _mainController
-          ..lastCheckUnreadAt = now
-          ..queryUnreadMsg();
-      }
-    }
-  }
-
-  void setIndex(int value) {
-    feedBack();
-
-    final currentPage = _mainController.navigationBars[value].page;
-    if (value != _mainController.selectedIndex.value) {
-      _mainController.selectedIndex.value = value;
-      if (_mainController.mainTabBarView) {
-        _mainController.controller.animateTo(value);
-      } else {
-        _mainController.controller.jumpToPage(value);
-      }
-      if (currentPage is HomePage) {
-        _checkDefaultSearch();
-        _checkUnread();
-      } else if (currentPage is DynamicsPage) {
-        _mainController.setCount();
-      }
-    } else {
-      int now = DateTime.now().millisecondsSinceEpoch;
-      if (now - _lastSelectTime < 500) {
-        EasyThrottle.throttle(
-          'topOrRefresh',
-          const Duration(milliseconds: 500),
-          () {
-            if (currentPage is HomePage) {
-              _homeController.onRefresh();
-            } else if (currentPage is DynamicsPage) {
-              _dynamicController.onRefresh();
-            }
-          },
-        );
-      } else {
-        if (currentPage is HomePage) {
-          _homeController.toTopOrRefresh();
-        } else if (currentPage is DynamicsPage) {
-          _dynamicController.toTopOrRefresh();
-        }
-      }
-      _lastSelectTime = now;
+      _mainController
+        ..checkUnreadDynamic()
+        ..checkDefaultSearch(true)
+        ..checkUnread(context.orientation == Orientation.portrait);
     }
   }
 
@@ -182,9 +98,10 @@ class _MainAppState extends State<MainApp>
           onBack();
         } else {
           if (_mainController.selectedIndex.value != 0) {
-            setIndex(0);
-            _mainController.bottomBarStream?.add(true);
-            _homeController.searchBarStream?.add(true);
+            _mainController
+              ..setIndex(0)
+              ..bottomBarStream?.add(true)
+              ..homeController?.searchBarStream?.add(true);
           } else {
             onBack();
           }
@@ -229,7 +146,8 @@ class _MainAppState extends State<MainApp>
                                                   Radius.circular(16),
                                                 ),
                                               ),
-                                          onDestinationSelected: setIndex,
+                                          onDestinationSelected:
+                                              _mainController.setIndex,
                                           selectedIndex: _mainController
                                               .selectedIndex
                                               .value,
@@ -258,7 +176,8 @@ class _MainAppState extends State<MainApp>
                                   groupAlignment: 0.5,
                                   selectedIndex:
                                       _mainController.selectedIndex.value,
-                                  onDestinationSelected: setIndex,
+                                  onDestinationSelected:
+                                      _mainController.setIndex,
                                   labelType: NavigationRailLabelType.selected,
                                   leading: userAndSearchVertical(theme),
                                   destinations: _mainController.navigationBars
@@ -329,7 +248,8 @@ class _MainAppState extends State<MainApp>
                           ? _mainController.navigationBars.length > 1
                                 ? Obx(
                                     () => NavigationBar(
-                                      onDestinationSelected: setIndex,
+                                      onDestinationSelected:
+                                          _mainController.setIndex,
                                       selectedIndex:
                                           _mainController.selectedIndex.value,
                                       destinations: _mainController
@@ -353,7 +273,7 @@ class _MainAppState extends State<MainApp>
                               () => BottomNavigationBar(
                                 currentIndex:
                                     _mainController.selectedIndex.value,
-                                onTap: setIndex,
+                                onTap: _mainController.setIndex,
                                 iconSize: 16,
                                 selectedFontSize: 12,
                                 unselectedFontSize: 12,
@@ -424,8 +344,7 @@ class _MainAppState extends State<MainApp>
                         child: Material(
                           type: MaterialType.transparency,
                           child: InkWell(
-                            onTap: () =>
-                                _homeController.showUserInfoDialog(context),
+                            onTap: _mainController.toMinePage,
                             splashColor: theme.colorScheme.primaryContainer
                                 .withValues(alpha: 0.3),
                             customBorder: const CircleBorder(),
@@ -461,8 +380,7 @@ class _MainAppState extends State<MainApp>
                   )
                 : defaultUser(
                     theme: theme,
-                    onPressed: () =>
-                        _homeController.showUserInfoDialog(context),
+                    onPressed: _mainController.toMinePage,
                   ),
           ),
         ),

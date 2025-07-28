@@ -34,9 +34,9 @@ class _DynamicsPageState extends State<DynamicsPage>
         tooltip: '发布动态',
         style: ButtonStyle(
           padding: WidgetStateProperty.all(EdgeInsets.zero),
-          backgroundColor: WidgetStateProperty.resolveWith((states) {
-            return theme.colorScheme.secondaryContainer;
-          }),
+          backgroundColor: WidgetStatePropertyAll(
+            theme.colorScheme.secondaryContainer,
+          ),
         ),
         onPressed: () {
           if (_dynamicsController.accountService.isLogin.value) {

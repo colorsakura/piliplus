@@ -2163,14 +2163,9 @@ class HeaderControlState extends State<HeaderControl> {
                                   children: [
                                     TextButton(
                                       style: ButtonStyle(
-                                        foregroundColor:
-                                            WidgetStateProperty.resolveWith((
-                                              states,
-                                            ) {
-                                              return theme
-                                                  .snackBarTheme
-                                                  .actionTextColor;
-                                            }),
+                                        foregroundColor: WidgetStatePropertyAll(
+                                          theme.snackBarTheme.actionTextColor,
+                                        ),
                                       ),
                                       onPressed: () {
                                         plPlayerController.setBackgroundPlay(
@@ -2183,14 +2178,9 @@ class HeaderControlState extends State<HeaderControl> {
                                     const SizedBox(width: 10),
                                     TextButton(
                                       style: ButtonStyle(
-                                        foregroundColor:
-                                            WidgetStateProperty.resolveWith((
-                                              states,
-                                            ) {
-                                              return theme
-                                                  .snackBarTheme
-                                                  .actionTextColor;
-                                            }),
+                                        foregroundColor: WidgetStatePropertyAll(
+                                          theme.snackBarTheme.actionTextColor,
+                                        ),
                                       ),
                                       onPressed: () {},
                                       child: const Text('不启用'),
@@ -2203,7 +2193,7 @@ class HeaderControlState extends State<HeaderControl> {
                             showCloseIcon: true,
                           ),
                         );
-                        await Future.delayed(const Duration(seconds: 3), () {});
+                        await Future.delayed(const Duration(seconds: 3));
                       }
                       if (!context.mounted) return;
                       PageUtils.enterPip(

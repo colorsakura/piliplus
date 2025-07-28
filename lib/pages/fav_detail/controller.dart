@@ -208,9 +208,7 @@ class FavDetailController
     var res = await FavHttp.cleanFav(mediaId: mediaId);
     if (res['status']) {
       SmartDialog.showToast('清除成功');
-      Future.delayed(const Duration(milliseconds: 200), () {
-        onReload();
-      });
+      Future.delayed(const Duration(milliseconds: 200), onReload);
     } else {
       SmartDialog.showToast(res['msg']);
     }

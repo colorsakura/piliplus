@@ -428,9 +428,10 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
       await videoDetailController.playerInit();
     }
 
-    Future.delayed(const Duration(milliseconds: 600), () {
-      AutoOrientation.fullAutoMode();
-    });
+    Future.delayed(
+      const Duration(milliseconds: 600),
+      AutoOrientation.fullAutoMode,
+    );
     plPlayerController?.addStatusLister(playerListener);
     plPlayerController?.addPositionListener(positionListener);
   }

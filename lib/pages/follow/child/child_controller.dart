@@ -51,7 +51,7 @@ class FollowChildController
       return MemberHttp.followUpGroup(mid: mid, tagid: tagid, pn: page);
     }
 
-    return FollowHttp.followingsNew(
+    return FollowHttp.followings(
       vmid: mid,
       pn: page,
       orderType: orderType.value.type,

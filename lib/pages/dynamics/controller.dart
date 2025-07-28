@@ -68,6 +68,7 @@ class DynamicsController extends GetxController
       vmid: accountService.mid,
       pn: allFollowedUpsPage,
       orderType: 'attention',
+      ps: 50,
     );
     if (res.isSuccess) {
       upData.value.upList ??= <UpItem>[];
@@ -108,6 +109,7 @@ class DynamicsController extends GetxController
         vmid: accountService.mid,
         pn: allFollowedUpsPage,
         orderType: 'attention',
+        ps: 50,
       );
       final res0 = await f1;
       if (!res0.isSuccess) {

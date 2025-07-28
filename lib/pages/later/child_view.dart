@@ -121,54 +121,55 @@ class _LaterViewChildPageState extends State<LaterViewChildPage>
                           bottom: 5,
                           child: IgnorePointer(
                             child: LayoutBuilder(
-                              builder: (context, constraints) => AnimatedOpacity(
-                                opacity: videoItem.checked == true ? 1 : 0,
-                                duration: const Duration(milliseconds: 200),
-                                child: Container(
-                                  alignment: Alignment.center,
-                                  height: constraints.maxHeight,
-                                  width:
-                                      constraints.maxHeight *
-                                      StyleString.aspectRatio,
-                                  decoration: BoxDecoration(
-                                    borderRadius: StyleString.mdRadius,
-                                    color: Colors.black.withValues(alpha: 0.6),
-                                  ),
-                                  child: SizedBox(
-                                    width: 34,
-                                    height: 34,
-                                    child: AnimatedScale(
-                                      scale: videoItem.checked == true ? 1 : 0,
-                                      duration: const Duration(
-                                        milliseconds: 250,
-                                      ),
-                                      curve: Curves.easeInOut,
-                                      child: IconButton(
-                                        tooltip: '取消选择',
-                                        style: ButtonStyle(
-                                          padding: WidgetStateProperty.all(
-                                            EdgeInsets.zero,
-                                          ),
-                                          backgroundColor:
-                                              WidgetStateProperty.resolveWith(
-                                                (states) {
-                                                  return theme
-                                                      .colorScheme
-                                                      .surface
-                                                      .withValues(alpha: 0.8);
-                                                },
-                                              ),
+                              builder: (context, constraints) =>
+                                  AnimatedOpacity(
+                                    opacity: videoItem.checked == true ? 1 : 0,
+                                    duration: const Duration(milliseconds: 200),
+                                    child: Container(
+                                      alignment: Alignment.center,
+                                      height: constraints.maxHeight,
+                                      width:
+                                          constraints.maxHeight *
+                                          StyleString.aspectRatio,
+                                      decoration: BoxDecoration(
+                                        borderRadius: StyleString.mdRadius,
+                                        color: Colors.black.withValues(
+                                          alpha: 0.6,
                                         ),
-                                        onPressed: null,
-                                        icon: Icon(
-                                          Icons.done_all_outlined,
-                                          color: theme.colorScheme.primary,
+                                      ),
+                                      child: SizedBox(
+                                        width: 34,
+                                        height: 34,
+                                        child: AnimatedScale(
+                                          scale: videoItem.checked == true
+                                              ? 1
+                                              : 0,
+                                          duration: const Duration(
+                                            milliseconds: 250,
+                                          ),
+                                          curve: Curves.easeInOut,
+                                          child: IconButton(
+                                            tooltip: '取消选择',
+                                            style: ButtonStyle(
+                                              padding: WidgetStateProperty.all(
+                                                EdgeInsets.zero,
+                                              ),
+                                              backgroundColor:
+                                                  WidgetStatePropertyAll(
+                                                    theme.colorScheme.surface
+                                                        .withValues(alpha: 0.8),
+                                                  ),
+                                            ),
+                                            onPressed: null,
+                                            icon: Icon(
+                                              Icons.done_all_outlined,
+                                              color: theme.colorScheme.primary,
+                                            ),
+                                          ),
                                         ),
                                       ),
                                     ),
                                   ),
-                                ),
-                              ),
                             ),
                           ),
                         ),
