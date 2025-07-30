@@ -347,7 +347,7 @@ List<SettingsModel> get styleSettings => [
     title: '顶/底栏滚动阈值',
     subtitle: '滚动多少像素后收起/展开顶底栏，默认50像素',
     leading: const Icon(Icons.swipe_vertical),
-    defaultVal: true,
+    defaultVal: false,
     setKey: SettingBoxKey.enableScrollThreshold,
     needReboot: true,
     onTap: () {

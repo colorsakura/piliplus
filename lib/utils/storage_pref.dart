@@ -605,7 +605,7 @@ class Pref {
       _setting.get(SettingBoxKey.hideSearchBar, defaultValue: true);
 
   static bool get enableScrollThreshold =>
-      _setting.get(SettingBoxKey.enableScrollThreshold, defaultValue: true);
+      _setting.get(SettingBoxKey.enableScrollThreshold, defaultValue: false);
 
   static double get scrollThreshold =>
       _setting.get(SettingBoxKey.scrollThreshold, defaultValue: 50.0);
