@@ -30,8 +30,8 @@ class _UpPanelState extends State<UpPanel> {
       return const SizedBox.shrink();
     }
     final theme = Theme.of(context);
-    final upData = controller.upData.value;
-    final List<UpItem>? upList = upData.upList;
+    final upData = controller.upState.value.data;
+    final List<UpItem> upList = upData.upList;
     final List<LiveUserItem>? liveList = upData.liveUsers?.items;
     return CustomScrollView(
       scrollDirection: isTop ? Axis.horizontal : Axis.vertical,
@@ -41,7 +41,7 @@ class _UpPanelState extends State<UpPanel> {
         SliverToBoxAdapter(
           child: InkWell(
             onTap: () => setState(() {
-              controller.showLiveItems = !controller.showLiveItems;
+              controller.showLiveUp = !controller.showLiveUp;
             }),
             onLongPress: () => Get.to(const LiveFollowPage()),
             child: Container(
@@ -64,7 +64,7 @@ class _UpPanelState extends State<UpPanel> {
                       WidgetSpan(
                         alignment: PlaceholderAlignment.middle,
                         child: Icon(
-                          controller.showLiveItems
+                          controller.showLiveUp
                               ? Icons.expand_less
                               : Icons.expand_more,
                           size: 12,
@@ -75,7 +75,7 @@ class _UpPanelState extends State<UpPanel> {
                       WidgetSpan(
                         alignment: PlaceholderAlignment.middle,
                         child: Icon(
-                          controller.showLiveItems
+                          controller.showLiveUp
                               ? Icons.keyboard_arrow_right
                               : Icons.keyboard_arrow_left,
                           color: theme.colorScheme.primary,
@@ -88,7 +88,7 @@ class _UpPanelState extends State<UpPanel> {
             ),
           ),
         ),
-        if (controller.showLiveItems && liveList?.isNotEmpty == true)
+        if (controller.showLiveUp && liveList?.isNotEmpty == true)
           SliverList.builder(
             itemCount: liveList!.length,
             itemBuilder: (context, index) {
@@ -110,9 +110,9 @@ class _UpPanelState extends State<UpPanel> {
             ),
           ),
         ),
-        if (upList?.isNotEmpty == true)
+        if (upList.isNotEmpty == true)
           SliverList.builder(
-            itemCount: upList!.length,
+            itemCount: upList.length,
             itemBuilder: (context, index) {
               return upItemBuild(theme, upList[index]);
             },
@@ -122,7 +122,7 @@ class _UpPanelState extends State<UpPanel> {
     );
   }
 
-  void _onSelect(UserItem data) {
+  void _onSelect(UpItem data) {
     controller
       ..currentMid = data.mid
       ..onSelectUp(data.mid);
@@ -132,7 +132,7 @@ class _UpPanelState extends State<UpPanel> {
     setState(() {});
   }
 
-  Widget upItemBuild(ThemeData theme, UserItem data) {
+  Widget upItemBuild(ThemeData theme, UpItem data) {
     final currentMid = controller.currentMid;
     final isLive = data is LiveUserItem;
     bool isCurrent = isLive || currentMid == data.mid || currentMid == -1;
@@ -143,14 +143,14 @@ class _UpPanelState extends State<UpPanel> {
         onTap: () {
           feedBack();
           switch (data) {
+            case LiveUserItem():
+              Get.toNamed('/liveRoom?roomid=${data.roomId}');
             case UpItem():
               _onSelect(data);
               break;
-            case LiveUserItem():
-              Get.toNamed('/liveRoom?roomid=${data.roomId}');
           }
         },
-        onDoubleTap: isLive ? () => _onSelect(data) : null,
+        // onDoubleTap: isLive ? () => _onSelect(data) : null,
         onLongPress: data.mid == -1
             ? null
             : () => Get.toNamed('/member?mid=${data.mid}'),

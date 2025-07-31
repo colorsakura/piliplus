@@ -544,9 +544,11 @@ class MemberHttp {
     if (res.data['code'] == 0) {
       return Success(
         FollowData(
-          list: (res.data['data'] as List?)
-              ?.map<FollowItemModel>((e) => FollowItemModel.fromJson(e))
-              .toList(),
+          list:
+              (res.data['data'] as List?)
+                  ?.map<FollowItemModel>((e) => FollowItemModel.fromJson(e))
+                  .toList() ??
+              <FollowItemModel>[],
         ),
       );
     } else {
