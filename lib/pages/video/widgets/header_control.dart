@@ -779,7 +779,7 @@ class HeaderControlState extends State<HeaderControl> {
     final VideoItem firstVideo = videoDetailCtr.firstVideo;
     // 当前视频可用的解码格式
     final List<FormatItem> videoFormat = videoInfo.supportFormats!;
-    final List? list = videoFormat
+    final List<String>? list = videoFormat
         .firstWhere((FormatItem e) => e.quality == firstVideo.quality.code)
         .codecs;
     if (list == null) {
@@ -829,7 +829,7 @@ class HeaderControlState extends State<HeaderControl> {
                             VideoDecodeFormatTypeExt.fromString(i)!.description,
                           ),
                           subtitle: Text(
-                            i!,
+                            i,
                             style: subTitleStyle,
                           ),
                           trailing: i.startsWith(currentDecodeFormats.code)
@@ -2054,7 +2054,7 @@ class HeaderControlState extends State<HeaderControl> {
                 ),
               ),
             Obx(
-              () => videoDetailCtr.segmentList.isNotEmpty == true
+              () => videoDetailCtr.segmentList.isNotEmpty
                   ? SizedBox(
                       width: 42,
                       height: 34,

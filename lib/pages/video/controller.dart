@@ -1027,7 +1027,9 @@ class VideoDetailController extends GetxController
         .where((i) => i.id == currentVideoQa.code)
         .toList();
 
-    final List supportDecodeFormats = videoList.map((e) => e.codecs!).toList();
+    final List<String> supportDecodeFormats = videoList
+        .map((e) => e.codecs!)
+        .toList();
     VideoDecodeFormatType defaultDecodeFormats =
         VideoDecodeFormatTypeExt.fromString(cacheDecode)!;
     VideoDecodeFormatType secondDecodeFormats =
@@ -1264,7 +1266,7 @@ class VideoDetailController extends GetxController
       /// 优先顺序 设置中指定解码格式 -> 当前可选的首个解码格式
       final List<FormatItem> supportFormats = data.supportFormats!;
       // 根据画质选编码格式
-      final List supportDecodeFormats = supportFormats
+      final List<String> supportDecodeFormats = supportFormats
           .firstWhere(
             (e) => e.quality == resVideoQa,
             orElse: () => supportFormats.first,

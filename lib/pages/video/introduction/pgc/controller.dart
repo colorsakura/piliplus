@@ -329,7 +329,7 @@ class PgcIntroController extends CommonIntroController {
   }
 
   bool prevPlay() {
-    List episodes = pgcItem.episodes!;
+    final episodes = pgcItem.episodes!;
     VideoDetailController videoDetailCtr = Get.find<VideoDetailController>(
       tag: Get.arguments['heroTag'],
     );
@@ -345,19 +345,21 @@ class PgcIntroController extends CommonIntroController {
         return false;
       }
     }
-    int epid = episodes[prevIndex].epId;
-    int cid = episodes[prevIndex].cid;
-    String bvid = episodes[prevIndex].bvid;
-    int aid = episodes[prevIndex].aid;
-    dynamic cover = episodes[prevIndex].cover;
-    changeSeasonOrbangu(epid, bvid, cid, aid, cover);
+    final episode = episodes[prevIndex];
+    changeSeasonOrbangu(
+      episode.epId,
+      episode.bvid,
+      episode.cid,
+      episode.aid,
+      episode.cover,
+    );
     return true;
   }
 
   /// 列表循环或者顺序播放时，自动播放下一个；自动连播时，播放相关视频
   bool nextPlay() {
     try {
-      List episodes = pgcItem.episodes!;
+      final episodes = pgcItem.episodes!;
       VideoDetailController videoDetailCtr = Get.find<VideoDetailController>(
         tag: Get.arguments['heroTag'],
       );
@@ -377,12 +379,14 @@ class PgcIntroController extends CommonIntroController {
           return false;
         }
       }
-      int epid = episodes[nextIndex].epId;
-      int cid = episodes[nextIndex].cid;
-      String bvid = episodes[nextIndex].bvid;
-      int aid = episodes[nextIndex].aid;
-      dynamic cover = episodes[nextIndex].cover;
-      changeSeasonOrbangu(epid, bvid, cid, aid, cover);
+      final episode = episodes[nextIndex];
+      changeSeasonOrbangu(
+        episode.epId,
+        episode.bvid,
+        episode.cid,
+        episode.aid,
+        episode.cover,
+      );
       return true;
     } catch (_) {
       return false;

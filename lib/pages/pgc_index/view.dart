@@ -96,7 +96,11 @@ class _PgcIndexPageState extends State<PgcIndexPage>
     };
   }
 
-  Widget _buildSortWidget(ThemeData theme, count, data) => Column(
+  Widget _buildSortWidget(
+    ThemeData theme,
+    int count,
+    PgcIndexConditionData data,
+  ) => Column(
     mainAxisSize: MainAxisSize.min,
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
@@ -122,57 +126,55 @@ class _PgcIndexPageState extends State<PgcIndexPage>
                     padding: const EdgeInsets.symmetric(
                       horizontal: 12,
                     ),
-                    childBuilder: (childIndex) => Obx(
-                      () => SearchText(
-                        bgColor:
-                            (item[childIndex] is PgcConditionOrder
-                                    ? _ctr.indexParams['order']
-                                    : _ctr.indexParams[data
-                                          .filter![data.order?.isNotEmpty ==
-                                                  true
-                                              ? index - 1
-                                              : index]
-                                          .field]) ==
-                                (item[childIndex] is PgcConditionOrder
-                                    ? item[childIndex].field
-                                    : item[childIndex].keyword)
-                            ? theme.colorScheme.secondaryContainer
-                            : Colors.transparent,
-                        textColor:
-                            (item[childIndex] is PgcConditionOrder
-                                    ? _ctr.indexParams['order']
-                                    : _ctr.indexParams[data
-                                          .filter![data.order?.isNotEmpty ==
-                                                  true
-                                              ? index - 1
-                                              : index]
-                                          .field]) ==
-                                (item[childIndex] is PgcConditionOrder
-                                    ? item[childIndex].field
-                                    : item[childIndex].keyword)
-                            ? theme.colorScheme.onSecondaryContainer
-                            : theme.colorScheme.onSurfaceVariant,
-                        text: item[childIndex].name,
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 6,
-                          vertical: 3,
+                    childBuilder: (childIndex) {
+                      final e = item[childIndex];
+                      return Obx(
+                        () => SearchText(
+                          bgColor:
+                              (e is PgcConditionOrder
+                                      ? _ctr.indexParams['order']
+                                      : _ctr.indexParams[data
+                                            .filter![data.order?.isNotEmpty ==
+                                                    true
+                                                ? index - 1
+                                                : index]
+                                            .field]) ==
+                                  (e is PgcConditionOrder ? e.field : e.keyword)
+                              ? theme.colorScheme.secondaryContainer
+                              : Colors.transparent,
+                          textColor:
+                              (e is PgcConditionOrder
+                                      ? _ctr.indexParams['order']
+                                      : _ctr.indexParams[data
+                                            .filter![data.order?.isNotEmpty ==
+                                                    true
+                                                ? index - 1
+                                                : index]
+                                            .field]) ==
+                                  (e is PgcConditionOrder ? e.field : e.keyword)
+                              ? theme.colorScheme.onSecondaryContainer
+                              : theme.colorScheme.onSurfaceVariant,
+                          text: e.name,
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 6,
+                            vertical: 3,
+                          ),
+                          onTap: (_) {
+                            String name = e is PgcConditionOrder
+                                ? 'order'
+                                : data
+                                      .filter![data.order?.isNotEmpty == true
+                                          ? index - 1
+                                          : index]
+                                      .field!;
+                            _ctr.indexParams[name] = (e is PgcConditionOrder
+                                ? e.field
+                                : e.keyword);
+                            _ctr.onReload();
+                          },
                         ),
-                        onTap: (_) {
-                          String name = item[childIndex] is PgcConditionOrder
-                              ? 'order'
-                              : data
-                                    .filter![data.order?.isNotEmpty == true
-                                        ? index - 1
-                                        : index]
-                                    .field!;
-                          _ctr.indexParams[name] =
-                              (item[childIndex] is PgcConditionOrder
-                              ? item[childIndex].field
-                              : item[childIndex].keyword);
-                          _ctr.onReload();
-                        },
-                      ),
-                    ),
+                      );
+                    },
                     itemCount: item!.length,
                   ),
                 )

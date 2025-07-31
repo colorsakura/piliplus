@@ -141,7 +141,7 @@ class MyApp extends StatelessWidget {
 
     // 强制设置高帧率
     if (Platform.isAndroid) {
-      late List modes;
+      late List<DisplayMode> modes;
       FlutterDisplayMode.supported.then((value) {
         modes = value;
         var storageDisplay = GStorage.setting.get(SettingBoxKey.displayMode);

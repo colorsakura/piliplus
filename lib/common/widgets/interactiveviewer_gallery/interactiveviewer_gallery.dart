@@ -55,7 +55,7 @@ class InteractiveviewerGallery<T> extends StatefulWidget {
 
   final int quality;
 
-  final ValueChanged? onClose;
+  final ValueChanged<bool>? onClose;
 
   final bool? setStatusBar;
 

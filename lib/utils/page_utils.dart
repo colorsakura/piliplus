@@ -515,12 +515,14 @@ class PageUtils {
 
   static void onHorizontalPreview(
     GlobalKey<ScaffoldState> key,
-    transitionAnimationController,
-    ctr,
+    TickerProvider vsync,
     List<String> imgList,
-    index,
-    onClose,
+    int index,
   ) {
+    final ctr = AnimationController(
+      vsync: vsync,
+      duration: const Duration(milliseconds: 200),
+    )..forward();
     key.currentState?.showBottomSheet(
       (context) {
         return FadeTransition(
@@ -529,7 +531,17 @@ class PageUtils {
             sources: imgList.map((url) => SourceModel(url: url)).toList(),
             initIndex: index,
             setStatusBar: false,
-            onClose: onClose,
+            onClose: (value) async {
+              if (value == false) {
+                await ctr.reverse();
+              }
+              try {
+                ctr.dispose();
+              } catch (_) {}
+              if (value == false) {
+                Get.back();
+              }
+            },
             quality: GlobalData().imgQuality,
           ),
         );
@@ -537,7 +549,6 @@ class PageUtils {
       enableDrag: false,
       elevation: 0,
       backgroundColor: Colors.transparent,
-      transitionAnimationController: transitionAnimationController,
       sheetAnimationStyle: const AnimationStyle(duration: Duration.zero),
     );
   }

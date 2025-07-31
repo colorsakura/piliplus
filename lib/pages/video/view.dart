@@ -100,16 +100,16 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
   bool get isFullScreen => plPlayerController?.isFullScreen.value ?? false;
 
   bool get _shouldShowSeasonPanel {
-    final videoDetail = videoIntroController.videoDetail.value;
-    return (videoDetail.ugcSeason != null ||
+    late final videoDetail = videoIntroController.videoDetail.value;
+    return videoDetailController.plPlayerController.horizontalSeasonPanel &&
+        (videoDetail.ugcSeason != null ||
             ((videoDetail.pages?.length ?? 0) > 1)) &&
-        context.orientation == Orientation.landscape &&
-        videoDetailController.plPlayerController.horizontalSeasonPanel;
+        context.orientation == Orientation.landscape;
   }
 
   bool get _horizontalPreview =>
-      context.orientation == Orientation.landscape &&
-      videoDetailController.plPlayerController.horizontalPreview;
+      videoDetailController.plPlayerController.horizontalPreview &&
+      context.orientation == Orientation.landscape;
 
   StreamSubscription? _listenerFS;
 
@@ -2014,33 +2014,12 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
       onViewImage: videoDetailController.onViewImage,
       onDismissed: videoDetailController.onDismissed,
       callback: _horizontalPreview
-          ? (imgList, index) {
-              final ctr = AnimationController(
-                vsync: this,
-                duration: const Duration(milliseconds: 200),
-              )..forward();
-              PageUtils.onHorizontalPreview(
-                videoDetailController.childKey,
-                AnimationController(
-                  vsync: this,
-                  duration: Duration.zero,
-                ),
-                ctr,
-                imgList,
-                index,
-                (value) async {
-                  if (value == false) {
-                    await ctr.reverse();
-                  }
-                  try {
-                    ctr.dispose();
-                  } catch (_) {}
-                  if (value == false) {
-                    Get.back();
-                  }
-                },
-              );
-            }
+          ? (imgList, index) => PageUtils.onHorizontalPreview(
+              videoDetailController.childKey,
+              this,
+              imgList,
+              index,
+            )
           : null,
     ),
   );

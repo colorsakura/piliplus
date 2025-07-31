@@ -28,7 +28,6 @@ class VideoReplyReplyPanel extends CommonSlidePage {
     this.isDialogue = false,
     this.onViewImage,
     this.onDismissed,
-    this.onDispose,
   });
   final int? id;
   final int oid;
@@ -40,7 +39,6 @@ class VideoReplyReplyPanel extends CommonSlidePage {
   final bool isDialogue;
   final VoidCallback? onViewImage;
   final ValueChanged<int>? onDismissed;
-  final VoidCallback? onDispose;
 
   @override
   State<VideoReplyReplyPanel> createState() => _VideoReplyReplyPanelState();
@@ -59,8 +57,9 @@ class _VideoReplyReplyPanelState
   ReplyInfo? get firstFloor => widget.firstFloor ?? _controller.firstFloor;
 
   bool get _horizontalPreview =>
-      context.orientation == Orientation.landscape &&
-      _controller.horizontalPreview;
+      _controller.horizontalPreview &&
+      context.orientation == Orientation.landscape;
+  late Function(List<String> imgList, int index)? _imageCallback;
 
   Animation<Color?>? colorAnimation;
 
@@ -83,36 +82,20 @@ class _VideoReplyReplyPanelState
 
   @override
   void dispose() {
-    widget.onDispose?.call();
     Get.delete<VideoReplyReplyController>(tag: _tag);
     super.dispose();
   }
 
-  Widget _header(ThemeData theme) => firstFloor == null
-      ? _sortWidget(theme)
-      : ValueListenableBuilder<Iterable<ItemPosition>>(
-          valueListenable: itemPositionsListener.itemPositions,
-          builder: (context, positions, child) {
-            int min = -1;
-            if (positions.isNotEmpty) {
-              min = positions
-                  .where(
-                    (ItemPosition position) => position.itemTrailingEdge > 0,
-                  )
-                  .reduce(
-                    (ItemPosition min, ItemPosition position) =>
-                        position.itemTrailingEdge < min.itemTrailingEdge
-                        ? position
-                        : min,
-                  )
-                  .index;
-            }
-            return min >= 2 ? _sortWidget(theme) : const SizedBox.shrink();
-          },
-        );
-
   @override
   Widget buildPage(ThemeData theme) {
+    _imageCallback = _horizontalPreview
+        ? (imgList, index) => PageUtils.onHorizontalPreview(
+            _key,
+            this,
+            imgList,
+            index,
+          )
+        : null;
     return Scaffold(
       key: _key,
       resizeToAvoidBottomInset: false,
@@ -146,9 +129,7 @@ class _VideoReplyReplyPanelState
                   height: 1,
                   color: theme.dividerColor.withValues(alpha: 0.1),
                 ),
-          Expanded(
-            child: enableSlide ? slideList(theme) : buildList(theme),
-          ),
+          Expanded(child: enableSlide ? slideList(theme) : buildList(theme)),
         ],
       ),
     );
@@ -190,7 +171,7 @@ class _VideoReplyReplyPanelState
                         upMid: _controller.upMid,
                         onViewImage: widget.onViewImage,
                         onDismissed: widget.onDismissed,
-                        callback: _getImageCallback,
+                        callback: _imageCallback,
                         onCheckReply: (item) =>
                             _controller.onCheckReply(item, isManual: true),
                       );
@@ -232,6 +213,29 @@ class _VideoReplyReplyPanelState
     );
   }
 
+  Widget _header(ThemeData theme) => firstFloor == null
+      ? _sortWidget(theme)
+      : ValueListenableBuilder<Iterable<ItemPosition>>(
+          valueListenable: itemPositionsListener.itemPositions,
+          builder: (context, positions, child) {
+            int min = -1;
+            if (positions.isNotEmpty) {
+              min = positions
+                  .where(
+                    (ItemPosition position) => position.itemTrailingEdge > 0,
+                  )
+                  .reduce(
+                    (ItemPosition min, ItemPosition position) =>
+                        position.itemTrailingEdge < min.itemTrailingEdge
+                        ? position
+                        : min,
+                  )
+                  .index;
+            }
+            return min >= 2 ? _sortWidget(theme) : const SizedBox.shrink();
+          },
+        );
+
   Widget _sortWidget(ThemeData theme) => Container(
     height: 40,
     padding: const EdgeInsets.fromLTRB(12, 0, 6, 0),
@@ -261,7 +265,7 @@ class _VideoReplyReplyPanelState
         SizedBox(
           height: 35,
           child: TextButton.icon(
-            onPressed: () => _controller.queryBySort(),
+            onPressed: _controller.queryBySort,
             icon: Icon(
               Icons.sort,
               size: 16,
@@ -281,36 +285,6 @@ class _VideoReplyReplyPanelState
       ],
     ),
   );
-
-  Function(List<String>, int)? get _getImageCallback => _horizontalPreview
-      ? (imgList, index) {
-          final ctr = AnimationController(
-            vsync: this,
-            duration: const Duration(milliseconds: 200),
-          )..forward();
-          PageUtils.onHorizontalPreview(
-            _key,
-            AnimationController(
-              vsync: this,
-              duration: Duration.zero,
-            ),
-            ctr,
-            imgList,
-            index,
-            (value) async {
-              if (value == false) {
-                await ctr.reverse();
-              }
-              try {
-                ctr.dispose();
-              } catch (_) {}
-              if (value == false) {
-                Get.back();
-              }
-            },
-          );
-        }
-      : null;
 
   Widget _buildBody(
     ThemeData theme,
@@ -381,9 +355,7 @@ class _VideoReplyReplyPanelState
       replyLevel: widget.isDialogue ? 3 : 2,
       onReply: (replyItem) =>
           _controller.onReply(context, replyItem: replyItem, index: index),
-      onDelete: (item, subIndex) {
-        _controller.onRemove(index, item, null);
-      },
+      onDelete: (item, subIndex) => _controller.onRemove(index, item, null),
       upMid: _controller.upMid,
       showDialogue: () => _key.currentState?.showBottomSheet(
         backgroundColor: Colors.transparent,
@@ -398,7 +370,7 @@ class _VideoReplyReplyPanelState
       ),
       onViewImage: widget.onViewImage,
       onDismissed: widget.onDismissed,
-      callback: _getImageCallback,
+      callback: _imageCallback,
       onCheckReply: (item) => _controller.onCheckReply(item, isManual: true),
     );
   }

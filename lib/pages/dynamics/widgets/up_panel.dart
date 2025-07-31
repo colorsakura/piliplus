@@ -110,7 +110,7 @@ class _UpPanelState extends State<UpPanel> {
             ),
           ),
         ),
-        if (upList.isNotEmpty == true)
+        if (upList.isNotEmpty)
           SliverList.builder(
             itemCount: upList.length,
             itemBuilder: (context, index) {

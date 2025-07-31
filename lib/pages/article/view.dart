@@ -56,58 +56,18 @@ class _ArticlePageState extends State<ArticlePage>
     tag: Utils.generateRandomString(8),
   );
   bool _isFabVisible = true;
-  bool? _imageStatus;
   late final AnimationController fabAnimationCtr;
   late final Animation<Offset> _anim;
 
   late final List<double> _ratio = Pref.dynamicDetailRatio;
 
   bool get _horizontalPreview =>
-      context.orientation == Orientation.landscape &&
-      _articleCtr.horizontalPreview;
+      _articleCtr.horizontalPreview &&
+      context.orientation == Orientation.landscape;
 
   late final _key = GlobalKey<ScaffoldState>();
 
-  Function(dynamic imgList, dynamic index)? get _getImageCallback =>
-      _horizontalPreview
-      ? (imgList, index) {
-          _imageStatus = true;
-          bool isFabVisible = _isFabVisible;
-          if (isFabVisible) {
-            _hideFab();
-          }
-          final ctr = AnimationController(
-            vsync: this,
-            duration: const Duration(milliseconds: 200),
-          )..forward();
-          PageUtils.onHorizontalPreview(
-            _key,
-            AnimationController(
-              vsync: this,
-              duration: Duration.zero,
-            ),
-            ctr,
-            imgList,
-            index,
-            (value) async {
-              _imageStatus = null;
-              if (isFabVisible) {
-                isFabVisible = false;
-                _showFab();
-              }
-              if (value == false) {
-                await ctr.reverse();
-              }
-              try {
-                ctr.dispose();
-              } catch (_) {}
-              if (value == false) {
-                Get.back();
-              }
-            },
-          );
-        }
-      : null;
+  late Function(dynamic imgList, dynamic index)? _imageCallback;
 
   @override
   void initState() {
@@ -182,14 +142,21 @@ class _ArticlePageState extends State<ArticlePage>
     EasyThrottle.throttle('replyReply', const Duration(milliseconds: 500), () {
       int oid = replyItem.oid.toInt();
       int rpid = replyItem.id.toInt();
-      Widget replyReplyPage({
-        bool automaticallyImplyLeading = true,
-        VoidCallback? onDispose,
-      }) => Scaffold(
+      Widget replyReplyPage({bool showBackBtn = true}) => Scaffold(
         appBar: AppBar(
+          toolbarHeight: showBackBtn ? null : 45,
           title: const Text('评论详情'),
-          titleSpacing: automaticallyImplyLeading ? null : 12,
-          automaticallyImplyLeading: automaticallyImplyLeading,
+          titleSpacing: showBackBtn ? null : 12,
+          automaticallyImplyLeading: showBackBtn,
+          actions: showBackBtn
+              ? null
+              : [
+                  IconButton(
+                    tooltip: '关闭',
+                    icon: const Icon(Icons.close, size: 20),
+                    onPressed: Get.back,
+                  ),
+                ],
         ),
         body: SafeArea(
           top: false,
@@ -202,7 +169,6 @@ class _ArticlePageState extends State<ArticlePage>
             isVideoDetail: false,
             replyType: _articleCtr.commentType,
             firstFloor: replyItem,
-            onDispose: onDispose,
           ),
         ),
       );
@@ -226,14 +192,7 @@ class _ArticlePageState extends State<ArticlePage>
             (context) => MediaQuery.removePadding(
               context: context,
               removeLeft: true,
-              child: replyReplyPage(
-                automaticallyImplyLeading: false,
-                onDispose: () {
-                  if (isFabVisible && _imageStatus != true) {
-                    _showFab();
-                  }
-                },
-              ),
+              child: replyReplyPage(showBackBtn: false),
             ),
           );
         } else {
@@ -252,6 +211,17 @@ class _ArticlePageState extends State<ArticlePage>
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    _imageCallback = _horizontalPreview
+        ? (imgList, index) {
+            _hideFab();
+            PageUtils.onHorizontalPreview(
+              _key,
+              this,
+              imgList,
+              index,
+            );
+          }
+        : null;
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: _buildAppBar,
@@ -386,7 +356,7 @@ class _ArticlePageState extends State<ArticlePage>
             if (kDebugMode) debugPrint('json page');
             content = OpusContent(
               opus: _articleCtr.opus!,
-              callback: _getImageCallback,
+              callback: _imageCallback,
               maxWidth: maxWidth,
             );
           } else if (_articleCtr.opusData?.modules.moduleBlocked != null) {
@@ -408,7 +378,7 @@ class _ArticlePageState extends State<ArticlePage>
                   context: context,
                   html: _articleCtr.articleData!.content!,
                   maxWidth: maxWidth,
-                  callback: _getImageCallback,
+                  callback: _imageCallback,
                 ),
               );
             } else {
@@ -419,7 +389,7 @@ class _ArticlePageState extends State<ArticlePage>
                     context: context,
                     element: res.body!.children[index],
                     maxWidth: maxWidth,
-                    callback: _getImageCallback,
+                    callback: _imageCallback,
                   );
                 },
                 separatorBuilder: (context, index) =>
@@ -655,7 +625,7 @@ class _ArticlePageState extends State<ArticlePage>
                       onDelete: (item, subIndex) =>
                           _articleCtr.onRemove(index, item, subIndex),
                       upMid: _articleCtr.upMid,
-                      callback: _getImageCallback,
+                      callback: _imageCallback,
                       onCheckReply: (item) =>
                           _articleCtr.onCheckReply(item, isManual: true),
                       onToggleTop: (item) => _articleCtr.onToggleTop(

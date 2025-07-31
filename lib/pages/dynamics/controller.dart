@@ -35,7 +35,7 @@ class DynamicsController extends GetxController
   late int _upPage = 1;
   late bool _upEnd = false;
   List<UpItem>? _cacheUpList;
-  late final showAllUp = Pref.dynamicsShowAllFollowedUp;
+  late final _showAllUp = Pref.dynamicsShowAllFollowedUp;
   late bool showLiveUp = Pref.expandDynLivePanel;
 
   final upPanelPosition = Pref.upPanelPosition;
@@ -55,7 +55,7 @@ class DynamicsController extends GetxController
   @override
   void onInit() {
     super.onInit();
-    if (showAllUp) {
+    if (_showAllUp) {
       scrollController.addListener(listener);
     }
     queryFollowUp();
@@ -64,15 +64,11 @@ class DynamicsController extends GetxController
   void listener() {
     if (scrollController.position.pixels >=
         scrollController.position.maxScrollExtent - 300) {
-      EasyThrottle.throttle(
-        'following',
-        const Duration(seconds: 1),
-        queryFollowing2,
-      );
+      queryAllUp();
     }
   }
 
-  Future<void> queryFollowing2() async {
+  Future<void> queryAllUp() async {
     if (isQuerying) return;
     isQuerying = true;
     if (_upEnd) {
@@ -116,7 +112,7 @@ class DynamicsController extends GetxController
 
     final res = await Future.wait([
       DynamicsHttp.followUp(),
-      if (showAllUp)
+      if (_showAllUp)
         FollowHttp.followings(
           vmid: accountService.mid,
           pn: _upPage,
@@ -126,11 +122,10 @@ class DynamicsController extends GetxController
     ]);
 
     final first = res.first;
-    final second = res.getOrNull(1);
     if (first.isSuccess) {
       FollowUpModel data = first.data as FollowUpModel;
+      final second = res.getOrNull(1);
       if (second != null && second.isSuccess) {
-        _cacheUpList = List<UpItem>.from(data.upList);
         FollowData data1 = second.data as FollowData;
         final list1 = data1.list;
 
@@ -140,6 +135,7 @@ class DynamicsController extends GetxController
         }
 
         final list = data.upList;
+        _cacheUpList = List<UpItem>.from(list);
         list.addAll(list1..removeWhere((e) => list.contains(e)));
       }
       upState.value = Success(data);
@@ -166,7 +162,7 @@ class DynamicsController extends GetxController
 
   @override
   Future<void> onRefresh() async {
-    if (showAllUp) {
+    if (_showAllUp) {
       _upPage = 1;
       _cacheUpList = null;
     }

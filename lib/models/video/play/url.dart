@@ -239,14 +239,14 @@ class FormatItem {
   String? format;
   String? newDesc;
   String? displayDesc;
-  List? codecs;
+  List<String>? codecs;
 
   FormatItem.fromJson(Map<String, dynamic> json) {
     quality = json['quality'];
     format = json['format'];
     newDesc = json['new_description'];
     displayDesc = json['display_desc'];
-    codecs = json['codecs'];
+    codecs = (json['codecs'] as List?)?.cast<String>();
   }
 }
 

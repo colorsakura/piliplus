@@ -49,7 +49,6 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
 
   final RxBool _visibleTitle = false.obs;
   bool _isFabVisible = true;
-  bool? _imageStatus;
 
   late final List<double> _ratio = Pref.dynamicDetailRatio;
 
@@ -59,46 +58,7 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
 
   late final _key = GlobalKey<ScaffoldState>();
 
-  Function(dynamic imgList, dynamic index)? get _getImageCallback =>
-      _horizontalPreview
-      ? (imgList, index) {
-          _imageStatus = true;
-          bool isFabVisible = _isFabVisible;
-          if (isFabVisible) {
-            _hideFab();
-          }
-          final ctr = AnimationController(
-            vsync: this,
-            duration: const Duration(milliseconds: 200),
-          )..forward();
-          PageUtils.onHorizontalPreview(
-            _key,
-            AnimationController(
-              vsync: this,
-              duration: Duration.zero,
-            ),
-            ctr,
-            imgList,
-            index,
-            (value) async {
-              _imageStatus = null;
-              if (isFabVisible) {
-                isFabVisible = false;
-                _showFab();
-              }
-              if (value == false) {
-                await ctr.reverse();
-              }
-              try {
-                ctr.dispose();
-              } catch (_) {}
-              if (value == false) {
-                Get.back();
-              }
-            },
-          );
-        }
-      : null;
+  late Function(List<String> imgList, int index)? _imageCallback;
 
   @override
   void initState() {
@@ -126,14 +86,21 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
     EasyThrottle.throttle('replyReply', const Duration(milliseconds: 500), () {
       int oid = replyItem.oid.toInt();
       int rpid = replyItem.id.toInt();
-      Widget replyReplyPage({
-        bool automaticallyImplyLeading = true,
-        VoidCallback? onDispose,
-      }) => Scaffold(
+      Widget replyReplyPage({bool showBackBtn = true}) => Scaffold(
         appBar: AppBar(
+          toolbarHeight: showBackBtn ? null : 45,
           title: const Text('评论详情'),
-          titleSpacing: automaticallyImplyLeading ? null : 12,
-          automaticallyImplyLeading: automaticallyImplyLeading,
+          titleSpacing: showBackBtn ? null : 12,
+          automaticallyImplyLeading: showBackBtn,
+          actions: showBackBtn
+              ? null
+              : [
+                  IconButton(
+                    tooltip: '关闭',
+                    icon: const Icon(Icons.close, size: 20),
+                    onPressed: Get.back,
+                  ),
+                ],
         ),
         body: SafeArea(
           top: false,
@@ -146,7 +113,6 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
             isVideoDetail: false,
             replyType: _controller.replyType,
             firstFloor: replyItem,
-            onDispose: onDispose,
           ),
         ),
       );
@@ -170,14 +136,7 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
             (context) => MediaQuery.removePadding(
               context: context,
               removeLeft: true,
-              child: replyReplyPage(
-                automaticallyImplyLeading: false,
-                onDispose: () {
-                  if (isFabVisible && _imageStatus != true) {
-                    _showFab();
-                  }
-                },
-              ),
+              child: replyReplyPage(showBackBtn: false),
             ),
           );
         } else {
@@ -247,6 +206,17 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    _imageCallback = _horizontalPreview
+        ? (imgList, index) {
+            _hideFab();
+            PageUtils.onHorizontalPreview(
+              _key,
+              this,
+              imgList,
+              index,
+            );
+          }
+        : null;
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
@@ -343,7 +313,7 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
                           child: DynamicPanel(
                             item: _controller.dynItem,
                             isDetail: true,
-                            callback: _getImageCallback,
+                            callback: _imageCallback,
                           ),
                         ),
                         replyPersistentHeader(theme),
@@ -378,7 +348,7 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
                           child: DynamicPanel(
                             item: _controller.dynItem,
                             isDetail: true,
-                            callback: _getImageCallback,
+                            callback: _imageCallback,
                           ),
                         ),
                       ),
@@ -788,7 +758,7 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
                       onDelete: (item, subIndex) =>
                           _controller.onRemove(index, item, subIndex),
                       upMid: _controller.upMid,
-                      callback: _getImageCallback,
+                      callback: _imageCallback,
                       onCheckReply: (item) =>
                           _controller.onCheckReply(item, isManual: true),
                       onToggleTop: (item) => _controller.onToggleTop(
