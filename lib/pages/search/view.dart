@@ -80,21 +80,22 @@ class _SearchPageState extends State<SearchPage> {
         children: [
           if (_searchController.searchSuggestion) _searchSuggest(),
           if (isPortrait) ...[
-            if (_searchController.enableHotKey) hotSearch(theme),
+            if (_searchController.enableTrending) hotSearch(theme),
             _history(theme, isPortrait),
-            if (_searchController.enableSearchRcmd) hotSearch(theme, false),
+            if (_searchController.enableSearchRcmd)
+              hotSearch(theme, isTrending: false),
           ] else
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                if (_searchController.enableHotKey ||
+                if (_searchController.enableTrending ||
                     _searchController.enableSearchRcmd)
                   Expanded(
                     child: Column(
                       children: [
-                        if (_searchController.enableHotKey) hotSearch(theme),
+                        if (_searchController.enableTrending) hotSearch(theme),
                         if (_searchController.enableSearchRcmd)
-                          hotSearch(theme, false),
+                          hotSearch(theme, isTrending: false),
                       ],
                     ),
                   ),
@@ -155,9 +156,9 @@ class _SearchPageState extends State<SearchPage> {
     );
   }
 
-  Widget hotSearch(ThemeData theme, [bool isHot = true]) {
+  Widget hotSearch(ThemeData theme, {bool isTrending = true}) {
     final text = Text(
-      isHot ? '大家都在搜' : '搜索发现',
+      isTrending ? '大家都在搜' : '搜索发现',
       strutStyle: const StrutStyle(leading: 0, height: 1),
       style: theme.textTheme.titleMedium!.copyWith(
         height: 1,
@@ -172,7 +173,7 @@ class _SearchPageState extends State<SearchPage> {
       color: outline,
     );
     return Padding(
-      padding: EdgeInsets.fromLTRB(10, isHot ? 25 : 4, 4, 25),
+      padding: EdgeInsets.fromLTRB(10, isTrending ? 25 : 4, 4, 25),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -181,7 +182,7 @@ class _SearchPageState extends State<SearchPage> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                isHot
+                isTrending
                     ? Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
@@ -224,8 +225,8 @@ class _SearchPageState extends State<SearchPage> {
                         EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                       ),
                     ),
-                    onPressed: isHot
-                        ? _searchController.queryHotSearchList
+                    onPressed: isTrending
+                        ? _searchController.queryTrendingList
                         : _searchController.queryRecommendList,
                     icon: Icon(
                       Icons.refresh_outlined,
@@ -247,10 +248,10 @@ class _SearchPageState extends State<SearchPage> {
           ),
           Obx(
             () => _buildHotKey(
-              isHot
-                  ? _searchController.loadingState.value
+              isTrending
+                  ? _searchController.trendingState.value
                   : _searchController.recommendData.value,
-              isHot,
+              isTrending,
             ),
           ),
         ],
@@ -270,7 +271,7 @@ class _SearchPageState extends State<SearchPage> {
             10,
             !isPortrait
                 ? 25
-                : _searchController.enableHotKey
+                : _searchController.enableTrending
                 ? 0
                 : 6,
             6,
@@ -375,7 +376,10 @@ class _SearchPageState extends State<SearchPage> {
     color: theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.8),
   );
 
-  Widget _buildHotKey(LoadingState<SearchRcmdData> loadingState, bool isHot) {
+  Widget _buildHotKey(
+    LoadingState<SearchRcmdData> loadingState,
+    bool isTrending,
+  ) {
     return switch (loadingState) {
       Success(:var response) =>
         response.list?.isNotEmpty == true
@@ -389,8 +393,8 @@ class _SearchPageState extends State<SearchPage> {
             : const SizedBox.shrink(),
       Error(:var errMsg) => errorWidget(
         errMsg: errMsg,
-        onReload: isHot
-            ? _searchController.queryHotSearchList
+        onReload: isTrending
+            ? _searchController.queryTrendingList
             : _searchController.queryRecommendList,
       ),
       _ => const SizedBox.shrink(),

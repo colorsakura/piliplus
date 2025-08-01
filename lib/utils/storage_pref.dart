@@ -742,7 +742,7 @@ class Pref {
   static bool get defaultShowComment =>
       _setting.get(SettingBoxKey.defaultShowComment, defaultValue: false);
 
-  static bool get enableHotKey =>
+  static bool get enableTrending =>
       _setting.get(SettingBoxKey.enableHotKey, defaultValue: true);
 
   static bool get enableSearchRcmd =>

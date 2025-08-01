@@ -39,8 +39,8 @@ class SSearchController extends GetxController {
   late final RxList<SearchSuggestItem> searchSuggestList;
 
   // trending
-  final bool enableHotKey = Pref.enableHotKey;
-  late final Rx<LoadingState<SearchTrendingData>> loadingState;
+  final bool enableTrending = Pref.enableTrending;
+  late final Rx<LoadingState<SearchTrendingData>> trendingState;
 
   // rcmd
   final bool enableSearchRcmd = Pref.enableSearchRcmd;
@@ -68,9 +68,9 @@ class SSearchController extends GetxController {
       searchSuggestList = <SearchSuggestItem>[].obs;
     }
 
-    if (enableHotKey) {
-      loadingState = LoadingState<SearchTrendingData>.loading().obs;
-      queryHotSearchList();
+    if (enableTrending) {
+      trendingState = LoadingState<SearchTrendingData>.loading().obs;
+      queryTrendingList();
     }
 
     if (enableSearchRcmd) {
@@ -97,7 +97,7 @@ class SSearchController extends GetxController {
   void onClear() {
     if (controller.value.text != '') {
       controller.clear();
-      searchSuggestList.clear();
+      if (searchSuggestion) searchSuggestList.clear();
       searchFocusNode.requestFocus();
       showUidBtn.value = false;
     } else {
@@ -138,8 +138,8 @@ class SSearchController extends GetxController {
   }
 
   // 获取热搜关键词
-  Future<void> queryHotSearchList() async {
-    loadingState.value = await SearchHttp.searchTrending(limit: 10);
+  Future<void> queryTrendingList() async {
+    trendingState.value = await SearchHttp.searchTrending(limit: 10);
   }
 
   Future<void> queryRecommendList() async {
@@ -150,7 +150,7 @@ class SSearchController extends GetxController {
     controller.text = keyword;
     validateUid();
 
-    searchSuggestList.clear();
+    if (searchSuggestion) searchSuggestList.clear();
     submit();
   }
 
