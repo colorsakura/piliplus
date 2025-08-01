@@ -341,7 +341,7 @@ class RequestUtils {
   // 动态点赞
   static Future<void> onLikeDynamic(
     DynamicItemModel item,
-    VoidCallback callback,
+    VoidCallback onSuccess,
   ) async {
     feedBack();
     String dynamicId = item.idStr!;
@@ -362,7 +362,7 @@ class RequestUtils {
           ?..count = count - 1
           ..status = false;
       }
-      callback();
+      onSuccess();
     } else {
       SmartDialog.showToast(res['msg']);
     }

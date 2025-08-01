@@ -1,222 +1,58 @@
 import 'dart:math';
 
-import 'package:PiliPlus/common/skeleton/video_reply.dart';
 import 'package:PiliPlus/common/widgets/custom_icon.dart';
-import 'package:PiliPlus/common/widgets/custom_sliver_persistent_header_delegate.dart';
-import 'package:PiliPlus/common/widgets/loading_widget/http_error.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
-import 'package:PiliPlus/grpc/bilibili/main/community/reply/v1.pb.dart'
-    show ReplyInfo;
 import 'package:PiliPlus/http/constants.dart';
-import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/dynamics/result.dart';
+import 'package:PiliPlus/pages/common/dyn/common_dyn_page.dart';
 import 'package:PiliPlus/pages/dynamics/widgets/author_panel.dart';
 import 'package:PiliPlus/pages/dynamics/widgets/dynamic_panel.dart';
 import 'package:PiliPlus/pages/dynamics_detail/controller.dart';
 import 'package:PiliPlus/pages/dynamics_repost/view.dart';
-import 'package:PiliPlus/pages/video/reply/widgets/reply_item_grpc.dart';
-import 'package:PiliPlus/pages/video/reply_reply/view.dart';
 import 'package:PiliPlus/utils/feed_back.dart';
 import 'package:PiliPlus/utils/grid.dart';
 import 'package:PiliPlus/utils/num_util.dart';
-import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:PiliPlus/utils/request_utils.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/storage_key.dart';
-import 'package:PiliPlus/utils/storage_pref.dart';
 import 'package:PiliPlus/utils/utils.dart';
-import 'package:easy_debounce/easy_throttle.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
-class DynamicDetailPage extends StatefulWidget {
+class DynamicDetailPage extends CommonDynPage {
   const DynamicDetailPage({super.key});
 
   @override
   State<DynamicDetailPage> createState() => _DynamicDetailPageState();
 }
 
-class _DynamicDetailPageState extends State<DynamicDetailPage>
-    with TickerProviderStateMixin {
-  final _controller = Get.put(
+class _DynamicDetailPageState extends CommonDynPageState<DynamicDetailPage> {
+  @override
+  final DynamicDetailController controller = Get.put(
     DynamicDetailController(),
     tag: Utils.generateRandomString(8),
   );
-  late final AnimationController _fabAnimationCtr;
-  late final Animation<Offset> _anim;
-
-  final RxBool _visibleTitle = false.obs;
-  bool _isFabVisible = true;
-
-  late final List<double> _ratio = Pref.dynamicDetailRatio;
-
-  bool get _horizontalPreview =>
-      context.orientation == Orientation.landscape &&
-      _controller.horizontalPreview;
-
-  late final _key = GlobalKey<ScaffoldState>();
-
-  late Function(List<String> imgList, int index)? _imageCallback;
 
   @override
-  void initState() {
-    super.initState();
-    _fabAnimationCtr = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 300),
-    );
-    _anim =
-        Tween<Offset>(
-          begin: const Offset(0, 1),
-          end: Offset.zero,
-        ).animate(
-          CurvedAnimation(
-            parent: _fabAnimationCtr,
-            curve: Curves.easeInOut,
-          ),
-        );
-    _fabAnimationCtr.forward();
-    _controller.scrollController.addListener(listener);
-  }
-
-  // 查看二级评论
-  void replyReply(BuildContext context, ReplyInfo replyItem, int? id) {
-    EasyThrottle.throttle('replyReply', const Duration(milliseconds: 500), () {
-      int oid = replyItem.oid.toInt();
-      int rpid = replyItem.id.toInt();
-      Widget replyReplyPage({bool showBackBtn = true}) => Scaffold(
-        appBar: AppBar(
-          toolbarHeight: showBackBtn ? null : 45,
-          title: const Text('评论详情'),
-          titleSpacing: showBackBtn ? null : 12,
-          automaticallyImplyLeading: showBackBtn,
-          actions: showBackBtn
-              ? null
-              : [
-                  IconButton(
-                    tooltip: '关闭',
-                    icon: const Icon(Icons.close, size: 20),
-                    onPressed: Get.back,
-                  ),
-                ],
-        ),
-        body: SafeArea(
-          top: false,
-          bottom: false,
-          child: VideoReplyReplyPanel(
-            enableSlide: false,
-            id: id,
-            oid: oid,
-            rpid: rpid,
-            isVideoDetail: false,
-            replyType: _controller.replyType,
-            firstFloor: replyItem,
-          ),
-        ),
-      );
-      if (this.context.orientation == Orientation.portrait) {
-        Get.to(
-          replyReplyPage,
-          routeName: 'dynamicDetail-Copy',
-          arguments: {
-            'item': _controller.dynItem,
-          },
-        );
-      } else {
-        ScaffoldState? scaffoldState = Scaffold.maybeOf(context);
-        if (scaffoldState != null) {
-          bool isFabVisible = _isFabVisible;
-          if (isFabVisible) {
-            _hideFab();
-          }
-          scaffoldState.showBottomSheet(
-            backgroundColor: Colors.transparent,
-            (context) => MediaQuery.removePadding(
-              context: context,
-              removeLeft: true,
-              child: replyReplyPage(showBackBtn: false),
-            ),
-          );
-        } else {
-          Get.to(
-            replyReplyPage,
-            routeName: 'dynamicDetail-Copy',
-            arguments: {
-              'item': _controller.dynItem,
-            },
-          );
-        }
-      }
-    });
-  }
+  dynamic get arguments => {
+    'item': controller.dynItem,
+  };
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (_controller.scrollController.hasClients) {
-        _visibleTitle.value =
-            _controller.scrollController.positions.first.pixels > 55;
+      if (controller.scrollController.hasClients) {
+        controller.showTitle.value =
+            controller.scrollController.positions.first.pixels > 55;
       }
     });
-  }
-
-  void listener() {
-    // 标题
-    _visibleTitle.value =
-        _controller.scrollController.positions.first.pixels > 55;
-
-    // fab按钮
-    final ScrollDirection direction1 =
-        _controller.scrollController.positions.first.userScrollDirection;
-    late final ScrollDirection direction2 =
-        _controller.scrollController.positions.last.userScrollDirection;
-    if (direction1 == ScrollDirection.forward ||
-        direction2 == ScrollDirection.forward) {
-      _showFab();
-    } else if (direction1 == ScrollDirection.reverse ||
-        direction2 == ScrollDirection.reverse) {
-      _hideFab();
-    }
-  }
-
-  void _showFab() {
-    if (!_isFabVisible) {
-      _isFabVisible = true;
-      _fabAnimationCtr.forward();
-    }
-  }
-
-  void _hideFab() {
-    if (_isFabVisible) {
-      _isFabVisible = false;
-      _fabAnimationCtr.reverse();
-    }
-  }
-
-  @override
-  void dispose() {
-    _fabAnimationCtr.dispose();
-    _controller.scrollController.removeListener(listener);
-    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    _imageCallback = _horizontalPreview
-        ? (imgList, index) {
-            _hideFab();
-            PageUtils.onHorizontalPreview(
-              _key,
-              this,
-              imgList,
-              index,
-            );
-          }
-        : null;
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
@@ -225,12 +61,12 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
           child: Obx(
             () {
               return AnimatedOpacity(
-                opacity: _visibleTitle.value ? 1 : 0,
+                opacity: controller.showTitle.value ? 1 : 0,
                 duration: const Duration(milliseconds: 300),
                 child: IgnorePointer(
-                  ignoring: !_visibleTitle.value,
+                  ignoring: !controller.showTitle.value,
                   child: AuthorPanel(
-                    item: _controller.dynItem,
+                    item: controller.dynItem,
                     isDetail: true,
                   ),
                 ),
@@ -257,14 +93,15 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
                           builder: (context) => Slider(
                             min: 1,
                             max: 100,
-                            value: _ratio.first,
+                            value: controller.ratio.first,
                             onChanged: (value) {
                               if (value >= 10 && value <= 90) {
-                                _ratio[0] = value.toPrecision(2);
-                                _ratio[1] = 100 - value;
+                                controller.ratio
+                                  ..[0] = value.toPrecision(2)
+                                  ..[1] = 100 - value;
                                 GStorage.setting.put(
                                   SettingBoxKey.dynamicDetailRatio,
-                                  _ratio,
+                                  controller.ratio,
                                 );
                                 (context as Element).markNeedsBuild();
                                 setState(() {});
@@ -289,7 +126,7 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
         bottom: false,
         child: context.orientation == Orientation.portrait
             ? refreshIndicator(
-                onRefresh: _controller.onRefresh,
+                onRefresh: controller.onRefresh,
                 child: _buildBody(context.orientation, theme),
               )
             : _buildBody(context.orientation, theme),
@@ -305,21 +142,20 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
           double padding = max(context.width / 2 - Grid.smallCardWidth, 0);
           if (orientation == Orientation.portrait) {
             return CustomScrollView(
-              controller: _controller.scrollController,
+              controller: controller.scrollController,
               physics: const AlwaysScrollableScrollPhysics(),
               slivers:
                   [
                         SliverToBoxAdapter(
                           child: DynamicPanel(
-                            item: _controller.dynItem,
+                            item: controller.dynItem,
                             isDetail: true,
-                            callback: _imageCallback,
+                            callback: imageCallback,
                           ),
                         ),
-                        replyPersistentHeader(theme),
+                        buildReplyHeader(theme),
                         Obx(
-                          () =>
-                              replyList(theme, _controller.loadingState.value),
+                          () => replyList(theme, controller.loadingState.value),
                         ),
                       ]
                       .map<Widget>(
@@ -334,9 +170,9 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
             return Row(
               children: [
                 Expanded(
-                  flex: _ratio[0].toInt(),
+                  flex: controller.ratio[0].toInt(),
                   child: CustomScrollView(
-                    controller: _controller.scrollController,
+                    controller: controller.scrollController,
                     physics: const AlwaysScrollableScrollPhysics(),
                     slivers: [
                       SliverPadding(
@@ -346,9 +182,9 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
                         ),
                         sliver: SliverToBoxAdapter(
                           child: DynamicPanel(
-                            item: _controller.dynItem,
+                            item: controller.dynItem,
                             isDetail: true,
-                            callback: _imageCallback,
+                            callback: imageCallback,
                           ),
                         ),
                       ),
@@ -356,26 +192,26 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
                   ),
                 ),
                 Expanded(
-                  flex: _ratio[1].toInt(),
+                  flex: controller.ratio[1].toInt(),
                   child: Scaffold(
-                    key: _key,
+                    key: scaffoldKey,
                     backgroundColor: Colors.transparent,
                     body: refreshIndicator(
-                      onRefresh: _controller.onRefresh,
+                      onRefresh: controller.onRefresh,
                       child: CustomScrollView(
-                        controller: _controller.scrollController,
+                        controller: controller.scrollController,
                         physics: const AlwaysScrollableScrollPhysics(),
                         slivers: [
                           SliverPadding(
                             padding: EdgeInsets.only(right: padding / 4),
-                            sliver: replyPersistentHeader(theme),
+                            sliver: buildReplyHeader(theme),
                           ),
                           SliverPadding(
                             padding: EdgeInsets.only(right: padding / 4),
                             sliver: Obx(
                               () => replyList(
                                 theme,
-                                _controller.loadingState.value,
+                                controller.loadingState.value,
                               ),
                             ),
                           ),
@@ -389,396 +225,170 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
           }
         },
       ),
-      Positioned(
-        left: 0,
-        right: 0,
-        bottom: 0,
-        child: SlideTransition(
-          position: _anim,
-          child: Builder(
-            builder: (context) {
-              Widget button() => FloatingActionButton(
-                heroTag: null,
-                onPressed: () {
-                  feedBack();
-                  _controller.onReply(
-                    context,
-                    oid: _controller.oid,
-                    replyType: _controller.replyType,
-                  );
-                },
-                tooltip: '评论动态',
-                child: const Icon(Icons.reply),
-              );
-              return !_controller.showDynActionBar
-                  ? Align(
-                      alignment: Alignment.bottomRight,
-                      child: Padding(
-                        padding: EdgeInsets.only(
-                          right: 14,
-                          bottom: MediaQuery.paddingOf(context).bottom + 14,
-                        ),
-                        child: button(),
-                      ),
-                    )
-                  : Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(right: 14, bottom: 14),
-                          child: button(),
-                        ),
-                        Container(
-                          decoration: BoxDecoration(
-                            color: theme.colorScheme.surface,
-                            border: Border(
-                              top: BorderSide(
-                                color: theme.colorScheme.outline.withValues(
-                                  alpha: 0.08,
-                                ),
-                              ),
-                            ),
-                          ),
-                          padding: EdgeInsets.only(
-                            bottom: MediaQuery.paddingOf(context).bottom,
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              Expanded(
-                                child: Builder(
-                                  builder: (btnContext) => TextButton.icon(
-                                    onPressed: () => showModalBottomSheet(
-                                      context: context,
-                                      isScrollControlled: true,
-                                      useSafeArea: true,
-                                      builder: (context) => RepostPanel(
-                                        item: _controller.dynItem,
-                                        callback: () {
-                                          int count =
-                                              _controller
-                                                  .dynItem
-                                                  .modules
-                                                  .moduleStat
-                                                  ?.forward
-                                                  ?.count ??
-                                              0;
-                                          _controller
-                                                  .dynItem
-                                                  .modules
-                                                  .moduleStat ??=
-                                              ModuleStatModel();
-                                          _controller
-                                                  .dynItem
-                                                  .modules
-                                                  .moduleStat
-                                                  ?.forward ??=
-                                              DynamicStat();
-                                          _controller
-                                                  .dynItem
-                                                  .modules
-                                                  .moduleStat!
-                                                  .forward!
-                                                  .count =
-                                              count + 1;
-                                          if (btnContext.mounted) {
-                                            (btnContext as Element?)
-                                                ?.markNeedsBuild();
-                                          }
-                                        },
-                                      ),
-                                    ),
-                                    icon: Icon(
-                                      FontAwesomeIcons.shareFromSquare,
-                                      size: 16,
-                                      color: theme.colorScheme.outline,
-                                      semanticLabel: "转发",
-                                    ),
-                                    style: TextButton.styleFrom(
-                                      padding: const EdgeInsets.fromLTRB(
-                                        15,
-                                        0,
-                                        15,
-                                        0,
-                                      ),
-                                      foregroundColor:
-                                          theme.colorScheme.outline,
-                                    ),
-                                    label: Text(
-                                      _controller
-                                                  .dynItem
-                                                  .modules
-                                                  .moduleStat
-                                                  ?.forward
-                                                  ?.count !=
-                                              null
-                                          ? NumUtil.numFormat(
-                                              _controller
-                                                  .dynItem
-                                                  .modules
-                                                  .moduleStat!
-                                                  .forward!
-                                                  .count,
-                                            )
-                                          : '转发',
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              Expanded(
-                                child: TextButton.icon(
-                                  onPressed: () => Utils.shareText(
-                                    '${HttpString.dynamicShareBaseUrl}/${_controller.dynItem.idStr}',
-                                  ),
-                                  icon: Icon(
-                                    CustomIcon.share_node,
-                                    size: 16,
-                                    color: theme.colorScheme.outline,
-                                    semanticLabel: "分享",
-                                  ),
-                                  style: TextButton.styleFrom(
-                                    padding: const EdgeInsets.fromLTRB(
-                                      15,
-                                      0,
-                                      15,
-                                      0,
-                                    ),
-                                    foregroundColor: theme.colorScheme.outline,
-                                  ),
-                                  label: const Text('分享'),
-                                ),
-                              ),
-                              Expanded(
-                                child: Builder(
-                                  builder: (context) => TextButton.icon(
-                                    onPressed: () => RequestUtils.onLikeDynamic(
-                                      _controller.dynItem,
-                                      () {
-                                        if (context.mounted) {
-                                          (context as Element?)
-                                              ?.markNeedsBuild();
-                                        }
-                                      },
-                                    ),
-                                    icon: Icon(
-                                      _controller
-                                                  .dynItem
-                                                  .modules
-                                                  .moduleStat
-                                                  ?.like
-                                                  ?.status ==
-                                              true
-                                          ? FontAwesomeIcons.solidThumbsUp
-                                          : FontAwesomeIcons.thumbsUp,
-                                      size: 16,
-                                      color:
-                                          _controller
-                                                  .dynItem
-                                                  .modules
-                                                  .moduleStat
-                                                  ?.like
-                                                  ?.status ==
-                                              true
-                                          ? theme.colorScheme.primary
-                                          : theme.colorScheme.outline,
-                                      semanticLabel:
-                                          _controller
-                                                  .dynItem
-                                                  .modules
-                                                  .moduleStat
-                                                  ?.like
-                                                  ?.status ==
-                                              true
-                                          ? "已赞"
-                                          : "点赞",
-                                    ),
-                                    style: TextButton.styleFrom(
-                                      padding: const EdgeInsets.fromLTRB(
-                                        15,
-                                        0,
-                                        15,
-                                        0,
-                                      ),
-                                      foregroundColor:
-                                          theme.colorScheme.outline,
-                                    ),
-                                    label: AnimatedSwitcher(
-                                      duration: const Duration(
-                                        milliseconds: 400,
-                                      ),
-                                      transitionBuilder:
-                                          (
-                                            Widget child,
-                                            Animation<double> animation,
-                                          ) {
-                                            return ScaleTransition(
-                                              scale: animation,
-                                              child: child,
-                                            );
-                                          },
-                                      child: Text(
-                                        _controller
-                                                    .dynItem
-                                                    .modules
-                                                    .moduleStat
-                                                    ?.like
-                                                    ?.count !=
-                                                null
-                                            ? NumUtil.numFormat(
-                                                _controller
-                                                    .dynItem
-                                                    .modules
-                                                    .moduleStat!
-                                                    .like!
-                                                    .count,
-                                              )
-                                            : '点赞',
-                                        style: TextStyle(
-                                          color:
-                                              _controller
-                                                      .dynItem
-                                                      .modules
-                                                      .moduleStat
-                                                      ?.like
-                                                      ?.status ==
-                                                  true
-                                              ? theme.colorScheme.primary
-                                              : theme.colorScheme.outline,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    );
-            },
-          ),
-        ),
-      ),
+      _buildBottom(theme),
     ],
   );
 
-  SliverPersistentHeader replyPersistentHeader(ThemeData theme) {
-    return SliverPersistentHeader(
-      delegate: CustomSliverPersistentHeaderDelegate(
-        bgColor: theme.colorScheme.surface,
-        child: Container(
-          height: 45,
-          padding: const EdgeInsets.only(left: 12, right: 6),
-          child: Row(
-            children: [
-              Obx(
-                () => AnimatedSwitcher(
-                  duration: const Duration(milliseconds: 400),
-                  transitionBuilder:
-                      (Widget child, Animation<double> animation) {
-                        return ScaleTransition(scale: animation, child: child);
-                      },
-                  child: Text(
-                    '${_controller.count.value == -1 ? 0 : NumUtil.numFormat(_controller.count.value)}条回复',
-                    key: ValueKey<int>(_controller.count.value),
+  Widget _buildBottom(ThemeData theme) {
+    return Positioned(
+      left: 0,
+      right: 0,
+      bottom: 0,
+      child: SlideTransition(
+        position: controller.fabAnim,
+        child: Builder(
+          builder: (context) {
+            Widget button() => FloatingActionButton(
+              heroTag: null,
+              onPressed: () {
+                feedBack();
+                controller.onReply(
+                  context,
+                  oid: controller.oid,
+                  replyType: controller.replyType,
+                );
+              },
+              tooltip: '评论动态',
+              child: const Icon(Icons.reply),
+            );
+
+            final bottom = MediaQuery.paddingOf(context).bottom;
+            if (!controller.showDynActionBar) {
+              return Align(
+                alignment: Alignment.bottomRight,
+                child: Padding(
+                  padding: EdgeInsets.only(
+                    right: 14,
+                    bottom: bottom + 14,
                   ),
+                  child: button(),
                 ),
-              ),
-              const Spacer(),
-              SizedBox(
-                height: 35,
-                child: TextButton.icon(
-                  onPressed: _controller.queryBySort,
-                  icon: Icon(
-                    Icons.sort,
-                    size: 16,
-                    color: theme.colorScheme.secondary,
-                  ),
-                  label: Obx(
-                    () => Text(
-                      _controller.sortType.value.label,
-                      style: TextStyle(
-                        fontSize: 13,
-                        color: theme.colorScheme.secondary,
+              );
+            }
+
+            final moduleStat = controller.dynItem.modules.moduleStat;
+            final primary = theme.colorScheme.primary;
+            final outline = theme.colorScheme.outline;
+            final btnStyle = TextButton.styleFrom(
+              padding: const EdgeInsets.symmetric(horizontal: 15),
+              foregroundColor: outline,
+            );
+
+            Widget textIconButton({
+              required IconData icon,
+              required String text,
+              required DynamicStat? stat,
+              required VoidCallback onPressed,
+              IconData? activitedIcon,
+            }) {
+              final status = stat?.status == true;
+              final color = status ? primary : outline;
+              return TextButton.icon(
+                onPressed: onPressed,
+                icon: Icon(
+                  status ? activitedIcon : icon,
+                  size: 16,
+                  color: color,
+                ),
+                style: btnStyle,
+                label: Text(
+                  stat?.count != null ? NumUtil.numFormat(stat!.count) : text,
+                  style: TextStyle(color: color),
+                ),
+              );
+            }
+
+            return Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(right: 14, bottom: 14),
+                  child: button(),
+                ),
+                Container(
+                  decoration: BoxDecoration(
+                    color: theme.colorScheme.surface,
+                    border: Border(
+                      top: BorderSide(
+                        color: theme.colorScheme.outline.withValues(
+                          alpha: 0.08,
+                        ),
                       ),
                     ),
                   ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-      pinned: true,
-    );
-  }
-
-  Widget replyList(
-    ThemeData theme,
-    LoadingState<List<ReplyInfo>?> loadingState,
-  ) {
-    return switch (loadingState) {
-      Loading() => SliverList.builder(
-        itemBuilder: (context, index) {
-          return const VideoReplySkeleton();
-        },
-        itemCount: 8,
-      ),
-      Success(:var response) =>
-        response?.isNotEmpty == true
-            ? SliverList.builder(
-                itemBuilder: (context, index) {
-                  if (index == response.length) {
-                    _controller.onLoadMore();
-                    return Container(
-                      alignment: Alignment.center,
-                      margin: EdgeInsets.only(
-                        bottom: MediaQuery.paddingOf(context).bottom,
-                      ),
-                      height: 125,
-                      child: Text(
-                        _controller.isEnd ? '没有更多了' : '加载中...',
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: theme.colorScheme.outline,
+                  padding: EdgeInsets.only(bottom: bottom),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Expanded(
+                        child: Builder(
+                          builder: (btnContext) {
+                            final forward = moduleStat?.forward;
+                            return textIconButton(
+                              icon: FontAwesomeIcons.shareFromSquare,
+                              text: '转发',
+                              stat: forward,
+                              onPressed: () => showModalBottomSheet(
+                                context: context,
+                                isScrollControlled: true,
+                                useSafeArea: true,
+                                builder: (context) => RepostPanel(
+                                  item: controller.dynItem,
+                                  callback: () {
+                                    if (forward != null) {
+                                      int count = forward.count ?? 0;
+                                      forward.count = count + 1;
+                                      if (btnContext.mounted) {
+                                        (btnContext as Element?)
+                                            ?.markNeedsBuild();
+                                      }
+                                    }
+                                  },
+                                ),
+                              ),
+                            );
+                          },
                         ),
                       ),
-                    );
-                  } else {
-                    return ReplyItemGrpc(
-                      replyItem: response[index],
-                      replyLevel: 1,
-                      replyReply: (replyItem, id) =>
-                          replyReply(context, replyItem, id),
-                      onReply: (replyItem) => _controller.onReply(
-                        context,
-                        replyItem: replyItem,
+                      Expanded(
+                        child: textIconButton(
+                          icon: CustomIcon.share_node,
+                          text: '分享',
+                          stat: null,
+                          onPressed: () => Utils.shareText(
+                            '${HttpString.dynamicShareBaseUrl}/${controller.dynItem.idStr}',
+                          ),
+                        ),
                       ),
-                      onDelete: (item, subIndex) =>
-                          _controller.onRemove(index, item, subIndex),
-                      upMid: _controller.upMid,
-                      callback: _imageCallback,
-                      onCheckReply: (item) =>
-                          _controller.onCheckReply(item, isManual: true),
-                      onToggleTop: (item) => _controller.onToggleTop(
-                        item,
-                        index,
-                        _controller.oid,
-                        _controller.replyType,
+                      Expanded(
+                        child: Builder(
+                          builder: (context) {
+                            return textIconButton(
+                              icon: FontAwesomeIcons.thumbsUp,
+                              activitedIcon: FontAwesomeIcons.solidThumbsUp,
+                              text: '点赞',
+                              stat: moduleStat?.like,
+                              onPressed: () => RequestUtils.onLikeDynamic(
+                                controller.dynItem,
+                                () {
+                                  if (context.mounted) {
+                                    (context as Element?)?.markNeedsBuild();
+                                  }
+                                },
+                              ),
+                            );
+                          },
+                        ),
                       ),
-                    );
-                  }
-                },
-                itemCount: response!.length + 1,
-              )
-            : HttpError(
-                onReload: _controller.onReload,
-              ),
-      Error(:var errMsg) => HttpError(
-        errMsg: errMsg,
-        onReload: _controller.onReload,
+                    ],
+                  ),
+                ),
+              ],
+            );
+          },
+        ),
       ),
-    };
+    );
   }
 }

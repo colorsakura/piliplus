@@ -1,5 +1,4 @@
 import 'package:PiliPlus/common/skeleton/video_reply.dart';
-import 'package:PiliPlus/common/widgets/custom_sliver_persistent_header_delegate.dart';
 import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
 import 'package:PiliPlus/common/widgets/loading_widget/http_error.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
@@ -9,30 +8,34 @@ import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/common/image_type.dart';
 import 'package:PiliPlus/models_new/match/match_info/contest.dart';
 import 'package:PiliPlus/models_new/match/match_info/team.dart';
+import 'package:PiliPlus/pages/common/dyn/common_dyn_page.dart';
 import 'package:PiliPlus/pages/match_info/controller.dart';
 import 'package:PiliPlus/pages/video/reply/widgets/reply_item_grpc.dart';
 import 'package:PiliPlus/pages/video/reply_reply/view.dart';
 import 'package:PiliPlus/utils/date_util.dart';
 import 'package:PiliPlus/utils/feed_back.dart';
-import 'package:PiliPlus/utils/num_util.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:easy_debounce/easy_throttle.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
-class MatchInfoPage extends StatefulWidget {
+class MatchInfoPage extends CommonDynPage {
   const MatchInfoPage({super.key});
 
   @override
   State<MatchInfoPage> createState() => _MatchInfoPageState();
 }
 
-class _MatchInfoPageState extends State<MatchInfoPage> {
-  final _controller = Get.put(
+class _MatchInfoPageState extends CommonDynPageState<MatchInfoPage> {
+  @override
+  final MatchInfoController controller = Get.put(
     MatchInfoController(),
     tag: Utils.generateRandomString(8),
   );
+
+  @override
+  dynamic get arguments => null;
 
   @override
   Widget build(BuildContext context) {
@@ -42,36 +45,39 @@ class _MatchInfoPageState extends State<MatchInfoPage> {
       body: SafeArea(
         bottom: false,
         child: refreshIndicator(
-          onRefresh: _controller.onRefresh,
+          onRefresh: controller.onRefresh,
           child: CustomScrollView(
-            controller: _controller.scrollController,
+            controller: controller.scrollController,
             physics: const AlwaysScrollableScrollPhysics(),
             slivers: [
-              Obx(() => _buildInfo(theme, _controller.infoState.value)),
+              Obx(() => _buildInfo(theme, controller.infoState.value)),
               SliverPadding(
                 padding: EdgeInsets.only(
                   bottom: MediaQuery.paddingOf(context).bottom + 80,
                 ),
                 sliver: Obx(
-                  () => _buildReply(theme, _controller.loadingState.value),
+                  () => _buildReply(theme, controller.loadingState.value),
                 ),
               ),
             ],
           ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        heroTag: null,
-        onPressed: () {
-          feedBack();
-          _controller.onReply(
-            context,
-            oid: _controller.cid,
-            replyType: _controller.replyType,
-          );
-        },
-        tooltip: '评论动态',
-        child: const Icon(Icons.reply),
+      floatingActionButton: SlideTransition(
+        position: controller.fabAnim,
+        child: FloatingActionButton(
+          heroTag: null,
+          onPressed: () {
+            feedBack();
+            controller.onReply(
+              context,
+              oid: controller.oid,
+              replyType: controller.replyType,
+            );
+          },
+          tooltip: '评论动态',
+          child: const Icon(Icons.reply),
+        ),
       ),
     );
   }
@@ -214,46 +220,47 @@ class _MatchInfoPageState extends State<MatchInfoPage> {
         response?.isNotEmpty == true
             ? SliverMainAxisGroup(
                 slivers: [
-                  _buildHeader(theme),
+                  buildReplyHeader(theme),
                   SliverList.builder(
                     itemCount: response!.length,
                     itemBuilder: (context, index) {
                       if (index == response.length - 1) {
-                        _controller.onLoadMore();
+                        controller.onLoadMore();
                       }
                       return ReplyItemGrpc(
                         replyItem: response[index],
                         replyLevel: 1,
                         replyReply: (replyItem, id) =>
                             replyReply(context, replyItem, id),
-                        onReply: (replyItem) => _controller.onReply(
+                        onReply: (replyItem) => controller.onReply(
                           context,
                           replyItem: replyItem,
                         ),
                         onDelete: (item, subIndex) =>
-                            _controller.onRemove(index, item, subIndex),
-                        upMid: _controller.upMid,
+                            controller.onRemove(index, item, subIndex),
+                        upMid: controller.upMid,
                         onCheckReply: (item) =>
-                            _controller.onCheckReply(item, isManual: true),
-                        onToggleTop: (item) => _controller.onToggleTop(
+                            controller.onCheckReply(item, isManual: true),
+                        onToggleTop: (item) => controller.onToggleTop(
                           item,
                           index,
-                          _controller.cid,
-                          _controller.replyType,
+                          controller.oid,
+                          controller.replyType,
                         ),
                       );
                     },
                   ),
                 ],
               )
-            : HttpError(onReload: _controller.onReload),
+            : HttpError(onReload: controller.onReload),
       Error(:var errMsg) => HttpError(
         errMsg: errMsg,
-        onReload: _controller.onReload,
+        onReload: controller.onReload,
       ),
     };
   }
 
+  @override
   void replyReply(BuildContext context, ReplyInfo replyItem, int? id) {
     EasyThrottle.throttle('replyReply', const Duration(milliseconds: 500), () {
       int oid = replyItem.oid.toInt();
@@ -270,69 +277,12 @@ class _MatchInfoPageState extends State<MatchInfoPage> {
               oid: oid,
               rpid: rpid,
               isVideoDetail: false,
-              replyType: _controller.replyType,
+              replyType: controller.replyType,
               firstFloor: replyItem,
             ),
           ),
         ),
       );
     });
-  }
-
-  Widget _buildHeader(ThemeData theme) {
-    return SliverPersistentHeader(
-      delegate: CustomSliverPersistentHeaderDelegate(
-        bgColor: theme.colorScheme.surface,
-        child: Container(
-          height: 45,
-          padding: const EdgeInsets.only(left: 12, right: 6),
-          child: Row(
-            children: [
-              Obx(
-                () {
-                  final count = _controller.count.value;
-                  return AnimatedSwitcher(
-                    duration: const Duration(milliseconds: 400),
-                    transitionBuilder:
-                        (Widget child, Animation<double> animation) {
-                          return ScaleTransition(
-                            scale: animation,
-                            child: child,
-                          );
-                        },
-                    child: Text(
-                      '${count == -1 ? 0 : NumUtil.numFormat(count)}条回复',
-                      key: ValueKey<int>(count),
-                    ),
-                  );
-                },
-              ),
-              const Spacer(),
-              SizedBox(
-                height: 35,
-                child: TextButton.icon(
-                  onPressed: _controller.queryBySort,
-                  icon: Icon(
-                    Icons.sort,
-                    size: 16,
-                    color: theme.colorScheme.secondary,
-                  ),
-                  label: Obx(
-                    () => Text(
-                      _controller.sortType.value.label,
-                      style: TextStyle(
-                        fontSize: 13,
-                        color: theme.colorScheme.secondary,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-      pinned: true,
-    );
   }
 }

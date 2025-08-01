@@ -12,27 +12,29 @@ import 'package:PiliPlus/models/dynamics/result.dart';
 import 'package:PiliPlus/models/model_avatar.dart';
 import 'package:PiliPlus/models_new/article/article_info/data.dart';
 import 'package:PiliPlus/models_new/article/article_view/data.dart';
-import 'package:PiliPlus/pages/common/reply_controller.dart';
+import 'package:PiliPlus/pages/common/dyn/common_dyn_controller.dart';
 import 'package:PiliPlus/utils/accounts.dart';
 import 'package:PiliPlus/utils/storage_pref.dart';
 import 'package:PiliPlus/utils/url_utils.dart';
+import 'package:flutter/rendering.dart' show ScrollDirection;
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 
-class ArticleController extends ReplyController<MainListReply> {
+class ArticleController extends CommonDynController<MainListReply> {
   late String id;
   late String type;
 
   late String url;
-  late int commentType;
   late int commentId;
+  @override
+  int get oid => commentId;
+  late int commentType;
+  @override
+  int get replyType => commentType;
   final summary = Summary();
-
-  RxBool showTitle = false.obs;
 
   late final RxInt topIndex = 0.obs;
 
-  late final horizontalPreview = Pref.horizontalPreview;
   late final showDynActionBar = Pref.showDynActionBar;
 
   @override
@@ -186,19 +188,20 @@ class ArticleController extends ReplyController<MainListReply> {
   }
 
   Future<void> onFav() async {
-    bool isFav = stats.value?.favorite?.status == true;
+    final favorite = stats.value?.favorite;
+    bool isFav = favorite?.status == true;
     final res = type == 'read'
         ? isFav
               ? await FavHttp.delFavArticle(id: commentId)
               : await FavHttp.addFavArticle(id: commentId)
         : await FavHttp.communityAction(opusId: id, action: isFav ? 4 : 3);
     if (res['status']) {
-      stats.value?.favorite?.status = !isFav;
-      var count = stats.value?.favorite?.count ?? 0;
+      favorite?.status = !isFav;
+      var count = favorite?.count ?? 0;
       if (isFav) {
-        stats.value?.favorite?.count = count - 1;
+        favorite?.count = count - 1;
       } else {
-        stats.value?.favorite?.count = count + 1;
+        favorite?.count = count + 1;
       }
       stats.refresh();
       SmartDialog.showToast('${isFav ? '取消' : ''}收藏成功');
@@ -208,23 +211,40 @@ class ArticleController extends ReplyController<MainListReply> {
   }
 
   Future<void> onLike() async {
-    bool isLike = stats.value?.like?.status == true;
+    final like = stats.value?.like;
+    bool isLike = like?.status == true;
     final res = await DynamicsHttp.thumbDynamic(
       dynamicId: opusData?.idStr ?? articleData?.dynIdStr,
       up: isLike ? 2 : 1,
     );
     if (res['status']) {
-      stats.value?.like?.status = !isLike;
-      int count = stats.value?.like?.count ?? 0;
+      like?.status = !isLike;
+      int count = like?.count ?? 0;
       if (isLike) {
-        stats.value?.like?.count = count - 1;
+        like?.count = count - 1;
       } else {
-        stats.value?.like?.count = count + 1;
+        like?.count = count + 1;
       }
       stats.refresh();
       SmartDialog.showToast(!isLike ? '点赞成功' : '取消赞');
     } else {
       SmartDialog.showToast(res['msg']);
+    }
+  }
+
+  @override
+  void listener() {
+    showTitle.value = scrollController.positions.last.pixels >= 45;
+    final ScrollDirection direction1 =
+        scrollController.positions.first.userScrollDirection;
+    late final ScrollDirection direction2 =
+        scrollController.positions.last.userScrollDirection;
+    if (direction1 == ScrollDirection.forward ||
+        direction2 == ScrollDirection.forward) {
+      showFab();
+    } else if (direction1 == ScrollDirection.reverse ||
+        direction2 == ScrollDirection.reverse) {
+      hideFab();
     }
   }
 }

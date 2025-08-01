@@ -1,14 +1,12 @@
-import 'package:PiliPlus/http/dynamics.dart';
 import 'package:PiliPlus/models/dynamics/result.dart';
 import 'package:PiliPlus/pages/dynamics_repost/view.dart';
-import 'package:PiliPlus/utils/feed_back.dart';
 import 'package:PiliPlus/utils/num_util.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
+import 'package:PiliPlus/utils/request_utils.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-class ActionPanel extends StatefulWidget {
+class ActionPanel extends StatelessWidget {
   const ActionPanel({
     super.key,
     required this.item,
@@ -16,158 +14,91 @@ class ActionPanel extends StatefulWidget {
   final DynamicItemModel item;
 
   @override
-  State<ActionPanel> createState() => _ActionPanelState();
-}
-
-class _ActionPanelState extends State<ActionPanel> {
-  bool isProcessing = false;
-  Future<void> handleState(Future Function() action) async {
-    if (!isProcessing) {
-      isProcessing = true;
-      await action();
-      isProcessing = false;
-    }
-  }
-
-  // 动态点赞
-  Future<void> onLikeDynamic() async {
-    feedBack();
-    final item = widget.item;
-    String dynamicId = item.idStr!;
-    // 1 已点赞 2 不喜欢 0 未操作
-    DynamicStat? like = item.modules.moduleStat?.like;
-    int count = like?.count ?? 0;
-    bool status = like?.status == true;
-    int up = status ? 2 : 1;
-    var res = await DynamicsHttp.thumbDynamic(dynamicId: dynamicId, up: up);
-    if (res['status']) {
-      SmartDialog.showToast(!status ? '点赞成功' : '取消赞');
-      if (up == 1) {
-        item.modules.moduleStat?.like
-          ?..count = count + 1
-          ..status = true;
-      } else {
-        item.modules.moduleStat?.like
-          ?..count = count - 1
-          ..status = false;
-      }
-      if (mounted) {
-        setState(() {});
-      }
-    } else {
-      SmartDialog.showToast(res['msg']);
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final color = theme.colorScheme.outline;
     final primary = theme.colorScheme.primary;
     final outline = theme.colorScheme.outline;
+    final moduleStat = item.modules.moduleStat!;
+    final forward = moduleStat.forward!;
+    final comment = moduleStat.comment!;
+    final like = moduleStat.like!;
+    final btnStyle = TextButton.styleFrom(
+      padding: const EdgeInsets.symmetric(horizontal: 15),
+      foregroundColor: outline,
+    );
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
         Expanded(
-          flex: 1,
           child: TextButton.icon(
             onPressed: () => showModalBottomSheet(
               context: context,
               isScrollControlled: true,
               useSafeArea: true,
-              builder: (context) => RepostPanel(
-                item: widget.item,
+              builder: (_) => RepostPanel(
+                item: item,
                 callback: () {
-                  int count =
-                      widget.item.modules.moduleStat?.forward?.count ?? 0;
-                  widget.item.modules.moduleStat!.forward!.count = count + 1;
-                  setState(() {});
+                  int count = forward.count ?? 0;
+                  forward.count = count + 1;
+                  if (context.mounted) {
+                    (context as Element?)?.markNeedsBuild();
+                  }
                 },
               ),
             ),
             icon: Icon(
               FontAwesomeIcons.shareFromSquare,
               size: 16,
-              color: color,
+              color: outline,
               semanticLabel: "转发",
             ),
-            style: TextButton.styleFrom(
-              padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
-              foregroundColor: outline,
-            ),
+            style: btnStyle,
             label: Text(
-              widget.item.modules.moduleStat!.forward!.count != null
-                  ? NumUtil.numFormat(
-                      widget.item.modules.moduleStat!.forward!.count,
-                    )
-                  : '转发',
+              forward.count != null ? NumUtil.numFormat(forward.count) : '转发',
             ),
           ),
         ),
         Expanded(
-          flex: 1,
           child: TextButton.icon(
             onPressed: () =>
-                PageUtils.pushDynDetail(widget.item, 1, action: 'comment'),
+                PageUtils.pushDynDetail(item, 1, action: 'comment'),
             icon: Icon(
               FontAwesomeIcons.comment,
               size: 16,
-              color: color,
+              color: outline,
               semanticLabel: "评论",
             ),
-            style: TextButton.styleFrom(
-              padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
-              foregroundColor: outline,
-            ),
+            style: btnStyle,
             label: Text(
-              widget.item.modules.moduleStat!.comment!.count != null
-                  ? NumUtil.numFormat(
-                      widget.item.modules.moduleStat!.comment!.count,
-                    )
-                  : '评论',
+              comment.count != null ? NumUtil.numFormat(comment.count) : '评论',
             ),
           ),
         ),
         Expanded(
-          flex: 1,
           child: TextButton.icon(
-            onPressed: () => handleState(onLikeDynamic),
+            onPressed: () => RequestUtils.onLikeDynamic(item, () {
+              if (context.mounted) {
+                (context as Element?)?.markNeedsBuild();
+              }
+            }),
             icon: Icon(
-              widget.item.modules.moduleStat!.like!.status!
+              like.status!
                   ? FontAwesomeIcons.solidThumbsUp
                   : FontAwesomeIcons.thumbsUp,
               size: 16,
-              color: widget.item.modules.moduleStat!.like!.status!
-                  ? primary
-                  : color,
-              semanticLabel: widget.item.modules.moduleStat!.like!.status!
-                  ? "已赞"
-                  : "点赞",
+              color: like.status! ? primary : outline,
+              semanticLabel: like.status! ? "已赞" : "点赞",
             ),
-            style: TextButton.styleFrom(
-              padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
-              foregroundColor: outline,
-            ),
+            style: btnStyle,
             label: AnimatedSwitcher(
               duration: const Duration(milliseconds: 400),
               transitionBuilder: (Widget child, Animation<double> animation) {
                 return ScaleTransition(scale: animation, child: child);
               },
               child: Text(
-                widget.item.modules.moduleStat!.like!.count != null
-                    ? NumUtil.numFormat(
-                        widget.item.modules.moduleStat!.like!.count,
-                      )
-                    : '点赞',
-                key: ValueKey<String>(
-                  widget.item.modules.moduleStat!.like!.count?.toString() ??
-                      '点赞',
-                ),
-                style: TextStyle(
-                  color: widget.item.modules.moduleStat!.like!.status!
-                      ? primary
-                      : color,
-                ),
+                like.count != null ? NumUtil.numFormat(like.count) : '点赞',
+                key: ValueKey<String>(like.count?.toString() ?? '点赞'),
+                style: TextStyle(color: like.status! ? primary : outline),
               ),
             ),
           ),
