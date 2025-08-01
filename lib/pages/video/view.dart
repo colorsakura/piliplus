@@ -104,12 +104,12 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
     return videoDetailController.plPlayerController.horizontalSeasonPanel &&
         (videoDetail.ugcSeason != null ||
             ((videoDetail.pages?.length ?? 0) > 1)) &&
-        context.orientation == Orientation.landscape;
+        context.isLandscape;
   }
 
   bool get _horizontalPreview =>
       videoDetailController.plPlayerController.horizontalPreview &&
-      context.orientation == Orientation.landscape;
+      context.isLandscape;
 
   StreamSubscription? _listenerFS;
 

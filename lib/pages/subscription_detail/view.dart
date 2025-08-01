@@ -28,6 +28,7 @@ class _SubDetailPageState extends State<SubDetailPage> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final padding = MediaQuery.paddingOf(context);
     return Scaffold(
       body: SafeArea(
         top: false,
@@ -38,11 +39,11 @@ class _SubDetailPageState extends State<SubDetailPage> {
             controller: _subDetailController.scrollController,
             physics: const AlwaysScrollableScrollPhysics(),
             slivers: [
-              _buildAppBar(theme),
+              _buildAppBar(theme, padding),
               SliverPadding(
                 padding: EdgeInsets.only(
                   top: 7,
-                  bottom: MediaQuery.paddingOf(context).bottom + 80,
+                  bottom: padding.bottom + 80,
                 ),
                 sliver: Obx(
                   () => _buildBody(_subDetailController.loadingState.value),
@@ -90,7 +91,7 @@ class _SubDetailPageState extends State<SubDetailPage> {
     };
   }
 
-  Widget _buildAppBar(ThemeData theme) {
+  Widget _buildAppBar(ThemeData theme, EdgeInsets padding) {
     final style = TextStyle(
       fontSize: 12.5,
       color: theme.colorScheme.outline,
@@ -125,7 +126,7 @@ class _SubDetailPageState extends State<SubDetailPage> {
             ),
           ),
           padding: EdgeInsets.only(
-            top: kToolbarHeight + MediaQuery.paddingOf(context).top + 10,
+            top: kToolbarHeight + padding.top + 10,
             left: 12,
             right: 12,
             bottom: 12,

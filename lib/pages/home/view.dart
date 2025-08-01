@@ -32,8 +32,7 @@ class _HomePageState extends State<HomePage>
     final theme = Theme.of(context);
     return Column(
       children: [
-        if (!_homeController.useSideBar &&
-            context.orientation == Orientation.portrait)
+        if (!_homeController.useSideBar && context.isPortrait)
           customAppBar(theme),
         if (_homeController.tabs.length > 1)
           Material(

@@ -53,6 +53,7 @@ class _DynamicDetailPageState extends CommonDynPageState<DynamicDetailPage> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final isPortrait = context.isPortrait;
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
@@ -75,8 +76,9 @@ class _DynamicDetailPageState extends CommonDynPageState<DynamicDetailPage> {
             },
           ),
         ),
-        actions: context.orientation == Orientation.landscape
-            ? [
+        actions: isPortrait
+            ? null
+            : [
                 IconButton(
                   tooltip: '页面比例调节',
                   onPressed: () => showDialog(
@@ -119,53 +121,51 @@ class _DynamicDetailPageState extends CommonDynPageState<DynamicDetailPage> {
                   ),
                 ),
                 const SizedBox(width: 16),
-              ]
-            : null,
+              ],
       ),
       body: SafeArea(
         top: false,
         bottom: false,
-        child: context.orientation == Orientation.portrait
+        child: isPortrait
             ? refreshIndicator(
                 onRefresh: controller.onRefresh,
-                child: _buildBody(context.orientation, theme),
+                child: _buildBody(isPortrait, theme),
               )
-            : _buildBody(context.orientation, theme),
+            : _buildBody(isPortrait, theme),
       ),
     );
   }
 
-  Widget _buildBody(Orientation orientation, ThemeData theme) => Stack(
+  Widget _buildBody(bool isPortrait, ThemeData theme) => Stack(
     clipBehavior: Clip.none,
     children: [
       Builder(
         builder: (context) {
           double padding = max(context.width / 2 - Grid.smallCardWidth, 0);
-          if (orientation == Orientation.portrait) {
+          if (isPortrait) {
             return CustomScrollView(
               controller: controller.scrollController,
               physics: const AlwaysScrollableScrollPhysics(),
-              slivers:
-                  [
-                        SliverToBoxAdapter(
-                          child: DynamicPanel(
-                            item: controller.dynItem,
-                            isDetail: true,
-                            callback: imageCallback,
-                          ),
+              slivers: [
+                SliverPadding(
+                  padding: EdgeInsets.symmetric(horizontal: padding),
+                  sliver: SliverMainAxisGroup(
+                    slivers: [
+                      SliverToBoxAdapter(
+                        child: DynamicPanel(
+                          item: controller.dynItem,
+                          isDetail: true,
+                          callback: imageCallback,
                         ),
-                        buildReplyHeader(theme),
-                        Obx(
-                          () => replyList(theme, controller.loadingState.value),
-                        ),
-                      ]
-                      .map<Widget>(
-                        (e) => SliverPadding(
-                          padding: EdgeInsets.symmetric(horizontal: padding),
-                          sliver: e,
-                        ),
-                      )
-                      .toList(),
+                      ),
+                      buildReplyHeader(theme),
+                      Obx(
+                        () => replyList(theme, controller.loadingState.value),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
             );
           } else {
             return Row(

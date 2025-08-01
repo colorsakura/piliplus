@@ -97,6 +97,7 @@ class _VideoReplyPanelState extends State<VideoReplyPanel>
   Widget build(BuildContext context) {
     super.build(context);
     final theme = Theme.of(context);
+    final bottom = MediaQuery.paddingOf(context).bottom;
     return refreshIndicator(
       onRefresh: _videoReplyController.onRefresh,
       child: Stack(
@@ -158,13 +159,16 @@ class _VideoReplyPanelState extends State<VideoReplyPanel>
                 ),
               ),
               Obx(
-                () =>
-                    _buildBody(theme, _videoReplyController.loadingState.value),
+                () => _buildBody(
+                  theme,
+                  bottom,
+                  _videoReplyController.loadingState.value,
+                ),
               ),
             ],
           ),
           Positioned(
-            bottom: MediaQuery.paddingOf(context).bottom + 14,
+            bottom: bottom + 14,
             right: 14,
             child: SlideTransition(
               position: _videoReplyController.anim,
@@ -188,7 +192,7 @@ class _VideoReplyPanelState extends State<VideoReplyPanel>
     );
   }
 
-  Widget _buildBody(ThemeData theme, LoadingState loadingState) {
+  Widget _buildBody(ThemeData theme, double bottom, LoadingState loadingState) {
     return switch (loadingState) {
       Loading() => SliverList.builder(
         itemBuilder: (BuildContext context, index) {
@@ -200,7 +204,6 @@ class _VideoReplyPanelState extends State<VideoReplyPanel>
         response?.isNotEmpty == true
             ? SliverList.builder(
                 itemBuilder: (context, index) {
-                  double bottom = MediaQuery.paddingOf(context).bottom;
                   if (index == response.length) {
                     _videoReplyController.onLoadMore();
                     return Container(

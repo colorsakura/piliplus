@@ -81,10 +81,11 @@ class _VideoIntroPanelState extends State<VideoIntroPanel>
       fadeCurve: Curves.ease,
       sizeCurve: Curves.linear,
     );
+    final isPortrait = context.isPortrait;
     return SliverLayoutBuilder(
       builder: (context, constraints) {
         bool isHorizontal =
-            context.orientation == Orientation.landscape &&
+            !isPortrait &&
             constraints.crossAxisExtent >
                 constraints.viewportMainAxisExtent * 1.25;
         return SliverPadding(
@@ -125,8 +126,7 @@ class _VideoIntroPanelState extends State<VideoIntroPanel>
                                     () {
                                       if (mid != null) {
                                         feedBack();
-                                        if (context.orientation ==
-                                                Orientation.landscape &&
+                                        if (!isPortrait &&
                                             introController
                                                 .horizontalMemberPage) {
                                           widget.onShowMemberPage(mid);
@@ -151,7 +151,14 @@ class _VideoIntroPanelState extends State<VideoIntroPanel>
                                   child: Row(
                                     spacing: 25,
                                     children: videoDetail.staff!
-                                        .map((e) => _buildStaff(theme, mid, e))
+                                        .map(
+                                          (e) => _buildStaff(
+                                            theme,
+                                            isPortrait,
+                                            mid,
+                                            e,
+                                          ),
+                                        )
                                         .toList(),
                                   ),
                                 ),
@@ -304,11 +311,10 @@ class _VideoIntroPanelState extends State<VideoIntroPanel>
                       // 合集
                       if (!isLoading &&
                           videoDetail.ugcSeason != null &&
-                          (context.orientation != Orientation.landscape ||
-                              (context.orientation == Orientation.landscape &&
-                                  !videoDetailCtr
-                                      .plPlayerController
-                                      .horizontalSeasonPanel)))
+                          (isPortrait ||
+                              !videoDetailCtr
+                                  .plPlayerController
+                                  .horizontalSeasonPanel))
                         SeasonPanel(
                           heroTag: widget.heroTag,
                           changeFuc: introController.changeSeasonOrbangu,
@@ -318,11 +324,10 @@ class _VideoIntroPanelState extends State<VideoIntroPanel>
                       if (!isLoading &&
                           videoDetail.pages != null &&
                           videoDetail.pages!.length > 1 &&
-                          (context.orientation != Orientation.landscape ||
-                              (context.orientation == Orientation.landscape &&
-                                  !videoDetailCtr
-                                      .plPlayerController
-                                      .horizontalSeasonPanel))) ...[
+                          (isPortrait ||
+                              !videoDetailCtr
+                                  .plPlayerController
+                                  .horizontalSeasonPanel)) ...[
                         PagesPanel(
                           heroTag: widget.heroTag,
                           videoIntroController: introController,
@@ -701,12 +706,17 @@ class _VideoIntroPanelState extends State<VideoIntroPanel>
     return TextSpan(children: spanChildren);
   }
 
-  Widget _buildStaff(ThemeData theme, int? ownerMid, Staff item) {
+  Widget _buildStaff(
+    ThemeData theme,
+    bool isPortrait,
+    int? ownerMid,
+    Staff item,
+  ) {
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: () {
         if (item.mid == ownerMid &&
-            context.orientation == Orientation.landscape &&
+            !isPortrait &&
             introController.horizontalMemberPage) {
           widget.onShowMemberPage(ownerMid);
         } else {

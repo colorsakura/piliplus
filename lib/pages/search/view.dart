@@ -29,6 +29,7 @@ class _SearchPageState extends State<SearchPage> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final isPortrait = context.isPortrait;
     return Scaffold(
       appBar: AppBar(
         shape: Border(
@@ -78,9 +79,9 @@ class _SearchPageState extends State<SearchPage> {
         padding: MediaQuery.paddingOf(context).copyWith(top: 0),
         children: [
           if (_searchController.searchSuggestion) _searchSuggest(),
-          if (context.orientation == Orientation.portrait) ...[
+          if (isPortrait) ...[
             if (_searchController.enableHotKey) hotSearch(theme),
-            _history(theme),
+            _history(theme, isPortrait),
             if (_searchController.enableSearchRcmd) hotSearch(theme, false),
           ] else
             Row(
@@ -97,7 +98,7 @@ class _SearchPageState extends State<SearchPage> {
                       ],
                     ),
                   ),
-                Expanded(child: _history(theme)),
+                Expanded(child: _history(theme, isPortrait)),
               ],
             ),
         ],
@@ -257,7 +258,7 @@ class _SearchPageState extends State<SearchPage> {
     );
   }
 
-  Widget _history(ThemeData theme) {
+  Widget _history(ThemeData theme, bool isPortrait) {
     return Obx(
       () {
         if (_searchController.historyList.isEmpty) {
@@ -267,7 +268,7 @@ class _SearchPageState extends State<SearchPage> {
         return Padding(
           padding: EdgeInsets.fromLTRB(
             10,
-            context.orientation == Orientation.landscape
+            !isPortrait
                 ? 25
                 : _searchController.enableHotKey
                 ? 0

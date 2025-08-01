@@ -40,6 +40,7 @@ class _MemberOpusState extends State<MemberOpus>
   @override
   Widget build(BuildContext context) {
     super.build(context);
+    final bottom = MediaQuery.paddingOf(context).bottom;
     return Stack(
       children: [
         refreshIndicator(
@@ -52,7 +53,7 @@ class _MemberOpusState extends State<MemberOpus>
                   top: widget.isSingle ? 12 : 0,
                   left: StyleString.safeSpace,
                   right: StyleString.safeSpace,
-                  bottom: MediaQuery.paddingOf(context).bottom + 90,
+                  bottom: bottom + 90,
                 ),
                 sliver: Obx(() => _buildBody(_controller.loadingState.value)),
               ),
@@ -62,7 +63,7 @@ class _MemberOpusState extends State<MemberOpus>
         if (_controller.filter?.isNotEmpty == true)
           Positioned(
             right: 16,
-            bottom: MediaQuery.paddingOf(context).bottom + 16,
+            bottom: bottom + 16,
             child: FloatingActionButton.extended(
               onPressed: () => showDialog(
                 context: context,

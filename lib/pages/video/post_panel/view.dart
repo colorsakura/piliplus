@@ -14,6 +14,7 @@ import 'package:PiliPlus/pages/common/common_collapse_slide_page.dart';
 import 'package:PiliPlus/pages/video/controller.dart';
 import 'package:PiliPlus/plugin/pl_player/controller.dart';
 import 'package:PiliPlus/utils/duration_util.dart';
+import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/storage_pref.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart' show kDebugMode;
@@ -39,10 +40,10 @@ class PostPanel extends CommonCollapseSlidePage {
 }
 
 class _PostPanelState extends CommonCollapseSlidePageState<PostPanel> {
-  VideoDetailController get videoDetailController =>
+  late final VideoDetailController videoDetailController =
       widget.videoDetailController;
-  PlPlayerController get plPlayerController => widget.plPlayerController;
-  List<PostSegmentModel>? get list => videoDetailController.postList;
+  late final PlPlayerController plPlayerController = widget.plPlayerController;
+  late final List<PostSegmentModel>? list = videoDetailController.postList;
 
   late final double videoDuration =
       plPlayerController.durationSeconds.value.inMilliseconds / 1000;
@@ -95,60 +96,58 @@ class _PostPanelState extends CommonCollapseSlidePageState<PostPanel> {
 
   @override
   Widget buildList(ThemeData theme) {
-    return list?.isNotEmpty == true
-        ? Stack(
-            clipBehavior: Clip.none,
-            children: [
-              SingleChildScrollView(
-                controller: ScrollController(),
-                physics: const AlwaysScrollableScrollPhysics(),
-                padding: EdgeInsets.only(
-                  bottom: 88 + MediaQuery.paddingOf(context).bottom,
-                ),
-                child: Column(
-                  children: List.generate(
-                    list!.length,
-                    (index) {
-                      return _buildItem(theme, index, list![index]);
-                    },
-                  ),
-                ),
-              ),
-              Positioned(
-                right: 16,
-                bottom: 16 + MediaQuery.paddingOf(context).bottom,
-                child: FloatingActionButton(
-                  tooltip: '提交',
-                  onPressed: () => showDialog(
-                    context: context,
-                    builder: (context) => AlertDialog(
-                      title: const Text('确定无误再提交'),
-                      actions: [
-                        TextButton(
-                          onPressed: Get.back,
-                          child: Text(
-                            '取消',
-                            style: TextStyle(
-                              color: theme.colorScheme.outline,
-                            ),
-                          ),
-                        ),
-                        TextButton(
-                          onPressed: () {
-                            Get.back();
-                            _onPost();
-                          },
-                          child: const Text('确定提交'),
-                        ),
-                      ],
+    if (list.isNullOrEmpty) {
+      return errorWidget();
+    }
+    final bottom = MediaQuery.paddingOf(context).bottom;
+    return Stack(
+      clipBehavior: Clip.none,
+      children: [
+        SingleChildScrollView(
+          controller: ScrollController(),
+          physics: const AlwaysScrollableScrollPhysics(),
+          padding: EdgeInsets.only(bottom: 88 + bottom),
+          child: Column(
+            children: List.generate(
+              list!.length,
+              (index) {
+                return _buildItem(theme, index, list![index]);
+              },
+            ),
+          ),
+        ),
+        Positioned(
+          right: 16,
+          bottom: 16 + bottom,
+          child: FloatingActionButton(
+            tooltip: '提交',
+            onPressed: () => showDialog(
+              context: context,
+              builder: (context) => AlertDialog(
+                title: const Text('确定无误再提交'),
+                actions: [
+                  TextButton(
+                    onPressed: Get.back,
+                    child: Text(
+                      '取消',
+                      style: TextStyle(color: theme.colorScheme.outline),
                     ),
                   ),
-                  child: const Icon(Icons.check),
-                ),
+                  TextButton(
+                    onPressed: () {
+                      Get.back();
+                      _onPost();
+                    },
+                    child: const Text('确定提交'),
+                  ),
+                ],
               ),
-            ],
-          )
-        : errorWidget();
+            ),
+            child: const Icon(Icons.check),
+          ),
+        ),
+      ],
+    );
   }
 
   void updateSegment({
@@ -225,9 +224,7 @@ class _PostPanelState extends CommonCollapseSlidePageState<PostPanel> {
                 content: TextFormField(
                   initialValue: value,
                   autofocus: true,
-                  onChanged: (value) {
-                    initV = value;
-                  },
+                  onChanged: (value) => initV = value,
                   inputFormatters: [
                     FilteringTextInputFormatter.allow(RegExp(r'[\d:.]+')),
                   ],

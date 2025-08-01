@@ -44,8 +44,7 @@ class _VotePanelState extends State<VotePanel> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final usePortrait =
-        context.orientation == Orientation.portrait || context.isTablet;
+    final usePortrait = context.isPortrait || context.isTablet;
     final right = [
       Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,

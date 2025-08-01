@@ -255,8 +255,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
     bool isPage = videoDetail?.pages != null && videoDetail!.pages!.length > 1;
     bool isPgc = pgcIntroController != null;
     bool anySeason = isSeason || isPage || isPgc;
-    double widgetWidth =
-        isFullScreen && context.orientation == Orientation.landscape ? 42 : 35;
+    double widgetWidth = isFullScreen && context.isLandscape ? 42 : 35;
     Map<BottomControlType, Widget> videoProgressWidgets = {
       /// 上一集
       BottomControlType.pre: Container(

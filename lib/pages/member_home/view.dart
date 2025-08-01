@@ -44,7 +44,7 @@ class _MemberHomeState extends State<MemberHome>
   }
 
   Widget _buildBody(LoadingState<SpaceData?> loadingState) {
-    final isVertical = context.orientation == Orientation.portrait;
+    final isVertical = context.isPortrait;
     final setting = _ctr.spaceSetting;
     final isOwner = setting != null;
     final color = Theme.of(context).colorScheme.outline;

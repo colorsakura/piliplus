@@ -49,7 +49,7 @@ class _MainAppState extends State<MainApp>
     _mainController
       ..checkUnreadDynamic()
       ..checkDefaultSearch(true)
-      ..checkUnread(context.orientation == Orientation.portrait);
+      ..checkUnread(context.isPortrait);
     super.didPopNext();
   }
 
@@ -65,7 +65,7 @@ class _MainAppState extends State<MainApp>
       _mainController
         ..checkUnreadDynamic()
         ..checkDefaultSearch(true)
-        ..checkUnread(context.orientation == Orientation.portrait);
+        ..checkUnread(context.isPortrait);
     }
   }
 
@@ -89,7 +89,7 @@ class _MainAppState extends State<MainApp>
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final bool isPortrait = context.orientation == Orientation.portrait;
+    final bool isPortrait = context.isPortrait;
     final useBottomNav = isPortrait && !_mainController.useSideBar;
     Widget? bottomNav = useBottomNav
         ? _mainController.navigationBars.length > 1

@@ -57,9 +57,8 @@ class _VideoReplyReplyPanelState
   ReplyInfo? get firstFloor => widget.firstFloor ?? _controller.firstFloor;
 
   bool get _horizontalPreview =>
-      _controller.horizontalPreview &&
-      context.orientation == Orientation.landscape;
-  late Function(List<String> imgList, int index)? _imageCallback;
+      _controller.horizontalPreview && context.isLandscape;
+  Function(List<String> imgList, int index)? _imageCallback;
 
   Animation<Color?>? colorAnimation;
 

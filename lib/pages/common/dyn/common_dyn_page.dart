@@ -24,8 +24,7 @@ abstract class CommonDynPageState<T extends CommonDynPage> extends State<T>
   late final scaffoldKey = GlobalKey<ScaffoldState>();
 
   bool get horizontalPreview =>
-      context.orientation == Orientation.landscape &&
-      controller.horizontalPreview;
+      context.isLandscape && controller.horizontalPreview;
   Function(List<String> imgList, int index)? imageCallback;
 
   dynamic get arguments;
@@ -191,7 +190,7 @@ abstract class CommonDynPageState<T extends CommonDynPage> extends State<T>
           ),
         ),
       );
-      if (this.context.orientation == Orientation.portrait) {
+      if (this.context.isPortrait) {
         Get.to(
           replyReplyPage,
           routeName: 'dynamicDetail-Copy',

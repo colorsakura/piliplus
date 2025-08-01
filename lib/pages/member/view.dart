@@ -331,15 +331,15 @@ class _MemberPageState extends State<MemberPage> {
   );
 
   Widget _buildAppBar({bool isV = true}) {
+    final top = MediaQuery.paddingOf(context).top;
     return DynamicSliverAppBar(
       pinned: true,
       primary: false,
       automaticallyImplyLeading: false,
-      toolbarHeight: kToolbarHeight + MediaQuery.paddingOf(context).top,
+      toolbarHeight: kToolbarHeight + top,
       flexibleSpace: _buildUserInfo(_userController.loadingState.value, isV),
       callback: (value) {
-        _userController.offset =
-            (value - 56 - MediaQuery.paddingOf(context).top).toInt();
+        _userController.offset = (value - 56 - top).toInt();
         listener();
       },
     );

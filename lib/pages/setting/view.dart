@@ -86,7 +86,7 @@ class _SettingPageState extends State<SettingPage> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    _isPortrait = context.orientation == Orientation.portrait;
+    _isPortrait = context.isPortrait;
     return Scaffold(
       appBar: AppBar(
         title: _isPortrait ? const Text('设置') : Text(_type.title),
@@ -168,9 +168,10 @@ class _SettingPageState extends State<SettingPage> {
     TextStyle subTitleStyle = theme.textTheme.labelMedium!.copyWith(
       color: theme.colorScheme.outline,
     );
+    final padding = MediaQuery.paddingOf(context);
     return ListView(
       children: [
-        _buildSearchItem(theme),
+        _buildSearchItem(theme, padding),
         ..._items
             .sublist(0, _items.length - 1)
             .map(
@@ -204,7 +205,7 @@ class _SettingPageState extends State<SettingPage> {
           leading: Icon(_items.last.icon),
           title: Text(_items.last.type.title, style: titleStyle),
         ),
-        SizedBox(height: MediaQuery.paddingOf(context).bottom + 80),
+        SizedBox(height: padding.bottom + 80),
       ],
     );
   }
@@ -276,9 +277,9 @@ class _SettingPageState extends State<SettingPage> {
     );
   }
 
-  Widget _buildSearchItem(ThemeData theme) => Padding(
+  Widget _buildSearchItem(ThemeData theme, EdgeInsets padding) => Padding(
     padding: EdgeInsets.only(
-      left: 16 + MediaQuery.paddingOf(context).left,
+      left: 16 + padding.left,
       right: 16,
       bottom: 8,
     ),

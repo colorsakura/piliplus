@@ -29,7 +29,7 @@ class _LiveDmBlockPageState extends State<LiveDmBlockPage> {
 
   @override
   Widget build(BuildContext context) {
-    isPortrait = context.orientation == Orientation.portrait;
+    isPortrait = context.isPortrait;
     final theme = Theme.of(context);
 
     Widget tabBar = TabBar(

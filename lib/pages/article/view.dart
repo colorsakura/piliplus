@@ -71,9 +71,10 @@ class _ArticlePageState extends CommonDynPageState<ArticlePage> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final isPortrait = context.isPortrait;
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: _buildAppBar,
+      appBar: _buildAppBar(isPortrait),
       body: SafeArea(
         top: false,
         bottom: false,
@@ -85,8 +86,6 @@ class _ArticlePageState extends CommonDynPageState<ArticlePage> {
               bottom: false,
               child: Builder(
                 builder: (context) {
-                  final isPortrait =
-                      context.orientation == Orientation.portrait;
                   double padding = max(
                     context.width / 2 - Grid.smallCardWidth,
                     0,
@@ -495,7 +494,7 @@ class _ArticlePageState extends CommonDynPageState<ArticlePage> {
     };
   }
 
-  PreferredSizeWidget get _buildAppBar => AppBar(
+  PreferredSizeWidget _buildAppBar(bool isPortrait) => AppBar(
     title: Obx(() {
       if (controller.isLoaded.value && controller.showTitle.value) {
         return Text(controller.summary.title ?? '');
@@ -504,7 +503,7 @@ class _ArticlePageState extends CommonDynPageState<ArticlePage> {
     }),
     actions: [
       const SizedBox(width: 4),
-      if (context.orientation == Orientation.landscape)
+      if (!isPortrait)
         IconButton(
           tooltip: '页面比例调节',
           onPressed: () => showDialog(

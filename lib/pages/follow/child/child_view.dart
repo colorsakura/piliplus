@@ -42,13 +42,28 @@ class _FollowChildPageState extends State<FollowChildPage>
   @override
   Widget build(BuildContext context) {
     super.build(context);
+    final padding = MediaQuery.paddingOf(context);
+    Widget child = refreshIndicator(
+      onRefresh: _followController.onRefresh,
+      child: CustomScrollView(
+        controller: _followController.scrollController,
+        physics: const AlwaysScrollableScrollPhysics(),
+        slivers: [
+          SliverPadding(
+            padding: EdgeInsets.only(bottom: padding.bottom + 80),
+            sliver: Obx(
+              () => _buildBody(_followController.loadingState.value),
+            ),
+          ),
+        ],
+      ),
+    );
     if (widget.onSelect != null ||
         (widget.controller?.isOwner == true && widget.tagid == null)) {
-      final padding = MediaQuery.paddingOf(context);
       return Stack(
         clipBehavior: Clip.none,
         children: [
-          _child,
+          child,
           Positioned(
             right: 16 + padding.right,
             bottom: 16 + padding.bottom,
@@ -66,24 +81,8 @@ class _FollowChildPageState extends State<FollowChildPage>
         ],
       );
     }
-    return _child;
+    return child;
   }
-
-  Widget get _child => refreshIndicator(
-    onRefresh: _followController.onRefresh,
-    child: CustomScrollView(
-      controller: _followController.scrollController,
-      physics: const AlwaysScrollableScrollPhysics(),
-      slivers: [
-        SliverPadding(
-          padding: EdgeInsets.only(
-            bottom: MediaQuery.paddingOf(context).bottom + 80,
-          ),
-          sliver: Obx(() => _buildBody(_followController.loadingState.value)),
-        ),
-      ],
-    ),
-  );
 
   Widget _buildBody(LoadingState<List<FollowItemModel>?> loadingState) {
     return switch (loadingState) {
