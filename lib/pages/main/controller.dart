@@ -10,6 +10,7 @@ import 'package:PiliPlus/models_new/msgfeed_unread/data.dart';
 import 'package:PiliPlus/models_new/single_unread/data.dart';
 import 'package:PiliPlus/pages/dynamics/controller.dart';
 import 'package:PiliPlus/pages/home/controller.dart';
+import 'package:PiliPlus/pages/mine/view.dart';
 import 'package:PiliPlus/services/account_service.dart';
 import 'package:PiliPlus/utils/feed_back.dart';
 import 'package:PiliPlus/utils/storage.dart';
@@ -254,10 +255,20 @@ class MainController extends GetxController
     }
   }
 
+  int? _mineIndex;
   void toMinePage() {
-    final index = navigationBars.indexOf(NavigationBarType.mine);
-    if (index != -1) {
-      setIndex(index);
+    _mineIndex ??= navigationBars.indexOf(NavigationBarType.mine);
+    if (_mineIndex != -1) {
+      setIndex(_mineIndex!);
+    } else {
+      Get.to(
+        const Material(
+          child: SafeArea(
+            bottom: false,
+            child: MinePage(),
+          ),
+        ),
+      );
     }
   }
 

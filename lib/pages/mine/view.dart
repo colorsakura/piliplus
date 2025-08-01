@@ -9,6 +9,7 @@ import 'package:PiliPlus/models/common/nav_bar_config.dart';
 import 'package:PiliPlus/models/user/info.dart';
 import 'package:PiliPlus/models_new/fav/fav_folder/list.dart';
 import 'package:PiliPlus/pages/common/common_page.dart';
+import 'package:PiliPlus/pages/home/view.dart';
 import 'package:PiliPlus/pages/login/controller.dart';
 import 'package:PiliPlus/pages/main/controller.dart';
 import 'package:PiliPlus/pages/mine/controller.dart';
@@ -120,6 +121,19 @@ class _MediaPageState extends CommonPageState<MinePage, MineController>
       spacing: 5,
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
+        if (!_mainController.hasHome) ...[
+          IconButton(
+            iconSize: 22,
+            padding: const EdgeInsets.all(8),
+            style: const ButtonStyle(
+              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+            ),
+            tooltip: '搜索',
+            onPressed: () => Get.toNamed('/search'),
+            icon: const Icon(Icons.search),
+          ),
+          msgBadge(_mainController),
+        ],
         Obx(
           () {
             final anonymity = MineController.anonymity.value;
