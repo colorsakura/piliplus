@@ -196,6 +196,7 @@ class _MediaPageState extends CommonPageState<MinePage, MineController>
     return Obx(() {
       final UserInfoData userInfo = controller.userInfo.value;
       final LevelInfo? levelInfo = userInfo.levelInfo;
+      final hasLevel = levelInfo != null;
       final isVip = userInfo.vipStatus != null && userInfo.vipStatus! > 0;
       final userStat = controller.userStat.value;
       return Column(
@@ -306,9 +307,10 @@ class _MediaPageState extends CommonPageState<MinePage, MineController>
                         constraints: const BoxConstraints(maxWidth: 225),
                         child: LinearProgressIndicator(
                           minHeight: 2.25,
-                          value: levelInfo != null
-                              ? (levelInfo.currentExp! / levelInfo.nextExp!)
+                          value: hasLevel
+                              ? levelInfo.currentExp! / levelInfo.nextExp!
                               : 0,
+                          trackGap: hasLevel ? null : 0,
                           backgroundColor: theme.colorScheme.outline.withValues(
                             alpha: 0.4,
                           ),
