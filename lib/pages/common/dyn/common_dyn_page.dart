@@ -60,9 +60,12 @@ abstract class CommonDynPageState<T extends CommonDynPage> extends State<T>
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Obx(
-                () => Text(
-                  '${controller.count.value == -1 ? 0 : NumUtil.numFormat(controller.count.value)}条回复',
-                ),
+                () {
+                  final count = controller.count.value;
+                  return Text(
+                    '${count == -1 ? 0 : NumUtil.numFormat(count)}条回复',
+                  );
+                },
               ),
               SizedBox(
                 height: 35,

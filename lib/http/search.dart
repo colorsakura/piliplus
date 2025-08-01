@@ -176,8 +176,8 @@ class SearchHttp {
   }
 
   static Future<LoadingState<PgcInfoModel>> pgcInfo({
-    int? seasonId,
-    int? epId,
+    dynamic seasonId,
+    dynamic epId,
   }) async {
     var res = await Request().get(
       Api.pgcInfo,
@@ -193,7 +193,7 @@ class SearchHttp {
     }
   }
 
-  static Future<LoadingState> episodeInfo({int? epId}) async {
+  static Future<LoadingState> episodeInfo({dynamic epId}) async {
     var res = await Request().get(
       Api.episodeInfo,
       queryParameters: {

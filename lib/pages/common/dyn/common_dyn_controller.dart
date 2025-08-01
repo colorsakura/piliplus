@@ -13,7 +13,7 @@ abstract class CommonDynController<R> extends ReplyController<R>
   late final AnimationController fabAnimationCtr;
   late final Animation<Offset> fabAnim;
 
-  final RxBool showTitle = false.obs;
+  late final RxBool showTitle = false.obs;
 
   late final horizontalPreview = Pref.horizontalPreview;
   late final List<double> ratio = Pref.dynamicDetailRatio;

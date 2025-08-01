@@ -60,11 +60,12 @@ class _DynamicDetailPageState extends CommonDynPageState<DynamicDetailPage> {
           padding: const EdgeInsets.only(right: 12),
           child: Obx(
             () {
+              final showTitle = controller.showTitle.value;
               return AnimatedOpacity(
-                opacity: controller.showTitle.value ? 1 : 0,
+                opacity: showTitle ? 1 : 0,
                 duration: const Duration(milliseconds: 300),
                 child: IgnorePointer(
-                  ignoring: !controller.showTitle.value,
+                  ignoring: !showTitle,
                   child: AuthorPanel(
                     item: controller.dynItem,
                     isDetail: true,
