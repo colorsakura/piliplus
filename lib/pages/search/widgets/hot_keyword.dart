@@ -17,6 +17,10 @@ class HotKeyword extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    late final style = TextStyle(
+      fontSize: 14,
+      color: Theme.of(context).colorScheme.outline,
+    );
     return Wrap(
       runSpacing: 0.4,
       spacing: 5.0,
@@ -63,7 +67,9 @@ class HotKeyword extends StatelessWidget {
                               width: 48,
                               height: 15,
                             ),
-                          ),
+                          )
+                        else if (i.recommendReason?.isNotEmpty == true)
+                          Text(i.recommendReason!, style: style),
                       ],
                     ),
                   ),

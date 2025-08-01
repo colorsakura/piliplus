@@ -77,6 +77,7 @@ class HomeController extends GetxController
       var res = await Request().get(Api.searchDefault);
       if (res.data['code'] == 0) {
         defaultSearch.value = res.data['data']?['name'] ?? '';
+        // defaultSearch.value = res.data['data']?['show_name'] ?? '';
       }
     } catch (_) {}
   }
