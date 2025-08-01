@@ -53,6 +53,7 @@ class _ColorSelectPageState extends State<ColorSelectPage> {
     TextStyle subTitleStyle = theme.textTheme.labelMedium!.copyWith(
       color: theme.colorScheme.outline,
     );
+    final size = Get.size;
     return Scaffold(
       appBar: AppBar(title: const Text('选择应用主题')),
       body: SafeArea(
@@ -240,8 +241,8 @@ class _ColorSelectPageState extends State<ColorSelectPage> {
             ...[
               IgnorePointer(
                 child: Container(
-                  height: Get.height / 2,
-                  width: Get.width,
+                  height: size.height / 2,
+                  width: size.width,
                   color: theme.colorScheme.surface,
                   child: const HomePage(),
                 ),

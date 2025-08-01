@@ -136,10 +136,10 @@ class VideoDetailController extends GetxController
     duration: const Duration(milliseconds: 200),
   );
   late final double minVideoHeight = Get.mediaQuery.size.shortestSide * 9 / 16;
-  late final double maxVideoHeight = max(
-    Get.mediaQuery.size.longestSide * 0.65,
-    Get.mediaQuery.size.shortestSide,
-  );
+  late final double maxVideoHeight = () {
+    final size = Get.mediaQuery.size;
+    return max(size.longestSide * 0.65, size.shortestSide);
+  }();
   late double videoHeight = minVideoHeight;
 
   void animToTop() {
@@ -1304,7 +1304,7 @@ class VideoDetailController extends GetxController
       videoUrl = VideoUtils.getCdnUrl(firstVideo);
 
       /// 优先顺序 设置中指定质量 -> 当前可选的最高质量
-      late AudioItem? firstAudio;
+      AudioItem? firstAudio;
       final List<AudioItem> audiosList = data.dash!.audio ?? <AudioItem>[];
       if (data.dash!.dolby?.audio != null &&
           data.dash!.dolby!.audio!.isNotEmpty) {

@@ -7,7 +7,6 @@ import 'package:PiliPlus/utils/utils.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
-import 'package:get/get.dart';
 import 'package:intl/intl.dart' show DateFormat;
 import 'package:live_photo_maker/live_photo_maker.dart';
 import 'package:path_provider/path_provider.dart';
@@ -31,9 +30,7 @@ class ImageUtil {
         SharePlus.instance.share(
           ShareParams(
             files: [XFile(path)],
-            sharePositionOrigin: await Utils.isIpad()
-                ? Rect.fromLTWH(0, 0, Get.width, Get.height / 2)
-                : null,
+            sharePositionOrigin: await Utils.sharePositionOrigin,
           ),
         );
       }

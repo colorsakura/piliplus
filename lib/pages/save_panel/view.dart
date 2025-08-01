@@ -252,9 +252,7 @@ class _SavePanelState extends State<SavePanel> {
                 mimeType: 'image/png',
               ),
             ],
-            sharePositionOrigin: await Utils.isIpad()
-                ? Rect.fromLTWH(0, 0, Get.width, Get.height / 2)
-                : null,
+            sharePositionOrigin: await Utils.sharePositionOrigin,
           ),
         );
       } else {

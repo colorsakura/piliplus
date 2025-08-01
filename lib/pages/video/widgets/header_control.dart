@@ -895,14 +895,8 @@ class HeaderControlState extends State<HeaderControl> {
                                       mimeType: Headers.jsonContentType,
                                     ),
                                   ],
-                                  sharePositionOrigin: await Utils.isIpad()
-                                      ? Rect.fromLTWH(
-                                          0,
-                                          0,
-                                          Get.width,
-                                          Get.height / 2,
-                                        )
-                                      : null,
+                                  sharePositionOrigin:
+                                      await Utils.sharePositionOrigin,
                                 ),
                               );
                             }

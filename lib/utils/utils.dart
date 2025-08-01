@@ -40,14 +40,25 @@ class Utils {
     return _isIpad!;
   }
 
+  static Future<Rect?> get sharePositionOrigin async {
+    if (await Utils.isIpad()) {
+      final size = Get.size;
+      return Rect.fromLTWH(
+        0,
+        0,
+        size.width,
+        size.height / 2,
+      );
+    }
+    return null;
+  }
+
   static Future<void> shareText(String text) async {
     try {
       SharePlus.instance.share(
         ShareParams(
           text: text,
-          sharePositionOrigin: await Utils.isIpad()
-              ? Rect.fromLTWH(0, 0, Get.width, Get.height / 2)
-              : null,
+          sharePositionOrigin: await sharePositionOrigin,
         ),
       );
     } catch (e) {

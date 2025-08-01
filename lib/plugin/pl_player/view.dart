@@ -86,8 +86,8 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
     with TickerProviderStateMixin {
   late AnimationController animationController;
   late VideoController videoController;
-  late VideoIntroController? videoIntroController;
-  late PgcIntroController? pgcIntroController;
+  VideoIntroController? videoIntroController;
+  PgcIntroController? pgcIntroController;
 
   final GlobalKey _playerKey = GlobalKey();
   final GlobalKey<VideoState> key = GlobalKey<VideoState>();

@@ -1377,10 +1377,11 @@ class PlPlayerController {
         fsProcessing = false;
         return;
       }
+      late final size = Get.size;
       if (mode == FullScreenMode.vertical ||
           (mode == FullScreenMode.auto && isVertical) ||
           (mode == FullScreenMode.ratio &&
-              (Get.height / Get.width < 1.25 || isVertical))) {
+              (isVertical || size.height / size.width < 1.25))) {
         await verticalScreenForTwoSeconds();
       } else {
         await landScape();

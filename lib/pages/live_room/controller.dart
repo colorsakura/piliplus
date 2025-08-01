@@ -30,45 +30,46 @@ import 'package:get/get.dart';
 class LiveRoomController extends GetxController {
   LiveRoomController(this.heroTag);
   final String heroTag;
-  late int roomId;
-  dynamic liveItem;
-  double volume = 0.0;
-  // 静音状态
-  RxBool volumeOff = false.obs;
+
+  int roomId = int.parse(Get.parameters['roomid']!);
   PlPlayerController plPlayerController = PlPlayerController.getInstance(
     isLive: true,
   );
+
+  RxBool isLoaded = false.obs;
   Rx<RoomInfoH5Data?> roomInfoH5 = Rx<RoomInfoH5Data?>(null);
 
+  // dm
+  LiveDmInfoData? dmInfo;
+  bool showDanmaku = true;
+  DanmakuController? controller;
+  List<RichTextItem>? savedDanmaku;
   RxList<dynamic> messages = [].obs;
   RxBool disableAutoScroll = false.obs;
-  double? brightness;
-  DanmakuController? controller;
-  bool showDanmaku = true;
+  LiveMessageStream? msgStream;
+  late final ScrollController scrollController = ScrollController()
+    ..addListener(listener);
 
   int? currentQn;
-  late List<({int code, String desc})> acceptQnList = [];
   RxString currentQnDesc = ''.obs;
+  final RxBool isPortrait = false.obs;
+  late List<({int code, String desc})> acceptQnList = [];
 
-  List<RichTextItem>? savedDanmaku;
-
-  AccountService accountService = Get.find<AccountService>();
   late final isLogin = accountService.isLogin.value;
-
-  LiveDmInfoData? dmInfo;
+  AccountService accountService = Get.find<AccountService>();
 
   @override
   void onInit() {
     super.onInit();
-    roomId = int.parse(Get.parameters['roomid']!);
+    queryLiveUrl();
     queryLiveInfoH5();
     if (Accounts.get(AccountType.heartbeat).isLogin && !Pref.historyPause) {
       VideoHttp.roomEntryAction(roomId: roomId);
     }
   }
 
-  Future<void> playerInit(String source) async {
-    await plPlayerController.setDataSource(
+  Future<void> playerInit(String source) {
+    return plPlayerController.setDataSource(
       DataSource(
         videoSource: source,
         audioSource: null,
@@ -84,9 +85,7 @@ class LiveRoomController extends GetxController {
     );
   }
 
-  final RxBool isPortrait = false.obs;
-
-  Future<void> queryLiveInfo() async {
+  Future<void> queryLiveUrl() async {
     if (currentQn == null) {
       await Connectivity().checkConnectivity().then((res) {
         currentQn = res.contains(ConnectivityResult.wifi)
@@ -102,7 +101,7 @@ class LiveRoomController extends GetxController {
     if (res['status']) {
       RoomPlayInfoData data = res['data'];
       if (data.liveStatus != 1) {
-        _dialog(title: '当前直播间未开播');
+        _showDialog('当前直播间未开播');
         return;
       }
       if (data.roomId != null) {
@@ -127,7 +126,7 @@ class LiveRoomController extends GetxController {
           .description;
       String videoUrl = VideoUtils.getCdnUrl(item);
       await playerInit(videoUrl);
-      return res;
+      isLoaded.value = true;
     }
   }
 
@@ -143,14 +142,12 @@ class LiveRoomController extends GetxController {
       );
     } else {
       if (res['msg'] != null) {
-        _dialog(title: res['msg']);
+        _showDialog(res['msg']);
       }
     }
   }
 
-  void _dialog({
-    required String title,
-  }) {
+  void _showDialog(String title) {
     Get.dialog(
       AlertDialog(
         title: Text(title),
@@ -172,10 +169,6 @@ class LiveRoomController extends GetxController {
       ),
     );
   }
-
-  LiveMessageStream? msgStream;
-  late final ScrollController scrollController = ScrollController()
-    ..addListener(listener);
 
   void scrollToBottom() {
     if (disableAutoScroll.value) return;
@@ -264,7 +257,7 @@ class LiveRoomController extends GetxController {
     currentQnDesc.value = LiveQuality.values
         .firstWhere((element) => element.code == currentQn)
         .description;
-    return queryLiveInfo();
+    return queryLiveUrl();
   }
 
   void initDm(LiveDmInfoData info) {
