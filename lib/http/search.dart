@@ -227,7 +227,9 @@ class SearchHttp {
     final res = await Request().get(
       Api.searchRecommend,
       queryParameters: {
-        'build': '8430300',
+        'build': 8430300,
+        'channel': 'master',
+        'version': '8.43.0',
         'c_locale': 'zh_CN',
         'mobi_app': 'android',
         'platform': 'android',

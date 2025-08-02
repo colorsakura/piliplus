@@ -537,19 +537,20 @@ class FavHttp {
   static Future<LoadingState<List<SpaceFavData>?>> spaceFav({
     required int mid,
   }) async {
-    Map<String, String> data = {
-      'build': '8430300',
+    final params = {
+      'build': 8430300,
+      'version': '8.43.0',
       'c_locale': 'zh_CN',
-      'channel': 'bili',
+      'channel': 'master',
       'mobi_app': 'android',
       'platform': 'android',
       's_locale': 'zh_CN',
       'statistics': Constants.statisticsApp,
-      'up_mid': mid.toString(),
+      'up_mid': mid,
     };
     var res = await Request().get(
       Api.spaceFav,
-      queryParameters: data,
+      queryParameters: params,
       options: Options(
         headers: {
           'bili-http-engine': 'cronet',

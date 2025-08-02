@@ -57,21 +57,22 @@ class MemberHttp {
     required int mid,
     required int page,
   }) async {
-    Map<String, String> data = {
-      'build': '8430300',
+    final params = {
+      'build': 8430300,
+      'channel': 'master',
+      'version': '8.43.0',
       'c_locale': 'zh_CN',
-      'channel': 'bili',
       'mobi_app': 'android',
       'platform': 'android',
-      'pn': page.toString(),
-      'ps': '10',
+      'pn': page,
+      'ps': 10,
       's_locale': 'zh_CN',
       'statistics': Constants.statisticsApp,
-      'vmid': mid.toString(),
+      'vmid': mid,
     };
     var res = await Request().get(
       Api.spaceArticle,
-      queryParameters: data,
+      queryParameters: params,
       options: Options(
         headers: {
           'bili-http-engine': 'cronet',
@@ -119,25 +120,26 @@ class MemberHttp {
     int? seriesId,
     includeCursor,
   }) async {
-    Map<String, String> data = {
-      if (aid != null) 'aid': aid.toString(),
-      'build': '8430300',
+    final params = {
+      'aid': ?aid,
+      'build': 8430300,
+      'version': '8.43.0',
       'c_locale': 'zh_CN',
-      'channel': 'bili',
+      'channel': 'master',
       'mobi_app': 'android',
       'platform': 'android',
       's_locale': 'zh_CN',
-      'ps': '20',
-      if (pn != null) 'pn': pn.toString(),
-      if (next != null) 'next': next.toString(),
-      if (seasonId != null) 'season_id': seasonId.toString(),
-      if (seriesId != null) 'series_id': seriesId.toString(),
-      'qn': type == ContributeType.video ? '80' : '32',
+      'ps': 20,
+      'pn': ?pn,
+      'next': ?next,
+      'season_id': ?seasonId,
+      'series_id': ?seriesId,
+      'qn': type == ContributeType.video ? 80 : 32,
       'order': ?order,
       'sort': ?sort,
-      if (includeCursor != null) 'include_cursor': includeCursor.toString(),
+      'include_cursor': ?includeCursor,
       'statistics': Constants.statisticsApp,
-      'vmid': mid.toString(),
+      'vmid': mid,
     };
     var res = await Request().get(
       switch (type) {
@@ -148,7 +150,7 @@ class MemberHttp {
         ContributeType.bangumi => Api.spaceBangumi,
         ContributeType.comic => Api.spaceComic,
       },
-      queryParameters: data,
+      queryParameters: params,
       options: Options(
         headers: {
           'bili-http-engine': 'cronet',
@@ -193,25 +195,26 @@ class MemberHttp {
     required contain,
     required index,
   }) async {
-    Map<String, String> data = {
-      'aid': aid.toString(),
-      'before_size': beforeSize.toString(),
-      'after_size': afterSize.toString(),
-      'cid': cid.toString(),
-      'contain': contain.toString(),
-      'index': index.toString(),
-      'build': '8430300',
+    final params = {
+      'aid': aid,
+      'before_size': beforeSize,
+      'after_size': afterSize,
+      'cid': cid,
+      'contain': contain,
+      'index': index,
+      'build': 8430300,
+      'version': '8.43.0',
       'c_locale': 'zh_CN',
-      'channel': 'bili',
+      'channel': 'master',
       'mobi_app': 'android',
       'platform': 'android',
       's_locale': 'zh_CN',
       'statistics': Constants.statisticsApp,
-      'vmid': mid.toString(),
+      'vmid': mid,
     };
     var res = await Request().get(
       Api.spaceStory,
-      queryParameters: data,
+      queryParameters: params,
       options: Options(
         headers: {
           'bili-http-engine': 'cronet',
@@ -230,20 +233,21 @@ class MemberHttp {
     int? mid,
     dynamic fromViewAid,
   }) async {
-    Map<String, String> data = {
-      'build': '8430300',
+    final params = {
+      'build': 8430300,
+      'version': '8.43.0',
       'c_locale': 'zh_CN',
-      'channel': 'bili',
+      'channel': 'master',
       'mobi_app': 'android',
       'platform': 'android',
       's_locale': 'zh_CN',
       'from_view_aid': ?fromViewAid,
       'statistics': Constants.statisticsApp,
-      'vmid': mid.toString(),
+      'vmid': mid,
     };
     var res = await Request().get(
       Api.space,
-      queryParameters: data,
+      queryParameters: params,
       options: Options(
         headers: {
           'bili-http-engine': 'cronet',
@@ -341,7 +345,7 @@ class MemberHttp {
       'keyword': ?keyword,
       'order': order,
       'platform': 'web',
-      'web_location': '1550101',
+      'web_location': 1550101,
       'order_avoided': orderAvoided,
       'dm_img_list': '[]',
       'dm_img_str': dmImgStr,

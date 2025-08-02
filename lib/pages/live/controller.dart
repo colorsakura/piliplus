@@ -3,6 +3,8 @@ import 'package:PiliPlus/http/live.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models_new/live/live_feed_index/card_data_list_item.dart';
 import 'package:PiliPlus/models_new/live/live_feed_index/card_list.dart';
+import 'package:PiliPlus/models_new/live/live_feed_index/data.dart';
+import 'package:PiliPlus/models_new/live/live_second_list/data.dart';
 import 'package:PiliPlus/models_new/live/live_second_list/tag.dart';
 import 'package:PiliPlus/pages/common/common_list_controller.dart';
 import 'package:PiliPlus/services/account_service.dart';
@@ -48,16 +50,18 @@ class LiveController extends CommonListController {
   bool customHandleResponse(bool isRefresh, Success response) {
     if (isRefresh) {
       if (areaIndex.value == 0) {
-        if (response.response.hasMore == 0) {
+        LiveIndexData data = response.response;
+        if (data.hasMore == 0) {
           isEnd = true;
         }
         topState.value = Pair(
-          first: response.response.followItem,
-          second: response.response.areaItem,
+          first: data.followItem,
+          second: data.areaItem,
         );
       } else {
-        count = response.response.count;
-        newTags = response.response.newTags;
+        LiveSecondData data = response.response;
+        count = data.count;
+        newTags = data.newTags;
         if (sortType != null) {
           tagIndex.value =
               newTags?.indexWhere((e) => e.sortType == sortType) ?? -1;
@@ -117,6 +121,9 @@ class LiveController extends CommonListController {
   }
 
   void onSelectArea(int index, CardLiveItem? cardLiveItem) {
+    if (isLoading) {
+      return; // areaIndex conflict
+    }
     if (index == areaIndex.value) {
       return;
     }
@@ -134,6 +141,9 @@ class LiveController extends CommonListController {
   }
 
   void onSelectTag(int index, String? sortType) {
+    if (isLoading) {
+      return;
+    }
     tagIndex.value = index;
     this.sortType = sortType;
 

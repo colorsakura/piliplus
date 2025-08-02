@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
 
 import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/http/api.dart';
@@ -77,38 +76,38 @@ class VideoHttp {
 
   // 添加额外的loginState变量模拟未登录状态
   static Future<LoadingState> rcmdVideoListApp({required int freshIdx}) async {
-    Map<String, String> data = {
-      'build': '2001100',
+    final params = {
+      'build': 2001100,
       'c_locale': 'zh_CN',
       'channel': 'master',
-      'column': '4',
+      'column': 4,
       'device': 'pad',
       'device_name': 'android',
-      'device_type': '0',
-      'disable_rcmd': '0',
-      'flush': '5',
-      'fnval': '976',
-      'fnver': '0',
-      'force_host': '2', //使用https
-      'fourk': '1',
-      'guidance': '0',
-      'https_url_req': '0',
-      'idx': freshIdx.toString(),
+      'device_type': 0,
+      'disable_rcmd': 0,
+      'flush': 5,
+      'fnval': 976,
+      'fnver': 0,
+      'force_host': 2, //使用https
+      'fourk': 1,
+      'guidance': 0,
+      'https_url_req': 0,
+      'idx': freshIdx,
       'mobi_app': 'android_hd',
       'network': 'wifi',
       'platform': 'android',
-      'player_net': '1',
+      'player_net': 1,
       'pull': freshIdx == 0 ? 'true' : 'false',
-      'qn': '32',
-      'recsys_mode': '0',
+      'qn': 32,
+      'recsys_mode': 0,
       's_locale': 'zh_CN',
       'splash_id': '',
       'statistics': Constants.statistics,
-      'voice_balance': '0',
+      'voice_balance': 0,
     };
     var res = await Request().get(
       Api.recommendListApp,
-      queryParameters: data,
+      queryParameters: params,
       options: Options(
         headers: {
           'buvid': LoginHttp.buvid,
@@ -465,7 +464,7 @@ class VideoHttp {
         'id': id,
         'reason_id': ?reasonId,
         'feedback_id': ?feedbackId,
-        'build': '1',
+        'build': 1,
         'mobi_app': 'android',
       },
     );
@@ -493,7 +492,7 @@ class VideoHttp {
         'id': id,
         'reason_id': ?reasonId,
         'feedback_id': ?feedbackId,
-        'build': '1',
+        'build': 1,
         'mobi_app': 'android',
       },
     );
@@ -542,7 +541,6 @@ class VideoHttp {
       data: data,
       options: Options(contentType: Headers.formUrlEncodedContentType),
     );
-    log(res.toString());
     if (res.data['code'] == 0) {
       return {'status': true, 'data': res.data['data']};
     } else {
@@ -564,7 +562,6 @@ class VideoHttp {
         'csrf': Accounts.main.csrf,
       },
     );
-    log(res.toString());
     if (res.data['code'] == 0) {
       return {'status': true};
     } else {

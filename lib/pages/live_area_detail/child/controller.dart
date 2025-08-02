@@ -60,6 +60,9 @@ class LiveAreaChildController
       );
 
   void onSelectTag(int index, String? sortType) {
+    if (isLoading) {
+      return;
+    }
     tagIndex.value = index;
     this.sortType = sortType;
 
