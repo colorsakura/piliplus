@@ -5,7 +5,9 @@ import 'package:PiliPlus/common/widgets/button/icon_button.dart';
 import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
 import 'package:PiliPlus/grpc/bilibili/main/community/reply/v1.pb.dart'
     show ReplyInfo;
+import 'package:PiliPlus/models/common/search_type.dart';
 import 'package:PiliPlus/models/dynamics/result.dart';
+import 'package:PiliPlus/pages/common/common_intro_controller.dart';
 import 'package:PiliPlus/pages/dynamics/widgets/dynamic_panel.dart';
 import 'package:PiliPlus/pages/video/introduction/pgc/controller.dart';
 import 'package:PiliPlus/pages/video/introduction/ugc/controller.dart';
@@ -88,8 +90,13 @@ class _SavePanelState extends State<SavePanel> {
 
       if (currentRoute.startsWith('/video')) {
         try {
-          final heroTag = Get.arguments?['heroTag'];
-          late final ctr = Get.find<UgcIntroController>(tag: heroTag);
+          final heroTag = Get.arguments['heroTag'];
+          CommonIntroController ctr;
+          if (Get.arguments['videoType'] == SearchType.media_bangumi) {
+            ctr = Get.find<PgcIntroController>(tag: heroTag);
+          } else {
+            ctr = Get.find<UgcIntroController>(tag: heroTag);
+          }
           final videoDetail = ctr.videoDetail.value;
           cover = videoDetail.pic;
           title = videoDetail.title;
@@ -100,7 +107,7 @@ class _SavePanelState extends State<SavePanel> {
             'bilibili://video/${reply.oid}?comment_root_id=${hasRoot ? reply.root : reply.id}${hasRoot ? '&comment_secondary_id=${reply.id}' : ''}';
 
         try {
-          final heroTag = Get.arguments?['heroTag'];
+          final heroTag = Get.arguments['heroTag'];
           late final ctr = Get.find<PgcIntroController>(tag: heroTag);
           final type = reply.type.toInt();
           late final oid = reply.oid;

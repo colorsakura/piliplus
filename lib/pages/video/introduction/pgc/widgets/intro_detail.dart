@@ -145,26 +145,30 @@ class _IntroDetailState extends CommonCollapseSlidePageState<PgcIntroPanel> {
               ),
             ],
           ),
-          const SizedBox(height: 20),
-          Text(
-            '简介：',
-            style: theme.textTheme.titleMedium,
-          ),
-          const SizedBox(height: 4),
-          Text(
-            widget.item.evaluate!,
-            style: textStyle,
-          ),
-          const SizedBox(height: 20),
-          Text(
-            '演职人员：',
-            style: theme.textTheme.titleMedium,
-          ),
-          const SizedBox(height: 4),
-          Text(
-            widget.item.actors!,
-            style: textStyle,
-          ),
+          if (widget.item.evaluate?.isNotEmpty == true) ...[
+            const SizedBox(height: 20),
+            Text(
+              '简介：',
+              style: theme.textTheme.titleMedium,
+            ),
+            const SizedBox(height: 4),
+            Text(
+              widget.item.evaluate!,
+              style: textStyle,
+            ),
+          ],
+          if (widget.item.actors?.isNotEmpty == true) ...[
+            const SizedBox(height: 20),
+            Text(
+              '演职人员：',
+              style: theme.textTheme.titleMedium,
+            ),
+            const SizedBox(height: 4),
+            Text(
+              widget.item.actors!,
+              style: textStyle,
+            ),
+          ],
           if (widget.videoTags?.isNotEmpty == true) ...[
             const SizedBox(height: 10),
             Wrap(

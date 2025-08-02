@@ -29,7 +29,6 @@ import 'package:PiliPlus/utils/date_util.dart';
 import 'package:PiliPlus/utils/duration_util.dart';
 import 'package:PiliPlus/utils/id_utils.dart';
 import 'package:PiliPlus/utils/storage.dart';
-import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/material.dart' hide TabBarView;
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -366,14 +365,7 @@ class _EpisodePanelState extends CommonSlidePageState<EpisodePanel> {
         break;
       case pgc.EpisodeItem item:
         bvid = item.bvid;
-        if (item.longTitle != null && item.longTitle != "") {
-          dynamic leading = item.title ?? index + 1;
-          title =
-              "${Utils.isStringNumeric(leading) ? '第$leading话' : leading}  ${episode.longTitle!}";
-        } else {
-          title = item.title!;
-        }
-
+        title = item.showTitle ?? item.title!;
         cover = item.cover;
         duration = item.duration == null ? null : item.duration! ~/ 1000;
         pubdate = item.pubTime;

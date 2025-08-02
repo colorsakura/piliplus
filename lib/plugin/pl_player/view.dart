@@ -468,7 +468,6 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
             int currentCid = plPlayerController.cid;
             String bvid = plPlayerController.bvid;
             List episodes = [];
-            final videoDetail = introController.videoDetail.value;
             if (isSeason) {
               final List<SectionItem> sections =
                   videoDetail.ugcSeason!.sections!;

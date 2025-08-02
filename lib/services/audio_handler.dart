@@ -1,5 +1,5 @@
 import 'package:PiliPlus/models_new/live/live_room_info_h5/data.dart';
-import 'package:PiliPlus/models_new/pgc/pgc_info_model/result.dart';
+import 'package:PiliPlus/models_new/pgc/pgc_info_model/episode.dart';
 import 'package:PiliPlus/models_new/video/video_detail/data.dart';
 import 'package:PiliPlus/plugin/pl_player/controller.dart';
 import 'package:PiliPlus/plugin/pl_player/models/play_status.dart';
@@ -113,7 +113,12 @@ class VideoPlayerServiceHandler extends BaseAudioHandler with SeekHandler {
     setPlaybackState(status, isBuffering, isLive);
   }
 
-  void onVideoDetailChange(dynamic data, int cid, String herotag) {
+  void onVideoDetailChange(
+    dynamic data,
+    int cid,
+    String herotag, {
+    String? artist,
+  }) {
     if (!enableBackgroundPlay) return;
     // if (kDebugMode) {
     //   debugPrint('当前调用栈为：');
@@ -131,37 +136,33 @@ class VideoPlayerServiceHandler extends BaseAudioHandler with SeekHandler {
         );
         mediaItem = MediaItem(
           id: id,
-          title: current?.pagePart ?? "",
-          artist: data.title ?? "",
-          album: data.title ?? "",
+          title: current?.pagePart ?? '',
+          artist: data.owner?.name,
           duration: Duration(seconds: current?.duration ?? 0),
-          artUri: Uri.parse(data.pic ?? ""),
+          artUri: Uri.parse(data.pic ?? ''),
         );
       } else {
         mediaItem = MediaItem(
           id: id,
-          title: data.title ?? "",
-          artist: data.owner?.name ?? "",
+          title: data.title ?? '',
+          artist: data.owner?.name,
           duration: Duration(seconds: data.duration ?? 0),
-          artUri: Uri.parse(data.pic ?? ""),
+          artUri: Uri.parse(data.pic ?? ''),
         );
       }
-    } else if (data is PgcInfoModel) {
-      final current = data.episodes?.firstWhereOrNull(
-        (element) => element.cid == cid,
-      );
+    } else if (data is EpisodeItem) {
       mediaItem = MediaItem(
         id: id,
-        title: current?.longTitle ?? "",
-        artist: data.title ?? "",
-        duration: Duration(milliseconds: current?.duration ?? 0),
-        artUri: Uri.parse(data.cover ?? ""),
+        title: data.showTitle ?? data.title ?? '',
+        artist: artist,
+        duration: Duration(milliseconds: data.duration ?? 0),
+        artUri: Uri.parse(data.cover ?? ''),
       );
     } else if (data is RoomInfoH5Data) {
       mediaItem = MediaItem(
         id: id,
         title: data.roomInfo?.title ?? '',
-        artist: data.anchorInfo?.baseInfo?.uname ?? '',
+        artist: data.anchorInfo?.baseInfo?.uname,
         artUri: Uri.parse(data.roomInfo?.cover ?? ''),
         isLive: true,
       );

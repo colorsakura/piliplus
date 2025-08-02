@@ -10,7 +10,6 @@ import 'package:PiliPlus/models/pgc_lcf.dart';
 import 'package:PiliPlus/models_new/pgc/pgc_info_model/episode.dart';
 import 'package:PiliPlus/models_new/pgc/pgc_info_model/result.dart';
 import 'package:PiliPlus/models_new/triple/pgc_triple.dart';
-import 'package:PiliPlus/models_new/video/video_detail/data.dart';
 import 'package:PiliPlus/models_new/video/video_detail/stat_detail.dart';
 import 'package:PiliPlus/pages/common/common_intro_controller.dart';
 import 'package:PiliPlus/pages/dynamics_repost/view.dart';
@@ -289,6 +288,7 @@ class PgcIntroController extends CommonIntroController {
       queryPgcLikeCoinFav();
     }
 
+    hasLater.value = false;
     this.cid.value = cid;
     queryVideoIntro();
     queryOnlineTotal();
@@ -457,11 +457,15 @@ class PgcIntroController extends CommonIntroController {
 
   @override
   Future<void> queryVideoIntro() async {
-    var res = await VideoHttp.videoIntro(bvid: bvid);
-    if (res.isSuccess) {
-      VideoDetailData data = res.data;
-      videoPlayerServiceHandler.onVideoDetailChange(data, data.cid!, heroTag);
-      videoDetail.value = data;
-    }
+    final episode = pgcItem.episodes!.firstWhere((e) => e.cid == cid.value);
+    videoPlayerServiceHandler.onVideoDetailChange(
+      episode,
+      cid.value,
+      heroTag,
+      artist: pgcItem.title,
+    );
+    videoDetail
+      ..value.title = episode.showTitle
+      ..refresh();
   }
 }
