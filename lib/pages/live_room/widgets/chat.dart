@@ -11,16 +11,22 @@ class LiveRoomChat extends StatelessWidget {
     super.key,
     required this.roomId,
     required this.liveRoomController,
-    this.isPP,
+    this.isPP = false,
   });
 
   final int roomId;
   final LiveRoomController liveRoomController;
-  final bool? isPP;
+  final bool isPP;
   bool get disableAutoScroll => liveRoomController.disableAutoScroll.value;
 
   @override
   Widget build(BuildContext context) {
+    late final bg = isPP
+        ? Colors.black.withValues(alpha: 0.4)
+        : const Color(0x15FFFFFF);
+    late final nameColor = isPP
+        ? Colors.white.withValues(alpha: 0.9)
+        : Colors.white.withValues(alpha: 0.6);
     return Stack(
       clipBehavior: Clip.none,
       children: [
@@ -42,9 +48,7 @@ class LiveRoomChat extends StatelessWidget {
                     vertical: 5,
                   ),
                   decoration: BoxDecoration(
-                    color: isPP == true
-                        ? Colors.black.withValues(alpha: 0.3)
-                        : const Color(0x15FFFFFF),
+                    color: bg,
                     borderRadius: const BorderRadius.all(Radius.circular(18)),
                   ),
                   child: Text.rich(
@@ -53,7 +57,7 @@ class LiveRoomChat extends StatelessWidget {
                         TextSpan(
                           text: '${item['name']}: ',
                           style: TextStyle(
-                            color: Colors.white.withValues(alpha: 0.6),
+                            color: nameColor,
                             fontSize: 14,
                           ),
                           recognizer: TapGestureRecognizer()

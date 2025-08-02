@@ -1317,7 +1317,6 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
               },
             ),
 
-            // if (BuildConfig.isDebug)
             // Positioned(
             //   right: 25,
             //   top: 125,
@@ -1325,7 +1324,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
             //     onPressed: () {
             //       transformationController.value = Matrix4.identity()
             //         ..translate(0.5, 0.5)
-            //         ..scale(1.2)
+            //         ..scale(0.5)
             //         ..translate(-0.5, -0.5);
 
             //       showRestoreScaleBtn.value = true;

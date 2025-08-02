@@ -152,7 +152,11 @@ class _LiveRoomPageState extends State<LiveRoomPage>
     }
   }
 
-  Widget videoPlayerPanel({Color? fill, Alignment? alignment}) {
+  Widget videoPlayerPanel({
+    Color? fill,
+    Alignment? alignment,
+    bool needDm = true,
+  }) {
     return PopScope(
       canPop: !isFullScreen,
       onPopInvokedWithResult: (bool didPop, Object? result) {
@@ -180,35 +184,39 @@ class _LiveRoomPageState extends State<LiveRoomPage>
               liveRoomCtr: _liveRoomController,
               onRefresh: _liveRoomController.queryLiveUrl,
             ),
-            danmuWidget: Obx(
-              () => AnimatedOpacity(
-                opacity: plPlayerController.enableShowDanmaku.value ? 1 : 0,
-                duration: const Duration(milliseconds: 100),
-                child: DanmakuScreen(
-                  createdController: (DanmakuController e) {
-                    plPlayerController.danmakuController =
-                        _liveRoomController.controller = e;
-                  },
-                  option: DanmakuOption(
-                    fontSize: _getFontSize(isFullScreen),
-                    fontWeight: plPlayerController.fontWeight,
-                    area: plPlayerController.showArea,
-                    opacity: plPlayerController.danmakuOpacity,
-                    hideTop: plPlayerController.blockTypes.contains(5),
-                    hideScroll: plPlayerController.blockTypes.contains(2),
-                    hideBottom: plPlayerController.blockTypes.contains(4),
-                    duration:
-                        plPlayerController.danmakuDuration /
-                        plPlayerController.playbackSpeed,
-                    staticDuration:
-                        plPlayerController.danmakuStaticDuration /
-                        plPlayerController.playbackSpeed,
-                    strokeWidth: plPlayerController.strokeWidth,
-                    lineHeight: plPlayerController.danmakuLineHeight,
+            danmuWidget: !needDm
+                ? null
+                : Obx(
+                    () => AnimatedOpacity(
+                      opacity: plPlayerController.enableShowDanmaku.value
+                          ? 1
+                          : 0,
+                      duration: const Duration(milliseconds: 100),
+                      child: DanmakuScreen(
+                        createdController: (DanmakuController e) {
+                          plPlayerController.danmakuController =
+                              _liveRoomController.controller = e;
+                        },
+                        option: DanmakuOption(
+                          fontSize: _getFontSize(isFullScreen),
+                          fontWeight: plPlayerController.fontWeight,
+                          area: plPlayerController.showArea,
+                          opacity: plPlayerController.danmakuOpacity,
+                          hideTop: plPlayerController.blockTypes.contains(5),
+                          hideScroll: plPlayerController.blockTypes.contains(2),
+                          hideBottom: plPlayerController.blockTypes.contains(4),
+                          duration:
+                              plPlayerController.danmakuDuration /
+                              plPlayerController.playbackSpeed,
+                          staticDuration:
+                              plPlayerController.danmakuStaticDuration /
+                              plPlayerController.playbackSpeed,
+                          strokeWidth: plPlayerController.strokeWidth,
+                          lineHeight: plPlayerController.danmakuLineHeight,
+                        ),
+                      ),
+                    ),
                   ),
-                ),
-              ),
-            ),
           );
         }
         return const SizedBox.shrink();
@@ -284,33 +292,10 @@ class _LiveRoomPageState extends State<LiveRoomPage>
                         if (_liveRoomController.isPortrait.value) {
                           return _buildPP;
                         }
-                        return Column(
-                          children: [
-                            _buildAppBar,
-                            Obx(
-                              () {
-                                final size = Get.size;
-                                return Container(
-                                  color: Colors.black,
-                                  width: size.width,
-                                  height: isFullScreen
-                                      ? size.height
-                                      : size.width * 9 / 16,
-                                  child: videoPlayerPanel(),
-                                );
-                              },
-                            ),
-                            ..._buildBottomWidget,
-                          ],
-                        );
+                        return _buildPH;
                       },
                     )
-                  : Column(
-                      children: [
-                        Obx(() => _buildAppBar),
-                        _buildBodyH,
-                      ],
-                    ),
+                  : _buildBodyH,
             ),
           ],
         ),
@@ -318,48 +303,62 @@ class _LiveRoomPageState extends State<LiveRoomPage>
     );
   }
 
-  Widget get _buildPP => Stack(
-    clipBehavior: Clip.none,
-    children: [
-      _buildAppBar,
-      Column(
-        children: [
-          Expanded(
-            child: Stack(
-              clipBehavior: Clip.none,
-              children: [
-                Obx(
-                  () => Container(
-                    margin: isFullScreen
-                        ? null
-                        : const EdgeInsets.only(top: 56),
-                    color: Colors.black,
-                    child: videoPlayerPanel(
-                      alignment: isFullScreen ? null : Alignment.topCenter,
-                    ),
-                  ),
+  Widget get _buildPH {
+    final isFullScreen = this.isFullScreen;
+    final size = Get.size;
+    Widget child = SizedBox(
+      width: size.width,
+      height: isFullScreen ? size.height : size.width * 9 / 16,
+      child: videoPlayerPanel(),
+    );
+    if (isFullScreen) {
+      return child;
+    }
+    return Column(
+      children: [
+        _buildAppBar,
+        child,
+        ..._buildBottomWidget,
+      ],
+    );
+  }
+
+  Widget get _buildPP {
+    final isFullScreen = this.isFullScreen;
+
+    final child = videoPlayerPanel(
+      alignment: isFullScreen ? null : Alignment.topCenter,
+      needDm: isFullScreen,
+    );
+
+    if (isFullScreen) {
+      return child;
+    }
+
+    return Column(
+      children: [
+        _buildAppBar,
+        Expanded(
+          child: Stack(
+            clipBehavior: Clip.none,
+            children: [
+              Positioned.fill(child: child),
+              Positioned(
+                left: 0,
+                right: 0,
+                bottom: 55,
+                child: SizedBox(
+                  height: Get.height * 0.32,
+                  child: _buildChatWidget(true),
                 ),
-                Obx(
-                  () => isFullScreen
-                      ? const SizedBox.shrink()
-                      : Positioned(
-                          left: 0,
-                          right: 0,
-                          bottom: 55,
-                          child: SizedBox(
-                            height: 125,
-                            child: _buildChatWidget(true),
-                          ),
-                        ),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
-          Obx(() => isFullScreen ? const SizedBox.shrink() : _buildInputWidget),
-        ],
-      ),
-    ],
-  );
+        ),
+        _buildInputWidget,
+      ],
+    );
+  }
 
   PreferredSizeWidget get _buildAppBar {
     final color = Theme.of(context).colorScheme.onSurfaceVariant;
@@ -482,31 +481,40 @@ class _LiveRoomPageState extends State<LiveRoomPage>
     double videoWidth =
         clampDouble(context.height / context.width * 1.08, 0.58, 0.75) *
         context.width;
-    return Expanded(
-      child: Row(
-        children: [
-          Obx(
-            () {
-              final size = Get.size;
-              return Container(
-                margin: EdgeInsets.only(
-                  bottom: MediaQuery.paddingOf(context).bottom,
-                ),
-                color: isFullScreen ? Colors.black : null,
-                width: isFullScreen ? size.width : videoWidth,
-                height: isFullScreen ? size.height : size.width * 9 / 16,
-                child: videoPlayerPanel(fill: Colors.transparent),
-              );
-            },
+    return Obx(
+      () {
+        final isFullScreen = this.isFullScreen;
+        final size = Get.size;
+        Widget child = Container(
+          margin: EdgeInsets.only(
+            bottom: MediaQuery.paddingOf(context).bottom,
           ),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: _buildBottomWidget,
+          width: isFullScreen ? size.width : videoWidth,
+          height: isFullScreen ? size.height : size.width * 9 / 16,
+          child: videoPlayerPanel(fill: Colors.transparent),
+        );
+        if (isFullScreen) {
+          return child;
+        }
+        return Column(
+          children: [
+            _buildAppBar,
+            Expanded(
+              child: Row(
+                children: [
+                  child,
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: _buildBottomWidget,
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
-      ),
+          ],
+        );
+      },
     );
   }
 
@@ -519,7 +527,7 @@ class _LiveRoomPageState extends State<LiveRoomPage>
     padding: const EdgeInsets.symmetric(vertical: 16),
     child: LiveRoomChat(
       key: chatKey,
-      isPP: isPP,
+      isPP: isPP ?? false,
       roomId: _roomId,
       liveRoomController: _liveRoomController,
     ),
