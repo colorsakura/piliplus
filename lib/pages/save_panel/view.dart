@@ -89,7 +89,7 @@ class _SavePanelState extends State<SavePanel> {
       if (currentRoute.startsWith('/video')) {
         try {
           final heroTag = Get.arguments?['heroTag'];
-          late final ctr = Get.find<VideoIntroController>(tag: heroTag);
+          late final ctr = Get.find<UgcIntroController>(tag: heroTag);
           final videoDetail = ctr.videoDetail.value;
           cover = videoDetail.pic;
           title = videoDetail.title;

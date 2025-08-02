@@ -15,7 +15,7 @@ class PgcPanel extends StatefulWidget {
     super.key,
     required this.pages,
     this.cid,
-    required this.changeFuc,
+    required this.onChangeEpisode,
     required this.showEpisodes,
     required this.heroTag,
     this.newEp,
@@ -23,7 +23,7 @@ class PgcPanel extends StatefulWidget {
 
   final List<EpisodeItem> pages;
   final int? cid;
-  final Function changeFuc;
+  final Function onChangeEpisode;
   final Function showEpisodes;
   final String heroTag;
   final NewEp? newEp;
@@ -154,7 +154,7 @@ class _PgcPanelState extends State<PgcPanel> {
                           vipStatus != 1) {
                         SmartDialog.showToast('需要大会员');
                       }
-                      widget.changeFuc(
+                      widget.onChangeEpisode(
                         item.epId,
                         item.bvid,
                         item.cid,

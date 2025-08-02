@@ -11,12 +11,12 @@ import 'package:PiliPlus/grpc/bilibili/main/community/reply/v1.pb.dart'
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/main.dart';
 import 'package:PiliPlus/models/common/episode_panel_type.dart';
-import 'package:PiliPlus/models/common/search_type.dart';
 import 'package:PiliPlus/models_new/pgc/pgc_info_model/episode.dart' as pgc;
 import 'package:PiliPlus/models_new/pgc/pgc_info_model/result.dart';
 import 'package:PiliPlus/models_new/video/video_detail/episode.dart';
 import 'package:PiliPlus/models_new/video/video_detail/page.dart';
 import 'package:PiliPlus/models_new/video/video_tag/data.dart';
+import 'package:PiliPlus/pages/common/common_intro_controller.dart';
 import 'package:PiliPlus/pages/danmaku/view.dart';
 import 'package:PiliPlus/pages/episode_panel/view.dart';
 import 'package:PiliPlus/pages/video/ai_conclusion/view.dart';
@@ -77,12 +77,18 @@ class VideoDetailPageV extends StatefulWidget {
 
 class _VideoDetailPageVState extends State<VideoDetailPageV>
     with TickerProviderStateMixin, RouteAware, WidgetsBindingObserver {
-  late VideoDetailController videoDetailController;
-  late VideoReplyController _videoReplyController;
+  late final VideoDetailController videoDetailController;
+  late final VideoReplyController _videoReplyController;
   PlPlayerController? plPlayerController;
-  late VideoIntroController videoIntroController;
-  late PgcIntroController pgcIntroController;
-  late final _introController = ScrollController();
+  late final CommonIntroController introController = videoDetailController.isUgc
+      ? ugcIntroController
+      : pgcIntroController;
+  late final UgcIntroController ugcIntroController;
+  late final PgcIntroController pgcIntroController;
+  ScrollController? _introScrollController;
+  ScrollController get introScrollController =>
+      _introScrollController ??= ScrollController();
+
   late String heroTag;
 
   bool get autoExitFullscreen =>
@@ -100,7 +106,10 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
   bool get isFullScreen => plPlayerController?.isFullScreen.value ?? false;
 
   bool get _shouldShowSeasonPanel {
-    late final videoDetail = videoIntroController.videoDetail.value;
+    if (!videoDetailController.isUgc) {
+      return false;
+    }
+    late final videoDetail = ugcIntroController.videoDetail.value;
     return videoDetailController.plPlayerController.horizontalSeasonPanel &&
         (videoDetail.ugcSeason != null ||
             ((videoDetail.pages?.length ?? 0) > 1)) &&
@@ -135,8 +144,9 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
         tag: heroTag,
       );
     }
-    videoIntroController = Get.put(VideoIntroController(), tag: heroTag);
-    if (videoDetailController.videoType == SearchType.media_bangumi) {
+    if (videoDetailController.isUgc) {
+      ugcIntroController = Get.put(UgcIntroController(), tag: heroTag);
+    } else {
       pgcIntroController = Get.put(PgcIntroController(), tag: heroTag);
     }
 
@@ -180,7 +190,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
-      videoIntroController.startTimer();
+      introController.startTimer();
       videoDetailController.plPlayerController.showDanmaku = true;
 
       // 修复从后台恢复时全屏状态下屏幕方向错误的问题
@@ -200,7 +210,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
         });
       }
     } else if (state == AppLifecycleState.paused) {
-      videoIntroController.canelTimer();
+      introController.canelTimer();
       videoDetailController.plPlayerController.showDanmaku = false;
     }
   }
@@ -256,11 +266,9 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
       /// 顺序播放 列表循环
       if (plPlayerController!.playRepeat != PlayRepeat.pause &&
           plPlayerController!.playRepeat != PlayRepeat.singleCycle) {
-        if (videoDetailController.isPlayAll ||
-            videoDetailController.videoType == SearchType.video) {
-          notExitFlag = videoIntroController.nextPlay();
-        } else if (videoDetailController.videoType ==
-            SearchType.media_bangumi) {
+        if (videoDetailController.isUgc) {
+          notExitFlag = ugcIntroController.nextPlay();
+        } else {
           notExitFlag = pgcIntroController.nextPlay();
         }
       }
@@ -346,10 +354,16 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
       ScreenBrightness.instance.resetApplicationScreenBrightness();
       PlPlayerController.setPlayCallBack(null);
     }
-    videoDetailController.positionSubscription?.cancel();
-    videoIntroController.canelTimer();
-    videoIntroController.videoDetail.close();
-    videoDetailController.cid.close();
+    videoDetailController
+      ..positionSubscription?.cancel()
+      ..cid.close();
+    if (videoDetailController.isUgc) {
+      ugcIntroController
+        ..canelTimer()
+        ..videoDetail.close();
+    } else {
+      pgcIntroController.canelTimer();
+    }
     if (!videoDetailController.horizontalScreen) {
       AutoOrientation.portraitUpMode();
     }
@@ -359,14 +373,16 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
     }
     if (plPlayerController != null) {
       videoDetailController.makeHeartBeat();
-      plPlayerController!.removeStatusLister(playerListener);
-      plPlayerController!.removePositionListener(positionListener);
-      plPlayerController!.dispose();
+      plPlayerController!
+        ..removeStatusLister(playerListener)
+        ..removePositionListener(positionListener)
+        ..dispose();
     } else {
       PlPlayerController.updatePlayCount();
     }
     VideoDetailPageV.routeObserver.unsubscribe(this);
     showStatusBar();
+    _introScrollController?.dispose();
     super.dispose();
   }
 
@@ -382,7 +398,8 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
     ScreenBrightness.instance.resetApplicationScreenBrightness();
 
     videoDetailController.positionSubscription?.cancel();
-    videoIntroController.canelTimer();
+
+    introController.canelTimer();
 
     videoDetailController
       ..playerStatus = plPlayerController?.playerStatus.status.value
@@ -416,7 +433,9 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
 
     isShowing = true;
     PlPlayerController.setPlayCallBack(playCallBack);
-    videoIntroController.startTimer();
+
+    introController.startTimer();
+
     if (mounted) {
       if (videoDetailController.brightness != null) {
         plPlayerController?.setCurrBrightness(
@@ -769,11 +788,10 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                                                   .colorScheme
                                                   .onSurface,
                                             ),
-                                            onSelected: (String type) async {
+                                            onSelected: (String type) {
                                               switch (type) {
                                                 case 'later':
-                                                  await videoIntroController
-                                                      .viewLater();
+                                                  introController.viewLater();
                                                   break;
                                                 case 'report':
                                                   if (!Accounts.main.isLogin) {
@@ -1127,7 +1145,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                     buildTabbar(
                       introText: '相关视频',
                       showIntro:
-                          videoDetailController.videoType == SearchType.video &&
+                          videoDetailController.isUgc &&
                           videoDetailController
                               .plPlayerController
                               .showRelatedVideo,
@@ -1137,13 +1155,12 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                       child: videoTabBarView(
                         controller: videoDetailController.tabCtr,
                         children: [
-                          if (videoDetailController.videoType ==
-                                  SearchType.video &&
+                          if (videoDetailController.isUgc &&
                               videoDetailController
                                   .plPlayerController
                                   .showRelatedVideo)
                             CustomScrollView(
-                              controller: _introController,
+                              controller: introScrollController,
                               slivers: [
                                 RelatedVideoPanel(
                                   key: relatedVideoPanelKey,
@@ -1215,14 +1232,12 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
             key: Key(heroTag),
             plPlayerController: plPlayerController!,
             videoDetailController: videoDetailController,
-            videoIntroController:
-                videoDetailController.videoType == SearchType.video
-                ? videoIntroController
+            ugcIntroController: videoDetailController.isUgc
+                ? ugcIntroController
                 : null,
-            pgcIntroController:
-                videoDetailController.videoType == SearchType.media_bangumi
-                ? pgcIntroController
-                : null,
+            pgcIntroController: videoDetailController.isUgc
+                ? null
+                : pgcIntroController,
             headerControl: HeaderControl(
               controller: plPlayerController!,
               videoDetailCtr: videoDetailController,
@@ -1232,11 +1247,9 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                 ? null
                 : Obx(
                     () => PlDanmaku(
-                      key: Key(
-                        videoDetailController.danmakuCid.value.toString(),
-                      ),
+                      key: Key(videoDetailController.cid.value.toString()),
                       isPipMode: true,
-                      cid: videoDetailController.danmakuCid.value,
+                      cid: videoDetailController.cid.value,
                       playerController: plPlayerController!,
                     ),
                   ),
@@ -1321,10 +1334,10 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                       ),
                     ],
                   ),
-                  onSelected: (String type) async {
+                  onSelected: (String type) {
                     switch (type) {
                       case 'later':
-                        await videoIntroController.viewLater();
+                        introController.viewLater();
                         break;
                       case 'report':
                         if (!Accounts.main.isLogin) {
@@ -1400,14 +1413,12 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
             key: Key(heroTag),
             plPlayerController: plPlayerController!,
             videoDetailController: videoDetailController,
-            videoIntroController:
-                videoDetailController.videoType == SearchType.video
-                ? videoIntroController
+            ugcIntroController: videoDetailController.isUgc
+                ? ugcIntroController
                 : null,
-            pgcIntroController:
-                videoDetailController.videoType == SearchType.media_bangumi
-                ? pgcIntroController
-                : null,
+            pgcIntroController: videoDetailController.isUgc
+                ? null
+                : pgcIntroController,
             headerControl: HeaderControl(
               key: videoDetailController.headerCtrKey,
               controller: videoDetailController.plPlayerController,
@@ -1416,8 +1427,8 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
             ),
             danmuWidget: Obx(
               () => PlDanmaku(
-                key: Key(videoDetailController.danmakuCid.value.toString()),
-                cid: videoDetailController.danmakuCid.value,
+                key: Key(videoDetailController.cid.value.toString()),
+                cid: videoDetailController.cid.value,
                 playerController: plPlayerController!,
               ),
             ),
@@ -1507,7 +1518,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
           }
           String text = tabs[value];
           if (text == '简介' || text == '相关视频') {
-            _introController.animToTop();
+            _introScrollController?.animToTop();
           } else if (text.startsWith('评论')) {
             _videoReplyController.animateToTop();
           }
@@ -1759,7 +1770,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                                       MaterialTapTargetSize.shrinkWrap,
                                 ),
                                 onPressed: () {
-                                  videoIntroController.changeSeasonOrbangu(
+                                  ugcIntroController.onChangeEpisode(
                                     null,
                                     videoDetailController.bvid,
                                     item.cid,
@@ -1795,13 +1806,13 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
     final bottom = MediaQuery.paddingOf(context).bottom;
     Widget introPanel() => CustomScrollView(
       key: const PageStorageKey<String>('简介'),
-      controller: needCtr ? _introController : null,
+      controller: needCtr ? introScrollController : null,
       physics: !needCtr
           ? const AlwaysScrollableScrollPhysics(parent: ClampingScrollPhysics())
           : null,
       slivers: [
-        if (videoDetailController.videoType == SearchType.video) ...[
-          VideoIntroPanel(
+        if (videoDetailController.isUgc) ...[
+          UgcIntroPanel(
             key: ugcPanelKey,
             heroTag: heroTag,
             showAiBottomSheet: showAiBottomSheet,
@@ -1828,7 +1839,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                 height: bottom + StyleString.safeSpace,
               ),
             ),
-        ] else if (videoDetailController.videoType == SearchType.media_bangumi)
+        ] else
           Obx(
             () => PgcIntroPage(
               key: pgcPanelKey,
@@ -1901,7 +1912,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
   }
 
   Widget get seasonPanel {
-    final videoDetail = videoIntroController.videoDetail.value;
+    final videoDetail = ugcIntroController.videoDetail.value;
     return Column(
       children: [
         if ((videoDetail.pages?.length ?? 0) > 1)
@@ -1910,8 +1921,8 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
               padding: const EdgeInsets.symmetric(horizontal: 14),
               child: PagesPanel(
                 heroTag: heroTag,
-                videoIntroController: videoIntroController,
-                bvid: videoIntroController.bvid,
+                ugcIntroController: ugcIntroController,
+                bvid: ugcIntroController.bvid,
                 showEpisodes: showEpisodes,
               ),
             )
@@ -1921,7 +1932,9 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                 () => EpisodePanel(
                   heroTag: heroTag,
                   enableSlide: false,
-                  videoIntroController: videoIntroController,
+                  ugcIntroController: videoDetailController.isUgc
+                      ? ugcIntroController
+                      : null,
                   type: EpisodeType.part,
                   list: [videoDetail.pages!],
                   cover: videoDetailController.cover.value,
@@ -1929,15 +1942,11 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                   aid: IdUtils.bv2av(videoDetailController.bvid),
                   cid: videoDetailController.cid.value,
                   isReversed: videoDetail.isPageReversed,
-                  changeFucCall:
-                      videoDetailController.videoType ==
-                          SearchType.media_bangumi
-                      ? pgcIntroController.changeSeasonOrbangu
-                      : videoIntroController.changeSeasonOrbangu,
+                  onChangeEpisode: videoDetailController.isUgc
+                      ? ugcIntroController.onChangeEpisode
+                      : pgcIntroController.onChangeEpisode,
                   showTitle: false,
-                  isSupportReverse:
-                      videoDetailController.videoType !=
-                      SearchType.media_bangumi,
+                  isSupportReverse: videoDetailController.isUgc,
                   onReverse: () => onReversePlay(
                     bvid: videoDetailController.bvid,
                     aid: IdUtils.bv2av(videoDetailController.bvid),
@@ -1959,9 +1968,9 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
             child: SeasonPanel(
               heroTag: heroTag,
               onTap: false,
-              changeFuc: videoIntroController.changeSeasonOrbangu,
+              onChangeEpisode: ugcIntroController.onChangeEpisode,
               showEpisodes: showEpisodes,
-              videoIntroController: videoIntroController,
+              ugcIntroController: ugcIntroController,
             ),
           ),
           Expanded(
@@ -1969,7 +1978,9 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
               () => EpisodePanel(
                 heroTag: heroTag,
                 enableSlide: false,
-                videoIntroController: videoIntroController,
+                ugcIntroController: videoDetailController.isUgc
+                    ? ugcIntroController
+                    : null,
                 type: EpisodeType.season,
                 initialTabIndex: videoDetailController.seasonIndex.value,
                 cover: videoDetailController.cover.value,
@@ -1978,19 +1989,17 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                 bvid: videoDetailController.bvid,
                 aid: IdUtils.bv2av(videoDetailController.bvid),
                 cid: videoDetailController.seasonCid ?? 0,
-                isReversed: videoIntroController
+                isReversed: ugcIntroController
                     .videoDetail
                     .value
                     .ugcSeason!
                     .sections![videoDetailController.seasonIndex.value]
                     .isReversed,
-                changeFucCall:
-                    videoDetailController.videoType == SearchType.media_bangumi
-                    ? pgcIntroController.changeSeasonOrbangu
-                    : videoIntroController.changeSeasonOrbangu,
+                onChangeEpisode: videoDetailController.isUgc
+                    ? ugcIntroController.onChangeEpisode
+                    : pgcIntroController.onChangeEpisode,
                 showTitle: false,
-                isSupportReverse:
-                    videoDetailController.videoType != SearchType.media_bangumi,
+                isSupportReverse: videoDetailController.isUgc,
                 onReverse: () => onReversePlay(
                   bvid: videoDetailController.bvid,
                   aid: IdUtils.bv2av(videoDetailController.bvid),
@@ -2051,7 +2060,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
     videoDetailController.childKey.currentState?.showBottomSheet(
       backgroundColor: Colors.transparent,
       (context) =>
-          AiConclusionPanel(item: videoIntroController.aiConclusionResult!),
+          AiConclusionPanel(item: ugcIntroController.aiConclusionResult!),
     );
   }
 
@@ -2075,7 +2084,9 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
     }
     Widget listSheetContent([bool? enableSlide]) => EpisodePanel(
       heroTag: heroTag,
-      videoIntroController: videoIntroController,
+      ugcIntroController: videoDetailController.isUgc
+          ? ugcIntroController
+          : null,
       type: season != null
           ? EpisodeType.season
           : episodes is List<Part>
@@ -2089,21 +2100,20 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
       cid: cid,
       seasonId: season?.id,
       list: season != null ? season.sections : [episodes],
-      isReversed: videoDetailController.videoType == SearchType.media_bangumi
+      isReversed: !videoDetailController.isUgc
           ? null
           : season != null
-          ? videoIntroController
+          ? ugcIntroController
                 .videoDetail
                 .value
                 .ugcSeason!
                 .sections![videoDetailController.seasonIndex.value]
                 .isReversed
-          : videoIntroController.videoDetail.value.isPageReversed,
-      isSupportReverse:
-          videoDetailController.videoType != SearchType.media_bangumi,
-      changeFucCall: videoDetailController.videoType == SearchType.media_bangumi
-          ? pgcIntroController.changeSeasonOrbangu
-          : videoIntroController.changeSeasonOrbangu,
+          : ugcIntroController.videoDetail.value.isPageReversed,
+      isSupportReverse: videoDetailController.isUgc,
+      onChangeEpisode: videoDetailController.isUgc
+          ? ugcIntroController.onChangeEpisode
+          : pgcIntroController.onChangeEpisode,
       onClose: Get.back,
       onReverse: () {
         Get.back();
@@ -2143,10 +2153,10 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
       return;
     }
 
-    void changeEpisode(episode) {
+    void onChangeEpisode(episode) {
       final isEpisode = episode is BaseEpisodeItem;
       final isPgc = episode is pgc.EpisodeItem;
-      videoIntroController.changeSeasonOrbangu(
+      ugcIntroController.onChangeEpisode(
         isPgc ? episode.epId : null,
         isEpisode ? episode.bvid : bvid,
         episode.cid,
@@ -2159,7 +2169,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
       );
     }
 
-    final videoDetail = videoIntroController.videoDetail.value;
+    final videoDetail = ugcIntroController.videoDetail.value;
     if (isSeason) {
       // reverse season
       final item = videoDetail
@@ -2176,7 +2186,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
           ..cid.refresh();
       } else {
         // switch to first episode
-        var episode = videoIntroController
+        var episode = ugcIntroController
             .videoDetail
             .value
             .ugcSeason!
@@ -2184,7 +2194,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
             .episodes!
             .first;
         if (episode.cid != videoDetailController.cid.value) {
-          changeEpisode(episode);
+          onChangeEpisode(episode);
           videoDetailController.seasonCid = episode.cid;
         } else {
           videoDetailController
@@ -2204,7 +2214,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
         // switch to first episode
         var episode = videoDetail.pages!.first;
         if (episode.cid != videoDetailController.cid.value) {
-          changeEpisode(episode);
+          onChangeEpisode(episode);
         } else {
           videoDetailController.cid.refresh();
         }
@@ -2264,7 +2274,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
         return HorizontalMemberPage(
           mid: mid,
           videoDetailController: videoDetailController,
-          videoIntroController: videoIntroController,
+          ugcIntroController: ugcIntroController,
         );
       },
     );

@@ -30,12 +30,12 @@ class HorizontalMemberPage extends StatefulWidget {
     super.key,
     required this.mid,
     required this.videoDetailController,
-    required this.videoIntroController,
+    required this.ugcIntroController,
   });
 
   final dynamic mid;
   final VideoDetailController videoDetailController;
-  final VideoIntroController videoIntroController;
+  final UgcIntroController ugcIntroController;
 
   @override
   State<HorizontalMemberPage> createState() => _HorizontalMemberPageState();
@@ -200,8 +200,8 @@ class _HorizontalMemberPageState extends State<HorizontalMemberPage> {
                         videoItem: videoItem,
                         bvid: _bvid,
                         onTap: () {
-                          final status = widget.videoIntroController
-                              .changeSeasonOrbangu(
+                          final status = widget.ugcIntroController
+                              .onChangeEpisode(
                                 null,
                                 videoItem.bvid,
                                 videoItem.cid,

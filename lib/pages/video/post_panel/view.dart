@@ -51,6 +51,14 @@ class _PostPanelState extends CommonCollapseSlidePageState<PostPanel> {
   double get currentPos =>
       plPlayerController.position.value.inMilliseconds / 1000;
 
+  final _controller = ScrollController();
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
   @override
   Widget buildPage(ThemeData theme) {
     return Scaffold(
@@ -104,7 +112,7 @@ class _PostPanelState extends CommonCollapseSlidePageState<PostPanel> {
       clipBehavior: Clip.none,
       children: [
         SingleChildScrollView(
-          controller: ScrollController(),
+          controller: _controller,
           physics: const AlwaysScrollableScrollPhysics(),
           padding: EdgeInsets.only(bottom: 88 + bottom),
           child: Column(

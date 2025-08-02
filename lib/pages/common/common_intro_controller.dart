@@ -1,12 +1,16 @@
+import 'dart:async' show Timer;
+
 import 'package:PiliPlus/http/fav.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/http/user.dart';
 import 'package:PiliPlus/http/video.dart';
 import 'package:PiliPlus/models_new/fav/fav_folder/data.dart';
+import 'package:PiliPlus/models_new/video/video_detail/data.dart';
 import 'package:PiliPlus/models_new/video/video_detail/stat_detail.dart';
 import 'package:PiliPlus/models_new/video/video_tag/data.dart';
 import 'package:PiliPlus/services/account_service.dart';
 import 'package:PiliPlus/utils/global_data.dart';
+import 'package:PiliPlus/utils/id_utils.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/storage_key.dart';
@@ -17,6 +21,8 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 
 abstract class CommonIntroController extends GetxController {
+  String heroTag = Get.arguments['heroTag'];
+
   String bvid = Get.parameters['bvid']!;
 
   // 是否点赞
@@ -27,6 +33,8 @@ abstract class CommonIntroController extends GetxController {
   bool get hasCoin => coinNum.value != 0;
   // 是否收藏
   final RxBool hasFav = false.obs;
+  // 是否稍后再看
+  final RxBool hasLater = false.obs;
 
   final Rx<List<VideoTagItem>?> videoTags = Rx<List<VideoTagItem>?>(null);
 
@@ -38,6 +46,62 @@ abstract class CommonIntroController extends GetxController {
   (Object, int) getFavRidType();
 
   StatDetail? getStat();
+
+  final Rx<VideoDetailData> videoDetail = VideoDetailData().obs;
+
+  Future<void> queryVideoIntro();
+
+  bool prevPlay();
+  bool nextPlay();
+
+  // 同时观看
+  final bool isShowOnlineTotal = Pref.enableOnlineTotal;
+  late final RxString total = '1'.obs;
+  Timer? timer;
+
+  final RxInt cid = int.parse(Get.parameters['cid']!).obs;
+
+  @override
+  void onInit() {
+    super.onInit();
+    queryVideoIntro();
+    startTimer();
+  }
+
+  void startTimer() {
+    if (isShowOnlineTotal) {
+      queryOnlineTotal();
+      timer ??= Timer.periodic(const Duration(seconds: 10), (Timer timer) {
+        queryOnlineTotal();
+      });
+    }
+  }
+
+  void canelTimer() {
+    timer?.cancel();
+    timer = null;
+  }
+
+  // 查看同时在看人数
+  Future<void> queryOnlineTotal() async {
+    if (!isShowOnlineTotal) {
+      return;
+    }
+    var result = await VideoHttp.onlineTotal(
+      aid: IdUtils.bv2av(bvid),
+      bvid: bvid,
+      cid: cid.value,
+    );
+    if (result['status']) {
+      total.value = result['data'];
+    }
+  }
+
+  @override
+  void onClose() {
+    canelTimer();
+    super.onClose();
+  }
 
   Future<LoadingState<FavFolderData>> queryVideoInFolder() async {
     favIds = null;
@@ -196,5 +260,13 @@ abstract class CommonIntroController extends GetxController {
     } else {
       videoTags.value = null;
     }
+  }
+
+  Future<void> viewLater() async {
+    var res = await (hasLater.value
+        ? UserHttp.toViewDel(aids: [IdUtils.bv2av(bvid)])
+        : await UserHttp.toViewLater(bvid: bvid));
+    if (res['status']) hasLater.value = !hasLater.value;
+    SmartDialog.showToast(res['msg']);
   }
 }

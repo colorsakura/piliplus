@@ -41,7 +41,7 @@ class EpisodePanel extends CommonSlidePage {
   const EpisodePanel({
     super.key,
     super.enableSlide,
-    required this.videoIntroController,
+    required this.ugcIntroController,
     required this.heroTag,
     required this.type,
     // required this.count,
@@ -57,11 +57,11 @@ class EpisodePanel extends CommonSlidePage {
     this.isSupportReverse,
     this.isReversed,
     this.onReverse,
-    required this.changeFucCall,
+    required this.onChangeEpisode,
     this.onClose,
-  });
+  }) : assert(type == EpisodeType.pgc || ugcIntroController != null);
 
-  final VideoIntroController videoIntroController;
+  final UgcIntroController? ugcIntroController;
   final String heroTag;
   final EpisodeType type;
   // final int count;
@@ -76,7 +76,7 @@ class EpisodePanel extends CommonSlidePage {
   final int initialTabIndex;
   final bool? isSupportReverse;
   final bool? isReversed;
-  final Function changeFucCall;
+  final Function onChangeEpisode;
   final VoidCallback? onReverse;
   final VoidCallback? onClose;
 
@@ -315,7 +315,7 @@ class _EpisodePanelState extends CommonSlidePageState<EpisodePanel> {
                             : episode.pages,
                         cover: episode.arc?.pic,
                         heroTag: widget.heroTag,
-                        videoIntroController: widget.videoIntroController,
+                        ugcIntroController: widget.ugcIntroController!,
                         bvid: IdUtils.av2bv(episode.aid),
                       ),
                     ),
@@ -401,7 +401,7 @@ class _EpisodePanelState extends CommonSlidePageState<EpisodePanel> {
               _currentItemIndex = index;
             }
             final isEpisode = episode is ugc.BaseEpisodeItem;
-            widget.changeFucCall(
+            widget.onChangeEpisode(
               episode is pgc.EpisodeItem ? episode.epId : null,
               isEpisode ? episode.bvid : widget.bvid,
               episode.cid,
@@ -411,7 +411,7 @@ class _EpisodePanelState extends CommonSlidePageState<EpisodePanel> {
             if (widget.type == EpisodeType.season) {
               try {
                 Get.find<VideoDetailController>(
-                  tag: widget.videoIntroController.heroTag,
+                  tag: widget.ugcIntroController!.heroTag,
                 ).seasonCid = episode.cid;
               } catch (_) {}
             }

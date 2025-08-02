@@ -32,6 +32,14 @@ class _ViewPointsPageState
 
   int currentIndex = -1;
 
+  final _controller = ScrollController();
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
   @override
   Widget buildPage(ThemeData theme) {
     return Scaffold(
@@ -92,7 +100,7 @@ class _ViewPointsPageState
       color: theme.dividerColor.withValues(alpha: 0.1),
     );
     return ListView.separated(
-      controller: ScrollController(),
+      controller: _controller,
       physics: const AlwaysScrollableScrollPhysics(),
       padding: EdgeInsets.only(
         bottom: MediaQuery.paddingOf(context).bottom + 80,

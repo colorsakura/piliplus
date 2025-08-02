@@ -10,14 +10,15 @@ import 'package:PiliPlus/models/pgc_lcf.dart';
 import 'package:PiliPlus/models_new/pgc/pgc_info_model/episode.dart';
 import 'package:PiliPlus/models_new/pgc/pgc_info_model/result.dart';
 import 'package:PiliPlus/models_new/triple/pgc_triple.dart';
+import 'package:PiliPlus/models_new/video/video_detail/data.dart';
 import 'package:PiliPlus/models_new/video/video_detail/stat_detail.dart';
 import 'package:PiliPlus/pages/common/common_intro_controller.dart';
 import 'package:PiliPlus/pages/dynamics_repost/view.dart';
 import 'package:PiliPlus/pages/video/controller.dart';
-import 'package:PiliPlus/pages/video/introduction/ugc/controller.dart';
 import 'package:PiliPlus/pages/video/pay_coins/view.dart';
 import 'package:PiliPlus/pages/video/reply/controller.dart';
 import 'package:PiliPlus/plugin/pl_player/models/play_repeat.dart';
+import 'package:PiliPlus/services/service_locator.dart';
 import 'package:PiliPlus/utils/feed_back.dart';
 import 'package:PiliPlus/utils/global_data.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
@@ -257,7 +258,7 @@ class PgcIntroController extends CommonIntroController {
   }
 
   // 修改分P或番剧分集
-  void changeSeasonOrbangu(dynamic epId, bvid, cid, aid, cover) {
+  void onChangeEpisode(dynamic epId, bvid, cid, aid, cover) {
     // 重新获取视频资源
     this.epId = epId;
     this.bvid = bvid;
@@ -270,7 +271,6 @@ class PgcIntroController extends CommonIntroController {
           ..epId = epId
           ..bvid = bvid
           ..cid.value = cid
-          ..danmakuCid.value = cid
           ..queryVideoUrl();
     if (cover is String && cover.isNotEmpty) {
       videoDetailCtr.cover.value = cover;
@@ -289,13 +289,9 @@ class PgcIntroController extends CommonIntroController {
       queryPgcLikeCoinFav();
     }
 
-    try {
-      Get.find<VideoIntroController>(tag: Get.arguments['heroTag'])
-        ..bvid = bvid
-        ..lastPlayCid.value = cid
-        ..queryVideoIntro()
-        ..queryOnlineTotal();
-    } catch (_) {}
+    this.cid.value = cid;
+    queryVideoIntro();
+    queryOnlineTotal();
   }
 
   // 追番
@@ -328,6 +324,7 @@ class PgcIntroController extends CommonIntroController {
     SmartDialog.showToast(result['msg']);
   }
 
+  @override
   bool prevPlay() {
     final episodes = pgcItem.episodes!;
     VideoDetailController videoDetailCtr = Get.find<VideoDetailController>(
@@ -346,7 +343,7 @@ class PgcIntroController extends CommonIntroController {
       }
     }
     final episode = episodes[prevIndex];
-    changeSeasonOrbangu(
+    onChangeEpisode(
       episode.epId,
       episode.bvid,
       episode.cid,
@@ -357,6 +354,7 @@ class PgcIntroController extends CommonIntroController {
   }
 
   /// 列表循环或者顺序播放时，自动播放下一个；自动连播时，播放相关视频
+  @override
   bool nextPlay() {
     try {
       final episodes = pgcItem.episodes!;
@@ -380,7 +378,7 @@ class PgcIntroController extends CommonIntroController {
         }
       }
       final episode = episodes[nextIndex];
-      changeSeasonOrbangu(
+      onChangeEpisode(
         episode.epId,
         episode.bvid,
         episode.cid,
@@ -455,5 +453,15 @@ class PgcIntroController extends CommonIntroController {
         followStatus.value = userStatus.followStatus;
       }
     });
+  }
+
+  @override
+  Future<void> queryVideoIntro() async {
+    var res = await VideoHttp.videoIntro(bvid: bvid);
+    if (res.isSuccess) {
+      VideoDetailData data = res.data;
+      videoPlayerServiceHandler.onVideoDetailChange(data, data.cid!, heroTag);
+      videoDetail.value = data;
+    }
   }
 }

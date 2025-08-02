@@ -10,6 +10,7 @@ import 'package:PiliPlus/models_new/video/video_detail/episode.dart';
 import 'package:PiliPlus/models_new/video/video_detail/page.dart';
 import 'package:PiliPlus/models_new/video/video_detail/section.dart';
 import 'package:PiliPlus/models_new/video/video_shot/data.dart';
+import 'package:PiliPlus/pages/common/common_intro_controller.dart';
 import 'package:PiliPlus/pages/video/controller.dart';
 import 'package:PiliPlus/pages/video/introduction/pgc/controller.dart';
 import 'package:PiliPlus/pages/video/introduction/ugc/controller.dart';
@@ -48,7 +49,7 @@ class PLVideoPlayer extends StatefulWidget {
   const PLVideoPlayer({
     required this.plPlayerController,
     this.videoDetailController,
-    this.videoIntroController,
+    this.ugcIntroController,
     this.pgcIntroController,
     required this.headerControl,
     this.bottomControl,
@@ -64,7 +65,7 @@ class PLVideoPlayer extends StatefulWidget {
 
   final PlPlayerController plPlayerController;
   final VideoDetailController? videoDetailController;
-  final VideoIntroController? videoIntroController;
+  final UgcIntroController? ugcIntroController;
   final PgcIntroController? pgcIntroController;
   final Widget headerControl;
   final Widget? bottomControl;
@@ -86,8 +87,12 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
     with TickerProviderStateMixin {
   late AnimationController animationController;
   late VideoController videoController;
-  VideoIntroController? videoIntroController;
+  UgcIntroController? ugcIntroController;
   PgcIntroController? pgcIntroController;
+  late final CommonIntroController introController =
+      widget.videoDetailController!.isUgc
+      ? ugcIntroController!
+      : pgcIntroController!;
 
   final GlobalKey _playerKey = GlobalKey();
   final GlobalKey<VideoState> key = GlobalKey<VideoState>();
@@ -170,7 +175,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
       duration: const Duration(milliseconds: 100),
     );
     videoController = plPlayerController.videoController!;
-    videoIntroController = widget.videoIntroController;
+    ugcIntroController = widget.ugcIntroController;
     pgcIntroController = widget.pgcIntroController;
     Future.microtask(() async {
       try {
@@ -250,9 +255,9 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
 
   // 动态构建底部控制条
   Widget buildBottomControl() {
-    final videoDetail = videoIntroController?.videoDetail.value;
-    bool isSeason = videoDetail?.ugcSeason != null;
-    bool isPage = videoDetail?.pages != null && videoDetail!.pages!.length > 1;
+    final videoDetail = introController.videoDetail.value;
+    bool isSeason = videoDetail.ugcSeason != null;
+    bool isPage = videoDetail.pages != null && videoDetail.pages!.length > 1;
     bool isPgc = pgcIntroController != null;
     bool anySeason = isSeason || isPage || isPgc;
     double widgetWidth = isFullScreen && context.isLandscape ? 42 : 35;
@@ -270,14 +275,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
             color: Colors.white,
           ),
           onTap: () {
-            bool? res;
-            if (videoIntroController != null) {
-              res = videoIntroController!.prevPlay();
-            }
-            if (pgcIntroController != null) {
-              res = pgcIntroController!.prevPlay();
-            }
-            if (res == false) {
+            if (!introController.prevPlay()) {
               SmartDialog.showToast('已经是第一集了');
             }
           },
@@ -302,14 +300,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
             color: Colors.white,
           ),
           onTap: () {
-            bool? res;
-            if (videoIntroController != null) {
-              res = videoIntroController!.nextPlay();
-            }
-            if (pgcIntroController != null) {
-              res = pgcIntroController!.nextPlay();
-            }
-            if (res == false) {
+            if (!introController.nextPlay()) {
               SmartDialog.showToast('已经是最后一集了');
             }
           },
@@ -477,7 +468,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
             int currentCid = plPlayerController.cid;
             String bvid = plPlayerController.bvid;
             List episodes = [];
-            final videoDetail = videoIntroController!.videoDetail.value;
+            final videoDetail = introController.videoDetail.value;
             if (isSeason) {
               final List<SectionItem> sections =
                   videoDetail.ugcSeason!.sections!;

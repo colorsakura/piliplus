@@ -19,6 +19,14 @@ class AiConclusionPanel extends CommonCollapseSlidePage {
 }
 
 class _AiDetailState extends CommonCollapseSlidePageState<AiConclusionPanel> {
+  final _controller = ScrollController();
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
   @override
   Widget buildPage(ThemeData theme) {
     return Material(
@@ -53,7 +61,7 @@ class _AiDetailState extends CommonCollapseSlidePageState<AiConclusionPanel> {
   @override
   Widget buildList(ThemeData theme) {
     return CustomScrollView(
-      controller: ScrollController(),
+      controller: _controller,
       physics: const AlwaysScrollableScrollPhysics(),
       slivers: [
         if (widget.item.summary?.isNotEmpty == true) ...[

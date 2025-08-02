@@ -68,11 +68,11 @@ class VideoDetailController extends GetxController
   /// 路由传参
   String bvid = Get.parameters['bvid']!;
   final RxInt cid = int.parse(Get.parameters['cid']!).obs;
-  final RxInt danmakuCid = 0.obs;
   final heroTag = Get.arguments['heroTag'];
   final RxString cover = ''.obs;
   // 视频类型 默认投稿视频
-  final SearchType videoType = Get.arguments['videoType'] ?? SearchType.video;
+  final isUgc =
+      (Get.arguments['videoType'] ?? SearchType.video) == SearchType.video;
 
   /// tabs相关配置
   late TabController tabCtr;
@@ -114,7 +114,7 @@ class VideoDetailController extends GetxController
   late String cacheDecode;
   late String cacheSecondDecode;
 
-  bool get showReply => videoType == SearchType.video
+  bool get showReply => isUgc
       ? plPlayerController.showVideoReply
       : plPlayerController.showBangumiReply;
 
@@ -283,7 +283,6 @@ class VideoDetailController extends GetxController
     );
     autoPlay.value = Pref.autoPlayEnable;
     if (autoPlay.value) isShowCover.value = false;
-    danmakuCid.value = cid.value;
 
     // 预设的解码格式
     cacheDecode = Pref.defaultDecode;
@@ -336,9 +335,9 @@ class VideoDetailController extends GetxController
           try {
             for (var item in mediaList) {
               if (item.cid != null) {
-                Get.find<VideoIntroController>(
+                Get.find<UgcIntroController>(
                   tag: heroTag,
-                ).changeSeasonOrbangu(
+                ).onChangeEpisode(
                   null,
                   item.bvid,
                   item.cid,
@@ -367,9 +366,9 @@ class VideoDetailController extends GetxController
         mediaList: mediaList,
         changeMediaList: (bvid, cid, aid, cover) {
           try {
-            Get.find<VideoIntroController>(
+            Get.find<UgcIntroController>(
               tag: heroTag,
-            ).changeSeasonOrbangu(null, bvid, cid, aid, cover);
+            ).onChangeEpisode(null, bvid, cid, aid, cover);
           } catch (_) {}
         },
         panelTitle: watchLaterTitle,
@@ -901,11 +900,11 @@ class VideoDetailController extends GetxController
               onTap: (_) {
                 if (item is int) {
                   try {
-                    VideoIntroController videoIntroController =
-                        Get.find<VideoIntroController>(tag: heroTag);
+                    UgcIntroController ugcIntroController =
+                        Get.find<UgcIntroController>(tag: heroTag);
                     Part part =
-                        videoIntroController.videoDetail.value.pages![item];
-                    videoIntroController.changeSeasonOrbangu(
+                        ugcIntroController.videoDetail.value.pages![item];
+                    ugcIntroController.onChangeEpisode(
                       null,
                       bvid,
                       part.cid,
@@ -1137,9 +1136,9 @@ class VideoDetailController extends GetxController
       bvid: bvid,
       cid: cid.value,
       autoplay: autoplay ?? autoPlay.value,
-      epid: videoType == SearchType.media_bangumi ? epId : null,
-      seasonId: videoType == SearchType.media_bangumi ? seasonId : null,
-      subType: videoType == SearchType.media_bangumi ? subType : null,
+      epid: isUgc ? null : epId,
+      seasonId: isUgc ? null : seasonId,
+      subType: isUgc ? null : subType,
       callback: () {
         if (videoState.value is! Success) {
           videoState.value = const Success(null);
@@ -1496,9 +1495,9 @@ class VideoDetailController extends GetxController
     if (res['status']) {
       PlayInfoData playInfo = res['data'];
       // interactive video
-      if (graphVersion == null) {
+      if (isUgc && graphVersion == null) {
         try {
-          final introCtr = Get.find<VideoIntroController>(tag: heroTag);
+          final introCtr = Get.find<UgcIntroController>(tag: heroTag);
           if (introCtr.videoDetail.value.rights?.isSteinGate == 1) {
             graphVersion = playInfo.interaction?.graphVersion;
             getSteinEdgeInfo();
@@ -1508,16 +1507,17 @@ class VideoDetailController extends GetxController
         }
       }
 
-      if (continuePlayingPart) {
+      if (isUgc && continuePlayingPart) {
         continuePlayingPart = false;
         try {
-          VideoIntroController videoIntroController =
-              Get.find<VideoIntroController>(tag: heroTag);
-          if ((videoIntroController.videoDetail.value.pages?.length ?? 0) > 1 &&
+          UgcIntroController ugcIntroController = Get.find<UgcIntroController>(
+            tag: heroTag,
+          );
+          if ((ugcIntroController.videoDetail.value.pages?.length ?? 0) > 1 &&
               playInfo.lastPlayCid != null &&
               playInfo.lastPlayCid != 0) {
             if (playInfo.lastPlayCid != cid.value) {
-              int index = videoIntroController.videoDetail.value.pages!
+              int index = ugcIntroController.videoDetail.value.pages!
                   .indexWhere((item) => item.cid == playInfo.lastPlayCid);
               if (index != -1) {
                 onAddItem(index);
@@ -1598,9 +1598,9 @@ class VideoDetailController extends GetxController
           isManual: true,
           bvid: bvid,
           cid: cid.value,
-          epid: videoType == SearchType.media_bangumi ? epId : null,
-          seasonId: videoType == SearchType.media_bangumi ? seasonId : null,
-          subType: videoType == SearchType.media_bangumi ? subType : null,
+          epid: isUgc ? null : epId,
+          seasonId: isUgc ? null : seasonId,
+          subType: isUgc ? null : subType,
         );
       } catch (_) {}
     }
@@ -1683,7 +1683,7 @@ class VideoDetailController extends GetxController
   void showNoteList(BuildContext context) {
     String? title;
     try {
-      title = Get.find<VideoIntroController>(
+      title = Get.find<UgcIntroController>(
         tag: heroTag,
       ).videoDetail.value.title;
     } catch (_) {}

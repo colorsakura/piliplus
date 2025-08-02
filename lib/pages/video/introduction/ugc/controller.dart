@@ -43,13 +43,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 
-class VideoIntroController extends CommonIntroController with ReloadMixin {
-  String heroTag = '';
-
+class UgcIntroController extends CommonIntroController with ReloadMixin {
   late ExpandableController expandableCtr;
 
   final RxBool status = true.obs;
-  final Rx<VideoDetailData> videoDetail = VideoDetailData().obs;
 
   // up主粉丝数
   final Rx<MemberCardInfoData> userStat = MemberCardInfoData().obs;
@@ -59,16 +56,6 @@ class VideoIntroController extends CommonIntroController with ReloadMixin {
 
   // 是否点踩
   final RxBool hasDislike = false.obs;
-
-  // 是否稍后再看
-  final RxBool hasLater = false.obs;
-
-  final RxInt lastPlayCid = 0.obs;
-
-  // 同时观看
-  final bool isShowOnlineTotal = Pref.enableOnlineTotal;
-  late final RxString total = '1'.obs;
-  Timer? timer;
 
   late final showArgueMsg = Pref.showArgueMsg;
   late final enableAi = Pref.enableAi;
@@ -93,11 +80,6 @@ class VideoIntroController extends CommonIntroController with ReloadMixin {
     }
 
     try {
-      if (heroTag.isEmpty) {
-        heroTag = Get.arguments['heroTag'];
-      }
-    } catch (_) {}
-    try {
       var videoItem = Get.arguments['videoItem'];
       if (videoItem != null) {
         if (videoItem.title case String e) {
@@ -110,12 +92,10 @@ class VideoIntroController extends CommonIntroController with ReloadMixin {
         }
       }
     } catch (_) {}
-    lastPlayCid.value = int.parse(Get.parameters['cid']!);
-    startTimer();
-    queryVideoIntro();
   }
 
   // 获取视频简介&分p
+  @override
   Future<void> queryVideoIntro() async {
     queryVideoTags();
     var res = await VideoHttp.videoIntro(bvid: bvid);
@@ -152,8 +132,8 @@ class VideoIntroController extends CommonIntroController with ReloadMixin {
         }
       } catch (_) {}
       final pages = videoDetail.value.pages;
-      if (pages != null && pages.isNotEmpty && lastPlayCid.value == 0) {
-        lastPlayCid.value = pages.first.cid!;
+      if (pages != null && pages.isNotEmpty && cid.value == 0) {
+        cid.value = pages.first.cid!;
       }
       queryUserStat(data.staff);
     } else {
@@ -296,14 +276,6 @@ class VideoIntroController extends CommonIntroController with ReloadMixin {
     } else {
       SmartDialog.showToast(result['msg']);
     }
-  }
-
-  Future<void> viewLater() async {
-    var res = await (hasLater.value
-        ? UserHttp.toViewDel(aids: [IdUtils.bv2av(bvid)])
-        : await UserHttp.toViewLater(bvid: bvid));
-    if (res['status']) hasLater.value = !hasLater.value;
-    SmartDialog.showToast(res['msg']);
   }
 
   // 投币
@@ -493,7 +465,7 @@ class VideoIntroController extends CommonIntroController with ReloadMixin {
   }
 
   // 修改分P或番剧分集
-  bool changeSeasonOrbangu(dynamic epid, bvid, cid, aid, cover, [isStein]) {
+  bool onChangeEpisode(dynamic epid, bvid, cid, aid, cover, [isStein]) {
     // 重新获取视频资源
     final videoDetailCtr = Get.find<VideoDetailController>(tag: heroTag);
 
@@ -519,7 +491,6 @@ class VideoIntroController extends CommonIntroController with ReloadMixin {
       ..bvid = bvid
       ..oid.value = aid ?? IdUtils.bv2av(bvid)
       ..cid.value = cid
-      ..danmakuCid.value = cid
       ..queryVideoUrl();
 
     if (this.bvid != bvid) {
@@ -553,48 +524,19 @@ class VideoIntroController extends CommonIntroController with ReloadMixin {
       queryVideoIntro();
     }
 
-    lastPlayCid.value = cid;
+    this.cid.value = cid;
     queryOnlineTotal();
     return true;
   }
 
-  void startTimer() {
-    if (isShowOnlineTotal) {
-      queryOnlineTotal();
-      timer ??= Timer.periodic(const Duration(seconds: 10), (Timer timer) {
-        queryOnlineTotal();
-      });
-    }
-  }
-
-  void canelTimer() {
-    timer?.cancel();
-    timer = null;
-  }
-
-  // 查看同时在看人数
-  Future<void> queryOnlineTotal() async {
-    if (!isShowOnlineTotal) {
-      return;
-    }
-    var result = await VideoHttp.onlineTotal(
-      aid: IdUtils.bv2av(bvid),
-      bvid: bvid,
-      cid: lastPlayCid.value,
-    );
-    if (result['status']) {
-      total.value = result['data'];
-    }
-  }
-
   @override
   void onClose() {
-    canelTimer();
     expandableCtr.dispose();
     super.onClose();
   }
 
   /// 播放上一个
+  @override
   bool prevPlay([bool skipPages = false]) {
     final List episodes = [];
     bool isPages = false;
@@ -624,7 +566,7 @@ class VideoIntroController extends CommonIntroController with ReloadMixin {
               ? videoDetail.isPageReversed == true
                     ? videoDetail.pages!.last.cid
                     : videoDetail.pages!.first.cid
-              : lastPlayCid.value),
+              : this.cid.value),
     );
     int prevIndex = currentIndex - 1;
     final PlayRepeat playRepeat = videoDetailCtr.plPlayerController.playRepeat;
@@ -644,11 +586,12 @@ class VideoIntroController extends CommonIntroController with ReloadMixin {
     final int cid = episodes[prevIndex].cid!;
     final String rBvid = isPages ? bvid : episodes[prevIndex].bvid;
     final int rAid = isPages ? IdUtils.bv2av(bvid) : episodes[prevIndex].aid!;
-    changeSeasonOrbangu(null, rBvid, cid, rAid, null);
+    onChangeEpisode(null, rBvid, cid, rAid, null);
     return true;
   }
 
   /// 列表循环或者顺序播放时，自动播放下一个
+  @override
   bool nextPlay([bool skipPages = false]) {
     try {
       final List episodes = [];
@@ -731,7 +674,7 @@ class VideoIntroController extends CommonIntroController with ReloadMixin {
 
       final String rBvid = isPages ? bvid : episodes[nextIndex].bvid;
       final int rAid = isPages ? IdUtils.bv2av(bvid) : episodes[nextIndex].aid!;
-      changeSeasonOrbangu(null, rBvid, cid, rAid, null);
+      onChangeEpisode(null, rBvid, cid, rAid, null);
       return true;
     } catch (_) {
       return false;
@@ -762,7 +705,7 @@ class VideoIntroController extends CommonIntroController with ReloadMixin {
     final firstItem = relatedCtr.loadingState.value.data!.first;
     try {
       if (firstItem.cid != null) {
-        changeSeasonOrbangu(
+        onChangeEpisode(
           null,
           firstItem.bvid,
           firstItem.cid,
@@ -771,7 +714,7 @@ class VideoIntroController extends CommonIntroController with ReloadMixin {
         );
       } else {
         SearchHttp.ab2c(aid: firstItem.aid, bvid: firstItem.bvid).then(
-          (cid) => changeSeasonOrbangu(
+          (cid) => onChangeEpisode(
             null,
             firstItem.bvid,
             cid,
@@ -791,7 +734,7 @@ class VideoIntroController extends CommonIntroController with ReloadMixin {
     SmartDialog.showLoading(msg: '正在获取AI总结');
     final res = await VideoHttp.aiConclusion(
       bvid: bvid,
-      cid: lastPlayCid.value,
+      cid: cid.value,
       upMid: videoDetail.value.owner?.mid,
     );
     SmartDialog.dismiss();

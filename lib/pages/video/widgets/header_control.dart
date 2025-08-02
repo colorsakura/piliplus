@@ -4,13 +4,13 @@ import 'dart:math';
 
 import 'package:PiliPlus/common/widgets/button/icon_button.dart';
 import 'package:PiliPlus/common/widgets/custom_icon.dart';
-import 'package:PiliPlus/models/common/search_type.dart';
 import 'package:PiliPlus/models/common/super_resolution_type.dart';
 import 'package:PiliPlus/models/common/video/audio_quality.dart';
 import 'package:PiliPlus/models/common/video/cdn_type.dart';
 import 'package:PiliPlus/models/common/video/video_decode_type.dart';
 import 'package:PiliPlus/models/common/video/video_quality.dart';
 import 'package:PiliPlus/models/video/play/url.dart';
+import 'package:PiliPlus/pages/common/common_intro_controller.dart';
 import 'package:PiliPlus/pages/setting/widgets/select_dialog.dart';
 import 'package:PiliPlus/pages/setting/widgets/switch_item.dart';
 import 'package:PiliPlus/pages/video/controller.dart';
@@ -64,12 +64,17 @@ class HeaderControl extends StatefulWidget {
 }
 
 class HeaderControlState extends State<HeaderControl> {
-  PlayUrlModel get videoInfo => videoDetailCtr.data;
+  late final PlPlayerController plPlayerController = widget.controller;
+  late final VideoDetailController videoDetailCtr = widget.videoDetailCtr;
+  late final PlayUrlModel videoInfo = videoDetailCtr.data;
   static const TextStyle subTitleStyle = TextStyle(fontSize: 12);
   static const TextStyle titleStyle = TextStyle(fontSize: 14);
   String get heroTag => widget.heroTag;
-  late VideoIntroController videoIntroController;
-  late PgcIntroController pgcIntroController;
+  late final UgcIntroController ugcIntroController;
+  late final PgcIntroController pgcIntroController;
+  late final CommonIntroController introController = videoDetailCtr.isUgc
+      ? ugcIntroController
+      : pgcIntroController;
   bool get horizontalScreen => videoDetailCtr.horizontalScreen;
   RxString now = ''.obs;
   Timer? clock;
@@ -78,14 +83,12 @@ class HeaderControlState extends State<HeaderControl> {
   late final _coinKey = GlobalKey<ActionItemState>();
   late final _favKey = GlobalKey<ActionItemState>();
 
-  PlPlayerController get plPlayerController => widget.controller;
-  VideoDetailController get videoDetailCtr => widget.videoDetailCtr;
-
   @override
   void initState() {
     super.initState();
-    videoIntroController = Get.find<VideoIntroController>(tag: heroTag);
-    if (videoDetailCtr.videoType != SearchType.video) {
+    if (videoDetailCtr.isUgc) {
+      ugcIntroController = Get.find<UgcIntroController>(tag: heroTag);
+    } else {
       pgcIntroController = Get.find<PgcIntroController>(tag: heroTag);
     }
   }
@@ -130,7 +133,7 @@ class HeaderControlState extends State<HeaderControl> {
                   dense: true,
                   onTap: () {
                     Get.back();
-                    videoIntroController.viewLater();
+                    introController.viewLater();
                   },
                   leading: const Icon(Icons.watch_later_outlined, size: 20),
                   title: const Text('添加至「稍后再看」', style: titleStyle),
@@ -874,7 +877,7 @@ class HeaderControlState extends State<HeaderControl> {
                           );
                           if (res.statusCode == 200) {
                             final name =
-                                '${videoIntroController.videoDetail.value.title}-${videoDetailCtr.bvid}-${videoDetailCtr.cid.value}-${item.lanDoc}.json';
+                                '${introController.videoDetail.value.title}-${videoDetailCtr.bvid}-${videoDetailCtr.cid.value}-${item.lanDoc}.json';
                             try {
                               DocumentFileSavePlusPlatform.instance
                                   .saveMultipleFiles(
@@ -1897,7 +1900,7 @@ class HeaderControlState extends State<HeaderControl> {
                   },
                 ),
               ),
-            if ((videoIntroController.videoDetail.value.title != null) &&
+            if ((introController.videoDetail.value.title != null) &&
                 (isFullScreen ||
                     (!isFullScreen &&
                         !horizontalScreen &&
@@ -1914,7 +1917,7 @@ class HeaderControlState extends State<HeaderControl> {
                           () {
                             String title;
                             final videoDetail =
-                                videoIntroController.videoDetail.value;
+                                introController.videoDetail.value;
                             if (videoDetail.videos == 1) {
                               title = videoDetail.title!;
                             } else {
@@ -1984,10 +1987,10 @@ class HeaderControlState extends State<HeaderControl> {
                         );
                       },
                     ),
-                    if (videoIntroController.isShowOnlineTotal)
+                    if (introController.isShowOnlineTotal)
                       Obx(
                         () => Text(
-                          '${videoIntroController.total.value}人正在看',
+                          '${introController.total.value}人正在看',
                           style: const TextStyle(
                             color: Colors.white,
                             fontSize: 11,
@@ -2226,7 +2229,7 @@ class HeaderControlState extends State<HeaderControl> {
               ? Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    if (videoDetailCtr.videoType == SearchType.video) ...[
+                    if (videoDetailCtr.isUgc) ...[
                       SizedBox(
                         width: 42,
                         height: 34,
@@ -2240,20 +2243,20 @@ class HeaderControlState extends State<HeaderControl> {
                             selectIcon: const Icon(
                               FontAwesomeIcons.solidThumbsUp,
                             ),
-                            onTap: videoIntroController.actionLikeVideo,
+                            onTap: ugcIntroController.actionLikeVideo,
                             onLongPress: () {
-                              videoIntroController.actionOneThree();
+                              ugcIntroController.actionOneThree();
                               plPlayerController
                                 ..isTriple = null
                                 ..hideTaskControls();
                             },
-                            selectStatus: videoIntroController.hasLike.value,
+                            selectStatus: ugcIntroController.hasLike.value,
                             semanticsLabel: '点赞',
                             needAnim: true,
                             hasTriple:
-                                videoIntroController.hasLike.value &&
-                                videoIntroController.hasCoin &&
-                                videoIntroController.hasFav.value,
+                                ugcIntroController.hasLike.value &&
+                                ugcIntroController.hasCoin &&
+                                ugcIntroController.hasFav.value,
                             callBack: (start) {
                               if (start) {
                                 HapticFeedback.lightImpact();
@@ -2284,8 +2287,8 @@ class HeaderControlState extends State<HeaderControl> {
                             selectIcon: const Icon(
                               FontAwesomeIcons.solidThumbsDown,
                             ),
-                            onTap: videoIntroController.actionDislikeVideo,
-                            selectStatus: videoIntroController.hasDislike.value,
+                            onTap: ugcIntroController.actionDislikeVideo,
+                            selectStatus: ugcIntroController.hasDislike.value,
                             semanticsLabel: '点踩',
                           ),
                         ),
@@ -2302,8 +2305,8 @@ class HeaderControlState extends State<HeaderControl> {
                               color: Colors.white,
                             ),
                             selectIcon: const Icon(FontAwesomeIcons.b),
-                            onTap: videoIntroController.actionCoinVideo,
-                            selectStatus: videoIntroController.hasCoin,
+                            onTap: ugcIntroController.actionCoinVideo,
+                            selectStatus: ugcIntroController.hasCoin,
                             semanticsLabel: '投币',
                             needAnim: true,
                           ),
@@ -2321,11 +2324,11 @@ class HeaderControlState extends State<HeaderControl> {
                               color: Colors.white,
                             ),
                             selectIcon: const Icon(FontAwesomeIcons.solidStar),
-                            onTap: () => videoIntroController
-                                .showFavBottomSheet(context),
-                            onLongPress: () => videoIntroController
+                            onTap: () =>
+                                ugcIntroController.showFavBottomSheet(context),
+                            onLongPress: () => ugcIntroController
                                 .showFavBottomSheet(context, isLongPress: true),
-                            selectStatus: videoIntroController.hasFav.value,
+                            selectStatus: ugcIntroController.hasFav.value,
                             semanticsLabel: '收藏',
                             needAnim: true,
                           ),
@@ -2341,7 +2344,7 @@ class HeaderControlState extends State<HeaderControl> {
                             color: Colors.white,
                           ),
                           onTap: () =>
-                              videoIntroController.actionShareVideo(context),
+                              ugcIntroController.actionShareVideo(context),
                           semanticsLabel: '分享',
                         ),
                       ),

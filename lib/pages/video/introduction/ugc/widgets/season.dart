@@ -11,17 +11,17 @@ import 'package:get/get.dart';
 class SeasonPanel extends StatefulWidget {
   const SeasonPanel({
     super.key,
-    required this.changeFuc,
+    required this.onChangeEpisode,
     required this.heroTag,
     required this.showEpisodes,
     this.onTap,
-    required this.videoIntroController,
+    required this.ugcIntroController,
   });
-  final Function changeFuc;
+  final Function onChangeEpisode;
   final String heroTag;
   final Function showEpisodes;
   final bool? onTap;
-  final VideoIntroController videoIntroController;
+  final UgcIntroController ugcIntroController;
 
   @override
   State<SeasonPanel> createState() => _SeasonPanelState();
@@ -33,9 +33,9 @@ class _SeasonPanelState extends State<SeasonPanel> {
   StreamSubscription? _listener;
   List<EpisodeItem> episodes = <EpisodeItem>[];
 
-  VideoIntroController get videoIntroController => widget.videoIntroController;
+  UgcIntroController get ugcIntroController => widget.ugcIntroController;
   VideoDetailData get videoDetail =>
-      widget.videoIntroController.videoDetail.value;
+      widget.ugcIntroController.videoDetail.value;
 
   @override
   void initState() {
@@ -44,13 +44,12 @@ class _SeasonPanelState extends State<SeasonPanel> {
       tag: widget.heroTag,
     );
 
-    _videoDetailController.seasonCid =
-        videoIntroController.lastPlayCid.value != 0
+    _videoDetailController.seasonCid = ugcIntroController.cid.value != 0
         ? (videoDetail.pages?.isNotEmpty == true
               ? videoDetail.isPageReversed
                     ? videoDetail.pages!.last.cid
                     : videoDetail.pages!.first.cid
-              : videoIntroController.lastPlayCid.value)
+              : ugcIntroController.cid.value)
         : videoDetail.isPageReversed
         ? videoDetail.pages!.last.cid
         : videoDetail.pages!.first.cid;

@@ -16,7 +16,7 @@ class PagesPanel extends StatefulWidget {
     required this.bvid,
     required this.heroTag,
     this.showEpisodes,
-    required this.videoIntroController,
+    required this.ugcIntroController,
   });
 
   final List<Part>? list;
@@ -25,7 +25,7 @@ class PagesPanel extends StatefulWidget {
   final String bvid;
   final String heroTag;
   final Function? showEpisodes;
-  final VideoIntroController videoIntroController;
+  final UgcIntroController ugcIntroController;
 
   @override
   State<PagesPanel> createState() => _PagesPanelState();
@@ -39,7 +39,7 @@ class _PagesPanelState extends State<PagesPanel> {
   StreamSubscription? _listener;
 
   List<Part> get pages =>
-      widget.list ?? widget.videoIntroController.videoDetail.value.pages!;
+      widget.list ?? widget.ugcIntroController.videoDetail.value.pages!;
 
   @override
   void initState() {
@@ -48,7 +48,7 @@ class _PagesPanelState extends State<PagesPanel> {
       tag: widget.heroTag,
     );
     if (widget.list == null) {
-      cid = widget.videoIntroController.lastPlayCid.value;
+      cid = widget.ugcIntroController.cid.value;
       pageIndex = pages.indexWhere((Part e) => e.cid == cid);
       _listener = _videoDetailController.cid.listen((int cid) {
         this.cid = cid;
@@ -156,7 +156,7 @@ class _PagesPanelState extends State<PagesPanel> {
                       if (widget.showEpisodes == null) {
                         Get.back();
                       }
-                      widget.videoIntroController.changeSeasonOrbangu(
+                      widget.ugcIntroController.onChangeEpisode(
                         null,
                         widget.bvid,
                         item.cid,
@@ -165,7 +165,7 @@ class _PagesPanelState extends State<PagesPanel> {
                       );
                       if (widget.list != null &&
                           widget
-                                  .videoIntroController
+                                  .ugcIntroController
                                   .videoDetail
                                   .value
                                   .ugcSeason !=

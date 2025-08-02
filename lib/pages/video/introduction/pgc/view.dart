@@ -252,7 +252,7 @@ class _PgcIntroPageState extends State<PgcIntroPage>
                 heroTag: widget.heroTag,
                 pages: item.episodes!,
                 cid: videoDetailCtr.cid.value,
-                changeFuc: pgcIntroController.changeSeasonOrbangu,
+                onChangeEpisode: pgcIntroController.onChangeEpisode,
                 showEpisodes: widget.showEpisodes,
                 newEp: item.newEp,
               ),
@@ -326,13 +326,15 @@ class _PgcIntroPageState extends State<PgcIntroPage>
               needAnim: true,
             ),
           ),
-          ActionItem(
-            icon: const Icon(FontAwesomeIcons.comment),
-            selectIcon: const Icon(FontAwesomeIcons.reply),
-            onTap: () => videoDetailCtr.tabCtr.animateTo(1),
-            selectStatus: false,
-            semanticsLabel: '评论',
-            text: NumUtil.numFormat(item.stat!.reply),
+          Obx(
+            () => ActionItem(
+              icon: const Icon(FontAwesomeIcons.clock),
+              selectIcon: const Icon(FontAwesomeIcons.solidClock),
+              onTap: () => handleState(pgcIntroController.viewLater),
+              selectStatus: pgcIntroController.hasLater.value,
+              semanticsLabel: '再看',
+              text: '再看',
+            ),
           ),
           ActionItem(
             icon: const Icon(FontAwesomeIcons.shareFromSquare),
