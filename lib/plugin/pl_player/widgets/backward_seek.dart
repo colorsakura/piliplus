@@ -26,7 +26,7 @@ class BackwardSeekIndicatorState extends State<BackwardSeekIndicator> {
     super.initState();
     duration = Duration(seconds: widget.duration);
     timer = Timer(const Duration(milliseconds: 400), () {
-      widget.onSubmitted.call(duration);
+      widget.onSubmitted(duration);
     });
   }
 
@@ -39,7 +39,7 @@ class BackwardSeekIndicatorState extends State<BackwardSeekIndicator> {
   void increment() {
     timer?.cancel();
     timer = Timer(const Duration(milliseconds: 400), () {
-      widget.onSubmitted.call(duration);
+      widget.onSubmitted(duration);
     });
     setState(() {
       duration += Duration(seconds: widget.duration);

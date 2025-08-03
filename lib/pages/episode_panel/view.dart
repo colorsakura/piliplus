@@ -75,7 +75,7 @@ class EpisodePanel extends CommonSlidePage {
   final int initialTabIndex;
   final bool? isSupportReverse;
   final bool? isReversed;
-  final Function onChangeEpisode;
+  final ValueChanged<ugc.BaseEpisodeItem> onChangeEpisode;
   final VoidCallback? onReverse;
   final VoidCallback? onClose;
 
@@ -330,7 +330,7 @@ class _EpisodePanelState extends CommonSlidePageState<EpisodePanel> {
 
   Widget _buildEpisodeItem({
     required ThemeData theme,
-    required dynamic episode,
+    required ugc.BaseEpisodeItem episode,
     required int index,
     required int length,
     required bool isCurrentIndex,
@@ -379,7 +379,7 @@ class _EpisodePanelState extends CommonSlidePageState<EpisodePanel> {
         type: MaterialType.transparency,
         child: InkWell(
           onTap: () {
-            if (episode.badge != null && episode.badge == "会员") {
+            if (episode.badge == "会员") {
               UserInfoData? userInfo = GStorage.userInfo.get('userInfoCache');
               int vipStatus = userInfo?.vipStatus ?? 0;
               if (vipStatus != 1) {
@@ -392,14 +392,7 @@ class _EpisodePanelState extends CommonSlidePageState<EpisodePanel> {
             if (!widget.showTitle) {
               _currentItemIndex = index;
             }
-            final isEpisode = episode is ugc.BaseEpisodeItem;
-            widget.onChangeEpisode(
-              episode is pgc.EpisodeItem ? episode.epId : null,
-              isEpisode ? episode.bvid : widget.bvid,
-              episode.cid,
-              isEpisode ? episode.aid : widget.aid,
-              cover,
-            );
+            widget.onChangeEpisode(episode);
             if (widget.type == EpisodeType.season) {
               try {
                 Get.find<VideoDetailController>(

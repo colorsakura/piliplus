@@ -10,6 +10,7 @@ import 'package:PiliPlus/models/common/image_preview_type.dart';
 import 'package:PiliPlus/models/common/image_type.dart';
 import 'package:PiliPlus/models/member/info.dart';
 import 'package:PiliPlus/models_new/space/space_archive/item.dart';
+import 'package:PiliPlus/models_new/video/video_detail/episode.dart';
 import 'package:PiliPlus/pages/member_video/widgets/video_card_h_member_video.dart';
 import 'package:PiliPlus/pages/video/controller.dart';
 import 'package:PiliPlus/pages/video/introduction/ugc/controller.dart';
@@ -17,7 +18,6 @@ import 'package:PiliPlus/pages/video/member/controller.dart';
 import 'package:PiliPlus/services/account_service.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/grid.dart';
-import 'package:PiliPlus/utils/id_utils.dart';
 import 'package:PiliPlus/utils/num_util.dart';
 import 'package:PiliPlus/utils/request_utils.dart';
 import 'package:PiliPlus/utils/utils.dart';
@@ -200,18 +200,14 @@ class _HorizontalMemberPageState extends State<HorizontalMemberPage> {
                         videoItem: videoItem,
                         bvid: _bvid,
                         onTap: () {
-                          final status = widget.ugcIntroController
-                              .onChangeEpisode(
-                                null,
-                                videoItem.bvid,
-                                videoItem.cid,
-                                IdUtils.bv2av(videoItem.bvid!),
-                                videoItem.cover,
-                              );
-                          if (status) {
-                            _bvid = videoItem.bvid;
-                            setState(() {});
-                          }
+                          Get.back();
+                          widget.ugcIntroController.onChangeEpisode(
+                            BaseEpisodeItem(
+                              bvid: videoItem.bvid,
+                              cid: videoItem.cid,
+                              cover: videoItem.cover,
+                            ),
+                          );
                         },
                       );
                     },

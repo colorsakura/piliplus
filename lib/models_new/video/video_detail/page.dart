@@ -1,7 +1,7 @@
 import 'package:PiliPlus/models_new/video/video_detail/dimension.dart';
+import 'package:PiliPlus/models_new/video/video_detail/episode.dart';
 
-class Part {
-  int? cid;
+class Part extends BaseEpisodeItem {
   int? page;
   String? from;
   String? pagePart;
@@ -11,10 +11,9 @@ class Part {
   Dimension? dimension;
   int? ctime;
   String? firstFrame;
-  String? badge;
 
   Part({
-    this.cid,
+    super.cid,
     this.page,
     this.from,
     this.pagePart,
@@ -24,7 +23,7 @@ class Part {
     this.dimension,
     this.ctime,
     this.firstFrame,
-    this.badge,
+    super.badge,
   });
 
   factory Part.fromJson(Map<String, dynamic> json) => Part(

@@ -329,29 +329,23 @@ class VideoDetailController extends GetxController
     );
     if (res['status']) {
       MediaListData data = res['data'];
-      if (data.mediaList?.isNotEmpty == true) {
+      if (data.mediaList.isNotEmpty) {
         if (isReverse) {
-          mediaList.value = data.mediaList!;
-          try {
-            for (var item in mediaList) {
-              if (item.cid != null) {
+          mediaList.value = data.mediaList;
+          for (var item in mediaList) {
+            if (item.cid != null) {
+              try {
                 Get.find<UgcIntroController>(
                   tag: heroTag,
-                ).onChangeEpisode(
-                  null,
-                  item.bvid,
-                  item.cid,
-                  item.aid,
-                  item.cover,
-                );
-                break;
-              }
+                ).onChangeEpisode(item);
+              } catch (_) {}
+              break;
             }
-          } catch (_) {}
+          }
         } else if (isLoadPrevious) {
-          mediaList.insertAll(0, data.mediaList!);
+          mediaList.insertAll(0, data.mediaList);
         } else {
-          mediaList.addAll(data.mediaList!);
+          mediaList.addAll(data.mediaList);
         }
       }
     } else {
@@ -364,11 +358,9 @@ class VideoDetailController extends GetxController
     if (mediaList.isNotEmpty) {
       Widget panel() => MediaListPanel(
         mediaList: mediaList,
-        changeMediaList: (bvid, cid, aid, cover) {
+        onChangeEpisode: (episode) {
           try {
-            Get.find<UgcIntroController>(
-              tag: heroTag,
-            ).onChangeEpisode(null, bvid, cid, aid, cover);
+            Get.find<UgcIntroController>(tag: heroTag).onChangeEpisode(episode);
           } catch (_) {}
         },
         panelTitle: watchLaterTitle,
@@ -904,13 +896,7 @@ class VideoDetailController extends GetxController
                         Get.find<UgcIntroController>(tag: heroTag);
                     Part part =
                         ugcIntroController.videoDetail.value.pages![item];
-                    ugcIntroController.onChangeEpisode(
-                      null,
-                      bvid,
-                      part.cid,
-                      IdUtils.bv2av(bvid),
-                      null,
-                    );
+                    ugcIntroController.onChangeEpisode(part);
                     SmartDialog.showToast('已跳至第${item + 1}P');
                   } catch (e) {
                     if (kDebugMode) debugPrint('$e');

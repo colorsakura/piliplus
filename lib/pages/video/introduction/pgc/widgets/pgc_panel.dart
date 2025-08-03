@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:PiliPlus/models/user/info.dart';
 import 'package:PiliPlus/models_new/pgc/pgc_info_model/episode.dart';
 import 'package:PiliPlus/models_new/pgc/pgc_info_model/new_ep.dart';
+import 'package:PiliPlus/models_new/video/video_detail/episode.dart'
+    hide EpisodeItem;
 import 'package:PiliPlus/pages/video/controller.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/utils.dart';
@@ -23,7 +25,7 @@ class PgcPanel extends StatefulWidget {
 
   final List<EpisodeItem> pages;
   final int? cid;
-  final Function onChangeEpisode;
+  final ValueChanged<BaseEpisodeItem> onChangeEpisode;
   final Function showEpisodes;
   final String heroTag;
   final NewEp? newEp;
@@ -149,18 +151,10 @@ class _PgcPanelState extends State<PgcPanel> {
                   child: InkWell(
                     borderRadius: const BorderRadius.all(Radius.circular(6)),
                     onTap: () {
-                      if (item.badge != null &&
-                          item.badge == '会员' &&
-                          vipStatus != 1) {
+                      if (item.badge == '会员' && vipStatus != 1) {
                         SmartDialog.showToast('需要大会员');
                       }
-                      widget.onChangeEpisode(
-                        item.epId,
-                        item.bvid,
-                        item.cid,
-                        item.aid,
-                        item.cover,
-                      );
+                      widget.onChangeEpisode(item);
                     },
                     child: Padding(
                       padding: const EdgeInsets.symmetric(

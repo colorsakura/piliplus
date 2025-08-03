@@ -6,10 +6,10 @@ import 'package:PiliPlus/common/widgets/image/image_save.dart';
 import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/common/widgets/stat/stat.dart';
-import 'package:PiliPlus/http/search.dart';
 import 'package:PiliPlus/models/common/badge_type.dart';
 import 'package:PiliPlus/models/common/stat_type.dart';
 import 'package:PiliPlus/models_new/media_list/media_list.dart';
+import 'package:PiliPlus/models_new/video/video_detail/episode.dart';
 import 'package:PiliPlus/pages/common/common_collapse_slide_page.dart';
 import 'package:PiliPlus/utils/duration_util.dart';
 import 'package:flutter/material.dart' hide RefreshCallback;
@@ -22,7 +22,7 @@ class MediaListPanel extends CommonCollapseSlidePage {
   const MediaListPanel({
     super.key,
     required this.mediaList,
-    this.changeMediaList,
+    required this.onChangeEpisode,
     this.panelTitle,
     required this.getBvId,
     required this.loadMoreMedia,
@@ -34,7 +34,7 @@ class MediaListPanel extends CommonCollapseSlidePage {
   });
 
   final List<MediaListItemModel> mediaList;
-  final Function? changeMediaList;
+  final ValueChanged<BaseEpisodeItem> onChangeEpisode;
   final String? panelTitle;
   final Function getBvId;
   final VoidCallback loadMoreMedia;
@@ -162,20 +162,13 @@ class _MediaListPanelState
             child: Material(
               type: MaterialType.transparency,
               child: InkWell(
-                onTap: () async {
+                onTap: () {
                   if (item.type != 2) {
                     SmartDialog.showToast('不支持播放该类型视频');
                     return;
                   }
                   Get.back();
-                  String bvid = item.bvid!;
-                  int? aid = item.aid;
-                  String cover = item.cover ?? '';
-                  final int? cid =
-                      item.cid ?? await SearchHttp.ab2c(aid: aid, bvid: bvid);
-                  if (cid != null) {
-                    widget.changeMediaList?.call(bvid, cid, aid, cover);
-                  }
+                  widget.onChangeEpisode(item);
                 },
                 onLongPress: () => imageSaveDialog(
                   title: item.title,
@@ -206,12 +199,12 @@ class _MediaListPanelState
                                       width: boxConstraints.maxWidth,
                                       height: boxConstraints.maxHeight,
                                     ),
-                                    if (item.badge?.text?.isNotEmpty == true)
+                                    if (item.badge?.isNotEmpty == true)
                                       PBadge(
-                                        text: item.badge?.text,
+                                        text: item.badge,
                                         right: 6.0,
                                         top: 6.0,
-                                        type: switch (item.badge?.text) {
+                                        type: switch (item.badge) {
                                           '充电专属' => PBadgeType.error,
                                           _ => PBadgeType.primary,
                                         },

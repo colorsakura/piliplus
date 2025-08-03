@@ -67,7 +67,7 @@ class _SelfSizedHorizontalListState extends State<SelfSizedHorizontalList> {
         padding: widget.padding,
         scrollDirection: Axis.horizontal,
         itemCount: widget.itemCount,
-        itemBuilder: (c, i) => widget.childBuilder.call(i),
+        itemBuilder: (c, i) => widget.childBuilder(i),
         separatorBuilder: (c, i) => SizedBox(width: widget.gapSize),
       ),
     );

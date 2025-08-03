@@ -156,13 +156,7 @@ class _PagesPanelState extends State<PagesPanel> {
                       if (widget.showEpisodes == null) {
                         Get.back();
                       }
-                      widget.ugcIntroController.onChangeEpisode(
-                        null,
-                        widget.bvid,
-                        item.cid,
-                        IdUtils.bv2av(widget.bvid),
-                        widget.cover,
-                      );
+                      widget.ugcIntroController.onChangeEpisode(item);
                       if (widget.list != null &&
                           widget
                                   .ugcIntroController

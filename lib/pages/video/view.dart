@@ -11,9 +11,7 @@ import 'package:PiliPlus/grpc/bilibili/main/community/reply/v1.pb.dart'
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/main.dart';
 import 'package:PiliPlus/models/common/episode_panel_type.dart';
-import 'package:PiliPlus/models_new/pgc/pgc_info_model/episode.dart' as pgc;
 import 'package:PiliPlus/models_new/pgc/pgc_info_model/result.dart';
-import 'package:PiliPlus/models_new/video/video_detail/episode.dart';
 import 'package:PiliPlus/models_new/video/video_detail/page.dart';
 import 'package:PiliPlus/models_new/video/video_tag/data.dart';
 import 'package:PiliPlus/pages/common/common_intro_controller.dart';
@@ -1771,12 +1769,8 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                                 ),
                                 onPressed: () {
                                   ugcIntroController.onChangeEpisode(
-                                    null,
-                                    videoDetailController.bvid,
-                                    item.cid,
-                                    IdUtils.bv2av(videoDetailController.bvid),
-                                    null,
-                                    true,
+                                    item,
+                                    isStein: true,
                                   );
                                   videoDetailController.getSteinEdgeInfo(
                                     item.id,
@@ -1968,7 +1962,6 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
             child: SeasonPanel(
               heroTag: heroTag,
               onTap: false,
-              onChangeEpisode: ugcIntroController.onChangeEpisode,
               showEpisodes: showEpisodes,
               ugcIntroController: ugcIntroController,
             ),
@@ -2153,22 +2146,6 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
       return;
     }
 
-    void onChangeEpisode(episode) {
-      final isEpisode = episode is BaseEpisodeItem;
-      final isPgc = episode is pgc.EpisodeItem;
-      ugcIntroController.onChangeEpisode(
-        isPgc ? episode.epId : null,
-        isEpisode ? episode.bvid : bvid,
-        episode.cid,
-        isEpisode ? episode.aid : aid,
-        episode is EpisodeItem
-            ? episode.arc?.pic
-            : isPgc
-            ? episode.cover
-            : null,
-      );
-    }
-
     final videoDetail = ugcIntroController.videoDetail.value;
     if (isSeason) {
       // reverse season
@@ -2194,7 +2171,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
             .episodes!
             .first;
         if (episode.cid != videoDetailController.cid.value) {
-          onChangeEpisode(episode);
+          ugcIntroController.onChangeEpisode(episode);
           videoDetailController.seasonCid = episode.cid;
         } else {
           videoDetailController
@@ -2214,7 +2191,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
         // switch to first episode
         var episode = videoDetail.pages!.first;
         if (episode.cid != videoDetailController.cid.value) {
-          onChangeEpisode(episode);
+          ugcIntroController.onChangeEpisode(episode);
         } else {
           videoDetailController.cid.refresh();
         }

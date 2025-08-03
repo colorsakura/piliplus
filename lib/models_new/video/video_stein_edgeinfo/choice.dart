@@ -1,18 +1,18 @@
-class Choice {
-  int? id;
+import 'package:PiliPlus/models_new/video/video_detail/episode.dart';
+
+class Choice extends BaseEpisodeItem {
   String? platformAction;
   String? nativeAction;
   String? condition;
-  int? cid;
   String? option;
   int? isDefault;
 
   Choice({
-    this.id,
+    super.id,
     this.platformAction,
     this.nativeAction,
     this.condition,
-    this.cid,
+    super.cid,
     this.option,
     this.isDefault,
   });

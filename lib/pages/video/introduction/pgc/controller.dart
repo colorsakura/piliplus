@@ -5,11 +5,14 @@ import 'package:PiliPlus/grpc/bilibili/app/viewunite/pgcanymodel.pb.dart'
     show ViewPgcAny;
 import 'package:PiliPlus/grpc/view.dart';
 import 'package:PiliPlus/http/constants.dart';
+import 'package:PiliPlus/http/search.dart';
 import 'package:PiliPlus/http/video.dart';
 import 'package:PiliPlus/models/pgc_lcf.dart';
 import 'package:PiliPlus/models_new/pgc/pgc_info_model/episode.dart';
 import 'package:PiliPlus/models_new/pgc/pgc_info_model/result.dart';
 import 'package:PiliPlus/models_new/triple/pgc_triple.dart';
+import 'package:PiliPlus/models_new/video/video_detail/episode.dart'
+    hide EpisodeItem;
 import 'package:PiliPlus/models_new/video/video_detail/stat_detail.dart';
 import 'package:PiliPlus/pages/common/common_intro_controller.dart';
 import 'package:PiliPlus/pages/dynamics_repost/view.dart';
@@ -20,6 +23,7 @@ import 'package:PiliPlus/plugin/pl_player/models/play_repeat.dart';
 import 'package:PiliPlus/services/service_locator.dart';
 import 'package:PiliPlus/utils/feed_back.dart';
 import 'package:PiliPlus/utils/global_data.dart';
+import 'package:PiliPlus/utils/id_utils.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
@@ -257,41 +261,55 @@ class PgcIntroController extends CommonIntroController {
   }
 
   // 修改分P或番剧分集
-  void onChangeEpisode(dynamic epId, bvid, cid, aid, cover) {
-    // 重新获取视频资源
-    this.epId = epId;
-    this.bvid = bvid;
+  Future<void> onChangeEpisode(BaseEpisodeItem episode) async {
+    try {
+      final int epId = episode.epId!;
+      final String bvid = episode.bvid ?? this.bvid;
+      final int aid = episode.aid ?? IdUtils.bv2av(bvid);
+      final int? cid =
+          episode.cid ?? await SearchHttp.ab2c(aid: aid, bvid: bvid);
+      if (cid == null) {
+        return;
+      }
+      final String? cover = episode.cover;
 
-    final videoDetailCtr =
-        Get.find<VideoDetailController>(tag: Get.arguments['heroTag'])
-          ..plPlayerController.pause()
-          ..makeHeartBeat()
-          ..onReset()
-          ..epId = epId
-          ..bvid = bvid
-          ..cid.value = cid
-          ..queryVideoUrl();
-    if (cover is String && cover.isNotEmpty) {
-      videoDetailCtr.cover.value = cover;
+      // 重新获取视频资源
+      this.epId = epId;
+      this.bvid = bvid;
+
+      final videoDetailCtr =
+          Get.find<VideoDetailController>(tag: Get.arguments['heroTag'])
+            ..plPlayerController.pause()
+            ..makeHeartBeat()
+            ..onReset()
+            ..epId = epId
+            ..bvid = bvid
+            ..cid.value = cid
+            ..queryVideoUrl();
+      if (cover != null && cover.isNotEmpty) {
+        videoDetailCtr.cover.value = cover;
+      }
+
+      // 重新请求评论
+      if (videoDetailCtr.showReply) {
+        try {
+          Get.find<VideoReplyController>(tag: Get.arguments['heroTag'])
+            ..aid = aid
+            ..onReload();
+        } catch (_) {}
+      }
+
+      if (accountService.isLogin.value) {
+        queryPgcLikeCoinFav();
+      }
+
+      hasLater.value = false;
+      this.cid.value = cid;
+      queryVideoIntro();
+      queryOnlineTotal();
+    } catch (e) {
+      debugPrint('pgc onChangeEpisode: $e');
     }
-
-    // 重新请求评论
-    if (videoDetailCtr.showReply) {
-      try {
-        Get.find<VideoReplyController>(tag: Get.arguments['heroTag'])
-          ..aid = aid
-          ..onReload();
-      } catch (_) {}
-    }
-
-    if (accountService.isLogin.value) {
-      queryPgcLikeCoinFav();
-    }
-
-    hasLater.value = false;
-    this.cid.value = cid;
-    queryVideoIntro();
-    queryOnlineTotal();
   }
 
   // 追番
@@ -342,14 +360,7 @@ class PgcIntroController extends CommonIntroController {
         return false;
       }
     }
-    final episode = episodes[prevIndex];
-    onChangeEpisode(
-      episode.epId,
-      episode.bvid,
-      episode.cid,
-      episode.aid,
-      episode.cover,
-    );
+    onChangeEpisode(episodes[prevIndex]);
     return true;
   }
 
@@ -377,14 +388,7 @@ class PgcIntroController extends CommonIntroController {
           return false;
         }
       }
-      final episode = episodes[nextIndex];
-      onChangeEpisode(
-        episode.epId,
-        episode.bvid,
-        episode.cid,
-        episode.aid,
-        episode.cover,
-      );
+      onChangeEpisode(episodes[nextIndex]);
       return true;
     } catch (_) {
       return false;

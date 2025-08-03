@@ -320,7 +320,6 @@ class _UgcIntroPanelState extends State<UgcIntroPanel>
                                   .horizontalSeasonPanel))
                         SeasonPanel(
                           heroTag: widget.heroTag,
-                          onChangeEpisode: ugcIntroController.onChangeEpisode,
                           showEpisodes: widget.showEpisodes,
                           ugcIntroController: ugcIntroController,
                         ),

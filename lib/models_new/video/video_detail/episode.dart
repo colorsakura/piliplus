@@ -1,21 +1,25 @@
 import 'package:PiliPlus/models_new/video/video_detail/arc.dart';
 import 'package:PiliPlus/models_new/video/video_detail/page.dart';
 
-abstract class BaseEpisodeItem {
+class BaseEpisodeItem {
   int? id;
   int? aid;
   int? cid;
+  int? epId;
   String? bvid;
   String? badge;
   String? title;
+  String? cover;
 
   BaseEpisodeItem({
     this.id,
     this.aid,
     this.cid,
+    this.epId,
     this.bvid,
     this.badge,
     this.title,
+    this.cover,
   });
 }
 
@@ -26,6 +30,8 @@ class EpisodeItem extends BaseEpisodeItem {
   Arc? arc;
   Part? page;
   List<Part>? pages;
+  @override
+  String? get cover => arc?.pic;
 
   EpisodeItem({
     this.seasonId,

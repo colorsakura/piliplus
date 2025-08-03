@@ -11,13 +11,11 @@ import 'package:get/get.dart';
 class SeasonPanel extends StatefulWidget {
   const SeasonPanel({
     super.key,
-    required this.onChangeEpisode,
     required this.heroTag,
     required this.showEpisodes,
     this.onTap,
     required this.ugcIntroController,
   });
-  final Function onChangeEpisode;
   final String heroTag;
   final Function showEpisodes;
   final bool? onTap;

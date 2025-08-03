@@ -465,68 +465,80 @@ class UgcIntroController extends CommonIntroController with ReloadMixin {
   }
 
   // 修改分P或番剧分集
-  bool onChangeEpisode(dynamic epid, bvid, cid, aid, cover, [isStein]) {
-    // 重新获取视频资源
-    final videoDetailCtr = Get.find<VideoDetailController>(tag: heroTag);
-
-    if (videoDetailCtr.isPlayAll) {
-      if (videoDetailCtr.mediaList.indexWhere((item) => item.bvid == bvid) ==
-          -1) {
-        PageUtils.toVideoPage(
-          'bvid=$bvid&cid=$cid',
-          arguments: {
-            'pic': cover,
-            'heroTag': Utils.makeHeroTag(bvid),
-          },
-        );
-        return false;
+  Future<void> onChangeEpisode(BaseEpisodeItem episode, {bool? isStein}) async {
+    try {
+      final String bvid = episode.bvid ?? this.bvid;
+      final int aid = episode.aid ?? IdUtils.bv2av(bvid);
+      final int? cid =
+          episode.cid ?? await SearchHttp.ab2c(aid: aid, bvid: bvid);
+      if (cid == null) {
+        return;
       }
+      final String? cover = episode.cover;
+
+      // 重新获取视频资源
+      final videoDetailCtr = Get.find<VideoDetailController>(tag: heroTag);
+
+      if (videoDetailCtr.isPlayAll) {
+        if (videoDetailCtr.mediaList.indexWhere((item) => item.bvid == bvid) ==
+            -1) {
+          PageUtils.toVideoPage(
+            'bvid=$bvid&cid=$cid',
+            arguments: {
+              'pic': ?cover,
+              'heroTag': Utils.makeHeroTag(bvid),
+            },
+          );
+          return;
+        }
+      }
+
+      videoDetailCtr
+        ..plPlayerController.pause()
+        ..makeHeartBeat()
+        ..updateMediaListHistory(aid)
+        ..onReset(isStein)
+        ..bvid = bvid
+        ..oid.value = aid
+        ..cid.value = cid
+        ..queryVideoUrl();
+
+      if (this.bvid != bvid) {
+        reload = true;
+        aiConclusionResult = null;
+
+        if (cover != null && cover.isNotEmpty) {
+          videoDetailCtr.cover.value = cover;
+        }
+
+        // 重新请求相关视频
+        if (videoDetailCtr.plPlayerController.showRelatedVideo) {
+          try {
+            Get.find<RelatedController>(tag: heroTag)
+              ..bvid = bvid
+              ..queryData();
+          } catch (_) {}
+        }
+
+        // 重新请求评论
+        if (videoDetailCtr.showReply) {
+          try {
+            Get.find<VideoReplyController>(tag: heroTag)
+              ..aid = aid
+              ..onReload();
+          } catch (_) {}
+        }
+
+        hasLater.value = false;
+        this.bvid = bvid;
+        queryVideoIntro();
+      }
+
+      this.cid.value = cid;
+      queryOnlineTotal();
+    } catch (e) {
+      debugPrint('ugc onChangeEpisode: $e');
     }
-
-    videoDetailCtr
-      ..plPlayerController.pause()
-      ..makeHeartBeat()
-      ..updateMediaListHistory(aid)
-      ..onReset(isStein)
-      ..bvid = bvid
-      ..oid.value = aid ?? IdUtils.bv2av(bvid)
-      ..cid.value = cid
-      ..queryVideoUrl();
-
-    if (this.bvid != bvid) {
-      reload = true;
-      aiConclusionResult = null;
-
-      if (cover is String && cover.isNotEmpty) {
-        videoDetailCtr.cover.value = cover;
-      }
-
-      // 重新请求相关视频
-      if (videoDetailCtr.plPlayerController.showRelatedVideo) {
-        try {
-          Get.find<RelatedController>(tag: heroTag)
-            ..bvid = bvid
-            ..queryData();
-        } catch (_) {}
-      }
-
-      // 重新请求评论
-      if (videoDetailCtr.showReply) {
-        try {
-          Get.find<VideoReplyController>(tag: heroTag)
-            ..aid = aid
-            ..onReload();
-        } catch (_) {}
-      }
-
-      hasLater.value = false;
-      this.bvid = bvid;
-      queryVideoIntro();
-    }
-
-    this.cid.value = cid;
-    queryOnlineTotal();
-    return true;
   }
 
   @override
@@ -538,7 +550,7 @@ class UgcIntroController extends CommonIntroController with ReloadMixin {
   /// 播放上一个
   @override
   bool prevPlay([bool skipPages = false]) {
-    final List episodes = [];
+    final List<BaseEpisodeItem> episodes = <BaseEpisodeItem>[];
     bool isPages = false;
 
     final videoDetailCtr = Get.find<VideoDetailController>(tag: heroTag);
@@ -566,7 +578,7 @@ class UgcIntroController extends CommonIntroController with ReloadMixin {
               ? videoDetail.isPageReversed == true
                     ? videoDetail.pages!.last.cid
                     : videoDetail.pages!.first.cid
-              : this.cid.value),
+              : cid.value),
     );
     int prevIndex = currentIndex - 1;
     final PlayRepeat playRepeat = videoDetailCtr.plPlayerController.playRepeat;
@@ -583,10 +595,7 @@ class UgcIntroController extends CommonIntroController with ReloadMixin {
         return false;
       }
     }
-    final int cid = episodes[prevIndex].cid!;
-    final String rBvid = isPages ? bvid : episodes[prevIndex].bvid;
-    final int rAid = isPages ? IdUtils.bv2av(bvid) : episodes[prevIndex].aid!;
-    onChangeEpisode(null, rBvid, cid, rAid, null);
+    onChangeEpisode(episodes[prevIndex]);
     return true;
   }
 
@@ -594,7 +603,7 @@ class UgcIntroController extends CommonIntroController with ReloadMixin {
   @override
   bool nextPlay([bool skipPages = false]) {
     try {
-      final List episodes = [];
+      final List<BaseEpisodeItem> episodes = <BaseEpisodeItem>[];
       bool isPages = false;
       final videoDetailCtr = Get.find<VideoDetailController>(tag: heroTag);
       final videoDetail = this.videoDetail.value;
@@ -671,10 +680,7 @@ class UgcIntroController extends CommonIntroController with ReloadMixin {
         }
         cid = episodes[nextIndex].cid!;
       }
-
-      final String rBvid = isPages ? bvid : episodes[nextIndex].bvid;
-      final int rAid = isPages ? IdUtils.bv2av(bvid) : episodes[nextIndex].aid!;
-      onChangeEpisode(null, rBvid, cid, rAid, null);
+      onChangeEpisode(episodes[nextIndex]);
       return true;
     } catch (_) {
       return false;
@@ -703,29 +709,14 @@ class UgcIntroController extends CommonIntroController with ReloadMixin {
     }
 
     final firstItem = relatedCtr.loadingState.value.data!.first;
-    try {
-      if (firstItem.cid != null) {
-        onChangeEpisode(
-          null,
-          firstItem.bvid,
-          firstItem.cid,
-          firstItem.aid,
-          firstItem.cover,
-        );
-      } else {
-        SearchHttp.ab2c(aid: firstItem.aid, bvid: firstItem.bvid).then(
-          (cid) => onChangeEpisode(
-            null,
-            firstItem.bvid,
-            cid,
-            firstItem.aid,
-            firstItem.cover,
-          ),
-        );
-      }
-    } catch (err) {
-      SmartDialog.showToast(err.toString());
-    }
+    onChangeEpisode(
+      BaseEpisodeItem(
+        aid: firstItem.aid,
+        bvid: firstItem.bvid,
+        cid: firstItem.cid,
+        cover: firstItem.cover,
+      ),
+    );
     return true;
   }
 

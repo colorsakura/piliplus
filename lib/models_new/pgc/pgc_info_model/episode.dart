@@ -8,11 +8,9 @@ import 'package:PiliPlus/models_new/video/video_detail/episode.dart'
 class EpisodeItem extends BaseEpisodeItem {
   BadgeInfo? badgeInfo;
   int? badgeType;
-  String? cover;
   Dimension? dimension;
   int? duration;
   bool? enableVt;
-  int? epId;
   String? from;
   bool? isViewHide;
   String? link;
@@ -39,11 +37,11 @@ class EpisodeItem extends BaseEpisodeItem {
     this.badgeType,
     super.bvid,
     super.cid,
-    this.cover,
+    super.cover,
     this.dimension,
     this.duration,
     this.enableVt,
-    this.epId,
+    super.epId,
     this.from,
     super.id,
     this.isViewHide,
