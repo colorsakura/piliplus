@@ -10,6 +10,7 @@ import 'package:PiliPlus/models/user/stat.dart';
 import 'package:PiliPlus/pages/dynamics/controller.dart';
 import 'package:PiliPlus/pages/dynamics_tab/controller.dart';
 import 'package:PiliPlus/pages/live/controller.dart';
+import 'package:PiliPlus/pages/main/controller.dart';
 import 'package:PiliPlus/pages/mine/controller.dart';
 import 'package:PiliPlus/pages/pgc/controller.dart';
 import 'package:PiliPlus/services/account_service.dart';
@@ -111,6 +112,10 @@ class LoginUtils {
       web.CookieManager().deleteAllCookies(),
       GStorage.userInfo.delete('userInfoCache'),
     ]);
+
+    try {
+      Get.find<MainController>().setDynCount();
+    } catch (_) {}
 
     try {
       Get.find<MineController>()

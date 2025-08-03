@@ -124,10 +124,8 @@ class UgcIntroController extends CommonIntroController with ReloadMixin {
         }
         if (videoDetailController.showReply) {
           try {
-            final videoReplyController = Get.find<VideoReplyController>(
-              tag: heroTag,
-            );
-            videoReplyController.count.value = data.stat?.reply ?? 0;
+            Get.find<VideoReplyController>(tag: heroTag).count.value =
+                data.stat?.reply ?? 0;
           } catch (_) {}
         }
       } catch (_) {}

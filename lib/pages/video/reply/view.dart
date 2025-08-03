@@ -129,8 +129,7 @@ class _VideoReplyPanelState extends State<VideoReplyPanel>
                         SizedBox(
                           height: 35,
                           child: TextButton.icon(
-                            onPressed: () =>
-                                _videoReplyController.queryBySort(),
+                            onPressed: _videoReplyController.queryBySort,
                             icon: Icon(
                               Icons.sort,
                               size: 16,

@@ -948,10 +948,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
             backgroundColor: Colors.transparent,
             body: Column(
               children: [
-                buildTabbar(
-                  showReply: videoDetailController.showReply,
-                  onTap: videoDetailController.animToTop,
-                ),
+                buildTabbar(onTap: videoDetailController.animToTop),
                 Expanded(
                   child: videoTabBarView(
                     controller: videoDetailController.tabCtr,
@@ -977,7 +974,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
       final double width = size.width;
       final double height = size.height;
       final padding = MediaQuery.paddingOf(context);
-      if (enableVerticalExpand && videoDetailController.isVertical.value) {
+      if (videoDetailController.isVertical.value && enableVerticalExpand) {
         final double videoHeight =
             height - (removeSafeArea ? 0 : padding.vertical);
         final double videoWidth = videoHeight * 9 / 16;
@@ -996,7 +993,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                 backgroundColor: Colors.transparent,
                 body: Column(
                   children: [
-                    buildTabbar(showReply: videoDetailController.showReply),
+                    buildTabbar(),
                     Expanded(
                       child: videoTabBarView(
                         controller: videoDetailController.tabCtr,
@@ -1032,10 +1029,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
               backgroundColor: Colors.transparent,
               body: Column(
                 children: [
-                  buildTabbar(
-                    needIndicator: false,
-                    showReply: videoDetailController.showReply,
-                  ),
+                  buildTabbar(needIndicator: false),
                   Expanded(
                     child: Row(
                       children: [
@@ -1062,7 +1056,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
       final double width = size.width;
       final double height = size.height;
       final padding = MediaQuery.paddingOf(context);
-      if (enableVerticalExpand && videoDetailController.isVertical.value) {
+      if (videoDetailController.isVertical.value && enableVerticalExpand) {
         final double videoHeight = height - (removeSafeArea ? 0 : padding.top);
         final double videoWidth = videoHeight * 9 / 16;
         return Row(
@@ -1082,10 +1076,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                 backgroundColor: Colors.transparent,
                 body: Column(
                   children: [
-                    buildTabbar(
-                      showIntro: false,
-                      showReply: videoDetailController.showReply,
-                    ),
+                    buildTabbar(showIntro: false),
                     Expanded(
                       child: videoTabBarView(
                         controller: videoDetailController.tabCtr,
@@ -1149,7 +1140,6 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                           videoDetailController
                               .plPlayerController
                               .showRelatedVideo,
-                      showReply: videoDetailController.showReply,
                     ),
                     Expanded(
                       child: videoTabBarView(
@@ -1474,12 +1464,11 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
     bool needIndicator = true,
     String introText = '简介',
     bool showIntro = true,
-    bool showReply = true,
     VoidCallback? onTap,
   }) {
     List<String> tabs = [
       if (showIntro) introText,
-      if (showReply) '评论',
+      if (videoDetailController.showReply) '评论',
       if (_shouldShowSeasonPanel) '播放列表',
     ];
     if (videoDetailController.tabCtr.length != tabs.length) {
@@ -1493,13 +1482,10 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
       );
     }
 
+    final flag = !needIndicator || tabs.length == 1;
     Widget tabbar() => TabBar(
-      labelColor: !needIndicator || tabs.length == 1
-          ? themeData.colorScheme.onSurface
-          : null,
-      indicator: !needIndicator || tabs.length == 1
-          ? const BoxDecoration()
-          : null,
+      labelColor: flag ? themeData.colorScheme.onSurface : null,
+      indicator: flag ? const BoxDecoration() : null,
       padding: EdgeInsets.zero,
       controller: videoDetailController.tabCtr,
       labelStyle:
@@ -1522,7 +1508,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
           }
         }
 
-        if (!needIndicator || tabs.length == 1) {
+        if (flag) {
           animToTop();
         } else if (!videoDetailController.tabCtr.indexIsChanging) {
           animToTop();
@@ -1530,10 +1516,12 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
       },
       tabs: tabs.map((text) {
         if (text == '评论') {
-          return Tab(
-            text:
-                '评论${_videoReplyController.count.value == -1 ? '' : ' ${NumUtil.numFormat(_videoReplyController.count.value)}'}',
-          );
+          return Obx(() {
+            final count = _videoReplyController.count.value;
+            return Tab(
+              text: '评论${count == -1 ? '' : ' ${NumUtil.numFormat(count)}'}',
+            );
+          });
         } else {
           return Tab(text: text);
         }
@@ -1558,7 +1546,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
           else
             Flexible(
               flex: tabs.length == 3 ? 2 : 1,
-              child: showReply ? Obx(() => tabbar()) : tabbar(),
+              child: tabbar(),
             ),
           Flexible(
             flex: 1,
@@ -1643,11 +1631,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
 
           Obx(() {
             if (videoDetailController.isShowCover.value) {
-              return Positioned(
-                top: 0,
-                left: 0,
-                right: 0,
-                bottom: 0,
+              return Positioned.fill(
                 child: GestureDetector(
                   onTap: handlePlay,
                   child: Obx(
