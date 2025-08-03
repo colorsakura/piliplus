@@ -9,7 +9,7 @@ class EpisodeItem extends BaseEpisodeItem {
   BadgeInfo? badgeInfo;
   int? badgeType;
   Dimension? dimension;
-  int? duration;
+  int? duration; // pgc: millisec , pugv: sec
   bool? enableVt;
   String? from;
   bool? isViewHide;
@@ -17,7 +17,7 @@ class EpisodeItem extends BaseEpisodeItem {
   String? longTitle;
   int? pubTime;
   int? pv;
-  String? releaseDate;
+  // String? releaseDate;
   Rights? rights;
   int? sectionType;
   String? shareCopy;
@@ -29,6 +29,7 @@ class EpisodeItem extends BaseEpisodeItem {
   int? status;
   String? subtitle;
   String? vid;
+  int? play;
 
   EpisodeItem({
     super.aid,
@@ -49,7 +50,7 @@ class EpisodeItem extends BaseEpisodeItem {
     this.longTitle,
     this.pubTime,
     this.pv,
-    this.releaseDate,
+    // this.releaseDate,
     this.rights,
     this.sectionType,
     this.shareCopy,
@@ -62,6 +63,7 @@ class EpisodeItem extends BaseEpisodeItem {
     this.subtitle,
     super.title,
     this.vid,
+    this.play,
   });
 
   factory EpisodeItem.fromJson(Map<String, dynamic> json) => EpisodeItem(
@@ -85,9 +87,9 @@ class EpisodeItem extends BaseEpisodeItem {
     isViewHide: json['is_view_hide'] as bool?,
     link: json['link'] as String?,
     longTitle: json['long_title'] as String?,
-    pubTime: json['pub_time'] as int?,
+    pubTime: json['pub_time'] ?? json['release_date'],
     pv: json['pv'] as int?,
-    releaseDate: json['release_date'] as String?,
+    // releaseDate: json['release_date'] as String?,
     rights: json['rights'] == null
         ? null
         : Rights.fromJson(json['rights'] as Map<String, dynamic>),
@@ -104,5 +106,6 @@ class EpisodeItem extends BaseEpisodeItem {
     subtitle: json['subtitle'] as String?,
     title: json['title'] as String?,
     vid: json['vid'] as String?,
+    play: json['play'] as int?,
   );
 }

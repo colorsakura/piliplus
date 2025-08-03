@@ -43,6 +43,11 @@ class VideoCardH extends StatelessWidget {
       var typeOrNull = item.type;
       if (typeOrNull?.isNotEmpty == true) {
         type = typeOrNull!;
+        if (type == 'ketang') {
+          badge = '课堂';
+        } else if (type == 'live_room') {
+          badge = '直播';
+        }
       }
       if (item.isUnionVideo == 1) {
         badge = '合作';
@@ -71,7 +76,7 @@ class VideoCardH extends StatelessWidget {
                 onTap ??
                 () async {
                   if (type == 'ketang') {
-                    SmartDialog.showToast('课堂视频暂不支持播放');
+                    PageUtils.viewPugv(seasonId: videoItem.aid);
                     return;
                   } else if (type == 'live_room') {
                     if (videoItem case SearchVideoItemModel item) {
@@ -172,13 +177,6 @@ class VideoCardH extends StatelessWidget {
                                 right: 6.0,
                                 bottom: 6.0,
                                 type: PBadgeType.gray,
-                              ),
-                            if (type != 'video')
-                              PBadge(
-                                text: type,
-                                left: 6.0,
-                                bottom: 6.0,
-                                type: PBadgeType.primary,
                               ),
                           ],
                         );

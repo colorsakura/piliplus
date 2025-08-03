@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:PiliPlus/http/video.dart';
 import 'package:PiliPlus/models/common/settings_type.dart';
 import 'package:PiliPlus/models/common/video/audio_quality.dart';
 import 'package:PiliPlus/models/common/video/cdn_type.dart';
@@ -33,9 +32,6 @@ List<SettingsModel> get videoSettings => [
     leading: const Icon(Icons.hd_outlined),
     setKey: SettingBoxKey.p1080,
     defaultVal: true,
-    onChanged: (value) {
-      VideoHttp.p1080 = value;
-    },
   ),
   SettingsModel(
     settingsType: SettingsType.normal,

@@ -561,7 +561,7 @@ class HeaderControlState extends State<HeaderControl> {
                       return;
                     }
                     Get.back();
-                    PageUtils.reportVideo(videoDetailCtr.oid.value);
+                    PageUtils.reportVideo(videoDetailCtr.aid);
                   },
                   leading: const Icon(Icons.error_outline, size: 20),
                   title: const Text('举报', style: titleStyle),

@@ -499,7 +499,7 @@ class UgcIntroController extends CommonIntroController with ReloadMixin {
         ..updateMediaListHistory(aid)
         ..onReset(isStein)
         ..bvid = bvid
-        ..oid.value = aid
+        ..aid = aid
         ..cid.value = cid
         ..queryVideoUrl();
 

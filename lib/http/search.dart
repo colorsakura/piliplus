@@ -193,6 +193,24 @@ class SearchHttp {
     }
   }
 
+  static Future<LoadingState<PgcInfoModel>> pugvInfo({
+    dynamic seasonId,
+    dynamic epId,
+  }) async {
+    var res = await Request().get(
+      Api.pugvInfo,
+      queryParameters: {
+        'season_id': ?seasonId,
+        'ep_id': ?epId,
+      },
+    );
+    if (res.data['code'] == 0) {
+      return Success(PgcInfoModel.fromJson(res.data['data']));
+    } else {
+      return Error(res.data['message']);
+    }
+  }
+
   static Future<LoadingState> episodeInfo({dynamic epId}) async {
     var res = await Request().get(
       Api.episodeInfo,

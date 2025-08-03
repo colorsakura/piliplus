@@ -13,22 +13,8 @@ import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 
 class VideoReplyPanel extends StatefulWidget {
-  final String? bvid;
-  final int oid;
-  final int rpid;
-  final int replyLevel;
-  final String heroTag;
-  final Function(ReplyInfo replyItem, int? rpid) replyReply;
-  final VoidCallback? onViewImage;
-  final ValueChanged<int>? onDismissed;
-  final Function(List<String>, int)? callback;
-  final bool? needController;
-
   const VideoReplyPanel({
     super.key,
-    this.bvid,
-    required this.oid,
-    this.rpid = 0,
     this.replyLevel = 1,
     required this.heroTag,
     required this.replyReply,
@@ -37,6 +23,14 @@ class VideoReplyPanel extends StatefulWidget {
     this.callback,
     this.needController,
   });
+
+  final int replyLevel;
+  final String heroTag;
+  final Function(ReplyInfo replyItem, int? rpid) replyReply;
+  final VoidCallback? onViewImage;
+  final ValueChanged<int>? onDismissed;
+  final Function(List<String>, int)? callback;
+  final bool? needController;
 
   @override
   State<VideoReplyPanel> createState() => _VideoReplyPanelState();
@@ -179,7 +173,7 @@ class _VideoReplyPanelState extends State<VideoReplyPanel>
                   _videoReplyController.onReply(
                     context,
                     oid: _videoReplyController.aid,
-                    replyType: 1,
+                    replyType: _videoReplyController.videoType.replyType,
                   );
                 },
                 tooltip: '发表评论',
@@ -240,7 +234,7 @@ class _VideoReplyPanelState extends State<VideoReplyPanel>
                         item,
                         index,
                         _videoReplyController.aid,
-                        1,
+                        _videoReplyController.videoType.replyType,
                       ),
                     );
                   }

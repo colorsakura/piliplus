@@ -53,7 +53,11 @@ class AccountManager extends Interceptor {
       Api.searchTrending,
       Api.searchRecommend,
     },
-    AccountType.video: {Api.ugcUrl, Api.pgcUrl},
+    AccountType.video: {
+      Api.ugcUrl,
+      Api.pgcUrl,
+      Api.pugvUrl,
+    },
   };
 
   static const loginApi = {

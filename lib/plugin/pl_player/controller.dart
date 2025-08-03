@@ -9,6 +9,7 @@ import 'package:PiliPlus/http/video.dart';
 import 'package:PiliPlus/models/common/account_type.dart';
 import 'package:PiliPlus/models/common/audio_normalization.dart';
 import 'package:PiliPlus/models/common/sponsor_block/skip_type.dart';
+import 'package:PiliPlus/models/common/video/video_type.dart';
 import 'package:PiliPlus/models/user/danmaku_rule.dart';
 import 'package:PiliPlus/models_new/video/video_shot/data.dart';
 import 'package:PiliPlus/pages/mine/controller.dart';
@@ -122,9 +123,12 @@ class PlPlayerController {
   dynamic _epid;
   dynamic _seasonId;
   dynamic _subType;
+  VideoType _videoType = VideoType.ugc;
   int _heartDuration = 0;
   int? width;
   int? height;
+
+  late final tryLook = !Accounts.get(AccountType.video).isLogin && Pref.p1080;
 
   late DataSource dataSource;
 
@@ -529,9 +533,11 @@ class PlPlayerController {
     dynamic epid,
     dynamic seasonId,
     dynamic subType,
+    VideoType? videoType,
     VoidCallback? callback,
   }) async {
     try {
+      _videoType = videoType ?? VideoType.ugc;
       this.width = width;
       this.height = height;
       this.dataSource = dataSource;
@@ -1439,6 +1445,7 @@ class PlPlayerController {
     dynamic epid,
     dynamic seasonId,
     dynamic subType,
+    VideoType? videoType,
   }) async {
     if (!enableHeart || MineController.anonymity.value || progress == 0) {
       return;
@@ -1466,6 +1473,7 @@ class PlPlayerController {
         epid: epid ?? _epid,
         seasonId: seasonId ?? _seasonId,
         subType: subType ?? _subType,
+        videoType: videoType ?? _videoType,
       );
       return;
     }
@@ -1479,6 +1487,7 @@ class PlPlayerController {
         epid: epid ?? _epid,
         seasonId: seasonId ?? _seasonId,
         subType: subType ?? _subType,
+        videoType: videoType ?? _videoType,
       );
     }
   }

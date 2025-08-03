@@ -11,7 +11,7 @@ import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/http/user.dart';
 import 'package:PiliPlus/http/video.dart';
 import 'package:PiliPlus/main.dart';
-import 'package:PiliPlus/models/common/search_type.dart';
+import 'package:PiliPlus/models/common/account_type.dart';
 import 'package:PiliPlus/models/common/sponsor_block/action_type.dart';
 import 'package:PiliPlus/models/common/sponsor_block/post_segment_model.dart';
 import 'package:PiliPlus/models/common/sponsor_block/segment_model.dart';
@@ -22,6 +22,7 @@ import 'package:PiliPlus/models/common/video/source_type.dart';
 import 'package:PiliPlus/models/common/video/subtitle_pref_type.dart';
 import 'package:PiliPlus/models/common/video/video_decode_type.dart';
 import 'package:PiliPlus/models/common/video/video_quality.dart';
+import 'package:PiliPlus/models/common/video/video_type.dart';
 import 'package:PiliPlus/models/video/play/url.dart';
 import 'package:PiliPlus/models_new/media_list/data.dart';
 import 'package:PiliPlus/models_new/media_list/media_list.dart';
@@ -42,6 +43,7 @@ import 'package:PiliPlus/plugin/pl_player/controller.dart';
 import 'package:PiliPlus/plugin/pl_player/models/data_source.dart';
 import 'package:PiliPlus/plugin/pl_player/models/heart_beat_type.dart';
 import 'package:PiliPlus/plugin/pl_player/models/play_status.dart';
+import 'package:PiliPlus/utils/accounts.dart';
 import 'package:PiliPlus/utils/duration_util.dart';
 import 'package:PiliPlus/utils/id_utils.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
@@ -67,12 +69,24 @@ class VideoDetailController extends GetxController
     with GetTickerProviderStateMixin {
   /// 路由传参
   String bvid = Get.parameters['bvid']!;
+  late int aid = IdUtils.bv2av(bvid);
   final RxInt cid = int.parse(Get.parameters['cid']!).obs;
   final heroTag = Get.arguments['heroTag'];
   final RxString cover = ''.obs;
   // 视频类型 默认投稿视频
-  final isUgc =
-      (Get.arguments['videoType'] ?? SearchType.video) == SearchType.video;
+  final pgcApi = Get.arguments['pgcApi'];
+  final VideoType videoType = Get.arguments['videoType'] ?? VideoType.ugc;
+  late final isUgc = videoType == VideoType.ugc;
+  VideoType get _actualVideoType {
+    if (videoType == VideoType.pgc) {
+      if (!Accounts.get(AccountType.video).isLogin) {
+        return VideoType.ugc;
+      }
+    } else if (pgcApi == true) {
+      return VideoType.pgc;
+    }
+    return videoType;
+  }
 
   /// tabs相关配置
   late TabController tabCtr;
@@ -89,8 +103,6 @@ class VideoDetailController extends GetxController
   final RxBool autoPlay = true.obs;
   // 封面图的展示
   final RxBool isShowCover = true.obs;
-
-  final RxInt oid = 0.obs;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final childKey = GlobalKey<ScaffoldState>();
@@ -287,7 +299,6 @@ class VideoDetailController extends GetxController
     // 预设的解码格式
     cacheDecode = Pref.defaultDecode;
     cacheSecondDecode = Pref.secondDecode;
-    oid.value = IdUtils.bv2av(Get.parameters['bvid']!);
   }
 
   Future<void> getMediaList({
@@ -1125,6 +1136,7 @@ class VideoDetailController extends GetxController
       epid: isUgc ? null : epId,
       seasonId: isUgc ? null : seasonId,
       subType: isUgc ? null : subType,
+      videoType: videoType,
       callback: () {
         if (videoState.value is! Success) {
           videoState.value = const Success(null);
@@ -1169,12 +1181,14 @@ class VideoDetailController extends GetxController
               : Pref.defaultAudioQaCellular;
       });
     }
+
     var result = await VideoHttp.videoUrl(
       cid: cid.value,
       bvid: bvid,
       epid: epId,
       seasonId: seasonId,
-      forcePgcApi: Get.arguments?['pgcApi'] ?? false,
+      tryLook: plPlayerController.tryLook,
+      videoType: _actualVideoType,
     );
 
     if (result['status']) {
@@ -1330,7 +1344,10 @@ class VideoDetailController extends GetxController
         Get.arguments['progress'] = null;
       } else {
         this.defaultST =
-            defaultST ?? Duration(milliseconds: data.lastPlayTime!);
+            defaultST ??
+            (data.lastPlayTime == null
+                ? Duration.zero
+                : Duration(milliseconds: data.lastPlayTime!));
       }
       if (autoPlay.value) {
         isShowCover.value = false;
@@ -1345,13 +1362,13 @@ class VideoDetailController extends GetxController
       if (plPlayerController.isFullScreen.value) {
         plPlayerController.toggleFullScreen(false);
       }
-      if (result['code'] == -404) {
+      final code = result['code'];
+      if (code == -404) {
         SmartDialog.showToast('视频不存在或已被删除');
-      }
-      if (result['code'] == 87008) {
+      } else if (code == 87008) {
         SmartDialog.showToast("当前视频可能是专属视频，可能需包月充电观看(${result['msg']})");
       } else {
-        SmartDialog.showToast("错误（${result['code']}）：${result['msg']}");
+        SmartDialog.showToast("错误($code): ${result['msg']}");
       }
     }
     isQuerying = false;
@@ -1587,6 +1604,7 @@ class VideoDetailController extends GetxController
           epid: isUgc ? null : epId,
           seasonId: isUgc ? null : seasonId,
           subType: isUgc ? null : subType,
+          videoType: videoType,
         );
       } catch (_) {}
     }
@@ -1680,7 +1698,7 @@ class VideoDetailController extends GetxController
             ? Theme(
                 data: MyApp.darkThemeData!,
                 child: NoteListPage(
-                  oid: oid.value,
+                  oid: aid,
                   enableSlide: false,
                   heroTag: heroTag,
                   isStein: graphVersion != null,
@@ -1688,7 +1706,7 @@ class VideoDetailController extends GetxController
                 ),
               )
             : NoteListPage(
-                oid: oid.value,
+                oid: aid,
                 enableSlide: false,
                 heroTag: heroTag,
                 isStein: graphVersion != null,
@@ -1700,7 +1718,7 @@ class VideoDetailController extends GetxController
       childKey.currentState?.showBottomSheet(
         backgroundColor: Colors.transparent,
         (context) => NoteListPage(
-          oid: oid.value,
+          oid: aid,
           heroTag: heroTag,
           isStein: graphVersion != null,
           title: title,

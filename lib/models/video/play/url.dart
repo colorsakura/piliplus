@@ -170,23 +170,25 @@ abstract class BaseItem {
 
   BaseItem.fromJson(Map<String, dynamic> json) {
     id = json['id'];
-    baseUrl = json['baseUrl'];
-    final backupUrls = (json['backupUrl'] as List?)?.cast<String>() ?? [];
+    baseUrl = json['baseUrl'] ?? json['base_url'];
+    final backupUrls =
+        ((json['backupUrl'] ?? json['backup_url']) as List?)?.cast<String>() ??
+        <String>[];
     backupUrl = backupUrls.isNotEmpty
         ? backupUrls.firstWhere(
             (i) => !_isMCDNorPCDN(i),
             orElse: () => backupUrls.first,
           )
         : null;
-    bandWidth = json['bandWidth'];
+    bandWidth = json['bandWidth'] ?? json['bandwidth'];
     mimeType = json['mime_type'];
     codecs = json['codecs'];
     width = json['width'];
     height = json['height'];
-    frameRate = json['frameRate'];
+    frameRate = json['frameRate'] ?? json['frame_rate'];
     sar = json['sar'];
-    startWithSap = json['startWithSap'];
-    segmentBase = json['segmentBase'];
+    startWithSap = json['startWithSap'] ?? json['start_with_sap'];
+    segmentBase = json['segmentBase'] ?? json['segment_base'];
     codecid = json['codecid'];
   }
 }

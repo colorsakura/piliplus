@@ -5,7 +5,7 @@ import 'package:PiliPlus/common/widgets/button/icon_button.dart';
 import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
 import 'package:PiliPlus/grpc/bilibili/main/community/reply/v1.pb.dart'
     show ReplyInfo;
-import 'package:PiliPlus/models/common/search_type.dart';
+import 'package:PiliPlus/models/common/video/video_type.dart';
 import 'package:PiliPlus/models/dynamics/result.dart';
 import 'package:PiliPlus/pages/dynamics/widgets/dynamic_panel.dart';
 import 'package:PiliPlus/pages/video/introduction/pgc/controller.dart';
@@ -90,7 +90,8 @@ class _SavePanelState extends State<SavePanel> {
       if (currentRoute.startsWith('/video')) {
         try {
           final heroTag = Get.arguments['heroTag'];
-          if (Get.arguments['videoType'] == SearchType.media_bangumi) {
+          final videoType = Get.arguments['videoType'];
+          if (videoType == VideoType.pgc || videoType == VideoType.pugv) {
             final ctr = Get.find<PgcIntroController>(tag: heroTag);
             final pgcItem = ctr.pgcItem;
             final episode = pgcItem.episodes!.firstWhere(
@@ -99,7 +100,7 @@ class _SavePanelState extends State<SavePanel> {
             cover = episode.cover;
             title =
                 episode.shareCopy ??
-                '${pgcItem.title} ${episode.showTitle ?? episode.title}';
+                '${pgcItem.title} ${episode.showTitle ?? episode.longTitle ?? ''}';
             pubdate = episode.pubTime;
             uname = pgcItem.upInfo?.uname;
           } else {

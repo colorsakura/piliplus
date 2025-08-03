@@ -52,7 +52,7 @@ class _HorizontalMemberPageState extends State<HorizontalMemberPage> {
     _controller = Get.put(
       HorizontalMemberPageController(
         mid: widget.mid,
-        currAid: widget.videoDetailController.oid.value.toString(),
+        currAid: widget.videoDetailController.aid.toString(),
       ),
       tag: widget.videoDetailController.heroTag,
     );
@@ -142,8 +142,7 @@ class _HorizontalMemberPageState extends State<HorizontalMemberPage> {
                 height: 35,
                 child: TextButton.icon(
                   onPressed: () => _controller
-                    ..lastAid = widget.videoDetailController.oid.value
-                        .toString()
+                    ..lastAid = widget.videoDetailController.aid.toString()
                     ..queryBySort(),
                   icon: Icon(
                     Icons.sort,

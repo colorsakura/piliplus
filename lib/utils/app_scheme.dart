@@ -817,6 +817,13 @@ class PiliScheme {
         }
         launchURL();
         return false;
+      case 'cheese':
+        bool hasMatch = PageUtils.viewPgcFromUri(path, isPgc: false);
+        if (hasMatch) {
+          return true;
+        }
+        launchURL();
+        return false;
       default:
         Map map = IdUtils.matchAvorBv(input: area?.split('?').first);
         if (map.isNotEmpty) {

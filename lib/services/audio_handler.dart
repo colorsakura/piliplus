@@ -153,9 +153,11 @@ class VideoPlayerServiceHandler extends BaseAudioHandler with SeekHandler {
     } else if (data is EpisodeItem) {
       mediaItem = MediaItem(
         id: id,
-        title: data.showTitle ?? data.title ?? '',
+        title: data.showTitle ?? data.longTitle ?? data.title ?? '',
         artist: artist,
-        duration: Duration(milliseconds: data.duration ?? 0),
+        duration: data.from == 'pugv'
+            ? Duration(seconds: data.duration ?? 0)
+            : Duration(milliseconds: data.duration ?? 0),
         artUri: Uri.parse(data.cover ?? ''),
       );
     } else if (data is RoomInfoH5Data) {

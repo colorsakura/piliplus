@@ -51,7 +51,7 @@ class VideoCardHLater extends StatelessWidget {
             onTap ??
             () async {
               if (type == 'ketang') {
-                SmartDialog.showToast('课堂视频暂不支持播放');
+                PageUtils.viewPugv(seasonId: videoItem.aid);
                 return;
               }
               if (videoItem.isPgc == true) {
@@ -117,6 +117,12 @@ class VideoCardHLater extends StatelessWidget {
                             text: videoItem.pgcLabel,
                             top: 6.0,
                             right: 6.0,
+                          )
+                        else if (type == 'ketang')
+                          const PBadge(
+                            text: '课堂',
+                            top: 6.0,
+                            right: 6.0,
                           ),
                         if (progress != null && progress != 0) ...[
                           PBadge(
@@ -145,13 +151,6 @@ class VideoCardHLater extends StatelessWidget {
                             right: 6.0,
                             bottom: 6.0,
                             type: PBadgeType.gray,
-                          ),
-                        if (type != 'video')
-                          PBadge(
-                            text: type,
-                            left: 6.0,
-                            bottom: 6.0,
-                            type: PBadgeType.primary,
                           ),
                       ],
                     );

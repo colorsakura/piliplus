@@ -177,15 +177,13 @@ class ArticleController extends CommonDynController<MainListReply> {
   }
 
   @override
-  Future<LoadingState<MainListReply>> customGetData() {
-    return ReplyGrpc.mainList(
-      type: commentType,
-      oid: commentId,
-      mode: mode.value,
-      cursorNext: cursorNext,
-      offset: paginationReply?.nextOffset,
-    );
-  }
+  Future<LoadingState<MainListReply>> customGetData() => ReplyGrpc.mainList(
+    type: commentType,
+    oid: commentId,
+    mode: mode.value,
+    cursorNext: cursorNext,
+    offset: paginationReply?.nextOffset,
+  );
 
   Future<void> onFav() async {
     final favorite = stats.value?.favorite;

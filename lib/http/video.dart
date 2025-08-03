@@ -7,6 +7,7 @@ import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/http/login.dart';
 import 'package:PiliPlus/http/ua_type.dart';
 import 'package:PiliPlus/models/common/account_type.dart';
+import 'package:PiliPlus/models/common/video/video_type.dart';
 import 'package:PiliPlus/models/home/rcmd/result.dart';
 import 'package:PiliPlus/models/model_hot_video_item.dart';
 import 'package:PiliPlus/models/model_rec_video_item.dart';
@@ -33,7 +34,6 @@ import 'package:flutter/foundation.dart';
 
 /// view层根据 status 判断渲染逻辑
 class VideoHttp {
-  static bool p1080 = Pref.p1080;
   // static bool enableRcmdDynamic = Pref.enableRcmdDynamic;
   static RegExp zoneRegExp = RegExp(Pref.banWordForZone, caseSensitive: false);
   static bool enableFilter = zoneRegExp.pattern.isNotEmpty;
@@ -193,7 +193,8 @@ class VideoHttp {
     int? qn,
     dynamic epid,
     dynamic seasonId,
-    bool? forcePgcApi,
+    required bool tryLook,
+    required VideoType videoType,
   }) async {
     final params = await WbiSign.makSign({
       'avid': ?avid,
@@ -211,33 +212,28 @@ class VideoHttp {
       'isGaiaAvoided': true,
       'web_location': 1315873,
       // 免登录查看1080p
-      if (!Accounts.get(AccountType.video).isLogin && p1080) 'try_look': 1,
+      if (tryLook) 'try_look': 1,
     });
-
-    late final usePgcApi =
-        forcePgcApi == true || Accounts.get(AccountType.video).isLogin;
 
     try {
       var res = await Request().get(
-        epid != null && usePgcApi ? Api.pgcUrl : Api.ugcUrl,
+        videoType.api,
         queryParameters: params,
       );
 
       if (res.data['code'] == 0) {
         late PlayUrlModel data;
-        if (epid != null && usePgcApi) {
-          data = PlayUrlModel.fromJson(res.data['result']['video_info'])
-            ..lastPlayTime = res
-                .data['result']['play_view_business_info']['user_status']['watch_progress']['current_watch_progress'];
-        } else {
-          data = PlayUrlModel.fromJson(res.data['data']);
+        switch (videoType) {
+          case VideoType.ugc || VideoType.pugv:
+            data = PlayUrlModel.fromJson(res.data['data']);
+          case VideoType.pgc:
+            data = PlayUrlModel.fromJson(res.data['result']['video_info'])
+              ..lastPlayTime = res
+                  .data['result']?['play_view_business_info']?['user_status']?['watch_progress']?['current_watch_progress'];
         }
-        return {
-          'status': true,
-          'data': data,
-        };
+        return {'status': true, 'data': data};
       } else {
-        if (epid != null && !usePgcApi && forcePgcApi != true) {
+        if (epid != null && videoType == VideoType.ugc) {
           return videoUrl(
             avid: avid,
             bvid: bvid,
@@ -245,7 +241,8 @@ class VideoHttp {
             qn: qn,
             epid: epid,
             seasonId: seasonId,
-            forcePgcApi: true,
+            tryLook: tryLook,
+            videoType: VideoType.pgc,
           );
         }
         return {
@@ -648,6 +645,7 @@ class VideoHttp {
     epid,
     seasonId,
     subType,
+    required VideoType videoType,
   }) async {
     await Request().post(
       Api.heartBeat,
@@ -656,7 +654,7 @@ class VideoHttp {
         'cid': cid,
         'epid': ?epid,
         'sid': ?seasonId,
-        if (epid != null) 'type': 4,
+        'type': videoType.type,
         'sub_type': ?subType,
         'played_time': progress,
         'csrf': Accounts.main.csrf,

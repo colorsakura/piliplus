@@ -38,6 +38,7 @@ class HistoryItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final hasDuration = item.duration != null && item.duration != 0;
     int aid = item.history.oid!;
     String bvid = item.history.bvid ?? IdUtils.av2bv(aid);
     return Material(
@@ -68,6 +69,10 @@ class HistoryItem extends StatelessWidget {
             }
           } else if (item.history.business == 'pgc') {
             PageUtils.viewPgc(epId: item.history.epid);
+          } else if (item.history.business == 'cheese') {
+            if (item.uri?.isNotEmpty == true) {
+              PageUtils.viewPgcFromUri(item.uri!, isPgc: false);
+            }
           } else {
             int? cid =
                 item.history.cid ??
@@ -128,8 +133,7 @@ class HistoryItem extends StatelessWidget {
                               width: maxWidth,
                               height: maxHeight,
                             ),
-                            if (!HistoryBusinessType.hiddenDurationType
-                                .contains(item.history.business))
+                            if (hasDuration)
                               PBadge(
                                 text: item.progress == -1
                                     ? '已看完'
@@ -139,11 +143,7 @@ class HistoryItem extends StatelessWidget {
                                 type: PBadgeType.gray,
                               ),
                             // 右上角
-                            if (HistoryBusinessType.showBadge.contains(
-                                  item.history.business,
-                                ) ||
-                                item.history.business ==
-                                    HistoryBusinessType.live.type)
+                            if (item.badge?.isNotEmpty == true)
                               PBadge(
                                 text: item.badge,
                                 top: 6.0,
@@ -155,8 +155,7 @@ class HistoryItem extends StatelessWidget {
                                     ? PBadgeType.gray
                                     : PBadgeType.primary,
                               ),
-                            if (item.duration != null &&
-                                item.duration != 0 &&
+                            if (hasDuration &&
                                 item.progress != null &&
                                 item.progress != 0)
                               Positioned(

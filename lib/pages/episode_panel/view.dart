@@ -367,7 +367,12 @@ class _EpisodePanelState extends CommonSlidePageState<EpisodePanel> {
         bvid = item.bvid;
         title = item.showTitle ?? item.title!;
         cover = item.cover;
-        duration = item.duration == null ? null : item.duration! ~/ 1000;
+        if (item.from == 'pugv') {
+          duration = item.duration;
+          view = item.play;
+        } else {
+          duration = item.duration == null ? null : item.duration! ~/ 1000;
+        }
         pubdate = item.pubTime;
         break;
     }

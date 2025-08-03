@@ -44,7 +44,6 @@ import 'package:PiliPlus/services/service_locator.dart';
 import 'package:PiliPlus/services/shutdown_timer_service.dart';
 import 'package:PiliPlus/utils/accounts.dart';
 import 'package:PiliPlus/utils/extension.dart';
-import 'package:PiliPlus/utils/id_utils.dart';
 import 'package:PiliPlus/utils/image_util.dart';
 import 'package:PiliPlus/utils/num_util.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
@@ -138,7 +137,11 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
 
     if (videoDetailController.showReply) {
       _videoReplyController = Get.put(
-        VideoReplyController(aid: videoDetailController.oid.value),
+        VideoReplyController(
+          aid: videoDetailController.aid,
+          videoType: videoDetailController.videoType,
+          heroTag: heroTag,
+        ),
         tag: heroTag,
       );
     }
@@ -317,8 +320,9 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
       return;
     }
     plPlayerController = videoDetailController.plPlayerController;
-    videoDetailController.isShowCover.value = false;
-    videoDetailController.autoPlay.value = true;
+    videoDetailController
+      ..isShowCover.value = false
+      ..autoPlay.value = true;
     if (videoDetailController.plPlayerController.preInitPlayer) {
       await plPlayerController!.play();
     } else {
@@ -798,9 +802,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                                                     );
                                                   } else {
                                                     PageUtils.reportVideo(
-                                                      videoDetailController
-                                                          .oid
-                                                          .value,
+                                                      videoDetailController.aid,
                                                     );
                                                   }
                                                   break;
@@ -1256,10 +1258,9 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
           ),
   );
 
-  Widget get manualPlayerWidget => Obx(
-    () => Visibility(
-      visible: videoDetailController.isShowCover.value,
-      child: Stack(
+  Widget get manualPlayerWidget => Obx(() {
+    if (videoDetailController.isShowCover.value) {
+      return Stack(
         clipBehavior: Clip.none,
         children: [
           Positioned(
@@ -1341,9 +1342,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                         if (!Accounts.main.isLogin) {
                           SmartDialog.showToast('账号未登录');
                         } else {
-                          PageUtils.reportVideo(
-                            videoDetailController.oid.value,
-                          );
+                          PageUtils.reportVideo(videoDetailController.aid);
                         }
                         break;
                       case 'note':
@@ -1396,9 +1395,10 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
             ),
           ),
         ],
-      ),
-    ),
-  );
+      );
+    }
+    return const SizedBox.shrink();
+  });
 
   Widget get plPlayer => Obx(
     key: videoPlayerKey,
@@ -1641,37 +1641,35 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
 
           if (isShowing) plPlayer,
 
-          if (!videoDetailController.autoPlay.value) ...[
-            Obx(
-              () => videoDetailController.isShowCover.value
-                  ? Positioned(
-                      top: 0,
-                      left: 0,
-                      right: 0,
-                      bottom: 0,
-                      child: GestureDetector(
-                        onTap: handlePlay,
-                        child: Obx(
-                          () => CachedNetworkImage(
-                            imageUrl:
-                                videoDetailController.cover.value.http2https,
-                            width: videoWidth,
-                            height: videoHeight,
-                            fit: BoxFit.cover,
-                            fadeOutDuration: const Duration(milliseconds: 120),
-                            fadeInDuration: const Duration(milliseconds: 120),
-                            memCacheWidth: videoWidth.cacheSize(context),
-                            placeholder: (context, url) => Center(
-                              child: Image.asset('assets/images/loading.png'),
-                            ),
-                          ),
-                        ),
+          Obx(() {
+            if (videoDetailController.isShowCover.value) {
+              return Positioned(
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                child: GestureDetector(
+                  onTap: handlePlay,
+                  child: Obx(
+                    () => CachedNetworkImage(
+                      imageUrl: videoDetailController.cover.value.http2https,
+                      width: videoWidth,
+                      height: videoHeight,
+                      fit: BoxFit.cover,
+                      fadeOutDuration: const Duration(milliseconds: 120),
+                      fadeInDuration: const Duration(milliseconds: 120),
+                      memCacheWidth: videoWidth.cacheSize(context),
+                      placeholder: (context, url) => Center(
+                        child: Image.asset('assets/images/loading.png'),
                       ),
-                    )
-                  : const SizedBox.shrink(),
-            ),
-            manualPlayerWidget,
-          ],
+                    ),
+                  ),
+                ),
+              );
+            }
+            return const SizedBox.shrink();
+          }),
+          manualPlayerWidget,
 
           if (videoDetailController.plPlayerController.enableSponsorBlock ||
               videoDetailController.continuePlayingPart)
@@ -1933,7 +1931,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                   list: [videoDetail.pages!],
                   cover: videoDetailController.cover.value,
                   bvid: videoDetailController.bvid,
-                  aid: IdUtils.bv2av(videoDetailController.bvid),
+                  aid: videoDetailController.aid,
                   cid: videoDetailController.cid.value,
                   isReversed: videoDetail.isPageReversed,
                   onChangeEpisode: videoDetailController.isUgc
@@ -1943,7 +1941,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                   isSupportReverse: videoDetailController.isUgc,
                   onReverse: () => onReversePlay(
                     bvid: videoDetailController.bvid,
-                    aid: IdUtils.bv2av(videoDetailController.bvid),
+                    aid: videoDetailController.aid,
                     isSeason: false,
                   ),
                 ),
@@ -1980,7 +1978,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                 seasonId: videoDetail.ugcSeason!.id,
                 list: videoDetail.ugcSeason!.sections!,
                 bvid: videoDetailController.bvid,
-                aid: IdUtils.bv2av(videoDetailController.bvid),
+                aid: videoDetailController.aid,
                 cid: videoDetailController.seasonCid ?? 0,
                 isReversed: ugcIntroController
                     .videoDetail
@@ -1995,7 +1993,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                 isSupportReverse: videoDetailController.isUgc,
                 onReverse: () => onReversePlay(
                   bvid: videoDetailController.bvid,
-                  aid: IdUtils.bv2av(videoDetailController.bvid),
+                  aid: videoDetailController.aid,
                   isSeason: true,
                 ),
               ),
@@ -2006,25 +2004,21 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
     );
   }
 
-  Widget videoReplyPanel([bool needCtr = true]) => Obx(
-    () => VideoReplyPanel(
-      key: videoReplyPanelKey,
-      needController: needCtr,
-      bvid: videoDetailController.bvid,
-      oid: videoDetailController.oid.value,
-      heroTag: heroTag,
-      replyReply: replyReply,
-      onViewImage: videoDetailController.onViewImage,
-      onDismissed: videoDetailController.onDismissed,
-      callback: _horizontalPreview
-          ? (imgList, index) => PageUtils.onHorizontalPreview(
-              videoDetailController.childKey,
-              this,
-              imgList,
-              index,
-            )
-          : null,
-    ),
+  Widget videoReplyPanel([bool needCtr = true]) => VideoReplyPanel(
+    key: videoReplyPanelKey,
+    needController: needCtr,
+    heroTag: heroTag,
+    replyReply: replyReply,
+    onViewImage: videoDetailController.onViewImage,
+    onDismissed: videoDetailController.onDismissed,
+    callback: _horizontalPreview
+        ? (imgList, index) => PageUtils.onHorizontalPreview(
+            videoDetailController.childKey,
+            this,
+            imgList,
+            index,
+          )
+        : null,
   );
 
   // 展示二级回复
@@ -2039,7 +2033,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
           oid: oid,
           rpid: rpid,
           firstFloor: replyItem,
-          replyType: 1,
+          replyType: _videoReplyController.videoType.replyType,
           isVideoDetail: true,
           onViewImage: videoDetailController.onViewImage,
           onDismissed: videoDetailController.onDismissed,

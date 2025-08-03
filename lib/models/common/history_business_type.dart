@@ -10,11 +10,6 @@ enum HistoryBusinessType {
   // 文章
   article('article');
 
-  // 隐藏时长
-  static const hiddenDurationType = {'live', 'article-list', 'article'};
-  // 右上
-  static const showBadge = {'pgc', 'article-list', 'article'};
-
   final String type;
   const HistoryBusinessType(this.type);
 }

@@ -7,6 +7,7 @@ import 'package:PiliPlus/grpc/view.dart';
 import 'package:PiliPlus/http/constants.dart';
 import 'package:PiliPlus/http/search.dart';
 import 'package:PiliPlus/http/video.dart';
+import 'package:PiliPlus/models/common/video/video_type.dart';
 import 'package:PiliPlus/models/pgc_lcf.dart';
 import 'package:PiliPlus/models_new/pgc/pgc_info_model/episode.dart';
 import 'package:PiliPlus/models_new/pgc/pgc_info_model/result.dart';
@@ -43,20 +44,23 @@ class PgcIntroController extends CommonIntroController {
       ? '追番'
       : '追剧';
 
+  final isPgc = Get.arguments['videoType'] == VideoType.pgc;
   final PgcInfoModel pgcItem = Get.arguments['pgcItem'];
 
   @override
   void onInit() {
     super.onInit();
-    if (accountService.isLogin.value) {
-      if (seasonId != null) {
-        queryIsFollowed();
+    if (isPgc) {
+      if (accountService.isLogin.value) {
+        if (seasonId != null) {
+          queryIsFollowed();
+        }
+        if (epId != null) {
+          queryPgcLikeCoinFav();
+        }
       }
-      if (epId != null) {
-        queryPgcLikeCoinFav();
-      }
+      queryVideoTags();
     }
-    queryVideoTags();
   }
 
   // 获取点赞/投币/收藏状态
@@ -226,7 +230,9 @@ class PgcIntroController extends CommonIntroController {
                     EpisodeItem item = pgcItem.episodes!.firstWhere(
                       (item) => item.epId == epId,
                     );
-                    final title = '${item.title!} ${item.showTitle}';
+                    final title =
+                        item.shareCopy ??
+                        '${pgcItem.title} ${item.showTitle ?? item.longTitle}';
                     PageUtils.pmShare(
                       context,
                       content: {
@@ -263,7 +269,7 @@ class PgcIntroController extends CommonIntroController {
   // 修改分P或番剧分集
   Future<void> onChangeEpisode(BaseEpisodeItem episode) async {
     try {
-      final int epId = episode.epId!;
+      final int epId = episode.epId ?? episode.id!;
       final String bvid = episode.bvid ?? this.bvid;
       final int aid = episode.aid ?? IdUtils.bv2av(bvid);
       final int? cid =
@@ -284,6 +290,7 @@ class PgcIntroController extends CommonIntroController {
             ..onReset()
             ..epId = epId
             ..bvid = bvid
+            ..aid = aid
             ..cid.value = cid
             ..queryVideoUrl();
       if (cover != null && cover.isNotEmpty) {
@@ -299,7 +306,7 @@ class PgcIntroController extends CommonIntroController {
         } catch (_) {}
       }
 
-      if (accountService.isLogin.value) {
+      if (isPgc && accountService.isLogin.value) {
         queryPgcLikeCoinFav();
       }
 

@@ -122,130 +122,158 @@ class _PgcIntroPageState extends State<PgcIntroPage>
                   ],
                 ),
                 Expanded(
-                  child: GestureDetector(
-                    onTap: () => widget.showIntroDetail(
-                      item,
-                      pgcIntroController.videoTags.value,
-                    ),
-                    behavior: HitTestBehavior.opaque,
-                    child: SizedBox(
-                      height: isLandscape ? 115 : 115 / 0.75,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            spacing: 20,
-                            children: [
-                              Expanded(
-                                child: Text(
-                                  item.title!,
-                                  style: const TextStyle(
-                                    fontSize: 16,
-                                  ),
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
+                  child: !pgcIntroController.isPgc
+                      ? Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              item.title!,
+                              style: const TextStyle(fontSize: 16),
+                            ),
+                            const SizedBox(height: 5),
+                            if (item.subtitle?.isNotEmpty == true)
+                              Text(
+                                item.subtitle!,
+                                style: TextStyle(
+                                  fontSize: 13,
+                                  color: theme.colorScheme.onSurfaceVariant,
                                 ),
                               ),
-                              Obx(
-                                () {
-                                  final isFollowed =
-                                      pgcIntroController.isFollowed.value;
-                                  final followStatus =
-                                      pgcIntroController.followStatus.value;
-                                  return FilledButton.tonal(
-                                    style: FilledButton.styleFrom(
-                                      tapTargetSize:
-                                          MaterialTapTargetSize.shrinkWrap,
-                                      padding: const EdgeInsets.symmetric(
-                                        horizontal: 20,
-                                        vertical: 10,
+                          ],
+                        )
+                      : GestureDetector(
+                          onTap: () => widget.showIntroDetail(
+                            item,
+                            pgcIntroController.videoTags.value,
+                          ),
+                          behavior: HitTestBehavior.opaque,
+                          child: SizedBox(
+                            height: isLandscape ? 115 : 115 / 0.75,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  spacing: 20,
+                                  children: [
+                                    Expanded(
+                                      child: Text(
+                                        item.title!,
+                                        style: const TextStyle(
+                                          fontSize: 16,
+                                        ),
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
                                       ),
-                                      visualDensity: VisualDensity.compact,
-                                      foregroundColor: isFollowed
-                                          ? theme.colorScheme.outline
-                                          : null,
-                                      backgroundColor: isFollowed
-                                          ? theme.colorScheme.onInverseSurface
-                                          : null,
                                     ),
-                                    onPressed: followStatus == -1
-                                        ? null
-                                        : () {
-                                            if (isFollowed) {
-                                              showPgcFollowDialog(
-                                                context: context,
-                                                type:
-                                                    pgcIntroController.pgcType,
-                                                followStatus: followStatus,
-                                                onUpdateStatus: (followStatus) {
-                                                  if (followStatus == -1) {
-                                                    pgcIntroController.pgcDel();
-                                                  } else {
-                                                    pgcIntroController
-                                                        .pgcUpdate(
+                                    Obx(
+                                      () {
+                                        final isFollowed =
+                                            pgcIntroController.isFollowed.value;
+                                        final followStatus = pgcIntroController
+                                            .followStatus
+                                            .value;
+                                        return FilledButton.tonal(
+                                          style: FilledButton.styleFrom(
+                                            tapTargetSize: MaterialTapTargetSize
+                                                .shrinkWrap,
+                                            padding: const EdgeInsets.symmetric(
+                                              horizontal: 20,
+                                              vertical: 10,
+                                            ),
+                                            visualDensity:
+                                                VisualDensity.compact,
+                                            foregroundColor: isFollowed
+                                                ? theme.colorScheme.outline
+                                                : null,
+                                            backgroundColor: isFollowed
+                                                ? theme
+                                                      .colorScheme
+                                                      .onInverseSurface
+                                                : null,
+                                          ),
+                                          onPressed: followStatus == -1
+                                              ? null
+                                              : () {
+                                                  if (isFollowed) {
+                                                    showPgcFollowDialog(
+                                                      context: context,
+                                                      type: pgcIntroController
+                                                          .pgcType,
+                                                      followStatus:
                                                           followStatus,
-                                                        );
+                                                      onUpdateStatus:
+                                                          (followStatus) {
+                                                            if (followStatus ==
+                                                                -1) {
+                                                              pgcIntroController
+                                                                  .pgcDel();
+                                                            } else {
+                                                              pgcIntroController
+                                                                  .pgcUpdate(
+                                                                    followStatus,
+                                                                  );
+                                                            }
+                                                          },
+                                                    );
+                                                  } else {
+                                                    pgcIntroController.pgcAdd();
                                                   }
                                                 },
-                                              );
-                                            } else {
-                                              pgcIntroController.pgcAdd();
-                                            }
-                                          },
-                                    child: Text(
-                                      isFollowed
-                                          ? '已${pgcIntroController.pgcType}'
-                                          : pgcIntroController.pgcType,
+                                          child: Text(
+                                            isFollowed
+                                                ? '已${pgcIntroController.pgcType}'
+                                                : pgcIntroController.pgcType,
+                                          ),
+                                        );
+                                      },
                                     ),
-                                  );
-                                },
-                              ),
-                            ],
-                          ),
-                          Row(
-                            spacing: 6,
-                            children: [
-                              StatWidget(
-                                type: StatType.play,
-                                value: item.stat!.view,
-                              ),
-                              StatWidget(
-                                type: StatType.danmaku,
-                                value: item.stat!.danmaku,
-                              ),
-                              if (isLandscape) ...[
-                                areasAndPubTime(theme, item),
-                                newEpDesc(theme, item),
+                                  ],
+                                ),
+                                Row(
+                                  spacing: 6,
+                                  children: [
+                                    StatWidget(
+                                      type: StatType.play,
+                                      value: item.stat!.view,
+                                    ),
+                                    StatWidget(
+                                      type: StatType.danmaku,
+                                      value: item.stat!.danmaku,
+                                    ),
+                                    if (isLandscape) ...[
+                                      areasAndPubTime(theme, item),
+                                      newEpDesc(theme, item),
+                                    ],
+                                  ],
+                                ),
+                                SizedBox(height: isLandscape ? 2 : 6),
+                                if (!isLandscape) ...[
+                                  areasAndPubTime(theme, item),
+                                  newEpDesc(theme, item),
+                                ],
+                                const Spacer(),
+                                Text(
+                                  '简介：${item.evaluate}',
+                                  maxLines: isLandscape ? 2 : 3,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                    fontSize: 13,
+                                    color: theme.colorScheme.outline,
+                                  ),
+                                ),
                               ],
-                            ],
-                          ),
-                          SizedBox(height: isLandscape ? 2 : 6),
-                          if (!isLandscape) ...[
-                            areasAndPubTime(theme, item),
-                            newEpDesc(theme, item),
-                          ],
-                          const Spacer(),
-                          Text(
-                            '简介：${item.evaluate!}',
-                            maxLines: isLandscape ? 2 : 3,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                              fontSize: 13,
-                              color: theme.colorScheme.outline,
                             ),
                           ),
-                        ],
-                      ),
-                    ),
-                  ),
+                        ),
                 ),
               ],
             ),
             const SizedBox(height: 6),
             // 点赞收藏转发 布局样式2
-            actionGrid(theme, item, pgcIntroController),
+            if (pgcIntroController.isPgc)
+              actionGrid(theme, item, pgcIntroController),
             // 番剧分p
             if (item.episodes!.isNotEmpty) ...[
               PgcPanel(

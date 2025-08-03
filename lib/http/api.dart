@@ -22,6 +22,8 @@ class Api {
   // https://api.bilibili.com/pgc/player/web/v2/playurl?cid=104236640&bvid=BV13t411n7ex
   static const String pgcUrl = '/pgc/player/web/v2/playurl';
 
+  static const String pugvUrl = '/pugv/player/web/playurl';
+
   // 字幕
   // aid, cid
   static const String playInfo = '/x/player/wbi/v2';
@@ -278,6 +280,8 @@ class Api {
 
   // 番剧/剧集明细
   static const String pgcInfo = '/pgc/view/web/season';
+
+  static const String pugvInfo = '/pugv/view/web/season';
 
   // https://api.bilibili.com/pgc/season/episode/web/info?ep_id=12345678
   static const String episodeInfo = '/pgc/season/episode/web/info';

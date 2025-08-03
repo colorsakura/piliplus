@@ -133,7 +133,7 @@ class _UgcIntroPanelState extends State<UgcIntroPanel>
                                           widget.onShowMemberPage(mid);
                                         } else {
                                           Get.toNamed(
-                                            '/member?mid=$mid&from_view_aid=${videoDetailCtr.oid.value}',
+                                            '/member?mid=$mid&from_view_aid=${videoDetailCtr.aid}',
                                           );
                                         }
                                       }
@@ -722,7 +722,7 @@ class _UgcIntroPanelState extends State<UgcIntroPanel>
           widget.onShowMemberPage(ownerMid);
         } else {
           Get.toNamed(
-            '/member?mid=${item.mid}&from_view_aid=${videoDetailCtr.oid.value}',
+            '/member?mid=${item.mid}&from_view_aid=${videoDetailCtr.aid}',
           );
         }
       },

@@ -5,7 +5,7 @@ import 'package:PiliPlus/grpc/im.dart';
 import 'package:PiliPlus/http/dynamics.dart';
 import 'package:PiliPlus/http/search.dart';
 import 'package:PiliPlus/models/common/image_preview_type.dart';
-import 'package:PiliPlus/models/common/search_type.dart';
+import 'package:PiliPlus/models/common/video/video_type.dart';
 import 'package:PiliPlus/models/dynamics/result.dart';
 import 'package:PiliPlus/models_new/pgc/pgc_info_model/episode.dart';
 import 'package:PiliPlus/models_new/pgc/pgc_info_model/result.dart';
@@ -695,16 +695,27 @@ class PageUtils {
   }
 
   static final _pgcRegex = RegExp(r'(ep|ss)(\d+)');
-  static bool viewPgcFromUri(String uri, {String? progress}) {
+  static bool viewPgcFromUri(
+    String uri, {
+    bool isPgc = true,
+    String? progress,
+  }) {
     RegExpMatch? match = _pgcRegex.firstMatch(uri);
     if (match != null) {
       bool isSeason = match.group(1) == 'ss';
       String id = match.group(2)!;
-      viewPgc(
-        seasonId: isSeason ? id : null,
-        epId: isSeason ? null : id,
-        progress: progress,
-      );
+      if (isPgc) {
+        viewPgc(
+          seasonId: isSeason ? id : null,
+          epId: isSeason ? null : id,
+          progress: progress,
+        );
+      } else {
+        viewPugv(
+          seasonId: isSeason ? id : null,
+          epId: isSeason ? null : id,
+        );
+      }
       return true;
     }
     return false;
@@ -745,7 +756,7 @@ class PageUtils {
                         'pgcApi': true,
                         'pic': item.cover,
                         'heroTag': Utils.makeHeroTag(item.cid),
-                        'videoType': SearchType.video,
+                        'videoType': VideoType.ugc,
                         if (progress != null)
                           'progress': int.tryParse(progress),
                       },
@@ -775,7 +786,7 @@ class PageUtils {
           arguments: {
             'pic': episode.cover,
             'heroTag': Utils.makeHeroTag(episode.cid),
-            'videoType': SearchType.media_bangumi,
+            'videoType': VideoType.pgc,
             'pgcItem': data,
             if (progress != null) 'progress': int.tryParse(progress),
           },
@@ -788,6 +799,37 @@ class PageUtils {
       SmartDialog.dismiss();
       SmartDialog.showToast('$e');
       if (kDebugMode) debugPrint('$e');
+    }
+  }
+
+  static Future<void> viewPugv({dynamic seasonId, dynamic epId}) async {
+    try {
+      SmartDialog.showLoading(msg: '资源获取中');
+      var res = await SearchHttp.pugvInfo(seasonId: seasonId, epId: epId);
+      SmartDialog.dismiss();
+      if (res.isSuccess) {
+        PgcInfoModel data = res.data;
+        if (data.episodes?.isNotEmpty == true) {
+          final item = data.episodes!.first;
+          toVideoPage(
+            'bvid=${IdUtils.av2bv(item.aid!)}&cid=${item.cid}&seasonId=${data.seasonId}&epId=${item.id}',
+            arguments: {
+              'pic': item.cover,
+              'heroTag': Utils.makeHeroTag(item.cid),
+              'videoType': VideoType.pugv,
+              'pgcItem': data,
+            },
+            preventDuplicates: false,
+          );
+        } else {
+          SmartDialog.showToast('NULL');
+        }
+      } else {
+        res.toast();
+      }
+    } catch (e) {
+      SmartDialog.dismiss();
+      SmartDialog.showToast(e.toString());
     }
   }
 

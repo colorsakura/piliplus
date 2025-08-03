@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:PiliPlus/http/constants.dart';
 import 'package:PiliPlus/http/video.dart';
 import 'package:PiliPlus/models/common/video/cdn_type.dart';
+import 'package:PiliPlus/models/common/video/video_type.dart';
 import 'package:PiliPlus/models/video/play/url.dart';
 import 'package:PiliPlus/utils/storage_pref.dart';
 import 'package:PiliPlus/utils/video_utils.dart';
@@ -102,6 +103,8 @@ class _CdnSelectDialogState extends State<CdnSelectDialog> {
     final result = await VideoHttp.videoUrl(
       cid: 196018899,
       bvid: 'BV1fK4y1t7hj',
+      tryLook: false,
+      videoType: VideoType.ugc,
     );
     if (!result['status']) throw Exception('无法获取视频流');
     return result['data'].dash.video.first;
