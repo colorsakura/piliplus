@@ -38,9 +38,7 @@ class _HistoryPageState extends State<HistoryPage>
           tag: _historyController.tabs[index - 1].type,
         );
       }
-    } catch (_) {
-      return _historyController;
-    }
+    } catch (_) {}
     return _historyController;
   }
 
@@ -71,6 +69,7 @@ class _HistoryPageState extends State<HistoryPage>
                     visible: enableMultiSelect,
                     child1: AppBar(
                       title: const Text('观看记录'),
+                      bottom: _buildPauseTip,
                       actions: [
                         IconButton(
                           tooltip: '搜索',
@@ -155,6 +154,7 @@ class _HistoryPageState extends State<HistoryPage>
                       ],
                     ),
                     child2: AppBar(
+                      bottom: _buildPauseTip,
                       leading: IconButton(
                         tooltip: '取消',
                         onPressed: currCtr().handleSelect,
@@ -297,28 +297,63 @@ class _HistoryPageState extends State<HistoryPage>
                   childCount: response!.length,
                 ),
               )
-            : Builder(
-                builder: (context) {
-                  final pauseStatus =
-                      _historyController.baseCtr.pauseStatus.value;
-                  return HttpError(
-                    errMsg: pauseStatus ? '历史记录功能已关闭' : null,
-                    btnText: pauseStatus ? '点击开启' : null,
-                    onReload: () {
-                      if (pauseStatus) {
-                        _historyController.baseCtr.onPauseHistory(context);
-                      } else {
-                        _historyController.onReload();
-                      }
-                    },
-                  );
-                },
-              ),
+            : HttpError(onReload: _historyController.onReload),
       Error(:var errMsg) => HttpError(
         errMsg: errMsg,
         onReload: _historyController.onReload,
       ),
     };
+  }
+
+  PreferredSizeWidget? get _buildPauseTip {
+    if (_historyController.baseCtr.pauseStatus.value) {
+      final theme = Theme.of(context).colorScheme;
+      return PreferredSize(
+        preferredSize: const Size.fromHeight(38),
+        child: Container(
+          height: 38,
+          color: theme.secondaryContainer.withValues(alpha: 0.8),
+          padding: const EdgeInsets.only(left: 16, right: 6),
+          child: Row(
+            children: [
+              Icon(
+                Icons.info_outline,
+                size: 18,
+                color: theme.onSecondaryContainer,
+              ),
+              const SizedBox(width: 4),
+              Expanded(
+                child: Text(
+                  '历史记录功能已关闭',
+                  strutStyle: const StrutStyle(height: 1, leading: 0),
+                  style: TextStyle(
+                    height: 1,
+                    color: theme.onSecondaryContainer,
+                  ),
+                ),
+              ),
+              GestureDetector(
+                behavior: HitTestBehavior.opaque,
+                onTap: () => _historyController.baseCtr.onPauseHistory(context),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 6,
+                    horizontal: 10,
+                  ),
+                  child: Text(
+                    '点击开启',
+                    strutStyle: const StrutStyle(height: 1, leading: 0),
+                    style: TextStyle(height: 1, color: theme.primary),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
+    return null;
   }
 
   @override
