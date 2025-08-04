@@ -3,8 +3,8 @@ import 'package:PiliPlus/common/widgets/badge.dart';
 import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
 import 'package:PiliPlus/models/common/badge_type.dart';
 import 'package:PiliPlus/models/dynamics/result.dart';
+import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 Widget livePanelSub(
   ThemeData theme,
@@ -24,7 +24,7 @@ Widget livePanelSub(
       Padding(
         padding: const EdgeInsets.symmetric(horizontal: StyleString.safeSpace),
         child: GestureDetector(
-          onTap: () => Get.toNamed('/liveRoom?roomid=${content.roomId}'),
+          onTap: () => PageUtils.toLiveRoom(content.roomId),
           child: LayoutBuilder(
             builder: (context, box) {
               double width = box.maxWidth;

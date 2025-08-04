@@ -30,7 +30,7 @@ class LiveRoomController extends GetxController {
   LiveRoomController(this.heroTag);
   final String heroTag;
 
-  int roomId = int.parse(Get.parameters['roomid']!);
+  int roomId = Get.arguments;
   PlPlayerController plPlayerController = PlPlayerController.getInstance(
     isLive: true,
   );

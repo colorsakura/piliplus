@@ -191,7 +191,7 @@ class PiliScheme {
             // bilibili://live/12345678?extra_jump_from=1&from=1&is_room_feed=1&h5awaken=random
             String? roomId = uriDigitRegExp.firstMatch(path)?.group(1);
             if (roomId != null) {
-              PageUtils.toDupNamed('/liveRoom?roomid=$roomId', off: off);
+              PageUtils.toLiveRoom(int.parse(roomId), off: off);
               return true;
             }
             return false;
@@ -561,7 +561,7 @@ class PiliScheme {
     if (host.contains('live.bilibili.com')) {
       String? roomId = uriDigitRegExp.firstMatch(path)?.group(1);
       if (roomId != null) {
-        PageUtils.toDupNamed('/liveRoom?roomid=$roomId', off: off);
+        PageUtils.toLiveRoom(int.parse(roomId), off: off);
         return true;
       }
       launchURL();

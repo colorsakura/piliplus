@@ -1,8 +1,8 @@
 import 'package:PiliPlus/common/widgets/image/image_save.dart';
 import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
 import 'package:PiliPlus/models/dynamics/result.dart';
+import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 Widget livePanel(
   ThemeData theme,
@@ -20,7 +20,7 @@ Widget livePanel(
     children: [
       GestureDetector(
         behavior: HitTestBehavior.opaque,
-        onTap: () => Get.toNamed('/liveRoom?roomid=${content.live?.id}'),
+        onTap: () => PageUtils.toLiveRoom(content.live?.id),
         onLongPress: () {
           Feedback.forLongPress(context);
           imageSaveDialog(

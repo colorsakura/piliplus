@@ -424,6 +424,8 @@ class PlPlayerController {
     }
   }
 
+  static PlPlayerController? get instance => _instance;
+
   static bool instanceExists() {
     return _instance != null;
   }
@@ -476,8 +478,7 @@ class PlPlayerController {
   Box video = GStorage.video;
 
   // 添加一个私有构造函数
-  PlPlayerController._({bool isLive = false}) {
-    _isLive = isLive;
+  PlPlayerController._() {
     if (!Accounts.heartbeat.isLogin || Pref.historyPause) {
       enableHeart = false;
     }
@@ -504,7 +505,7 @@ class PlPlayerController {
   // 获取实例 传参
   static PlPlayerController getInstance({bool isLive = false}) {
     // 如果实例尚未创建，则创建一个新实例
-    _instance ??= PlPlayerController._(isLive: isLive);
+    _instance ??= PlPlayerController._().._isLive = isLive;
     _instance!._playerCount.value += 1;
     return _instance!;
   }

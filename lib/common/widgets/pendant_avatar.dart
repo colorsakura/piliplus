@@ -3,10 +3,10 @@ import 'package:PiliPlus/models/common/avatar_badge_type.dart';
 import 'package:PiliPlus/models/common/image_type.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/image_util.dart';
+import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:PiliPlus/utils/storage_pref.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 class PendantAvatar extends StatelessWidget {
   final BadgeType _badgeType;
@@ -14,7 +14,7 @@ class PendantAvatar extends StatelessWidget {
   final double size;
   final double badgeSize;
   final String? garbPendantImage;
-  final dynamic roomId;
+  final int? roomId;
   final VoidCallback? onTap;
 
   const PendantAvatar({
@@ -71,7 +71,7 @@ class PendantAvatar extends StatelessWidget {
           Positioned(
             bottom: 0,
             child: InkWell(
-              onTap: () => Get.toNamed('/liveRoom?roomid=$roomId'),
+              onTap: () => PageUtils.toLiveRoom(roomId),
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1),
                 decoration: BoxDecoration(

@@ -16,7 +16,6 @@ import 'package:PiliPlus/utils/duration_util.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
-import 'package:get/get.dart';
 
 // 视频卡片 - 水平布局
 class VideoCardH extends StatelessWidget {
@@ -81,7 +80,7 @@ class VideoCardH extends StatelessWidget {
                     if (videoItem case SearchVideoItemModel item) {
                       int? roomId = item.id;
                       if (roomId != null) {
-                        Get.toNamed('/liveRoom?roomid=$roomId');
+                        PageUtils.toLiveRoom(roomId);
                       }
                     } else {
                       SmartDialog.showToast(
@@ -96,6 +95,7 @@ class VideoCardH extends StatelessWidget {
                       return;
                     }
                   }
+
                   try {
                     final int? cid =
                         videoItem.cid ??

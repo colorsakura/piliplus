@@ -5,6 +5,7 @@ import 'package:PiliPlus/models/dynamics/up.dart';
 import 'package:PiliPlus/pages/dynamics/controller.dart';
 import 'package:PiliPlus/pages/live_follow/view.dart';
 import 'package:PiliPlus/utils/feed_back.dart';
+import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -144,7 +145,7 @@ class _UpPanelState extends State<UpPanel> {
           feedBack();
           switch (data) {
             case LiveUserItem():
-              Get.toNamed('/liveRoom?roomid=${data.roomId}');
+              PageUtils.toLiveRoom(data.roomId);
             case UpItem():
               _onSelect(data);
               break;

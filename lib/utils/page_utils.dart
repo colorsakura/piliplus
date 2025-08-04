@@ -14,6 +14,7 @@ import 'package:PiliPlus/pages/contact/view.dart';
 import 'package:PiliPlus/pages/fav_panel/view.dart';
 import 'package:PiliPlus/pages/share/view.dart';
 import 'package:PiliPlus/pages/video/introduction/ugc/widgets/menu_row.dart';
+import 'package:PiliPlus/plugin/pl_player/controller.dart';
 import 'package:PiliPlus/services/shutdown_timer_service.dart';
 import 'package:PiliPlus/utils/app_scheme.dart';
 import 'package:PiliPlus/utils/extension.dart';
@@ -444,7 +445,7 @@ class PageUtils {
       case 'DYNAMIC_TYPE_LIVE_RCMD':
         DynamicLiveModel liveRcmd =
             item.modules.moduleDynamic!.major!.liveRcmd!;
-        toDupNamed('/liveRoom?roomid=${liveRcmd.roomId}');
+        toLiveRoom(liveRcmd.roomId);
         break;
 
       /// 合集查看
@@ -663,6 +664,24 @@ class PageUtils {
     );
   }
 
+  static void toLiveRoom(
+    int? roomId, {
+    bool off = false,
+  }) {
+    if (roomId == null) {
+      return;
+    }
+    if (PlPlayerController.instanceExists()) {
+      SmartDialog.showToast('unsupported');
+      return;
+    }
+    if (off) {
+      Get.offNamed('/liveRoom', arguments: roomId);
+    } else {
+      Get.toNamed('/liveRoom', arguments: roomId);
+    }
+  }
+
   static void toVideoPage({
     VideoType videoType = VideoType.ugc,
     int? aid,
@@ -679,6 +698,10 @@ class PageUtils {
     bool preventDuplicates = true,
     bool off = false,
   }) {
+    if (PlPlayerController.instance?.isLive == true) {
+      SmartDialog.showToast('Living');
+      return;
+    }
     final arguments = {
       'aid': aid ?? IdUtils.bv2av(bvid!),
       'bvid': bvid ?? IdUtils.av2bv(aid!),
@@ -698,14 +721,14 @@ class PageUtils {
         '/videoV',
         arguments: arguments,
         id: id,
-        preventDuplicates: preventDuplicates,
+        preventDuplicates: false,
       );
     } else {
       Get.toNamed(
         '/videoV',
         arguments: arguments,
         id: id,
-        preventDuplicates: preventDuplicates,
+        preventDuplicates: false,
       );
     }
   }

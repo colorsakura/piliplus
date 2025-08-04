@@ -14,6 +14,7 @@ import 'package:PiliPlus/pages/video/reply/widgets/reply_item_grpc.dart';
 import 'package:PiliPlus/pages/video/reply_reply/view.dart';
 import 'package:PiliPlus/utils/date_util.dart';
 import 'package:PiliPlus/utils/feed_back.dart';
+import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:easy_debounce/easy_throttle.dart';
 import 'package:flutter/material.dart';
@@ -162,9 +163,8 @@ class _MatchInfoPageState extends CommonDynPageState<MatchInfoPage> {
                                 visualDensity: VisualDensity.compact,
                                 tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                               ),
-                              onPressed: () => Get.toNamed(
-                                '/liveRoom?roomid=${data.liveRoom}',
-                              ),
+                              onPressed: () =>
+                                  PageUtils.toLiveRoom(data.liveRoom),
                               child: const Text('看直播'),
                             )
                           else if (data.contestStatus == 3)

@@ -203,7 +203,13 @@ class ChatItem extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           GestureDetector(
-            onTap: () => Get.toNamed('/liveRoom?roomid=${content['sourceID']}'),
+            onTap: () {
+              var roomId = content['sourceID'];
+              if (roomId is String) {
+                roomId = int.parse(roomId);
+              }
+              PageUtils.toLiveRoom(roomId);
+            },
             child: NetworkImgLayer(
               width: 220,
               height: 220 * 9 / 16,

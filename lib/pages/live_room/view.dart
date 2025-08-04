@@ -37,8 +37,7 @@ class LiveRoomPage extends StatefulWidget {
 
 class _LiveRoomPageState extends State<LiveRoomPage>
     with WidgetsBindingObserver {
-  late final String heroTag;
-  late final int _roomId;
+  final String heroTag = Utils.generateRandomString(6);
   late final LiveRoomController _liveRoomController;
   late final PlPlayerController plPlayerController;
   bool get isFullScreen => plPlayerController.isFullScreen.value;
@@ -58,8 +57,6 @@ class _LiveRoomPageState extends State<LiveRoomPage>
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-    _roomId = int.parse(Get.parameters['roomid'] ?? '-1');
-    heroTag = Utils.makeHeroTag(_roomId);
     _liveRoomController = Get.put(
       LiveRoomController(heroTag),
       tag: heroTag,
@@ -528,7 +525,7 @@ class _LiveRoomPageState extends State<LiveRoomPage>
     child: LiveRoomChat(
       key: chatKey,
       isPP: isPP ?? false,
-      roomId: _roomId,
+      roomId: _liveRoomController.roomId,
       liveRoomController: _liveRoomController,
     ),
   );

@@ -56,7 +56,7 @@ class HistoryItem extends StatelessWidget {
             );
           } else if (item.history.business == 'live') {
             if (item.liveStatus == 1) {
-              Get.toNamed('/liveRoom?roomid=${item.history.oid}');
+              PageUtils.toLiveRoom(item.history.oid);
             } else {
               SmartDialog.showToast('直播未开播');
             }
