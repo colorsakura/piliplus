@@ -478,7 +478,7 @@ class PlPlayerController {
   // 添加一个私有构造函数
   PlPlayerController._({bool isLive = false}) {
     _isLive = isLive;
-    if (!Accounts.get(AccountType.heartbeat).isLogin || Pref.historyPause) {
+    if (!Accounts.heartbeat.isLogin || Pref.historyPause) {
       enableHeart = false;
     }
 

@@ -620,7 +620,7 @@ class VideoHttp {
     await Request().post(
       Api.roomEntryAction,
       queryParameters: {
-        'csrf': Accounts.main.csrf,
+        'csrf': Accounts.heartbeat.csrf,
       },
       data: {
         'room_id': roomId,
@@ -638,7 +638,7 @@ class VideoHttp {
       queryParameters: {
         'aid': ?aid,
         'type': ?type,
-        'csrf': Accounts.main.csrf,
+        'csrf': Accounts.heartbeat.csrf,
       },
     );
   }
@@ -665,7 +665,7 @@ class VideoHttp {
         'type': videoType.type,
         'sub_type': ?subType,
         'played_time': progress,
-        'csrf': Accounts.main.csrf,
+        'csrf': Accounts.heartbeat.csrf,
       },
     );
   }
@@ -681,7 +681,7 @@ class VideoHttp {
         'desc': desc,
         'oid': oid,
         'upper_mid': upperMid,
-        'csrf': Accounts.main.csrf,
+        'csrf': Accounts.heartbeat.csrf,
       },
     );
   }
