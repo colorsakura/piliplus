@@ -111,9 +111,10 @@
                     android:pathPattern="/readlist" />
                 <data android:host="advertise" android:path="/home" />
                 <data android:host="clip" />
-                <data android:host="search" />
+                <data android:host="search" android:pathPattern=".*" />
                 <data android:host="stardust-search" />
                 <data android:host="music" />
+                <data android:host="cheese" />
                 <data android:host="bangumi"
                     android:pathPattern="/season.*" />
                 <data android:host="bangumi" android:pathPattern="/.*" />
@@ -145,7 +146,6 @@
                 <data android:host="video" />
                 <data android:host="story" />
                 <data android:host="podcast" />
-                <data android:host="search" />
                 <data android:host="main" android:path="/favorite" />
                 <data android:host="pgc" android:path="/theater/match" />
                 <data android:host="pgc" android:path="/theater/square" />
@@ -159,7 +159,6 @@
                 <data android:host="user_center" android:path="/vip" />
                 <data android:host="history" />
                 <data android:host="charge" android:path="/rank" />
-                <data android:host="assistant" />
                 <data android:host="assistant" />
                 <data android:host="feedback" />
                 <data android:host="auth" android:path="/launch" />
