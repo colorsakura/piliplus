@@ -2,37 +2,6 @@ import 'package:PiliPlus/pages/common/multi_select_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
-  const AppBarWidget({
-    required this.child1,
-    required this.child2,
-    required this.visible,
-    super.key,
-  });
-
-  final PreferredSizeWidget child1;
-  final PreferredSizeWidget child2;
-  final bool visible;
-  @override
-  Size get preferredSize => child1.preferredSize;
-
-  @override
-  Widget build(BuildContext context) {
-    return AnimatedSwitcher(
-      duration: const Duration(milliseconds: 500),
-      transitionBuilder: (Widget child, Animation<double> animation) {
-        return ScaleTransition(
-          scale: animation,
-          child: child,
-        );
-      },
-      child: !visible
-          ? KeyedSubtree.wrap(child1, 0)
-          : KeyedSubtree.wrap(child2, 1),
-    );
-  }
-}
-
 class MultiSelectAppBarWidget extends StatelessWidget
     implements PreferredSizeWidget {
   final MultiSelectMixin ctr;
@@ -50,10 +19,9 @@ class MultiSelectAppBarWidget extends StatelessWidget
 
   @override
   Widget build(BuildContext context) {
-    return AppBarWidget(
-      visible: visible ?? ctr.enableMultiSelect.value,
-      child1: child,
-      child2: AppBar(
+    final visible = this.visible ?? ctr.enableMultiSelect.value;
+    if (visible) {
+      return AppBar(
         bottom: child.bottom,
         leading: IconButton(
           tooltip: '取消',
@@ -82,8 +50,9 @@ class MultiSelectAppBarWidget extends StatelessWidget
           ),
           const SizedBox(width: 6),
         ],
-      ),
-    );
+      );
+    }
+    return child;
   }
 
   @override
