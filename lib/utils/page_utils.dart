@@ -415,11 +415,9 @@ class PageUtils {
           int? cid = await SearchHttp.ab2c(bvid: bvid);
           if (cid != null) {
             toVideoPage(
-              'bvid=$bvid&cid=$cid',
-              arguments: {
-                'pic': cover,
-                'heroTag': Utils.makeHeroTag(bvid),
-              },
+              bvid: bvid,
+              cid: cid,
+              cover: cover,
               preventDuplicates: false,
             );
           }
@@ -459,11 +457,10 @@ class PageUtils {
         int? cid = await SearchHttp.ab2c(bvid: bvid);
         if (cid != null) {
           toVideoPage(
-            'bvid=$bvid&cid=$cid',
-            arguments: {
-              'pic': cover,
-              'heroTag': Utils.makeHeroTag(bvid),
-            },
+            aid: aid,
+            bvid: bvid,
+            cid: cid,
+            cover: cover,
             preventDuplicates: false,
           );
         }
@@ -666,29 +663,49 @@ class PageUtils {
     );
   }
 
-  static void toVideoPage(
-    String page, {
-    dynamic arguments,
+  static void toVideoPage({
+    VideoType videoType = VideoType.ugc,
+    int? aid,
+    String? bvid,
+    required int cid,
+    int? seasonId,
+    int? epId,
+    int? pgcType,
+    String? cover,
+    String? title,
+    int? progress,
+    Map? extraArguments,
     int? id,
     bool preventDuplicates = true,
-    Map<String, String>? parameters,
     bool off = false,
   }) {
+    final arguments = {
+      'aid': aid ?? IdUtils.bv2av(bvid!),
+      'bvid': bvid ?? IdUtils.av2bv(aid!),
+      'cid': cid,
+      'seasonId': ?seasonId,
+      'epId': ?epId,
+      'pgcType': ?pgcType,
+      'cover': ?cover,
+      'title': ?title,
+      'progress': ?progress,
+      'videoType': videoType,
+      'heroTag': Utils.makeHeroTag(cid),
+      ...?extraArguments,
+    };
     if (off) {
       Get.offNamed(
-        '/videoV?$page',
+        '/videoV',
         arguments: arguments,
         id: id,
         preventDuplicates: preventDuplicates,
-        parameters: parameters,
       );
     } else {
       Get.toNamed(
-        '/videoV?$page',
+        '/videoV',
         arguments: arguments,
         id: id,
         preventDuplicates: preventDuplicates,
-        parameters: parameters,
       );
     }
   }
@@ -757,13 +774,16 @@ class PageUtils {
             epId: epId ?? data.userStatus?.progress?.lastEpId,
           );
           toVideoPage(
-            'bvid=${episode.bvid}&cid=${episode.cid}&seasonId=${data.seasonId}&epId=${episode.epId}&type=${data.type}',
-            arguments: {
-              'pic': episode.cover,
-              'heroTag': Utils.makeHeroTag(episode.cid),
-              'videoType': VideoType.pgc,
+            videoType: VideoType.pgc,
+            bvid: episode.bvid!,
+            cid: episode.cid!,
+            seasonId: data.seasonId,
+            epId: episode.epId,
+            pgcType: data.type,
+            cover: episode.cover,
+            progress: progress == null ? null : int.tryParse(progress),
+            extraArguments: {
               'pgcItem': data,
-              if (progress != null) 'progress': int.tryParse(progress),
             },
             preventDuplicates: false,
           );
@@ -780,14 +800,18 @@ class PageUtils {
                     if (episode.epId.toString() == epId) {
                       // view as ugc
                       toVideoPage(
-                        'bvid=${episode.bvid}&cid=${episode.cid}&seasonId=${data.seasonId}&epId=${episode.epId}',
-                        arguments: {
+                        videoType: VideoType.ugc,
+                        bvid: episode.bvid!,
+                        cid: episode.cid!,
+                        seasonId: data.seasonId,
+                        epId: episode.epId,
+                        cover: episode.cover,
+                        progress: progress == null
+                            ? null
+                            : int.tryParse(progress),
+                        extraArguments: {
                           'pgcApi': true,
-                          'pic': episode.cover,
-                          'heroTag': Utils.makeHeroTag(episode.cid),
-                          'videoType': VideoType.ugc,
-                          if (progress != null)
-                            'progress': int.tryParse(progress),
+                          'pgcItem': data,
                         },
                         preventDuplicates: false,
                       );
@@ -833,11 +857,13 @@ class PageUtils {
             isPgc: false,
           );
           toVideoPage(
-            'bvid=${IdUtils.av2bv(episode.aid!)}&cid=${episode.cid}&seasonId=${data.seasonId}&epId=${episode.id}',
-            arguments: {
-              'pic': episode.cover,
-              'heroTag': Utils.makeHeroTag(episode.cid),
-              'videoType': VideoType.pugv,
+            videoType: VideoType.pugv,
+            aid: episode.aid!,
+            cid: episode.cid!,
+            seasonId: data.seasonId,
+            epId: episode.id,
+            cover: episode.cover,
+            extraArguments: {
               'pgcItem': data,
             },
             preventDuplicates: false,

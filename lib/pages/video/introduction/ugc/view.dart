@@ -66,8 +66,7 @@ class _UgcIntroPanelState extends State<UgcIntroPanel>
   @override
   void initState() {
     super.initState();
-    ugcIntroController = Get.put(UgcIntroController(), tag: widget.heroTag)
-      ..heroTag = widget.heroTag;
+    ugcIntroController = Get.put(UgcIntroController(), tag: widget.heroTag);
   }
 
   @override

@@ -380,8 +380,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
       ),
 
       /// 超分辨率
-      BottomControlType.superResolution:
-          Get.parameters['type'] == '1' || Get.parameters['type'] == '4'
+      BottomControlType.superResolution: plPlayerController.isAnim
           ? Container(
               height: 30,
               margin: const EdgeInsets.symmetric(horizontal: 10),

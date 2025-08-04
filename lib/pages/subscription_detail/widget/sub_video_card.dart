@@ -6,12 +6,10 @@ import 'package:PiliPlus/common/widgets/stat/stat.dart';
 import 'package:PiliPlus/http/search.dart';
 import 'package:PiliPlus/models/common/badge_type.dart';
 import 'package:PiliPlus/models/common/stat_type.dart';
-import 'package:PiliPlus/models/common/video/video_type.dart';
 import 'package:PiliPlus/models_new/sub/sub_detail/media.dart';
 import 'package:PiliPlus/utils/date_util.dart';
 import 'package:PiliPlus/utils/duration_util.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
-import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
 
 // 收藏视频卡片 - 水平布局
@@ -34,12 +32,10 @@ class SubVideoCardH extends StatelessWidget {
           int? cid = await SearchHttp.ab2c(bvid: videoItem.bvid);
           if (cid != null) {
             PageUtils.toVideoPage(
-              'bvid=${videoItem.bvid}&cid=$cid',
-              arguments: {
-                'videoItem': videoItem,
-                'heroTag': Utils.makeHeroTag(videoItem.id),
-                'videoType': VideoType.ugc,
-              },
+              bvid: videoItem.bvid,
+              cid: cid,
+              cover: videoItem.cover,
+              title: videoItem.title,
             );
           }
         },

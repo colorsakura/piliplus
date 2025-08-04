@@ -17,7 +17,6 @@ import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/id_utils.dart';
 import 'package:PiliPlus/utils/image_util.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
-import 'package:PiliPlus/utils/utils.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -325,11 +324,9 @@ class ChatItem extends StatelessWidget {
                       SmartDialog.dismiss();
                       if (cid != null) {
                         PageUtils.toVideoPage(
-                          'bvid=$bvid&cid=$cid',
-                          arguments: {
-                            'pic': i['cover_url'],
-                            'heroTag': Utils.makeHeroTag(bvid),
-                          },
+                          bvid: bvid,
+                          cid: cid,
+                          cover: i['cover_url'],
                         );
                       }
                     } catch (err) {
@@ -414,11 +411,9 @@ class ChatItem extends StatelessWidget {
                   SmartDialog.dismiss();
                   if (cid != null) {
                     PageUtils.toVideoPage(
-                      'bvid=$bvid&cid=$cid',
-                      arguments: {
-                        'pic': content['cover'],
-                        'heroTag': Utils.makeHeroTag(bvid),
-                      },
+                      bvid: bvid,
+                      cid: cid,
+                      cover: content['cover'],
                     );
                   }
                 } catch (err) {
@@ -500,11 +495,10 @@ class ChatItem extends StatelessWidget {
           SmartDialog.dismiss();
           if (cid != null) {
             PageUtils.toVideoPage(
-              'bvid=$bvid&cid=$cid',
-              arguments: {
-                'pic': content['thumb'],
-                'heroTag': Utils.makeHeroTag(bvid),
-              },
+              aid: aid,
+              bvid: bvid,
+              cid: cid,
+              cover: content['thumb'],
             );
           }
         };

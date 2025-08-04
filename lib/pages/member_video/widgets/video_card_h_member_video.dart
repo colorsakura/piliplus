@@ -11,7 +11,6 @@ import 'package:PiliPlus/models_new/space/space_archive/item.dart';
 import 'package:PiliPlus/utils/date_util.dart';
 import 'package:PiliPlus/utils/duration_util.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
-import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 
@@ -57,10 +56,10 @@ class VideoCardHMemberVideo extends StatelessWidget {
                   }
                   try {
                     PageUtils.toVideoPage(
-                      'bvid=${videoItem.bvid}&cid=${videoItem.cid}',
-                      arguments: {
-                        'heroTag': Utils.makeHeroTag(videoItem.bvid),
-                      },
+                      bvid: videoItem.bvid,
+                      cid: videoItem.cid!,
+                      cover: videoItem.cover,
+                      title: videoItem.title,
                     );
                   } catch (err) {
                     SmartDialog.showToast(err.toString());

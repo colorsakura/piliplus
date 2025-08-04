@@ -62,17 +62,9 @@ class VideoReplyController extends ReplyController<MainListReply>
     return response.replies;
   }
 
-  int get _epId {
-    return switch (videoCtr.epId) {
-      int e => e,
-      String e => int.parse(e),
-      _ => throw UnsupportedError(''),
-    };
-  }
-
   @override
   Future<LoadingState<MainListReply>> customGetData() => ReplyGrpc.mainList(
-    oid: isPugv ? _epId : aid,
+    oid: isPugv ? videoCtr.epId! : aid,
     type: videoType.replyType,
     mode: mode.value,
     cursorNext: cursorNext,

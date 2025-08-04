@@ -21,9 +21,8 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 
 abstract class CommonIntroController extends GetxController {
-  String heroTag = Get.arguments['heroTag'];
-
-  String bvid = Get.parameters['bvid']!;
+  late final String heroTag;
+  late String bvid;
 
   // 是否点赞
   final RxBool hasLike = false.obs;
@@ -59,11 +58,16 @@ abstract class CommonIntroController extends GetxController {
   late final RxString total = '1'.obs;
   Timer? timer;
 
-  final RxInt cid = int.parse(Get.parameters['cid']!).obs;
+  late final RxInt cid;
 
   @override
   void onInit() {
     super.onInit();
+    final args = Get.arguments;
+    heroTag = args['heroTag'];
+    bvid = args['bvid'];
+    cid = RxInt(args['cid']);
+
     queryVideoIntro();
     startTimer();
   }

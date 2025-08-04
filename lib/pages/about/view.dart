@@ -276,7 +276,7 @@ Commit Hash: ${BuildConfig.commitHash}''',
                                         );
                                     Accounts.account
                                         .putAll(res)
-                                        .whenComplete(() => Accounts.refresh())
+                                        .whenComplete(Accounts.refresh)
                                         .whenComplete(() {
                                           MineController.anonymity.value =
                                               !Accounts.get(

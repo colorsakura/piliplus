@@ -11,7 +11,6 @@ import 'package:PiliPlus/pages/later/controller.dart';
 import 'package:PiliPlus/pages/later/widgets/video_card_h_later.dart';
 import 'package:PiliPlus/utils/grid.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
-import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -88,11 +87,12 @@ class _LaterViewChildPageState extends State<LaterViewChildPage>
                           videoItem: videoItem,
                           onViewLater: (cid) {
                             PageUtils.toVideoPage(
-                              'bvid=${videoItem.bvid}&cid=$cid',
-                              arguments: {
-                                'videoItem': videoItem,
+                              bvid: videoItem.bvid,
+                              cid: cid,
+                              cover: videoItem.pic,
+                              title: videoItem.title,
+                              extraArguments: {
                                 'oid': videoItem.aid,
-                                'heroTag': Utils.makeHeroTag(videoItem.bvid),
                                 'sourceType': SourceType.watchLater,
                                 'count': _laterController
                                     .baseCtr

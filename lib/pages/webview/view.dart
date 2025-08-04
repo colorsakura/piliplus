@@ -34,7 +34,7 @@ class _WebviewPageState extends State<WebviewPage> {
       widget.uaType ?? UaType.values.byName(Get.parameters['uaType'] ?? 'mob');
   final RxString title = ''.obs;
   final RxDouble progress = 1.0.obs;
-  bool? _inApp;
+  bool _inApp = false;
   bool _off = false;
 
   InAppWebViewController? _webViewController;
@@ -42,9 +42,9 @@ class _WebviewPageState extends State<WebviewPage> {
   @override
   void initState() {
     super.initState();
-    if (Get.arguments is Map) {
-      _inApp = Get.arguments['inApp'];
-      _off = Get.arguments['off'] ?? false;
+    if (Get.arguments case Map map) {
+      _inApp = map['inApp'] ?? false;
+      _off = map['off'] ?? false;
     }
   }
 
@@ -297,7 +297,7 @@ class _WebviewPageState extends State<WebviewPage> {
             return null;
           },
           shouldOverrideUrlLoading: (controller, navigationAction) async {
-            if (_inApp == true) {
+            if (_inApp) {
               return NavigationActionPolicy.ALLOW;
             }
             late String url = navigationAction.request.url.toString();

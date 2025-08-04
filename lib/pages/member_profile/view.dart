@@ -337,9 +337,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
           ],
         );
       },
-    ).whenComplete(() {
-      _textController.clear();
-    });
+    ).whenComplete(_textController.clear);
   }
 
   Future<void> _update({

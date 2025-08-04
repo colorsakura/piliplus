@@ -79,19 +79,7 @@ class UgcIntroController extends CommonIntroController with ReloadMixin {
       });
     }
 
-    try {
-      var videoItem = Get.arguments['videoItem'];
-      if (videoItem != null) {
-        if (videoItem.title case String e) {
-          videoDetail.value.title = e;
-        } else if (videoItem.title case List list) {
-          videoDetail.value.title = list.fold<String>(
-            '',
-            (prev, val) => prev + val['text'],
-          );
-        }
-      }
-    } catch (_) {}
+    videoDetail.value.title = Get.arguments['title'] ?? '';
   }
 
   // 获取视频简介&分p
@@ -481,11 +469,9 @@ class UgcIntroController extends CommonIntroController with ReloadMixin {
         if (videoDetailCtr.mediaList.indexWhere((item) => item.bvid == bvid) ==
             -1) {
           PageUtils.toVideoPage(
-            'bvid=$bvid&cid=$cid',
-            arguments: {
-              'pic': ?cover,
-              'heroTag': Utils.makeHeroTag(bvid),
-            },
+            bvid: bvid,
+            cid: cid,
+            cover: cover,
           );
           return;
         }
@@ -690,10 +676,8 @@ class UgcIntroController extends CommonIntroController with ReloadMixin {
     if (Get.isRegistered<RelatedController>(tag: heroTag)) {
       relatedCtr = Get.find<RelatedController>(tag: heroTag);
     } else {
-      relatedCtr = Get.put(RelatedController(false), tag: heroTag)
-        ..queryData().whenComplete(() {
-          playRelated();
-        });
+      relatedCtr = Get.put(RelatedController(autoQuery: false), tag: heroTag)
+        ..queryData().whenComplete(playRelated);
       return false;
     }
 

@@ -70,11 +70,12 @@ class _LaterSearchPageState
                 videoItem: item,
                 onViewLater: (cid) {
                   PageUtils.toVideoPage(
-                    'bvid=${item.bvid}&cid=$cid',
-                    arguments: {
-                      'videoItem': item,
+                    bvid: item.bvid,
+                    cid: cid,
+                    cover: item.pic,
+                    title: item.title,
+                    extraArguments: {
                       'oid': item.aid,
-                      'heroTag': Utils.makeHeroTag(item.bvid),
                       'sourceType': SourceType.watchLater,
                       'count': controller.count,
                       'favTitle': '稍后再看',

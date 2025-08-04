@@ -13,7 +13,6 @@ import 'package:PiliPlus/utils/duration_util.dart';
 import 'package:PiliPlus/utils/feed_back.dart';
 import 'package:PiliPlus/utils/id_utils.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
-import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
@@ -81,11 +80,11 @@ class HistoryItem extends StatelessWidget {
                 );
             if (cid != null) {
               PageUtils.toVideoPage(
-                'bvid=$bvid&cid=$cid',
-                arguments: {
-                  'heroTag': Utils.makeHeroTag(aid),
-                  'pic': item.cover,
-                },
+                aid: aid,
+                bvid: bvid,
+                cid: cid,
+                cover: item.cover,
+                title: item.title,
               );
             }
           }

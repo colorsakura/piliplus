@@ -74,6 +74,8 @@ class VideoDetailPageV extends StatefulWidget {
 
 class _VideoDetailPageVState extends State<VideoDetailPageV>
     with TickerProviderStateMixin, RouteAware, WidgetsBindingObserver {
+  final heroTag = Get.arguments['heroTag'];
+
   late final VideoDetailController videoDetailController;
   late final VideoReplyController _videoReplyController;
   PlPlayerController? plPlayerController;
@@ -85,8 +87,6 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
   ScrollController? _introScrollController;
   ScrollController get introScrollController =>
       _introScrollController ??= ScrollController();
-
-  late String heroTag;
 
   bool get autoExitFullscreen =>
       videoDetailController.plPlayerController.autoExitFullscreen;
@@ -130,9 +130,6 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
     super.initState();
 
     PlPlayerController.setPlayCallBack(playCallBack);
-    if (Get.arguments != null && Get.arguments['heroTag'] != null) {
-      heroTag = Get.arguments['heroTag'];
-    }
     videoDetailController = Get.put(VideoDetailController(), tag: heroTag);
 
     if (videoDetailController.showReply) {

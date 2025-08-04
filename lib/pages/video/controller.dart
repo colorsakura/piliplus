@@ -45,7 +45,6 @@ import 'package:PiliPlus/plugin/pl_player/models/heart_beat_type.dart';
 import 'package:PiliPlus/plugin/pl_player/models/play_status.dart';
 import 'package:PiliPlus/utils/accounts.dart';
 import 'package:PiliPlus/utils/duration_util.dart';
-import 'package:PiliPlus/utils/id_utils.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/storage_pref.dart';
@@ -68,25 +67,27 @@ import 'package:media_kit/media_kit.dart';
 class VideoDetailController extends GetxController
     with GetTickerProviderStateMixin {
   /// 路由传参
-  String bvid = Get.parameters['bvid']!;
-  late int aid = IdUtils.bv2av(bvid);
-  final RxInt cid = int.parse(Get.parameters['cid']!).obs;
-  final heroTag = Get.arguments['heroTag'];
-  final RxString cover = ''.obs;
+  late final Map args;
+  late String bvid;
+  late int aid;
+  late final RxInt cid;
+  int? epId;
+  int? seasonId;
+  int? pgcType;
+  late final String heroTag;
+  late final RxString cover;
+
   // 视频类型 默认投稿视频
-  final pgcApi = Get.arguments['pgcApi'];
-  final VideoType videoType = Get.arguments['videoType'] ?? VideoType.ugc;
+  late final VideoType videoType;
   late final isUgc = videoType == VideoType.ugc;
-  VideoType get _actualVideoType {
-    if (videoType == VideoType.pgc) {
-      if (!Accounts.get(AccountType.video).isLogin) {
-        return VideoType.ugc;
-      }
-    } else if (pgcApi == true) {
-      return VideoType.pgc;
-    }
-    return videoType;
-  }
+  VideoType? _actualVideoType;
+
+  // 页面来源 稍后再看 收藏夹
+  late bool isPlayAll;
+  late SourceType sourceType;
+  late bool _mediaDesc = false;
+  late final RxList<MediaListItemModel> mediaList = <MediaListItemModel>[].obs;
+  late String watchLaterTitle;
 
   /// tabs相关配置
   late TabController tabCtr;
@@ -247,52 +248,42 @@ class VideoDetailController extends GetxController
     imageStatus = false;
   }
 
-  // 页面来源 稍后再看 收藏夹
-  SourceType sourceType = Get.arguments['sourceType'] ?? SourceType.normal;
-  late bool _mediaDesc = false;
-  late final RxList<MediaListItemModel> mediaList = <MediaListItemModel>[].obs;
-  late String watchLaterTitle = '';
-  bool get isPlayAll => sourceType != SourceType.normal;
-
-  late dynamic epId = Get.parameters['epId'];
-  late dynamic seasonId = Get.parameters['seasonId'];
-  late dynamic subType = Get.parameters['type'];
-
   @override
   void onInit() {
     super.onInit();
-    var keys = Get.arguments.keys.toList();
-    if (keys.isNotEmpty) {
-      if (keys.contains('pic')) {
-        cover.value = Get.arguments['pic'] ?? '';
-      } else if (keys.contains('videoItem')) {
-        var args = Get.arguments['videoItem'];
-        try {
-          if (args.cover != null && args.cover != '') {
-            cover.value = args.cover;
-          }
-        } catch (_) {
-          try {
-            if (args.pic != null && args.pic != '') {
-              cover.value = args.pic;
-            }
-          } catch (_) {}
-        }
+    args = Get.arguments;
+    videoType = args['videoType'];
+    if (videoType == VideoType.pgc) {
+      if (!Accounts.get(AccountType.video).isLogin) {
+        _actualVideoType = VideoType.ugc;
       }
+    } else if (args['pgcApi'] == true) {
+      _actualVideoType = VideoType.pgc;
     }
 
+    bvid = args['bvid'];
+    aid = args['aid'];
+    cid = RxInt(args['cid']);
+    epId = args['epId'];
+    seasonId = args['seasonId'];
+    pgcType = args['pgcType'];
+    heroTag = args['heroTag'];
+    cover = RxString(args['cover'] ?? '');
+
+    sourceType = args['sourceType'] ?? SourceType.normal;
+    isPlayAll = sourceType != SourceType.normal;
     if (isPlayAll) {
-      watchLaterTitle = Get.arguments['favTitle'];
-      _mediaDesc = Get.arguments['desc'];
+      watchLaterTitle = args['favTitle'];
+      _mediaDesc = args['desc'];
       getMediaList();
     }
 
-    bool defaultShowComment = Pref.defaultShowComment;
     tabCtr = TabController(
       length: 2,
       vsync: this,
-      initialIndex: defaultShowComment ? 1 : 0,
+      initialIndex: Pref.defaultShowComment ? 1 : 0,
     );
+
     autoPlay.value = Pref.autoPlayEnable;
     if (autoPlay.value) isShowCover.value = false;
 
@@ -305,21 +296,20 @@ class VideoDetailController extends GetxController
     bool isReverse = false,
     bool isLoadPrevious = false,
   }) async {
-    if (!isReverse &&
-        Get.arguments['count'] != null &&
-        mediaList.length >= Get.arguments['count']) {
+    final count = args['count'];
+    if (!isReverse && count != null && mediaList.length >= count) {
       return;
     }
     var res = await UserHttp.getMediaList(
-      type: Get.arguments['mediaType'] ?? sourceType.mediaType,
-      bizId: Get.arguments['mediaId'] ?? -1,
+      type: args['mediaType'] ?? sourceType.mediaType,
+      bizId: args['mediaId'] ?? -1,
       ps: 20,
       direction: isLoadPrevious ? true : false,
       oid: isReverse
           ? null
           : mediaList.isEmpty
-          ? Get.arguments['isContinuePlaying'] == true
-                ? Get.arguments['oid']
+          ? args['isContinuePlaying'] == true
+                ? args['oid']
                 : null
           : isLoadPrevious
           ? mediaList.first.aid
@@ -332,9 +322,8 @@ class VideoDetailController extends GetxController
           ? mediaList.first.type
           : mediaList.last.type,
       desc: _mediaDesc,
-      sortField: Get.arguments['sortField'] ?? 1,
-      withCurrent:
-          mediaList.isEmpty && Get.arguments['isContinuePlaying'] == true
+      sortField: args['sortField'] ?? 1,
+      withCurrent: mediaList.isEmpty && args['isContinuePlaying'] == true
           ? true
           : false,
     );
@@ -376,20 +365,19 @@ class VideoDetailController extends GetxController
         },
         panelTitle: watchLaterTitle,
         getBvId: () => bvid,
-        count: Get.arguments['count'],
+        count: args['count'],
         loadMoreMedia: getMediaList,
         desc: _mediaDesc,
         onReverse: () {
           _mediaDesc = !_mediaDesc;
           getMediaList(isReverse: true);
         },
-        loadPrevious: Get.arguments['isContinuePlaying'] == true
+        loadPrevious: args['isContinuePlaying'] == true
             ? () => getMediaList(isLoadPrevious: true)
             : null,
         onDelete:
             sourceType == SourceType.watchLater ||
-                (sourceType == SourceType.fav &&
-                    Get.arguments?['isOwner'] == true)
+                (sourceType == SourceType.fav && args['isOwner'] == true)
             ? (item, index) async {
                 if (sourceType == SourceType.watchLater) {
                   var res = await UserHttp.toViewDel(
@@ -402,7 +390,7 @@ class VideoDetailController extends GetxController
                 } else {
                   var res = await FavHttp.favVideo(
                     resources: '${item.aid}:${item.type}',
-                    delIds: '${Get.arguments?['mediaId']}',
+                    delIds: '${args['mediaId']}',
                   );
                   if (res['status']) {
                     mediaList.removeAt(index);
@@ -1136,7 +1124,7 @@ class VideoDetailController extends GetxController
       autoplay: autoplay ?? autoPlay.value,
       epid: isUgc ? null : epId,
       seasonId: isUgc ? null : seasonId,
-      subType: isUgc ? null : subType,
+      pgcType: isUgc ? null : pgcType,
       videoType: videoType,
       callback: () {
         if (videoState.value is! Success) {
@@ -1189,7 +1177,7 @@ class VideoDetailController extends GetxController
       epid: epId,
       seasonId: seasonId,
       tryLook: plPlayerController.tryLook,
-      videoType: _actualVideoType,
+      videoType: _actualVideoType ?? videoType,
     );
 
     if (result['status']) {
@@ -1204,9 +1192,10 @@ class VideoDetailController extends GetxController
       if (data.dash == null && data.durl != null) {
         videoUrl = data.durl!.first.url!;
         audioUrl = '';
-        if (Get.arguments?['progress'] != null) {
-          this.defaultST = Duration(milliseconds: Get.arguments['progress']);
-          Get.arguments['progress'] = null;
+        final progress = args['progress'];
+        if (progress != null) {
+          this.defaultST = Duration(milliseconds: progress);
+          args['progress'] = null;
         } else {
           this.defaultST = defaultST ?? Duration.zero;
         }
@@ -1340,9 +1329,10 @@ class VideoDetailController extends GetxController
         audioUrl = '';
       }
       //
-      if (Get.arguments?['progress'] != null) {
-        this.defaultST = Duration(milliseconds: Get.arguments['progress']);
-        Get.arguments['progress'] = null;
+      final progress = args['progress'];
+      if (progress != null) {
+        this.defaultST = Duration(milliseconds: progress);
+        args['progress'] = null;
       } else {
         this.defaultST =
             defaultST ??
@@ -1577,11 +1567,12 @@ class VideoDetailController extends GetxController
   }
 
   void updateMediaListHistory(int aid) {
-    if (Get.arguments?['sortField'] != null) {
+    final sortField = args['sortField'];
+    if (sortField != null) {
       VideoHttp.medialistHistory(
         desc: _mediaDesc ? 1 : 0,
         oid: aid,
-        upperMid: Get.arguments?['mediaId'],
+        upperMid: sortField,
       );
     }
   }
@@ -1605,7 +1596,7 @@ class VideoDetailController extends GetxController
           cid: cid.value,
           epid: isUgc ? null : epId,
           seasonId: isUgc ? null : seasonId,
-          subType: isUgc ? null : subType,
+          pgcType: isUgc ? null : pgcType,
           videoType: videoType,
         );
       } catch (_) {}

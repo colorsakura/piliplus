@@ -10,7 +10,6 @@ import 'package:PiliPlus/pages/later/base_controller.dart';
 import 'package:PiliPlus/services/account_service.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
-import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
@@ -165,10 +164,11 @@ class LaterController extends MultiSelectController<LaterData, LaterItemModel> {
             SmartDialog.showToast('已跳过不支持播放的视频');
           }
           PageUtils.toVideoPage(
-            'bvid=${item.bvid}&cid=${item.cid}',
-            arguments: {
-              'videoItem': item,
-              'heroTag': Utils.makeHeroTag(item.bvid),
+            bvid: item.bvid,
+            cid: item.cid!,
+            cover: item.pic,
+            title: item.title,
+            extraArguments: {
               'sourceType': SourceType.watchLater,
               'count': baseCtr.counts[LaterViewType.all],
               'favTitle': '稍后再看',

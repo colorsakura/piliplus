@@ -11,7 +11,6 @@ import 'package:PiliPlus/pages/common/common_list_controller.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/id_utils.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
-import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 
@@ -154,22 +153,26 @@ class MemberVideoCtr
       if (oid != null) {
         var bvid = IdUtils.av2bv(int.parse(oid));
         var cid = await SearchHttp.ab2c(aid: oid, bvid: bvid);
-        PageUtils.toVideoPage(
-          'bvid=$bvid&cid=$cid',
-          arguments: {
-            'heroTag': Utils.makeHeroTag(oid),
-            'sourceType': SourceType.archive,
-            'mediaId': seasonId ?? seriesId ?? mid,
-            'oid': oid,
-            'favTitle': '$username: ${title ?? episodicButton.text ?? '播放全部'}',
-            if (seriesId == null) 'count': count.value,
-            if (seasonId != null || seriesId != null)
-              'mediaType': params['page_type'],
-            'desc': params['desc'] == '1',
-            'sortField': params['sort_field'],
-            'isContinuePlaying': true,
-          },
-        );
+        if (cid != null) {
+          PageUtils.toVideoPage(
+            aid: int.parse(oid),
+            bvid: bvid,
+            cid: cid,
+            extraArguments: {
+              'sourceType': SourceType.archive,
+              'mediaId': seasonId ?? seriesId ?? mid,
+              'oid': oid,
+              'favTitle':
+                  '$username: ${title ?? episodicButton.text ?? '播放全部'}',
+              if (seriesId == null) 'count': count.value,
+              if (seasonId != null || seriesId != null)
+                'mediaType': params['page_type'],
+              'desc': params['desc'] == '1',
+              'sortField': params['sort_field'],
+              'isContinuePlaying': true,
+            },
+          );
+        }
       }
       return;
     }
@@ -195,10 +198,11 @@ class MemberVideoCtr
               ? !desc
               : desc;
           PageUtils.toVideoPage(
-            'bvid=${element.bvid}&cid=${element.cid}',
-            arguments: {
-              'videoItem': element,
-              'heroTag': Utils.makeHeroTag(element.bvid),
+            bvid: element.bvid,
+            cid: element.cid!,
+            cover: element.cover,
+            title: element.title,
+            extraArguments: {
               'sourceType': SourceType.archive,
               'mediaId': seasonId ?? seriesId ?? mid,
               'oid': IdUtils.bv2av(element.bvid!),

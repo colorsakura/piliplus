@@ -3,7 +3,6 @@ import 'package:PiliPlus/http/search.dart';
 import 'package:PiliPlus/utils/accounts/account.dart';
 import 'package:PiliPlus/utils/id_utils.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
-import 'package:PiliPlus/utils/utils.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/material.dart';
@@ -53,10 +52,9 @@ class UrlUtils {
       final int? cid = await SearchHttp.ab2c(aid: aid, bvid: bvid);
       if (cid != null) {
         PageUtils.toVideoPage(
-          'bvid=$bvid&cid=$cid',
-          arguments: {
-            'heroTag': Utils.makeHeroTag(bvid),
-          },
+          aid: aid,
+          bvid: bvid,
+          cid: cid,
           preventDuplicates: false,
         );
       }

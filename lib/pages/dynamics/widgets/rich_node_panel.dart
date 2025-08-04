@@ -12,7 +12,6 @@ import 'package:PiliPlus/pages/dynamics/widgets/vote.dart';
 import 'package:PiliPlus/utils/app_scheme.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
-import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -231,10 +230,8 @@ TextSpan? richNode(
                         int? cid = await SearchHttp.ab2c(bvid: i.rid);
                         if (cid != null) {
                           PageUtils.toVideoPage(
-                            'bvid=${i.rid}&cid=$cid',
-                            arguments: {
-                              'heroTag': Utils.makeHeroTag(i.rid),
-                            },
+                            bvid: i.rid,
+                            cid: cid,
                           );
                         }
                       } catch (err) {

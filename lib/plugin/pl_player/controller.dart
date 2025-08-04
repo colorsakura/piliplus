@@ -119,11 +119,11 @@ class PlPlayerController {
 
   // 记录历史记录
   int? _aid;
-  String _bvid = '';
-  int _cid = 0;
-  dynamic _epid;
-  dynamic _seasonId;
-  dynamic _subType;
+  String? _bvid;
+  int? _cid;
+  int? _epid;
+  int? _seasonId;
+  int? _pgcType;
   VideoType _videoType = VideoType.ugc;
   int _heartDuration = 0;
   int? width;
@@ -148,8 +148,8 @@ class PlPlayerController {
 
   // final Durations durations;
 
-  String get bvid => _bvid;
-  int get cid => _cid;
+  String get bvid => _bvid!;
+  int get cid => _cid!;
 
   /// 数据加载监听
   Stream<DataStatus> get onDataStatusChanged => dataStatus.status.stream;
@@ -530,11 +530,11 @@ class PlPlayerController {
     bool? isVertical,
     // 记录历史记录
     int? aid,
-    String bvid = '',
-    int cid = 0,
-    dynamic epid,
-    dynamic seasonId,
-    dynamic subType,
+    String? bvid,
+    int? cid,
+    int? epid,
+    int? seasonId,
+    int? pgcType,
     VideoType? videoType,
     VoidCallback? callback,
   }) async {
@@ -560,7 +560,7 @@ class PlPlayerController {
       _cid = cid;
       _epid = epid;
       _seasonId = seasonId;
-      _subType = subType;
+      _pgcType = pgcType;
 
       if (showSeekPreview) {
         videoShot = null;
@@ -648,15 +648,14 @@ class PlPlayerController {
     return shadersDirectory;
   }
 
-  late final _isPgc =
-      Get.parameters['type'] == '1' || Get.parameters['type'] == '4';
-  late int superResolutionType = _isPgc ? Pref.superResolutionType : 0;
+  late final isAnim = _pgcType == 1 || _pgcType == 4;
+  late int superResolutionType = isAnim ? Pref.superResolutionType : 0;
   Future<void> setShader([int? type, NativePlayer? pp]) async {
     if (type == null) {
       type ??= superResolutionType;
     } else {
       superResolutionType = type;
-      if (_isPgc) {
+      if (isAnim) {
         GStorage.setting.put(SettingBoxKey.superResolutionType, type);
       }
     }
@@ -714,7 +713,7 @@ class PlPlayerController {
         );
     var pp = player.platform as NativePlayer;
     if (_videoPlayerController == null) {
-      if (_isPgc) {
+      if (isAnim) {
         setShader(superResolutionType, pp);
       }
       String audioNormalization = Pref.audioNormalization;
@@ -1448,7 +1447,7 @@ class PlPlayerController {
     dynamic cid,
     dynamic epid,
     dynamic seasonId,
-    dynamic subType,
+    dynamic pgcType,
     VideoType? videoType,
   }) async {
     if (!enableHeart || MineController.anonymity.value || progress == 0) {
@@ -1477,7 +1476,7 @@ class PlPlayerController {
         progress: isComplete ? -1 : progress,
         epid: epid ?? _epid,
         seasonId: seasonId ?? _seasonId,
-        subType: subType ?? _subType,
+        subType: pgcType ?? _pgcType,
         videoType: videoType ?? _videoType,
       );
       return;
@@ -1492,7 +1491,7 @@ class PlPlayerController {
         progress: progress,
         epid: epid ?? _epid,
         seasonId: seasonId ?? _seasonId,
-        subType: subType ?? _subType,
+        subType: pgcType ?? _pgcType,
         videoType: videoType ?? _videoType,
       );
     }

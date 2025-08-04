@@ -42,11 +42,11 @@ class VideoCardV extends StatelessWidget {
             await SearchHttp.ab2c(aid: videoItem.aid, bvid: bvid);
         if (cid != null) {
           PageUtils.toVideoPage(
-            'bvid=$bvid&cid=$cid',
-            arguments: {
-              'heroTag': heroTag,
-              'videoItem': videoItem,
-            },
+            aid: videoItem.aid,
+            bvid: bvid,
+            cid: cid,
+            cover: videoItem.cover,
+            title: videoItem.title,
           );
         }
         break;

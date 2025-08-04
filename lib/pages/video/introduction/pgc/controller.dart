@@ -32,29 +32,38 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 
 class PgcIntroController extends CommonIntroController {
-  var seasonId = Get.parameters['seasonId'] != null
-      ? int.tryParse(Get.parameters['seasonId']!)
-      : null;
-  var epId = Get.parameters['epId'] != null
-      ? int.tryParse(Get.parameters['epId']!)
-      : null;
+  int? seasonId;
+  int? epId;
 
-  late final String pgcType =
-      Get.parameters['type'] == '1' || Get.parameters['type'] == '4'
+  late final String pgcType = pgcItem.type == 1 || pgcItem.type == 4
       ? '追番'
       : '追剧';
 
-  final isPgc = Get.arguments['videoType'] == VideoType.pgc;
-  final PgcInfoModel pgcItem = Get.arguments['pgcItem'];
+  late final bool isPgc;
+  late final PgcInfoModel pgcItem;
+
+  @override
+  (Object, int) getFavRidType() => (epId!, 24);
+
+  @override
+  StatDetail? getStat() => pgcItem.stat;
+
+  late final RxBool isFollowed = false.obs;
+  late final RxInt followStatus = (-1).obs;
 
   @override
   void onInit() {
+    final args = Get.arguments;
+    seasonId = args['seasonId'];
+    epId = args['epId'];
+    isPgc = args['videoType'] == VideoType.pgc;
+    pgcItem = args['pgcItem'];
+
     super.onInit();
+
     if (isPgc) {
       if (accountService.isLogin.value) {
-        if (seasonId != null) {
-          queryIsFollowed();
-        }
+        queryIsFollowed();
         if (epId != null) {
           queryPgcLikeCoinFav();
         }
@@ -124,12 +133,6 @@ class PgcIntroController extends CommonIntroController {
       hasCoin: coinNum.value == 1,
     );
   }
-
-  @override
-  (Object, int) getFavRidType() => (epId!, 24);
-
-  @override
-  StatDetail? getStat() => pgcItem.stat;
 
   // 分享视频
   void actionShareVideo(BuildContext context) {
@@ -202,12 +205,12 @@ class PgcIntroController extends CommonIntroController {
                             6：漫画
                             7：综艺 // 4099
                          */
-                      dynType: switch (Get.parameters['type']) {
-                        '1' => 4097,
-                        '2' => 4098,
-                        '3' => 4101,
-                        '4' => 4100,
-                        '5' || '7' => 4099,
+                      dynType: switch (pgcItem.type) {
+                        1 => 4097,
+                        2 => 4098,
+                        3 => 4101,
+                        4 => 4100,
+                        5 || 7 => 4099,
                         _ => -1,
                       },
                       pic: pgcItem.cover,
@@ -283,16 +286,15 @@ class PgcIntroController extends CommonIntroController {
       this.epId = epId;
       this.bvid = bvid;
 
-      final videoDetailCtr =
-          Get.find<VideoDetailController>(tag: Get.arguments['heroTag'])
-            ..plPlayerController.pause()
-            ..makeHeartBeat()
-            ..onReset()
-            ..epId = epId
-            ..bvid = bvid
-            ..aid = aid
-            ..cid.value = cid
-            ..queryVideoUrl();
+      final videoDetailCtr = Get.find<VideoDetailController>(tag: heroTag)
+        ..plPlayerController.pause()
+        ..makeHeartBeat()
+        ..onReset()
+        ..epId = epId
+        ..bvid = bvid
+        ..aid = aid
+        ..cid.value = cid
+        ..queryVideoUrl();
       if (cover != null && cover.isNotEmpty) {
         videoDetailCtr.cover.value = cover;
       }
@@ -300,7 +302,7 @@ class PgcIntroController extends CommonIntroController {
       // 重新请求评论
       if (videoDetailCtr.showReply) {
         try {
-          Get.find<VideoReplyController>(tag: Get.arguments['heroTag'])
+          Get.find<VideoReplyController>(tag: heroTag)
             ..aid = aid
             ..onReload();
         } catch (_) {}
@@ -353,7 +355,7 @@ class PgcIntroController extends CommonIntroController {
   bool prevPlay() {
     final episodes = pgcItem.episodes!;
     VideoDetailController videoDetailCtr = Get.find<VideoDetailController>(
-      tag: Get.arguments['heroTag'],
+      tag: heroTag,
     );
     int currentIndex = episodes.indexWhere(
       (e) => e.cid == videoDetailCtr.cid.value,
@@ -377,7 +379,7 @@ class PgcIntroController extends CommonIntroController {
     try {
       final episodes = pgcItem.episodes!;
       VideoDetailController videoDetailCtr = Get.find<VideoDetailController>(
-        tag: Get.arguments['heroTag'],
+        tag: heroTag,
       );
       PlayRepeat playRepeat = videoDetailCtr.plPlayerController.playRepeat;
 
@@ -437,9 +439,6 @@ class PgcIntroController extends CommonIntroController {
     }
   }
 
-  RxBool isFollowed = false.obs;
-  RxInt followStatus = (-1).obs;
-
   void queryIsFollowed() {
     // try {
     //   var result = await Request().get(
@@ -469,14 +468,14 @@ class PgcIntroController extends CommonIntroController {
   @override
   void queryVideoIntro([EpisodeItem? episode]) {
     episode ??= pgcItem.episodes!.firstWhere((e) => e.cid == cid.value);
+    videoDetail
+      ..value.title = episode.showTitle
+      ..refresh();
     videoPlayerServiceHandler.onVideoDetailChange(
       episode,
       cid.value,
       heroTag,
       artist: pgcItem.title,
     );
-    videoDetail
-      ..value.title = episode.showTitle
-      ..refresh();
   }
 }

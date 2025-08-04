@@ -77,10 +77,11 @@ class _FavSearchPageState
                   )
                 : null,
             onViewFav: () => PageUtils.toVideoPage(
-              'bvid=${item.bvid}&cid=${item.ugc?.firstCid}',
-              arguments: {
-                'videoItem': item,
-                'heroTag': Utils.makeHeroTag(item.bvid),
+              bvid: item.bvid,
+              cid: item.ugc!.firstCid!,
+              cover: item.cover,
+              title: item.title,
+              extraArguments: {
                 'sourceType': SourceType.fav,
                 'mediaId': controller.mediaId,
                 'oid': item.id,

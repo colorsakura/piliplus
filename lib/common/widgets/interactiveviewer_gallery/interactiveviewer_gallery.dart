@@ -48,7 +48,7 @@ class InteractiveviewerGallery<T> extends StatefulWidget {
     this.minScale = 1.0,
     this.onPageChanged,
     this.onDismissed,
-    this.setStatusBar,
+    this.setStatusBar = true,
     this.onClose,
     required this.quality,
   });
@@ -57,7 +57,7 @@ class InteractiveviewerGallery<T> extends StatefulWidget {
 
   final ValueChanged<bool>? onClose;
 
-  final bool? setStatusBar;
+  final bool setStatusBar;
 
   /// The sources to show.
   final List<SourceModel> sources;
@@ -114,7 +114,7 @@ class _InteractiveviewerGalleryState extends State<InteractiveviewerGallery>
       duration: const Duration(milliseconds: 300),
     )..addListener(listener);
 
-    if (widget.setStatusBar != false) {
+    if (widget.setStatusBar) {
       setStatusBar();
     }
 
@@ -148,7 +148,7 @@ class _InteractiveviewerGalleryState extends State<InteractiveviewerGallery>
     _animationController
       ..removeListener(listener)
       ..dispose();
-    if (widget.setStatusBar != false) {
+    if (widget.setStatusBar) {
       if (Platform.isIOS || Platform.isAndroid) {
         SystemChrome.setEnabledSystemUIMode(
           mode ?? SystemUiMode.edgeToEdge,

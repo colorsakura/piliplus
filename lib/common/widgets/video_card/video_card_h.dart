@@ -14,7 +14,6 @@ import 'package:PiliPlus/models/search/result.dart';
 import 'package:PiliPlus/utils/date_util.dart';
 import 'package:PiliPlus/utils/duration_util.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
-import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
@@ -106,11 +105,10 @@ class VideoCardH extends StatelessWidget {
                         );
                     if (cid != null) {
                       PageUtils.toVideoPage(
-                        'bvid=${videoItem.bvid}&cid=$cid',
-                        arguments: {
-                          'videoItem': videoItem,
-                          'heroTag': Utils.makeHeroTag(videoItem.aid),
-                        },
+                        bvid: videoItem.bvid,
+                        cid: cid,
+                        cover: videoItem.cover,
+                        title: videoItem.title,
                       );
                     }
                   } catch (err) {

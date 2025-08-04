@@ -504,10 +504,11 @@ class _FavDetailPageState extends State<FavDetailPage> {
                               final folderInfo =
                                   _favDetailController.folderInfo.value;
                               PageUtils.toVideoPage(
-                                'bvid=${item.bvid}&cid=${item.ugc?.firstCid}',
-                                arguments: {
-                                  'videoItem': item,
-                                  'heroTag': Utils.makeHeroTag(item.bvid),
+                                bvid: item.bvid,
+                                cid: item.ugc!.firstCid!,
+                                cover: item.cover,
+                                title: item.title,
+                                extraArguments: {
                                   'sourceType': SourceType.fav,
                                   'mediaId': folderInfo.id,
                                   'oid': item.id,

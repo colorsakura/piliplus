@@ -11,7 +11,6 @@ import 'package:PiliPlus/pages/fav_sort/view.dart';
 import 'package:PiliPlus/services/account_service.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
-import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 
@@ -129,10 +128,11 @@ class FavDetailController
           }
           final folderInfo = this.folderInfo.value;
           PageUtils.toVideoPage(
-            'bvid=${element.bvid}&cid=${element.ugc!.firstCid}',
-            arguments: {
-              'videoItem': element,
-              'heroTag': Utils.makeHeroTag(element.bvid),
+            bvid: element.bvid,
+            cid: element.ugc!.firstCid!,
+            cover: element.cover,
+            title: element.title,
+            extraArguments: {
               'sourceType': SourceType.fav,
               'mediaId': folderInfo.id,
               'oid': element.id,

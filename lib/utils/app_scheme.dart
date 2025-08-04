@@ -165,15 +165,14 @@ class PiliScheme {
             String? aid = uriDigitRegExp.firstMatch(path)?.group(1);
             String? bvid = IdUtils.bvRegex.firstMatch(path)?.group(0);
             if (aid != null || bvid != null) {
-              if (queryParameters['cid'] != null) {
+              final cid = queryParameters['cid'];
+              if (cid != null) {
                 bvid ??= IdUtils.av2bv(int.parse(aid!));
+                final progress = queryParameters['dm_progress'];
                 PageUtils.toVideoPage(
-                  'bvid=$bvid&cid=${queryParameters['cid']}',
-                  arguments: {
-                    'heroTag': Utils.makeHeroTag(aid),
-                    if (queryParameters['dm_progress'] != null)
-                      'progress': int.tryParse(queryParameters['dm_progress']!),
-                  },
+                  bvid: bvid,
+                  cid: int.parse(cid),
+                  progress: progress == null ? null : int.parse(progress),
                   off: off,
                   preventDuplicates: false,
                 );
@@ -639,13 +638,12 @@ class PiliScheme {
             final int? cid = await SearchHttp.ab2c(bvid: bvid);
             if (cid != null) {
               PageUtils.toVideoPage(
-                'bvid=$bvid&cid=$cid',
-                arguments: {
-                  'heroTag': Utils.makeHeroTag(bvid),
+                bvid: bvid,
+                cid: cid,
+                extraArguments: {
                   'sourceType': SourceType.playlist,
                   'favTitle': '播放列表',
                   'mediaId': mediaId,
-                  'mediaType': 3,
                   'desc': true,
                   'isContinuePlaying': true,
                 },
@@ -903,11 +901,10 @@ class PiliScheme {
       }
       if (cid != null) {
         PageUtils.toVideoPage(
-          'bvid=$bvid&cid=$cid',
-          arguments: {
-            'heroTag': Utils.makeHeroTag(aid),
-            if (progress != null) 'progress': int.tryParse(progress),
-          },
+          aid: aid,
+          bvid: bvid,
+          cid: cid,
+          progress: progress == null ? null : int.parse(progress),
           off: off,
           preventDuplicates: false,
         );
