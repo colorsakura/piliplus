@@ -36,6 +36,7 @@ class HistoryItem extends StatelessWidget {
     final hasDuration = item.duration != null && item.duration != 0;
     int aid = item.history.oid!;
     String bvid = item.history.bvid ?? IdUtils.av2bv(aid);
+    final business = item.history.business;
     return Material(
       type: MaterialType.transparency,
       child: InkWell(
@@ -44,25 +45,25 @@ class HistoryItem extends StatelessWidget {
             ctr.onSelect(item);
             return;
           }
-          if (item.history.business?.contains('article') == true) {
+          if (business?.contains('article') == true) {
             PageUtils.toDupNamed(
               '/articlePage',
               parameters: {
-                'id': item.history.business == 'article-list'
+                'id': business == 'article-list'
                     ? '${item.history.cid}'
                     : '${item.history.oid}',
                 'type': 'read',
               },
             );
-          } else if (item.history.business == 'live') {
+          } else if (business == 'live') {
             if (item.liveStatus == 1) {
               PageUtils.toLiveRoom(item.history.oid);
             } else {
               SmartDialog.showToast('直播未开播');
             }
-          } else if (item.history.business == 'pgc') {
+          } else if (business == 'pgc') {
             PageUtils.viewPgc(epId: item.history.epid);
-          } else if (item.history.business == 'cheese') {
+          } else if (business == 'cheese') {
             if (item.uri?.isNotEmpty == true) {
               PageUtils.viewPgcFromUri(
                 item.uri!,
@@ -144,8 +145,7 @@ class HistoryItem extends StatelessWidget {
                                 top: 6.0,
                                 right: 6.0,
                                 type:
-                                    item.history.business ==
-                                            HistoryBusinessType.live.type &&
+                                    business == HistoryBusinessType.live.type &&
                                         item.liveStatus != 1
                                     ? PBadgeType.gray
                                     : PBadgeType.primary,
@@ -255,11 +255,11 @@ class HistoryItem extends StatelessWidget {
                               ],
                             ),
                           ),
-                        if (item.history.business != 'pgc' &&
+                        if (business != 'pgc' &&
                             item.badge != '番剧' &&
                             item.tagName?.contains('动画') != true &&
-                            item.history.business != 'live' &&
-                            item.history.business?.contains('article') != true)
+                            business != 'live' &&
+                            business?.contains('article') != true)
                           PopupMenuItem<String>(
                             onTap: () async {
                               var res = await UserHttp.toViewLater(
@@ -277,8 +277,7 @@ class HistoryItem extends StatelessWidget {
                             ),
                           ),
                         PopupMenuItem<String>(
-                          onTap: () =>
-                              onDelete(item.kid!, item.history.business!),
+                          onTap: () => onDelete(item.kid!, business!),
                           height: 35,
                           child: const Row(
                             children: [

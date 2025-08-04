@@ -40,8 +40,6 @@ class LiveRoomController extends GetxController {
 
   // dm
   LiveDmInfoData? dmInfo;
-  bool showDanmaku = true;
-  DanmakuController? controller;
   List<RichTextItem>? savedDanmaku;
   RxList<dynamic> messages = [].obs;
   RxBool disableAutoScroll = false.obs;
@@ -289,8 +287,9 @@ class LiveRoomController extends GetxController {
                   'emots': extra['emots'],
                   'uemote': first[13],
                 });
-                if (showDanmaku) {
-                  controller?.addDanmaku(
+
+                if (plPlayerController.showDanmaku) {
+                  plPlayerController.danmakuController?.addDanmaku(
                     DanmakuContentItem(
                       extra['content'],
                       color: DmUtils.decimalToColor(extra['color']),

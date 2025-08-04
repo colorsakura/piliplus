@@ -28,7 +28,6 @@ class LiveRoomChat extends StatelessWidget {
         ? Colors.white.withValues(alpha: 0.9)
         : Colors.white.withValues(alpha: 0.6);
     return Stack(
-      clipBehavior: Clip.none,
       children: [
         Obx(
           () => ListView.separated(
