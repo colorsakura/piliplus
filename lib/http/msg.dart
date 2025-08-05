@@ -533,13 +533,13 @@ class MsgHttp {
   }
 
   static Future<LoadingState<List<ImUserInfosData>?>> imUserInfos({
-    required List uids,
+    required String uids,
   }) async {
     final csrf = Accounts.main.csrf;
     var res = await Request().get(
       Api.imUserInfos,
       queryParameters: {
-        'uids': uids.join(','),
+        'uids': uids,
         'build': 0,
         'mobi_app': 'web',
         'csrf_token': csrf,

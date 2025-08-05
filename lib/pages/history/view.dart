@@ -52,189 +52,175 @@ class _HistoryPageState extends State<HistoryPage>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return widget.type != null
-        ? _buildPage
-        : Obx(
-            () {
-              final enableMultiSelect =
-                  _historyController.baseCtr.enableMultiSelect.value;
-              return PopScope(
-                canPop: !enableMultiSelect,
-                onPopInvokedWithResult: (didPop, result) {
-                  if (enableMultiSelect) {
-                    currCtr().handleSelect();
-                  }
-                },
-                child: Scaffold(
-                  appBar: MultiSelectAppBarWidget(
-                    visible: enableMultiSelect,
-                    ctr: currCtr(),
-                    child: AppBar(
-                      title: const Text('观看记录'),
-                      bottom: _buildPauseTip,
-                      actions: [
-                        IconButton(
-                          tooltip: '搜索',
-                          onPressed: () => Get.toNamed('/historySearch'),
-                          icon: const Icon(Icons.search_outlined),
+    Widget child = refreshIndicator(
+      onRefresh: _historyController.onRefresh,
+      child: CustomScrollView(
+        physics: const AlwaysScrollableScrollPhysics(),
+        controller: _historyController.scrollController,
+        slivers: [
+          SliverPadding(
+            padding: EdgeInsets.only(
+              top: StyleString.safeSpace - 5,
+              bottom: MediaQuery.paddingOf(context).bottom + 80,
+            ),
+            sliver: Obx(
+              () => _buildBody(_historyController.loadingState.value),
+            ),
+          ),
+        ],
+      ),
+    );
+    if (widget.type != null) {
+      return child;
+    }
+    return Obx(
+      () {
+        final enableMultiSelect =
+            _historyController.baseCtr.enableMultiSelect.value;
+        return PopScope(
+          canPop: !enableMultiSelect,
+          onPopInvokedWithResult: (didPop, result) {
+            if (enableMultiSelect) {
+              currCtr().handleSelect();
+            }
+          },
+          child: Scaffold(
+            appBar: MultiSelectAppBarWidget(
+              visible: enableMultiSelect,
+              ctr: currCtr(),
+              child: _buildAppBar,
+            ),
+            body: Obx(() {
+              if (_historyController.tabs.isEmpty) {
+                return SafeArea(
+                  top: false,
+                  bottom: false,
+                  child: child,
+                );
+              }
+              return SafeArea(
+                top: false,
+                bottom: false,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    TabBar(
+                      controller: _historyController.tabController,
+                      onTap: (index) {
+                        if (!_historyController
+                            .tabController!
+                            .indexIsChanging) {
+                          currCtr().scrollController.animToTop();
+                        } else {
+                          if (enableMultiSelect) {
+                            currCtr(
+                              _historyController.tabController!.previousIndex,
+                            ).handleSelect();
+                          }
+                        }
+                      },
+                      tabs: [
+                        const Tab(text: '全部'),
+                        ..._historyController.tabs.map(
+                          (item) => Tab(text: item.name),
                         ),
-                        PopupMenuButton<String>(
-                          onSelected: (String type) {
-                            // 处理菜单项选择的逻辑
-                            switch (type) {
-                              case 'pause':
-                                _historyController.baseCtr.onPauseHistory(
-                                  context,
-                                );
-                                break;
-                              case 'clear':
-                                _historyController.baseCtr.onClearHistory(
-                                  context,
-                                  () {
-                                    _historyController.loadingState.value =
-                                        const Success(
-                                          null,
-                                        );
-                                    if (_historyController.tabController !=
-                                        null) {
-                                      for (final item
-                                          in _historyController.tabs) {
-                                        try {
-                                          Get.find<HistoryController>(
-                                            tag: item.type,
-                                          ).loadingState.value = const Success(
-                                            null,
-                                          );
-                                        } catch (_) {}
-                                      }
-                                    }
-                                  },
-                                );
-                                break;
-                              case 'del':
-                                currCtr().onDelHistory();
-                                break;
-                              case 'multiple':
-                                _historyController
-                                        .baseCtr
-                                        .enableMultiSelect
-                                        .value =
-                                    true;
-                                break;
-                            }
-                          },
-                          itemBuilder: (BuildContext context) =>
-                              <PopupMenuEntry<String>>[
-                                PopupMenuItem<String>(
-                                  value: 'pause',
-                                  child: Obx(
-                                    () => Text(
-                                      !_historyController
-                                              .baseCtr
-                                              .pauseStatus
-                                              .value
-                                          ? '暂停观看记录'
-                                          : '恢复观看记录',
-                                    ),
-                                  ),
-                                ),
-                                const PopupMenuItem<String>(
-                                  value: 'clear',
-                                  child: Text('清空观看记录'),
-                                ),
-                                const PopupMenuItem<String>(
-                                  value: 'del',
-                                  child: Text('删除已看记录'),
-                                ),
-                                const PopupMenuItem<String>(
-                                  value: 'multiple',
-                                  child: Text('多选删除'),
-                                ),
-                              ],
-                        ),
-                        const SizedBox(width: 6),
                       ],
                     ),
-                  ),
-                  body: Obx(
-                    () => _historyController.tabs.isNotEmpty
-                        ? SafeArea(
-                            top: false,
-                            bottom: false,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                TabBar(
-                                  controller: _historyController.tabController,
-                                  onTap: (index) {
-                                    if (!_historyController
-                                        .tabController!
-                                        .indexIsChanging) {
-                                      currCtr().scrollController.animToTop();
-                                    } else {
-                                      if (enableMultiSelect) {
-                                        currCtr(
-                                          _historyController
-                                              .tabController!
-                                              .previousIndex,
-                                        ).handleSelect();
-                                      }
-                                    }
-                                  },
-                                  tabs: [
-                                    const Tab(text: '全部'),
-                                    ..._historyController.tabs.map(
-                                      (item) => Tab(text: item.name),
-                                    ),
-                                  ],
-                                ),
-                                Expanded(
-                                  child: TabBarView(
-                                    physics: enableMultiSelect
-                                        ? const NeverScrollableScrollPhysics()
-                                        : const CustomTabBarViewScrollPhysics(),
-                                    controller:
-                                        _historyController.tabController,
-                                    children: [
-                                      KeepAliveWrapper(
-                                        builder: (context) => _buildPage,
-                                      ),
-                                      ..._historyController.tabs.map(
-                                        (item) => HistoryPage(type: item.type),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          )
-                        : SafeArea(
-                            top: false,
-                            bottom: false,
-                            child: _buildPage,
+                    Expanded(
+                      child: TabBarView(
+                        physics: enableMultiSelect
+                            ? const NeverScrollableScrollPhysics()
+                            : const CustomTabBarViewScrollPhysics(),
+                        controller: _historyController.tabController,
+                        children: [
+                          KeepAliveWrapper(builder: (context) => child),
+                          ..._historyController.tabs.map(
+                            (item) => HistoryPage(type: item.type),
                           ),
-                  ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
               );
-            },
-          );
+            }),
+          ),
+        );
+      },
+    );
   }
 
-  Widget get _buildPage => refreshIndicator(
-    onRefresh: _historyController.onRefresh,
-    child: CustomScrollView(
-      physics: const AlwaysScrollableScrollPhysics(),
-      controller: _historyController.scrollController,
-      slivers: [
-        SliverPadding(
-          padding: EdgeInsets.only(
-            top: StyleString.safeSpace - 5,
-            bottom: MediaQuery.paddingOf(context).bottom + 80,
+  AppBar get _buildAppBar => AppBar(
+    title: const Text('观看记录'),
+    bottom: _buildPauseTip,
+    actions: [
+      IconButton(
+        tooltip: '搜索',
+        onPressed: () => Get.toNamed('/historySearch'),
+        icon: const Icon(Icons.search_outlined),
+      ),
+      PopupMenuButton<String>(
+        onSelected: (String type) {
+          switch (type) {
+            case 'pause':
+              _historyController.baseCtr.onPauseHistory(
+                context,
+              );
+              break;
+            case 'clear':
+              _historyController.baseCtr.onClearHistory(
+                context,
+                () {
+                  _historyController.loadingState.value = const Success(
+                    null,
+                  );
+                  if (_historyController.tabController != null) {
+                    for (final item in _historyController.tabs) {
+                      try {
+                        Get.find<HistoryController>(
+                          tag: item.type,
+                        ).loadingState.value = const Success(
+                          null,
+                        );
+                      } catch (_) {}
+                    }
+                  }
+                },
+              );
+              break;
+            case 'viewed':
+              currCtr().onDelViewedHistory();
+              break;
+            case 'multiple':
+              _historyController.baseCtr.enableMultiSelect.value = true;
+              break;
+          }
+        },
+        itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+          PopupMenuItem<String>(
+            value: 'pause',
+            child: Text(
+              !_historyController.baseCtr.pauseStatus.value
+                  ? '暂停观看记录'
+                  : '恢复观看记录',
+            ),
           ),
-          sliver: Obx(() => _buildBody(_historyController.loadingState.value)),
-        ),
-      ],
-    ),
+          const PopupMenuItem<String>(
+            value: 'clear',
+            child: Text('清空观看记录'),
+          ),
+          const PopupMenuItem<String>(
+            value: 'viewed',
+            child: Text('删除已看记录'),
+          ),
+          const PopupMenuItem<String>(
+            value: 'multiple',
+            child: Text('多选删除'),
+          ),
+        ],
+      ),
+      const SizedBox(width: 6),
+    ],
   );
 
   Widget _buildBody(LoadingState<List<HistoryItemModel>?> loadingState) {

@@ -33,7 +33,7 @@ class _FavFolderSortPageState extends State<FavFolderSortPage> {
           TextButton(
             onPressed: () async {
               var res = await FavHttp.sortFavFolder(
-                sort: sortList.map((item) => item.id).toList(),
+                sort: sortList.map((item) => item.id).join(','),
               );
               if (res['status']) {
                 SmartDialog.showToast('排序完成');

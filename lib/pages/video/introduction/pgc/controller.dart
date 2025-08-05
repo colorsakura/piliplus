@@ -343,7 +343,7 @@ class PgcIntroController extends CommonIntroController {
 
   Future<void> pgcUpdate(int status) async {
     var result = await VideoHttp.pgcUpdate(
-      seasonId: [pgcItem.seasonId],
+      seasonId: pgcItem.seasonId.toString(),
       status: status,
     );
     if (result['status']) {

@@ -3,8 +3,8 @@ import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/http/user.dart';
 import 'package:PiliPlus/models_new/history/data.dart';
 import 'package:PiliPlus/models_new/history/list.dart';
-import 'package:PiliPlus/pages/common/common_search_controller.dart';
-import 'package:PiliPlus/pages/common/multi_select_controller.dart';
+import 'package:PiliPlus/pages/common/multi_select/base.dart';
+import 'package:PiliPlus/pages/common/search/common_search_controller.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 
@@ -23,16 +23,7 @@ class HistorySearchController
   }
 
   Future<void> onDelHistory(int index, kid, String business) async {
-    final String resKid;
-    if (business == 'live') {
-      resKid = 'live_$kid';
-    } else if (business.contains('article')) {
-      resKid = 'article_$kid';
-    } else {
-      resKid = 'archive_$kid';
-    }
-
-    var res = await UserHttp.delHistory([resKid]);
+    var res = await UserHttp.delHistory('${business}_$kid');
     if (res['status']) {
       loadingState
         ..value.data!.removeAt(index)
@@ -42,20 +33,21 @@ class HistorySearchController
   }
 
   @override
-  void onConfirm() {
+  void onRemove() {
     showConfirmDialog(
       context: Get.context!,
       content: '确认删除所选历史记录吗？',
       title: '提示',
       onConfirm: () async {
         SmartDialog.showLoading(msg: '请求中');
-        final result = allChecked.toSet();
-        final kidList = result.map(
-          (item) => '${item.history.business!}_${item.kid!}',
+        final removeList = allChecked;
+        var response = await UserHttp.delHistory(
+          removeList
+              .map((item) => '${item.history.business!}_${item.kid!}')
+              .join(','),
         );
-        var response = await UserHttp.delHistory(kidList);
         if (response['status']) {
-          afterDelete(result);
+          afterDelete(removeList);
         }
         SmartDialog.dismiss();
         SmartDialog.showToast(response['msg']);

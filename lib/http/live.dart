@@ -393,10 +393,10 @@ class LiveHttp {
   }
 
   static Future setLiveFavTag({
-    required List ids,
+    required String ids,
   }) async {
     final data = {
-      'tags': ids.join(','),
+      'tags': ids,
       'access_key': Accounts.main.accessKey,
       'appkey': Constants.appKey,
       'actionKey': 'appkey',

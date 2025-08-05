@@ -18,7 +18,8 @@ import 'package:PiliPlus/http/validate.dart';
 import 'package:PiliPlus/http/video.dart';
 import 'package:PiliPlus/models/dynamics/result.dart';
 import 'package:PiliPlus/models/login/model.dart';
-import 'package:PiliPlus/pages/common/multi_select_controller.dart';
+import 'package:PiliPlus/pages/common/multi_select/base.dart';
+import 'package:PiliPlus/pages/common/multi_select/multi_select_controller.dart';
 import 'package:PiliPlus/pages/dynamics_tab/controller.dart';
 import 'package:PiliPlus/pages/group_panel/view.dart';
 import 'package:PiliPlus/pages/later/controller.dart';
@@ -419,29 +420,28 @@ class RequestUtils {
                 TextButton(
                   onPressed: () {
                     if (checkedId != null) {
-                      Set resources = ctr.allChecked.toSet();
+                      Iterable removeList = ctr.allChecked;
                       SmartDialog.showLoading();
                       FavHttp.copyOrMoveFav(
                         isCopy: isCopy,
                         isFav: ctr is! LaterController,
                         srcMediaId: mediaId,
                         tarMediaId: checkedId,
-                        resources: resources
+                        resources: removeList
                             .map(
                               (item) => ctr is LaterController
                                   ? item.aid
                                   : '${item.id}:${item.type}',
                             )
-                            .toList(),
+                            .join(','),
                         mid: isCopy ? mid : null,
                       ).then((res) {
                         if (res.isSuccess) {
                           ctr.handleSelect(false);
                           if (!isCopy) {
-                            ctr.loadingState.value.data!.removeWhere(
-                              resources.contains,
-                            );
-                            ctr.loadingState.refresh();
+                            ctr.loadingState
+                              ..value.data!.removeWhere(removeList.contains)
+                              ..refresh();
                           }
                           SmartDialog.dismiss();
                           SmartDialog.showToast('${isCopy ? '复制' : '移动'}成功');

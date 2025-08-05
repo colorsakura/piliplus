@@ -5,7 +5,7 @@ import 'package:PiliPlus/models/common/later_view_type.dart';
 import 'package:PiliPlus/models/common/video/source_type.dart';
 import 'package:PiliPlus/models_new/later/data.dart';
 import 'package:PiliPlus/models_new/later/list.dart';
-import 'package:PiliPlus/pages/common/multi_select_controller.dart';
+import 'package:PiliPlus/pages/common/multi_select/multi_select_controller.dart';
 import 'package:PiliPlus/pages/later/base_controller.dart';
 import 'package:PiliPlus/services/account_service.dart';
 import 'package:PiliPlus/utils/extension.dart';
@@ -15,9 +15,7 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 
 class LaterController extends MultiSelectController<LaterData, LaterItemModel> {
-  LaterController(
-    this.laterViewType,
-  );
+  LaterController(this.laterViewType);
   final LaterViewType laterViewType;
 
   AccountService accountService = Get.find<AccountService>();
@@ -77,7 +75,7 @@ class LaterController extends MultiSelectController<LaterData, LaterItemModel> {
             TextButton(
               onPressed: () async {
                 Get.back();
-                final res = await UserHttp.toViewDel(aids: {aid!});
+                final res = await UserHttp.toViewDel(aids: aid.toString());
                 if (res['status']) {
                   baseCtr.counts[laterViewType] =
                       baseCtr.counts[laterViewType]! - 1;
@@ -124,30 +122,26 @@ class LaterController extends MultiSelectController<LaterData, LaterItemModel> {
   }
 
   @override
-  void onConfirm() {
+  void onRemove() {
     showConfirmDialog(
       context: Get.context!,
       content: '确认删除所选稍后再看吗？',
       title: '提示',
-      onConfirm: () => _onDelete(allChecked.toSet()),
+      onConfirm: () async {
+        final removeList = allChecked;
+        SmartDialog.showLoading(msg: '请求中');
+        final res = await UserHttp.toViewDel(
+          aids: removeList.map((item) => item.aid!).join(','),
+        );
+        if (res['status']) {
+          baseCtr.counts[laterViewType] =
+              baseCtr.counts[laterViewType]! - removeList.length;
+          afterDelete(removeList);
+        }
+        SmartDialog.dismiss();
+        SmartDialog.showToast(res['msg']);
+      },
     );
-  }
-
-  Future<void> _onDelete(Set<LaterItemModel> result) async {
-    SmartDialog.showLoading(msg: '请求中');
-    final res = await UserHttp.toViewDel(aids: result.map((item) => item.aid!));
-    if (res['status']) {
-      afterDelete(result);
-
-      baseCtr.counts[laterViewType] =
-          baseCtr.counts[laterViewType]! - result.length;
-      if (baseCtr.enableMultiSelect.value) {
-        baseCtr.checkedCount.value = 0;
-        baseCtr.enableMultiSelect.value = false;
-      }
-    }
-    SmartDialog.dismiss();
-    SmartDialog.showToast(res['msg']);
   }
 
   // 稍后再看播放全部

@@ -270,7 +270,7 @@ abstract class CommonIntroController extends GetxController {
 
   Future<void> viewLater() async {
     var res = await (hasLater.value
-        ? UserHttp.toViewDel(aids: [IdUtils.bv2av(bvid)])
+        ? UserHttp.toViewDel(aids: IdUtils.bv2av(bvid).toString())
         : await UserHttp.toViewLater(bvid: bvid));
     if (res['status']) hasLater.value = !hasLater.value;
     SmartDialog.showToast(res['msg']);

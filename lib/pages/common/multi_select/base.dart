@@ -14,12 +14,8 @@ abstract class MultiSelectBase<T> {
 
   void onSelect(T item, [bool disableSelect = true]);
   void handleSelect([bool checked = false, bool disableSelect = true]);
-  void onConfirm();
+  void onRemove();
 }
-
-abstract class MultiSelectController<R, T extends MultiSelectData>
-    extends CommonListController<R, T>
-    with CommonMultiSelectMixin<T>, DeleteItemMixin {}
 
 mixin CommonMultiSelectMixin<T extends MultiSelectData>
     implements MultiSelectBase<T> {
@@ -76,15 +72,16 @@ mixin CommonMultiSelectMixin<T extends MultiSelectData>
 
 mixin DeleteItemMixin<R, T extends MultiSelectData>
     on CommonListController<R, T>, CommonMultiSelectMixin<T> {
-  Future<void> afterDelete(Set<T> result) async {
-    // TODO: result require hash
-    final remainList = loadingState.value.data!;
-    if (result.length == 1) {
-      remainList.remove(result.single);
+  Future<void> afterDelete(Iterable<T> removeList) async {
+    final list = loadingState.value.data!;
+    if (removeList.length == list.length) {
+      list.clear();
+    } else if (removeList.length == 1) {
+      list.remove(removeList.single);
     } else {
-      remainList.removeWhere(result.contains);
+      list.removeWhere(removeList.contains);
     }
-    if (remainList.isNotEmpty) {
+    if (list.isNotEmpty) {
       loadingState.refresh();
     } else if (!isEnd) {
       onReload();

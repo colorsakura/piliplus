@@ -1,7 +1,7 @@
 import 'package:PiliPlus/http/fav.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models_new/fav/fav_note/list.dart';
-import 'package:PiliPlus/pages/common/multi_select_controller.dart';
+import 'package:PiliPlus/pages/common/multi_select/multi_select_controller.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 
 class FavNoteController
@@ -35,11 +35,13 @@ class FavNoteController
   }
 
   @override
-  Future<void> onConfirm() async {
-    Set<FavNoteItemModel> removeList = allChecked.toSet();
+  Future<void> onRemove() async {
+    final removeList = allChecked;
     final res = await FavHttp.delNote(
       isPublish: isPublish,
-      noteIds: removeList.map((item) => isPublish ? item.cvid : item.noteId),
+      noteIds: removeList
+          .map((item) => isPublish ? item.cvid : item.noteId)
+          .join(','),
     );
     if (res['status']) {
       afterDelete(removeList);

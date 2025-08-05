@@ -4,7 +4,7 @@ import 'package:PiliPlus/http/user.dart';
 import 'package:PiliPlus/models_new/history/data.dart';
 import 'package:PiliPlus/models_new/history/list.dart';
 import 'package:PiliPlus/models_new/history/tab.dart';
-import 'package:PiliPlus/pages/common/multi_select_controller.dart';
+import 'package:PiliPlus/pages/common/multi_select/multi_select_controller.dart';
 import 'package:PiliPlus/pages/history/base_controller.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/storage.dart';
@@ -89,26 +89,28 @@ class HistoryController
   }
 
   // 删除已看历史记录
-  void onDelHistory() {
+  void onDelViewedHistory() {
     if (loadingState.value.isSuccess) {
-      final set = loadingState.value.data!
-          .where((e) => e.progress == -1)
-          .toSet();
-      if (set.isNotEmpty) {
-        _onDelete(set);
+      final viewedList = loadingState.value.data!.where(
+        (e) => e.progress == -1,
+      );
+      if (viewedList.isNotEmpty) {
+        _onDelete(viewedList);
       } else {
         SmartDialog.showToast('无已看记录');
       }
     }
   }
 
-  Future<void> _onDelete(Set<HistoryItemModel> result) async {
+  Future<void> _onDelete(Iterable<HistoryItemModel> removeList) async {
     SmartDialog.showLoading(msg: '请求中');
     final response = await UserHttp.delHistory(
-      result.map((item) => '${item.history.business}_${item.kid}'),
+      removeList
+          .map((item) => '${item.history.business}_${item.kid}')
+          .join(','),
     );
     if (response['status']) {
-      afterDelete(result);
+      afterDelete(removeList);
     }
     SmartDialog.dismiss();
     SmartDialog.showToast(response['msg']);
@@ -116,12 +118,12 @@ class HistoryController
 
   // 删除选中的记录
   @override
-  void onConfirm() {
+  void onRemove() {
     showConfirmDialog(
       context: Get.context!,
       content: '确认删除所选历史记录吗？',
       title: '提示',
-      onConfirm: () => _onDelete(allChecked.toSet()),
+      onConfirm: () => _onDelete(allChecked),
     );
   }
 

@@ -249,7 +249,7 @@ class _FavDetailPageState extends State<FavDetailPage> {
                     context: context,
                     title: '确定删除该收藏夹?',
                     onConfirm: () =>
-                        FavHttp.deleteFolder(mediaIds: [mediaId]).then((res) {
+                        FavHttp.deleteFolder(mediaIds: mediaId).then((res) {
                           if (res['status']) {
                             SmartDialog.showToast('删除成功');
                             Get.back(result: true);
@@ -324,7 +324,7 @@ class _FavDetailPageState extends State<FavDetailPage> {
       style: TextButton.styleFrom(
         visualDensity: VisualDensity.compact,
       ),
-      onPressed: _favDetailController.onConfirm,
+      onPressed: _favDetailController.onRemove,
       child: Text(
         '删除',
         style: TextStyle(color: theme.colorScheme.error),

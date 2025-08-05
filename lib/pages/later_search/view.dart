@@ -1,7 +1,7 @@
 import 'package:PiliPlus/models/common/video/source_type.dart';
 import 'package:PiliPlus/models_new/later/data.dart';
 import 'package:PiliPlus/models_new/later/list.dart';
-import 'package:PiliPlus/pages/common/common_search_page.dart';
+import 'package:PiliPlus/pages/common/search/common_search_page.dart';
 import 'package:PiliPlus/pages/later/widgets/video_card_h_later.dart';
 import 'package:PiliPlus/pages/later_search/controller.dart';
 import 'package:PiliPlus/utils/grid.dart';

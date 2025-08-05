@@ -151,10 +151,10 @@ class UserHttp {
   }
 
   // 移除已观看
-  static Future toViewDel({required Iterable<int> aids}) async {
+  static Future toViewDel({required String aids}) async {
     final Map<String, dynamic> params = {
       'csrf': Accounts.main.csrf,
-      'resources': aids.join(','),
+      'resources': aids,
     };
     var res = await Request().post(
       Api.toViewDel,
@@ -204,11 +204,11 @@ class UserHttp {
   }
 
   // 删除历史记录
-  static Future delHistory(Iterable<String> kidList) async {
+  static Future delHistory(String kid) async {
     var res = await Request().post(
       Api.delHistory,
       data: {
-        'kid': kidList.join(','),
+        'kid': kid,
         'jsonp': 'jsonp',
         'csrf': Accounts.heartbeat.csrf,
       },

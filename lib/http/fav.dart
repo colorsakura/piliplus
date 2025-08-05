@@ -312,12 +312,12 @@ class FavHttp {
 
   static Future delNote({
     required bool isPublish,
-    required Iterable noteIds,
+    required String noteIds,
   }) async {
     final res = await Request().post(
       isPublish ? Api.delPublishNote : Api.delNote,
       data: {
-        isPublish ? 'cvids' : 'note_ids': noteIds.join(','),
+        isPublish ? 'cvids' : 'note_ids': noteIds,
         'csrf': Accounts.main.csrf,
       },
       options: Options(
@@ -375,10 +375,10 @@ class FavHttp {
   }
 
   static Future sortFavFolder({
-    required List<int?> sort,
+    required String sort,
   }) async {
     Map<String, dynamic> data = {
-      'sort': sort.join(','),
+      'sort': sort,
       'csrf': Accounts.main.csrf,
     };
     AppSign.appSign(data);
@@ -398,11 +398,11 @@ class FavHttp {
 
   static Future sortFav({
     required dynamic mediaId,
-    required List<String> sort,
+    required String sort,
   }) async {
     Map<String, dynamic> data = {
       'media_id': mediaId,
-      'sort': sort.join(','),
+      'sort': sort,
       'csrf': Accounts.main.csrf,
     };
     AppSign.appSign(data);
@@ -442,12 +442,12 @@ class FavHttp {
   }
 
   static Future deleteFolder({
-    required List<dynamic> mediaIds,
+    required String mediaIds,
   }) async {
     var res = await Request().post(
       Api.deleteFolder,
       data: {
-        'media_ids': mediaIds.join(','),
+        'media_ids': mediaIds,
         'platform': 'web',
         'csrf': Accounts.main.csrf,
       },
@@ -643,7 +643,7 @@ class FavHttp {
     required dynamic srcMediaId,
     required dynamic tarMediaId,
     dynamic mid,
-    required Iterable resources,
+    required String resources,
   }) async {
     var res = await Request().post(
       isFav
@@ -657,7 +657,7 @@ class FavHttp {
         'src_media_id': ?srcMediaId,
         'tar_media_id': tarMediaId,
         'mid': ?mid,
-        'resources': resources.join(','),
+        'resources': resources,
         'platform': 'web',
         'csrf': Accounts.main.csrf,
       },

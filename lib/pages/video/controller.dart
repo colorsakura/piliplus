@@ -379,7 +379,7 @@ class VideoDetailController extends GetxController
             ? (item, index) async {
                 if (sourceType == SourceType.watchLater) {
                   var res = await UserHttp.toViewDel(
-                    aids: [item.aid!],
+                    aids: item.aid.toString(),
                   );
                   if (res['status']) {
                     mediaList.removeAt(index);

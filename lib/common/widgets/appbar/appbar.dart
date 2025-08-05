@@ -1,4 +1,4 @@
-import 'package:PiliPlus/pages/common/multi_select_controller.dart';
+import 'package:PiliPlus/pages/common/multi_select/base.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -41,7 +41,7 @@ class MultiSelectAppBarWidget extends StatelessWidget
             style: TextButton.styleFrom(
               visualDensity: VisualDensity.compact,
             ),
-            onPressed: ctr.onConfirm,
+            onPressed: ctr.onRemove,
             child: Text(
               '移除',
               style: TextStyle(color: Get.theme.colorScheme.error),

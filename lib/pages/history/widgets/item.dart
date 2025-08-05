@@ -8,7 +8,7 @@ import 'package:PiliPlus/http/user.dart';
 import 'package:PiliPlus/models/common/badge_type.dart';
 import 'package:PiliPlus/models/common/history_business_type.dart';
 import 'package:PiliPlus/models_new/history/list.dart';
-import 'package:PiliPlus/pages/common/multi_select_controller.dart';
+import 'package:PiliPlus/pages/common/multi_select/base.dart';
 import 'package:PiliPlus/utils/date_util.dart';
 import 'package:PiliPlus/utils/duration_util.dart';
 import 'package:PiliPlus/utils/id_utils.dart';
@@ -37,65 +37,63 @@ class HistoryItem extends StatelessWidget {
     int aid = item.history.oid!;
     String bvid = item.history.bvid ?? IdUtils.av2bv(aid);
     final business = item.history.business;
+    final enableMultiSelect = ctr.enableMultiSelect.value;
     return Material(
       type: MaterialType.transparency,
       child: InkWell(
-        onTap: () async {
-          if (ctr.enableMultiSelect.value) {
-            ctr.onSelect(item);
-            return;
-          }
-          if (business?.contains('article') == true) {
-            PageUtils.toDupNamed(
-              '/articlePage',
-              parameters: {
-                'id': business == 'article-list'
-                    ? '${item.history.cid}'
-                    : '${item.history.oid}',
-                'type': 'read',
+        onTap: enableMultiSelect
+            ? () => ctr.onSelect(item)
+            : () async {
+                if (business?.contains('article') == true) {
+                  PageUtils.toDupNamed(
+                    '/articlePage',
+                    parameters: {
+                      'id': business == 'article-list'
+                          ? '${item.history.cid}'
+                          : '${item.history.oid}',
+                      'type': 'read',
+                    },
+                  );
+                } else if (business == 'live') {
+                  if (item.liveStatus == 1) {
+                    PageUtils.toLiveRoom(item.history.oid);
+                  } else {
+                    SmartDialog.showToast('直播未开播');
+                  }
+                } else if (business == 'pgc') {
+                  PageUtils.viewPgc(epId: item.history.epid);
+                } else if (business == 'cheese') {
+                  if (item.uri?.isNotEmpty == true) {
+                    PageUtils.viewPgcFromUri(
+                      item.uri!,
+                      isPgc: false,
+                      aid: item.history.oid,
+                    );
+                  }
+                } else {
+                  int? cid =
+                      item.history.cid ??
+                      await SearchHttp.ab2c(
+                        aid: aid,
+                        bvid: bvid,
+                        part: item.history.page,
+                      );
+                  if (cid != null) {
+                    PageUtils.toVideoPage(
+                      aid: aid,
+                      bvid: bvid,
+                      cid: cid,
+                      cover: item.cover,
+                      title: item.title,
+                    );
+                  }
+                }
               },
-            );
-          } else if (business == 'live') {
-            if (item.liveStatus == 1) {
-              PageUtils.toLiveRoom(item.history.oid);
-            } else {
-              SmartDialog.showToast('直播未开播');
-            }
-          } else if (business == 'pgc') {
-            PageUtils.viewPgc(epId: item.history.epid);
-          } else if (business == 'cheese') {
-            if (item.uri?.isNotEmpty == true) {
-              PageUtils.viewPgcFromUri(
-                item.uri!,
-                isPgc: false,
-                aid: item.history.oid,
-              );
-            }
-          } else {
-            int? cid =
-                item.history.cid ??
-                await SearchHttp.ab2c(
-                  aid: aid,
-                  bvid: bvid,
-                  part: item.history.page,
-                );
-            if (cid != null) {
-              PageUtils.toVideoPage(
-                aid: aid,
-                bvid: bvid,
-                cid: cid,
-                cover: item.cover,
-                title: item.title,
-              );
-            }
-          }
-        },
-        onLongPress: ctr.enableMultiSelect.value
+        onLongPress: enableMultiSelect
             ? null
-            : () {
-                ctr.enableMultiSelect.value = true;
-                ctr.onSelect(item);
-              },
+            : () => ctr
+                ..enableMultiSelect.value = true
+                ..onSelect(item),
         child: Stack(
           clipBehavior: Clip.none,
           children: [

@@ -739,13 +739,13 @@ class VideoHttp {
   }
 
   static Future pgcUpdate({
-    required List seasonId,
-    required dynamic status,
+    required String seasonId,
+    required int status,
   }) async {
     var res = await Request().post(
       Api.pgcUpdate,
       data: {
-        'season_id': seasonId.join(','),
+        'season_id': seasonId,
         'status': status,
         'csrf': Accounts.main.csrf,
       },

@@ -45,7 +45,7 @@ class WhisperLinkSettingController extends GetxController {
       LoadingState<List<UidSetting>?>.loading().obs;
 
   Future<void> getUserInfo() async {
-    userState.value = await MsgHttp.imUserInfos(uids: [talkerUid]);
+    userState.value = await MsgHttp.imUserInfos(uids: talkerUid.toString());
   }
 
   Future<void> getSessionSs() async {

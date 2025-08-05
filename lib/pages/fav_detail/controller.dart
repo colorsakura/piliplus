@@ -7,7 +7,8 @@ import 'package:PiliPlus/models_new/fav/fav_detail/data.dart';
 import 'package:PiliPlus/models_new/fav/fav_detail/media.dart';
 import 'package:PiliPlus/models_new/fav/fav_folder/list.dart';
 import 'package:PiliPlus/pages/common/common_list_controller.dart';
-import 'package:PiliPlus/pages/common/multi_select_controller.dart';
+import 'package:PiliPlus/pages/common/multi_select/base.dart';
+import 'package:PiliPlus/pages/common/multi_select/multi_select_controller.dart';
 import 'package:PiliPlus/pages/fav_sort/view.dart';
 import 'package:PiliPlus/services/account_service.dart';
 import 'package:PiliPlus/utils/extension.dart';
@@ -22,7 +23,7 @@ mixin BaseFavController
   bool get isOwner;
   int get mediaId;
 
-  void onRemove(int count) {}
+  void updateLength(int count) {}
 
   void onViewFav(FavDetailItemModel item, int? index);
 
@@ -35,7 +36,7 @@ mixin BaseFavController
       loadingState
         ..value.data!.removeAt(index)
         ..refresh();
-      onRemove(1);
+      updateLength(1);
       SmartDialog.showToast('取消收藏');
     } else {
       SmartDialog.showToast(result['msg']);
@@ -43,20 +44,22 @@ mixin BaseFavController
   }
 
   @override
-  void onConfirm() {
+  void onRemove() {
     showConfirmDialog(
       context: Get.context!,
       content: '确认删除所选收藏吗？',
       title: '提示',
       onConfirm: () async {
-        final checked = allChecked.toSet();
+        final removeList = allChecked;
         var result = await FavHttp.favVideo(
-          resources: checked.map((item) => '${item.id}:${item.type}').join(','),
+          resources: removeList
+              .map((item) => '${item.id}:${item.type}')
+              .join(','),
           delIds: mediaId.toString(),
         );
         if (result['status']) {
-          afterDelete(checked);
-          onRemove(checked.length);
+          updateLength(removeList.length);
+          afterDelete(removeList);
           SmartDialog.showToast('取消收藏');
         } else {
           SmartDialog.showToast(result['msg']);
@@ -120,7 +123,7 @@ class FavDetailController
   }
 
   @override
-  void onRemove(int count) {
+  void updateLength(int count) {
     folderInfo
       ..value.mediaCount -= count
       ..refresh();

@@ -1,4 +1,4 @@
-import 'package:PiliPlus/pages/common/common_slide_page.dart';
+import 'package:PiliPlus/pages/common/slide/common_slide_page.dart';
 import 'package:flutter/material.dart';
 
 abstract class CommonCollapseSlidePage extends CommonSlidePage {

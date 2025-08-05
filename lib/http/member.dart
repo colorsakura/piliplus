@@ -505,7 +505,7 @@ class MemberHttp {
   }
 
   // 设置分组
-  static Future addUsers(List<int?> fids, List<int?> tagids) async {
+  static Future addUsers(String fids, String tagids) async {
     var res = await Request().post(
       Api.addUsers,
       queryParameters: {
@@ -513,8 +513,8 @@ class MemberHttp {
             '{"platform":"web","device":"pc","spmid":"333.1387"}',
       },
       data: {
-        'fids': fids.join(','),
-        'tagids': tagids.join(','),
+        'fids': fids,
+        'tagids': tagids,
         'csrf': Accounts.main.csrf,
         // 'cross_domain': true
       },

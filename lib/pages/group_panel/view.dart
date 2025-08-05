@@ -75,7 +75,10 @@ class _GroupPanelState extends State<GroupPanel> {
       tagidList = [0];
     }
     // 保存
-    final res = await MemberHttp.addUsers([widget.mid], tagidList);
+    final res = await MemberHttp.addUsers(
+      widget.mid.toString(),
+      tagidList.join(','),
+    );
     SmartDialog.showToast(res['msg']);
     if (res['status']) {
       Get.back(result: tagidList);

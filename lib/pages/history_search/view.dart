@@ -1,6 +1,6 @@
 import 'package:PiliPlus/models_new/history/data.dart';
 import 'package:PiliPlus/models_new/history/list.dart';
-import 'package:PiliPlus/pages/common/common_search_page.dart';
+import 'package:PiliPlus/pages/common/search/common_search_page.dart';
 import 'package:PiliPlus/pages/history/widgets/item.dart';
 import 'package:PiliPlus/pages/history_search/controller.dart';
 import 'package:PiliPlus/utils/grid.dart';
