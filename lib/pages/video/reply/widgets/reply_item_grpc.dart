@@ -18,6 +18,7 @@ import 'package:PiliPlus/pages/save_panel/view.dart';
 import 'package:PiliPlus/pages/video/controller.dart';
 import 'package:PiliPlus/pages/video/reply/widgets/zan_grpc.dart';
 import 'package:PiliPlus/utils/accounts.dart';
+import 'package:PiliPlus/utils/context_ext.dart';
 import 'package:PiliPlus/utils/date_util.dart';
 import 'package:PiliPlus/utils/duration_util.dart';
 import 'package:PiliPlus/utils/extension.dart';
@@ -34,7 +35,7 @@ import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
-import 'package:get/get.dart';
+import 'package:get/get.dart' hide ContextExtensionss;
 
 class ReplyItemGrpc extends StatelessWidget {
   const ReplyItemGrpc({
@@ -216,7 +217,7 @@ class ReplyItemGrpc extends StatelessWidget {
                           color:
                               (replyItem.member.vipStatus > 0 &&
                                   replyItem.member.vipType == 2)
-                              ? context.vipColor
+                              ? theme.colorScheme.vipColor
                               : theme.colorScheme.outline,
                           fontSize: 13,
                         ),

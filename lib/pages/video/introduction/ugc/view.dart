@@ -18,6 +18,7 @@ import 'package:PiliPlus/pages/video/introduction/ugc/widgets/action_item.dart';
 import 'package:PiliPlus/pages/video/introduction/ugc/widgets/page.dart';
 import 'package:PiliPlus/pages/video/introduction/ugc/widgets/season.dart';
 import 'package:PiliPlus/utils/app_scheme.dart';
+import 'package:PiliPlus/utils/context_ext.dart';
 import 'package:PiliPlus/utils/date_util.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/feed_back.dart';
@@ -32,7 +33,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show HapticFeedback;
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:get/get.dart';
+import 'package:get/get.dart' hide ContextExtensionss;
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 class UgcIntroPanel extends StatefulWidget {
@@ -810,7 +811,7 @@ class _UgcIntroPanelState extends State<UgcIntroPanel>
                 style: TextStyle(
                   fontSize: 13,
                   color: (item.vip?.status ?? 0) > 0 && item.vip?.type == 2
-                      ? context.vipColor
+                      ? theme.colorScheme.vipColor
                       : null,
                 ),
               ),
@@ -859,7 +860,7 @@ class _UgcIntroPanelState extends State<UgcIntroPanel>
                   style: TextStyle(
                     fontSize: 13,
                     color: isVip && userStat.card?.vip?.type == 2
-                        ? context.vipColor
+                        ? theme.colorScheme.vipColor
                         : null,
                   ),
                 ),

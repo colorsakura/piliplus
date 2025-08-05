@@ -10,6 +10,7 @@ import 'package:PiliPlus/models/dynamics/result.dart';
 import 'package:PiliPlus/pages/dynamics/controller.dart';
 import 'package:PiliPlus/pages/save_panel/view.dart';
 import 'package:PiliPlus/utils/accounts.dart';
+import 'package:PiliPlus/utils/context_ext.dart';
 import 'package:PiliPlus/utils/date_util.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/feed_back.dart';
@@ -19,7 +20,7 @@ import 'package:PiliPlus/utils/utils.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
-import 'package:get/get.dart';
+import 'package:get/get.dart' hide ContextExtensionss;
 
 class AuthorPanel extends StatelessWidget {
   final DynamicItemModel item;
@@ -98,7 +99,7 @@ class AuthorPanel extends StatelessWidget {
                             item.modules.moduleAuthor!.vip != null &&
                                 item.modules.moduleAuthor!.vip!.status > 0 &&
                                 item.modules.moduleAuthor!.vip!.type == 2
-                            ? context.vipColor
+                            ? theme.colorScheme.vipColor
                             : theme.colorScheme.onSurface,
                         fontSize: theme.textTheme.titleSmall!.fontSize,
                       ),

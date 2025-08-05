@@ -242,7 +242,7 @@ class _NoteListPageState extends CommonSlidePageState<NoteListPage> {
                                   item.author?.vipInfo?.status != null &&
                                       item.author!.vipInfo!.status > 0 &&
                                       item.author!.vipInfo!.type == 2
-                                  ? context.vipColor
+                                  ? theme.colorScheme.vipColor
                                   : theme.colorScheme.outline,
                               fontSize: 13,
                             ),

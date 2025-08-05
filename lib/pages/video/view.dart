@@ -43,6 +43,7 @@ import 'package:PiliPlus/plugin/pl_player/view.dart';
 import 'package:PiliPlus/services/service_locator.dart';
 import 'package:PiliPlus/services/shutdown_timer_service.dart';
 import 'package:PiliPlus/utils/accounts.dart';
+import 'package:PiliPlus/utils/context_ext.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/image_util.dart';
 import 'package:PiliPlus/utils/num_util.dart';
@@ -60,7 +61,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart' show SystemUiOverlayStyle;
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:get/get.dart';
+import 'package:get/get.dart' hide ContextExtensionss;
 import 'package:screen_brightness/screen_brightness.dart';
 
 class VideoDetailPageV extends StatefulWidget {
@@ -537,8 +538,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
   }
 
   Widget get childWhenDisabled {
-    final isPortrait =
-        MediaQuery.orientationOf(context) == Orientation.portrait;
+    final isPortrait = context.isPortrait;
     final useSafeArea = !removeSafeArea && isPortrait && isFullScreen;
     final size = MediaQuery.sizeOf(context);
     final double width = size.width;
@@ -606,9 +606,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
           controller: videoDetailController.scrollCtr,
           onlyOneScrollInBody: true,
           pinnedHeaderSliverHeightBuilder: () {
-            double pinnedHeight =
-                isFullScreen ||
-                    MediaQuery.orientationOf(context) == Orientation.landscape
+            double pinnedHeight = isFullScreen || context.isLandscape
                 ? MediaQuery.sizeOf(context).height
                 : videoDetailController.isExpanding ||
                       videoDetailController.isCollapsing
@@ -1586,8 +1584,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
     return PopScope(
       canPop:
           !isFullScreen &&
-          (videoDetailController.horizontalScreen ||
-              MediaQuery.orientationOf(context) == Orientation.portrait),
+          (videoDetailController.horizontalScreen || context.isPortrait),
       onPopInvokedWithResult: _onPopInvokedWithResult,
       child: Stack(
         clipBehavior: Clip.none,
@@ -1796,9 +1793,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
           child: SizedBox(
             height:
                 bottom +
-                (videoDetailController.isPlayAll &&
-                        MediaQuery.orientationOf(context) ==
-                            Orientation.landscape
+                (videoDetailController.isPlayAll && context.isLandscape
                     ? 75
                     : 0),
           ),
@@ -2183,8 +2178,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
     if (isFullScreen) {
       plPlayerController!.triggerFullScreen(status: false);
     }
-    if (MediaQuery.orientationOf(context) == Orientation.landscape &&
-        !videoDetailController.horizontalScreen) {
+    if (!videoDetailController.horizontalScreen && context.isLandscape) {
       verticalScreenForTwoSeconds();
     }
   }

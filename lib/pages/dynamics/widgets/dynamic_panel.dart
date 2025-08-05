@@ -6,9 +6,9 @@ import 'package:PiliPlus/pages/dynamics/widgets/author_panel.dart';
 import 'package:PiliPlus/pages/dynamics/widgets/blocked_item.dart';
 import 'package:PiliPlus/pages/dynamics/widgets/content_panel.dart';
 import 'package:PiliPlus/pages/dynamics/widgets/module_panel.dart';
+import 'package:PiliPlus/utils/context_ext.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 class DynamicPanel extends StatelessWidget {
   final DynamicItemModel item;
@@ -80,8 +80,7 @@ class DynamicPanel extends StatelessWidget {
         ),
       ),
     );
-    if (isSave ||
-        (isDetail && Get.context!.orientation == Orientation.landscape)) {
+    if (isSave || (isDetail && context.isLandscape)) {
       return child;
     }
     return DecoratedBox(

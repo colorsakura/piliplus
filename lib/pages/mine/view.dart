@@ -274,7 +274,7 @@ class _MediaPageState extends CommonPageState<MinePage, MineController>
                               style: theme.textTheme.titleMedium!.copyWith(
                                 height: 1,
                                 color: isVip && userInfo.vipType == 2
-                                    ? context.vipColor
+                                    ? theme.colorScheme.vipColor
                                     : null,
                               ),
                             ),

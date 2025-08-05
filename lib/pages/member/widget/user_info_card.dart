@@ -83,7 +83,7 @@ class UserInfoCard extends StatelessWidget {
     return Hero(
       tag: imgUrl,
       child: GestureDetector(
-        onTap: () => context.imageView(
+        onTap: () => PageUtils.imageView(
           imgList: [SourceModel(url: imgUrl)],
         ),
         child: CachedNetworkImage(
@@ -130,7 +130,7 @@ class UserInfoCard extends StatelessWidget {
                 fontSize: 17,
                 fontWeight: FontWeight.bold,
                 color: (card.vip?.status ?? -1) > 0 && card.vip?.type == 2
-                    ? context.vipColor
+                    ? theme.colorScheme.vipColor
                     : null,
               ),
             ),
@@ -145,7 +145,7 @@ class UserInfoCard extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
               decoration: BoxDecoration(
                 borderRadius: StyleString.mdRadius,
-                color: context.vipColor,
+                color: theme.colorScheme.vipColor,
               ),
               child: Text(
                 card.vip?.label?.text ?? '大会员',
@@ -413,7 +413,7 @@ class UserInfoCard extends StatelessWidget {
     ],
   );
 
-  Hero _buildAvatar(BuildContext context) => Hero(
+  Widget get _buildAvatar => Hero(
     tag: card.face ?? '',
     child: PendantAvatar(
       avatar: card.face,
@@ -423,8 +423,9 @@ class UserInfoCard extends StatelessWidget {
       isVip: (card.vip?.status ?? -1) > 0,
       garbPendantImage: card.pendant!.image!,
       roomId: live?.liveStatus == 1 ? live!.roomid : null,
-      onTap: () =>
-          context.imageView(imgList: [SourceModel(url: card.face.http2https)]),
+      onTap: () => PageUtils.imageView(
+        imgList: [SourceModel(url: card.face.http2https)],
+      ),
     ),
   );
 
@@ -448,7 +449,7 @@ class UserInfoCard extends StatelessWidget {
           Positioned(
             top: 110,
             left: 20,
-            child: _buildAvatar(context),
+            child: _buildAvatar,
           ),
           Positioned(
             left: 160,
@@ -554,7 +555,7 @@ class UserInfoCard extends StatelessWidget {
                 top: 10,
                 bottom: card.prInfo?.content?.isNotEmpty == true ? 0 : 10,
               ),
-              child: _buildAvatar(context),
+              child: _buildAvatar,
             ),
             const SizedBox(width: 10),
             Expanded(

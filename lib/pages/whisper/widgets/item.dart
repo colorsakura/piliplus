@@ -209,7 +209,7 @@ class WhisperSessionItem extends StatelessWidget {
                           vipInfo?['status'] != null &&
                               vipInfo!['status'] > 0 &&
                               vipInfo['type'] == 2
-                          ? context.vipColor
+                          ? theme.colorScheme.vipColor
                           : null,
                     ),
                   ),

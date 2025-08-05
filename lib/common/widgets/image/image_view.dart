@@ -7,6 +7,7 @@ import 'package:PiliPlus/common/widgets/image/nine_grid_view.dart';
 import 'package:PiliPlus/models/common/badge_type.dart';
 import 'package:PiliPlus/models/common/image_preview_type.dart';
 import 'package:PiliPlus/utils/extension.dart';
+import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:PiliPlus/utils/storage_pref.dart';
 import 'package:flutter/material.dart';
 
@@ -98,12 +99,12 @@ Widget imageView(
     };
   }
 
-  void onTap(BuildContext context, int index) {
+  void onTap(int index) {
     if (callback != null) {
       callback(picArr.map((item) => item.url).toList(), index);
     } else {
       onViewImage?.call();
-      context.imageView(
+      PageUtils.imageView(
         initialPage: index,
         imgList: picArr.map(
           (item) {
@@ -138,7 +139,7 @@ Widget imageView(
       return Hero(
         tag: item.url,
         child: GestureDetector(
-          onTap: () => onTap(context, index),
+          onTap: () => onTap(index),
           child: Stack(
             clipBehavior: Clip.none,
             alignment: Alignment.center,

@@ -11,6 +11,7 @@ import 'package:PiliPlus/pages/dynamics/widgets/dynamic_panel.dart';
 import 'package:PiliPlus/pages/video/introduction/pgc/controller.dart';
 import 'package:PiliPlus/pages/video/introduction/ugc/controller.dart';
 import 'package:PiliPlus/pages/video/reply/widgets/reply_item_grpc.dart';
+import 'package:PiliPlus/utils/context_ext.dart';
 import 'package:PiliPlus/utils/date_util.dart';
 import 'package:PiliPlus/utils/image_util.dart';
 import 'package:PiliPlus/utils/utils.dart';
@@ -18,7 +19,7 @@ import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
-import 'package:get/get.dart';
+import 'package:get/get.dart' hide ContextExtensionss;
 import 'package:intl/intl.dart' show DateFormat;
 import 'package:pretty_qr_code/pretty_qr_code.dart';
 import 'package:saver_gallery/saver_gallery.dart';
@@ -483,11 +484,7 @@ class _SavePanelState extends State<SavePanel> {
                                                     decoration:
                                                         const PrettyQrDecoration(
                                                           shape:
-                                                              PrettyQrRoundedSymbol(
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .zero,
-                                                              ),
+                                                              PrettyQrSquaresSymbol(),
                                                         ),
                                                   ),
                                                 ),

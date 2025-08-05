@@ -15,11 +15,12 @@ import 'package:PiliPlus/pages/member_home/widgets/fav_item.dart';
 import 'package:PiliPlus/pages/member_home/widgets/video_card_v_member_home.dart';
 import 'package:PiliPlus/pages/member_like_arc/view.dart';
 import 'package:PiliPlus/pages/member_pgc/widgets/pgc_card_v_member_pgc.dart';
+import 'package:PiliPlus/utils/context_ext.dart';
 import 'package:PiliPlus/utils/grid.dart';
 import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
-import 'package:get/get.dart';
+import 'package:get/get.dart' hide ContextExtensionss;
 
 class MemberHome extends StatefulWidget {
   const MemberHome({super.key, this.heroTag});

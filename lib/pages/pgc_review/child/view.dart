@@ -232,7 +232,7 @@ class _PgcReviewChildPageState extends State<PgcReviewChildPage>
                                     item.author?.vip?.status != null &&
                                         item.author!.vip!.status > 0 &&
                                         item.author!.vip!.type == 2
-                                    ? context.vipColor
+                                    ? theme.colorScheme.vipColor
                                     : theme.colorScheme.outline,
                                 fontSize: 13,
                               ),

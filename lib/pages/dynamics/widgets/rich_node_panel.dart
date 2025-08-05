@@ -10,7 +10,6 @@ import 'package:PiliPlus/models/common/image_type.dart';
 import 'package:PiliPlus/models/dynamics/result.dart';
 import 'package:PiliPlus/pages/dynamics/widgets/vote.dart';
 import 'package:PiliPlus/utils/app_scheme.dart';
-import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/gestures.dart';
@@ -273,7 +272,7 @@ TextSpan? richNode(
                   recognizer: TapGestureRecognizer()
                     ..onTap = () {
                       void onView(List<OpusPicModel> list) {
-                        Get.context!.imageView(
+                        PageUtils.imageView(
                           imgList: list
                               .map((e) => SourceModel(url: e.src!))
                               .toList(),

@@ -1,13 +1,9 @@
 import 'package:PiliPlus/common/widgets/dialog/dialog.dart';
-import 'package:PiliPlus/common/widgets/interactiveviewer_gallery/hero_dialog_route.dart';
-import 'package:PiliPlus/common/widgets/interactiveviewer_gallery/interactiveviewer_gallery.dart';
 import 'package:PiliPlus/grpc/bilibili/app/im/v1.pbenum.dart'
     show IMSettingType, ThreeDotItemType;
-import 'package:PiliPlus/models/common/image_preview_type.dart';
 import 'package:PiliPlus/pages/common/common_whisper_controller.dart';
 import 'package:PiliPlus/pages/contact/view.dart';
 import 'package:PiliPlus/pages/whisper_settings/view.dart';
-import 'package:PiliPlus/utils/global_data.dart';
 import 'package:floating/floating.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -81,32 +77,9 @@ extension StringExt on String? {
   bool get isNullOrEmpty => this == null || this!.isEmpty;
 }
 
-extension BuildContextExt on BuildContext {
-  Color get vipColor {
-    return Theme.of(this).brightness == Brightness.light
-        ? const Color(0xFFFF6699)
-        : const Color(0xFFD44E7D);
-  }
-
-  Future<void> imageView({
-    int initialPage = 0,
-    required List<SourceModel> imgList,
-    ValueChanged<int>? onDismissed,
-    int? quality,
-  }) {
-    bool isMemberPage = Get.currentRoute.startsWith('/member?');
-    return Navigator.of(this).push(
-      HeroDialogRoute(
-        builder: (context) => InteractiveviewerGallery(
-          sources: imgList,
-          initIndex: initialPage,
-          onDismissed: onDismissed,
-          setStatusBar: !isMemberPage,
-          quality: quality ?? GlobalData().imgQuality,
-        ),
-      ),
-    );
-  }
+extension ColorSchemeExt on ColorScheme {
+  Color get vipColor =>
+      brightness.isLight ? const Color(0xFFFF6699) : const Color(0xFFD44E7D);
 }
 
 extension Unique<E, Id> on List<E> {
@@ -125,8 +98,11 @@ extension ColorExtension on Color {
 }
 
 extension BrightnessExt on Brightness {
-  Brightness get reverse =>
-      this == Brightness.light ? Brightness.dark : Brightness.light;
+  Brightness get reverse => isLight ? Brightness.dark : Brightness.light;
+
+  bool get isLight => this == Brightness.light;
+
+  bool get isDark => this == Brightness.dark;
 }
 
 extension RationalExt on Rational {

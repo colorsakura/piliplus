@@ -19,6 +19,7 @@ import 'package:PiliPlus/services/account_service.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/grid.dart';
 import 'package:PiliPlus/utils/num_util.dart';
+import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:PiliPlus/utils/request_utils.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
@@ -250,7 +251,7 @@ class _HorizontalMemberPageState extends State<HorizontalMemberPage> {
                 color:
                     (memberInfoModel.vip?.status ?? -1) > 0 &&
                         memberInfoModel.vip?.type == 2
-                    ? context.vipColor
+                    ? theme.colorScheme.vipColor
                     : null,
               ),
             ),
@@ -391,7 +392,7 @@ class _HorizontalMemberPageState extends State<HorizontalMemberPage> {
   Widget _buildAvatar(String face) => GestureDetector(
     onTap: () {
       widget.videoDetailController.onViewImage();
-      context.imageView(
+      PageUtils.imageView(
         imgList: [SourceModel(url: face)],
         onDismissed: widget.videoDetailController.onDismissed,
       );

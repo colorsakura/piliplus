@@ -103,9 +103,8 @@ class _LoginPageState extends State<LoginPage> {
               child: PrettyQrView.data(
                 data: _loginPageCtr.codeInfo['data']!['url']!,
                 decoration: const PrettyQrDecoration(
-                  shape: PrettyQrRoundedSymbol(
+                  shape: PrettyQrSquaresSymbol(
                     color: Colors.black87,
-                    borderRadius: BorderRadius.zero,
                   ),
                 ),
               ),

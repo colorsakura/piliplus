@@ -12,6 +12,7 @@ import 'package:PiliPlus/pages/dynamics/widgets/vote.dart';
 import 'package:PiliPlus/utils/app_scheme.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/image_util.dart';
+import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cached_network_svg_image/cached_network_svg_image.dart';
 import 'package:flutter/foundation.dart' show kDebugMode;
@@ -181,7 +182,7 @@ class OpusContent extends StatelessWidget {
                       if (callback != null) {
                         callback!([pic.url!], 0);
                       } else {
-                        context.imageView(
+                        PageUtils.imageView(
                           imgList: [SourceModel(url: pic.url!)],
                           quality: 60,
                         );

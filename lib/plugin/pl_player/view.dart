@@ -27,6 +27,7 @@ import 'package:PiliPlus/plugin/pl_player/widgets/bottom_control.dart';
 import 'package:PiliPlus/plugin/pl_player/widgets/common_btn.dart';
 import 'package:PiliPlus/plugin/pl_player/widgets/forward_seek.dart';
 import 'package:PiliPlus/plugin/pl_player/widgets/play_pause_btn.dart';
+import 'package:PiliPlus/utils/context_ext.dart';
 import 'package:PiliPlus/utils/duration_util.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/id_utils.dart';
@@ -38,7 +39,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_volume_controller/flutter_volume_controller.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:get/get.dart';
+import 'package:get/get.dart' hide ContextExtensionss;
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:media_kit/media_kit.dart';
 import 'package:media_kit_video/media_kit_video.dart';
@@ -951,8 +952,8 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                   if (plPlayerController.controlsLock.value) return;
                   if (details.localPosition.dy < 40) return;
                   if (details.localPosition.dx < 40) return;
-                  if (details.localPosition.dx > context.width - 40) return;
-                  if (details.localPosition.dy > context.height - 40) return;
+                  if (details.localPosition.dx > maxWidth - 40) return;
+                  if (details.localPosition.dy > maxHeight - 40) return;
                   _initialFocalPoint = details.localPosition;
                   _gestureType = null;
                 },

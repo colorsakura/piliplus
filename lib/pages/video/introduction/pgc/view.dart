@@ -12,8 +12,8 @@ import 'package:PiliPlus/pages/video/controller.dart';
 import 'package:PiliPlus/pages/video/introduction/pgc/controller.dart';
 import 'package:PiliPlus/pages/video/introduction/pgc/widgets/pgc_panel.dart';
 import 'package:PiliPlus/pages/video/introduction/ugc/widgets/action_item.dart';
-import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/num_util.dart';
+import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show HapticFeedback;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -69,8 +69,7 @@ class _PgcIntroPageState extends State<PgcIntroPage>
     super.build(context);
     final ThemeData theme = Theme.of(context);
     final item = pgcIntroController.pgcItem;
-    final isLandscape =
-        MediaQuery.orientationOf(context) == Orientation.landscape;
+    final isLandscape = context.isLandscape;
     return SliverPadding(
       padding: EdgeInsets.only(
         left: StyleString.safeSpace,
@@ -92,7 +91,7 @@ class _PgcIntroPageState extends State<PgcIntroPage>
                     GestureDetector(
                       onTap: () {
                         videoDetailCtr.onViewImage();
-                        context.imageView(
+                        PageUtils.imageView(
                           imgList: [
                             SourceModel(
                               url: item.cover!,

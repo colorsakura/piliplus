@@ -20,8 +20,8 @@ import 'package:PiliPlus/pages/article/widgets/opus_content.dart';
 import 'package:PiliPlus/pages/common/dyn/common_dyn_page.dart';
 import 'package:PiliPlus/pages/dynamics_repost/view.dart';
 import 'package:PiliPlus/pages/video/reply/widgets/reply_item_grpc.dart';
+import 'package:PiliPlus/utils/context_ext.dart';
 import 'package:PiliPlus/utils/date_util.dart';
-import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/feed_back.dart';
 import 'package:PiliPlus/utils/grid.dart';
 import 'package:PiliPlus/utils/image_util.dart';
@@ -35,7 +35,7 @@ import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:get/get.dart';
+import 'package:get/get.dart' hide ContextExtensionss;
 import 'package:html/parser.dart' as parser;
 
 class ArticlePage extends CommonDynPage {
@@ -302,7 +302,7 @@ class _ArticlePageState extends CommonDynPageState<ArticlePage> {
                                 final pic = pics[index];
                                 return GestureDetector(
                                   behavior: HitTestBehavior.opaque,
-                                  onTap: () => context.imageView(
+                                  onTap: () => PageUtils.imageView(
                                     quality: 60,
                                     imgList: pics
                                         .map((e) => SourceModel(url: e.url!))

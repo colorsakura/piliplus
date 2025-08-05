@@ -141,7 +141,7 @@ class _WhisperLinkSettingPageState extends State<WhisperLinkSettingPage> {
                                 item.vip?.status != null &&
                                     item.vip!.status > 0 &&
                                     item.vip?.type == 2
-                                ? context.vipColor
+                                ? theme.colorScheme.vipColor
                                 : null,
                           ),
                         ),
