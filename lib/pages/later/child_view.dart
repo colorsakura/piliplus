@@ -101,11 +101,7 @@ class _LaterViewChildPageState extends State<LaterViewChildPage>
                         context,
                         index,
                         videoItem.aid,
-                        onSuccess: () {
-                          final counts = _laterController.baseCtr.counts;
-                          counts[widget.laterViewType] =
-                              counts[widget.laterViewType]! - 1;
-                        },
+                        onSuccess: () => _laterController.updateLength?.call(1),
                       ),
                     );
                   },

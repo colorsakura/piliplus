@@ -20,7 +20,32 @@ import 'package:get/get.dart';
 mixin BaseLaterController
     on
         CommonListController<LaterData, LaterItemModel>,
-        CommonMultiSelectMixin<LaterItemModel> {
+        CommonMultiSelectMixin<LaterItemModel>,
+        DeleteItemMixin<LaterData, LaterItemModel> {
+  ValueChanged<int>? updateLength;
+
+  @override
+  void onRemove() {
+    showConfirmDialog(
+      context: Get.context!,
+      content: '确认删除所选稍后再看吗？',
+      title: '提示',
+      onConfirm: () async {
+        final removeList = allChecked;
+        SmartDialog.showLoading(msg: '请求中');
+        final res = await UserHttp.toViewDel(
+          aids: removeList.map((item) => item.aid).join(','),
+        );
+        if (res['status']) {
+          updateLength?.call(removeList.length);
+          afterDelete(removeList);
+        }
+        SmartDialog.dismiss();
+        SmartDialog.showToast(res['msg']);
+      },
+    );
+  }
+
   // single
   void toViewDel(
     BuildContext context,
@@ -134,29 +159,6 @@ class LaterController extends MultiSelectController<LaterData, LaterItemModel>
     );
   }
 
-  @override
-  void onRemove() {
-    showConfirmDialog(
-      context: Get.context!,
-      content: '确认删除所选稍后再看吗？',
-      title: '提示',
-      onConfirm: () async {
-        final removeList = allChecked;
-        SmartDialog.showLoading(msg: '请求中');
-        final res = await UserHttp.toViewDel(
-          aids: removeList.map((item) => item.aid!).join(','),
-        );
-        if (res['status']) {
-          baseCtr.counts[laterViewType] =
-              baseCtr.counts[laterViewType]! - removeList.length;
-          afterDelete(removeList);
-        }
-        SmartDialog.dismiss();
-        SmartDialog.showToast(res['msg']);
-      },
-    );
-  }
-
   // 稍后再看播放全部
   void toViewPlayAll() {
     if (loadingState.value.isSuccess) {
@@ -188,6 +190,11 @@ class LaterController extends MultiSelectController<LaterData, LaterItemModel>
       }
     }
   }
+
+  @override
+  ValueChanged<int>? get updateLength =>
+      (count) => baseCtr.counts[laterViewType] =
+          baseCtr.counts[laterViewType]! - count;
 
   @override
   Future<void> onReload() {

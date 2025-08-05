@@ -13,6 +13,7 @@ import 'package:PiliPlus/pages/fav_sort/view.dart';
 import 'package:PiliPlus/services/account_service.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
+import 'package:flutter/services.dart' show ValueChanged;
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 
@@ -23,7 +24,7 @@ mixin BaseFavController
   bool get isOwner;
   int get mediaId;
 
-  void updateLength(int count) {}
+  ValueChanged<int>? updateLength;
 
   void onViewFav(FavDetailItemModel item, int? index);
 
@@ -36,7 +37,7 @@ mixin BaseFavController
       loadingState
         ..value.data!.removeAt(index)
         ..refresh();
-      updateLength(1);
+      updateLength?.call(1);
       SmartDialog.showToast('取消收藏');
     } else {
       SmartDialog.showToast(result['msg']);
@@ -58,7 +59,7 @@ mixin BaseFavController
           delIds: mediaId.toString(),
         );
         if (result['status']) {
-          updateLength(removeList.length);
+          updateLength?.call(removeList.length);
           afterDelete(removeList);
           SmartDialog.showToast('取消收藏');
         } else {
@@ -123,11 +124,10 @@ class FavDetailController
   }
 
   @override
-  void updateLength(int count) {
-    folderInfo
-      ..value.mediaCount -= count
-      ..refresh();
-  }
+  ValueChanged<int>? get updateLength =>
+      (count) => folderInfo
+        ..value.mediaCount -= count
+        ..refresh();
 
   @override
   Future<LoadingState<FavDetailData>> customGetData() =>
