@@ -1,7 +1,6 @@
 import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/common/widgets/badge.dart';
 import 'package:PiliPlus/common/widgets/button/icon_button.dart';
-import 'package:PiliPlus/common/widgets/dialog/dialog.dart';
 import 'package:PiliPlus/common/widgets/image/image_save.dart';
 import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
 import 'package:PiliPlus/common/widgets/progress_bar/video_progress_indicator.dart';
@@ -250,12 +249,7 @@ class VideoCardHLater extends StatelessWidget {
                   iconButton(
                     tooltip: '移除',
                     context: context,
-                    onPressed: () => showConfirmDialog(
-                      context: context,
-                      title: '提示',
-                      content: '即将移除该视频，确定是否移除',
-                      onConfirm: onRemove!,
-                    ),
+                    onPressed: onRemove,
                     icon: Icons.clear,
                     iconColor: theme.colorScheme.outline,
                     bgColor: Colors.transparent,

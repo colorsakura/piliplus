@@ -88,6 +88,9 @@ mixin DeleteItemMixin<R, T extends MultiSelectData>
       loadingState.refresh();
     } else if (!isEnd) {
       onReload();
+    } else {
+      // empty && end
+      loadingState.value = const Success(null);
     }
     if (enableMultiSelect.value) {
       rxCount.value = 0;
