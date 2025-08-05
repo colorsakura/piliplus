@@ -11,7 +11,6 @@ import 'package:PiliPlus/pages/common/common_list_controller.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/id_utils.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
-import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 
 class MemberVideoCtr
@@ -186,9 +185,6 @@ class MemberVideoCtr
         if (element.cid == null) {
           continue;
         } else {
-          if (element.bvid != list.first.bvid) {
-            SmartDialog.showToast('已跳过不支持播放的视频');
-          }
           bool desc = seasonId != null ? false : true;
           desc =
               (seasonId != null || seriesId != null) &&

@@ -21,14 +21,14 @@ class VideoCardHLater extends StatelessWidget {
   const VideoCardHLater({
     super.key,
     required this.ctr,
+    required this.index,
     required this.videoItem,
-    this.onViewLater,
-    required this.onRemove,
+    required this.onViewLater,
   });
+  final int index;
   final BaseLaterController ctr;
   final LaterItemModel videoItem;
-  final ValueChanged<int>? onViewLater;
-  final VoidCallback onRemove;
+  final ValueChanged<int> onViewLater;
 
   @override
   Widget build(BuildContext context) {
@@ -72,7 +72,7 @@ class VideoCardHLater extends StatelessWidget {
                         bvid: videoItem.bvid,
                       );
                   if (cid != null) {
-                    onViewLater!(cid);
+                    onViewLater(cid);
                   }
                 } catch (err) {
                   SmartDialog.showToast(err.toString());
@@ -192,7 +192,7 @@ class VideoCardHLater extends StatelessWidget {
         iconButton(
           tooltip: '移除',
           context: context,
-          onPressed: onRemove,
+          onPressed: () => ctr..toViewDel(context, index, videoItem.aid),
           icon: Icons.clear,
           iconColor: theme.colorScheme.outline,
           bgColor: Colors.transparent,

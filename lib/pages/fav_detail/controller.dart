@@ -24,7 +24,7 @@ mixin BaseFavController
   bool get isOwner;
   int get mediaId;
 
-  ValueChanged<int>? updateLength;
+  ValueChanged<int>? updateCount;
 
   void onViewFav(FavDetailItemModel item, int? index);
 
@@ -37,7 +37,7 @@ mixin BaseFavController
       loadingState
         ..value.data!.removeAt(index)
         ..refresh();
-      updateLength?.call(1);
+      updateCount?.call(1);
       SmartDialog.showToast('取消收藏');
     } else {
       SmartDialog.showToast(result['msg']);
@@ -59,7 +59,7 @@ mixin BaseFavController
           delIds: mediaId.toString(),
         );
         if (result['status']) {
-          updateLength?.call(removeList.length);
+          updateCount?.call(removeList.length);
           afterDelete(removeList);
           SmartDialog.showToast('取消收藏');
         } else {
@@ -124,7 +124,7 @@ class FavDetailController
   }
 
   @override
-  ValueChanged<int>? get updateLength =>
+  ValueChanged<int>? get updateCount =>
       (count) => folderInfo
         ..value.mediaCount -= count
         ..refresh();
@@ -147,9 +147,6 @@ class FavDetailController
         if (element.ugc?.firstCid == null) {
           continue;
         } else {
-          if (element.bvid != list.first.bvid) {
-            SmartDialog.showToast('已跳过不支持播放的视频');
-          }
           onViewFav(element, null);
           break;
         }

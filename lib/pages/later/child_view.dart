@@ -76,6 +76,7 @@ class _LaterViewChildPageState extends State<LaterViewChildPage>
                     }
                     var videoItem = response[index];
                     return VideoCardHLater(
+                      index: index,
                       videoItem: videoItem,
                       ctr: _laterController,
                       onViewLater: (cid) {
@@ -97,12 +98,6 @@ class _LaterViewChildPageState extends State<LaterViewChildPage>
                           },
                         );
                       },
-                      onRemove: () => _laterController.toViewDel(
-                        context,
-                        index,
-                        videoItem.aid,
-                        onSuccess: () => _laterController.updateLength?.call(1),
-                      ),
                     );
                   },
                   childCount: response!.length,

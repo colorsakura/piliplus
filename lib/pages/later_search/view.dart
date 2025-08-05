@@ -38,6 +38,7 @@ class _LaterSearchPageState
         }
         final item = list[index];
         return VideoCardHLater(
+          index: index,
           videoItem: item,
           ctr: controller,
           onViewLater: (cid) {
@@ -57,11 +58,6 @@ class _LaterSearchPageState
               },
             );
           },
-          onRemove: () => controller.toViewDel(
-            context,
-            index,
-            item.aid!,
-          ),
         );
       }),
     );

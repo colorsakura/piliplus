@@ -2011,7 +2011,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
   }
 
   void showEpisodes([int? index, season, episodes, bvid, aid, cid]) {
-    if (bvid == null) {
+    if (cid == null) {
       videoDetailController.showMediaListPanel(context);
       return;
     }

@@ -5,7 +5,6 @@ import 'package:PiliPlus/models_new/media_list/ogv_info.dart';
 import 'package:PiliPlus/models_new/media_list/page.dart';
 import 'package:PiliPlus/models_new/media_list/rights.dart';
 import 'package:PiliPlus/models_new/video/video_detail/episode.dart';
-import 'package:PiliPlus/utils/extension.dart';
 
 class MediaListItemModel extends BaseEpisodeItem {
   @override
@@ -35,6 +34,8 @@ class MediaListItemModel extends BaseEpisodeItem {
   bool? forbidFav;
   int? moreType;
   int? businessOid;
+  @override
+  int? get cid => pages?.firstOrNull?.id;
 
   MediaListItemModel({
     super.aid,
@@ -105,6 +106,5 @@ class MediaListItemModel extends BaseEpisodeItem {
     forbidFav = json['forbid_fav'] as bool?;
     moreType = json['more_type'] as int?;
     businessOid = json['business_oid'] as int?;
-    cid = pages.getOrNull((page ?? 1) - 1)?.id;
   }
 }

@@ -7,7 +7,6 @@ import 'package:PiliPlus/common/widgets/progress_bar/audio_video_progress_bar.da
 import 'package:PiliPlus/common/widgets/progress_bar/segment_progress_bar.dart';
 import 'package:PiliPlus/models/common/super_resolution_type.dart';
 import 'package:PiliPlus/models_new/video/video_detail/episode.dart';
-import 'package:PiliPlus/models_new/video/video_detail/page.dart';
 import 'package:PiliPlus/models_new/video/video_detail/section.dart';
 import 'package:PiliPlus/models_new/video/video_shot/data.dart';
 import 'package:PiliPlus/pages/common/common_intro_controller.dart';
@@ -257,11 +256,14 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
   // 动态构建底部控制条
   Widget buildBottomControl() {
     final videoDetail = introController.videoDetail.value;
-    bool isSeason = videoDetail.ugcSeason != null;
-    bool isPage = videoDetail.pages != null && videoDetail.pages!.length > 1;
-    bool isPgc = pgcIntroController != null;
-    bool anySeason = isSeason || isPage || isPgc;
-    double widgetWidth = isFullScreen && context.isLandscape ? 42 : 35;
+    final isSeason = videoDetail.ugcSeason != null;
+    final isPart = videoDetail.pages != null && videoDetail.pages!.length > 1;
+    final isPgc = pgcIntroController != null;
+    final anySeason = isSeason || isPart || isPgc;
+    final isPlayAll = widget.videoDetailController?.isPlayAll == true;
+
+    final double widgetWidth = isFullScreen && context.isLandscape ? 42 : 35;
+
     Map<BottomControlType, Widget> videoProgressWidgets = {
       /// 上一集
       BottomControlType.pre: Container(
@@ -460,7 +462,8 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
             color: Colors.white,
           ),
           onTap: () {
-            if (!anySeason || widget.videoDetailController?.isPlayAll == true) {
+            // part -> playAll -> season(pgc)
+            if (!anySeason || !isPart) {
               widget.showEpisodes?.call();
               return;
             }
@@ -481,9 +484,8 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                   }
                 }
               }
-            } else if (isPage) {
-              final List<Part> pages = videoDetail.pages!;
-              episodes = pages;
+            } else if (isPart) {
+              episodes = videoDetail.pages!;
             } else if (isPgc) {
               episodes = pgcIntroController!.pgcItem.episodes!;
             }
@@ -493,7 +495,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
               isSeason ? null : episodes,
               bvid,
               IdUtils.bv2av(bvid),
-              isSeason && isPage
+              isSeason && isPart
                   ? widget.videoDetailController?.seasonCid ?? currentCid
                   : currentCid,
             );
@@ -642,7 +644,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
     List<BottomControlType> userSpecifyItemLeft = [
       BottomControlType.playOrPause,
       BottomControlType.time,
-      if (anySeason || widget.videoDetailController?.isPlayAll == true) ...[
+      if (anySeason || isPlayAll) ...[
         BottomControlType.pre,
         BottomControlType.next,
       ],
@@ -652,8 +654,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
       BottomControlType.dmChart,
       BottomControlType.superResolution,
       BottomControlType.viewPoints,
-      if (anySeason || widget.videoDetailController?.isPlayAll == true)
-        BottomControlType.episode,
+      if (anySeason || isPlayAll) BottomControlType.episode,
       if (isFullScreen) BottomControlType.fit,
       BottomControlType.subtitle,
       BottomControlType.speed,

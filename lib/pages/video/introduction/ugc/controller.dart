@@ -534,17 +534,16 @@ class UgcIntroController extends CommonIntroController with ReloadMixin {
 
   /// 播放上一个
   @override
-  bool prevPlay([bool skipPages = false]) {
+  bool prevPlay([bool skipPart = false]) {
     final List<BaseEpisodeItem> episodes = <BaseEpisodeItem>[];
-    bool isPages = false;
+    bool isPart = false;
 
     final videoDetailCtr = Get.find<VideoDetailController>(tag: heroTag);
     final videoDetail = this.videoDetail.value;
 
-    if (!skipPages && (videoDetail.pages?.length ?? 0) > 1) {
-      isPages = true;
-      final List<Part> pages = videoDetail.pages!;
-      episodes.addAll(pages);
+    if (!skipPart && (videoDetail.pages?.length ?? 0) > 1) {
+      isPart = true;
+      episodes.addAll(videoDetail.pages!);
     } else if (videoDetailCtr.isPlayAll) {
       episodes.addAll(videoDetailCtr.mediaList);
     } else if (videoDetail.ugcSeason != null) {
@@ -559,18 +558,19 @@ class UgcIntroController extends CommonIntroController with ReloadMixin {
     final int currentIndex = episodes.indexWhere(
       (e) =>
           e.cid ==
-          (skipPages
+          (skipPart
               ? videoDetail.isPageReversed == true
                     ? videoDetail.pages!.last.cid
                     : videoDetail.pages!.first.cid
-              : cid.value),
+              : this.cid.value),
     );
+
     int prevIndex = currentIndex - 1;
     final PlayRepeat playRepeat = videoDetailCtr.plPlayerController.playRepeat;
 
     // 列表循环
     if (prevIndex < 0) {
-      if (isPages &&
+      if (isPart &&
           (videoDetailCtr.isPlayAll || videoDetail.ugcSeason != null)) {
         return prevPlay(true);
       }
@@ -580,22 +580,36 @@ class UgcIntroController extends CommonIntroController with ReloadMixin {
         return false;
       }
     }
-    onChangeEpisode(episodes[prevIndex]);
-    return true;
+
+    int? cid = episodes[prevIndex].cid;
+    while (cid == null) {
+      prevIndex--;
+      if (prevIndex < 0) {
+        return false;
+      }
+      cid = episodes[prevIndex].cid;
+    }
+
+    if (cid != this.cid.value) {
+      onChangeEpisode(episodes[prevIndex]);
+      return true;
+    } else {
+      return false;
+    }
   }
 
   /// 列表循环或者顺序播放时，自动播放下一个
   @override
-  bool nextPlay([bool skipPages = false]) {
+  bool nextPlay([bool skipPart = false]) {
     try {
       final List<BaseEpisodeItem> episodes = <BaseEpisodeItem>[];
-      bool isPages = false;
+      bool isPart = false;
       final videoDetailCtr = Get.find<VideoDetailController>(tag: heroTag);
       final videoDetail = this.videoDetail.value;
 
       // part -> playall -> season
-      if (!skipPages && (videoDetail.pages?.length ?? 0) > 1) {
-        isPages = true;
+      if (!skipPart && (videoDetail.pages?.length ?? 0) > 1) {
+        isPart = true;
         final List<Part> pages = videoDetail.pages!;
         episodes.addAll(pages);
       } else if (videoDetailCtr.isPlayAll) {
@@ -623,16 +637,16 @@ class UgcIntroController extends CommonIntroController with ReloadMixin {
       final int currentIndex = episodes.indexWhere(
         (e) =>
             e.cid ==
-            (skipPages
+            (skipPart
                 ? videoDetail.isPageReversed == true
                       ? videoDetail.pages!.last.cid
                       : videoDetail.pages!.first.cid
-                : videoDetailCtr.cid.value),
+                : this.cid.value),
       );
 
       int nextIndex = currentIndex + 1;
 
-      if (!isPages &&
+      if (!isPart &&
           videoDetailCtr.isPlayAll &&
           currentIndex == episodes.length - 2) {
         videoDetailCtr.getMediaList();
@@ -640,7 +654,7 @@ class UgcIntroController extends CommonIntroController with ReloadMixin {
 
       // 列表循环
       if (nextIndex >= episodes.length) {
-        if (isPages &&
+        if (isPart &&
             (videoDetailCtr.isPlayAll || videoDetail.ugcSeason != null)) {
           return nextPlay(true);
         }
@@ -655,18 +669,21 @@ class UgcIntroController extends CommonIntroController with ReloadMixin {
         }
       }
 
-      int cid = episodes[nextIndex].cid!;
-
-      while (cid == -1) {
-        SmartDialog.showToast('当前视频暂不支持播放，自动跳过');
+      int? cid = episodes[nextIndex].cid;
+      while (cid == null) {
         nextIndex++;
         if (nextIndex >= episodes.length) {
           return false;
         }
-        cid = episodes[nextIndex].cid!;
+        cid = episodes[nextIndex].cid;
       }
-      onChangeEpisode(episodes[nextIndex]);
-      return true;
+
+      if (cid != this.cid.value) {
+        onChangeEpisode(episodes[nextIndex]);
+        return true;
+      } else {
+        return false;
+      }
     } catch (_) {
       return false;
     }

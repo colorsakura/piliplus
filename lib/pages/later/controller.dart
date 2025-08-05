@@ -22,7 +22,7 @@ mixin BaseLaterController
         CommonListController<LaterData, LaterItemModel>,
         CommonMultiSelectMixin<LaterItemModel>,
         DeleteItemMixin<LaterData, LaterItemModel> {
-  ValueChanged<int>? updateLength;
+  ValueChanged<int>? updateCount;
 
   @override
   void onRemove() {
@@ -37,7 +37,7 @@ mixin BaseLaterController
           aids: removeList.map((item) => item.aid).join(','),
         );
         if (res['status']) {
-          updateLength?.call(removeList.length);
+          updateCount?.call(removeList.length);
           afterDelete(removeList);
         }
         SmartDialog.dismiss();
@@ -50,9 +50,8 @@ mixin BaseLaterController
   void toViewDel(
     BuildContext context,
     int index,
-    int? aid, {
-    VoidCallback? onSuccess,
-  }) {
+    int? aid,
+  ) {
     showDialog(
       context: context,
       builder: (context) {
@@ -75,7 +74,7 @@ mixin BaseLaterController
                   loadingState
                     ..value.data!.removeAt(index)
                     ..refresh();
-                  onSuccess?.call();
+                  updateCount?.call(1);
                 }
                 SmartDialog.showToast(res['msg']);
               },
@@ -169,9 +168,6 @@ class LaterController extends MultiSelectController<LaterData, LaterItemModel>
         if (item.cid == null || item.pgcLabel?.isNotEmpty == true) {
           continue;
         } else {
-          if (item.bvid != list.first.bvid) {
-            SmartDialog.showToast('已跳过不支持播放的视频');
-          }
           PageUtils.toVideoPage(
             bvid: item.bvid,
             cid: item.cid!,
@@ -192,7 +188,7 @@ class LaterController extends MultiSelectController<LaterData, LaterItemModel>
   }
 
   @override
-  ValueChanged<int>? get updateLength =>
+  ValueChanged<int>? get updateCount =>
       (count) => baseCtr.counts[laterViewType] =
           baseCtr.counts[laterViewType]! - count;
 
