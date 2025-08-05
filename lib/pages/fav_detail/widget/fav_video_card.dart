@@ -34,6 +34,7 @@ class FavVideoCardH extends StatelessWidget {
   Widget build(BuildContext context) {
     final isOwner = !isSort && ctr!.isOwner;
     late final enableMultiSelect = ctr?.enableMultiSelect.value ?? false;
+    final theme = Theme.of(context);
     return Material(
       type: MaterialType.transparency,
       child: InkWell(
@@ -62,8 +63,9 @@ class FavVideoCardH extends StatelessWidget {
             ? null
             : isOwner && !enableMultiSelect
             ? () {
-                ctr!.enableMultiSelect.value = true;
-                ctr!.onSelect(item);
+                ctr!
+                  ..enableMultiSelect.value = true
+                  ..onSelect(item);
               }
             : () => imageSaveDialog(
                 title: item.title,
@@ -108,7 +110,7 @@ class FavVideoCardH extends StatelessWidget {
                         if (!isSort)
                           Positioned.fill(
                             child: selectMask(
-                              Theme.of(context),
+                              theme,
                               item.checked == true,
                             ),
                           ),
@@ -118,7 +120,7 @@ class FavVideoCardH extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: 10),
-              content(context, isOwner),
+              content(context, theme, isOwner),
             ],
           ),
         ),
@@ -126,8 +128,7 @@ class FavVideoCardH extends StatelessWidget {
     );
   }
 
-  Widget content(BuildContext context, bool isOwner) {
-    final theme = Theme.of(context);
+  Widget content(BuildContext context, ThemeData theme, isOwner) {
     return Expanded(
       child: Stack(
         clipBehavior: Clip.none,

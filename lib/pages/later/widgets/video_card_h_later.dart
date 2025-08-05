@@ -1,7 +1,6 @@
 import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/common/widgets/badge.dart';
 import 'package:PiliPlus/common/widgets/button/icon_button.dart';
-import 'package:PiliPlus/common/widgets/image/image_save.dart';
 import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
 import 'package:PiliPlus/common/widgets/progress_bar/video_progress_indicator.dart';
 import 'package:PiliPlus/common/widgets/select_mask.dart';
@@ -11,6 +10,7 @@ import 'package:PiliPlus/models/common/badge_type.dart';
 import 'package:PiliPlus/models/common/stat_type.dart';
 import 'package:PiliPlus/models/search/result.dart';
 import 'package:PiliPlus/models_new/later/list.dart';
+import 'package:PiliPlus/pages/later/controller.dart';
 import 'package:PiliPlus/utils/duration_util.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:flutter/material.dart';
@@ -20,17 +20,15 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 class VideoCardHLater extends StatelessWidget {
   const VideoCardHLater({
     super.key,
+    required this.ctr,
     required this.videoItem,
-    this.onTap,
-    this.onLongPress,
     this.onViewLater,
-    this.onRemove,
+    required this.onRemove,
   });
+  final BaseLaterController ctr;
   final LaterItemModel videoItem;
-  final VoidCallback? onTap;
-  final VoidCallback? onLongPress;
   final ValueChanged<int>? onViewLater;
-  final VoidCallback? onRemove;
+  final VoidCallback onRemove;
 
   @override
   Widget build(BuildContext context) {
@@ -41,45 +39,45 @@ class VideoCardHLater extends StatelessWidget {
         type = typeOrNull!;
       }
     }
+    final theme = Theme.of(context);
+    final enableMultiSelect = ctr.enableMultiSelect.value;
     return Material(
       type: MaterialType.transparency,
       child: InkWell(
-        onLongPress:
-            onLongPress ??
-            () => imageSaveDialog(
-              title: videoItem.title,
-              cover: videoItem.pic,
-              bvid: videoItem.bvid,
-            ),
-        onTap:
-            onTap ??
-            () async {
-              if (type == 'ketang') {
-                PageUtils.viewPugv(seasonId: videoItem.aid);
-                return;
-              }
-              if (videoItem.isPgc == true) {
-                if (videoItem.bangumi?.epId != null) {
-                  PageUtils.viewPgc(epId: videoItem.bangumi!.epId);
-                } else if (videoItem.redirectUrl?.isNotEmpty == true) {
-                  PageUtils.viewPgcFromUri(videoItem.redirectUrl!);
+        onLongPress: enableMultiSelect
+            ? null
+            : () => ctr
+                ..enableMultiSelect.value = true
+                ..onSelect(videoItem),
+        onTap: enableMultiSelect
+            ? () => ctr.onSelect(videoItem)
+            : () async {
+                if (type == 'ketang') {
+                  PageUtils.viewPugv(seasonId: videoItem.aid);
+                  return;
                 }
-                return;
-              }
-              try {
-                final int? cid =
-                    videoItem.cid ??
-                    await SearchHttp.ab2c(
-                      aid: videoItem.aid,
-                      bvid: videoItem.bvid,
-                    );
-                if (cid != null) {
-                  onViewLater!(cid);
+                if (videoItem.isPgc == true) {
+                  if (videoItem.bangumi?.epId != null) {
+                    PageUtils.viewPgc(epId: videoItem.bangumi!.epId);
+                  } else if (videoItem.redirectUrl?.isNotEmpty == true) {
+                    PageUtils.viewPgcFromUri(videoItem.redirectUrl!);
+                  }
+                  return;
                 }
-              } catch (err) {
-                SmartDialog.showToast(err.toString());
-              }
-            },
+                try {
+                  final int? cid =
+                      videoItem.cid ??
+                      await SearchHttp.ab2c(
+                        aid: videoItem.aid,
+                        bvid: videoItem.bvid,
+                      );
+                  if (cid != null) {
+                    onViewLater!(cid);
+                  }
+                } catch (err) {
+                  SmartDialog.showToast(err.toString());
+                }
+              },
         child: Padding(
           padding: const EdgeInsets.symmetric(
             horizontal: StyleString.safeSpace,
@@ -158,7 +156,7 @@ class VideoCardHLater extends StatelessWidget {
                           ),
                         Positioned.fill(
                           child: selectMask(
-                            Theme.of(context),
+                            theme,
                             videoItem.checked == true,
                           ),
                         ),
@@ -168,7 +166,7 @@ class VideoCardHLater extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: 10),
-              content(context),
+              content(context, theme),
             ],
           ),
         ),
@@ -176,13 +174,36 @@ class VideoCardHLater extends StatelessWidget {
     );
   }
 
-  Widget content(BuildContext context) {
-    final theme = Theme.of(context);
+  Widget content(BuildContext context, ThemeData theme) {
+    final isPgc = videoItem.isPgc == true && videoItem.bangumi != null;
+    Widget bottom = Row(
+      spacing: 8,
+      children: [
+        StatWidget(
+          type: StatType.play,
+          value: videoItem.stat?.view,
+        ),
+        if (!isPgc)
+          StatWidget(
+            type: StatType.danmaku,
+            value: videoItem.stat?.danmaku,
+          ),
+        const Spacer(),
+        iconButton(
+          tooltip: '移除',
+          context: context,
+          onPressed: onRemove,
+          icon: Icons.clear,
+          iconColor: theme.colorScheme.outline,
+          bgColor: Colors.transparent,
+        ),
+      ],
+    );
     return Expanded(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          if (videoItem.isPgc == true && videoItem.bangumi != null) ...[
+          if (isPgc) ...[
             Text(
               videoItem.bangumi!.season!.title!,
               style: TextStyle(
@@ -205,10 +226,7 @@ class VideoCardHLater extends StatelessWidget {
               overflow: TextOverflow.ellipsis,
             ),
             const Spacer(),
-            StatWidget(
-              type: StatType.play,
-              value: videoItem.stat?.view,
-            ),
+            bottom,
           ] else ...[
             Expanded(
               child: Text(
@@ -233,30 +251,7 @@ class VideoCardHLater extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 3),
-            Row(
-              spacing: 8,
-              children: [
-                StatWidget(
-                  type: StatType.play,
-                  value: videoItem.stat?.view,
-                ),
-                StatWidget(
-                  type: StatType.danmaku,
-                  value: videoItem.stat?.danmaku,
-                ),
-                if (onRemove != null) ...[
-                  const Spacer(),
-                  iconButton(
-                    tooltip: '移除',
-                    context: context,
-                    onPressed: onRemove,
-                    icon: Icons.clear,
-                    iconColor: theme.colorScheme.outline,
-                    bgColor: Colors.transparent,
-                  ),
-                ],
-              ],
-            ),
+            bottom,
           ],
         ],
       ),

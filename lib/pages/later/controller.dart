@@ -5,6 +5,9 @@ import 'package:PiliPlus/models/common/later_view_type.dart';
 import 'package:PiliPlus/models/common/video/source_type.dart';
 import 'package:PiliPlus/models_new/later/data.dart';
 import 'package:PiliPlus/models_new/later/list.dart';
+import 'package:PiliPlus/pages/common/common_list_controller.dart'
+    show CommonListController;
+import 'package:PiliPlus/pages/common/multi_select/base.dart';
 import 'package:PiliPlus/pages/common/multi_select/multi_select_controller.dart';
 import 'package:PiliPlus/pages/later/base_controller.dart';
 import 'package:PiliPlus/services/account_service.dart';
@@ -14,7 +17,54 @@ import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 
-class LaterController extends MultiSelectController<LaterData, LaterItemModel> {
+mixin BaseLaterController
+    on
+        CommonListController<LaterData, LaterItemModel>,
+        CommonMultiSelectMixin<LaterItemModel> {
+  // single
+  void toViewDel(
+    BuildContext context,
+    int index,
+    int? aid, {
+    VoidCallback? onSuccess,
+  }) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('提示'),
+          content: const Text('即将移除该视频，确定是否移除'),
+          actions: [
+            TextButton(
+              onPressed: Get.back,
+              child: Text(
+                '取消',
+                style: TextStyle(color: Theme.of(context).colorScheme.outline),
+              ),
+            ),
+            TextButton(
+              onPressed: () async {
+                Get.back();
+                final res = await UserHttp.toViewDel(aids: aid.toString());
+                if (res['status']) {
+                  loadingState
+                    ..value.data!.removeAt(index)
+                    ..refresh();
+                  onSuccess?.call();
+                }
+                SmartDialog.showToast(res['msg']);
+              },
+              child: const Text('确认移除'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+}
+
+class LaterController extends MultiSelectController<LaterData, LaterItemModel>
+    with BaseLaterController {
   LaterController(this.laterViewType);
   final LaterViewType laterViewType;
 
@@ -54,43 +104,6 @@ class LaterController extends MultiSelectController<LaterData, LaterItemModel> {
     if (length >= baseCtr.counts[laterViewType]!) {
       isEnd = true;
     }
-  }
-
-  // single
-  void toViewDel(BuildContext context, int index, int? aid) {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: const Text('提示'),
-          content: const Text('即将移除该视频，确定是否移除'),
-          actions: [
-            TextButton(
-              onPressed: Get.back,
-              child: Text(
-                '取消',
-                style: TextStyle(color: Theme.of(context).colorScheme.outline),
-              ),
-            ),
-            TextButton(
-              onPressed: () async {
-                Get.back();
-                final res = await UserHttp.toViewDel(aids: aid.toString());
-                if (res['status']) {
-                  baseCtr.counts[laterViewType] =
-                      baseCtr.counts[laterViewType]! - 1;
-                  loadingState
-                    ..value.data!.removeAt(index)
-                    ..refresh();
-                }
-                SmartDialog.showToast(res['msg']);
-              },
-              child: const Text('确认移除'),
-            ),
-          ],
-        );
-      },
-    );
   }
 
   // 一键清空

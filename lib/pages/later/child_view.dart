@@ -75,10 +75,9 @@ class _LaterViewChildPageState extends State<LaterViewChildPage>
                       _laterController.onLoadMore();
                     }
                     var videoItem = response[index];
-                    final enableMultiSelect =
-                        _laterController.baseCtr.enableMultiSelect.value;
                     return VideoCardHLater(
                       videoItem: videoItem,
+                      ctr: _laterController,
                       onViewLater: (cid) {
                         PageUtils.toVideoPage(
                           bvid: videoItem.bvid,
@@ -98,20 +97,15 @@ class _LaterViewChildPageState extends State<LaterViewChildPage>
                           },
                         );
                       },
-                      onTap: !enableMultiSelect
-                          ? null
-                          : () => _laterController.onSelect(videoItem),
-                      onLongPress: enableMultiSelect
-                          ? null
-                          : () {
-                              _laterController.baseCtr.enableMultiSelect.value =
-                                  true;
-                              _laterController.onSelect(videoItem);
-                            },
                       onRemove: () => _laterController.toViewDel(
                         context,
                         index,
                         videoItem.aid,
+                        onSuccess: () {
+                          final counts = _laterController.baseCtr.counts;
+                          counts[widget.laterViewType] =
+                              counts[widget.laterViewType]! - 1;
+                        },
                       ),
                     );
                   },

@@ -37,9 +37,9 @@ class _LaterSearchPageState
           controller.onLoadMore();
         }
         final item = list[index];
-        final enableMultiSelect = controller.enableMultiSelect.value;
         return VideoCardHLater(
           videoItem: item,
+          ctr: controller,
           onViewLater: (cid) {
             PageUtils.toVideoPage(
               bvid: item.bvid,
@@ -62,13 +62,6 @@ class _LaterSearchPageState
             index,
             item.aid!,
           ),
-          onTap: !enableMultiSelect ? null : () => controller.onSelect(item),
-          onLongPress: enableMultiSelect
-              ? null
-              : () {
-                  controller.enableMultiSelect.value = true;
-                  controller.onSelect(item);
-                },
         );
       }),
     );
