@@ -1,6 +1,7 @@
 import 'package:PiliPlus/models_new/live/live_room_info_h5/data.dart';
 import 'package:PiliPlus/models_new/pgc/pgc_info_model/episode.dart';
 import 'package:PiliPlus/models_new/video/video_detail/data.dart';
+import 'package:PiliPlus/models_new/video/video_detail/page.dart';
 import 'package:PiliPlus/plugin/pl_player/controller.dart';
 import 'package:PiliPlus/plugin/pl_player/models/play_status.dart';
 import 'package:PiliPlus/utils/storage_pref.dart';
@@ -118,6 +119,7 @@ class VideoPlayerServiceHandler extends BaseAudioHandler with SeekHandler {
     int cid,
     String herotag, {
     String? artist,
+    String? cover,
   }) {
     if (!enableBackgroundPlay) return;
     // if (kDebugMode) {
@@ -167,6 +169,14 @@ class VideoPlayerServiceHandler extends BaseAudioHandler with SeekHandler {
         artist: data.anchorInfo?.baseInfo?.uname,
         artUri: Uri.parse(data.roomInfo?.cover ?? ''),
         isLive: true,
+      );
+    } else if (data is Part) {
+      mediaItem = MediaItem(
+        id: id,
+        title: data.pagePart ?? '',
+        artist: artist,
+        duration: Duration(seconds: data.duration ?? 0),
+        artUri: Uri.parse(cover ?? ''),
       );
     }
     if (mediaItem == null) return;
