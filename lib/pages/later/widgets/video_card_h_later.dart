@@ -176,83 +176,89 @@ class VideoCardHLater extends StatelessWidget {
 
   Widget content(BuildContext context, ThemeData theme) {
     final isPgc = videoItem.isPgc == true && videoItem.bangumi != null;
-    Widget bottom = Row(
-      spacing: 8,
-      children: [
-        StatWidget(
-          type: StatType.play,
-          value: videoItem.stat?.view,
-        ),
-        if (!isPgc)
-          StatWidget(
-            type: StatType.danmaku,
-            value: videoItem.stat?.danmaku,
-          ),
-        const Spacer(),
-        iconButton(
-          tooltip: '移除',
-          context: context,
-          onPressed: () => ctr..toViewDel(context, index, videoItem.aid),
-          icon: Icons.clear,
-          iconColor: theme.colorScheme.outline,
-          bgColor: Colors.transparent,
-        ),
-      ],
+    Widget stat = StatWidget(
+      type: StatType.play,
+      value: videoItem.stat?.view,
     );
     return Expanded(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Stack(
         children: [
-          if (isPgc) ...[
-            Text(
-              videoItem.bangumi!.season!.title!,
-              style: TextStyle(
-                fontSize: theme.textTheme.bodyMedium!.fontSize,
-                height: 1.42,
-                letterSpacing: 0.3,
-              ),
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: isPgc
+                ? [
+                    Text(
+                      videoItem.bangumi!.season!.title!,
+                      style: TextStyle(
+                        fontSize: theme.textTheme.bodyMedium!.fontSize,
+                        height: 1.42,
+                        letterSpacing: 0.3,
+                      ),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    const SizedBox(height: 3),
+                    Text(
+                      videoItem.subtitle!,
+                      textAlign: TextAlign.start,
+                      style: TextStyle(
+                        fontSize: 13,
+                        color: theme.colorScheme.outline,
+                      ),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    const Spacer(),
+                    stat,
+                  ]
+                : [
+                    Expanded(
+                      child: Text(
+                        videoItem.title!,
+                        style: TextStyle(
+                          fontSize: theme.textTheme.bodyMedium!.fontSize,
+                          height: 1.42,
+                          letterSpacing: 0.3,
+                        ),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                    Text(
+                      videoItem.owner!.name!,
+                      maxLines: 1,
+                      style: TextStyle(
+                        fontSize: 12,
+                        height: 1,
+                        color: theme.colorScheme.outline,
+                        overflow: TextOverflow.clip,
+                      ),
+                    ),
+                    const SizedBox(height: 3),
+                    Row(
+                      spacing: 8,
+                      children: [
+                        stat,
+                        StatWidget(
+                          type: StatType.danmaku,
+                          value: videoItem.stat?.danmaku,
+                        ),
+                      ],
+                    ),
+                  ],
+          ),
+          Positioned(
+            right: 0,
+            bottom: 0,
+            child: iconButton(
+              tooltip: '移除',
+              context: context,
+              onPressed: () => ctr.toViewDel(context, index, videoItem.aid),
+              icon: Icons.clear,
+              iconColor: theme.colorScheme.outline,
+              bgColor: Colors.transparent,
             ),
-            const SizedBox(height: 3),
-            Text(
-              videoItem.subtitle!,
-              textAlign: TextAlign.start,
-              style: TextStyle(
-                fontSize: 13,
-                color: theme.colorScheme.outline,
-              ),
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-            ),
-            const Spacer(),
-            bottom,
-          ] else ...[
-            Expanded(
-              child: Text(
-                videoItem.title!,
-                style: TextStyle(
-                  fontSize: theme.textTheme.bodyMedium!.fontSize,
-                  height: 1.42,
-                  letterSpacing: 0.3,
-                ),
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-              ),
-            ),
-            Text(
-              videoItem.owner!.name!,
-              maxLines: 1,
-              style: TextStyle(
-                fontSize: 12,
-                height: 1,
-                color: theme.colorScheme.outline,
-                overflow: TextOverflow.clip,
-              ),
-            ),
-            const SizedBox(height: 3),
-            bottom,
-          ],
+          ),
         ],
       ),
     );
