@@ -12,8 +12,8 @@ import 'package:PiliPlus/services/loggeer.dart';
 import 'package:PiliPlus/services/service_locator.dart';
 import 'package:PiliPlus/utils/app_scheme.dart';
 import 'package:PiliPlus/utils/cache_manage.dart';
-import 'package:PiliPlus/utils/data.dart';
 import 'package:PiliPlus/utils/date_util.dart';
+import 'package:PiliPlus/utils/request_utils.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/storage_key.dart';
 import 'package:PiliPlus/utils/storage_pref.dart';
@@ -124,7 +124,7 @@ Commit Hash: ${BuildConfig.commitHash}''';
       systemNavigationBarContrastEnforced: false,
     ),
   );
-  Data.init();
+  RequestUtils.syncHistoryStatus();
   PiliScheme.init();
 }
 

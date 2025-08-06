@@ -26,6 +26,8 @@ import 'package:PiliPlus/pages/later/controller.dart';
 import 'package:PiliPlus/utils/accounts.dart';
 import 'package:PiliPlus/utils/context_ext.dart';
 import 'package:PiliPlus/utils/feed_back.dart';
+import 'package:PiliPlus/utils/storage.dart';
+import 'package:PiliPlus/utils/storage_key.dart';
 import 'package:PiliPlus/utils/storage_pref.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/foundation.dart' show kDebugMode;
@@ -35,6 +37,17 @@ import 'package:get/get.dart' hide ContextExtensionss;
 import 'package:gt3_flutter_plugin/gt3_flutter_plugin.dart';
 
 class RequestUtils {
+  static Future<void> syncHistoryStatus() async {
+    final account = Accounts.history;
+    if (!account.isLogin) {
+      return;
+    }
+    var res = await UserHttp.historyStatus(account: account);
+    if (res['status']) {
+      GStorage.localCache.put(LocalCacheKey.historyPause, res['data']);
+    }
+  }
+
   // 1：小视频（已弃用）
   // 2：相簿
   // 3：纯文字
