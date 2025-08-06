@@ -1,5 +1,7 @@
 import 'package:PiliPlus/models_new/pgc/pgc_info_model/activity.dart';
 import 'package:PiliPlus/models_new/pgc/pgc_info_model/area.dart';
+import 'package:PiliPlus/models_new/pgc/pgc_info_model/brief.dart';
+import 'package:PiliPlus/models_new/pgc/pgc_info_model/cooperator.dart';
 import 'package:PiliPlus/models_new/pgc/pgc_info_model/episode.dart';
 import 'package:PiliPlus/models_new/pgc/pgc_info_model/icon_font.dart';
 import 'package:PiliPlus/models_new/pgc/pgc_info_model/new_ep.dart';
@@ -53,6 +55,8 @@ class PgcInfoModel {
   int? type;
   UpInfo? upInfo;
   UserStatus? userStatus;
+  List<Cooperator>? cooperators;
+  Brief? brief;
 
   PgcInfoModel({
     this.activity,
@@ -94,6 +98,8 @@ class PgcInfoModel {
     this.type,
     this.upInfo,
     this.userStatus,
+    this.cooperators,
+    this.brief,
   });
 
   factory PgcInfoModel.fromJson(Map<String, dynamic> json) => PgcInfoModel(
@@ -164,5 +170,11 @@ class PgcInfoModel {
     userStatus: json['user_status'] == null
         ? null
         : UserStatus.fromJson(json['user_status'] as Map<String, dynamic>),
+    cooperators: (json['cooperators'] as List?)
+        ?.map((e) => Cooperator.fromJson(e))
+        .toList(),
+    brief: json['brief'] == null
+        ? null
+        : Brief.fromJson(json['brief'] as Map<String, dynamic>),
   );
 }

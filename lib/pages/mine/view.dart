@@ -329,6 +329,7 @@ class _MediaPageState extends CommonPageState<MinePage, MineController>
                             alpha: 0.4,
                           ),
                           valueColor: AlwaysStoppedAnimation<Color>(secondary),
+                          stopIndicatorColor: Colors.transparent,
                         ),
                       ),
                     ],

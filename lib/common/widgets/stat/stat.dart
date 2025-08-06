@@ -23,6 +23,7 @@ class StatWidget extends StatelessWidget {
         Theme.of(context).colorScheme.outline.withValues(alpha: 0.8);
     return Row(
       spacing: 2,
+      mainAxisSize: MainAxisSize.min,
       children: [
         Icon(
           type.iconData,
