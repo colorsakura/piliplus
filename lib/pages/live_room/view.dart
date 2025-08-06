@@ -360,6 +360,40 @@ class _LiveRoomPageState extends State<LiveRoomPage>
           icon: const Icon(Icons.more_vert, size: 20),
           itemBuilder: (BuildContext context) => <PopupMenuEntry>[
             PopupMenuItem(
+              onTap: () => Utils.copyText(
+                'https://live.bilibili.com/${_liveRoomController.roomId}',
+              ),
+              child: Row(
+                spacing: 10,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(
+                    Icons.copy,
+                    size: 19,
+                    color: color,
+                  ),
+                  const Text('复制链接'),
+                ],
+              ),
+            ),
+            PopupMenuItem(
+              onTap: () => Utils.shareText(
+                'https://live.bilibili.com/${_liveRoomController.roomId}',
+              ),
+              child: Row(
+                spacing: 10,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(
+                    Icons.share,
+                    size: 19,
+                    color: color,
+                  ),
+                  const Text('分享直播间'),
+                ],
+              ),
+            ),
+            PopupMenuItem(
               onTap: () => PageUtils.inAppWebview(
                 'https://live.bilibili.com/h5/${_liveRoomController.roomId}',
                 off: true,
@@ -563,7 +597,9 @@ class _LiveRoomPageState extends State<LiveRoomPage>
           },
         );
       },
-      transitionDuration: const Duration(milliseconds: 500),
+      transitionDuration: fromEmote
+          ? const Duration(milliseconds: 300)
+          : const Duration(milliseconds: 500),
       transitionBuilder: (context, animation, secondaryAnimation, child) {
         var tween = Tween(
           begin: const Offset(0.0, 1.0),
