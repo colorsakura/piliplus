@@ -5,7 +5,7 @@ import 'package:PiliPlus/utils/storage_key.dart';
 
 class Data {
   static Future<void> init() async {
-    if (!Accounts.main.isLogin) {
+    if (!Accounts.history.isLogin) {
       return;
     }
     var res = await UserHttp.historyStatus();

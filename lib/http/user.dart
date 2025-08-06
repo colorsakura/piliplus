@@ -13,6 +13,7 @@ import 'package:PiliPlus/models_new/space_setting/data.dart';
 import 'package:PiliPlus/models_new/sub/sub/data.dart';
 import 'package:PiliPlus/models_new/video/video_tag/data.dart';
 import 'package:PiliPlus/utils/accounts.dart';
+import 'package:PiliPlus/utils/accounts/account.dart';
 import 'package:PiliPlus/utils/global_data.dart';
 import 'package:PiliPlus/utils/wbi_sign.dart';
 import 'package:dio/dio.dart';
@@ -80,6 +81,7 @@ class UserHttp {
     required String type,
     int? max,
     int? viewAt,
+    Account? account,
   }) async {
     var res = await Request().get(
       Api.historyList,
@@ -89,6 +91,7 @@ class UserHttp {
         'max': max ?? 0,
         'view_at': viewAt ?? 0,
       },
+      options: Options(extra: {'account': account ?? Accounts.history}),
     );
     if (res.data['code'] == 0) {
       return Success(HistoryData.fromJson(res.data['data']));
@@ -98,22 +101,27 @@ class UserHttp {
   }
 
   // 暂停观看历史
-  static Future pauseHistory(bool switchStatus) async {
+  static Future pauseHistory(bool switchStatus, {Account? account}) async {
     // 暂停switchStatus传true 否则false
+    account ??= Accounts.history;
     var res = await Request().post(
       Api.pauseHistory,
       queryParameters: {
         'switch': switchStatus,
         'jsonp': 'jsonp',
-        'csrf': Accounts.heartbeat.csrf,
+        'csrf': account.csrf,
       },
+      options: Options(extra: {'account': account}),
     );
     return res;
   }
 
   // 观看历史暂停状态
-  static Future historyStatus() async {
-    var res = await Request().get(Api.historyStatus);
+  static Future historyStatus({Account? account}) async {
+    var res = await Request().get(
+      Api.historyStatus,
+      options: Options(extra: {'account': account ?? Accounts.history}),
+    );
     if (res.data['code'] == 0) {
       return {'status': true, 'data': res.data['data']};
     } else {
@@ -122,13 +130,15 @@ class UserHttp {
   }
 
   // 清空历史记录
-  static Future clearHistory() async {
+  static Future clearHistory({Account? account}) async {
+    account ??= Accounts.history;
     var res = await Request().post(
       Api.clearHistory,
       queryParameters: {
         'jsonp': 'jsonp',
-        'csrf': Accounts.heartbeat.csrf,
+        'csrf': account.csrf,
       },
+      options: Options(extra: {'account': account}),
     );
     return res;
   }
@@ -204,15 +214,17 @@ class UserHttp {
   }
 
   // 删除历史记录
-  static Future delHistory(String kid) async {
+  static Future delHistory(String kid, {Account? account}) async {
+    account ??= Accounts.history;
     var res = await Request().post(
       Api.delHistory,
       data: {
         'kid': kid,
         'jsonp': 'jsonp',
-        'csrf': Accounts.heartbeat.csrf,
+        'csrf': account.csrf,
       },
       options: Options(
+        extra: {'account': account},
         contentType: Headers.formUrlEncodedContentType,
       ),
     );
@@ -241,6 +253,7 @@ class UserHttp {
   static Future<LoadingState<HistoryData>> searchHistory({
     required int pn,
     required String keyword,
+    Account? account,
   }) async {
     var res = await Request().get(
       Api.searchHistory,
@@ -249,6 +262,7 @@ class UserHttp {
         'keyword': keyword,
         'business': 'all',
       },
+      options: Options(extra: {'account': account ?? Accounts.history}),
     );
     if (res.data['code'] == 0) {
       return Success(HistoryData.fromJson(res.data['data']));

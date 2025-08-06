@@ -6,6 +6,7 @@ import 'package:PiliPlus/models_new/history/list.dart';
 import 'package:PiliPlus/models_new/history/tab.dart';
 import 'package:PiliPlus/pages/common/multi_select/multi_select_controller.dart';
 import 'package:PiliPlus/pages/history/base_controller.dart';
+import 'package:PiliPlus/utils/accounts/account.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/storage_key.dart';
@@ -19,6 +20,8 @@ class HistoryController
   HistoryController(this.type);
 
   late final baseCtr = Get.put(HistoryBaseController());
+
+  Account get account => baseCtr.account;
 
   final String? type;
   TabController? tabController;
@@ -74,7 +77,7 @@ class HistoryController
 
   // 观看历史暂停状态
   Future<void> historyStatus() async {
-    var res = await UserHttp.historyStatus();
+    var res = await UserHttp.historyStatus(account: account);
     if (res['status']) {
       baseCtr.pauseStatus.value = res['data'];
       GStorage.localCache.put(LocalCacheKey.historyPause, res['data']);
@@ -90,15 +93,13 @@ class HistoryController
 
   // 删除已看历史记录
   void onDelViewedHistory() {
-    if (loadingState.value.isSuccess) {
-      final viewedList = loadingState.value.data!
-          .where((e) => e.progress == -1)
-          .toSet();
-      if (viewedList.isNotEmpty) {
-        _onDelete(viewedList);
-      } else {
-        SmartDialog.showToast('无已看记录');
-      }
+    final viewedList = loadingState.value.dataOrNull
+        ?.where((e) => e.progress == -1)
+        .toSet();
+    if (viewedList != null && viewedList.isNotEmpty) {
+      _onDelete(viewedList);
+    } else {
+      SmartDialog.showToast('无已看记录');
     }
   }
 
@@ -108,6 +109,7 @@ class HistoryController
       removeList
           .map((item) => '${item.history.business}_${item.kid}')
           .join(','),
+      account: account,
     );
     if (response['status']) {
       afterDelete(removeList);
@@ -128,8 +130,12 @@ class HistoryController
   }
 
   @override
-  Future<LoadingState<HistoryData>> customGetData() =>
-      UserHttp.historyList(type: type ?? 'all', max: max, viewAt: viewAt);
+  Future<LoadingState<HistoryData>> customGetData() => UserHttp.historyList(
+    type: type ?? 'all',
+    max: max,
+    viewAt: viewAt,
+    account: account,
+  );
 
   @override
   void onClose() {

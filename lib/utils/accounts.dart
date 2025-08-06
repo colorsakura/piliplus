@@ -16,6 +16,13 @@ class Accounts {
   static final Map<AccountType, Account> accountMode = {};
   static Account get main => accountMode[AccountType.main]!;
   static Account get heartbeat => accountMode[AccountType.heartbeat]!;
+  static Account get history {
+    final heartbeat = Accounts.heartbeat;
+    if (heartbeat is AnonymousAccount) {
+      return Accounts.main;
+    }
+    return heartbeat;
+  }
   // static set main(Account account) => set(AccountType.main, account);
 
   static Future<void> init() async {

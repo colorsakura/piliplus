@@ -1,4 +1,5 @@
 import 'package:PiliPlus/http/user.dart';
+import 'package:PiliPlus/utils/accounts.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/storage_key.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +11,8 @@ class HistoryBaseController extends GetxController {
 
   RxBool enableMultiSelect = false.obs;
   RxInt checkedCount = 0.obs;
+
+  final account = Accounts.history;
 
   // 清空观看历史
   void onClearHistory(BuildContext context, VoidCallback onSuccess) {
@@ -31,7 +34,7 @@ class HistoryBaseController extends GetxController {
               onPressed: () async {
                 Get.back();
                 SmartDialog.showLoading(msg: '请求中');
-                var res = await UserHttp.clearHistory();
+                var res = await UserHttp.clearHistory(account: account);
                 SmartDialog.dismiss();
                 if (res.data['code'] == 0) {
                   SmartDialog.showToast('清空观看历史');
@@ -66,7 +69,10 @@ class HistoryBaseController extends GetxController {
             TextButton(
               onPressed: () async {
                 SmartDialog.showLoading(msg: '请求中');
-                var res = await UserHttp.pauseHistory(pauseStatus);
+                var res = await UserHttp.pauseHistory(
+                  pauseStatus,
+                  account: account,
+                );
                 SmartDialog.dismiss();
                 if (res.data['code'] == 0) {
                   SmartDialog.showToast(pauseStatus ? '暂停观看历史' : '恢复观看历史');

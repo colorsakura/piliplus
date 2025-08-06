@@ -5,6 +5,7 @@ import 'package:PiliPlus/models_new/history/data.dart';
 import 'package:PiliPlus/models_new/history/list.dart';
 import 'package:PiliPlus/pages/common/multi_select/base.dart';
 import 'package:PiliPlus/pages/common/search/common_search_controller.dart';
+import 'package:PiliPlus/utils/accounts.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 
@@ -15,6 +16,7 @@ class HistorySearchController
   Future<LoadingState<HistoryData>> customGetData() => UserHttp.searchHistory(
     pn: page,
     keyword: editController.value.text,
+    account: account,
   );
 
   @override
@@ -22,8 +24,13 @@ class HistorySearchController
     return response.list;
   }
 
+  final account = Accounts.history;
+
   Future<void> onDelHistory(int index, kid, String business) async {
-    var res = await UserHttp.delHistory('${business}_$kid');
+    var res = await UserHttp.delHistory(
+      '${business}_$kid',
+      account: account,
+    );
     if (res['status']) {
       loadingState
         ..value.data!.removeAt(index)
@@ -45,6 +52,7 @@ class HistorySearchController
           removeList
               .map((item) => '${item.history.business!}_${item.kid!}')
               .join(','),
+          account: account,
         );
         if (response['status']) {
           afterDelete(removeList);
