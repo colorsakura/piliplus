@@ -53,7 +53,7 @@ class _SetDisplayModeState extends State<SetDisplayMode> {
     preferred ??= DisplayMode.auto;
 
     FlutterDisplayMode.setPreferredMode(preferred!).whenComplete(() {
-      Future.delayed(const Duration(milliseconds: 100)).whenComplete(fetchAll);
+      Future.delayed(const Duration(milliseconds: 100), fetchAll);
     });
   }
 

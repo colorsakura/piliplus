@@ -256,5 +256,5 @@ abstract class CommonPublishPageState<T extends CommonPublishPage>
     enablePublish.value = value.trim().isNotEmpty;
   }
 
-  void onSave() {}
+  void onSave();
 }

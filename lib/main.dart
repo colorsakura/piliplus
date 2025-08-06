@@ -145,15 +145,14 @@ class MyApp extends StatelessWidget {
       FlutterDisplayMode.supported.then((value) {
         modes = value;
         var storageDisplay = GStorage.setting.get(SettingBoxKey.displayMode);
-        DisplayMode f = DisplayMode.auto;
+        DisplayMode? displayMode;
         if (storageDisplay != null) {
-          f = modes.firstWhere(
+          displayMode = modes.firstWhereOrNull(
             (e) => e.toString() == storageDisplay,
-            orElse: () => f,
           );
         }
-        DisplayMode preferred = modes.toList().firstWhere((el) => el == f);
-        FlutterDisplayMode.setPreferredMode(preferred);
+        displayMode ??= DisplayMode.auto;
+        FlutterDisplayMode.setPreferredMode(displayMode);
       });
     }
 

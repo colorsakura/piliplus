@@ -228,22 +228,23 @@ abstract class CommonRichTextPubPageState<T extends CommonRichTextPubPage>
             "biz_id": "",
           });
         case RichTextType.vote:
-          list.add({
-            "raw_text": e.rawText,
-            "type": 4,
-            "biz_id": e.id,
-          });
-          list.add({
-            "raw_text": ' ',
-            "type": 1,
-            "biz_id": "",
-          });
+          list
+            ..add({
+              "raw_text": e.rawText,
+              "type": 4,
+              "biz_id": e.id,
+            })
+            ..add({
+              "raw_text": ' ',
+              "type": 1,
+              "biz_id": "",
+            });
       }
     }
     return list;
   }
 
-  double _mentionOffset = 0;
+  late double _mentionOffset = 0;
   Future<void> onMention([bool fromClick = false]) async {
     controller.keepChatPanel();
     final res = await DynMentionPanel.onDynMention(

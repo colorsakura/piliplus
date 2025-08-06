@@ -551,13 +551,15 @@ class PageUtils {
             initIndex: index,
             setStatusBar: false,
             onClose: (value) async {
-              if (value == false) {
-                await ctr.reverse();
+              if (!value) {
+                try {
+                  await ctr.reverse();
+                } catch (_) {}
               }
               try {
                 ctr.dispose();
               } catch (_) {}
-              if (value == false) {
+              if (!value) {
                 Get.back();
               }
             },
