@@ -182,6 +182,7 @@ class VideoCardHLater extends StatelessWidget {
     );
     return Expanded(
       child: Stack(
+        clipBehavior: Clip.none,
         children: [
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -249,7 +250,7 @@ class VideoCardHLater extends StatelessWidget {
           ),
           Positioned(
             right: 0,
-            bottom: 0,
+            bottom: -8,
             child: iconButton(
               tooltip: '移除',
               context: context,

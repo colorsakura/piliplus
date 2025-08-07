@@ -850,6 +850,12 @@ class Api {
 
   static const String dynReserve = '/x/dynamic/feed/reserve/click';
 
+  static const String favPugv = '/pugv/app/web/favorite/page';
+
+  static const String addFavPugv = '/pugv/app/web/favorite/add';
+
+  static const String delFavPugv = '/pugv/app/web/favorite/del';
+
   static const String favTopicList = '/x/topic/web/fav/list';
 
   static const String addFavTopic = '/x/topic/fav/sub/add';
@@ -919,6 +925,8 @@ class Api {
   static const String spaceComic = '${HttpString.appBaseUrl}/x/v2/space/comic';
 
   static const String spaceAudio = '/audio/music-service/web/song/upper';
+
+  static const String spaceCheese = '/pugv/app/web/season/page';
 
   static const String dynMention = '/x/polymer/web-dynamic/v1/mention/search';
 

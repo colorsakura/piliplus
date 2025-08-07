@@ -10,6 +10,7 @@ import 'package:PiliPlus/models_new/fav/fav_folder/list.dart';
 import 'package:PiliPlus/models_new/fav/fav_note/list.dart';
 import 'package:PiliPlus/models_new/fav/fav_pgc/data.dart';
 import 'package:PiliPlus/models_new/fav/fav_topic/data.dart';
+import 'package:PiliPlus/models_new/space/space_cheese/data.dart';
 import 'package:PiliPlus/models_new/space/space_fav/data.dart';
 import 'package:PiliPlus/models_new/sub/sub_detail/data.dart';
 import 'package:PiliPlus/utils/accounts.dart';
@@ -139,6 +140,58 @@ class FavHttp {
       return Success(SubDetailData.fromJson(res.data['data']));
     } else {
       return Error(res.data['message']);
+    }
+  }
+
+  static Future<LoadingState<SpaceCheeseData>> favPugv({
+    required int mid,
+    required int page,
+  }) async {
+    var res = await Request().get(
+      Api.favPugv,
+      queryParameters: {
+        'mid': mid,
+        'ps': 20,
+        'pn': page,
+        'web_location': 333.1387,
+      },
+    );
+    if (res.data['code'] == 0) {
+      return Success(SpaceCheeseData.fromJson(res.data['data']));
+    } else {
+      return Error(res.data['message']);
+    }
+  }
+
+  static Future addFavPugv(seasonId) async {
+    var res = await Request().post(
+      Api.addFavPugv,
+      data: {
+        'season_id': seasonId,
+        'csrf': Accounts.main.csrf,
+      },
+      options: Options(contentType: Headers.formUrlEncodedContentType),
+    );
+    if (res.data['code'] == 0) {
+      return {'status': true};
+    } else {
+      return {'status': false, 'msg': res.data['message']};
+    }
+  }
+
+  static Future delFavPugv(seasonId) async {
+    var res = await Request().post(
+      Api.delFavPugv,
+      data: {
+        'season_id': seasonId,
+        'csrf': Accounts.main.csrf,
+      },
+      options: Options(contentType: Headers.formUrlEncodedContentType),
+    );
+    if (res.data['code'] == 0) {
+      return {'status': true};
+    } else {
+      return {'status': false, 'msg': res.data['message']};
     }
   }
 

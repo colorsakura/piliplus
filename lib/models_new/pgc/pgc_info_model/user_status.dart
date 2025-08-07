@@ -10,6 +10,7 @@ class UserStatus {
   int? payPackPaid;
   int? sponsor;
   UserProgress? progress;
+  int? favored;
 
   UserStatus({
     this.areaLimit,
@@ -21,6 +22,7 @@ class UserStatus {
     this.payPackPaid,
     this.sponsor,
     this.progress,
+    this.favored,
   });
 
   factory UserStatus.fromJson(Map<String, dynamic> json) => UserStatus(
@@ -35,5 +37,6 @@ class UserStatus {
     progress: json['progress'] == null
         ? null
         : UserProgress.fromJson(json['progress']),
+    favored: json['favored'] as int?,
   );
 }

@@ -11,16 +11,16 @@ class Brief {
 }
 
 class Img {
-  num? aspectRatio;
+  num aspectRatio;
   String? url;
 
   Img({
-    this.aspectRatio,
+    required this.aspectRatio,
     this.url,
   });
 
   factory Img.fromJson(Map<String, dynamic> json) => Img(
-    aspectRatio: json['aspect_ratio'],
+    aspectRatio: json['aspect_ratio'] ?? 1,
     url: json['url'] as String?,
   );
 }

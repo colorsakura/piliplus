@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/common/widgets/badge.dart';
+import 'package:PiliPlus/common/widgets/button/icon_button.dart';
 import 'package:PiliPlus/common/widgets/dialog/dialog.dart';
 import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
 import 'package:PiliPlus/common/widgets/stat/stat.dart';
@@ -80,7 +81,7 @@ class _PgcIntroPageState extends State<PgcIntroPage>
             crossAxisAlignment: CrossAxisAlignment.start,
             spacing: 10,
             children: [
-              _buildCover(isLandscape, item),
+              _buildCover(theme, isLandscape, item),
               Expanded(child: _buildInfoPanel(isLandscape, theme, item)),
             ],
           ),
@@ -142,6 +143,7 @@ class _PgcIntroPageState extends State<PgcIntroPage>
                     radius: 0,
                     src: e.url,
                     width: imgWidth,
+                    height: imgWidth * e.aspectRatio,
                   ),
                 );
               }).toList(),
@@ -153,7 +155,7 @@ class _PgcIntroPageState extends State<PgcIntroPage>
     return null;
   }
 
-  Widget _buildCover(bool isLandscape, PgcInfoModel item) {
+  Widget _buildCover(ThemeData theme, bool isLandscape, PgcInfoModel item) {
     return Stack(
       clipBehavior: Clip.none,
       children: [
@@ -182,6 +184,24 @@ class _PgcIntroPageState extends State<PgcIntroPage>
             right: 6,
             bottom: 6,
             left: null,
+          ),
+        if (!pgcIntroController.isPgc)
+          Positioned(
+            right: 6,
+            bottom: 6,
+            child: Obx(() {
+              final isFav = pgcIntroController.isFav.value;
+              return iconButton(
+                context: context,
+                size: 28,
+                iconSize: 26,
+                tooltip: '${isFav ? '取消' : ''}收藏',
+                onPressed: () => pgcIntroController.onFavPugv(isFav),
+                icon: isFav ? Icons.star_rounded : Icons.star_border_rounded,
+                bgColor: isFav ? null : theme.colorScheme.onInverseSurface,
+                iconColor: isFav ? null : theme.colorScheme.onSurfaceVariant,
+              );
+            }),
           ),
       ],
     );
@@ -374,7 +394,7 @@ class _PgcIntroPageState extends State<PgcIntroPage>
             item.upInfo!.avatar!,
             item.upInfo!.uname!,
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: 6),
         ],
         Text(
           item.title!,

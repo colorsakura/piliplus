@@ -5,6 +5,7 @@ import 'package:PiliPlus/grpc/bilibili/app/viewunite/pgcanymodel.pb.dart'
     show ViewPgcAny;
 import 'package:PiliPlus/grpc/view.dart';
 import 'package:PiliPlus/http/constants.dart';
+import 'package:PiliPlus/http/fav.dart';
 import 'package:PiliPlus/http/search.dart';
 import 'package:PiliPlus/http/video.dart';
 import 'package:PiliPlus/models/common/video/source_type.dart';
@@ -51,6 +52,7 @@ class PgcIntroController extends CommonIntroController {
 
   late final RxBool isFollowed = false.obs;
   late final RxInt followStatus = (-1).obs;
+  late final RxBool isFav = (pgcItem.userStatus?.favored == 1).obs;
 
   @override
   void onInit() {
@@ -478,5 +480,17 @@ class PgcIntroController extends CommonIntroController {
       heroTag,
       artist: pgcItem.title,
     );
+  }
+
+  Future<void> onFavPugv(bool isFav) async {
+    final res = isFav
+        ? await FavHttp.delFavPugv(seasonId)
+        : await FavHttp.addFavPugv(seasonId);
+    if (res['status']) {
+      this.isFav.value = !isFav;
+      SmartDialog.showToast('${isFav ? '取消' : ''}收藏成功');
+    } else {
+      SmartDialog.showToast(res['msg']);
+    }
   }
 }

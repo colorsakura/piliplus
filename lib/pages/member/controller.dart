@@ -41,13 +41,6 @@ class MemberController extends CommonDataController<SpaceData, SpaceData?>
   late List<Tab> tabs;
   TabController? tabController;
   RxInt contributeInitialIndex = 0.obs;
-  late final implTabs = const [
-    'home',
-    'dynamic',
-    'contribute',
-    'favorite',
-    'bangumi',
-  ];
 
   bool? hasSeasonOrSeries;
 
@@ -83,7 +76,7 @@ class MemberController extends CommonDataController<SpaceData, SpaceData?>
         data.series?.item?.isNotEmpty == true) {
       hasSeasonOrSeries = true;
     }
-    tab2?.retainWhere((item) => implTabs.contains(item.param));
+    tab2?.retainWhere((item) => MemberTabType.contains(item.param!));
     if (tab2?.isNotEmpty == true) {
       if (data.hasItem != true && tab2!.first.param == 'home') {
         // remove empty home tab

@@ -9,6 +9,7 @@ import 'package:PiliPlus/pages/exp_log/view.dart';
 import 'package:PiliPlus/pages/login_log/view.dart';
 import 'package:PiliPlus/pages/member/controller.dart';
 import 'package:PiliPlus/pages/member/widget/user_info_card.dart';
+import 'package:PiliPlus/pages/member_cheese/view.dart';
 import 'package:PiliPlus/pages/member_contribute/view.dart';
 import 'package:PiliPlus/pages/member_dynamics/view.dart';
 import 'package:PiliPlus/pages/member_favorite/view.dart';
@@ -322,6 +323,10 @@ class _MemberPageState extends State<MemberPage> {
           mid: _mid,
         ),
         'favorite' => MemberFavorite(
+          heroTag: _heroTag,
+          mid: _mid,
+        ),
+        'cheese' => MemberCheese(
           heroTag: _heroTag,
           mid: _mid,
         ),

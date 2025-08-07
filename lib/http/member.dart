@@ -20,6 +20,7 @@ import 'package:PiliPlus/models_new/space/space/data.dart';
 import 'package:PiliPlus/models_new/space/space_archive/data.dart';
 import 'package:PiliPlus/models_new/space/space_article/data.dart';
 import 'package:PiliPlus/models_new/space/space_audio/data.dart';
+import 'package:PiliPlus/models_new/space/space_cheese/data.dart';
 import 'package:PiliPlus/models_new/space/space_opus/data.dart';
 import 'package:PiliPlus/models_new/space/space_season_series/item.dart';
 import 'package:PiliPlus/models_new/upower_rank/data.dart';
@@ -181,6 +182,26 @@ class MemberHttp {
     );
     if (res.data['code'] == 0) {
       return Success(SpaceAudioData.fromJson(res.data['data']));
+    } else {
+      return Error(res.data['message']);
+    }
+  }
+
+  static Future<LoadingState<SpaceCheeseData>> spaceCheese({
+    required int page,
+    required mid,
+  }) async {
+    var res = await Request().get(
+      Api.spaceCheese,
+      queryParameters: {
+        'pn': page,
+        'ps': 30,
+        'mid': mid,
+        'web_location': 333.1387,
+      },
+    );
+    if (res.data['code'] == 0) {
+      return Success(SpaceCheeseData.fromJson(res.data['data']));
     } else {
       return Error(res.data['message']);
     }
