@@ -69,6 +69,10 @@ void main() async {
   Request();
   await Request.setCookie();
 
+  SmartDialog.config.toast = SmartConfigToast(
+    displayType: SmartToastType.onlyRefresh,
+  );
+
   if (Pref.enableLog) {
     // 异常捕获 logo记录
     String buildConfig =

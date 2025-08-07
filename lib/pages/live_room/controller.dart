@@ -39,13 +39,12 @@ class LiveRoomController extends GetxController {
   Rx<RoomInfoH5Data?> roomInfoH5 = Rx<RoomInfoH5Data?>(null);
 
   Rx<int?> liveTime = Rx<int?>(null);
-  static const periodMins = 5;
   Timer? liveTimeTimer;
 
   void startLiveTimer() {
     if (liveTime.value != null) {
       liveTimeTimer ??= Timer.periodic(
-        const Duration(minutes: periodMins),
+        const Duration(minutes: 5),
         (_) => liveTime.refresh(),
       );
     }

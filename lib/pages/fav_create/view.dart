@@ -143,7 +143,7 @@ class _CreateFavPageState extends State<CreateFavPage> {
               aspectRatioPresets: [
                 CropAspectRatioPreset.ratio16x9,
               ],
-              aspectRatioLockEnabled: true,
+              aspectRatioLockEnabled: false,
               resetAspectRatioEnabled: false,
               aspectRatioPickerButtonHidden: true,
             ),

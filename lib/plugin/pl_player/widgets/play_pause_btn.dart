@@ -58,10 +58,9 @@ class PlayOrPauseButtonState extends State<PlayOrPauseButton>
       height: 34,
       child: GestureDetector(
         behavior: HitTestBehavior.opaque,
-        onTap: () async {
+        onTap: () {
           if (player.state.completed) {
-            await player.seek(Duration.zero);
-            player.play();
+            player.seek(Duration.zero).whenComplete(player.play);
           } else {
             player.playOrPause();
           }

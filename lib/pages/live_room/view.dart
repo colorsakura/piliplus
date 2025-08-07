@@ -354,11 +354,11 @@ class _LiveRoomPageState extends State<LiveRoomPage>
                         if (text.isNotEmpty) {
                           text += '  ';
                         }
-                        text +=
-                            '开播${DurationUtil.formatDurationBetween(
-                              liveTime * 1000,
-                              DateTime.now().millisecondsSinceEpoch,
-                            )}';
+                        final duration = DurationUtil.formatDurationBetween(
+                          liveTime * 1000,
+                          DateTime.now().millisecondsSinceEpoch,
+                        );
+                        text += duration.isEmpty ? '刚刚开播' : '开播$duration';
                       }
                       if (text.isEmpty) {
                         return const SizedBox.shrink();
@@ -616,7 +616,7 @@ class _LiveRoomPageState extends State<LiveRoomPage>
         );
       },
       transitionDuration: fromEmote
-          ? const Duration(milliseconds: 300)
+          ? const Duration(milliseconds: 400)
           : const Duration(milliseconds: 500),
       transitionBuilder: (context, animation, secondaryAnimation, child) {
         var tween = Tween(
@@ -689,12 +689,8 @@ class _LiveDanmakuState extends State<LiveDanmaku> {
               area: plPlayerController.showArea,
               opacity: plPlayerController.danmakuOpacity,
               hideTop: plPlayerController.blockTypes.contains(5),
-              hideScroll: plPlayerController.blockTypes.contains(
-                2,
-              ),
-              hideBottom: plPlayerController.blockTypes.contains(
-                4,
-              ),
+              hideScroll: plPlayerController.blockTypes.contains(2),
+              hideBottom: plPlayerController.blockTypes.contains(4),
               duration:
                   plPlayerController.danmakuDuration /
                   plPlayerController.playbackSpeed,

@@ -35,10 +35,7 @@ class BottomControl extends StatelessWidget {
       titleSpacing: 14,
       title: Row(
         children: [
-          PlayOrPauseButton(
-            plPlayerController: plPlayerController,
-          ),
-          const SizedBox(width: 10),
+          PlayOrPauseButton(plPlayerController: plPlayerController),
           ComBtn(
             icon: const Icon(
               Icons.refresh,

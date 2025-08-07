@@ -15,12 +15,16 @@ import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/update.dart';
 import 'package:PiliPlus/utils/utils.dart';
+import 'package:dio/dio.dart' show Headers;
+import 'package:document_file_save_plus/document_file_save_plus_platform_interface.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show Clipboard, ClipboardData;
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:share_plus/share_plus.dart';
 
 class AboutPage extends StatefulWidget {
   const AboutPage({super.key, this.showAppBar});
@@ -313,6 +317,42 @@ Commit Hash: ${BuildConfig.commitHash}''',
                   clipBehavior: Clip.hardEdge,
                   title: const Text('导入/导出设置'),
                   children: [
+                    ListTile(
+                      dense: true,
+                      title: const Text('导出文件至本地', style: style),
+                      onTap: () async {
+                        Get.back();
+                        final res = utf8.encode(GStorage.exportAllSettings());
+                        final name =
+                            'piliplus_settings_${context.isTablet ? 'pad' : 'phone'}_'
+                            '${DateFormat('yyyyMMddHHmmss').format(DateTime.now())}.json';
+                        try {
+                          DocumentFileSavePlusPlatform.instance
+                              .saveMultipleFiles(
+                                dataList: [res],
+                                fileNameList: [name],
+                                mimeTypeList: [Headers.jsonContentType],
+                              );
+                          if (Platform.isAndroid) {
+                            SmartDialog.showToast('已保存');
+                          }
+                        } catch (e) {
+                          SharePlus.instance.share(
+                            ShareParams(
+                              files: [
+                                XFile.fromData(
+                                  res,
+                                  name: name,
+                                  mimeType: Headers.jsonContentType,
+                                ),
+                              ],
+                              sharePositionOrigin:
+                                  await Utils.sharePositionOrigin,
+                            ),
+                          );
+                        }
+                      },
+                    ),
                     ListTile(
                       dense: true,
                       title: const Text('导出设置至剪贴板', style: style),

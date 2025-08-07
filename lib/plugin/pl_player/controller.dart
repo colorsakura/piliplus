@@ -1451,15 +1451,15 @@ class PlPlayerController {
     dynamic pgcType,
     VideoType? videoType,
   }) async {
+    if (isLive) {
+      return;
+    }
     if (!enableHeart || MineController.anonymity.value || progress == 0) {
       return;
     } else if (playerStatus.status.value == PlayerStatus.paused) {
       if (!isManual) {
         return;
       }
-    }
-    if (isLive) {
-      return;
     }
     bool isComplete =
         playerStatus.status.value == PlayerStatus.completed ||

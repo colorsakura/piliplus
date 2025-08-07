@@ -177,8 +177,9 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
     videoDetailController.queryVideoUrl();
     if (videoDetailController.autoPlay.value) {
       plPlayerController = videoDetailController.plPlayerController;
-      plPlayerController!.addStatusLister(playerListener);
-      plPlayerController!.addPositionListener(positionListener);
+      plPlayerController!
+        ..addStatusLister(playerListener)
+        ..addPositionListener(positionListener);
       await plPlayerController!.autoEnterFullscreen();
     }
   }
@@ -327,8 +328,9 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
     } else {
       await videoDetailController.playerInit(autoplay: true);
     }
-    plPlayerController!.addStatusLister(playerListener);
-    plPlayerController!.addPositionListener(positionListener);
+    plPlayerController!
+      ..addStatusLister(playerListener)
+      ..addPositionListener(positionListener);
     await plPlayerController!.autoEnterFullscreen();
   }
 
@@ -336,8 +338,9 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
   void dispose() {
     _listenerFS?.cancel();
 
-    videoDetailController.skipTimer?.cancel();
-    videoDetailController.skipTimer = null;
+    videoDetailController
+      ..skipTimer?.cancel()
+      ..skipTimer = null;
 
     try {
       Get.delete<HorizontalMemberPageController>(
@@ -409,9 +412,10 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
       videoDetailController
         ..makeHeartBeat()
         ..showVP = plPlayerController!.showVP.value;
-      plPlayerController!.removeStatusLister(playerListener);
-      plPlayerController!.removePositionListener(positionListener);
-      plPlayerController!.pause();
+      plPlayerController!
+        ..removeStatusLister(playerListener)
+        ..removePositionListener(positionListener)
+        ..pause();
     }
     isShowing = false;
     super.didPushNext();

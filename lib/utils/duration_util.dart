@@ -37,9 +37,11 @@ class DurationUtil {
     int diffMillis = endMillis - startMillis;
     final duration = Duration(milliseconds: diffMillis);
 
-    final years = duration.inDays ~/ 365;
-    final months = (duration.inDays % 365) ~/ 30;
-    final days = (duration.inDays % 365) % 30;
+    final inDays = duration.inDays;
+    final daysLeft = inDays % 365;
+    final years = inDays ~/ 365;
+    final months = daysLeft ~/ 30;
+    final days = daysLeft % 30;
     final hours = duration.inHours % 24;
     final minutes = duration.inMinutes % 60;
 
@@ -49,8 +51,7 @@ class DurationUtil {
     if (months > 0) format += '$months月';
     if (days > 0) format += '$days天';
     if (hours > 0) format += '$hours小时';
-
-    format += '$minutes分钟';
+    if (minutes > 0) format += '$minutes分钟';
 
     return format;
   }

@@ -11,6 +11,7 @@ Widget videoProgressIndicator(double progress) => ClipRect(
     child: LinearProgressIndicator(
       minHeight: 10,
       value: progress,
+      stopIndicatorColor: Colors.transparent,
     ),
   ),
 );
