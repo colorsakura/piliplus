@@ -1,12 +1,12 @@
 import 'package:PiliPlus/common/widgets/custom_sliver_persistent_header_delegate.dart';
 import 'package:PiliPlus/common/widgets/video_card/video_card_h.dart';
+import 'package:PiliPlus/models/common/search_type.dart';
 import 'package:PiliPlus/models/search/result.dart';
 import 'package:PiliPlus/pages/search/widgets/search_text.dart';
 import 'package:PiliPlus/pages/search_panel/video/controller.dart';
 import 'package:PiliPlus/pages/search_panel/view.dart';
 import 'package:PiliPlus/utils/grid.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 
 class SearchVideoPanel extends CommonSearchPanel {
@@ -56,29 +56,21 @@ class _SearchVideoPanelState
                   scrollDirection: Axis.horizontal,
                   child: Wrap(
                     children: [
-                      for (var i in controller.filterList) ...[
+                      for (var e in ArchiveFilterType.values)
                         Obx(
                           () => SearchText(
                             fontSize: 13,
-                            text: i['label'],
+                            text: e.desc,
                             bgColor: Colors.transparent,
-                            textColor:
-                                controller.selectedType.value == i['type']
+                            textColor: controller.selectedType.value == e
                                 ? theme.colorScheme.primary
                                 : theme.colorScheme.outline,
-                            onTap: (value) async {
-                              controller.selectedType.value = i['type'];
-                              controller.order.value = i['type']
-                                  .toString()
-                                  .split('.')
-                                  .last;
-                              SmartDialog.showLoading(msg: 'loading');
-                              await controller.onReload();
-                              SmartDialog.dismiss();
-                            },
+                            onTap: (_) => controller
+                              ..order = e.name
+                              ..selectedType.value = e
+                              ..onSortSearch(getBack: false),
                           ),
                         ),
-                      ],
                     ],
                   ),
                 ),

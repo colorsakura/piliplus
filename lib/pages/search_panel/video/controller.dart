@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:PiliPlus/http/loading_state.dart';
+import 'package:PiliPlus/models/common/search/video_search_type.dart';
 import 'package:PiliPlus/models/common/search_type.dart';
 import 'package:PiliPlus/models/search/result.dart';
 import 'package:PiliPlus/pages/search/widgets/search_text.dart';
@@ -26,23 +27,11 @@ class SearchVideoController
   @override
   void onInit() {
     super.onInit();
+    videoDurationType = VideoDurationType.all;
+    videoZoneType = VideoZoneType.all;
     DateTime now = DateTime.now();
-    pubBeginDate = DateTime(
-      now.year,
-      now.month,
-      1,
-      0,
-      0,
-      0,
-    );
-    pubEndDate = DateTime(
-      now.year,
-      now.month,
-      now.day,
-      23,
-      59,
-      59,
-    );
+    pubBeginDate = DateTime(now.year, now.month, 1, 0, 0, 0);
+    pubEndDate = DateTime(now.year, now.month, now.day, 23, 59, 59);
 
     jump2Video();
   }
@@ -86,61 +75,12 @@ class SearchVideoController
     }
   }
 
-  // sort
-  late final List<Map> filterList = ArchiveFilterType.values
-      .map(
-        (type) => {
-          'label': type.desc,
-          'type': type,
-        },
-      )
-      .toList();
-  late final Rx<ArchiveFilterType> selectedType =
-      ArchiveFilterType.values.first.obs;
-  late final List pubTimeFiltersList = [
-    {'label': '不限', 'value': 0},
-    {'label': '最近一天', 'value': 1},
-    {'label': '最近一周', 'value': 2},
-    {'label': '最近半年', 'value': 3},
-  ];
-  late final List timeFiltersList = [
-    {'label': '全部时长', 'value': 0},
-    {'label': '0-10分钟', 'value': 1},
-    {'label': '10-30分钟', 'value': 2},
-    {'label': '30-60分钟', 'value': 3},
-    {'label': '60分钟+', 'value': 4},
-  ];
-  late final List zoneFiltersList = [
-    {'label': '全部', 'value': 0},
-    {'label': '动画', 'value': 1, 'tids': 1},
-    {'label': '番剧', 'value': 2, 'tids': 13},
-    {'label': '国创', 'value': 3, 'tids': 167},
-    {'label': '音乐', 'value': 4, 'tids': 3},
-    {'label': '舞蹈', 'value': 5, 'tids': 129},
-    {'label': '游戏', 'value': 6, 'tids': 4},
-    {'label': '知识', 'value': 7, 'tids': 36},
-    {'label': '科技', 'value': 8, 'tids': 188},
-    {'label': '运动', 'value': 9, 'tids': 234},
-    {'label': '汽车', 'value': 10, 'tids': 223},
-    {'label': '生活', 'value': 11, 'tids': 160},
-    {'label': '美食', 'value': 12, 'tids': 221},
-    {'label': '动物', 'value': 13, 'tids': 217},
-    {'label': '鬼畜', 'value': 14, 'tids': 119},
-    {'label': '时尚', 'value': 15, 'tids': 155},
-    {'label': '资讯', 'value': 16, 'tids': 202},
-    {'label': '娱乐', 'value': 17, 'tids': 5},
-    {'label': '影视', 'value': 18, 'tids': 181},
-    {'label': '记录', 'value': 19, 'tids': 177},
-    {'label': '电影', 'value': 20, 'tids': 23},
-    {'label': '电视', 'value': 21, 'tids': 11},
-  ];
-  int currentPubTimeFilter = 0;
+  final Rx<ArchiveFilterType> selectedType = ArchiveFilterType.totalrank.obs;
+  VideoPubTimeType? pubTimeType = VideoPubTimeType.all;
   late DateTime pubBeginDate;
   late DateTime pubEndDate;
   bool customPubBeginDate = false;
   bool customPubEndDate = false;
-  int currentTimeFilter = 0;
-  int currentZoneFilter = 0;
 
   void onShowFilterDialog(BuildContext context) {
     showModalBottomSheet(
@@ -154,6 +94,9 @@ class SearchVideoController
         builder: (context, setState) {
           final theme = Theme.of(context);
           Widget dateWidget([bool isFirst = true]) {
+            final enable =
+                pubTimeType == null &&
+                (isFirst ? customPubBeginDate : customPubEndDate);
             return SearchText(
               text: DateUtil.longFormat.format(
                 isFirst ? pubBeginDate : pubEndDate,
@@ -165,7 +108,7 @@ class SearchVideoController
                   initialDate: isFirst ? pubBeginDate : pubEndDate,
                   firstDate: isFirst ? DateTime(2009, 6, 26) : pubBeginDate,
                   lastDate: isFirst ? pubEndDate : DateTime.now(),
-                ).then((selectedDate) async {
+                ).then((selectedDate) {
                   if (selectedDate != null) {
                     if (isFirst) {
                       customPubBeginDate = true;
@@ -174,7 +117,7 @@ class SearchVideoController
                       customPubEndDate = true;
                       pubEndDate = selectedDate;
                     }
-                    currentPubTimeFilter = -1;
+                    pubTimeType = null;
                     SmartDialog.dismiss();
                     pubBegin =
                         DateTime(
@@ -197,20 +140,14 @@ class SearchVideoController
                         ).millisecondsSinceEpoch ~/
                         1000;
                     setState(() {});
-                    SmartDialog.showLoading(msg: 'loading');
-                    await onReload();
-                    SmartDialog.dismiss();
+                    onSortSearch(getBack: false);
                   }
                 });
               },
-              bgColor:
-                  currentPubTimeFilter == -1 &&
-                      (isFirst ? customPubBeginDate : customPubEndDate)
+              bgColor: enable
                   ? theme.colorScheme.secondaryContainer
                   : theme.colorScheme.outline.withValues(alpha: 0.1),
-              textColor:
-                  currentPubTimeFilter == -1 &&
-                      (isFirst ? customPubBeginDate : customPubEndDate)
+              textColor: enable
                   ? theme.colorScheme.onSecondaryContainer
                   : theme.colorScheme.outline.withValues(alpha: 0.8),
             );
@@ -235,59 +172,55 @@ class SearchVideoController
                   Wrap(
                     spacing: 8,
                     runSpacing: 8,
-                    children: pubTimeFiltersList
-                        .map(
-                          (item) => SearchText(
-                            text: item['label'],
-                            onTap: (text) async {
-                              Get.back();
-                              currentPubTimeFilter = item['value'];
-                              SmartDialog.dismiss();
-                              SmartDialog.showToast("「${item['label']}」的筛选结果");
-                              DateTime now = DateTime.now();
-                              if (item['value'] == 0) {
-                                pubBegin = null;
-                                pubEnd = null;
-                              } else {
-                                pubBegin =
-                                    DateTime(
-                                      now.year,
-                                      now.month,
-                                      now.day -
-                                          (item['value'] == 0
-                                              ? 0
-                                              : item['value'] == 1
-                                              ? 6
-                                              : 179),
-                                      0,
-                                      0,
-                                      0,
-                                    ).millisecondsSinceEpoch ~/
-                                    1000;
-                                pubEnd =
-                                    DateTime(
-                                      now.year,
-                                      now.month,
-                                      now.day,
-                                      23,
-                                      59,
-                                      59,
-                                    ).millisecondsSinceEpoch ~/
-                                    1000;
-                              }
-                              SmartDialog.showLoading(msg: 'loading');
-                              await onReload();
-                              SmartDialog.dismiss();
-                            },
-                            bgColor: item['value'] == currentPubTimeFilter
-                                ? theme.colorScheme.secondaryContainer
-                                : null,
-                            textColor: item['value'] == currentPubTimeFilter
-                                ? theme.colorScheme.onSecondaryContainer
-                                : null,
-                          ),
-                        )
-                        .toList(),
+                    children: VideoPubTimeType.values.map(
+                      (e) {
+                        final isCurr = e == pubTimeType;
+                        return SearchText(
+                          text: e.label,
+                          onTap: (text) {
+                            pubTimeType = e;
+                            DateTime now = DateTime.now();
+                            if (e == VideoPubTimeType.all) {
+                              pubBegin = null;
+                              pubEnd = null;
+                            } else {
+                              pubBegin =
+                                  DateTime(
+                                    now.year,
+                                    now.month,
+                                    now.day -
+                                        (e == VideoPubTimeType.day
+                                            ? 0
+                                            : e == VideoPubTimeType.week
+                                            ? 6
+                                            : 179),
+                                    0,
+                                    0,
+                                    0,
+                                  ).millisecondsSinceEpoch ~/
+                                  1000;
+                              pubEnd =
+                                  DateTime(
+                                    now.year,
+                                    now.month,
+                                    now.day,
+                                    23,
+                                    59,
+                                    59,
+                                  ).millisecondsSinceEpoch ~/
+                                  1000;
+                            }
+                            onSortSearch(label: e.label);
+                          },
+                          bgColor: isCurr
+                              ? theme.colorScheme.secondaryContainer
+                              : null,
+                          textColor: isCurr
+                              ? theme.colorScheme.onSecondaryContainer
+                              : null,
+                        );
+                      },
+                    ).toList(),
                   ),
                   const SizedBox(height: 8),
                   Row(
@@ -308,29 +241,24 @@ class SearchVideoController
                   Wrap(
                     spacing: 8,
                     runSpacing: 8,
-                    children: timeFiltersList
-                        .map(
-                          (item) => SearchText(
-                            text: item['label'],
-                            onTap: (text) async {
-                              Get.back();
-                              currentTimeFilter = item['value'];
-                              SmartDialog.dismiss();
-                              SmartDialog.showToast("「${item['label']}」的筛选结果");
-                              duration.value = item['value'];
-                              SmartDialog.showLoading(msg: 'loading');
-                              await onReload();
-                              SmartDialog.dismiss();
-                            },
-                            bgColor: item['value'] == currentTimeFilter
-                                ? theme.colorScheme.secondaryContainer
-                                : null,
-                            textColor: item['value'] == currentTimeFilter
-                                ? theme.colorScheme.onSecondaryContainer
-                                : null,
-                          ),
-                        )
-                        .toList(),
+                    children: VideoDurationType.values.map(
+                      (e) {
+                        final isCurr = e == videoDurationType;
+                        return SearchText(
+                          text: e.label,
+                          onTap: (_) {
+                            videoDurationType = e;
+                            onSortSearch(label: e.label);
+                          },
+                          bgColor: isCurr
+                              ? theme.colorScheme.secondaryContainer
+                              : null,
+                          textColor: isCurr
+                              ? theme.colorScheme.onSecondaryContainer
+                              : null,
+                        );
+                      },
+                    ).toList(),
                   ),
                   const SizedBox(height: 20),
                   const Text('内容分区', style: TextStyle(fontSize: 16)),
@@ -338,29 +266,24 @@ class SearchVideoController
                   Wrap(
                     spacing: 8,
                     runSpacing: 8,
-                    children: zoneFiltersList
-                        .map(
-                          (item) => SearchText(
-                            text: item['label'],
-                            onTap: (text) async {
-                              Get.back();
-                              currentZoneFilter = item['value'];
-                              SmartDialog.dismiss();
-                              SmartDialog.showToast("「${item['label']}」的筛选结果");
-                              tids = item['tids'];
-                              SmartDialog.showLoading(msg: 'loading');
-                              await onReload();
-                              SmartDialog.dismiss();
-                            },
-                            bgColor: item['value'] == currentZoneFilter
-                                ? theme.colorScheme.secondaryContainer
-                                : null,
-                            textColor: item['value'] == currentZoneFilter
-                                ? theme.colorScheme.onSecondaryContainer
-                                : null,
-                          ),
-                        )
-                        .toList(),
+                    children: VideoZoneType.values.map(
+                      (e) {
+                        final isCurr = e == videoZoneType;
+                        return SearchText(
+                          text: e.label,
+                          onTap: (_) {
+                            videoZoneType = e;
+                            onSortSearch(label: e.label);
+                          },
+                          bgColor: isCurr
+                              ? theme.colorScheme.secondaryContainer
+                              : null,
+                          textColor: isCurr
+                              ? theme.colorScheme.onSecondaryContainer
+                              : null,
+                        );
+                      },
+                    ).toList(),
                   ),
                 ],
               ),

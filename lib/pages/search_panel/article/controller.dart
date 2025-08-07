@@ -1,11 +1,11 @@
 import 'dart:math';
 
+import 'package:PiliPlus/models/common/search/article_search_type.dart';
 import 'package:PiliPlus/models/search/result.dart';
 import 'package:PiliPlus/pages/search/widgets/search_text.dart';
 import 'package:PiliPlus/pages/search_panel/controller.dart';
 import 'package:PiliPlus/utils/context_ext.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart' hide ContextExtensionss;
 
 class SearchArticleController
@@ -19,6 +19,7 @@ class SearchArticleController
   @override
   void onInit() {
     super.onInit();
+    articleZoneType = ArticleZoneType.all.obs;
     jump2Article();
   }
 
@@ -40,27 +41,7 @@ class SearchArticleController
     }
   }
 
-  // sort
-  late final List orderFiltersList = [
-    {'label': '综合排序', 'value': 0, 'order': 'totalrank'},
-    {'label': '最新发布', 'value': 1, 'order': 'pubdate'},
-    {'label': '最多点击', 'value': 2, 'order': 'click'},
-    {'label': '最多喜欢', 'value': 3, 'order': 'attention'},
-    {'label': '最多评论', 'value': 4, 'order': 'scores'},
-  ];
-  late final List zoneFiltersList = [
-    {'label': '全部分区', 'value': 0, 'categoryId': 0},
-    {'label': '动画', 'value': 1, 'categoryId': 2},
-    {'label': '游戏', 'value': 2, 'categoryId': 1},
-    {'label': '影视', 'value': 3, 'categoryId': 28},
-    {'label': '生活', 'value': 4, 'categoryId': 3},
-    {'label': '兴趣', 'value': 5, 'categoryId': 29},
-    {'label': '轻小说', 'value': 6, 'categoryId': 16},
-    {'label': '科技', 'value': 7, 'categoryId': 17},
-    {'label': '笔记', 'value': 8, 'categoryId': 41},
-  ];
-  RxInt currentOrderFilterval = 0.obs;
-  RxInt currentZoneFilterval = 0.obs;
+  Rx<ArticleOrderType> articleOrderType = ArticleOrderType.totalrank.obs;
 
   void onShowFilterDialog(BuildContext context) {
     showModalBottomSheet(
@@ -91,30 +72,25 @@ class SearchArticleController
                 Wrap(
                   spacing: 8,
                   runSpacing: 8,
-                  children: orderFiltersList
-                      .map(
-                        (item) => SearchText(
-                          text: item['label'],
-                          onTap: (_) async {
-                            Get.back();
-                            currentOrderFilterval.value = item['value'];
-                            SmartDialog.dismiss();
-                            SmartDialog.showToast("「${item['label']}」的筛选结果");
-                            order.value = item['order'];
-                            SmartDialog.showLoading(msg: 'loading');
-                            await onReload();
-                            SmartDialog.dismiss();
-                          },
-                          bgColor: item['value'] == currentOrderFilterval.value
-                              ? theme.colorScheme.secondaryContainer
-                              : null,
-                          textColor:
-                              item['value'] == currentOrderFilterval.value
-                              ? theme.colorScheme.onSecondaryContainer
-                              : null,
-                        ),
-                      )
-                      .toList(),
+                  children: ArticleOrderType.values.map(
+                    (e) {
+                      final isCurr = e == articleOrderType.value;
+                      return SearchText(
+                        text: e.label,
+                        onTap: (_) {
+                          articleOrderType.value = e;
+                          order = e.order;
+                          onSortSearch(label: e.label);
+                        },
+                        bgColor: isCurr
+                            ? theme.colorScheme.secondaryContainer
+                            : null,
+                        textColor: isCurr
+                            ? theme.colorScheme.onSecondaryContainer
+                            : null,
+                      );
+                    },
+                  ).toList(),
                 ),
                 const SizedBox(height: 20),
                 const Text('分区', style: TextStyle(fontSize: 16)),
@@ -122,29 +98,24 @@ class SearchArticleController
                 Wrap(
                   spacing: 8,
                   runSpacing: 8,
-                  children: zoneFiltersList
-                      .map(
-                        (item) => SearchText(
-                          text: item['label'],
-                          onTap: (_) async {
-                            Get.back();
-                            currentZoneFilterval.value = item['value'];
-                            SmartDialog.dismiss();
-                            SmartDialog.showToast("「${item['label']}」的筛选结果");
-                            categoryId = item['categoryId'];
-                            SmartDialog.showLoading(msg: 'loading');
-                            await onReload();
-                            SmartDialog.dismiss();
-                          },
-                          bgColor: item['value'] == currentZoneFilterval.value
-                              ? theme.colorScheme.secondaryContainer
-                              : null,
-                          textColor: item['value'] == currentZoneFilterval.value
-                              ? theme.colorScheme.onSecondaryContainer
-                              : null,
-                        ),
-                      )
-                      .toList(),
+                  children: ArticleZoneType.values.map(
+                    (e) {
+                      final isCurr = e == articleZoneType!.value;
+                      return SearchText(
+                        text: e.label,
+                        onTap: (_) {
+                          articleZoneType!.value = e;
+                          onSortSearch(label: e.label);
+                        },
+                        bgColor: isCurr
+                            ? theme.colorScheme.secondaryContainer
+                            : null,
+                        textColor: isCurr
+                            ? theme.colorScheme.onSecondaryContainer
+                            : null,
+                      );
+                    },
+                  ).toList(),
                 ),
               ],
             ),

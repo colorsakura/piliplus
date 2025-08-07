@@ -42,12 +42,12 @@ class SearchAllController
   Future<LoadingState<SearchAllData>> customGetData() => SearchHttp.searchAll(
     keyword: keyword,
     page: page,
-    order: order.value,
-    duration: searchType == SearchType.video ? duration.value : null,
-    tids: tids,
-    orderSort: orderSort,
-    userType: userType,
-    categoryId: categoryId,
+    order: order,
+    duration: null,
+    tids: videoZoneType?.tids,
+    orderSort: userOrderType?.value.orderSort,
+    userType: userType?.value.index,
+    categoryId: articleZoneType?.value.categoryId,
     pubBegin: pubBegin,
     pubEnd: pubEnd,
   );

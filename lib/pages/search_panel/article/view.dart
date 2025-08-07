@@ -51,7 +51,7 @@ class _SearchArticlePanelState
             children: [
               Obx(
                 () => Text(
-                  '排序: ${controller.orderFiltersList[controller.currentOrderFilterval.value]['label']}',
+                  '排序: ${controller.articleOrderType.value.label}',
                   maxLines: 1,
                   style: TextStyle(color: theme.colorScheme.outline),
                 ),
@@ -59,7 +59,7 @@ class _SearchArticlePanelState
               const Spacer(),
               Obx(
                 () => Text(
-                  '分区: ${controller.zoneFiltersList[controller.currentZoneFilterval.value]['label']}',
+                  '分区: ${controller.articleZoneType!.value.label}',
                   maxLines: 1,
                   style: TextStyle(color: theme.colorScheme.outline),
                 ),
