@@ -32,7 +32,7 @@ class SearchPanelController<R extends SearchNumData<T>, T>
   int? pubBegin;
   int? pubEnd;
 
-  // article
+  // user
   Rx<UserOrderType>? userOrderType;
   Rx<UserType>? userType;
 

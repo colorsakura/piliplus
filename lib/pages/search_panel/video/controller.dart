@@ -210,7 +210,7 @@ class SearchVideoController
                                   ).millisecondsSinceEpoch ~/
                                   1000;
                             }
-                            onSortSearch(label: e.label);
+                            onSortSearch();
                           },
                           bgColor: isCurr
                               ? theme.colorScheme.secondaryContainer
@@ -224,14 +224,10 @@ class SearchVideoController
                   ),
                   const SizedBox(height: 8),
                   Row(
+                    spacing: 8,
                     children: [
                       Expanded(child: dateWidget()),
-                      const SizedBox(width: 8),
-                      const Text(
-                        '至',
-                        style: TextStyle(fontSize: 13),
-                      ),
-                      const SizedBox(width: 8),
+                      const Text('至', style: TextStyle(fontSize: 13)),
                       Expanded(child: dateWidget(false)),
                     ],
                   ),
