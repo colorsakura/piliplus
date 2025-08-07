@@ -1,5 +1,5 @@
 import 'package:PiliPlus/common/widgets/loading_widget/http_error.dart';
-import 'package:PiliPlus/pages/search/controller.dart';
+import 'package:PiliPlus/pages/search/controller.dart' show SearchKeywordMixin;
 import 'package:PiliPlus/pages/setting/models/extra_settings.dart';
 import 'package:PiliPlus/pages/setting/models/model.dart';
 import 'package:PiliPlus/pages/setting/models/play_settings.dart';
@@ -39,7 +39,7 @@ class _SettingsSearchPageState extends State<SettingsSearchPage>
   }
 
   @override
-  ValueChanged<String> get onKeywordChanged => (value) {
+  void onKeywordChanged(String value) {
     if (value.isEmpty) {
       _list.clear();
     } else {
@@ -54,7 +54,7 @@ class _SettingsSearchPageState extends State<SettingsSearchPage>
           )
           .toList();
     }
-  };
+  }
 
   @override
   void dispose() {

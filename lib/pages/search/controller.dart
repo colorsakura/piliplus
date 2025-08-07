@@ -18,7 +18,7 @@ mixin SearchKeywordMixin {
   Duration duration = const Duration(milliseconds: 200);
   StreamController<String>? ctr;
   StreamSubscription<String>? sub;
-  ValueChanged<String> get onKeywordChanged;
+  void onKeywordChanged(String value);
 
   void subInit() {
     ctr = StreamController<String>();
@@ -170,7 +170,7 @@ class SSearchController extends GetxController with SearchKeywordMixin {
   }
 
   @override
-  ValueChanged<String> get onKeywordChanged => (String value) async {
+  Future<void> onKeywordChanged(String value) async {
     var res = await SearchHttp.searchSuggest(term: value);
     if (res['status']) {
       SearchSuggestModel data = res['data'];
@@ -178,7 +178,7 @@ class SSearchController extends GetxController with SearchKeywordMixin {
         searchSuggestList.value = data.tag!;
       }
     }
-  };
+  }
 
   void onLongSelect(String word) {
     historyList.remove(word);

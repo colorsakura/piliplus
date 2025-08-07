@@ -10,7 +10,7 @@ import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models_new/dynamic/dyn_mention/group.dart';
 import 'package:PiliPlus/pages/dynamics_mention/controller.dart';
 import 'package:PiliPlus/pages/dynamics_mention/widgets/item.dart';
-import 'package:PiliPlus/pages/search/controller.dart';
+import 'package:PiliPlus/pages/search/controller.dart' show SearchKeywordMixin;
 import 'package:PiliPlus/utils/context_ext.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:flutter/material.dart';
@@ -80,14 +80,13 @@ class _DynMentionPanelState extends State<DynMentionPanel>
   }
 
   @override
-  ValueChanged<String> get onKeywordChanged =>
-      (value) => _controller
-        ..enableClear.value = value.isNotEmpty
-        ..onRefresh().whenComplete(
-          () => WidgetsBinding.instance.addPostFrameCallback(
-            (_) => widget.scrollController?.jumpToTop(),
-          ),
-        );
+  void onKeywordChanged(String value) => _controller
+    ..enableClear.value = value.isNotEmpty
+    ..onRefresh().whenComplete(
+      () => WidgetsBinding.instance.addPostFrameCallback(
+        (_) => widget.scrollController?.jumpToTop(),
+      ),
+    );
 
   @override
   Widget build(BuildContext context) {

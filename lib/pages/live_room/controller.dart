@@ -38,6 +38,24 @@ class LiveRoomController extends GetxController {
   RxBool isLoaded = false.obs;
   Rx<RoomInfoH5Data?> roomInfoH5 = Rx<RoomInfoH5Data?>(null);
 
+  Rx<int?> liveTime = Rx<int?>(null);
+  static const periodMins = 5;
+  Timer? liveTimeTimer;
+
+  void startLiveTimer() {
+    if (liveTime.value != null) {
+      liveTimeTimer ??= Timer.periodic(
+        const Duration(minutes: periodMins),
+        (_) => liveTime.refresh(),
+      );
+    }
+  }
+
+  void cancelLiveTimer() {
+    liveTimeTimer?.cancel();
+    liveTimeTimer = null;
+  }
+
   // dm
   LiveDmInfoData? dmInfo;
   List<RichTextItem>? savedDanmaku;
@@ -104,6 +122,8 @@ class LiveRoomController extends GetxController {
       if (data.roomId != null) {
         roomId = data.roomId!;
       }
+      liveTime.value = data.liveTime;
+      startLiveTimer();
       isPortrait.value = data.isPortrait ?? false;
       List<CodecItem> codec =
           data.playurlInfo!.playurl!.stream!.first.format!.first.codec!;
@@ -237,6 +257,7 @@ class LiveRoomController extends GetxController {
 
   @override
   void onClose() {
+    cancelLiveTimer();
     savedDanmaku?.clear();
     savedDanmaku = null;
     scrollController
