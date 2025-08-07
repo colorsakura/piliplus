@@ -8,11 +8,11 @@ import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models_new/dynamic/dyn_topic_top/topic_item.dart';
 import 'package:PiliPlus/pages/dynamics_select_topic/controller.dart';
 import 'package:PiliPlus/pages/dynamics_select_topic/widgets/item.dart';
+import 'package:PiliPlus/pages/search/controller.dart';
 import 'package:PiliPlus/utils/context_ext.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart' hide ContextExtensionss;
-import 'package:stream_transform/stream_transform.dart';
 
 class SelectTopicPanel extends StatefulWidget {
   const SelectTopicPanel({
@@ -56,10 +56,11 @@ class SelectTopicPanel extends StatefulWidget {
   State<SelectTopicPanel> createState() => _SelectTopicPanelState();
 }
 
-class _SelectTopicPanelState extends State<SelectTopicPanel> {
+class _SelectTopicPanelState extends State<SelectTopicPanel>
+    with SearchKeywordMixin {
   final _controller = Get.put(SelectTopicController());
-  final StreamController<String> _ctr = StreamController<String>();
-  late StreamSubscription<String> _sub;
+  @override
+  Duration get duration => const Duration(milliseconds: 300);
 
   @override
   void initState() {
@@ -67,25 +68,24 @@ class _SelectTopicPanelState extends State<SelectTopicPanel> {
     if (_controller.loadingState.value is Error) {
       _controller.onReload();
     }
-    _sub = _ctr.stream
-        .debounce(const Duration(milliseconds: 300), trailing: true)
-        .listen((value) {
-          _controller
-            ..enableClear.value = value.isNotEmpty
-            ..onRefresh().whenComplete(
-              () => WidgetsBinding.instance.addPostFrameCallback(
-                (_) => widget.scrollController?.jumpToTop(),
-              ),
-            );
-        });
+    subInit();
   }
 
   @override
   void dispose() {
-    _sub.cancel();
-    _ctr.close();
+    subDispose();
     super.dispose();
   }
+
+  @override
+  ValueChanged<String> get onKeywordChanged =>
+      (value) => _controller
+        ..enableClear.value = value.isNotEmpty
+        ..onRefresh().whenComplete(
+          () => WidgetsBinding.instance.addPostFrameCallback(
+            (_) => widget.scrollController?.jumpToTop(),
+          ),
+        );
 
   @override
   Widget build(BuildContext context) {
@@ -110,7 +110,7 @@ class _SelectTopicPanelState extends State<SelectTopicPanel> {
           child: TextField(
             focusNode: _controller.focusNode,
             controller: _controller.controller,
-            onChanged: _ctr.add,
+            onChanged: ctr!.add,
             decoration: InputDecoration(
               border: const OutlineInputBorder(
                 gapPadding: 0,

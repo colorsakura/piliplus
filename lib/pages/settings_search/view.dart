@@ -1,6 +1,5 @@
-import 'dart:async';
-
 import 'package:PiliPlus/common/widgets/loading_widget/http_error.dart';
+import 'package:PiliPlus/pages/search/controller.dart';
 import 'package:PiliPlus/pages/setting/models/extra_settings.dart';
 import 'package:PiliPlus/pages/setting/models/model.dart';
 import 'package:PiliPlus/pages/setting/models/play_settings.dart';
@@ -11,7 +10,6 @@ import 'package:PiliPlus/pages/setting/models/video_settings.dart';
 import 'package:PiliPlus/utils/grid.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:stream_transform/stream_transform.dart';
 import 'package:waterfall_flow/waterfall_flow.dart';
 
 class SettingsSearchPage extends StatefulWidget {
@@ -21,7 +19,8 @@ class SettingsSearchPage extends StatefulWidget {
   State<SettingsSearchPage> createState() => _SettingsSearchPageState();
 }
 
-class _SettingsSearchPageState extends State<SettingsSearchPage> {
+class _SettingsSearchPageState extends State<SettingsSearchPage>
+    with SearchKeywordMixin {
   final _textEditingController = TextEditingController();
   final RxList<SettingsModel> _list = <SettingsModel>[].obs;
   late final _settings = [
@@ -32,37 +31,34 @@ class _SettingsSearchPageState extends State<SettingsSearchPage> {
     ...playSettings,
     ...styleSettings,
   ];
-  late StreamController<String> _ctr;
-  late StreamSubscription<String> _sub;
 
   @override
   void initState() {
     super.initState();
-    _ctr = StreamController<String>();
-    _sub = _ctr.stream
-        .debounce(const Duration(milliseconds: 200), trailing: true)
-        .listen((value) {
-          if (value.isEmpty) {
-            _list.clear();
-          } else {
-            value = value.toLowerCase();
-            _list.value = _settings
-                .where(
-                  (item) =>
-                      (item.title ?? item.getTitle?.call())
-                          ?.toLowerCase()
-                          .contains(value) ||
-                      item.subtitle?.toLowerCase().contains(value) == true,
-                )
-                .toList();
-          }
-        });
+    subInit();
   }
 
   @override
+  ValueChanged<String> get onKeywordChanged => (value) {
+    if (value.isEmpty) {
+      _list.clear();
+    } else {
+      value = value.toLowerCase();
+      _list.value = _settings
+          .where(
+            (item) =>
+                (item.title ?? item.getTitle?.call())?.toLowerCase().contains(
+                  value,
+                ) ||
+                item.subtitle?.toLowerCase().contains(value) == true,
+          )
+          .toList();
+    }
+  };
+
+  @override
   void dispose() {
-    _sub.cancel();
-    _ctr.close();
+    subDispose();
     _textEditingController.dispose();
     super.dispose();
   }
@@ -89,7 +85,7 @@ class _SettingsSearchPageState extends State<SettingsSearchPage> {
           autofocus: true,
           controller: _textEditingController,
           textAlignVertical: TextAlignVertical.center,
-          onChanged: _ctr.add,
+          onChanged: ctr!.add,
           decoration: const InputDecoration(
             isDense: true,
             hintText: '搜索',

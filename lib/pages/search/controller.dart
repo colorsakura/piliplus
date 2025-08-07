@@ -14,7 +14,26 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stream_transform/stream_transform.dart';
 
-class SSearchController extends GetxController {
+mixin SearchKeywordMixin {
+  Duration duration = const Duration(milliseconds: 200);
+  StreamController<String>? ctr;
+  StreamSubscription<String>? sub;
+  ValueChanged<String> get onKeywordChanged;
+
+  void subInit() {
+    ctr = StreamController<String>();
+    sub = ctr!.stream
+        .debounce(duration, trailing: true)
+        .listen(onKeywordChanged);
+  }
+
+  void subDispose() {
+    sub?.cancel();
+    ctr?.close();
+  }
+}
+
+class SSearchController extends GetxController with SearchKeywordMixin {
   SSearchController(this.tag);
   final String tag;
 
@@ -34,8 +53,7 @@ class SSearchController extends GetxController {
 
   // suggestion
   final bool searchSuggestion = Pref.searchSuggestion;
-  StreamController<String>? _ctr;
-  StreamSubscription<String>? _sub;
+
   late final RxList<SearchSuggestItem> searchSuggestList;
 
   // trending
@@ -61,10 +79,7 @@ class SSearchController extends GetxController {
     ).obs;
 
     if (searchSuggestion) {
-      _ctr = StreamController<String>();
-      _sub = _ctr!.stream
-          .debounce(const Duration(milliseconds: 200), trailing: true)
-          .listen(querySearchSuggest);
+      subInit();
       searchSuggestList = <SearchSuggestItem>[].obs;
     }
 
@@ -89,7 +104,7 @@ class SSearchController extends GetxController {
       if (value.isEmpty) {
         searchSuggestList.clear();
       } else {
-        _ctr!.add(value);
+        ctr!.add(value);
       }
     }
   }
@@ -154,7 +169,8 @@ class SSearchController extends GetxController {
     submit();
   }
 
-  Future<void> querySearchSuggest(String value) async {
+  @override
+  ValueChanged<String> get onKeywordChanged => (String value) async {
     var res = await SearchHttp.searchSuggest(term: value);
     if (res['status']) {
       SearchSuggestModel data = res['data'];
@@ -162,7 +178,7 @@ class SSearchController extends GetxController {
         searchSuggestList.value = data.tag!;
       }
     }
-  }
+  };
 
   void onLongSelect(String word) {
     historyList.remove(word);
@@ -182,10 +198,9 @@ class SSearchController extends GetxController {
 
   @override
   void onClose() {
+    subDispose();
     searchFocusNode.dispose();
     controller.dispose();
-    _sub?.cancel();
-    _ctr?.close();
     super.onClose();
   }
 }

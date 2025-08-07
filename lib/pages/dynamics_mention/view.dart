@@ -10,11 +10,11 @@ import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models_new/dynamic/dyn_mention/group.dart';
 import 'package:PiliPlus/pages/dynamics_mention/controller.dart';
 import 'package:PiliPlus/pages/dynamics_mention/widgets/item.dart';
+import 'package:PiliPlus/pages/search/controller.dart';
 import 'package:PiliPlus/utils/context_ext.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart' hide ContextExtensionss;
-import 'package:stream_transform/stream_transform.dart';
 
 class DynMentionPanel extends StatefulWidget {
   const DynMentionPanel({
@@ -58,10 +58,11 @@ class DynMentionPanel extends StatefulWidget {
   State<DynMentionPanel> createState() => _DynMentionPanelState();
 }
 
-class _DynMentionPanelState extends State<DynMentionPanel> {
+class _DynMentionPanelState extends State<DynMentionPanel>
+    with SearchKeywordMixin {
   final _controller = Get.put(DynMentionController());
-  final StreamController<String> _ctr = StreamController<String>();
-  late StreamSubscription<String> _sub;
+  @override
+  Duration get duration => const Duration(milliseconds: 300);
 
   @override
   void initState() {
@@ -69,25 +70,24 @@ class _DynMentionPanelState extends State<DynMentionPanel> {
     if (_controller.loadingState.value is Error) {
       _controller.onReload();
     }
-    _sub = _ctr.stream
-        .debounce(const Duration(milliseconds: 300), trailing: true)
-        .listen((value) {
-          _controller
-            ..enableClear.value = value.isNotEmpty
-            ..onRefresh().whenComplete(
-              () => WidgetsBinding.instance.addPostFrameCallback(
-                (_) => widget.scrollController?.jumpToTop(),
-              ),
-            );
-        });
+    subInit();
   }
 
   @override
   void dispose() {
-    _sub.cancel();
-    _ctr.close();
+    subDispose();
     super.dispose();
   }
+
+  @override
+  ValueChanged<String> get onKeywordChanged =>
+      (value) => _controller
+        ..enableClear.value = value.isNotEmpty
+        ..onRefresh().whenComplete(
+          () => WidgetsBinding.instance.addPostFrameCallback(
+            (_) => widget.scrollController?.jumpToTop(),
+          ),
+        );
 
   @override
   Widget build(BuildContext context) {
@@ -114,7 +114,7 @@ class _DynMentionPanelState extends State<DynMentionPanel> {
           child: TextField(
             focusNode: _controller.focusNode,
             controller: _controller.controller,
-            onChanged: _ctr.add,
+            onChanged: ctr!.add,
             decoration: InputDecoration(
               border: const OutlineInputBorder(
                 gapPadding: 0,
