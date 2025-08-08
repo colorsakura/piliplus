@@ -807,7 +807,7 @@ class PlPlayerController {
 
   Future<bool> refreshPlayer() async {
     if (_videoPlayerController == null) {
-      SmartDialog.showToast('视频播放器为空，请重新进入本页面');
+      // SmartDialog.showToast('视频播放器为空，请重新进入本页面');
       return false;
     }
     if (dataSource.videoSource.isNullOrEmpty) {
@@ -952,8 +952,14 @@ class PlPlayerController {
         );
       }),
       videoPlayerController!.stream.error.listen((String event) {
-        // 直播的错误提示没有参考价值，均不予显示
-        if (isLive) return;
+        if (isLive) {
+          if (event.startsWith('tcp: ffurl_read returned ') ||
+              event.startsWith("Failed to open https://") ||
+              event.startsWith("Can not open external file https://")) {
+            Future.delayed(const Duration(milliseconds: 3000), refreshPlayer);
+          }
+          return;
+        }
         if (event.startsWith("Failed to open https://") ||
             event.startsWith("Can not open external file https://") ||
             //tcp: ffurl_read returned 0xdfb9b0bb
