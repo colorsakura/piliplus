@@ -85,9 +85,6 @@ class _LiveRoomPageState extends State<LiveRoomPage>
     WidgetsBinding.instance.removeObserver(this);
     ScreenBrightness.instance.resetApplicationScreenBrightness();
     PlPlayerController.setPlayCallBack(null);
-    _liveRoomController
-      ..msgStream?.close()
-      ..msgStream = null;
     plPlayerController
       ..removeStatusLister(playerListener)
       ..dispose();

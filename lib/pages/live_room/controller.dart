@@ -259,6 +259,8 @@ class LiveRoomController extends GetxController {
     cancelLiveTimer();
     savedDanmaku?.clear();
     savedDanmaku = null;
+    msgStream?.close();
+    msgStream = null;
     scrollController
       ..removeListener(listener)
       ..dispose();
