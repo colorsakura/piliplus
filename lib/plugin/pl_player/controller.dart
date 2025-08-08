@@ -814,15 +814,17 @@ class PlPlayerController {
       SmartDialog.showToast('视频源为空，请重新进入本页面');
       return false;
     }
-    if (dataSource.audioSource.isNullOrEmpty) {
-      SmartDialog.showToast('音频源为空');
-    } else {
-      await (_videoPlayerController!.platform as NativePlayer).setProperty(
-        'audio-files',
-        UniversalPlatform.isWindows
-            ? dataSource.audioSource!.replaceAll(';', '\\;')
-            : dataSource.audioSource!.replaceAll(':', '\\:'),
-      );
+    if (!isLive) {
+      if (dataSource.audioSource.isNullOrEmpty) {
+        SmartDialog.showToast('音频源为空');
+      } else {
+        await (_videoPlayerController!.platform as NativePlayer).setProperty(
+          'audio-files',
+          UniversalPlatform.isWindows
+              ? dataSource.audioSource!.replaceAll(';', '\\;')
+              : dataSource.audioSource!.replaceAll(':', '\\:'),
+        );
+      }
     }
     await _videoPlayerController!.open(
       Media(

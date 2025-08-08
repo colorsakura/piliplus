@@ -433,7 +433,7 @@ class RequestUtils {
                 TextButton(
                   onPressed: () {
                     if (checkedId != null) {
-                      Iterable removeList = ctr.allChecked;
+                      Set removeList = ctr.allChecked.toSet();
                       SmartDialog.showLoading();
                       FavHttp.copyOrMoveFav(
                         isCopy: isCopy,
