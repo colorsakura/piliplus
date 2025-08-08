@@ -1784,14 +1784,12 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
               ),
             ),
         ] else
-          Obx(
-            () => PgcIntroPage(
-              key: pgcPanelKey,
-              heroTag: heroTag,
-              cid: videoDetailController.cid.value,
-              showEpisodes: showEpisodes,
-              showIntroDetail: showIntroDetail,
-            ),
+          PgcIntroPage(
+            key: pgcPanelKey,
+            heroTag: heroTag,
+            cid: videoDetailController.cid.value,
+            showEpisodes: showEpisodes,
+            showIntroDetail: showIntroDetail,
           ),
         SliverToBoxAdapter(
           child: SizedBox(

@@ -111,12 +111,9 @@ class _PgcIntroPageState extends State<PgcIntroPage>
       );
     }
     return SliverPadding(
-      padding: EdgeInsets.only(
-        left: StyleString.safeSpace,
-        right: StyleString.safeSpace,
-        top: StyleString.safeSpace,
-        bottom: StyleString.safeSpace + MediaQuery.paddingOf(context).bottom,
-      ),
+      padding:
+          const EdgeInsets.all(StyleString.safeSpace) +
+          const EdgeInsets.only(bottom: 50),
       sliver: sliver,
     );
   }

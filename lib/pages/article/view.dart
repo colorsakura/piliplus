@@ -524,8 +524,9 @@ class _ArticlePageState extends CommonDynPageState<ArticlePage> {
                     value: controller.ratio.first,
                     onChanged: (value) {
                       if (value >= 10 && value <= 90) {
+                        value = value.toPrecision(2);
                         controller.ratio
-                          ..[0] = value.toPrecision(2)
+                          ..[0] = value
                           ..[1] = 100 - value;
                         GStorage.setting.put(
                           SettingBoxKey.dynamicDetailRatio,

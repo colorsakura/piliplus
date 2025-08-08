@@ -463,7 +463,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
           ),
           onTap: () {
             // part -> playAll -> season(pgc)
-            if (!anySeason || !isPart) {
+            if (isPlayAll && !isPart) {
               widget.showEpisodes?.call();
               return;
             }
