@@ -149,7 +149,11 @@ class _HomePageState extends State<HomePage>
 
   Widget customAppBar(ThemeData theme) {
     if (!_homeController.hideSearchBar) {
-      return searchBarAndUser(theme);
+      return Container(
+        height: 52,
+        padding: const EdgeInsets.fromLTRB(14, 6, 14, 0),
+        child: searchBarAndUser(theme),
+      );
     }
     return StreamBuilder(
       stream: _homeController.searchBarStream?.stream.distinct(),
