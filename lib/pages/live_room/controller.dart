@@ -24,6 +24,7 @@ import 'package:canvas_danmaku/canvas_danmaku.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 
 class LiveRoomController extends GetxController {
@@ -256,6 +257,7 @@ class LiveRoomController extends GetxController {
 
   @override
   void onClose() {
+    cancelLikeTimer();
     cancelLiveTimer();
     savedDanmaku?.clear();
     savedDanmaku = null;
@@ -329,5 +331,44 @@ class LiveRoomController extends GetxController {
             } catch (_) {}
           })
           ..init();
+  }
+
+  final RxInt likeClickTime = 0.obs;
+  Timer? likeClickTimer;
+
+  void cancelLikeTimer() {
+    likeClickTimer?.cancel();
+    likeClickTimer = null;
+  }
+
+  void onLikeTapDown([_]) {
+    cancelLikeTimer();
+    likeClickTime.value++;
+  }
+
+  void onLikeTapUp([_]) {
+    likeClickTimer ??= Timer(
+      const Duration(milliseconds: 800),
+      onLike,
+    );
+  }
+
+  Future<void> onLike() async {
+    if (!Accounts.heartbeat.isLogin) {
+      likeClickTime.value = 0;
+      return;
+    }
+    var res = await LiveHttp.liveLikeReport(
+      clickTime: likeClickTime.value,
+      roomId: roomId,
+      uid: accountService.mid,
+      anchorId: roomInfoH5.value?.roomInfo?.uid,
+    );
+    if (res['status']) {
+      SmartDialog.showToast('点赞成功');
+    } else {
+      SmartDialog.showToast(res['msg']);
+    }
+    likeClickTime.value = 0;
   }
 }

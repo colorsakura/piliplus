@@ -29,6 +29,7 @@ class AccountManager extends Interceptor {
       Api.heartBeat,
       Api.historyReport,
       Api.roomEntryAction,
+      Api.liveLikeReport,
       // Api.historyList,
       // Api.pauseHistory,
       // Api.clearHistory,

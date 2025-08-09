@@ -619,4 +619,29 @@ class LiveHttp {
       return {'status': false, 'msg': res.data['message']};
     }
   }
+
+  static Future liveLikeReport({
+    required int clickTime,
+    required dynamic roomId,
+    required dynamic uid,
+    required dynamic anchorId,
+  }) async {
+    var res = await Request().post(
+      Api.liveLikeReport,
+      data: await WbiSign.makSign({
+        'click_time': clickTime,
+        'room_id': roomId,
+        'uid': uid,
+        'anchor_id': anchorId,
+        'web_location': 444.8,
+        'csrf': Accounts.heartbeat.csrf,
+      }),
+      options: Options(contentType: Headers.formUrlEncodedContentType),
+    );
+    if (res.data['code'] == 0) {
+      return {'status': true};
+    } else {
+      return {'status': false, 'msg': res.data['message']};
+    }
+  }
 }

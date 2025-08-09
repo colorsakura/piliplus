@@ -54,7 +54,7 @@ class BottomControl extends StatelessWidget {
                 padding: WidgetStateProperty.all(EdgeInsets.zero),
               ),
               onPressed: () {
-                if (liveRoomCtr.accountService.isLogin.value) {
+                if (liveRoomCtr.isLogin) {
                   Get.toNamed(
                     '/liveDmBlockPage',
                     parameters: {

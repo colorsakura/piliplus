@@ -945,4 +945,7 @@ class Api {
   static const String expLog = '/x/member/web/exp/log';
 
   static const String moralLog = '/x/member/web/moral/log';
+
+  static const String liveLikeReport =
+      '${HttpString.liveBaseUrl}/xlive/app-ucenter/v1/like_info_v3/like/likeReportV3';
 }

@@ -578,6 +578,60 @@ class _LiveRoomPageState extends State<LiveRoomPage>
                 style: TextStyle(color: _color),
               ),
             ),
+            Builder(
+              builder: (context) {
+                final theme = Theme.of(context).colorScheme;
+                return Material(
+                  type: MaterialType.transparency,
+                  child: Stack(
+                    clipBehavior: Clip.none,
+                    children: [
+                      InkWell(
+                        overlayColor: overlayColor(theme),
+                        customBorder: const CircleBorder(),
+                        onTapDown: _liveRoomController.onLikeTapDown,
+                        onTapUp: _liveRoomController.onLikeTapUp,
+                        onTapCancel: _liveRoomController.onLikeTapUp,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Icon(Icons.thumb_up_off_alt, color: _color),
+                        ),
+                      ),
+                      Positioned(
+                        right: -12,
+                        top: -12,
+                        child: Obx(() {
+                          final likeClickTime =
+                              _liveRoomController.likeClickTime.value;
+                          if (likeClickTime == 0) {
+                            return const SizedBox.shrink();
+                          }
+                          return AnimatedSwitcher(
+                            duration: const Duration(milliseconds: 160),
+                            transitionBuilder: (child, animation) {
+                              return ScaleTransition(
+                                scale: animation,
+                                child: child,
+                              );
+                            },
+                            child: Text(
+                              key: ValueKey(likeClickTime),
+                              'x$likeClickTime',
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: theme.brightness.isDark
+                                    ? theme.primary
+                                    : theme.inversePrimary,
+                              ),
+                            ),
+                          );
+                        }),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
             IconButton(
               onPressed: () => onSendDanmaku(true),
               icon: Icon(Icons.emoji_emotions_outlined, color: _color),
@@ -588,8 +642,33 @@ class _LiveRoomPageState extends State<LiveRoomPage>
     ),
   );
 
+  WidgetStateProperty<Color?>? overlayColor(ColorScheme theme) =>
+      WidgetStateProperty.resolveWith((Set<WidgetState> states) {
+        if (states.contains(WidgetState.selected)) {
+          if (states.contains(WidgetState.pressed)) {
+            return theme.primary.withValues(alpha: 0.1);
+          }
+          if (states.contains(WidgetState.hovered)) {
+            return theme.primary.withValues(alpha: 0.08);
+          }
+          if (states.contains(WidgetState.focused)) {
+            return theme.primary.withValues(alpha: 0.1);
+          }
+        }
+        if (states.contains(WidgetState.pressed)) {
+          return theme.onSurfaceVariant.withValues(alpha: 0.1);
+        }
+        if (states.contains(WidgetState.hovered)) {
+          return theme.onSurfaceVariant.withValues(alpha: 0.08);
+        }
+        if (states.contains(WidgetState.focused)) {
+          return theme.onSurfaceVariant.withValues(alpha: 0.1);
+        }
+        return Colors.transparent;
+      });
+
   void onSendDanmaku([bool fromEmote = false]) {
-    if (!_liveRoomController.accountService.isLogin.value) {
+    if (!_liveRoomController.isLogin) {
       SmartDialog.showToast('账号未登录');
       return;
     }
