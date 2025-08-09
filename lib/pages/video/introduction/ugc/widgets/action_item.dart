@@ -18,7 +18,9 @@ mixin TripleAnimMixin<T extends StatefulWidget>
   void onTriple();
   void onLike();
 
-  void initTriple() {
+  @override
+  void initState() {
+    super.initState();
     animController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 1500),
@@ -69,9 +71,11 @@ mixin TripleAnimMixin<T extends StatefulWidget>
     _timer = null;
   }
 
-  void disposeTriple() {
+  @override
+  void dispose() {
     cancelTimer();
     animController.dispose();
+    super.dispose();
   }
 }
 

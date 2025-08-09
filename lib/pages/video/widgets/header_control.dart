@@ -89,13 +89,11 @@ class HeaderControlState extends State<HeaderControl>
     } else {
       pgcIntroController = Get.find<PgcIntroController>(tag: heroTag);
     }
-    initTriple();
   }
 
   @override
   void dispose() {
     clock?.cancel();
-    disposeTriple();
     super.dispose();
   }
 

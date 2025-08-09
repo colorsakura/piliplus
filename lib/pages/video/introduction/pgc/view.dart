@@ -64,13 +64,6 @@ class _PgcIntroPageState extends State<PgcIntroPage>
     super.initState();
     pgcIntroController = Get.put(PgcIntroController(), tag: widget.heroTag);
     videoDetailCtr = Get.find<VideoDetailController>(tag: widget.heroTag);
-    initTriple();
-  }
-
-  @override
-  void dispose() {
-    disposeTriple();
-    super.dispose();
   }
 
   @override

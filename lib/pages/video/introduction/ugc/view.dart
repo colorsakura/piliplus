@@ -67,13 +67,6 @@ class _UgcIntroPanelState extends State<UgcIntroPanel>
   void initState() {
     super.initState();
     ugcIntroController = Get.put(UgcIntroController(), tag: widget.heroTag);
-    initTriple();
-  }
-
-  @override
-  void dispose() {
-    disposeTriple();
-    super.dispose();
   }
 
   @override
