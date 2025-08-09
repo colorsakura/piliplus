@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
 import 'package:PiliPlus/common/widgets/pendant_avatar.dart';
@@ -57,16 +55,15 @@ class _UgcIntroPanelState extends State<UgcIntroPanel>
         AutomaticKeepAliveClientMixin,
         SingleTickerProviderStateMixin,
         TripleAnimMixin {
-  late UgcIntroController ugcIntroController;
+  @override
+  late UgcIntroController introController;
   late final VideoDetailController videoDetailCtr =
       Get.find<VideoDetailController>(tag: widget.heroTag);
-
-  bool isProcessing = false;
 
   @override
   void initState() {
     super.initState();
-    ugcIntroController = Get.put(UgcIntroController(), tag: widget.heroTag);
+    introController = Get.put(UgcIntroController(), tag: widget.heroTag);
   }
 
   @override
@@ -95,8 +92,7 @@ class _UgcIntroPanelState extends State<UgcIntroPanel>
           ),
           sliver: Obx(
             () {
-              VideoDetailData videoDetail =
-                  ugcIntroController.videoDetail.value;
+              VideoDetailData videoDetail = introController.videoDetail.value;
               bool isLoading = videoDetail.bvid == null;
               int? mid = videoDetail.owner?.mid;
               return SliverToBoxAdapter(
@@ -107,7 +103,7 @@ class _UgcIntroPanelState extends State<UgcIntroPanel>
                       return;
                     }
                     feedBack();
-                    ugcIntroController.expandableCtr.toggle();
+                    introController.expandableCtr.toggle();
                   },
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -127,7 +123,7 @@ class _UgcIntroPanelState extends State<UgcIntroPanel>
                                       if (mid != null) {
                                         feedBack();
                                         if (!isPortrait &&
-                                            ugcIntroController
+                                            introController
                                                 .horizontalMemberPage) {
                                           widget.onShowMemberPage(mid);
                                         } else {
@@ -146,7 +142,7 @@ class _UgcIntroPanelState extends State<UgcIntroPanel>
                                 child: SingleChildScrollView(
                                   scrollDirection: Axis.horizontal,
                                   physics: ReloadScrollPhysics(
-                                    controller: ugcIntroController,
+                                    controller: introController,
                                   ),
                                   child: Row(
                                     spacing: 25,
@@ -170,7 +166,7 @@ class _UgcIntroPanelState extends State<UgcIntroPanel>
                                   context,
                                   isLoading,
                                   videoDetail,
-                                  ugcIntroController,
+                                  introController,
                                 ),
                               ),
                             ],
@@ -182,7 +178,7 @@ class _UgcIntroPanelState extends State<UgcIntroPanel>
                         _buildVideoTitle(theme, videoDetail)
                       else
                         ExpandablePanel(
-                          controller: ugcIntroController.expandableCtr,
+                          controller: introController.expandableCtr,
                           collapsed: GestureDetector(
                             onLongPress: () {
                               Feedback.forLongPress(context);
@@ -208,11 +204,11 @@ class _UgcIntroPanelState extends State<UgcIntroPanel>
                         clipBehavior: Clip.none,
                         children: [
                           _buildInfo(theme, videoDetail),
-                          if (ugcIntroController.enableAi) _aiBtn,
+                          if (introController.enableAi) _aiBtn,
                         ],
                       ),
                       if (videoDetail.argueInfo?.argueMsg?.isNotEmpty == true &&
-                          ugcIntroController.showArgueMsg) ...[
+                          introController.showArgueMsg) ...[
                         const SizedBox(height: 2),
                         Text.rich(
                           TextSpan(
@@ -238,7 +234,7 @@ class _UgcIntroPanelState extends State<UgcIntroPanel>
                         ),
                       ],
                       ExpandablePanel(
-                        controller: ugcIntroController.expandableCtr,
+                        controller: introController.expandableCtr,
                         collapsed: const SizedBox.shrink(),
                         expanded: Column(
                           mainAxisSize: MainAxisSize.min,
@@ -270,8 +266,7 @@ class _UgcIntroPanelState extends State<UgcIntroPanel>
                               ),
                             ],
                             Obx(() {
-                              final videoTags =
-                                  ugcIntroController.videoTags.value;
+                              final videoTags = introController.videoTags.value;
                               if (videoTags.isNullOrEmpty) {
                                 return const SizedBox.shrink();
                               }
@@ -282,13 +277,13 @@ class _UgcIntroPanelState extends State<UgcIntroPanel>
                         theme: expandTheme,
                       ),
                       Obx(
-                        () => ugcIntroController.status.value
+                        () => introController.status.value
                             ? const SizedBox.shrink()
                             : Center(
                                 child: TextButton.icon(
                                   icon: const Icon(Icons.refresh),
                                   onPressed: () {
-                                    ugcIntroController
+                                    introController
                                       ..status.value = true
                                       ..queryVideoIntro();
                                     if (videoDetailCtr.videoUrl.isNullOrEmpty &&
@@ -307,7 +302,7 @@ class _UgcIntroPanelState extends State<UgcIntroPanel>
                           context,
                           isLoading,
                           videoDetail,
-                          ugcIntroController,
+                          introController,
                         ),
                       ],
                       // 合集
@@ -320,7 +315,7 @@ class _UgcIntroPanelState extends State<UgcIntroPanel>
                         SeasonPanel(
                           heroTag: widget.heroTag,
                           showEpisodes: widget.showEpisodes,
-                          ugcIntroController: ugcIntroController,
+                          ugcIntroController: introController,
                         ),
                       if (!isLoading &&
                           videoDetail.pages != null &&
@@ -331,8 +326,8 @@ class _UgcIntroPanelState extends State<UgcIntroPanel>
                                   .horizontalSeasonPanel)) ...[
                         PagesPanel(
                           heroTag: widget.heroTag,
-                          ugcIntroController: ugcIntroController,
-                          bvid: ugcIntroController.bvid,
+                          ugcIntroController: introController,
+                          bvid: introController.bvid,
                           showEpisodes: widget.showEpisodes,
                         ),
                       ],
@@ -474,20 +469,12 @@ class _UgcIntroPanelState extends State<UgcIntroPanel>
     return child();
   }
 
-  Future<void> handleState(FutureOr Function() action) async {
-    if (!isProcessing) {
-      isProcessing = true;
-      await action();
-      isProcessing = false;
-    }
-  }
-
   Widget followButton(BuildContext context, ThemeData t) {
     return Obx(
       () {
-        int attr = ugcIntroController.followStatus['attribute'] ?? 0;
+        int attr = introController.followStatus['attribute'] ?? 0;
         return TextButton(
-          onPressed: () => ugcIntroController.actionRelationMod(context),
+          onPressed: () => introController.actionRelationMod(context),
           style: TextButton.styleFrom(
             tapTargetSize: MaterialTapTargetSize.shrinkWrap,
             visualDensity: const VisualDensity(vertical: -2.8),
@@ -518,7 +505,7 @@ class _UgcIntroPanelState extends State<UgcIntroPanel>
     BuildContext context,
     bool isLoading,
     VideoDetailData videoDetail,
-    UgcIntroController ugcIntroController,
+    UgcIntroController introController,
   ) {
     return SizedBox(
       height: 48,
@@ -528,9 +515,8 @@ class _UgcIntroPanelState extends State<UgcIntroPanel>
             () => ActionItem(
               icon: const Icon(FontAwesomeIcons.thumbsUp),
               selectIcon: const Icon(FontAwesomeIcons.solidThumbsUp),
-              onTap: () => handleState(ugcIntroController.actionLikeVideo),
-              onLongPress: () => handleState(ugcIntroController.actionTriple),
-              selectStatus: ugcIntroController.hasLike.value,
+              onTap: () => handleAction(introController.actionLikeVideo),
+              selectStatus: introController.hasLike.value,
               semanticsLabel: '点赞',
               text: !isLoading
                   ? NumUtil.numFormat(videoDetail.stat!.like)
@@ -545,8 +531,8 @@ class _UgcIntroPanelState extends State<UgcIntroPanel>
             () => ActionItem(
               icon: const Icon(FontAwesomeIcons.thumbsDown),
               selectIcon: const Icon(FontAwesomeIcons.solidThumbsDown),
-              onTap: () => handleState(ugcIntroController.actionDislikeVideo),
-              selectStatus: ugcIntroController.hasDislike.value,
+              onTap: () => handleAction(introController.actionDislikeVideo),
+              selectStatus: introController.hasDislike.value,
               semanticsLabel: '点踩',
               text: "点踩",
             ),
@@ -555,8 +541,8 @@ class _UgcIntroPanelState extends State<UgcIntroPanel>
             () => ActionItem(
               icon: const Icon(FontAwesomeIcons.b),
               selectIcon: const Icon(FontAwesomeIcons.b),
-              onTap: () => handleState(ugcIntroController.actionCoinVideo),
-              selectStatus: ugcIntroController.hasCoin,
+              onTap: introController.actionCoinVideo,
+              selectStatus: introController.hasCoin,
               semanticsLabel: '投币',
               text: !isLoading
                   ? NumUtil.numFormat(videoDetail.stat!.coin)
@@ -569,12 +555,12 @@ class _UgcIntroPanelState extends State<UgcIntroPanel>
             () => ActionItem(
               icon: const Icon(FontAwesomeIcons.star),
               selectIcon: const Icon(FontAwesomeIcons.solidStar),
-              onTap: () => ugcIntroController.showFavBottomSheet(context),
-              onLongPress: () => ugcIntroController.showFavBottomSheet(
+              onTap: () => introController.showFavBottomSheet(context),
+              onLongPress: () => introController.showFavBottomSheet(
                 context,
                 isLongPress: true,
               ),
-              selectStatus: ugcIntroController.hasFav.value,
+              selectStatus: introController.hasFav.value,
               semanticsLabel: '收藏',
               text: !isLoading
                   ? NumUtil.numFormat(videoDetail.stat!.favorite)
@@ -587,15 +573,15 @@ class _UgcIntroPanelState extends State<UgcIntroPanel>
             () => ActionItem(
               icon: const Icon(FontAwesomeIcons.clock),
               selectIcon: const Icon(FontAwesomeIcons.solidClock),
-              onTap: () => handleState(ugcIntroController.viewLater),
-              selectStatus: ugcIntroController.hasLater.value,
+              onTap: () => handleAction(introController.viewLater),
+              selectStatus: introController.hasLater.value,
               semanticsLabel: '再看',
               text: '再看',
             ),
           ),
           ActionItem(
             icon: const Icon(FontAwesomeIcons.shareFromSquare),
-            onTap: () => ugcIntroController.actionShareVideo(context),
+            onTap: () => introController.actionShareVideo(context),
             selectStatus: false,
             semanticsLabel: '分享',
             text: !isLoading
@@ -706,7 +692,7 @@ class _UgcIntroPanelState extends State<UgcIntroPanel>
       onTap: () {
         if (item.mid == ownerMid &&
             !isPortrait &&
-            ugcIntroController.horizontalMemberPage) {
+            introController.horizontalMemberPage) {
           widget.onShowMemberPage(ownerMid);
         } else {
           Get.toNamed(
@@ -750,9 +736,8 @@ class _UgcIntroPanelState extends State<UgcIntroPanel>
                 right: -6,
                 child: Obx(
                   () =>
-                      ugcIntroController.staffRelations['status'] == true &&
-                          ugcIntroController.staffRelations['${item.mid}'] ==
-                              null
+                      introController.staffRelations['status'] == true &&
+                          introController.staffRelations['${item.mid}'] == null
                       ? Material(
                           type: MaterialType.transparency,
                           shape: const CircleBorder(),
@@ -763,8 +748,7 @@ class _UgcIntroPanelState extends State<UgcIntroPanel>
                               mid: item.mid,
                               isFollow: false,
                               callback: (val) {
-                                ugcIntroController
-                                        .staffRelations['${item.mid}'] =
+                                introController.staffRelations['${item.mid}'] =
                                     true;
                               },
                             ),
@@ -825,7 +809,7 @@ class _UgcIntroPanelState extends State<UgcIntroPanel>
     behavior: HitTestBehavior.opaque,
     child: Obx(
       () {
-        final userStat = ugcIntroController.userStat.value;
+        final userStat = introController.userStat.value;
         final isVip = (userStat.card?.vip?.status ?? 0) > 0;
         return Row(
           mainAxisSize: MainAxisSize.min,
@@ -895,10 +879,10 @@ class _UgcIntroPanelState extends State<UgcIntroPanel>
           color: theme.colorScheme.outline,
           semanticLabel: '无痕',
         ),
-      if (ugcIntroController.isShowOnlineTotal)
+      if (introController.isShowOnlineTotal)
         Obx(
           () => Text(
-            '${ugcIntroController.total.value}人在看',
+            '${introController.total.value}人在看',
             style: TextStyle(
               fontSize: 12,
               color: theme.colorScheme.outline,
@@ -917,15 +901,15 @@ class _UgcIntroPanelState extends State<UgcIntroPanel>
         label: 'AI总结',
         child: GestureDetector(
           onTap: () async {
-            if (ugcIntroController.aiConclusionResult == null) {
-              await ugcIntroController.aiConclusion();
+            if (introController.aiConclusionResult == null) {
+              await introController.aiConclusion();
             }
-            if (ugcIntroController.aiConclusionResult == null) {
+            if (introController.aiConclusionResult == null) {
               return;
             }
-            if (ugcIntroController.aiConclusionResult!.summary?.isNotEmpty ==
+            if (introController.aiConclusionResult!.summary?.isNotEmpty ==
                     true ||
-                ugcIntroController.aiConclusionResult!.outline?.isNotEmpty ==
+                introController.aiConclusionResult!.outline?.isNotEmpty ==
                     true) {
               widget.showAiBottomSheet();
             } else {
@@ -968,16 +952,4 @@ class _UgcIntroPanelState extends State<UgcIntroPanel>
 
   @override
   bool get wantKeepAlive => true;
-
-  @override
-  bool get hasTriple =>
-      ugcIntroController.hasLike.value &&
-      ugcIntroController.hasCoin &&
-      ugcIntroController.hasFav.value;
-
-  @override
-  void onLike() => handleState(ugcIntroController.actionLikeVideo);
-
-  @override
-  void onTriple() => handleState(ugcIntroController.actionTriple);
 }

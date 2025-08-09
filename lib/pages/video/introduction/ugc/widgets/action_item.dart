@@ -1,6 +1,7 @@
-import 'dart:async' show Timer;
+import 'dart:async' show Timer, FutureOr;
 import 'dart:math' show pi;
 
+import 'package:PiliPlus/pages/common/common_intro_controller.dart';
 import 'package:PiliPlus/utils/feed_back.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show HapticFeedback;
@@ -8,15 +9,26 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 
 mixin TripleAnimMixin<T extends StatefulWidget>
     on SingleTickerProviderStateMixin<T> {
+  CommonIntroController get introController;
   late AnimationController animController;
   late Animation<double> animation;
 
   late int _lastTime;
   Timer? _timer;
 
-  bool get hasTriple;
-  void onTriple();
-  void onLike();
+  bool get _hasTriple =>
+      introController.hasLike.value &&
+      introController.hasCoin &&
+      introController.hasFav.value;
+
+  bool isProcessing = false;
+  Future<void> handleAction(FutureOr Function() action) async {
+    if (!isProcessing) {
+      isProcessing = true;
+      await action();
+      isProcessing = false;
+    }
+  }
 
   @override
   void initState() {
@@ -38,13 +50,13 @@ mixin TripleAnimMixin<T extends StatefulWidget>
   void onStartTriple() {
     _lastTime = DateTime.now().millisecondsSinceEpoch;
     _timer ??= Timer(const Duration(milliseconds: 200), () {
-      if (hasTriple) {
-        HapticFeedback.lightImpact();
+      HapticFeedback.lightImpact();
+      if (_hasTriple) {
         SmartDialog.showToast('已经完成三连');
       } else {
         animController.forward().whenComplete(() {
           animController.reset();
-          onTriple();
+          handleAction(introController.actionTriple);
         });
       }
       cancelTimer();
@@ -54,14 +66,14 @@ mixin TripleAnimMixin<T extends StatefulWidget>
   void onCancelTriple(bool isCancel) {
     int duration = DateTime.now().millisecondsSinceEpoch - _lastTime;
     if (duration >= 200 && duration < 1500) {
-      if (!hasTriple) {
+      if (!_hasTriple) {
         animController.reverse();
       }
     } else if (duration < 200) {
       cancelTimer();
       if (!isCancel) {
         feedBack();
-        onLike();
+        handleAction(introController.actionLikeVideo);
       }
     }
   }

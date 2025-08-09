@@ -72,6 +72,7 @@ class HeaderControlState extends State<HeaderControl>
   String get heroTag => widget.heroTag;
   late final UgcIntroController ugcIntroController;
   late final PgcIntroController pgcIntroController;
+  @override
   late final CommonIntroController introController = videoDetailCtr.isUgc
       ? ugcIntroController
       : pgcIntroController;
@@ -2235,7 +2236,8 @@ class HeaderControlState extends State<HeaderControl>
                           selectIcon: const Icon(
                             FontAwesomeIcons.solidThumbsUp,
                           ),
-                          onTap: introController.actionLikeVideo,
+                          onTap: () =>
+                              handleAction(introController.actionLikeVideo),
                           selectStatus: introController.hasLike.value,
                           semanticsLabel: '点赞',
                           controller: animController,
@@ -2267,7 +2269,9 @@ class HeaderControlState extends State<HeaderControl>
                             selectIcon: const Icon(
                               FontAwesomeIcons.solidThumbsDown,
                             ),
-                            onTap: ugcIntroController.actionDislikeVideo,
+                            onTap: () => handleAction(
+                              ugcIntroController.actionDislikeVideo,
+                            ),
                             selectStatus: ugcIntroController.hasDislike.value,
                             semanticsLabel: '点踩',
                           ),
@@ -2342,18 +2346,6 @@ class HeaderControlState extends State<HeaderControl>
         ? Obx(() => _buildHeader(true))
         : _buildHeader(false);
   }
-
-  @override
-  bool get hasTriple =>
-      introController.hasLike.value &&
-      introController.hasCoin &&
-      introController.hasFav.value;
-
-  @override
-  void onLike() => introController.actionLikeVideo();
-
-  @override
-  void onTriple() => introController.actionTriple();
 }
 
 class MSliderTrackShape extends RoundedRectSliderTrackShape {
