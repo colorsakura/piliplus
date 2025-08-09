@@ -37,7 +37,6 @@ import 'package:dio/dio.dart';
 import 'package:document_file_save_plus/document_file_save_plus_platform_interface.dart';
 import 'package:floating/floating.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart' show HapticFeedback;
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
@@ -63,7 +62,8 @@ class HeaderControl extends StatefulWidget {
   State<HeaderControl> createState() => HeaderControlState();
 }
 
-class HeaderControlState extends State<HeaderControl> {
+class HeaderControlState extends State<HeaderControl>
+    with SingleTickerProviderStateMixin, TripleAnimMixin {
   late final PlPlayerController plPlayerController = widget.controller;
   late final VideoDetailController videoDetailCtr = widget.videoDetailCtr;
   late final PlayUrlModel videoInfo = videoDetailCtr.data;
@@ -80,8 +80,6 @@ class HeaderControlState extends State<HeaderControl> {
   Timer? clock;
   bool get isFullScreen => widget.controller.isFullScreen.value;
   Box setting = GStorage.setting;
-  late final _coinKey = GlobalKey<ActionItemState>();
-  late final _favKey = GlobalKey<ActionItemState>();
 
   @override
   void initState() {
@@ -91,11 +89,13 @@ class HeaderControlState extends State<HeaderControl> {
     } else {
       pgcIntroController = Get.find<PgcIntroController>(tag: heroTag);
     }
+    initTriple();
   }
 
   @override
   void dispose() {
     clock?.cancel();
+    disposeTriple();
     super.dispose();
   }
 
@@ -2224,51 +2224,38 @@ class HeaderControlState extends State<HeaderControl> {
               ? Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    if (videoDetailCtr.isUgc) ...[
-                      SizedBox(
-                        width: 42,
-                        height: 34,
-                        child: Obx(
-                          () => ActionItem(
-                            expand: false,
-                            icon: const Icon(
-                              FontAwesomeIcons.thumbsUp,
-                              color: Colors.white,
-                            ),
-                            selectIcon: const Icon(
-                              FontAwesomeIcons.solidThumbsUp,
-                            ),
-                            onTap: ugcIntroController.actionLikeVideo,
-                            onLongPress: () {
-                              ugcIntroController.actionOneThree();
-                              plPlayerController
-                                ..isTriple = null
-                                ..hideTaskControls();
-                            },
-                            selectStatus: ugcIntroController.hasLike.value,
-                            semanticsLabel: '点赞',
-                            needAnim: true,
-                            hasTriple:
-                                ugcIntroController.hasLike.value &&
-                                ugcIntroController.hasCoin &&
-                                ugcIntroController.hasFav.value,
-                            callBack: (start) {
-                              if (start) {
-                                HapticFeedback.lightImpact();
-                                plPlayerController.isTriple = true;
-                                _coinKey.currentState?.controller?.forward();
-                                _favKey.currentState?.controller?.forward();
-                              } else {
-                                _coinKey.currentState?.controller?.reverse();
-                                _favKey.currentState?.controller?.reverse();
-                                plPlayerController
-                                  ..isTriple = null
-                                  ..hideTaskControls();
-                              }
-                            },
+                    SizedBox(
+                      width: 42,
+                      height: 34,
+                      child: Obx(
+                        () => ActionItem(
+                          expand: false,
+                          icon: const Icon(
+                            FontAwesomeIcons.thumbsUp,
+                            color: Colors.white,
                           ),
+                          selectIcon: const Icon(
+                            FontAwesomeIcons.solidThumbsUp,
+                          ),
+                          onTap: introController.actionLikeVideo,
+                          selectStatus: introController.hasLike.value,
+                          semanticsLabel: '点赞',
+                          controller: animController,
+                          animation: animation,
+                          onStartTriple: () {
+                            plPlayerController.isTriple = true;
+                            onStartTriple();
+                          },
+                          onCancelTriple: (value) {
+                            plPlayerController
+                              ..isTriple = null
+                              ..hideTaskControls();
+                            onCancelTriple(value);
+                          },
                         ),
                       ),
+                    ),
+                    if (videoDetailCtr.isUgc)
                       SizedBox(
                         width: 42,
                         height: 34,
@@ -2288,162 +2275,62 @@ class HeaderControlState extends State<HeaderControl> {
                           ),
                         ),
                       ),
-                      SizedBox(
-                        width: 42,
-                        height: 34,
-                        child: Obx(
-                          () => ActionItem(
-                            key: _coinKey,
-                            expand: false,
-                            icon: const Icon(
-                              FontAwesomeIcons.b,
-                              color: Colors.white,
-                            ),
-                            selectIcon: const Icon(FontAwesomeIcons.b),
-                            onTap: ugcIntroController.actionCoinVideo,
-                            selectStatus: ugcIntroController.hasCoin,
-                            semanticsLabel: '投币',
-                            needAnim: true,
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        width: 42,
-                        height: 34,
-                        child: Obx(
-                          () => ActionItem(
-                            key: _favKey,
-                            expand: false,
-                            icon: const Icon(
-                              FontAwesomeIcons.star,
-                              color: Colors.white,
-                            ),
-                            selectIcon: const Icon(FontAwesomeIcons.solidStar),
-                            onTap: () =>
-                                ugcIntroController.showFavBottomSheet(context),
-                            onLongPress: () => ugcIntroController
-                                .showFavBottomSheet(context, isLongPress: true),
-                            selectStatus: ugcIntroController.hasFav.value,
-                            semanticsLabel: '收藏',
-                            needAnim: true,
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        width: 42,
-                        height: 34,
-                        child: ActionItem(
+                    SizedBox(
+                      width: 42,
+                      height: 34,
+                      child: Obx(
+                        () => ActionItem(
                           expand: false,
                           icon: const Icon(
-                            FontAwesomeIcons.shareFromSquare,
+                            FontAwesomeIcons.b,
                             color: Colors.white,
                           ),
-                          onTap: () =>
-                              ugcIntroController.actionShareVideo(context),
-                          semanticsLabel: '分享',
+                          selectIcon: const Icon(FontAwesomeIcons.b),
+                          onTap: introController.actionCoinVideo,
+                          selectStatus: introController.hasCoin,
+                          semanticsLabel: '投币',
+                          controller: animController,
+                          animation: animation,
                         ),
                       ),
-                    ] else ...[
-                      SizedBox(
-                        width: 42,
-                        height: 34,
-                        child: Obx(
-                          () => ActionItem(
-                            expand: false,
-                            icon: const Icon(
-                              FontAwesomeIcons.thumbsUp,
-                              color: Colors.white,
-                            ),
-                            selectIcon: const Icon(
-                              FontAwesomeIcons.solidThumbsUp,
-                            ),
-                            onTap: pgcIntroController.actionLikeVideo,
-                            onLongPress: () {
-                              pgcIntroController.actionOneThree();
-                              plPlayerController
-                                ..isTriple = null
-                                ..hideTaskControls();
-                            },
-                            selectStatus: pgcIntroController.hasLike.value,
-                            semanticsLabel: '点赞',
-                            needAnim: true,
-                            hasTriple:
-                                pgcIntroController.hasLike.value &&
-                                pgcIntroController.hasCoin &&
-                                pgcIntroController.hasFav.value,
-                            callBack: (start) {
-                              if (start) {
-                                HapticFeedback.lightImpact();
-                                plPlayerController.isTriple = true;
-                                _coinKey.currentState?.controller?.forward();
-                                _favKey.currentState?.controller?.forward();
-                              } else {
-                                _coinKey.currentState?.controller?.reverse();
-                                _favKey.currentState?.controller?.reverse();
-                                plPlayerController
-                                  ..isTriple = null
-                                  ..hideTaskControls();
-                              }
-                            },
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        width: 42,
-                        height: 34,
-                        child: Obx(
-                          () => ActionItem(
-                            expand: false,
-                            key: _coinKey,
-                            icon: const Icon(
-                              FontAwesomeIcons.b,
-                              color: Colors.white,
-                            ),
-                            selectIcon: const Icon(FontAwesomeIcons.b),
-                            onTap: pgcIntroController.actionCoinVideo,
-                            selectStatus: pgcIntroController.hasCoin,
-                            semanticsLabel: '投币',
-                            needAnim: true,
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        width: 42,
-                        height: 34,
-                        child: Obx(
-                          () => ActionItem(
-                            key: _favKey,
-                            expand: false,
-                            icon: const Icon(
-                              FontAwesomeIcons.star,
-                              color: Colors.white,
-                            ),
-                            selectIcon: const Icon(FontAwesomeIcons.solidStar),
-                            onTap: () =>
-                                pgcIntroController.showFavBottomSheet(context),
-                            onLongPress: () => pgcIntroController
-                                .showFavBottomSheet(context, isLongPress: true),
-                            selectStatus: pgcIntroController.hasFav.value,
-                            semanticsLabel: '收藏',
-                            needAnim: true,
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        width: 42,
-                        height: 34,
-                        child: ActionItem(
+                    ),
+                    SizedBox(
+                      width: 42,
+                      height: 34,
+                      child: Obx(
+                        () => ActionItem(
                           expand: false,
                           icon: const Icon(
-                            FontAwesomeIcons.shareFromSquare,
+                            FontAwesomeIcons.star,
                             color: Colors.white,
                           ),
+                          selectIcon: const Icon(FontAwesomeIcons.solidStar),
                           onTap: () =>
-                              pgcIntroController.actionShareVideo(context),
-                          semanticsLabel: '转发',
+                              introController.showFavBottomSheet(context),
+                          onLongPress: () => introController.showFavBottomSheet(
+                            context,
+                            isLongPress: true,
+                          ),
+                          selectStatus: introController.hasFav.value,
+                          semanticsLabel: '收藏',
+                          controller: animController,
+                          animation: animation,
                         ),
                       ),
-                    ],
+                    ),
+                    SizedBox(
+                      width: 42,
+                      height: 34,
+                      child: ActionItem(
+                        expand: false,
+                        icon: const Icon(
+                          FontAwesomeIcons.shareFromSquare,
+                          color: Colors.white,
+                        ),
+                        onTap: () => introController.actionShareVideo(context),
+                        semanticsLabel: '分享',
+                      ),
+                    ),
                   ],
                 )
               : const SizedBox.shrink(),
@@ -2457,6 +2344,18 @@ class HeaderControlState extends State<HeaderControl> {
         ? Obx(() => _buildHeader(true))
         : _buildHeader(false);
   }
+
+  @override
+  bool get hasTriple =>
+      introController.hasLike.value &&
+      introController.hasCoin &&
+      introController.hasFav.value;
+
+  @override
+  void onLike() => introController.actionLikeVideo();
+
+  @override
+  void onTriple() => introController.actionTriple();
 }
 
 class MSliderTrackShape extends RoundedRectSliderTrackShape {

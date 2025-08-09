@@ -1,106 +1,65 @@
-import 'dart:async';
-import 'dart:math';
+import 'dart:async' show Timer;
+import 'dart:math' show pi;
 
 import 'package:PiliPlus/utils/feed_back.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show HapticFeedback;
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 
-class ActionItem extends StatefulWidget {
-  final Icon icon;
-  final Icon? selectIcon;
-  final VoidCallback? onTap;
-  final VoidCallback? onLongPress;
-  final String? text;
-  final bool selectStatus;
-  final String semanticsLabel;
-  final bool needAnim;
-  final bool hasTriple;
-  final ValueChanged<bool>? callBack;
-  final bool expand;
+mixin TripleAnimMixin<T extends StatefulWidget>
+    on SingleTickerProviderStateMixin<T> {
+  late AnimationController animController;
+  late Animation<double> animation;
 
-  const ActionItem({
-    super.key,
-    required this.icon,
-    this.selectIcon,
-    this.onTap,
-    this.onLongPress,
-    this.text,
-    this.selectStatus = false,
-    this.needAnim = false,
-    this.hasTriple = false,
-    this.callBack,
-    required this.semanticsLabel,
-    this.expand = true,
-  });
-
-  @override
-  State<ActionItem> createState() => ActionItemState();
-}
-
-class ActionItemState extends State<ActionItem>
-    with SingleTickerProviderStateMixin {
-  AnimationController? controller;
-  Animation<double>? _animation;
-
-  late final _isThumbsUp = widget.semanticsLabel == '点赞';
   late int _lastTime;
   Timer? _timer;
 
-  void _startLongPress() {
+  bool get hasTriple;
+  void onTriple();
+  void onLike();
+
+  void initTriple() {
+    animController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1500),
+      reverseDuration: const Duration(milliseconds: 400),
+    );
+
+    animation = Tween<double>(begin: 0, end: -2 * pi).animate(
+      CurvedAnimation(
+        parent: animController,
+        curve: Curves.easeInOut,
+      ),
+    );
+  }
+
+  void onStartTriple() {
     _lastTime = DateTime.now().millisecondsSinceEpoch;
     _timer ??= Timer(const Duration(milliseconds: 200), () {
-      if (widget.hasTriple) {
+      if (hasTriple) {
         HapticFeedback.lightImpact();
         SmartDialog.showToast('已经完成三连');
       } else {
-        controller?.forward();
-        widget.callBack?.call(true);
+        animController.forward().whenComplete(() {
+          animController.reset();
+          onTriple();
+        });
       }
       cancelTimer();
     });
   }
 
-  void _cancelLongPress([bool isCancel = false]) {
+  void onCancelTriple(bool isCancel) {
     int duration = DateTime.now().millisecondsSinceEpoch - _lastTime;
     if (duration >= 200 && duration < 1500) {
-      if (!widget.hasTriple) {
-        controller?.reverse();
-        widget.callBack?.call(false);
+      if (!hasTriple) {
+        animController.reverse();
       }
     } else if (duration < 200) {
       cancelTimer();
       if (!isCancel) {
         feedBack();
-        widget.onTap?.call();
-      }
-    }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    if (widget.needAnim) {
-      controller = AnimationController(
-        vsync: this,
-        duration: const Duration(milliseconds: 1500),
-        reverseDuration: const Duration(milliseconds: 400),
-      )..addListener(listener);
-
-      _animation = Tween<double>(begin: 0, end: -2 * pi).animate(
-        CurvedAnimation(
-          parent: controller!,
-          curve: Curves.easeInOut,
-        ),
-      );
-    }
-  }
-
-  void listener() {
-    if (controller!.value == 1) {
-      controller!.reset();
-      if (_isThumbsUp) {
-        widget.onLongPress?.call();
+        onLike();
       }
     }
   }
@@ -110,13 +69,49 @@ class ActionItemState extends State<ActionItem>
     _timer = null;
   }
 
-  @override
-  void dispose() {
+  void disposeTriple() {
     cancelTimer();
-    controller?.removeListener(listener);
-    controller?.dispose();
-    super.dispose();
+    animController.dispose();
   }
+}
+
+class ActionItem extends StatefulWidget {
+  const ActionItem({
+    super.key,
+    required this.icon,
+    this.selectIcon,
+    this.onTap,
+    this.onLongPress,
+    this.text,
+    this.selectStatus = false,
+    required this.semanticsLabel,
+    this.expand = true,
+    this.controller,
+    this.animation,
+    this.onStartTriple,
+    this.onCancelTriple,
+  });
+
+  final Icon icon;
+  final Icon? selectIcon;
+  final VoidCallback? onTap;
+  final VoidCallback? onLongPress;
+  final String? text;
+  final bool selectStatus;
+  final String semanticsLabel;
+  final bool expand;
+  final AnimationController? controller;
+  final Animation<double>? animation;
+  final VoidCallback? onStartTriple;
+  final ValueChanged<bool>? onCancelTriple;
+
+  @override
+  State<ActionItem> createState() => ActionItemState();
+}
+
+class ActionItemState extends State<ActionItem>
+    with SingleTickerProviderStateMixin {
+  late final _isThumbsUp = widget.onStartTriple != null;
 
   @override
   Widget build(BuildContext context) {
@@ -155,9 +150,11 @@ class ActionItemState extends State<ActionItem>
                 widget.onTap?.call();
               },
         onLongPress: _isThumbsUp ? null : widget.onLongPress,
-        onTapDown: _isThumbsUp ? (details) => _startLongPress() : null,
-        onTapUp: _isThumbsUp ? (details) => _cancelLongPress() : null,
-        onTapCancel: _isThumbsUp ? () => _cancelLongPress(true) : null,
+        onTapDown: _isThumbsUp ? (details) => widget.onStartTriple!() : null,
+        onTapUp: _isThumbsUp
+            ? (details) => widget.onCancelTriple!(false)
+            : null,
+        onTapCancel: _isThumbsUp ? () => widget.onCancelTriple!(true) : null,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -165,14 +162,14 @@ class ActionItemState extends State<ActionItem>
               clipBehavior: Clip.none,
               alignment: Alignment.center,
               children: [
-                if (widget.needAnim)
+                if (widget.animation != null)
                   AnimatedBuilder(
-                    animation: _animation!,
+                    animation: widget.animation!,
                     builder: (context, child) => CustomPaint(
                       size: const Size(28, 28),
                       painter: _ArcPainter(
                         color: theme.colorScheme.primary,
-                        sweepAngle: _animation!.value,
+                        sweepAngle: widget.animation!.value,
                       ),
                     ),
                   )

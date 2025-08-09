@@ -98,6 +98,7 @@ class PgcIntroController extends CommonIntroController {
   }
 
   // （取消）点赞
+  @override
   Future<void> actionLikeVideo() async {
     if (!accountService.isLogin.value) {
       SmartDialog.showToast('账号未登录');
@@ -115,6 +116,7 @@ class PgcIntroController extends CommonIntroController {
   }
 
   // 投币
+  @override
   void actionCoinVideo() {
     if (!accountService.isLogin.value) {
       SmartDialog.showToast('账号未登录');
@@ -138,6 +140,7 @@ class PgcIntroController extends CommonIntroController {
   }
 
   // 分享视频
+  @override
   void actionShareVideo(BuildContext context) {
     showDialog(
       context: context,
@@ -408,7 +411,8 @@ class PgcIntroController extends CommonIntroController {
   }
 
   // 一键三连
-  Future<void> actionOneThree() async {
+  @override
+  Future<void> actionTriple() async {
     feedBack();
     if (!accountService.isLogin.value) {
       SmartDialog.showToast('账号未登录');

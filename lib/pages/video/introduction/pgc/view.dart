@@ -18,7 +18,6 @@ import 'package:PiliPlus/pages/video/introduction/ugc/widgets/action_item.dart';
 import 'package:PiliPlus/utils/num_util.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart' show HapticFeedback;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
@@ -41,12 +40,12 @@ class PgcIntroPage extends StatefulWidget {
 }
 
 class _PgcIntroPageState extends State<PgcIntroPage>
-    with AutomaticKeepAliveClientMixin {
+    with
+        AutomaticKeepAliveClientMixin,
+        SingleTickerProviderStateMixin,
+        TripleAnimMixin {
   late PgcIntroController pgcIntroController;
   late VideoDetailController videoDetailCtr;
-
-  late final _coinKey = GlobalKey<ActionItemState>();
-  late final _favKey = GlobalKey<ActionItemState>();
 
   bool isProcessing = false;
   Future<void> handleState(FutureOr Function() action) async {
@@ -65,6 +64,13 @@ class _PgcIntroPageState extends State<PgcIntroPage>
     super.initState();
     pgcIntroController = Get.put(PgcIntroController(), tag: widget.heroTag);
     videoDetailCtr = Get.find<VideoDetailController>(tag: widget.heroTag);
+    initTriple();
+  }
+
+  @override
+  void dispose() {
+    disposeTriple();
+    super.dispose();
   }
 
   @override
@@ -425,42 +431,30 @@ class _PgcIntroPageState extends State<PgcIntroPage>
               icon: const Icon(FontAwesomeIcons.thumbsUp),
               selectIcon: const Icon(FontAwesomeIcons.solidThumbsUp),
               onTap: () => handleState(pgcIntroController.actionLikeVideo),
-              onLongPress: pgcIntroController.actionOneThree,
+              onLongPress: () => handleState(pgcIntroController.actionTriple),
               selectStatus: pgcIntroController.hasLike.value,
               semanticsLabel: '点赞',
               text: NumUtil.numFormat(item.stat!.like),
-              needAnim: true,
-              hasTriple:
-                  pgcIntroController.hasLike.value &&
-                  pgcIntroController.hasCoin &&
-                  pgcIntroController.hasFav.value,
-              callBack: (start) {
-                if (start) {
-                  HapticFeedback.lightImpact();
-                  _coinKey.currentState?.controller?.forward();
-                  _favKey.currentState?.controller?.forward();
-                } else {
-                  _coinKey.currentState?.controller?.reverse();
-                  _favKey.currentState?.controller?.reverse();
-                }
-              },
+              controller: animController,
+              animation: animation,
+              onStartTriple: onStartTriple,
+              onCancelTriple: onCancelTriple,
             ),
           ),
           Obx(
             () => ActionItem(
-              key: _coinKey,
               icon: const Icon(FontAwesomeIcons.b),
               selectIcon: const Icon(FontAwesomeIcons.b),
               onTap: () => handleState(pgcIntroController.actionCoinVideo),
               selectStatus: pgcIntroController.hasCoin,
               semanticsLabel: '投币',
               text: NumUtil.numFormat(item.stat!.coin),
-              needAnim: true,
+              controller: animController,
+              animation: animation,
             ),
           ),
           Obx(
             () => ActionItem(
-              key: _favKey,
               icon: const Icon(FontAwesomeIcons.star),
               selectIcon: const Icon(FontAwesomeIcons.solidStar),
               onTap: () => pgcIntroController.showFavBottomSheet(context),
@@ -471,7 +465,8 @@ class _PgcIntroPageState extends State<PgcIntroPage>
               selectStatus: pgcIntroController.hasFav.value,
               semanticsLabel: '收藏',
               text: NumUtil.numFormat(item.stat!.favorite),
-              needAnim: true,
+              controller: animController,
+              animation: animation,
             ),
           ),
           Obx(
@@ -495,4 +490,16 @@ class _PgcIntroPageState extends State<PgcIntroPage>
       ),
     );
   }
+
+  @override
+  bool get hasTriple =>
+      pgcIntroController.hasLike.value &&
+      pgcIntroController.hasCoin &&
+      pgcIntroController.hasFav.value;
+
+  @override
+  void onLike() => handleState(pgcIntroController.actionLikeVideo);
+
+  @override
+  void onTriple() => handleState(pgcIntroController.actionTriple);
 }

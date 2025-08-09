@@ -54,6 +54,11 @@ abstract class CommonIntroController extends GetxController {
   bool prevPlay();
   bool nextPlay();
 
+  void actionLikeVideo();
+  void actionCoinVideo();
+  void actionTriple();
+  void actionShareVideo(BuildContext context);
+
   // 同时观看
   final bool isShowOnlineTotal = Pref.enableOnlineTotal;
   late final RxString total = '1'.obs;

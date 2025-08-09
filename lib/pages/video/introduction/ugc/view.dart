@@ -30,7 +30,6 @@ import 'package:PiliPlus/utils/utils.dart';
 import 'package:expandable/expandable.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart' show HapticFeedback;
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart' hide ContextExtensionss;
@@ -54,13 +53,13 @@ class UgcIntroPanel extends StatefulWidget {
 }
 
 class _UgcIntroPanelState extends State<UgcIntroPanel>
-    with AutomaticKeepAliveClientMixin {
+    with
+        AutomaticKeepAliveClientMixin,
+        SingleTickerProviderStateMixin,
+        TripleAnimMixin {
   late UgcIntroController ugcIntroController;
   late final VideoDetailController videoDetailCtr =
       Get.find<VideoDetailController>(tag: widget.heroTag);
-
-  late final _coinKey = GlobalKey<ActionItemState>();
-  late final _favKey = GlobalKey<ActionItemState>();
 
   bool isProcessing = false;
 
@@ -68,6 +67,13 @@ class _UgcIntroPanelState extends State<UgcIntroPanel>
   void initState() {
     super.initState();
     ugcIntroController = Get.put(UgcIntroController(), tag: widget.heroTag);
+    initTriple();
+  }
+
+  @override
+  void dispose() {
+    disposeTriple();
+    super.dispose();
   }
 
   @override
@@ -530,27 +536,16 @@ class _UgcIntroPanelState extends State<UgcIntroPanel>
               icon: const Icon(FontAwesomeIcons.thumbsUp),
               selectIcon: const Icon(FontAwesomeIcons.solidThumbsUp),
               onTap: () => handleState(ugcIntroController.actionLikeVideo),
-              onLongPress: () => handleState(ugcIntroController.actionOneThree),
+              onLongPress: () => handleState(ugcIntroController.actionTriple),
               selectStatus: ugcIntroController.hasLike.value,
               semanticsLabel: '点赞',
               text: !isLoading
                   ? NumUtil.numFormat(videoDetail.stat!.like)
                   : null,
-              needAnim: true,
-              hasTriple:
-                  ugcIntroController.hasLike.value &&
-                  ugcIntroController.hasCoin &&
-                  ugcIntroController.hasFav.value,
-              callBack: (start) {
-                if (start) {
-                  HapticFeedback.lightImpact();
-                  _coinKey.currentState?.controller?.forward();
-                  _favKey.currentState?.controller?.forward();
-                } else {
-                  _coinKey.currentState?.controller?.reverse();
-                  _favKey.currentState?.controller?.reverse();
-                }
-              },
+              controller: animController,
+              animation: animation,
+              onStartTriple: onStartTriple,
+              onCancelTriple: onCancelTriple,
             ),
           ),
           Obx(
@@ -565,7 +560,6 @@ class _UgcIntroPanelState extends State<UgcIntroPanel>
           ),
           Obx(
             () => ActionItem(
-              key: _coinKey,
               icon: const Icon(FontAwesomeIcons.b),
               selectIcon: const Icon(FontAwesomeIcons.b),
               onTap: () => handleState(ugcIntroController.actionCoinVideo),
@@ -574,12 +568,12 @@ class _UgcIntroPanelState extends State<UgcIntroPanel>
               text: !isLoading
                   ? NumUtil.numFormat(videoDetail.stat!.coin)
                   : null,
-              needAnim: true,
+              controller: animController,
+              animation: animation,
             ),
           ),
           Obx(
             () => ActionItem(
-              key: _favKey,
               icon: const Icon(FontAwesomeIcons.star),
               selectIcon: const Icon(FontAwesomeIcons.solidStar),
               onTap: () => ugcIntroController.showFavBottomSheet(context),
@@ -592,7 +586,8 @@ class _UgcIntroPanelState extends State<UgcIntroPanel>
               text: !isLoading
                   ? NumUtil.numFormat(videoDetail.stat!.favorite)
                   : null,
-              needAnim: true,
+              controller: animController,
+              animation: animation,
             ),
           ),
           Obx(
@@ -980,4 +975,16 @@ class _UgcIntroPanelState extends State<UgcIntroPanel>
 
   @override
   bool get wantKeepAlive => true;
+
+  @override
+  bool get hasTriple =>
+      ugcIntroController.hasLike.value &&
+      ugcIntroController.hasCoin &&
+      ugcIntroController.hasFav.value;
+
+  @override
+  void onLike() => handleState(ugcIntroController.actionLikeVideo);
+
+  @override
+  void onTriple() => handleState(ugcIntroController.actionTriple);
 }
