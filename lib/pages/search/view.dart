@@ -81,10 +81,10 @@ class _SearchPageState extends State<SearchPage> {
         children: [
           if (_searchController.searchSuggestion) _searchSuggest(),
           if (isPortrait) ...[
-            if (_searchController.enableTrending) hotSearch(theme),
+            if (_searchController.enableTrending) hotSearch(theme, isPortrait),
             _history(theme, isPortrait),
             if (_searchController.enableSearchRcmd)
-              hotSearch(theme, isTrending: false),
+              hotSearch(theme, isPortrait, isTrending: false),
           ] else
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -94,9 +94,10 @@ class _SearchPageState extends State<SearchPage> {
                   Expanded(
                     child: Column(
                       children: [
-                        if (_searchController.enableTrending) hotSearch(theme),
+                        if (_searchController.enableTrending)
+                          hotSearch(theme, isPortrait),
                         if (_searchController.enableSearchRcmd)
-                          hotSearch(theme, isTrending: false),
+                          hotSearch(theme, isPortrait, isTrending: false),
                       ],
                     ),
                   ),
@@ -157,7 +158,7 @@ class _SearchPageState extends State<SearchPage> {
     );
   }
 
-  Widget hotSearch(ThemeData theme, {bool isTrending = true}) {
+  Widget hotSearch(ThemeData theme, bool isPortrait, {bool isTrending = true}) {
     final text = Text(
       isTrending ? '大家都在搜' : '搜索发现',
       strutStyle: const StrutStyle(leading: 0, height: 1),
@@ -174,7 +175,14 @@ class _SearchPageState extends State<SearchPage> {
       color: outline,
     );
     return Padding(
-      padding: EdgeInsets.fromLTRB(10, isTrending ? 25 : 4, 4, 25),
+      padding: EdgeInsets.fromLTRB(
+        10,
+        !isTrending && (isPortrait || _searchController.enableTrending)
+            ? 4
+            : 25,
+        4,
+        25,
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
