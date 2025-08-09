@@ -252,6 +252,7 @@ class SearchHttp {
         'mobi_app': 'android',
         'platform': 'android',
         's_locale': 'zh_CN',
+        'from': 2,
       },
     );
     if (res.data['code'] == 0) {
