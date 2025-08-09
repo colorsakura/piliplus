@@ -1289,21 +1289,22 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                 final visible =
                     !plPlayerController.controlsLock.value &&
                     plPlayerController.showControls.value;
+                visible
+                    ? animationController.forward()
+                    : animationController.reverse();
                 return Positioned.fill(
                   child: ClipRect(
                     child: Column(
                       children: [
                         AppBarAni(
+                          isTop: true,
                           controller: animationController,
-                          visible: visible,
-                          position: 'top',
                           child: widget.headerControl,
                         ),
                         const Spacer(),
                         AppBarAni(
+                          isTop: false,
                           controller: animationController,
-                          visible: visible,
-                          position: 'bottom',
                           child:
                               widget.bottomControl ??
                               BottomControl(
