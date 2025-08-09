@@ -75,7 +75,7 @@ mixin TripleAnimMixin<T extends StatefulWidget>
   }
 }
 
-class ActionItem extends StatefulWidget {
+class ActionItem extends StatelessWidget {
   const ActionItem({
     super.key,
     required this.icon,
@@ -90,7 +90,7 @@ class ActionItem extends StatefulWidget {
     this.animation,
     this.onStartTriple,
     this.onCancelTriple,
-  });
+  }) : isThumbsUp = onStartTriple != null;
 
   final Icon icon;
   final Icon? selectIcon;
@@ -104,38 +104,31 @@ class ActionItem extends StatefulWidget {
   final Animation<double>? animation;
   final VoidCallback? onStartTriple;
   final ValueChanged<bool>? onCancelTriple;
-
-  @override
-  State<ActionItem> createState() => ActionItemState();
-}
-
-class ActionItemState extends State<ActionItem>
-    with SingleTickerProviderStateMixin {
-  late final _isThumbsUp = widget.onStartTriple != null;
+  final bool isThumbsUp;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    Widget? text;
-    if (widget.expand) {
-      final hasText = widget.text != null;
-      text = Text(
-        hasText ? widget.text! : '-',
-        key: hasText ? ValueKey(widget.text!) : null,
+    Widget? textWidget;
+    if (expand) {
+      final hasText = text != null;
+      textWidget = Text(
+        hasText ? text! : '-',
+        key: hasText ? ValueKey(text!) : null,
         style: TextStyle(
-          color: widget.selectStatus
+          color: selectStatus
               ? theme.colorScheme.primary
               : theme.colorScheme.outline,
           fontSize: theme.textTheme.labelSmall!.fontSize,
         ),
       );
       if (hasText) {
-        text = AnimatedSwitcher(
+        textWidget = AnimatedSwitcher(
           duration: const Duration(milliseconds: 300),
           transitionBuilder: (Widget child, Animation<double> animation) {
             return ScaleTransition(scale: animation, child: child);
           },
-          child: text,
+          child: textWidget,
         );
       }
     }
@@ -143,18 +136,16 @@ class ActionItemState extends State<ActionItem>
       type: MaterialType.transparency,
       child: InkWell(
         borderRadius: const BorderRadius.all(Radius.circular(6)),
-        onTap: _isThumbsUp
+        onTap: isThumbsUp
             ? null
             : () {
                 feedBack();
-                widget.onTap?.call();
+                onTap?.call();
               },
-        onLongPress: _isThumbsUp ? null : widget.onLongPress,
-        onTapDown: _isThumbsUp ? (details) => widget.onStartTriple!() : null,
-        onTapUp: _isThumbsUp
-            ? (details) => widget.onCancelTriple!(false)
-            : null,
-        onTapCancel: _isThumbsUp ? () => widget.onCancelTriple!(true) : null,
+        onLongPress: isThumbsUp ? null : onLongPress,
+        onTapDown: isThumbsUp ? (details) => onStartTriple!() : null,
+        onTapUp: isThumbsUp ? (details) => onCancelTriple!(false) : null,
+        onTapCancel: isThumbsUp ? () => onCancelTriple!(true) : null,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -162,36 +153,34 @@ class ActionItemState extends State<ActionItem>
               clipBehavior: Clip.none,
               alignment: Alignment.center,
               children: [
-                if (widget.animation != null)
+                if (animation != null)
                   AnimatedBuilder(
-                    animation: widget.animation!,
+                    animation: animation!,
                     builder: (context, child) => CustomPaint(
                       size: const Size(28, 28),
                       painter: _ArcPainter(
                         color: theme.colorScheme.primary,
-                        sweepAngle: widget.animation!.value,
+                        sweepAngle: animation!.value,
                       ),
                     ),
                   )
                 else
                   const SizedBox(width: 28, height: 28),
                 Icon(
-                  widget.selectStatus
-                      ? widget.selectIcon!.icon!
-                      : widget.icon.icon,
+                  selectStatus ? selectIcon!.icon! : icon.icon,
                   size: 18,
-                  color: widget.selectStatus
+                  color: selectStatus
                       ? theme.colorScheme.primary
-                      : widget.icon.color ?? theme.colorScheme.outline,
+                      : icon.color ?? theme.colorScheme.outline,
                 ),
               ],
             ),
-            ?text,
+            ?textWidget,
           ],
         ),
       ),
     );
-    return widget.expand ? Expanded(child: child) : child;
+    return expand ? Expanded(child: child) : child;
   }
 }
 
