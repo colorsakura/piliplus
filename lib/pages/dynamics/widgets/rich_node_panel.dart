@@ -308,8 +308,42 @@ TextSpan? richNode(
               );
             }
             break;
+          case 'RICH_TEXT_NODE_TYPE_OGV_SEASON':
+            spanChildren
+              ..add(
+                WidgetSpan(
+                  alignment: PlaceholderAlignment.middle,
+                  child: Icon(
+                    Icons.play_circle_outline_outlined,
+                    size: 16,
+                    color: theme.colorScheme.primary,
+                  ),
+                ),
+              )
+              ..add(
+                TextSpan(
+                  text: i.text,
+                  style: style,
+                  recognizer: i.jumpUrl == null
+                      ? null
+                      : (TapGestureRecognizer()
+                          ..onTap = () =>
+                              PiliScheme.routePushFromUrl(i.jumpUrl!)),
+                ),
+              );
+            break;
           default:
-            spanChildren.add(TextSpan(text: i.text, style: style));
+            spanChildren.add(
+              TextSpan(
+                text: i.text,
+                style: style,
+                recognizer: i.jumpUrl == null
+                    ? null
+                    : (TapGestureRecognizer()
+                        ..onTap = () =>
+                            PiliScheme.routePushFromUrl(i.jumpUrl!)),
+              ),
+            );
             break;
         }
       }
