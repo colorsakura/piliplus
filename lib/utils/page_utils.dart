@@ -441,7 +441,6 @@ class PageUtils {
               bvid: bvid,
               cid: cid,
               cover: cover,
-              preventDuplicates: false,
             );
           }
         } catch (err) {
@@ -484,7 +483,6 @@ class PageUtils {
             bvid: bvid,
             cid: cid,
             cover: cover,
-            preventDuplicates: false,
           );
         }
         break;
@@ -718,7 +716,6 @@ class PageUtils {
     int? progress,
     Map? extraArguments,
     int? id,
-    bool preventDuplicates = true,
     bool off = false,
   }) {
     if (PlPlayerController.instance?.isLive == true) {
@@ -813,32 +810,21 @@ class PageUtils {
       if (result.isSuccess) {
         PgcInfoModel data = result.data;
         final episodes = data.episodes;
+        final hasEpisode = episodes != null && episodes.isNotEmpty;
 
-        if (episodes != null && episodes.isNotEmpty) {
-          final EpisodeItem episode = findEpisode(
-            episodes,
-            epId: epId ?? data.userStatus?.progress?.lastEpId,
-          );
-          toVideoPage(
-            videoType: VideoType.pgc,
-            bvid: episode.bvid!,
-            cid: episode.cid!,
-            seasonId: data.seasonId,
-            epId: episode.epId,
-            pgcType: data.type,
-            cover: episode.cover,
-            progress: progress == null ? null : int.tryParse(progress),
-            extraArguments: {
-              'pgcItem': data,
-            },
-            preventDuplicates: false,
-          );
-        } else {
+        EpisodeItem? episode;
+        if (epId != null) {
+          epId = epId.toString();
+          if (hasEpisode) {
+            episode = episodes.firstWhereOrNull(
+              (item) => item.epId.toString() == epId,
+            );
+          }
+
           // find section
-          if (epId != null) {
+          if (episode == null) {
             final sections = data.section;
             if (sections != null && sections.isNotEmpty) {
-              epId = epId.toString();
               for (var section in sections) {
                 final episodes = section.episodes;
                 if (episodes != null && episodes.isNotEmpty) {
@@ -859,7 +845,6 @@ class PageUtils {
                           'pgcApi': true,
                           'pgcItem': data,
                         },
-                        preventDuplicates: false,
                       );
                       return;
                     }
@@ -868,8 +853,30 @@ class PageUtils {
               }
             }
           }
-          SmartDialog.showToast('资源加载失败');
         }
+
+        if (hasEpisode) {
+          episode ??= findEpisode(
+            episodes,
+            epId: data.userStatus?.progress?.lastEpId,
+          );
+          toVideoPage(
+            videoType: VideoType.pgc,
+            bvid: episode.bvid!,
+            cid: episode.cid!,
+            seasonId: data.seasonId,
+            epId: episode.epId,
+            pgcType: data.type,
+            cover: episode.cover,
+            progress: progress == null ? null : int.tryParse(progress),
+            extraArguments: {
+              'pgcItem': data,
+            },
+          );
+          return;
+        }
+
+        SmartDialog.showToast('资源加载失败');
       } else {
         result.toast();
       }
@@ -912,7 +919,6 @@ class PageUtils {
             extraArguments: {
               'pgcItem': data,
             },
-            preventDuplicates: false,
           );
         } else {
           SmartDialog.showToast('资源加载失败');

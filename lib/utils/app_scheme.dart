@@ -174,7 +174,6 @@ class PiliScheme {
                   cid: int.parse(cid),
                   progress: progress == null ? null : int.parse(progress),
                   off: off,
-                  preventDuplicates: false,
                 );
               } else {
                 videoPush(
@@ -906,7 +905,6 @@ class PiliScheme {
           cid: cid,
           progress: progress == null ? null : int.parse(progress),
           off: off,
-          preventDuplicates: false,
         );
       }
     } catch (e) {

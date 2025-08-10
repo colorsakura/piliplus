@@ -305,10 +305,13 @@ class _UgcIntroPanelState extends TripleState<UgcIntroPanel>
                           !videoDetailCtr
                               .plPlayerController
                               .horizontalSeasonPanel))
-                    SeasonPanel(
-                      heroTag: widget.heroTag,
-                      showEpisodes: widget.showEpisodes,
-                      ugcIntroController: introController,
+                    Obx(
+                      () => SeasonPanel(
+                        key: ValueKey(introController.videoDetail.value),
+                        heroTag: widget.heroTag,
+                        showEpisodes: widget.showEpisodes,
+                        ugcIntroController: introController,
+                      ),
                     ),
                   if (!isLoading &&
                       videoDetail.pages != null &&
@@ -316,14 +319,16 @@ class _UgcIntroPanelState extends TripleState<UgcIntroPanel>
                       (isPortrait ||
                           !videoDetailCtr
                               .plPlayerController
-                              .horizontalSeasonPanel)) ...[
-                    PagesPanel(
-                      heroTag: widget.heroTag,
-                      ugcIntroController: introController,
-                      bvid: introController.bvid,
-                      showEpisodes: widget.showEpisodes,
+                              .horizontalSeasonPanel))
+                    Obx(
+                      () => PagesPanel(
+                        key: ValueKey(introController.videoDetail.value),
+                        heroTag: widget.heroTag,
+                        ugcIntroController: introController,
+                        bvid: introController.bvid,
+                        showEpisodes: widget.showEpisodes,
+                      ),
                     ),
-                  ],
                 ],
               ),
             ),

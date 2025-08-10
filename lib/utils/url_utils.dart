@@ -55,7 +55,6 @@ class UrlUtils {
           aid: aid,
           bvid: bvid,
           cid: cid,
-          preventDuplicates: false,
         );
       }
     } else {

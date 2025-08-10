@@ -622,7 +622,7 @@ class _EpisodePanelState extends CommonSlidePageState<EpisodePanel> {
                 _tabController.animateTo(widget.initialTabIndex);
                 await Future.delayed(const Duration(milliseconds: 225));
               }
-              _itemScrollController[currentTabIndex].scrollTo(
+              _itemScrollController[widget.initialTabIndex].scrollTo(
                 index: _currentItemIndex,
                 duration: const Duration(milliseconds: 200),
               );

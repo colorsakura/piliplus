@@ -8,6 +8,7 @@ import 'package:PiliPlus/utils/id_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+// TODO refa
 class PagesPanel extends StatefulWidget {
   const PagesPanel({
     super.key,
@@ -156,7 +157,9 @@ class _PagesPanelState extends State<PagesPanel> {
                       if (widget.showEpisodes == null) {
                         Get.back();
                       }
-                      widget.ugcIntroController.onChangeEpisode(item);
+                      widget.ugcIntroController.onChangeEpisode(
+                        item..bvid ??= widget.bvid,
+                      );
                       if (widget.list != null &&
                           widget
                                   .ugcIntroController
