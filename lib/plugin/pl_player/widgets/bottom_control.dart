@@ -10,13 +10,16 @@ import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 
 class BottomControl extends StatelessWidget {
-  final PlPlayerController controller;
-  final Function buildBottomControl;
   const BottomControl({
     required this.controller,
     required this.buildBottomControl,
+    required this.maxWidth,
     super.key,
   });
+
+  final PlPlayerController controller;
+  final Widget Function(double maxWidth) buildBottomControl;
+  final double maxWidth;
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +54,7 @@ class BottomControl extends StatelessWidget {
                         buildDmChart(theme, controller, 4.5),
                       if (controller.viewPointList.isNotEmpty &&
                           controller.showVP.value)
-                        buildViewPointWidget(controller, 8.75),
+                        buildViewPointWidget(controller, 8.75, maxWidth),
                       ProgressBar(
                         progress: Duration(seconds: value),
                         buffered: Duration(seconds: buffer),
@@ -146,7 +149,7 @@ class BottomControl extends StatelessWidget {
                           left: 0,
                           right: 0,
                           bottom: 18,
-                          child: buildSeekPreviewWidget(controller),
+                          child: buildSeekPreviewWidget(controller, maxWidth),
                         ),
                     ],
                   ),
@@ -154,7 +157,7 @@ class BottomControl extends StatelessWidget {
               );
             },
           ),
-          buildBottomControl(),
+          buildBottomControl(maxWidth),
           const SizedBox(height: 12),
         ],
       ),

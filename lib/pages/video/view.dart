@@ -665,25 +665,21 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                             showStatusBar();
                           }
                         }
+                        final height = !isPortrait || isFullScreen
+                            ? maxHeight -
+                                  (!isPortrait || removeSafeArea
+                                      ? 0
+                                      : padding.top)
+                            : videoDetailController.isExpanding ||
+                                  videoDetailController.isCollapsing
+                            ? animHeight
+                            : videoDetailController.videoHeight;
                         return SizedBox(
-                          height: !isPortrait || isFullScreen
-                              ? maxHeight -
-                                    (!isPortrait || removeSafeArea
-                                        ? 0
-                                        : padding.top)
-                              : videoDetailController.isExpanding ||
-                                    videoDetailController.isCollapsing
-                              ? animHeight
-                              : videoDetailController.videoHeight,
                           width: maxWidth,
+                          height: height,
                           child: videoPlayer(
-                            maxWidth,
-                            !isPortrait || isFullScreen
-                                ? maxHeight
-                                : videoDetailController.isExpanding ||
-                                      videoDetailController.isCollapsing
-                                ? animHeight
-                                : videoDetailController.videoHeight,
+                            width: maxWidth,
+                            height: height,
                           ),
                         );
                       },
@@ -964,14 +960,18 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
       if (videoDetailController.isVertical.value && enableVerticalExpand) {
         final double videoHeight =
             maxHeight - (removeSafeArea ? 0 : padding.vertical);
-        final double videoWidth = videoHeight * 9 / 16;
+        final double width = videoHeight * 9 / 16;
+        final videoWidth = isFullScreen ? maxWidth : width;
         return Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(
+              width: videoWidth,
               height: videoHeight,
-              width: isFullScreen ? maxWidth : videoWidth,
-              child: videoPlayer(videoWidth, videoHeight),
+              child: videoPlayer(
+                width: videoWidth,
+                height: videoHeight,
+              ),
             ),
             Expanded(
               child: Scaffold(
@@ -986,7 +986,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                         controller: videoDetailController.tabCtr,
                         children: [
                           videoIntro(
-                            width: maxWidth - videoWidth,
+                            width: maxWidth - width,
                             height: maxHeight,
                           ),
                           if (videoDetailController.showReply)
@@ -1002,16 +1002,20 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
           ],
         );
       }
-      final double videoHeight = maxHeight / 2.5;
       final shouldShowSeasonPanel = _shouldShowSeasonPanel;
+      final double height = maxHeight / 2.5;
+      final videoHeight = isFullScreen
+          ? maxHeight - (removeSafeArea ? 0 : padding.vertical)
+          : height;
       return Column(
         children: [
           SizedBox(
             width: maxWidth,
-            height: isFullScreen
-                ? maxHeight - (removeSafeArea ? 0 : padding.vertical)
-                : videoHeight,
-            child: videoPlayer(maxWidth, videoHeight),
+            height: videoHeight,
+            child: videoPlayer(
+              width: maxWidth,
+              height: videoHeight,
+            ),
           ),
           Expanded(
             child: Scaffold(
@@ -1032,7 +1036,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                               if (shouldShowSeasonPanel) flex++;
                               return maxWidth / flex;
                             }(),
-                            height: maxHeight - videoHeight,
+                            height: maxHeight - height,
                           ),
                         ),
                         if (videoDetailController.showReply)
@@ -1056,20 +1060,24 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
       if (videoDetailController.isVertical.value && enableVerticalExpand) {
         final double videoHeight =
             maxHeight - (removeSafeArea ? 0 : padding.top);
-        final double videoWidth = videoHeight * 9 / 16;
+        final double width = videoHeight * 9 / 16;
+        final videoWidth = isFullScreen ? maxWidth : width;
         return Row(
           children: [
             if (!isFullScreen)
               Expanded(
                 child: videoIntro(
-                  width: (maxWidth - videoWidth) / 2,
+                  width: (maxWidth - width) / 2,
                   height: maxHeight,
                 ),
               ),
             SizedBox(
+              width: videoWidth,
               height: videoHeight,
-              width: isFullScreen ? maxWidth : videoWidth,
-              child: videoPlayer(videoWidth, videoHeight),
+              child: videoPlayer(
+                width: videoWidth,
+                height: videoHeight,
+              ),
             ),
             Expanded(
               child: Scaffold(
@@ -1096,12 +1104,13 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
           ],
         );
       }
-      double videoWidth =
+      double width =
           clampDouble(maxHeight / maxWidth * 1.08, 0.5, 0.7) * maxWidth;
       if (maxWidth >= 560) {
-        videoWidth = min(videoWidth, maxWidth - 280);
+        width = min(width, maxWidth - 280);
       }
-      final double videoHeight = videoWidth * 9 / 16;
+      final videoWidth = isFullScreen ? maxWidth : width;
+      final double videoHeight = isFullScreen ? maxHeight : width * 9 / 16;
       final introHeight =
           maxHeight - videoHeight - (removeSafeArea ? 0 : padding.top);
       return Row(
@@ -1109,17 +1118,20 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
           Column(
             children: [
               SizedBox(
-                width: isFullScreen ? maxWidth : videoWidth,
-                height: isFullScreen ? maxHeight : videoHeight,
-                child: videoPlayer(videoWidth, videoHeight),
+                width: videoWidth,
+                height: videoHeight,
+                child: videoPlayer(
+                  width: videoWidth,
+                  height: videoHeight,
+                ),
               ),
               Offstage(
                 offstage: isFullScreen,
                 child: SizedBox(
-                  width: videoWidth,
+                  width: width,
                   height: introHeight,
                   child: videoIntro(
-                    width: videoWidth,
+                    width: width,
                     height: introHeight,
                     needRelated: false,
                     needCtr: false,
@@ -1132,9 +1144,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
             offstage: isFullScreen,
             child: SizedBox(
               width:
-                  maxWidth -
-                  videoWidth -
-                  (removeSafeArea ? 0 : padding.horizontal),
+                  maxWidth - width - (removeSafeArea ? 0 : padding.horizontal),
               height: maxHeight - (removeSafeArea ? 0 : padding.top),
               child: Scaffold(
                 key: videoDetailController.childKey,
@@ -1372,7 +1382,11 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
     return const SizedBox.shrink();
   });
 
-  Widget plPlayer([bool isPipMode = false]) => Obx(
+  Widget plPlayer({
+    required double width,
+    required double height,
+    bool isPipMode = false,
+  }) => Obx(
     key: videoPlayerKey,
     () =>
         videoDetailController.videoState.value is! Success ||
@@ -1381,6 +1395,8 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
         ? const SizedBox.shrink()
         : PLVideoPlayer(
             key: playerKey,
+            maxWidth: width,
+            maxHeight: height,
             plPlayerController: plPlayerController!,
             videoDetailController: videoDetailController,
             introController: videoDetailController.isUgc
@@ -1410,7 +1426,9 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
 
   Widget autoChoose(Widget childWhenDisabled) {
     if (Platform.isAndroid) {
-      return Floating().isPipMode ? plPlayer(true) : childWhenDisabled;
+      return Floating().isPipMode
+          ? plPlayer(width: maxWidth, height: maxHeight, isPipMode: true)
+          : childWhenDisabled;
     }
     return childWhenDisabled;
   }
@@ -1428,7 +1446,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
       builder: (context, constraints) {
         maxWidth = constraints.maxWidth;
         maxHeight = constraints.maxHeight;
-        isPortrait = maxHeight > maxWidth;
+        isPortrait = maxHeight >= maxWidth;
 
         if (!videoDetailController.horizontalScreen) {
           return autoChoose(childWhenDisabled);
@@ -1599,7 +1617,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
     );
   }
 
-  Widget videoPlayer(double videoWidth, double videoHeight) {
+  Widget videoPlayer({required double width, required double height}) {
     final isFullScreen = this.isFullScreen;
     return PopScope(
       canPop:
@@ -1611,7 +1629,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
         children: [
           const Positioned.fill(child: ColoredBox(color: Colors.black)),
 
-          if (isShowing) plPlayer(),
+          if (isShowing) plPlayer(width: width, height: height),
 
           Obx(() {
             if (!videoDetailController.autoPlay.value) {
@@ -1621,12 +1639,12 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                   child: Obx(
                     () => CachedNetworkImage(
                       imageUrl: videoDetailController.cover.value.http2https,
-                      width: videoWidth,
-                      height: videoHeight,
+                      width: width,
+                      height: height,
                       fit: BoxFit.cover,
                       fadeOutDuration: const Duration(milliseconds: 120),
                       fadeInDuration: const Duration(milliseconds: 120),
-                      memCacheWidth: videoWidth.cacheSize(context),
+                      memCacheWidth: width.cacheSize(context),
                       placeholder: (context, url) => Center(
                         child: Image.asset('assets/images/loading.png'),
                       ),

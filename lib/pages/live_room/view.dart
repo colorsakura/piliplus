@@ -14,7 +14,6 @@ import 'package:PiliPlus/plugin/pl_player/models/play_status.dart';
 import 'package:PiliPlus/plugin/pl_player/utils/fullscreen.dart';
 import 'package:PiliPlus/plugin/pl_player/view.dart';
 import 'package:PiliPlus/services/service_locator.dart';
-import 'package:PiliPlus/utils/context_ext.dart';
 import 'package:PiliPlus/utils/duration_util.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
@@ -113,20 +112,39 @@ class _LiveRoomPageState extends State<LiveRoomPage>
     }
   }
 
+  late double maxWidth;
+  late double maxHeight;
+  late EdgeInsets padding;
+
   @override
   Widget build(BuildContext context) {
-    final isPortrait = context.isPortrait;
-    if (Platform.isAndroid) {
-      return Floating().isPipMode
-          ? videoPlayerPanel(isFullScreen, isPipMode: true)
-          : childWhenDisabled(isPortrait);
-    } else {
-      return childWhenDisabled(isPortrait);
-    }
+    padding = MediaQuery.paddingOf(context);
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        maxWidth = constraints.maxWidth;
+        maxHeight = constraints.maxHeight;
+        final isPortrait = maxHeight >= maxWidth;
+
+        if (Platform.isAndroid) {
+          return Floating().isPipMode
+              ? videoPlayerPanel(
+                  isFullScreen,
+                  width: maxWidth,
+                  height: maxHeight,
+                  isPipMode: true,
+                )
+              : childWhenDisabled(isPortrait);
+        } else {
+          return childWhenDisabled(isPortrait);
+        }
+      },
+    );
   }
 
   Widget videoPlayerPanel(
     bool isFullScreen, {
+    required double width,
+    required double height,
     bool isPipMode = false,
     Color? fill,
     Alignment? alignment,
@@ -144,6 +162,8 @@ class _LiveRoomPageState extends State<LiveRoomPage>
           final roomInfoH5 = _liveRoomController.roomInfoH5.value;
           return PLVideoPlayer(
             key: playerKey,
+            maxWidth: width,
+            maxHeight: height,
             fill: fill,
             alignment: alignment,
             plPlayerController: plPlayerController,
@@ -212,11 +232,10 @@ class _LiveRoomPageState extends State<LiveRoomPage>
                     ?.appBackground;
                 Widget child;
                 if (appBackground?.isNotEmpty == true) {
-                  final size = Get.size;
                   child = CachedNetworkImage(
                     fit: BoxFit.cover,
-                    width: size.width,
-                    height: size.height,
+                    width: maxWidth,
+                    height: maxHeight,
                     imageUrl: appBackground!.http2https,
                   );
                 } else {
@@ -254,14 +273,18 @@ class _LiveRoomPageState extends State<LiveRoomPage>
 
   Widget get _buildPH {
     final isFullScreen = this.isFullScreen;
-    final size = Get.size;
+    final height = isFullScreen ? maxHeight : maxWidth * 9 / 16;
     return Column(
       children: [
         if (!isFullScreen) _buildAppBar,
         SizedBox(
-          width: size.width,
-          height: isFullScreen ? size.height : size.width * 9 / 16,
-          child: videoPlayerPanel(isFullScreen),
+          width: maxWidth,
+          height: height,
+          child: videoPlayerPanel(
+            isFullScreen,
+            width: maxWidth,
+            height: height,
+          ),
         ),
         ..._buildBottomWidget,
       ],
@@ -270,11 +293,17 @@ class _LiveRoomPageState extends State<LiveRoomPage>
 
   Widget get _buildPP {
     final isFullScreen = this.isFullScreen;
+    final bottomHeight = 85.0 + padding.bottom;
+    final height = isFullScreen
+        ? maxHeight
+        : maxHeight - padding.top - kToolbarHeight - bottomHeight;
     Widget child = Stack(
       clipBehavior: Clip.none,
       children: [
         Positioned.fill(
           child: videoPlayerPanel(
+            width: maxWidth,
+            height: height,
             isFullScreen,
             alignment: isFullScreen ? null : Alignment.topCenter,
             needDm: isFullScreen,
@@ -288,7 +317,7 @@ class _LiveRoomPageState extends State<LiveRoomPage>
             maintainState: true,
             visible: !isFullScreen,
             child: SizedBox(
-              height: Get.height * 0.32,
+              height: maxHeight * 0.32,
               child: _buildChatWidget(true),
             ),
           ),
@@ -302,7 +331,10 @@ class _LiveRoomPageState extends State<LiveRoomPage>
       children: [
         _buildAppBar,
         Expanded(child: child),
-        _buildInputWidget,
+        SizedBox(
+          height: bottomHeight,
+          child: _buildInputWidget,
+        ),
       ],
     );
   }
@@ -471,23 +503,23 @@ class _LiveRoomPageState extends State<LiveRoomPage>
 
   Widget get _buildBodyH {
     double videoWidth =
-        clampDouble(context.height / context.width * 1.08, 0.58, 0.75) *
-        context.width;
+        clampDouble(maxHeight / maxWidth * 1.08, 0.58, 0.75) * maxWidth;
     return Obx(
       () {
         final isFullScreen = this.isFullScreen;
-        final size = Get.size;
+        final width = isFullScreen ? maxWidth : videoWidth;
+        final height = isFullScreen ? maxHeight : maxWidth * 9 / 16;
         Widget child = Row(
           children: [
             Container(
-              margin: EdgeInsets.only(
-                bottom: MediaQuery.paddingOf(context).bottom,
-              ),
-              width: isFullScreen ? size.width : videoWidth,
-              height: isFullScreen ? size.height : size.width * 9 / 16,
+              margin: EdgeInsets.only(bottom: padding.bottom),
+              width: width,
+              height: height,
               child: videoPlayerPanel(
                 isFullScreen,
                 fill: Colors.transparent,
+                width: width,
+                height: height,
               ),
             ),
             Expanded(
@@ -531,7 +563,7 @@ class _LiveRoomPageState extends State<LiveRoomPage>
       top: 5,
       left: 10,
       right: 10,
-      bottom: 15 + MediaQuery.paddingOf(context).bottom,
+      bottom: 15 + padding.bottom,
     ),
     decoration: const BoxDecoration(
       borderRadius: BorderRadius.only(

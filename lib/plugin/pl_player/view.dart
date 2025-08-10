@@ -46,6 +46,8 @@ import 'package:screen_brightness/screen_brightness.dart';
 
 class PLVideoPlayer extends StatefulWidget {
   const PLVideoPlayer({
+    required this.maxWidth,
+    required this.maxHeight,
     required this.plPlayerController,
     this.videoDetailController,
     this.introController,
@@ -61,6 +63,8 @@ class PLVideoPlayer extends StatefulWidget {
     super.key,
   });
 
+  final double maxWidth;
+  final double maxHeight;
   final PlPlayerController plPlayerController;
   final VideoDetailController? videoDetailController;
   final CommonIntroController? introController;
@@ -244,7 +248,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
   }
 
   // 动态构建底部控制条
-  Widget buildBottomControl() {
+  Widget buildBottomControl(double maxWidth) {
     final videoDetail = introController.videoDetail.value;
     final isSeason = videoDetail.ugcSeason != null;
     final isPart = videoDetail.pages != null && videoDetail.pages!.length > 1;
@@ -659,16 +663,12 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
       children: [
         ...userSpecifyItemLeft.map(progressWidget),
         Expanded(
-          child: LayoutBuilder(
-            builder: (context, constraints) => FittedBox(
-              child: ConstrainedBox(
-                constraints: BoxConstraints(
-                  minWidth: constraints.maxWidth,
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: userSpecifyItemRight.map(progressWidget).toList(),
-                ),
+          child: FittedBox(
+            child: ConstrainedBox(
+              constraints: BoxConstraints(minWidth: maxWidth),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: userSpecifyItemRight.map(progressWidget).toList(),
               ),
             ),
           ),
@@ -691,1109 +691,1094 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
       color: Colors.white,
       fontSize: 12,
     );
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        final maxWidth = constraints.maxWidth;
-        final maxHeight = constraints.maxHeight;
-        return Stack(
-          fit: StackFit.passthrough,
-          key: _playerKey,
-          children: <Widget>[
-            Obx(
-              () => Video(
-                fill: widget.fill ?? Colors.black,
-                key: key,
-                alignment: widget.alignment ?? Alignment.center,
-                controller: videoController,
-                controls: NoVideoControls,
-                pauseUponEnteringBackgroundMode:
-                    !plPlayerController.continuePlayInBackground.value,
-                resumeUponEnteringForegroundMode: true,
-                // 字幕尺寸调节
-                subtitleViewConfiguration:
-                    plPlayerController.subtitleViewConfiguration,
-                fit: plPlayerController.videoFit.value,
-                dmWidget: widget.danmuWidget,
-                transformationController: transformationController,
-                scaleEnabled: !plPlayerController.controlsLock.value,
-                enableShrinkVideoSize: plPlayerController.enableShrinkVideoSize,
-                onInteractionStart: (ScaleStartDetails details) {
-                  if (plPlayerController.controlsLock.value) return;
-                  // 如果起点太靠上则屏蔽
-                  if (details.localFocalPoint.dy < 40) return;
-                  if (details.localFocalPoint.dx < 40) return;
-                  if (details.localFocalPoint.dx > maxWidth - 40) return;
-                  if (details.localFocalPoint.dy > maxHeight - 40) return;
-                  if (details.pointerCount == 2) {
-                    interacting = true;
-                  }
-                  _initialFocalPoint = details.localFocalPoint;
-                  // if (kDebugMode) {
-                  //   debugPrint("_initialFocalPoint$_initialFocalPoint");
-                  // }
-                  _gestureType = null;
-                },
-                onInteractionUpdate: (ScaleUpdateDetails details) {
-                  showRestoreScaleBtn.value =
-                      transformationController.value.row0.x != 1.0;
-                  if (interacting || _initialFocalPoint == Offset.zero) return;
-                  Offset cumulativeDelta =
-                      details.localFocalPoint - _initialFocalPoint;
-                  if (details.pointerCount == 2 &&
-                      cumulativeDelta.distance < 1.5) {
-                    interacting = true;
-                    _gestureType = null;
-                    return;
-                  }
 
-                  /// 锁定时禁用
-                  if (plPlayerController.controlsLock.value) return;
+    final maxWidth = widget.maxWidth;
+    final maxHeight = widget.maxHeight;
 
-                  if (_gestureType == null) {
-                    if (cumulativeDelta.distance < 1) return;
-                    if (cumulativeDelta.dx.abs() >
-                        3 * cumulativeDelta.dy.abs()) {
-                      _gestureType = GestureType.horizontal;
-                    } else if (cumulativeDelta.dy.abs() >
-                        3 * cumulativeDelta.dx.abs()) {
-                      if (!plPlayerController.enableSlideVolumeBrightness &&
-                          !plPlayerController.enableSlideFS) {
-                        return;
-                      }
+    return Stack(
+      fit: StackFit.passthrough,
+      key: _playerKey,
+      children: <Widget>[
+        Obx(
+          () => Video(
+            fill: widget.fill ?? Colors.black,
+            key: key,
+            alignment: widget.alignment ?? Alignment.center,
+            controller: videoController,
+            controls: NoVideoControls,
+            pauseUponEnteringBackgroundMode:
+                !plPlayerController.continuePlayInBackground.value,
+            resumeUponEnteringForegroundMode: true,
+            // 字幕尺寸调节
+            subtitleViewConfiguration:
+                plPlayerController.subtitleViewConfiguration,
+            fit: plPlayerController.videoFit.value,
+            dmWidget: widget.danmuWidget,
+            transformationController: transformationController,
+            scaleEnabled: !plPlayerController.controlsLock.value,
+            enableShrinkVideoSize: plPlayerController.enableShrinkVideoSize,
+            onInteractionStart: (ScaleStartDetails details) {
+              if (plPlayerController.controlsLock.value) return;
+              // 如果起点太靠上则屏蔽
+              if (details.localFocalPoint.dy < 40) return;
+              if (details.localFocalPoint.dx < 40) return;
+              if (details.localFocalPoint.dx > maxWidth - 40) return;
+              if (details.localFocalPoint.dy > maxHeight - 40) return;
+              if (details.pointerCount == 2) {
+                interacting = true;
+              }
+              _initialFocalPoint = details.localFocalPoint;
+              // if (kDebugMode) {
+              //   debugPrint("_initialFocalPoint$_initialFocalPoint");
+              // }
+              _gestureType = null;
+            },
+            onInteractionUpdate: (ScaleUpdateDetails details) {
+              showRestoreScaleBtn.value =
+                  transformationController.value.row0.x != 1.0;
+              if (interacting || _initialFocalPoint == Offset.zero) return;
+              Offset cumulativeDelta =
+                  details.localFocalPoint - _initialFocalPoint;
+              if (details.pointerCount == 2 && cumulativeDelta.distance < 1.5) {
+                interacting = true;
+                _gestureType = null;
+                return;
+              }
 
-                      // _gestureType = 'vertical';
+              /// 锁定时禁用
+              if (plPlayerController.controlsLock.value) return;
 
-                      final double tapPosition = details.localFocalPoint.dx;
-                      final double sectionWidth = maxWidth / 3;
-                      if (tapPosition < sectionWidth) {
-                        if (!plPlayerController.enableSlideVolumeBrightness) {
-                          return;
-                        }
-                        // 左边区域
-                        _gestureType = GestureType.left;
-                      } else if (tapPosition < sectionWidth * 2) {
-                        if (!plPlayerController.enableSlideFS) {
-                          return;
-                        }
-                        // 全屏
-                        _gestureType = GestureType.center;
-                      } else {
-                        if (!plPlayerController.enableSlideVolumeBrightness) {
-                          return;
-                        }
-                        // 右边区域
-                        _gestureType = GestureType.right;
-                      }
-                    } else {
-                      return;
-                    }
-                  }
-
-                  Offset delta = details.focalPointDelta;
-
-                  if (_gestureType == GestureType.horizontal) {
-                    // live模式下禁用
-                    if (plPlayerController.isLive) return;
-
-                    final int curSliderPosition =
-                        plPlayerController.sliderPosition.value.inMilliseconds;
-                    final Duration pos = Duration(
-                      milliseconds:
-                          curSliderPosition +
-                          (plPlayerController.sliderScale * delta.dx / maxWidth)
-                              .round(),
-                    );
-                    final Duration result = pos.clamp(
-                      Duration.zero,
-                      plPlayerController.duration.value,
-                    );
-                    final height = maxHeight * 0.125;
-                    if (details.localFocalPoint.dy <= height &&
-                        (details.localFocalPoint.dx >= maxWidth * 0.875 ||
-                            details.localFocalPoint.dx <= maxWidth * 0.125)) {
-                      plPlayerController.cancelSeek = true;
-                      plPlayerController.showPreview.value = false;
-                      if (plPlayerController.hasToast != true) {
-                        plPlayerController.hasToast = true;
-                        SmartDialog.showAttach(
-                          targetContext: context,
-                          alignment: Alignment.center,
-                          animationTime: const Duration(milliseconds: 200),
-                          animationType: SmartAnimationType.fade,
-                          displayTime: const Duration(milliseconds: 1500),
-                          maskColor: Colors.transparent,
-                          builder: (context) => Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 8,
-                              vertical: 4,
-                            ),
-                            decoration: BoxDecoration(
-                              borderRadius: const BorderRadius.all(
-                                Radius.circular(6),
-                              ),
-                              color: theme.colorScheme.secondaryContainer,
-                            ),
-                            child: Text(
-                              '松开手指，取消进退',
-                              style: TextStyle(
-                                color: theme.colorScheme.onSecondaryContainer,
-                              ),
-                            ),
-                          ),
-                        );
-                      }
-                    } else {
-                      if (plPlayerController.cancelSeek == true) {
-                        plPlayerController
-                          ..cancelSeek = null
-                          ..hasToast = null;
-                      }
-                    }
-                    plPlayerController
-                      ..onUpdatedSliderProgress(result)
-                      ..onChangedSliderStart();
-                    if (plPlayerController.showSeekPreview &&
-                        plPlayerController.cancelSeek != true) {
-                      try {
-                        plPlayerController.previewDx.value =
-                            result.inMilliseconds /
-                            plPlayerController
-                                .durationSeconds
-                                .value
-                                .inMilliseconds *
-                            maxWidth;
-                        if (!plPlayerController.showPreview.value) {
-                          plPlayerController.showPreview.value = true;
-                        }
-                      } catch (_) {}
-                    }
-                  } else if (_gestureType == GestureType.left) {
-                    // 左边区域 👈
-                    final double level = maxHeight * 3;
-                    final double brightness =
-                        _brightnessValue.value - delta.dy / level;
-                    final double result = brightness.clamp(0.0, 1.0);
-                    setBrightness(result);
-                  } else if (_gestureType == GestureType.center) {
-                    // 全屏
-                    const double threshold = 2.5; // 滑动阈值
-                    double cumulativeDy =
-                        details.localFocalPoint.dy - _initialFocalPoint.dy;
-
-                    void fullScreenTrigger(bool status) {
-                      plPlayerController.triggerFullScreen(status: status);
-                    }
-
-                    if (cumulativeDy > threshold) {
-                      _gestureType = GestureType.center_down;
-                      if (isFullScreen ^
-                          plPlayerController.fullScreenGestureReverse) {
-                        fullScreenTrigger(
-                          plPlayerController.fullScreenGestureReverse,
-                        );
-                      }
-                      // if (kDebugMode) debugPrint('center_down:$cumulativeDy');
-                    } else if (cumulativeDy < -threshold) {
-                      _gestureType = GestureType.center_up;
-                      if (!isFullScreen ^
-                          plPlayerController.fullScreenGestureReverse) {
-                        fullScreenTrigger(
-                          !plPlayerController.fullScreenGestureReverse,
-                        );
-                      }
-                      // if (kDebugMode) debugPrint('center_up:$cumulativeDy');
-                    }
-                  } else if (_gestureType == GestureType.right) {
-                    // 右边区域
-                    final double level = maxHeight * 0.5;
-                    EasyThrottle.throttle(
-                      'setVolume',
-                      const Duration(milliseconds: 20),
-                      () {
-                        final double volume =
-                            _volumeValue.value - delta.dy / level;
-                        final double result = volume.clamp(0.0, 1.0);
-                        setVolume(result);
-                      },
-                    );
-                  }
-                },
-                onInteractionEnd: (ScaleEndDetails details) {
-                  if (plPlayerController.showSeekPreview) {
-                    plPlayerController.showPreview.value = false;
-                  }
-                  if (plPlayerController.isSliderMoving.value) {
-                    if (plPlayerController.cancelSeek == true) {
-                      plPlayerController.onUpdatedSliderProgress(
-                        plPlayerController.position.value,
-                      );
-                    } else {
-                      plPlayerController.seekTo(
-                        plPlayerController.sliderPosition.value,
-                        isSeek: false,
-                      );
-                    }
-                    plPlayerController.onChangedSliderEnd();
-                  }
-                  interacting = false;
-                  _initialFocalPoint = Offset.zero;
-                  _gestureType = null;
-                },
-                flipX: plPlayerController.flipX.value,
-                flipY: plPlayerController.flipY.value,
-                onVerticalDragStart: (details) {
-                  if (plPlayerController.controlsLock.value) return;
-                  if (details.localPosition.dy < 40) return;
-                  if (details.localPosition.dx < 40) return;
-                  if (details.localPosition.dx > maxWidth - 40) return;
-                  if (details.localPosition.dy > maxHeight - 40) return;
-                  _initialFocalPoint = details.localPosition;
-                  _gestureType = null;
-                },
-                onVerticalDragUpdate: (details) {
-                  if (plPlayerController.controlsLock.value) return;
+              if (_gestureType == null) {
+                if (cumulativeDelta.distance < 1) return;
+                if (cumulativeDelta.dx.abs() > 3 * cumulativeDelta.dy.abs()) {
+                  _gestureType = GestureType.horizontal;
+                } else if (cumulativeDelta.dy.abs() >
+                    3 * cumulativeDelta.dx.abs()) {
                   if (!plPlayerController.enableSlideVolumeBrightness &&
                       !plPlayerController.enableSlideFS) {
                     return;
                   }
-                  final double tapPosition = details.localPosition.dx;
+
+                  // _gestureType = 'vertical';
+
+                  final double tapPosition = details.localFocalPoint.dx;
                   final double sectionWidth = maxWidth / 3;
-                  late GestureType gestureType;
                   if (tapPosition < sectionWidth) {
                     if (!plPlayerController.enableSlideVolumeBrightness) {
                       return;
                     }
                     // 左边区域
-                    gestureType = GestureType.left;
+                    _gestureType = GestureType.left;
                   } else if (tapPosition < sectionWidth * 2) {
                     if (!plPlayerController.enableSlideFS) {
                       return;
                     }
                     // 全屏
-                    gestureType = GestureType.center;
+                    _gestureType = GestureType.center;
                   } else {
                     if (!plPlayerController.enableSlideVolumeBrightness) {
                       return;
                     }
                     // 右边区域
-                    gestureType = GestureType.right;
+                    _gestureType = GestureType.right;
                   }
+                } else {
+                  return;
+                }
+              }
 
-                  if (_gestureType != null && _gestureType != gestureType) {
-                    return;
-                  }
-                  _gestureType = gestureType;
+              Offset delta = details.focalPointDelta;
 
-                  if (_gestureType == GestureType.left) {
-                    // 左边区域 👈
-                    final double level = maxHeight * 3;
-                    final double brightness =
-                        _brightnessValue.value - details.delta.dy / level;
-                    final double result = brightness.clamp(0.0, 1.0);
-                    setBrightness(result);
-                  } else if (_gestureType == GestureType.center) {
-                    // 全屏
-                    const double threshold = 2.5; // 滑动阈值
-                    double cumulativeDy =
-                        details.localPosition.dy - _initialFocalPoint.dy;
+              if (_gestureType == GestureType.horizontal) {
+                // live模式下禁用
+                if (plPlayerController.isLive) return;
 
-                    void fullScreenTrigger(bool status) {
-                      plPlayerController.triggerFullScreen(status: status);
-                    }
-
-                    if (cumulativeDy > threshold) {
-                      _gestureType = GestureType.center_down;
-                      if (isFullScreen ^
-                          plPlayerController.fullScreenGestureReverse) {
-                        fullScreenTrigger(
-                          plPlayerController.fullScreenGestureReverse,
-                        );
-                      }
-                      // if (kDebugMode) debugPrint('center_down:$cumulativeDy');
-                    } else if (cumulativeDy < -threshold) {
-                      _gestureType = GestureType.center_up;
-                      if (!isFullScreen ^
-                          plPlayerController.fullScreenGestureReverse) {
-                        fullScreenTrigger(
-                          !plPlayerController.fullScreenGestureReverse,
-                        );
-                      }
-                      // if (kDebugMode)   debugPrint('center_up:$cumulativeDy');
-                    }
-                  } else if (_gestureType == GestureType.right) {
-                    // 右边区域
-                    final double level = maxHeight * 0.5;
-                    EasyThrottle.throttle(
-                      'setVolume',
-                      const Duration(milliseconds: 20),
-                      () {
-                        final double volume =
-                            _volumeValue.value - details.delta.dy / level;
-                        final double result = volume.clamp(0.0, 1.0);
-                        setVolume(result);
-                      },
+                final int curSliderPosition =
+                    plPlayerController.sliderPosition.value.inMilliseconds;
+                final Duration pos = Duration(
+                  milliseconds:
+                      curSliderPosition +
+                      (plPlayerController.sliderScale * delta.dx / maxWidth)
+                          .round(),
+                );
+                final Duration result = pos.clamp(
+                  Duration.zero,
+                  plPlayerController.duration.value,
+                );
+                final height = maxHeight * 0.125;
+                if (details.localFocalPoint.dy <= height &&
+                    (details.localFocalPoint.dx >= maxWidth * 0.875 ||
+                        details.localFocalPoint.dx <= maxWidth * 0.125)) {
+                  plPlayerController.cancelSeek = true;
+                  plPlayerController.showPreview.value = false;
+                  if (plPlayerController.hasToast != true) {
+                    plPlayerController.hasToast = true;
+                    SmartDialog.showAttach(
+                      targetContext: context,
+                      alignment: Alignment.center,
+                      animationTime: const Duration(milliseconds: 200),
+                      animationType: SmartAnimationType.fade,
+                      displayTime: const Duration(milliseconds: 1500),
+                      maskColor: Colors.transparent,
+                      builder: (context) => Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 4,
+                        ),
+                        decoration: BoxDecoration(
+                          borderRadius: const BorderRadius.all(
+                            Radius.circular(6),
+                          ),
+                          color: theme.colorScheme.secondaryContainer,
+                        ),
+                        child: Text(
+                          '松开手指，取消进退',
+                          style: TextStyle(
+                            color: theme.colorScheme.onSecondaryContainer,
+                          ),
+                        ),
+                      ),
                     );
                   }
-                },
-                onVerticalDragEnd: (details) {
-                  interacting = false;
-                  _initialFocalPoint = Offset.zero;
-                  _gestureType = null;
-                },
-                onTap: () {
-                  plPlayerController.controls =
-                      !plPlayerController.showControls.value;
-                },
-                onDoubleTapDown: (TapDownDetails details) {
-                  if (plPlayerController.controlsLock.value) {
-                    return;
+                } else {
+                  if (plPlayerController.cancelSeek == true) {
+                    plPlayerController
+                      ..cancelSeek = null
+                      ..hasToast = null;
                   }
-                  if (plPlayerController.isLive) {
-                    doubleTapFuc(DoubleTapType.center);
-                    return;
+                }
+                plPlayerController
+                  ..onUpdatedSliderProgress(result)
+                  ..onChangedSliderStart();
+                if (plPlayerController.showSeekPreview &&
+                    plPlayerController.cancelSeek != true) {
+                  try {
+                    plPlayerController.previewDx.value =
+                        result.inMilliseconds /
+                        plPlayerController
+                            .durationSeconds
+                            .value
+                            .inMilliseconds *
+                        maxWidth;
+                    if (!plPlayerController.showPreview.value) {
+                      plPlayerController.showPreview.value = true;
+                    }
+                  } catch (_) {}
+                }
+              } else if (_gestureType == GestureType.left) {
+                // 左边区域 👈
+                final double level = maxHeight * 3;
+                final double brightness =
+                    _brightnessValue.value - delta.dy / level;
+                final double result = brightness.clamp(0.0, 1.0);
+                setBrightness(result);
+              } else if (_gestureType == GestureType.center) {
+                // 全屏
+                const double threshold = 2.5; // 滑动阈值
+                double cumulativeDy =
+                    details.localFocalPoint.dy - _initialFocalPoint.dy;
+
+                void fullScreenTrigger(bool status) {
+                  plPlayerController.triggerFullScreen(status: status);
+                }
+
+                if (cumulativeDy > threshold) {
+                  _gestureType = GestureType.center_down;
+                  if (isFullScreen ^
+                      plPlayerController.fullScreenGestureReverse) {
+                    fullScreenTrigger(
+                      plPlayerController.fullScreenGestureReverse,
+                    );
                   }
-                  final double tapPosition = details.localPosition.dx;
-                  final double sectionWidth = maxWidth / 4;
-                  DoubleTapType type;
-                  if (tapPosition < sectionWidth) {
-                    type = DoubleTapType.left;
-                  } else if (tapPosition < sectionWidth * 3) {
-                    type = DoubleTapType.center;
-                  } else {
-                    type = DoubleTapType.right;
+                  // if (kDebugMode) debugPrint('center_down:$cumulativeDy');
+                } else if (cumulativeDy < -threshold) {
+                  _gestureType = GestureType.center_up;
+                  if (!isFullScreen ^
+                      plPlayerController.fullScreenGestureReverse) {
+                    fullScreenTrigger(
+                      !plPlayerController.fullScreenGestureReverse,
+                    );
                   }
-                  doubleTapFuc(type);
-                },
-                onLongPressStart: (LongPressStartDetails detail) {
-                  plPlayerController.setLongPressStatus(true);
-                },
-                onLongPressEnd: (LongPressEndDetails details) {
-                  plPlayerController.setLongPressStatus(false);
-                },
-                enableDragSubtitle: plPlayerController.enableDragSubtitle,
-                onUpdatePadding: plPlayerController.onUpdatePadding,
+                  // if (kDebugMode) debugPrint('center_up:$cumulativeDy');
+                }
+              } else if (_gestureType == GestureType.right) {
+                // 右边区域
+                final double level = maxHeight * 0.5;
+                EasyThrottle.throttle(
+                  'setVolume',
+                  const Duration(milliseconds: 20),
+                  () {
+                    final double volume = _volumeValue.value - delta.dy / level;
+                    final double result = volume.clamp(0.0, 1.0);
+                    setVolume(result);
+                  },
+                );
+              }
+            },
+            onInteractionEnd: (ScaleEndDetails details) {
+              if (plPlayerController.showSeekPreview) {
+                plPlayerController.showPreview.value = false;
+              }
+              if (plPlayerController.isSliderMoving.value) {
+                if (plPlayerController.cancelSeek == true) {
+                  plPlayerController.onUpdatedSliderProgress(
+                    plPlayerController.position.value,
+                  );
+                } else {
+                  plPlayerController.seekTo(
+                    plPlayerController.sliderPosition.value,
+                    isSeek: false,
+                  );
+                }
+                plPlayerController.onChangedSliderEnd();
+              }
+              interacting = false;
+              _initialFocalPoint = Offset.zero;
+              _gestureType = null;
+            },
+            flipX: plPlayerController.flipX.value,
+            flipY: plPlayerController.flipY.value,
+            onVerticalDragStart: (details) {
+              if (plPlayerController.controlsLock.value) return;
+              if (details.localPosition.dy < 40) return;
+              if (details.localPosition.dx < 40) return;
+              if (details.localPosition.dx > maxWidth - 40) return;
+              if (details.localPosition.dy > maxHeight - 40) return;
+              _initialFocalPoint = details.localPosition;
+              _gestureType = null;
+            },
+            onVerticalDragUpdate: (details) {
+              if (plPlayerController.controlsLock.value) return;
+              if (!plPlayerController.enableSlideVolumeBrightness &&
+                  !plPlayerController.enableSlideFS) {
+                return;
+              }
+              final double tapPosition = details.localPosition.dx;
+              final double sectionWidth = maxWidth / 3;
+              late GestureType gestureType;
+              if (tapPosition < sectionWidth) {
+                if (!plPlayerController.enableSlideVolumeBrightness) {
+                  return;
+                }
+                // 左边区域
+                gestureType = GestureType.left;
+              } else if (tapPosition < sectionWidth * 2) {
+                if (!plPlayerController.enableSlideFS) {
+                  return;
+                }
+                // 全屏
+                gestureType = GestureType.center;
+              } else {
+                if (!plPlayerController.enableSlideVolumeBrightness) {
+                  return;
+                }
+                // 右边区域
+                gestureType = GestureType.right;
+              }
+
+              if (_gestureType != null && _gestureType != gestureType) {
+                return;
+              }
+              _gestureType = gestureType;
+
+              if (_gestureType == GestureType.left) {
+                // 左边区域 👈
+                final double level = maxHeight * 3;
+                final double brightness =
+                    _brightnessValue.value - details.delta.dy / level;
+                final double result = brightness.clamp(0.0, 1.0);
+                setBrightness(result);
+              } else if (_gestureType == GestureType.center) {
+                // 全屏
+                const double threshold = 2.5; // 滑动阈值
+                double cumulativeDy =
+                    details.localPosition.dy - _initialFocalPoint.dy;
+
+                void fullScreenTrigger(bool status) {
+                  plPlayerController.triggerFullScreen(status: status);
+                }
+
+                if (cumulativeDy > threshold) {
+                  _gestureType = GestureType.center_down;
+                  if (isFullScreen ^
+                      plPlayerController.fullScreenGestureReverse) {
+                    fullScreenTrigger(
+                      plPlayerController.fullScreenGestureReverse,
+                    );
+                  }
+                  // if (kDebugMode) debugPrint('center_down:$cumulativeDy');
+                } else if (cumulativeDy < -threshold) {
+                  _gestureType = GestureType.center_up;
+                  if (!isFullScreen ^
+                      plPlayerController.fullScreenGestureReverse) {
+                    fullScreenTrigger(
+                      !plPlayerController.fullScreenGestureReverse,
+                    );
+                  }
+                  // if (kDebugMode)   debugPrint('center_up:$cumulativeDy');
+                }
+              } else if (_gestureType == GestureType.right) {
+                // 右边区域
+                final double level = maxHeight * 0.5;
+                EasyThrottle.throttle(
+                  'setVolume',
+                  const Duration(milliseconds: 20),
+                  () {
+                    final double volume =
+                        _volumeValue.value - details.delta.dy / level;
+                    final double result = volume.clamp(0.0, 1.0);
+                    setVolume(result);
+                  },
+                );
+              }
+            },
+            onVerticalDragEnd: (details) {
+              interacting = false;
+              _initialFocalPoint = Offset.zero;
+              _gestureType = null;
+            },
+            onTap: () {
+              plPlayerController.controls =
+                  !plPlayerController.showControls.value;
+            },
+            onDoubleTapDown: (TapDownDetails details) {
+              if (plPlayerController.controlsLock.value) {
+                return;
+              }
+              if (plPlayerController.isLive) {
+                doubleTapFuc(DoubleTapType.center);
+                return;
+              }
+              final double tapPosition = details.localPosition.dx;
+              final double sectionWidth = maxWidth / 4;
+              DoubleTapType type;
+              if (tapPosition < sectionWidth) {
+                type = DoubleTapType.left;
+              } else if (tapPosition < sectionWidth * 3) {
+                type = DoubleTapType.center;
+              } else {
+                type = DoubleTapType.right;
+              }
+              doubleTapFuc(type);
+            },
+            onLongPressStart: (LongPressStartDetails detail) {
+              plPlayerController.setLongPressStatus(true);
+            },
+            onLongPressEnd: (LongPressEndDetails details) {
+              plPlayerController.setLongPressStatus(false);
+            },
+            enableDragSubtitle: plPlayerController.enableDragSubtitle,
+            onUpdatePadding: plPlayerController.onUpdatePadding,
+          ),
+        ),
+
+        // /// 弹幕面板
+        // if (widget.danmuWidget != null)
+        //   Positioned.fill(top: 4, child: widget.danmuWidget!),
+
+        /// 长按倍速 toast
+        Obx(
+          () => Align(
+            alignment: Alignment.topCenter,
+            child: FractionalTranslation(
+              translation: const Offset(0.0, 0.3), // 上下偏移量（负数向上偏移）
+              child: AnimatedOpacity(
+                curve: Curves.easeInOut,
+                opacity: plPlayerController.longPressStatus.value ? 1.0 : 0.0,
+                duration: const Duration(milliseconds: 150),
+                child: Container(
+                  alignment: Alignment.center,
+                  decoration: const BoxDecoration(
+                    color: Color(0x88000000),
+                    borderRadius: BorderRadius.all(Radius.circular(16)),
+                  ),
+                  height: 32.0,
+                  width: 70.0,
+                  child: Center(
+                    child: Obx(
+                      () => Text(
+                        '${plPlayerController.enableAutoLongPressSpeed ? (plPlayerController.longPressStatus.value ? plPlayerController.lastPlaybackSpeed : plPlayerController.playbackSpeed) * 2 : plPlayerController.longPressSpeed}倍速中',
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 13,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
               ),
             ),
+          ),
+        ),
 
-            // /// 弹幕面板
-            // if (widget.danmuWidget != null)
-            //   Positioned.fill(top: 4, child: widget.danmuWidget!),
-
-            /// 长按倍速 toast
-            Obx(
-              () => Align(
-                alignment: Alignment.topCenter,
-                child: FractionalTranslation(
-                  translation: const Offset(0.0, 0.3), // 上下偏移量（负数向上偏移）
-                  child: AnimatedOpacity(
-                    curve: Curves.easeInOut,
-                    opacity: plPlayerController.longPressStatus.value
-                        ? 1.0
-                        : 0.0,
-                    duration: const Duration(milliseconds: 150),
+        /// 时间进度 toast
+        IgnorePointer(
+          ignoring: true,
+          child: Align(
+            alignment: Alignment.topCenter,
+            child: FractionalTranslation(
+              translation: const Offset(0.0, 1.0), // 上下偏移量（负数向上偏移）
+              child: Obx(
+                () => AnimatedOpacity(
+                  curve: Curves.easeInOut,
+                  opacity: plPlayerController.isSliderMoving.value ? 1.0 : 0.0,
+                  duration: const Duration(milliseconds: 150),
+                  child: IntrinsicWidth(
                     child: Container(
                       alignment: Alignment.center,
                       decoration: const BoxDecoration(
                         color: Color(0x88000000),
-                        borderRadius: BorderRadius.all(Radius.circular(16)),
-                      ),
-                      height: 32.0,
-                      width: 70.0,
-                      child: Center(
-                        child: Obx(
-                          () => Text(
-                            '${plPlayerController.enableAutoLongPressSpeed ? (plPlayerController.longPressStatus.value ? plPlayerController.lastPlaybackSpeed : plPlayerController.playbackSpeed) * 2 : plPlayerController.longPressSpeed}倍速中',
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 13,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-
-            /// 时间进度 toast
-            IgnorePointer(
-              ignoring: true,
-              child: Align(
-                alignment: Alignment.topCenter,
-                child: FractionalTranslation(
-                  translation: const Offset(0.0, 1.0), // 上下偏移量（负数向上偏移）
-                  child: Obx(
-                    () => AnimatedOpacity(
-                      curve: Curves.easeInOut,
-                      opacity: plPlayerController.isSliderMoving.value
-                          ? 1.0
-                          : 0.0,
-                      duration: const Duration(milliseconds: 150),
-                      child: IntrinsicWidth(
-                        child: Container(
-                          alignment: Alignment.center,
-                          decoration: const BoxDecoration(
-                            color: Color(0x88000000),
-                            borderRadius: BorderRadius.all(Radius.circular(64)),
-                          ),
-                          height: 34.0,
-                          padding: const EdgeInsets.only(left: 10, right: 10),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Obx(() {
-                                return Text(
-                                  DurationUtil.formatDuration(
-                                    plPlayerController
-                                        .sliderTempPosition
-                                        .value
-                                        .inSeconds,
-                                  ),
-                                  style: textStyle,
-                                );
-                              }),
-                              const SizedBox(width: 2),
-                              const Text('/', style: textStyle),
-                              const SizedBox(width: 2),
-                              Obx(
-                                () {
-                                  return Text(
-                                    DurationUtil.formatDuration(
-                                      plPlayerController
-                                          .durationSeconds
-                                          .value
-                                          .inSeconds,
-                                    ),
-                                    style: textStyle,
-                                  );
-                                },
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-
-            /// 音量🔊 控制条展示
-            IgnorePointer(
-              ignoring: true,
-              child: Align(
-                alignment: Alignment.center,
-                child: Obx(
-                  () => AnimatedOpacity(
-                    curve: Curves.easeInOut,
-                    opacity: _volumeIndicator.value ? 1.0 : 0.0,
-                    duration: const Duration(milliseconds: 150),
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 8,
-                        vertical: 5,
-                      ),
-                      decoration: const BoxDecoration(
-                        color: Color(0x88000000),
                         borderRadius: BorderRadius.all(Radius.circular(64)),
                       ),
+                      height: 34.0,
+                      padding: const EdgeInsets.only(left: 10, right: 10),
                       child: Row(
-                        mainAxisSize: MainAxisSize.min,
                         mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Icon(
-                            _volumeValue.value == 0.0
-                                ? Icons.volume_off
-                                : _volumeValue.value < 0.5
-                                ? Icons.volume_down
-                                : Icons.volume_up,
-                            color: Colors.white,
-                            size: 20.0,
-                          ),
-                          const SizedBox(width: 2.0),
-                          Text(
-                            '${(_volumeValue.value * 100.0).round()}%',
-                            style: const TextStyle(
-                              fontSize: 13.0,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-
-            /// 亮度🌞 控制条展示
-            IgnorePointer(
-              ignoring: true,
-              child: Align(
-                alignment: Alignment.center,
-                child: Obx(
-                  () => AnimatedOpacity(
-                    curve: Curves.easeInOut,
-                    opacity: _brightnessIndicator.value ? 1.0 : 0.0,
-                    duration: const Duration(milliseconds: 150),
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 8,
-                        vertical: 5,
-                      ),
-                      decoration: const BoxDecoration(
-                        color: Color(0x88000000),
-                        borderRadius: BorderRadius.all(Radius.circular(64)),
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Icon(
-                            _brightnessValue.value < 1.0 / 3.0
-                                ? Icons.brightness_low
-                                : _brightnessValue.value < 2.0 / 3.0
-                                ? Icons.brightness_medium
-                                : Icons.brightness_high,
-                            color: Colors.white,
-                            size: 18.0,
-                          ),
-                          const SizedBox(width: 2.0),
-                          Text(
-                            '${(_brightnessValue.value * 100.0).round()}%',
-                            style: const TextStyle(
-                              fontSize: 13.0,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-
-            // 头部、底部控制条
-            Obx(
-              () {
-                final visible =
-                    !plPlayerController.controlsLock.value &&
-                    plPlayerController.showControls.value;
-                visible
-                    ? animationController.forward()
-                    : animationController.reverse();
-                return Positioned.fill(
-                  child: ClipRect(
-                    child: Column(
-                      children: [
-                        AppBarAni(
-                          isTop: true,
-                          controller: animationController,
-                          child: widget.headerControl,
-                        ),
-                        const Spacer(),
-                        AppBarAni(
-                          isTop: false,
-                          controller: animationController,
-                          child:
-                              widget.bottomControl ??
-                              BottomControl(
-                                controller: plPlayerController,
-                                buildBottomControl: buildBottomControl,
+                        children: [
+                          Obx(() {
+                            return Text(
+                              DurationUtil.formatDuration(
+                                plPlayerController
+                                    .sliderTempPosition
+                                    .value
+                                    .inSeconds,
                               ),
-                        ),
-                      ],
-                    ),
-                  ),
-                );
-              },
-            ),
-
-            // Positioned(
-            //   right: 25,
-            //   top: 125,
-            //   child: FilledButton.tonal(
-            //     onPressed: () {
-            //       transformationController.value = Matrix4.identity()
-            //         ..translate(0.5, 0.5)
-            //         ..scale(0.5)
-            //         ..translate(-0.5, -0.5);
-
-            //       showRestoreScaleBtn.value = true;
-            //     },
-            //     child: const Text('scale'),
-            //   ),
-            // ),
-            Obx(
-              () =>
-                  showRestoreScaleBtn.value &&
-                      plPlayerController.showControls.value
-                  ? Align(
-                      alignment: Alignment.bottomCenter,
-                      child: Padding(
-                        padding: const EdgeInsets.only(bottom: 95),
-                        child: FilledButton.tonal(
-                          style: FilledButton.styleFrom(
-                            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                            backgroundColor: theme
-                                .colorScheme
-                                .secondaryContainer
-                                .withValues(alpha: 0.8),
-                            visualDensity: VisualDensity.compact,
-                            padding: const EdgeInsets.all(15),
-                            shape: const RoundedRectangleBorder(
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(6),
-                              ),
-                            ),
-                          ),
-                          onPressed: () async {
-                            showRestoreScaleBtn.value = false;
-                            final animController = AnimationController(
-                              vsync: this,
-                              duration: const Duration(milliseconds: 255),
+                              style: textStyle,
                             );
-                            final anim =
-                                Matrix4Tween(
-                                  begin: transformationController.value,
-                                  end: Matrix4.identity(),
-                                ).animate(
-                                  CurveTween(
-                                    curve: Curves.easeOut,
-                                  ).animate(animController),
-                                );
-                            void listener() {
-                              transformationController.value = anim.value;
-                            }
-
-                            animController.addListener(listener);
-                            await animController.forward(from: 0);
-                            animController
-                              ..removeListener(listener)
-                              ..dispose();
-                          },
-                          child: const Text('还原屏幕'),
-                        ),
-                      ),
-                    )
-                  : const SizedBox.shrink(),
-            ),
-
-            /// 进度条 live模式下禁用
-            Obx(
-              () {
-                final int value =
-                    plPlayerController.sliderPositionSeconds.value;
-                final int max =
-                    plPlayerController.durationSeconds.value.inSeconds;
-                final int buffer = plPlayerController.bufferedSeconds.value;
-                if (plPlayerController.showControls.value) {
-                  return const SizedBox.shrink();
-                }
-
-                switch (plPlayerController.defaultBtmProgressBehavior) {
-                  case BtmProgressBehavior.alwaysShow:
-                    break;
-                  case BtmProgressBehavior.alwaysHide:
-                    return const SizedBox.shrink();
-                  case BtmProgressBehavior.onlyShowFullScreen:
-                    if (!isFullScreen) {
-                      return const SizedBox.shrink();
-                    }
-                  case BtmProgressBehavior.onlyHideFullScreen:
-                    if (isFullScreen) {
-                      return const SizedBox.shrink();
-                    }
-                }
-
-                if (plPlayerController.isLive) {
-                  return const SizedBox.shrink();
-                }
-
-                if (value > max || max <= 0) {
-                  return const SizedBox.shrink();
-                }
-
-                return Positioned(
-                  bottom: -2.2,
-                  left: 0,
-                  right: 0,
-                  child: Semantics(
-                    // label: '${(value / max * 100).round()}%',
-                    value: '${(value / max * 100).round()}%',
-                    // enabled: false,
-                    child: Stack(
-                      clipBehavior: Clip.none,
-                      alignment: Alignment.bottomCenter,
-                      children: [
-                        if (plPlayerController.dmTrend.isNotEmpty &&
-                            plPlayerController.showDmTreandChart.value)
-                          buildDmChart(theme, plPlayerController),
-                        if (plPlayerController.viewPointList.isNotEmpty &&
-                            plPlayerController.showVP.value)
-                          buildViewPointWidget(plPlayerController, 4.25),
-                        IgnorePointer(
-                          child: ProgressBar(
-                            progress: Duration(seconds: value),
-                            buffered: Duration(seconds: buffer),
-                            total: Duration(seconds: max),
-                            progressBarColor: primary,
-                            baseBarColor: Colors.white.withValues(alpha: 0.2),
-                            bufferedBarColor: primary.withValues(alpha: 0.4),
-                            timeLabelLocation: TimeLabelLocation.none,
-                            thumbColor: primary,
-                            barHeight: 3.5,
-                            thumbRadius: draggingFixedProgressBar.value
-                                ? 7
-                                : 2.5,
-                            // onDragStart: (duration) {
-                            //   feedBack();
-                            //   plPlayerController.onChangedSliderStart();
-                            // },
-                            // onDragUpdate: (duration) {
-                            //   plPlayerController
-                            //       .onUpdatedSliderProgress(duration.timeStamp);
-                            //   if (plPlayerController.showSeekPreview) {
-                            //     if (plPlayerController.showPreview.value.not) {
-                            //       plPlayerController.showPreview.value = true;
-                            //     }
-                            //     plPlayerController.previewDx.value =
-                            //         duration.localPosition.dx;
-                            //   }
-                            // },
-                            // onSeek: (duration) {
-                            //   if (plPlayerController.showSeekPreview) {
-                            //     plPlayerController.showPreview.value = false;
-                            //   }
-                            //   plPlayerController.onChangedSliderEnd();
-                            //   plPlayerController
-                            //       .onChangedSlider(duration.inSeconds.toDouble());
-                            //   plPlayerController.seekTo(
-                            //       Duration(seconds: duration.inSeconds),
-                            //       type: 'slider');
-                            // },
-                          ),
-                        ),
-                        if (plPlayerController.segmentList.isNotEmpty)
-                          Positioned(
-                            left: 0,
-                            right: 0,
-                            bottom: 0.75,
-                            child: IgnorePointer(
-                              child: CustomPaint(
-                                size: const Size(double.infinity, 3.5),
-                                painter: SegmentProgressBar(
-                                  segmentColors: plPlayerController.segmentList,
-                                ),
-                              ),
-                            ),
-                          ),
-                        if (plPlayerController.viewPointList.isNotEmpty &&
-                            plPlayerController.showVP.value)
-                          Positioned(
-                            left: 0,
-                            right: 0,
-                            bottom: 0.75,
-                            child: IgnorePointer(
-                              child: CustomPaint(
-                                size: const Size(double.infinity, 3.5),
-                                painter: SegmentProgressBar(
-                                  segmentColors:
-                                      plPlayerController.viewPointList,
-                                ),
-                              ),
-                            ),
-                          ),
-                        if (plPlayerController.showSeekPreview)
-                          Positioned(
-                            left: 0,
-                            right: 0,
-                            bottom: 12,
-                            child: buildSeekPreviewWidget(plPlayerController),
-                          ),
-                      ],
-                    ),
-                    // SlideTransition(
-                    //     position: Tween<Offset>(
-                    //       begin: Offset.zero,
-                    //       end: const Offset(0, -1),
-                    //     ).animate(CurvedAnimation(
-                    //       parent: animationController,
-                    //       curve: Curves.easeInOut,
-                    //     )),
-                    //     child: ),
-                  ),
-                );
-              },
-            ),
-
-            // 锁
-            SafeArea(
-              child: Obx(
-                () => Visibility(
-                  visible: !plPlayerController.isLive && isFullScreen,
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: FractionalTranslation(
-                      translation: const Offset(1, -0.4),
-                      child: Visibility(
-                        visible:
-                            plPlayerController.showControls.value &&
-                            (isFullScreen ||
-                                plPlayerController.controlsLock.value),
-                        child: DecoratedBox(
-                          decoration: const BoxDecoration(
-                            color: Color(0x45000000),
-                            borderRadius: BorderRadius.all(Radius.circular(8)),
-                          ),
-                          child: ComBtn(
-                            icon: Icon(
-                              plPlayerController.controlsLock.value
-                                  ? FontAwesomeIcons.lock
-                                  : FontAwesomeIcons.lockOpen,
-                              semanticLabel:
-                                  plPlayerController.controlsLock.value
-                                  ? '解锁'
-                                  : '锁定',
-                              size: 15,
-                              color: Colors.white,
-                            ),
-                            onTap: () => plPlayerController.onLockControl(
-                              !plPlayerController.controlsLock.value,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-
-            // 截图
-            SafeArea(
-              child: Obx(
-                () => Align(
-                  alignment: Alignment.centerRight,
-                  child: FractionalTranslation(
-                    translation: const Offset(-1, -0.4),
-                    child: Visibility(
-                      visible:
-                          plPlayerController.showControls.value && isFullScreen,
-                      child: DecoratedBox(
-                        decoration: const BoxDecoration(
-                          color: Color(0x45000000),
-                          borderRadius: BorderRadius.all(Radius.circular(8)),
-                        ),
-                        child: ComBtn(
-                          icon: const Icon(
-                            Icons.photo_camera,
-                            semanticLabel: '截图',
-                            size: 20,
-                            color: Colors.white,
-                          ),
-                          onTap: () {
-                            SmartDialog.showToast('截图中');
-                            plPlayerController.videoPlayerController
-                                ?.screenshot(format: 'image/png')
-                                .then((value) {
-                                  if (value != null && context.mounted) {
-                                    SmartDialog.showToast('点击弹窗保存截图');
-                                    showDialog(
-                                      context: context,
-                                      builder: (BuildContext context) {
-                                        return AlertDialog(
-                                          // title: const Text('点击保存'),
-                                          titlePadding: EdgeInsets.zero,
-                                          contentPadding: const EdgeInsets.all(
-                                            8,
-                                          ),
-                                          insetPadding: EdgeInsets.only(
-                                            left: context.width / 2,
-                                          ),
-                                          //移除圆角
-                                          shape: const RoundedRectangleBorder(),
-                                          content: GestureDetector(
-                                            onTap: () async {
-                                              String name = DateTime.now()
-                                                  .toString();
-                                              final SaveResult result =
-                                                  await SaverGallery.saveImage(
-                                                    value,
-                                                    fileName: name,
-                                                    androidRelativePath:
-                                                        "Pictures/Screenshots",
-                                                    skipIfExists: false,
-                                                  );
-
-                                              if (result.isSuccess) {
-                                                Get.back();
-                                                SmartDialog.showToast(
-                                                  '$name.png已保存到相册/截图',
-                                                );
-                                              } else {
-                                                await SmartDialog.showToast(
-                                                  '保存失败，${result.errorMessage}',
-                                                );
-                                              }
-                                            },
-                                            child: ConstrainedBox(
-                                              constraints: BoxConstraints(
-                                                maxWidth: maxWidth / 3,
-                                                maxHeight: maxHeight / 3,
-                                              ),
-                                              child: Image.memory(value),
-                                            ),
-                                          ),
-                                        );
-                                      },
-                                    );
-                                  } else {
-                                    SmartDialog.showToast('截图失败');
-                                  }
-                                });
-                          },
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-
-            Obx(() {
-              if (plPlayerController.dataStatus.loading ||
-                  plPlayerController.isBuffering.value) {
-                return Center(
-                  child: GestureDetector(
-                    onTap: plPlayerController.refreshPlayer,
-                    child: Container(
-                      padding: const EdgeInsets.all(30),
-                      decoration: const BoxDecoration(
-                        shape: BoxShape.circle,
-                        gradient: RadialGradient(
-                          colors: [Colors.black26, Colors.transparent],
-                        ),
-                      ),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Image.asset(
-                            'assets/images/loading.gif',
-                            height: 25,
-                            semanticLabel: "加载中",
-                          ),
-                          if (plPlayerController.isBuffering.value)
-                            Obx(() {
-                              if (plPlayerController.buffered.value ==
-                                  Duration.zero) {
-                                return const Text(
-                                  '加载中...',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 12,
-                                  ),
-                                );
-                              }
-                              String bufferStr = plPlayerController.buffered
-                                  .toString();
+                          }),
+                          const SizedBox(width: 2),
+                          const Text('/', style: textStyle),
+                          const SizedBox(width: 2),
+                          Obx(
+                            () {
                               return Text(
-                                bufferStr.substring(0, bufferStr.length - 3),
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 12,
+                                DurationUtil.formatDuration(
+                                  plPlayerController
+                                      .durationSeconds
+                                      .value
+                                      .inSeconds,
                                 ),
+                                style: textStyle,
                               );
-                            }),
+                            },
+                          ),
                         ],
                       ),
                     ),
                   ),
-                );
-              } else {
-                return const SizedBox.shrink();
-              }
-            }),
-
-            /// 点击 快进/快退
-            Obx(
-              () =>
-                  _mountSeekBackwardButton.value ||
-                      _mountSeekForwardButton.value
-                  ? Positioned.fill(
-                      child: Row(
-                        children: [
-                          if (_mountSeekBackwardButton.value)
-                            Expanded(
-                              child: TweenAnimationBuilder<double>(
-                                tween: Tween<double>(begin: 0.0, end: 1.0),
-                                duration: const Duration(milliseconds: 500),
-                                builder: (context, value, child) => Opacity(
-                                  opacity: value,
-                                  child: child,
-                                ),
-                                child: BackwardSeekIndicator(
-                                  duration: plPlayerController
-                                      .fastForBackwardDuration,
-                                  onSubmitted: (Duration value) {
-                                    _mountSeekBackwardButton.value = false;
-                                    final Player player = widget
-                                        .plPlayerController
-                                        .videoPlayerController!;
-                                    Duration result =
-                                        player.state.position - value;
-                                    result = result.clamp(
-                                      Duration.zero,
-                                      player.state.duration,
-                                    );
-                                    plPlayerController
-                                      ..seekTo(result, isSeek: false)
-                                      ..play();
-                                  },
-                                ),
-                              ),
-                            ),
-                          const Spacer(flex: 2),
-                          if (_mountSeekForwardButton.value)
-                            Expanded(
-                              child: TweenAnimationBuilder<double>(
-                                tween: Tween<double>(begin: 0.0, end: 1.0),
-                                duration: const Duration(milliseconds: 500),
-                                builder: (context, value, child) => Opacity(
-                                  opacity: value,
-                                  child: child,
-                                ),
-                                child: ForwardSeekIndicator(
-                                  duration: plPlayerController
-                                      .fastForBackwardDuration,
-                                  onSubmitted: (Duration value) {
-                                    _mountSeekForwardButton.value = false;
-                                    final Player player = widget
-                                        .plPlayerController
-                                        .videoPlayerController!;
-                                    Duration result =
-                                        player.state.position + value;
-                                    result = result.clamp(
-                                      Duration.zero,
-                                      player.state.duration,
-                                    );
-                                    plPlayerController
-                                      ..seekTo(result, isSeek: false)
-                                      ..play();
-                                  },
-                                ),
-                              ),
-                            ),
-                        ],
-                      ),
-                    )
-                  : const SizedBox.shrink(),
+                ),
+              ),
             ),
-          ],
-        );
-      },
+          ),
+        ),
+
+        /// 音量🔊 控制条展示
+        IgnorePointer(
+          ignoring: true,
+          child: Align(
+            alignment: Alignment.center,
+            child: Obx(
+              () => AnimatedOpacity(
+                curve: Curves.easeInOut,
+                opacity: _volumeIndicator.value ? 1.0 : 0.0,
+                duration: const Duration(milliseconds: 150),
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 5,
+                  ),
+                  decoration: const BoxDecoration(
+                    color: Color(0x88000000),
+                    borderRadius: BorderRadius.all(Radius.circular(64)),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Icon(
+                        _volumeValue.value == 0.0
+                            ? Icons.volume_off
+                            : _volumeValue.value < 0.5
+                            ? Icons.volume_down
+                            : Icons.volume_up,
+                        color: Colors.white,
+                        size: 20.0,
+                      ),
+                      const SizedBox(width: 2.0),
+                      Text(
+                        '${(_volumeValue.value * 100.0).round()}%',
+                        style: const TextStyle(
+                          fontSize: 13.0,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+
+        /// 亮度🌞 控制条展示
+        IgnorePointer(
+          ignoring: true,
+          child: Align(
+            alignment: Alignment.center,
+            child: Obx(
+              () => AnimatedOpacity(
+                curve: Curves.easeInOut,
+                opacity: _brightnessIndicator.value ? 1.0 : 0.0,
+                duration: const Duration(milliseconds: 150),
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 5,
+                  ),
+                  decoration: const BoxDecoration(
+                    color: Color(0x88000000),
+                    borderRadius: BorderRadius.all(Radius.circular(64)),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Icon(
+                        _brightnessValue.value < 1.0 / 3.0
+                            ? Icons.brightness_low
+                            : _brightnessValue.value < 2.0 / 3.0
+                            ? Icons.brightness_medium
+                            : Icons.brightness_high,
+                        color: Colors.white,
+                        size: 18.0,
+                      ),
+                      const SizedBox(width: 2.0),
+                      Text(
+                        '${(_brightnessValue.value * 100.0).round()}%',
+                        style: const TextStyle(
+                          fontSize: 13.0,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+
+        // 头部、底部控制条
+        Obx(
+          () {
+            final visible =
+                !plPlayerController.controlsLock.value &&
+                plPlayerController.showControls.value;
+            visible
+                ? animationController.forward()
+                : animationController.reverse();
+            return Positioned.fill(
+              child: ClipRect(
+                child: Column(
+                  children: [
+                    AppBarAni(
+                      isTop: true,
+                      controller: animationController,
+                      child: widget.headerControl,
+                    ),
+                    const Spacer(),
+                    AppBarAni(
+                      isTop: false,
+                      controller: animationController,
+                      child:
+                          widget.bottomControl ??
+                          BottomControl(
+                            controller: plPlayerController,
+                            buildBottomControl: buildBottomControl,
+                            maxWidth: maxWidth,
+                          ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+        ),
+
+        // Positioned(
+        //   right: 25,
+        //   top: 125,
+        //   child: FilledButton.tonal(
+        //     onPressed: () {
+        //       transformationController.value = Matrix4.identity()
+        //         ..translate(0.5, 0.5)
+        //         ..scale(0.5)
+        //         ..translate(-0.5, -0.5);
+
+        //       showRestoreScaleBtn.value = true;
+        //     },
+        //     child: const Text('scale'),
+        //   ),
+        // ),
+        Obx(
+          () =>
+              showRestoreScaleBtn.value && plPlayerController.showControls.value
+              ? Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Padding(
+                    padding: const EdgeInsets.only(bottom: 95),
+                    child: FilledButton.tonal(
+                      style: FilledButton.styleFrom(
+                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                        backgroundColor: theme.colorScheme.secondaryContainer
+                            .withValues(alpha: 0.8),
+                        visualDensity: VisualDensity.compact,
+                        padding: const EdgeInsets.all(15),
+                        shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(6),
+                          ),
+                        ),
+                      ),
+                      onPressed: () async {
+                        showRestoreScaleBtn.value = false;
+                        final animController = AnimationController(
+                          vsync: this,
+                          duration: const Duration(milliseconds: 255),
+                        );
+                        final anim =
+                            Matrix4Tween(
+                              begin: transformationController.value,
+                              end: Matrix4.identity(),
+                            ).animate(
+                              CurveTween(
+                                curve: Curves.easeOut,
+                              ).animate(animController),
+                            );
+                        void listener() {
+                          transformationController.value = anim.value;
+                        }
+
+                        animController.addListener(listener);
+                        await animController.forward(from: 0);
+                        animController
+                          ..removeListener(listener)
+                          ..dispose();
+                      },
+                      child: const Text('还原屏幕'),
+                    ),
+                  ),
+                )
+              : const SizedBox.shrink(),
+        ),
+
+        /// 进度条 live模式下禁用
+        Obx(
+          () {
+            final int value = plPlayerController.sliderPositionSeconds.value;
+            final int max = plPlayerController.durationSeconds.value.inSeconds;
+            final int buffer = plPlayerController.bufferedSeconds.value;
+            if (plPlayerController.showControls.value) {
+              return const SizedBox.shrink();
+            }
+
+            switch (plPlayerController.defaultBtmProgressBehavior) {
+              case BtmProgressBehavior.alwaysShow:
+                break;
+              case BtmProgressBehavior.alwaysHide:
+                return const SizedBox.shrink();
+              case BtmProgressBehavior.onlyShowFullScreen:
+                if (!isFullScreen) {
+                  return const SizedBox.shrink();
+                }
+              case BtmProgressBehavior.onlyHideFullScreen:
+                if (isFullScreen) {
+                  return const SizedBox.shrink();
+                }
+            }
+
+            if (plPlayerController.isLive) {
+              return const SizedBox.shrink();
+            }
+
+            if (value > max || max <= 0) {
+              return const SizedBox.shrink();
+            }
+
+            return Positioned(
+              bottom: -2.2,
+              left: 0,
+              right: 0,
+              child: Semantics(
+                // label: '${(value / max * 100).round()}%',
+                value: '${(value / max * 100).round()}%',
+                // enabled: false,
+                child: Stack(
+                  clipBehavior: Clip.none,
+                  alignment: Alignment.bottomCenter,
+                  children: [
+                    if (plPlayerController.dmTrend.isNotEmpty &&
+                        plPlayerController.showDmTreandChart.value)
+                      buildDmChart(theme, plPlayerController),
+                    if (plPlayerController.viewPointList.isNotEmpty &&
+                        plPlayerController.showVP.value)
+                      buildViewPointWidget(
+                        plPlayerController,
+                        4.25,
+                        maxWidth,
+                      ),
+                    IgnorePointer(
+                      child: ProgressBar(
+                        progress: Duration(seconds: value),
+                        buffered: Duration(seconds: buffer),
+                        total: Duration(seconds: max),
+                        progressBarColor: primary,
+                        baseBarColor: Colors.white.withValues(alpha: 0.2),
+                        bufferedBarColor: primary.withValues(alpha: 0.4),
+                        timeLabelLocation: TimeLabelLocation.none,
+                        thumbColor: primary,
+                        barHeight: 3.5,
+                        thumbRadius: draggingFixedProgressBar.value ? 7 : 2.5,
+                        // onDragStart: (duration) {
+                        //   feedBack();
+                        //   plPlayerController.onChangedSliderStart();
+                        // },
+                        // onDragUpdate: (duration) {
+                        //   plPlayerController
+                        //       .onUpdatedSliderProgress(duration.timeStamp);
+                        //   if (plPlayerController.showSeekPreview) {
+                        //     if (plPlayerController.showPreview.value.not) {
+                        //       plPlayerController.showPreview.value = true;
+                        //     }
+                        //     plPlayerController.previewDx.value =
+                        //         duration.localPosition.dx;
+                        //   }
+                        // },
+                        // onSeek: (duration) {
+                        //   if (plPlayerController.showSeekPreview) {
+                        //     plPlayerController.showPreview.value = false;
+                        //   }
+                        //   plPlayerController.onChangedSliderEnd();
+                        //   plPlayerController
+                        //       .onChangedSlider(duration.inSeconds.toDouble());
+                        //   plPlayerController.seekTo(
+                        //       Duration(seconds: duration.inSeconds),
+                        //       type: 'slider');
+                        // },
+                      ),
+                    ),
+                    if (plPlayerController.segmentList.isNotEmpty)
+                      Positioned(
+                        left: 0,
+                        right: 0,
+                        bottom: 0.75,
+                        child: IgnorePointer(
+                          child: CustomPaint(
+                            size: const Size(double.infinity, 3.5),
+                            painter: SegmentProgressBar(
+                              segmentColors: plPlayerController.segmentList,
+                            ),
+                          ),
+                        ),
+                      ),
+                    if (plPlayerController.viewPointList.isNotEmpty &&
+                        plPlayerController.showVP.value)
+                      Positioned(
+                        left: 0,
+                        right: 0,
+                        bottom: 0.75,
+                        child: IgnorePointer(
+                          child: CustomPaint(
+                            size: const Size(double.infinity, 3.5),
+                            painter: SegmentProgressBar(
+                              segmentColors: plPlayerController.viewPointList,
+                            ),
+                          ),
+                        ),
+                      ),
+                    if (plPlayerController.showSeekPreview)
+                      Positioned(
+                        left: 0,
+                        right: 0,
+                        bottom: 12,
+                        child: buildSeekPreviewWidget(
+                          plPlayerController,
+                          maxWidth,
+                        ),
+                      ),
+                  ],
+                ),
+                // SlideTransition(
+                //     position: Tween<Offset>(
+                //       begin: Offset.zero,
+                //       end: const Offset(0, -1),
+                //     ).animate(CurvedAnimation(
+                //       parent: animationController,
+                //       curve: Curves.easeInOut,
+                //     )),
+                //     child: ),
+              ),
+            );
+          },
+        ),
+
+        // 锁
+        SafeArea(
+          child: Obx(
+            () => Visibility(
+              visible: !plPlayerController.isLive && isFullScreen,
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: FractionalTranslation(
+                  translation: const Offset(1, -0.4),
+                  child: Visibility(
+                    visible:
+                        plPlayerController.showControls.value &&
+                        (isFullScreen || plPlayerController.controlsLock.value),
+                    child: DecoratedBox(
+                      decoration: const BoxDecoration(
+                        color: Color(0x45000000),
+                        borderRadius: BorderRadius.all(Radius.circular(8)),
+                      ),
+                      child: ComBtn(
+                        icon: Icon(
+                          plPlayerController.controlsLock.value
+                              ? FontAwesomeIcons.lock
+                              : FontAwesomeIcons.lockOpen,
+                          semanticLabel: plPlayerController.controlsLock.value
+                              ? '解锁'
+                              : '锁定',
+                          size: 15,
+                          color: Colors.white,
+                        ),
+                        onTap: () => plPlayerController.onLockControl(
+                          !plPlayerController.controlsLock.value,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+
+        // 截图
+        SafeArea(
+          child: Obx(
+            () => Align(
+              alignment: Alignment.centerRight,
+              child: FractionalTranslation(
+                translation: const Offset(-1, -0.4),
+                child: Visibility(
+                  visible:
+                      plPlayerController.showControls.value && isFullScreen,
+                  child: DecoratedBox(
+                    decoration: const BoxDecoration(
+                      color: Color(0x45000000),
+                      borderRadius: BorderRadius.all(Radius.circular(8)),
+                    ),
+                    child: ComBtn(
+                      icon: const Icon(
+                        Icons.photo_camera,
+                        semanticLabel: '截图',
+                        size: 20,
+                        color: Colors.white,
+                      ),
+                      onTap: () {
+                        SmartDialog.showToast('截图中');
+                        plPlayerController.videoPlayerController
+                            ?.screenshot(format: 'image/png')
+                            .then((value) {
+                              if (value != null && context.mounted) {
+                                SmartDialog.showToast('点击弹窗保存截图');
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                      // title: const Text('点击保存'),
+                                      titlePadding: EdgeInsets.zero,
+                                      contentPadding: const EdgeInsets.all(
+                                        8,
+                                      ),
+                                      insetPadding: EdgeInsets.only(
+                                        left: maxWidth / 2,
+                                      ),
+                                      //移除圆角
+                                      shape: const RoundedRectangleBorder(),
+                                      content: GestureDetector(
+                                        onTap: () async {
+                                          String name = DateTime.now()
+                                              .toString();
+                                          final SaveResult result =
+                                              await SaverGallery.saveImage(
+                                                value,
+                                                fileName: name,
+                                                androidRelativePath:
+                                                    "Pictures/Screenshots",
+                                                skipIfExists: false,
+                                              );
+
+                                          if (result.isSuccess) {
+                                            Get.back();
+                                            SmartDialog.showToast(
+                                              '$name.png已保存到相册/截图',
+                                            );
+                                          } else {
+                                            await SmartDialog.showToast(
+                                              '保存失败，${result.errorMessage}',
+                                            );
+                                          }
+                                        },
+                                        child: ConstrainedBox(
+                                          constraints: BoxConstraints(
+                                            maxWidth: maxWidth / 3,
+                                            maxHeight: maxHeight / 3,
+                                          ),
+                                          child: Image.memory(value),
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                );
+                              } else {
+                                SmartDialog.showToast('截图失败');
+                              }
+                            });
+                      },
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+
+        Obx(() {
+          if (plPlayerController.dataStatus.loading ||
+              plPlayerController.isBuffering.value) {
+            return Center(
+              child: GestureDetector(
+                onTap: plPlayerController.refreshPlayer,
+                child: Container(
+                  padding: const EdgeInsets.all(30),
+                  decoration: const BoxDecoration(
+                    shape: BoxShape.circle,
+                    gradient: RadialGradient(
+                      colors: [Colors.black26, Colors.transparent],
+                    ),
+                  ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Image.asset(
+                        'assets/images/loading.gif',
+                        height: 25,
+                        semanticLabel: "加载中",
+                      ),
+                      if (plPlayerController.isBuffering.value)
+                        Obx(() {
+                          if (plPlayerController.buffered.value ==
+                              Duration.zero) {
+                            return const Text(
+                              '加载中...',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 12,
+                              ),
+                            );
+                          }
+                          String bufferStr = plPlayerController.buffered
+                              .toString();
+                          return Text(
+                            bufferStr.substring(0, bufferStr.length - 3),
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 12,
+                            ),
+                          );
+                        }),
+                    ],
+                  ),
+                ),
+              ),
+            );
+          } else {
+            return const SizedBox.shrink();
+          }
+        }),
+
+        /// 点击 快进/快退
+        Obx(
+          () => _mountSeekBackwardButton.value || _mountSeekForwardButton.value
+              ? Positioned.fill(
+                  child: Row(
+                    children: [
+                      if (_mountSeekBackwardButton.value)
+                        Expanded(
+                          child: TweenAnimationBuilder<double>(
+                            tween: Tween<double>(begin: 0.0, end: 1.0),
+                            duration: const Duration(milliseconds: 500),
+                            builder: (context, value, child) => Opacity(
+                              opacity: value,
+                              child: child,
+                            ),
+                            child: BackwardSeekIndicator(
+                              duration:
+                                  plPlayerController.fastForBackwardDuration,
+                              onSubmitted: (Duration value) {
+                                _mountSeekBackwardButton.value = false;
+                                final Player player = widget
+                                    .plPlayerController
+                                    .videoPlayerController!;
+                                Duration result = player.state.position - value;
+                                result = result.clamp(
+                                  Duration.zero,
+                                  player.state.duration,
+                                );
+                                plPlayerController
+                                  ..seekTo(result, isSeek: false)
+                                  ..play();
+                              },
+                            ),
+                          ),
+                        ),
+                      const Spacer(flex: 2),
+                      if (_mountSeekForwardButton.value)
+                        Expanded(
+                          child: TweenAnimationBuilder<double>(
+                            tween: Tween<double>(begin: 0.0, end: 1.0),
+                            duration: const Duration(milliseconds: 500),
+                            builder: (context, value, child) => Opacity(
+                              opacity: value,
+                              child: child,
+                            ),
+                            child: ForwardSeekIndicator(
+                              duration:
+                                  plPlayerController.fastForBackwardDuration,
+                              onSubmitted: (Duration value) {
+                                _mountSeekForwardButton.value = false;
+                                final Player player = widget
+                                    .plPlayerController
+                                    .videoPlayerController!;
+                                Duration result = player.state.position + value;
+                                result = result.clamp(
+                                  Duration.zero,
+                                  player.state.duration,
+                                );
+                                plPlayerController
+                                  ..seekTo(result, isSeek: false)
+                                  ..play();
+                              },
+                            ),
+                          ),
+                        ),
+                    ],
+                  ),
+                )
+              : const SizedBox.shrink(),
+        ),
+      ],
     );
   }
 }
@@ -1851,7 +1836,10 @@ Widget buildDmChart(
   );
 }
 
-Widget buildSeekPreviewWidget(PlPlayerController plPlayerController) {
+Widget buildSeekPreviewWidget(
+  PlPlayerController plPlayerController,
+  double maxWidth,
+) {
   return Obx(
     () {
       if (!plPlayerController.showPreview.value ||
@@ -1864,75 +1852,70 @@ Widget buildSeekPreviewWidget(PlPlayerController plPlayerController) {
 
       VideoShotData data = plPlayerController.videoShot!['data'];
 
-      return LayoutBuilder(
-        builder: (context, constraints) {
-          try {
-            double scale =
-                plPlayerController.isFullScreen.value &&
-                    !plPlayerController.isVertical
-                ? 4
-                : 2.5;
-            // offset
-            double left = (plPlayerController.previewDx.value - 48 * scale / 2)
-                .clamp(8, constraints.maxWidth - 48 * scale - 8);
+      try {
+        double scale =
+            plPlayerController.isFullScreen.value &&
+                !plPlayerController.isVertical
+            ? 4
+            : 2.5;
+        // offset
+        double left = (plPlayerController.previewDx.value - 48 * scale / 2)
+            .clamp(8, maxWidth - 48 * scale - 8);
 
-            // index
-            // int index = plPlayerController.sliderPositionSeconds.value ~/ 5;
-            int index = max(
-              0,
-              (data.index!
-                      .where(
-                        (item) =>
-                            item <=
-                            plPlayerController.sliderPositionSeconds.value,
-                      )
-                      .length -
-                  2),
-            );
+        // index
+        // int index = plPlayerController.sliderPositionSeconds.value ~/ 5;
+        int index = max(
+          0,
+          (data.index!
+                  .where(
+                    (item) =>
+                        item <= plPlayerController.sliderPositionSeconds.value,
+                  )
+                  .length -
+              2),
+        );
 
-            // pageIndex
-            int pageIndex = (index ~/ 100).clamp(0, data.image!.length - 1);
+        // pageIndex
+        int pageIndex = (index ~/ 100).clamp(0, data.image!.length - 1);
 
-            // alignment
-            double cal(m) {
-              return -1 + 2 / 9 * m;
-            }
+        // alignment
+        double cal(m) {
+          return -1 + 2 / 9 * m;
+        }
 
-            int align = index % 100;
-            int x = align % 10;
-            int y = align ~/ 10;
-            double dx = cal(x);
-            double dy = cal(y);
-            Alignment alignment = Alignment(dx, dy);
+        int align = index % 100;
+        int x = align % 10;
+        int y = align ~/ 10;
+        double dx = cal(x);
+        double dy = cal(y);
+        Alignment alignment = Alignment(dx, dy);
 
-            return Container(
-              alignment: Alignment.centerLeft,
-              padding: EdgeInsets.only(left: left),
-              child: UnconstrainedBox(
-                child: ClipRRect(
-                  borderRadius: scale == 2.5
-                      ? const BorderRadius.all(Radius.circular(6))
-                      : StyleString.mdRadius,
-                  child: Align(
-                    widthFactor: 0.1,
-                    heightFactor: 0.1,
-                    alignment: alignment,
-                    child: CachedNetworkImage(
-                      fit: BoxFit.fill,
-                      width: 480 * scale,
-                      height: 270 * scale,
-                      imageUrl: data.image![pageIndex].http2https,
-                    ),
-                  ),
+        return Container(
+          alignment: Alignment.centerLeft,
+          padding: EdgeInsets.only(left: left),
+          child: UnconstrainedBox(
+            child: ClipRRect(
+              borderRadius: scale == 2.5
+                  ? const BorderRadius.all(Radius.circular(6))
+                  : StyleString.mdRadius,
+              child: Align(
+                widthFactor: 0.1,
+                heightFactor: 0.1,
+                alignment: alignment,
+                child: CachedNetworkImage(
+                  fit: BoxFit.fill,
+                  width: 480 * scale,
+                  height: 270 * scale,
+                  imageUrl: data.image![pageIndex].http2https,
                 ),
               ),
-            );
-          } catch (e) {
-            if (kDebugMode) debugPrint('seek preview: $e');
-            return const SizedBox.shrink();
-          }
-        },
-      );
+            ),
+          ),
+        );
+      } catch (e) {
+        if (kDebugMode) debugPrint('seek preview: $e');
+        return const SizedBox.shrink();
+      }
     },
   );
 }
@@ -1940,32 +1923,29 @@ Widget buildSeekPreviewWidget(PlPlayerController plPlayerController) {
 Widget buildViewPointWidget(
   PlPlayerController plPlayerController,
   double offset,
+  double maxWidth,
 ) {
-  return LayoutBuilder(
-    builder: (context, constraints) {
-      return Container(
-        height: 16,
-        margin: EdgeInsets.only(bottom: offset),
-        child: Listener(
-          behavior: HitTestBehavior.opaque,
-          onPointerDown: (event) {
-            try {
-              double seg = event.localPosition.dx / constraints.maxWidth;
-              Segment item = plPlayerController.viewPointList
-                  .where((item) => item.start >= seg)
-                  .reduce((a, b) => a.start < b.start ? a : b);
-              if (item.from != null) {
-                plPlayerController
-                  ..danmakuController?.clear()
-                  ..videoPlayerController?.seek(Duration(seconds: item.from!));
-              }
-              // if (kDebugMode) debugPrint('${item.title},,${item.from}');
-            } catch (e) {
-              if (kDebugMode) debugPrint('$e');
-            }
-          },
-        ),
-      );
-    },
+  return Container(
+    height: 16,
+    margin: EdgeInsets.only(bottom: offset),
+    child: Listener(
+      behavior: HitTestBehavior.opaque,
+      onPointerDown: (event) {
+        try {
+          double seg = event.localPosition.dx / maxWidth;
+          Segment item = plPlayerController.viewPointList
+              .where((item) => item.start >= seg)
+              .reduce((a, b) => a.start < b.start ? a : b);
+          if (item.from != null) {
+            plPlayerController
+              ..danmakuController?.clear()
+              ..videoPlayerController?.seek(Duration(seconds: item.from!));
+          }
+          // if (kDebugMode) debugPrint('${item.title},,${item.from}');
+        } catch (e) {
+          if (kDebugMode) debugPrint('$e');
+        }
+      },
+    ),
   );
 }
