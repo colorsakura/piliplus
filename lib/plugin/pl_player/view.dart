@@ -1952,15 +1952,12 @@ Widget buildViewPointWidget(
             try {
               double seg = event.localPosition.dx / constraints.maxWidth;
               Segment item = plPlayerController.viewPointList
-                  .where((item) {
-                    return item.start >= seg;
-                  })
+                  .where((item) => item.start >= seg)
                   .reduce((a, b) => a.start < b.start ? a : b);
               if (item.from != null) {
-                plPlayerController.danmakuController?.clear();
-                plPlayerController.videoPlayerController?.seek(
-                  Duration(seconds: item.from!),
-                );
+                plPlayerController
+                  ..danmakuController?.clear()
+                  ..videoPlayerController?.seek(Duration(seconds: item.from!));
               }
               // if (kDebugMode) debugPrint('${item.title},,${item.from}');
             } catch (e) {

@@ -44,6 +44,7 @@ class ActionItem extends StatelessWidget {
     );
 
     if (animation != null) {
+      final primary = theme.colorScheme.primary;
       child = Stack(
         clipBehavior: Clip.none,
         alignment: Alignment.center,
@@ -53,7 +54,7 @@ class ActionItem extends StatelessWidget {
             builder: (context, child) => CustomPaint(
               size: const Size.square(28),
               painter: _ArcPainter(
-                color: theme.colorScheme.primary,
+                color: primary,
                 sweepAngle: animation!.value,
               ),
             ),
@@ -117,6 +118,10 @@ class _ArcPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
+    if (sweepAngle == 0) {
+      return;
+    }
+
     final paint = Paint()
       ..color = color
       ..strokeWidth = 2
