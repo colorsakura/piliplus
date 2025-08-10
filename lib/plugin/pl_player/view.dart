@@ -249,9 +249,8 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
     final isSeason = videoDetail.ugcSeason != null;
     final isPart = videoDetail.pages != null && videoDetail.pages!.length > 1;
     final isPgc = !widget.videoDetailController!.isUgc;
-    final anySeason = isSeason || isPart || isPgc;
-    final isPlayAll =
-        anySeason || widget.videoDetailController?.isPlayAll == true;
+    final isPlayAll = widget.videoDetailController?.isPlayAll == true;
+    final anySeason = isSeason || isPart || isPgc || isPlayAll;
 
     final double widgetWidth = isFullScreen && context.isLandscape ? 42 : 35;
 
@@ -639,7 +638,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
     List<BottomControlType> userSpecifyItemLeft = [
       BottomControlType.playOrPause,
       BottomControlType.time,
-      if (isPlayAll) ...[
+      if (anySeason) ...[
         BottomControlType.pre,
         BottomControlType.next,
       ],
@@ -649,7 +648,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
       BottomControlType.dmChart,
       BottomControlType.superResolution,
       BottomControlType.viewPoints,
-      if (isPlayAll) BottomControlType.episode,
+      if (anySeason) BottomControlType.episode,
       if (isFullScreen) BottomControlType.fit,
       BottomControlType.subtitle,
       BottomControlType.speed,
