@@ -49,11 +49,13 @@ import 'package:share_plus/share_plus.dart';
 
 class HeaderControl extends StatefulWidget {
   const HeaderControl({
+    required this.isPortrait,
     required this.controller,
     required this.videoDetailCtr,
     required this.heroTag,
     super.key,
   });
+  final bool isPortrait;
   final PlPlayerController controller;
   final VideoDetailController videoDetailCtr;
   final String heroTag;
@@ -75,7 +77,8 @@ class HeaderControlState extends TripleState<HeaderControl> {
   late CommonIntroController introController = videoDetailCtr.isUgc
       ? ugcIntroController
       : pgcIntroController;
-  bool get horizontalScreen => videoDetailCtr.horizontalScreen;
+  late final isPortrait = widget.isPortrait;
+  late final horizontalScreen = videoDetailCtr.horizontalScreen;
   RxString now = ''.obs;
   Timer? clock;
   bool get isFullScreen => widget.controller.isFullScreen.value;
@@ -1346,7 +1349,7 @@ class HeaderControlState extends TripleState<HeaderControl> {
             ..danmakuFontScaleFS = fontSizeFS
             ..putDanmakuSettings();
           setState(() {});
-          if (widget.controller.isFullScreen.value == true) {
+          if (isFullScreen) {
             try {
               danmakuController?.updateOption(
                 danmakuController.option.copyWith(
@@ -1363,7 +1366,7 @@ class HeaderControlState extends TripleState<HeaderControl> {
             ..danmakuFontScale = fontSize
             ..putDanmakuSettings();
           setState(() {});
-          if (widget.controller.isFullScreen.value == false) {
+          if (!isFullScreen) {
             try {
               danmakuController?.updateOption(
                 danmakuController.option.copyWith(
@@ -1878,7 +1881,7 @@ class HeaderControlState extends TripleState<HeaderControl> {
                 onPressed: () {
                   if (isFullScreen) {
                     widget.controller.triggerFullScreen(status: false);
-                  } else if (!horizontalScreen && context.isLandscape) {
+                  } else if (!horizontalScreen && !isPortrait) {
                     verticalScreenForTwoSeconds();
                   } else {
                     Get.back();
@@ -1886,7 +1889,7 @@ class HeaderControlState extends TripleState<HeaderControl> {
                 },
               ),
             ),
-            if (!isFullScreen || context.isLandscape)
+            if (!isFullScreen || !isPortrait)
               SizedBox(
                 width: 42,
                 height: 34,
@@ -1904,10 +1907,7 @@ class HeaderControlState extends TripleState<HeaderControl> {
                 ),
               ),
             if ((introController.videoDetail.value.title != null) &&
-                (isFullScreen ||
-                    (!isFullScreen &&
-                        !horizontalScreen &&
-                        context.isLandscape)))
+                (isFullScreen || (!horizontalScreen && !isPortrait)))
               Expanded(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
@@ -2007,8 +2007,7 @@ class HeaderControlState extends TripleState<HeaderControl> {
             // show current datetime
             Obx(
               () {
-                if ((isFullScreen || !horizontalScreen) &&
-                    context.isLandscape) {
+                if ((isFullScreen || !horizontalScreen) && !isPortrait) {
                   startClock();
                   return Text(
                     now.value,

@@ -18,7 +18,7 @@ class BottomControl extends StatelessWidget {
   });
 
   final PlPlayerController controller;
-  final Widget Function(double maxWidth) buildBottomControl;
+  final Widget Function() buildBottomControl;
   final double maxWidth;
 
   @override
@@ -157,7 +157,7 @@ class BottomControl extends StatelessWidget {
               );
             },
           ),
-          buildBottomControl(maxWidth),
+          buildBottomControl(),
           const SizedBox(height: 12),
         ],
       ),

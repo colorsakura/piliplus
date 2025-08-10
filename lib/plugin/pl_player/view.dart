@@ -25,7 +25,6 @@ import 'package:PiliPlus/plugin/pl_player/widgets/bottom_control.dart';
 import 'package:PiliPlus/plugin/pl_player/widgets/common_btn.dart';
 import 'package:PiliPlus/plugin/pl_player/widgets/forward_seek.dart';
 import 'package:PiliPlus/plugin/pl_player/widgets/play_pause_btn.dart';
-import 'package:PiliPlus/utils/context_ext.dart';
 import 'package:PiliPlus/utils/duration_util.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/id_utils.dart';
@@ -248,7 +247,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
   }
 
   // 动态构建底部控制条
-  Widget buildBottomControl(double maxWidth) {
+  Widget buildBottomControl(bool isLandscape) {
     final videoDetail = introController.videoDetail.value;
     final isSeason = videoDetail.ugcSeason != null;
     final isPart = videoDetail.pages != null && videoDetail.pages!.length > 1;
@@ -256,7 +255,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
     final isPlayAll = widget.videoDetailController?.isPlayAll == true;
     final anySeason = isSeason || isPart || isPgc || isPlayAll;
 
-    final double widgetWidth = isFullScreen && context.isLandscape ? 42 : 35;
+    final double widgetWidth = isLandscape && isFullScreen ? 42 : 35;
 
     Widget progressWidget(
       BottomControlType bottomControl,
@@ -379,44 +378,41 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
       ),
 
       /// 超分辨率
-      BottomControlType.superResolution =>
-        plPlayerController.isAnim
-            ? Container(
-                height: 30,
-                margin: const EdgeInsets.symmetric(horizontal: 10),
-                alignment: Alignment.center,
-                child: PopupMenuButton<SuperResolutionType>(
-                  initialValue: SuperResolutionType
-                      .values[plPlayerController.superResolutionType],
-                  color: Colors.black.withValues(alpha: 0.8),
-                  itemBuilder: (BuildContext context) {
-                    return SuperResolutionType.values.map((
-                      SuperResolutionType type,
-                    ) {
-                      return PopupMenuItem<SuperResolutionType>(
-                        height: 35,
-                        padding: const EdgeInsets.only(left: 30),
-                        value: type,
-                        onTap: () => plPlayerController.setShader(type.index),
-                        child: Text(
-                          type.title,
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 13,
-                          ),
-                        ),
-                      );
-                    }).toList();
-                  },
-                  child: Text(
-                    SuperResolutionType
-                        .values[plPlayerController.superResolutionType]
-                        .title,
-                    style: const TextStyle(color: Colors.white, fontSize: 13),
+      BottomControlType.superResolution => Container(
+        height: 30,
+        margin: const EdgeInsets.symmetric(horizontal: 10),
+        alignment: Alignment.center,
+        child: PopupMenuButton<SuperResolutionType>(
+          initialValue: SuperResolutionType
+              .values[plPlayerController.superResolutionType],
+          color: Colors.black.withValues(alpha: 0.8),
+          itemBuilder: (BuildContext context) {
+            return SuperResolutionType.values.map((
+              SuperResolutionType type,
+            ) {
+              return PopupMenuItem<SuperResolutionType>(
+                height: 35,
+                padding: const EdgeInsets.only(left: 30),
+                value: type,
+                onTap: () => plPlayerController.setShader(type.index),
+                child: Text(
+                  type.title,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 13,
                   ),
                 ),
-              )
-            : const SizedBox.shrink(),
+              );
+            }).toList();
+          },
+          child: Text(
+            SuperResolutionType
+                .values[plPlayerController.superResolutionType]
+                .title,
+            style: const TextStyle(color: Colors.white, fontSize: 13),
+          ),
+        ),
+      ),
 
       /// 分段信息
       BottomControlType.viewPoints => Obx(
@@ -650,7 +646,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
 
     List<BottomControlType> userSpecifyItemRight = [
       BottomControlType.dmChart,
-      BottomControlType.superResolution,
+      if (plPlayerController.isAnim) BottomControlType.superResolution,
       BottomControlType.viewPoints,
       if (anySeason) BottomControlType.episode,
       if (isFullScreen) BottomControlType.fit,
@@ -663,12 +659,14 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
       children: [
         ...userSpecifyItemLeft.map(progressWidget),
         Expanded(
-          child: FittedBox(
-            child: ConstrainedBox(
-              constraints: BoxConstraints(minWidth: maxWidth),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: userSpecifyItemRight.map(progressWidget).toList(),
+          child: LayoutBuilder(
+            builder: (context, constraints) => FittedBox(
+              child: ConstrainedBox(
+                constraints: BoxConstraints(minWidth: constraints.maxWidth),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: userSpecifyItemRight.map(progressWidget).toList(),
+                ),
               ),
             ),
           ),
@@ -1294,7 +1292,8 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                           widget.bottomControl ??
                           BottomControl(
                             controller: plPlayerController,
-                            buildBottomControl: buildBottomControl,
+                            buildBottomControl: () =>
+                                buildBottomControl(maxWidth > maxHeight),
                             maxWidth: maxWidth,
                           ),
                     ),

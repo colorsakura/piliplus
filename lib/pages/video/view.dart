@@ -100,7 +100,8 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
       videoDetailController.plPlayerController.removeSafeArea;
 
   bool isShowing = true;
-  bool get isFullScreen => plPlayerController?.isFullScreen.value ?? false;
+  bool get isFullScreen =>
+      videoDetailController.plPlayerController.isFullScreen.value;
 
   bool get _shouldShowSeasonPanel {
     if (isPortrait || !videoDetailController.isUgc) {
@@ -1110,9 +1111,10 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
         width = min(width, maxWidth - 280);
       }
       final videoWidth = isFullScreen ? maxWidth : width;
-      final double videoHeight = isFullScreen ? maxHeight : width * 9 / 16;
+      final double height = width * 9 / 16;
+      final videoHeight = isFullScreen ? maxHeight : height;
       final introHeight =
-          maxHeight - videoHeight - (removeSafeArea ? 0 : padding.top);
+          maxHeight - height - (removeSafeArea ? 0 : padding.top);
       return Row(
         children: [
           Column(
@@ -1404,6 +1406,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                 : pgcIntroController,
             headerControl: HeaderControl(
               key: videoDetailController.headerCtrKey,
+              isPortrait: isPortrait,
               controller: videoDetailController.plPlayerController,
               videoDetailCtr: videoDetailController,
               heroTag: heroTag,
