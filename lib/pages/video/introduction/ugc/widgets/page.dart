@@ -145,9 +145,9 @@ class _PagesPanelState extends State<PagesPanel> {
               final item = pages[i];
               return Container(
                 width: 150,
-                margin: EdgeInsets.only(
-                  right: i != pages.length - 1 ? 10 : 0,
-                ),
+                margin: i != pages.length - 1
+                    ? const EdgeInsets.only(right: 10)
+                    : null,
                 child: Material(
                   color: theme.colorScheme.onInverseSurface,
                   borderRadius: const BorderRadius.all(Radius.circular(6)),
@@ -158,7 +158,9 @@ class _PagesPanelState extends State<PagesPanel> {
                         Get.back();
                       }
                       widget.ugcIntroController.onChangeEpisode(
-                        item..bvid ??= widget.bvid,
+                        item
+                          ..bvid ??= widget.bvid
+                          ..cover ??= widget.cover,
                       );
                       if (widget.list != null &&
                           widget

@@ -77,7 +77,7 @@ class HeaderControlState extends TripleState<HeaderControl> {
   late CommonIntroController introController = videoDetailCtr.isUgc
       ? ugcIntroController
       : pgcIntroController;
-  late final isPortrait = widget.isPortrait;
+  bool get isPortrait => widget.isPortrait;
   late final horizontalScreen = videoDetailCtr.horizontalScreen;
   RxString now = ''.obs;
   Timer? clock;

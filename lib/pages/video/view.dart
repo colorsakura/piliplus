@@ -1945,11 +1945,14 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
           ],
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 12),
-            child: SeasonPanel(
-              heroTag: heroTag,
-              onTap: false,
-              showEpisodes: showEpisodes,
-              ugcIntroController: ugcIntroController,
+            child: Obx(
+              () => SeasonPanel(
+                key: ValueKey(introController.videoDetail.value),
+                heroTag: heroTag,
+                onTap: false,
+                showEpisodes: showEpisodes,
+                ugcIntroController: ugcIntroController,
+              ),
             ),
           ),
           Expanded(

@@ -158,9 +158,9 @@ class _PgcPanelState extends State<PgcPanel> {
     return Container(
       width: 150,
       height: 60,
-      margin: EdgeInsets.only(
-        right: index == widget.pages.length - 1 ? 0 : 10,
-      ),
+      margin: index != widget.pages.length - 1
+          ? const EdgeInsets.only(right: 10)
+          : null,
       child: Material(
         color: theme.colorScheme.onInverseSurface,
         borderRadius: const BorderRadius.all(Radius.circular(6)),

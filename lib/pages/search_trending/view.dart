@@ -61,7 +61,7 @@ class _SearchTrendingPageState extends State<SearchTrendingPage> {
             ? min(640.0, maxWidth * 0.6)
             : maxWidth;
         final height = width * 528 / 1125;
-        _offset = height - 56 - Get.mediaQuery.padding.top;
+        _offset = height - 56 - MediaQuery.paddingOf(context).top;
         listener();
         final removePadding = maxWidth > width;
         return Scaffold(
