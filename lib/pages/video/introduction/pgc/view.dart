@@ -26,6 +26,7 @@ class PgcIntroPage extends StatefulWidget {
   final String heroTag;
   final Function showEpisodes;
   final Function showIntroDetail;
+  final double maxWidth;
 
   const PgcIntroPage({
     super.key,
@@ -33,14 +34,16 @@ class PgcIntroPage extends StatefulWidget {
     required this.heroTag,
     required this.showEpisodes,
     required this.showIntroDetail,
+    required this.maxWidth,
   });
 
   @override
   State<PgcIntroPage> createState() => _PgcIntroPageState();
 }
 
-class _PgcIntroPageState extends State<PgcIntroPage>
+class _PgcIntroPageState extends TripleState<PgcIntroPage>
     with AutomaticKeepAliveClientMixin {
+  @override
   late PgcIntroController introController;
   late VideoDetailController videoDetailCtr;
 
@@ -89,12 +92,15 @@ class _PgcIntroPageState extends State<PgcIntroPage>
       ),
     );
     if (!introController.isPgc) {
-      sliver = SliverMainAxisGroup(
-        slivers: [
-          sliver,
-          ?_buildBreif(item),
-        ],
-      );
+      final breif = _buildBreif(item);
+      if (breif != null) {
+        sliver = SliverMainAxisGroup(
+          slivers: [
+            sliver,
+            breif,
+          ],
+        );
+      }
     }
     return SliverPadding(
       padding:
@@ -107,32 +113,28 @@ class _PgcIntroPageState extends State<PgcIntroPage>
   Widget? _buildBreif(PgcInfoModel item) {
     final img = item.brief?.img;
     if (img != null && img.isNotEmpty) {
-      return SliverLayoutBuilder(
-        builder: (context, constraints) {
-          final maxWidth = constraints.crossAxisExtent;
-          double padding = max(0, maxWidth - 400);
-          final imgWidth = maxWidth - padding;
-          padding = padding / 2;
-          return SliverPadding(
-            padding: EdgeInsetsGeometry.only(
-              top: 10,
-              left: padding,
-              right: padding,
-            ),
-            sliver: SliverMainAxisGroup(
-              slivers: img.map((e) {
-                return SliverToBoxAdapter(
-                  child: NetworkImgLayer(
-                    radius: 0,
-                    src: e.url,
-                    width: imgWidth,
-                    height: imgWidth * e.aspectRatio,
-                  ),
-                );
-              }).toList(),
-            ),
-          );
-        },
+      final maxWidth = widget.maxWidth - 2 * StyleString.safeSpace;
+      double padding = max(0, maxWidth - 400);
+      final imgWidth = maxWidth - padding;
+      padding = padding / 2;
+      return SliverPadding(
+        padding: EdgeInsetsGeometry.only(
+          top: 10,
+          left: padding,
+          right: padding,
+        ),
+        sliver: SliverMainAxisGroup(
+          slivers: img.map((e) {
+            return SliverToBoxAdapter(
+              child: NetworkImgLayer(
+                radius: 0,
+                src: e.url,
+                width: imgWidth,
+                height: imgWidth * e.aspectRatio,
+              ),
+            );
+          }).toList(),
+        ),
       );
     }
     return null;
@@ -404,75 +406,65 @@ class _PgcIntroPageState extends State<PgcIntroPage>
   ) {
     return SizedBox(
       height: 48,
-      child: TripleBuilder(
-        introController: introController,
-        builder: (context, tripleAnimation, onStartTriple, onCancelTriple) {
-          return Row(
-            children: [
-              Obx(
-                () => ActionItem(
-                  animation: tripleAnimation,
-                  icon: const Icon(FontAwesomeIcons.thumbsUp),
-                  selectIcon: const Icon(FontAwesomeIcons.solidThumbsUp),
-                  onTap: () => introController.handleAction(
-                    introController.actionLikeVideo,
-                  ),
-                  selectStatus: introController.hasLike.value,
-                  semanticsLabel: '点赞',
-                  text: NumUtil.numFormat(item.stat!.like),
-                  onStartTriple: onStartTriple,
-                  onCancelTriple: onCancelTriple,
-                ),
+      child: Row(
+        children: [
+          Obx(
+            () => ActionItem(
+              animation: tripleAnimation,
+              icon: const Icon(FontAwesomeIcons.thumbsUp),
+              selectIcon: const Icon(FontAwesomeIcons.solidThumbsUp),
+              selectStatus: introController.hasLike.value,
+              semanticsLabel: '点赞',
+              text: NumUtil.numFormat(item.stat!.like),
+              onStartTriple: onStartTriple,
+              onCancelTriple: onCancelTriple,
+            ),
+          ),
+          Obx(
+            () => ActionItem(
+              animation: tripleAnimation,
+              icon: const Icon(FontAwesomeIcons.b),
+              selectIcon: const Icon(FontAwesomeIcons.b),
+              onTap: introController.actionCoinVideo,
+              selectStatus: introController.hasCoin,
+              semanticsLabel: '投币',
+              text: NumUtil.numFormat(item.stat!.coin),
+            ),
+          ),
+          Obx(
+            () => ActionItem(
+              animation: tripleAnimation,
+              icon: const Icon(FontAwesomeIcons.star),
+              selectIcon: const Icon(FontAwesomeIcons.solidStar),
+              onTap: () => introController.showFavBottomSheet(context),
+              onLongPress: () => introController.showFavBottomSheet(
+                context,
+                isLongPress: true,
               ),
-              Obx(
-                () => ActionItem(
-                  animation: tripleAnimation,
-                  icon: const Icon(FontAwesomeIcons.b),
-                  selectIcon: const Icon(FontAwesomeIcons.b),
-                  onTap: () => introController.handleAction(
-                    introController.actionCoinVideo,
-                  ),
-                  selectStatus: introController.hasCoin,
-                  semanticsLabel: '投币',
-                  text: NumUtil.numFormat(item.stat!.coin),
-                ),
-              ),
-              Obx(
-                () => ActionItem(
-                  animation: tripleAnimation,
-                  icon: const Icon(FontAwesomeIcons.star),
-                  selectIcon: const Icon(FontAwesomeIcons.solidStar),
-                  onTap: () => introController.showFavBottomSheet(context),
-                  onLongPress: () => introController.showFavBottomSheet(
-                    context,
-                    isLongPress: true,
-                  ),
-                  selectStatus: introController.hasFav.value,
-                  semanticsLabel: '收藏',
-                  text: NumUtil.numFormat(item.stat!.favorite),
-                ),
-              ),
-              Obx(
-                () => ActionItem(
-                  icon: const Icon(FontAwesomeIcons.clock),
-                  selectIcon: const Icon(FontAwesomeIcons.solidClock),
-                  onTap: () =>
-                      introController.handleAction(introController.viewLater),
-                  selectStatus: introController.hasLater.value,
-                  semanticsLabel: '再看',
-                  text: '再看',
-                ),
-              ),
-              ActionItem(
-                icon: const Icon(FontAwesomeIcons.shareFromSquare),
-                onTap: () => introController.actionShareVideo(context),
-                selectStatus: false,
-                semanticsLabel: '转发',
-                text: NumUtil.numFormat(item.stat!.share),
-              ),
-            ],
-          );
-        },
+              selectStatus: introController.hasFav.value,
+              semanticsLabel: '收藏',
+              text: NumUtil.numFormat(item.stat!.favorite),
+            ),
+          ),
+          Obx(
+            () => ActionItem(
+              icon: const Icon(FontAwesomeIcons.clock),
+              selectIcon: const Icon(FontAwesomeIcons.solidClock),
+              onTap: () =>
+                  introController.handleAction(introController.viewLater),
+              selectStatus: introController.hasLater.value,
+              semanticsLabel: '再看',
+              text: '再看',
+            ),
+          ),
+          ActionItem(
+            icon: const Icon(FontAwesomeIcons.shareFromSquare),
+            onTap: () => introController.actionShareVideo(context),
+            selectStatus: false,
+            semanticsLabel: '转发',
+            text: NumUtil.numFormat(item.stat!.share),
+          ),
+        ],
       ),
     );
   }

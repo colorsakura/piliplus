@@ -29,7 +29,6 @@ import 'package:PiliPlus/utils/image_util.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/storage_key.dart';
-import 'package:PiliPlus/utils/storage_pref.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:PiliPlus/utils/video_utils.dart';
 import 'package:canvas_danmaku/canvas_danmaku.dart';
@@ -63,7 +62,7 @@ class HeaderControl extends StatefulWidget {
   State<HeaderControl> createState() => HeaderControlState();
 }
 
-class HeaderControlState extends State<HeaderControl> {
+class HeaderControlState extends TripleState<HeaderControl> {
   late final PlPlayerController plPlayerController = widget.controller;
   late final VideoDetailController videoDetailCtr = widget.videoDetailCtr;
   late final PlayUrlModel videoInfo = videoDetailCtr.data;
@@ -72,6 +71,7 @@ class HeaderControlState extends State<HeaderControl> {
   String get heroTag => widget.heroTag;
   late final UgcIntroController ugcIntroController;
   late final PgcIntroController pgcIntroController;
+  @override
   late CommonIntroController introController = videoDetailCtr.isUgc
       ? ugcIntroController
       : pgcIntroController;
@@ -664,7 +664,7 @@ class HeaderControlState extends State<HeaderControl> {
                         ..updatePlayer();
 
                       // update
-                      if (!Pref.tempPlayerConf) {
+                      if (!plPlayerController.tempPlayerConf) {
                         final res = await Connectivity().checkConnectivity();
                         if (res.contains(ConnectivityResult.wifi)) {
                           setting.put(
@@ -741,7 +741,7 @@ class HeaderControlState extends State<HeaderControl> {
                         ..updatePlayer();
 
                       // update
-                      if (!Pref.tempPlayerConf) {
+                      if (!plPlayerController.tempPlayerConf) {
                         final res = await Connectivity().checkConnectivity();
                         if (res.contains(ConnectivityResult.wifi)) {
                           setting.put(
@@ -2102,7 +2102,7 @@ class HeaderControlState extends State<HeaderControl> {
                     onPressed: () {
                       final newVal = !enableShowDanmaku;
                       plPlayerController.enableShowDanmaku.value = newVal;
-                      if (!Pref.tempPlayerConf) {
+                      if (!plPlayerController.tempPlayerConf) {
                         setting.put(SettingBoxKey.enableShowDanmaku, newVal);
                       }
                     },
@@ -2228,118 +2228,112 @@ class HeaderControlState extends State<HeaderControl> {
           ],
         ),
         if (showFSActionItem && isFullScreen)
-          TripleBuilder(
-            introController: introController,
-            builder: (context, tripleAnimation, onStartTriple, onCancelTriple) {
-              return Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  SizedBox(
-                    width: 42,
-                    height: 34,
-                    child: Obx(
-                      () => ActionItem(
-                        expand: false,
-                        icon: const Icon(
-                          FontAwesomeIcons.thumbsUp,
-                          color: Colors.white,
-                        ),
-                        selectIcon: const Icon(
-                          FontAwesomeIcons.solidThumbsUp,
-                        ),
-                        selectStatus: introController.hasLike.value,
-                        semanticsLabel: '点赞',
-                        animation: tripleAnimation,
-                        onStartTriple: () {
-                          plPlayerController.tripling = true;
-                          onStartTriple();
-                        },
-                        onCancelTriple: ([bool isTap = false]) {
-                          plPlayerController
-                            ..tripling = false
-                            ..hideTaskControls();
-                          onCancelTriple(isTap);
-                        },
-                      ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              SizedBox(
+                width: 42,
+                height: 34,
+                child: Obx(
+                  () => ActionItem(
+                    expand: false,
+                    icon: const Icon(
+                      FontAwesomeIcons.thumbsUp,
+                      color: Colors.white,
                     ),
+                    selectIcon: const Icon(
+                      FontAwesomeIcons.solidThumbsUp,
+                    ),
+                    selectStatus: introController.hasLike.value,
+                    semanticsLabel: '点赞',
+                    animation: tripleAnimation,
+                    onStartTriple: () {
+                      plPlayerController.tripling = true;
+                      onStartTriple();
+                    },
+                    onCancelTriple: ([bool isTap = false]) {
+                      plPlayerController
+                        ..tripling = false
+                        ..hideTaskControls();
+                      onCancelTriple(isTap);
+                    },
                   ),
-                  if (introController case UgcIntroController ugc)
-                    SizedBox(
-                      width: 42,
-                      height: 34,
-                      child: Obx(
-                        () => ActionItem(
-                          expand: false,
-                          icon: const Icon(
-                            FontAwesomeIcons.thumbsDown,
-                            color: Colors.white,
-                          ),
-                          selectIcon: const Icon(
-                            FontAwesomeIcons.solidThumbsDown,
-                          ),
-                          onTap: ugc.actionDislikeVideo,
-                          selectStatus: ugc.hasDislike.value,
-                          semanticsLabel: '点踩',
-                        ),
-                      ),
-                    ),
-                  SizedBox(
-                    width: 42,
-                    height: 34,
-                    child: Obx(
-                      () => ActionItem(
-                        expand: false,
-                        animation: tripleAnimation,
-                        icon: const Icon(
-                          FontAwesomeIcons.b,
-                          color: Colors.white,
-                        ),
-                        selectIcon: const Icon(FontAwesomeIcons.b),
-                        onTap: introController.actionCoinVideo,
-                        selectStatus: introController.hasCoin,
-                        semanticsLabel: '投币',
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    width: 42,
-                    height: 34,
-                    child: Obx(
-                      () => ActionItem(
-                        expand: false,
-                        animation: tripleAnimation,
-                        icon: const Icon(
-                          FontAwesomeIcons.star,
-                          color: Colors.white,
-                        ),
-                        selectIcon: const Icon(FontAwesomeIcons.solidStar),
-                        onTap: () =>
-                            introController.showFavBottomSheet(context),
-                        onLongPress: () => introController.showFavBottomSheet(
-                          context,
-                          isLongPress: true,
-                        ),
-                        selectStatus: introController.hasFav.value,
-                        semanticsLabel: '收藏',
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    width: 42,
-                    height: 34,
-                    child: ActionItem(
+                ),
+              ),
+              if (introController case UgcIntroController ugc)
+                SizedBox(
+                  width: 42,
+                  height: 34,
+                  child: Obx(
+                    () => ActionItem(
                       expand: false,
                       icon: const Icon(
-                        FontAwesomeIcons.shareFromSquare,
+                        FontAwesomeIcons.thumbsDown,
                         color: Colors.white,
                       ),
-                      onTap: () => introController.actionShareVideo(context),
-                      semanticsLabel: '分享',
+                      selectIcon: const Icon(
+                        FontAwesomeIcons.solidThumbsDown,
+                      ),
+                      onTap: () => ugc.handleAction(ugc.actionDislikeVideo),
+                      selectStatus: ugc.hasDislike.value,
+                      semanticsLabel: '点踩',
                     ),
                   ),
-                ],
-              );
-            },
+                ),
+              SizedBox(
+                width: 42,
+                height: 34,
+                child: Obx(
+                  () => ActionItem(
+                    expand: false,
+                    animation: tripleAnimation,
+                    icon: const Icon(
+                      FontAwesomeIcons.b,
+                      color: Colors.white,
+                    ),
+                    selectIcon: const Icon(FontAwesomeIcons.b),
+                    onTap: introController.actionCoinVideo,
+                    selectStatus: introController.hasCoin,
+                    semanticsLabel: '投币',
+                  ),
+                ),
+              ),
+              SizedBox(
+                width: 42,
+                height: 34,
+                child: Obx(
+                  () => ActionItem(
+                    expand: false,
+                    animation: tripleAnimation,
+                    icon: const Icon(
+                      FontAwesomeIcons.star,
+                      color: Colors.white,
+                    ),
+                    selectIcon: const Icon(FontAwesomeIcons.solidStar),
+                    onTap: () => introController.showFavBottomSheet(context),
+                    onLongPress: () => introController.showFavBottomSheet(
+                      context,
+                      isLongPress: true,
+                    ),
+                    selectStatus: introController.hasFav.value,
+                    semanticsLabel: '收藏',
+                  ),
+                ),
+              ),
+              SizedBox(
+                width: 42,
+                height: 34,
+                child: ActionItem(
+                  expand: false,
+                  icon: const Icon(
+                    FontAwesomeIcons.shareFromSquare,
+                    color: Colors.white,
+                  ),
+                  onTap: () => introController.actionShareVideo(context),
+                  semanticsLabel: '分享',
+                ),
+              ),
+            ],
           ),
       ],
     ),

@@ -20,7 +20,6 @@ import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/storage_key.dart';
-import 'package:PiliPlus/utils/storage_pref.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:canvas_danmaku/canvas_danmaku.dart';
@@ -559,7 +558,7 @@ class _LiveRoomPageState extends State<LiveRoomPage>
                   onPressed: () {
                     final newVal = !enableShowDanmaku;
                     plPlayerController.enableShowDanmaku.value = newVal;
-                    if (!Pref.tempPlayerConf) {
+                    if (!plPlayerController.tempPlayerConf) {
                       GStorage.setting.put(
                         SettingBoxKey.enableShowDanmaku,
                         newVal,

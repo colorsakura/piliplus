@@ -79,9 +79,7 @@ class ActionItem extends StatelessWidget {
             )
           : child,
     );
-    return expand
-        ? Expanded(child: child)
-        : Material(type: MaterialType.transparency, child: child);
+    return expand ? Expanded(child: child) : child;
   }
 
   Widget _buildText(ThemeData theme) {
@@ -135,7 +133,7 @@ class _ArcPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) {
-    return false;
+  bool shouldRepaint(covariant _ArcPainter oldDelegate) {
+    return sweepAngle != oldDelegate.sweepAngle || color != oldDelegate.color;
   }
 }

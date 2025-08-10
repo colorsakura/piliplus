@@ -41,18 +41,21 @@ class UgcIntroPanel extends StatefulWidget {
     required this.showAiBottomSheet,
     required this.showEpisodes,
     required this.onShowMemberPage,
+    required this.isHorizontal,
   });
   final String heroTag;
   final Function showAiBottomSheet;
   final Function showEpisodes;
   final ValueChanged<int?> onShowMemberPage;
+  final bool isHorizontal;
 
   @override
   State<UgcIntroPanel> createState() => _UgcIntroPanelState();
 }
 
-class _UgcIntroPanelState extends State<UgcIntroPanel>
+class _UgcIntroPanelState extends TripleState<UgcIntroPanel>
     with AutomaticKeepAliveClientMixin {
+  @override
   late UgcIntroController introController;
   late final VideoDetailController videoDetailCtr =
       Get.find<VideoDetailController>(tag: widget.heroTag);
@@ -75,267 +78,258 @@ class _UgcIntroPanelState extends State<UgcIntroPanel>
       sizeCurve: Curves.linear,
     );
     final isPortrait = context.isPortrait;
-    return SliverLayoutBuilder(
-      builder: (context, constraints) {
-        bool isHorizontal =
-            !isPortrait &&
-            constraints.crossAxisExtent >
-                constraints.viewportMainAxisExtent * 1.25;
-        return SliverPadding(
-          padding: const EdgeInsets.only(
-            left: StyleString.safeSpace,
-            right: StyleString.safeSpace,
-            top: 10,
-          ),
-          sliver: Obx(
-            () {
-              VideoDetailData videoDetail = introController.videoDetail.value;
-              bool isLoading = videoDetail.bvid == null;
-              int? mid = videoDetail.owner?.mid;
-              return SliverToBoxAdapter(
-                child: GestureDetector(
-                  behavior: HitTestBehavior.opaque,
-                  onTap: () {
-                    if (isLoading) {
-                      return;
-                    }
-                    feedBack();
-                    introController.expandableCtr.toggle();
-                  },
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      GestureDetector(
-                        behavior: HitTestBehavior.opaque,
-                        onTap: () {},
-                        child: Row(
-                          children: [
-                            if (videoDetail.staff.isNullOrEmpty) ...[
-                              Expanded(
-                                child: Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: _buildAvatar(
-                                    theme,
-                                    () {
-                                      if (mid != null) {
-                                        feedBack();
-                                        if (!isPortrait &&
-                                            introController
-                                                .horizontalMemberPage) {
-                                          widget.onShowMemberPage(mid);
-                                        } else {
-                                          Get.toNamed(
-                                            '/member?mid=$mid&from_view_aid=${videoDetailCtr.aid}',
-                                          );
-                                        }
-                                      }
-                                    },
-                                  ),
-                                ),
-                              ),
-                              followButton(context, theme),
-                            ] else
-                              Expanded(
-                                child: SingleChildScrollView(
-                                  scrollDirection: Axis.horizontal,
-                                  physics: ReloadScrollPhysics(
-                                    controller: introController,
-                                  ),
-                                  child: Row(
-                                    spacing: 25,
-                                    children: videoDetail.staff!
-                                        .map(
-                                          (e) => _buildStaff(
-                                            theme,
-                                            isPortrait,
-                                            mid,
-                                            e,
-                                          ),
-                                        )
-                                        .toList(),
-                                  ),
-                                ),
-                              ),
-                            if (isHorizontal) ...[
-                              const SizedBox(width: 10),
-                              Expanded(
-                                child: actionGrid(
-                                  context,
-                                  isLoading,
-                                  videoDetail,
-                                  introController,
-                                ),
-                              ),
-                            ],
-                          ],
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      if (isLoading)
-                        _buildVideoTitle(theme, videoDetail)
-                      else
-                        ExpandablePanel(
-                          controller: introController.expandableCtr,
-                          collapsed: GestureDetector(
-                            onLongPress: () {
-                              Feedback.forLongPress(context);
-                              Utils.copyText(videoDetail.title ?? '');
-                            },
-                            child: _buildVideoTitle(theme, videoDetail),
-                          ),
-                          expanded: GestureDetector(
-                            onLongPress: () {
-                              Feedback.forLongPress(context);
-                              Utils.copyText(videoDetail.title ?? '');
-                            },
-                            child: _buildVideoTitle(
-                              theme,
-                              videoDetail,
-                              isExpand: true,
-                            ),
-                          ),
-                          theme: expandTheme,
-                        ),
-                      const SizedBox(height: 8),
-                      Stack(
-                        clipBehavior: Clip.none,
-                        children: [
-                          _buildInfo(theme, videoDetail),
-                          if (introController.enableAi) _aiBtn,
-                        ],
-                      ),
-                      if (videoDetail.argueInfo?.argueMsg?.isNotEmpty == true &&
-                          introController.showArgueMsg) ...[
-                        const SizedBox(height: 2),
-                        Text.rich(
-                          TextSpan(
-                            children: [
-                              WidgetSpan(
-                                alignment: PlaceholderAlignment.middle,
-                                child: Icon(
-                                  size: 13,
-                                  Icons.error_outline,
-                                  color: theme.colorScheme.outline,
-                                ),
-                              ),
-                              const WidgetSpan(child: SizedBox(width: 2)),
-                              TextSpan(
-                                text: '${videoDetail.argueInfo!.argueMsg}',
-                              ),
-                            ],
-                          ),
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: theme.colorScheme.outline,
-                          ),
-                        ),
-                      ],
-                      ExpandablePanel(
-                        controller: introController.expandableCtr,
-                        collapsed: const SizedBox.shrink(),
-                        expanded: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const SizedBox(height: 8),
-                            GestureDetector(
-                              onTap: () =>
-                                  Utils.copyText('${videoDetail.bvid}'),
-                              child: Text(
-                                videoDetail.bvid ?? '',
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  color: theme.colorScheme.secondary,
-                                ),
-                              ),
-                            ),
-                            if (videoDetail.descV2?.isNotEmpty == true) ...[
-                              const SizedBox(height: 8),
-                              SelectableText.rich(
-                                style: const TextStyle(
-                                  height: 1.4,
-                                ),
-                                TextSpan(
-                                  children: [
-                                    buildContent(theme, videoDetail),
-                                  ],
-                                ),
-                              ),
-                            ],
-                            Obx(() {
-                              final videoTags = introController.videoTags.value;
-                              if (videoTags.isNullOrEmpty) {
-                                return const SizedBox.shrink();
-                              }
-                              return _buildTags(videoTags!);
-                            }),
-                          ],
-                        ),
-                        theme: expandTheme,
-                      ),
-                      Obx(
-                        () => introController.status.value
-                            ? const SizedBox.shrink()
-                            : Center(
-                                child: TextButton.icon(
-                                  icon: const Icon(Icons.refresh),
-                                  onPressed: () {
-                                    introController
-                                      ..status.value = true
-                                      ..queryVideoIntro();
-                                    if (videoDetailCtr.videoUrl.isNullOrEmpty &&
-                                        !videoDetailCtr.isQuerying) {
-                                      videoDetailCtr.queryVideoUrl();
+    final isHorizontal = !isPortrait && widget.isHorizontal;
+    return SliverPadding(
+      padding: const EdgeInsets.only(
+        left: StyleString.safeSpace,
+        right: StyleString.safeSpace,
+        top: 10,
+      ),
+      sliver: Obx(
+        () {
+          VideoDetailData videoDetail = introController.videoDetail.value;
+          bool isLoading = videoDetail.bvid == null;
+          int? mid = videoDetail.owner?.mid;
+          return SliverToBoxAdapter(
+            child: GestureDetector(
+              behavior: HitTestBehavior.opaque,
+              onTap: () {
+                if (isLoading) {
+                  return;
+                }
+                feedBack();
+                introController.expandableCtr.toggle();
+              },
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  GestureDetector(
+                    behavior: HitTestBehavior.opaque,
+                    onTap: () {},
+                    child: Row(
+                      children: [
+                        if (videoDetail.staff.isNullOrEmpty) ...[
+                          Expanded(
+                            child: Align(
+                              alignment: Alignment.centerLeft,
+                              child: _buildAvatar(
+                                theme,
+                                () {
+                                  if (mid != null) {
+                                    feedBack();
+                                    if (!isPortrait &&
+                                        introController.horizontalMemberPage) {
+                                      widget.onShowMemberPage(mid);
+                                    } else {
+                                      Get.toNamed(
+                                        '/member?mid=$mid&from_view_aid=${videoDetailCtr.aid}',
+                                      );
                                     }
-                                  },
-                                  label: const Text("点此重新加载"),
-                                ),
+                                  }
+                                },
                               ),
+                            ),
+                          ),
+                          followButton(context, theme),
+                        ] else
+                          Expanded(
+                            child: SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              physics: ReloadScrollPhysics(
+                                controller: introController,
+                              ),
+                              child: Row(
+                                spacing: 25,
+                                children: videoDetail.staff!
+                                    .map(
+                                      (e) => _buildStaff(
+                                        theme,
+                                        isPortrait,
+                                        mid,
+                                        e,
+                                      ),
+                                    )
+                                    .toList(),
+                              ),
+                            ),
+                          ),
+                        if (isHorizontal) ...[
+                          const SizedBox(width: 10),
+                          Expanded(
+                            child: actionGrid(
+                              context,
+                              isLoading,
+                              videoDetail,
+                              introController,
+                            ),
+                          ),
+                        ],
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  if (isLoading)
+                    _buildVideoTitle(theme, videoDetail)
+                  else
+                    ExpandablePanel(
+                      controller: introController.expandableCtr,
+                      collapsed: GestureDetector(
+                        onLongPress: () {
+                          Feedback.forLongPress(context);
+                          Utils.copyText(videoDetail.title ?? '');
+                        },
+                        child: _buildVideoTitle(theme, videoDetail),
                       ),
-                      // 点赞收藏转发 布局样式2
-                      if (!isHorizontal) ...[
-                        const SizedBox(height: 8),
-                        actionGrid(
-                          context,
-                          isLoading,
+                      expanded: GestureDetector(
+                        onLongPress: () {
+                          Feedback.forLongPress(context);
+                          Utils.copyText(videoDetail.title ?? '');
+                        },
+                        child: _buildVideoTitle(
+                          theme,
                           videoDetail,
-                          introController,
+                          isExpand: true,
                         ),
-                      ],
-                      // 合集
-                      if (!isLoading &&
-                          videoDetail.ugcSeason != null &&
-                          (isPortrait ||
-                              !videoDetailCtr
-                                  .plPlayerController
-                                  .horizontalSeasonPanel))
-                        SeasonPanel(
-                          heroTag: widget.heroTag,
-                          showEpisodes: widget.showEpisodes,
-                          ugcIntroController: introController,
-                        ),
-                      if (!isLoading &&
-                          videoDetail.pages != null &&
-                          videoDetail.pages!.length > 1 &&
-                          (isPortrait ||
-                              !videoDetailCtr
-                                  .plPlayerController
-                                  .horizontalSeasonPanel)) ...[
-                        PagesPanel(
-                          heroTag: widget.heroTag,
-                          ugcIntroController: introController,
-                          bvid: introController.bvid,
-                          showEpisodes: widget.showEpisodes,
-                        ),
-                      ],
+                      ),
+                      theme: expandTheme,
+                    ),
+                  const SizedBox(height: 8),
+                  Stack(
+                    clipBehavior: Clip.none,
+                    children: [
+                      _buildInfo(theme, videoDetail),
+                      if (introController.enableAi) _aiBtn,
                     ],
                   ),
-                ),
-              );
-            },
-          ),
-        );
-      },
+                  if (videoDetail.argueInfo?.argueMsg?.isNotEmpty == true &&
+                      introController.showArgueMsg) ...[
+                    const SizedBox(height: 2),
+                    Text.rich(
+                      TextSpan(
+                        children: [
+                          WidgetSpan(
+                            alignment: PlaceholderAlignment.middle,
+                            child: Icon(
+                              size: 13,
+                              Icons.error_outline,
+                              color: theme.colorScheme.outline,
+                            ),
+                          ),
+                          const WidgetSpan(child: SizedBox(width: 2)),
+                          TextSpan(
+                            text: '${videoDetail.argueInfo!.argueMsg}',
+                          ),
+                        ],
+                      ),
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: theme.colorScheme.outline,
+                      ),
+                    ),
+                  ],
+                  ExpandablePanel(
+                    controller: introController.expandableCtr,
+                    collapsed: const SizedBox.shrink(),
+                    expanded: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const SizedBox(height: 8),
+                        GestureDetector(
+                          onTap: () => Utils.copyText('${videoDetail.bvid}'),
+                          child: Text(
+                            videoDetail.bvid ?? '',
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: theme.colorScheme.secondary,
+                            ),
+                          ),
+                        ),
+                        if (videoDetail.descV2?.isNotEmpty == true) ...[
+                          const SizedBox(height: 8),
+                          SelectableText.rich(
+                            style: const TextStyle(
+                              height: 1.4,
+                            ),
+                            TextSpan(
+                              children: [
+                                buildContent(theme, videoDetail),
+                              ],
+                            ),
+                          ),
+                        ],
+                        Obx(() {
+                          final videoTags = introController.videoTags.value;
+                          if (videoTags.isNullOrEmpty) {
+                            return const SizedBox.shrink();
+                          }
+                          return _buildTags(videoTags!);
+                        }),
+                      ],
+                    ),
+                    theme: expandTheme,
+                  ),
+                  Obx(
+                    () => introController.status.value
+                        ? const SizedBox.shrink()
+                        : Center(
+                            child: TextButton.icon(
+                              icon: const Icon(Icons.refresh),
+                              onPressed: () {
+                                introController
+                                  ..status.value = true
+                                  ..queryVideoIntro();
+                                if (videoDetailCtr.videoUrl.isNullOrEmpty &&
+                                    !videoDetailCtr.isQuerying) {
+                                  videoDetailCtr.queryVideoUrl();
+                                }
+                              },
+                              label: const Text("点此重新加载"),
+                            ),
+                          ),
+                  ),
+                  // 点赞收藏转发 布局样式2
+                  if (!isHorizontal) ...[
+                    const SizedBox(height: 8),
+                    actionGrid(
+                      context,
+                      isLoading,
+                      videoDetail,
+                      introController,
+                    ),
+                  ],
+                  // 合集
+                  if (!isLoading &&
+                      videoDetail.ugcSeason != null &&
+                      (isPortrait ||
+                          !videoDetailCtr
+                              .plPlayerController
+                              .horizontalSeasonPanel))
+                    SeasonPanel(
+                      heroTag: widget.heroTag,
+                      showEpisodes: widget.showEpisodes,
+                      ugcIntroController: introController,
+                    ),
+                  if (!isLoading &&
+                      videoDetail.pages != null &&
+                      videoDetail.pages!.length > 1 &&
+                      (isPortrait ||
+                          !videoDetailCtr
+                              .plPlayerController
+                              .horizontalSeasonPanel)) ...[
+                    PagesPanel(
+                      heroTag: widget.heroTag,
+                      ugcIntroController: introController,
+                      bvid: introController.bvid,
+                      showEpisodes: widget.showEpisodes,
+                    ),
+                  ],
+                ],
+              ),
+            ),
+          );
+        },
+      ),
     );
   }
 
@@ -506,95 +500,85 @@ class _UgcIntroPanelState extends State<UgcIntroPanel>
   ) {
     return SizedBox(
       height: 48,
-      child: TripleBuilder(
-        introController: introController,
-        builder: (context, tripleAnimation, onStartTriple, onCancelTriple) {
-          return Row(
-            children: [
-              Obx(
-                () => ActionItem(
-                  animation: tripleAnimation,
-                  icon: const Icon(FontAwesomeIcons.thumbsUp),
-                  selectIcon: const Icon(FontAwesomeIcons.solidThumbsUp),
-                  onTap: () => introController.handleAction(
-                    introController.actionLikeVideo,
-                  ),
-                  selectStatus: introController.hasLike.value,
-                  semanticsLabel: '点赞',
-                  text: !isLoading
-                      ? NumUtil.numFormat(videoDetail.stat!.like)
-                      : null,
-                  onStartTriple: onStartTriple,
-                  onCancelTriple: onCancelTriple,
-                ),
+      child: Row(
+        children: [
+          Obx(
+            () => ActionItem(
+              animation: tripleAnimation,
+              icon: const Icon(FontAwesomeIcons.thumbsUp),
+              selectIcon: const Icon(FontAwesomeIcons.solidThumbsUp),
+              selectStatus: introController.hasLike.value,
+              semanticsLabel: '点赞',
+              text: !isLoading
+                  ? NumUtil.numFormat(videoDetail.stat!.like)
+                  : null,
+              onStartTriple: onStartTriple,
+              onCancelTriple: onCancelTriple,
+            ),
+          ),
+          Obx(
+            () => ActionItem(
+              icon: const Icon(FontAwesomeIcons.thumbsDown),
+              selectIcon: const Icon(FontAwesomeIcons.solidThumbsDown),
+              onTap: () => introController.handleAction(
+                introController.actionDislikeVideo,
               ),
-              Obx(
-                () => ActionItem(
-                  icon: const Icon(FontAwesomeIcons.thumbsDown),
-                  selectIcon: const Icon(FontAwesomeIcons.solidThumbsDown),
-                  onTap: () => introController.handleAction(
-                    introController.actionDislikeVideo,
-                  ),
-                  selectStatus: introController.hasDislike.value,
-                  semanticsLabel: '点踩',
-                  text: "点踩",
-                ),
+              selectStatus: introController.hasDislike.value,
+              semanticsLabel: '点踩',
+              text: "点踩",
+            ),
+          ),
+          Obx(
+            () => ActionItem(
+              animation: tripleAnimation,
+              icon: const Icon(FontAwesomeIcons.b),
+              selectIcon: const Icon(FontAwesomeIcons.b),
+              onTap: introController.actionCoinVideo,
+              selectStatus: introController.hasCoin,
+              semanticsLabel: '投币',
+              text: !isLoading
+                  ? NumUtil.numFormat(videoDetail.stat!.coin)
+                  : null,
+            ),
+          ),
+          Obx(
+            () => ActionItem(
+              animation: tripleAnimation,
+              icon: const Icon(FontAwesomeIcons.star),
+              selectIcon: const Icon(FontAwesomeIcons.solidStar),
+              onTap: () => introController.showFavBottomSheet(context),
+              onLongPress: () => introController.showFavBottomSheet(
+                context,
+                isLongPress: true,
               ),
-              Obx(
-                () => ActionItem(
-                  animation: tripleAnimation,
-                  icon: const Icon(FontAwesomeIcons.b),
-                  selectIcon: const Icon(FontAwesomeIcons.b),
-                  onTap: () => introController.handleAction(
-                    introController.actionCoinVideo,
-                  ),
-                  selectStatus: introController.hasCoin,
-                  semanticsLabel: '投币',
-                  text: !isLoading
-                      ? NumUtil.numFormat(videoDetail.stat!.coin)
-                      : null,
-                ),
-              ),
-              Obx(
-                () => ActionItem(
-                  animation: tripleAnimation,
-                  icon: const Icon(FontAwesomeIcons.star),
-                  selectIcon: const Icon(FontAwesomeIcons.solidStar),
-                  onTap: () => introController.showFavBottomSheet(context),
-                  onLongPress: () => introController.showFavBottomSheet(
-                    context,
-                    isLongPress: true,
-                  ),
-                  selectStatus: introController.hasFav.value,
-                  semanticsLabel: '收藏',
-                  text: !isLoading
-                      ? NumUtil.numFormat(videoDetail.stat!.favorite)
-                      : null,
-                ),
-              ),
-              Obx(
-                () => ActionItem(
-                  icon: const Icon(FontAwesomeIcons.clock),
-                  selectIcon: const Icon(FontAwesomeIcons.solidClock),
-                  onTap: () =>
-                      introController.handleAction(introController.viewLater),
-                  selectStatus: introController.hasLater.value,
-                  semanticsLabel: '再看',
-                  text: '再看',
-                ),
-              ),
-              ActionItem(
-                icon: const Icon(FontAwesomeIcons.shareFromSquare),
-                onTap: () => introController.actionShareVideo(context),
-                selectStatus: false,
-                semanticsLabel: '分享',
-                text: !isLoading
-                    ? NumUtil.numFormat(videoDetail.stat!.share!)
-                    : null,
-              ),
-            ],
-          );
-        },
+              selectStatus: introController.hasFav.value,
+              semanticsLabel: '收藏',
+              text: !isLoading
+                  ? NumUtil.numFormat(videoDetail.stat!.favorite)
+                  : null,
+            ),
+          ),
+          Obx(
+            () => ActionItem(
+              icon: const Icon(FontAwesomeIcons.clock),
+              selectIcon: const Icon(FontAwesomeIcons.solidClock),
+              onTap: () =>
+                  introController.handleAction(introController.viewLater),
+              selectStatus: introController.hasLater.value,
+              semanticsLabel: '再看',
+              text: '再看',
+            ),
+          ),
+          ActionItem(
+            icon: const Icon(FontAwesomeIcons.shareFromSquare),
+            onTap: () => introController.actionShareVideo(context),
+            selectStatus: false,
+            semanticsLabel: '分享',
+            text: !isLoading
+                ? NumUtil.numFormat(videoDetail.stat!.share!)
+                : null,
+          ),
+        ],
       ),
     );
   }

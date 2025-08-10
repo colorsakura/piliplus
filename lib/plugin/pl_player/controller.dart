@@ -336,6 +336,8 @@ class PlPlayerController {
   late final bool pipNoDanmaku = Pref.pipNoDanmaku;
   late final bool removeSafeArea = Pref.removeSafeArea;
 
+  late final bool tempPlayerConf = Pref.tempPlayerConf;
+
   int? cacheVideoQa;
   late int cacheAudioQa;
   bool enableHeart = true;
@@ -656,7 +658,7 @@ class PlPlayerController {
       type ??= superResolutionType;
     } else {
       superResolutionType = type;
-      if (isAnim && !Pref.tempPlayerConf) {
+      if (isAnim && !tempPlayerConf) {
         GStorage.setting.put(SettingBoxKey.superResolutionType, type);
       }
     }
@@ -1314,7 +1316,7 @@ class PlPlayerController {
   /// 设置后台播放
   Future<void> setBackgroundPlay(bool val) async {
     videoPlayerServiceHandler.enableBackgroundPlay = val;
-    if (!Pref.tempPlayerConf) {
+    if (!tempPlayerConf) {
       setting.put(SettingBoxKey.enableBackgroundPlay, val);
     }
   }
@@ -1596,7 +1598,7 @@ class PlPlayerController {
 
   void setContinuePlayInBackground() {
     _continuePlayInBackground.value = !_continuePlayInBackground.value;
-    if (!Pref.tempPlayerConf) {
+    if (!tempPlayerConf) {
       setting.put(
         SettingBoxKey.continuePlayInBackground,
         _continuePlayInBackground.value,
