@@ -449,6 +449,7 @@ List<SettingsModel> get styleSettings => [
   SettingsModel(
     settingsType: SettingsType.normal,
     onTap: (setState) {
+      final reduceLuxColor = Pref.reduceLuxColor;
       showDialog(
         context: Get.context!,
         builder: (context) => AlertDialog(
@@ -457,9 +458,9 @@ List<SettingsModel> get styleSettings => [
           title: const Text('Color Picker'),
           content: SlideColorPicker(
             showResetBtn: false,
-            color: Pref.reduceLuxColor ?? Colors.white,
-            callback: (Color? color) async {
-              if (color != null && color != Pref.reduceLuxColor) {
+            color: reduceLuxColor ?? Colors.white,
+            callback: (Color? color) {
+              if (color != null && color != reduceLuxColor) {
                 if (color == Colors.white) {
                   NetworkImgLayer.reduceLuxColor = null;
                   GStorage.setting.delete(SettingBoxKey.reduceLuxColor);
@@ -477,7 +478,7 @@ List<SettingsModel> get styleSettings => [
                   }
 
                   if (color.computeLuminance() < 0.2) {
-                    await showConfirmDialog(
+                    showConfirmDialog(
                       context: context,
                       title:
                           '确认使用#${(color.toARGB32() & 0xFFFFFF).toRadixString(16).toUpperCase().padLeft(6)}？',

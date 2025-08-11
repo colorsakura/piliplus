@@ -41,6 +41,8 @@ class _MainAppState extends State<MainApp>
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+    NetworkImgLayer.reduce =
+        NetworkImgLayer.reduceLuxColor != null && context.isDarkMode;
     MainApp.routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute);
   }
 

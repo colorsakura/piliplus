@@ -1,6 +1,5 @@
 import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/models/common/image_type.dart';
-import 'package:PiliPlus/utils/context_ext.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/image_util.dart';
 import 'package:PiliPlus/utils/storage_pref.dart';
@@ -43,26 +42,25 @@ class NetworkImgLayer extends StatelessWidget {
   final BoxFit? boxFit;
 
   static Color? reduceLuxColor = Pref.reduceLuxColor;
+  static bool reduce = false;
 
   @override
   Widget build(BuildContext context) {
-    final reduce =
-        quality != 100 && reduceLuxColor != null && context.isDarkMode;
     return src?.isNotEmpty == true
         ? type == ImageType.avatar
-              ? ClipOval(child: _buildImage(context, reduce))
+              ? ClipOval(child: _buildImage(context))
               : radius == 0 || type == ImageType.emote
-              ? _buildImage(context, reduce)
+              ? _buildImage(context)
               : ClipRRect(
                   borderRadius: radius != null
                       ? BorderRadius.circular(radius!)
                       : StyleString.mdRadius,
-                  child: _buildImage(context, reduce),
+                  child: _buildImage(context),
                 )
-        : getPlaceHolder?.call() ?? _placeholder(context, reduce);
+        : getPlaceHolder?.call() ?? _placeholder(context);
   }
 
-  Widget _buildImage(BuildContext context, bool reduce) {
+  Widget _buildImage(BuildContext context) {
     int? memCacheWidth, memCacheHeight;
     if (height == null || forceUseCacheWidth || width <= height!) {
       memCacheWidth = width.cacheSize(context);
@@ -81,15 +79,15 @@ class NetworkImgLayer extends StatelessWidget {
       fadeInDuration: fadeInDuration ?? const Duration(milliseconds: 120),
       filterQuality: FilterQuality.low,
       placeholder: (BuildContext context, String url) =>
-          getPlaceHolder?.call() ?? _placeholder(context, reduce),
+          getPlaceHolder?.call() ?? _placeholder(context),
       imageBuilder: imageBuilder,
-      errorWidget: (context, url, error) => _placeholder(context, reduce),
+      errorWidget: (context, url, error) => _placeholder(context),
       colorBlendMode: reduce ? BlendMode.modulate : null,
       color: reduce ? reduceLuxColor : null,
     );
   }
 
-  Widget _placeholder(BuildContext context, bool reduce) {
+  Widget _placeholder(BuildContext context) {
     return Container(
       width: width,
       height: height,

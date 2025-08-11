@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-Future<void> showConfirmDialog({
+void showConfirmDialog({
   required BuildContext context,
   required String title,
   dynamic content,
   required VoidCallback onConfirm,
 }) {
-  return showDialog(
+  showDialog(
     context: context,
     builder: (context) {
       return AlertDialog(
