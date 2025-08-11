@@ -507,14 +507,17 @@ class PlPlayerController {
   // 获取实例 传参
   static PlPlayerController getInstance({bool isLive = false}) {
     // 如果实例尚未创建，则创建一个新实例
-    _instance ??= PlPlayerController._().._isLive = isLive;
-    _instance!._playerCount.value += 1;
+    _instance ??= PlPlayerController._();
+    _instance!
+      .._isLive = isLive
+      .._playerCount.value += 1;
     return _instance!;
   }
 
   // 初始化资源
   Future<void> setDataSource(
     DataSource dataSource, {
+    bool isLive = false,
     List<Segment>? segmentList,
     List<Segment>? viewPointList,
     bool? showVP,
@@ -542,6 +545,7 @@ class PlPlayerController {
     VoidCallback? callback,
   }) async {
     try {
+      _isLive = isLive;
       _videoType = videoType ?? VideoType.ugc;
       this.width = width;
       this.height = height;

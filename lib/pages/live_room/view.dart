@@ -37,7 +37,7 @@ class LiveRoomPage extends StatefulWidget {
 }
 
 class _LiveRoomPageState extends State<LiveRoomPage>
-    with WidgetsBindingObserver {
+    with WidgetsBindingObserver, RouteAware {
   final String heroTag = Utils.generateRandomString(6);
   late final LiveRoomController _liveRoomController;
   late final PlPlayerController plPlayerController;
@@ -63,18 +63,64 @@ class _LiveRoomPageState extends State<LiveRoomPage>
       ..addStatusLister(playerListener);
   }
 
-  void playerListener(PlayerStatus? status) {
-    if (status != PlayerStatus.playing) {
-      plPlayerController.danmakuController?.pause();
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    PageUtils.routeObserver.subscribe(
+      this,
+      ModalRoute.of(context)! as PageRoute,
+    );
+  }
+
+  @override
+  Future<void> didPopNext() async {
+    WidgetsBinding.instance.addObserver(this);
+    PlPlayerController.setPlayCallBack(plPlayerController.play);
+    plPlayerController.danmakuController =
+        _liveRoomController.danmakuController;
+    _liveRoomController.startLiveTimer();
+    if (plPlayerController.playerStatus.playing) {
       _liveRoomController
-        ..cancelLiveTimer()
-        ..msgStream?.close()
-        ..msgStream = null;
+        ..danmakuController?.resume()
+        ..startLiveMsg();
     } else {
-      plPlayerController.danmakuController?.resume();
+      final shouldPlay = _liveRoomController.isPlaying ?? false;
+      if (shouldPlay) {
+        _liveRoomController
+          ..danmakuController?.resume()
+          ..startLiveMsg();
+      }
+      await _liveRoomController.playerInit(autoplay: shouldPlay);
+    }
+    plPlayerController.addStatusLister(playerListener);
+
+    super.didPopNext();
+  }
+
+  @override
+  void didPushNext() {
+    WidgetsBinding.instance.removeObserver(this);
+    plPlayerController.removeStatusLister(playerListener);
+    _liveRoomController
+      ..danmakuController?.clear()
+      ..danmakuController?.pause()
+      ..cancelLiveTimer()
+      ..closeLiveMsg()
+      ..isPlaying = plPlayerController.playerStatus.playing;
+    super.didPushNext();
+  }
+
+  void playerListener(PlayerStatus? status) {
+    if (status == PlayerStatus.playing) {
       _liveRoomController
+        ..danmakuController?.resume()
         ..startLiveTimer()
-        ..liveMsg();
+        ..startLiveMsg();
+    } else {
+      _liveRoomController
+        ..danmakuController?.pause()
+        ..cancelLiveTimer()
+        ..closeLiveMsg();
     }
   }
 
@@ -87,6 +133,7 @@ class _LiveRoomPageState extends State<LiveRoomPage>
     plPlayerController
       ..removeStatusLister(playerListener)
       ..dispose();
+    PageUtils.routeObserver.unsubscribe(this);
     super.dispose();
   }
 
@@ -150,6 +197,7 @@ class _LiveRoomPageState extends State<LiveRoomPage>
     Alignment? alignment,
     bool needDm = true,
   }) {
+    _liveRoomController.isFullScreen = isFullScreen;
     return PopScope(
       canPop: !isFullScreen,
       onPopInvokedWithResult: (bool didPop, Object? result) {
@@ -182,6 +230,7 @@ class _LiveRoomPageState extends State<LiveRoomPage>
             danmuWidget: !needDm
                 ? null
                 : LiveDanmaku(
+                    liveRoomController: _liveRoomController,
                     plPlayerController: plPlayerController,
                     isFullScreen: isFullScreen,
                     isPipMode: isPipMode,
@@ -743,12 +792,14 @@ class _LiveRoomPageState extends State<LiveRoomPage>
 }
 
 class LiveDanmaku extends StatefulWidget {
+  final LiveRoomController liveRoomController;
   final PlPlayerController plPlayerController;
   final bool isPipMode;
   final bool isFullScreen;
 
   const LiveDanmaku({
     super.key,
+    required this.liveRoomController,
     required this.plPlayerController,
     this.isPipMode = false,
     required this.isFullScreen,
@@ -791,7 +842,8 @@ class _LiveDanmakuState extends State<LiveDanmaku> {
           duration: const Duration(milliseconds: 100),
           child: DanmakuScreen(
             createdController: (DanmakuController e) {
-              plPlayerController.danmakuController = e;
+              widget.liveRoomController.danmakuController =
+                  plPlayerController.danmakuController = e;
             },
             option: DanmakuOption(
               fontSize: _fontSize,

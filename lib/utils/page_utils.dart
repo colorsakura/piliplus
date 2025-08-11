@@ -15,7 +15,6 @@ import 'package:PiliPlus/pages/contact/view.dart';
 import 'package:PiliPlus/pages/fav_panel/view.dart';
 import 'package:PiliPlus/pages/share/view.dart';
 import 'package:PiliPlus/pages/video/introduction/ugc/widgets/menu_row.dart';
-import 'package:PiliPlus/plugin/pl_player/controller.dart';
 import 'package:PiliPlus/services/shutdown_timer_service.dart';
 import 'package:PiliPlus/utils/app_scheme.dart';
 import 'package:PiliPlus/utils/context_ext.dart';
@@ -35,6 +34,9 @@ import 'package:get/get.dart' hide ContextExtensionss;
 import 'package:url_launcher/url_launcher.dart';
 
 class PageUtils {
+  static final RouteObserver<PageRoute> routeObserver =
+      RouteObserver<PageRoute>();
+
   static Future<void> imageView({
     int initialPage = 0,
     required List<SourceModel> imgList,
@@ -690,10 +692,6 @@ class PageUtils {
     if (roomId == null) {
       return;
     }
-    if (PlPlayerController.instanceExists()) {
-      SmartDialog.showToast('unsupported');
-      return;
-    }
     if (off) {
       Get.offNamed('/liveRoom', arguments: roomId);
     } else {
@@ -716,10 +714,6 @@ class PageUtils {
     int? id,
     bool off = false,
   }) {
-    if (PlPlayerController.instance?.isLive == true) {
-      SmartDialog.showToast('Living');
-      return;
-    }
     final arguments = {
       'aid': aid ?? IdUtils.bv2av(bvid!),
       'bvid': bvid ?? IdUtils.av2bv(aid!),

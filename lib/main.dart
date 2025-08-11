@@ -4,8 +4,6 @@ import 'package:PiliPlus/build_config.dart';
 import 'package:PiliPlus/common/widgets/custom_toast.dart';
 import 'package:PiliPlus/http/init.dart';
 import 'package:PiliPlus/models/common/theme/theme_color_type.dart';
-import 'package:PiliPlus/pages/main/view.dart';
-import 'package:PiliPlus/pages/video/view.dart';
 import 'package:PiliPlus/router/app_pages.dart';
 import 'package:PiliPlus/services/account_service.dart';
 import 'package:PiliPlus/services/loggeer.dart';
@@ -13,6 +11,7 @@ import 'package:PiliPlus/services/service_locator.dart';
 import 'package:PiliPlus/utils/app_scheme.dart';
 import 'package:PiliPlus/utils/cache_manage.dart';
 import 'package:PiliPlus/utils/date_util.dart';
+import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:PiliPlus/utils/request_utils.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/storage_key.dart';
@@ -227,8 +226,7 @@ class MyApp extends StatelessWidget {
           ),
           navigatorObservers: [
             FlutterSmartDialog.observer,
-            VideoDetailPageV.routeObserver,
-            MainApp.routeObserver,
+            PageUtils.routeObserver,
           ],
         );
       }),

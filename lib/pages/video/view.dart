@@ -68,8 +68,6 @@ class VideoDetailPageV extends StatefulWidget {
 
   @override
   State<VideoDetailPageV> createState() => _VideoDetailPageVState();
-  static final RouteObserver<PageRoute> routeObserver =
-      RouteObserver<PageRoute>();
 }
 
 class _VideoDetailPageVState extends State<VideoDetailPageV>
@@ -381,7 +379,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
     } else {
       PlPlayerController.updatePlayCount();
     }
-    VideoDetailPageV.routeObserver.unsubscribe(this);
+    PageUtils.routeObserver.unsubscribe(this);
     showStatusBar();
     _introScrollController?.dispose();
     super.dispose();
@@ -476,7 +474,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    VideoDetailPageV.routeObserver.subscribe(
+    PageUtils.routeObserver.subscribe(
       this,
       ModalRoute.of(context)! as PageRoute,
     );

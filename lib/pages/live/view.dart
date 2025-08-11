@@ -259,6 +259,7 @@ class _LivePageState extends CommonPageState<LivePage, LiveController>
             ),
             const Spacer(),
             GestureDetector(
+              behavior: HitTestBehavior.opaque,
               onTap: () => Get.to(const LiveFollowPage()),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
@@ -293,6 +294,7 @@ class _LivePageState extends CommonPageState<LivePage, LiveController>
         return SizedBox(
           width: 65,
           child: GestureDetector(
+            behavior: HitTestBehavior.opaque,
             onTap: () => PageUtils.toLiveRoom(item.roomid),
             onLongPress: () {
               Feedback.forLongPress(context);

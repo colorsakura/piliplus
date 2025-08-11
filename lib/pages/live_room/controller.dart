@@ -32,6 +32,7 @@ class LiveRoomController extends GetxController {
   final String heroTag;
 
   int roomId = Get.arguments;
+  DanmakuController? danmakuController;
   PlPlayerController plPlayerController = PlPlayerController.getInstance(
     isLive: true,
   );
@@ -61,7 +62,7 @@ class LiveRoomController extends GetxController {
   List<RichTextItem>? savedDanmaku;
   RxList<dynamic> messages = [].obs;
   RxBool disableAutoScroll = false.obs;
-  LiveMessageStream? msgStream;
+  LiveMessageStream? _msgStream;
   late final ScrollController scrollController = ScrollController()
     ..addListener(listener);
 
@@ -73,6 +74,10 @@ class LiveRoomController extends GetxController {
   late final isLogin = accountService.isLogin.value;
   AccountService accountService = Get.find<AccountService>();
 
+  String? videoUrl;
+  bool? isPlaying;
+  late bool isFullScreen = false;
+
   @override
   void onInit() {
     super.onInit();
@@ -83,10 +88,13 @@ class LiveRoomController extends GetxController {
     }
   }
 
-  Future<void> playerInit(String source) {
+  Future<void>? playerInit({bool autoplay = true}) {
+    if (videoUrl == null) {
+      return null;
+    }
     return plPlayerController.setDataSource(
       DataSource(
-        videoSource: source,
+        videoSource: videoUrl,
         audioSource: null,
         type: DataSourceType.network,
         httpHeaders: {
@@ -95,7 +103,8 @@ class LiveRoomController extends GetxController {
           'referer': HttpString.baseUrl,
         },
       ),
-      autoplay: true,
+      isLive: true,
+      autoplay: autoplay,
       isVertical: isPortrait.value,
     );
   }
@@ -145,8 +154,8 @@ class LiveRoomController extends GetxController {
               .firstWhereOrNull((element) => element.code == currentQn)
               ?.description ??
           currentQn.toString();
-      String videoUrl = VideoUtils.getCdnUrl(item);
-      await playerInit(videoUrl);
+      videoUrl = VideoUtils.getCdnUrl(item);
+      await playerInit();
       isLoaded.value = true;
     }
   }
@@ -198,7 +207,12 @@ class LiveRoomController extends GetxController {
     }
   }
 
-  void liveMsg() {
+  void closeLiveMsg() {
+    _msgStream?.close();
+    _msgStream = null;
+  }
+
+  void startLiveMsg() {
     if (messages.isEmpty) {
       LiveHttp.liveRoomDanmaPrefetch(roomId: roomId).then((v) {
         if (v['status']) {
@@ -225,7 +239,7 @@ class LiveRoomController extends GetxController {
         }
       });
     }
-    if (msgStream != null) {
+    if (_msgStream != null) {
       return;
     }
     if (dmInfo != null) {
@@ -259,8 +273,7 @@ class LiveRoomController extends GetxController {
     cancelLiveTimer();
     savedDanmaku?.clear();
     savedDanmaku = null;
-    msgStream?.close();
-    msgStream = null;
+    closeLiveMsg();
     scrollController
       ..removeListener(listener)
       ..dispose();
@@ -285,7 +298,7 @@ class LiveRoomController extends GetxController {
     if (info.hostList.isNullOrEmpty) {
       return;
     }
-    msgStream =
+    _msgStream =
         LiveMessageStream(
             streamToken: info.token!,
             roomId: roomId,
@@ -321,9 +334,11 @@ class LiveRoomController extends GetxController {
                       selfSend: isLogin && uid == accountService.mid,
                     ),
                   );
-                  WidgetsBinding.instance.addPostFrameCallback(
-                    (_) => scrollToBottom(),
-                  );
+                  if (!isFullScreen) {
+                    WidgetsBinding.instance.addPostFrameCallback(
+                      (_) => scrollToBottom(),
+                    );
+                  }
                 }
               }
             } catch (_) {}
