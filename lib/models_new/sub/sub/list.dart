@@ -1,4 +1,5 @@
 import 'package:PiliPlus/models/model_owner.dart';
+import 'package:PiliPlus/models_new/fav/fav_detail/cnt_info.dart';
 
 class SubItemModel {
   int? id;
@@ -24,6 +25,7 @@ class SubItemModel {
   int? type;
   String? link;
   String? bvid;
+  CntInfo? cntInfo;
 
   SubItemModel({
     this.id,
@@ -49,6 +51,7 @@ class SubItemModel {
     this.type,
     this.link,
     this.bvid,
+    this.cntInfo,
   });
 
   factory SubItemModel.fromJson(Map<String, dynamic> json) => SubItemModel(
@@ -77,5 +80,8 @@ class SubItemModel {
     type: json['type'] as int?,
     link: json['link'] as String?,
     bvid: json['bvid'] as String?,
+    cntInfo: json['cnt_info'] == null
+        ? null
+        : CntInfo.fromJson(json['cnt_info']),
   );
 }

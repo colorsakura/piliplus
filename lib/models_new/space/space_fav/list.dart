@@ -1,60 +1,38 @@
 import 'package:PiliPlus/models/model_owner.dart';
+import 'package:PiliPlus/models_new/sub/sub/list.dart';
 
-class SpaceFavItemModel {
-  int? id;
+class SpaceFavItemModel extends SubItemModel {
   int? mediaId;
   int? count;
   int? isPublic;
-  int? fid;
-  int? mid;
-  int? attr;
-  String? attrDesc;
-  String? title;
-  String? cover;
-  Owner? upper;
-  int? coverType;
-  String? intro;
-  int? ctime;
-  int? mtime;
-  int? state;
-  int? favState;
-  int? mediaCount;
-  int? viewCount;
-  int? vt;
-  bool? isTop;
-  dynamic recentFav;
-  int? playSwitch;
-  int? type;
-  String? link;
-  String? bvid;
 
   SpaceFavItemModel({
-    this.id,
+    super.id,
     this.mediaId,
     this.count,
     this.isPublic,
-    this.fid,
-    this.mid,
-    this.attr,
-    this.attrDesc,
-    this.title,
-    this.cover,
-    this.upper,
-    this.coverType,
-    this.intro,
-    this.ctime,
-    this.mtime,
-    this.state,
-    this.favState,
-    this.mediaCount,
-    this.viewCount,
-    this.vt,
-    this.isTop,
-    this.recentFav,
-    this.playSwitch,
-    this.type,
-    this.link,
-    this.bvid,
+    super.fid,
+    super.mid,
+    super.attr,
+    super.attrDesc,
+    super.title,
+    super.cover,
+    super.upper,
+    super.coverType,
+    super.intro,
+    super.ctime,
+    super.mtime,
+    super.state,
+    super.favState,
+    super.mediaCount,
+    super.viewCount,
+    super.vt,
+    super.isTop,
+    super.recentFav,
+    super.playSwitch,
+    super.type,
+    super.link,
+    super.bvid,
   });
 
   factory SpaceFavItemModel.fromJson(Map<String, dynamic> json) =>

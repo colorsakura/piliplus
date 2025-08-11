@@ -8,55 +8,39 @@ import 'package:get/get.dart';
 
 class SubDetailController
     extends CommonListController<SubDetailData, SubDetailItemModel> {
-  late SubItemModel subInfo;
-
   late int id;
-  late String heroTag;
-
-  late final RxInt mediaCount;
-  late final RxInt playCount;
+  String? heroTag;
+  SubItemModel? subInfo;
 
   @override
   void onInit() {
     super.onInit();
-    subInfo = Get.arguments;
-    mediaCount = (subInfo.mediaCount ?? 0).obs;
-    playCount = (subInfo.viewCount ?? 0).obs;
-    id = int.parse(Get.parameters['id']!);
-    heroTag = Get.parameters['heroTag']!;
+    final args = Get.arguments;
+    id = args['id'];
+    subInfo = args['subInfo'];
+    heroTag = args['heroTag'];
+
     queryData();
   }
 
   @override
   List<SubDetailItemModel>? getDataList(SubDetailData response) {
-    mediaCount.value = response.info!.mediaCount!;
-    if (subInfo.type == 11) {
-      playCount.value = response.info!.cntInfo!.play!;
-    }
+    subInfo = response.info;
     return response.medias;
   }
 
   @override
   void checkIsEnd(int length) {
-    if (length >= mediaCount.value) {
+    final count = subInfo?.mediaCount;
+    if (count != null && length >= count) {
       isEnd = true;
     }
   }
 
   @override
-  Future<LoadingState<SubDetailData>> customGetData() {
-    if (subInfo.type == 11) {
-      return FavHttp.favResourceList(
-        id: id,
-        ps: 20,
-        pn: page,
-      );
-    } else {
-      return FavHttp.favSeasonList(
-        id: id,
-        ps: 20,
-        pn: page,
-      );
-    }
-  }
+  Future<LoadingState<SubDetailData>> customGetData() => FavHttp.favSeasonList(
+    id: id,
+    ps: 20,
+    pn: page,
+  );
 }

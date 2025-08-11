@@ -3,6 +3,7 @@ import 'package:PiliPlus/common/widgets/badge.dart';
 import 'package:PiliPlus/common/widgets/image/image_save.dart';
 import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
 import 'package:PiliPlus/models_new/sub/sub/list.dart';
+import 'package:PiliPlus/pages/subscription_detail/view.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -42,13 +43,10 @@ class SubItem extends StatelessWidget {
               },
             );
           } else {
-            Get.toNamed(
-              '/subDetail',
-              arguments: item,
-              parameters: {
-                'heroTag': heroTag,
-                'id': item.id.toString(),
-              },
+            SubDetailPage.toSubDetailPage(
+              item.id!,
+              heroTag: heroTag,
+              subInfo: item,
             );
           }
         },

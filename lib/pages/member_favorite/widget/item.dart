@@ -3,7 +3,7 @@ import 'package:PiliPlus/common/widgets/badge.dart';
 import 'package:PiliPlus/common/widgets/image/image_save.dart';
 import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
 import 'package:PiliPlus/models_new/space/space_fav/list.dart';
-import 'package:PiliPlus/models_new/sub/sub/list.dart';
+import 'package:PiliPlus/pages/subscription_detail/view.dart';
 import 'package:PiliPlus/utils/fav_util.dart';
 import 'package:PiliPlus/utils/num_util.dart';
 import 'package:PiliPlus/utils/utils.dart';
@@ -38,20 +38,9 @@ class MemberFavItem extends StatelessWidget {
             );
             callback?.call(res);
           } else {
-            Get.toNamed(
-              '/subDetail',
-              arguments: SubItemModel(
-                type: item.type,
-                title: item.title,
-                cover: item.cover,
-                upper: item.upper,
-                mediaCount: item.mediaCount,
-                viewCount: item.viewCount,
-              ),
-              parameters: {
-                'id': item.id.toString(),
-                'heroTag': Utils.makeHeroTag(item.id),
-              },
+            SubDetailPage.toSubDetailPage(
+              item.id!,
+              subInfo: item,
             );
           }
         },

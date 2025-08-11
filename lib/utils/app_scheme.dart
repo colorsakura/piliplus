@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:PiliPlus/http/search.dart';
 import 'package:PiliPlus/models/common/video/source_type.dart';
+import 'package:PiliPlus/pages/subscription_detail/view.dart';
 import 'package:PiliPlus/pages/video/reply_reply/view.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/id_utils.dart';
@@ -568,6 +569,13 @@ class PiliScheme {
     }
 
     if (host.contains('space.bilibili.com')) {
+      String? sid =
+          uri.queryParameters['sid'] ??
+          RegExp(r'lists/(\d+)').firstMatch(path)?.group(1);
+      if (sid != null) {
+        SubDetailPage.toSubDetailPage(int.parse(sid));
+        return true;
+      }
       String? mid = uriDigitRegExp.firstMatch(path)?.group(1);
       if (mid != null) {
         PageUtils.toDupNamed('/member?mid=$mid', off: off);
