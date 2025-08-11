@@ -79,7 +79,7 @@ class PlPlayerController {
   final Rx<Duration> _buffered = Rx(Duration.zero);
   final RxInt bufferedSeconds = 0.obs;
 
-  final RxInt _playerCount = 0.obs;
+  int _playerCount = 0;
 
   late double lastPlaybackSpeed = 1.0;
   final RxDouble _playbackSpeed = Pref.playSpeedDefault.obs;
@@ -87,7 +87,6 @@ class PlPlayerController {
   final RxDouble _currentVolume = 1.0.obs;
   final RxDouble _currentBrightness = (-1.0).obs;
 
-  final RxBool _mute = false.obs;
   final RxBool _showControls = false.obs;
   final RxBool _showVolumeStatus = false.obs;
   final RxBool _showBrightnessStatus = false.obs;
@@ -135,10 +134,7 @@ class PlPlayerController {
 
   Timer? _timer;
   Timer? _timerForSeek;
-  Timer? _timerForVolume;
   Timer? _timerForShowingVolume;
-  Timer? _timerForGettingVolume;
-  Timer? timerForTrackingMouse;
 
   final RxList<Segment> viewPointList = <Segment>[].obs;
   final RxBool showVP = true.obs;
@@ -174,10 +170,6 @@ class PlPlayerController {
   /// 视频缓冲
   Rx<Duration> get buffered => _buffered;
   Stream<Duration> get onBufferedChanged => _buffered.stream;
-
-  // 视频静音
-  RxBool get mute => _mute;
-  Stream<bool> get onMuteChanged => _mute.stream;
 
   /// [videoPlayerController] instance of Player
   Player? get videoPlayerController => _videoPlayerController;
@@ -248,8 +240,6 @@ class PlPlayerController {
 
   /// 全屏方向
   bool get isVertical => _isVertical;
-
-  RxInt get playerCount => _playerCount;
 
   ///
   bool get isLive => _isLive;
@@ -510,7 +500,7 @@ class PlPlayerController {
     _instance ??= PlPlayerController._();
     _instance!
       .._isLive = isLive
-      .._playerCount.value += 1;
+      .._playerCount += 1;
     return _instance!;
   }
 
@@ -580,7 +570,7 @@ class PlPlayerController {
         await pause(notify: false);
       }
 
-      if (_playerCount.value == 0) {
+      if (_playerCount == 0) {
         return;
       }
       // 配置Player 音轨、字幕等等
@@ -1045,7 +1035,7 @@ class PlPlayerController {
     // if (position >= duration.value) {
     //   position = duration.value - const Duration(milliseconds: 100);
     // }
-    if (_playerCount.value == 0) {
+    if (_playerCount == 0) {
       return;
     }
     if (position < Duration.zero) {
@@ -1075,7 +1065,7 @@ class PlPlayerController {
         Timer t,
       ) async {
         //_timerForSeek = null;
-        if (_playerCount.value == 0) {
+        if (_playerCount == 0) {
           _timerForSeek?.cancel();
           _timerForSeek = null;
         } else if (duration.value.inSeconds != 0) {
@@ -1128,7 +1118,7 @@ class PlPlayerController {
 
   /// 播放视频
   Future<void> play({bool repeat = false, bool hideControls = true}) async {
-    if (_playerCount.value == 0) return;
+    if (_playerCount == 0) return;
     // 播放时自动隐藏控制条
     controls = !hideControls;
     // repeat为true，将从头播放
@@ -1170,9 +1160,7 @@ class PlPlayerController {
 
   /// 隐藏控制条
   void hideTaskControls() {
-    if (_timer != null) {
-      _timer!.cancel();
-    }
+    _timer?.cancel();
     Duration waitingTime = Duration(seconds: enableLongShowControl ? 30 : 3);
     _timer = Timer(waitingTime, () {
       if (!isSliderMoving.value && !tripling) {
@@ -1446,14 +1434,6 @@ class PlPlayerController {
     return screenshot;
   }
 
-  Future<void> videoPlayerClosed() async {
-    _timer?.cancel();
-    _timerForVolume?.cancel();
-    _timerForGettingVolume?.cancel();
-    timerForTrackingMouse?.cancel();
-    _timerForSeek?.cancel();
-  }
-
   // 记录播放记录
   Future<void> makeHeartBeat(
     int progress, {
@@ -1547,8 +1527,8 @@ class PlPlayerController {
 
   Future<void> dispose() async {
     // 每次减1，最后销毁
-    if (playerCount.value > 1) {
-      _playerCount.value -= 1;
+    if (_playerCount > 1) {
+      _playerCount -= 1;
       _heartDuration = 0;
       if (!Get.previousRoute.startsWith('/video')) {
         pause();
@@ -1556,15 +1536,13 @@ class PlPlayerController {
       return;
     }
     dmState.clear();
-    _playerCount.value = 0;
+    _playerCount = 0;
     Utils.channel.setMethodCallHandler(null);
     pause();
     try {
       _timer?.cancel();
-      _timerForVolume?.cancel();
-      _timerForGettingVolume?.cancel();
-      timerForTrackingMouse?.cancel();
       _timerForSeek?.cancel();
+      _timerForShowingVolume?.cancel();
       // _position.close();
       _playerEventSubs?.cancel();
       // _sliderPosition.close();
@@ -1593,10 +1571,10 @@ class PlPlayerController {
   }
 
   static void updatePlayCount() {
-    if (_instance?._playerCount.value == 1) {
+    if (_instance?._playerCount == 1) {
       _instance?.dispose();
     } else {
-      _instance?._playerCount.value -= 1;
+      _instance?._playerCount -= 1;
     }
   }
 

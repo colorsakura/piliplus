@@ -1646,6 +1646,9 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                       height: height,
                       boxFit: BoxFit.cover,
                       forceUseCacheWidth: true,
+                      getPlaceHolder: () => Center(
+                        child: Image.asset('assets/images/loading.png'),
+                      ),
                     ),
                   ),
                 ),

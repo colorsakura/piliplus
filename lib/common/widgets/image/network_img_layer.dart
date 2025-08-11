@@ -46,21 +46,28 @@ class NetworkImgLayer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return src?.isNotEmpty == true
-        ? type == ImageType.avatar
-              ? ClipOval(child: _buildImage(context))
-              : radius == 0 || type == ImageType.emote
-              ? _buildImage(context)
-              : ClipRRect(
-                  borderRadius: radius != null
-                      ? BorderRadius.circular(radius!)
-                      : StyleString.mdRadius,
-                  child: _buildImage(context),
-                )
-        : getPlaceHolder?.call() ?? _placeholder(context);
+    final noRadius = type == ImageType.emote || radius == 0;
+
+    if (src?.isNotEmpty == true) {
+      Widget child = _buildImage(context, noRadius);
+      if (noRadius) {
+        return child;
+      }
+      if (type == ImageType.avatar) {
+        return ClipOval(child: child);
+      }
+      return ClipRRect(
+        borderRadius: radius != null
+            ? BorderRadius.circular(radius!)
+            : StyleString.mdRadius,
+        child: child,
+      );
+    }
+
+    return getPlaceHolder?.call() ?? _placeholder(context, noRadius);
   }
 
-  Widget _buildImage(BuildContext context) {
+  Widget _buildImage(BuildContext context, bool noRadius) {
     int? memCacheWidth, memCacheHeight;
     if (height == null || forceUseCacheWidth || width <= height!) {
       memCacheWidth = width.cacheSize(context);
@@ -79,26 +86,26 @@ class NetworkImgLayer extends StatelessWidget {
       fadeInDuration: fadeInDuration ?? const Duration(milliseconds: 120),
       filterQuality: FilterQuality.low,
       placeholder: (BuildContext context, String url) =>
-          getPlaceHolder?.call() ?? _placeholder(context),
+          getPlaceHolder?.call() ?? _placeholder(context, noRadius),
       imageBuilder: imageBuilder,
-      errorWidget: (context, url, error) => _placeholder(context),
+      errorWidget: (context, url, error) => _placeholder(context, noRadius),
       colorBlendMode: reduce ? BlendMode.modulate : null,
       color: reduce ? reduceLuxColor : null,
     );
   }
 
-  Widget _placeholder(BuildContext context) {
+  Widget _placeholder(BuildContext context, bool noRadius) {
+    final isAvatar = type == ImageType.avatar;
     return Container(
       width: width,
       height: height,
-      clipBehavior: Clip.antiAlias,
+      clipBehavior: noRadius ? Clip.none : Clip.antiAlias,
       decoration: BoxDecoration(
-        shape: type == ImageType.avatar ? BoxShape.circle : BoxShape.rectangle,
+        shape: isAvatar ? BoxShape.circle : BoxShape.rectangle,
         color: Theme.of(
           context,
         ).colorScheme.onInverseSurface.withValues(alpha: 0.4),
-        borderRadius:
-            type == ImageType.avatar || type == ImageType.emote || radius == 0
+        borderRadius: noRadius || isAvatar
             ? null
             : radius != null
             ? BorderRadius.circular(radius!)
@@ -106,9 +113,7 @@ class NetworkImgLayer extends StatelessWidget {
       ),
       child: Center(
         child: Image.asset(
-          type == ImageType.avatar
-              ? 'assets/images/noface.jpeg'
-              : 'assets/images/loading.png',
+          isAvatar ? 'assets/images/noface.jpeg' : 'assets/images/loading.png',
           width: width,
           height: height,
           cacheWidth: width.cacheSize(context),

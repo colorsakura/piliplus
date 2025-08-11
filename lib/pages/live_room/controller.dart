@@ -196,8 +196,7 @@ class LiveRoomController extends GetxController {
     );
   }
 
-  void scrollToBottom() {
-    if (disableAutoScroll.value) return;
+  void scrollToBottom([_]) {
     if (scrollController.hasClients) {
       scrollController.animateTo(
         scrollController.position.maxScrollExtent,
@@ -231,9 +230,7 @@ class LiveRoomController extends GetxController {
                   },
                 ),
               );
-              WidgetsBinding.instance.addPostFrameCallback(
-                (_) => scrollToBottom(),
-              );
+              WidgetsBinding.instance.addPostFrameCallback(scrollToBottom);
             } catch (_) {}
           }
         }
@@ -334,9 +331,9 @@ class LiveRoomController extends GetxController {
                       selfSend: isLogin && uid == accountService.mid,
                     ),
                   );
-                  if (!isFullScreen) {
+                  if (!isFullScreen && !disableAutoScroll.value) {
                     WidgetsBinding.instance.addPostFrameCallback(
-                      (_) => scrollToBottom(),
+                      scrollToBottom,
                     );
                   }
                 }
