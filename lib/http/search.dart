@@ -99,8 +99,8 @@ class SearchHttp {
           case SearchType.article:
             data = SearchArticleData.fromJson(res.data['data']);
             break;
-          default:
-            break;
+          // default:
+          //   break;
         }
         return Success(data);
       } catch (err) {
