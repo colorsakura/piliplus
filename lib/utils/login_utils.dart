@@ -25,28 +25,28 @@ import 'package:get/get.dart';
 class LoginUtils {
   static final random = Random();
 
+  static Future setWebCookie([Account? account]) async {
+    final cookies = (account ?? Accounts.main).cookieJar.toList();
+    final webManager = web.CookieManager();
+    return Future.wait(
+      cookies.map(
+        (cookie) => webManager.setCookie(
+          url: web.WebUri(cookie.domain ?? ''),
+          name: cookie.name,
+          value: cookie.value,
+          path: cookie.path ?? '/',
+          domain: cookie.domain,
+          isSecure: cookie.secure,
+          isHttpOnly: cookie.httpOnly,
+        ),
+      ),
+    );
+  }
+
   static Future<void> onLoginMain() async {
     final account = Accounts.main;
     GrpcReq.updateHeaders(account.accessKey);
-    try {
-      final cookies = account.cookieJar.toList();
-      final webManager = web.CookieManager();
-      Future.wait([
-        ...cookies.map(
-          (item) => webManager.setCookie(
-            url: web.WebUri(item.domain ?? ''),
-            name: item.name,
-            value: item.value,
-            path: item.path ?? '',
-            domain: item.domain,
-            isSecure: item.secure,
-            isHttpOnly: item.httpOnly,
-          ),
-        ),
-      ]);
-    } catch (e) {
-      SmartDialog.showToast('设置登录态失败，$e');
-    }
+    setWebCookie(account);
     final result = await UserHttp.userInfo();
     if (result.isSuccess) {
       final UserInfoData data = result.data;

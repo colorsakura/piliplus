@@ -223,9 +223,9 @@ List<SettingsModel> get playSettings => [
           return SelectDialog<int>(
             title: '默认全屏方向',
             value: Pref.fullScreenMode,
-            values: FullScreenMode.values.map((e) {
-              return (e.index, e.desc);
-            }).toList(),
+            values: FullScreenMode.values
+                .map((e) => (e.index, e.desc))
+                .toList(),
           );
         },
       );
@@ -248,9 +248,9 @@ List<SettingsModel> get playSettings => [
           return SelectDialog<int>(
             title: '底部进度条展示',
             value: Pref.btmProgressBehavior,
-            values: BtmProgressBehavior.values.map((e) {
-              return (e.index, e.desc);
-            }).toList(),
+            values: BtmProgressBehavior.values
+                .map((e) => (e.index, e.desc))
+                .toList(),
           );
         },
       );

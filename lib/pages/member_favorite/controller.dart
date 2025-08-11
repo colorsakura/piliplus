@@ -77,7 +77,7 @@ class MemberFavoriteCtr
       firstEnd.value = res.data['data']['has_more'] == false;
       if (res.data['data'] != null) {
         List<SpaceFavItemModel> list =
-            (res.data['data']['list'] as List<dynamic>?)
+            (res.data['data']?['list'] as List<dynamic>?)
                 ?.map((item) => SpaceFavItemModel.fromJson(item))
                 .toList() ??
             <SpaceFavItemModel>[];
@@ -107,7 +107,7 @@ class MemberFavoriteCtr
       secondEnd.value = res.data['data']['has_more'] == false;
       if (res.data['data'] != null) {
         List<SpaceFavItemModel> list =
-            (res.data['data']['list'] as List<dynamic>?)
+            (res.data['data']?['list'] as List<dynamic>?)
                 ?.map((item) => SpaceFavItemModel.fromJson(item))
                 .toList() ??
             <SpaceFavItemModel>[];

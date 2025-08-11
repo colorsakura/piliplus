@@ -3,7 +3,6 @@ import 'package:PiliPlus/common/widgets/loading_widget/http_error.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models_new/space/space_fav/data.dart';
-import 'package:PiliPlus/models_new/space/space_fav/list.dart';
 import 'package:PiliPlus/pages/member_favorite/controller.dart';
 import 'package:PiliPlus/pages/member_favorite/widget/item.dart';
 import 'package:PiliPlus/utils/grid.dart';
@@ -123,7 +122,7 @@ class _MemberFavoriteState extends State<MemberFavorite>
         ),
         controlAffinity: ListTileControlAffinity.leading,
         children: [
-          ...(data.mediaListResponse?.list as List<SpaceFavItemModel>).map(
+          ...?data.mediaListResponse?.list?.map(
             (item) => SizedBox(
               height: 98,
               child: MemberFavItem(

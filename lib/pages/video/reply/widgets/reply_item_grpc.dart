@@ -393,7 +393,6 @@ class ReplyItemGrpc extends StatelessWidget {
         ],
         if (replyItem.replyControl.cardLabels
             .map((item) => item.textContent)
-            .toList()
             .contains('热评'))
           Text(
             '热评',

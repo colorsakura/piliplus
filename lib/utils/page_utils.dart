@@ -67,15 +67,13 @@ class PageUtils {
     final shareListRes = await ImGrpc.shareList(size: 3);
     if (shareListRes.isSuccess && shareListRes.data.sessionList.isNotEmpty) {
       userList.addAll(
-        shareListRes.data.sessionList
-            .map<UserModel>(
-              (item) => UserModel(
-                mid: item.talkerId.toInt(),
-                name: item.talkerUname,
-                avatar: item.talkerIcon,
-              ),
-            )
-            .toList(),
+        shareListRes.data.sessionList.map<UserModel>(
+          (item) => UserModel(
+            mid: item.talkerId.toInt(),
+            name: item.talkerUname,
+            avatar: item.talkerIcon,
+          ),
+        ),
       );
     } else if (context.mounted) {
       UserModel? userModel = await Navigator.of(context).push(

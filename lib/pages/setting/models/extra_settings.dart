@@ -535,9 +535,9 @@ List<SettingsModel> get extraSettings => [
           return SelectDialog<SuperResolutionType>(
             title: '超分辨率',
             value: SuperResolutionType.values[Pref.superResolutionType],
-            values: SuperResolutionType.values.map((e) {
-              return (e, e.title);
-            }).toList(),
+            values: SuperResolutionType.values
+                .map((e) => (e, e.title))
+                .toList(),
           );
         },
       );
@@ -935,9 +935,9 @@ List<SettingsModel> get extraSettings => [
           return SelectDialog<int>(
             title: '评论展示',
             value: Pref.replySortType,
-            values: ReplySortType.values.map((e) {
-              return (e.index, e.title);
-            }).toList(),
+            values: ReplySortType.values
+                .map((e) => (e.index, e.title))
+                .toList(),
           );
         },
       );
@@ -961,9 +961,10 @@ List<SettingsModel> get extraSettings => [
           return SelectDialog<int>(
             title: '动态展示',
             value: Pref.defaultDynamicType,
-            values: DynamicsTabType.values.sublist(0, 4).map((e) {
-              return (e.index, e.label);
-            }).toList(),
+            values: DynamicsTabType.values
+                .sublist(0, 4)
+                .map((e) => (e.index, e.label))
+                .toList(),
           );
         },
       );
@@ -986,9 +987,7 @@ List<SettingsModel> get extraSettings => [
           return SelectDialog<MemberTabType>(
             title: '用户页默认展示TAB',
             value: Pref.memberTab,
-            values: MemberTabType.values.map((e) {
-              return (e, e.title);
-            }).toList(),
+            values: MemberTabType.values.map((e) => (e, e.title)).toList(),
           );
         },
       );

@@ -1,6 +1,6 @@
 // ignore_for_file: constant_identifier_names
 enum SearchType {
-  // all,
+  // all('综合'),
   // 视频：video
   video('视频', hasHeader: true),
   // 番剧：media_bangumi,

@@ -234,7 +234,7 @@ abstract class CommonPublishPageState<T extends CommonPublishPage>
               'img_size': data.imgSize,
               'img_src': data.imageUrl,
             };
-          }).toList(),
+          }),
           eagerError: true,
         );
         SmartDialog.dismiss();

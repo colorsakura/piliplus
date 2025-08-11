@@ -22,36 +22,24 @@ class SearchAllData extends SearchNumData {
 
   SearchAllData.fromJson(Map<String, dynamic> json) {
     numResults = (json['numResults'] as num?)?.toInt();
-    if ((json['result'] as List?)?.isNotEmpty == true) {
+    if (json['result'] case List result) {
       final isRefresh = json['page'] == 1;
       list = [];
-      for (final item in json['result']) {
-        if ((item['data'] as List?)?.isNotEmpty == true) {
+      for (final item in result) {
+        if (item['data'] case List data) {
           switch (item['result_type']) {
             case 'media_bangumi' || 'media_bangumi':
               if (isRefresh) {
-                list!.add(
-                  (item['data'] as List)
-                      .map((e) => SearchPgcItemModel.fromJson(e))
-                      .toList(),
-                );
+                list!.addAll(data.map((e) => SearchPgcItemModel.fromJson(e)));
               }
               break;
             case 'bili_user':
               if (isRefresh) {
-                list!.addAll(
-                  (item['data'] as List)
-                      .map((e) => SearchUserItemModel.fromJson(e))
-                      .toList(),
-                );
+                list!.addAll(data.map((e) => SearchUserItemModel.fromJson(e)));
               }
               break;
             case 'video':
-              list!.addAll(
-                (item['data'] as List)
-                    .map((e) => SearchVideoItemModel.fromJson(e))
-                    .toList(),
-              );
+              list!.addAll(data.map((e) => SearchVideoItemModel.fromJson(e)));
               break;
           }
         }

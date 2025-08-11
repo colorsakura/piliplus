@@ -70,10 +70,7 @@ class Utils {
     String baseDirectory,
     List<String> shaders,
   ) {
-    List<String> absolutePaths = shaders.map((shader) {
-      return path.join(baseDirectory, shader);
-    }).toList();
-    return absolutePaths.join(':');
+    return shaders.map((shader) => path.join(baseDirectory, shader)).join(':');
   }
 
   static final numericRegex = RegExp(r'^[\d\.]+$');

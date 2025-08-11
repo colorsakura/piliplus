@@ -2,10 +2,9 @@ import 'dart:io';
 
 import 'package:PiliPlus/http/ua_type.dart';
 import 'package:PiliPlus/models/common/webview_menu_type.dart';
-import 'package:PiliPlus/utils/accounts.dart';
-import 'package:PiliPlus/utils/accounts/account.dart';
 import 'package:PiliPlus/utils/app_scheme.dart';
 import 'package:PiliPlus/utils/cache_manage.dart';
+import 'package:PiliPlus/utils/login_utils.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/foundation.dart' show kDebugMode;
@@ -111,18 +110,7 @@ class _WebviewPageState extends State<WebviewPage> {
                         }
                         break;
                       case WebviewMenuItem.resetCookie:
-                        final cookies = Accounts.main.cookieJar.toList();
-                        for (var item in cookies) {
-                          await CookieManager().setCookie(
-                            url: WebUri(item.domain ?? ''),
-                            name: item.name,
-                            value: item.value,
-                            path: item.path ?? '',
-                            domain: item.domain,
-                            isSecure: item.secure,
-                            isHttpOnly: item.httpOnly,
-                          );
-                        }
+                        await LoginUtils.setWebCookie();
                         SmartDialog.showToast('设置成功，刷新或重新打开网页');
                         break;
                     }

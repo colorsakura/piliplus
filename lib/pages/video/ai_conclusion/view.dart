@@ -110,44 +110,43 @@ class _AiDetailState extends CommonCollapseSlidePageState<AiConclusionPanel> {
                       ),
                     ),
                     const SizedBox(height: 6),
-                    if (item.partOutline?.isNotEmpty == true)
-                      ...item.partOutline!.map(
-                        (item) => Wrap(
-                          children: [
-                            SelectableText.rich(
-                              TextSpan(
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  color: theme.colorScheme.onSurface,
-                                  height: 1.5,
-                                ),
-                                children: [
-                                  TextSpan(
-                                    text: DurationUtil.formatDuration(
-                                      item.timestamp,
-                                    ),
-                                    style: TextStyle(
-                                      color: theme.colorScheme.primary,
-                                    ),
-                                    recognizer: TapGestureRecognizer()
-                                      ..onTap = () {
-                                        try {
-                                          Get.find<VideoDetailController>(
-                                            tag: Get.arguments['heroTag'],
-                                          ).plPlayerController.seekTo(
-                                            Duration(seconds: item.timestamp!),
-                                          );
-                                        } catch (_) {}
-                                      },
-                                  ),
-                                  const TextSpan(text: ' '),
-                                  TextSpan(text: item.content!),
-                                ],
+                    ...?item.partOutline?.map(
+                      (item) => Wrap(
+                        children: [
+                          SelectableText.rich(
+                            TextSpan(
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: theme.colorScheme.onSurface,
+                                height: 1.5,
                               ),
+                              children: [
+                                TextSpan(
+                                  text: DurationUtil.formatDuration(
+                                    item.timestamp,
+                                  ),
+                                  style: TextStyle(
+                                    color: theme.colorScheme.primary,
+                                  ),
+                                  recognizer: TapGestureRecognizer()
+                                    ..onTap = () {
+                                      try {
+                                        Get.find<VideoDetailController>(
+                                          tag: Get.arguments['heroTag'],
+                                        ).plPlayerController.seekTo(
+                                          Duration(seconds: item.timestamp!),
+                                        );
+                                      } catch (_) {}
+                                    },
+                                ),
+                                const TextSpan(text: ' '),
+                                TextSpan(text: item.content!),
+                              ],
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
+                    ),
                   ],
                 );
               },

@@ -132,9 +132,9 @@ List<SettingsModel> get videoSettings => [
           return SelectDialog<int>(
             title: '蜂窝网络画质',
             value: Pref.defaultVideoQaCellular,
-            values: VideoQuality.values.reversed.map((e) {
-              return (e.code, e.desc);
-            }).toList(),
+            values: VideoQuality.values.reversed
+                .map((e) => (e.code, e.desc))
+                .toList(),
           );
         },
       );
@@ -185,9 +185,9 @@ List<SettingsModel> get videoSettings => [
           return SelectDialog<int>(
             title: '蜂窝网络音质',
             value: Pref.defaultAudioQaCellular,
-            values: AudioQuality.values.reversed.map((e) {
-              return (e.code, e.desc);
-            }).toList(),
+            values: AudioQuality.values.reversed
+                .map((e) => (e.code, e.desc))
+                .toList(),
           );
         },
       );
@@ -238,9 +238,9 @@ List<SettingsModel> get videoSettings => [
           return SelectDialog<int>(
             title: '直播默认画质',
             value: Pref.liveQualityCellular,
-            values: LiveQuality.values.map((e) {
-              return (e.code, e.description);
-            }).toList(),
+            values: LiveQuality.values
+                .map((e) => (e.code, e.description))
+                .toList(),
           );
         },
       );
@@ -288,9 +288,9 @@ List<SettingsModel> get videoSettings => [
           return SelectDialog<String>(
             title: '次选解码格式',
             value: Pref.secondDecode,
-            values: VideoDecodeFormatType.values.map((e) {
-              return (e.code, e.description);
-            }).toList(),
+            values: VideoDecodeFormatType.values
+                .map((e) => (e.code, e.description))
+                .toList(),
           );
         },
       );
@@ -330,20 +330,17 @@ List<SettingsModel> get videoSettings => [
           return SelectDialog<String>(
             title: '视频同步',
             value: Pref.videoSync,
-            values:
-                [
-                  'audio',
-                  'display-resample',
-                  'display-resample-vdrop',
-                  'display-resample-desync',
-                  'display-tempo',
-                  'display-vdrop',
-                  'display-adrop',
-                  'display-desync',
-                  'desync',
-                ].map((e) {
-                  return (e, e);
-                }).toList(),
+            values: const [
+              'audio',
+              'display-resample',
+              'display-resample-vdrop',
+              'display-resample-desync',
+              'display-tempo',
+              'display-vdrop',
+              'display-adrop',
+              'display-desync',
+              'desync',
+            ].map((e) => (e, e)).toList(),
           );
         },
       );
@@ -365,9 +362,13 @@ List<SettingsModel> get videoSettings => [
           return SelectDialog<String>(
             title: '硬解模式',
             value: Pref.hardwareDecoding,
-            values: ['auto', 'auto-copy', 'auto-safe', 'no', 'yes'].map((e) {
-              return (e, e);
-            }).toList(),
+            values: const [
+              'auto',
+              'auto-copy',
+              'auto-safe',
+              'no',
+              'yes',
+            ].map((e) => (e, e)).toList(),
           );
         },
       );

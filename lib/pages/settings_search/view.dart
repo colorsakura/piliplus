@@ -98,9 +98,7 @@ class _SettingsSearchPageState extends SearchState<SettingsSearchPage> {
                     ? const HttpError()
                     : SliverWaterfallFlow.extent(
                         maxCrossAxisExtent: Grid.smallCardWidth * 2,
-                        children: [
-                          ..._list.map((item) => item.widget),
-                        ],
+                        children: _list.map((item) => item.widget).toList(),
                       ),
               ),
             ),

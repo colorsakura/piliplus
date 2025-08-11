@@ -202,22 +202,20 @@ class LiveRoomController extends GetxController {
     if (messages.isEmpty) {
       LiveHttp.liveRoomDanmaPrefetch(roomId: roomId).then((v) {
         if (v['status']) {
-          if ((v['data'] as List?)?.isNotEmpty == true) {
+          if (v['data'] case List list) {
             try {
               messages.addAll(
-                (v['data'] as List)
-                    .map(
-                      (obj) => {
-                        'name': obj['user']['base']['name'],
-                        'uid': obj['user']['uid'],
-                        'text': obj['text'],
-                        'emots': obj['emots'],
-                        'uemote': obj['emoticon']['emoticon_unique'] != ""
-                            ? obj['emoticon']
-                            : null,
-                      },
-                    )
-                    .toList(),
+                list.map(
+                  (obj) => {
+                    'name': obj['user']['base']['name'],
+                    'uid': obj['user']['uid'],
+                    'text': obj['text'],
+                    'emots': obj['emots'],
+                    'uemote': obj['emoticon']['emoticon_unique'] != ""
+                        ? obj['emoticon']
+                        : null,
+                  },
+                ),
               );
               WidgetsBinding.instance.addPostFrameCallback(
                 (_) => scrollToBottom(),

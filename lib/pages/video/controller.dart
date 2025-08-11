@@ -764,8 +764,7 @@ class VideoDetailController extends GetxController
 
                   return segmentModel;
                 },
-              )
-              .toList(),
+              ),
         );
 
         // _segmentProgressList
@@ -774,7 +773,7 @@ class VideoDetailController extends GetxController
             double start = (e.segment.first / duration).clamp(0.0, 1.0);
             double end = (e.segment.second / duration).clamp(0.0, 1.0);
             return Segment(start, end, _getColor(e.segmentType));
-          }).toList(),
+          }),
         );
 
         if (positionSubscription == null &&

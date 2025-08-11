@@ -10,6 +10,7 @@ import 'package:PiliPlus/utils/accounts.dart';
 import 'package:PiliPlus/utils/accounts/account.dart';
 import 'package:PiliPlus/utils/accounts/account_manager/account_mgr.dart';
 import 'package:PiliPlus/utils/global_data.dart';
+import 'package:PiliPlus/utils/login_utils.dart';
 import 'package:PiliPlus/utils/storage_pref.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:archive/archive.dart';
@@ -18,7 +19,6 @@ import 'package:dio/dio.dart';
 import 'package:dio/io.dart';
 import 'package:dio_http2_adapter/dio_http2_adapter.dart';
 import 'package:flutter/foundation.dart' show kDebugMode;
-import 'package:flutter_inappwebview/flutter_inappwebview.dart' as web;
 
 class Request {
   static const _gzipDecoder = GZipDecoder();
@@ -30,25 +30,11 @@ class Request {
   factory Request() => _instance;
 
   /// 设置cookie
-  static Future<void> setCookie() async {
+  static void setCookie() {
     accountManager = AccountManager();
     dio.interceptors.add(accountManager);
     Accounts.refresh();
-    final List<Cookie> cookies = Accounts.main.cookieJar.toList();
-    final webManager = web.CookieManager();
-    await Future.wait(
-      cookies.map(
-        (item) => webManager.setCookie(
-          url: web.WebUri(item.domain ?? ''),
-          name: item.name,
-          value: item.value,
-          path: item.path ?? '',
-          domain: item.domain,
-          isSecure: item.secure,
-          isHttpOnly: item.httpOnly,
-        ),
-      ),
-    );
+    LoginUtils.setWebCookie();
 
     if (Accounts.main.isLogin) {
       final coin = Pref.userInfoCache?.money;

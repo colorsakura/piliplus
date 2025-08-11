@@ -10,8 +10,8 @@ class DanmakuBlockDataModel {
     rule = <SimpleRule>[];
     rule1 = <SimpleRule>[];
     rule2 = <SimpleRule>[];
-    if ((json['rule'] as List?)?.isNotEmpty == true) {
-      for (var e in json['rule']) {
+    if (json['rule'] case List list) {
+      for (var e in list) {
         SimpleRule item = SimpleRule.fromJson(e);
         switch (item.type) {
           case 0:

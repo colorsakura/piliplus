@@ -104,9 +104,7 @@ List<SettingsModel> get styleSettings => [
           return SelectDialog<Transition>(
             title: '页面过渡动画',
             value: CustomGetPage.pageTransition,
-            values: Transition.values.map((e) {
-              return (e, e.name);
-            }).toList(),
+            values: Transition.values.map((e) => (e, e.name)).toList(),
           );
         },
       );
@@ -203,9 +201,7 @@ List<SettingsModel> get styleSettings => [
           return SelectDialog<UpPanelPosition>(
             title: '动态页UP主显示位置',
             value: Pref.upPanelPosition,
-            values: UpPanelPosition.values.map((e) {
-              return (e, e.label);
-            }).toList(),
+            values: UpPanelPosition.values.map((e) => (e, e.label)).toList(),
           );
         },
       );
@@ -239,9 +235,7 @@ List<SettingsModel> get styleSettings => [
           return SelectDialog<DynamicBadgeMode>(
             title: '动态未读标记',
             value: Pref.dynamicBadgeType,
-            values: DynamicBadgeMode.values.map((e) {
-              return (e, e.desc);
-            }).toList(),
+            values: DynamicBadgeMode.values.map((e) => (e, e.desc)).toList(),
           );
         },
       );
@@ -272,9 +266,7 @@ List<SettingsModel> get styleSettings => [
           return SelectDialog<DynamicBadgeMode>(
             title: '消息未读标记',
             value: Pref.msgBadgeMode,
-            values: DynamicBadgeMode.values.map((e) {
-              return (e, e.desc);
-            }).toList(),
+            values: DynamicBadgeMode.values.map((e) => (e, e.desc)).toList(),
           );
         },
       );
@@ -557,11 +549,7 @@ List<SettingsModel> get styleSettings => [
           return SelectDialog<ThemeType>(
             title: '主题模式',
             value: Pref.themeType,
-            values: ThemeType.values.map(
-              (e) {
-                return (e, e.desc);
-              },
-            ).toList(),
+            values: ThemeType.values.map((e) => (e, e.desc)).toList(),
           );
         },
       );
@@ -608,9 +596,9 @@ List<SettingsModel> get styleSettings => [
           return SelectDialog<int>(
             title: '首页启动页',
             value: Pref.defaultHomePage,
-            values: NavigationBarType.values.map((e) {
-              return (e.index, e.label);
-            }).toList(),
+            values: NavigationBarType.values
+                .map((e) => (e.index, e.label))
+                .toList(),
           );
         },
       );

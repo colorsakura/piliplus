@@ -1641,12 +1641,12 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                   onTap: handlePlay,
                   child: Obx(
                     () => NetworkImgLayer(
+                      radius: 0,
+                      quality: 60,
                       src: videoDetailController.cover.value,
                       width: width,
                       height: height,
                       boxFit: BoxFit.cover,
-                      fadeOutDuration: const Duration(milliseconds: 120),
-                      fadeInDuration: const Duration(milliseconds: 120),
                       forceUseCacheWidth: true,
                     ),
                   ),

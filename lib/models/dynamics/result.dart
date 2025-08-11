@@ -98,11 +98,11 @@ class DynamicItemModel {
     }
     idStr = json['item']?['id_str'];
     // type = json['type']; // int
-    modules = json['item']?['modules'] == null
-        ? ItemModulesModel()
-        : ItemModulesModel.fromOpusJson(
-            (json['item']['modules'] as List).cast(),
-          );
+    if (json['item']?['modules'] case List list) {
+      modules = ItemModulesModel.fromOpusJson(list.cast());
+    } else {
+      modules = ItemModulesModel();
+    }
 
     if (json['fallback'] != null) {
       fallback = Fallback.fromJson(json['fallback']);
@@ -196,7 +196,7 @@ class ItemModulesModel {
               : ModuleBlocked.fromJson(i['module_blocked']);
           break;
         case 'MODULE_TYPE_EXTEND':
-          moduleExtend = (i['module_extend']['items'] as List?)
+          moduleExtend = (i['module_extend']?['items'] as List?)
               ?.map((i) => ModuleTag.fromJson(i))
               .toList();
           break;
@@ -1286,11 +1286,9 @@ class RichTextNodeItem {
     text = json['text'];
     type = json['type'];
     rid = json['rid'];
-    pics = json['pics'] == null
-        ? null
-        : (json['pics'] as List?)
-              ?.map((e) => OpusPicModel.fromJson(e))
-              .toList();
+    pics = (json['pics'] as List?)
+        ?.map((e) => OpusPicModel.fromJson(e))
+        .toList();
     jumpUrl = json['jump_url'];
   }
 }

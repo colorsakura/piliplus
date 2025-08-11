@@ -67,7 +67,7 @@ void main() async {
   HttpOverrides.global = _CustomHttpOverrides();
   await setupServiceLocator();
   Request();
-  await Request.setCookie();
+  Request.setCookie();
 
   SmartDialog.config.toast = SmartConfigToast(
     displayType: SmartToastType.onlyRefresh,
