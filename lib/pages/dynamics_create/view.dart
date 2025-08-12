@@ -737,10 +737,12 @@ class _CreateDynPanelState extends CommonRichTextPubPageState<CreateDynPanel> {
       SmartDialog.showToast('发布成功');
       var id = result['data']?['dyn_id'];
       RequestUtils.insertCreatedDyn(id);
-      RequestUtils.checkCreatedDyn(
-        id: id,
-        dynText: editController.rawText,
-      );
+      if (_replyOption.value != ReplyOptionType.close) {
+        RequestUtils.checkCreatedDyn(
+          id: id,
+          dynText: editController.rawText,
+        );
+      }
     } else {
       SmartDialog.showToast(result['msg']);
       if (kDebugMode) debugPrint('failed to publish: ${result['msg']}');
