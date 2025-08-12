@@ -335,7 +335,7 @@ class PlPlayerController {
   late final bool enableHA = Pref.enableHA;
   late final String hwdec = Pref.hardwareDecoding;
 
-  late final defaultBtmProgressBehavior =
+  late final progressType =
       BtmProgressBehavior.values[Pref.btmProgressBehavior];
   late final enableQuickDouble = Pref.enableQuickDouble;
   late final fullScreenGestureReverse = Pref.fullScreenGestureReverse;

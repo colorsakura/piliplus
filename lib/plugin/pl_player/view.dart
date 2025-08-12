@@ -160,11 +160,16 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
   }
 
   StreamSubscription? _listener;
+  StreamSubscription? _controlsListener;
 
   @override
   void initState() {
     super.initState();
     plPlayerController.getPlayerKey = () => key;
+    _controlsListener = plPlayerController.showControls.listen((bool val) {
+      final visible = val && !plPlayerController.controlsLock.value;
+      visible ? animationController.forward() : animationController.reverse();
+    });
     animationController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 100),
@@ -240,6 +245,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
   @override
   void dispose() {
     _listener?.cancel();
+    _controlsListener?.cancel();
     animationController.dispose();
     FlutterVolumeController.removeListener();
     transformationController.dispose();
@@ -659,12 +665,14 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
       children: [
         ...userSpecifyItemLeft.map(progressWidget),
         Expanded(
-          child: FittedBox(
-            child: ConstrainedBox(
-              constraints: BoxConstraints(minWidth: maxWidth),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: userSpecifyItemRight.map(progressWidget).toList(),
+          child: LayoutBuilder(
+            builder: (context, constraints) => FittedBox(
+              child: ConstrainedBox(
+                constraints: BoxConstraints(minWidth: constraints.maxWidth),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: userSpecifyItemRight.map(progressWidget).toList(),
+                ),
               ),
             ),
           ),
@@ -1265,43 +1273,33 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
         ),
 
         // 头部、底部控制条
-        Obx(
-          () {
-            final visible =
-                !plPlayerController.controlsLock.value &&
-                plPlayerController.showControls.value;
-            visible
-                ? animationController.forward()
-                : animationController.reverse();
-            return Positioned.fill(
-              child: ClipRect(
-                child: Column(
-                  children: [
-                    AppBarAni(
-                      isTop: true,
-                      controller: animationController,
-                      child: widget.headerControl,
-                    ),
-                    const Spacer(),
-                    AppBarAni(
-                      isTop: false,
-                      controller: animationController,
-                      child:
-                          widget.bottomControl ??
-                          BottomControl(
-                            controller: plPlayerController,
-                            buildBottomControl: (bottomMaxWidth) =>
-                                buildBottomControl(
-                                  maxWidth > maxHeight,
-                                  bottomMaxWidth,
-                                ),
-                          ),
-                    ),
-                  ],
+        Positioned.fill(
+          child: ClipRect(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                AppBarAni(
+                  isTop: true,
+                  controller: animationController,
+                  child: widget.headerControl,
                 ),
-              ),
-            );
-          },
+                AppBarAni(
+                  isTop: false,
+                  controller: animationController,
+                  child:
+                      widget.bottomControl ??
+                      BottomControl(
+                        controller: plPlayerController,
+                        buildBottomControl: (bottomMaxWidth) =>
+                            buildBottomControl(
+                              maxWidth > maxHeight,
+                              bottomMaxWidth,
+                            ),
+                      ),
+                ),
+              ],
+            ),
+          ),
         ),
 
         // Positioned(
@@ -1372,99 +1370,58 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
         ),
 
         /// 进度条 live模式下禁用
-        Obx(
-          () {
-            final int value = plPlayerController.sliderPositionSeconds.value;
-            final int max = plPlayerController.durationSeconds.value.inSeconds;
-            final int buffer = plPlayerController.bufferedSeconds.value;
-            if (plPlayerController.showControls.value) {
-              return const SizedBox.shrink();
-            }
-
-            switch (plPlayerController.defaultBtmProgressBehavior) {
-              case BtmProgressBehavior.alwaysShow:
-                break;
-              case BtmProgressBehavior.alwaysHide:
-                return const SizedBox.shrink();
-              case BtmProgressBehavior.onlyShowFullScreen:
-                if (!isFullScreen) {
+        if (!plPlayerController.isLive &&
+            plPlayerController.progressType != BtmProgressBehavior.alwaysHide)
+          Positioned(
+            bottom: -2.2,
+            left: 0,
+            right: 0,
+            child: Obx(
+              () {
+                if (plPlayerController.showControls.value) {
                   return const SizedBox.shrink();
                 }
-              case BtmProgressBehavior.onlyHideFullScreen:
-                if (isFullScreen) {
-                  return const SizedBox.shrink();
+
+                switch (plPlayerController.progressType) {
+                  case BtmProgressBehavior.onlyShowFullScreen:
+                    if (!isFullScreen) {
+                      return const SizedBox.shrink();
+                    }
+                  case BtmProgressBehavior.onlyHideFullScreen:
+                    if (isFullScreen) {
+                      return const SizedBox.shrink();
+                    }
+                  default:
                 }
-            }
 
-            if (plPlayerController.isLive) {
-              return const SizedBox.shrink();
-            }
-
-            if (value > max || max <= 0) {
-              return const SizedBox.shrink();
-            }
-
-            return Positioned(
-              bottom: -2.2,
-              left: 0,
-              right: 0,
-              child: Semantics(
-                // label: '${(value / max * 100).round()}%',
-                value: '${(value / max * 100).round()}%',
-                // enabled: false,
-                child: Stack(
+                return Stack(
                   clipBehavior: Clip.none,
                   alignment: Alignment.bottomCenter,
                   children: [
-                    if (plPlayerController.dmTrend.isNotEmpty &&
-                        plPlayerController.showDmTreandChart.value)
-                      buildDmChart(theme, plPlayerController),
-                    if (plPlayerController.viewPointList.isNotEmpty &&
-                        plPlayerController.showVP.value)
-                      buildViewPointWidget(
-                        plPlayerController,
-                        4.25,
-                        maxWidth,
-                      ),
                     IgnorePointer(
-                      child: ProgressBar(
-                        progress: Duration(seconds: value),
-                        buffered: Duration(seconds: buffer),
-                        total: Duration(seconds: max),
-                        progressBarColor: primary,
-                        baseBarColor: Colors.white.withValues(alpha: 0.2),
-                        bufferedBarColor: primary.withValues(alpha: 0.4),
-                        timeLabelLocation: TimeLabelLocation.none,
-                        thumbColor: primary,
-                        barHeight: 3.5,
-                        thumbRadius: draggingFixedProgressBar.value ? 7 : 2.5,
-                        // onDragStart: (duration) {
-                        //   feedBack();
-                        //   plPlayerController.onChangedSliderStart();
-                        // },
-                        // onDragUpdate: (duration) {
-                        //   plPlayerController
-                        //       .onUpdatedSliderProgress(duration.timeStamp);
-                        //   if (plPlayerController.showSeekPreview) {
-                        //     if (plPlayerController.showPreview.value.not) {
-                        //       plPlayerController.showPreview.value = true;
-                        //     }
-                        //     plPlayerController.previewDx.value =
-                        //         duration.localPosition.dx;
-                        //   }
-                        // },
-                        // onSeek: (duration) {
-                        //   if (plPlayerController.showSeekPreview) {
-                        //     plPlayerController.showPreview.value = false;
-                        //   }
-                        //   plPlayerController.onChangedSliderEnd();
-                        //   plPlayerController
-                        //       .onChangedSlider(duration.inSeconds.toDouble());
-                        //   plPlayerController.seekTo(
-                        //       Duration(seconds: duration.inSeconds),
-                        //       type: 'slider');
-                        // },
-                      ),
+                      child: Obx(() {
+                        final int value =
+                            plPlayerController.sliderPositionSeconds.value;
+                        final int max =
+                            plPlayerController.durationSeconds.value.inSeconds;
+                        final int buffer =
+                            plPlayerController.bufferedSeconds.value;
+                        if (value > max || max <= 0) {
+                          return const SizedBox.shrink();
+                        }
+                        return ProgressBar(
+                          progress: Duration(seconds: value),
+                          buffered: Duration(seconds: buffer),
+                          total: Duration(seconds: max),
+                          progressBarColor: primary,
+                          baseBarColor: Colors.white.withValues(alpha: 0.2),
+                          bufferedBarColor: primary.withValues(alpha: 0.4),
+                          timeLabelLocation: TimeLabelLocation.none,
+                          thumbColor: primary,
+                          barHeight: 3.5,
+                          thumbRadius: draggingFixedProgressBar.value ? 7 : 2.5,
+                        );
+                      }),
                     ),
                     if (plPlayerController.segmentList.isNotEmpty)
                       Positioned(
@@ -1484,7 +1441,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                         ),
                       ),
                     if (plPlayerController.viewPointList.isNotEmpty &&
-                        plPlayerController.showVP.value)
+                        plPlayerController.showVP.value) ...[
                       Positioned(
                         left: 0,
                         right: 0,
@@ -1501,6 +1458,15 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                           ),
                         ),
                       ),
+                      buildViewPointWidget(
+                        plPlayerController,
+                        4.25,
+                        maxWidth,
+                      ),
+                    ],
+                    if (plPlayerController.dmTrend.isNotEmpty &&
+                        plPlayerController.showDmTreandChart.value)
+                      buildDmChart(theme, plPlayerController),
                     if (plPlayerController.showSeekPreview)
                       Positioned(
                         left: 0,
@@ -1512,20 +1478,10 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                         ),
                       ),
                   ],
-                ),
-                // SlideTransition(
-                //     position: Tween<Offset>(
-                //       begin: Offset.zero,
-                //       end: const Offset(0, -1),
-                //     ).animate(CurvedAnimation(
-                //       parent: animationController,
-                //       curve: Curves.easeInOut,
-                //     )),
-                //     child: ),
-              ),
-            );
-          },
-        ),
+                );
+              },
+            ),
+          ),
 
         // 锁
         SafeArea(
