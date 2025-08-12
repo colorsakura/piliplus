@@ -22,14 +22,6 @@ body:
       required: true
 
   - type: textarea
-    id: bug
-    attributes:
-      label: 问题描述
-      description: 请提供一个清晰而简明的问题描述。
-    validations:
-      required: true
-
-  - type: textarea
     id: steps
     attributes:
       label: 复现步骤
