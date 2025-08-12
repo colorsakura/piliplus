@@ -52,12 +52,6 @@ class VideoReplyReplyController extends ReplyController
   }
 
   @override
-  Future<void> onRefresh() {
-    paginationReply = null;
-    return super.onRefresh();
-  }
-
-  @override
   List<ReplyInfo>? getDataList(response) {
     return isDialogue ? response.replies : response.root.replies;
   }
@@ -66,6 +60,7 @@ class VideoReplyReplyController extends ReplyController
   bool customHandleResponse(bool isRefresh, Success response) {
     final data = response.response;
 
+    subjectControl = data.subjectControl;
     upMid ??= data.subjectControl.upMid;
     paginationReply = data.paginationReply;
     isEnd = data.cursor.isEnd;
@@ -141,6 +136,12 @@ class VideoReplyReplyController extends ReplyController
     int? index,
   }) {
     assert(replyItem != null && index != null);
+
+    final (bool inputDisable, String? hint) = replyHint;
+    if (inputDisable) {
+      return;
+    }
+
     final oid = replyItem!.oid.toInt();
     final root = replyItem.id.toInt();
     final key = oid + root;
@@ -150,6 +151,7 @@ class VideoReplyReplyController extends ReplyController
           GetDialogRoute(
             pageBuilder: (buildContext, animation, secondaryAnimation) {
               return ReplyPage(
+                hint: hint,
                 oid: oid,
                 root: root,
                 parent: root,
