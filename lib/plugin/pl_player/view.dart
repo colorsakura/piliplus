@@ -247,7 +247,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
   }
 
   // 动态构建底部控制条
-  Widget buildBottomControl(bool isLandscape) {
+  Widget buildBottomControl(bool isLandscape, double maxWidth) {
     final videoDetail = introController.videoDetail.value;
     final isSeason = videoDetail.ugcSeason != null;
     final isPart = videoDetail.pages != null && videoDetail.pages!.length > 1;
@@ -659,14 +659,12 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
       children: [
         ...userSpecifyItemLeft.map(progressWidget),
         Expanded(
-          child: LayoutBuilder(
-            builder: (context, constraints) => FittedBox(
-              child: ConstrainedBox(
-                constraints: BoxConstraints(minWidth: constraints.maxWidth),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: userSpecifyItemRight.map(progressWidget).toList(),
-                ),
+          child: FittedBox(
+            child: ConstrainedBox(
+              constraints: BoxConstraints(minWidth: maxWidth),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: userSpecifyItemRight.map(progressWidget).toList(),
               ),
             ),
           ),
@@ -1292,9 +1290,11 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                           widget.bottomControl ??
                           BottomControl(
                             controller: plPlayerController,
-                            buildBottomControl: () =>
-                                buildBottomControl(maxWidth > maxHeight),
-                            maxWidth: maxWidth,
+                            buildBottomControl: (bottomMaxWidth) =>
+                                buildBottomControl(
+                                  maxWidth > maxHeight,
+                                  bottomMaxWidth,
+                                ),
                           ),
                     ),
                   ],
@@ -1472,10 +1472,13 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                         right: 0,
                         bottom: 0.75,
                         child: IgnorePointer(
-                          child: CustomPaint(
-                            size: const Size(double.infinity, 3.5),
-                            painter: SegmentProgressBar(
-                              segmentColors: plPlayerController.segmentList,
+                          child: RepaintBoundary(
+                            child: CustomPaint(
+                              key: const Key('segmentList'),
+                              size: const Size(double.infinity, 3.5),
+                              painter: SegmentProgressBar(
+                                segmentColors: plPlayerController.segmentList,
+                              ),
                             ),
                           ),
                         ),
@@ -1487,10 +1490,13 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                         right: 0,
                         bottom: 0.75,
                         child: IgnorePointer(
-                          child: CustomPaint(
-                            size: const Size(double.infinity, 3.5),
-                            painter: SegmentProgressBar(
-                              segmentColors: plPlayerController.viewPointList,
+                          child: RepaintBoundary(
+                            child: CustomPaint(
+                              key: const Key('viewPointList'),
+                              size: const Size(double.infinity, 3.5),
+                              painter: SegmentProgressBar(
+                                segmentColors: plPlayerController.viewPointList,
+                              ),
                             ),
                           ),
                         ),
@@ -1850,6 +1856,10 @@ Widget buildSeekPreviewWidget(
       }
 
       VideoShotData data = plPlayerController.videoShot!['data'];
+
+      if (data.index.isNullOrEmpty) {
+        return const SizedBox.shrink();
+      }
 
       try {
         double scale =

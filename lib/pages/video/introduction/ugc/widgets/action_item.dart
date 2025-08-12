@@ -49,13 +49,15 @@ class ActionItem extends StatelessWidget {
         clipBehavior: Clip.none,
         alignment: Alignment.center,
         children: [
-          AnimatedBuilder(
-            animation: animation!,
-            builder: (context, child) => CustomPaint(
-              size: const Size.square(28),
-              painter: _ArcPainter(
-                color: primary,
-                sweepAngle: animation!.value,
+          RepaintBoundary(
+            child: AnimatedBuilder(
+              animation: animation!,
+              builder: (context, child) => CustomPaint(
+                size: const Size.square(28),
+                painter: _ArcPainter(
+                  color: primary,
+                  sweepAngle: animation!.value,
+                ),
               ),
             ),
           ),
