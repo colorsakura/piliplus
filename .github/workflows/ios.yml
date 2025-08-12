@@ -1,6 +1,14 @@
 name: Build for iOS
 
 on:
+  pull_request:
+        types:
+          - opened
+          - synchronize
+          - reopened
+          - ready_for_review
+        paths-ignore:
+          - '**.md'
   workflow_dispatch:
     inputs:
       branch:
