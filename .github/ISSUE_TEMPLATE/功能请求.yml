@@ -23,14 +23,6 @@ body:
       required: true
 
   - type: textarea
-    id: propose
-    attributes:
-      label: 目标
-      description: 请描述你希望通过这个功能实现的目标。
-    validations:
-      required: true
-
-  - type: textarea
     id: solution
     attributes:
       label: 解决方案
