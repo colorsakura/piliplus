@@ -38,6 +38,14 @@ body:
       required: true
 
   - type: textarea
+    id: actual
+    attributes:
+      label: 实际行为
+      description: 请描述实际的行为或结果。
+    validations:
+      required: true
+
+  - type: textarea
     id: log
     attributes:
       label: 错误日志
