@@ -1,40 +1,23 @@
 enum LiveQuality {
-  dolby,
-  super4K,
-  origin,
-  bluRay,
-  superHD,
-  smooth,
-  flunt,
-}
+  dolby(30000, '杜比'),
+  origin4K(25000, '4K 原画'),
+  super4K(20000, '4K'),
+  origin(10000, '原画'),
+  bluRay(400, '蓝光'),
+  superHD(250, '超清'),
+  smooth(150, '高清'),
+  flunt(80, '流畅');
 
-extension LiveQualityExt on LiveQuality {
-  static const List<int> _codeList = [
-    30000,
-    20000,
-    10000,
-    400,
-    250,
-    150,
-    80,
-  ];
-  int get code => _codeList[index];
+  final int code;
+  final String desc;
+  const LiveQuality(this.code, this.desc);
 
-  static LiveQuality? fromCode(int code) {
-    final index = _codeList.indexOf(code);
-    if (index != -1) {
-      return LiveQuality.values[index];
+  static LiveQuality? fromCode(int? code) {
+    for (var e in LiveQuality.values) {
+      if (e.code == code) {
+        return e;
+      }
     }
     return null;
   }
-
-  String get description => const [
-    '杜比',
-    '4K',
-    '原画',
-    '蓝光',
-    '超清',
-    '高清',
-    '流畅',
-  ][index];
 }

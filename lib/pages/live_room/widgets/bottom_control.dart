@@ -37,6 +37,7 @@ class BottomControl extends StatelessWidget {
         children: [
           PlayOrPauseButton(plPlayerController: plPlayerController),
           ComBtn(
+            height: 30,
             icon: const Icon(
               Icons.refresh,
               size: 18,
@@ -45,92 +46,81 @@ class BottomControl extends StatelessWidget {
             onTap: onRefresh,
           ),
           const Spacer(),
-          SizedBox(
-            width: 35,
-            height: 35,
-            child: IconButton(
-              tooltip: '弹幕屏蔽',
-              style: ButtonStyle(
-                padding: WidgetStateProperty.all(EdgeInsets.zero),
-              ),
-              onPressed: () {
-                if (liveRoomCtr.isLogin) {
-                  Get.toNamed(
-                    '/liveDmBlockPage',
-                    parameters: {
-                      'roomId': liveRoomCtr.roomId.toString(),
-                    },
-                  );
-                } else {
-                  SmartDialog.showToast('账号未登录');
-                }
-              },
-              icon: const Icon(
-                size: 18,
-                Icons.block,
-                color: Colors.white,
-              ),
+          ComBtn(
+            height: 30,
+            icon: const Icon(
+              size: 18,
+              Icons.block,
+              color: Colors.white,
             ),
+            onTap: () {
+              if (liveRoomCtr.isLogin) {
+                Get.toNamed(
+                  '/liveDmBlockPage',
+                  parameters: {
+                    'roomId': liveRoomCtr.roomId.toString(),
+                  },
+                );
+              } else {
+                SmartDialog.showToast('账号未登录');
+              }
+            },
           ),
-          const SizedBox(width: 10),
+          const SizedBox(width: 3),
           Obx(
             () {
               final enableShowDanmaku =
                   plPlayerController.enableShowDanmaku.value;
-              return SizedBox(
-                width: 35,
-                height: 35,
-                child: IconButton(
-                  tooltip: '弹幕开关',
-                  style: ButtonStyle(
-                    padding: WidgetStateProperty.all(EdgeInsets.zero),
-                  ),
-                  onPressed: () {
-                    final newVal = !enableShowDanmaku;
-                    plPlayerController.enableShowDanmaku.value = newVal;
-                    if (!plPlayerController.tempPlayerConf) {
-                      GStorage.setting.put(
-                        SettingBoxKey.enableShowDanmaku,
-                        newVal,
-                      );
-                    }
-                  },
-                  icon: Icon(
-                    size: 18,
-                    enableShowDanmaku
-                        ? Icons.subtitles_outlined
-                        : Icons.subtitles_off_outlined,
-                    color: Colors.white,
-                  ),
-                ),
+              return ComBtn(
+                icon: enableShowDanmaku
+                    ? const Icon(
+                        size: 18,
+                        Icons.subtitles_outlined,
+                        color: Colors.white,
+                      )
+                    : const Icon(
+                        size: 18,
+                        Icons.subtitles_off_outlined,
+                        color: Colors.white,
+                      ),
+                onTap: () {
+                  final newVal = !enableShowDanmaku;
+                  plPlayerController.enableShowDanmaku.value = newVal;
+                  if (!plPlayerController.tempPlayerConf) {
+                    GStorage.setting.put(
+                      SettingBoxKey.enableShowDanmaku,
+                      newVal,
+                    );
+                  }
+                },
               );
             },
           ),
           Obx(
-            () => Container(
-              height: 30,
-              margin: const EdgeInsets.symmetric(horizontal: 10),
-              alignment: Alignment.center,
-              child: PopupMenuButton<BoxFit>(
-                initialValue: plPlayerController.videoFit.value,
-                color: Colors.black.withValues(alpha: 0.8),
-                itemBuilder: (BuildContext context) {
-                  return BoxFit.values.map((BoxFit boxFit) {
-                    return PopupMenuItem<BoxFit>(
-                      height: 35,
-                      padding: const EdgeInsets.only(left: 30),
-                      value: boxFit,
-                      onTap: () => plPlayerController.toggleVideoFit(boxFit),
-                      child: Text(
-                        boxFit.desc,
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 13,
+            () => PopupMenuButton<BoxFit>(
+              initialValue: plPlayerController.videoFit.value,
+              color: Colors.black.withValues(alpha: 0.8),
+              itemBuilder: (context) {
+                return BoxFit.values
+                    .map(
+                      (BoxFit boxFit) => PopupMenuItem<BoxFit>(
+                        height: 35,
+                        padding: const EdgeInsets.only(left: 30),
+                        value: boxFit,
+                        onTap: () => plPlayerController.toggleVideoFit(boxFit),
+                        child: Text(
+                          boxFit.desc,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 13,
+                          ),
                         ),
                       ),
-                    );
-                  }).toList();
-                },
+                    )
+                    .toList();
+              },
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
                 child: Text(
                   plPlayerController.videoFit.value.desc,
                   style: const TextStyle(color: Colors.white, fontSize: 13),
@@ -138,46 +128,54 @@ class BottomControl extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(width: 10),
           Obx(
-            () => SizedBox(
-              width: 30,
-              child: PopupMenuButton<int>(
-                padding: EdgeInsets.zero,
-                initialValue: liveRoomCtr.currentQn,
-                color: Colors.black.withValues(alpha: 0.8),
+            () => PopupMenuButton<int>(
+              padding: EdgeInsets.zero,
+              initialValue: liveRoomCtr.currentQn,
+              color: Colors.black.withValues(alpha: 0.8),
+              itemBuilder: (context) {
+                return liveRoomCtr.acceptQnList
+                    .map(
+                      (e) => PopupMenuItem<int>(
+                        height: 35,
+                        padding: const EdgeInsets.only(left: 30),
+                        value: e.code,
+                        onTap: () => liveRoomCtr.changeQn(e.code),
+                        child: Text(
+                          e.desc,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 13,
+                          ),
+                        ),
+                      ),
+                    )
+                    .toList();
+              },
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
                 child: Text(
                   liveRoomCtr.currentQnDesc.value,
                   style: const TextStyle(color: Colors.white, fontSize: 13),
                 ),
-                itemBuilder: (BuildContext context) {
-                  return liveRoomCtr.acceptQnList.map((e) {
-                    return PopupMenuItem<int>(
-                      height: 35,
-                      padding: const EdgeInsets.only(left: 30),
-                      value: e.code,
-                      onTap: () => liveRoomCtr.changeQn(e.code),
-                      child: Text(
-                        e.desc,
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 13,
-                        ),
-                      ),
-                    );
-                  }).toList();
-                },
               ),
             ),
           ),
-          const SizedBox(width: 10),
           ComBtn(
-            icon: const Icon(
-              Icons.fullscreen,
-              semanticLabel: '全屏切换',
-              size: 20,
-              color: Colors.white,
-            ),
+            height: 30,
+            icon: plPlayerController.isFullScreen.value
+                ? const Icon(
+                    Icons.fullscreen_exit,
+                    semanticLabel: '退出全屏',
+                    size: 24,
+                    color: Colors.white,
+                  )
+                : const Icon(
+                    Icons.fullscreen,
+                    semanticLabel: '全屏',
+                    size: 24,
+                    color: Colors.white,
+                  ),
             onTap: () => plPlayerController.triggerFullScreen(
               status: !plPlayerController.isFullScreen.value,
             ),

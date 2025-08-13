@@ -144,18 +144,11 @@ class LiveRoomController extends GetxController {
       acceptQnList = item.acceptQn!.map((e) {
         return (
           code: e,
-          desc:
-              LiveQuality.values
-                  .firstWhereOrNull((element) => element.code == e)
-                  ?.description ??
-              e.toString(),
+          desc: LiveQuality.fromCode(e)?.desc ?? e.toString(),
         );
       }).toList();
       currentQnDesc.value =
-          LiveQuality.values
-              .firstWhereOrNull((element) => element.code == currentQn)
-              ?.description ??
-          currentQn.toString();
+          LiveQuality.fromCode(currentQn)?.desc ?? currentQn.toString();
       videoUrl = VideoUtils.getCdnUrl(item);
       await playerInit();
       isLoaded.value = true;
@@ -286,10 +279,7 @@ class LiveRoomController extends GetxController {
     }
     currentQn = qn;
     currentQnDesc.value =
-        LiveQuality.values
-            .firstWhereOrNull((element) => element.code == currentQn)
-            ?.description ??
-        currentQn.toString();
+        LiveQuality.fromCode(currentQn)?.desc ?? currentQn.toString();
     return queryLiveUrl();
   }
 

@@ -204,8 +204,7 @@ List<SettingsModel> get videoSettings => [
     settingsType: SettingsType.normal,
     title: '直播默认画质',
     leading: const Icon(Icons.video_settings_outlined),
-    getSubtitle: () =>
-        '当前画质：${LiveQualityExt.fromCode(Pref.liveQuality)!.description}',
+    getSubtitle: () => '当前画质：${LiveQuality.fromCode(Pref.liveQuality)?.desc}',
     onTap: (setState) async {
       int? result = await showDialog(
         context: Get.context!,
@@ -213,9 +212,7 @@ List<SettingsModel> get videoSettings => [
           return SelectDialog<int>(
             title: '直播默认画质',
             value: Pref.liveQuality,
-            values: LiveQuality.values
-                .map((e) => (e.code, e.description))
-                .toList(),
+            values: LiveQuality.values.map((e) => (e.code, e.desc)).toList(),
           );
         },
       );
@@ -230,17 +227,15 @@ List<SettingsModel> get videoSettings => [
     title: '蜂窝网络直播默认画质',
     leading: const Icon(Icons.video_settings_outlined),
     getSubtitle: () =>
-        '当前画质：${LiveQualityExt.fromCode(Pref.liveQualityCellular)!.description}',
+        '当前画质：${LiveQuality.fromCode(Pref.liveQualityCellular)?.desc}',
     onTap: (setState) async {
       int? result = await showDialog(
         context: Get.context!,
         builder: (context) {
           return SelectDialog<int>(
-            title: '直播默认画质',
+            title: '蜂窝网络直播默认画质',
             value: Pref.liveQualityCellular,
-            values: LiveQuality.values
-                .map((e) => (e.code, e.description))
-                .toList(),
+            values: LiveQuality.values.map((e) => (e.code, e.desc)).toList(),
           );
         },
       );

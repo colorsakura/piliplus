@@ -201,18 +201,18 @@ class HeaderControlState extends TripleState<HeaderControl> {
                       const SizedBox(width: 10),
                       Builder(
                         builder: (context) => PopupMenuButton(
-                          initialValue: SuperResolutionType
-                              .values[widget.controller.superResolutionType],
+                          initialValue:
+                              widget.controller.superResolutionType.value,
                           child: Padding(
                             padding: const EdgeInsets.all(4),
                             child: Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 Text(
-                                  SuperResolutionType
-                                      .values[widget
-                                          .controller
-                                          .superResolutionType]
+                                  widget
+                                      .controller
+                                      .superResolutionType
+                                      .value
                                       .title,
                                   strutStyle: const StrutStyle(
                                     leading: 0,
@@ -235,7 +235,7 @@ class HeaderControlState extends TripleState<HeaderControl> {
                             ),
                           ),
                           onSelected: (value) {
-                            widget.controller.setShader(value.index);
+                            widget.controller.setShader(value);
                             if (context.mounted) {
                               (context as Element).markNeedsBuild();
                             }

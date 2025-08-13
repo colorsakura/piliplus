@@ -121,15 +121,15 @@ class _WebDavSettingPageState extends State<WebDavSettingPage> {
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.save),
         onPressed: () async {
+          await GStorage.setting.putAll({
+            SettingBoxKey.webdavUri: _uriCtr.text,
+            SettingBoxKey.webdavUsername: _usernameCtr.text,
+            SettingBoxKey.webdavPassword: _passwordCtr.text,
+            SettingBoxKey.webdavDirectory: _directoryCtr.text,
+          });
           if (_uriCtr.text.isEmpty) {
-            SmartDialog.showToast('地址不能为空');
             return;
           }
-          final setting = GStorage.setting;
-          await setting.put(SettingBoxKey.webdavUri, _uriCtr.text);
-          await setting.put(SettingBoxKey.webdavUsername, _usernameCtr.text);
-          await setting.put(SettingBoxKey.webdavPassword, _passwordCtr.text);
-          await setting.put(SettingBoxKey.webdavDirectory, _directoryCtr.text);
           try {
             final res = await WebDav().init();
             if (res.first) {

@@ -9,6 +9,7 @@ import 'package:PiliPlus/http/video.dart';
 import 'package:PiliPlus/models/common/account_type.dart';
 import 'package:PiliPlus/models/common/audio_normalization.dart';
 import 'package:PiliPlus/models/common/sponsor_block/skip_type.dart';
+import 'package:PiliPlus/models/common/super_resolution_type.dart';
 import 'package:PiliPlus/models/common/video/video_type.dart';
 import 'package:PiliPlus/models/user/danmaku_rule.dart';
 import 'package:PiliPlus/models_new/video/video_shot/data.dart';
@@ -646,41 +647,43 @@ class PlPlayerController {
   }
 
   late final isAnim = _pgcType == 1 || _pgcType == 4;
-  late int superResolutionType = isAnim ? Pref.superResolutionType : 0;
-  Future<void> setShader([int? type, NativePlayer? pp]) async {
+  late final Rx<SuperResolutionType> superResolutionType =
+      (isAnim ? Pref.superResolutionType : SuperResolutionType.disable).obs;
+  Future<void> setShader([SuperResolutionType? type, NativePlayer? pp]) async {
     if (type == null) {
-      type ??= superResolutionType;
+      type = superResolutionType.value;
     } else {
-      superResolutionType = type;
+      superResolutionType.value = type;
       if (isAnim && !tempPlayerConf) {
-        GStorage.setting.put(SettingBoxKey.superResolutionType, type);
+        setting.put(SettingBoxKey.superResolutionType, type.index);
       }
     }
     pp ??= _videoPlayerController?.platform as NativePlayer;
     await pp.waitForPlayerInitialization;
     await pp.waitForVideoControllerInitializationIfAttached;
-    if (type == 1) {
-      await pp.command([
-        'change-list',
-        'glsl-shaders',
-        'set',
-        Utils.buildShadersAbsolutePath(
-          (await copyShadersToExternalDirectory())?.path ?? '',
-          Constants.mpvAnime4KShadersLite,
-        ),
-      ]);
-    } else if (type == 2) {
-      await pp.command([
-        'change-list',
-        'glsl-shaders',
-        'set',
-        Utils.buildShadersAbsolutePath(
-          (await copyShadersToExternalDirectory())?.path ?? '',
-          Constants.mpvAnime4KShaders,
-        ),
-      ]);
-    } else {
-      await pp.command(['change-list', 'glsl-shaders', 'clr', '']);
+    switch (type) {
+      case SuperResolutionType.disable:
+        return pp.command(['change-list', 'glsl-shaders', 'clr', '']);
+      case SuperResolutionType.efficiency:
+        return pp.command([
+          'change-list',
+          'glsl-shaders',
+          'set',
+          Utils.buildShadersAbsolutePath(
+            (await copyShadersToExternalDirectory())?.path ?? '',
+            Constants.mpvAnime4KShadersLite,
+          ),
+        ]);
+      case SuperResolutionType.quality:
+        return pp.command([
+          'change-list',
+          'glsl-shaders',
+          'set',
+          Utils.buildShadersAbsolutePath(
+            (await copyShadersToExternalDirectory())?.path ?? '',
+            Constants.mpvAnime4KShaders,
+          ),
+        ]);
     }
   }
 
@@ -711,7 +714,7 @@ class PlPlayerController {
     var pp = player.platform as NativePlayer;
     if (_videoPlayerController == null) {
       if (isAnim) {
-        setShader(superResolutionType, pp);
+        setShader(superResolutionType.value, pp);
       }
       String audioNormalization = Pref.audioNormalization;
       audioNormalization = switch (audioNormalization) {
@@ -1500,29 +1503,31 @@ class PlPlayerController {
   }
 
   void putDanmakuSettings() {
-    setting
-      ..put(SettingBoxKey.danmakuWeight, danmakuWeight)
-      ..put(SettingBoxKey.danmakuBlockType, blockTypes.toList())
-      ..put(SettingBoxKey.danmakuShowArea, showArea)
-      ..put(SettingBoxKey.danmakuOpacity, danmakuOpacity)
-      ..put(SettingBoxKey.danmakuFontScale, danmakuFontScale)
-      ..put(SettingBoxKey.danmakuFontScaleFS, danmakuFontScaleFS)
-      ..put(SettingBoxKey.danmakuDuration, danmakuDuration)
-      ..put(SettingBoxKey.danmakuStaticDuration, danmakuStaticDuration)
-      ..put(SettingBoxKey.strokeWidth, strokeWidth)
-      ..put(SettingBoxKey.fontWeight, fontWeight)
-      ..put(SettingBoxKey.danmakuLineHeight, danmakuLineHeight);
+    setting.putAll({
+      SettingBoxKey.danmakuWeight: danmakuWeight,
+      SettingBoxKey.danmakuBlockType: blockTypes.toList(),
+      SettingBoxKey.danmakuShowArea: showArea,
+      SettingBoxKey.danmakuOpacity: danmakuOpacity,
+      SettingBoxKey.danmakuFontScale: danmakuFontScale,
+      SettingBoxKey.danmakuFontScaleFS: danmakuFontScaleFS,
+      SettingBoxKey.danmakuDuration: danmakuDuration,
+      SettingBoxKey.danmakuStaticDuration: danmakuStaticDuration,
+      SettingBoxKey.strokeWidth: strokeWidth,
+      SettingBoxKey.fontWeight: fontWeight,
+      SettingBoxKey.danmakuLineHeight: danmakuLineHeight,
+    });
   }
 
   void putSubtitleSettings() {
-    setting
-      ..put(SettingBoxKey.subtitleFontScale, subtitleFontScale)
-      ..put(SettingBoxKey.subtitleFontScaleFS, subtitleFontScaleFS)
-      ..put(SettingBoxKey.subtitlePaddingH, subtitlePaddingH)
-      ..put(SettingBoxKey.subtitlePaddingB, subtitlePaddingB)
-      ..put(SettingBoxKey.subtitleBgOpaticy, subtitleBgOpaticy)
-      ..put(SettingBoxKey.subtitleStrokeWidth, subtitleStrokeWidth)
-      ..put(SettingBoxKey.subtitleFontWeight, subtitleFontWeight);
+    setting.putAll({
+      SettingBoxKey.subtitleFontScale: subtitleFontScale,
+      SettingBoxKey.subtitleFontScaleFS: subtitleFontScaleFS,
+      SettingBoxKey.subtitlePaddingH: subtitlePaddingH,
+      SettingBoxKey.subtitlePaddingB: subtitlePaddingB,
+      SettingBoxKey.subtitleBgOpaticy: subtitleBgOpaticy,
+      SettingBoxKey.subtitleStrokeWidth: subtitleStrokeWidth,
+      SettingBoxKey.subtitleFontWeight: subtitleFontWeight,
+    });
   }
 
   Future<void> dispose() async {

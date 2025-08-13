@@ -266,49 +266,43 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
     Widget progressWidget(
       BottomControlType bottomControl,
     ) => switch (bottomControl) {
-      /// 上一集
-      BottomControlType.pre => Container(
-        width: widgetWidth,
-        height: 30,
-        alignment: Alignment.center,
-        child: ComBtn(
-          icon: const Icon(
-            Icons.skip_previous,
-            semanticLabel: '上一集',
-            size: 22,
-            color: Colors.white,
-          ),
-          onTap: () {
-            if (!introController.prevPlay()) {
-              SmartDialog.showToast('已经是第一集了');
-            }
-          },
-        ),
-      ),
-
       /// 播放暂停
       BottomControlType.playOrPause => PlayOrPauseButton(
         plPlayerController: plPlayerController,
       ),
 
-      /// 下一集
-      BottomControlType.next => Container(
+      /// 上一集
+      BottomControlType.pre => ComBtn(
         width: widgetWidth,
         height: 30,
-        alignment: Alignment.center,
-        child: ComBtn(
-          icon: const Icon(
-            Icons.skip_next,
-            semanticLabel: '下一集',
-            size: 22,
-            color: Colors.white,
-          ),
-          onTap: () {
-            if (!introController.nextPlay()) {
-              SmartDialog.showToast('已经是最后一集了');
-            }
-          },
+        icon: const Icon(
+          Icons.skip_previous,
+          semanticLabel: '上一集',
+          size: 22,
+          color: Colors.white,
         ),
+        onTap: () {
+          if (!introController.prevPlay()) {
+            SmartDialog.showToast('已经是第一集了');
+          }
+        },
+      ),
+
+      /// 下一集
+      BottomControlType.next => ComBtn(
+        width: widgetWidth,
+        height: 30,
+        icon: const Icon(
+          Icons.skip_next,
+          semanticLabel: '下一集',
+          size: 22,
+          color: Colors.white,
+        ),
+        onTap: () {
+          if (!introController.nextPlay()) {
+            SmartDialog.showToast('已经是最后一集了');
+          }
+        },
       ),
 
       /// 时间进度
@@ -317,8 +311,8 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           // 播放时间
-          Obx(() {
-            return Text(
+          Obx(
+            () => Text(
               DurationUtil.formatDuration(
                 plPlayerController.positionSeconds.value,
               ),
@@ -328,8 +322,8 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                 height: 1.4,
                 fontFeatures: [FontFeature.tabularFigures()],
               ),
-            );
-          }),
+            ),
+          ),
           Obx(
             () => Text(
               DurationUtil.formatDuration(
@@ -350,72 +344,63 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
       BottomControlType.dmChart => Obx(
         () => plPlayerController.dmTrend.isEmpty
             ? const SizedBox.shrink()
-            : Container(
+            : ComBtn(
                 width: widgetWidth,
                 height: 30,
-                alignment: Alignment.center,
-                child: ComBtn(
-                  icon: plPlayerController.showDmTreandChart.value
-                      ? const Icon(
-                          Icons.show_chart,
-                          size: 22,
-                          color: Colors.white,
-                        )
-                      : const Stack(
-                          clipBehavior: Clip.none,
-                          alignment: Alignment.center,
-                          children: [
-                            Icon(
-                              Icons.show_chart,
-                              size: 22,
-                              color: Colors.white,
-                            ),
-                            Icon(
-                              Icons.hide_source,
-                              size: 22,
-                              color: Colors.white,
-                            ),
-                          ],
-                        ),
-                  onTap: () => plPlayerController.showDmTreandChart.value =
-                      !plPlayerController.showDmTreandChart.value,
-                ),
+                icon: plPlayerController.showDmTreandChart.value
+                    ? const Icon(
+                        Icons.show_chart,
+                        size: 22,
+                        color: Colors.white,
+                      )
+                    : const Stack(
+                        clipBehavior: Clip.none,
+                        alignment: Alignment.center,
+                        children: [
+                          Icon(
+                            Icons.show_chart,
+                            size: 22,
+                            color: Colors.white,
+                          ),
+                          Icon(
+                            Icons.hide_source,
+                            size: 22,
+                            color: Colors.white,
+                          ),
+                        ],
+                      ),
+                onTap: () => plPlayerController.showDmTreandChart.value =
+                    !plPlayerController.showDmTreandChart.value,
               ),
       ),
 
       /// 超分辨率
-      BottomControlType.superResolution => Container(
-        height: 30,
-        margin: const EdgeInsets.symmetric(horizontal: 10),
-        alignment: Alignment.center,
-        child: PopupMenuButton<SuperResolutionType>(
-          initialValue: SuperResolutionType
-              .values[plPlayerController.superResolutionType],
+      BottomControlType.superResolution => Obx(
+        () => PopupMenuButton<SuperResolutionType>(
+          initialValue: plPlayerController.superResolutionType.value,
           color: Colors.black.withValues(alpha: 0.8),
-          itemBuilder: (BuildContext context) {
-            return SuperResolutionType.values.map((
-              SuperResolutionType type,
-            ) {
-              return PopupMenuItem<SuperResolutionType>(
-                height: 35,
-                padding: const EdgeInsets.only(left: 30),
-                value: type,
-                onTap: () => plPlayerController.setShader(type.index),
-                child: Text(
-                  type.title,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 13,
+          itemBuilder: (context) {
+            return SuperResolutionType.values
+                .map(
+                  (type) => PopupMenuItem<SuperResolutionType>(
+                    height: 35,
+                    padding: const EdgeInsets.only(left: 30),
+                    value: type,
+                    onTap: () => plPlayerController.setShader(type),
+                    child: Text(
+                      type.title,
+                      style: const TextStyle(color: Colors.white, fontSize: 13),
+                    ),
                   ),
-                ),
-              );
-            }).toList();
+                )
+                .toList();
           },
-          child: Text(
-            SuperResolutionType
-                .values[plPlayerController.superResolutionType]
-                .title,
-            style: const TextStyle(color: Colors.white, fontSize: 13),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: Text(
+              plPlayerController.superResolutionType.value.title,
+              style: const TextStyle(color: Colors.white, fontSize: 13),
+            ),
           ),
         ),
       ),
@@ -424,110 +409,105 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
       BottomControlType.viewPoints => Obx(
         () => plPlayerController.viewPointList.isEmpty
             ? const SizedBox.shrink()
-            : Container(
+            : ComBtn(
                 width: widgetWidth,
                 height: 30,
-                alignment: Alignment.center,
-                child: ComBtn(
-                  icon: Transform.rotate(
-                    angle: pi / 2,
-                    child: const Icon(
-                      MdiIcons.viewHeadline,
-                      semanticLabel: '分段信息',
-                      size: 22,
-                      color: Colors.white,
-                    ),
+                icon: Transform.rotate(
+                  angle: pi / 2,
+                  child: const Icon(
+                    MdiIcons.viewHeadline,
+                    semanticLabel: '分段信息',
+                    size: 22,
+                    color: Colors.white,
                   ),
-                  onTap: widget.showViewPoints,
-                  onLongPress: () {
-                    Feedback.forLongPress(context);
-                    plPlayerController.showVP.value =
-                        !plPlayerController.showVP.value;
-                  },
                 ),
+                onTap: widget.showViewPoints,
+                onLongPress: () {
+                  Feedback.forLongPress(context);
+                  plPlayerController.showVP.value =
+                      !plPlayerController.showVP.value;
+                },
               ),
       ),
 
       /// 选集
-      BottomControlType.episode => Container(
+      BottomControlType.episode => ComBtn(
         width: widgetWidth,
         height: 30,
-        alignment: Alignment.center,
-        child: ComBtn(
-          icon: const Icon(
-            Icons.list,
-            semanticLabel: '选集',
-            size: 22,
-            color: Colors.white,
-          ),
-          onTap: () {
-            // part -> playAll -> season(pgc)
-            if (isPlayAll && !isPart) {
-              widget.showEpisodes?.call();
-              return;
-            }
-            int? index;
-            int currentCid = plPlayerController.cid;
-            String bvid = plPlayerController.bvid;
-            List episodes = [];
-            if (isSeason) {
-              final List<SectionItem> sections =
-                  videoDetail.ugcSeason!.sections!;
-              for (int i = 0; i < sections.length; i++) {
-                final List<EpisodeItem> episodesList = sections[i].episodes!;
-                for (int j = 0; j < episodesList.length; j++) {
-                  if (episodesList[j].cid == plPlayerController.cid) {
-                    index = i;
-                    episodes = episodesList;
-                    break;
-                  }
+        icon: const Icon(
+          Icons.list,
+          semanticLabel: '选集',
+          size: 22,
+          color: Colors.white,
+        ),
+        onTap: () {
+          // part -> playAll -> season(pgc)
+          if (isPlayAll && !isPart) {
+            widget.showEpisodes?.call();
+            return;
+          }
+          int? index;
+          int currentCid = plPlayerController.cid;
+          String bvid = plPlayerController.bvid;
+          List episodes = [];
+          if (isSeason) {
+            final List<SectionItem> sections = videoDetail.ugcSeason!.sections!;
+            for (int i = 0; i < sections.length; i++) {
+              final List<EpisodeItem> episodesList = sections[i].episodes!;
+              for (int j = 0; j < episodesList.length; j++) {
+                if (episodesList[j].cid == plPlayerController.cid) {
+                  index = i;
+                  episodes = episodesList;
+                  break;
                 }
               }
-            } else if (isPart) {
-              episodes = videoDetail.pages!;
-            } else if (isPgc) {
-              episodes =
-                  (introController as PgcIntroController).pgcItem.episodes!;
             }
-            widget.showEpisodes?.call(
-              index,
-              isSeason ? videoDetail.ugcSeason! : null,
-              isSeason ? null : episodes,
-              bvid,
-              IdUtils.bv2av(bvid),
-              isSeason && isPart
-                  ? widget.videoDetailController?.seasonCid ?? currentCid
-                  : currentCid,
-            );
-          },
-        ),
+          } else if (isPart) {
+            episodes = videoDetail.pages!;
+          } else if (isPgc) {
+            episodes =
+                (introController as PgcIntroController).pgcItem.episodes!;
+          }
+          widget.showEpisodes?.call(
+            index,
+            isSeason ? videoDetail.ugcSeason! : null,
+            isSeason ? null : episodes,
+            bvid,
+            IdUtils.bv2av(bvid),
+            isSeason && isPart
+                ? widget.videoDetailController?.seasonCid ?? currentCid
+                : currentCid,
+          );
+        },
       ),
 
       /// 画面比例
-      BottomControlType.fit => Container(
-        height: 30,
-        margin: const EdgeInsets.symmetric(horizontal: 10),
-        alignment: Alignment.center,
-        child: PopupMenuButton<BoxFit>(
+      BottomControlType.fit => Obx(
+        () => PopupMenuButton<BoxFit>(
           initialValue: plPlayerController.videoFit.value,
           color: Colors.black.withValues(alpha: 0.8),
-          itemBuilder: (BuildContext context) {
-            return BoxFit.values.map((BoxFit boxFit) {
-              return PopupMenuItem<BoxFit>(
-                height: 35,
-                padding: const EdgeInsets.only(left: 30),
-                value: boxFit,
-                onTap: () => plPlayerController.toggleVideoFit(boxFit),
-                child: Text(
-                  boxFit.desc,
-                  style: const TextStyle(color: Colors.white, fontSize: 13),
-                ),
-              );
-            }).toList();
+          itemBuilder: (context) {
+            return BoxFit.values
+                .map(
+                  (BoxFit boxFit) => PopupMenuItem<BoxFit>(
+                    height: 35,
+                    padding: const EdgeInsets.only(left: 30),
+                    value: boxFit,
+                    onTap: () => plPlayerController.toggleVideoFit(boxFit),
+                    child: Text(
+                      boxFit.desc,
+                      style: const TextStyle(color: Colors.white, fontSize: 13),
+                    ),
+                  ),
+                )
+                .toList();
           },
-          child: Text(
-            plPlayerController.videoFit.value.desc,
-            style: const TextStyle(color: Colors.white, fontSize: 13),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: Text(
+              plPlayerController.videoFit.value.desc,
+              style: const TextStyle(color: Colors.white, fontSize: 13),
+            ),
           ),
         ),
       ),
@@ -536,83 +516,79 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
       BottomControlType.subtitle => Obx(
         () => widget.videoDetailController?.subtitles.isEmpty == true
             ? const SizedBox.shrink()
-            : SizedBox(
-                width: widgetWidth,
-                height: 30,
-                child: PopupMenuButton<int>(
-                  initialValue: widget
-                      .videoDetailController!
-                      .vttSubtitlesIndex
-                      .value
-                      .clamp(0, widget.videoDetailController!.subtitles.length),
-                  color: Colors.black.withValues(alpha: 0.8),
-                  itemBuilder: (BuildContext context) {
-                    return [
-                      PopupMenuItem<int>(
-                        value: 0,
-                        onTap: () =>
-                            widget.videoDetailController!.setSubtitle(0),
-                        child: const Text(
-                          "关闭字幕",
-                          style: TextStyle(color: Colors.white),
-                        ),
+            : PopupMenuButton<int>(
+                initialValue: widget
+                    .videoDetailController!
+                    .vttSubtitlesIndex
+                    .value
+                    .clamp(0, widget.videoDetailController!.subtitles.length),
+                color: Colors.black.withValues(alpha: 0.8),
+                itemBuilder: (context) {
+                  return [
+                    PopupMenuItem<int>(
+                      value: 0,
+                      onTap: () => widget.videoDetailController!.setSubtitle(0),
+                      child: const Text(
+                        "关闭字幕",
+                        style: TextStyle(color: Colors.white),
                       ),
-                      ...widget.videoDetailController!.subtitles.indexed.map((
-                        e,
-                      ) {
-                        return PopupMenuItem<int>(
-                          value: e.$1 + 1,
-                          onTap: () => widget.videoDetailController!
-                              .setSubtitle(e.$1 + 1),
-                          child: Text(
-                            "${e.$2.lanDoc}",
-                            style: const TextStyle(color: Colors.white),
-                          ),
-                        );
-                      }),
-                    ];
-                  },
-                  child: Container(
-                    width: 35,
-                    height: 30,
-                    alignment: Alignment.center,
-                    child: Icon(
-                      widget.videoDetailController!.vttSubtitlesIndex.value == 0
-                          ? Icons.closed_caption_off_outlined
-                          : Icons.closed_caption_off_rounded,
-                      size: 22,
-                      color: Colors.white,
-                      semanticLabel: '字幕',
                     ),
-                  ),
+                    ...widget.videoDetailController!.subtitles.indexed.map((e) {
+                      return PopupMenuItem<int>(
+                        value: e.$1 + 1,
+                        onTap: () =>
+                            widget.videoDetailController!.setSubtitle(e.$1 + 1),
+                        child: Text(
+                          "${e.$2.lanDoc}",
+                          style: const TextStyle(color: Colors.white),
+                        ),
+                      );
+                    }),
+                  ];
+                },
+                child: SizedBox(
+                  width: widgetWidth,
+                  height: 30,
+                  child:
+                      widget.videoDetailController!.vttSubtitlesIndex.value == 0
+                      ? const Icon(
+                          Icons.closed_caption_off_outlined,
+                          size: 22,
+                          color: Colors.white,
+                        )
+                      : const Icon(
+                          Icons.closed_caption_off_rounded,
+                          size: 22,
+                          color: Colors.white,
+                        ),
                 ),
               ),
       ),
 
       /// 播放速度
       BottomControlType.speed => Obx(
-        () => Container(
-          height: 30,
-          margin: const EdgeInsets.symmetric(horizontal: 10),
-          alignment: Alignment.center,
-          child: PopupMenuButton<double>(
-            initialValue: plPlayerController.playbackSpeed,
-            color: Colors.black.withValues(alpha: 0.8),
-            itemBuilder: (BuildContext context) {
-              return plPlayerController.speedList.map((double speed) {
-                return PopupMenuItem<double>(
-                  height: 35,
-                  padding: const EdgeInsets.only(left: 30),
-                  value: speed,
-                  onTap: () => plPlayerController.setPlaybackSpeed(speed),
-                  child: Text(
-                    "${speed}X",
-                    style: const TextStyle(color: Colors.white, fontSize: 13),
-                    semanticsLabel: "$speed倍速",
+        () => PopupMenuButton<double>(
+          initialValue: plPlayerController.playbackSpeed,
+          color: Colors.black.withValues(alpha: 0.8),
+          itemBuilder: (context) {
+            return plPlayerController.speedList
+                .map(
+                  (double speed) => PopupMenuItem<double>(
+                    height: 35,
+                    padding: const EdgeInsets.only(left: 30),
+                    value: speed,
+                    onTap: () => plPlayerController.setPlaybackSpeed(speed),
+                    child: Text(
+                      "${speed}X",
+                      style: const TextStyle(color: Colors.white, fontSize: 13),
+                      semanticsLabel: "$speed倍速",
+                    ),
                   ),
-                );
-              }).toList();
-            },
+                )
+                .toList();
+          },
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
             child: Text(
               "${plPlayerController.playbackSpeed}X",
               style: const TextStyle(color: Colors.white, fontSize: 13),
@@ -623,20 +599,25 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
       ),
 
       /// 全屏
-      BottomControlType.fullscreen => SizedBox(
-        width: widgetWidth,
-        height: 30,
-        child: Obx(
-          () => ComBtn(
-            icon: Icon(
-              isFullScreen ? Icons.fullscreen_exit : Icons.fullscreen,
-              semanticLabel: isFullScreen ? '退出全屏' : '全屏',
-              size: 24,
-              color: Colors.white,
-            ),
-            onTap: () =>
-                plPlayerController.triggerFullScreen(status: !isFullScreen),
-          ),
+      BottomControlType.fullscreen => Obx(
+        () => ComBtn(
+          width: widgetWidth,
+          height: 30,
+          icon: isFullScreen
+              ? const Icon(
+                  Icons.fullscreen_exit,
+                  semanticLabel: '退出全屏',
+                  size: 24,
+                  color: Colors.white,
+                )
+              : const Icon(
+                  Icons.fullscreen,
+                  semanticLabel: '全屏',
+                  size: 24,
+                  color: Colors.white,
+                ),
+          onTap: () =>
+              plPlayerController.triggerFullScreen(status: !isFullScreen),
         ),
       ),
     };

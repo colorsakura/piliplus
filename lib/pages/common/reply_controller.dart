@@ -106,20 +106,21 @@ abstract class ReplyController<R> extends CommonListController<R, ReplyInfo> {
   }
 
   (bool inputDisable, String? hint) get replyHint {
+    bool inputDisable = false;
+    String? hint;
     try {
       if (subjectControl != null && subjectControl!.hasRootText()) {
-        if (subjectControl!.inputDisable) {
-          SmartDialog.showToast(subjectControl!.rootText);
-          return (true, null);
+        final rootText = subjectControl!.rootText;
+        inputDisable = subjectControl!.inputDisable;
+        if (inputDisable) {
+          SmartDialog.showToast(rootText);
         }
-        if ((subjectControl!.hasSwitcherType() &&
-                subjectControl!.switcherType != 1) ||
-            subjectControl!.rootText.contains('可发评论')) {
-          return (false, subjectControl!.rootText);
+        if (rootText.contains('可发') || rootText.contains('可见')) {
+          hint = rootText;
         }
       }
     } catch (_) {}
-    return (false, null);
+    return (inputDisable, hint);
   }
 
   void onReply(

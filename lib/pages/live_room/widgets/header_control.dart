@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:PiliPlus/plugin/pl_player/controller.dart';
+import 'package:PiliPlus/plugin/pl_player/widgets/common_btn.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:floating/floating.dart';
 import 'package:flutter/material.dart';
@@ -27,6 +28,39 @@ class LiveHeaderControl extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isFullScreen = plPlayerController.isFullScreen.value;
+    Widget child;
+    if (title != null) {
+      child = Text(
+        title!,
+        maxLines: 1,
+        style: const TextStyle(
+          fontSize: 15,
+          height: 1,
+          color: Colors.white,
+        ),
+      );
+      if (isFullScreen && upName != null) {
+        child = Column(
+          spacing: 5,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            child,
+            Text(
+              upName!,
+              maxLines: 1,
+              style: const TextStyle(
+                fontSize: 12,
+                height: 1,
+                color: Colors.white,
+              ),
+            ),
+          ],
+        );
+      }
+      child = Expanded(child: child);
+    } else {
+      child = const Spacer();
+    }
     return AppBar(
       backgroundColor: Colors.transparent,
       foregroundColor: Colors.white,
@@ -37,146 +71,74 @@ class LiveHeaderControl extends StatelessWidget {
         spacing: 10,
         children: [
           if (isFullScreen)
-            SizedBox(
-              width: 35,
-              height: 35,
-              child: IconButton(
-                tooltip: '返回',
-                icon: const Icon(
-                  FontAwesomeIcons.arrowLeft,
-                  size: 15,
-                ),
-                style: ButtonStyle(
-                  padding: WidgetStateProperty.all(EdgeInsets.zero),
-                ),
-                onPressed: () =>
-                    plPlayerController.triggerFullScreen(status: false),
-              ),
+            ComBtn(
+              icon: const Icon(FontAwesomeIcons.arrowLeft, size: 15),
+              onTap: () => plPlayerController.triggerFullScreen(status: false),
             ),
-          if (title != null)
-            Expanded(
-              child: Column(
-                spacing: 5,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    title!,
-                    maxLines: 1,
-                    style: const TextStyle(
-                      fontSize: 15,
-                      height: 1,
-                      color: Colors.white,
-                    ),
-                  ),
-                  if (isFullScreen && upName != null)
-                    Text(
-                      upName!,
-                      maxLines: 1,
-                      style: const TextStyle(
-                        fontSize: 12,
-                        height: 1,
-                        color: Colors.white,
-                      ),
-                    ),
-                ],
-              ),
-            )
-          else
-            const Spacer(),
-          SizedBox(
-            width: 35,
-            height: 35,
-            child: IconButton(
-              tooltip: '发弹幕',
-              style: ButtonStyle(
-                padding: WidgetStateProperty.all(EdgeInsets.zero),
-              ),
-              onPressed: onSendDanmaku,
-              icon: const Icon(
-                Icons.comment_outlined,
-                size: 18,
-                color: Colors.white,
-              ),
+          child,
+          ComBtn(
+            icon: const Icon(
+              size: 18,
+              Icons.comment_outlined,
+              color: Colors.white,
             ),
+            onTap: onSendDanmaku,
           ),
           Obx(
             () {
               final onlyPlayAudio = plPlayerController.onlyPlayAudio.value;
-              return SizedBox(
-                width: 35,
-                height: 35,
-                child: IconButton(
-                  onPressed: () {
-                    plPlayerController.onlyPlayAudio.value = !onlyPlayAudio;
-                    onPlayAudio();
-                  },
-                  style: ButtonStyle(
-                    padding: WidgetStateProperty.all(EdgeInsets.zero),
-                  ),
-                  icon: onlyPlayAudio
-                      ? const Icon(
-                          size: 18,
-                          MdiIcons.musicCircle,
-                          color: Colors.white,
-                        )
-                      : const Icon(
-                          size: 18,
-                          MdiIcons.musicCircleOutline,
-                          color: Colors.white,
-                        ),
-                ),
+              return ComBtn(
+                onTap: () {
+                  plPlayerController.onlyPlayAudio.value = !onlyPlayAudio;
+                  onPlayAudio();
+                },
+                icon: onlyPlayAudio
+                    ? const Icon(
+                        size: 18,
+                        MdiIcons.musicCircle,
+                        color: Colors.white,
+                      )
+                    : const Icon(
+                        size: 18,
+                        MdiIcons.musicCircleOutline,
+                        color: Colors.white,
+                      ),
               );
             },
           ),
           if (Platform.isAndroid)
-            SizedBox(
-              width: 35,
-              height: 35,
-              child: IconButton(
-                tooltip: '画中画',
-                style: ButtonStyle(
-                  padding: WidgetStateProperty.all(EdgeInsets.zero),
-                ),
-                onPressed: () async {
-                  try {
-                    var floating = Floating();
-                    if ((await floating.isPipAvailable) == true) {
-                      plPlayerController.hiddenControls(false);
-                      floating.enable(
-                        plPlayerController.isVertical
-                            ? const EnableManual(
-                                aspectRatio: Rational.vertical(),
-                              )
-                            : const EnableManual(),
-                      );
-                    }
-                  } catch (_) {}
-                },
-                icon: const Icon(
-                  Icons.picture_in_picture_outlined,
-                  size: 18,
-                  color: Colors.white,
-                ),
-              ),
-            ),
-          SizedBox(
-            width: 35,
-            height: 35,
-            child: IconButton(
-              tooltip: '定时关闭',
-              style: ButtonStyle(
-                padding: WidgetStateProperty.all(EdgeInsets.zero),
-              ),
-              onPressed: () => PageUtils.scheduleExit(
-                context,
-                plPlayerController.isFullScreen.value,
-                true,
-              ),
+            ComBtn(
+              onTap: () async {
+                try {
+                  var floating = Floating();
+                  if ((await floating.isPipAvailable) == true) {
+                    plPlayerController.hiddenControls(false);
+                    floating.enable(
+                      plPlayerController.isVertical
+                          ? const EnableManual(
+                              aspectRatio: Rational.vertical(),
+                            )
+                          : const EnableManual(),
+                    );
+                  }
+                } catch (_) {}
+              },
               icon: const Icon(
                 size: 18,
-                Icons.schedule,
+                Icons.picture_in_picture_outlined,
                 color: Colors.white,
               ),
+            ),
+          ComBtn(
+            onTap: () => PageUtils.scheduleExit(
+              context,
+              plPlayerController.isFullScreen.value,
+              true,
+            ),
+            icon: const Icon(
+              size: 18,
+              Icons.schedule,
+              color: Colors.white,
             ),
           ),
         ],

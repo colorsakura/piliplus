@@ -110,7 +110,7 @@ class UserInfoCard extends StatelessWidget {
 
   List<Widget> _buildLeft(BuildContext context, ThemeData theme) => [
     Padding(
-      padding: const EdgeInsets.only(left: 20, right: 20, top: 5),
+      padding: const EdgeInsets.only(left: 20, right: 20),
       child: Wrap(
         spacing: 8,
         runSpacing: 8,
@@ -461,6 +461,7 @@ class UserInfoCard extends StatelessWidget {
           ),
         ],
       ),
+      const SizedBox(height: 5),
       ..._buildLeft(context, theme),
       if (card.prInfo?.content?.isNotEmpty == true) buildPrInfo(theme),
       const SizedBox(height: 5),

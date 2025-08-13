@@ -61,27 +61,28 @@ class _MemberVideoState extends State<MemberVideo>
   Widget build(BuildContext context) {
     super.build(context);
     final theme = Theme.of(context);
-    return Stack(
-      clipBehavior: Clip.none,
-      children: [
-        refreshIndicator(
-          onRefresh: _controller.onRefresh,
-          child: CustomScrollView(
-            physics: ReloadScrollPhysics(controller: _controller),
-            slivers: [
-              SliverPadding(
-                padding: EdgeInsets.only(
-                  bottom: MediaQuery.paddingOf(context).bottom + 80,
-                ),
-                sliver: Obx(
-                  () => _buildBody(theme, _controller.loadingState.value),
-                ),
-              ),
-            ],
+    Widget child = refreshIndicator(
+      onRefresh: _controller.onRefresh,
+      child: CustomScrollView(
+        physics: ReloadScrollPhysics(controller: _controller),
+        slivers: [
+          SliverPadding(
+            padding: EdgeInsets.only(
+              bottom: MediaQuery.paddingOf(context).bottom + 80,
+            ),
+            sliver: Obx(
+              () => _buildBody(theme, _controller.loadingState.value),
+            ),
           ),
-        ),
-        if (widget.type == ContributeType.video &&
-            _controller.fromViewAid?.isNotEmpty == true)
+        ],
+      ),
+    );
+    if (widget.type == ContributeType.video &&
+        _controller.fromViewAid?.isNotEmpty == true) {
+      return Stack(
+        clipBehavior: Clip.none,
+        children: [
+          child,
           Obx(
             () => _controller.isLocating.value != true
                 ? Positioned(
@@ -103,6 +104,7 @@ class _MemberVideoState extends State<MemberVideo>
                               ?.indexWhere((i) => i.param == fromViewAid);
                           if (locatedIndex == null || locatedIndex == -1) {
                             _controller
+                              ..reload = true
                               ..page = 0
                               ..loadingState.value = LoadingState.loading()
                               ..queryData();
@@ -120,8 +122,10 @@ class _MemberVideoState extends State<MemberVideo>
                   )
                 : const SizedBox.shrink(),
           ),
-      ],
-    );
+        ],
+      );
+    }
+    return child;
   }
 
   Widget _buildBody(

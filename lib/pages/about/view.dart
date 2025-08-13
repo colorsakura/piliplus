@@ -97,12 +97,11 @@ class _AboutPageState extends State<AboutPage> {
                 );
               }
             },
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(maxHeight: 150),
-              child: ExcludeSemantics(
-                child: Image.asset(
-                  'assets/images/logo/logo.png',
-                ),
+            child: ExcludeSemantics(
+              child: Image.asset(
+                width: 150,
+                height: 150,
+                'assets/images/logo/logo.png',
               ),
             ),
           ),

@@ -9,6 +9,7 @@ import 'package:PiliPlus/models/common/member/tab_type.dart';
 import 'package:PiliPlus/models/common/msg/msg_unread_type.dart';
 import 'package:PiliPlus/models/common/sponsor_block/segment_type.dart';
 import 'package:PiliPlus/models/common/sponsor_block/skip_type.dart';
+import 'package:PiliPlus/models/common/super_resolution_type.dart';
 import 'package:PiliPlus/models/common/theme/theme_type.dart';
 import 'package:PiliPlus/models/common/video/audio_quality.dart';
 import 'package:PiliPlus/models/common/video/cdn_type.dart';
@@ -22,6 +23,7 @@ import 'package:PiliPlus/plugin/pl_player/models/bottom_progress_behavior.dart';
 import 'package:PiliPlus/plugin/pl_player/models/fullscreen_mode.dart';
 import 'package:PiliPlus/plugin/pl_player/models/play_repeat.dart';
 import 'package:PiliPlus/utils/context_ext.dart';
+import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/global_data.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/storage_key.dart';
@@ -406,8 +408,15 @@ class Pref {
   static String get audioNormalization =>
       _setting.get(SettingBoxKey.audioNormalization, defaultValue: '0');
 
-  static int get superResolutionType =>
-      _setting.get(SettingBoxKey.superResolutionType, defaultValue: 0);
+  static SuperResolutionType get superResolutionType {
+    SuperResolutionType? superResolutionType;
+    final index = _setting.get(SettingBoxKey.superResolutionType);
+    if (index != null) {
+      superResolutionType = SuperResolutionType.values.getOrNull(index);
+    }
+    superResolutionType ??= SuperResolutionType.disable;
+    return superResolutionType;
+  }
 
   static bool get preInitPlayer =>
       _setting.get(SettingBoxKey.preInitPlayer, defaultValue: false);

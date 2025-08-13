@@ -25,7 +25,6 @@ class MemberController extends CommonDataController<SpaceData, SpaceData?>
   MemberController({required this.mid});
   int mid;
   String? username;
-  RxBool showUname = false.obs;
 
   AccountService accountService = Get.find<AccountService>();
 
@@ -131,7 +130,6 @@ class MemberController extends CommonDataController<SpaceData, SpaceData?>
       vsync: this,
       length: tabs.length,
     );
-    showUname.value = true;
     username = errMsg;
     loadingState.value = const Success(null);
     return true;

@@ -13,6 +13,7 @@ import 'package:PiliPlus/plugin/pl_player/controller.dart';
 import 'package:PiliPlus/plugin/pl_player/models/play_status.dart';
 import 'package:PiliPlus/plugin/pl_player/utils/fullscreen.dart';
 import 'package:PiliPlus/plugin/pl_player/view.dart';
+import 'package:PiliPlus/plugin/pl_player/widgets/common_btn.dart';
 import 'package:PiliPlus/services/service_locator.dart';
 import 'package:PiliPlus/utils/duration_util.dart';
 import 'package:PiliPlus/utils/extension.dart';
@@ -45,8 +46,6 @@ class _LiveRoomPageState extends State<LiveRoomPage>
 
   final GlobalKey chatKey = GlobalKey();
   final GlobalKey playerKey = GlobalKey();
-
-  final Color _color = const Color(0xFFEEEEEE);
 
   @override
   void initState() {
@@ -630,13 +629,14 @@ class _LiveRoomPageState extends State<LiveRoomPage>
       child: Padding(
         padding: const EdgeInsets.only(top: 5, bottom: 10),
         child: Row(
+          spacing: 6,
           children: [
             Obx(
               () {
                 final enableShowDanmaku =
                     plPlayerController.enableShowDanmaku.value;
-                return IconButton(
-                  onPressed: () {
+                return ComBtn(
+                  onTap: () {
                     final newVal = !enableShowDanmaku;
                     plPlayerController.enableShowDanmaku.value = newVal;
                     if (!plPlayerController.tempPlayerConf) {
@@ -646,19 +646,24 @@ class _LiveRoomPageState extends State<LiveRoomPage>
                       );
                     }
                   },
-                  icon: Icon(
-                    enableShowDanmaku
-                        ? Icons.subtitles_outlined
-                        : Icons.subtitles_off_outlined,
-                    color: _color,
-                  ),
+                  icon: enableShowDanmaku
+                      ? const Icon(
+                          size: 22,
+                          Icons.subtitles_outlined,
+                          color: Color(0xFFEEEEEE),
+                        )
+                      : const Icon(
+                          size: 22,
+                          Icons.subtitles_off_outlined,
+                          color: Color(0xFFEEEEEE),
+                        ),
                 );
               },
             ),
-            Expanded(
+            const Expanded(
               child: Text(
                 '发送弹幕',
-                style: TextStyle(color: _color),
+                style: TextStyle(color: Color(0xFFEEEEEE)),
               ),
             ),
             Builder(
@@ -675,9 +680,13 @@ class _LiveRoomPageState extends State<LiveRoomPage>
                         onTapDown: _liveRoomController.onLikeTapDown,
                         onTapUp: _liveRoomController.onLikeTapUp,
                         onTapCancel: _liveRoomController.onLikeTapUp,
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Icon(Icons.thumb_up_off_alt, color: _color),
+                        child: const SizedBox.square(
+                          dimension: 34,
+                          child: Icon(
+                            size: 22,
+                            color: Color(0xFFEEEEEE),
+                            Icons.thumb_up_off_alt,
+                          ),
                         ),
                       ),
                       Positioned(
@@ -715,9 +724,13 @@ class _LiveRoomPageState extends State<LiveRoomPage>
                 );
               },
             ),
-            IconButton(
-              onPressed: () => onSendDanmaku(true),
-              icon: Icon(Icons.emoji_emotions_outlined, color: _color),
+            ComBtn(
+              onTap: () => onSendDanmaku(true),
+              icon: const Icon(
+                size: 22,
+                color: Color(0xFFEEEEEE),
+                Icons.emoji_emotions_outlined,
+              ),
             ),
           ],
         ),
