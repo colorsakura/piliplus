@@ -49,8 +49,8 @@ class LiveController extends CommonListController {
   @override
   bool customHandleResponse(bool isRefresh, Success response) {
     if (isRefresh) {
-      if (areaIndex.value == 0) {
-        LiveIndexData data = response.response;
+      final res = response.response;
+      if (res case LiveIndexData data) {
         if (data.hasMore == 0) {
           isEnd = true;
         }
@@ -58,8 +58,7 @@ class LiveController extends CommonListController {
           first: data.followItem,
           second: data.areaItem,
         );
-      } else {
-        LiveSecondData data = response.response;
+      } else if (res case LiveSecondData data) {
         count = data.count;
         newTags = data.newTags;
         if (sortType != null) {
