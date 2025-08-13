@@ -99,12 +99,6 @@ class _DynamicSliverAppBarMediumState extends State<DynamicSliverAppBarMedium> {
   // to calculate dynamically the size for the sliver app bar
   double _height = 0;
 
-  @override
-  void initState() {
-    super.initState();
-    _updateHeight();
-  }
-
   void _updateHeight() {
     // Gets the new height and updates the sliver app bar. Needs to be called after the last frame has been rebuild
     // otherwise this will throw an error
@@ -120,26 +114,39 @@ class _DynamicSliverAppBarMediumState extends State<DynamicSliverAppBarMedium> {
   }
 
   Orientation? _orientation;
+  late Size size;
 
   @override
-  Widget build(BuildContext context) {
-    final orientation = MediaQuery.orientationOf(context);
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    size = MediaQuery.sizeOf(context);
+    final orientation = size.width > size.height
+        ? Orientation.landscape
+        : Orientation.portrait;
     if (orientation != _orientation) {
       _orientation = orientation;
       _height = 0;
       _updateHeight();
     }
+  }
 
+  @override
+  Widget build(BuildContext context) {
     //Needed to lay out the flexibleSpace the first time, so we can calculate its intrinsic height
     if (_height == 0) {
       return SliverToBoxAdapter(
-        child: SizedBox(
-          key: _childKey,
-          child: widget.flexibleSpace ?? const SizedBox(height: kToolbarHeight),
+        child: UnconstrainedBox(
+          alignment: Alignment.topLeft,
+          child: SizedBox(
+            key: _childKey,
+            width: size.width,
+            child: widget.flexibleSpace,
+          ),
         ),
       );
     }
 
+    final padding = MediaQuery.paddingOf(context).top;
     return SliverAppBar.medium(
       leading: widget.leading,
       automaticallyImplyLeading: widget.automaticallyImplyLeading,
@@ -159,7 +166,6 @@ class _DynamicSliverAppBarMediumState extends State<DynamicSliverAppBarMedium> {
       centerTitle: widget.centerTitle,
       excludeHeaderSemantics: widget.excludeHeaderSemantics,
       titleSpacing: widget.titleSpacing,
-      collapsedHeight: widget.collapsedHeight,
       floating: widget.floating,
       pinned: widget.pinned,
       snap: widget.snap,
@@ -167,8 +173,9 @@ class _DynamicSliverAppBarMediumState extends State<DynamicSliverAppBarMedium> {
       stretchTriggerOffset: widget.stretchTriggerOffset,
       onStretchTrigger: widget.onStretchTrigger,
       shape: widget.shape,
-      toolbarHeight: widget.toolbarHeight,
-      expandedHeight: _height - MediaQuery.paddingOf(context).top,
+      toolbarHeight: kToolbarHeight,
+      collapsedHeight: kToolbarHeight + padding + 1,
+      expandedHeight: _height - padding,
       leadingWidth: widget.leadingWidth,
       toolbarTextStyle: widget.toolbarTextStyle,
       titleTextStyle: widget.titleTextStyle,

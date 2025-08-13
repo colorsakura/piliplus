@@ -47,7 +47,6 @@ class MemberController extends CommonDataController<SpaceData, SpaceData?>
   final fromViewAid = Get.parameters['from_view_aid'];
 
   final key = GlobalKey<ExtendedNestedScrollViewState>();
-  int offset = 120;
 
   @override
   void onInit() {

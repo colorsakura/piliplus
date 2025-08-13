@@ -5,6 +5,7 @@ import 'package:PiliPlus/models_new/space/space/card.dart';
 import 'package:PiliPlus/models_new/space/space/images.dart';
 import 'package:PiliPlus/models_new/space/space/live.dart';
 import 'package:PiliPlus/utils/accounts.dart';
+import 'package:PiliPlus/utils/context_ext.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/image_util.dart';
 import 'package:PiliPlus/utils/num_util.dart';
@@ -12,12 +13,11 @@ import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:get/get.dart' hide ContextExtensionss;
 
 class UserInfoCard extends StatelessWidget {
   const UserInfoCard({
     super.key,
-    required this.isV,
     required this.isOwner,
     required this.card,
     required this.images,
@@ -27,7 +27,6 @@ class UserInfoCard extends StatelessWidget {
     this.silence,
   });
 
-  final bool isV;
   final bool isOwner;
   final int relation;
   final SpaceCard card;
@@ -39,7 +38,9 @@ class UserInfoCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return isV ? _buildV(context, theme) : _buildH(context, theme);
+    return context.isPortrait
+        ? _buildV(context, theme)
+        : _buildH(context, theme);
   }
 
   Widget _countWidget({
@@ -541,11 +542,8 @@ class UserInfoCard extends StatelessWidget {
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
       // _buildHeader(context),
-      SizedBox(
-        height: Get.mediaQuery.padding.top + 56,
-      ),
+      const SizedBox(height: 56),
       SafeArea(
-        top: false,
         bottom: false,
         child: Row(
           children: [

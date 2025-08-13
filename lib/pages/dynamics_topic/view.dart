@@ -42,6 +42,7 @@ class _DynTopicPageState extends State<DynTopicPage> {
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
+    final padding = MediaQuery.paddingOf(context);
     return Scaffold(
       resizeToAvoidBottomInset: false,
       floatingActionButton: FloatingActionButton.extended(
@@ -70,7 +71,13 @@ class _DynTopicPageState extends State<DynTopicPage> {
             controller: _controller.scrollController,
             physics: const AlwaysScrollableScrollPhysics(),
             slivers: [
-              Obx(() => _buildAppBar(theme, _controller.topState.value)),
+              Obx(
+                () => _buildAppBar(
+                  theme,
+                  padding.top,
+                  _controller.topState.value,
+                ),
+              ),
               Obx(() {
                 final allSortBy = _controller.topicSortByConf.value?.allSortBy;
                 if (allSortBy != null && allSortBy.isNotEmpty) {
@@ -133,9 +140,7 @@ class _DynTopicPageState extends State<DynTopicPage> {
                 return const SliverToBoxAdapter();
               }),
               SliverPadding(
-                padding: EdgeInsets.only(
-                  bottom: MediaQuery.paddingOf(context).bottom + 80,
-                ),
+                padding: EdgeInsets.only(bottom: padding.bottom + 80),
                 sliver: Obx(() => _buildBody(_controller.loadingState.value)),
               ),
             ],
@@ -145,15 +150,18 @@ class _DynTopicPageState extends State<DynTopicPage> {
     );
   }
 
-  Widget _buildAppBar(ThemeData theme, LoadingState<TopDetails?> topState) {
-    late final paddingTop = MediaQuery.paddingOf(context).top;
+  Widget _buildAppBar(
+    ThemeData theme,
+    double paddingTop,
+    LoadingState<TopDetails?> topState,
+  ) {
     return switch (topState) {
       Loading() => const SliverAppBar(),
       Success(:var response) when (topState.dataOrNull != null) =>
         DynamicSliverAppBarMedium(
           pinned: true,
-          callback: (value) => _controller.appbarOffset =
-              value - kToolbarHeight - paddingTop - 7,
+          callback: (value) =>
+              _controller.appbarOffset = value - kToolbarHeight - paddingTop,
           title: IgnorePointer(child: Text(response!.topicItem!.name)),
           flexibleSpace: Container(
             decoration: BoxDecoration(
