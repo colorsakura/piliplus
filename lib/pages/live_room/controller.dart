@@ -12,7 +12,6 @@ import 'package:PiliPlus/models_new/live/live_room_play_info/codec.dart';
 import 'package:PiliPlus/models_new/live/live_room_play_info/data.dart';
 import 'package:PiliPlus/plugin/pl_player/controller.dart';
 import 'package:PiliPlus/plugin/pl_player/models/data_source.dart';
-import 'package:PiliPlus/services/account_service.dart';
 import 'package:PiliPlus/services/service_locator.dart';
 import 'package:PiliPlus/tcp/live.dart';
 import 'package:PiliPlus/utils/accounts.dart';
@@ -71,8 +70,8 @@ class LiveRoomController extends GetxController {
   final RxBool isPortrait = false.obs;
   late List<({int code, String desc})> acceptQnList = [];
 
-  late final isLogin = accountService.isLogin.value;
-  AccountService accountService = Get.find<AccountService>();
+  late final bool isLogin;
+  late final int mid;
 
   String? videoUrl;
   bool? isPlaying;
@@ -81,9 +80,12 @@ class LiveRoomController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    final account = Accounts.heartbeat;
+    isLogin = account.isLogin;
+    mid = account.mid;
     queryLiveUrl();
     queryLiveInfoH5();
-    if (Accounts.heartbeat.isLogin && !Pref.historyPause) {
+    if (isLogin && !Pref.historyPause) {
       VideoHttp.roomEntryAction(roomId: roomId);
     }
   }
@@ -299,7 +301,7 @@ class LiveRoomController extends GetxController {
         LiveMessageStream(
             streamToken: info.token!,
             roomId: roomId,
-            uid: Accounts.main.mid,
+            uid: mid,
             servers: info.hostList!
                 .map((host) => 'wss://${host.host}:${host.wssPort}/sub')
                 .toList(),
@@ -328,7 +330,7 @@ class LiveRoomController extends GetxController {
                       extra['content'],
                       color: DmUtils.decimalToColor(extra['color']),
                       type: DmUtils.getPosition(extra['mode']),
-                      selfSend: isLogin && uid == accountService.mid,
+                      selfSend: isLogin && uid == mid,
                     ),
                   );
                   if (!isFullScreen && !disableAutoScroll.value) {
@@ -364,14 +366,14 @@ class LiveRoomController extends GetxController {
   }
 
   Future<void> onLike() async {
-    if (!Accounts.heartbeat.isLogin) {
+    if (!isLogin) {
       likeClickTime.value = 0;
       return;
     }
     var res = await LiveHttp.liveLikeReport(
       clickTime: likeClickTime.value,
       roomId: roomId,
-      uid: accountService.mid,
+      uid: mid,
       anchorId: roomInfoH5.value?.roomInfo?.uid,
     );
     if (res['status']) {
