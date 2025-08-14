@@ -41,15 +41,17 @@ class SliverWaterfallFlowDelegateWithMaxCrossAxisExtent
 
   @override
   int getCrossAxisCount(SliverConstraints constraints) {
-    if (crossAxisCount != null &&
-        constraints.crossAxisExtent == crossAxisExtent) {
+    final crossAxisExtent = constraints.crossAxisExtent;
+    if (crossAxisCount != null && this.crossAxisExtent == crossAxisExtent) {
       return crossAxisCount!;
     }
-    crossAxisExtent = constraints.crossAxisExtent;
-    crossAxisCount =
-        (constraints.crossAxisExtent / (maxCrossAxisExtent + crossAxisSpacing))
-            .ceil();
-    callback?.call(constraints.crossAxisExtent / crossAxisCount!);
+    this.crossAxisExtent = crossAxisExtent;
+    crossAxisCount = (crossAxisExtent / (maxCrossAxisExtent + crossAxisSpacing))
+        .ceil();
+    callback?.call(
+      (crossAxisExtent - ((crossAxisCount! - 1) * crossAxisSpacing)) /
+          crossAxisCount!,
+    );
     return crossAxisCount!;
   }
 

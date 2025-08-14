@@ -57,6 +57,9 @@ Widget videoSeasonWidget(
   }
 
   Widget buildCover() {
+    if (floor == 1) {
+      maxWidth -= 24;
+    }
     return Stack(
       clipBehavior: Clip.none,
       children: [
