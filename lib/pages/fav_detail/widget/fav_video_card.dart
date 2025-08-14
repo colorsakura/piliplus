@@ -59,7 +59,7 @@ class FavVideoCardH extends StatelessWidget {
 
                 ctr!.onViewFav(item, index);
               },
-        onLongPress: isSort
+        onLongPress: isSort || enableMultiSelect
             ? null
             : isOwner && !enableMultiSelect
             ? () {

@@ -191,9 +191,6 @@ class _HistoryPageState extends State<HistoryPage>
             case 'viewed':
               currCtr().onDelViewedHistory();
               break;
-            case 'multiple':
-              _historyController.baseCtr.enableMultiSelect.value = true;
-              break;
           }
         },
         itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
@@ -212,10 +209,6 @@ class _HistoryPageState extends State<HistoryPage>
           const PopupMenuItem<String>(
             value: 'viewed',
             child: Text('删除已看记录'),
-          ),
-          const PopupMenuItem<String>(
-            value: 'multiple',
-            child: Text('多选删除'),
           ),
         ],
       ),
