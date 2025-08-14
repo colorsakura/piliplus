@@ -1547,12 +1547,11 @@ class VideoDetailController extends GetxController
   }
 
   void updateMediaListHistory(int aid) {
-    final sortField = args['sortField'];
-    if (sortField != null) {
+    if (args['sortField'] != null) {
       VideoHttp.medialistHistory(
         desc: _mediaDesc ? 1 : 0,
         oid: aid,
-        upperMid: sortField,
+        upperMid: args['mediaId'],
       );
     }
   }

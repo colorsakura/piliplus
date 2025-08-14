@@ -23,7 +23,6 @@ import 'package:PiliPlus/models_new/video/video_note_list/data.dart';
 import 'package:PiliPlus/models_new/video/video_play_info/data.dart';
 import 'package:PiliPlus/models_new/video/video_relation/data.dart';
 import 'package:PiliPlus/utils/accounts.dart';
-import 'package:PiliPlus/utils/accounts/account.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/global_data.dart';
 import 'package:PiliPlus/utils/id_utils.dart';
@@ -677,18 +676,15 @@ class VideoHttp {
     required int desc,
     required dynamic oid,
     required dynamic upperMid,
-    Account? account,
   }) async {
-    account ??= Accounts.history;
     await Request().post(
       Api.mediaListHistory,
       queryParameters: {
         'desc': desc,
         'oid': oid,
         'upper_mid': upperMid,
-        'csrf': account.csrf,
+        'csrf': Accounts.heartbeat.csrf,
       },
-      options: Options(extra: {'account': account}),
     );
   }
 
