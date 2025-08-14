@@ -1,5 +1,5 @@
 import 'package:PiliPlus/common/widgets/scroll_physics.dart';
-import 'package:PiliPlus/models/common/search_type.dart';
+import 'package:PiliPlus/models/common/search/search_type.dart';
 import 'package:PiliPlus/pages/search/controller.dart';
 import 'package:PiliPlus/pages/search_panel/article/view.dart';
 import 'package:PiliPlus/pages/search_panel/live/view.dart';
@@ -44,8 +44,8 @@ class _SearchResultPageState extends State<SearchResultPage>
         sSearchController = Get.find<SSearchController>(
           tag: Get.parameters['tag'],
         );
+        _tabController.addListener(listener);
       } catch (_) {}
-      _tabController.addListener(listener);
     }
   }
 

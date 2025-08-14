@@ -47,3 +47,18 @@ enum VideoZoneType {
   final int? tids;
   const VideoZoneType(this.label, {this.tids});
 }
+
+// 搜索类型为视频、专栏及相簿时
+enum ArchiveFilterType {
+  totalrank('默认排序'),
+  click('播放多'),
+  pubdate('新发布'),
+  dm('弹幕多'),
+  stow('收藏多'),
+  scores('评论多');
+  // 专栏
+  // attention('最多喜欢'),
+
+  final String desc;
+  const ArchiveFilterType(this.desc);
+}
