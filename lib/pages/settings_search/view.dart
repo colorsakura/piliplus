@@ -8,9 +8,11 @@ import 'package:PiliPlus/pages/setting/models/recommend_settings.dart';
 import 'package:PiliPlus/pages/setting/models/style_settings.dart';
 import 'package:PiliPlus/pages/setting/models/video_settings.dart';
 import 'package:PiliPlus/utils/grid.dart';
+import 'package:PiliPlus/utils/waterfall.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:waterfall_flow/waterfall_flow.dart';
+import 'package:waterfall_flow/waterfall_flow.dart'
+    hide SliverWaterfallFlowDelegateWithMaxCrossAxisExtent;
 
 class SettingsSearchPage extends StatefulWidget {
   const SettingsSearchPage({super.key});
@@ -96,9 +98,15 @@ class _SettingsSearchPageState extends SearchState<SettingsSearchPage> {
               sliver: Obx(
                 () => _list.isEmpty
                     ? const HttpError()
-                    : SliverWaterfallFlow.extent(
-                        maxCrossAxisExtent: Grid.smallCardWidth * 2,
-                        children: _list.map((item) => item.widget).toList(),
+                    : SliverWaterfallFlow(
+                        gridDelegate:
+                            SliverWaterfallFlowDelegateWithMaxCrossAxisExtent(
+                              maxCrossAxisExtent: Grid.smallCardWidth * 2,
+                            ),
+                        delegate: SliverChildBuilderDelegate(
+                          (_, index) => _list[index].widget,
+                          childCount: _list.length,
+                        ),
                       ),
               ),
             ),

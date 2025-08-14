@@ -27,6 +27,7 @@ Widget module(
   bool isDetail,
   Function(List<String>, int)? callback, {
   floor = 1,
+  required double maxWidth,
 }) {
   switch (item.type) {
     // 图文
@@ -46,6 +47,7 @@ Widget module(
         'archive',
         callback,
         floor: floor,
+        maxWidth: maxWidth,
       );
     // 转发
     case 'DYNAMIC_TYPE_FORWARD':
@@ -78,6 +80,7 @@ Widget module(
           return const SizedBox.shrink();
         }
       }
+      maxWidth -= 30;
       return InkWell(
         onTap: () => PageUtils.pushDynDetail(orig, floor + 1),
         onLongPress: () {
@@ -160,6 +163,7 @@ Widget module(
                 isDetail,
                 callback,
                 floor: floor + 1,
+                maxWidth: maxWidth,
               ),
               module(
                 theme,
@@ -169,18 +173,30 @@ Widget module(
                 isDetail,
                 callback,
                 floor: floor + 1,
+                maxWidth: maxWidth,
               ),
               if (orig.modules.moduleDynamic?.additional != null)
                 addWidget(theme, orig, context, floor: floor + 1),
               if (orig.modules.moduleDynamic?.major?.blocked != null)
-                blockedItem(theme, orig.modules.moduleDynamic!.major!.blocked!),
+                blockedItem(
+                  theme,
+                  orig.modules.moduleDynamic!.major!.blocked!,
+                  maxWidth: maxWidth,
+                ),
             ],
           ),
         ),
       );
     // 直播
     case 'DYNAMIC_TYPE_LIVE_RCMD':
-      return liveRcmdPanel(theme, isDetail, item, context, floor: floor);
+      return liveRcmdPanel(
+        theme,
+        isDetail,
+        item,
+        context,
+        floor: floor,
+        maxWidth: maxWidth,
+      );
     // 直播
     case 'DYNAMIC_TYPE_LIVE':
       return livePanel(theme, isDetail, item, context, floor: floor);
@@ -194,6 +210,7 @@ Widget module(
         context,
         'ugcSeason',
         callback,
+        maxWidth: maxWidth,
       );
     case 'DYNAMIC_TYPE_PGC':
       return videoSeasonWidget(
@@ -205,6 +222,7 @@ Widget module(
         'pgc',
         callback,
         floor: floor,
+        maxWidth: maxWidth,
       );
     case 'DYNAMIC_TYPE_PGC_UNION':
       return videoSeasonWidget(
@@ -216,6 +234,7 @@ Widget module(
         'pgc',
         callback,
         floor: floor,
+        maxWidth: maxWidth,
       );
     case 'DYNAMIC_TYPE_NONE':
       return Row(
@@ -442,7 +461,14 @@ Widget module(
     case 'DYNAMIC_TYPE_SUBSCRIPTION_NEW'
         when item.modules.moduleDynamic?.major?.type ==
             'MAJOR_TYPE_SUBSCRIPTION_NEW':
-      return livePanelSub(theme, isDetail, item, context, floor: floor);
+      return livePanelSub(
+        theme,
+        isDetail,
+        item,
+        context,
+        floor: floor,
+        maxWidth: maxWidth,
+      );
 
     default:
       return Padding(

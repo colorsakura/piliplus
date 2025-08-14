@@ -19,12 +19,14 @@ import 'package:PiliPlus/utils/grid.dart';
 import 'package:PiliPlus/utils/num_util.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:PiliPlus/utils/utils.dart';
+import 'package:PiliPlus/utils/waterfall.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:waterfall_flow/waterfall_flow.dart';
+import 'package:waterfall_flow/waterfall_flow.dart'
+    hide SliverWaterfallFlowDelegateWithMaxCrossAxisExtent;
 
 class DynTopicPage extends StatefulWidget {
   const DynTopicPage({super.key});
@@ -344,6 +346,8 @@ class _DynTopicPageState extends State<DynTopicPage> {
     };
   }
 
+  late double _maxWidth;
+
   Widget _buildBody(LoadingState<List<TopicCardItem>?> loadingState) {
     return switch (loadingState) {
       Loading() => DynamicsTabPage.dynSkeleton(
@@ -352,24 +356,31 @@ class _DynTopicPageState extends State<DynTopicPage> {
       Success(:var response) =>
         response?.isNotEmpty == true
             ? GlobalData().dynamicsWaterfallFlow
-                  ? SliverWaterfallFlow.extent(
-                      maxCrossAxisExtent: Grid.smallCardWidth * 2,
-                      crossAxisSpacing: StyleString.cardSpace / 2,
-                      lastChildLayoutTypeBuilder: (index) {
-                        if (index == response.length - 1) {
-                          _controller.onLoadMore();
-                        }
-                        return index == response.length
-                            ? LastChildLayoutType.foot
-                            : LastChildLayoutType.none;
-                      },
-                      children: [
-                        for (var item in response!)
-                          if (item.dynamicCardItem != null)
-                            DynamicPanel(item: item.dynamicCardItem!)
-                          else
-                            Text(item.topicType ?? 'err'),
-                      ],
+                  ? SliverWaterfallFlow(
+                      gridDelegate:
+                          SliverWaterfallFlowDelegateWithMaxCrossAxisExtent(
+                            maxCrossAxisExtent: Grid.smallCardWidth * 2,
+                            crossAxisSpacing: StyleString.cardSpace / 2,
+                            callback: (value) => _maxWidth = value,
+                          ),
+                      delegate: SliverChildBuilderDelegate(
+                        (_, index) {
+                          if (index == response.length - 1) {
+                            _controller.onLoadMore();
+                          }
+
+                          final item = response[index];
+                          if (item.dynamicCardItem != null) {
+                            return DynamicPanel(
+                              item: item.dynamicCardItem!,
+                              maxWidth: _maxWidth,
+                            );
+                          }
+
+                          return Text(item.topicType ?? 'err');
+                        },
+                        childCount: response!.length,
+                      ),
                     )
                   : SliverCrossAxisGroup(
                       slivers: [
@@ -385,6 +396,7 @@ class _DynTopicPageState extends State<DynTopicPage> {
                               if (item.dynamicCardItem != null) {
                                 return DynamicPanel(
                                   item: item.dynamicCardItem!,
+                                  maxWidth: _maxWidth,
                                 );
                               } else {
                                 return Text(item.topicType ?? 'err');
@@ -396,9 +408,7 @@ class _DynTopicPageState extends State<DynTopicPage> {
                         const SliverFillRemaining(),
                       ],
                     )
-            : HttpError(
-                onReload: _controller.onReload,
-              ),
+            : HttpError(onReload: _controller.onReload),
       Error(:var errMsg) => HttpError(
         errMsg: errMsg,
         onReload: _controller.onReload,

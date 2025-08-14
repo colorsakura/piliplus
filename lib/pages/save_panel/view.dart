@@ -340,10 +340,13 @@ class _SavePanelState extends State<SavePanel> {
                               )
                             else if (_item is DynamicItemModel)
                               IgnorePointer(
-                                child: DynamicPanel(
-                                  item: _item,
-                                  isDetail: true,
-                                  isSave: true,
+                                child: LayoutBuilder(
+                                  builder: (_, constrains) => DynamicPanel(
+                                    item: _item,
+                                    isDetail: true,
+                                    isSave: true,
+                                    maxWidth: constrains.maxWidth,
+                                  ),
                                 ),
                               ),
                             if (cover?.isNotEmpty == true &&

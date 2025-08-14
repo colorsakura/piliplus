@@ -7,9 +7,11 @@ import 'package:PiliPlus/models_new/space/space_opus/item.dart';
 import 'package:PiliPlus/pages/member_opus/controller.dart';
 import 'package:PiliPlus/pages/member_opus/widgets/space_opus_item.dart';
 import 'package:PiliPlus/utils/grid.dart';
+import 'package:PiliPlus/utils/waterfall.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:waterfall_flow/waterfall_flow.dart';
+import 'package:waterfall_flow/waterfall_flow.dart'
+    hide SliverWaterfallFlowDelegateWithMaxCrossAxisExtent;
 
 class MemberOpus extends StatefulWidget {
   const MemberOpus({
@@ -125,21 +127,23 @@ class _MemberOpusState extends State<MemberOpus>
       ),
       Success(:var response) =>
         response?.isNotEmpty == true
-            ? SliverWaterfallFlow.extent(
-                maxCrossAxisExtent: Grid.smallCardWidth,
-                mainAxisSpacing: StyleString.safeSpace,
-                crossAxisSpacing: StyleString.safeSpace,
-                lastChildLayoutTypeBuilder: (index) {
-                  if (index == response.length - 1) {
-                    _controller.onLoadMore();
-                  }
-                  return index == response.length
-                      ? LastChildLayoutType.foot
-                      : LastChildLayoutType.none;
-                },
-                children: response!
-                    .map((item) => SpaceOpusItem(item: item))
-                    .toList(),
+            ? SliverWaterfallFlow(
+                gridDelegate: SliverWaterfallFlowDelegateWithMaxCrossAxisExtent(
+                  maxCrossAxisExtent: Grid.smallCardWidth,
+                  mainAxisSpacing: StyleString.safeSpace,
+                  crossAxisSpacing: StyleString.safeSpace,
+                ),
+                delegate: SliverChildBuilderDelegate(
+                  (_, index) {
+                    if (index == response.length - 1) {
+                      _controller.onLoadMore();
+                    }
+                    return SpaceOpusItem(
+                      item: response[index],
+                    );
+                  },
+                  childCount: response!.length,
+                ),
               )
             : HttpError(
                 onReload: _controller.onReload,

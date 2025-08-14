@@ -154,10 +154,13 @@ class _DynamicDetailPageState extends CommonDynPageState<DynamicDetailPage> {
                   sliver: SliverMainAxisGroup(
                     slivers: [
                       SliverToBoxAdapter(
-                        child: DynamicPanel(
-                          item: controller.dynItem,
-                          isDetail: true,
-                          callback: imageCallback,
+                        child: LayoutBuilder(
+                          builder: (_, constrains) => DynamicPanel(
+                            item: controller.dynItem,
+                            isDetail: true,
+                            callback: imageCallback,
+                            maxWidth: constrains.maxWidth,
+                          ),
                         ),
                       ),
                       buildReplyHeader(theme),
@@ -184,10 +187,13 @@ class _DynamicDetailPageState extends CommonDynPageState<DynamicDetailPage> {
                           bottom: MediaQuery.paddingOf(context).bottom + 80,
                         ),
                         sliver: SliverToBoxAdapter(
-                          child: DynamicPanel(
-                            item: controller.dynItem,
-                            isDetail: true,
-                            callback: imageCallback,
+                          child: LayoutBuilder(
+                            builder: (_, constraints) => DynamicPanel(
+                              item: controller.dynItem,
+                              isDetail: true,
+                              callback: imageCallback,
+                              maxWidth: constraints.maxWidth,
+                            ),
                           ),
                         ),
                       ),

@@ -9,9 +9,11 @@ import 'package:PiliPlus/pages/member_dynamics/controller.dart';
 import 'package:PiliPlus/utils/global_data.dart';
 import 'package:PiliPlus/utils/grid.dart';
 import 'package:PiliPlus/utils/utils.dart';
+import 'package:PiliPlus/utils/waterfall.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:waterfall_flow/waterfall_flow.dart';
+import 'package:waterfall_flow/waterfall_flow.dart'
+    hide SliverWaterfallFlowDelegateWithMaxCrossAxisExtent;
 
 class MemberDynamicsPage extends StatefulWidget {
   const MemberDynamicsPage({super.key, this.mid});
@@ -72,6 +74,8 @@ class _MemberDynamicsPageState extends State<MemberDynamicsPage>
     ),
   );
 
+  late double _maxWidth;
+
   Widget _buildContent(LoadingState<List<DynamicItemModel>?> loadingState) {
     return switch (loadingState) {
       Loading() => DynamicsTabPage.dynSkeleton(
@@ -80,26 +84,27 @@ class _MemberDynamicsPageState extends State<MemberDynamicsPage>
       Success(:var response) =>
         response?.isNotEmpty == true
             ? GlobalData().dynamicsWaterfallFlow
-                  ? SliverWaterfallFlow.extent(
-                      maxCrossAxisExtent: Grid.smallCardWidth * 2,
-                      crossAxisSpacing: StyleString.safeSpace,
-                      lastChildLayoutTypeBuilder: (index) {
-                        if (index == response.length - 1) {
-                          _memberDynamicController.onLoadMore();
-                        }
-                        return index == response.length
-                            ? LastChildLayoutType.foot
-                            : LastChildLayoutType.none;
-                      },
-                      children: response!
-                          .map(
-                            (item) => DynamicPanel(
-                              item: item,
-                              onRemove: _memberDynamicController.onRemove,
-                              onSetTop: _memberDynamicController.onSetTop,
-                            ),
-                          )
-                          .toList(),
+                  ? SliverWaterfallFlow(
+                      gridDelegate:
+                          SliverWaterfallFlowDelegateWithMaxCrossAxisExtent(
+                            maxCrossAxisExtent: Grid.smallCardWidth * 2,
+                            crossAxisSpacing: StyleString.cardSpace / 2,
+                            callback: (value) => _maxWidth = value,
+                          ),
+                      delegate: SliverChildBuilderDelegate(
+                        (_, index) {
+                          if (index == response.length - 1) {
+                            _memberDynamicController.onLoadMore();
+                          }
+                          return DynamicPanel(
+                            item: response[index],
+                            onRemove: _memberDynamicController.onRemove,
+                            onSetTop: _memberDynamicController.onSetTop,
+                            maxWidth: _maxWidth,
+                          );
+                        },
+                        childCount: response!.length,
+                      ),
                     )
                   : SliverCrossAxisGroup(
                       slivers: [
@@ -115,6 +120,7 @@ class _MemberDynamicsPageState extends State<MemberDynamicsPage>
                                 item: response[index],
                                 onRemove: _memberDynamicController.onRemove,
                                 onSetTop: _memberDynamicController.onSetTop,
+                                maxWidth: _maxWidth,
                               );
                             },
                             itemCount: response!.length,

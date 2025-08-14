@@ -15,9 +15,11 @@ import 'package:PiliPlus/pages/dynamics_tab/controller.dart';
 import 'package:PiliPlus/pages/main/controller.dart';
 import 'package:PiliPlus/utils/global_data.dart';
 import 'package:PiliPlus/utils/grid.dart';
+import 'package:PiliPlus/utils/waterfall.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:waterfall_flow/waterfall_flow.dart';
+import 'package:waterfall_flow/waterfall_flow.dart'
+    hide SliverWaterfallFlowDelegateWithMaxCrossAxisExtent;
 
 class DynamicsTabPage extends CommonPage {
   const DynamicsTabPage({super.key, required this.dynamicsType});
@@ -133,6 +135,8 @@ class _DynamicsTabPageState
     );
   }
 
+  late double _maxWidth;
+
   Widget _buildBody(LoadingState<List<DynamicItemModel>?> loadingState) {
     return switch (loadingState) {
       Loading() => DynamicsTabPage.dynSkeleton(
@@ -141,26 +145,28 @@ class _DynamicsTabPageState
       Success(:var response) =>
         response?.isNotEmpty == true
             ? GlobalData().dynamicsWaterfallFlow
-                  ? SliverWaterfallFlow.extent(
-                      maxCrossAxisExtent: Grid.smallCardWidth * 2,
-                      crossAxisSpacing: StyleString.cardSpace / 2,
-                      lastChildLayoutTypeBuilder: (index) {
-                        if (index == response.length - 1) {
-                          controller.onLoadMore();
-                        }
-                        return index == response.length
-                            ? LastChildLayoutType.foot
-                            : LastChildLayoutType.none;
-                      },
-                      children: [
-                        for (int index = 0; index < response!.length; index++)
-                          DynamicPanel(
+                  ? SliverWaterfallFlow(
+                      gridDelegate:
+                          SliverWaterfallFlowDelegateWithMaxCrossAxisExtent(
+                            maxCrossAxisExtent: Grid.smallCardWidth * 2,
+                            crossAxisSpacing: StyleString.cardSpace / 2,
+                            callback: (value) => _maxWidth = value,
+                          ),
+                      delegate: SliverChildBuilderDelegate(
+                        (_, index) {
+                          if (index == response.length - 1) {
+                            controller.onLoadMore();
+                          }
+                          return DynamicPanel(
                             item: response[index],
                             onRemove: (idStr) =>
                                 controller.onRemove(index, idStr),
                             onBlock: () => controller.onBlock(index),
-                          ),
-                      ],
+                            maxWidth: _maxWidth,
+                          );
+                        },
+                        childCount: response!.length,
+                      ),
                     )
                   : SliverCrossAxisGroup(
                       slivers: [
@@ -178,6 +184,7 @@ class _DynamicsTabPageState
                                 onRemove: (idStr) =>
                                     controller.onRemove(index, idStr),
                                 onBlock: () => controller.onBlock(index),
+                                maxWidth: _maxWidth,
                               );
                             },
                             itemCount: response!.length,

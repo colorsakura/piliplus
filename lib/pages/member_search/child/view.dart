@@ -10,9 +10,11 @@ import 'package:PiliPlus/pages/dynamics_tab/view.dart';
 import 'package:PiliPlus/pages/member_search/child/controller.dart';
 import 'package:PiliPlus/utils/global_data.dart';
 import 'package:PiliPlus/utils/grid.dart';
+import 'package:PiliPlus/utils/waterfall.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:waterfall_flow/waterfall_flow.dart';
+import 'package:waterfall_flow/waterfall_flow.dart'
+    hide SliverWaterfallFlowDelegateWithMaxCrossAxisExtent;
 
 class MemberSearchChildPage extends StatefulWidget {
   const MemberSearchChildPage({
@@ -70,6 +72,8 @@ class _MemberSearchChildPageState extends State<MemberSearchChildPage>
     };
   }
 
+  late double _maxWidth;
+
   Widget _buildBody(LoadingState<List?> loadingState) {
     return switch (loadingState) {
       Loading() => _buildLoading,
@@ -94,21 +98,25 @@ class _MemberSearchChildPageState extends State<MemberSearchChildPage>
                     ),
                     MemberSearchType.dynamic =>
                       GlobalData().dynamicsWaterfallFlow
-                          ? SliverWaterfallFlow.extent(
-                              maxCrossAxisExtent: Grid.smallCardWidth * 2,
-                              crossAxisSpacing: StyleString.safeSpace,
-                              mainAxisSpacing: StyleString.safeSpace,
-                              lastChildLayoutTypeBuilder: (index) {
-                                if (index == response.length - 1) {
-                                  _controller.onLoadMore();
-                                }
-                                return index == response.length
-                                    ? LastChildLayoutType.foot
-                                    : LastChildLayoutType.none;
-                              },
-                              children: response!
-                                  .map((item) => DynamicPanel(item: item))
-                                  .toList(),
+                          ? SliverWaterfallFlow(
+                              gridDelegate:
+                                  SliverWaterfallFlowDelegateWithMaxCrossAxisExtent(
+                                    maxCrossAxisExtent: Grid.smallCardWidth * 2,
+                                    crossAxisSpacing: StyleString.safeSpace,
+                                    callback: (value) => _maxWidth = value,
+                                  ),
+                              delegate: SliverChildBuilderDelegate(
+                                (_, index) {
+                                  if (index == response.length - 1) {
+                                    _controller.onLoadMore();
+                                  }
+                                  return DynamicPanel(
+                                    item: response[index],
+                                    maxWidth: _maxWidth,
+                                  );
+                                },
+                                childCount: response!.length,
+                              ),
                             )
                           : SliverCrossAxisGroup(
                               slivers: [
@@ -122,6 +130,7 @@ class _MemberSearchChildPageState extends State<MemberSearchChildPage>
                                       }
                                       return DynamicPanel(
                                         item: response[index],
+                                        maxWidth: _maxWidth,
                                       );
                                     },
                                     itemCount: response!.length,

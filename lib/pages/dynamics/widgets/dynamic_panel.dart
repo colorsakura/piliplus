@@ -12,6 +12,7 @@ import 'package:flutter/material.dart';
 
 class DynamicPanel extends StatelessWidget {
   final DynamicItemModel item;
+  final double maxWidth;
   final bool isDetail;
   final ValueChanged? onRemove;
   final Function(List<String>, int)? callback;
@@ -22,6 +23,7 @@ class DynamicPanel extends StatelessWidget {
   const DynamicPanel({
     super.key,
     required this.item,
+    required this.maxWidth,
     this.isDetail = false,
     this.onRemove,
     this.callback,
@@ -67,12 +69,32 @@ class DynamicPanel extends StatelessWidget {
               child: authorWidget,
             ),
             if (item.type != 'DYNAMIC_TYPE_NONE')
-              content(theme, isSave, context, item, isDetail, callback),
-            module(theme, isSave, item, context, isDetail, callback),
+              content(
+                theme,
+                isSave,
+                context,
+                item,
+                isDetail,
+                callback,
+                maxWidth: maxWidth,
+              ),
+            module(
+              theme,
+              isSave,
+              item,
+              context,
+              isDetail,
+              callback,
+              maxWidth: maxWidth,
+            ),
             if (item.modules.moduleDynamic?.additional != null)
               addWidget(theme, item, context),
             if (item.modules.moduleDynamic?.major?.blocked != null)
-              blockedItem(theme, item.modules.moduleDynamic!.major!.blocked!),
+              blockedItem(
+                theme,
+                item.modules.moduleDynamic!.major!.blocked!,
+                maxWidth: maxWidth,
+              ),
             const SizedBox(height: 2),
             if (!isDetail) ActionPanel(item: item),
             if (isDetail && !isSave) const SizedBox(height: 12),

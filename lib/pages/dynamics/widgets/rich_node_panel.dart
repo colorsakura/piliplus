@@ -21,8 +21,9 @@ import 'package:get/get.dart';
 TextSpan? richNode(
   ThemeData theme,
   DynamicItemModel item,
-  BuildContext context,
-) {
+  BuildContext context, {
+  required double maxWidth,
+}) {
   try {
     late final style = TextStyle(color: theme.colorScheme.primary);
     List<InlineSpan> spanChildren = [];
@@ -246,21 +247,17 @@ TextSpan? richNode(
                 ..add(const TextSpan(text: '\n'))
                 ..add(
                   WidgetSpan(
-                    child: LayoutBuilder(
-                      builder: (context, constraints) {
-                        return imageView(
-                          constraints.maxWidth,
-                          i.pics!
-                              .map(
-                                (item) => ImageModel(
-                                  url: item.src ?? '',
-                                  width: item.width,
-                                  height: item.height,
-                                ),
-                              )
-                              .toList(),
-                        );
-                      },
+                    child: imageView(
+                      maxWidth,
+                      i.pics!
+                          .map(
+                            (item) => ImageModel(
+                              url: item.src ?? '',
+                              width: item.width,
+                              height: item.height,
+                            ),
+                          )
+                          .toList(),
                     ),
                   ),
                 );

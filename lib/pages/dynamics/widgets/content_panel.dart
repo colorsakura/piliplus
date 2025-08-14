@@ -15,9 +15,12 @@ Widget content(
   bool isDetail,
   Function(List<String>, int)? callback, {
   floor = 1,
+  required double maxWidth,
 }) {
-  TextSpan? richNodes = richNode(theme, item, context);
-
+  if (floor == 1) {
+    maxWidth -= 24;
+  }
+  TextSpan? richNodes = richNode(theme, item, context, maxWidth: maxWidth);
   return Padding(
     padding: floor == 1
         ? const EdgeInsets.fromLTRB(12, 0, 12, 6)
@@ -77,23 +80,19 @@ Widget content(
                   maxLines: isSave ? null : 6,
                 ),
         if (item.modules.moduleDynamic?.major?.opus?.pics?.isNotEmpty == true)
-          LayoutBuilder(
-            builder: (context, constraints) {
-              return imageView(
-                constraints.maxWidth,
-                item.modules.moduleDynamic!.major!.opus!.pics!
-                    .map(
-                      (item) => ImageModel(
-                        width: item.width,
-                        height: item.height,
-                        url: item.url ?? '',
-                        liveUrl: item.liveUrl,
-                      ),
-                    )
-                    .toList(),
-                callback: callback,
-              );
-            },
+          imageView(
+            maxWidth,
+            item.modules.moduleDynamic!.major!.opus!.pics!
+                .map(
+                  (item) => ImageModel(
+                    width: item.width,
+                    height: item.height,
+                    url: item.url ?? '',
+                    liveUrl: item.liveUrl,
+                  ),
+                )
+                .toList(),
+            callback: callback,
           ),
       ],
     ),
