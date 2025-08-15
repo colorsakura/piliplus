@@ -75,9 +75,7 @@ class PBadge extends StatelessWidget {
         bgColor = Colors.transparent;
         borderColor = theme.secondary;
       case PBadgeType.free:
-        bgColor = Get.isDarkMode
-            ? const Color(0xFFD66011)
-            : const Color(0xFFFF7F24);
+        bgColor = theme.freeColor;
         color = Colors.white;
     }
 

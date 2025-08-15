@@ -38,6 +38,11 @@ class _WebviewPageState extends State<WebviewPage> {
 
   InAppWebViewController? _webViewController;
 
+  static final _prefixRegex = RegExp(
+    r'^(?!(https?://))\S+://',
+    caseSensitive: false,
+  );
+
   @override
   void initState() {
     super.initState();
@@ -298,10 +303,7 @@ class _WebviewPageState extends State<WebviewPage> {
             if (hasMatch) {
               progress.value = 1;
               return NavigationActionPolicy.CANCEL;
-            } else if (RegExp(
-              r'^(?!(https?://))\S+://',
-              caseSensitive: false,
-            ).hasMatch(url)) {
+            } else if (_prefixRegex.hasMatch(url)) {
               if (context.mounted) {
                 SnackBar snackBar = SnackBar(
                   content: const Text('当前网页将要打开外部链接，是否打开'),

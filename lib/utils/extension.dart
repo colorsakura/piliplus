@@ -85,6 +85,9 @@ extension StringExt on String? {
 extension ColorSchemeExt on ColorScheme {
   Color get vipColor =>
       brightness.isLight ? const Color(0xFFFF6699) : const Color(0xFFD44E7D);
+
+  Color get freeColor =>
+      brightness.isLight ? const Color(0xFFFF7F24) : const Color(0xFFD66011);
 }
 
 extension Unique<E, Id> on List<E> {

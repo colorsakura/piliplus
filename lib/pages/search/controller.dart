@@ -14,17 +14,15 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stream_transform/stream_transform.dart';
 
-mixin SearchKeywordMixin {
+mixin DebounceStreamMixin<T> {
   Duration duration = const Duration(milliseconds: 200);
-  StreamController<String>? ctr;
-  StreamSubscription<String>? sub;
-  void onKeywordChanged(String value);
+  StreamController<T>? ctr;
+  StreamSubscription<T>? sub;
+  void onValueChanged(T value);
 
   void subInit() {
-    ctr = StreamController<String>();
-    sub = ctr!.stream
-        .debounce(duration, trailing: true)
-        .listen(onKeywordChanged);
+    ctr = StreamController<T>();
+    sub = ctr!.stream.debounce(duration, trailing: true).listen(onValueChanged);
   }
 
   void subDispose() {
@@ -36,7 +34,7 @@ mixin SearchKeywordMixin {
 }
 
 abstract class SearchState<T extends StatefulWidget> extends State<T>
-    with SearchKeywordMixin {
+    with DebounceStreamMixin<String> {
   @override
   void dispose() {
     subDispose();
@@ -50,7 +48,8 @@ abstract class SearchState<T extends StatefulWidget> extends State<T>
   }
 }
 
-class SSearchController extends GetxController with SearchKeywordMixin {
+class SSearchController extends GetxController
+    with DebounceStreamMixin<String> {
   SSearchController(this.tag);
   final String tag;
 
@@ -187,7 +186,7 @@ class SSearchController extends GetxController with SearchKeywordMixin {
   }
 
   @override
-  Future<void> onKeywordChanged(String value) async {
+  Future<void> onValueChanged(String value) async {
     var res = await SearchHttp.searchSuggest(term: value);
     if (res['status']) {
       SearchSuggestModel data = res['data'];

@@ -34,7 +34,7 @@ class _SettingsSearchPageState extends SearchState<SettingsSearchPage> {
   ];
 
   @override
-  void onKeywordChanged(String value) {
+  void onValueChanged(String value) {
     if (value.isEmpty) {
       _list.clear();
     } else {

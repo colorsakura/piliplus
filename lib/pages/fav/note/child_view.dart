@@ -91,6 +91,7 @@ class _FavNoteChildPageState extends State<FavNoteChildPage>
                         onChanged: (value) {
                           _favNoteController.handleSelect(
                             checked: !_favNoteController.allSelected.value,
+                            disableSelect: false,
                           );
                         },
                       ),

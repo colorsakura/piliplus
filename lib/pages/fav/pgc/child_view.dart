@@ -96,6 +96,7 @@ class _FavPgcChildPageState extends State<FavPgcChildPage>
                         onChanged: (value) {
                           _favPgcController.handleSelect(
                             checked: !_favPgcController.allSelected.value,
+                            disableSelect: false,
                           );
                         },
                       ),

@@ -9,10 +9,10 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 class WebDavSettingPage extends StatefulWidget {
   const WebDavSettingPage({
     super.key,
-    this.showAppBar,
+    this.showAppBar = true,
   });
 
-  final bool? showAppBar;
+  final bool showAppBar;
 
   @override
   State<WebDavSettingPage> createState() => _WebDavSettingPageState();
@@ -38,7 +38,8 @@ class _WebDavSettingPageState extends State<WebDavSettingPage> {
   Widget build(BuildContext context) {
     EdgeInsets padding = MediaQuery.paddingOf(context);
     return Scaffold(
-      appBar: widget.showAppBar == false
+      resizeToAvoidBottomInset: widget.showAppBar,
+      appBar: !widget.showAppBar
           ? null
           : AppBar(title: const Text('WebDAV 设置')),
       body: ListView(

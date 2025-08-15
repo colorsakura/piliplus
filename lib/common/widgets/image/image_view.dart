@@ -45,11 +45,11 @@ Widget imageView(
   ValueChanged<int>? onDismissed,
   Function(List<String>, int)? callback,
 }) {
-  double imageWidth = (maxWidth - 2 * 5) / 3;
+  double imageWidth = (maxWidth - 10) / 3;
   double imageHeight = imageWidth;
   if (picArr.length == 1) {
-    dynamic width = picArr[0].width;
-    dynamic height = picArr[0].height;
+    num width = picArr[0].width;
+    num height = picArr[0].height;
     double ratioWH = width / height;
     double ratioHW = height / width;
     imageWidth = ratioWH > 1.5
@@ -57,6 +57,9 @@ Widget imageView(
         : (ratioWH >= 1 || (height > width && ratioHW < 1.5))
         ? 2 * imageWidth
         : 1.5 * imageWidth;
+    if (width != 1) {
+      imageWidth = min(imageWidth, width.toDouble());
+    }
     imageHeight = imageWidth * min(ratioHW, _maxRatio);
   } else if (picArr.length == 2) {
     imageWidth = imageHeight = 2 * imageWidth;

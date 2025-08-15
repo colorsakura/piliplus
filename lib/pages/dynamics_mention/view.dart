@@ -72,7 +72,7 @@ class _DynMentionPanelState extends SearchState<DynMentionPanel> {
   }
 
   @override
-  void onKeywordChanged(String value) => _controller
+  void onValueChanged(String value) => _controller
     ..enableClear.value = value.isNotEmpty
     ..onRefresh().whenComplete(
       () => WidgetsBinding.instance.addPostFrameCallback(
