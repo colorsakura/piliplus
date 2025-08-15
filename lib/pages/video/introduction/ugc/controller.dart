@@ -193,7 +193,7 @@ class UgcIntroController extends CommonIntroController with ReloadMixin {
       SmartDialog.showToast('已三连');
       return;
     }
-    var result = await VideoHttp.oneThree(bvid: bvid);
+    var result = await VideoHttp.ugcTriple(bvid: bvid);
     if (result['status']) {
       UgcTriple data = result['data'];
       late final stat = videoDetail.value.stat!;
@@ -211,7 +211,11 @@ class UgcIntroController extends CommonIntroController with ReloadMixin {
         hasFav.value = true;
       }
       hasDislike.value = false;
-      SmartDialog.showToast('三连成功');
+      if (data.coin != true) {
+        SmartDialog.showToast('投币失败');
+      } else {
+        SmartDialog.showToast('三连成功');
+      }
     } else {
       SmartDialog.showToast(result['msg']);
     }

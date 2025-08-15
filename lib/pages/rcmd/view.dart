@@ -115,11 +115,9 @@ class _RcmdPageState extends CommonPageState<RcmdPage, RcmdController>
                     } else {
                       return VideoCardV(
                         videoItem: response[index],
-                        onRemove: () {
-                          controller.loadingState
-                            ..value.data!.removeAt(index)
-                            ..refresh();
-                        },
+                        onRemove: () => controller.loadingState
+                          ..value.data!.removeAt(index)
+                          ..refresh(),
                       );
                     }
                   },

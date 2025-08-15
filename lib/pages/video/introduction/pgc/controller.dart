@@ -423,7 +423,7 @@ class PgcIntroController extends CommonIntroController {
       SmartDialog.showToast('已三连');
       return;
     }
-    var result = await VideoHttp.triple(epId: epId, seasonId: seasonId);
+    var result = await VideoHttp.pgcTriple(epId: epId, seasonId: seasonId);
     if (result['status']) {
       PgcTriple data = result['data'];
       late final stat = pgcItem.stat!;
@@ -431,7 +431,8 @@ class PgcIntroController extends CommonIntroController {
         stat.like++;
         hasLike.value = true;
       }
-      if ((data.coin == 1) != hasCoin) {
+      final hasCoin = data.coin == 1;
+      if (this.hasCoin != hasCoin) {
         stat.coin += 2;
         coinNum.value = 2;
         GlobalData().afterCoin(2);
@@ -440,7 +441,11 @@ class PgcIntroController extends CommonIntroController {
         stat.favorite++;
         hasFav.value = true;
       }
-      SmartDialog.showToast('三连成功');
+      if (!hasCoin) {
+        SmartDialog.showToast('投币失败');
+      } else {
+        SmartDialog.showToast('三连成功');
+      }
     } else {
       SmartDialog.showToast(result['msg']);
     }

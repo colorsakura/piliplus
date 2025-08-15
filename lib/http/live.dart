@@ -420,9 +420,7 @@ class LiveHttp {
     var res = await Request().post(
       Api.setLiveFavTag,
       data: data,
-      options: Options(
-        contentType: Headers.formUrlEncodedContentType,
-      ),
+      options: Options(contentType: Headers.formUrlEncodedContentType),
     );
 
     if (res.data['code'] == 0) {

@@ -196,9 +196,7 @@ class ReplyHttp {
         'action': action,
         'csrf': Accounts.main.csrf,
       },
-      options: Options(
-        contentType: Headers.formUrlEncodedContentType,
-      ),
+      options: Options(contentType: Headers.formUrlEncodedContentType),
     );
     if (res.data['code'] == 0) {
       return {'status': true, 'data': res.data['data']};
@@ -216,13 +214,14 @@ class ReplyHttp {
   }) async {
     var res = await Request().post(
       Api.likeReply,
-      queryParameters: {
+      data: {
         'type': type,
         'oid': oid,
         'rpid': rpid,
         'action': action,
         'csrf': Accounts.main.csrf,
       },
+      options: Options(contentType: Headers.formUrlEncodedContentType),
     );
     if (res.data['code'] == 0) {
       return {'status': true, 'data': res.data['data']};
@@ -263,9 +262,7 @@ class ReplyHttp {
         'action': isUpTop ? 0 : 1,
         'csrf': Accounts.main.csrf,
       },
-      options: Options(
-        contentType: Headers.formUrlEncodedContentType,
-      ),
+      options: Options(contentType: Headers.formUrlEncodedContentType),
     );
     if (res.data['code'] == 0) {
       return {'status': true};

@@ -1,4 +1,3 @@
-import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/common/widgets/custom_icon.dart';
 import 'package:PiliPlus/common/widgets/custom_sliver_persistent_header_delegate.dart';
 import 'package:PiliPlus/common/widgets/dynamic_sliver_appbar_medium.dart';
@@ -12,7 +11,6 @@ import 'package:PiliPlus/models_new/dynamic/dyn_topic_feed/item.dart';
 import 'package:PiliPlus/models_new/dynamic/dyn_topic_top/top_details.dart';
 import 'package:PiliPlus/pages/dynamics/widgets/dynamic_panel.dart';
 import 'package:PiliPlus/pages/dynamics_create/view.dart';
-import 'package:PiliPlus/pages/dynamics_tab/view.dart';
 import 'package:PiliPlus/pages/dynamics_topic/controller.dart';
 import 'package:PiliPlus/utils/global_data.dart';
 import 'package:PiliPlus/utils/grid.dart';
@@ -35,7 +33,7 @@ class DynTopicPage extends StatefulWidget {
   State<DynTopicPage> createState() => _DynTopicPageState();
 }
 
-class _DynTopicPageState extends State<DynTopicPage> {
+class _DynTopicPageState extends State<DynTopicPage> with DynMixin {
   final DynTopicController _controller = Get.put(
     DynTopicController(),
     tag: Utils.generateRandomString(8),
@@ -346,23 +344,14 @@ class _DynTopicPageState extends State<DynTopicPage> {
     };
   }
 
-  late double _maxWidth;
-
   Widget _buildBody(LoadingState<List<TopicCardItem>?> loadingState) {
     return switch (loadingState) {
-      Loading() => DynamicsTabPage.dynSkeleton(
-        GlobalData().dynamicsWaterfallFlow,
-      ),
+      Loading() => dynSkeleton,
       Success(:var response) =>
         response?.isNotEmpty == true
             ? GlobalData().dynamicsWaterfallFlow
                   ? SliverWaterfallFlow(
-                      gridDelegate:
-                          SliverWaterfallFlowDelegateWithMaxCrossAxisExtent(
-                            maxCrossAxisExtent: Grid.smallCardWidth * 2,
-                            crossAxisSpacing: StyleString.cardSpace / 2,
-                            callback: (value) => _maxWidth = value,
-                          ),
+                      gridDelegate: gridDelegate,
                       delegate: SliverChildBuilderDelegate(
                         (_, index) {
                           if (index == response.length - 1) {
@@ -373,7 +362,7 @@ class _DynTopicPageState extends State<DynTopicPage> {
                           if (item.dynamicCardItem != null) {
                             return DynamicPanel(
                               item: item.dynamicCardItem!,
-                              maxWidth: _maxWidth,
+                              maxWidth: maxWidth,
                             );
                           }
 
@@ -396,7 +385,7 @@ class _DynTopicPageState extends State<DynTopicPage> {
                               if (item.dynamicCardItem != null) {
                                 return DynamicPanel(
                                   item: item.dynamicCardItem!,
-                                  maxWidth: _maxWidth,
+                                  maxWidth: maxWidth,
                                 );
                               } else {
                                 return Text(item.topicType ?? 'err');

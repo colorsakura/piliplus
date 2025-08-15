@@ -14,7 +14,7 @@ Widget livePanelSub(
   int floor = 1,
   required double maxWidth,
 }) {
-  maxWidth -= StyleString.safeSpace * 2;
+  maxWidth -= 24;
   SubscriptionNew? subItem = item.modules.moduleDynamic!.major?.subscriptionNew;
   LivePlayInfo? content = subItem?.liveRcmd?.content?.livePlayInfo;
   if (subItem == null || content == null) {

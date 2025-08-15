@@ -1,4 +1,3 @@
-import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/common/skeleton/video_card_h.dart';
 import 'package:PiliPlus/common/widgets/dialog/dialog.dart';
 import 'package:PiliPlus/common/widgets/loading_widget/http_error.dart';
@@ -38,7 +37,7 @@ class _FavArticlePageState extends State<FavArticlePage>
         slivers: [
           SliverPadding(
             padding: EdgeInsets.only(
-              top: StyleString.safeSpace - 5,
+              top: 7,
               bottom: MediaQuery.paddingOf(context).bottom + 80,
             ),
             sliver: Obx(

@@ -1,4 +1,3 @@
-import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/common/skeleton/video_card_h.dart';
 import 'package:PiliPlus/common/widgets/loading_widget/http_error.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
@@ -44,7 +43,7 @@ class _ZonePageState extends CommonPageState<ZonePage, ZoneController>
         slivers: [
           SliverPadding(
             padding: EdgeInsets.only(
-              top: StyleString.safeSpace - 5,
+              top: 7,
               bottom: MediaQuery.paddingOf(context).bottom + 80,
             ),
             sliver: Obx(() => _buildBody(controller.loadingState.value)),

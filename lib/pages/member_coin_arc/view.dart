@@ -52,7 +52,7 @@ class _MemberCoinArcPageState extends State<MemberCoinArcPage> {
             slivers: [
               SliverPadding(
                 padding: EdgeInsets.only(
-                  top: StyleString.safeSpace - 5,
+                  top: 7,
                   left: StyleString.safeSpace,
                   right: StyleString.safeSpace,
                   bottom: MediaQuery.paddingOf(context).bottom + 80,

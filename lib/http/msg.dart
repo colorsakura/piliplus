@@ -187,16 +187,14 @@ class MsgHttp {
     String? biz,
     CancelToken? cancelToken,
   }) async {
-    final file = await MultipartFile.fromFile(path);
-    Map<String, dynamic> data = {
-      'file_up': file,
-      'category': ?category,
-      'biz': ?biz,
-      'csrf': Accounts.main.csrf,
-    };
     var res = await Request().post(
       Api.uploadBfs,
-      data: FormData.fromMap(data),
+      data: FormData.fromMap({
+        'file_up': await MultipartFile.fromFile(path),
+        'category': ?category,
+        'biz': ?biz,
+        'csrf': Accounts.main.csrf,
+      }),
       cancelToken: cancelToken,
     );
     if (res.data['code'] == 0) {
@@ -226,7 +224,8 @@ class MsgHttp {
     });
     var res = await Request().post(
       HttpString.tUrl + Api.createTextDynamic,
-      data: FormData.fromMap(data),
+      data: data,
+      options: Options(contentType: Headers.formUrlEncodedContentType),
     );
     if (res.data['code'] == 0) {
       return {'status': true};
@@ -272,7 +271,8 @@ class MsgHttp {
     });
     var res = await Request().post(
       HttpString.tUrl + Api.removeMsg,
-      data: FormData.fromMap(data),
+      data: data,
+      options: Options(contentType: Headers.formUrlEncodedContentType),
     );
     if (res.data['code'] == 0) {
       return {'status': true};
@@ -296,9 +296,7 @@ class MsgHttp {
         'csrf_token': csrf,
         'csrf': csrf,
       },
-      options: Options(
-        contentType: Headers.formUrlEncodedContentType,
-      ),
+      options: Options(contentType: Headers.formUrlEncodedContentType),
     );
     if (res.data['code'] == 0) {
       return {'status': true};
@@ -354,7 +352,8 @@ class MsgHttp {
     });
     var res = await Request().post(
       HttpString.tUrl + Api.setTop,
-      data: FormData.fromMap(data),
+      data: data,
+      options: Options(contentType: Headers.formUrlEncodedContentType),
     );
     if (res.data['code'] == 0) {
       return {'status': true};
@@ -407,7 +406,7 @@ class MsgHttp {
   }) async {
     String csrf = Accounts.main.csrf;
     final devId = getDevId();
-    Map<String, dynamic> base = {
+    Map<String, dynamic> data = {
       'msg': {
         'sender_uid': senderUid,
         'receiver_id': receiverId,
@@ -425,7 +424,7 @@ class MsgHttp {
       'csrf_token': csrf,
       'csrf': csrf,
     };
-    Map<String, dynamic> params = await WbiSign.makSign(base);
+    Map<String, dynamic> params = await WbiSign.makSign(data);
     var res = await Request().post(
       Api.sendMsg,
       queryParameters: <String, dynamic>{
@@ -435,7 +434,7 @@ class MsgHttp {
         'w_rid': params['w_rid'],
         'wts': params['wts'],
       },
-      data: base,
+      data: data,
       options: Options(
         contentType: Headers.formUrlEncodedContentType,
       ),

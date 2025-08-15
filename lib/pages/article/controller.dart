@@ -16,7 +16,6 @@ import 'package:PiliPlus/utils/accounts.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/storage_pref.dart';
 import 'package:PiliPlus/utils/url_utils.dart';
-import 'package:flutter/rendering.dart' show ScrollDirection;
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 
@@ -225,22 +224,6 @@ class ArticleController extends CommonDynController<MainListReply> {
       SmartDialog.showToast(!isLike ? '点赞成功' : '取消赞');
     } else {
       SmartDialog.showToast(res['msg']);
-    }
-  }
-
-  @override
-  void listener() {
-    showTitle.value = scrollController.positions.last.pixels >= 45;
-    final ScrollDirection direction1 =
-        scrollController.positions.first.userScrollDirection;
-    late final ScrollDirection direction2 =
-        scrollController.positions.last.userScrollDirection;
-    if (direction1 == ScrollDirection.forward ||
-        direction2 == ScrollDirection.forward) {
-      showFab();
-    } else if (direction1 == ScrollDirection.reverse ||
-        direction2 == ScrollDirection.reverse) {
-      hideFab();
     }
   }
 }

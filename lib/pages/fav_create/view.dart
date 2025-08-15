@@ -246,20 +246,16 @@ class _CreateFavPageState extends State<CreateFavPage> {
                     if (_cover?.isNotEmpty == true)
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 5),
-                        child: LayoutBuilder(
-                          builder: (context, constraints) {
-                            return ClipRRect(
-                              borderRadius: const BorderRadius.all(
-                                Radius.circular(6),
-                              ),
-                              child: CachedNetworkImage(
-                                imageUrl: ImageUtil.thumbnailUrl(_cover!),
-                                height: constraints.maxHeight,
-                                width: constraints.maxHeight * 16 / 9,
-                                fit: BoxFit.cover,
-                              ),
-                            );
-                          },
+                        child: ClipRRect(
+                          borderRadius: const BorderRadius.all(
+                            Radius.circular(6),
+                          ),
+                          child: CachedNetworkImage(
+                            imageUrl: ImageUtil.thumbnailUrl(_cover!),
+                            height: 55,
+                            width: 88,
+                            fit: BoxFit.cover,
+                          ),
                         ),
                       ),
                     Icon(

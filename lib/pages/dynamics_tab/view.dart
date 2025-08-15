@@ -1,7 +1,5 @@
 import 'dart:async';
 
-import 'package:PiliPlus/common/constants.dart';
-import 'package:PiliPlus/common/skeleton/dynamic_card.dart';
 import 'package:PiliPlus/common/widgets/loading_widget/http_error.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/http/loading_state.dart';
@@ -28,46 +26,11 @@ class DynamicsTabPage extends CommonPage {
 
   @override
   State<DynamicsTabPage> createState() => _DynamicsTabPageState();
-
-  static Widget dynSkeleton(bool dynamicsWaterfallFlow) {
-    if (!dynamicsWaterfallFlow) {
-      return SliverCrossAxisGroup(
-        slivers: [
-          const SliverFillRemaining(),
-          SliverConstrainedCrossAxis(
-            maxExtent: Grid.smallCardWidth * 2,
-            sliver: SliverList.builder(
-              itemBuilder: (context, index) {
-                return const DynamicCardSkeleton();
-              },
-              itemCount: 10,
-            ),
-          ),
-          const SliverFillRemaining(),
-        ],
-      );
-    }
-    return SliverGrid(
-      gridDelegate: SliverGridDelegateWithExtentAndRatio(
-        crossAxisSpacing: StyleString.cardSpace / 2,
-        mainAxisSpacing: StyleString.cardSpace / 2,
-        maxCrossAxisExtent: Grid.smallCardWidth * 2,
-        childAspectRatio: StyleString.aspectRatio,
-        mainAxisExtent: 50,
-      ),
-      delegate: SliverChildBuilderDelegate(
-        (context, index) {
-          return const DynamicCardSkeleton();
-        },
-        childCount: 10,
-      ),
-    );
-  }
 }
 
 class _DynamicsTabPageState
     extends CommonPageState<DynamicsTabPage, DynamicsTabController>
-    with AutomaticKeepAliveClientMixin {
+    with AutomaticKeepAliveClientMixin, DynMixin {
   StreamSubscription? _listener;
   late final MainController _mainController = Get.find<MainController>();
 
@@ -135,23 +98,14 @@ class _DynamicsTabPageState
     );
   }
 
-  late double _maxWidth;
-
   Widget _buildBody(LoadingState<List<DynamicItemModel>?> loadingState) {
     return switch (loadingState) {
-      Loading() => DynamicsTabPage.dynSkeleton(
-        GlobalData().dynamicsWaterfallFlow,
-      ),
+      Loading() => dynSkeleton,
       Success(:var response) =>
         response?.isNotEmpty == true
             ? GlobalData().dynamicsWaterfallFlow
                   ? SliverWaterfallFlow(
-                      gridDelegate:
-                          SliverWaterfallFlowDelegateWithMaxCrossAxisExtent(
-                            maxCrossAxisExtent: Grid.smallCardWidth * 2,
-                            crossAxisSpacing: StyleString.cardSpace / 2,
-                            callback: (value) => _maxWidth = value,
-                          ),
+                      gridDelegate: gridDelegate,
                       delegate: SliverChildBuilderDelegate(
                         (_, index) {
                           if (index == response.length - 1) {
@@ -162,7 +116,7 @@ class _DynamicsTabPageState
                             onRemove: (idStr) =>
                                 controller.onRemove(index, idStr),
                             onBlock: () => controller.onBlock(index),
-                            maxWidth: _maxWidth,
+                            maxWidth: maxWidth,
                           );
                         },
                         childCount: response!.length,
@@ -184,7 +138,7 @@ class _DynamicsTabPageState
                                 onRemove: (idStr) =>
                                     controller.onRemove(index, idStr),
                                 onBlock: () => controller.onBlock(index),
-                                maxWidth: _maxWidth,
+                                maxWidth: maxWidth,
                               );
                             },
                             itemCount: response!.length,

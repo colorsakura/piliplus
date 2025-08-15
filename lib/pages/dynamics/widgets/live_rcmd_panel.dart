@@ -14,7 +14,7 @@ Widget liveRcmdPanel(
   int floor = 1,
   required double maxWidth,
 }) {
-  maxWidth -= StyleString.safeSpace * 2;
+  maxWidth -= 24;
   DynamicLiveModel? liveRcmd = item.modules.moduleDynamic?.major?.liveRcmd;
   if (liveRcmd == null) {
     return const SizedBox.shrink();

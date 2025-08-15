@@ -113,7 +113,7 @@ class _PgcIntroPageState extends TripleState<PgcIntroPage>
   Widget? _buildBreif(PgcInfoModel item) {
     final img = item.brief?.img;
     if (img != null && img.isNotEmpty) {
-      final maxWidth = widget.maxWidth - 2 * StyleString.safeSpace;
+      final maxWidth = widget.maxWidth - 24;
       double padding = max(0, maxWidth - 400);
       final imgWidth = maxWidth - padding;
       padding = padding / 2;

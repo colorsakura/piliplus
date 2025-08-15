@@ -50,7 +50,7 @@ class _ViewPointsPageState
         toolbarHeight: 45,
         actions: [
           const Text(
-            '分段进度条',
+            '分段进度条 ',
             style: TextStyle(fontSize: 16),
           ),
           Obx(
@@ -116,63 +116,71 @@ class _ViewPointsPageState
             currentIndex = index;
           }
         }
-        return ListTile(
-          dense: true,
-          onTap: segment.from != null
-              ? () {
-                  currentIndex = index;
-                  plPlayerController?.danmakuController?.clear();
-                  plPlayerController?.videoPlayerController?.seek(
-                    Duration(seconds: segment.from!),
-                  );
-                  Get.back();
-                }
-              : null,
-          leading: segment.url?.isNotEmpty == true
-              ? Container(
-                  margin: const EdgeInsets.symmetric(vertical: 6),
-                  decoration: currentIndex == index
-                      ? BoxDecoration(
-                          borderRadius: const BorderRadius.all(
-                            Radius.circular(6),
-                          ),
-                          border: Border.all(
-                            width: 1.8,
-                            strokeAlign: BorderSide.strokeAlignOutside,
-                            color: theme.colorScheme.primary,
-                          ),
-                        )
-                      : null,
-                  child: LayoutBuilder(
-                    builder: (context, constraints) => NetworkImgLayer(
-                      radius: 6,
-                      src: segment.url,
-                      width: constraints.maxHeight * StyleString.aspectRatio,
-                      height: constraints.maxHeight,
-                    ),
-                  ),
-                )
-              : null,
-          title: Text(
-            segment.title ?? '',
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: currentIndex == index ? FontWeight.bold : null,
-              color: currentIndex == index ? theme.colorScheme.primary : null,
-            ),
-          ),
-          subtitle: Text(
-            '${segment.from != null ? DurationUtil.formatDuration(segment.from) : ''} - ${segment.to != null ? DurationUtil.formatDuration(segment.to) : ''}',
-            style: TextStyle(
-              fontSize: 13,
-              color: currentIndex == index
-                  ? theme.colorScheme.primary
-                  : theme.colorScheme.outline,
-            ),
-          ),
-        );
+        final isCurr = currentIndex == index;
+        return _buildItem(theme, segment, isCurr);
       },
       separatorBuilder: (context, index) => divider,
+    );
+  }
+
+  Widget _buildItem(ThemeData theme, Segment segment, bool isCurr) {
+    final theme = Theme.of(context);
+    return Material(
+      type: MaterialType.transparency,
+      child: InkWell(
+        onTap: segment.from != null
+            ? () {
+                Get.back();
+                plPlayerController
+                  ?..danmakuController?.clear()
+                  ..videoPlayerController?.seek(
+                    Duration(seconds: segment.from!),
+                  );
+              }
+            : null,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: StyleString.safeSpace,
+            vertical: 5,
+          ),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              NetworkImgLayer(
+                src: segment.url,
+                width: 140.8,
+                height: 88,
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Column(
+                  spacing: 10,
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      segment.title ?? '',
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: isCurr
+                          ? TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: theme.colorScheme.primary,
+                            )
+                          : null,
+                    ),
+                    Text(
+                      '${segment.from != null ? DurationUtil.formatDuration(segment.from) : ''} - '
+                      '${segment.to != null ? DurationUtil.formatDuration(segment.to) : ''}',
+                      style: TextStyle(color: theme.colorScheme.outline),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

@@ -33,7 +33,7 @@ class MultiSelectAppBarWidget extends StatelessWidget
             style: TextButton.styleFrom(
               visualDensity: VisualDensity.compact,
             ),
-            onPressed: () => ctr.handleSelect(true),
+            onPressed: () => ctr.handleSelect(checked: true),
             child: const Text('全选'),
           ),
           ...?children,

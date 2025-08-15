@@ -103,18 +103,20 @@ class FavHttp {
     var res = type == 11
         ? await Request().post(
             Api.unfavFolder,
-            queryParameters: {
+            data: {
               'media_id': id,
               'csrf': Accounts.main.csrf,
             },
+            options: Options(contentType: Headers.formUrlEncodedContentType),
           )
         : await Request().post(
             Api.unfavSeason,
-            queryParameters: {
+            data: {
               'platform': 'web',
               'season_id': id,
               'csrf': Accounts.main.csrf,
             },
+            options: Options(contentType: Headers.formUrlEncodedContentType),
           );
     if (res.data['code'] == 0) {
       return {'status': true};

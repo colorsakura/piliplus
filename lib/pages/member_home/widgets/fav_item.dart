@@ -37,17 +37,10 @@ class MemberFavItem extends StatelessWidget {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              AspectRatio(
-                aspectRatio: StyleString.aspectRatio,
-                child: LayoutBuilder(
-                  builder: (context, boxConstraints) {
-                    return NetworkImgLayer(
-                      src: item.cover,
-                      width: boxConstraints.maxWidth,
-                      height: boxConstraints.maxHeight,
-                    );
-                  },
-                ),
+              NetworkImgLayer(
+                src: item.cover,
+                width: 140.8,
+                height: 88,
               ),
               const SizedBox(width: 10),
               Expanded(

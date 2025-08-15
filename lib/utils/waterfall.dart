@@ -1,7 +1,54 @@
-import 'package:flutter/material.dart' show ValueChanged;
+import 'package:PiliPlus/common/constants.dart';
+import 'package:PiliPlus/common/skeleton/dynamic_card.dart';
+import 'package:PiliPlus/utils/global_data.dart';
+import 'package:PiliPlus/utils/grid.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart' show SliverConstraints;
 import 'package:waterfall_flow/waterfall_flow.dart'
     show SliverWaterfallFlowDelegate;
+
+mixin DynMixin {
+  late double maxWidth;
+
+  late final gridDelegate = SliverWaterfallFlowDelegateWithMaxCrossAxisExtent(
+    maxCrossAxisExtent: Grid.smallCardWidth * 2,
+    crossAxisSpacing: 4,
+    callback: (value) => maxWidth = value,
+  );
+
+  late final skeDelegate = SliverGridDelegateWithExtentAndRatio(
+    crossAxisSpacing: 4,
+    mainAxisSpacing: 4,
+    maxCrossAxisExtent: Grid.smallCardWidth * 2,
+    childAspectRatio: StyleString.aspectRatio,
+    mainAxisExtent: 50,
+  );
+
+  Widget get dynSkeleton {
+    if (!GlobalData().dynamicsWaterfallFlow) {
+      return SliverCrossAxisGroup(
+        slivers: [
+          const SliverFillRemaining(),
+          SliverConstrainedCrossAxis(
+            maxExtent: Grid.smallCardWidth * 2,
+            sliver: SliverList.builder(
+              itemBuilder: (_, _) => const DynamicCardSkeleton(),
+              itemCount: 10,
+            ),
+          ),
+          const SliverFillRemaining(),
+        ],
+      );
+    }
+    return SliverGrid(
+      gridDelegate: skeDelegate,
+      delegate: SliverChildBuilderDelegate(
+        (_, _) => const DynamicCardSkeleton(),
+        childCount: 10,
+      ),
+    );
+  }
+}
 
 class SliverWaterfallFlowDelegateWithMaxCrossAxisExtent
     extends SliverWaterfallFlowDelegate {

@@ -106,12 +106,15 @@ class UserHttp {
     account ??= Accounts.history;
     var res = await Request().post(
       Api.pauseHistory,
-      queryParameters: {
+      data: {
         'switch': switchStatus,
         'jsonp': 'jsonp',
         'csrf': account.csrf,
       },
-      options: Options(extra: {'account': account}),
+      options: Options(
+        extra: {'account': account},
+        contentType: Headers.formUrlEncodedContentType,
+      ),
     );
     return res;
   }
@@ -134,11 +137,14 @@ class UserHttp {
     account ??= Accounts.history;
     var res = await Request().post(
       Api.clearHistory,
-      queryParameters: {
+      data: {
         'jsonp': 'jsonp',
         'csrf': account.csrf,
       },
-      options: Options(extra: {'account': account}),
+      options: Options(
+        extra: {'account': account},
+        contentType: Headers.formUrlEncodedContentType,
+      ),
     );
     return res;
   }
@@ -147,11 +153,12 @@ class UserHttp {
   static Future toViewLater({String? bvid, dynamic aid}) async {
     var res = await Request().post(
       Api.toViewLater,
-      queryParameters: {
+      data: {
         'aid': ?aid,
         'bvid': ?bvid,
         'csrf': Accounts.main.csrf,
       },
+      options: Options(contentType: Headers.formUrlEncodedContentType),
     );
     if (res.data['code'] == 0) {
       return {'status': true, 'msg': 'yeah！稍后再看'};
@@ -201,10 +208,11 @@ class UserHttp {
   static Future toViewClear([int? cleanType]) async {
     var res = await Request().post(
       Api.toViewClear,
-      queryParameters: {
+      data: {
         'clean_type': ?cleanType,
         'csrf': Accounts.main.csrf,
       },
+      options: Options(contentType: Headers.formUrlEncodedContentType),
     );
     if (res.data['code'] == 0) {
       return {'status': true, 'msg': '操作完成'};
@@ -369,9 +377,7 @@ class UserHttp {
         "reason_type": reasonType,
         "reason_desc": reasonType == 0 ? reasonDesc : null,
       },
-      options: Options(
-        contentType: Headers.formUrlEncodedContentType,
-      ),
+      options: Options(contentType: Headers.formUrlEncodedContentType),
     );
     return res.data as Map;
   }

@@ -27,7 +27,7 @@ class DanmakuHttp {
     // assert(aid != null || bvid != null);
     // assert(csrf != null || access_key != null);
     // 构建参数对象
-    var params = <String, dynamic>{
+    var data = <String, dynamic>{
       'type': type,
       'oid': oid,
       'msg': msg,
@@ -47,10 +47,8 @@ class DanmakuHttp {
 
     var response = await Request().post(
       Api.shootDanmaku,
-      data: params,
-      options: Options(
-        contentType: Headers.formUrlEncodedContentType,
-      ),
+      data: data,
+      options: Options(contentType: Headers.formUrlEncodedContentType),
     );
     if (response.statusCode != 200) {
       return {

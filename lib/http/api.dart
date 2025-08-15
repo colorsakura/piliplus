@@ -134,9 +134,9 @@ class Api {
   // aid	num	稿件avid	必要（可选）	avid与bvid任选一个
   // bvid	str	稿件bvid	必要（可选）	avid与bvid任选一个
   // csrf	str	CSRF Token（位于cookie）	必要
-  static const String oneThree = '/x/web-interface/archive/like/triple';
+  static const String ugcTriple = '/x/web-interface/archive/like/triple';
 
-  static const String triple = '/pgc/season/episode/like/triple';
+  static const String pgcTriple = '/pgc/season/episode/like/triple';
 
   // 获取指定用户创建的所有收藏夹信息
   // 该接口也能查询目标内容id存在于那些收藏夹中

@@ -360,9 +360,9 @@ class VideoHttp {
   }
 
   // 一键三连 pgc
-  static Future triple({dynamic epId, required dynamic seasonId}) async {
+  static Future pgcTriple({dynamic epId, required dynamic seasonId}) async {
     var res = await Request().post(
-      Api.triple,
+      Api.pgcTriple,
       data: {
         'ep_id': epId,
         'csrf': Accounts.main.csrf,
@@ -384,9 +384,9 @@ class VideoHttp {
   }
 
   // 一键三连
-  static Future oneThree({required String bvid}) async {
+  static Future ugcTriple({required String bvid}) async {
     var res = await Request().post(
-      Api.oneThree,
+      Api.ugcTriple,
       data: {
         'aid': IdUtils.bv2av(bvid),
         'eab_x': 2,
@@ -394,6 +394,8 @@ class VideoHttp {
         'source': 'web_normal',
         'ga': 1,
         'csrf': Accounts.main.csrf,
+        'spmid': '333.788.0.0',
+        'statistics': '{"appId":100,"platform":5}',
       },
       options: Options(
         contentType: Headers.formUrlEncodedContentType,
@@ -529,7 +531,7 @@ class VideoHttp {
     if (message == '') {
       return {'status': false, 'msg': '请输入评论内容'};
     }
-    Map<String, dynamic> data = {
+    final data = {
       'type': type,
       'oid': oid,
       if (root != null && root != 0) 'root': root,
@@ -560,12 +562,13 @@ class VideoHttp {
   }) async {
     var res = await Request().post(
       Api.replyDel,
-      queryParameters: {
+      data: {
         'type': type, //type.index
         'oid': oid,
         'rpid': rpid,
         'csrf': Accounts.main.csrf,
       },
+      options: Options(contentType: Headers.formUrlEncodedContentType),
     );
     if (res.data['code'] == 0) {
       return {'status': true};
@@ -637,11 +640,12 @@ class VideoHttp {
   }) async {
     await Request().post(
       Api.historyReport,
-      queryParameters: {
+      data: {
         'aid': ?aid,
         'type': ?type,
         'csrf': Accounts.heartbeat.csrf,
       },
+      options: Options(contentType: Headers.formUrlEncodedContentType),
     );
   }
 
@@ -659,7 +663,7 @@ class VideoHttp {
     final isPugv = videoType == VideoType.pugv;
     await Request().post(
       Api.heartBeat,
-      queryParameters: {
+      data: {
         if (isPugv) 'aid': ?aid else 'bvid': ?bvid,
         'cid': cid,
         'epid': ?epid,
@@ -669,6 +673,7 @@ class VideoHttp {
         'played_time': progress,
         'csrf': Accounts.heartbeat.csrf,
       },
+      options: Options(contentType: Headers.formUrlEncodedContentType),
     );
   }
 
@@ -679,12 +684,13 @@ class VideoHttp {
   }) async {
     await Request().post(
       Api.mediaListHistory,
-      queryParameters: {
+      data: {
         'desc': desc,
         'oid': oid,
         'upper_mid': upperMid,
         'csrf': Accounts.heartbeat.csrf,
       },
+      options: Options(contentType: Headers.formUrlEncodedContentType),
     );
   }
 
@@ -692,10 +698,11 @@ class VideoHttp {
   static Future pgcAdd({int? seasonId}) async {
     var res = await Request().post(
       Api.pgcAdd,
-      queryParameters: {
+      data: {
         'season_id': seasonId,
         'csrf': Accounts.main.csrf,
       },
+      options: Options(contentType: Headers.formUrlEncodedContentType),
     );
     if (res.data['code'] == 0) {
       return {
@@ -718,10 +725,11 @@ class VideoHttp {
   static Future pgcDel({int? seasonId}) async {
     var res = await Request().post(
       Api.pgcDel,
-      queryParameters: {
+      data: {
         'season_id': seasonId,
         'csrf': Accounts.main.csrf,
       },
+      options: Options(contentType: Headers.formUrlEncodedContentType),
     );
     if (res.data['code'] == 0) {
       return {

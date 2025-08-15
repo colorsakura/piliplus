@@ -279,7 +279,7 @@ class _FavDetailPageState extends State<FavDetailPage> {
       style: TextButton.styleFrom(
         visualDensity: VisualDensity.compact,
       ),
-      onPressed: () => _favDetailController.handleSelect(true),
+      onPressed: () => _favDetailController.handleSelect(checked: true),
       child: const Text('全选'),
     ),
     TextButton(

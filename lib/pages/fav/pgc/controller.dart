@@ -24,14 +24,9 @@ class FavPgcController
   }
 
   @override
-  void onSelect(FavPgcItemModel item, [bool disableSelect = true]) {
-    super.onSelect(item, false);
-  }
-
-  @override
-  void handleSelect([bool checked = false, bool disableSelect = true]) {
+  void handleSelect({bool checked = false, bool disableSelect = true}) {
     allSelected.value = checked;
-    super.handleSelect(checked, false);
+    super.handleSelect(checked: checked, disableSelect: disableSelect);
   }
 
   @override
@@ -88,10 +83,10 @@ class FavPgcController
             ..refresh();
           ctr.allSelected.value = false;
         }
-        afterDelete(removeList);
       } catch (e) {
         if (kDebugMode) debugPrint('fav pgc onUpdate: $e');
       }
+      afterDelete(removeList);
     }
     SmartDialog.showToast(res['msg']);
   }

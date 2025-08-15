@@ -1,4 +1,3 @@
-import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/common/skeleton/video_card_h.dart';
 import 'package:PiliPlus/common/widgets/loading_widget/http_error.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
@@ -36,7 +35,7 @@ class _FavVideoPageState extends State<FavVideoPage>
         slivers: [
           SliverPadding(
             padding: EdgeInsets.only(
-              top: StyleString.safeSpace - 5,
+              top: 7,
               bottom: 80 + MediaQuery.paddingOf(context).bottom,
             ),
             sliver: Obx(

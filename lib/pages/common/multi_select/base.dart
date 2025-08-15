@@ -12,8 +12,8 @@ abstract class MultiSelectBase<T> {
 
   int get checkedCount;
 
-  void onSelect(T item, [bool disableSelect = true]);
-  void handleSelect([bool checked = false, bool disableSelect = true]);
+  void onSelect(T item);
+  void handleSelect({bool checked = false, bool disableSelect = true});
   void onRemove();
 }
 
@@ -34,7 +34,7 @@ mixin CommonMultiSelectMixin<T extends MultiSelectData>
       loadingState.value.data!.where((v) => v.checked == true);
 
   @override
-  void onSelect(T item, [bool disableSelect = true]) {
+  void onSelect(T item) {
     List<T> list = loadingState.value.data!;
     item.checked = !(item.checked ?? false);
     if (item.checked!) {
@@ -43,17 +43,15 @@ mixin CommonMultiSelectMixin<T extends MultiSelectData>
       rxCount.value--;
     }
     loadingState.refresh();
-    if (disableSelect) {
-      if (checkedCount == 0) {
-        enableMultiSelect.value = false;
-      }
+    if (checkedCount == 0) {
+      enableMultiSelect.value = false;
     } else {
       allSelected.value = checkedCount == list.length;
     }
   }
 
   @override
-  void handleSelect([bool checked = false, bool disableSelect = true]) {
+  void handleSelect({bool checked = false, bool disableSelect = true}) {
     if (loadingState.value.isSuccess) {
       final list = loadingState.value.data;
       if (list?.isNotEmpty == true) {

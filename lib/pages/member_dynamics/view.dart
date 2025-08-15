@@ -1,10 +1,8 @@
-import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/common/widgets/loading_widget/http_error.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/dynamics/result.dart';
 import 'package:PiliPlus/pages/dynamics/widgets/dynamic_panel.dart';
-import 'package:PiliPlus/pages/dynamics_tab/view.dart';
 import 'package:PiliPlus/pages/member_dynamics/controller.dart';
 import 'package:PiliPlus/utils/global_data.dart';
 import 'package:PiliPlus/utils/grid.dart';
@@ -25,7 +23,7 @@ class MemberDynamicsPage extends StatefulWidget {
 }
 
 class _MemberDynamicsPageState extends State<MemberDynamicsPage>
-    with AutomaticKeepAliveClientMixin {
+    with AutomaticKeepAliveClientMixin, DynMixin {
   late MemberDynamicsController _memberDynamicController;
   late int mid;
 
@@ -74,23 +72,14 @@ class _MemberDynamicsPageState extends State<MemberDynamicsPage>
     ),
   );
 
-  late double _maxWidth;
-
   Widget _buildContent(LoadingState<List<DynamicItemModel>?> loadingState) {
     return switch (loadingState) {
-      Loading() => DynamicsTabPage.dynSkeleton(
-        GlobalData().dynamicsWaterfallFlow,
-      ),
+      Loading() => dynSkeleton,
       Success(:var response) =>
         response?.isNotEmpty == true
             ? GlobalData().dynamicsWaterfallFlow
                   ? SliverWaterfallFlow(
-                      gridDelegate:
-                          SliverWaterfallFlowDelegateWithMaxCrossAxisExtent(
-                            maxCrossAxisExtent: Grid.smallCardWidth * 2,
-                            crossAxisSpacing: StyleString.cardSpace / 2,
-                            callback: (value) => _maxWidth = value,
-                          ),
+                      gridDelegate: gridDelegate,
                       delegate: SliverChildBuilderDelegate(
                         (_, index) {
                           if (index == response.length - 1) {
@@ -100,7 +89,7 @@ class _MemberDynamicsPageState extends State<MemberDynamicsPage>
                             item: response[index],
                             onRemove: _memberDynamicController.onRemove,
                             onSetTop: _memberDynamicController.onSetTop,
-                            maxWidth: _maxWidth,
+                            maxWidth: maxWidth,
                           );
                         },
                         childCount: response!.length,
@@ -120,7 +109,7 @@ class _MemberDynamicsPageState extends State<MemberDynamicsPage>
                                 item: response[index],
                                 onRemove: _memberDynamicController.onRemove,
                                 onSetTop: _memberDynamicController.onSetTop,
-                                maxWidth: _maxWidth,
+                                maxWidth: maxWidth,
                               );
                             },
                             itemCount: response!.length,

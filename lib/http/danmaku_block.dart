@@ -2,6 +2,7 @@ import 'package:PiliPlus/http/api.dart';
 import 'package:PiliPlus/http/init.dart';
 import 'package:PiliPlus/models/user/danmaku_block.dart';
 import 'package:PiliPlus/utils/accounts.dart';
+import 'package:dio/dio.dart';
 
 class DanmakuFilterHttp {
   static Future danmakuFilter() async {
@@ -22,10 +23,11 @@ class DanmakuFilterHttp {
   static Future danmakuFilterDel({required int ids}) async {
     var res = await Request().post(
       Api.danmakuFilterDel,
-      queryParameters: {
+      data: {
         'ids': ids,
         'csrf': Accounts.main.csrf,
       },
+      options: Options(contentType: Headers.formUrlEncodedContentType),
     );
     if (res.data['code'] == 0) {
       return {'status': true};
@@ -43,11 +45,12 @@ class DanmakuFilterHttp {
   }) async {
     var res = await Request().post(
       Api.danmakuFilterAdd,
-      queryParameters: {
+      data: {
         'type': type,
         'filter': filter,
         'csrf': Accounts.main.csrf,
       },
+      options: Options(contentType: Headers.formUrlEncodedContentType),
     );
     if (res.data['code'] == 0) {
       return {

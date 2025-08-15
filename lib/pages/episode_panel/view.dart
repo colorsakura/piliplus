@@ -246,6 +246,7 @@ class _EpisodePanelState extends CommonCollapseSlidePageState<EpisodePanel> {
   }
 
   Widget _buildBody(ThemeData theme, int tabIndex, episodes) {
+    final isCurrTab = tabIndex == widget.initialTabIndex;
     return KeepAliveWrapper(
       builder: (context) => ScrollablePositionedList.separated(
         padding: EdgeInsets.only(
@@ -254,7 +255,7 @@ class _EpisodePanelState extends CommonCollapseSlidePageState<EpisodePanel> {
         ),
         reverse: _isReversed[tabIndex],
         itemCount: episodes.length,
-        initialScrollIndex: _currentItemIndex,
+        initialScrollIndex: isCurrTab ? _currentItemIndex : 0,
         physics: const AlwaysScrollableScrollPhysics(),
         itemBuilder: (BuildContext context, int itemIndex) {
           final episode = episodes[itemIndex];
@@ -263,9 +264,7 @@ class _EpisodePanelState extends CommonCollapseSlidePageState<EpisodePanel> {
             episode: episode,
             index: itemIndex,
             length: episodes.length,
-            isCurrentIndex: tabIndex == widget.initialTabIndex
-                ? itemIndex == _currentItemIndex
-                : false,
+            isCurrentIndex: isCurrTab ? itemIndex == _currentItemIndex : false,
           );
           return widget.type == EpisodeType.season &&
                   widget.showTitle &&
@@ -394,47 +393,40 @@ class _EpisodePanelState extends CommonCollapseSlidePageState<EpisodePanel> {
               spacing: 10,
               children: [
                 if (cover?.isNotEmpty == true)
-                  AspectRatio(
-                    aspectRatio: StyleString.aspectRatio,
-                    child: LayoutBuilder(
-                      builder: (context, boxConstraints) {
-                        return Stack(
-                          clipBehavior: Clip.none,
-                          children: [
-                            NetworkImgLayer(
-                              src: cover,
-                              width: boxConstraints.maxWidth,
-                              height: boxConstraints.maxHeight,
-                            ),
-                            if (duration != null && duration > 0)
-                              PBadge(
-                                text: DurationUtil.formatDuration(duration),
-                                right: 6.0,
-                                bottom: 6.0,
-                                type: PBadgeType.gray,
-                              ),
-                            if (isCharging == true)
-                              const PBadge(
-                                text: '充电专属',
-                                top: 6,
-                                right: 6,
-                                type: PBadgeType.error,
-                              )
-                            else if (episode.badge != null)
-                              PBadge(
-                                text: episode.badge,
-                                top: 6,
-                                right: 6,
-                                type: switch (episode.badge) {
-                                  '会员' => PBadgeType.primary,
-                                  '限免' => PBadgeType.free,
-                                  _ => PBadgeType.gray,
-                                },
-                              ),
-                          ],
-                        );
-                      },
-                    ),
+                  Stack(
+                    clipBehavior: Clip.none,
+                    children: [
+                      NetworkImgLayer(
+                        src: cover,
+                        width: 140.8,
+                        height: 88,
+                      ),
+                      if (duration != null && duration > 0)
+                        PBadge(
+                          text: DurationUtil.formatDuration(duration),
+                          right: 6.0,
+                          bottom: 6.0,
+                          type: PBadgeType.gray,
+                        ),
+                      if (isCharging == true)
+                        const PBadge(
+                          text: '充电专属',
+                          top: 6,
+                          right: 6,
+                          type: PBadgeType.error,
+                        )
+                      else if (episode.badge != null)
+                        PBadge(
+                          text: episode.badge,
+                          top: 6,
+                          right: 6,
+                          type: switch (episode.badge) {
+                            '会员' => PBadgeType.primary,
+                            '限免' => PBadgeType.free,
+                            _ => PBadgeType.gray,
+                          },
+                        ),
+                    ],
                   )
                 else if (isCurrentIndex)
                   Image.asset(

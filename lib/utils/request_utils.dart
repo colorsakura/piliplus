@@ -450,7 +450,7 @@ class RequestUtils {
                         mid: isCopy ? mid : null,
                       ).then((res) {
                         if (res.isSuccess) {
-                          ctr.handleSelect(false);
+                          ctr.handleSelect(checked: false);
                           if (!isCopy) {
                             ctr.loadingState
                               ..value.data!.removeWhere(removeList.contains)

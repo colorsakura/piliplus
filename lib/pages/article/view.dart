@@ -81,116 +81,108 @@ class _ArticlePageState extends CommonDynPageState<ArticlePage> {
         child: Stack(
           clipBehavior: Clip.none,
           children: [
-            SafeArea(
-              top: false,
-              bottom: false,
-              child: Builder(
-                builder: (context) {
-                  double padding = max(
-                    context.width / 2 - Grid.smallCardWidth,
-                    0,
-                  );
-                  if (isPortrait) {
-                    return LayoutBuilder(
-                      builder: (context, constraints) {
-                        final maxWidth =
-                            constraints.maxWidth - 2 * padding - 24;
-                        return Padding(
-                          padding: EdgeInsets.symmetric(horizontal: padding),
-                          child: CustomScrollView(
-                            controller: controller.scrollController,
-                            physics: const AlwaysScrollableScrollPhysics(),
-                            slivers: [
-                              _buildContent(theme, maxWidth),
-                              SliverToBoxAdapter(
-                                child: Divider(
-                                  thickness: 8,
-                                  color: theme.dividerColor.withValues(
-                                    alpha: 0.05,
-                                  ),
-                                ),
-                              ),
-                              buildReplyHeader(theme),
-                              Obx(
-                                () => _buildReplyList(
-                                  theme,
-                                  controller.loadingState.value,
-                                ),
-                              ),
-                            ],
-                          ),
-                        );
-                      },
-                    );
-                  } else {
-                    return Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Expanded(
-                          flex: controller.ratio[0].toInt(),
-                          child: LayoutBuilder(
-                            builder: (context, constraints) {
-                              final maxWidth =
-                                  constraints.maxWidth - padding / 4 - 24;
-                              return CustomScrollView(
-                                controller: controller.scrollController,
-                                physics: const AlwaysScrollableScrollPhysics(),
-                                slivers: [
-                                  SliverPadding(
-                                    padding: EdgeInsets.only(
-                                      left: padding / 4,
-                                      bottom:
-                                          MediaQuery.paddingOf(context).bottom +
-                                          80,
-                                    ),
-                                    sliver: _buildContent(theme, maxWidth),
-                                  ),
-                                ],
-                              );
-                            },
-                          ),
-                        ),
-                        VerticalDivider(
-                          thickness: 8,
-                          color: theme.dividerColor.withValues(alpha: 0.05),
-                        ),
-                        Expanded(
-                          flex: controller.ratio[1].toInt(),
-                          child: Scaffold(
-                            key: scaffoldKey,
-                            backgroundColor: Colors.transparent,
-                            body: refreshIndicator(
-                              onRefresh: controller.onRefresh,
-                              child: Padding(
-                                padding: EdgeInsets.only(right: padding / 4),
-                                child: CustomScrollView(
-                                  controller: controller.scrollController,
-                                  physics:
-                                      const AlwaysScrollableScrollPhysics(),
-                                  slivers: [
-                                    buildReplyHeader(theme),
-                                    Obx(
-                                      () => _buildReplyList(
-                                        theme,
-                                        controller.loadingState.value,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    );
-                  }
-                },
-              ),
-            ),
+            _buildPage(theme, isPortrait),
             _buildBottom(theme),
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildPage(ThemeData theme, bool isPortrait) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        double padding = max(
+          context.width / 2 - Grid.smallCardWidth,
+          0,
+        );
+
+        if (isPortrait) {
+          final maxWidth = constraints.maxWidth - 2 * padding - 24;
+          return Padding(
+            padding: EdgeInsets.symmetric(horizontal: padding),
+            child: CustomScrollView(
+              controller: controller.scrollController,
+              physics: const AlwaysScrollableScrollPhysics(),
+              slivers: [
+                _buildContent(theme, maxWidth),
+                SliverToBoxAdapter(
+                  child: Divider(
+                    thickness: 8,
+                    color: theme.dividerColor.withValues(
+                      alpha: 0.05,
+                    ),
+                  ),
+                ),
+                buildReplyHeader(theme),
+                Obx(
+                  () => _buildReplyList(
+                    theme,
+                    controller.loadingState.value,
+                  ),
+                ),
+              ],
+            ),
+          );
+        }
+
+        padding = padding / 4;
+        final flex = controller.ratio[0].toInt();
+        return Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              flex: flex,
+              child: CustomScrollView(
+                controller: controller.scrollController,
+                physics: const AlwaysScrollableScrollPhysics(),
+                slivers: [
+                  SliverPadding(
+                    padding: EdgeInsets.only(
+                      left: padding,
+                      bottom: MediaQuery.paddingOf(context).bottom + 80,
+                    ),
+                    sliver: _buildContent(
+                      theme,
+                      constraints.maxWidth * flex - padding - 24,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            VerticalDivider(
+              thickness: 8,
+              color: theme.dividerColor.withValues(alpha: 0.05),
+            ),
+            Expanded(
+              flex: controller.ratio[1].toInt(),
+              child: Scaffold(
+                key: scaffoldKey,
+                backgroundColor: Colors.transparent,
+                body: refreshIndicator(
+                  onRefresh: controller.onRefresh,
+                  child: Padding(
+                    padding: EdgeInsets.only(right: padding),
+                    child: CustomScrollView(
+                      controller: controller.scrollController,
+                      physics: const AlwaysScrollableScrollPhysics(),
+                      slivers: [
+                        buildReplyHeader(theme),
+                        Obx(
+                          () => _buildReplyList(
+                            theme,
+                            controller.loadingState.value,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 

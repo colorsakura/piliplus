@@ -56,34 +56,27 @@ class MemberFavItem extends StatelessWidget {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              AspectRatio(
-                aspectRatio: StyleString.aspectRatio,
-                child: LayoutBuilder(
-                  builder: (context, boxConstraints) {
-                    return Stack(
-                      clipBehavior: Clip.none,
-                      children: [
-                        NetworkImgLayer(
-                          src: item.cover,
-                          width: boxConstraints.maxWidth,
-                          height: boxConstraints.maxHeight,
-                        ),
-                        if (item.type == 21)
-                          const PBadge(
-                            right: 6,
-                            top: 6,
-                            text: '合集',
-                          )
-                        else if (item.type == 11)
-                          const PBadge(
-                            right: 6,
-                            top: 6,
-                            text: '收藏夹',
-                          ),
-                      ],
-                    );
-                  },
-                ),
+              Stack(
+                clipBehavior: Clip.none,
+                children: [
+                  NetworkImgLayer(
+                    src: item.cover,
+                    width: 140.8,
+                    height: 88,
+                  ),
+                  if (item.type == 21)
+                    const PBadge(
+                      right: 6,
+                      top: 6,
+                      text: '合集',
+                    )
+                  else if (item.type == 11)
+                    const PBadge(
+                      right: 6,
+                      top: 6,
+                      text: '收藏夹',
+                    ),
+                ],
               ),
               const SizedBox(width: 10),
               Expanded(

@@ -54,17 +54,13 @@ class FavFolderItem extends StatelessWidget {
                   ),
                 ],
               ),
-              child: LayoutBuilder(
-                builder: (context, box) {
-                  return Hero(
-                    tag: heroTag,
-                    child: NetworkImgLayer(
-                      src: item.cover,
-                      width: box.maxWidth,
-                      height: box.maxHeight,
-                    ),
-                  );
-                },
+              child: Hero(
+                tag: heroTag,
+                child: NetworkImgLayer(
+                  src: item.cover,
+                  width: 176,
+                  height: 110,
+                ),
               ),
             ),
             Text(

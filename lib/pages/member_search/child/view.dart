@@ -1,4 +1,3 @@
-import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/common/skeleton/video_card_h.dart';
 import 'package:PiliPlus/common/widgets/loading_widget/http_error.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
@@ -6,7 +5,6 @@ import 'package:PiliPlus/common/widgets/video_card/video_card_h.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/common/member/search_type.dart';
 import 'package:PiliPlus/pages/dynamics/widgets/dynamic_panel.dart';
-import 'package:PiliPlus/pages/dynamics_tab/view.dart';
 import 'package:PiliPlus/pages/member_search/child/controller.dart';
 import 'package:PiliPlus/utils/global_data.dart';
 import 'package:PiliPlus/utils/grid.dart';
@@ -31,7 +29,7 @@ class MemberSearchChildPage extends StatefulWidget {
 }
 
 class _MemberSearchChildPageState extends State<MemberSearchChildPage>
-    with AutomaticKeepAliveClientMixin {
+    with AutomaticKeepAliveClientMixin, DynMixin {
   MemberSearchChildController get _controller => widget.controller;
 
   @override
@@ -66,13 +64,9 @@ class _MemberSearchChildPageState extends State<MemberSearchChildPage>
           childCount: 10,
         ),
       ),
-      MemberSearchType.dynamic => DynamicsTabPage.dynSkeleton(
-        GlobalData().dynamicsWaterfallFlow,
-      ),
+      MemberSearchType.dynamic => dynSkeleton,
     };
   }
-
-  late double _maxWidth;
 
   Widget _buildBody(LoadingState<List?> loadingState) {
     return switch (loadingState) {
@@ -99,12 +93,7 @@ class _MemberSearchChildPageState extends State<MemberSearchChildPage>
                     MemberSearchType.dynamic =>
                       GlobalData().dynamicsWaterfallFlow
                           ? SliverWaterfallFlow(
-                              gridDelegate:
-                                  SliverWaterfallFlowDelegateWithMaxCrossAxisExtent(
-                                    maxCrossAxisExtent: Grid.smallCardWidth * 2,
-                                    crossAxisSpacing: StyleString.safeSpace,
-                                    callback: (value) => _maxWidth = value,
-                                  ),
+                              gridDelegate: gridDelegate,
                               delegate: SliverChildBuilderDelegate(
                                 (_, index) {
                                   if (index == response.length - 1) {
@@ -112,7 +101,7 @@ class _MemberSearchChildPageState extends State<MemberSearchChildPage>
                                   }
                                   return DynamicPanel(
                                     item: response[index],
-                                    maxWidth: _maxWidth,
+                                    maxWidth: maxWidth,
                                   );
                                 },
                                 childCount: response!.length,
@@ -130,7 +119,7 @@ class _MemberSearchChildPageState extends State<MemberSearchChildPage>
                                       }
                                       return DynamicPanel(
                                         item: response[index],
-                                        maxWidth: _maxWidth,
+                                        maxWidth: maxWidth,
                                       );
                                     },
                                     itemCount: response!.length,

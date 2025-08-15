@@ -208,20 +208,16 @@ class _PayCoinsPageState extends State<PayCoinsPage>
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        bool isV = constraints.maxHeight > constraints.maxWidth;
-        return isV
-            ? _buildBody(isV)
-            : Row(
-                children: [
-                  const Spacer(),
-                  Expanded(flex: 3, child: _buildBody(isV)),
-                  const Spacer(),
-                ],
-              );
-      },
-    );
+    bool isPortrait = context.isPortrait;
+    return isPortrait
+        ? _buildBody(isPortrait)
+        : Row(
+            children: [
+              const Spacer(),
+              Expanded(flex: 3, child: _buildBody(isPortrait)),
+              const Spacer(),
+            ],
+          );
   }
 
   Widget _buildBody(bool isV) => Stack(

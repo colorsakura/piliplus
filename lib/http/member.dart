@@ -28,7 +28,6 @@ import 'package:PiliPlus/utils/accounts.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:PiliPlus/utils/wbi_sign.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
 
 class MemberHttp {
   static Future reportMember(
@@ -38,16 +37,14 @@ class MemberHttp {
   }) async {
     var res = await Request().post(
       HttpString.spaceBaseUrl + Api.reportMember,
-      data: FormData.fromMap(
-        {
-          'mid': mid,
-          'reason': reason,
-          'reason_v2': ?reasonV2,
-          'csrf': Accounts.main.csrf,
-        },
-      ),
+      data: {
+        'mid': mid,
+        'reason': reason,
+        'reason_v2': ?reasonV2,
+        'csrf': Accounts.main.csrf,
+      },
+      options: Options(contentType: Headers.formUrlEncodedContentType),
     );
-    debugPrint('report: ${res.data}');
     return {
       'status': res.data['status'],
       'msg': res.data['message'] ?? res.data['data'],
@@ -510,9 +507,7 @@ class MemberHttp {
         'fid': fid,
         'csrf': Accounts.main.csrf,
       },
-      options: Options(
-        contentType: Headers.formUrlEncodedContentType,
-      ),
+      options: Options(contentType: Headers.formUrlEncodedContentType),
     );
     if (res.data['code'] == 0) {
       return {'status': true};
@@ -538,9 +533,7 @@ class MemberHttp {
         'csrf': Accounts.main.csrf,
         // 'cross_domain': true
       },
-      options: Options(
-        contentType: Headers.formUrlEncodedContentType,
-      ),
+      options: Options(contentType: Headers.formUrlEncodedContentType),
     );
     if (res.data['code'] == 0) {
       return {'status': true, 'msg': '操作成功'};
@@ -591,9 +584,7 @@ class MemberHttp {
         'tag': tagName,
         'csrf': Accounts.main.csrf,
       },
-      options: Options(
-        contentType: Headers.formUrlEncodedContentType,
-      ),
+      options: Options(contentType: Headers.formUrlEncodedContentType),
     );
     if (res.data['code'] == 0) {
       return {'status': true};
@@ -614,9 +605,7 @@ class MemberHttp {
         'name': name,
         'csrf': Accounts.main.csrf,
       },
-      options: Options(
-        contentType: Headers.formUrlEncodedContentType,
-      ),
+      options: Options(contentType: Headers.formUrlEncodedContentType),
     );
     if (res.data['code'] == 0) {
       return {'status': true};
@@ -636,9 +625,7 @@ class MemberHttp {
         'tagid': tagid,
         'csrf': Accounts.main.csrf,
       },
-      options: Options(
-        contentType: Headers.formUrlEncodedContentType,
-      ),
+      options: Options(contentType: Headers.formUrlEncodedContentType),
     );
     if (res.data['code'] == 0) {
       return {'status': true};

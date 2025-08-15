@@ -2,6 +2,7 @@ import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/common/widgets/badge.dart';
 import 'package:PiliPlus/common/widgets/button/icon_button.dart';
 import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
+import 'package:PiliPlus/common/widgets/select_mask.dart';
 import 'package:PiliPlus/models/common/badge_type.dart';
 import 'package:PiliPlus/models_new/fav/fav_pgc/list.dart';
 import 'package:PiliPlus/pages/common/multi_select/base.dart';
@@ -81,71 +82,11 @@ class FavPgcItem extends StatelessWidget {
                                   ),
                                 ),
                                 Positioned.fill(
-                                  child: IgnorePointer(
-                                    child: LayoutBuilder(
-                                      builder: (context, constraints) =>
-                                          AnimatedOpacity(
-                                            opacity: item.checked == true
-                                                ? 1
-                                                : 0,
-                                            duration: const Duration(
-                                              milliseconds: 200,
-                                            ),
-                                            child: Container(
-                                              alignment: Alignment.center,
-                                              height: constraints.maxHeight,
-                                              width:
-                                                  constraints.maxHeight *
-                                                  StyleString.aspectRatio,
-                                              decoration: BoxDecoration(
-                                                borderRadius:
-                                                    const BorderRadius.all(
-                                                      Radius.circular(4),
-                                                    ),
-                                                color: Colors.black.withValues(
-                                                  alpha: 0.6,
-                                                ),
-                                              ),
-                                              child: SizedBox(
-                                                width: 34,
-                                                height: 34,
-                                                child: AnimatedScale(
-                                                  scale: item.checked == true
-                                                      ? 1
-                                                      : 0,
-                                                  duration: const Duration(
-                                                    milliseconds: 250,
-                                                  ),
-                                                  curve: Curves.easeInOut,
-                                                  child: IconButton(
-                                                    tooltip: '取消选择',
-                                                    style: ButtonStyle(
-                                                      padding:
-                                                          WidgetStateProperty.all(
-                                                            EdgeInsets.zero,
-                                                          ),
-                                                      backgroundColor:
-                                                          WidgetStatePropertyAll(
-                                                            theme
-                                                                .colorScheme
-                                                                .surface
-                                                                .withValues(
-                                                                  alpha: 0.8,
-                                                                ),
-                                                          ),
-                                                    ),
-                                                    onPressed: null,
-                                                    icon: Icon(
-                                                      Icons.done_all_outlined,
-                                                      color: theme
-                                                          .colorScheme
-                                                          .primary,
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                          ),
+                                  child: selectMask(
+                                    theme,
+                                    item.checked == true,
+                                    borderRadius: const BorderRadius.all(
+                                      Radius.circular(4),
                                     ),
                                   ),
                                 ),
