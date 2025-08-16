@@ -1443,7 +1443,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
             ),
           ),
 
-        if (plPlayerController.showSeekPreview)
+        if (!plPlayerController.isLive && plPlayerController.showSeekPreview)
           buildSeekPreviewWidget(
             plPlayerController,
             maxWidth,
@@ -1778,8 +1778,9 @@ Widget buildSeekPreviewWidget(
       try {
         VideoShotData data = plPlayerController.videoShot!.data;
 
-        final isFullScreen = plPlayerController.isFullScreen.value;
-        final double scale = isFullScreen && !plPlayerController.isVertical
+        final double scale =
+            plPlayerController.isFullScreen.value &&
+                !plPlayerController.isVertical
             ? 4
             : 3;
         double height = 27 * scale;
@@ -1795,7 +1796,7 @@ Widget buildSeekPreviewWidget(
         double imgYSize = data.imgYSize;
 
         return Align(
-          alignment: isFullScreen ? Alignment.center : Alignment.center,
+          alignment: Alignment.center,
           child: Obx(
             () {
               final index = plPlayerController.previewIndex.value!;
@@ -1871,10 +1872,7 @@ Future<ui.Image?> _getImg(String url) async {
   final fileInfo = await cacheManager.getFileFromCache(cacheKey);
   if (fileInfo != null) {
     final bytes = await fileInfo.file.readAsBytes();
-    final codec = await ui.instantiateImageCodec(bytes);
-    final frame = await codec.getNextFrame();
-    codec.dispose();
-    return frame.image;
+    return _loadImg(bytes);
   } else {
     final res = await Request().get(
       url,
@@ -1883,12 +1881,17 @@ Future<ui.Image?> _getImg(String url) async {
     if (res.statusCode == 200) {
       final data = res.data;
       cacheManager.putFile(cacheKey, data, fileExtension: 'jpg');
-      final codec = await ui.instantiateImageCodec(data);
-      final frame = await codec.getNextFrame();
-      return frame.image;
+      return _loadImg(data);
     }
   }
   return null;
+}
+
+Future<ui.Image?> _loadImg(Uint8List bytes) async {
+  final codec = await ui.instantiateImageCodec(bytes);
+  final frame = await codec.getNextFrame();
+  codec.dispose();
+  return frame.image;
 }
 
 class _VideoShotImageState extends State<VideoShotImage> {
