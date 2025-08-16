@@ -36,11 +36,11 @@
     </queries>
 
     <application
-        android:label="PiliPlus"
+        android:label="@string/app_name"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"
         xmlns:tools="http://schemas.android.com/tools"
-        android:enableOnBackInvokedCallback="true"
+        android:enableOnBackInvokedCallback="false"
         android:allowBackup="false"
         android:fullBackupContent="false"
         tools:replace="android:allowBackup">

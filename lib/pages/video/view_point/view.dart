@@ -96,7 +96,6 @@ class _ViewPointsPageState
   @override
   Widget buildList(ThemeData theme) {
     return ListView.builder(
-      key: const PageStorageKey('viewpoint'),
       controller: _controller,
       physics: const AlwaysScrollableScrollPhysics(),
       padding: EdgeInsets.only(

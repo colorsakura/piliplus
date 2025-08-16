@@ -136,7 +136,6 @@ class _PagesPanelState extends State<PagesPanel> {
         SizedBox(
           height: 35,
           child: ListView.builder(
-            key: PageStorageKey(hashCode),
             controller: _scrollController,
             scrollDirection: Axis.horizontal,
             itemCount: pages.length,

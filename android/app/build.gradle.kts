@@ -30,6 +30,12 @@ android {
         versionName = flutter.versionName
     }
 
+    packagingOptions {
+        jniLibs {
+            useLegacyPackaging = true
+        }
+    }
+
     val keyProperties = Properties().also {
         val properties = rootProject.file("key.properties")
         if (properties.exists())
@@ -51,12 +57,12 @@ android {
         all {
             signingConfig = config ?: signingConfigs["debug"]
         }
-        release {
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
-        }
+//        release {
+//            proguardFiles(
+//                getDefaultProguardFile("proguard-android-optimize.txt"),
+//                "proguard-rules.pro"
+//            )
+//        }
         debug {
             applicationIdSuffix = ".debug"
         }

@@ -99,7 +99,6 @@ class _IntroDetailState extends CommonCollapseSlidePageState<PgcIntroPanel> {
     );
     return SelectionArea(
       child: ListView(
-        key: const PageStorageKey('pgc_intro'),
         controller: _controller,
         physics: const AlwaysScrollableScrollPhysics(),
         padding: EdgeInsets.only(

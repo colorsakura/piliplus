@@ -62,7 +62,6 @@ class _VotePanelState extends State<VotePanel> {
       ),
       Flexible(
         child: ListView.builder(
-          key: const PageStorageKey('vote_opions'),
           shrinkWrap: true,
           itemCount: _voteInfo.options.length,
           itemBuilder: (context, index) => _buildOptions(index),

@@ -122,7 +122,6 @@ class _MediaListPanelState
     () {
       final showDelBtn = widget.onDelete != null && widget.mediaList.length > 1;
       return ScrollablePositionedList.separated(
-        key: const PageStorageKey('medialist'),
         itemScrollController: _controller,
         physics: const AlwaysScrollableScrollPhysics(),
         itemCount: widget.mediaList.length,

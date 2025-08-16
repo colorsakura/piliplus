@@ -56,7 +56,6 @@ class _PgcReviewChildPageState extends State<PgcReviewChildPage>
     return refreshIndicator(
       onRefresh: _controller.onRefresh,
       child: CustomScrollView(
-        key: PageStorageKey(_tag),
         controller: _controller.scrollController,
         physics: const AlwaysScrollableScrollPhysics(),
         slivers: [

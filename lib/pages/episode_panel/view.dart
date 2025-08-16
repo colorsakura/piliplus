@@ -261,7 +261,6 @@ class _EpisodePanelState extends CommonCollapseSlidePageState<EpisodePanel> {
     final isCurrTab = tabIndex == widget.initialTabIndex;
     return KeepAliveWrapper(
       builder: (context) => ScrollablePositionedList.separated(
-        key: PageStorageKey(tabIndex),
         padding: EdgeInsets.only(
           top: 7,
           bottom: MediaQuery.paddingOf(context).bottom + 80,
