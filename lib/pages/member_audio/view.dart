@@ -53,29 +53,29 @@ class _MemberAudioState extends State<MemberAudio>
   @override
   bool get wantKeepAlive => true;
 
+  late final gridDelegate = SliverGridDelegateWithExtentAndRatio(
+    mainAxisSpacing: 2,
+    maxCrossAxisExtent: Grid.smallCardWidth * 2,
+    childAspectRatio: StyleString.aspectRatio * 2.6,
+    minHeight: MediaQuery.textScalerOf(context).scale(90),
+  );
+
   Widget _buildBody(LoadingState<List<SpaceAudioItem>?> loadingState) {
     return switch (loadingState) {
       Loading() => linearLoading,
       Success(:var response) =>
         response?.isNotEmpty == true
-            ? SliverGrid(
-                gridDelegate: SliverGridDelegateWithExtentAndRatio(
-                  mainAxisSpacing: 2,
-                  maxCrossAxisExtent: Grid.smallCardWidth * 2,
-                  childAspectRatio: StyleString.aspectRatio * 2.6,
-                  minHeight: MediaQuery.textScalerOf(context).scale(90),
-                ),
-                delegate: SliverChildBuilderDelegate(
-                  (context, index) {
-                    if (index == response.length - 1) {
-                      _controller.onLoadMore();
-                    }
-                    return MemberAudioItem(
-                      item: response[index],
-                    );
-                  },
-                  childCount: response!.length,
-                ),
+            ? SliverGrid.builder(
+                gridDelegate: gridDelegate,
+                itemBuilder: (context, index) {
+                  if (index == response.length - 1) {
+                    _controller.onLoadMore();
+                  }
+                  return MemberAudioItem(
+                    item: response[index],
+                  );
+                },
+                itemCount: response!.length,
               )
             : HttpError(onReload: _controller.onReload),
       Error(:var errMsg) => HttpError(

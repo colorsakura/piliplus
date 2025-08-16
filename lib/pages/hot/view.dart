@@ -1,4 +1,3 @@
-import 'package:PiliPlus/common/skeleton/video_card_h.dart';
 import 'package:PiliPlus/common/widgets/loading_widget/http_error.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/common/widgets/video_card/video_card_h.dart';
@@ -23,7 +22,7 @@ class HotPage extends CommonPage {
 }
 
 class _HotPageState extends CommonPageState<HotPage, HotController>
-    with AutomaticKeepAliveClientMixin {
+    with AutomaticKeepAliveClientMixin, GridMixin {
   @override
   HotController controller = Get.put(HotController());
 
@@ -149,43 +148,27 @@ class _HotPageState extends CommonPageState<HotPage, HotController>
     );
   }
 
-  Widget _buildSkeleton() {
-    return SliverGrid(
-      gridDelegate: Grid.videoCardHDelegate(context),
-      delegate: SliverChildBuilderDelegate(
-        (context, index) {
-          return const VideoCardHSkeleton();
-        },
-        childCount: 10,
-      ),
-    );
-  }
-
   Widget _buildBody(LoadingState<List<HotVideoItemModel>?> loadingState) {
     return switch (loadingState) {
-      Loading() => _buildSkeleton(),
+      Loading() => gridSkeleton,
       Success(:var response) =>
         response?.isNotEmpty == true
-            ? SliverGrid(
-                gridDelegate: Grid.videoCardHDelegate(context),
-                delegate: SliverChildBuilderDelegate(
-                  (context, index) {
-                    if (index == response.length - 1) {
-                      controller.onLoadMore();
-                    }
-                    return VideoCardH(
-                      videoItem: response[index],
-                      onRemove: () => controller.loadingState
-                        ..value.data!.removeAt(index)
-                        ..refresh(),
-                    );
-                  },
-                  childCount: response!.length,
-                ),
+            ? SliverGrid.builder(
+                gridDelegate: gridDelegate,
+                itemBuilder: (context, index) {
+                  if (index == response.length - 1) {
+                    controller.onLoadMore();
+                  }
+                  return VideoCardH(
+                    videoItem: response[index],
+                    onRemove: () => controller.loadingState
+                      ..value.data!.removeAt(index)
+                      ..refresh(),
+                  );
+                },
+                itemCount: response!.length,
               )
-            : HttpError(
-                onReload: controller.onReload,
-              ),
+            : HttpError(onReload: controller.onReload),
       Error(:var errMsg) => HttpError(
         errMsg: errMsg,
         onReload: controller.onReload,

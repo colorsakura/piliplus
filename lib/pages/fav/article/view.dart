@@ -1,4 +1,3 @@
-import 'package:PiliPlus/common/skeleton/video_card_h.dart';
 import 'package:PiliPlus/common/widgets/dialog/dialog.dart';
 import 'package:PiliPlus/common/widgets/loading_widget/http_error.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
@@ -18,7 +17,7 @@ class FavArticlePage extends StatefulWidget {
 }
 
 class _FavArticlePageState extends State<FavArticlePage>
-    with AutomaticKeepAliveClientMixin {
+    with AutomaticKeepAliveClientMixin, GridMixin {
   final FavArticleController _favArticleController = Get.put(
     FavArticleController(),
   );
@@ -51,37 +50,27 @@ class _FavArticlePageState extends State<FavArticlePage>
 
   Widget _buildBody(LoadingState<List<FavArticleItemModel>?> loadingState) {
     return switch (loadingState) {
-      Loading() => SliverGrid(
-        gridDelegate: Grid.videoCardHDelegate(context),
-        delegate: SliverChildBuilderDelegate(
-          (context, index) {
-            return const VideoCardHSkeleton();
-          },
-          childCount: 10,
-        ),
-      ),
+      Loading() => gridSkeleton,
       Success(:var response) =>
         response?.isNotEmpty == true
-            ? SliverGrid(
-                gridDelegate: Grid.videoCardHDelegate(context),
-                delegate: SliverChildBuilderDelegate(
-                  (context, index) {
-                    if (index == response.length - 1) {
-                      _favArticleController.onLoadMore();
-                    }
-                    final item = response[index];
-                    return FavArticleItem(
-                      item: item,
-                      onDelete: () => showConfirmDialog(
-                        context: context,
-                        title: '确定取消收藏？',
-                        onConfirm: () =>
-                            _favArticleController.onRemove(index, item.opusId),
-                      ),
-                    );
-                  },
-                  childCount: response!.length,
-                ),
+            ? SliverGrid.builder(
+                gridDelegate: gridDelegate,
+                itemBuilder: (context, index) {
+                  if (index == response.length - 1) {
+                    _favArticleController.onLoadMore();
+                  }
+                  final item = response[index];
+                  return FavArticleItem(
+                    item: item,
+                    onDelete: () => showConfirmDialog(
+                      context: context,
+                      title: '确定取消收藏？',
+                      onConfirm: () =>
+                          _favArticleController.onRemove(index, item.opusId),
+                    ),
+                  );
+                },
+                itemCount: response!.length,
               )
             : HttpError(onReload: _favArticleController.onReload),
       Error(:var errMsg) => HttpError(

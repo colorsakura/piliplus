@@ -1,4 +1,5 @@
 import 'package:PiliPlus/common/constants.dart';
+import 'package:PiliPlus/common/skeleton/video_card_v.dart';
 import 'package:PiliPlus/models/search/result.dart';
 import 'package:PiliPlus/pages/search_panel/controller.dart';
 import 'package:PiliPlus/pages/search_panel/live/widgets/item.dart';
@@ -36,6 +37,14 @@ class _SearchLivePanelState
     tag: widget.searchType.name + widget.tag,
   );
 
+  late final gridDelegate = SliverGridDelegateWithExtentAndRatio(
+    maxCrossAxisExtent: Grid.smallCardWidth,
+    crossAxisSpacing: StyleString.cardSpace,
+    mainAxisSpacing: StyleString.cardSpace,
+    childAspectRatio: StyleString.aspectRatio,
+    mainAxisExtent: MediaQuery.textScalerOf(context).scale(80),
+  );
+
   @override
   Widget buildList(ThemeData theme, List<SearchLiveItemModel> list) {
     return SliverPadding(
@@ -43,24 +52,23 @@ class _SearchLivePanelState
         left: StyleString.safeSpace,
         right: StyleString.safeSpace,
       ),
-      sliver: SliverGrid(
-        gridDelegate: SliverGridDelegateWithExtentAndRatio(
-          maxCrossAxisExtent: Grid.smallCardWidth,
-          crossAxisSpacing: StyleString.safeSpace,
-          mainAxisSpacing: StyleString.safeSpace,
-          childAspectRatio: StyleString.aspectRatio,
-          mainAxisExtent: MediaQuery.textScalerOf(context).scale(80),
-        ),
-        delegate: SliverChildBuilderDelegate(
-          (context, index) {
-            if (index == list.length - 1) {
-              controller.onLoadMore();
-            }
-            return LiveItem(liveItem: list[index]);
-          },
-          childCount: list.length,
-        ),
+      sliver: SliverGrid.builder(
+        gridDelegate: gridDelegate,
+        itemBuilder: (context, index) {
+          if (index == list.length - 1) {
+            controller.onLoadMore();
+          }
+          return LiveItem(liveItem: list[index]);
+        },
+        itemCount: list.length,
       ),
     );
   }
+
+  @override
+  Widget get builLoading => SliverGrid.builder(
+    gridDelegate: gridDelegate,
+    itemBuilder: (context, index) => const VideoCardVSkeleton(),
+    itemCount: 10,
+  );
 }

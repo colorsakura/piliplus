@@ -9,30 +9,31 @@ abstract class CommonCollapseSlidePageState<T extends CommonCollapseSlidePage>
     extends CommonSlidePageState<T> {
   late bool isInit = true;
 
-  void init() {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (mounted) {
-        setState(() {
-          isInit = false;
-        });
-      }
-    });
-  }
-
   @override
   void initState() {
     super.initState();
     init();
   }
 
+  void init() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      isInit = false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    Widget child = super.build(context);
     if (isInit) {
-      return const CustomScrollView(
-        physics: NeverScrollableScrollPhysics(),
+      return Stack(
+        children: [
+          const CustomScrollView(
+            physics: NeverScrollableScrollPhysics(),
+          ),
+          child,
+        ],
       );
     }
-
-    return super.build(context);
+    return child;
   }
 }

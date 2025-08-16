@@ -54,24 +54,24 @@ class _FavSearchPageState
     ),
   ];
 
+  late final gridDelegate = Grid.videoCardHDelegate(context, minHeight: 110);
+
   @override
   Widget buildList(List<FavDetailItemModel> list) {
-    return SliverGrid(
-      gridDelegate: Grid.videoCardHDelegate(context, minHeight: 110),
-      delegate: SliverChildBuilderDelegate(
-        childCount: list.length,
-        (context, index) {
-          if (index == list.length - 1) {
-            controller.onLoadMore();
-          }
-          final item = list[index];
-          return FavVideoCardH(
-            item: item,
-            index: index,
-            ctr: controller,
-          );
-        },
-      ),
+    return SliverGrid.builder(
+      gridDelegate: gridDelegate,
+      itemBuilder: (context, index) {
+        if (index == list.length - 1) {
+          controller.onLoadMore();
+        }
+        final item = list[index];
+        return FavVideoCardH(
+          item: item,
+          index: index,
+          ctr: controller,
+        );
+      },
+      itemCount: list.length,
     );
   }
 }

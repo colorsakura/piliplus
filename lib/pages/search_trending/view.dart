@@ -225,9 +225,7 @@ class _SearchTrendingPageState extends State<SearchTrendingPage> {
                 },
                 separatorBuilder: (context, index) => divider,
               )
-            : HttpError(
-                onReload: _controller.onReload,
-              ),
+            : HttpError(onReload: _controller.onReload),
       Error(:var errMsg) => HttpError(
         errMsg: errMsg,
         onReload: _controller.onReload,

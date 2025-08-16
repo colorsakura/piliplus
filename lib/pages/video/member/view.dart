@@ -1,4 +1,3 @@
-import 'package:PiliPlus/common/skeleton/video_card_h.dart';
 import 'package:PiliPlus/common/widgets/button/icon_button.dart';
 import 'package:PiliPlus/common/widgets/custom_sliver_persistent_header_delegate.dart';
 import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
@@ -42,7 +41,8 @@ class HorizontalMemberPage extends StatefulWidget {
   State<HorizontalMemberPage> createState() => _HorizontalMemberPageState();
 }
 
-class _HorizontalMemberPageState extends State<HorizontalMemberPage> {
+class _HorizontalMemberPageState extends State<HorizontalMemberPage>
+    with GridMixin {
   late final HorizontalMemberPageController _controller;
   AccountService accountService = Get.find<AccountService>();
   dynamic _bvid;
@@ -173,46 +173,36 @@ class _HorizontalMemberPageState extends State<HorizontalMemberPage> {
     LoadingState<List<SpaceArchiveItem>?> loadingState,
   ) {
     return switch (loadingState) {
-      Loading() => SliverGrid(
-        gridDelegate: Grid.videoCardHDelegate(context),
-        delegate: SliverChildBuilderDelegate(
-          childCount: 10,
-          (context, index) {
-            return const VideoCardHSkeleton();
-          },
-        ),
-      ),
+      Loading() => gridSkeleton,
       Success(:var response) =>
         response?.isNotEmpty == true
             ? SliverPadding(
                 padding: EdgeInsets.only(
                   bottom: MediaQuery.paddingOf(context).bottom + 80,
                 ),
-                sliver: SliverGrid(
-                  gridDelegate: Grid.videoCardHDelegate(context),
-                  delegate: SliverChildBuilderDelegate(
-                    (context, index) {
-                      if (index == response.length - 1 && _controller.hasNext) {
-                        _controller.onLoadMore();
-                      }
-                      final SpaceArchiveItem videoItem = response[index];
-                      return VideoCardHMemberVideo(
-                        videoItem: videoItem,
-                        bvid: _bvid,
-                        onTap: () {
-                          Get.back();
-                          widget.ugcIntroController.onChangeEpisode(
-                            BaseEpisodeItem(
-                              bvid: videoItem.bvid,
-                              cid: videoItem.cid,
-                              cover: videoItem.cover,
-                            ),
-                          );
-                        },
-                      );
-                    },
-                    childCount: response!.length,
-                  ),
+                sliver: SliverGrid.builder(
+                  gridDelegate: gridDelegate,
+                  itemBuilder: (context, index) {
+                    if (index == response.length - 1 && _controller.hasNext) {
+                      _controller.onLoadMore();
+                    }
+                    final SpaceArchiveItem videoItem = response[index];
+                    return VideoCardHMemberVideo(
+                      videoItem: videoItem,
+                      bvid: _bvid,
+                      onTap: () {
+                        Get.back();
+                        widget.ugcIntroController.onChangeEpisode(
+                          BaseEpisodeItem(
+                            bvid: videoItem.bvid,
+                            cid: videoItem.cid,
+                            cover: videoItem.cover,
+                          ),
+                        );
+                      },
+                    );
+                  },
+                  itemCount: response!.length,
                 ),
               )
             : HttpError(onReload: _controller.onReload),

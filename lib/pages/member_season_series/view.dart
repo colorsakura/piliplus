@@ -1,4 +1,3 @@
-import 'package:PiliPlus/common/skeleton/video_card_h.dart';
 import 'package:PiliPlus/common/widgets/loading_widget/http_error.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/common/member/contribute_type.dart';
@@ -26,7 +25,7 @@ class SeasonSeriesPage extends StatefulWidget {
 }
 
 class _SeasonSeriesPageState extends State<SeasonSeriesPage>
-    with AutomaticKeepAliveClientMixin {
+    with AutomaticKeepAliveClientMixin, GridMixin {
   late final _controller = Get.put(
     SeasonSeriesController(widget.mid),
     tag: widget.heroTag,
@@ -54,58 +53,48 @@ class _SeasonSeriesPageState extends State<SeasonSeriesPage>
 
   Widget _buildBody(LoadingState<List<SpaceSsModel>?> loadingState) {
     return switch (loadingState) {
-      Loading() => SliverGrid(
-        gridDelegate: Grid.videoCardHDelegate(context),
-        delegate: SliverChildBuilderDelegate(
-          (context, index) {
-            return const VideoCardHSkeleton();
-          },
-          childCount: 10,
-        ),
-      ),
+      Loading() => gridSkeleton,
       Success(:var response) =>
         response?.isNotEmpty == true
-            ? SliverGrid(
-                gridDelegate: Grid.videoCardHDelegate(context),
-                delegate: SliverChildBuilderDelegate(
-                  (context, index) {
-                    if (index == response.length - 1) {
-                      _controller.onLoadMore();
-                    }
-                    SpaceSsModel item = response[index];
-                    return SeasonSeriesCard(
-                      item: item,
-                      onTap: () {
-                        bool isSeason = item.meta!.seasonId != null;
-                        dynamic id = isSeason
-                            ? item.meta!.seasonId
-                            : item.meta!.seriesId;
-                        Get.to(
-                          Scaffold(
-                            appBar: AppBar(
-                              title: Text(item.meta!.name!),
-                            ),
-                            body: SafeArea(
-                              top: false,
-                              bottom: false,
-                              child: MemberVideo(
-                                type: isSeason
-                                    ? ContributeType.season
-                                    : ContributeType.series,
-                                heroTag: widget.heroTag,
-                                mid: widget.mid,
-                                seasonId: isSeason ? id : null,
-                                seriesId: isSeason ? null : id,
-                                title: item.meta!.name,
-                              ),
+            ? SliverGrid.builder(
+                gridDelegate: gridDelegate,
+                itemBuilder: (context, index) {
+                  if (index == response.length - 1) {
+                    _controller.onLoadMore();
+                  }
+                  SpaceSsModel item = response[index];
+                  return SeasonSeriesCard(
+                    item: item,
+                    onTap: () {
+                      bool isSeason = item.meta!.seasonId != null;
+                      dynamic id = isSeason
+                          ? item.meta!.seasonId
+                          : item.meta!.seriesId;
+                      Get.to(
+                        Scaffold(
+                          appBar: AppBar(
+                            title: Text(item.meta!.name!),
+                          ),
+                          body: SafeArea(
+                            top: false,
+                            bottom: false,
+                            child: MemberVideo(
+                              type: isSeason
+                                  ? ContributeType.season
+                                  : ContributeType.series,
+                              heroTag: widget.heroTag,
+                              mid: widget.mid,
+                              seasonId: isSeason ? id : null,
+                              seriesId: isSeason ? null : id,
+                              title: item.meta!.name,
                             ),
                           ),
-                        );
-                      },
-                    );
-                  },
-                  childCount: response!.length,
-                ),
+                        ),
+                      );
+                    },
+                  );
+                },
+                itemCount: response!.length,
               )
             : HttpError(onReload: _controller.onReload),
       Error(:var errMsg) => HttpError(

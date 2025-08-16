@@ -1,4 +1,3 @@
-import 'package:PiliPlus/common/skeleton/video_card_h.dart';
 import 'package:PiliPlus/common/widgets/loading_widget/http_error.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/http/loading_state.dart';
@@ -25,7 +24,7 @@ class LaterViewChildPage extends StatefulWidget {
 }
 
 class _LaterViewChildPageState extends State<LaterViewChildPage>
-    with AutomaticKeepAliveClientMixin {
+    with AutomaticKeepAliveClientMixin, GridMixin {
   late final LaterController _laterController = Get.put(
     LaterController(widget.laterViewType),
     tag: widget.laterViewType.type.toString(),
@@ -56,56 +55,44 @@ class _LaterViewChildPageState extends State<LaterViewChildPage>
 
   Widget _buildBody(LoadingState<List<LaterItemModel>?> loadingState) {
     return switch (loadingState) {
-      Loading() => SliverGrid(
-        gridDelegate: Grid.videoCardHDelegate(context),
-        delegate: SliverChildBuilderDelegate(
-          (context, index) {
-            return const VideoCardHSkeleton();
-          },
-          childCount: 10,
-        ),
-      ),
+      Loading() => gridSkeleton,
       Success(:var response) =>
         response?.isNotEmpty == true
-            ? SliverGrid(
-                gridDelegate: Grid.videoCardHDelegate(context),
-                delegate: SliverChildBuilderDelegate(
-                  (context, index) {
-                    if (index == response.length - 1) {
-                      _laterController.onLoadMore();
-                    }
-                    var videoItem = response[index];
-                    return VideoCardHLater(
-                      index: index,
-                      videoItem: videoItem,
-                      ctr: _laterController,
-                      onViewLater: (cid) {
-                        PageUtils.toVideoPage(
-                          bvid: videoItem.bvid,
-                          cid: cid,
-                          cover: videoItem.pic,
-                          title: videoItem.title,
-                          extraArguments: {
-                            'oid': videoItem.aid,
-                            'sourceType': SourceType.watchLater,
-                            'count': _laterController
-                                .baseCtr
-                                .counts[LaterViewType.all],
-                            'favTitle': '稍后再看',
-                            'mediaId': _laterController.accountService.mid,
-                            'desc': false,
-                            'isContinuePlaying': index != 0,
-                          },
-                        );
-                      },
-                    );
-                  },
-                  childCount: response!.length,
-                ),
+            ? SliverGrid.builder(
+                gridDelegate: gridDelegate,
+                itemBuilder: (context, index) {
+                  if (index == response.length - 1) {
+                    _laterController.onLoadMore();
+                  }
+                  var videoItem = response[index];
+                  return VideoCardHLater(
+                    index: index,
+                    videoItem: videoItem,
+                    ctr: _laterController,
+                    onViewLater: (cid) {
+                      PageUtils.toVideoPage(
+                        bvid: videoItem.bvid,
+                        cid: cid,
+                        cover: videoItem.pic,
+                        title: videoItem.title,
+                        extraArguments: {
+                          'oid': videoItem.aid,
+                          'sourceType': SourceType.watchLater,
+                          'count': _laterController
+                              .baseCtr
+                              .counts[LaterViewType.all],
+                          'favTitle': '稍后再看',
+                          'mediaId': _laterController.accountService.mid,
+                          'desc': false,
+                          'isContinuePlaying': index != 0,
+                        },
+                      );
+                    },
+                  );
+                },
+                itemCount: response!.length,
               )
-            : HttpError(
-                onReload: _laterController.onReload,
-              ),
+            : HttpError(onReload: _laterController.onReload),
       Error(:var errMsg) => HttpError(
         errMsg: errMsg,
         onReload: _laterController.onReload,

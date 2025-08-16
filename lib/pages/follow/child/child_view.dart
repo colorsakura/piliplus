@@ -88,9 +88,7 @@ class _FollowChildPageState extends State<FollowChildPage>
     return switch (loadingState) {
       Loading() => SliverList.builder(
         itemCount: 12,
-        itemBuilder: (context, index) {
-          return const MsgFeedTopSkeleton();
-        },
+        itemBuilder: (context, index) => const MsgFeedTopSkeleton(),
       ),
       Success(:var response) =>
         response?.isNotEmpty == true

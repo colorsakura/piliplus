@@ -1,4 +1,3 @@
-import 'package:PiliPlus/common/skeleton/video_card_h.dart';
 import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
 import 'package:PiliPlus/common/widgets/loading_widget/http_error.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
@@ -24,7 +23,7 @@ class ArticleListPage extends StatefulWidget {
   State<ArticleListPage> createState() => _ArticleListPageState();
 }
 
-class _ArticleListPageState extends State<ArticleListPage> {
+class _ArticleListPageState extends State<ArticleListPage> with GridMixin {
   final _controller = Get.put(
     ArticleListController(),
     tag: Utils.generateRandomString(8),
@@ -58,37 +57,27 @@ class _ArticleListPageState extends State<ArticleListPage> {
     );
   }
 
+  @override
+  Widget get gridSkeleton => SliverPadding(
+    padding: EdgeInsets.only(
+      top: MediaQuery.paddingOf(context).top + kToolbarHeight + 120,
+    ),
+    sliver: super.gridSkeleton,
+  );
+
   Widget _buildBody(
     ThemeData theme,
     LoadingState<List<ArticleListItemModel>?> loadingState,
   ) {
     return switch (loadingState) {
-      Loading() => SliverPadding(
-        padding: EdgeInsets.only(
-          top: MediaQuery.paddingOf(context).top + kToolbarHeight + 120,
-        ),
-        sliver: SliverGrid(
-          gridDelegate: Grid.videoCardHDelegate(context),
-          delegate: SliverChildBuilderDelegate(
-            (context, index) {
-              return const VideoCardHSkeleton();
-            },
-            childCount: 10,
-          ),
-        ),
-      ),
+      Loading() => gridSkeleton,
       Success(:var response) =>
         response?.isNotEmpty == true
-            ? SliverGrid(
-                gridDelegate: Grid.videoCardHDelegate(context),
-                delegate: SliverChildBuilderDelegate(
-                  (context, index) {
-                    return ArticleListItem(
-                      item: response[index],
-                    );
-                  },
-                  childCount: response!.length,
-                ),
+            ? SliverGrid.builder(
+                gridDelegate: gridDelegate,
+                itemBuilder: (context, index) =>
+                    ArticleListItem(item: response[index]),
+                itemCount: response!.length,
               )
             : HttpError(onReload: _controller.onReload),
       Error(:var errMsg) => HttpError(

@@ -185,9 +185,7 @@ class _WhisperDetailPageState
                 separatorBuilder: (context, index) =>
                     const SizedBox(height: 12),
               )
-            : scrollErrorWidget(
-                onReload: _whisperDetailController.onReload,
-              ),
+            : scrollErrorWidget(onReload: _whisperDetailController.onReload),
       Error(:var errMsg) => scrollErrorWidget(
         errMsg: errMsg,
         onReload: _whisperDetailController.onReload,

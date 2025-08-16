@@ -1,4 +1,3 @@
-import 'package:PiliPlus/common/skeleton/video_card_h.dart';
 import 'package:PiliPlus/common/widgets/custom_sliver_persistent_header_delegate.dart';
 import 'package:PiliPlus/common/widgets/loading_widget/http_error.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
@@ -38,11 +37,9 @@ class MemberVideo extends StatefulWidget {
 }
 
 class _MemberVideoState extends State<MemberVideo>
-    with AutomaticKeepAliveClientMixin {
+    with AutomaticKeepAliveClientMixin, GridMixin {
   @override
   bool get wantKeepAlive => true;
-
-  late final gridDelegate = Grid.videoCardHDelegate(context);
 
   late final _controller = Get.put(
     MemberVideoCtr(
@@ -128,25 +125,18 @@ class _MemberVideoState extends State<MemberVideo>
     return child;
   }
 
+  @override
+  Widget get gridSkeleton => SliverPadding(
+    padding: widget.isSingle ? const EdgeInsets.only(top: 7) : EdgeInsets.zero,
+    sliver: super.gridSkeleton,
+  );
+
   Widget _buildBody(
     ThemeData theme,
     LoadingState<List<SpaceArchiveItem>?> loadingState,
   ) {
     return switch (loadingState) {
-      Loading() => SliverPadding(
-        padding: widget.isSingle
-            ? const EdgeInsets.only(top: 7)
-            : EdgeInsets.zero,
-        sliver: SliverGrid(
-          gridDelegate: Grid.videoCardHDelegate(context),
-          delegate: SliverChildBuilderDelegate(
-            (context, index) {
-              return const VideoCardHSkeleton();
-            },
-            childCount: 10,
-          ),
-        ),
-      ),
+      Loading() => gridSkeleton,
       Success(:var response) =>
         response?.isNotEmpty == true
             ? SliverMainAxisGroup(
@@ -239,27 +229,23 @@ class _MemberVideoState extends State<MemberVideo>
                       ),
                     ),
                   ),
-                  SliverGrid(
+                  SliverGrid.builder(
                     gridDelegate: gridDelegate,
-                    delegate: SliverChildBuilderDelegate(
-                      (context, index) {
-                        if (widget.type != ContributeType.season &&
-                            index == response.length - 1) {
-                          _controller.onLoadMore();
-                        }
-                        return VideoCardHMemberVideo(
-                          videoItem: response[index],
-                          fromViewAid: _controller.fromViewAid,
-                        );
-                      },
-                      childCount: response!.length,
-                    ),
+                    itemBuilder: (context, index) {
+                      if (widget.type != ContributeType.season &&
+                          index == response.length - 1) {
+                        _controller.onLoadMore();
+                      }
+                      return VideoCardHMemberVideo(
+                        videoItem: response[index],
+                        fromViewAid: _controller.fromViewAid,
+                      );
+                    },
+                    itemCount: response!.length,
                   ),
                 ],
               )
-            : HttpError(
-                onReload: _controller.onReload,
-              ),
+            : HttpError(onReload: _controller.onReload),
       Error(:var errMsg) => HttpError(
         errMsg: errMsg,
         onReload: _controller.onReload,

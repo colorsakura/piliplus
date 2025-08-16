@@ -1,4 +1,3 @@
-import 'package:PiliPlus/common/skeleton/video_card_h.dart';
 import 'package:PiliPlus/common/widgets/loading_widget/http_error.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/grpc/bilibili/main/community/reply/v1.pb.dart'
@@ -26,7 +25,7 @@ class ReplySearchChildPage extends StatefulWidget {
 }
 
 class _ReplySearchChildPageState extends State<ReplySearchChildPage>
-    with AutomaticKeepAliveClientMixin {
+    with AutomaticKeepAliveClientMixin, GridMixin {
   ReplySearchChildController get _controller => widget.controller;
 
   @override
@@ -50,37 +49,23 @@ class _ReplySearchChildPageState extends State<ReplySearchChildPage>
     );
   }
 
-  Widget get _buildLoading {
-    return SliverGrid(
-      gridDelegate: Grid.videoCardHDelegate(context),
-      delegate: SliverChildBuilderDelegate(
-        (context, index) {
-          return const VideoCardHSkeleton();
-        },
-        childCount: 10,
-      ),
-    );
-  }
-
   Widget _buildBody(LoadingState<List<SearchItem>?> loadingState) {
     return switch (loadingState) {
-      Loading() => _buildLoading,
+      Loading() => gridSkeleton,
       Success(:var response) =>
         response?.isNotEmpty == true
-            ? SliverGrid(
-                gridDelegate: Grid.videoCardHDelegate(context),
-                delegate: SliverChildBuilderDelegate(
-                  (context, index) {
-                    if (index == response.length - 1) {
-                      _controller.onLoadMore();
-                    }
-                    return ReplySearchItem(
-                      item: response[index],
-                      type: widget.searchType,
-                    );
-                  },
-                  childCount: response!.length,
-                ),
+            ? SliverGrid.builder(
+                gridDelegate: gridDelegate,
+                itemBuilder: (context, index) {
+                  if (index == response.length - 1) {
+                    _controller.onLoadMore();
+                  }
+                  return ReplySearchItem(
+                    item: response[index],
+                    type: widget.searchType,
+                  );
+                },
+                itemCount: response!.length,
               )
             : HttpError(onReload: _controller.onReload),
       Error(:var errMsg) => HttpError(

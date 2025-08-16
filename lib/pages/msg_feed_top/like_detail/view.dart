@@ -63,9 +63,7 @@ class _LikeDetailPageState extends State<LikeDetailPage> {
     return switch (loadingState) {
       Loading() => SliverList.builder(
         itemCount: 12,
-        itemBuilder: (context, index) {
-          return const MsgFeedTopSkeleton();
-        },
+        itemBuilder: (context, index) => const MsgFeedTopSkeleton(),
       ),
       Success(:var response) => SliverMainAxisGroup(
         slivers: [

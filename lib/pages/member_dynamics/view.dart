@@ -79,7 +79,7 @@ class _MemberDynamicsPageState extends State<MemberDynamicsPage>
         response?.isNotEmpty == true
             ? GlobalData().dynamicsWaterfallFlow
                   ? SliverWaterfallFlow(
-                      gridDelegate: gridDelegate,
+                      gridDelegate: dynGridDelegate,
                       delegate: SliverChildBuilderDelegate(
                         (_, index) {
                           if (index == response.length - 1) {
@@ -118,9 +118,7 @@ class _MemberDynamicsPageState extends State<MemberDynamicsPage>
                         const SliverFillRemaining(),
                       ],
                     )
-            : HttpError(
-                onReload: _memberDynamicController.onReload,
-              ),
+            : HttpError(onReload: _memberDynamicController.onReload),
       Error(:var errMsg) => HttpError(
         errMsg: errMsg,
         onReload: _memberDynamicController.onReload,

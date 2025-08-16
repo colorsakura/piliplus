@@ -1,4 +1,3 @@
-import 'package:PiliPlus/common/skeleton/video_card_h.dart';
 import 'package:PiliPlus/common/widgets/loading_widget/http_error.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/http/loading_state.dart';
@@ -16,7 +15,7 @@ class SubPage extends StatefulWidget {
   State<SubPage> createState() => _SubPageState();
 }
 
-class _SubPageState extends State<SubPage> {
+class _SubPageState extends State<SubPage> with GridMixin {
   final SubController _subController = Get.put(SubController());
 
   @override
@@ -46,34 +45,24 @@ class _SubPageState extends State<SubPage> {
 
   Widget _buildBody(LoadingState<List<SubItemModel>?> loadingState) {
     return switch (loadingState) {
-      Loading() => SliverGrid(
-        gridDelegate: Grid.videoCardHDelegate(context),
-        delegate: SliverChildBuilderDelegate(
-          (context, index) => const VideoCardHSkeleton(),
-          childCount: 10,
-        ),
-      ),
+      Loading() => gridSkeleton,
       Success(:var response) =>
         response?.isNotEmpty == true
-            ? SliverGrid(
-                gridDelegate: Grid.videoCardHDelegate(context),
-                delegate: SliverChildBuilderDelegate(
-                  childCount: response!.length,
-                  (BuildContext context, int index) {
-                    if (index == response.length - 1) {
-                      _subController.onLoadMore();
-                    }
-                    final item = response[index];
-                    return SubItem(
-                      item: item,
-                      cancelSub: () => _subController.cancelSub(item),
-                    );
-                  },
-                ),
+            ? SliverGrid.builder(
+                gridDelegate: gridDelegate,
+                itemBuilder: (context, index) {
+                  if (index == response.length - 1) {
+                    _subController.onLoadMore();
+                  }
+                  final item = response[index];
+                  return SubItem(
+                    item: item,
+                    cancelSub: () => _subController.cancelSub(item),
+                  );
+                },
+                itemCount: response!.length,
               )
-            : HttpError(
-                onReload: _subController.onReload,
-              ),
+            : HttpError(onReload: _subController.onReload),
       Error(:var errMsg) => HttpError(
         errMsg: errMsg,
         onReload: _subController.onReload,

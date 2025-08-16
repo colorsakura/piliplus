@@ -18,6 +18,7 @@ class HotVideoItemModel extends BaseRecVideoItemModel with MultiSelectData {
   String? redirectUrl;
   num? progress;
   int? isCooperation;
+  bool? isCharging;
 
   HotVideoItemModel.fromJson(Map<String, dynamic> json) {
     aid = json["aid"];
@@ -47,6 +48,7 @@ class HotVideoItemModel extends BaseRecVideoItemModel with MultiSelectData {
     // uri = json['uri']; // 仅在稍后再看存在
     progress = json['progress'];
     isCooperation = json['rights']?['is_cooperation'];
+    isCharging = json['charging_pay']?['level'] != null;
   }
 
   // @override

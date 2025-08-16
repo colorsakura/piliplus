@@ -296,17 +296,18 @@ class _ReplyPageState extends CommonRichTextPubPageState<ReplyPage> {
 
     final isRoot = widget.root == 0;
     final color = themeData.colorScheme.onSurfaceVariant;
+    late final gridDelegate = SliverGridDelegateWithExtentAndRatio(
+      maxCrossAxisExtent: 65,
+      mainAxisSpacing: 12,
+      crossAxisSpacing: 12,
+      mainAxisExtent: 25,
+    );
 
     return SizedBox(
       height: height,
       child: GridView(
         padding: const EdgeInsets.only(left: 12, bottom: 12, right: 12),
-        gridDelegate: SliverGridDelegateWithExtentAndRatio(
-          maxCrossAxisExtent: 65,
-          mainAxisSpacing: 12,
-          crossAxisSpacing: 12,
-          mainAxisExtent: 25,
-        ),
+        gridDelegate: gridDelegate,
         children: [
           item(
             onTap: () async {

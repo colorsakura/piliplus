@@ -1,3 +1,4 @@
+import 'package:PiliPlus/common/skeleton/msg_feed_top.dart';
 import 'package:PiliPlus/common/widgets/custom_sliver_persistent_header_delegate.dart';
 import 'package:PiliPlus/models/search/result.dart';
 import 'package:PiliPlus/pages/search_panel/user/controller.dart';
@@ -88,24 +89,31 @@ class _SearchUserPanelState
     );
   }
 
+  late final gridDelegate = SliverGridDelegateWithMaxCrossAxisExtent(
+    maxCrossAxisExtent: Grid.smallCardWidth * 2,
+    mainAxisExtent: 66,
+  );
+
   @override
   Widget buildList(ThemeData theme, List<SearchUserItemModel> list) {
-    return SliverGrid(
-      gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-        maxCrossAxisExtent: Grid.smallCardWidth * 2,
-        mainAxisExtent: 66,
-      ),
-      delegate: SliverChildBuilderDelegate(
-        (BuildContext context, int index) {
-          if (index == list.length - 1) {
-            controller.onLoadMore();
-          }
-          return SearchUserItem(
-            item: list[index],
-          );
-        },
-        childCount: list.length,
-      ),
+    return SliverGrid.builder(
+      gridDelegate: gridDelegate,
+      itemBuilder: (BuildContext context, int index) {
+        if (index == list.length - 1) {
+          controller.onLoadMore();
+        }
+        return SearchUserItem(
+          item: list[index],
+        );
+      },
+      itemCount: list.length,
     );
   }
+
+  @override
+  Widget get builLoading => SliverGrid.builder(
+    gridDelegate: gridDelegate,
+    itemBuilder: (context, index) => const MsgFeedTopSkeleton(),
+    itemCount: 10,
+  );
 }

@@ -427,9 +427,7 @@ class _ArticlePageState extends CommonDynPageState<ArticlePage> {
     return switch (loadingState) {
       Loading() => SliverList.builder(
         itemCount: 12,
-        itemBuilder: (context, index) {
-          return const VideoReplySkeleton();
-        },
+        itemBuilder: (context, index) => const VideoReplySkeleton(),
       ),
       Success(:var response) =>
         response?.isNotEmpty == true

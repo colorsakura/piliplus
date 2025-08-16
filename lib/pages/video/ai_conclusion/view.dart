@@ -61,6 +61,7 @@ class _AiDetailState extends CommonCollapseSlidePageState<AiConclusionPanel> {
   @override
   Widget buildList(ThemeData theme) {
     return CustomScrollView(
+      key: const PageStorageKey('ai_detail'),
       controller: _controller,
       physics: const AlwaysScrollableScrollPhysics(),
       slivers: [

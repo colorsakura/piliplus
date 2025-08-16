@@ -51,80 +51,80 @@ class _RcmdPageState extends CommonPageState<RcmdPage, RcmdController>
     );
   }
 
+  late final gridDelegate = SliverGridDelegateWithExtentAndRatio(
+    mainAxisSpacing: StyleString.cardSpace,
+    crossAxisSpacing: StyleString.cardSpace,
+    maxCrossAxisExtent: Grid.smallCardWidth,
+    childAspectRatio: StyleString.aspectRatio,
+    mainAxisExtent: MediaQuery.textScalerOf(context).scale(90),
+  );
+
   Widget _buildBody(LoadingState<List<dynamic>?> loadingState) {
     return switch (loadingState) {
-      Loading() => _buildSkeleton(),
+      Loading() => _buildSkeleton,
       Success(:var response) =>
         response?.isNotEmpty == true
-            ? SliverGrid(
-                gridDelegate: SliverGridDelegateWithExtentAndRatio(
-                  mainAxisSpacing: StyleString.cardSpace,
-                  crossAxisSpacing: StyleString.cardSpace,
-                  maxCrossAxisExtent: Grid.smallCardWidth,
-                  childAspectRatio: StyleString.aspectRatio,
-                  mainAxisExtent: MediaQuery.textScalerOf(context).scale(90),
-                ),
-                delegate: SliverChildBuilderDelegate(
-                  (BuildContext context, int index) {
-                    if (index == response.length - 1) {
-                      controller.onLoadMore();
-                    }
-                    if (controller.lastRefreshAt != null) {
-                      if (controller.lastRefreshAt == index) {
-                        return GestureDetector(
-                          onTap: () => controller
-                            ..animateToTop()
-                            ..onRefresh(),
-                          child: Card(
-                            child: Container(
-                              alignment: Alignment.center,
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 10,
-                              ),
-                              child: Text(
-                                '上次看到这里\n点击刷新',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  color: Theme.of(
-                                    context,
-                                  ).colorScheme.onSurfaceVariant,
-                                ),
+            ? SliverGrid.builder(
+                gridDelegate: gridDelegate,
+                itemBuilder: (context, index) {
+                  if (index == response.length - 1) {
+                    controller.onLoadMore();
+                  }
+                  if (controller.lastRefreshAt != null) {
+                    if (controller.lastRefreshAt == index) {
+                      return GestureDetector(
+                        onTap: () => controller
+                          ..animateToTop()
+                          ..onRefresh(),
+                        child: Card(
+                          child: Container(
+                            alignment: Alignment.center,
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 10,
+                            ),
+                            child: Text(
+                              '上次看到这里\n点击刷新',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: Theme.of(
+                                  context,
+                                ).colorScheme.onSurfaceVariant,
                               ),
                             ),
                           ),
-                        );
-                      }
-                      int actualIndex = controller.lastRefreshAt == null
-                          ? index
-                          : index > controller.lastRefreshAt!
-                          ? index - 1
-                          : index;
-                      return VideoCardV(
-                        videoItem: response[actualIndex],
-                        onRemove: () {
-                          if (controller.lastRefreshAt != null &&
-                              actualIndex < controller.lastRefreshAt!) {
-                            controller.lastRefreshAt =
-                                controller.lastRefreshAt! - 1;
-                          }
-                          controller.loadingState
-                            ..value.data!.removeAt(actualIndex)
-                            ..refresh();
-                        },
-                      );
-                    } else {
-                      return VideoCardV(
-                        videoItem: response[index],
-                        onRemove: () => controller.loadingState
-                          ..value.data!.removeAt(index)
-                          ..refresh(),
+                        ),
                       );
                     }
-                  },
-                  childCount: controller.lastRefreshAt != null
-                      ? response!.length + 1
-                      : response!.length,
-                ),
+                    int actualIndex = controller.lastRefreshAt == null
+                        ? index
+                        : index > controller.lastRefreshAt!
+                        ? index - 1
+                        : index;
+                    return VideoCardV(
+                      videoItem: response[actualIndex],
+                      onRemove: () {
+                        if (controller.lastRefreshAt != null &&
+                            actualIndex < controller.lastRefreshAt!) {
+                          controller.lastRefreshAt =
+                              controller.lastRefreshAt! - 1;
+                        }
+                        controller.loadingState
+                          ..value.data!.removeAt(actualIndex)
+                          ..refresh();
+                      },
+                    );
+                  } else {
+                    return VideoCardV(
+                      videoItem: response[index],
+                      onRemove: () => controller.loadingState
+                        ..value.data!.removeAt(index)
+                        ..refresh(),
+                    );
+                  }
+                },
+                itemCount: controller.lastRefreshAt != null
+                    ? response!.length + 1
+                    : response!.length,
               )
             : HttpError(onReload: controller.onReload),
       Error(:var errMsg) => HttpError(
@@ -134,21 +134,9 @@ class _RcmdPageState extends CommonPageState<RcmdPage, RcmdController>
     };
   }
 
-  Widget _buildSkeleton() {
-    return SliverGrid(
-      gridDelegate: SliverGridDelegateWithExtentAndRatio(
-        mainAxisSpacing: StyleString.cardSpace,
-        crossAxisSpacing: StyleString.cardSpace,
-        maxCrossAxisExtent: Grid.smallCardWidth,
-        childAspectRatio: StyleString.aspectRatio,
-        mainAxisExtent: MediaQuery.textScalerOf(context).scale(90),
-      ),
-      delegate: SliverChildBuilderDelegate(
-        (context, index) {
-          return const VideoCardVSkeleton();
-        },
-        childCount: 10,
-      ),
-    );
-  }
+  Widget get _buildSkeleton => SliverGrid.builder(
+    gridDelegate: gridDelegate,
+    itemBuilder: (context, index) => const VideoCardVSkeleton(),
+    itemCount: 10,
+  );
 }

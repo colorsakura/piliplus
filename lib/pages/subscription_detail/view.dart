@@ -1,4 +1,3 @@
-import 'package:PiliPlus/common/skeleton/video_card_h.dart';
 import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
 import 'package:PiliPlus/common/widgets/loading_widget/http_error.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
@@ -35,7 +34,7 @@ class SubDetailPage extends StatefulWidget {
   }
 }
 
-class _SubDetailPageState extends State<SubDetailPage> {
+class _SubDetailPageState extends State<SubDetailPage> with GridMixin {
   late final SubDetailController _subDetailController = Get.put(
     SubDetailController(),
     tag: Utils.makeHeroTag(Get.parameters['id']),
@@ -74,32 +73,22 @@ class _SubDetailPageState extends State<SubDetailPage> {
 
   Widget _buildBody(LoadingState<List<SubDetailItemModel>?> loadingState) {
     return switch (loadingState) {
-      Loading() => SliverGrid(
-        gridDelegate: Grid.videoCardHDelegate(context),
-        delegate: SliverChildBuilderDelegate(
-          (context, index) => const VideoCardHSkeleton(),
-          childCount: 10,
-        ),
-      ),
+      Loading() => gridSkeleton,
       Success(:var response) =>
         response?.isNotEmpty == true
-            ? SliverGrid(
-                gridDelegate: Grid.videoCardHDelegate(context),
-                delegate: SliverChildBuilderDelegate(
-                  childCount: response!.length,
-                  (context, index) {
-                    if (index == response.length - 1) {
-                      _subDetailController.onLoadMore();
-                    }
-                    return SubVideoCardH(
-                      videoItem: response[index],
-                    );
-                  },
-                ),
+            ? SliverGrid.builder(
+                gridDelegate: gridDelegate,
+                itemBuilder: (context, index) {
+                  if (index == response.length - 1) {
+                    _subDetailController.onLoadMore();
+                  }
+                  return SubVideoCardH(
+                    videoItem: response[index],
+                  );
+                },
+                itemCount: response!.length,
               )
-            : HttpError(
-                onReload: _subDetailController.onReload,
-              ),
+            : HttpError(onReload: _subDetailController.onReload),
       Error(:var errMsg) => HttpError(
         errMsg: errMsg,
         onReload: _subDetailController.onReload,
@@ -124,6 +113,7 @@ class _SubDetailPageState extends State<SubDetailPage> {
 
   Widget _buildAppBar(ThemeData theme, EdgeInsets padding, SubItemModel info) {
     final style = TextStyle(
+      height: 1,
       fontSize: 12.5,
       color: theme.colorScheme.outline,
     );
@@ -178,29 +168,28 @@ class _SubDetailPageState extends State<SubDetailPage> {
               cover,
               Expanded(
                 child: Column(
-                  spacing: 4,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      info.title!,
-                      style: TextStyle(
-                        fontSize: theme.textTheme.titleMedium!.fontSize,
-                        fontWeight: FontWeight.bold,
+                    Expanded(
+                      child: Text(
+                        info.title!,
+                        style: const TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                     GestureDetector(
-                      onTap: () {
-                        Get.toNamed(
-                          '/member?mid=${info.upper!.mid}',
-                        );
-                      },
+                      onTap: () =>
+                          Get.toNamed('/member?mid=${info.upper!.mid}'),
                       child: Text(
                         info.upper!.name!,
                         style: TextStyle(color: theme.colorScheme.primary),
                       ),
                     ),
-                    const Spacer(),
+                    const SizedBox(height: 4),
                     Text('共${info.mediaCount}条视频', style: style),
+                    const SizedBox(height: 4),
                     Text(
                       '${NumUtil.numFormat(info.viewCount ?? info.cntInfo?.play)}次播放',
                       style: style,

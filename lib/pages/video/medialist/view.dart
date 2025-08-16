@@ -49,14 +49,20 @@ class MediaListPanel extends CommonCollapseSlidePage {
 
 class _MediaListPanelState
     extends CommonCollapseSlidePageState<MediaListPanel> {
-  late final int _index;
+  final _controller = ItemScrollController();
 
   @override
-  void initState() {
-    super.initState();
+  void init() {
     final bvid = widget.getBvId();
     final bvIndex = widget.mediaList.indexWhere((item) => item.bvid == bvid);
-    _index = bvIndex == -1 ? 0 : bvIndex;
+    if (bvIndex != -1) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          isInit = false;
+          _controller.jumpTo(index: bvIndex);
+        }
+      });
+    }
   }
 
   @override
@@ -116,9 +122,10 @@ class _MediaListPanelState
     () {
       final showDelBtn = widget.onDelete != null && widget.mediaList.length > 1;
       return ScrollablePositionedList.separated(
+        key: const PageStorageKey('medialist'),
+        itemScrollController: _controller,
         physics: const AlwaysScrollableScrollPhysics(),
         itemCount: widget.mediaList.length,
-        initialScrollIndex: _index,
         padding: EdgeInsets.only(
           top: 7,
           bottom: MediaQuery.paddingOf(context).bottom + 80,

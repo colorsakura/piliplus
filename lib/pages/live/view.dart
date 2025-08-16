@@ -138,22 +138,20 @@ class _LivePageState extends CommonPageState<LivePage, LiveController>
     );
   }
 
+  late final gridDelegate = SliverGridDelegateWithExtentAndRatio(
+    mainAxisSpacing: StyleString.cardSpace,
+    crossAxisSpacing: StyleString.cardSpace,
+    maxCrossAxisExtent: Grid.smallCardWidth,
+    childAspectRatio: StyleString.aspectRatio,
+    mainAxisExtent: MediaQuery.textScalerOf(context).scale(90),
+  );
+
   Widget _buildBody(ThemeData theme, LoadingState<List?> loadingState) {
     return switch (loadingState) {
-      Loading() => SliverGrid(
-        gridDelegate: SliverGridDelegateWithExtentAndRatio(
-          mainAxisSpacing: StyleString.cardSpace,
-          crossAxisSpacing: StyleString.cardSpace,
-          maxCrossAxisExtent: Grid.smallCardWidth,
-          childAspectRatio: StyleString.aspectRatio,
-          mainAxisExtent: MediaQuery.textScalerOf(context).scale(90),
-        ),
-        delegate: SliverChildBuilderDelegate(
-          (context, index) {
-            return const VideoCardVSkeleton();
-          },
-          childCount: 10,
-        ),
+      Loading() => SliverGrid.builder(
+        gridDelegate: gridDelegate,
+        itemBuilder: (context, index) => const VideoCardVSkeleton(),
+        itemCount: 10,
       ),
       Success(:var response) => SliverMainAxisGroup(
         slivers: [
@@ -194,29 +192,21 @@ class _LivePageState extends CommonPageState<LivePage, LiveController>
               ),
             ),
           response?.isNotEmpty == true
-              ? SliverGrid(
-                  gridDelegate: SliverGridDelegateWithExtentAndRatio(
-                    mainAxisSpacing: StyleString.cardSpace,
-                    crossAxisSpacing: StyleString.cardSpace,
-                    maxCrossAxisExtent: Grid.smallCardWidth,
-                    childAspectRatio: StyleString.aspectRatio,
-                    mainAxisExtent: MediaQuery.textScalerOf(context).scale(90),
-                  ),
-                  delegate: SliverChildBuilderDelegate(
-                    (context, index) {
-                      if (index == response.length - 1) {
-                        controller.onLoadMore();
-                      }
-                      final item = response[index];
-                      if (item is LiveCardList) {
-                        return LiveCardVApp(
-                          item: item.cardData!.smallCardV1!,
-                        );
-                      }
-                      return LiveCardVApp(item: item);
-                    },
-                    childCount: response!.length,
-                  ),
+              ? SliverGrid.builder(
+                  gridDelegate: gridDelegate,
+                  itemBuilder: (context, index) {
+                    if (index == response.length - 1) {
+                      controller.onLoadMore();
+                    }
+                    final item = response[index];
+                    if (item is LiveCardList) {
+                      return LiveCardVApp(
+                        item: item.cardData!.smallCardV1!,
+                      );
+                    }
+                    return LiveCardVApp(item: item);
+                  },
+                  itemCount: response!.length,
                 )
               : HttpError(onReload: controller.onReload),
         ],

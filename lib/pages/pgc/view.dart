@@ -314,35 +314,30 @@ class _PgcPageState extends CommonPageState<PgcPage, PgcController>
     ),
   );
 
+  late final gridDelegate = SliverGridDelegateWithExtentAndRatio(
+    mainAxisSpacing: StyleString.cardSpace,
+    crossAxisSpacing: StyleString.cardSpace,
+    maxCrossAxisExtent: Grid.smallCardWidth / 3 * 2,
+    childAspectRatio: 0.75,
+    mainAxisExtent: MediaQuery.textScalerOf(context).scale(50),
+  );
+
   Widget _buildRcmdBody(LoadingState<List<PgcIndexItem>?> loadingState) {
     return switch (loadingState) {
       Loading() => const SliverToBoxAdapter(),
       Success(:var response) =>
         response?.isNotEmpty == true
-            ? SliverGrid(
-                gridDelegate: SliverGridDelegateWithExtentAndRatio(
-                  // 行间距
-                  mainAxisSpacing: StyleString.cardSpace,
-                  // 列间距
-                  crossAxisSpacing: StyleString.cardSpace,
-                  // 最大宽度
-                  maxCrossAxisExtent: Grid.smallCardWidth / 3 * 2,
-                  childAspectRatio: 0.75,
-                  mainAxisExtent: MediaQuery.textScalerOf(context).scale(50),
-                ),
-                delegate: SliverChildBuilderDelegate(
-                  (BuildContext context, int index) {
-                    if (index == response.length - 1) {
-                      controller.onLoadMore();
-                    }
-                    return PgcCardVPgcIndex(item: response[index]);
-                  },
-                  childCount: response!.length,
-                ),
+            ? SliverGrid.builder(
+                gridDelegate: gridDelegate,
+                itemBuilder: (context, index) {
+                  if (index == response.length - 1) {
+                    controller.onLoadMore();
+                  }
+                  return PgcCardVPgcIndex(item: response[index]);
+                },
+                itemCount: response!.length,
               )
-            : HttpError(
-                onReload: controller.onReload,
-              ),
+            : HttpError(onReload: controller.onReload),
       Error(:var errMsg) => HttpError(
         errMsg: errMsg,
         onReload: controller.onReload,

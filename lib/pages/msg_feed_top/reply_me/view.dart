@@ -79,9 +79,7 @@ class _ReplyMePageState extends State<ReplyMePage> {
     return switch (loadingState) {
       Loading() => SliverList.builder(
         itemCount: 12,
-        itemBuilder: (context, index) {
-          return const MsgFeedTopSkeleton();
-        },
+        itemBuilder: (context, index) => const MsgFeedTopSkeleton(),
       ),
       Success(:var response) =>
         response?.isNotEmpty == true

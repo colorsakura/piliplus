@@ -1,9 +1,20 @@
 import 'dart:math';
 
 import 'package:PiliPlus/common/constants.dart';
+import 'package:PiliPlus/common/skeleton/video_card_h.dart';
 import 'package:PiliPlus/utils/storage_pref.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+
+mixin GridMixin<T extends StatefulWidget> on State<T> {
+  late final gridDelegate = Grid.videoCardHDelegate(context);
+
+  Widget get gridSkeleton => SliverGrid.builder(
+    gridDelegate: gridDelegate,
+    itemBuilder: (_, _) => const VideoCardHSkeleton(),
+    itemCount: 10,
+  );
+}
 
 class Grid {
   static final double smallCardWidth = Pref.smallCardWidth;

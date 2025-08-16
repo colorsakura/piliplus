@@ -117,22 +117,25 @@ class _MemberOpusState extends State<MemberOpus>
     );
   }
 
+  late final gridDelegate = SliverWaterfallFlowDelegateWithMaxCrossAxisExtent(
+    maxCrossAxisExtent: Grid.smallCardWidth,
+    mainAxisSpacing: StyleString.safeSpace,
+    crossAxisSpacing: StyleString.safeSpace,
+  );
+
   Widget _buildBody(LoadingState<List<SpaceOpusItemModel>?> loadingState) {
     return switch (loadingState) {
-      Loading() => SliverWaterfallFlow.extent(
-        maxCrossAxisExtent: Grid.smallCardWidth,
-        mainAxisSpacing: StyleString.safeSpace,
-        crossAxisSpacing: StyleString.safeSpace,
-        children: List.generate(10, (_) => const SpaceOpusSkeleton()),
+      Loading() => SliverWaterfallFlow(
+        gridDelegate: gridDelegate,
+        delegate: SliverChildBuilderDelegate(
+          (context, index) => const SpaceOpusSkeleton(),
+          childCount: 10,
+        ),
       ),
       Success(:var response) =>
         response?.isNotEmpty == true
             ? SliverWaterfallFlow(
-                gridDelegate: SliverWaterfallFlowDelegateWithMaxCrossAxisExtent(
-                  maxCrossAxisExtent: Grid.smallCardWidth,
-                  mainAxisSpacing: StyleString.safeSpace,
-                  crossAxisSpacing: StyleString.safeSpace,
-                ),
+                gridDelegate: gridDelegate,
                 delegate: SliverChildBuilderDelegate(
                   (_, index) {
                     if (index == response.length - 1) {
@@ -145,9 +148,7 @@ class _MemberOpusState extends State<MemberOpus>
                   childCount: response!.length,
                 ),
               )
-            : HttpError(
-                onReload: _controller.onReload,
-              ),
+            : HttpError(onReload: _controller.onReload),
       Error(:var errMsg) => HttpError(
         errMsg: errMsg,
         onReload: _controller.onReload,

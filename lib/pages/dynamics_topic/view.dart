@@ -351,7 +351,7 @@ class _DynTopicPageState extends State<DynTopicPage> with DynMixin {
         response?.isNotEmpty == true
             ? GlobalData().dynamicsWaterfallFlow
                   ? SliverWaterfallFlow(
-                      gridDelegate: gridDelegate,
+                      gridDelegate: dynGridDelegate,
                       delegate: SliverChildBuilderDelegate(
                         (_, index) {
                           if (index == response.length - 1) {

@@ -77,82 +77,73 @@ class _FansPageState extends State<FansPage> {
     );
   }
 
+  late final gridDelegate = SliverGridDelegateWithMaxCrossAxisExtent(
+    maxCrossAxisExtent: Grid.smallCardWidth * 2,
+    mainAxisExtent: 66,
+  );
+
   Widget _buildBody(LoadingState<List<FansItemModel>?> loadingState) {
     return switch (loadingState) {
-      Loading() => SliverGrid(
-        gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-          maxCrossAxisExtent: Grid.smallCardWidth * 2,
-          mainAxisExtent: 66,
-        ),
-        delegate: SliverChildBuilderDelegate(
-          (context, index) {
-            return const MsgFeedTopSkeleton();
-          },
-          childCount: 16,
-        ),
+      Loading() => SliverGrid.builder(
+        gridDelegate: gridDelegate,
+        itemBuilder: (context, index) => const MsgFeedTopSkeleton(),
+        itemCount: 16,
       ),
       Success(:var response) =>
         response?.isNotEmpty == true
-            ? SliverGrid(
-                gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                  maxCrossAxisExtent: Grid.smallCardWidth * 2,
-                  mainAxisExtent: 66,
-                ),
-                delegate: SliverChildBuilderDelegate(
-                  (BuildContext context, int index) {
-                    if (index == response.length - 1) {
-                      _fansController.onLoadMore();
-                    }
-                    final item = response[index];
-                    return ListTile(
-                      onTap: () {
-                        if (widget.onSelect != null) {
-                          widget.onSelect!(
-                            UserModel(
-                              mid: item.mid!,
-                              name: item.uname!,
-                              avatar: item.face!,
-                            ),
-                          );
-                          return;
-                        }
-                        Get.toNamed('/member?mid=${item.mid}');
-                      },
-                      onLongPress: widget.onSelect != null
-                          ? null
-                          : isOwner
-                          ? () => showConfirmDialog(
-                              context: context,
-                              title: '确定移除 ${item.uname} ？',
-                              onConfirm: () =>
-                                  _fansController.onRemoveFan(index, item.mid!),
-                            )
-                          : null,
-                      leading: NetworkImgLayer(
-                        width: 45,
-                        height: 45,
-                        type: ImageType.avatar,
-                        src: item.face,
-                      ),
-                      title: Text(
-                        item.uname!,
-                        style: const TextStyle(fontSize: 14),
-                      ),
-                      subtitle: Text(
-                        item.sign ?? '',
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      dense: true,
-                      trailing: const SizedBox(width: 6),
-                    );
-                  },
-                  childCount: response!.length,
-                ),
+            ? SliverGrid.builder(
+                gridDelegate: gridDelegate,
+                itemBuilder: (context, index) {
+                  if (index == response.length - 1) {
+                    _fansController.onLoadMore();
+                  }
+                  final item = response[index];
+                  return ListTile(
+                    onTap: () {
+                      if (widget.onSelect != null) {
+                        widget.onSelect!(
+                          UserModel(
+                            mid: item.mid!,
+                            name: item.uname!,
+                            avatar: item.face!,
+                          ),
+                        );
+                        return;
+                      }
+                      Get.toNamed('/member?mid=${item.mid}');
+                    },
+                    onLongPress: widget.onSelect != null
+                        ? null
+                        : isOwner
+                        ? () => showConfirmDialog(
+                            context: context,
+                            title: '确定移除 ${item.uname} ？',
+                            onConfirm: () =>
+                                _fansController.onRemoveFan(index, item.mid!),
+                          )
+                        : null,
+                    leading: NetworkImgLayer(
+                      width: 45,
+                      height: 45,
+                      type: ImageType.avatar,
+                      src: item.face,
+                    ),
+                    title: Text(
+                      item.uname!,
+                      style: const TextStyle(fontSize: 14),
+                    ),
+                    subtitle: Text(
+                      item.sign ?? '',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    dense: true,
+                    trailing: const SizedBox(width: 6),
+                  );
+                },
+                itemCount: response!.length,
               )
-            : HttpError(
-                onReload: _fansController.onReload,
-              ),
+            : HttpError(onReload: _fansController.onReload),
       Error(:var errMsg) => HttpError(
         errMsg: errMsg,
         onReload: _fansController.onReload,

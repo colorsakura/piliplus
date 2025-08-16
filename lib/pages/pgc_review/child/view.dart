@@ -36,17 +36,16 @@ class PgcReviewChildPage extends StatefulWidget {
 
 class _PgcReviewChildPageState extends State<PgcReviewChildPage>
     with AutomaticKeepAliveClientMixin {
+  late final _tag = '${widget.mediaId}${widget.type.name}';
   late final _controller = Get.put(
     PgcReviewController(type: widget.type, mediaId: widget.mediaId),
-    tag: '${widget.mediaId}${widget.type.name}',
+    tag: _tag,
   );
   late final isLongReview = widget.type == PgcReviewType.long;
 
   @override
   void dispose() {
-    Get.delete<PgcReviewController>(
-      tag: '${widget.mediaId}${widget.type.name}',
-    );
+    Get.delete<PgcReviewController>(tag: _tag);
     super.dispose();
   }
 
@@ -57,6 +56,7 @@ class _PgcReviewChildPageState extends State<PgcReviewChildPage>
     return refreshIndicator(
       onRefresh: _controller.onRefresh,
       child: CustomScrollView(
+        key: PageStorageKey(_tag),
         controller: _controller.scrollController,
         physics: const AlwaysScrollableScrollPhysics(),
         slivers: [
@@ -87,9 +87,7 @@ class _PgcReviewChildPageState extends State<PgcReviewChildPage>
         child: ListView.builder(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
-          itemBuilder: (context, index) {
-            return const VideoReplySkeleton();
-          },
+          itemBuilder: (context, index) => const VideoReplySkeleton(),
           itemCount: 8,
         ),
       ),

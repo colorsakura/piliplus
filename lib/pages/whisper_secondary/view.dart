@@ -90,9 +90,7 @@ class _WhisperSecPageState extends State<WhisperSecPage> {
     return switch (loadingState) {
       Loading() => SliverList.builder(
         itemCount: 12,
-        itemBuilder: (context, index) {
-          return const WhisperItemSkeleton();
-        },
+        itemBuilder: (context, index) => const WhisperItemSkeleton(),
       ),
       Success(:var response) =>
         response?.isNotEmpty == true
@@ -115,9 +113,7 @@ class _WhisperSecPageState extends State<WhisperSecPage> {
                 },
                 separatorBuilder: (context, index) => divider,
               )
-            : HttpError(
-                onReload: _controller.onReload,
-              ),
+            : HttpError(onReload: _controller.onReload),
       Error(:var errMsg) => HttpError(
         errMsg: errMsg,
         onReload: _controller.onReload,

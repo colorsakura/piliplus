@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:math' show pi;
 
 import 'package:PiliPlus/pages/common/common_intro_controller.dart';
-import 'package:PiliPlus/utils/feed_back.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -62,7 +61,6 @@ abstract class TripleState<T extends StatefulWidget> extends State<T>
     } else if (_timer != null && _timer!.tick == 0) {
       _cancelTimer();
       if (isTapUp) {
-        feedBack();
         introController.actionLikeVideo();
       }
     }

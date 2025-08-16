@@ -28,25 +28,25 @@ class _HistorySearchPageState
     tag: Utils.generateRandomString(8),
   );
 
+  late final gridDelegate = Grid.videoCardHDelegate(context, minHeight: 110);
+
   @override
   Widget buildList(List<HistoryItemModel> list) {
-    return SliverGrid(
-      gridDelegate: Grid.videoCardHDelegate(context, minHeight: 110),
-      delegate: SliverChildBuilderDelegate(
-        childCount: list.length,
-        (context, index) {
-          if (index == list.length - 1) {
-            controller.onLoadMore();
-          }
-          final item = list[index];
-          return HistoryItem(
-            item: item,
-            ctr: controller,
-            onDelete: (kid, business) =>
-                controller.onDelHistory(index, kid, business),
-          );
-        },
-      ),
+    return SliverGrid.builder(
+      gridDelegate: gridDelegate,
+      itemBuilder: (context, index) {
+        if (index == list.length - 1) {
+          controller.onLoadMore();
+        }
+        final item = list[index];
+        return HistoryItem(
+          item: item,
+          ctr: controller,
+          onDelete: (kid, business) =>
+              controller.onDelHistory(index, kid, business),
+        );
+      },
+      itemCount: list.length,
     );
   }
 }

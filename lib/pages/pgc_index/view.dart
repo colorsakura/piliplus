@@ -211,28 +211,28 @@ class _PgcIndexPageState extends State<PgcIndexPage>
     ],
   );
 
+  late final gridDelegate = SliverGridDelegateWithExtentAndRatio(
+    mainAxisSpacing: StyleString.cardSpace,
+    crossAxisSpacing: StyleString.cardSpace,
+    maxCrossAxisExtent: Grid.smallCardWidth / 3 * 2,
+    childAspectRatio: 0.75,
+    mainAxisExtent: MediaQuery.textScalerOf(context).scale(50),
+  );
+
   Widget _buildList(LoadingState<List<PgcIndexItem>?> loadingState) {
     return switch (loadingState) {
       Loading() => linearLoading,
       Success(:var response) =>
         response?.isNotEmpty == true
-            ? SliverGrid(
-                gridDelegate: SliverGridDelegateWithExtentAndRatio(
-                  mainAxisSpacing: StyleString.cardSpace,
-                  crossAxisSpacing: StyleString.cardSpace,
-                  maxCrossAxisExtent: Grid.smallCardWidth / 3 * 2,
-                  childAspectRatio: 0.75,
-                  mainAxisExtent: MediaQuery.textScalerOf(context).scale(50),
-                ),
-                delegate: SliverChildBuilderDelegate(
-                  (BuildContext context, int index) {
-                    if (index == response.length - 1) {
-                      _ctr.onLoadMore();
-                    }
-                    return PgcCardVPgcIndex(item: response[index]);
-                  },
-                  childCount: response!.length,
-                ),
+            ? SliverGrid.builder(
+                gridDelegate: gridDelegate,
+                itemBuilder: (context, index) {
+                  if (index == response.length - 1) {
+                    _ctr.onLoadMore();
+                  }
+                  return PgcCardVPgcIndex(item: response[index]);
+                },
+                itemCount: response!.length,
               )
             : HttpError(onReload: _ctr.onReload),
       Error(:var errMsg) => HttpError(

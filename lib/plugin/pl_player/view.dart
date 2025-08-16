@@ -1054,24 +1054,25 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
         //   Positioned.fill(top: 4, child: widget.danmuWidget!),
 
         /// 长按倍速 toast
-        Obx(
-          () => Align(
+        IgnorePointer(
+          ignoring: true,
+          child: Align(
             alignment: Alignment.topCenter,
             child: FractionalTranslation(
-              translation: const Offset(0.0, 0.3), // 上下偏移量（负数向上偏移）
-              child: AnimatedOpacity(
-                curve: Curves.easeInOut,
-                opacity: plPlayerController.longPressStatus.value ? 1.0 : 0.0,
-                duration: const Duration(milliseconds: 150),
-                child: Container(
-                  alignment: Alignment.center,
-                  decoration: const BoxDecoration(
-                    color: Color(0x88000000),
-                    borderRadius: BorderRadius.all(Radius.circular(16)),
-                  ),
-                  height: 32.0,
-                  width: 70.0,
-                  child: Center(
+              translation: isFullScreen
+                  ? const Offset(0.0, 1.2)
+                  : const Offset(0.0, 0.8),
+              child: Obx(
+                () => AnimatedOpacity(
+                  curve: Curves.easeInOut,
+                  opacity: plPlayerController.longPressStatus.value ? 1.0 : 0.0,
+                  duration: const Duration(milliseconds: 150),
+                  child: Container(
+                    padding: const EdgeInsets.all(6),
+                    decoration: const BoxDecoration(
+                      color: Color(0x88000000),
+                      borderRadius: BorderRadius.all(Radius.circular(16)),
+                    ),
                     child: Obx(
                       () => Text(
                         '${plPlayerController.enableAutoLongPressSpeed ? (plPlayerController.longPressStatus.value ? plPlayerController.lastPlaybackSpeed : plPlayerController.playbackSpeed) * 2 : plPlayerController.longPressSpeed}倍速中',
@@ -1094,53 +1095,54 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
           child: Align(
             alignment: Alignment.topCenter,
             child: FractionalTranslation(
-              translation: const Offset(0.0, 0.6),
+              translation: isFullScreen
+                  ? const Offset(0.0, 1.2)
+                  : const Offset(0.0, 0.8),
               child: Obx(
                 () => AnimatedOpacity(
                   curve: Curves.easeInOut,
                   opacity: plPlayerController.isSliderMoving.value ? 1.0 : 0.0,
                   duration: const Duration(milliseconds: 150),
-                  child: IntrinsicWidth(
-                    child: Container(
-                      alignment: Alignment.center,
-                      decoration: const BoxDecoration(
-                        color: Color(0x88000000),
-                        borderRadius: BorderRadius.all(Radius.circular(64)),
-                      ),
-                      height: 34.0,
-                      padding: const EdgeInsets.only(left: 10, right: 10),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Obx(() {
+                  child: Container(
+                    decoration: const BoxDecoration(
+                      color: Color(0x88000000),
+                      borderRadius: BorderRadius.all(Radius.circular(64)),
+                    ),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 10,
+                      vertical: 8,
+                    ),
+                    child: Row(
+                      spacing: 2,
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Obx(() {
+                          return Text(
+                            DurationUtil.formatDuration(
+                              plPlayerController
+                                  .sliderTempPosition
+                                  .value
+                                  .inSeconds,
+                            ),
+                            style: textStyle,
+                          );
+                        }),
+                        const Text('/', style: textStyle),
+                        Obx(
+                          () {
                             return Text(
                               DurationUtil.formatDuration(
                                 plPlayerController
-                                    .sliderTempPosition
+                                    .durationSeconds
                                     .value
                                     .inSeconds,
                               ),
                               style: textStyle,
                             );
-                          }),
-                          const SizedBox(width: 2),
-                          const Text('/', style: textStyle),
-                          const SizedBox(width: 2),
-                          Obx(
-                            () {
-                              return Text(
-                                DurationUtil.formatDuration(
-                                  plPlayerController
-                                      .durationSeconds
-                                      .value
-                                      .inSeconds,
-                                ),
-                                style: textStyle,
-                              );
-                            },
-                          ),
-                        ],
-                      ),
+                          },
+                        ),
+                      ],
                     ),
                   ),
                 ),
@@ -1553,7 +1555,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                                               '$name.png已保存到相册/截图',
                                             );
                                           } else {
-                                            await SmartDialog.showToast(
+                                            SmartDialog.showToast(
                                               '保存失败，${result.errorMessage}',
                                             );
                                           }
@@ -1589,7 +1591,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
               child: GestureDetector(
                 onTap: plPlayerController.refreshPlayer,
                 child: Container(
-                  padding: const EdgeInsets.all(30),
+                  padding: const EdgeInsets.all(20),
                   decoration: const BoxDecoration(
                     shape: BoxShape.circle,
                     gradient: RadialGradient(
@@ -1920,22 +1922,20 @@ class _VideoShotImageState extends State<VideoShotImage> {
         final imgYSize = _image!.height / 10;
         final height = widget.height;
         final width = height * imgXSize / imgYSize;
-        _size = Size(width, height);
         _setRect(width, height);
         widget.onSetSize(imgXSize, imgYSize);
       } else {
-        _size = const Size(double.nan, double.nan);
         _setRect(double.nan, double.nan);
       }
     } else {
       final height = widget.height;
       final width = height * widget.imgXSize / widget.imgYSize;
-      _size = Size(width, height);
       _setRect(width, height);
     }
   }
 
   void _setRect(double width, double height) {
+    _size = Size(width, height);
     _dstRect = Rect.fromLTWH(0, 0, width, height);
     _rrect = RRect.fromRectAndRadius(_dstRect, const Radius.circular(10));
   }

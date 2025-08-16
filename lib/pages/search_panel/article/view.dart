@@ -25,7 +25,8 @@ class _SearchArticlePanelState
           SearchArticlePanel,
           SearchArticleData,
           SearchArticleItemModel
-        > {
+        >
+    with GridMixin {
   @override
   late final SearchArticleController controller = Get.put(
     SearchArticleController(
@@ -90,17 +91,18 @@ class _SearchArticlePanelState
 
   @override
   Widget buildList(ThemeData theme, List<SearchArticleItemModel> list) {
-    return SliverGrid(
-      gridDelegate: Grid.videoCardHDelegate(context),
-      delegate: SliverChildBuilderDelegate(
-        (BuildContext context, int index) {
-          if (index == list.length - 1) {
-            controller.onLoadMore();
-          }
-          return SearchArticleItem(item: list[index]);
-        },
-        childCount: list.length,
-      ),
+    return SliverGrid.builder(
+      gridDelegate: gridDelegate,
+      itemBuilder: (context, index) {
+        if (index == list.length - 1) {
+          controller.onLoadMore();
+        }
+        return SearchArticleItem(item: list[index]);
+      },
+      itemCount: list.length,
     );
   }
+
+  @override
+  Widget get builLoading => gridSkeleton;
 }

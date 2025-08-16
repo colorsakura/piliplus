@@ -27,7 +27,8 @@ class _SearchVideoPanelState
           SearchVideoPanel,
           SearchVideoData,
           SearchVideoItemModel
-        > {
+        >
+    with GridMixin {
   @override
   late final SearchVideoController controller = Get.put(
     SearchVideoController(
@@ -102,22 +103,23 @@ class _SearchVideoPanelState
 
   @override
   Widget buildList(ThemeData theme, List<SearchVideoItemModel> list) {
-    return SliverGrid(
-      gridDelegate: Grid.videoCardHDelegate(context),
-      delegate: SliverChildBuilderDelegate(
-        (context, index) {
-          if (index == list.length - 1) {
-            controller.onLoadMore();
-          }
-          return VideoCardH(
-            videoItem: list[index],
-            onRemove: () => controller.loadingState
-              ..value.data!.removeAt(index)
-              ..refresh(),
-          );
-        },
-        childCount: list.length,
-      ),
+    return SliverGrid.builder(
+      gridDelegate: gridDelegate,
+      itemBuilder: (context, index) {
+        if (index == list.length - 1) {
+          controller.onLoadMore();
+        }
+        return VideoCardH(
+          videoItem: list[index],
+          onRemove: () => controller.loadingState
+            ..value.data!.removeAt(index)
+            ..refresh(),
+        );
+      },
+      itemCount: list.length,
     );
   }
+
+  @override
+  Widget get builLoading => gridSkeleton;
 }

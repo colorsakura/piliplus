@@ -296,9 +296,7 @@ class _VideoReplyReplyPanelState
         child: ListView.builder(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
-          itemBuilder: (context, index) {
-            return const VideoReplySkeleton();
-          },
+          itemBuilder: (context, index) => const VideoReplySkeleton(),
           itemCount: 8,
         ),
       ),

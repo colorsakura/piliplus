@@ -1,6 +1,5 @@
 import 'package:PiliPlus/common/widgets/dialog/dialog.dart';
 import 'package:PiliPlus/common/widgets/loading_widget/http_error.dart';
-import 'package:PiliPlus/common/widgets/loading_widget/loading_widget.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models_new/space/space_cheese/item.dart';
@@ -18,7 +17,7 @@ class FavCheesePage extends StatefulWidget {
 }
 
 class _FavCheesePageState extends State<FavCheesePage>
-    with AutomaticKeepAliveClientMixin {
+    with AutomaticKeepAliveClientMixin, GridMixin {
   final FavCheeseController _controller = Get.put(FavCheeseController());
 
   @override
@@ -53,29 +52,27 @@ class _FavCheesePageState extends State<FavCheesePage>
     LoadingState<List<SpaceCheeseItem>?> loadingState,
   ) {
     return switch (loadingState) {
-      Loading() => linearLoading,
+      Loading() => gridSkeleton,
       Success(:var response) =>
         response?.isNotEmpty == true
-            ? SliverGrid(
-                gridDelegate: Grid.videoCardHDelegate(context),
-                delegate: SliverChildBuilderDelegate(
-                  (context, index) {
-                    if (index == response.length - 1) {
-                      _controller.onLoadMore();
-                    }
-                    final item = response[index];
-                    return MemberCheeseItem(
-                      item: item,
-                      onRemove: () => showConfirmDialog(
-                        context: context,
-                        title: '确定取消收藏该课堂？',
-                        onConfirm: () =>
-                            _controller.onRemove(index, item.seasonId),
-                      ),
-                    );
-                  },
-                  childCount: response!.length,
-                ),
+            ? SliverGrid.builder(
+                gridDelegate: gridDelegate,
+                itemBuilder: (context, index) {
+                  if (index == response.length - 1) {
+                    _controller.onLoadMore();
+                  }
+                  final item = response[index];
+                  return MemberCheeseItem(
+                    item: item,
+                    onRemove: () => showConfirmDialog(
+                      context: context,
+                      title: '确定取消收藏该课堂？',
+                      onConfirm: () =>
+                          _controller.onRemove(index, item.seasonId),
+                    ),
+                  );
+                },
+                itemCount: response!.length,
               )
             : HttpError(onReload: _controller.onReload),
       Error(:var errMsg) => HttpError(

@@ -25,14 +25,13 @@ class _LaterSearchPageState
     tag: Utils.generateRandomString(8),
   );
 
+  late final gridDelegate = Grid.videoCardHDelegate(context, minHeight: 110);
+
   @override
   Widget buildList(List<LaterItemModel> list) {
-    return SliverGrid(
-      gridDelegate: Grid.videoCardHDelegate(context, minHeight: 110),
-      delegate: SliverChildBuilderDelegate(childCount: list.length, (
-        context,
-        index,
-      ) {
+    return SliverGrid.builder(
+      gridDelegate: gridDelegate,
+      itemBuilder: (context, index) {
         if (index == list.length - 1) {
           controller.onLoadMore();
         }
@@ -59,7 +58,8 @@ class _LaterSearchPageState
             );
           },
         );
-      }),
+      },
+      itemCount: list.length,
     );
   }
 }

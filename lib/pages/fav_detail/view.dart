@@ -1,4 +1,3 @@
-import 'package:PiliPlus/common/skeleton/video_card_h.dart';
 import 'package:PiliPlus/common/widgets/button/icon_button.dart';
 import 'package:PiliPlus/common/widgets/dialog/dialog.dart';
 import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
@@ -28,7 +27,7 @@ class FavDetailPage extends StatefulWidget {
   State<FavDetailPage> createState() => _FavDetailPageState();
 }
 
-class _FavDetailPageState extends State<FavDetailPage> {
+class _FavDetailPageState extends State<FavDetailPage> with GridMixin {
   late final FavDetailController _favDetailController = Get.put(
     FavDetailController(),
     tag: Utils.makeHeroTag(mediaId),
@@ -335,6 +334,7 @@ class _FavDetailPageState extends State<FavDetailPage> {
 
   Widget _flexibleSpace(ThemeData theme) {
     final style = TextStyle(
+      height: 1,
       fontSize: 12.5,
       color: theme.colorScheme.outline,
     );
@@ -397,14 +397,15 @@ class _FavDetailPageState extends State<FavDetailPage> {
                   if (folderInfo.title.isNotEmpty)
                     Expanded(
                       child: Column(
-                        spacing: 4,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            folderInfo.title,
-                            style: TextStyle(
-                              fontSize: theme.textTheme.titleMedium!.fontSize,
-                              fontWeight: FontWeight.bold,
+                          Expanded(
+                            child: Text(
+                              folderInfo.title,
+                              style: TextStyle(
+                                fontSize: theme.textTheme.titleMedium!.fontSize,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ),
                           GestureDetector(
@@ -418,22 +419,20 @@ class _FavDetailPageState extends State<FavDetailPage> {
                               ),
                             ),
                           ),
-                          if (folderInfo.intro?.isNotEmpty == true)
+                          const SizedBox(height: 4),
+                          if (folderInfo.intro?.isNotEmpty == true) ...[
                             Text(
                               folderInfo.intro!,
                               style: style,
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
                             ),
-                          Expanded(
-                            child: Align(
-                              alignment: Alignment.bottomLeft,
-                              child: Text(
-                                '共${folderInfo.mediaCount}条视频 · ${FavUtil.isPublicFavText(folderInfo.attr)}',
-                                textAlign: TextAlign.end,
-                                style: style,
-                              ),
-                            ),
+                            const SizedBox(height: 4),
+                          ],
+                          Text(
+                            '共${folderInfo.mediaCount}条视频 · '
+                            '${FavUtil.isPublicFavText(folderInfo.attr)}',
+                            style: style,
                           ),
                         ],
                       ),
@@ -453,48 +452,36 @@ class _FavDetailPageState extends State<FavDetailPage> {
     LoadingState<List<FavDetailItemModel>?> loadingState,
   ) {
     return switch (loadingState) {
-      Loading() => SliverGrid(
-        gridDelegate: Grid.videoCardHDelegate(context),
-        delegate: SliverChildBuilderDelegate(
-          (context, index) {
-            return const VideoCardHSkeleton();
-          },
-          childCount: 10,
-        ),
-      ),
+      Loading() => gridSkeleton,
       Success(:var response) =>
         response?.isNotEmpty == true
-            ? SliverGrid(
-                gridDelegate: Grid.videoCardHDelegate(context),
-                delegate: SliverChildBuilderDelegate(
-                  (context, index) {
-                    if (index == response.length) {
-                      _favDetailController.onLoadMore();
-                      return Container(
-                        height: 60,
-                        alignment: Alignment.center,
-                        child: Text(
-                          _favDetailController.isEnd ? '没有更多了' : '加载中...',
-                          style: TextStyle(
-                            color: theme.colorScheme.outline,
-                            fontSize: 13,
-                          ),
+            ? SliverGrid.builder(
+                gridDelegate: gridDelegate,
+                itemBuilder: (context, index) {
+                  if (index == response.length) {
+                    _favDetailController.onLoadMore();
+                    return Container(
+                      height: 60,
+                      alignment: Alignment.center,
+                      child: Text(
+                        _favDetailController.isEnd ? '没有更多了' : '加载中...',
+                        style: TextStyle(
+                          color: theme.colorScheme.outline,
+                          fontSize: 13,
                         ),
-                      );
-                    }
-                    FavDetailItemModel item = response[index];
-                    return FavVideoCardH(
-                      item: item,
-                      index: index,
-                      ctr: _favDetailController,
+                      ),
                     );
-                  },
-                  childCount: response!.length + 1,
-                ),
+                  }
+                  FavDetailItemModel item = response[index];
+                  return FavVideoCardH(
+                    item: item,
+                    index: index,
+                    ctr: _favDetailController,
+                  );
+                },
+                itemCount: response!.length + 1,
               )
-            : HttpError(
-                onReload: _favDetailController.onReload,
-              ),
+            : HttpError(onReload: _favDetailController.onReload),
       Error(:var errMsg) => HttpError(
         errMsg: errMsg,
         onReload: _favDetailController.onReload,

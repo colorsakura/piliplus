@@ -1618,9 +1618,6 @@ class PlPlayerController {
     }
     if (videoShot case Success<VideoShotData> success) {
       final data = success.response;
-      if (data.index.isNullOrEmpty) {
-        return;
-      }
       if (!showPreview.value) {
         showPreview.value = true;
       }
@@ -1663,10 +1660,13 @@ class PlPlayerController {
         ),
       );
       if (res.data['code'] == 0) {
-        videoShot = Success(VideoShotData.fromJson(res.data['data']));
-      } else {
-        videoShot = const Error(null);
+        final data = VideoShotData.fromJson(res.data['data']);
+        if (data.index.isNotEmpty) {
+          videoShot = Success(data);
+          return;
+        }
       }
+      videoShot = const Error(null);
     } catch (e) {
       videoShot = const Error(null);
       if (kDebugMode) debugPrint('getVideoShot: $e');

@@ -51,7 +51,9 @@ class VideoCardH extends StatelessWidget {
         badge = '合作';
       }
     } else if (videoItem case HotVideoItemModel item) {
-      if (item.isCooperation == 1) {
+      if (item.isCharging == true) {
+        badge = '充电专属';
+      } else if (item.isCooperation == 1) {
         badge = '合作';
       } else {
         badge = item.pgcLabel;
@@ -147,6 +149,10 @@ class VideoCardH extends StatelessWidget {
                                 text: badge,
                                 top: 6.0,
                                 right: 6.0,
+                                type: switch (badge) {
+                                  '充电专属' => PBadgeType.error,
+                                  _ => PBadgeType.primary,
+                                },
                               ),
                             if (progress != null && progress != 0) ...[
                               PBadge(

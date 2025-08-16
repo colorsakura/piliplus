@@ -105,7 +105,7 @@ class _DynamicsTabPageState
         response?.isNotEmpty == true
             ? GlobalData().dynamicsWaterfallFlow
                   ? SliverWaterfallFlow(
-                      gridDelegate: gridDelegate,
+                      gridDelegate: dynGridDelegate,
                       delegate: SliverChildBuilderDelegate(
                         (_, index) {
                           if (index == response.length - 1) {
@@ -147,9 +147,7 @@ class _DynamicsTabPageState
                         const SliverFillRemaining(),
                       ],
                     )
-            : HttpError(
-                onReload: controller.onReload,
-              ),
+            : HttpError(onReload: controller.onReload),
       Error(:var errMsg) => HttpError(
         errMsg: errMsg,
         onReload: controller.onReload,

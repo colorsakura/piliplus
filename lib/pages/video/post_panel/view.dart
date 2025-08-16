@@ -112,6 +112,7 @@ class _PostPanelState extends CommonCollapseSlidePageState<PostPanel> {
       clipBehavior: Clip.none,
       children: [
         SingleChildScrollView(
+          key: const PageStorageKey('segment_list'),
           controller: _controller,
           physics: const AlwaysScrollableScrollPhysics(),
           padding: EdgeInsets.only(bottom: 88 + bottom),

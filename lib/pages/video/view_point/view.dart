@@ -95,14 +95,12 @@ class _ViewPointsPageState
 
   @override
   Widget buildList(ThemeData theme) {
-    final divider = Divider(
-      height: 1,
-      color: theme.dividerColor.withValues(alpha: 0.1),
-    );
-    return ListView.separated(
+    return ListView.builder(
+      key: const PageStorageKey('viewpoint'),
       controller: _controller,
       physics: const AlwaysScrollableScrollPhysics(),
       padding: EdgeInsets.only(
+        top: 7,
         bottom: MediaQuery.paddingOf(context).bottom + 80,
       ),
       itemCount: videoDetailController.viewPointList.length,
@@ -119,7 +117,6 @@ class _ViewPointsPageState
         final isCurr = currentIndex == index;
         return _buildItem(theme, segment, isCurr);
       },
-      separatorBuilder: (context, index) => divider,
     );
   }
 

@@ -1,4 +1,3 @@
-import 'package:PiliPlus/common/skeleton/video_card_h.dart';
 import 'package:PiliPlus/common/widgets/loading_widget/http_error.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/common/widgets/video_card/video_card_h.dart';
@@ -22,7 +21,7 @@ class ZonePage extends CommonPage {
 }
 
 class _ZonePageState extends CommonPageState<ZonePage, ZoneController>
-    with AutomaticKeepAliveClientMixin {
+    with AutomaticKeepAliveClientMixin, GridMixin {
   @override
   late ZoneController controller = Get.put(
     ZoneController(rid: widget.rid, seasonType: widget.seasonType),
@@ -53,40 +52,26 @@ class _ZonePageState extends CommonPageState<ZonePage, ZoneController>
     );
   }
 
-  Widget _buildSkeleton() {
-    return SliverGrid(
-      gridDelegate: Grid.videoCardHDelegate(context),
-      delegate: SliverChildBuilderDelegate(
-        (context, index) {
-          return const VideoCardHSkeleton();
-        },
-        childCount: 10,
-      ),
-    );
-  }
-
   Widget _buildBody(LoadingState<List<dynamic>?> loadingState) {
     return switch (loadingState) {
-      Loading() => _buildSkeleton(),
+      Loading() => gridSkeleton,
       Success(:var response) =>
         response?.isNotEmpty == true
-            ? SliverGrid(
-                gridDelegate: Grid.videoCardHDelegate(context),
-                delegate: SliverChildBuilderDelegate(
-                  (context, index) {
-                    final item = response[index];
-                    if (item is HotVideoItemModel) {
-                      return VideoCardH(
-                        videoItem: item,
-                        onRemove: () => controller.loadingState
-                          ..value.data!.removeAt(index)
-                          ..refresh(),
-                      );
-                    }
-                    return PgcRankItem(item: item);
-                  },
-                  childCount: response!.length,
-                ),
+            ? SliverGrid.builder(
+                gridDelegate: gridDelegate,
+                itemBuilder: (context, index) {
+                  final item = response[index];
+                  if (item is HotVideoItemModel) {
+                    return VideoCardH(
+                      videoItem: item,
+                      onRemove: () => controller.loadingState
+                        ..value.data!.removeAt(index)
+                        ..refresh(),
+                    );
+                  }
+                  return PgcRankItem(item: item);
+                },
+                itemCount: response!.length,
               )
             : HttpError(onReload: controller.onReload),
       Error(:var errMsg) => HttpError(

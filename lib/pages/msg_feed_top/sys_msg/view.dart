@@ -67,9 +67,7 @@ class _SysMsgPageState extends State<SysMsgPage> {
       Loading() => SliverSafeArea(
         sliver: SliverList.builder(
           itemCount: 12,
-          itemBuilder: (context, index) {
-            return const MsgFeedSysMsgSkeleton();
-          },
+          itemBuilder: (context, index) => const MsgFeedSysMsgSkeleton(),
         ),
       ),
       Success(:var response) =>

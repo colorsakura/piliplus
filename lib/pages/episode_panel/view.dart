@@ -169,6 +169,18 @@ class _EpisodePanelState extends CommonCollapseSlidePageState<EpisodePanel> {
   }
 
   @override
+  void init() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        isInit = false;
+        _itemScrollController[widget.initialTabIndex].jumpTo(
+          index: _currentItemIndex,
+        );
+      }
+    });
+  }
+
+  @override
   void dispose() {
     _tabController
       ..removeListener(listener)
@@ -249,51 +261,49 @@ class _EpisodePanelState extends CommonCollapseSlidePageState<EpisodePanel> {
     final isCurrTab = tabIndex == widget.initialTabIndex;
     return KeepAliveWrapper(
       builder: (context) => ScrollablePositionedList.separated(
+        key: PageStorageKey(tabIndex),
         padding: EdgeInsets.only(
           top: 7,
           bottom: MediaQuery.paddingOf(context).bottom + 80,
         ),
         reverse: _isReversed[tabIndex],
         itemCount: episodes.length,
-        initialScrollIndex: isCurrTab ? _currentItemIndex : 0,
         physics: const AlwaysScrollableScrollPhysics(),
         itemBuilder: (BuildContext context, int itemIndex) {
           final episode = episodes[itemIndex];
+          final isCurrItem = isCurrTab ? itemIndex == _currentItemIndex : false;
           Widget episodeItem = _buildEpisodeItem(
             theme: theme,
             episode: episode,
             index: itemIndex,
             length: episodes.length,
-            isCurrentIndex: isCurrTab ? itemIndex == _currentItemIndex : false,
+            isCurrentIndex: isCurrItem,
           );
-          return widget.type == EpisodeType.season &&
-                  widget.showTitle &&
-                  episode.pages.length > 1
-              ? Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    episodeItem,
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 12,
-                        vertical: 5,
-                      ),
-                      child: PagesPanel(
-                        list:
-                            widget.initialTabIndex == _currentTabIndex.value &&
-                                itemIndex == _currentItemIndex
-                            ? null
-                            : episode.pages,
-                        cover: episode.arc?.pic,
-                        heroTag: widget.heroTag,
-                        ugcIntroController: widget.ugcIntroController!,
-                        bvid: IdUtils.av2bv(episode.aid),
-                      ),
-                    ),
-                  ],
-                )
-              : episodeItem;
+          if (widget.type == EpisodeType.season &&
+              widget.showTitle &&
+              episode.pages.length > 1) {
+            return Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                episodeItem,
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 5,
+                  ),
+                  child: PagesPanel(
+                    list: isCurrTab && isCurrItem ? null : episode.pages,
+                    cover: episode.arc?.pic,
+                    heroTag: widget.heroTag,
+                    ugcIntroController: widget.ugcIntroController!,
+                    bvid: IdUtils.av2bv(episode.aid),
+                  ),
+                ),
+              ],
+            );
+          }
+          return episodeItem;
         },
         itemScrollController: _itemScrollController[tabIndex],
         separatorBuilder: (context, index) => const SizedBox(height: 2),

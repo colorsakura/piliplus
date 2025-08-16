@@ -98,9 +98,7 @@ abstract class CommonDynPageState<T extends CommonDynPage> extends State<T>
     return switch (loadingState) {
       Loading() => SliverList.builder(
         itemCount: 12,
-        itemBuilder: (context, index) {
-          return const VideoReplySkeleton();
-        },
+        itemBuilder: (context, index) => const VideoReplySkeleton(),
       ),
       Success(:var response) =>
         response?.isNotEmpty == true
@@ -149,7 +147,10 @@ abstract class CommonDynPageState<T extends CommonDynPage> extends State<T>
                   }
                 },
               )
-            : HttpError(onReload: controller.onReload),
+            : HttpError(
+                errMsg: '还没有评论',
+                onReload: controller.onReload,
+              ),
       Error(:var errMsg) => HttpError(
         errMsg: errMsg,
         onReload: controller.onReload,

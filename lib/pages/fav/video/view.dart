@@ -1,4 +1,3 @@
-import 'package:PiliPlus/common/skeleton/video_card_h.dart';
 import 'package:PiliPlus/common/widgets/loading_widget/http_error.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/http/loading_state.dart';
@@ -18,7 +17,7 @@ class FavVideoPage extends StatefulWidget {
 }
 
 class _FavVideoPageState extends State<FavVideoPage>
-    with AutomaticKeepAliveClientMixin {
+    with AutomaticKeepAliveClientMixin, GridMixin {
   final FavController _favController = Get.find<FavController>();
 
   @override
@@ -49,52 +48,40 @@ class _FavVideoPageState extends State<FavVideoPage>
 
   Widget _buildBody(LoadingState<List<FavFolderInfo>?> loadingState) {
     return switch (loadingState) {
-      Loading() => SliverGrid(
-        gridDelegate: Grid.videoCardHDelegate(context),
-        delegate: SliverChildBuilderDelegate(
-          (BuildContext context, int index) {
-            return const VideoCardHSkeleton();
-          },
-          childCount: 10,
-        ),
-      ),
+      Loading() => gridSkeleton,
       Success(:var response) =>
         response?.isNotEmpty == true
-            ? SliverGrid(
-                gridDelegate: Grid.videoCardHDelegate(context),
-                delegate: SliverChildBuilderDelegate(
-                  childCount: response!.length,
-                  (BuildContext context, int index) {
-                    if (index == response.length - 1) {
-                      _favController.onLoadMore();
-                    }
-                    final item = response[index];
-                    String heroTag = Utils.makeHeroTag(item.fid);
-                    return FavVideoItem(
-                      heroTag: heroTag,
-                      item: item,
-                      onTap: () async {
-                        var res = await Get.toNamed(
-                          '/favDetail',
-                          arguments: item,
-                          parameters: {
-                            'heroTag': heroTag,
-                            'mediaId': item.id.toString(),
-                          },
-                        );
-                        if (res == true) {
-                          _favController.loadingState
-                            ..value.data!.removeAt(index)
-                            ..refresh();
-                        }
-                      },
-                    );
-                  },
-                ),
+            ? SliverGrid.builder(
+                gridDelegate: gridDelegate,
+                itemBuilder: (BuildContext context, int index) {
+                  if (index == response.length - 1) {
+                    _favController.onLoadMore();
+                  }
+                  final item = response[index];
+                  String heroTag = Utils.makeHeroTag(item.fid);
+                  return FavVideoItem(
+                    heroTag: heroTag,
+                    item: item,
+                    onTap: () async {
+                      var res = await Get.toNamed(
+                        '/favDetail',
+                        arguments: item,
+                        parameters: {
+                          'heroTag': heroTag,
+                          'mediaId': item.id.toString(),
+                        },
+                      );
+                      if (res == true) {
+                        _favController.loadingState
+                          ..value.data!.removeAt(index)
+                          ..refresh();
+                      }
+                    },
+                  );
+                },
+                itemCount: response!.length,
               )
-            : HttpError(
-                onReload: _favController.onReload,
-              ),
+            : HttpError(onReload: _favController.onReload),
       Error(:var errMsg) => HttpError(
         errMsg: errMsg,
         onReload: _favController.onReload,
