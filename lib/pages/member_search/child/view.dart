@@ -45,7 +45,14 @@ class _MemberSearchChildPageState extends State<MemberSearchChildPage>
               top: widget.searchType == MemberSearchType.archive ? 7 : 0,
               bottom: MediaQuery.paddingOf(context).bottom + 80,
             ),
-            sliver: Obx(() => _buildBody(_controller.loadingState.value)),
+            sliver: switch (widget.searchType) {
+              MemberSearchType.archive => Obx(
+                () => _buildBody(_controller.loadingState.value),
+              ),
+              MemberSearchType.dynamic => buildPage(
+                Obx(() => _buildBody(_controller.loadingState.value)),
+              ),
+            },
           ),
         ],
       ),
@@ -96,26 +103,17 @@ class _MemberSearchChildPageState extends State<MemberSearchChildPage>
                                 childCount: response!.length,
                               ),
                             )
-                          : SliverCrossAxisGroup(
-                              slivers: [
-                                const SliverFillRemaining(),
-                                SliverConstrainedCrossAxis(
-                                  maxExtent: Grid.smallCardWidth * 2,
-                                  sliver: SliverList.builder(
-                                    itemBuilder: (context, index) {
-                                      if (index == response.length - 1) {
-                                        _controller.onLoadMore();
-                                      }
-                                      return DynamicPanel(
-                                        item: response[index],
-                                        maxWidth: maxWidth,
-                                      );
-                                    },
-                                    itemCount: response!.length,
-                                  ),
-                                ),
-                                const SliverFillRemaining(),
-                              ],
+                          : SliverList.builder(
+                              itemBuilder: (context, index) {
+                                if (index == response.length - 1) {
+                                  _controller.onLoadMore();
+                                }
+                                return DynamicPanel(
+                                  item: response[index],
+                                  maxWidth: maxWidth,
+                                );
+                              },
+                              itemCount: response!.length,
                             ),
                   };
                 },

@@ -13,7 +13,6 @@ import 'package:PiliPlus/pages/dynamics/widgets/dynamic_panel.dart';
 import 'package:PiliPlus/pages/dynamics_create/view.dart';
 import 'package:PiliPlus/pages/dynamics_topic/controller.dart';
 import 'package:PiliPlus/utils/global_data.dart';
-import 'package:PiliPlus/utils/grid.dart';
 import 'package:PiliPlus/utils/num_util.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:PiliPlus/utils/utils.dart';
@@ -141,7 +140,9 @@ class _DynTopicPageState extends State<DynTopicPage> with DynMixin {
               }),
               SliverPadding(
                 padding: EdgeInsets.only(bottom: padding.bottom + 80),
-                sliver: Obx(() => _buildBody(_controller.loadingState.value)),
+                sliver: buildPage(
+                  Obx(() => _buildBody(_controller.loadingState.value)),
+                ),
               ),
             ],
           ),
@@ -371,31 +372,22 @@ class _DynTopicPageState extends State<DynTopicPage> with DynMixin {
                         childCount: response!.length,
                       ),
                     )
-                  : SliverCrossAxisGroup(
-                      slivers: [
-                        const SliverFillRemaining(),
-                        SliverConstrainedCrossAxis(
-                          maxExtent: Grid.smallCardWidth * 2,
-                          sliver: SliverList.builder(
-                            itemBuilder: (context, index) {
-                              if (index == response.length - 1) {
-                                _controller.onLoadMore();
-                              }
-                              final item = response[index];
-                              if (item.dynamicCardItem != null) {
-                                return DynamicPanel(
-                                  item: item.dynamicCardItem!,
-                                  maxWidth: maxWidth,
-                                );
-                              } else {
-                                return Text(item.topicType ?? 'err');
-                              }
-                            },
-                            itemCount: response!.length,
-                          ),
-                        ),
-                        const SliverFillRemaining(),
-                      ],
+                  : SliverList.builder(
+                      itemBuilder: (context, index) {
+                        if (index == response.length - 1) {
+                          _controller.onLoadMore();
+                        }
+                        final item = response[index];
+                        if (item.dynamicCardItem != null) {
+                          return DynamicPanel(
+                            item: item.dynamicCardItem!,
+                            maxWidth: maxWidth,
+                          );
+                        } else {
+                          return Text(item.topicType ?? 'err');
+                        }
+                      },
+                      itemCount: response!.length,
                     )
             : HttpError(onReload: _controller.onReload),
       Error(:var errMsg) => HttpError(

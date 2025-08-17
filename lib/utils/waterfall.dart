@@ -17,6 +17,29 @@ mixin DynMixin {
         callback: (value) => maxWidth = value,
       );
 
+  Widget buildPage(Widget child) {
+    if (GlobalData().dynamicsWaterfallFlow) {
+      return child;
+    }
+    return SliverLayoutBuilder(
+      builder: (context, constraints) {
+        final maxWidth = constraints.crossAxisExtent;
+        final cardWidth = Grid.smallCardWidth * 2;
+        final flag = cardWidth < maxWidth;
+        this.maxWidth = flag ? cardWidth : maxWidth;
+        if (!flag) {
+          return child;
+        }
+        return SliverPadding(
+          padding: EdgeInsets.symmetric(
+            horizontal: (maxWidth - cardWidth) / 2,
+          ),
+          sliver: child,
+        );
+      },
+    );
+  }
+
   late final skeDelegate = SliverGridDelegateWithExtentAndRatio(
     crossAxisSpacing: 4,
     mainAxisSpacing: 4,
@@ -33,18 +56,9 @@ mixin DynMixin {
         itemCount: 10,
       );
     }
-    return SliverCrossAxisGroup(
-      slivers: [
-        const SliverFillRemaining(),
-        SliverConstrainedCrossAxis(
-          maxExtent: Grid.smallCardWidth * 2,
-          sliver: SliverList.builder(
-            itemBuilder: (_, _) => const DynamicCardSkeleton(),
-            itemCount: 10,
-          ),
-        ),
-        const SliverFillRemaining(),
-      ],
+    return SliverList.builder(
+      itemBuilder: (_, _) => const DynamicCardSkeleton(),
+      itemCount: 10,
     );
   }
 }

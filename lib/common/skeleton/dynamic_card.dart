@@ -1,4 +1,5 @@
 import 'package:PiliPlus/common/skeleton/skeleton.dart';
+import 'package:PiliPlus/utils/global_data.dart';
 import 'package:flutter/material.dart';
 
 class DynamicCardSkeleton extends StatelessWidget {
@@ -89,7 +90,7 @@ class DynamicCardSkeleton extends StatelessWidget {
                 ],
               ),
             ),
-            const Spacer(),
+            if (GlobalData().dynamicsWaterfallFlow) const Spacer(),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [

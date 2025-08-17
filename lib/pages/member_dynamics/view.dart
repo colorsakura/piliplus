@@ -5,7 +5,6 @@ import 'package:PiliPlus/models/dynamics/result.dart';
 import 'package:PiliPlus/pages/dynamics/widgets/dynamic_panel.dart';
 import 'package:PiliPlus/pages/member_dynamics/controller.dart';
 import 'package:PiliPlus/utils/global_data.dart';
-import 'package:PiliPlus/utils/grid.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:PiliPlus/utils/waterfall.dart';
 import 'package:flutter/material.dart';
@@ -64,8 +63,10 @@ class _MemberDynamicsPageState extends State<MemberDynamicsPage>
           padding: EdgeInsets.only(
             bottom: MediaQuery.paddingOf(context).bottom + 80,
           ),
-          sliver: Obx(
-            () => _buildContent(_memberDynamicController.loadingState.value),
+          sliver: buildPage(
+            Obx(
+              () => _buildContent(_memberDynamicController.loadingState.value),
+            ),
           ),
         ),
       ],
@@ -95,28 +96,19 @@ class _MemberDynamicsPageState extends State<MemberDynamicsPage>
                         childCount: response!.length,
                       ),
                     )
-                  : SliverCrossAxisGroup(
-                      slivers: [
-                        const SliverFillRemaining(),
-                        SliverConstrainedCrossAxis(
-                          maxExtent: Grid.smallCardWidth * 2,
-                          sliver: SliverList.builder(
-                            itemBuilder: (context, index) {
-                              if (index == response.length - 1) {
-                                _memberDynamicController.onLoadMore();
-                              }
-                              return DynamicPanel(
-                                item: response[index],
-                                onRemove: _memberDynamicController.onRemove,
-                                onSetTop: _memberDynamicController.onSetTop,
-                                maxWidth: maxWidth,
-                              );
-                            },
-                            itemCount: response!.length,
-                          ),
-                        ),
-                        const SliverFillRemaining(),
-                      ],
+                  : SliverList.builder(
+                      itemBuilder: (context, index) {
+                        if (index == response.length - 1) {
+                          _memberDynamicController.onLoadMore();
+                        }
+                        return DynamicPanel(
+                          item: response[index],
+                          onRemove: _memberDynamicController.onRemove,
+                          onSetTop: _memberDynamicController.onSetTop,
+                          maxWidth: maxWidth,
+                        );
+                      },
+                      itemCount: response!.length,
                     )
             : HttpError(onReload: _memberDynamicController.onReload),
       Error(:var errMsg) => HttpError(
