@@ -1,5 +1,6 @@
 import 'package:PiliPlus/pages/live_room/controller.dart';
 import 'package:PiliPlus/plugin/pl_player/controller.dart';
+import 'package:PiliPlus/plugin/pl_player/models/video_fit_type.dart';
 import 'package:PiliPlus/plugin/pl_player/widgets/common_btn.dart';
 import 'package:PiliPlus/plugin/pl_player/widgets/play_pause_btn.dart';
 import 'package:PiliPlus/utils/storage.dart';
@@ -97,13 +98,13 @@ class BottomControl extends StatelessWidget {
             },
           ),
           Obx(
-            () => PopupMenuButton<BoxFit>(
+            () => PopupMenuButton<VideoFitType>(
               initialValue: plPlayerController.videoFit.value,
               color: Colors.black.withValues(alpha: 0.8),
               itemBuilder: (context) {
-                return BoxFit.values
+                return VideoFitType.values
                     .map(
-                      (BoxFit boxFit) => PopupMenuItem<BoxFit>(
+                      (boxFit) => PopupMenuItem<VideoFitType>(
                         height: 35,
                         padding: const EdgeInsets.only(left: 30),
                         value: boxFit,

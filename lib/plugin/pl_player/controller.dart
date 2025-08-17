@@ -25,6 +25,7 @@ import 'package:PiliPlus/plugin/pl_player/models/fullscreen_mode.dart';
 import 'package:PiliPlus/plugin/pl_player/models/heart_beat_type.dart';
 import 'package:PiliPlus/plugin/pl_player/models/play_repeat.dart';
 import 'package:PiliPlus/plugin/pl_player/models/play_status.dart';
+import 'package:PiliPlus/plugin/pl_player/models/video_fit_type.dart';
 import 'package:PiliPlus/plugin/pl_player/utils/fullscreen.dart';
 import 'package:PiliPlus/services/service_locator.dart';
 import 'package:PiliPlus/utils/accounts.dart';
@@ -104,7 +105,7 @@ class PlPlayerController {
 
   bool _isVertical = false;
 
-  final Rx<BoxFit> _videoFit = Rx(BoxFit.contain);
+  final Rx<VideoFitType> _videoFit = Rx(VideoFitType.contain);
   late StreamSubscription<DataStatus> _dataListenerForVideoFit;
   late StreamSubscription<DataStatus> _dataListenerForEnterFullscreen;
 
@@ -220,7 +221,7 @@ class PlPlayerController {
   bool get autoplay => _autoPlay;
 
   /// 视频比例
-  Rx<BoxFit> get videoFit => _videoFit;
+  Rx<VideoFitType> get videoFit => _videoFit;
 
   /// 后台播放
   RxBool get continuePlayInBackground => _continuePlayInBackground;
@@ -370,24 +371,21 @@ class PlPlayerController {
         : Colors.black.withValues(alpha: subtitleBgOpaticy),
   );
 
-  SubtitleViewConfiguration get subtitleViewConfiguration =>
-      SubtitleViewConfiguration(
-        style: subTitleStyle,
-        padding: EdgeInsets.only(
-          left: subtitlePaddingH.toDouble(),
-          right: subtitlePaddingH.toDouble(),
-          bottom: subtitlePaddingB.toDouble(),
-        ),
-        textScaleFactor: 1,
-        strokeWidth: subtitleBgOpaticy == 0 ? subtitleStrokeWidth : null,
-      );
+  late final Rx<SubtitleViewConfiguration> subtitleConfig = _getSubConfig.obs;
 
-  GlobalKey<VideoState> Function()? getPlayerKey;
+  SubtitleViewConfiguration get _getSubConfig => SubtitleViewConfiguration(
+    style: subTitleStyle,
+    padding: EdgeInsets.only(
+      left: subtitlePaddingH.toDouble(),
+      right: subtitlePaddingH.toDouble(),
+      bottom: subtitlePaddingB.toDouble(),
+    ),
+    textScaleFactor: 1,
+    strokeWidth: subtitleBgOpaticy == 0 ? subtitleStrokeWidth : null,
+  );
 
   void updateSubtitleStyle() {
-    getPlayerKey?.call().currentState?.update(
-      subtitleViewConfiguration: subtitleViewConfiguration,
-    );
+    subtitleConfig.value = _getSubConfig;
   }
 
   void onUpdatePadding(EdgeInsets padding) {
@@ -1271,42 +1269,32 @@ class PlPlayerController {
   }
 
   /// Toggle Change the videofit accordingly
-  void toggleVideoFit(BoxFit value) {
+  void toggleVideoFit(VideoFitType value) {
     _videoFit.value = value;
-    setVideoFit();
-    getPlayerKey?.call().currentState?.update(fit: value);
-  }
-
-  /// 缓存fit
-  Future<void> setVideoFit() async {
-    SmartDialog.showToast(
-      _videoFit.value.toast,
-      displayTime: const Duration(seconds: 1),
-    );
     video.put(VideoBoxKey.cacheVideoFit, _videoFit.value.index);
   }
 
   /// 读取fit
   int fitValue = Pref.cacheVideoFit;
   Future<void> getVideoFit() async {
-    var attr = BoxFit.values[fitValue];
+    var attr = VideoFitType.values[fitValue];
     // 由于none与scaleDown涉及视频原始尺寸，需要等待视频加载后再设置，否则尺寸会变为0，出现错误;
-    if (attr == BoxFit.none || attr == BoxFit.scaleDown) {
+    if (attr == VideoFitType.none || attr == VideoFitType.scaleDown) {
       if (buffered.value == Duration.zero) {
-        attr = BoxFit.contain;
+        attr = VideoFitType.contain;
         _dataListenerForVideoFit = dataStatus.status.listen((status) {
           if (status == DataStatus.loaded) {
             _dataListenerForVideoFit.cancel();
-            var attr = BoxFit.values[fitValue];
-            if (attr == BoxFit.none || attr == BoxFit.scaleDown) {
+            var attr = VideoFitType.values[fitValue];
+            if (attr == VideoFitType.none || attr == VideoFitType.scaleDown) {
               _videoFit.value = attr;
             }
           }
         });
       }
       // fill不应该在竖屏视频生效
-    } else if (attr == BoxFit.fill && isVertical) {
-      attr = BoxFit.contain;
+    } else if (attr == VideoFitType.fill && isVertical) {
+      attr = VideoFitType.contain;
     }
     _videoFit.value = attr;
   }
@@ -1675,18 +1663,4 @@ class PlPlayerController {
 
   late final RxList<double> dmTrend = <double>[].obs;
   late final RxBool showDmTreandChart = true.obs;
-}
-
-extension BoxFitExt on BoxFit {
-  String get desc => const ['拉伸', '自动', '裁剪', '等宽', '等高', '原始', '限制'][index];
-
-  String get toast => const [
-    '拉伸至播放器尺寸，将产生变形（竖屏改为自动）',
-    '缩放至播放器尺寸，保留黑边',
-    '缩放至填满播放器，裁剪超出部分',
-    '缩放至撑满播放器宽度',
-    '缩放至撑满播放器高度',
-    '不缩放，以视频原始尺寸显示',
-    '仅超出时缩小至播放器尺寸',
-  ][index];
 }
