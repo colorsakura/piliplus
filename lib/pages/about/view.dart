@@ -26,6 +26,7 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:re_highlight/languages/json.dart';
 import 'package:re_highlight/re_highlight.dart';
+import 'package:re_highlight/styles/github-dark.dart';
 import 'package:re_highlight/styles/github.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -384,13 +385,25 @@ Future<void> showInportExportDialog<T>(
               SmartDialog.showToast('解析json失败：$e');
               return;
             }
-            final renderer = TextSpanRenderer(const TextStyle(), githubTheme);
-            Highlight()
-              ..registerLanguage('json', langJson)
-              ..highlight(code: formatText, language: 'json').render(renderer);
+            final highlight = Highlight()..registerLanguage('json', langJson);
+            final result = highlight.highlight(
+              code: formatText,
+              language: 'json',
+            );
+            late TextSpanRenderer renderer;
+            bool? isDarkMode;
             showDialog(
               context: context,
               builder: (context) {
+                final isDark = context.isDarkMode;
+                if (isDark != isDarkMode) {
+                  isDarkMode = isDark;
+                  renderer = TextSpanRenderer(
+                    const TextStyle(),
+                    isDark ? githubDarkTheme : githubTheme,
+                  );
+                  result.render(renderer);
+                }
                 return AlertDialog(
                   title: Text('是否导入如下$title？'),
                   content: SingleChildScrollView(
