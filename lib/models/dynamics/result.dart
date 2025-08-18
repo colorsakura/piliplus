@@ -13,6 +13,14 @@ class DynamicsDataModel {
   String? offset;
   int? total;
 
+  static String _getMatchText(DynamicItemModel item) {
+    final moduleDynamic = item.modules.moduleDynamic;
+    final opus = moduleDynamic?.major?.opus;
+    return (opus?.title ?? '') +
+        (opus?.summary?.text ?? '') +
+        (moduleDynamic?.desc?.text ?? '');
+  }
+
   static RegExp banWordForDyn = RegExp(
     Pref.banWordForDyn,
     caseSensitive: false,
@@ -42,16 +50,15 @@ class DynamicsDataModel {
                     'ADDITIONAL_TYPE_GOODS')) {
           continue;
         }
-        if (enableFilter &&
-            banWordForDyn.hasMatch(
-              (item.orig?.modules.moduleDynamic?.major?.opus?.summary?.text ??
-                      '') +
-                  (item.modules.moduleDynamic?.major?.opus?.summary?.text ??
-                      '') +
-                  (item.orig?.modules.moduleDynamic?.desc?.text ?? '') +
-                  (item.modules.moduleDynamic?.desc?.text ?? ''),
-            )) {
-          continue;
+        if (enableFilter) {
+          if (item.orig case DynamicItemModel orig) {
+            if (banWordForDyn.hasMatch(_getMatchText(orig))) {
+              continue;
+            }
+          }
+          if (banWordForDyn.hasMatch(_getMatchText(item))) {
+            continue;
+          }
         }
         if (filterBan &&
             tempBannedList!.contains(item.modules.moduleAuthor?.mid)) {
