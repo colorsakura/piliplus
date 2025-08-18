@@ -2442,9 +2442,10 @@ class EditableTextState extends State<EditableText>
     if (selection.isCollapsed || widget.obscureText) {
       return;
     }
-    // TODO copy
-    String text = textEditingValue.text;
-    Clipboard.setData(ClipboardData(text: selection.textInside(text)));
+    final String text =
+        widget.controller.getSelectionText(selection) ??
+        selection.textInside(textEditingValue.text);
+    Clipboard.setData(ClipboardData(text: text));
     if (cause == SelectionChangedCause.toolbar) {
       bringIntoView(textEditingValue.selection.extent);
       hideToolbar(false);
@@ -2480,11 +2481,13 @@ class EditableTextState extends State<EditableText>
       return;
     }
     final TextSelection selection = textEditingValue.selection;
-    final String text = textEditingValue.text;
     if (selection.isCollapsed) {
       return;
     }
-    Clipboard.setData(ClipboardData(text: selection.textInside(text)));
+    final String text =
+        widget.controller.getSelectionText(selection) ??
+        selection.textInside(textEditingValue.text);
+    Clipboard.setData(ClipboardData(text: text));
     _replaceText(ReplaceTextIntent(textEditingValue, '', selection, cause));
     if (cause == SelectionChangedCause.toolbar) {
       // Schedule a call to bringIntoView() after renderEditable updates.
