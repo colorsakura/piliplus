@@ -21,7 +21,8 @@ import 'package:get/get.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:re_highlight/languages/all.dart';
 import 'package:re_highlight/re_highlight.dart';
-import 'package:re_highlight/styles/all.dart';
+import 'package:re_highlight/styles/github-dark.dart';
+import 'package:re_highlight/styles/github.dart';
 
 class OpusContent extends StatelessWidget {
   final List<ArticleContentModel> opus;
@@ -553,7 +554,7 @@ class OpusContent extends StatelessWidget {
               );
               final TextSpanRenderer renderer = TextSpanRenderer(
                 const TextStyle(),
-                builtinAllThemes['github']!,
+                context.isDarkMode ? githubDarkTheme : githubTheme,
               );
               result.render(renderer);
               return Container(
