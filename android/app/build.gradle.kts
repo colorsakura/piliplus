@@ -30,11 +30,7 @@ android {
         versionName = flutter.versionName
     }
 
-    packagingOptions {
-        jniLibs {
-            useLegacyPackaging = true
-        }
-    }
+    packagingOptions.jniLibs.useLegacyPackaging = true
 
     val keyProperties = Properties().also {
         val properties = rootProject.file("key.properties")
