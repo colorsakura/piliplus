@@ -1,6 +1,7 @@
 import 'package:PiliPlus/models/model_avatar.dart';
 import 'package:PiliPlus/models_new/space/space/achieve.dart';
 import 'package:PiliPlus/models_new/space/space/entrance.dart';
+import 'package:PiliPlus/models_new/space/space/followings_followed_upper.dart';
 import 'package:PiliPlus/models_new/space/space/honours.dart';
 import 'package:PiliPlus/models_new/space/space/level_info.dart';
 import 'package:PiliPlus/models_new/space/space/likes.dart';
@@ -57,6 +58,7 @@ class SpaceCard {
   int? digitalType;
   bool? hasDigitalAsset;
   SpacePrInfo? prInfo;
+  FollowingsFollowedUpper? followingsFollowedUpper;
 
   SpaceCard({
     this.mid,
@@ -102,6 +104,7 @@ class SpaceCard {
     this.digitalType,
     this.hasDigitalAsset,
     this.prInfo,
+    this.followingsFollowedUpper,
   });
 
   factory SpaceCard.fromJson(Map<String, dynamic> json) => SpaceCard(
@@ -187,5 +190,10 @@ class SpaceCard {
     prInfo: json['pr_info'] == null
         ? null
         : SpacePrInfo.fromJson(json['pr_info'] as Map<String, dynamic>),
+    followingsFollowedUpper: json['followings_followed_upper'] == null
+        ? null
+        : FollowingsFollowedUpper.fromJson(
+            json['followings_followed_upper'] as Map<String, dynamic>,
+          ),
   );
 }
