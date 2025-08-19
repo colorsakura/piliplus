@@ -402,6 +402,8 @@ class _FavDetailPageState extends State<FavDetailPage> with GridMixin {
                           Expanded(
                             child: Text(
                               folderInfo.title,
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
                               style: TextStyle(
                                 fontSize: theme.textTheme.titleMedium!.fontSize,
                                 fontWeight: FontWeight.bold,

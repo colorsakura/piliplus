@@ -1883,7 +1883,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
               ),
             ),
           )
-        else
+        else if (Platform.isAndroid)
           const SizedBox.shrink(),
       ],
     );

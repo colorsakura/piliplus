@@ -614,6 +614,7 @@ class UserInfoCard extends StatelessWidget {
       );
     }
     Widget child = Row(
+      mainAxisSize: MainAxisSize.min,
       children: [
         const SizedBox(width: 20),
         avatars,
@@ -638,12 +639,11 @@ class UserInfoCard extends StatelessWidget {
           size: 20,
           color: colorScheme.outline,
         ),
-        const SizedBox(width: 20),
+        const SizedBox(width: 10),
       ],
     );
     if (item.jumpUrl?.isNotEmpty == true) {
       return GestureDetector(
-        behavior: HitTestBehavior.opaque,
         onTap: () => PageUtils.handleWebview(item.jumpUrl!),
         child: child,
       );

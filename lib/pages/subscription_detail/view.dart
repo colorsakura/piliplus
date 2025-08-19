@@ -173,6 +173,8 @@ class _SubDetailPageState extends State<SubDetailPage> with GridMixin {
                     Expanded(
                       child: Text(
                         info.title!,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
                         style: const TextStyle(
                           fontSize: 15,
                           fontWeight: FontWeight.bold,

@@ -15,6 +15,7 @@ class MemberAudioItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final hasStat = item.statistic != null;
     return Material(
       type: MaterialType.transparency,
       child: InkWell(
@@ -58,25 +59,28 @@ class MemberAudioItem extends StatelessWidget {
                     ),
                     const SizedBox(height: 6),
                     Text(
-                      DateUtil.dateFormat(item.ctime! ~/ 1000),
+                      DateUtil.dateFormat(
+                        hasStat ? item.ctime! ~/ 1000 : item.ctime!,
+                      ),
                       style: TextStyle(
                         fontSize: 13,
                         color: theme.colorScheme.onSurfaceVariant,
                       ),
                     ),
-                    Row(
-                      spacing: 16,
-                      children: [
-                        StatWidget(
-                          type: StatType.listen,
-                          value: item.statistic?.play,
-                        ),
-                        StatWidget(
-                          type: StatType.reply,
-                          value: item.statistic?.comment,
-                        ),
-                      ],
-                    ),
+                    if (hasStat)
+                      Row(
+                        spacing: 16,
+                        children: [
+                          StatWidget(
+                            type: StatType.listen,
+                            value: item.statistic?.play,
+                          ),
+                          StatWidget(
+                            type: StatType.reply,
+                            value: item.statistic?.comment,
+                          ),
+                        ],
+                      ),
                   ],
                 ),
               ),
