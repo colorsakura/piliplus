@@ -1,15 +1,9 @@
-import 'dart:io';
-
 import 'package:PiliPlus/http/init.dart';
 import 'package:PiliPlus/models/common/account_type.dart';
 import 'package:PiliPlus/pages/mine/controller.dart';
 import 'package:PiliPlus/utils/accounts/account.dart';
 import 'package:PiliPlus/utils/login_utils.dart';
-import 'package:PiliPlus/utils/storage.dart';
-import 'package:cookie_jar/cookie_jar.dart';
-import 'package:flutter/foundation.dart';
 import 'package:hive/hive.dart';
-import 'package:path_provider/path_provider.dart';
 
 class Accounts {
   static late final Box<LoginAccount> account;
@@ -32,46 +26,46 @@ class Accounts {
         return deletedEntries > 2;
       },
     );
-    await _migrate();
+    // await _migrate();
   }
 
-  static Future<void> _migrate() async {
-    final Directory tempDir = await getApplicationSupportDirectory();
-    final String tempPath = "${tempDir.path}/.plpl/";
-    final Directory dir = Directory(tempPath);
-    if (dir.existsSync()) {
-      if (kDebugMode) debugPrint('migrating...');
-      final cookieJar = PersistCookieJar(
-        ignoreExpires: true,
-        storage: FileStorage(tempPath),
-      );
-      await cookieJar.forceInit();
-      final cookies = DefaultCookieJar(ignoreExpires: true)
-        ..domainCookies.addAll(cookieJar.domainCookies);
-      final localAccessKey = GStorage.localCache.get(
-        'accessKey',
-        defaultValue: {},
-      );
+  // static Future<void> _migrate() async {
+  //   final Directory tempDir = await getApplicationSupportDirectory();
+  //   final String tempPath = "${tempDir.path}/.plpl/";
+  //   final Directory dir = Directory(tempPath);
+  //   if (dir.existsSync()) {
+  //     if (kDebugMode) debugPrint('migrating...');
+  //     final cookieJar = PersistCookieJar(
+  //       ignoreExpires: true,
+  //       storage: FileStorage(tempPath),
+  //     );
+  //     await cookieJar.forceInit();
+  //     final cookies = DefaultCookieJar(ignoreExpires: true)
+  //       ..domainCookies.addAll(cookieJar.domainCookies);
+  //     final localAccessKey = GStorage.localCache.get(
+  //       'accessKey',
+  //       defaultValue: {},
+  //     );
 
-      final isLogin =
-          cookies.domainCookies['bilibili.com']?['/']?['SESSDATA'] != null;
+  //     final isLogin =
+  //         cookies.domainCookies['bilibili.com']?['/']?['SESSDATA'] != null;
 
-      await Future.wait([
-        GStorage.localCache.delete('accessKey'),
-        GStorage.localCache.delete('danmakuFilterRule'),
-        GStorage.localCache.delete('blackMidsList'),
-        dir.delete(recursive: true),
-        if (isLogin)
-          LoginAccount(
-            cookies,
-            localAccessKey['value'],
-            localAccessKey['refresh'],
-            AccountType.values.toSet(),
-          ).onChange(),
-      ]);
-      if (kDebugMode) debugPrint('migrated successfully');
-    }
-  }
+  //     await Future.wait([
+  //       GStorage.localCache.delete('accessKey'),
+  //       GStorage.localCache.delete('danmakuFilterRule'),
+  //       GStorage.localCache.delete('blackMidsList'),
+  //       dir.delete(recursive: true),
+  //       if (isLogin)
+  //         LoginAccount(
+  //           cookies,
+  //           localAccessKey['value'],
+  //           localAccessKey['refresh'],
+  //           AccountType.values.toSet(),
+  //         ).onChange(),
+  //     ]);
+  //     if (kDebugMode) debugPrint('migrated successfully');
+  //   }
+  // }
 
   static Future<void> refresh() async {
     for (var a in account.values) {
