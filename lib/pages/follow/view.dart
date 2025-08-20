@@ -1,6 +1,7 @@
 import 'package:PiliPlus/common/widgets/dialog/dialog.dart';
 import 'package:PiliPlus/common/widgets/loading_widget/loading_widget.dart';
 import 'package:PiliPlus/common/widgets/scroll_physics.dart';
+import 'package:PiliPlus/common/widgets/view_safe_area.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/member/tags.dart';
 import 'package:PiliPlus/pages/follow/child/child_controller.dart';
@@ -28,6 +29,7 @@ class _FollowPageState extends State<FollowPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: Text(
           _followController.isOwner ? '我的关注' : '${_followController.name}的关注',
@@ -92,9 +94,7 @@ class _FollowPageState extends State<FollowPage> {
       Success() => Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SafeArea(
-            top: false,
-            bottom: false,
+          ViewSafeArea(
             child: TabBar(
               isScrollable: true,
               tabAlignment: TabAlignment.start,

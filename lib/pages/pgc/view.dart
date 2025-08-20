@@ -5,6 +5,7 @@ import 'package:PiliPlus/common/widgets/loading_widget/http_error.dart';
 import 'package:PiliPlus/common/widgets/loading_widget/loading_widget.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/common/widgets/scroll_physics.dart';
+import 'package:PiliPlus/common/widgets/view_safe_area.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/common/fav_type.dart';
 import 'package:PiliPlus/models/common/home_tab_type.dart';
@@ -105,7 +106,7 @@ class _PgcPageState extends CommonPageState<PgcPage, PgcController>
                               isScrollable: true,
                               tabAlignment: TabAlignment.start,
                               dividerHeight: 0,
-                              overlayColor: WidgetStateProperty.all(
+                              overlayColor: const WidgetStatePropertyAll(
                                 Colors.transparent,
                               ),
                               splashFactory: NoSplash.splashFactory,
@@ -160,6 +161,7 @@ class _PgcPageState extends CommonPageState<PgcPage, PgcController>
                               physics: const AlwaysScrollableScrollPhysics(),
                               scrollDirection: Axis.horizontal,
                               itemCount: item.episodes!.length,
+                              padding: EdgeInsets.zero,
                               itemBuilder: (context, index) {
                                 return Container(
                                   width: Grid.smallCardWidth / 2,
@@ -204,7 +206,7 @@ class _PgcPageState extends CommonPageState<PgcPage, PgcController>
       padding: EdgeInsets.only(
         left: StyleString.safeSpace,
         right: StyleString.safeSpace,
-        bottom: MediaQuery.paddingOf(context).bottom + 80,
+        bottom: MediaQuery.viewPaddingOf(context).bottom + 100,
       ),
       sliver: Obx(
         () => _buildRcmdBody(controller.loadingState.value),
@@ -243,6 +245,7 @@ class _PgcPageState extends CommonPageState<PgcPage, PgcController>
                 List<int> types = const [102, 2, 5, 3, 7];
                 Get.to(
                   Scaffold(
+                    resizeToAvoidBottomInset: false,
                     appBar: AppBar(title: const Text('索引')),
                     body: DefaultTabController(
                       length: types.length,
@@ -250,9 +253,7 @@ class _PgcPageState extends CommonPageState<PgcPage, PgcController>
                         builder: (context) {
                           return Column(
                             children: [
-                              SafeArea(
-                                top: false,
-                                bottom: false,
+                              ViewSafeArea(
                                 child: TabBar(
                                   tabs: titles
                                       .map((title) => Tab(text: title))
@@ -436,6 +437,7 @@ class _PgcPageState extends CommonPageState<PgcPage, PgcController>
                 controller: controller.followController,
                 scrollDirection: Axis.horizontal,
                 itemCount: response!.length,
+                padding: EdgeInsets.zero,
                 itemBuilder: (context, index) {
                   if (index == response.length - 1) {
                     controller.queryPgcFollow(false);

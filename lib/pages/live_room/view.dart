@@ -161,30 +161,27 @@ class _LiveRoomPageState extends State<LiveRoomPage>
   late double maxWidth;
   late double maxHeight;
   late EdgeInsets padding;
+  late bool isPortrait;
 
   @override
   Widget build(BuildContext context) {
-    padding = MediaQuery.paddingOf(context);
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        maxWidth = constraints.maxWidth;
-        maxHeight = constraints.maxHeight;
-        final isPortrait = maxHeight >= maxWidth;
-
-        if (Platform.isAndroid) {
-          return Floating().isPipMode
-              ? videoPlayerPanel(
-                  isFullScreen,
-                  width: maxWidth,
-                  height: maxHeight,
-                  isPipMode: true,
-                )
-              : childWhenDisabled(isPortrait);
-        } else {
-          return childWhenDisabled(isPortrait);
-        }
-      },
-    );
+    padding = MediaQuery.viewPaddingOf(context);
+    final size = MediaQuery.sizeOf(context);
+    maxWidth = size.width;
+    maxHeight = size.height;
+    isPortrait = maxHeight >= maxWidth;
+    if (Platform.isAndroid) {
+      return Floating().isPipMode
+          ? videoPlayerPanel(
+              isFullScreen,
+              width: maxWidth,
+              height: maxHeight,
+              isPipMode: true,
+            )
+          : childWhenDisabled;
+    } else {
+      return childWhenDisabled;
+    }
   }
 
   Widget videoPlayerPanel(
@@ -257,7 +254,7 @@ class _LiveRoomPageState extends State<LiveRoomPage>
     );
   }
 
-  Widget childWhenDisabled(bool isPortrait) {
+  Widget get childWhenDisabled {
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: _systemOverlayStyleForBrightness(
         Brightness.dark,
@@ -297,22 +294,17 @@ class _LiveRoomPageState extends State<LiveRoomPage>
                 );
               },
             ),
-            SafeArea(
-              top: !isFullScreen,
-              left: !isFullScreen,
-              right: !isFullScreen,
-              bottom: false,
-              child: isPortrait
-                  ? Obx(
-                      () {
-                        if (_liveRoomController.isPortrait.value) {
-                          return _buildPP;
-                        }
-                        return _buildPH;
-                      },
-                    )
-                  : _buildBodyH,
-            ),
+            if (isPortrait)
+              Obx(
+                () {
+                  if (_liveRoomController.isPortrait.value) {
+                    return _buildPP;
+                  }
+                  return _buildPH;
+                },
+              )
+            else
+              _buildBodyH,
           ],
         ),
       ),
@@ -321,67 +313,86 @@ class _LiveRoomPageState extends State<LiveRoomPage>
 
   Widget get _buildPH {
     final isFullScreen = this.isFullScreen;
-    final height = isFullScreen ? maxHeight : maxWidth * 9 / 16;
+    final height = maxWidth * 9 / 16;
+    final videoHeight = isFullScreen ? maxHeight : height;
     return Column(
       children: [
-        if (!isFullScreen) _buildAppBar,
+        Offstage(
+          offstage: isFullScreen,
+          child: _buildAppBar,
+        ),
         SizedBox(
           width: maxWidth,
-          height: height,
+          height: videoHeight,
           child: videoPlayerPanel(
             isFullScreen,
             width: maxWidth,
-            height: height,
+            height: videoHeight,
           ),
         ),
-        ..._buildBottomWidget,
+        Offstage(
+          offstage: isFullScreen,
+          child: SizedBox(
+            width: maxWidth,
+            height: maxHeight - padding.top - height - kToolbarHeight,
+            child: _buildBottomWidget,
+          ),
+        ),
       ],
     );
   }
 
   Widget get _buildPP {
     final isFullScreen = this.isFullScreen;
-    final bottomHeight = 85.0 + padding.bottom;
-    final height = isFullScreen
-        ? maxHeight
-        : maxHeight - padding.top - kToolbarHeight - bottomHeight;
-    Widget child = Stack(
+    final bottomHeight = 80.0 + padding.bottom;
+    final topPadding = padding.top + kToolbarHeight;
+    final videoHeight = maxHeight - bottomHeight - topPadding;
+    return Stack(
       clipBehavior: Clip.none,
       children: [
         Positioned.fill(
+          top: isFullScreen ? 0 : topPadding,
+          bottom: isFullScreen ? 0 : bottomHeight,
           child: videoPlayerPanel(
             width: maxWidth,
-            height: height,
+            height: videoHeight,
             isFullScreen,
-            alignment: isFullScreen ? null : Alignment.topCenter,
             needDm: isFullScreen,
+            alignment: isFullScreen ? null : Alignment.topCenter,
+          ),
+        ),
+        Positioned(
+          top: 0,
+          left: 0,
+          right: 0,
+          child: Offstage(
+            offstage: isFullScreen,
+            child: _buildAppBar,
           ),
         ),
         Positioned(
           left: 0,
           right: 0,
-          bottom: 55,
-          child: Visibility(
-            maintainState: true,
-            visible: !isFullScreen,
+          bottom: 55 + bottomHeight,
+          child: Offstage(
+            offstage: isFullScreen,
             child: SizedBox(
               height: maxHeight * 0.32,
               child: _buildChatWidget(true),
             ),
           ),
         ),
-      ],
-    );
-    if (isFullScreen) {
-      return child;
-    }
-    return Column(
-      children: [
-        _buildAppBar,
-        Expanded(child: child),
-        SizedBox(
-          height: bottomHeight,
-          child: _buildInputWidget,
+        Positioned(
+          left: 0,
+          right: 0,
+          bottom: 0,
+          child: Offstage(
+            offstage: isFullScreen,
+            child: SizedBox(
+              height: bottomHeight,
+              child: _buildInputWidget,
+            ),
+          ),
         ),
       ],
     );
@@ -550,57 +561,69 @@ class _LiveRoomPageState extends State<LiveRoomPage>
   }
 
   Widget get _buildBodyH {
-    double videoWidth =
+    final videoWidth =
         clampDouble(maxHeight / maxWidth * 1.08, 0.58, 0.75) * maxWidth;
+    final videoHeight = maxHeight - padding.top;
     return Obx(
       () {
         final isFullScreen = this.isFullScreen;
         final width = isFullScreen ? maxWidth : videoWidth;
-        final height = isFullScreen ? maxHeight : maxWidth * 9 / 16;
-        Widget child = Row(
-          children: [
-            Container(
-              margin: EdgeInsets.only(bottom: padding.bottom),
-              width: width,
-              height: height,
-              child: videoPlayerPanel(
-                isFullScreen,
-                fill: Colors.transparent,
-                width: width,
-                height: height,
-              ),
-            ),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: _buildBottomWidget,
-              ),
-            ),
-          ],
-        );
-        if (isFullScreen) {
-          return child;
-        }
+        final height = isFullScreen ? maxHeight : videoHeight;
         return Column(
           children: [
-            _buildAppBar,
-            Expanded(child: child),
+            Offstage(
+              offstage: isFullScreen,
+              child: _buildAppBar,
+            ),
+            Expanded(
+              child: Padding(
+                padding: isFullScreen
+                    ? EdgeInsets.zero
+                    : EdgeInsets.only(left: padding.left, right: padding.right),
+                child: Row(
+                  children: [
+                    Container(
+                      margin: EdgeInsets.only(bottom: padding.bottom),
+                      width: width,
+                      height: height,
+                      child: videoPlayerPanel(
+                        isFullScreen,
+                        fill: Colors.transparent,
+                        width: width,
+                        height: height,
+                      ),
+                    ),
+                    Offstage(
+                      offstage: isFullScreen,
+                      child: SizedBox(
+                        width: maxWidth - videoWidth - padding.horizontal,
+                        height: videoHeight,
+                        child: _buildBottomWidget,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
           ],
         );
       },
     );
   }
 
-  List<Widget> get _buildBottomWidget => [
-    Expanded(child: _buildChatWidget()),
-    _buildInputWidget,
-  ];
+  Widget get _buildBottomWidget => Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Expanded(child: _buildChatWidget()),
+      _buildInputWidget,
+    ],
+  );
 
-  Widget _buildChatWidget([bool? isPP]) => Padding(
-    padding: const EdgeInsets.symmetric(vertical: 16),
+  Widget _buildChatWidget([bool isPP = false]) => Padding(
+    padding: EdgeInsets.only(bottom: 16, top: !isPortrait ? 0 : 16),
     child: LiveRoomChat(
       key: chatKey,
-      isPP: isPP ?? false,
+      isPP: isPP,
       roomId: _liveRoomController.roomId,
       liveRoomController: _liveRoomController,
     ),
@@ -613,6 +636,7 @@ class _LiveRoomPageState extends State<LiveRoomPage>
       right: 10,
       bottom: 15 + padding.bottom,
     ),
+    height: 80 + padding.bottom,
     decoration: const BoxDecoration(
       borderRadius: BorderRadius.only(
         topLeft: Radius.circular(20),

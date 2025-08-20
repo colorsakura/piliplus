@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:PiliPlus/common/widgets/button/icon_button.dart';
+import 'package:PiliPlus/common/widgets/view_safe_area.dart';
 import 'package:PiliPlus/http/danmaku.dart';
 import 'package:PiliPlus/main.dart';
 import 'package:PiliPlus/models/common/publish_panel_type.dart';
@@ -145,8 +146,7 @@ class _SendDanmakuPanelState extends CommonTextPubPageState<SendDanmakuPanel> {
 
   @override
   Widget build(BuildContext context) {
-    Widget child = SafeArea(
-      bottom: false,
+    Widget child = ViewSafeArea(
       child: Align(
         alignment: Alignment.bottomCenter,
         child: Container(
@@ -216,7 +216,7 @@ class _SendDanmakuPanelState extends CommonTextPubPageState<SendDanmakuPanel> {
               _buildColorPanel,
             ],
           ),
-          SizedBox(height: 12 + MediaQuery.paddingOf(context).bottom),
+          SizedBox(height: 12 + MediaQuery.viewPaddingOf(context).bottom),
         ],
       ),
     ),

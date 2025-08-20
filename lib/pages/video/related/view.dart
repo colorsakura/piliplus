@@ -28,10 +28,7 @@ class _RelatedVideoPanelState extends State<RelatedVideoPanel>
   Widget build(BuildContext context) {
     super.build(context);
     return SliverPadding(
-      padding: const EdgeInsets.only(
-        top: 7,
-        bottom: 80,
-      ),
+      padding: const EdgeInsets.only(top: 7, bottom: 100),
       sliver: Obx(() => _buildBody(_relatedController.loadingState.value)),
     );
   }

@@ -284,7 +284,7 @@ class _RepostPanelState extends CommonRichTextPubPageState<RepostPanel> {
                   child: IconButton(
                     tooltip: '返回',
                     style: ButtonStyle(
-                      padding: WidgetStateProperty.all(EdgeInsets.zero),
+                      padding: const WidgetStatePropertyAll(EdgeInsets.zero),
                       backgroundColor: WidgetStatePropertyAll(
                         theme.colorScheme.secondaryContainer,
                       ),
@@ -353,7 +353,7 @@ class _RepostPanelState extends CommonRichTextPubPageState<RepostPanel> {
         ),
       ),
     ),
-    SizedBox(height: 10 + MediaQuery.paddingOf(context).bottom),
+    SizedBox(height: 10 + MediaQuery.viewPaddingOf(context).bottom),
   ];
 
   @override

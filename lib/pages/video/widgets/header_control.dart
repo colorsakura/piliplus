@@ -2071,8 +2071,8 @@ class HeaderControlState extends TripleState<HeaderControl> {
                 height: 34,
                 child: IconButton(
                   tooltip: '提交片段',
-                  style: ButtonStyle(
-                    padding: WidgetStateProperty.all(EdgeInsets.zero),
+                  style: const ButtonStyle(
+                    padding: WidgetStatePropertyAll(EdgeInsets.zero),
                   ),
                   onPressed: () => videoDetailCtr.onBlock(context),
                   icon: const Stack(
@@ -2100,8 +2100,8 @@ class HeaderControlState extends TripleState<HeaderControl> {
                       height: 34,
                       child: IconButton(
                         tooltip: '片段信息',
-                        style: ButtonStyle(
-                          padding: WidgetStateProperty.all(EdgeInsets.zero),
+                        style: const ButtonStyle(
+                          padding: WidgetStatePropertyAll(EdgeInsets.zero),
                         ),
                         onPressed: () => videoDetailCtr.showSBDetail(context),
                         icon: const Icon(
@@ -2118,8 +2118,8 @@ class HeaderControlState extends TripleState<HeaderControl> {
               height: 34,
               child: IconButton(
                 tooltip: '发弹幕',
-                style: ButtonStyle(
-                  padding: WidgetStateProperty.all(EdgeInsets.zero),
+                style: const ButtonStyle(
+                  padding: WidgetStatePropertyAll(EdgeInsets.zero),
                 ),
                 onPressed: videoDetailCtr.showShootDanmakuSheet,
                 icon: const Icon(
@@ -2138,8 +2138,8 @@ class HeaderControlState extends TripleState<HeaderControl> {
                       plPlayerController.enableShowDanmaku.value;
                   return IconButton(
                     tooltip: "${enableShowDanmaku ? '关闭' : '开启'}弹幕",
-                    style: ButtonStyle(
-                      padding: WidgetStateProperty.all(EdgeInsets.zero),
+                    style: const ButtonStyle(
+                      padding: WidgetStatePropertyAll(EdgeInsets.zero),
                     ),
                     onPressed: () {
                       final newVal = !enableShowDanmaku;
@@ -2165,8 +2165,8 @@ class HeaderControlState extends TripleState<HeaderControl> {
                 height: 34,
                 child: IconButton(
                   tooltip: '画中画',
-                  style: ButtonStyle(
-                    padding: WidgetStateProperty.all(EdgeInsets.zero),
+                  style: const ButtonStyle(
+                    padding: WidgetStatePropertyAll(EdgeInsets.zero),
                   ),
                   onPressed: () async {
                     bool canUsePiP = await Floating().isPipAvailable;
@@ -2256,8 +2256,8 @@ class HeaderControlState extends TripleState<HeaderControl> {
               height: 34,
               child: IconButton(
                 tooltip: "更多设置",
-                style: ButtonStyle(
-                  padding: WidgetStateProperty.all(EdgeInsets.zero),
+                style: const ButtonStyle(
+                  padding: WidgetStatePropertyAll(EdgeInsets.zero),
                 ),
                 onPressed: showSettingSheet,
                 icon: const Icon(

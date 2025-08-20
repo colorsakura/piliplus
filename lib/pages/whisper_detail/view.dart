@@ -44,6 +44,7 @@ class _WhisperDetailPageState
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
+    final padding = MediaQuery.viewPaddingOf(context);
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
@@ -122,9 +123,11 @@ class _WhisperDetailPageState
           const SizedBox(width: 10),
         ],
       ),
-      body: SafeArea(
-        top: false,
-        bottom: false,
+      body: Padding(
+        padding: EdgeInsets.only(
+          left: padding.left,
+          right: padding.right,
+        ),
         child: Column(
           children: [
             Expanded(
@@ -146,7 +149,7 @@ class _WhisperDetailPageState
               _buildInputView(theme),
               buildPanelContainer(theme, theme.colorScheme.onInverseSurface),
             ] else
-              SizedBox(height: MediaQuery.paddingOf(context).bottom),
+              SizedBox(height: padding.bottom),
           ],
         ),
       ),

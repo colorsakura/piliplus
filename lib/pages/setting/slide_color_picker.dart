@@ -64,7 +64,7 @@ class _SlideColorPickerState extends State<SlideColorPicker> {
           child: SliderTheme(
             data: SliderTheme.of(context).copyWith(
               trackHeight: 10,
-              thumbSize: WidgetStateProperty.all(const Size(4, 25)),
+              thumbSize: const WidgetStatePropertyAll(Size(4, 25)),
             ),
             child: Slider(
               padding: EdgeInsets.zero,

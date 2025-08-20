@@ -29,7 +29,9 @@ class _LiveAreaPageState extends State<LiveAreaPage> {
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
+    final padding = MediaQuery.viewPaddingOf(context);
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: const Text('全部标签'),
         actions: _controller.accountService.isLogin.value
@@ -47,9 +49,8 @@ class _LiveAreaPageState extends State<LiveAreaPage> {
               ]
             : null,
       ),
-      body: SafeArea(
-        top: false,
-        bottom: false,
+      body: Padding(
+        padding: EdgeInsets.only(left: padding.left, right: padding.right),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -57,7 +58,11 @@ class _LiveAreaPageState extends State<LiveAreaPage> {
               Obx(() => _buildFavWidget(theme, _controller.favState.value)),
             Expanded(
               child: Obx(
-                () => _buildBody(theme, _controller.loadingState.value),
+                () => _buildBody(
+                  theme,
+                  padding.bottom,
+                  _controller.loadingState.value,
+                ),
               ),
             ),
           ],
@@ -68,6 +73,7 @@ class _LiveAreaPageState extends State<LiveAreaPage> {
 
   Widget _buildBody(
     ThemeData theme,
+    double bottom,
     LoadingState<List<AreaList>?> loadingState,
   ) {
     return switch (loadingState) {
@@ -96,9 +102,7 @@ class _LiveAreaPageState extends State<LiveAreaPage> {
                                   return GridView.builder(
                                     padding: EdgeInsets.only(
                                       top: 12,
-                                      bottom:
-                                          MediaQuery.paddingOf(context).bottom +
-                                          80,
+                                      bottom: bottom + 100,
                                     ),
                                     gridDelegate:
                                         const SliverGridDelegateWithMaxCrossAxisExtent(

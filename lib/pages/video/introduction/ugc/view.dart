@@ -17,7 +17,6 @@ import 'package:PiliPlus/pages/video/introduction/ugc/widgets/page.dart';
 import 'package:PiliPlus/pages/video/introduction/ugc/widgets/season.dart';
 import 'package:PiliPlus/pages/video/introduction/ugc/widgets/triple_state.dart';
 import 'package:PiliPlus/utils/app_scheme.dart';
-import 'package:PiliPlus/utils/context_ext.dart';
 import 'package:PiliPlus/utils/date_util.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/feed_back.dart';
@@ -41,12 +40,14 @@ class UgcIntroPanel extends StatefulWidget {
     required this.showAiBottomSheet,
     required this.showEpisodes,
     required this.onShowMemberPage,
+    required this.isPortrait,
     required this.isHorizontal,
   });
   final String heroTag;
   final Function showAiBottomSheet;
   final Function showEpisodes;
   final ValueChanged<int?> onShowMemberPage;
+  final bool isPortrait;
   final bool isHorizontal;
 
   @override
@@ -77,7 +78,7 @@ class _UgcIntroPanelState extends TripleState<UgcIntroPanel>
       fadeCurve: Curves.ease,
       sizeCurve: Curves.linear,
     );
-    final isPortrait = context.isPortrait;
+    final isPortrait = widget.isPortrait;
     final isHorizontal = !isPortrait && widget.isHorizontal;
     return SliverPadding(
       padding: const EdgeInsets.only(

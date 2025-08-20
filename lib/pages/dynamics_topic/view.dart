@@ -41,7 +41,7 @@ class _DynTopicPageState extends State<DynTopicPage> with DynMixin {
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
-    final padding = MediaQuery.paddingOf(context);
+    final padding = MediaQuery.viewPaddingOf(context);
     return Scaffold(
       resizeToAvoidBottomInset: false,
       floatingActionButton: FloatingActionButton.extended(
@@ -61,91 +61,90 @@ class _DynTopicPageState extends State<DynTopicPage> with DynMixin {
         icon: const Icon(CustomIcon.topic_tag, size: 20),
         label: const Text('参与话题'),
       ),
-      body: SafeArea(
-        top: false,
-        bottom: false,
-        child: refreshIndicator(
-          onRefresh: _controller.onRefresh,
-          child: CustomScrollView(
-            controller: _controller.scrollController,
-            physics: const AlwaysScrollableScrollPhysics(),
-            slivers: [
-              Obx(
-                () => _buildAppBar(
-                  theme,
-                  padding.top,
-                  _controller.topState.value,
-                ),
+      body: refreshIndicator(
+        onRefresh: _controller.onRefresh,
+        child: CustomScrollView(
+          controller: _controller.scrollController,
+          physics: const AlwaysScrollableScrollPhysics(),
+          slivers: [
+            Obx(
+              () => _buildAppBar(
+                theme,
+                padding,
+                _controller.topState.value,
               ),
-              Obx(() {
-                final allSortBy = _controller.topicSortByConf.value?.allSortBy;
-                if (allSortBy != null && allSortBy.isNotEmpty) {
-                  return SliverPersistentHeader(
-                    pinned: true,
-                    delegate: CustomSliverPersistentHeaderDelegate(
-                      extent: 30,
-                      bgColor: theme.colorScheme.surface,
-                      child: SizedBox(
-                        height: 30,
-                        child: Builder(
-                          builder: (context) {
-                            return Padding(
-                              padding: const EdgeInsets.only(
-                                left: 12,
-                                bottom: 6,
-                              ),
-                              child: ToggleButtons(
-                                fillColor: theme.colorScheme.secondaryContainer,
-                                selectedColor:
-                                    theme.colorScheme.onSecondaryContainer,
-                                constraints: const BoxConstraints(
-                                  minWidth: 54,
-                                  minHeight: 24,
+            ),
+            Obx(() {
+              final allSortBy = _controller.topicSortByConf.value?.allSortBy;
+              if (allSortBy != null && allSortBy.isNotEmpty) {
+                return SliverPersistentHeader(
+                  pinned: true,
+                  delegate: CustomSliverPersistentHeaderDelegate(
+                    extent: 30,
+                    needRebuild: true,
+                    bgColor: theme.colorScheme.surface,
+                    child: Container(
+                      height: 30,
+                      padding: EdgeInsets.only(
+                        left: 12 + padding.left,
+                        bottom: 6,
+                      ),
+                      child: Builder(
+                        builder: (context) {
+                          return ToggleButtons(
+                            fillColor: theme.colorScheme.secondaryContainer,
+                            selectedColor:
+                                theme.colorScheme.onSecondaryContainer,
+                            constraints: const BoxConstraints(
+                              minWidth: 54,
+                              minHeight: 24,
+                            ),
+                            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                            borderRadius: const BorderRadius.all(
+                              Radius.circular(25),
+                            ),
+                            onPressed: (index) {
+                              _controller.onSort(allSortBy[index].sortBy!);
+                              (context as Element).markNeedsBuild();
+                            },
+                            isSelected: allSortBy.map((e) {
+                              return e.sortBy == _controller.sortBy;
+                            }).toList(),
+                            children: allSortBy.map((e) {
+                              return Text(
+                                e.sortName!,
+                                style: const TextStyle(
+                                  fontSize: 13,
+                                  height: 1,
                                 ),
-                                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                                borderRadius: const BorderRadius.all(
-                                  Radius.circular(25),
+                                strutStyle: const StrutStyle(
+                                  height: 1,
+                                  leading: 0,
+                                  fontSize: 13,
                                 ),
-                                onPressed: (index) {
-                                  _controller.onSort(allSortBy[index].sortBy!);
-                                  (context as Element).markNeedsBuild();
-                                },
-                                isSelected: allSortBy.map((e) {
-                                  return e.sortBy == _controller.sortBy;
-                                }).toList(),
-                                children: allSortBy.map((e) {
-                                  return Text(
-                                    e.sortName!,
-                                    style: const TextStyle(
-                                      fontSize: 13,
-                                      height: 1,
-                                    ),
-                                    strutStyle: const StrutStyle(
-                                      height: 1,
-                                      leading: 0,
-                                      fontSize: 13,
-                                    ),
-                                    textScaler: TextScaler.noScaling,
-                                  );
-                                }).toList(),
-                              ),
-                            );
-                          },
-                        ),
+                                textScaler: TextScaler.noScaling,
+                              );
+                            }).toList(),
+                          );
+                        },
                       ),
                     ),
-                  );
-                }
-                return const SliverToBoxAdapter();
-              }),
-              SliverPadding(
-                padding: EdgeInsets.only(bottom: padding.bottom + 80),
-                sliver: buildPage(
-                  Obx(() => _buildBody(_controller.loadingState.value)),
-                ),
+                  ),
+                );
+              }
+              return const SliverToBoxAdapter();
+            }),
+            SliverPadding(
+              padding: EdgeInsets.only(
+                left: padding.left,
+                right: padding.right,
+                bottom: padding.bottom + 100,
               ),
-            ],
-          ),
+              sliver: buildPage(
+                Obx(() => _buildBody(_controller.loadingState.value)),
+              ),
+            ),
+          ],
         ),
       ),
     );
@@ -153,7 +152,7 @@ class _DynTopicPageState extends State<DynTopicPage> with DynMixin {
 
   Widget _buildAppBar(
     ThemeData theme,
-    double paddingTop,
+    EdgeInsets padding,
     LoadingState<TopDetails?> topState,
   ) {
     return switch (topState) {
@@ -162,7 +161,7 @@ class _DynTopicPageState extends State<DynTopicPage> with DynMixin {
         DynamicSliverAppBarMedium(
           pinned: true,
           callback: (value) =>
-              _controller.appbarOffset = value - kToolbarHeight - paddingTop,
+              _controller.appbarOffset = value - kToolbarHeight - padding.top,
           title: IgnorePointer(child: Text(response!.topicItem!.name)),
           flexibleSpace: Container(
             decoration: BoxDecoration(
@@ -175,9 +174,9 @@ class _DynTopicPageState extends State<DynTopicPage> with DynMixin {
               ),
             ),
             padding: EdgeInsets.only(
-              top: paddingTop,
-              left: 12,
-              right: 12,
+              top: padding.top,
+              left: 12 + padding.left,
+              right: 12 + padding.right,
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,

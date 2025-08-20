@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:PiliPlus/common/widgets/view_safe_area.dart';
 import 'package:PiliPlus/http/search.dart';
 import 'package:PiliPlus/models/common/video/source_type.dart';
 import 'package:PiliPlus/pages/subscription_detail/view.dart';
@@ -123,6 +124,7 @@ class PiliScheme {
                     'id': commentSecondaryId,
                   },
                   () => Scaffold(
+                    resizeToAvoidBottomInset: false,
                     appBar: AppBar(
                       title: const Text('评论详情'),
                       actions: [
@@ -139,9 +141,7 @@ class PiliScheme {
                         ),
                       ],
                     ),
-                    body: SafeArea(
-                      top: false,
-                      bottom: false,
+                    body: ViewSafeArea(
                       child: VideoReplyReplyPanel(
                         enableSlide: false,
                         oid: int.parse(oid),
@@ -260,6 +260,7 @@ class PiliScheme {
                   'enterUri': queryParameters['enterUri'],
                 },
                 () => Scaffold(
+                  resizeToAvoidBottomInset: false,
                   appBar: AppBar(
                     title: const Text('评论详情'),
                     actions: [
@@ -279,9 +280,7 @@ class PiliScheme {
                       ),
                     ],
                   ),
-                  body: SafeArea(
-                    top: false,
-                    bottom: false,
+                  body: ViewSafeArea(
                     child: VideoReplyReplyPanel(
                       enableSlide: false,
                       oid: oid,
@@ -309,6 +308,7 @@ class PiliScheme {
                   'type': type,
                 },
                 () => Scaffold(
+                  resizeToAvoidBottomInset: false,
                   appBar: AppBar(
                     title: const Text('评论详情'),
                     actions: [
@@ -329,9 +329,7 @@ class PiliScheme {
                       ),
                     ],
                   ),
-                  body: SafeArea(
-                    top: false,
-                    bottom: false,
+                  body: ViewSafeArea(
                     child: VideoReplyReplyPanel(
                       enableSlide: false,
                       oid: oid,
@@ -384,6 +382,7 @@ class PiliScheme {
                       'id': commentSecondaryId,
                     },
                     () => Scaffold(
+                      resizeToAvoidBottomInset: false,
                       appBar: AppBar(
                         title: const Text('评论详情'),
                         actions: [
@@ -394,9 +393,7 @@ class PiliScheme {
                           ),
                         ],
                       ),
-                      body: SafeArea(
-                        top: false,
-                        bottom: false,
+                      body: ViewSafeArea(
                         child: VideoReplyReplyPanel(
                           enableSlide: false,
                           oid: oid ?? int.parse(dynId),
@@ -781,6 +778,7 @@ class PiliScheme {
               'id': commentSecondaryId,
             },
             () => Scaffold(
+              resizeToAvoidBottomInset: false,
               appBar: AppBar(
                 title: const Text('评论详情'),
                 actions: pageType == '1'
@@ -795,9 +793,7 @@ class PiliScheme {
                       ]
                     : null,
               ),
-              body: SafeArea(
-                top: false,
-                bottom: false,
+              body: ViewSafeArea(
                 child: VideoReplyReplyPanel(
                   enableSlide: false,
                   oid: int.parse(oid),

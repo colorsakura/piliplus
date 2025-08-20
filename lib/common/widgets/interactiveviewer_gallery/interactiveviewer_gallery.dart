@@ -335,7 +335,7 @@ class _InteractiveviewerGalleryState extends State<InteractiveviewerGallery>
           right: 0,
           child: Container(
             padding:
-                MediaQuery.paddingOf(context) +
+                MediaQuery.viewPaddingOf(context) +
                 const EdgeInsets.fromLTRB(12, 8, 20, 8),
             decoration: _enablePageView
                 ? BoxDecoration(

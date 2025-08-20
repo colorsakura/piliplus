@@ -58,15 +58,14 @@ class _MemberVideoState extends State<MemberVideo>
   Widget build(BuildContext context) {
     super.build(context);
     final theme = Theme.of(context);
+    final padding = MediaQuery.viewPaddingOf(context);
     Widget child = refreshIndicator(
       onRefresh: _controller.onRefresh,
       child: CustomScrollView(
         physics: ReloadScrollPhysics(controller: _controller),
         slivers: [
           SliverPadding(
-            padding: EdgeInsets.only(
-              bottom: MediaQuery.paddingOf(context).bottom + 80,
-            ),
+            padding: EdgeInsets.only(bottom: padding.bottom + 100),
             sliver: Obx(
               () => _buildBody(theme, _controller.loadingState.value),
             ),
@@ -83,38 +82,34 @@ class _MemberVideoState extends State<MemberVideo>
           Obx(
             () => _controller.isLocating.value != true
                 ? Positioned(
-                    right: 15,
-                    bottom: 15,
-                    child: SafeArea(
-                      top: false,
-                      left: false,
-                      child: FloatingActionButton.extended(
-                        onPressed: () {
-                          final fromViewAid = _controller.fromViewAid;
+                    right: 15 + padding.right,
+                    bottom: 15 + padding.bottom,
+                    child: FloatingActionButton.extended(
+                      onPressed: () {
+                        final fromViewAid = _controller.fromViewAid;
+                        _controller
+                          ..isLocating.value = true
+                          ..lastAid = fromViewAid;
+                        final locatedIndex = _controller
+                            .loadingState
+                            .value
+                            .dataOrNull
+                            ?.indexWhere((i) => i.param == fromViewAid);
+                        if (locatedIndex == null || locatedIndex == -1) {
                           _controller
-                            ..isLocating.value = true
-                            ..lastAid = fromViewAid;
-                          final locatedIndex = _controller
-                              .loadingState
-                              .value
-                              .dataOrNull
-                              ?.indexWhere((i) => i.param == fromViewAid);
-                          if (locatedIndex == null || locatedIndex == -1) {
-                            _controller
-                              ..reload = true
-                              ..page = 0
-                              ..loadingState.value = LoadingState.loading()
-                              ..queryData();
-                          } else {
-                            PrimaryScrollController.of(context).jumpTo(
-                              gridDelegate.layoutCache!
-                                  .getGeometryForChildIndex(locatedIndex)
-                                  .scrollOffset,
-                            );
-                          }
-                        },
-                        label: const Text('定位至上次观看'),
-                      ),
+                            ..reload = true
+                            ..page = 0
+                            ..loadingState.value = LoadingState.loading()
+                            ..queryData();
+                        } else {
+                          PrimaryScrollController.of(context).jumpTo(
+                            gridDelegate.layoutCache!
+                                .getGeometryForChildIndex(locatedIndex)
+                                .scrollOffset,
+                          );
+                        }
+                      },
+                      label: const Text('定位至上次观看'),
                     ),
                   )
                 : const SizedBox.shrink(),

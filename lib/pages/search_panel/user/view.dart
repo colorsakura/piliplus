@@ -71,8 +71,8 @@ class _SearchUserPanelState
                 height: 32,
                 child: IconButton(
                   tooltip: '筛选',
-                  style: ButtonStyle(
-                    padding: WidgetStateProperty.all(EdgeInsets.zero),
+                  style: const ButtonStyle(
+                    padding: WidgetStatePropertyAll(EdgeInsets.zero),
                   ),
                   onPressed: () => controller.onShowFilterDialog(context),
                   icon: Icon(

@@ -49,10 +49,7 @@ class _MemberBangumiState extends State<MemberBangumi>
               left: StyleString.safeSpace,
               right: StyleString.safeSpace,
               top: StyleString.safeSpace,
-              bottom:
-                  StyleString.safeSpace +
-                  MediaQuery.paddingOf(context).bottom +
-                  80,
+              bottom: MediaQuery.viewPaddingOf(context).bottom + 100,
             ),
             sliver: Obx(
               () => _buildBody(_controller.loadingState.value),

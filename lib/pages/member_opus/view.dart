@@ -42,7 +42,7 @@ class _MemberOpusState extends State<MemberOpus>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    final bottom = MediaQuery.paddingOf(context).bottom;
+    final bottom = MediaQuery.viewPaddingOf(context).bottom;
     return Stack(
       children: [
         refreshIndicator(

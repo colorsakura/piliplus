@@ -36,7 +36,7 @@ class _FavPgcChildPageState extends State<FavPgcChildPage>
   Widget build(BuildContext context) {
     super.build(context);
     final theme = Theme.of(context);
-    final padding = MediaQuery.paddingOf(context);
+    final padding = MediaQuery.viewPaddingOf(context);
     final bottomH = 50 + padding.bottom;
     return Stack(
       clipBehavior: Clip.none,
@@ -48,7 +48,7 @@ class _FavPgcChildPageState extends State<FavPgcChildPage>
             physics: const AlwaysScrollableScrollPhysics(),
             slivers: [
               SliverPadding(
-                padding: EdgeInsets.only(bottom: padding.bottom + 80),
+                padding: EdgeInsets.only(bottom: padding.bottom + 100),
                 sliver: Obx(
                   () => _buildBody(_favPgcController.loadingState.value),
                 ),

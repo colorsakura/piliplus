@@ -36,31 +36,29 @@ class _MemberCoinArcPageState extends State<MemberCoinArcPage> {
 
   @override
   Widget build(BuildContext context) {
+    final padding = MediaQuery.viewPaddingOf(context);
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: Text(
           '${widget.mid == accountService.mid ? '我' : '${widget.name}'}的最近投币',
         ),
       ),
-      body: SafeArea(
-        top: false,
-        bottom: false,
-        child: refreshIndicator(
-          onRefresh: _ctr.onRefresh,
-          child: CustomScrollView(
-            physics: const AlwaysScrollableScrollPhysics(),
-            slivers: [
-              SliverPadding(
-                padding: EdgeInsets.only(
-                  top: 7,
-                  left: StyleString.safeSpace,
-                  right: StyleString.safeSpace,
-                  bottom: MediaQuery.paddingOf(context).bottom + 80,
-                ),
-                sliver: Obx(() => _buildBody(_ctr.loadingState.value)),
+      body: refreshIndicator(
+        onRefresh: _ctr.onRefresh,
+        child: CustomScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          slivers: [
+            SliverPadding(
+              padding: EdgeInsets.only(
+                top: 7,
+                left: StyleString.safeSpace + padding.left,
+                right: StyleString.safeSpace + padding.right,
+                bottom: padding.bottom + 100,
               ),
-            ],
-          ),
+              sliver: Obx(() => _buildBody(_ctr.loadingState.value)),
+            ),
+          ],
         ),
       ),
     );

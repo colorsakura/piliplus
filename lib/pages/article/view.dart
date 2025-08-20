@@ -75,9 +75,11 @@ class _ArticlePageState extends CommonDynPageState<ArticlePage> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: _buildAppBar(isPortrait),
-      body: SafeArea(
-        top: false,
-        bottom: false,
+      body: Padding(
+        padding: EdgeInsets.only(
+          left: padding.left,
+          right: padding.right,
+        ),
         child: Stack(
           clipBehavior: Clip.none,
           children: [
@@ -140,7 +142,7 @@ class _ArticlePageState extends CommonDynPageState<ArticlePage> {
                   SliverPadding(
                     padding: EdgeInsets.only(
                       left: padding,
-                      bottom: MediaQuery.paddingOf(context).bottom + 80,
+                      bottom: this.padding.bottom + 100,
                     ),
                     sliver: _buildContent(
                       theme,
@@ -159,6 +161,7 @@ class _ArticlePageState extends CommonDynPageState<ArticlePage> {
               child: Scaffold(
                 key: scaffoldKey,
                 backgroundColor: Colors.transparent,
+                resizeToAvoidBottomInset: false,
                 body: refreshIndicator(
                   onRefresh: controller.onRefresh,
                   child: Padding(
@@ -438,9 +441,7 @@ class _ArticlePageState extends CommonDynPageState<ArticlePage> {
                     controller.onLoadMore();
                     return Container(
                       alignment: Alignment.center,
-                      margin: EdgeInsets.only(
-                        bottom: MediaQuery.paddingOf(context).bottom,
-                      ),
+                      margin: EdgeInsets.only(bottom: padding.bottom),
                       height: 125,
                       child: Text(
                         controller.isEnd ? '没有更多了' : '加载中...',
@@ -633,12 +634,14 @@ class _ArticlePageState extends CommonDynPageState<ArticlePage> {
             child: const Icon(Icons.reply),
           );
 
-          final bottom = MediaQuery.paddingOf(context).bottom;
           if (!controller.showDynActionBar) {
             return Align(
               alignment: Alignment.bottomRight,
               child: Padding(
-                padding: EdgeInsets.only(right: 14, bottom: bottom + 14),
+                padding: EdgeInsets.only(
+                  right: 14,
+                  bottom: padding.bottom + 14,
+                ),
                 child: button(),
               ),
             );
@@ -681,7 +684,7 @@ class _ArticlePageState extends CommonDynPageState<ArticlePage> {
             Widget btn = Padding(
               padding: EdgeInsets.only(
                 right: 14,
-                bottom: 14 + (stats != null ? 0 : bottom),
+                bottom: 14 + (stats != null ? 0 : padding.bottom),
               ),
               child: button(),
             );
@@ -709,7 +712,7 @@ class _ArticlePageState extends CommonDynPageState<ArticlePage> {
                       ),
                     ),
                   ),
-                  padding: EdgeInsets.only(bottom: bottom),
+                  padding: EdgeInsets.only(bottom: padding.bottom),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [

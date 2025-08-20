@@ -50,7 +50,7 @@ class _PgcReviewPageState extends State<PgcReviewPage>
                 tabAlignment: TabAlignment.start,
                 dividerHeight: 0,
                 indicatorWeight: 0,
-                overlayColor: WidgetStateProperty.all(Colors.transparent),
+                overlayColor: const WidgetStatePropertyAll(Colors.transparent),
                 splashFactory: NoSplash.splashFactory,
                 padding: const EdgeInsets.only(left: 6),
                 indicatorPadding: const EdgeInsets.symmetric(
@@ -104,7 +104,7 @@ class _PgcReviewPageState extends State<PgcReviewPage>
         ),
         Positioned(
           right: 16,
-          bottom: MediaQuery.paddingOf(context).bottom + 16,
+          bottom: MediaQuery.viewPaddingOf(context).bottom + 16,
           child: FloatingActionButton(
             onPressed: () => showDialog(
               context: context,

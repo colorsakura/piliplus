@@ -183,7 +183,9 @@ class _LiveEmotePanelState extends State<LiveEmotePanel>
                         )
                         .toList(),
                   ),
-                  SizedBox(height: MediaQuery.paddingOf(context).bottom),
+                  SizedBox(
+                    height: MediaQuery.viewPaddingOf(context).bottom,
+                  ),
                 ],
               )
             : _errorWidget(),

@@ -28,7 +28,7 @@ class _RankPageState extends State<RankPage>
           width: 64,
           child: ListView(
             padding: EdgeInsets.only(
-              bottom: MediaQuery.paddingOf(context).bottom + 80,
+              bottom: MediaQuery.viewPaddingOf(context).bottom + 100,
             ),
             children: List.generate(
               RankType.values.length,

@@ -428,7 +428,8 @@ class _PayCoinsPageState extends State<PayCoinsPage>
                 ],
               ),
               SizedBox(
-                height: (isV ? 50 : 10) + MediaQuery.paddingOf(context).bottom,
+                height:
+                    (isV ? 50 : 10) + MediaQuery.viewPaddingOf(context).bottom,
               ),
             ],
           ),

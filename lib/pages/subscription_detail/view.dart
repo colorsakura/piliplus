@@ -43,29 +43,28 @@ class _SubDetailPageState extends State<SubDetailPage> with GridMixin {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final padding = MediaQuery.paddingOf(context);
-    return Scaffold(
-      body: SafeArea(
-        top: false,
-        bottom: false,
-        child: refreshIndicator(
-          onRefresh: _subDetailController.onRefresh,
-          child: CustomScrollView(
-            controller: _subDetailController.scrollController,
-            physics: const AlwaysScrollableScrollPhysics(),
-            slivers: [
-              _appBar(theme, padding),
-              SliverPadding(
-                padding: EdgeInsets.only(
-                  top: 7,
-                  bottom: padding.bottom + 80,
-                ),
-                sliver: Obx(
-                  () => _buildBody(_subDetailController.loadingState.value),
-                ),
+    final padding = MediaQuery.viewPaddingOf(context);
+    return Material(
+      color: theme.colorScheme.surface,
+      child: refreshIndicator(
+        onRefresh: _subDetailController.onRefresh,
+        child: CustomScrollView(
+          controller: _subDetailController.scrollController,
+          physics: const AlwaysScrollableScrollPhysics(),
+          slivers: [
+            _appBar(theme, padding),
+            SliverPadding(
+              padding: EdgeInsets.only(
+                top: 7,
+                left: padding.left,
+                right: padding.right,
+                bottom: padding.bottom + 100,
               ),
-            ],
-          ),
+              sliver: Obx(
+                () => _buildBody(_subDetailController.loadingState.value),
+              ),
+            ),
+          ],
         ),
       ),
     );
@@ -157,7 +156,7 @@ class _SubDetailPageState extends State<SubDetailPage> with GridMixin {
           ),
           padding: EdgeInsets.only(
             top: kToolbarHeight + padding.top + 10,
-            left: 12,
+            left: 12 + padding.left,
             right: 12,
             bottom: 12,
           ),

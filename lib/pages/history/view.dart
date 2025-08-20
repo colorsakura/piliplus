@@ -50,6 +50,7 @@ class _HistoryPageState extends State<HistoryPage>
   @override
   Widget build(BuildContext context) {
     super.build(context);
+    final padding = MediaQuery.viewPaddingOf(context);
     Widget child = refreshIndicator(
       onRefresh: _historyController.onRefresh,
       child: CustomScrollView(
@@ -59,7 +60,7 @@ class _HistoryPageState extends State<HistoryPage>
           SliverPadding(
             padding: EdgeInsets.only(
               top: 7,
-              bottom: MediaQuery.paddingOf(context).bottom + 80,
+              bottom: padding.bottom + 100,
             ),
             sliver: Obx(
               () => _buildBody(_historyController.loadingState.value),
@@ -83,23 +84,22 @@ class _HistoryPageState extends State<HistoryPage>
             }
           },
           child: Scaffold(
+            resizeToAvoidBottomInset: false,
             appBar: MultiSelectAppBarWidget(
               visible: enableMultiSelect,
               ctr: currCtr(),
               child: _buildAppBar,
             ),
-            body: Obx(() {
-              if (_historyController.tabs.isEmpty) {
-                return SafeArea(
-                  top: false,
-                  bottom: false,
-                  child: child,
-                );
-              }
-              return SafeArea(
-                top: false,
-                bottom: false,
-                child: Column(
+            body: Padding(
+              padding: EdgeInsets.only(
+                left: padding.left,
+                right: padding.right,
+              ),
+              child: Obx(() {
+                if (_historyController.tabs.isEmpty) {
+                  return child;
+                }
+                return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     TabBar(
@@ -139,9 +139,9 @@ class _HistoryPageState extends State<HistoryPage>
                       ),
                     ),
                   ],
-                ),
-              );
-            }),
+                );
+              }),
+            ),
           ),
         );
       },

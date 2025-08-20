@@ -47,6 +47,7 @@ class _UpowerRankPageState extends State<UpowerRankPage>
   Widget build(BuildContext context) {
     super.build(context);
     final theme = Theme.of(context);
+    final padding = MediaQuery.viewPaddingOf(context);
     final child = refreshIndicator(
       onRefresh: _controller.onRefresh,
       child: CustomScrollView(
@@ -54,9 +55,7 @@ class _UpowerRankPageState extends State<UpowerRankPage>
         physics: const AlwaysScrollableScrollPhysics(),
         slivers: [
           SliverPadding(
-            padding: EdgeInsets.only(
-              bottom: MediaQuery.paddingOf(context).bottom + 80,
-            ),
+            padding: EdgeInsets.only(bottom: padding.bottom + 100),
             sliver: Obx(
               () => _bilidBody(theme, _controller.loadingState.value),
             ),
@@ -66,6 +65,7 @@ class _UpowerRankPageState extends State<UpowerRankPage>
     );
     if (widget.privilegeType == null) {
       return Scaffold(
+        resizeToAvoidBottomInset: false,
         appBar: AppBar(
           title: Obx(() {
             final name = _controller.name.value;
@@ -76,9 +76,8 @@ class _UpowerRankPageState extends State<UpowerRankPage>
                   );
           }),
         ),
-        body: SafeArea(
-          top: false,
-          bottom: false,
+        body: Padding(
+          padding: EdgeInsets.only(left: padding.left, right: padding.right),
           child: Center(
             child: ConstrainedBox(
               constraints: const BoxConstraints(maxWidth: 625),

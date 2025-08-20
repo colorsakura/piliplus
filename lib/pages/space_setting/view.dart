@@ -21,9 +21,8 @@ class _SpaceSettingPageState extends State<SpaceSettingPage> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('空间设置'),
-      ),
+      resizeToAvoidBottomInset: false,
+      appBar: AppBar(title: const Text('空间设置')),
       body: Obx(() => _buildBody(theme, _controller.loadingState.value)),
     );
   }
@@ -42,7 +41,7 @@ class _SpaceSettingPageState extends State<SpaceSettingPage> {
             ? scrollErrorWidget(onReload: _controller.onReload)
             : Builder(
                 builder: (context) {
-                  final padding = MediaQuery.paddingOf(context);
+                  final padding = MediaQuery.viewPaddingOf(context);
                   final divider = Divider(
                     height: 1,
                     indent: max(16, padding.left),
@@ -83,9 +82,7 @@ class _SpaceSettingPageState extends State<SpaceSettingPage> {
                       ),
                       dividerL,
                       SliverToBoxAdapter(
-                        child: SizedBox(
-                          height: padding.bottom + 80,
-                        ),
+                        child: SizedBox(height: padding.bottom + 100),
                       ),
                     ],
                   );

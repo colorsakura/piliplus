@@ -29,6 +29,7 @@ class _ReplyMePageState extends State<ReplyMePage> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: const Text('回复我的'),
         actions: [
@@ -54,7 +55,7 @@ class _ReplyMePageState extends State<ReplyMePage> {
           slivers: [
             SliverPadding(
               padding: EdgeInsets.only(
-                bottom: MediaQuery.paddingOf(context).bottom + 80,
+                bottom: MediaQuery.viewPaddingOf(context).bottom + 100,
               ),
               sliver: Obx(
                 () => _buildBody(theme, _replyMeController.loadingState.value),

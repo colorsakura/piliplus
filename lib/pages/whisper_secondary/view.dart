@@ -32,6 +32,7 @@ class _WhisperSecPageState extends State<WhisperSecPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: Text(widget.name),
         actions: [
@@ -70,7 +71,7 @@ class _WhisperSecPageState extends State<WhisperSecPage> {
           slivers: [
             SliverPadding(
               padding: EdgeInsets.only(
-                bottom: MediaQuery.paddingOf(context).bottom + 80,
+                bottom: MediaQuery.viewPaddingOf(context).bottom + 100,
               ),
               sliver: Obx(() => _buildBody(_controller.loadingState.value)),
             ),

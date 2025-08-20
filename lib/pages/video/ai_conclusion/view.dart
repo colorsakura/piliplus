@@ -91,7 +91,7 @@ class _AiDetailState extends CommonCollapseSlidePageState<AiConclusionPanel> {
             padding: EdgeInsets.only(
               left: 14,
               right: 14,
-              bottom: MediaQuery.paddingOf(context).bottom + 80,
+              bottom: MediaQuery.viewPaddingOf(context).bottom + 100,
             ),
             sliver: SliverList.builder(
               itemCount: widget.item.outline!.length,

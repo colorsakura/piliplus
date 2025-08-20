@@ -191,10 +191,7 @@ class _SelectTopicPanelState extends SearchState<SelectTopicPanel> {
         response?.isNotEmpty == true
             ? ListView.builder(
                 padding: EdgeInsets.only(
-                  bottom:
-                      MediaQuery.paddingOf(context).bottom +
-                      MediaQuery.viewInsetsOf(context).bottom +
-                      80,
+                  bottom: MediaQuery.viewPaddingOf(context).bottom + 100,
                 ),
                 controller: widget.scrollController,
                 itemBuilder: (context, index) {

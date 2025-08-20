@@ -296,6 +296,7 @@ class _SavePanelState extends State<SavePanel> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final padding = MediaQuery.viewPaddingOf(context);
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: Get.back,
@@ -304,212 +305,208 @@ class _SavePanelState extends State<SavePanel> {
         alignment: Alignment.center,
         children: [
           SingleChildScrollView(
-            padding: const EdgeInsets.only(top: 12, bottom: 80),
-            child: SafeArea(
-              child: GestureDetector(
-                onTap: () {},
-                child: Container(
-                  width: context.mediaQueryShortestSide,
-                  margin: const EdgeInsets.symmetric(horizontal: 12),
-                  child: RepaintBoundary(
-                    key: boundaryKey,
-                    child: Container(
-                      clipBehavior: Clip.hardEdge,
-                      decoration: BoxDecoration(
-                        color: theme.colorScheme.surface,
-                        borderRadius: const BorderRadius.all(
-                          Radius.circular(12),
-                        ),
+            padding: EdgeInsets.only(
+              top: 12 + padding.top,
+              bottom: 80 + padding.bottom,
+            ),
+            child: GestureDetector(
+              onTap: () {},
+              child: Container(
+                width: context.mediaQueryShortestSide,
+                margin: const EdgeInsets.symmetric(horizontal: 12),
+                child: RepaintBoundary(
+                  key: boundaryKey,
+                  child: Container(
+                    clipBehavior: Clip.hardEdge,
+                    decoration: BoxDecoration(
+                      color: theme.colorScheme.surface,
+                      borderRadius: const BorderRadius.all(
+                        Radius.circular(12),
                       ),
-                      child: AnimatedSize(
-                        curve: Curves.easeInOut,
-                        alignment: Alignment.topCenter,
-                        duration: const Duration(milliseconds: 255),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            if (_item is ReplyInfo)
-                              IgnorePointer(
-                                child: ReplyItemGrpc(
-                                  replyItem: _item,
-                                  replyLevel: 0,
-                                  needDivider: false,
-                                  upMid: widget.upMid,
-                                ),
-                              )
-                            else if (_item is DynamicItemModel)
-                              IgnorePointer(
-                                child: LayoutBuilder(
-                                  builder: (_, constrains) => DynamicPanel(
-                                    item: _item,
-                                    isDetail: true,
-                                    isSave: true,
-                                    maxWidth: constrains.maxWidth,
-                                  ),
+                    ),
+                    child: AnimatedSize(
+                      curve: Curves.easeInOut,
+                      alignment: Alignment.topCenter,
+                      duration: const Duration(milliseconds: 255),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          if (_item is ReplyInfo)
+                            IgnorePointer(
+                              child: ReplyItemGrpc(
+                                replyItem: _item,
+                                replyLevel: 0,
+                                needDivider: false,
+                                upMid: widget.upMid,
+                              ),
+                            )
+                          else if (_item is DynamicItemModel)
+                            IgnorePointer(
+                              child: LayoutBuilder(
+                                builder: (_, constrains) => DynamicPanel(
+                                  item: _item,
+                                  isDetail: true,
+                                  isSave: true,
+                                  maxWidth: constrains.maxWidth,
                                 ),
                               ),
-                            if (cover?.isNotEmpty == true &&
-                                title?.isNotEmpty == true)
-                              Container(
-                                height: 81,
-                                clipBehavior: Clip.hardEdge,
-                                margin: const EdgeInsets.symmetric(
-                                  horizontal: 12,
+                            ),
+                          if (cover?.isNotEmpty == true &&
+                              title?.isNotEmpty == true)
+                            Container(
+                              height: 81,
+                              clipBehavior: Clip.hardEdge,
+                              margin: const EdgeInsets.symmetric(
+                                horizontal: 12,
+                              ),
+                              padding: const EdgeInsets.all(8),
+                              decoration: BoxDecoration(
+                                color: theme.colorScheme.onInverseSurface,
+                                borderRadius: const BorderRadius.all(
+                                  Radius.circular(8),
                                 ),
-                                padding: const EdgeInsets.all(8),
-                                decoration: BoxDecoration(
-                                  color: theme.colorScheme.onInverseSurface,
-                                  borderRadius: const BorderRadius.all(
-                                    Radius.circular(8),
+                              ),
+                              child: Row(
+                                children: [
+                                  NetworkImgLayer(
+                                    radius: 6,
+                                    src: cover!,
+                                    height: MediaQuery.textScalerOf(
+                                      context,
+                                    ).scale(65),
+                                    width:
+                                        MediaQuery.textScalerOf(
+                                          context,
+                                        ).scale(65) *
+                                        16 /
+                                        9,
+                                    quality: 100,
                                   ),
-                                ),
-                                child: Row(
-                                  children: [
-                                    NetworkImgLayer(
-                                      radius: 6,
-                                      src: cover!,
-                                      height: MediaQuery.textScalerOf(
-                                        context,
-                                      ).scale(65),
-                                      width:
-                                          MediaQuery.textScalerOf(
-                                            context,
-                                          ).scale(65) *
-                                          16 /
-                                          9,
-                                      quality: 100,
-                                    ),
-                                    const SizedBox(width: 10),
-                                    Expanded(
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
+                                  const SizedBox(width: 10),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          '$title\n',
+                                          maxLines: 2,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                        if (pubdate != null) ...[
+                                          const Spacer(),
                                           Text(
-                                            '$title\n',
-                                            maxLines: 2,
-                                            overflow: TextOverflow.ellipsis,
-                                          ),
-                                          if (pubdate != null) ...[
-                                            const Spacer(),
-                                            Text(
-                                              DateUtil.format(
-                                                pubdate,
-                                                format: DateUtil.longFormatDs,
-                                              ),
-                                              style: TextStyle(
-                                                color:
-                                                    theme.colorScheme.outline,
-                                              ),
+                                            DateUtil.format(
+                                              pubdate,
+                                              format: DateUtil.longFormatDs,
                                             ),
-                                          ],
+                                            style: TextStyle(
+                                              color: theme.colorScheme.outline,
+                                            ),
+                                          ),
                                         ],
-                                      ),
+                                      ],
                                     ),
-                                  ],
-                                ),
+                                  ),
+                                ],
                               ),
-                            showBottom
-                                ? Stack(
-                                    clipBehavior: Clip.none,
-                                    children: [
-                                      if (uri.isNotEmpty)
-                                        Align(
-                                          alignment: Alignment.centerRight,
-                                          child: Row(
-                                            children: [
-                                              Expanded(
-                                                child: Column(
-                                                  mainAxisSize:
-                                                      MainAxisSize.min,
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.end,
-                                                  children: [
-                                                    if (uname?.isNotEmpty ==
-                                                        true) ...[
-                                                      Text(
-                                                        '@$uname',
-                                                        maxLines: 1,
-                                                        overflow: TextOverflow
-                                                            .ellipsis,
-                                                        style: TextStyle(
-                                                          color: theme
-                                                              .colorScheme
-                                                              .primary,
-                                                        ),
-                                                      ),
-                                                      const SizedBox(height: 4),
-                                                    ],
+                            ),
+                          showBottom
+                              ? Stack(
+                                  clipBehavior: Clip.none,
+                                  children: [
+                                    if (uri.isNotEmpty)
+                                      Align(
+                                        alignment: Alignment.centerRight,
+                                        child: Row(
+                                          children: [
+                                            Expanded(
+                                              child: Column(
+                                                mainAxisSize: MainAxisSize.min,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.end,
+                                                children: [
+                                                  if (uname?.isNotEmpty ==
+                                                      true) ...[
                                                     Text(
-                                                      '识别二维码，$viewType$itemType',
-                                                      textAlign: TextAlign.end,
+                                                      '@$uname',
+                                                      maxLines: 1,
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
                                                       style: TextStyle(
                                                         color: theme
                                                             .colorScheme
-                                                            .onSurfaceVariant,
+                                                            .primary,
                                                       ),
                                                     ),
                                                     const SizedBox(height: 4),
-                                                    Text(
-                                                      DateUtil.longFormatDs
-                                                          .format(
-                                                            DateTime.now(),
-                                                          ),
-                                                      textAlign: TextAlign.end,
-                                                      style: TextStyle(
-                                                        fontSize: 13,
-                                                        color: theme
-                                                            .colorScheme
-                                                            .outline,
-                                                      ),
-                                                    ),
                                                   ],
-                                                ),
-                                              ),
-                                              Container(
-                                                width: 100,
-                                                height: 100,
-                                                padding: const EdgeInsets.all(
-                                                  12,
-                                                ),
-                                                child: Container(
-                                                  color: Get.isDarkMode
-                                                      ? Colors.white
-                                                      : theme
-                                                            .colorScheme
-                                                            .surface,
-                                                  padding: const EdgeInsets.all(
-                                                    3,
+                                                  Text(
+                                                    '识别二维码，$viewType$itemType',
+                                                    textAlign: TextAlign.end,
+                                                    style: TextStyle(
+                                                      color: theme
+                                                          .colorScheme
+                                                          .onSurfaceVariant,
+                                                    ),
                                                   ),
-                                                  child: PrettyQrView.data(
-                                                    data: uri,
-                                                    decoration:
-                                                        const PrettyQrDecoration(
-                                                          shape:
-                                                              PrettyQrSquaresSymbol(),
+                                                  const SizedBox(height: 4),
+                                                  Text(
+                                                    DateUtil.longFormatDs
+                                                        .format(
+                                                          DateTime.now(),
                                                         ),
+                                                    textAlign: TextAlign.end,
+                                                    style: TextStyle(
+                                                      fontSize: 13,
+                                                      color: theme
+                                                          .colorScheme
+                                                          .outline,
+                                                    ),
                                                   ),
+                                                ],
+                                              ),
+                                            ),
+                                            Container(
+                                              width: 100,
+                                              height: 100,
+                                              padding: const EdgeInsets.all(
+                                                12,
+                                              ),
+                                              child: Container(
+                                                color: Get.isDarkMode
+                                                    ? Colors.white
+                                                    : theme.colorScheme.surface,
+                                                padding: const EdgeInsets.all(
+                                                  3,
+                                                ),
+                                                child: PrettyQrView.data(
+                                                  data: uri,
+                                                  decoration:
+                                                      const PrettyQrDecoration(
+                                                        shape:
+                                                            PrettyQrSquaresSymbol(),
+                                                      ),
                                                 ),
                                               ),
-                                            ],
-                                          ),
-                                        ),
-                                      Align(
-                                        alignment: Alignment.centerLeft,
-                                        child: Image.asset(
-                                          'assets/images/logo/logo_2.png',
-                                          width: 100,
-                                          color: theme
-                                              .colorScheme
-                                              .onSurfaceVariant,
+                                            ),
+                                          ],
                                         ),
                                       ),
-                                    ],
-                                  )
-                                : const SizedBox(height: 12),
-                          ],
-                        ),
+                                    Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: Image.asset(
+                                        'assets/images/logo/logo_2.png',
+                                        width: 100,
+                                        color:
+                                            theme.colorScheme.onSurfaceVariant,
+                                      ),
+                                    ),
+                                  ],
+                                )
+                              : const SizedBox(height: 12),
+                        ],
                       ),
                     ),
                   ),
@@ -518,10 +515,10 @@ class _SavePanelState extends State<SavePanel> {
             ),
           ),
           Positioned(
-            left: 0,
-            right: 0,
-            bottom: 0,
-            child: Container(
+            left: padding.left,
+            right: padding.right,
+            bottom: 25 + padding.bottom,
+            child: DecoratedBox(
               decoration: const BoxDecoration(
                 gradient: LinearGradient(
                   begin: Alignment.topCenter,
@@ -532,51 +529,45 @@ class _SavePanelState extends State<SavePanel> {
                   ],
                 ),
               ),
-              padding: const EdgeInsets.only(bottom: 25, top: 10),
-              child: SafeArea(
-                top: false,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    iconButton(
-                      size: 42,
-                      tooltip: '关闭',
-                      context: context,
-                      icon: Icons.clear,
-                      onPressed: Get.back,
-                      bgColor: theme.colorScheme.onInverseSurface,
-                      iconColor: theme.colorScheme.onSurfaceVariant,
-                    ),
-                    const SizedBox(width: 40),
-                    iconButton(
-                      size: 42,
-                      tooltip: showBottom ? '隐藏' : '显示',
-                      context: context,
-                      icon: showBottom
-                          ? Icons.visibility_off
-                          : Icons.visibility,
-                      onPressed: () => setState(() {
-                        showBottom = !showBottom;
-                      }),
-                    ),
-                    const SizedBox(width: 40),
-                    iconButton(
-                      size: 42,
-                      tooltip: '分享',
-                      context: context,
-                      icon: Icons.share,
-                      onPressed: () => _onSaveOrSharePic(true),
-                    ),
-                    const SizedBox(width: 40),
-                    iconButton(
-                      size: 42,
-                      tooltip: '保存',
-                      context: context,
-                      icon: Icons.save_alt,
-                      onPressed: _onSaveOrSharePic,
-                    ),
-                  ],
-                ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  iconButton(
+                    size: 42,
+                    tooltip: '关闭',
+                    context: context,
+                    icon: Icons.clear,
+                    onPressed: Get.back,
+                    bgColor: theme.colorScheme.onInverseSurface,
+                    iconColor: theme.colorScheme.onSurfaceVariant,
+                  ),
+                  const SizedBox(width: 40),
+                  iconButton(
+                    size: 42,
+                    tooltip: showBottom ? '隐藏' : '显示',
+                    context: context,
+                    icon: showBottom ? Icons.visibility_off : Icons.visibility,
+                    onPressed: () => setState(() {
+                      showBottom = !showBottom;
+                    }),
+                  ),
+                  const SizedBox(width: 40),
+                  iconButton(
+                    size: 42,
+                    tooltip: '分享',
+                    context: context,
+                    icon: Icons.share,
+                    onPressed: () => _onSaveOrSharePic(true),
+                  ),
+                  const SizedBox(width: 40),
+                  iconButton(
+                    size: 42,
+                    tooltip: '保存',
+                    context: context,
+                    icon: Icons.save_alt,
+                    onPressed: _onSaveOrSharePic,
+                  ),
+                ],
               ),
             ),
           ),

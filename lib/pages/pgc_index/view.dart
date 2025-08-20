@@ -38,6 +38,7 @@ class _PgcIndexPageState extends State<PgcIndexPage>
     final theme = Theme.of(context);
     return widget.indexType == null
         ? Scaffold(
+            resizeToAvoidBottomInset: false,
             appBar: AppBar(title: const Text('索引')),
             body: Obx(() => _buildBody(theme, _ctr.conditionState.value)),
           )
@@ -48,6 +49,7 @@ class _PgcIndexPageState extends State<PgcIndexPage>
     ThemeData theme,
     LoadingState<PgcIndexConditionData> loadingState,
   ) {
+    final padding = MediaQuery.viewPaddingOf(context);
     return switch (loadingState) {
       Loading() => loadingWidget,
       Success(:var response) => Builder(
@@ -56,8 +58,8 @@ class _PgcIndexPageState extends State<PgcIndexPage>
               (response.order?.isNotEmpty == true ? 1 : 0) +
               (response.filter?.length ?? 0);
           if (count == 0) return const SizedBox.shrink();
-          return SafeArea(
-            bottom: false,
+          return Padding(
+            padding: EdgeInsets.only(left: padding.left, right: padding.right),
             child: CustomScrollView(
               controller: _ctr.scrollController,
               slivers: [
@@ -78,7 +80,7 @@ class _PgcIndexPageState extends State<PgcIndexPage>
                     left: StyleString.safeSpace,
                     right: StyleString.safeSpace,
                     top: 12,
-                    bottom: MediaQuery.paddingOf(context).bottom + 80,
+                    bottom: padding.bottom + 100,
                   ),
                   sliver: Obx(() => _buildList(_ctr.loadingState.value)),
                 ),

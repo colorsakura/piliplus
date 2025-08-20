@@ -58,6 +58,7 @@ class _BarSetPageState extends State<BarSetPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: Text('$title编辑'),
         actions: [
@@ -68,7 +69,7 @@ class _BarSetPageState extends State<BarSetPage> {
       body: ReorderableListView(
         onReorder: onReorder,
         footer: SizedBox(
-          height: MediaQuery.paddingOf(context).bottom + 30,
+          height: MediaQuery.viewPaddingOf(context).bottom + 30,
           child: const Align(
             alignment: Alignment.centerRight,
             child: Text('*长按拖动排序        '),

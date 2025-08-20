@@ -80,7 +80,7 @@ class _SearchPageState extends State<SearchPage> {
         ),
       ),
       body: ListView(
-        padding: MediaQuery.paddingOf(context).copyWith(top: 0),
+        padding: MediaQuery.viewPaddingOf(context).copyWith(top: 0),
         children: [
           if (_searchController.searchSuggestion) _searchSuggest(),
           if (isPortrait) ...[

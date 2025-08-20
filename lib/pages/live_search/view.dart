@@ -1,4 +1,5 @@
 import 'package:PiliPlus/common/widgets/scroll_physics.dart';
+import 'package:PiliPlus/common/widgets/view_safe_area.dart';
 import 'package:PiliPlus/models/common/live_search_type.dart';
 import 'package:PiliPlus/pages/live_search/child/view.dart';
 import 'package:PiliPlus/pages/live_search/controller.dart';
@@ -55,9 +56,7 @@ class _LiveSearchPageState extends State<LiveSearchPage> {
           },
         ),
       ),
-      body: SafeArea(
-        top: false,
-        bottom: false,
+      body: ViewSafeArea(
         child: Obx(() {
           return Opacity(
             opacity: _controller.hasData.value ? 1 : 0,

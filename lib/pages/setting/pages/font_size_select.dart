@@ -1,3 +1,4 @@
+import 'package:PiliPlus/common/widgets/view_safe_area.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/storage_key.dart';
 import 'package:PiliPlus/utils/storage_pref.dart';
@@ -28,6 +29,7 @@ class _FontSizeSelectPageState extends State<FontSizeSelectPage> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         actions: [
           TextButton(
@@ -41,7 +43,7 @@ class _FontSizeSelectPageState extends State<FontSizeSelectPage> {
           const SizedBox(width: 12),
         ],
       ),
-      body: SafeArea(
+      body: ViewSafeArea(
         child: Column(
           children: [
             Expanded(

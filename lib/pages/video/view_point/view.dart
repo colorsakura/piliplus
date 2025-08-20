@@ -43,6 +43,7 @@ class _ViewPointsPageState
   @override
   Widget buildPage(ThemeData theme) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         automaticallyImplyLeading: false,
         titleSpacing: 16,
@@ -100,7 +101,7 @@ class _ViewPointsPageState
       physics: const AlwaysScrollableScrollPhysics(),
       padding: EdgeInsets.only(
         top: 7,
-        bottom: MediaQuery.paddingOf(context).bottom + 80,
+        bottom: MediaQuery.viewPaddingOf(context).bottom + 100,
       ),
       itemCount: videoDetailController.viewPointList.length,
       itemBuilder: (context, index) {

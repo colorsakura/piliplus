@@ -16,12 +16,13 @@ class _ExtraSettingState extends State<ExtraSetting> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: widget.showAppBar == false
           ? null
           : AppBar(title: const Text('其它设置')),
       body: ListView(
         padding: EdgeInsets.only(
-          bottom: MediaQuery.paddingOf(context).bottom + 80,
+          bottom: MediaQuery.viewPaddingOf(context).bottom + 100,
         ),
         children: settings.map((item) => item.widget).toList(),
       ),

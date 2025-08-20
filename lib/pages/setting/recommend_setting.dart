@@ -26,12 +26,13 @@ class _RecommendSettingState extends State<RecommendSetting> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: widget.showAppBar == false
           ? null
           : AppBar(title: const Text('推荐流设置')),
       body: ListView(
         padding: EdgeInsets.only(
-          bottom: MediaQuery.paddingOf(context).bottom + 80,
+          bottom: MediaQuery.viewPaddingOf(context).bottom + 100,
         ),
         children: [
           ...part.map((item) => item.widget),

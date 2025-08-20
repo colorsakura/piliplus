@@ -89,33 +89,27 @@ class _SettingPageState extends State<SettingPage> {
     final theme = Theme.of(context);
     _isPortrait = context.isPortrait;
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: _isPortrait ? const Text('设置') : Text(_type.title),
       ),
       body: _isPortrait
           ? _buildList(theme)
-          : Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(
-                  flex: 4,
-                  child: MediaQuery.removePadding(
-                    context: context,
-                    removeRight: true,
-                    removeTop: true,
+          : SafeArea(
+              bottom: false,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    flex: 4,
                     child: _buildList(theme),
                   ),
-                ),
-                VerticalDivider(
-                  width: 1,
-                  color: theme.colorScheme.outline.withValues(alpha: 0.1),
-                ),
-                Expanded(
-                  flex: 6,
-                  child: MediaQuery.removePadding(
-                    context: context,
-                    removeLeft: true,
-                    removeTop: true,
+                  VerticalDivider(
+                    width: 1,
+                    color: theme.colorScheme.outline.withValues(alpha: 0.1),
+                  ),
+                  Expanded(
+                    flex: 6,
                     child: switch (_type) {
                       SettingType.privacySetting => const PrivacySetting(
                         showAppBar: false,
@@ -141,8 +135,8 @@ class _SettingPageState extends State<SettingPage> {
                       SettingType.about => const AboutPage(showAppBar: false),
                     },
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
     );
   }
@@ -175,10 +169,12 @@ class _SettingPageState extends State<SettingPage> {
     TextStyle subTitleStyle = theme.textTheme.labelMedium!.copyWith(
       color: theme.colorScheme.outline,
     );
-    final padding = MediaQuery.paddingOf(context);
     return ListView(
+      padding: EdgeInsets.only(
+        bottom: MediaQuery.viewPaddingOf(context).bottom + 100,
+      ),
       children: [
-        _buildSearchItem(theme, padding),
+        _buildSearchItem(theme),
         ..._items
             .sublist(0, _items.length - 1)
             .map(
@@ -212,7 +208,6 @@ class _SettingPageState extends State<SettingPage> {
           leading: Icon(_items.last.icon),
           title: Text(_items.last.type.title, style: titleStyle),
         ),
-        SizedBox(height: padding.bottom + 80),
       ],
     );
   }
@@ -284,12 +279,8 @@ class _SettingPageState extends State<SettingPage> {
     );
   }
 
-  Widget _buildSearchItem(ThemeData theme, EdgeInsets padding) => Padding(
-    padding: EdgeInsets.only(
-      left: 16 + padding.left,
-      right: 16,
-      bottom: 8,
-    ),
+  Widget _buildSearchItem(ThemeData theme) => Padding(
+    padding: const EdgeInsets.only(left: 16, right: 16, bottom: 8),
     child: Material(
       type: MaterialType.transparency,
       child: InkWell(

@@ -58,6 +58,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(title: const Text('账号资料')),
       body: _buildBody(theme, _loadingState),
     );
@@ -127,7 +128,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
       Loading() => loadingWidget,
       Success(:var response) => ListView(
         padding: EdgeInsets.only(
-          bottom: MediaQuery.paddingOf(context).bottom + 25,
+          bottom: MediaQuery.viewPaddingOf(context).bottom + 25,
         ),
         children: [
           divider1,

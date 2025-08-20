@@ -109,8 +109,8 @@ class _PgcPanelState extends State<PgcPanel> {
               SizedBox(
                 height: 34,
                 child: TextButton(
-                  style: ButtonStyle(
-                    padding: WidgetStateProperty.all(EdgeInsets.zero),
+                  style: const ButtonStyle(
+                    padding: WidgetStatePropertyAll(EdgeInsets.zero),
                   ),
                   onPressed: () => widget.showEpisodes(
                     null,
@@ -134,13 +134,13 @@ class _PgcPanelState extends State<PgcPanel> {
         SizedBox(
           height: 60,
           child: ListView.builder(
+            padding: EdgeInsets.zero,
             controller: listViewScrollCtr,
             scrollDirection: Axis.horizontal,
             itemCount: widget.pages.length,
             itemExtent: 150,
-            itemBuilder: (BuildContext context, int index) {
-              return _buildItem(theme, isPugv, index);
-            },
+            itemBuilder: (BuildContext context, int index) =>
+                _buildItem(theme, isPugv, index),
           ),
         ),
       ],

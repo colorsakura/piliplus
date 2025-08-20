@@ -105,7 +105,7 @@ class _IntroDetailState extends CommonCollapseSlidePageState<PgcIntroPanel> {
           left: 14,
           right: 14,
           top: 14,
-          bottom: MediaQuery.paddingOf(context).bottom + 80,
+          bottom: MediaQuery.viewPaddingOf(context).bottom + 100,
         ),
         children: [
           Text(

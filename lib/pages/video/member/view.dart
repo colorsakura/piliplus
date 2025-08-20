@@ -96,9 +96,16 @@ class _HorizontalMemberPageState extends State<HorizontalMemberPage>
                 physics: const AlwaysScrollableScrollPhysics(),
                 slivers: [
                   _buildSliverHeader(theme),
-                  Obx(
-                    () =>
-                        _buildVideoList(theme, _controller.loadingState.value),
+                  SliverPadding(
+                    padding: EdgeInsets.only(
+                      bottom: MediaQuery.viewPaddingOf(context).bottom + 100,
+                    ),
+                    sliver: Obx(
+                      () => _buildVideoList(
+                        theme,
+                        _controller.loadingState.value,
+                      ),
+                    ),
                   ),
                 ],
               ),
@@ -176,34 +183,29 @@ class _HorizontalMemberPageState extends State<HorizontalMemberPage>
       Loading() => gridSkeleton,
       Success(:var response) =>
         response?.isNotEmpty == true
-            ? SliverPadding(
-                padding: EdgeInsets.only(
-                  bottom: MediaQuery.paddingOf(context).bottom + 80,
-                ),
-                sliver: SliverGrid.builder(
-                  gridDelegate: gridDelegate,
-                  itemBuilder: (context, index) {
-                    if (index == response.length - 1 && _controller.hasNext) {
-                      _controller.onLoadMore();
-                    }
-                    final SpaceArchiveItem videoItem = response[index];
-                    return VideoCardHMemberVideo(
-                      videoItem: videoItem,
-                      bvid: _bvid,
-                      onTap: () {
-                        Get.back();
-                        widget.ugcIntroController.onChangeEpisode(
-                          BaseEpisodeItem(
-                            bvid: videoItem.bvid,
-                            cid: videoItem.cid,
-                            cover: videoItem.cover,
-                          ),
-                        );
-                      },
-                    );
-                  },
-                  itemCount: response!.length,
-                ),
+            ? SliverGrid.builder(
+                gridDelegate: gridDelegate,
+                itemBuilder: (context, index) {
+                  if (index == response.length - 1 && _controller.hasNext) {
+                    _controller.onLoadMore();
+                  }
+                  final SpaceArchiveItem videoItem = response[index];
+                  return VideoCardHMemberVideo(
+                    videoItem: videoItem,
+                    bvid: _bvid,
+                    onTap: () {
+                      Get.back();
+                      widget.ugcIntroController.onChangeEpisode(
+                        BaseEpisodeItem(
+                          bvid: videoItem.bvid,
+                          cid: videoItem.cid,
+                          cover: videoItem.cover,
+                        ),
+                      );
+                    },
+                  );
+                },
+                itemCount: response!.length,
               )
             : HttpError(onReload: _controller.onReload),
       Error(:var errMsg) => HttpError(

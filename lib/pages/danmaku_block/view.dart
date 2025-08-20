@@ -85,7 +85,7 @@ class _DanmakuBlockPageState extends State<DanmakuBlockPage> {
     return ListView.builder(
       itemCount: list.length,
       padding: EdgeInsets.only(
-        bottom: MediaQuery.paddingOf(context).bottom + 80,
+        bottom: MediaQuery.viewPaddingOf(context).bottom + 100,
       ),
       itemBuilder: (context, itemIndex) {
         final SimpleRule item = list[itemIndex];

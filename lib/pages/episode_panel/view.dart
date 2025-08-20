@@ -263,7 +263,7 @@ class _EpisodePanelState extends CommonCollapseSlidePageState<EpisodePanel> {
       builder: (context) => ScrollablePositionedList.separated(
         padding: EdgeInsets.only(
           top: 7,
-          bottom: MediaQuery.paddingOf(context).bottom + 80,
+          bottom: MediaQuery.viewPaddingOf(context).bottom + 100,
         ),
         reverse: _isReversed[tabIndex],
         itemCount: episodes.length,

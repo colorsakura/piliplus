@@ -22,7 +22,9 @@ class _LiveFollowPageState extends State<LiveFollowPage> {
 
   @override
   Widget build(BuildContext context) {
+    final padding = MediaQuery.viewPaddingOf(context);
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: Obx(
           () {
@@ -31,24 +33,20 @@ class _LiveFollowPageState extends State<LiveFollowPage> {
           },
         ),
       ),
-      body: SafeArea(
-        top: false,
-        bottom: false,
-        child: refreshIndicator(
-          onRefresh: _controller.onRefresh,
-          child: CustomScrollView(
-            physics: const AlwaysScrollableScrollPhysics(),
-            slivers: [
-              SliverPadding(
-                padding: EdgeInsets.only(
-                  left: StyleString.safeSpace,
-                  right: StyleString.safeSpace,
-                  bottom: MediaQuery.paddingOf(context).bottom + 80,
-                ),
-                sliver: Obx(() => _buildBody(_controller.loadingState.value)),
+      body: refreshIndicator(
+        onRefresh: _controller.onRefresh,
+        child: CustomScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          slivers: [
+            SliverPadding(
+              padding: EdgeInsets.only(
+                left: StyleString.safeSpace + padding.left,
+                right: StyleString.safeSpace + padding.right,
+                bottom: padding.bottom + 100,
               ),
-            ],
-          ),
+              sliver: Obx(() => _buildBody(_controller.loadingState.value)),
+            ),
+          ],
         ),
       ),
     );

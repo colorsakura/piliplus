@@ -44,7 +44,7 @@ class _MemberFavoriteState extends State<MemberFavorite>
         slivers: [
           SliverPadding(
             padding: EdgeInsets.only(
-              bottom: MediaQuery.paddingOf(context).bottom + 80,
+              bottom: MediaQuery.viewPaddingOf(context).bottom + 100,
             ),
             sliver: Obx(
               () => _buildBody(theme, _controller.loadingState.value),

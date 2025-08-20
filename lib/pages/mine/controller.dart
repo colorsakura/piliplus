@@ -177,7 +177,7 @@ class MineController
                 top: 15,
                 left: 20,
                 right: 20,
-                bottom: MediaQuery.paddingOf(context).bottom + 15,
+                bottom: MediaQuery.viewPaddingOf(context).bottom + 15,
               ),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -248,7 +248,7 @@ class MineController
                 top: 15,
                 left: 20,
                 right: 20,
-                bottom: MediaQuery.paddingOf(context).bottom + 15,
+                bottom: MediaQuery.viewPaddingOf(context).bottom + 15,
               ),
               child: Row(
                 children: [

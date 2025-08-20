@@ -140,7 +140,7 @@ class _GroupPanelState extends State<GroupPanel> {
             left: 20,
             right: 20,
             top: 12,
-            bottom: MediaQuery.paddingOf(context).bottom + 12,
+            bottom: MediaQuery.viewPaddingOf(context).bottom + 12,
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.end,

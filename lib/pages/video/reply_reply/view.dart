@@ -87,7 +87,8 @@ class _VideoReplyReplyPanelState
   }
 
   @override
-  Widget buildPage(ThemeData theme) {
+  void didChangeDependencies() {
+    super.didChangeDependencies();
     _imageCallback = _horizontalPreview
         ? (imgList, index) => PageUtils.onHorizontalPreview(
             _key,
@@ -96,6 +97,10 @@ class _VideoReplyReplyPanelState
             index,
           )
         : null;
+  }
+
+  @override
+  Widget buildPage(ThemeData theme) {
     return Scaffold(
       key: _key,
       resizeToAvoidBottomInset: false,
@@ -305,13 +310,14 @@ class _VideoReplyReplyPanelState
           if (index == response!.length) {
             _controller.onLoadMore();
             return Container(
+              height: 125,
               alignment: Alignment.center,
               margin: EdgeInsets.only(
-                bottom: MediaQuery.paddingOf(context).bottom,
+                bottom: MediaQuery.viewPaddingOf(context).bottom,
               ),
-              height: 125,
               child: Text(
                 _controller.isEnd ? '没有更多了' : '加载中...',
+                textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 12,
                   color: theme.colorScheme.outline,

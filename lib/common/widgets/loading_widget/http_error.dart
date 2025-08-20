@@ -60,7 +60,7 @@ class HttpError extends StatelessWidget {
               style: TextStyle(color: theme.colorScheme.primary),
             ),
           ),
-        SizedBox(height: 40 + MediaQuery.paddingOf(context).bottom),
+        SizedBox(height: 40 + MediaQuery.viewPaddingOf(context).bottom),
       ],
     );
   }

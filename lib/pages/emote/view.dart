@@ -208,7 +208,9 @@ class _EmotePanelState extends State<EmotePanel>
                       ),
                     ],
                   ),
-                  SizedBox(height: MediaQuery.paddingOf(context).bottom),
+                  SizedBox(
+                    height: MediaQuery.viewPaddingOf(context).bottom,
+                  ),
                 ],
               )
             : _errorWidget(),

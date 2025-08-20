@@ -33,7 +33,7 @@ class _DynamicsPageState extends State<DynamicsPage>
       child: IconButton(
         tooltip: '发布动态',
         style: ButtonStyle(
-          padding: WidgetStateProperty.all(EdgeInsets.zero),
+          padding: const WidgetStatePropertyAll(EdgeInsets.zero),
           backgroundColor: WidgetStatePropertyAll(
             theme.colorScheme.secondaryContainer,
           ),
@@ -90,8 +90,10 @@ class _DynamicsPageState extends State<DynamicsPage>
     super.build(context);
     ThemeData theme = Theme.of(context);
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: Colors.transparent,
       appBar: AppBar(
+        primary: false,
         leading: upPanelPosition == UpPanelPosition.rightDrawer
             ? _createDynamicBtn(theme, false)
             : null,
@@ -127,11 +129,11 @@ class _DynamicsPageState extends State<DynamicsPage>
             : [_createDynamicBtn(theme)],
       ),
       drawer: upPanelPosition == UpPanelPosition.leftDrawer
-          ? SafeArea(child: upPanelPart(theme))
+          ? upPanelPart(theme)
           : null,
       drawerEnableOpenDragGesture: true,
       endDrawer: upPanelPosition == UpPanelPosition.rightDrawer
-          ? SafeArea(child: upPanelPart(theme))
+          ? upPanelPart(theme)
           : null,
       endDrawerEnableOpenDragGesture: true,
       body: Row(

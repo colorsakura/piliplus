@@ -2,6 +2,7 @@ import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/common/skeleton/msg_feed_top.dart';
 import 'package:PiliPlus/common/skeleton/video_card_v.dart';
 import 'package:PiliPlus/common/widgets/loading_widget/http_error.dart';
+import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/common/live_search_type.dart';
 import 'package:PiliPlus/pages/live_search/child/controller.dart';
@@ -33,7 +34,7 @@ class _LiveSearchChildPageState extends State<LiveSearchChildPage>
   Widget build(BuildContext context) {
     super.build(context);
     double padding = widget.searchType == LiveSearchType.room ? 12 : 0;
-    return RefreshIndicator(
+    return refreshIndicator(
       onRefresh: _controller.onRefresh,
       child: CustomScrollView(
         controller: _controller.scrollController,
@@ -43,7 +44,7 @@ class _LiveSearchChildPageState extends State<LiveSearchChildPage>
               top: padding,
               left: padding,
               right: padding,
-              bottom: MediaQuery.paddingOf(context).bottom + 80,
+              bottom: MediaQuery.viewPaddingOf(context).bottom + 100,
             ),
             sliver: Obx(() => _buildBody(_controller.loadingState.value)),
           ),

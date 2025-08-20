@@ -1,6 +1,7 @@
 import 'package:PiliPlus/common/widgets/loading_widget/http_error.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/common/widgets/video_card/video_card_h.dart';
+import 'package:PiliPlus/common/widgets/view_safe_area.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/common/home_tab_type.dart';
 import 'package:PiliPlus/models/model_hot_video_item.dart';
@@ -92,10 +93,9 @@ class _HotPageState extends CommonPageState<HotPage, HotController>
                                 } else {
                                   Get.to(
                                     Scaffold(
+                                      resizeToAvoidBottomInset: false,
                                       appBar: AppBar(title: const Text('排行榜')),
-                                      body: const SafeArea(
-                                        top: false,
-                                        bottom: false,
+                                      body: const ViewSafeArea(
                                         child: RankPage(),
                                       ),
                                     ),
@@ -137,7 +137,7 @@ class _HotPageState extends CommonPageState<HotPage, HotController>
           SliverPadding(
             padding: EdgeInsets.only(
               top: 7,
-              bottom: MediaQuery.paddingOf(context).bottom + 80,
+              bottom: MediaQuery.viewPaddingOf(context).bottom + 100,
             ),
             sliver: Obx(
               () => _buildBody(controller.loadingState.value),

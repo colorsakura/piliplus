@@ -146,7 +146,7 @@ class _DynamicSliverAppBarMediumState extends State<DynamicSliverAppBarMedium> {
       );
     }
 
-    final padding = MediaQuery.paddingOf(context).top;
+    final padding = MediaQuery.viewPaddingOf(context).top;
     return SliverAppBar.medium(
       leading: widget.leading,
       automaticallyImplyLeading: widget.automaticallyImplyLeading,

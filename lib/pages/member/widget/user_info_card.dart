@@ -29,6 +29,7 @@ class UserInfoCard extends StatelessWidget {
     required this.onFollow,
     this.live,
     this.silence,
+    required this.padding,
   });
 
   final bool isOwner;
@@ -38,6 +39,7 @@ class UserInfoCard extends StatelessWidget {
   final VoidCallback onFollow;
   final Live? live;
   final int? silence;
+  final EdgeInsets padding;
 
   @override
   Widget build(BuildContext context) {
@@ -529,8 +531,12 @@ class UserInfoCard extends StatelessWidget {
     children: [
       // _buildHeader(context),
       const SizedBox(height: 56),
-      SafeArea(
-        bottom: false,
+      Padding(
+        padding: EdgeInsets.only(
+          top: padding.top,
+          left: padding.left,
+          right: padding.right,
+        ),
         child: Row(
           children: [
             const SizedBox(width: 20),

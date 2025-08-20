@@ -107,7 +107,7 @@ class _PostPanelState extends CommonCollapseSlidePageState<PostPanel> {
     if (list.isNullOrEmpty) {
       return errorWidget();
     }
-    final bottom = MediaQuery.paddingOf(context).bottom;
+    final bottom = MediaQuery.viewPaddingOf(context).bottom;
     return Stack(
       clipBehavior: Clip.none,
       children: [

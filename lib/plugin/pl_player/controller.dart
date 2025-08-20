@@ -331,7 +331,6 @@ class PlPlayerController {
   late final bool autoPlayEnable = Pref.autoPlayEnable;
   late final bool enableVerticalExpand = Pref.enableVerticalExpand;
   late final bool pipNoDanmaku = Pref.pipNoDanmaku;
-  late final bool removeSafeArea = Pref.removeSafeArea;
 
   late final bool tempPlayerConf = Pref.tempPlayerConf;
 
@@ -1394,9 +1393,7 @@ class PlPlayerController {
         await landScape();
       }
     } else if (isFullScreen.value && !status) {
-      if (Get.currentRoute.startsWith('/liveRoom') || !removeSafeArea) {
-        showStatusBar();
-      }
+      showStatusBar();
       toggleFullScreen(false);
       if (mode == FullScreenMode.none) {
         fsProcessing = false;

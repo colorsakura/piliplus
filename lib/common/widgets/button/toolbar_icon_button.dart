@@ -29,7 +29,7 @@ class ToolbarIconButton extends StatelessWidget {
             ? theme.colorScheme.onSecondaryContainer
             : theme.colorScheme.outline,
         style: ButtonStyle(
-          padding: WidgetStateProperty.all(EdgeInsets.zero),
+          padding: const WidgetStatePropertyAll(EdgeInsets.zero),
           backgroundColor: WidgetStatePropertyAll(
             selected ? theme.colorScheme.secondaryContainer : null,
           ),

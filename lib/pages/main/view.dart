@@ -93,6 +93,7 @@ class _MainAppState extends State<MainApp>
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final padding = MediaQuery.viewPaddingOf(context);
     final bool isPortrait = context.isPortrait;
     final useBottomNav = isPortrait && !_mainController.useSideBar;
     Widget? bottomNav = useBottomNav
@@ -163,9 +164,10 @@ class _MainAppState extends State<MainApp>
         ),
         child: Scaffold(
           extendBody: true,
+          resizeToAvoidBottomInset: false,
           appBar: AppBar(toolbarHeight: 0),
-          body: SafeArea(
-            bottom: false,
+          body: Padding(
+            padding: EdgeInsets.only(right: padding.right),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -206,7 +208,9 @@ class _MainAppState extends State<MainApp>
                                                 (e) =>
                                                     NavigationDrawerDestination(
                                                       label: Text(e.label),
-                                                      icon: _buildIcon(type: e),
+                                                      icon: _buildIcon(
+                                                        type: e,
+                                                      ),
                                                       selectedIcon: _buildIcon(
                                                         type: e,
                                                         selected: true,
@@ -250,7 +254,7 @@ class _MainAppState extends State<MainApp>
                         ),
                   VerticalDivider(
                     width: 1,
-                    endIndent: MediaQuery.paddingOf(context).bottom,
+                    endIndent: padding.bottom,
                     color: theme.colorScheme.outline.withValues(alpha: 0.06),
                   ),
                 ],

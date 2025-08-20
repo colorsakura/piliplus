@@ -492,7 +492,7 @@ class _MediaPageState extends CommonPageState<MinePage, MineController>
                     child: IconButton(
                       tooltip: '查看更多',
                       style: ButtonStyle(
-                        padding: WidgetStateProperty.all(EdgeInsets.zero),
+                        padding: const WidgetStatePropertyAll(EdgeInsets.zero),
                         backgroundColor: WidgetStatePropertyAll(
                           theme.colorScheme.secondaryContainer.withValues(
                             alpha: 0.5,

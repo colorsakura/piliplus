@@ -67,12 +67,12 @@ void imageSaveDialog({
                       color: Colors.black.withValues(alpha: 0.3),
                       shape: BoxShape.circle,
                     ),
-                    child: IconButton(
+                    child: const IconButton(
                       style: ButtonStyle(
-                        padding: WidgetStateProperty.all(EdgeInsets.zero),
+                        padding: WidgetStatePropertyAll(EdgeInsets.zero),
                       ),
                       onPressed: SmartDialog.dismiss,
-                      icon: const Icon(
+                      icon: Icon(
                         Icons.close,
                         size: 18,
                         color: Colors.white,

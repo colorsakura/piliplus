@@ -61,12 +61,14 @@ class _SearchTrendingPageState extends State<SearchTrendingPage> {
             ? min(640.0, maxWidth * 0.6)
             : maxWidth;
         final height = width * 528 / 1125;
-        _offset = height - 56 - MediaQuery.paddingOf(context).top;
+        final padding = MediaQuery.viewPaddingOf(context);
+        _offset = height - 56 - padding.top;
         listener();
         final removePadding = maxWidth > width;
         return Scaffold(
           extendBody: true,
           extendBodyBehindAppBar: true,
+          resizeToAvoidBottomInset: false,
           appBar: PreferredSize(
             preferredSize: const Size.fromHeight(56),
             child: Obx(
@@ -130,9 +132,7 @@ class _SearchTrendingPageState extends State<SearchTrendingPage> {
                         ),
                       ),
                       SliverPadding(
-                        padding: EdgeInsets.only(
-                          bottom: MediaQuery.paddingOf(context).bottom + 100,
-                        ),
+                        padding: EdgeInsets.only(bottom: padding.bottom + 100),
                         sliver: Obx(
                           () =>
                               _buildBody(theme, _controller.loadingState.value),

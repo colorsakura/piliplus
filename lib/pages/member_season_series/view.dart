@@ -1,4 +1,5 @@
 import 'package:PiliPlus/common/widgets/loading_widget/http_error.dart';
+import 'package:PiliPlus/common/widgets/view_safe_area.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/common/member/contribute_type.dart';
 import 'package:PiliPlus/models_new/space/space_season_series/season.dart'
@@ -41,7 +42,7 @@ class _SeasonSeriesPageState extends State<SeasonSeriesPage>
       slivers: [
         SliverPadding(
           padding: EdgeInsets.only(
-            bottom: MediaQuery.paddingOf(context).bottom + 80,
+            bottom: MediaQuery.viewPaddingOf(context).bottom + 100,
           ),
           sliver: Obx(
             () => _buildBody(_controller.loadingState.value),
@@ -72,12 +73,9 @@ class _SeasonSeriesPageState extends State<SeasonSeriesPage>
                           : item.meta!.seriesId;
                       Get.to(
                         Scaffold(
-                          appBar: AppBar(
-                            title: Text(item.meta!.name!),
-                          ),
-                          body: SafeArea(
-                            top: false,
-                            bottom: false,
+                          resizeToAvoidBottomInset: false,
+                          appBar: AppBar(title: Text(item.meta!.name!)),
+                          body: ViewSafeArea(
                             child: MemberVideo(
                               type: isSeason
                                   ? ContributeType.season

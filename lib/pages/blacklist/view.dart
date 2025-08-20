@@ -39,6 +39,7 @@ class _BlackListPageState extends State<BlackListPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: Obx(
           () => Text(
@@ -54,7 +55,7 @@ class _BlackListPageState extends State<BlackListPage> {
           slivers: [
             SliverPadding(
               padding: EdgeInsets.only(
-                bottom: MediaQuery.paddingOf(context).bottom + 80,
+                bottom: MediaQuery.viewPaddingOf(context).bottom + 100,
               ),
               sliver: Obx(
                 () => _buildBody(_blackListController.loadingState.value),

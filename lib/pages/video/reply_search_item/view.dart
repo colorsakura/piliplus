@@ -1,4 +1,5 @@
 import 'package:PiliPlus/common/widgets/scroll_physics.dart';
+import 'package:PiliPlus/common/widgets/view_safe_area.dart';
 import 'package:PiliPlus/models/common/reply/reply_search_type.dart';
 import 'package:PiliPlus/pages/video/reply_search_item/child/view.dart';
 import 'package:PiliPlus/pages/video/reply_search_item/controller.dart';
@@ -29,6 +30,7 @@ class _ReplySearchPageState extends State<ReplySearchPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         actions: [
           IconButton(
@@ -56,9 +58,7 @@ class _ReplySearchPageState extends State<ReplySearchPage> {
           onSubmitted: (value) => _controller.submit(),
         ),
       ),
-      body: SafeArea(
-        top: false,
-        bottom: false,
+      body: ViewSafeArea(
         child: Column(
           children: [
             TabBar(

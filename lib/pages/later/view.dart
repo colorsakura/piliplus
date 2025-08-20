@@ -1,5 +1,6 @@
 import 'package:PiliPlus/common/widgets/appbar/appbar.dart';
 import 'package:PiliPlus/common/widgets/scroll_physics.dart';
+import 'package:PiliPlus/common/widgets/view_safe_area.dart';
 import 'package:PiliPlus/models/common/later_view_type.dart';
 import 'package:PiliPlus/models_new/later/data.dart';
 import 'package:PiliPlus/models_new/later/list.dart';
@@ -79,9 +80,7 @@ class _LaterPageState extends State<LaterPage>
                     )
                   : const SizedBox.shrink(),
             ),
-            body: SafeArea(
-              top: false,
-              bottom: false,
+            body: ViewSafeArea(
               child: Column(
                 children: [
                   TabBar(

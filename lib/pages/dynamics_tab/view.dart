@@ -88,7 +88,7 @@ class _DynamicsTabPageState
         slivers: [
           SliverPadding(
             padding: EdgeInsets.only(
-              bottom: MediaQuery.paddingOf(context).bottom + 80,
+              bottom: MediaQuery.viewPaddingOf(context).bottom + 100,
             ),
             sliver: buildPage(
               Obx(() => _buildBody(controller.loadingState.value)),

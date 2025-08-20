@@ -504,7 +504,7 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     padding =
-        MediaQuery.paddingOf(context).copyWith(top: 0) +
+        MediaQuery.viewPaddingOf(context).copyWith(top: 0) +
         const EdgeInsets.only(bottom: 25);
     return OrientationBuilder(
       builder: (context, orientation) {

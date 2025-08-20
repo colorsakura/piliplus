@@ -43,26 +43,29 @@ class _MemberDynamicsPageState extends State<MemberDynamicsPage>
   @override
   Widget build(BuildContext context) {
     super.build(context);
+    final padding = MediaQuery.viewPaddingOf(context);
     return widget.mid == null
         ? Scaffold(
+            resizeToAvoidBottomInset: false,
             appBar: AppBar(title: const Text('我的动态')),
-            body: SafeArea(
-              bottom: false,
-              child: _buildBody,
+            body: Padding(
+              padding: EdgeInsets.only(
+                left: padding.left,
+                right: padding.right,
+              ),
+              child: _buildBody(padding),
             ),
           )
-        : _buildBody;
+        : _buildBody(padding);
   }
 
-  Widget get _buildBody => refreshIndicator(
+  Widget _buildBody(EdgeInsets padding) => refreshIndicator(
     onRefresh: _memberDynamicController.onRefresh,
     child: CustomScrollView(
       physics: const AlwaysScrollableScrollPhysics(),
       slivers: [
         SliverPadding(
-          padding: EdgeInsets.only(
-            bottom: MediaQuery.paddingOf(context).bottom + 80,
-          ),
+          padding: EdgeInsets.only(bottom: padding.bottom + 100),
           sliver: buildPage(
             Obx(
               () => _buildContent(_memberDynamicController.loadingState.value),

@@ -98,7 +98,7 @@ class _WhisperBlockPageState extends State<WhisperBlockPage> {
                     padding: EdgeInsets.only(
                       left: 25,
                       right: 25,
-                      bottom: MediaQuery.paddingOf(context).bottom + 10,
+                      bottom: MediaQuery.viewPaddingOf(context).bottom + 10,
                     ),
                     child: FilledButton.tonal(
                       onPressed: _onAdd,

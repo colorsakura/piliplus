@@ -41,10 +41,11 @@ class _WhisperLinkSettingPageState extends State<WhisperLinkSettingPage> {
       color: theme.colorScheme.outline.withValues(alpha: 0.1),
     );
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(title: const Text('聊天设置')),
       body: ListView(
         padding: EdgeInsets.only(
-          bottom: MediaQuery.paddingOf(context).bottom + 80,
+          bottom: MediaQuery.viewPaddingOf(context).bottom + 100,
         ),
         children: [
           divider,

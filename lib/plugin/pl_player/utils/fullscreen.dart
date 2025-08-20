@@ -64,13 +64,23 @@ Future<void> fullAutoModeForceSensor() async {
 }
 
 Future<void> hideStatusBar() async {
+  if (!_showStatusBar) {
+    return;
+  }
+  _showStatusBar = false;
   await SystemChrome.setEnabledSystemUIMode(
     SystemUiMode.immersiveSticky,
   );
 }
 
+bool _showStatusBar = true;
+
 //退出全屏显示
 Future<void> showStatusBar() async {
+  if (_showStatusBar) {
+    return;
+  }
+  _showStatusBar = true;
   dynamic document;
   late SystemUiMode mode = SystemUiMode.edgeToEdge;
   try {

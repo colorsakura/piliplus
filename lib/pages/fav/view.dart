@@ -1,4 +1,5 @@
 import 'package:PiliPlus/common/widgets/scroll_physics.dart';
+import 'package:PiliPlus/common/widgets/view_safe_area.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/common/fav_type.dart';
 import 'package:PiliPlus/models_new/fav/fav_folder/list.dart';
@@ -52,6 +53,7 @@ class _FavPageState extends State<FavPage> with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: const Text('我的收藏'),
         actions: [
@@ -152,9 +154,7 @@ class _FavPageState extends State<FavPage> with SingleTickerProviderStateMixin {
           },
         ),
       ),
-      body: SafeArea(
-        top: false,
-        bottom: false,
+      body: ViewSafeArea(
         child: tabBarView(
           controller: _tabController,
           children: FavTabType.values.map((item) => item.page).toList(),

@@ -188,9 +188,7 @@ class _DynMentionPanelState extends SearchState<DynMentionPanel> {
                       () => _buildBody(theme, _controller.loadingState.value),
                     ),
                     SliverToBoxAdapter(
-                      child: SizedBox(
-                        height: padding + viewInset + 80,
-                      ),
+                      child: SizedBox(height: padding + viewInset + 100),
                     ),
                   ],
                 ),

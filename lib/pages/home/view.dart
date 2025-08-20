@@ -232,7 +232,7 @@ Widget defaultUser({
     child: IconButton(
       tooltip: '默认用户头像',
       style: ButtonStyle(
-        padding: WidgetStateProperty.all(EdgeInsets.zero),
+        padding: const WidgetStatePropertyAll(EdgeInsets.zero),
         backgroundColor: WidgetStatePropertyAll(
           theme.colorScheme.onInverseSurface,
         ),

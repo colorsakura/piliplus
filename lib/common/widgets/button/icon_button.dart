@@ -41,8 +41,8 @@ Widget mediumButton({
     child: IconButton(
       tooltip: tooltip,
       icon: Icon(icon),
-      style: ButtonStyle(
-        padding: WidgetStateProperty.all(EdgeInsets.zero),
+      style: const ButtonStyle(
+        padding: WidgetStatePropertyAll(EdgeInsets.zero),
       ),
       onPressed: onPressed,
     ),

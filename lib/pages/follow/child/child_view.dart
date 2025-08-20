@@ -42,7 +42,7 @@ class _FollowChildPageState extends State<FollowChildPage>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    final padding = MediaQuery.paddingOf(context);
+    final padding = MediaQuery.viewPaddingOf(context);
     Widget child = refreshIndicator(
       onRefresh: _followController.onRefresh,
       child: CustomScrollView(
@@ -50,7 +50,7 @@ class _FollowChildPageState extends State<FollowChildPage>
         physics: const AlwaysScrollableScrollPhysics(),
         slivers: [
           SliverPadding(
-            padding: EdgeInsets.only(bottom: padding.bottom + 80),
+            padding: EdgeInsets.only(bottom: padding.bottom + 100),
             sliver: Obx(
               () => _buildBody(_followController.loadingState.value),
             ),

@@ -30,7 +30,7 @@ class _CreateReservePageState extends State<CreateReservePage> {
       fontSize: 15,
       color: theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.9),
     );
-    final padding = MediaQuery.paddingOf(context);
+    final padding = MediaQuery.viewPaddingOf(context);
     final divider = [
       const SizedBox(height: 10),
       Divider(
@@ -46,7 +46,7 @@ class _CreateReservePageState extends State<CreateReservePage> {
           top: 16,
           left: padding.left + 16,
           right: padding.right + 16,
-          bottom: padding.bottom + 80,
+          bottom: padding.bottom + 100,
         ),
         children: [
           Row(

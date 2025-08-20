@@ -185,7 +185,6 @@ class SettingBoxKey {
       enableSingleRow = 'enableSingleRow',
       displayMode = 'displayMode',
       smallCardWidth = 'smallCardWidth',
-      videoPlayerRemoveSafeArea = 'videoPlayerRemoveSafeArea',
       dynamicsWaterfallFlow = 'dynamicsWaterfallFlow',
       upPanelPosition = 'upPanelPosition',
       dynamicsShowAllFollowedUp = 'dynamicsShowAllFollowedUp',

@@ -27,6 +27,7 @@ class PgcIntroPage extends StatefulWidget {
   final Function showEpisodes;
   final Function showIntroDetail;
   final double maxWidth;
+  final bool isLandscape;
 
   const PgcIntroPage({
     super.key,
@@ -35,6 +36,7 @@ class PgcIntroPage extends StatefulWidget {
     required this.showEpisodes,
     required this.showIntroDetail,
     required this.maxWidth,
+    required this.isLandscape,
   });
 
   @override
@@ -62,7 +64,7 @@ class _PgcIntroPageState extends TripleState<PgcIntroPage>
     super.build(context);
     final ThemeData theme = Theme.of(context);
     final item = introController.pgcItem;
-    final isLandscape = context.isLandscape;
+    final isLandscape = widget.isLandscape;
     Widget sliver = SliverToBoxAdapter(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

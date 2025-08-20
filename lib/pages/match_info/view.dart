@@ -2,6 +2,8 @@ import 'package:PiliPlus/common/skeleton/video_reply.dart';
 import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
 import 'package:PiliPlus/common/widgets/loading_widget/http_error.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
+import 'package:PiliPlus/common/widgets/view_safe_area.dart';
+import 'package:PiliPlus/common/widgets/view_sliver_safe_area.dart';
 import 'package:PiliPlus/grpc/bilibili/main/community/reply/v1.pb.dart'
     show ReplyInfo;
 import 'package:PiliPlus/http/loading_state.dart';
@@ -42,26 +44,21 @@ class _MatchInfoPageState extends CommonDynPageState<MatchInfoPage> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(title: const Text('比赛详情')),
-      body: SafeArea(
-        bottom: false,
-        child: refreshIndicator(
-          onRefresh: controller.onRefresh,
-          child: CustomScrollView(
-            controller: controller.scrollController,
-            physics: const AlwaysScrollableScrollPhysics(),
-            slivers: [
-              Obx(() => _buildInfo(theme, controller.infoState.value)),
-              SliverPadding(
-                padding: EdgeInsets.only(
-                  bottom: MediaQuery.paddingOf(context).bottom + 80,
-                ),
-                sliver: Obx(
-                  () => _buildReply(theme, controller.loadingState.value),
-                ),
+      body: refreshIndicator(
+        onRefresh: controller.onRefresh,
+        child: CustomScrollView(
+          controller: controller.scrollController,
+          physics: const AlwaysScrollableScrollPhysics(),
+          slivers: [
+            Obx(() => _buildInfo(theme, controller.infoState.value)),
+            ViewSliverSafeArea(
+              sliver: Obx(
+                () => _buildReply(theme, controller.loadingState.value),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
       floatingActionButton: SlideTransition(
@@ -267,10 +264,9 @@ class _MatchInfoPageState extends CommonDynPageState<MatchInfoPage> {
       int rpid = replyItem.id.toInt();
       Get.to(
         Scaffold(
+          resizeToAvoidBottomInset: false,
           appBar: AppBar(title: const Text('评论详情')),
-          body: SafeArea(
-            top: false,
-            bottom: false,
+          body: ViewSafeArea(
             child: VideoReplyReplyPanel(
               enableSlide: false,
               id: id,

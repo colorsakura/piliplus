@@ -42,7 +42,7 @@ class _LaterViewChildPageState extends State<LaterViewChildPage>
           SliverPadding(
             padding: EdgeInsets.only(
               top: 7,
-              bottom: MediaQuery.paddingOf(context).bottom + 85,
+              bottom: MediaQuery.viewPaddingOf(context).bottom + 85,
             ),
             sliver: Obx(
               () => _buildBody(_laterController.loadingState.value),

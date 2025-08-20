@@ -230,8 +230,8 @@ class AuthorPanel extends StatelessWidget {
           height: 32,
           child: IconButton(
             tooltip: '更多',
-            style: ButtonStyle(
-              padding: WidgetStateProperty.all(EdgeInsets.zero),
+            style: const ButtonStyle(
+              padding: WidgetStatePropertyAll(EdgeInsets.zero),
             ),
             onPressed: () => morePanel(context),
             icon: const Icon(Icons.more_vert_outlined, size: 18),
@@ -266,7 +266,7 @@ class AuthorPanel extends StatelessWidget {
         final theme = Theme.of(context);
         return Padding(
           padding: EdgeInsets.only(
-            bottom: MediaQuery.paddingOf(context1).bottom,
+            bottom: MediaQuery.viewPaddingOf(context1).bottom,
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,

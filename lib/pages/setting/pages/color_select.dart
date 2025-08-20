@@ -55,6 +55,7 @@ class _ColorSelectPageState extends State<ColorSelectPage> {
     );
     final size = Get.size;
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(title: const Text('选择应用主题')),
       body: SafeArea(
         bottom: false,

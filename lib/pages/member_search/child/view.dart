@@ -43,7 +43,7 @@ class _MemberSearchChildPageState extends State<MemberSearchChildPage>
           SliverPadding(
             padding: EdgeInsets.only(
               top: widget.searchType == MemberSearchType.archive ? 7 : 0,
-              bottom: MediaQuery.paddingOf(context).bottom + 80,
+              bottom: MediaQuery.viewPaddingOf(context).bottom + 100,
             ),
             sliver: switch (widget.searchType) {
               MemberSearchType.archive => Obx(

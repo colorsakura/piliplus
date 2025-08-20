@@ -125,9 +125,11 @@ class _DynamicDetailPageState extends CommonDynPageState<DynamicDetailPage> {
                 const SizedBox(width: 16),
               ],
       ),
-      body: SafeArea(
-        top: false,
-        bottom: false,
+      body: Padding(
+        padding: EdgeInsets.only(
+          left: padding.left,
+          right: padding.right,
+        ),
         child: isPortrait
             ? refreshIndicator(
                 onRefresh: controller.onRefresh,
@@ -184,7 +186,7 @@ class _DynamicDetailPageState extends CommonDynPageState<DynamicDetailPage> {
                       SliverPadding(
                         padding: EdgeInsets.only(
                           left: padding / 4,
-                          bottom: MediaQuery.paddingOf(context).bottom + 80,
+                          bottom: this.padding.bottom + 100,
                         ),
                         sliver: SliverToBoxAdapter(
                           child: LayoutBuilder(
@@ -205,6 +207,7 @@ class _DynamicDetailPageState extends CommonDynPageState<DynamicDetailPage> {
                   child: Scaffold(
                     key: scaffoldKey,
                     backgroundColor: Colors.transparent,
+                    resizeToAvoidBottomInset: false,
                     body: refreshIndicator(
                       onRefresh: controller.onRefresh,
                       child: CustomScrollView(
@@ -261,14 +264,13 @@ class _DynamicDetailPageState extends CommonDynPageState<DynamicDetailPage> {
               child: const Icon(Icons.reply),
             );
 
-            final bottom = MediaQuery.paddingOf(context).bottom;
             if (!controller.showDynActionBar) {
               return Align(
                 alignment: Alignment.bottomRight,
                 child: Padding(
                   padding: EdgeInsets.only(
                     right: 14,
-                    bottom: bottom + 14,
+                    bottom: padding.bottom + 14,
                   ),
                   child: button(),
                 ),
@@ -326,7 +328,7 @@ class _DynamicDetailPageState extends CommonDynPageState<DynamicDetailPage> {
                       ),
                     ),
                   ),
-                  padding: EdgeInsets.only(bottom: bottom),
+                  padding: EdgeInsets.only(bottom: padding.bottom),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [

@@ -38,7 +38,7 @@ class _FavNotePageState extends State<FavNotePage>
           children: [
             Expanded(
               child: TabBar(
-                overlayColor: WidgetStateProperty.all(Colors.transparent),
+                overlayColor: const WidgetStatePropertyAll(Colors.transparent),
                 splashFactory: NoSplash.splashFactory,
                 isScrollable: true,
                 tabAlignment: TabAlignment.start,

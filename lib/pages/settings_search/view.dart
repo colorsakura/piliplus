@@ -1,4 +1,5 @@
 import 'package:PiliPlus/common/widgets/loading_widget/http_error.dart';
+import 'package:PiliPlus/common/widgets/view_sliver_safe_area.dart';
 import 'package:PiliPlus/pages/search/controller.dart' show SearchState;
 import 'package:PiliPlus/pages/setting/models/extra_settings.dart';
 import 'package:PiliPlus/pages/setting/models/model.dart';
@@ -87,31 +88,25 @@ class _SettingsSearchPageState extends SearchState<SettingsSearchPage> {
           ),
         ),
       ),
-      body: SafeArea(
-        bottom: false,
-        child: CustomScrollView(
-          slivers: [
-            SliverPadding(
-              padding: EdgeInsets.only(
-                bottom: MediaQuery.paddingOf(context).bottom + 80,
-              ),
-              sliver: Obx(
-                () => _list.isEmpty
-                    ? const HttpError()
-                    : SliverWaterfallFlow(
-                        gridDelegate:
-                            SliverWaterfallFlowDelegateWithMaxCrossAxisExtent(
-                              maxCrossAxisExtent: Grid.smallCardWidth * 2,
-                            ),
-                        delegate: SliverChildBuilderDelegate(
-                          (_, index) => _list[index].widget,
-                          childCount: _list.length,
-                        ),
+      body: CustomScrollView(
+        slivers: [
+          ViewSliverSafeArea(
+            sliver: Obx(
+              () => _list.isEmpty
+                  ? const HttpError()
+                  : SliverWaterfallFlow(
+                      gridDelegate:
+                          SliverWaterfallFlowDelegateWithMaxCrossAxisExtent(
+                            maxCrossAxisExtent: Grid.smallCardWidth * 2,
+                          ),
+                      delegate: SliverChildBuilderDelegate(
+                        (_, index) => _list[index].widget,
+                        childCount: _list.length,
                       ),
-              ),
+                    ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

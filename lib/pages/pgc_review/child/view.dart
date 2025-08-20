@@ -62,7 +62,7 @@ class _PgcReviewChildPageState extends State<PgcReviewChildPage>
           _buildHeader(theme),
           SliverPadding(
             padding: EdgeInsets.only(
-              bottom: MediaQuery.paddingOf(context).bottom + 100,
+              bottom: MediaQuery.viewPaddingOf(context).bottom + 100,
             ),
             sliver: Obx(
               () => _buildBody(theme, _controller.loadingState.value),

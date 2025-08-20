@@ -40,9 +40,12 @@ class _FavDetailPageState extends State<FavDetailPage> with GridMixin {
     mediaId = Get.parameters['mediaId']!;
   }
 
+  late EdgeInsets padding;
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    padding = MediaQuery.viewPaddingOf(context);
     return Obx(
       () {
         final enableMultiSelect = _favDetailController.enableMultiSelect.value;
@@ -64,30 +67,28 @@ class _FavDetailPageState extends State<FavDetailPage> with GridMixin {
                     )
                   : const SizedBox.shrink(),
             ),
-            body: SafeArea(
-              top: false,
-              bottom: false,
-              child: refreshIndicator(
-                onRefresh: _favDetailController.onRefresh,
-                child: CustomScrollView(
-                  physics: const AlwaysScrollableScrollPhysics(),
-                  controller: _favDetailController.scrollController,
-                  slivers: [
-                    _buildHeader(enableMultiSelect, theme),
-                    SliverPadding(
-                      padding: EdgeInsets.only(
-                        bottom: MediaQuery.paddingOf(context).bottom + 85,
-                      ),
-                      sliver: Obx(
-                        () => _buildBody(
-                          enableMultiSelect,
-                          theme,
-                          _favDetailController.loadingState.value,
-                        ),
+            body: refreshIndicator(
+              onRefresh: _favDetailController.onRefresh,
+              child: CustomScrollView(
+                physics: const AlwaysScrollableScrollPhysics(),
+                controller: _favDetailController.scrollController,
+                slivers: [
+                  _buildHeader(enableMultiSelect, theme),
+                  SliverPadding(
+                    padding: EdgeInsets.only(
+                      left: padding.left,
+                      right: padding.right,
+                      bottom: padding.bottom + 100,
+                    ),
+                    sliver: Obx(
+                      () => _buildBody(
+                        enableMultiSelect,
+                        theme,
+                        _favDetailController.loadingState.value,
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ),
@@ -341,8 +342,8 @@ class _FavDetailPageState extends State<FavDetailPage> with GridMixin {
     return FlexibleSpaceBar(
       background: Padding(
         padding: EdgeInsets.only(
-          top: kToolbarHeight + MediaQuery.paddingOf(context).top + 10,
-          left: 14,
+          top: kToolbarHeight + padding.top + 10,
+          left: 14 + padding.left,
           right: 20,
           bottom: 10,
         ),

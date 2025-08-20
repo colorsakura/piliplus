@@ -6,6 +6,7 @@ import 'dart:ui' as ui;
 import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/common/widgets/progress_bar/audio_video_progress_bar.dart';
 import 'package:PiliPlus/common/widgets/progress_bar/segment_progress_bar.dart';
+import 'package:PiliPlus/common/widgets/view_safe_area.dart';
 import 'package:PiliPlus/http/init.dart';
 import 'package:PiliPlus/models/common/super_resolution_type.dart';
 import 'package:PiliPlus/models_new/video/video_detail/episode.dart';
@@ -262,7 +263,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
     final isPgc = !widget.videoDetailController!.isUgc;
     final isPlayAll = widget.videoDetailController?.isPlayAll == true;
     final anySeason = isSeason || isPart || isPgc || isPlayAll;
-
+    final isFullScreen = this.isFullScreen;
     final double widgetWidth = isLandscape && isFullScreen ? 42 : 35;
 
     Widget progressWidget(
@@ -605,26 +606,24 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
       ),
 
       /// 全屏
-      BottomControlType.fullscreen => Obx(
-        () => ComBtn(
-          width: widgetWidth,
-          height: 30,
-          icon: isFullScreen
-              ? const Icon(
-                  Icons.fullscreen_exit,
-                  semanticLabel: '退出全屏',
-                  size: 24,
-                  color: Colors.white,
-                )
-              : const Icon(
-                  Icons.fullscreen,
-                  semanticLabel: '全屏',
-                  size: 24,
-                  color: Colors.white,
-                ),
-          onTap: () =>
-              plPlayerController.triggerFullScreen(status: !isFullScreen),
-        ),
+      BottomControlType.fullscreen => ComBtn(
+        width: widgetWidth,
+        height: 30,
+        icon: isFullScreen
+            ? const Icon(
+                Icons.fullscreen_exit,
+                semanticLabel: '退出全屏',
+                size: 24,
+                color: Colors.white,
+              )
+            : const Icon(
+                Icons.fullscreen,
+                semanticLabel: '全屏',
+                size: 24,
+                color: Colors.white,
+              ),
+        onTap: () =>
+            plPlayerController.triggerFullScreen(status: !isFullScreen),
       ),
     };
 
@@ -1010,6 +1009,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
       color: Colors.white,
       fontSize: 12,
     );
+    final isFullScreen = this.isFullScreen;
     final isLive = plPlayerController.isLive;
 
     return Stack(
@@ -1274,11 +1274,13 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                 AppBarAni(
                   isTop: true,
                   controller: animationController,
+                  isFullScreen: isFullScreen,
                   child: widget.headerControl,
                 ),
                 AppBarAni(
                   isTop: false,
                   controller: animationController,
+                  isFullScreen: isFullScreen,
                   child:
                       widget.bottomControl ??
                       BottomControl(
@@ -1471,41 +1473,42 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
           ),
 
         // 锁
-        if (!isLive)
-          SafeArea(
-            child: Obx(
-              () => Visibility(
-                visible: isFullScreen,
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: FractionalTranslation(
-                    translation: const Offset(1, -0.4),
-                    child: Visibility(
-                      visible:
-                          plPlayerController.showControls.value &&
-                          (isFullScreen ||
-                              plPlayerController.controlsLock.value),
-                      child: DecoratedBox(
-                        decoration: const BoxDecoration(
-                          color: Color(0x45000000),
-                          borderRadius: BorderRadius.all(Radius.circular(8)),
-                        ),
-                        child: ComBtn(
-                          icon: Icon(
-                            plPlayerController.controlsLock.value
-                                ? FontAwesomeIcons.lock
-                                : FontAwesomeIcons.lockOpen,
-                            semanticLabel: plPlayerController.controlsLock.value
-                                ? '解锁'
-                                : '锁定',
-                            size: 15,
-                            color: Colors.white,
-                          ),
-                          onTap: () => plPlayerController.onLockControl(
-                            !plPlayerController.controlsLock.value,
-                          ),
-                        ),
+        if (!isLive && isFullScreen)
+          ViewSafeArea(
+            right: false,
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: FractionalTranslation(
+                translation: const Offset(1, -0.4),
+                child: Obx(
+                  () => Visibility(
+                    visible: plPlayerController.showControls.value,
+                    child: DecoratedBox(
+                      decoration: const BoxDecoration(
+                        color: Color(0x45000000),
+                        borderRadius: BorderRadius.all(Radius.circular(8)),
                       ),
+                      child: Obx(() {
+                        final controlsLock =
+                            plPlayerController.controlsLock.value;
+                        return ComBtn(
+                          icon: controlsLock
+                              ? const Icon(
+                                  FontAwesomeIcons.lock,
+                                  semanticLabel: '解锁',
+                                  size: 15,
+                                  color: Colors.white,
+                                )
+                              : const Icon(
+                                  FontAwesomeIcons.lockOpen,
+                                  semanticLabel: '锁定',
+                                  size: 15,
+                                  color: Colors.white,
+                                ),
+                          onTap: () =>
+                              plPlayerController.onLockControl(!controlsLock),
+                        );
+                      }),
                     ),
                   ),
                 ),
@@ -1514,95 +1517,96 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
           ),
 
         // 截图
-        SafeArea(
-          child: Obx(
-            () => Align(
-              alignment: Alignment.centerRight,
-              child: FractionalTranslation(
-                translation: const Offset(-1, -0.4),
-                child: Visibility(
-                  visible:
-                      plPlayerController.showControls.value && isFullScreen,
-                  child: DecoratedBox(
-                    decoration: const BoxDecoration(
-                      color: Color(0x45000000),
-                      borderRadius: BorderRadius.all(Radius.circular(8)),
-                    ),
-                    child: ComBtn(
-                      icon: const Icon(
-                        Icons.photo_camera,
-                        semanticLabel: '截图',
-                        size: 20,
-                        color: Colors.white,
+        if (isFullScreen)
+          ViewSafeArea(
+            left: false,
+            child: Obx(
+              () => Align(
+                alignment: Alignment.centerRight,
+                child: FractionalTranslation(
+                  translation: const Offset(-1, -0.4),
+                  child: Visibility(
+                    visible: plPlayerController.showControls.value,
+                    child: DecoratedBox(
+                      decoration: const BoxDecoration(
+                        color: Color(0x45000000),
+                        borderRadius: BorderRadius.all(Radius.circular(8)),
                       ),
-                      onTap: () {
-                        SmartDialog.showToast('截图中');
-                        plPlayerController.videoPlayerController
-                            ?.screenshot(format: 'image/png')
-                            .then((value) {
-                              if (value != null && context.mounted) {
-                                SmartDialog.showToast('点击弹窗保存截图');
-                                showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) {
-                                    return AlertDialog(
-                                      // title: const Text('点击保存'),
-                                      titlePadding: EdgeInsets.zero,
-                                      contentPadding: const EdgeInsets.all(
-                                        8,
-                                      ),
-                                      insetPadding: EdgeInsets.only(
-                                        left: maxWidth / 2,
-                                      ),
-                                      //移除圆角
-                                      shape: const RoundedRectangleBorder(),
-                                      content: GestureDetector(
-                                        onTap: () async {
-                                          String name = DateTime.now()
-                                              .toString();
-                                          final SaveResult result =
-                                              await SaverGallery.saveImage(
-                                                value,
-                                                fileName: name,
-                                                androidRelativePath:
-                                                    "Pictures/Screenshots",
-                                                skipIfExists: false,
-                                              );
-
-                                          if (result.isSuccess) {
-                                            Get.back();
-                                            SmartDialog.showToast(
-                                              '$name.png已保存到相册/截图',
-                                            );
-                                          } else {
-                                            SmartDialog.showToast(
-                                              '保存失败，${result.errorMessage}',
-                                            );
-                                          }
-                                        },
-                                        child: ConstrainedBox(
-                                          constraints: BoxConstraints(
-                                            maxWidth: maxWidth / 3,
-                                            maxHeight: maxHeight / 3,
-                                          ),
-                                          child: Image.memory(value),
+                      child: ComBtn(
+                        icon: const Icon(
+                          Icons.photo_camera,
+                          semanticLabel: '截图',
+                          size: 20,
+                          color: Colors.white,
+                        ),
+                        onTap: () {
+                          SmartDialog.showToast('截图中');
+                          plPlayerController.videoPlayerController
+                              ?.screenshot(format: 'image/png')
+                              .then((value) {
+                                if (value != null && context.mounted) {
+                                  SmartDialog.showToast('点击弹窗保存截图');
+                                  showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return AlertDialog(
+                                        // title: const Text('点击保存'),
+                                        titlePadding: EdgeInsets.zero,
+                                        contentPadding: const EdgeInsets.all(
+                                          8,
                                         ),
-                                      ),
-                                    );
-                                  },
-                                );
-                              } else {
-                                SmartDialog.showToast('截图失败');
-                              }
-                            });
-                      },
+                                        insetPadding: EdgeInsets.only(
+                                          left: maxWidth / 2,
+                                        ),
+                                        //移除圆角
+                                        shape: const RoundedRectangleBorder(),
+                                        content: GestureDetector(
+                                          onTap: () async {
+                                            String name = DateTime.now()
+                                                .toString();
+                                            final SaveResult result =
+                                                await SaverGallery.saveImage(
+                                                  value,
+                                                  fileName: name,
+                                                  androidRelativePath:
+                                                      "Pictures/Screenshots",
+                                                  skipIfExists: false,
+                                                );
+
+                                            if (result.isSuccess) {
+                                              Get.back();
+                                              SmartDialog.showToast(
+                                                '$name.png已保存到相册/截图',
+                                              );
+                                            } else {
+                                              SmartDialog.showToast(
+                                                '保存失败，${result.errorMessage}',
+                                              );
+                                            }
+                                          },
+                                          child: ConstrainedBox(
+                                            constraints: BoxConstraints(
+                                              maxWidth: maxWidth / 3,
+                                              maxHeight: maxHeight / 3,
+                                            ),
+                                            child: Image.memory(value),
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  );
+                                } else {
+                                  SmartDialog.showToast('截图失败');
+                                }
+                              });
+                        },
+                      ),
                     ),
                   ),
                 ),
               ),
             ),
           ),
-        ),
 
         Obx(() {
           if (plPlayerController.dataStatus.loading ||

@@ -68,6 +68,7 @@ class _FavSortPageState extends State<FavSortPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: Text('排序: ${_favDetailController.folderInfo.value.title}'),
         actions: [
@@ -94,11 +95,7 @@ class _FavSortPageState extends State<FavSortPage> {
           const SizedBox(width: 16),
         ],
       ),
-      body: SafeArea(
-        top: false,
-        bottom: false,
-        child: _buildBody,
-      ),
+      body: _buildBody,
     );
   }
 
@@ -127,9 +124,9 @@ class _FavSortPageState extends State<FavSortPage> {
       scrollController: _scrollController,
       onReorder: onReorder,
       physics: const AlwaysScrollableScrollPhysics(),
-      footer: SizedBox(
-        height: MediaQuery.paddingOf(context).bottom + 80,
-      ),
+      padding:
+          MediaQuery.viewPaddingOf(context).copyWith(top: 0) +
+          const EdgeInsets.only(bottom: 100),
       itemCount: sortList.length,
       itemBuilder: (context, index) {
         final item = sortList[index];

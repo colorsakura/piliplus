@@ -76,7 +76,11 @@ class _AboutPageState extends State<AboutPage> {
       appBar: widget.showAppBar == false
           ? null
           : AppBar(title: const Text('关于')),
+      resizeToAvoidBottomInset: false,
       body: ListView(
+        padding: EdgeInsets.only(
+          bottom: MediaQuery.viewPaddingOf(context).bottom + 100,
+        ),
         children: [
           GestureDetector(
             onTap: () {
@@ -298,7 +302,6 @@ Commit Hash: ${BuildConfig.commitHash}''',
               },
             ),
           ),
-          const SizedBox(height: 80),
         ],
       ),
     );

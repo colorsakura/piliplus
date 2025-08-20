@@ -36,7 +36,7 @@ class _WebDavSettingPageState extends State<WebDavSettingPage> {
 
   @override
   Widget build(BuildContext context) {
-    EdgeInsets padding = MediaQuery.paddingOf(context);
+    EdgeInsets padding = MediaQuery.viewPaddingOf(context);
     return Scaffold(
       resizeToAvoidBottomInset: widget.showAppBar,
       appBar: !widget.showAppBar

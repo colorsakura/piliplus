@@ -29,29 +29,31 @@ class _ArticleListPageState extends State<ArticleListPage> with GridMixin {
     tag: Utils.generateRandomString(8),
   );
 
+  late EdgeInsets padding;
+
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
-    return Scaffold(
-      body: SafeArea(
-        top: false,
-        bottom: false,
-        child: refreshIndicator(
-          onRefresh: _controller.onRefresh,
-          child: CustomScrollView(
-            physics: const AlwaysScrollableScrollPhysics(),
-            slivers: [
-              Obx(() => _buildHeader(theme, _controller.list.value)),
-              SliverPadding(
-                padding: EdgeInsets.only(
-                  bottom: MediaQuery.paddingOf(context).bottom + 80,
-                ),
-                sliver: Obx(
-                  () => _buildBody(theme, _controller.loadingState.value),
-                ),
+    padding = MediaQuery.viewPaddingOf(context);
+    return Material(
+      color: theme.colorScheme.surface,
+      child: refreshIndicator(
+        onRefresh: _controller.onRefresh,
+        child: CustomScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          slivers: [
+            Obx(() => _buildHeader(theme, _controller.list.value)),
+            SliverPadding(
+              padding: EdgeInsets.only(
+                left: padding.left,
+                right: padding.right,
+                bottom: padding.bottom + 100,
               ),
-            ],
-          ),
+              sliver: Obx(
+                () => _buildBody(theme, _controller.loadingState.value),
+              ),
+            ),
+          ],
         ),
       ),
     );
@@ -60,7 +62,7 @@ class _ArticleListPageState extends State<ArticleListPage> with GridMixin {
   @override
   Widget get gridSkeleton => SliverPadding(
     padding: EdgeInsets.only(
-      top: MediaQuery.paddingOf(context).top + kToolbarHeight + 120,
+      top: padding.top + kToolbarHeight + 120,
     ),
     sliver: super.gridSkeleton,
   );
@@ -96,7 +98,6 @@ class _ArticleListPageState extends State<ArticleListPage> with GridMixin {
       text: '  |  ',
       style: TextStyle(color: theme.colorScheme.outline.withValues(alpha: 0.7)),
     );
-    final padding = MediaQuery.paddingOf(context).top + kToolbarHeight;
     return SliverAppBar.medium(
       title: Text(item.name!),
       pinned: true,
@@ -105,9 +106,9 @@ class _ArticleListPageState extends State<ArticleListPage> with GridMixin {
         background: Container(
           height: 120,
           margin: EdgeInsets.only(
-            left: 12,
+            left: 12 + padding.left,
             right: 12,
-            top: padding,
+            top: padding.top + kToolbarHeight,
           ),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,

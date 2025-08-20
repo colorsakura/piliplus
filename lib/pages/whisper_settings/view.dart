@@ -34,6 +34,7 @@ class _WhisperSettingsPageState extends State<WhisperSettingsPage> {
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: Obx(() => Text(_controller.title.value)),
       ),
@@ -169,7 +170,7 @@ class _WhisperSettingsPageState extends State<WhisperSettingsPage> {
           final keys = response.keys.toList()..sort();
           return ListView.separated(
             padding: EdgeInsets.only(
-              bottom: MediaQuery.paddingOf(context).bottom + 80,
+              bottom: MediaQuery.viewPaddingOf(context).bottom + 100,
             ),
             itemCount: keys.length,
             itemBuilder: (context, index) {

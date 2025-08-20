@@ -35,7 +35,7 @@ class _FavVideoPageState extends State<FavVideoPage>
           SliverPadding(
             padding: EdgeInsets.only(
               top: 7,
-              bottom: 80 + MediaQuery.paddingOf(context).bottom,
+              bottom: 100 + MediaQuery.viewPaddingOf(context).bottom,
             ),
             sliver: Obx(
               () => _buildBody(_favController.loadingState.value),

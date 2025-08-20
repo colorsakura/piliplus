@@ -113,8 +113,8 @@ class _PagesPanelState extends State<PagesPanel> {
                 SizedBox(
                   height: 34,
                   child: TextButton(
-                    style: ButtonStyle(
-                      padding: WidgetStateProperty.all(EdgeInsets.zero),
+                    style: const ButtonStyle(
+                      padding: WidgetStatePropertyAll(EdgeInsets.zero),
                     ),
                     onPressed: () => widget.showEpisodes!(
                       null,

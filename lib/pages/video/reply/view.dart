@@ -87,11 +87,13 @@ class _VideoReplyPanelState extends State<VideoReplyPanel>
     }
   }
 
+  late double bottom;
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
+    bottom = MediaQuery.viewPaddingOf(context).bottom;
     final theme = Theme.of(context);
-    final bottom = MediaQuery.paddingOf(context).bottom;
     return refreshIndicator(
       onRefresh: _videoReplyController.onRefresh,
       child: Stack(
@@ -154,15 +156,14 @@ class _VideoReplyPanelState extends State<VideoReplyPanel>
               Obx(
                 () => _buildBody(
                   theme,
-                  bottom,
                   _videoReplyController.loadingState.value,
                 ),
               ),
             ],
           ),
           Positioned(
-            bottom: bottom + 14,
             right: 14,
+            bottom: 14 + bottom,
             child: SlideTransition(
               position: _videoReplyController.anim,
               child: FloatingActionButton(
@@ -185,7 +186,7 @@ class _VideoReplyPanelState extends State<VideoReplyPanel>
     );
   }
 
-  Widget _buildBody(ThemeData theme, double bottom, LoadingState loadingState) {
+  Widget _buildBody(ThemeData theme, LoadingState loadingState) {
     return switch (loadingState) {
       Loading() => SliverList.builder(
         itemBuilder: (context, index) => const VideoReplySkeleton(),
@@ -198,11 +199,12 @@ class _VideoReplyPanelState extends State<VideoReplyPanel>
                   if (index == response.length) {
                     _videoReplyController.onLoadMore();
                     return Container(
+                      height: 125,
                       alignment: Alignment.center,
-                      padding: EdgeInsets.only(bottom: bottom),
-                      height: bottom + 100,
+                      margin: EdgeInsets.only(bottom: bottom),
                       child: Text(
                         _videoReplyController.isEnd ? '没有更多了' : '加载中...',
+                        textAlign: TextAlign.center,
                         style: TextStyle(
                           fontSize: 12,
                           color: theme.colorScheme.outline,

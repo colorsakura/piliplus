@@ -127,7 +127,7 @@ class _MediaListPanelState
         itemCount: widget.mediaList.length,
         padding: EdgeInsets.only(
           top: 7,
-          bottom: MediaQuery.paddingOf(context).bottom + 80,
+          bottom: MediaQuery.viewPaddingOf(context).bottom + 100,
         ),
         itemBuilder: ((context, index) {
           if (index == widget.mediaList.length - 1 &&

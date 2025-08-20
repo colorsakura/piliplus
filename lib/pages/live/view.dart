@@ -53,7 +53,7 @@ class _LivePageState extends CommonPageState<LivePage, LiveController>
             SliverPadding(
               padding: EdgeInsets.only(
                 top: StyleString.cardSpace,
-                bottom: MediaQuery.paddingOf(context).bottom + 80,
+                bottom: MediaQuery.viewPaddingOf(context).bottom + 100,
               ),
               sliver: SliverMainAxisGroup(
                 slivers: [

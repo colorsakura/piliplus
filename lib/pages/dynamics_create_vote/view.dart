@@ -36,7 +36,7 @@ class _CreateVotePageState extends State<CreateVotePage> {
       fontSize: 15,
       color: theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.9),
     );
-    final padding = MediaQuery.paddingOf(context);
+    final padding = MediaQuery.viewPaddingOf(context);
     final divider = Divider(
       height: 20,
       thickness: 1,
@@ -50,7 +50,7 @@ class _CreateVotePageState extends State<CreateVotePage> {
         padding: EdgeInsets.only(
           left: padding.left + 16,
           right: padding.right + 16,
-          bottom: padding.bottom + 80,
+          bottom: padding.bottom + 100,
         ),
         children: [
           const Text(

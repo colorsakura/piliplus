@@ -58,7 +58,7 @@ abstract class CommonSearchPanelState<
         response?.isNotEmpty == true
             ? SliverPadding(
                 padding: EdgeInsets.only(
-                  bottom: MediaQuery.paddingOf(context).bottom + 80,
+                  bottom: MediaQuery.viewPaddingOf(context).bottom + 100,
                 ),
                 sliver: buildList(theme, response!),
               )

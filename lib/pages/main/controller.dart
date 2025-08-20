@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math' show max;
 
+import 'package:PiliPlus/common/widgets/view_safe_area.dart';
 import 'package:PiliPlus/grpc/dyn.dart';
 import 'package:PiliPlus/http/msg.dart';
 import 'package:PiliPlus/models/common/dynamic/dynamic_badge_mode.dart';
@@ -263,8 +264,8 @@ class MainController extends GetxController
     } else {
       Get.to(
         const Material(
-          child: SafeArea(
-            bottom: false,
+          child: ViewSafeArea(
+            top: true,
             child: MinePage(),
           ),
         ),

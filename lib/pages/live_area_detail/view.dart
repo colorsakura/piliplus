@@ -35,7 +35,9 @@ class _LiveAreaDetailPageState extends State<LiveAreaDetailPage> {
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
+    final padding = MediaQuery.viewPaddingOf(context);
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: Text(widget.parentName),
         actions: [
@@ -46,16 +48,19 @@ class _LiveAreaDetailPageState extends State<LiveAreaDetailPage> {
           const SizedBox(width: 16),
         ],
       ),
-      body: SafeArea(
-        top: false,
-        bottom: false,
-        child: Obx(() => _buildBody(theme, _controller.loadingState.value)),
+      body: Padding(
+        padding: EdgeInsets.only(left: padding.left, right: padding.right),
+        child: Obx(
+          () =>
+              _buildBody(theme, padding.bottom, _controller.loadingState.value),
+        ),
       ),
     );
   }
 
   Widget _buildBody(
     ThemeData theme,
+    double bottom,
     LoadingState<List<AreaItem>?> loadingState,
   ) {
     return switch (loadingState) {
@@ -100,7 +105,7 @@ class _LiveAreaDetailPageState extends State<LiveAreaDetailPage> {
                               icon: Icons.menu,
                               bgColor: Colors.transparent,
                               onPressed: () =>
-                                  _showTags(context, theme, response),
+                                  _showTags(context, theme, bottom, response),
                             ),
                           ],
                         ),
@@ -162,7 +167,12 @@ class _LiveAreaDetailPageState extends State<LiveAreaDetailPage> {
     );
   }
 
-  void _showTags(BuildContext context, ThemeData theme, List<AreaItem> list) {
+  void _showTags(
+    BuildContext context,
+    ThemeData theme,
+    double bottom,
+    List<AreaItem> list,
+  ) {
     showModalBottomSheet(
       context: context,
       useSafeArea: true,
@@ -196,7 +206,7 @@ class _LiveAreaDetailPageState extends State<LiveAreaDetailPage> {
                     controller: scrollController,
                     padding: EdgeInsets.only(
                       top: 12,
-                      bottom: MediaQuery.paddingOf(context).bottom + 80,
+                      bottom: bottom + 100,
                     ),
                     itemCount: list.length,
                     gridDelegate:

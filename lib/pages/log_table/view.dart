@@ -17,26 +17,24 @@ class _LogPageState<T> extends State<LogPage<T>> {
 
   @override
   Widget build(BuildContext context) {
+    final padding = MediaQuery.viewPaddingOf(context);
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(title: Text(_controller.title)),
-      body: SafeArea(
-        top: false,
-        bottom: false,
-        child: Center(
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 680),
-            child: CustomScrollView(
-              slivers: [
-                SliverPadding(
-                  padding: EdgeInsets.only(
-                    left: 10,
-                    right: 10,
-                    bottom: MediaQuery.paddingOf(context).bottom + 80,
-                  ),
-                  sliver: Obx(() => _buildBody(_controller.loadingState.value)),
+      body: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 680),
+          child: CustomScrollView(
+            slivers: [
+              SliverPadding(
+                padding: EdgeInsets.only(
+                  left: 10 + padding.left,
+                  right: 10 + padding.right,
+                  bottom: padding.bottom + 100,
                 ),
-              ],
-            ),
+                sliver: Obx(() => _buildBody(_controller.loadingState.value)),
+              ),
+            ],
           ),
         ),
       ),

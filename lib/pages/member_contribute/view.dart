@@ -49,7 +49,9 @@ class _MemberContributeState extends State<MemberContribute>
               SizedBox(
                 width: double.infinity,
                 child: TabBar(
-                  overlayColor: WidgetStateProperty.all(Colors.transparent),
+                  overlayColor: const WidgetStatePropertyAll(
+                    Colors.transparent,
+                  ),
                   splashFactory: NoSplash.splashFactory,
                   padding: const EdgeInsets.symmetric(horizontal: 8),
                   isScrollable: true,

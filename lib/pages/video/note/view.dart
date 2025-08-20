@@ -105,7 +105,7 @@ class _NoteListPageState extends CommonSlidePageState<NoteListPage> {
               physics: const AlwaysScrollableScrollPhysics(),
               slivers: [
                 SliverPadding(
-                  padding: const EdgeInsets.only(bottom: 80),
+                  padding: const EdgeInsets.only(bottom: 100),
                   sliver: Obx(
                     () => _buildBody(theme, _controller.loadingState.value),
                   ),
@@ -118,7 +118,7 @@ class _NoteListPageState extends CommonSlidePageState<NoteListPage> {
               left: 12,
               right: 12,
               top: 6,
-              bottom: MediaQuery.paddingOf(context).bottom + 6,
+              bottom: MediaQuery.viewPaddingOf(context).bottom + 6,
             ),
             width: double.infinity,
             decoration: BoxDecoration(

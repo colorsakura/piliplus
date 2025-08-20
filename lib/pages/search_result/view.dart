@@ -1,4 +1,5 @@
 import 'package:PiliPlus/common/widgets/scroll_physics.dart';
+import 'package:PiliPlus/common/widgets/view_safe_area.dart';
 import 'package:PiliPlus/models/common/search/search_type.dart';
 import 'package:PiliPlus/pages/search/controller.dart';
 import 'package:PiliPlus/pages/search_panel/article/view.dart';
@@ -65,6 +66,7 @@ class _SearchResultPageState extends State<SearchResultPage>
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         shape: Border(
           bottom: BorderSide(
@@ -94,15 +96,13 @@ class _SearchResultPageState extends State<SearchResultPage>
           ),
         ),
       ),
-      body: SafeArea(
-        top: false,
-        bottom: false,
+      body: ViewSafeArea(
         child: Column(
           children: [
             SizedBox(
               width: double.infinity,
               child: TabBar(
-                overlayColor: WidgetStateProperty.all(Colors.transparent),
+                overlayColor: const WidgetStatePropertyAll(Colors.transparent),
                 splashFactory: NoSplash.splashFactory,
                 padding: const EdgeInsets.only(top: 4, left: 8, right: 8),
                 controller: _tabController,

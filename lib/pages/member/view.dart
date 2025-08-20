@@ -48,47 +48,57 @@ class _MemberPageState extends State<MemberPage> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final padding = MediaQuery.viewPaddingOf(context);
     return Material(
       color: theme.colorScheme.surface,
-      child: Obx(() {
-        if (_userController.loadingState.value.isSuccess) {
-          return ExtendedNestedScrollView(
-            key: _userController.key,
-            controller: _userController.scrollController,
-            onlyOneScrollInBody: true,
-            pinnedHeaderSliverHeightBuilder: () =>
-                kToolbarHeight + MediaQuery.paddingOf(context).top,
-            headerSliverBuilder: (context, innerBoxIsScrolled) {
-              return [
-                _buildUserInfo(
-                  theme,
-                  _userController.loadingState.value,
-                ),
-              ];
-            },
-            body: _userController.tab2?.isNotEmpty == true
-                ? SafeArea(
-                    top: false,
-                    bottom: false,
-                    child: Column(
-                      children: [
-                        if ((_userController.tab2?.length ?? 0) > 1)
-                          TabBar(
-                            controller: _userController.tabController,
-                            tabs: _userController.tabs,
-                            onTap: _userController.onTapTab,
-                          ),
-                        Expanded(child: _buildBody),
-                      ],
-                    ),
-                  )
-                : const Center(child: Text('EMPTY')),
+      child: Obx(
+        () {
+          if (_userController.loadingState.value.isSuccess) {
+            return ExtendedNestedScrollView(
+              key: _userController.key,
+              controller: _userController.scrollController,
+              onlyOneScrollInBody: true,
+              pinnedHeaderSliverHeightBuilder: () =>
+                  kToolbarHeight + padding.top,
+              headerSliverBuilder: (context, innerBoxIsScrolled) {
+                return [
+                  _buildUserInfo(
+                    theme,
+                    padding,
+                    _userController.loadingState.value,
+                  ),
+                ];
+              },
+              body: _userController.tab2?.isNotEmpty == true
+                  ? Padding(
+                      padding: EdgeInsets.only(
+                        left: padding.left,
+                        right: padding.right,
+                      ),
+                      child: Column(
+                        children: [
+                          if ((_userController.tab2?.length ?? 0) > 1)
+                            TabBar(
+                              controller: _userController.tabController,
+                              tabs: _userController.tabs,
+                              onTap: _userController.onTapTab,
+                            ),
+                          Expanded(child: _buildBody),
+                        ],
+                      ),
+                    )
+                  : const Center(child: Text('EMPTY')),
+            );
+          }
+          return Center(
+            child: _buildUserInfo(
+              theme,
+              padding,
+              _userController.loadingState.value,
+            ),
           );
-        }
-        return Center(
-          child: _buildUserInfo(theme, _userController.loadingState.value),
-        );
-      }),
+        },
+      ),
     );
   }
 
@@ -304,7 +314,11 @@ class _MemberPageState extends State<MemberPage> {
     }).toList(),
   );
 
-  Widget _buildUserInfo(ThemeData theme, LoadingState<SpaceData?> userState) {
+  Widget _buildUserInfo(
+    ThemeData theme,
+    EdgeInsets padding,
+    LoadingState<SpaceData?> userState,
+  ) {
     switch (userState) {
       case Loading():
         return const CircularProgressIndicator();
@@ -324,6 +338,7 @@ class _MemberPageState extends State<MemberPage> {
                 onFollow: () => _userController.onFollow(context),
                 live: _userController.live,
                 silence: _userController.silence,
+                padding: padding,
               ),
             ),
           );

@@ -60,7 +60,7 @@ class SearchArticleController
               top: 20,
               left: 16,
               right: 16,
-              bottom: 80 + MediaQuery.paddingOf(context).bottom,
+              bottom: 100 + MediaQuery.viewPaddingOf(context).bottom,
             ),
             child: Column(
               mainAxisSize: MainAxisSize.min,

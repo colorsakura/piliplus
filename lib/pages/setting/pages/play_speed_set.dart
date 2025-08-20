@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:PiliPlus/common/widgets/view_safe_area.dart';
 import 'package:PiliPlus/pages/setting/widgets/switch_item.dart';
 import 'package:PiliPlus/utils/context_ext.dart';
 import 'package:PiliPlus/utils/storage.dart';
@@ -148,7 +149,7 @@ class _PlaySpeedPageState extends State<PlaySpeedPage> {
                 ),
               ),
             ),
-            SizedBox(height: 25 + MediaQuery.paddingOf(context).bottom),
+            SizedBox(height: 25 + MediaQuery.viewPaddingOf(context).bottom),
           ],
         );
       },
@@ -186,6 +187,7 @@ class _PlaySpeedPageState extends State<PlaySpeedPage> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: const Text('倍速设置'),
         actions: [
@@ -200,8 +202,7 @@ class _PlaySpeedPageState extends State<PlaySpeedPage> {
           const SizedBox(width: 16),
         ],
       ),
-      body: SafeArea(
-        bottom: false,
+      body: ViewSafeArea(
         child: ListView(
           children: [
             Padding(

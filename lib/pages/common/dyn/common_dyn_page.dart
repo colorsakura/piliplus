@@ -30,6 +30,8 @@ abstract class CommonDynPageState<T extends CommonDynPage> extends State<T>
 
   dynamic get arguments;
 
+  late EdgeInsets padding;
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -44,6 +46,7 @@ abstract class CommonDynPageState<T extends CommonDynPage> extends State<T>
             );
           }
         : null;
+    padding = MediaQuery.viewPaddingOf(context);
   }
 
   Widget buildReplyHeader(ThemeData theme) {
@@ -109,9 +112,7 @@ abstract class CommonDynPageState<T extends CommonDynPage> extends State<T>
                     controller.onLoadMore();
                     return Container(
                       alignment: Alignment.center,
-                      margin: EdgeInsets.only(
-                        bottom: MediaQuery.paddingOf(context).bottom,
-                      ),
+                      margin: EdgeInsets.only(bottom: padding.bottom),
                       height: 125,
                       child: Text(
                         controller.isEnd ? '没有更多了' : '加载中...',
@@ -163,6 +164,7 @@ abstract class CommonDynPageState<T extends CommonDynPage> extends State<T>
       int oid = replyItem.oid.toInt();
       int rpid = replyItem.id.toInt();
       Widget replyReplyPage({bool showBackBtn = true}) => Scaffold(
+        resizeToAvoidBottomInset: false,
         appBar: AppBar(
           toolbarHeight: showBackBtn ? null : 45,
           title: const Text('评论详情'),
@@ -178,9 +180,8 @@ abstract class CommonDynPageState<T extends CommonDynPage> extends State<T>
                   ),
                 ],
         ),
-        body: SafeArea(
-          top: false,
-          bottom: false,
+        body: Padding(
+          padding: EdgeInsets.only(right: padding.right),
           child: VideoReplyReplyPanel(
             enableSlide: false,
             id: id,

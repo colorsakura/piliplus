@@ -458,6 +458,7 @@ class _SponsorBlockPageState extends State<SponsorBlockPage> {
     );
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(title: const Text('空降助手')),
       body: CustomScrollView(
         slivers: [
@@ -491,7 +492,7 @@ class _SponsorBlockPageState extends State<SponsorBlockPage> {
           dividerL,
           SliverToBoxAdapter(
             child: SizedBox(
-              height: 55 + MediaQuery.paddingOf(context).bottom,
+              height: 55 + MediaQuery.viewPaddingOf(context).bottom,
             ),
           ),
         ],

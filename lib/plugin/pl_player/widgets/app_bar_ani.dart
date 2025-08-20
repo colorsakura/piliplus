@@ -1,16 +1,19 @@
+import 'package:PiliPlus/common/widgets/view_safe_area.dart';
 import 'package:flutter/material.dart';
 
 class AppBarAni extends StatelessWidget {
   const AppBarAni({
+    super.key,
     required this.child,
     required this.controller,
     required this.isTop,
-    super.key,
+    required this.isFullScreen,
   });
 
   final Widget child;
   final AnimationController controller;
   final bool isTop;
+  final bool isFullScreen;
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +50,12 @@ class AppBarAni extends StatelessWidget {
                   tileMode: TileMode.mirror,
                 ),
         ),
-        child: SafeArea(bottom: false, child: child),
+        child: ViewSafeArea(
+          top: isTop && isFullScreen,
+          left: isFullScreen,
+          right: isFullScreen,
+          child: child,
+        ),
       ),
     );
   }

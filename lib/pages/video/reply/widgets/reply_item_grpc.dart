@@ -850,7 +850,7 @@ class ReplyItemGrpc extends StatelessWidget {
 
     return Padding(
       padding: EdgeInsets.only(
-        bottom: MediaQuery.paddingOf(context).bottom + 20,
+        bottom: MediaQuery.viewPaddingOf(context).bottom + 20,
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,

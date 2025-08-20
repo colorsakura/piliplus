@@ -28,7 +28,7 @@ extension ContextExtensions on BuildContext {
   TextTheme get textTheme => Theme.of(this).textTheme;
 
   /// similar to [MediaQuery.of(context).padding]
-  EdgeInsets get mediaQueryPadding => MediaQuery.paddingOf(this);
+  EdgeInsets get mediaQueryPadding => MediaQuery.viewPaddingOf(this);
 
   /// similar to [MediaQuery.of(context).padding]
   MediaQueryData get mediaQuery => MediaQuery.of(this);

@@ -174,14 +174,6 @@ List<SettingsModel> get styleSettings => [
   ),
   const SettingsModel(
     settingsType: SettingsType.sw1tch,
-    title: '播放页移除安全边距',
-    subtitle: '隐藏状态栏、撑满屏幕，但播放控件仍处于安全域内',
-    leading: Icon(Icons.fit_screen_outlined),
-    setKey: SettingBoxKey.videoPlayerRemoveSafeArea,
-    defaultVal: false,
-  ),
-  const SettingsModel(
-    settingsType: SettingsType.sw1tch,
     title: '动态页启用瀑布流',
     subtitle: '关闭会显示为单列',
     leading: Icon(Icons.view_array_outlined),

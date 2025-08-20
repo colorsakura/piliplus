@@ -27,6 +27,7 @@ class _FavFolderSortPageState extends State<FavFolderSortPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: const Text('收藏夹排序'),
         actions: [
@@ -48,11 +49,7 @@ class _FavFolderSortPageState extends State<FavFolderSortPage> {
           const SizedBox(width: 16),
         ],
       ),
-      body: SafeArea(
-        top: false,
-        bottom: false,
-        child: _buildBody,
-      ),
+      body: _buildBody,
     );
   }
 
@@ -77,10 +74,10 @@ class _FavFolderSortPageState extends State<FavFolderSortPage> {
       key: _key,
       onReorder: onReorder,
       physics: const AlwaysScrollableScrollPhysics(),
-      footer: SizedBox(
-        height: MediaQuery.paddingOf(context).bottom + 80,
-      ),
       itemCount: sortList.length,
+      padding:
+          MediaQuery.viewPaddingOf(context).copyWith(top: 0) +
+          const EdgeInsets.only(bottom: 100),
       itemBuilder: (context, index) {
         final item = sortList[index];
         final key = item.id.toString();
