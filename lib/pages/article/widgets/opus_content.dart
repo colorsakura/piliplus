@@ -229,7 +229,26 @@ class OpusContent extends StatelessWidget {
                           alignment: PlaceholderAlignment.middle,
                         ),
                         ...entry.$2.nodes!.map((item) {
-                          return _getSpan(item.word);
+                          if (item.word != null) {
+                            return _getSpan(item.word);
+                          }
+                          if (item.rich case Rich rich) {
+                            final hasUrl = rich.jumpUrl?.isNotEmpty == true;
+                            return TextSpan(
+                              text: '${hasUrl ? '\u{1F517}' : ''}${rich.text}',
+                              recognizer: hasUrl
+                                  ? (TapGestureRecognizer()
+                                      ..onTap = () =>
+                                          PiliScheme.routePushFromUrl(
+                                            rich.jumpUrl!,
+                                          ))
+                                  : null,
+                              style: hasUrl
+                                  ? TextStyle(color: colorScheme.primary)
+                                  : null,
+                            );
+                          }
+                          return const TextSpan();
                         }),
                         if (entry.$1 < element.list!.items!.length - 1)
                           const TextSpan(text: '\n'),
