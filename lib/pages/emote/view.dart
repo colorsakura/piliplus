@@ -171,13 +171,16 @@ class _EmotePanelState extends State<EmotePanel>
                               .withValues(alpha: 0.8),
                           bgColor: Colors.transparent,
                           context: context,
-                          onPressed: () => Get.toNamed(
-                            '/webview',
-                            parameters: {
-                              'url':
-                                  'https://www.bilibili.com/h5/mall/emoji-package/home?navhide=1&native.theme=1&night=${Get.isDarkMode ? 1 : 0}',
-                            },
-                          ),
+                          onPressed: () {
+                            final isDark = Get.isDarkMode;
+                            Get.toNamed(
+                              '/webview',
+                              parameters: {
+                                'url':
+                                    'https://www.bilibili.com/h5/mall/emoji-package/home?navhide=1&native.theme=${isDark ? 2 : 1}&night=${isDark ? 1 : 0}',
+                              },
+                            );
+                          },
                           icon: Icons.settings,
                         ),
                       ),

@@ -38,7 +38,6 @@ class _WebDavSettingPageState extends State<WebDavSettingPage> {
   Widget build(BuildContext context) {
     EdgeInsets padding = MediaQuery.viewPaddingOf(context);
     return Scaffold(
-      resizeToAvoidBottomInset: widget.showAppBar,
       appBar: !widget.showAppBar
           ? null
           : AppBar(title: const Text('WebDAV 设置')),

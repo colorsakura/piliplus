@@ -244,6 +244,7 @@ Commit Hash: ${BuildConfig.commitHash}''',
                 if (Accounts.main.isLogin) {
                   await LoginUtils.onLoginMain();
                 }
+                return true;
               },
             ),
           ),
@@ -313,7 +314,7 @@ Future<void> showInportExportDialog<T>(
   required String title,
   String? label,
   required String Function() toJson,
-  required FutureOr<void> Function(T json) fromJson,
+  required FutureOr<bool> Function(T json) fromJson,
 }) => showDialog(
   context: context,
   builder: (context) {
@@ -426,8 +427,9 @@ Future<void> showInportExportDialog<T>(
                       onPressed: () async {
                         Get.back();
                         try {
-                          await fromJson(json);
-                          SmartDialog.showToast('导入成功');
+                          if (await fromJson(json)) {
+                            SmartDialog.showToast('导入成功');
+                          }
                         } catch (e) {
                           SmartDialog.showToast('导入失败：$e');
                         }

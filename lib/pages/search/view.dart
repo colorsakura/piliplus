@@ -14,6 +14,7 @@ import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/storage_key.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart' hide ContextExtensionss;
 
 class SearchPage extends StatefulWidget {
@@ -394,15 +395,19 @@ class _SearchPageState extends State<SearchPage> {
         Icons.import_export_outlined,
         color: theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.8),
       ),
-      style: IconButton.styleFrom(
-        padding: EdgeInsets.zero,
-      ),
+      style: IconButton.styleFrom(padding: EdgeInsets.zero),
       onPressed: () => showInportExportDialog<List>(
         context,
         title: '历史记录',
         toJson: () => jsonEncode(_searchController.historyList),
         fromJson: (json) {
-          _searchController.historyList.value = json.cast<String>();
+          try {
+            _searchController.historyList.value = List<String>.from(json);
+            return true;
+          } catch (e) {
+            SmartDialog.showToast(e.toString());
+            return false;
+          }
         },
       ),
     ),

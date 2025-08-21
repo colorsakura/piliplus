@@ -645,7 +645,12 @@ class UserInfoCard extends StatelessWidget {
     );
     if (item.jumpUrl?.isNotEmpty == true) {
       return GestureDetector(
-        onTap: () => PageUtils.handleWebview(item.jumpUrl!),
+        onTap: () {
+          final isDark = Get.isDarkMode;
+          PageUtils.handleWebview(
+            '${item.jumpUrl}&native.theme=${isDark ? 2 : 1}&night=${isDark ? 1 : 0}',
+          );
+        },
         child: child,
       );
     }
