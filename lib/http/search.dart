@@ -11,7 +11,6 @@ import 'package:PiliPlus/models_new/pgc/pgc_info_model/result.dart';
 import 'package:PiliPlus/models_new/search/search_rcmd/data.dart';
 import 'package:PiliPlus/models_new/search/search_trending/data.dart';
 import 'package:PiliPlus/utils/extension.dart';
-import 'package:PiliPlus/utils/global_data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 
@@ -79,12 +78,6 @@ class SearchHttp {
       try {
         switch (searchType) {
           case SearchType.video:
-            if (res.data['data']['result'] != null) {
-              for (var i in res.data['data']['result']) {
-                // 屏蔽推广和拉黑用户
-                i['available'] = !GlobalData().blackMids.contains(i['mid']);
-              }
-            }
             data = SearchVideoData.fromJson(res.data['data']);
             break;
           case SearchType.live_room:
