@@ -402,7 +402,9 @@ class _SearchPageState extends State<SearchPage> {
         toJson: () => jsonEncode(_searchController.historyList),
         fromJson: (json) {
           try {
-            _searchController.historyList.value = List<String>.from(json);
+            final list = List<String>.from(json);
+            _searchController.historyList.value = list;
+            GStorage.historyWord.put('cacheList', list);
             return true;
           } catch (e) {
             SmartDialog.showToast(e.toString());
