@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:PiliPlus/common/widgets/dialog/dialog.dart';
 import 'package:PiliPlus/grpc/bilibili/app/im/v1.pbenum.dart'
     show IMSettingType, ThreeDotItemType;
@@ -207,6 +209,14 @@ extension ThreeDotItemTypeExt on ThreeDotItemType {
       default:
         SmartDialog.showToast('TODO: $name');
     }
+  }
+}
+
+extension FileExt on File {
+  void delSync({bool recursive = false}) {
+    try {
+      deleteSync(recursive: recursive);
+    } catch (_) {}
   }
 }
 

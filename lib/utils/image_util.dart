@@ -10,7 +10,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:intl/intl.dart' show DateFormat;
 import 'package:live_photo_maker/live_photo_maker.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:saver_gallery/saver_gallery.dart';
 import 'package:share_plus/share_plus.dart';
@@ -24,17 +23,19 @@ class ImageUtil {
   static Future<void> onShareImg(String url) async {
     try {
       SmartDialog.showLoading();
-      final temp = await getTemporaryDirectory();
-      var path = '${temp.path}/${Utils.getFileName(url)}';
-      var res = await Request().downloadFile(url.http2https, path);
+      final path =
+          '${await Utils.temporaryDirectory}/${Utils.getFileName(url)}';
+      final res = await Request().downloadFile(url.http2https, path);
       SmartDialog.dismiss();
       if (res.statusCode == 200) {
-        SharePlus.instance.share(
-          ShareParams(
-            files: [XFile(path)],
-            sharePositionOrigin: await Utils.sharePositionOrigin,
-          ),
-        );
+        await SharePlus.instance
+            .share(
+              ShareParams(
+                files: [XFile(path)],
+                sharePositionOrigin: await Utils.sharePositionOrigin,
+              ),
+            )
+            .whenComplete(() => File(path).delSync());
       }
     } catch (e) {
       SmartDialog.showToast(e.toString());
@@ -108,7 +109,7 @@ class ImageUtil {
       }
       if (!silentDownImg) SmartDialog.showLoading(msg: '正在下载');
 
-      String tmpPath = (await getTemporaryDirectory()).path;
+      String tmpPath = await Utils.temporaryDirectory;
       late String imageName = "cover_${Utils.getFileName(url)}";
       late String imagePath = '$tmpPath/$imageName';
       String videoName = "video_${Utils.getFileName(liveUrl)}";
@@ -121,13 +122,19 @@ class ImageUtil {
         final res1 = await Request().downloadFile(url.http2https, imagePath);
         if (res1.statusCode != 200) throw '${res1.statusCode}';
         if (!silentDownImg) SmartDialog.showLoading(msg: '正在保存');
-        bool success = await LivePhotoMaker.create(
-          coverImage: imagePath,
-          imagePath: null,
-          voicePath: videoPath,
-          width: width,
-          height: height,
-        );
+        bool success =
+            await LivePhotoMaker.create(
+              coverImage: imagePath,
+              imagePath: null,
+              voicePath: videoPath,
+              width: width,
+              height: height,
+            ).whenComplete(
+              () {
+                File(videoPath).delSync();
+                File(imagePath).delSync();
+              },
+            );
         if (success) {
           SmartDialog.showToast(' Live Photo 已保存 ');
         } else {
@@ -141,7 +148,7 @@ class ImageUtil {
           fileName: videoName,
           androidRelativePath: "Pictures/PiliPlus",
           skipIfExists: false,
-        );
+        ).whenComplete(() => File(videoPath).delSync());
         if (result.isSuccess) {
           SmartDialog.showToast(' 已保存 ');
         } else {
@@ -174,12 +181,12 @@ class ImageUtil {
     }
     try {
       final isAndroid = Platform.isAndroid;
-      final tempPath = (await getTemporaryDirectory()).path;
+      final tempPath = await Utils.temporaryDirectory;
       final futures = imgList.map((url) async {
-        var name = Utils.getFileName(url);
-        var filePath = '$tempPath/$name';
+        final name = Utils.getFileName(url);
+        final filePath = '$tempPath/$name';
 
-        var response = await Request().downloadFile(
+        final response = await Request().downloadFile(
           url.http2https,
           filePath,
           cancelToken: cancelToken,
@@ -192,25 +199,26 @@ class ImageUtil {
               fileName: name,
               androidRelativePath: "Pictures/PiliPlus",
               skipIfExists: false,
-            );
+            ).whenComplete(() => File(filePath).delSync());
           }
         }
-        return {
-          'filePath': filePath,
-          'name': name,
-          'statusCode': response.statusCode,
-        };
+        return (
+          filePath: filePath,
+          name: name,
+          statusCode: response.statusCode,
+        );
       });
       final result = await Future.wait(futures, eagerError: true);
       if (!isAndroid) {
-        for (Map res in result) {
-          if (res['statusCode'] == 200) {
+        for (var res in result) {
+          if (res.statusCode == 200) {
             await SaverGallery.saveFile(
-              filePath: res['filePath'],
-              fileName: res['name'],
+              filePath: res.filePath,
+              fileName: res.name,
               androidRelativePath: "Pictures/PiliPlus",
               skipIfExists: false,
             );
+            File(res.filePath).delSync();
           }
         }
       }

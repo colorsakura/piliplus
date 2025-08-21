@@ -13,6 +13,7 @@ import 'package:PiliPlus/models_new/live/live_emote/emoticon.dart';
 import 'package:PiliPlus/models_new/upload_bfs/data.dart';
 import 'package:PiliPlus/pages/common/publish/common_publish_page.dart';
 import 'package:PiliPlus/pages/dynamics_mention/view.dart';
+import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/feed_back.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:dio/dio.dart' show CancelToken;
@@ -56,6 +57,16 @@ abstract class CommonRichTextPubPageState<T extends CommonRichTextPubPage>
     if (editController.rawText.trim().isNotEmpty) {
       enablePublish.value = true;
     }
+  }
+
+  @override
+  void dispose() {
+    if (hasPub) {
+      for (var i in pathList) {
+        File(i).delSync();
+      }
+    }
+    super.dispose();
   }
 
   @override

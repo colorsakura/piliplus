@@ -34,7 +34,7 @@ abstract class CommonPublishPageState<T extends CommonPublishPage>
   late final RxBool readOnly = false.obs;
   late final RxBool enablePublish = false.obs;
 
-  bool? hasPub;
+  bool hasPub = false;
   void initPubState();
 
   @override
@@ -57,7 +57,7 @@ abstract class CommonPublishPageState<T extends CommonPublishPage>
 
   @override
   void dispose() {
-    if (hasPub != true) {
+    if (!hasPub) {
       onSave();
     }
     focusNode.dispose();

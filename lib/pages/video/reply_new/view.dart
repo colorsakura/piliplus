@@ -25,7 +25,6 @@ import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart' hide TextField;
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart' hide ContextExtensionss;
-import 'package:path_provider/path_provider.dart';
 
 class ReplyPage extends CommonRichTextPubPage {
   final int oid;
@@ -377,9 +376,8 @@ class _ReplyPageState extends CommonRichTextPubPageState<ReplyPage> {
                         .videoPlayerController
                         ?.screenshot(format: 'image/png');
                     if (res != null) {
-                      final tempDir = await getTemporaryDirectory();
-                      File file = File(
-                        '${tempDir.path}/${Utils.generateRandomString(8)}.png',
+                      final file = File(
+                        '${await Utils.temporaryDirectory}/${Utils.generateRandomString(8)}.png',
                       );
                       await file.writeAsBytes(res);
                       pathList.add(file.path);

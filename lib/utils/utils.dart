@@ -8,6 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 import 'package:path/path.dart' as path;
+import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 
 class Utils {
@@ -21,30 +22,26 @@ class Utils {
   static int? _sdkInt;
 
   static Future<int> get sdkInt async {
-    if (_sdkInt != null) {
-      return _sdkInt!;
-    }
-    _sdkInt = (await DeviceInfoPlugin().androidInfo).version.sdkInt;
-    return _sdkInt!;
+    return _sdkInt ??= (await DeviceInfoPlugin().androidInfo).version.sdkInt;
   }
 
   static bool? _isIpad;
 
-  static Future<bool> isIpad() async {
-    if (_isIpad != null) {
-      return _isIpad!;
-    }
-    if (!Platform.isIOS) {
-      return false;
-    }
-    DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
-    IosDeviceInfo info = await deviceInfo.iosInfo;
-    _isIpad = info.model.toLowerCase().contains("ipad");
-    return _isIpad!;
+  static Future<bool> get isIpad async {
+    if (!Platform.isIOS) return false;
+    return _isIpad ??= (await DeviceInfoPlugin().iosInfo).model
+        .toLowerCase()
+        .contains('ipad');
+  }
+
+  static String? _tempDir;
+
+  static Future<String> get temporaryDirectory async {
+    return _tempDir ??= (await getTemporaryDirectory()).path;
   }
 
   static Future<Rect?> get sharePositionOrigin async {
-    if (await Utils.isIpad()) {
+    if (await isIpad) {
       final size = Get.size;
       return Rect.fromLTWH(
         0,
@@ -58,7 +55,7 @@ class Utils {
 
   static Future<void> shareText(String text) async {
     try {
-      SharePlus.instance.share(
+      await SharePlus.instance.share(
         ShareParams(
           text: text,
           sharePositionOrigin: await sharePositionOrigin,
