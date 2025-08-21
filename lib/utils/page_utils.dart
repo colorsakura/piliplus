@@ -43,14 +43,17 @@ class PageUtils {
     ValueChanged<int>? onDismissed,
     int? quality,
   }) {
-    bool isMemberPage = Get.currentRoute.startsWith('/member?');
+    final currentRoute = Get.currentRoute;
+    bool noneSet =
+        currentRoute.startsWith('/videoV') ||
+        currentRoute.startsWith('/member?');
     return Navigator.of(Get.context!).push(
       HeroDialogRoute(
         builder: (context) => InteractiveviewerGallery(
           sources: imgList,
           initIndex: initialPage,
           onDismissed: onDismissed,
-          setStatusBar: !isMemberPage,
+          setStatusBar: !noneSet,
           quality: quality ?? GlobalData().imgQuality,
         ),
       ),

@@ -515,9 +515,9 @@ class _SavePanelState extends State<SavePanel> {
             ),
           ),
           Positioned(
-            left: padding.left,
-            right: padding.right,
-            bottom: 25 + padding.bottom,
+            left: 0,
+            right: 0,
+            bottom: 0,
             child: DecoratedBox(
               decoration: const BoxDecoration(
                 gradient: LinearGradient(
@@ -529,45 +529,54 @@ class _SavePanelState extends State<SavePanel> {
                   ],
                 ),
               ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  iconButton(
-                    size: 42,
-                    tooltip: '关闭',
-                    context: context,
-                    icon: Icons.clear,
-                    onPressed: Get.back,
-                    bgColor: theme.colorScheme.onInverseSurface,
-                    iconColor: theme.colorScheme.onSurfaceVariant,
-                  ),
-                  const SizedBox(width: 40),
-                  iconButton(
-                    size: 42,
-                    tooltip: showBottom ? '隐藏' : '显示',
-                    context: context,
-                    icon: showBottom ? Icons.visibility_off : Icons.visibility,
-                    onPressed: () => setState(() {
-                      showBottom = !showBottom;
-                    }),
-                  ),
-                  const SizedBox(width: 40),
-                  iconButton(
-                    size: 42,
-                    tooltip: '分享',
-                    context: context,
-                    icon: Icons.share,
-                    onPressed: () => _onSaveOrSharePic(true),
-                  ),
-                  const SizedBox(width: 40),
-                  iconButton(
-                    size: 42,
-                    tooltip: '保存',
-                    context: context,
-                    icon: Icons.save_alt,
-                    onPressed: _onSaveOrSharePic,
-                  ),
-                ],
+              child: Padding(
+                padding: EdgeInsets.only(
+                  left: padding.left,
+                  right: padding.right,
+                  bottom: 25 + padding.bottom,
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    iconButton(
+                      size: 42,
+                      tooltip: '关闭',
+                      context: context,
+                      icon: Icons.clear,
+                      onPressed: Get.back,
+                      bgColor: theme.colorScheme.onInverseSurface,
+                      iconColor: theme.colorScheme.onSurfaceVariant,
+                    ),
+                    const SizedBox(width: 40),
+                    iconButton(
+                      size: 42,
+                      tooltip: showBottom ? '隐藏' : '显示',
+                      context: context,
+                      icon: showBottom
+                          ? Icons.visibility_off
+                          : Icons.visibility,
+                      onPressed: () => setState(() {
+                        showBottom = !showBottom;
+                      }),
+                    ),
+                    const SizedBox(width: 40),
+                    iconButton(
+                      size: 42,
+                      tooltip: '分享',
+                      context: context,
+                      icon: Icons.share,
+                      onPressed: () => _onSaveOrSharePic(true),
+                    ),
+                    const SizedBox(width: 40),
+                    iconButton(
+                      size: 42,
+                      tooltip: '保存',
+                      context: context,
+                      icon: Icons.save_alt,
+                      onPressed: _onSaveOrSharePic,
+                    ),
+                  ],
+                ),
               ),
             ),
           ),

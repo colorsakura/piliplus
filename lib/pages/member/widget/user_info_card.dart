@@ -1,6 +1,7 @@
 import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
 import 'package:PiliPlus/common/widgets/pendant_avatar.dart';
+import 'package:PiliPlus/common/widgets/view_safe_area.dart';
 import 'package:PiliPlus/models/common/image_preview_type.dart';
 import 'package:PiliPlus/models/common/image_type.dart';
 import 'package:PiliPlus/models_new/space/space/card.dart';
@@ -29,7 +30,6 @@ class UserInfoCard extends StatelessWidget {
     required this.onFollow,
     this.live,
     this.silence,
-    required this.padding,
   });
 
   final bool isOwner;
@@ -39,7 +39,6 @@ class UserInfoCard extends StatelessWidget {
   final VoidCallback onFollow;
   final Live? live;
   final int? silence;
-  final EdgeInsets padding;
 
   @override
   Widget build(BuildContext context) {
@@ -420,7 +419,7 @@ class UserInfoCard extends StatelessWidget {
     child: PendantAvatar(
       avatar: card.face,
       size: 80,
-      badgeSize: 22,
+      badgeSize: 20,
       officialType: card.officialVerify?.type,
       isVip: (card.vip?.status ?? -1) > 0,
       garbPendantImage: card.pendant!.image!,
@@ -531,12 +530,8 @@ class UserInfoCard extends StatelessWidget {
     children: [
       // _buildHeader(context),
       const SizedBox(height: 56),
-      Padding(
-        padding: EdgeInsets.only(
-          top: padding.top,
-          left: padding.left,
-          right: padding.right,
-        ),
+      ViewSafeArea(
+        top: true,
         child: Row(
           children: [
             const SizedBox(width: 20),

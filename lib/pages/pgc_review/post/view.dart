@@ -1,13 +1,12 @@
 import 'package:PiliPlus/common/widgets/button/icon_button.dart';
 import 'package:PiliPlus/common/widgets/custom_icon.dart';
 import 'package:PiliPlus/http/pgc.dart';
-import 'package:PiliPlus/pages/common/slide/common_collapse_slide_page.dart';
 import 'package:PiliPlus/utils/accounts.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 
-class PgcReviewPostPanel extends CommonCollapseSlidePage {
+class PgcReviewPostPanel extends StatefulWidget {
   const PgcReviewPostPanel({
     super.key,
     required this.name,
@@ -28,8 +27,7 @@ class PgcReviewPostPanel extends CommonCollapseSlidePage {
   State<PgcReviewPostPanel> createState() => _PgcReviewPostPanelState();
 }
 
-class _PgcReviewPostPanelState
-    extends CommonCollapseSlidePageState<PgcReviewPostPanel> {
+class _PgcReviewPostPanelState extends State<PgcReviewPostPanel> {
   late final _controller = TextEditingController(text: widget.content);
   late final RxInt _score = (widget.score ?? 0).obs;
   late final RxBool _shareFeed = false.obs;
@@ -49,7 +47,7 @@ class _PgcReviewPostPanelState
   }
 
   @override
-  Widget buildPage(ThemeData theme) {
+  Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -84,7 +82,7 @@ class _PgcReviewPostPanelState
         ),
         Center(
           child: Padding(
-            padding: const EdgeInsets.only(top: 20, bottom: 10),
+            padding: const EdgeInsets.only(top: 10, bottom: 8),
             child: GestureDetector(
               behavior: HitTestBehavior.opaque,
               onHorizontalDragUpdate: (details) =>
@@ -139,17 +137,19 @@ class _PgcReviewPostPanelState
             },
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.all(12),
-          child: TextField(
-            maxLength: 100,
-            minLines: 5,
-            maxLines: 5,
-            controller: _controller,
-            decoration: const InputDecoration(
-              border: OutlineInputBorder(),
+        Flexible(
+          child: Padding(
+            padding: const EdgeInsets.all(12),
+            child: TextField(
+              maxLength: 100,
+              minLines: 5,
+              maxLines: 5,
+              controller: _controller,
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(),
+              ),
+              textInputAction: TextInputAction.done,
             ),
-            textInputAction: TextInputAction.done,
           ),
         ),
         if (!_isMod)

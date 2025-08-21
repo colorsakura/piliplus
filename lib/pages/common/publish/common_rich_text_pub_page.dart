@@ -4,14 +4,18 @@ import 'package:PiliPlus/common/widgets/button/icon_button.dart';
 import 'package:PiliPlus/common/widgets/button/toolbar_icon_button.dart';
 import 'package:PiliPlus/common/widgets/text_field/controller.dart';
 import 'package:PiliPlus/common/widgets/text_field/text_field.dart';
+import 'package:PiliPlus/http/msg.dart';
 import 'package:PiliPlus/models/common/image_preview_type.dart';
 import 'package:PiliPlus/models/common/publish_panel_type.dart';
 import 'package:PiliPlus/models_new/dynamic/dyn_mention/item.dart';
 import 'package:PiliPlus/models_new/emote/emote.dart' as e;
 import 'package:PiliPlus/models_new/live/live_emote/emoticon.dart';
+import 'package:PiliPlus/models_new/upload_bfs/data.dart';
 import 'package:PiliPlus/pages/common/publish/common_publish_page.dart';
 import 'package:PiliPlus/pages/dynamics_mention/view.dart';
+import 'package:PiliPlus/utils/feed_back.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
+import 'package:dio/dio.dart' show CancelToken;
 import 'package:easy_debounce/easy_throttle.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -36,6 +40,9 @@ abstract class CommonRichTextPubPage
 abstract class CommonRichTextPubPageState<T extends CommonRichTextPubPage>
     extends CommonPublishPageState<T> {
   final key = GlobalKey<RichTextFieldState>();
+  late final imagePicker = ImagePicker();
+  late final RxList<String> pathList = <String>[].obs;
+  int get limit => widget.imageLengthLimit ?? 9;
 
   @override
   late final RichTextEditingController editController =
@@ -380,9 +387,7 @@ abstract class CommonRichTextPubPageState<T extends CommonRichTextPubPage>
   }
 
   @override
-  void onSave() {
-    widget.onSave?.call(editController.items);
-  }
+  void onSave() => widget.onSave?.call(editController.items);
 
   Widget get emojiBtn => Obx(
     () {
@@ -430,4 +435,42 @@ abstract class CommonRichTextPubPageState<T extends CommonRichTextPubPage>
       );
     },
   );
+
+  @override
+  Future<void> onPublish() async {
+    feedBack();
+    List<Map<String, dynamic>>? pictures;
+    if (pathList.isNotEmpty) {
+      SmartDialog.showLoading(msg: '正在上传图片...');
+      final cancelToken = CancelToken();
+      try {
+        pictures = await Future.wait<Map<String, dynamic>>(
+          pathList.map((path) async {
+            Map result = await MsgHttp.uploadBfs(
+              path: path,
+              category: 'daily',
+              biz: 'new_dyn',
+              cancelToken: cancelToken,
+            );
+            if (!result['status']) throw HttpException(result['msg']);
+            UploadBfsResData data = result['data'];
+            return {
+              'img_width': data.imageWidth,
+              'img_height': data.imageHeight,
+              'img_size': data.imgSize,
+              'img_src': data.imageUrl,
+            };
+          }),
+          eagerError: true,
+        );
+        SmartDialog.dismiss();
+      } on HttpException catch (e) {
+        cancelToken.cancel();
+        SmartDialog.dismiss();
+        SmartDialog.showToast(e.message);
+        return;
+      }
+    }
+    onCustomPublish(pictures: pictures);
+  }
 }

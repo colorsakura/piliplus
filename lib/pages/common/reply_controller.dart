@@ -12,6 +12,7 @@ import 'package:PiliPlus/utils/feed_back.dart';
 import 'package:PiliPlus/utils/reply_utils.dart';
 import 'package:PiliPlus/utils/request_utils.dart';
 import 'package:PiliPlus/utils/storage_pref.dart';
+import 'package:PiliPlus/utils/utils.dart';
 import 'package:easy_debounce/easy_throttle.dart';
 import 'package:fixnum/fixnum.dart';
 import 'package:flutter/material.dart';
@@ -181,7 +182,10 @@ abstract class ReplyController<R> extends CommonListController<R, ReplyInfo> {
                 child: child,
               );
             },
-            settings: RouteSettings(arguments: Get.arguments),
+            settings: RouteSettings(
+              arguments: Get.arguments,
+              name: '${Get.currentRoute}-copy-${Utils.generateRandomString(3)}',
+            ),
           ),
         )
         .then(

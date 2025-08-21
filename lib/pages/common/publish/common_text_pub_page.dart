@@ -1,4 +1,5 @@
 import 'package:PiliPlus/pages/common/publish/common_publish_page.dart';
+import 'package:PiliPlus/utils/feed_back.dart';
 import 'package:flutter/material.dart';
 
 abstract class CommonTextPubPage extends CommonPublishPage<String> {
@@ -24,7 +25,11 @@ abstract class CommonTextPubPageState<T extends CommonTextPubPage>
   }
 
   @override
-  void onSave() {
-    widget.onSave?.call(editController.text);
+  void onSave() => widget.onSave?.call(editController.text);
+
+  @override
+  Future<void> onPublish() {
+    feedBack();
+    return onCustomPublish();
   }
 }

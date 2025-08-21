@@ -41,7 +41,7 @@ class _FavPgcPageState extends State<FavPgcPage>
           children: [
             Expanded(
               child: TabBar(
-                overlayColor: WidgetStatePropertyAll(Colors.transparent),
+                overlayColor: const WidgetStatePropertyAll(Colors.transparent),
                 splashFactory: NoSplash.splashFactory,
                 isScrollable: true,
                 tabAlignment: TabAlignment.start,

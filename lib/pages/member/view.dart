@@ -59,14 +59,10 @@ class _MemberPageState extends State<MemberPage> {
               controller: _userController.scrollController,
               onlyOneScrollInBody: true,
               pinnedHeaderSliverHeightBuilder: () =>
-                  kToolbarHeight + padding.top,
+                  kToolbarHeight + MediaQuery.viewPaddingOf(context).top,
               headerSliverBuilder: (context, innerBoxIsScrolled) {
                 return [
-                  _buildUserInfo(
-                    theme,
-                    padding,
-                    _userController.loadingState.value,
-                  ),
+                  _buildUserInfo(theme, _userController.loadingState.value),
                 ];
               },
               body: _userController.tab2?.isNotEmpty == true
@@ -91,11 +87,7 @@ class _MemberPageState extends State<MemberPage> {
             );
           }
           return Center(
-            child: _buildUserInfo(
-              theme,
-              padding,
-              _userController.loadingState.value,
-            ),
+            child: _buildUserInfo(theme, _userController.loadingState.value),
           );
         },
       ),
@@ -316,7 +308,6 @@ class _MemberPageState extends State<MemberPage> {
 
   Widget _buildUserInfo(
     ThemeData theme,
-    EdgeInsets padding,
     LoadingState<SpaceData?> userState,
   ) {
     switch (userState) {
@@ -338,7 +329,6 @@ class _MemberPageState extends State<MemberPage> {
                 onFollow: () => _userController.onFollow(context),
                 live: _userController.live,
                 silence: _userController.silence,
-                padding: padding,
               ),
             ),
           );
