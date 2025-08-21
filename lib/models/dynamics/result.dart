@@ -953,7 +953,7 @@ class DynamicMajorModel {
   // MAJOR_TYPE_ARCHIVE 视频
   // MAJOR_TYPE_OPUS 图文/文章
   String? type;
-  Map? courses;
+  DynamicArchiveModel? courses;
   Common? common;
   Map? music;
   ModuleBlocked? blocked;
@@ -987,7 +987,9 @@ class DynamicMajorModel {
         ? DynamicNoneModel.fromJson(json['none'])
         : null;
     type = json['type'];
-    courses = json['courses'];
+    courses = json['courses'] == null
+        ? null
+        : DynamicArchiveModel.fromJson(json['courses']);
     common = json['common'] == null ? null : Common.fromJson(json['common']);
     music = json['music'];
     blocked = json['blocked'] == null

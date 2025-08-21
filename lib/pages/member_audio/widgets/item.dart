@@ -73,11 +73,11 @@ class MemberAudioItem extends StatelessWidget {
                         children: [
                           StatWidget(
                             type: StatType.listen,
-                            value: item.statistic?.play,
+                            value: item.statistic!.play,
                           ),
                           StatWidget(
                             type: StatType.reply,
-                            value: item.statistic?.comment,
+                            value: item.statistic!.comment,
                           ),
                         ],
                       ),

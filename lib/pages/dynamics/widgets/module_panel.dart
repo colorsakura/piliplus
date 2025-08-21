@@ -38,13 +38,16 @@ Widget module(
       return const SizedBox.shrink();
     // 视频
     case 'DYNAMIC_TYPE_AV':
+    case 'DYNAMIC_TYPE_UGC_SEASON':
+    case 'DYNAMIC_TYPE_PGC':
+    case 'DYNAMIC_TYPE_PGC_UNION':
+    case 'DYNAMIC_TYPE_COURSES_SEASON':
       return videoSeasonWidget(
         theme,
         isSave,
         isDetail,
         item,
         context,
-        'archive',
         callback,
         floor: floor,
         maxWidth: maxWidth,
@@ -200,42 +203,6 @@ Widget module(
     // 直播
     case 'DYNAMIC_TYPE_LIVE':
       return livePanel(theme, isDetail, item, context, floor: floor);
-    // 合集
-    case 'DYNAMIC_TYPE_UGC_SEASON':
-      return videoSeasonWidget(
-        theme,
-        isSave,
-        isDetail,
-        item,
-        context,
-        'ugcSeason',
-        callback,
-        maxWidth: maxWidth,
-      );
-    case 'DYNAMIC_TYPE_PGC':
-      return videoSeasonWidget(
-        theme,
-        isSave,
-        isDetail,
-        item,
-        context,
-        'pgc',
-        callback,
-        floor: floor,
-        maxWidth: maxWidth,
-      );
-    case 'DYNAMIC_TYPE_PGC_UNION':
-      return videoSeasonWidget(
-        theme,
-        isSave,
-        isDetail,
-        item,
-        context,
-        'pgc',
-        callback,
-        floor: floor,
-        maxWidth: maxWidth,
-      );
     case 'DYNAMIC_TYPE_NONE':
       return Row(
         spacing: 4,
@@ -243,19 +210,6 @@ Widget module(
           const Icon(FontAwesomeIcons.ghost, size: 14),
           Text(item.modules.moduleDynamic!.major!.none!.tips!),
         ],
-      );
-    // 课堂
-    case 'DYNAMIC_TYPE_COURSES_SEASON':
-      return SizedBox(
-        width: double.infinity,
-        child: Padding(
-          padding: floor == 1
-              ? const EdgeInsets.symmetric(horizontal: 12)
-              : EdgeInsets.zero,
-          child: Text(
-            "课堂：${item.modules.moduleDynamic!.major!.courses!['title']}",
-          ),
-        ),
       );
     // 活动
     case 'DYNAMIC_TYPE_COMMON_SQUARE':

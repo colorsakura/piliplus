@@ -13,7 +13,6 @@ Widget videoSeasonWidget(
   bool isDetail,
   DynamicItemModel item,
   BuildContext context,
-  String type,
   Function(List<String>, int)? callback, {
   floor = 1,
   required double maxWidth,
@@ -45,10 +44,12 @@ Widget videoSeasonWidget(
   // 1 投稿视频 铺满 borderRadius 0
   // 2 转发视频 铺满 borderRadius 6
 
-  DynamicArchiveModel? itemContent = switch (type) {
-    'ugcSeason' => item.modules.moduleDynamic?.major?.ugcSeason,
-    'archive' => item.modules.moduleDynamic?.major?.archive,
-    'pgc' => item.modules.moduleDynamic?.major?.pgc,
+  DynamicArchiveModel? itemContent = switch (item.type) {
+    'DYNAMIC_TYPE_AV' => item.modules.moduleDynamic?.major?.archive,
+    'DYNAMIC_TYPE_UGC_SEASON' => item.modules.moduleDynamic?.major?.ugcSeason,
+    'DYNAMIC_TYPE_PGC' ||
+    'DYNAMIC_TYPE_PGC_UNION' => item.modules.moduleDynamic?.major?.pgc,
+    'DYNAMIC_TYPE_COURSES_SEASON' => item.modules.moduleDynamic?.major?.courses,
     _ => null,
   };
 
@@ -121,9 +122,11 @@ Widget videoSeasonWidget(
                     ),
                     const SizedBox(width: 6),
                   ],
-                  Text('${NumUtil.numFormat(itemContent.stat?.play)}次围观'),
-                  const SizedBox(width: 6),
-                  Text('${NumUtil.numFormat(itemContent.stat?.danmu)}条弹幕'),
+                  if (itemContent.stat != null) ...[
+                    Text('${NumUtil.numFormat(itemContent.stat!.play)}次围观'),
+                    const SizedBox(width: 6),
+                    Text('${NumUtil.numFormat(itemContent.stat!.danmu)}条弹幕'),
+                  ],
                   const Spacer(),
                   Image.asset(
                     'assets/images/play.png',

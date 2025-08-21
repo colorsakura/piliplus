@@ -518,7 +518,10 @@ class PageUtils {
         }
         break;
 
-      // case 'DYNAMIC_TYPE_COURSES_SEASON':
+      case 'DYNAMIC_TYPE_COURSES_SEASON':
+        PageUtils.viewPugv(seasonId: item.basic?.ridStr);
+        break;
+
       // 纯文字动态查看
       // case 'DYNAMIC_TYPE_WORD':
       // # 装扮/剧集点评/普通分享

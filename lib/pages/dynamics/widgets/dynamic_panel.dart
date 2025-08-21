@@ -56,6 +56,7 @@ class DynamicPanel extends StatelessWidget {
                   'DYNAMIC_TYPE_LIVE',
                   'DYNAMIC_TYPE_LIVE_RCMD',
                   'DYNAMIC_TYPE_MEDIALIST',
+                  'DYNAMIC_TYPE_COURSES_SEASON',
                 }.contains(item.type)
             ? null
             : () => PageUtils.pushDynDetail(item, 1),
@@ -151,6 +152,10 @@ class DynamicPanel extends StatelessWidget {
       case 'DYNAMIC_TYPE_LIVE':
         title = major?.live?.title;
         cover = major?.live?.cover;
+        break;
+      case 'DYNAMIC_TYPE_COURSES_SEASON':
+        title = major?.courses?.title;
+        cover = major?.courses?.cover;
         break;
       default:
         morePanel(context);
