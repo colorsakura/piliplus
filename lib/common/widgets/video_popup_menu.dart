@@ -7,7 +7,6 @@ import 'package:PiliPlus/models_new/space/space_archive/item.dart';
 import 'package:PiliPlus/pages/mine/controller.dart';
 import 'package:PiliPlus/pages/search/widgets/search_text.dart';
 import 'package:PiliPlus/utils/accounts.dart';
-import 'package:PiliPlus/utils/storage_pref.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -260,7 +259,6 @@ class VideoCustomActions {
                         reSrc: 11,
                       );
                       if (res['status']) {
-                        Pref.setBlackMid(videoItem.owner.mid!);
                         onRemove?.call();
                       }
                       SmartDialog.showToast(res['msg'] ?? '成功');

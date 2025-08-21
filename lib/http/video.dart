@@ -613,6 +613,13 @@ class VideoHttp {
       ),
     );
     if (res.data['code'] == 0) {
+      if (act == 5) {
+        // block
+        Pref.setBlackMid(mid);
+      } else if (act == 6) {
+        // unblock
+        Pref.removeBlackMid(mid);
+      }
       return {'status': true};
     } else {
       return {'status': false, 'msg': res.data['message']};

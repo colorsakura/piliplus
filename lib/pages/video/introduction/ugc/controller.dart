@@ -441,7 +441,6 @@ class UgcIntroController extends CommonIntroController with ReloadMixin {
         reSrc: 11,
       );
       if (res['status']) {
-        Pref.removeBlackMid(mid);
         followStatus['attribute'] = 0;
       }
       return;
