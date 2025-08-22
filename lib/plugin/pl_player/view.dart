@@ -1626,9 +1626,10 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Image.asset(
-                        'assets/images/loading.gif',
+                        'assets/images/loading.webp',
                         height: 25,
                         semanticLabel: "加载中",
+                        color: Colors.white,
                       ),
                       if (plPlayerController.isBuffering.value)
                         Obx(() {
