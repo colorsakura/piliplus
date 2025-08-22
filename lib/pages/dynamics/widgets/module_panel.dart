@@ -85,7 +85,7 @@ Widget module(
       }
       maxWidth -= 30;
       return InkWell(
-        onTap: () => PageUtils.pushDynDetail(orig, floor + 1),
+        onTap: () => PageUtils.pushDynDetail(orig),
         onLongPress: () {
           String? title, cover, bvid;
           late var origMajor = orig.modules.moduleDynamic?.major;

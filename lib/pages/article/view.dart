@@ -31,7 +31,6 @@ import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/storage_key.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -196,14 +195,14 @@ class _ArticlePageState extends CommonDynPageState<ArticlePage> {
         if (controller.isLoaded.value) {
           late Widget content;
           if (controller.opus != null) {
-            if (kDebugMode) debugPrint('json page');
+            // if (kDebugMode) debugPrint('json page');
             content = OpusContent(
               opus: controller.opus!,
               callback: imageCallback,
               maxWidth: maxWidth,
             );
           } else if (controller.opusData?.modules.moduleBlocked != null) {
-            if (kDebugMode) debugPrint('moduleBlocked');
+            // if (kDebugMode) debugPrint('moduleBlocked');
             final moduleBlocked = controller.opusData!.modules.moduleBlocked!;
             content = SliverToBoxAdapter(
               child: moduleBlockedItem(theme, moduleBlocked, maxWidth),
@@ -213,7 +212,7 @@ class _ArticlePageState extends CommonDynPageState<ArticlePage> {
               // json
               return ArticleOpus(ops: controller.articleData?.ops);
             }
-            if (kDebugMode) debugPrint('html page');
+            // if (kDebugMode) debugPrint('html page');
             final res = parser.parse(controller.articleData!.content!);
             if (res.body!.children.isEmpty) {
               content = SliverToBoxAdapter(

@@ -1062,7 +1062,7 @@ class PlPlayerController {
       //   play();
       // }
     } else {
-      if (kDebugMode) debugPrint('seek duration else');
+      // if (kDebugMode) debugPrint('seek duration else');
       _timerForSeek?.cancel();
       _timerForSeek = Timer.periodic(const Duration(milliseconds: 200), (
         Timer t,

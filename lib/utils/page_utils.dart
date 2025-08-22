@@ -372,9 +372,9 @@ class PageUtils {
         EnableManual(
           aspectRatio: aspectRatio.fitsInAndroidRequirements
               ? aspectRatio
-              : height > width
-              ? const Rational.vertical()
-              : const Rational.landscape(),
+              : width > height
+              ? const Rational.landscape()
+              : const Rational.vertical(),
         ),
       );
     } else {
@@ -383,9 +383,8 @@ class PageUtils {
   }
 
   static Future<void> pushDynDetail(
-    DynamicItemModel item,
-    floor, {
-    action = 'all',
+    DynamicItemModel item, {
+    bool isPush = false,
   }) async {
     feedBack();
 
@@ -409,7 +408,7 @@ class PageUtils {
     }
 
     /// 点击评论action 直接查看评论
-    if (action == 'comment') {
+    if (isPush) {
       push();
       return;
     }
@@ -418,15 +417,10 @@ class PageUtils {
 
     switch (item.type) {
       case 'DYNAMIC_TYPE_AV':
-        if (item.modules.moduleDynamic?.major?.archive?.type == 2) {
-          if (item.modules.moduleDynamic!.major!.archive!.jumpUrl!.startsWith(
-            '//',
-          )) {
-            item.modules.moduleDynamic!.major!.archive!.jumpUrl =
-                'https:${item.modules.moduleDynamic!.major!.archive!.jumpUrl!}';
-          }
+        final archive = item.modules.moduleDynamic!.major!.archive!;
+        if (archive.type == 2) {
           String? redirectUrl = await UrlUtils.parseRedirectUrl(
-            item.modules.moduleDynamic!.major!.archive!.jumpUrl!,
+            archive.jumpUrl!.http2https,
             false,
           );
           if (redirectUrl != null) {
@@ -436,8 +430,8 @@ class PageUtils {
         }
 
         try {
-          String bvid = item.modules.moduleDynamic!.major!.archive!.bvid!;
-          String cover = item.modules.moduleDynamic!.major!.archive!.cover!;
+          String bvid = archive.bvid!;
+          String cover = archive.cover!;
           int? cid = await SearchHttp.ab2c(bvid: bvid);
           if (cid != null) {
             toVideoPage(
@@ -461,8 +455,9 @@ class PageUtils {
           },
         );
         break;
+
       case 'DYNAMIC_TYPE_PGC':
-        if (kDebugMode) debugPrint('番剧');
+        // if (kDebugMode) debugPrint('番剧');
         SmartDialog.showToast('暂未支持的类型，请联系开发者');
         break;
 
@@ -492,34 +487,37 @@ class PageUtils {
 
       /// 番剧查看
       case 'DYNAMIC_TYPE_PGC_UNION':
-        if (kDebugMode) debugPrint('DYNAMIC_TYPE_PGC_UNION 番剧');
+        // if (kDebugMode) debugPrint('DYNAMIC_TYPE_PGC_UNION 番剧');
         DynamicArchiveModel pgc = item.modules.moduleDynamic!.major!.pgc!;
         if (pgc.epid != null) {
           viewPgc(epId: pgc.epid);
         }
         break;
+
       case 'DYNAMIC_TYPE_MEDIALIST':
-        if (item.modules.moduleDynamic?.major?.medialist != null) {
-          final String? url =
-              item.modules.moduleDynamic!.major!.medialist!.jumpUrl;
-          if (url?.contains('medialist/detail/ml') == true) {
-            Get.toNamed(
-              '/favDetail',
-              parameters: {
-                'heroTag':
-                    '${item.modules.moduleDynamic!.major!.medialist!.cover}',
-                'mediaId':
-                    '${item.modules.moduleDynamic!.major!.medialist!.id}',
-              },
-            );
-          } else if (url != null) {
-            handleWebview(url.http2https);
+        if (item.modules.moduleDynamic?.major?.medialist
+            case Medialist medialist) {
+          final String? url = medialist.jumpUrl;
+          if (url != null) {
+            if (url.contains('medialist/detail/ml')) {
+              Get.toNamed(
+                '/favDetail',
+                parameters: {
+                  'heroTag': '${medialist.cover}',
+                  'mediaId': '${medialist.id}',
+                },
+              );
+            } else {
+              handleWebview(url.http2https);
+            }
           }
         }
         break;
 
       case 'DYNAMIC_TYPE_COURSES_SEASON':
-        PageUtils.viewPugv(seasonId: item.basic?.ridStr);
+        PageUtils.viewPugv(
+          seasonId: item.modules.moduleDynamic!.major!.courses!.id,
+        );
         break;
 
       // 纯文字动态查看

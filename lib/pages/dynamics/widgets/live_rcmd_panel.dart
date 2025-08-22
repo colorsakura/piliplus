@@ -25,7 +25,7 @@ Widget liveRcmdPanel(
       Padding(
         padding: const EdgeInsets.symmetric(horizontal: StyleString.safeSpace),
         child: GestureDetector(
-          onTap: () => PageUtils.pushDynDetail(item, floor),
+          onTap: () => PageUtils.pushDynDetail(item),
           child: Stack(
             clipBehavior: Clip.none,
             children: [

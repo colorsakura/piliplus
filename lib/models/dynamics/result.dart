@@ -1157,6 +1157,7 @@ class DynamicTopicModel {
 
 class DynamicArchiveModel {
   DynamicArchiveModel({
+    this.id,
     this.aid,
     this.badge,
     this.bvid,
@@ -1172,6 +1173,7 @@ class DynamicArchiveModel {
     this.seasonId,
   });
 
+  int? id;
   int? aid;
   Badge? badge;
   String? bvid;
@@ -1187,6 +1189,7 @@ class DynamicArchiveModel {
   int? seasonId;
 
   DynamicArchiveModel.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
     aid = json['aid'] is String ? int.parse(json['aid']) : json['aid'];
     badge = json['badge'] == null ? null : Badge.fromJson(json['badge']);
     bvid = json['bvid'] ?? json['epid'].toString() ?? ' ';

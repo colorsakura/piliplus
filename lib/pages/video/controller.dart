@@ -1112,7 +1112,6 @@ class VideoDetailController extends GetxController
           (data.timeLength == null
               ? null
               : Duration(milliseconds: data.timeLength!)),
-      // 宽>高 水平 否则 垂直
       isVertical: isVertical.value,
       aid: aid,
       bvid: bvid,

@@ -17,7 +17,6 @@ import 'package:PiliPlus/pages/member_like_arc/view.dart';
 import 'package:PiliPlus/pages/member_pgc/widgets/pgc_card_v_member_pgc.dart';
 import 'package:PiliPlus/utils/context_ext.dart';
 import 'package:PiliPlus/utils/grid.dart';
-import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart' hide ContextExtensionss;
@@ -329,10 +328,10 @@ class _MemberHomeState extends State<MemberHome>
                         if (contributeCtr.tabController?.index != index1) {
                           contributeCtr.tabController?.index = index1;
                         }
-                        if (kDebugMode) debugPrint('initialized');
+                        // if (kDebugMode) debugPrint('initialized');
                       } catch (e) {
                         _ctr.contributeInitialIndex.value = index1;
-                        if (kDebugMode) debugPrint('not initialized');
+                        // if (kDebugMode) debugPrint('not initialized');
                       }
                     }
                   }

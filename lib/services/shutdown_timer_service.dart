@@ -4,7 +4,6 @@ import 'dart:io';
 
 import 'package:PiliPlus/plugin/pl_player/controller.dart';
 import 'package:PiliPlus/plugin/pl_player/models/play_status.dart';
-import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 
@@ -73,7 +72,7 @@ class ShutdownTimerService with WidgetsBindingObserver {
 
   void _showShutdownDialog() {
     if (isInBackground) {
-      if (kDebugMode) debugPrint("app在后台运行，不弹窗");
+      // if (kDebugMode) debugPrint("app在后台运行，不弹窗");
       _executeShutdown();
       return;
     }

@@ -59,7 +59,7 @@ class DynamicPanel extends StatelessWidget {
                   'DYNAMIC_TYPE_COURSES_SEASON',
                 }.contains(item.type)
             ? null
-            : () => PageUtils.pushDynDetail(item, 1),
+            : () => PageUtils.pushDynDetail(item),
         onLongPress: () => _imageSaveDialog(context, authorWidget.morePanel),
         child: Column(
           mainAxisSize: MainAxisSize.min,
