@@ -1,9 +1,9 @@
 enum AudioQuality {
-  k64(30216, '64K'),
-  k132(30232, '132K'),
-  k192(30280, '192K'),
+  hiRes(30251, 'Hi-Res无损'),
   dolby(30250, '杜比全景声'),
-  hiRes(30251, 'Hi-Res无损');
+  k192(30280, '192K'),
+  k132(30232, '132K'),
+  k64(30216, '64K');
 
   final int code;
   final String desc;

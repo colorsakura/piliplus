@@ -98,7 +98,7 @@ class VideoDetailController extends GetxController
   final Rx<LoadingState> videoState = LoadingState.loading().obs;
 
   /// 播放器配置 画质 音质 解码格式
-  late VideoQuality currentVideoQa;
+  late Rx<VideoQuality> currentVideoQa;
   AudioQuality? currentAudioQa;
   late VideoDecodeFormatType currentDecodeFormats;
   // 是否开始自动播放 存在多p的情况下，第二p需要为true
@@ -1004,7 +1004,7 @@ class VideoDetailController extends GetxController
 
     /// 根据currentVideoQa和currentDecodeFormats 重新设置videoUrl
     List<VideoItem> videoList = data.dash!.video!
-        .where((i) => i.id == currentVideoQa.code)
+        .where((i) => i.id == currentVideoQa.value.code)
         .toList();
 
     final List<String> supportDecodeFormats = videoList
@@ -1036,7 +1036,7 @@ class VideoDetailController extends GetxController
           orElse: () => videoList.first,
         );
       } else {
-        if (currentVideoQa == VideoQuality.dolbyVision) {
+        if (currentVideoQa.value == VideoQuality.dolbyVision) {
           currentDecodeFormats = VideoDecodeFormatTypeExt.fromString(
             videoList.first.codecs!,
           )!;
@@ -1203,7 +1203,7 @@ class VideoDetailController extends GetxController
         );
         setVideoHeight();
         currentDecodeFormats = VideoDecodeFormatTypeExt.fromString('avc1')!;
-        currentVideoQa = VideoQuality.fromCode(data.quality!);
+        currentVideoQa = Rx(VideoQuality.fromCode(data.quality!));
         if (autoPlay.value || plPlayerController.preInitPlayer) {
           await playerInit();
         }
@@ -1236,7 +1236,7 @@ class VideoDetailController extends GetxController
           numbers,
         );
       }
-      currentVideoQa = VideoQuality.fromCode(resVideoQa);
+      currentVideoQa = Rx(VideoQuality.fromCode(resVideoQa));
 
       /// 取出符合当前画质的videoList
       final List<VideoItem> videosList = allVideosList

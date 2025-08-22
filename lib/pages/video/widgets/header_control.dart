@@ -361,7 +361,7 @@ class HeaderControlState extends TripleState<HeaderControl> {
                   leading: const Icon(Icons.play_circle_outline, size: 20),
                   title: const Text('选择画质', style: titleStyle),
                   subtitle: Text(
-                    '当前画质 ${videoDetailCtr.currentVideoQa.desc}',
+                    '当前画质 ${videoDetailCtr.currentVideoQa.value.desc}',
                     style: subTitleStyle,
                   ),
                 ),
@@ -604,7 +604,7 @@ class HeaderControlState extends TripleState<HeaderControl> {
       return;
     }
     final List<FormatItem> videoFormat = videoInfo.supportFormats!;
-    final VideoQuality currentVideoQa = videoDetailCtr.currentVideoQa;
+    final VideoQuality currentVideoQa = videoDetailCtr.currentVideoQa.value;
 
     /// 总质量分类
     final int totalQaSam = videoFormat.length;
@@ -663,9 +663,12 @@ class HeaderControlState extends TripleState<HeaderControl> {
                       }
                       Get.back();
                       final int quality = item.quality!;
+                      final newQa = VideoQuality.fromCode(quality);
                       videoDetailCtr
-                        ..currentVideoQa = VideoQuality.fromCode(quality)
+                        ..currentVideoQa.value = newQa
                         ..updatePlayer();
+
+                      SmartDialog.showToast("画质已变为：${newQa.desc}");
 
                       // update
                       if (!plPlayerController.tempPlayerConf) {
@@ -682,9 +685,6 @@ class HeaderControlState extends TripleState<HeaderControl> {
                           );
                         }
                       }
-                      SmartDialog.showToast(
-                        "画质已变为：${VideoQuality.fromCode(quality).desc}",
-                      );
                     },
                     // 可能包含会员解锁画质
                     enabled: index >= totalQaSam - userfulQaSam,
@@ -740,9 +740,12 @@ class HeaderControlState extends TripleState<HeaderControl> {
                       }
                       Get.back();
                       final int quality = i.id!;
+                      final newQa = AudioQuality.fromCode(quality);
                       videoDetailCtr
-                        ..currentAudioQa = AudioQuality.fromCode(quality)
+                        ..currentAudioQa = newQa
                         ..updatePlayer();
+
+                      SmartDialog.showToast("音质已变为：${newQa.desc}");
 
                       // update
                       if (!plPlayerController.tempPlayerConf) {
@@ -759,9 +762,6 @@ class HeaderControlState extends TripleState<HeaderControl> {
                           );
                         }
                       }
-                      SmartDialog.showToast(
-                        "音质已变为：${AudioQuality.fromCode(quality).desc}",
-                      );
                     },
                     contentPadding: const EdgeInsets.only(left: 20, right: 20),
                     title: Text(i.quality),

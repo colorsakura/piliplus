@@ -740,17 +740,9 @@ class ReplyItemGrpc extends StatelessWidget {
             final ctr = Get.find<VideoDetailController>(
               tag: getTag?.call() ?? Get.arguments['heroTag'],
             );
-            int duration = ctr.data.timeLength!;
-            List<int> split = matchStr
-                .split(':')
-                .reversed
-                .map((item) => int.parse(item))
-                .toList();
-            int seek = 0;
-            for (int i = 0; i < split.length; i++) {
-              seek += split[i] * pow(60, i).toInt();
-            }
-            isValid = seek * 1000 <= duration;
+            isValid =
+                ctr.data.timeLength! * 1000 <=
+                DurationUtil.parseDuration(matchStr);
           } catch (e) {
             if (kDebugMode) debugPrint('failed to validate: $e');
           }

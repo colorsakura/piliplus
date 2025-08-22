@@ -1,6 +1,6 @@
 enum BottomControlType {
-  pre,
   playOrPause,
+  pre,
   next,
   time,
   episode,
@@ -11,4 +11,5 @@ enum BottomControlType {
   viewPoints,
   superResolution,
   dmChart,
+  qa,
 }

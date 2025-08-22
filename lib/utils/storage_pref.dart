@@ -198,7 +198,7 @@ class Pref {
 
   static int get defaultVideoQa => _setting.get(
     SettingBoxKey.defaultVideoQa,
-    defaultValue: VideoQuality.values.last.code,
+    defaultValue: VideoQuality.super8k.code,
   );
 
   static int get defaultVideoQaCellular => _setting.get(
@@ -208,7 +208,7 @@ class Pref {
 
   static int get defaultAudioQa => _setting.get(
     SettingBoxKey.defaultAudioQa,
-    defaultValue: AudioQuality.values.last.code,
+    defaultValue: AudioQuality.hiRes.code,
   );
 
   static int get defaultAudioQaCellular => _setting.get(

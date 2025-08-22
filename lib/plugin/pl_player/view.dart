@@ -9,6 +9,8 @@ import 'package:PiliPlus/common/widgets/progress_bar/segment_progress_bar.dart';
 import 'package:PiliPlus/common/widgets/view_safe_area.dart';
 import 'package:PiliPlus/http/init.dart';
 import 'package:PiliPlus/models/common/super_resolution_type.dart';
+import 'package:PiliPlus/models/common/video/video_quality.dart';
+import 'package:PiliPlus/models/video/play/url.dart';
 import 'package:PiliPlus/models_new/video/video_detail/episode.dart';
 import 'package:PiliPlus/models_new/video/video_detail/section.dart';
 import 'package:PiliPlus/models_new/video/video_shot/data.dart';
@@ -31,6 +33,9 @@ import 'package:PiliPlus/plugin/pl_player/widgets/forward_seek.dart';
 import 'package:PiliPlus/plugin/pl_player/widgets/play_pause_btn.dart';
 import 'package:PiliPlus/utils/duration_util.dart';
 import 'package:PiliPlus/utils/id_utils.dart';
+import 'package:PiliPlus/utils/storage.dart';
+import 'package:PiliPlus/utils/storage_key.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:easy_debounce/easy_throttle.dart';
 import 'package:fl_chart/fl_chart.dart';
@@ -400,7 +405,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                 .toList();
           },
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
+            padding: const EdgeInsets.symmetric(horizontal: 8),
             child: Text(
               plPlayerController.superResolutionType.value.title,
               style: const TextStyle(color: Colors.white, fontSize: 13),
@@ -508,7 +513,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                 .toList();
           },
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
+            padding: const EdgeInsets.symmetric(horizontal: 8),
             child: Text(
               plPlayerController.videoFit.value.desc,
               style: const TextStyle(color: Colors.white, fontSize: 13),
@@ -595,7 +600,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                 .toList();
           },
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
+            padding: const EdgeInsets.symmetric(horizontal: 8),
             child: Text(
               "${plPlayerController.playbackSpeed}X",
               style: const TextStyle(color: Colors.white, fontSize: 13),
@@ -603,6 +608,88 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
             ),
           ),
         ),
+      ),
+
+      BottomControlType.qa => Obx(
+        () {
+          final videoDetailCtr = widget.videoDetailController!;
+          final VideoQuality currentVideoQa =
+              videoDetailCtr.currentVideoQa.value;
+          final PlayUrlModel videoInfo = videoDetailCtr.data;
+          final List<FormatItem> videoFormat = videoInfo.supportFormats!;
+          final int totalQaSam = videoFormat.length;
+          int userfulQaSam = 0;
+          final List<VideoItem> video = videoInfo.dash!.video!;
+          final Set<int> idSet = {};
+          for (final VideoItem item in video) {
+            final int id = item.id!;
+            if (!idSet.contains(id)) {
+              idSet.add(id);
+              userfulQaSam++;
+            }
+          }
+          return PopupMenuButton<int>(
+            requestFocus: false,
+            initialValue: currentVideoQa.code,
+            color: Colors.black.withValues(alpha: 0.8),
+            itemBuilder: (context) {
+              return List.generate(
+                totalQaSam,
+                (index) {
+                  final item = videoFormat[index];
+                  final enabled = index >= totalQaSam - userfulQaSam;
+                  return PopupMenuItem<int>(
+                    enabled: enabled,
+                    height: 35,
+                    padding: const EdgeInsets.only(left: 20),
+                    value: item.quality,
+                    onTap: () async {
+                      if (currentVideoQa.code == item.quality) {
+                        return;
+                      }
+                      final int quality = item.quality!;
+                      final newQa = VideoQuality.fromCode(quality);
+                      videoDetailCtr
+                        ..currentVideoQa.value = newQa
+                        ..updatePlayer();
+
+                      SmartDialog.showToast("画质已变为：${newQa.desc}");
+
+                      // update
+                      if (!plPlayerController.tempPlayerConf) {
+                        final res = await Connectivity().checkConnectivity();
+                        if (res.contains(ConnectivityResult.wifi)) {
+                          GStorage.setting.put(
+                            SettingBoxKey.defaultVideoQa,
+                            quality,
+                          );
+                        } else {
+                          GStorage.setting.put(
+                            SettingBoxKey.defaultVideoQaCellular,
+                            quality,
+                          );
+                        }
+                      }
+                    },
+                    child: Text(
+                      item.newDesc ?? '',
+                      style: enabled
+                          ? const TextStyle(color: Colors.white, fontSize: 13)
+                          : null,
+                    ),
+                  );
+                },
+              );
+            },
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8),
+              child: Text(
+                currentVideoQa.shortDesc,
+                style: const TextStyle(color: Colors.white, fontSize: 13),
+              ),
+            ),
+          );
+        },
       ),
 
       /// 全屏
@@ -644,6 +731,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
       if (isFullScreen) BottomControlType.fit,
       BottomControlType.subtitle,
       BottomControlType.speed,
+      if (isFullScreen) BottomControlType.qa,
       BottomControlType.fullscreen,
     ];
 

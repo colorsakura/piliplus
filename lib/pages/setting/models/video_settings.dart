@@ -107,9 +107,7 @@ List<SettingsModel> get videoSettings => [
           return SelectDialog<int>(
             title: '默认画质',
             value: Pref.defaultVideoQa,
-            values: VideoQuality.values.reversed
-                .map((e) => (e.code, e.desc))
-                .toList(),
+            values: VideoQuality.values.map((e) => (e.code, e.desc)).toList(),
           );
         },
       );
@@ -132,9 +130,7 @@ List<SettingsModel> get videoSettings => [
           return SelectDialog<int>(
             title: '蜂窝网络画质',
             value: Pref.defaultVideoQaCellular,
-            values: VideoQuality.values.reversed
-                .map((e) => (e.code, e.desc))
-                .toList(),
+            values: VideoQuality.values.map((e) => (e.code, e.desc)).toList(),
           );
         },
       );
@@ -160,9 +156,7 @@ List<SettingsModel> get videoSettings => [
           return SelectDialog<int>(
             title: '默认音质',
             value: Pref.defaultAudioQa,
-            values: AudioQuality.values.reversed
-                .map((e) => (e.code, e.desc))
-                .toList(),
+            values: AudioQuality.values.map((e) => (e.code, e.desc)).toList(),
           );
         },
       );
@@ -185,9 +179,7 @@ List<SettingsModel> get videoSettings => [
           return SelectDialog<int>(
             title: '蜂窝网络音质',
             value: Pref.defaultAudioQaCellular,
-            values: AudioQuality.values.reversed
-                .map((e) => (e.code, e.desc))
-                .toList(),
+            values: AudioQuality.values.map((e) => (e.code, e.desc)).toList(),
           );
         },
       );

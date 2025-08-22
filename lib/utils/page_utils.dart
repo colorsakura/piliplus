@@ -372,9 +372,9 @@ class PageUtils {
         EnableManual(
           aspectRatio: aspectRatio.fitsInAndroidRequirements
               ? aspectRatio
-              : width > height
-              ? const Rational.landscape()
-              : const Rational.vertical(),
+              : height > width
+              ? const Rational.vertical()
+              : const Rational.landscape(),
         ),
       );
     } else {
