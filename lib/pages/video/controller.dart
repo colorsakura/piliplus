@@ -1226,7 +1226,8 @@ class VideoDetailController extends GetxController
       int currentHighVideoQa = allVideosList.first.quality.code;
       // 预设的画质为null，则当前可用的最高质量
       int resVideoQa = currentHighVideoQa;
-      if (plPlayerController.cacheVideoQa! <= currentHighVideoQa) {
+      if (data.acceptQuality?.isNotEmpty == true &&
+          plPlayerController.cacheVideoQa! <= currentHighVideoQa) {
         // 如果预设的画质低于当前最高
         final List<int> numbers = data.acceptQuality!
             .where((e) => e <= currentHighVideoQa)

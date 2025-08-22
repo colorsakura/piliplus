@@ -39,6 +39,8 @@ class _MemberOpusState extends State<MemberOpus>
     tag: widget.heroTag,
   );
 
+  late double _maxWidth;
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -121,6 +123,7 @@ class _MemberOpusState extends State<MemberOpus>
     maxCrossAxisExtent: Grid.smallCardWidth,
     mainAxisSpacing: StyleString.safeSpace,
     crossAxisSpacing: StyleString.safeSpace,
+    callback: (value) => _maxWidth = value,
   );
 
   Widget _buildBody(LoadingState<List<SpaceOpusItemModel>?> loadingState) {
@@ -143,6 +146,7 @@ class _MemberOpusState extends State<MemberOpus>
                     }
                     return SpaceOpusItem(
                       item: response[index],
+                      maxWidth: _maxWidth,
                     );
                   },
                   childCount: response!.length,
