@@ -51,6 +51,7 @@ class _FansPageState extends State<FansPage> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context).colorScheme;
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: widget.mid != null
@@ -64,7 +65,7 @@ class _FansPageState extends State<FansPage> {
           slivers: [
             ViewSliverSafeArea(
               sliver: Obx(
-                () => _buildBody(_fansController.loadingState.value),
+                () => _buildBody(theme, _fansController.loadingState.value),
               ),
             ),
           ],
@@ -78,7 +79,10 @@ class _FansPageState extends State<FansPage> {
     mainAxisExtent: 66,
   );
 
-  Widget _buildBody(LoadingState<List<FansItemModel>?> loadingState) {
+  Widget _buildBody(
+    ColorScheme theme,
+    LoadingState<List<FansItemModel>?> loadingState,
+  ) {
     return switch (loadingState) {
       Loading() => SliverGrid.builder(
         gridDelegate: gridDelegate,
@@ -93,67 +97,7 @@ class _FansPageState extends State<FansPage> {
                   if (index == response.length - 1) {
                     _fansController.onLoadMore();
                   }
-                  final item = response[index];
-                  return SizedBox(
-                    height: 66,
-                    child: InkWell(
-                      onTap: () {
-                        if (widget.onSelect != null) {
-                          widget.onSelect!(
-                            UserModel(
-                              mid: item.mid!,
-                              name: item.uname!,
-                              avatar: item.face!,
-                            ),
-                          );
-                          return;
-                        }
-                        Get.toNamed('/member?mid=${item.mid}');
-                      },
-                      onLongPress: widget.onSelect != null
-                          ? null
-                          : isOwner
-                          ? () => showConfirmDialog(
-                              context: context,
-                              title: '确定移除 ${item.uname} ？',
-                              onConfirm: () =>
-                                  _fansController.onRemoveFan(index, item.mid!),
-                            )
-                          : null,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 12,
-                          vertical: 10,
-                        ),
-                        child: Row(
-                          spacing: 10,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            NetworkImgLayer(
-                              width: 45,
-                              height: 45,
-                              type: ImageType.avatar,
-                              src: item.face,
-                            ),
-                            Column(
-                              spacing: 5,
-                              children: [
-                                Text(
-                                  item.uname!,
-                                  style: const TextStyle(fontSize: 14),
-                                ),
-                                Text(
-                                  item.sign ?? '',
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  );
+                  return _buildItem(theme, index, response[index]);
                 },
                 itemCount: response!.length,
               )
@@ -163,5 +107,69 @@ class _FansPageState extends State<FansPage> {
         onReload: _fansController.onReload,
       ),
     };
+  }
+
+  Widget _buildItem(ColorScheme theme, int index, FansItemModel item) {
+    return SizedBox(
+      height: 66,
+      child: InkWell(
+        onTap: () {
+          if (widget.onSelect != null) {
+            widget.onSelect!(
+              UserModel(
+                mid: item.mid!,
+                name: item.uname!,
+                avatar: item.face!,
+              ),
+            );
+            return;
+          }
+          Get.toNamed('/member?mid=${item.mid}');
+        },
+        onLongPress: widget.onSelect != null
+            ? null
+            : isOwner
+            ? () => showConfirmDialog(
+                context: context,
+                title: '确定移除 ${item.uname} ？',
+                onConfirm: () => _fansController.onRemoveFan(index, item.mid!),
+              )
+            : null,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 12,
+            vertical: 10,
+          ),
+          child: Row(
+            spacing: 10,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              NetworkImgLayer(
+                width: 45,
+                height: 45,
+                type: ImageType.avatar,
+                src: item.face,
+              ),
+              Column(
+                spacing: 4,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    item.uname!,
+                    style: const TextStyle(fontSize: 14),
+                  ),
+                  Text(
+                    item.sign ?? '',
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(fontSize: 13, color: theme.outline),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }
