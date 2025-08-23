@@ -86,7 +86,7 @@ class MsgHttp {
   }
 
   static Future<LoadingState<MsgLikeDetailData>> msgLikeDetail({
-    required dynamic cardId,
+    required Object cardId,
     required int pn,
   }) async {
     var res = await Request().get(
@@ -155,7 +155,7 @@ class MsgHttp {
   }
 
   static Future uploadImage({
-    required dynamic path,
+    required String path,
     required String bucket,
     required String dir,
   }) async {
@@ -211,7 +211,7 @@ class MsgHttp {
   }
 
   static Future createTextDynamic(
-    dynamic content,
+    Object content,
   ) async {
     String csrf = Accounts.main.csrf;
     Map<String, dynamic> data = await WbiSign.makSign({
@@ -237,7 +237,11 @@ class MsgHttp {
     }
   }
 
-  static Future removeDynamic({required dynIdStr, dynType, ridStr}) async {
+  static Future removeDynamic({
+    required Object dynIdStr,
+    Object? dynType,
+    Object? ridStr,
+  }) async {
     var res = await Request().post(
       Api.removeDynamic,
       queryParameters: {
@@ -258,7 +262,7 @@ class MsgHttp {
   }
 
   static Future removeMsg(
-    dynamic talkerId,
+    Object talkerId,
   ) async {
     String csrf = Accounts.main.csrf;
     Map<String, dynamic> data = await WbiSign.makSign({
@@ -283,7 +287,7 @@ class MsgHttp {
 
   static Future delMsgfeed(
     int tp,
-    dynamic id,
+    Object id,
   ) async {
     String csrf = Accounts.main.csrf;
     var res = await Request().post(
@@ -309,7 +313,7 @@ class MsgHttp {
   }
 
   static Future delSysMsg(
-    dynamic id,
+    Object id,
   ) async {
     String csrf = Accounts.main.csrf;
     var res = await Request().post(
@@ -337,7 +341,7 @@ class MsgHttp {
   }
 
   static Future setTop({
-    required dynamic talkerId,
+    required Object talkerId,
     required int opType,
   }) async {
     String csrf = Accounts.main.csrf;
@@ -367,8 +371,8 @@ class MsgHttp {
 
   // 消息标记已读
   static Future ackSessionMsg({
-    int? talkerId,
-    int? ackSeqno,
+    required int talkerId,
+    required int ackSeqno,
   }) async {
     String csrf = Accounts.main.csrf;
     final params = await WbiSign.makSign({
@@ -399,14 +403,14 @@ class MsgHttp {
 
   // 发送私信
   static Future sendMsg({
-    int? senderUid,
-    int? receiverId,
+    required int senderUid,
+    required int receiverId,
     int? msgType,
-    dynamic content,
+    required Object content,
   }) async {
     String csrf = Accounts.main.csrf;
     final devId = getDevId();
-    Map<String, dynamic> data = {
+    final data = {
       'msg': {
         'sender_uid': senderUid,
         'receiver_id': receiverId,
@@ -424,15 +428,15 @@ class MsgHttp {
       'csrf_token': csrf,
       'csrf': csrf,
     };
-    Map<String, dynamic> params = await WbiSign.makSign(data);
+    final params = await WbiSign.makSign(data);
     var res = await Request().post(
       Api.sendMsg,
-      queryParameters: <String, dynamic>{
+      queryParameters: {
         'w_sender_uid': senderUid,
         'w_receiver_id': receiverId,
         'w_dev_id': devId,
-        'w_rid': params['w_rid'],
-        'wts': params['wts'],
+        'w_rid': params['w_rid']!,
+        'wts': params['wts']!,
       },
       data: data,
       options: Options(
@@ -454,7 +458,7 @@ class MsgHttp {
   }
 
   static Future msgSetNotice({
-    required dynamic id,
+    required Object id,
     required int noticeState,
   }) async {
     final csrf = Accounts.main.csrf;
@@ -482,9 +486,9 @@ class MsgHttp {
   }
 
   static Future setMsgDnd({
-    required uid,
+    required Object uid,
     required int setting,
-    required dndUid,
+    required Object dndUid,
   }) async {
     final csrf = Accounts.main.csrf;
     var res = await Request().post(
@@ -557,7 +561,7 @@ class MsgHttp {
   }
 
   static Future<LoadingState<SessionSsData>> getSessionSs({
-    required talkerUid,
+    required Object talkerUid,
   }) async {
     final csrf = Accounts.main.csrf;
     var res = await Request().get(
@@ -578,7 +582,7 @@ class MsgHttp {
   }
 
   static Future<LoadingState<List<UidSetting>?>> getMsgDnd({
-    required uidsStr,
+    required Object uidsStr,
   }) async {
     final csrf = Accounts.main.csrf;
     var res = await Request().get(

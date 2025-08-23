@@ -31,14 +31,14 @@ class DynamicsHttp {
     int? mid,
     Set<int>? tempBannedList,
   }) async {
-    Map<String, dynamic> data = {
+    final data = {
       if (type == DynamicsTabType.up)
-        'host_mid': mid
+        'host_mid': mid!
       else ...{
         'type': type.name,
         'timezone_offset': '-480',
       },
-      'offset': offset,
+      'offset': ?offset,
       'features': 'itemOpusStyle,listOnlyfans',
     };
     var res = await Request().get(Api.followDynamic, queryParameters: data);
@@ -120,11 +120,11 @@ class DynamicsHttp {
   }
 
   static Future createDynamic({
-    dynamic mid,
-    dynamic dynIdStr, // repost dyn
-    dynamic rid, // repost video
-    dynamic dynType,
-    dynamic rawText,
+    Object? mid,
+    Object? dynIdStr, // repost dyn
+    Object? rid, // repost video
+    Object? dynType,
+    Object? rawText,
     List? pics,
     int? publishTime,
     ReplyOptionType? replyOption,
@@ -213,9 +213,9 @@ class DynamicsHttp {
 
   //
   static Future dynamicDetail({
-    dynamic id,
-    dynamic rid,
-    dynamic type,
+    Object? id,
+    Object? rid,
+    Object? type,
     bool clearCookie = false,
   }) async {
     var res = await Request().get(
@@ -255,7 +255,7 @@ class DynamicsHttp {
   }
 
   static Future setTop({
-    required dynamic dynamicId,
+    required Object dynamicId,
   }) async {
     var res = await Request().post(
       Api.setTopDyn,
@@ -274,7 +274,7 @@ class DynamicsHttp {
   }
 
   static Future rmTop({
-    required dynamic dynamicId,
+    required Object dynamicId,
   }) async {
     var res = await Request().post(
       Api.rmTopDyn,
@@ -293,7 +293,7 @@ class DynamicsHttp {
   }
 
   static Future articleInfo({
-    required dynamic cvId,
+    required Object cvId,
   }) async {
     var res = await Request().get(
       Api.articleInfo,
@@ -315,7 +315,7 @@ class DynamicsHttp {
   }
 
   static Future<LoadingState<ArticleViewData>> articleView({
-    required dynamic cvId,
+    required Object cvId,
   }) async {
     final res = await Request().get(
       Api.articleView,
@@ -333,7 +333,7 @@ class DynamicsHttp {
   }
 
   static Future<LoadingState<DynamicItemModel>> opusDetail({
-    required dynamic opusId,
+    required Object opusId,
   }) async {
     final res = await Request().get(
       Api.opusDetail,
@@ -350,7 +350,7 @@ class DynamicsHttp {
     }
   }
 
-  static Future<LoadingState<VoteInfo>> voteInfo(dynamic voteId) async {
+  static Future<LoadingState<VoteInfo>> voteInfo(Object voteId) async {
     final res = await Request().get(
       Api.voteInfo,
       queryParameters: {'vote_id': voteId},
@@ -392,7 +392,9 @@ class DynamicsHttp {
     }
   }
 
-  static Future<LoadingState<TopDetails?>> topicTop({required topicId}) async {
+  static Future<LoadingState<TopDetails?>> topicTop({
+    required Object topicId,
+  }) async {
     final res = await Request().get(
       Api.topicTop,
       queryParameters: {
@@ -411,7 +413,7 @@ class DynamicsHttp {
   }
 
   static Future<LoadingState<TopicCardList?>> topicFeed({
-    required topicId,
+    required Object topicId,
     required String offset,
     required int sortBy,
   }) async {
@@ -438,7 +440,7 @@ class DynamicsHttp {
   }
 
   static Future<LoadingState<ArticleListData>> articleList({
-    required id,
+    required Object id,
   }) async {
     final res = await Request().get(
       Api.articleList,
@@ -455,10 +457,10 @@ class DynamicsHttp {
   }
 
   static Future dynReserve({
-    required reserveId,
-    required curBtnStatus,
-    required dynamicIdStr,
-    required reserveTotal,
+    required Object reserveId,
+    required Object curBtnStatus,
+    required Object dynamicIdStr,
+    required Object reserveTotal,
   }) async {
     var res = await Request().post(
       Api.dynReserve,
@@ -504,7 +506,7 @@ class DynamicsHttp {
     }
   }
 
-  static Future<LoadingState<List<OpusPicModel>?>> dynPic(dynamic id) async {
+  static Future<LoadingState<List<OpusPicModel>?>> dynPic(Object id) async {
     final res = await Request().get(
       Api.dynPic,
       queryParameters: {
@@ -529,7 +531,7 @@ class DynamicsHttp {
     final res = await Request().get(
       Api.dynMention,
       queryParameters: {
-        if (keyword?.isNotEmpty == true) 'keyword': keyword,
+        if (keyword?.isNotEmpty == true) 'keyword': keyword!,
         'web_location': 333.1365,
       },
     );
@@ -619,7 +621,7 @@ class DynamicsHttp {
   }
 
   static Future<LoadingState<ReserveInfoData>> reserveInfo({
-    required dynamic sid,
+    required Object sid,
   }) async {
     final res = await Request().get(
       Api.reserveInfo,

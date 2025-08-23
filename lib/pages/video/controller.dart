@@ -826,7 +826,7 @@ class VideoDetailController extends GetxController
     }
   }
 
-  void onAddItem(dynamic item) {
+  void onAddItem(Object item) {
     if (listData.contains(item)) return;
     listData.insert(0, item);
     listKey.currentState?.insertItem(0);
@@ -1446,7 +1446,7 @@ class VideoDetailController extends GetxController
         '/x/stein/edgeinfo_v2',
         queryParameters: {
           'bvid': bvid,
-          'graph_version': graphVersion,
+          'graph_version': ?graphVersion,
           'edge_id': ?edgeId,
         },
       );

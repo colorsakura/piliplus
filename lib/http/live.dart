@@ -24,7 +24,12 @@ import 'package:PiliPlus/utils/wbi_sign.dart';
 import 'package:dio/dio.dart';
 
 class LiveHttp {
-  static Future sendLiveMsg({roomId, msg, dmType, emoticonOptions}) async {
+  static Future sendLiveMsg({
+    required Object roomId,
+    required Object msg,
+    Object? dmType,
+    Object? emoticonOptions,
+  }) async {
     String csrf = Accounts.main.csrf;
     var res = await Request().post(
       Api.sendLiveMsg,
@@ -66,7 +71,11 @@ class LiveHttp {
     }
   }
 
-  static Future liveRoomInfo({roomId, qn, bool onlyAudio = false}) async {
+  static Future liveRoomInfo({
+    required Object roomId,
+    Object? qn,
+    bool onlyAudio = false,
+  }) async {
     var res = await Request().get(
       Api.liveRoomInfo,
       queryParameters: {
@@ -74,7 +83,7 @@ class LiveHttp {
         'protocol': '0, 1',
         'format': '0, 1, 2',
         'codec': '0, 1',
-        'qn': qn,
+        'qn': ?qn,
         'platform': 'web',
         'ptype': 8,
         'dolby': 5,
@@ -92,7 +101,7 @@ class LiveHttp {
     }
   }
 
-  static Future liveRoomInfoH5({roomId, qn}) async {
+  static Future liveRoomInfoH5({required Object roomId}) async {
     var res = await Request().get(
       Api.liveRoomInfoH5,
       queryParameters: {
@@ -109,7 +118,7 @@ class LiveHttp {
     }
   }
 
-  static Future liveRoomDanmaPrefetch({roomId}) async {
+  static Future liveRoomDanmaPrefetch({required Object roomId}) async {
     var res = await Request().get(
       Api.liveRoomDmPrefetch,
       queryParameters: {'roomid': roomId},
@@ -127,7 +136,7 @@ class LiveHttp {
     }
   }
 
-  static Future liveRoomGetDanmakuToken({roomId}) async {
+  static Future liveRoomGetDanmakuToken({required Object roomId}) async {
     var res = await Request().get(
       Api.liveRoomDmToken,
       queryParameters: await WbiSign.makSign({
@@ -168,7 +177,7 @@ class LiveHttp {
     bool? moduleSelect,
   }) async {
     final params = {
-      if (isLogin) 'access_key': Accounts.main.accessKey,
+      if (isLogin) 'access_key': Accounts.main.accessKey!,
       'appkey': Constants.appKey,
       'channel': 'master',
       'actionKey': 'appkey',
@@ -245,12 +254,12 @@ class LiveHttp {
   static Future<LoadingState<LiveSecondData>> liveSecondList({
     required int pn,
     required bool isLogin,
-    required areaId,
-    required parentAreaId,
+    required Object? areaId,
+    required Object? parentAreaId,
     String? sortType,
   }) async {
     final params = {
-      if (isLogin) 'access_key': Accounts.main.accessKey,
+      if (isLogin) 'access_key': Accounts.main.accessKey!,
       'appkey': Constants.appKey,
       'actionKey': 'appkey',
       'channel': 'master',
@@ -316,7 +325,7 @@ class LiveHttp {
     required bool isLogin,
   }) async {
     final params = {
-      if (isLogin) 'access_key': Accounts.main.accessKey,
+      if (isLogin) 'access_key': Accounts.main.accessKey!,
       'appkey': Constants.appKey,
       'actionKey': 'appkey',
       'build': 8430300,
@@ -355,7 +364,7 @@ class LiveHttp {
     required bool isLogin,
   }) async {
     final params = {
-      if (isLogin) 'access_key': Accounts.main.accessKey,
+      if (isLogin) 'access_key': Accounts.main.accessKey!,
       'appkey': Constants.appKey,
       'actionKey': 'appkey',
       'build': 8430300,
@@ -432,10 +441,10 @@ class LiveHttp {
 
   static Future<LoadingState<List<AreaItem>?>> liveRoomAreaList({
     required bool isLogin,
-    required parentid,
+    required Object parentid,
   }) async {
     final params = {
-      if (isLogin) 'access_key': Accounts.main.accessKey,
+      if (isLogin) 'access_key': Accounts.main.accessKey!,
       'appkey': Constants.appKey,
       'actionKey': 'appkey',
       'build': 8430300,
@@ -478,7 +487,7 @@ class LiveHttp {
     required LiveSearchType type,
   }) async {
     final params = {
-      if (isLogin) 'access_key': Accounts.main.accessKey,
+      if (isLogin) 'access_key': Accounts.main.accessKey!,
       'appkey': Constants.appKey,
       'actionKey': 'appkey',
       'build': 8430300,
@@ -514,7 +523,7 @@ class LiveHttp {
   }
 
   static Future<LoadingState<ShieldInfo?>> getLiveInfoByUser(
-    dynamic roomId,
+    Object roomId,
   ) async {
     var res = await Request().get(
       Api.getLiveInfoByUser,
@@ -595,8 +604,8 @@ class LiveHttp {
   }
 
   static Future liveShieldUser({
-    required dynamic uid,
-    required dynamic roomid,
+    required Object uid,
+    required Object roomid,
     required int type,
   }) async {
     final csrf = Accounts.main.csrf;
@@ -620,9 +629,9 @@ class LiveHttp {
 
   static Future liveLikeReport({
     required int clickTime,
-    required dynamic roomId,
-    required dynamic uid,
-    required dynamic anchorId,
+    required Object roomId,
+    required Object uid,
+    Object? anchorId,
   }) async {
     var res = await Request().post(
       Api.liveLikeReport,
@@ -630,7 +639,7 @@ class LiveHttp {
         'click_time': clickTime,
         'room_id': roomId,
         'uid': uid,
-        'anchor_id': anchorId,
+        'anchor_id': ?anchorId,
         'web_location': 444.8,
         'csrf': Accounts.heartbeat.csrf,
       }),
