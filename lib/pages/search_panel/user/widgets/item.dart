@@ -30,7 +30,7 @@ class SearchUserItem extends StatelessWidget {
               avatar: item.upic,
               size: 42,
               isVip: false,
-              officialType: item.officialVerify?['type'],
+              officialType: item.officialVerify?.type,
               roomId: item.isLive == 1 ? item.roomId : null,
             ),
             const SizedBox(width: 10),
@@ -59,10 +59,9 @@ class SearchUserItem extends StatelessWidget {
                   '粉丝：${NumUtil.numFormat(item.fans)}  视频：${NumUtil.numFormat(item.videos)}',
                   style: style,
                 ),
-                if (item.officialVerify?['desc'] != null &&
-                    item.officialVerify?['desc'] != '')
+                if (item.officialVerify?.desc?.isNotEmpty == true)
                   Text(
-                    item.officialVerify?['desc'],
+                    item.officialVerify!.desc!,
                     style: style,
                   ),
               ],

@@ -815,7 +815,7 @@ class _UgcIntroPanelState extends TripleState<UgcIntroPanel>
               size: 35,
               badgeSize: 14,
               isVip: isVip,
-              officialType: userStat.card?.officialVerify?.type,
+              officialType: userStat.card?.official?.type,
             ),
             const SizedBox(width: 10),
             Column(

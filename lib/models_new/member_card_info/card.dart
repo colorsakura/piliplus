@@ -6,7 +6,7 @@ class Card {
   String? face;
   int? fans;
   int? attention;
-  BaseOfficialVerify? officialVerify;
+  BaseOfficialVerify? official;
   Vip? vip;
 
   Card({
@@ -15,7 +15,7 @@ class Card {
     this.face,
     this.fans,
     this.attention,
-    this.officialVerify,
+    this.official,
     this.vip,
   });
 
@@ -25,10 +25,10 @@ class Card {
     face: json['face'] as String?,
     fans: json['fans'] as int?,
     attention: json['attention'] as int?,
-    officialVerify: json['official_verify'] == null
+    official: json['Official'] == null
         ? null
         : BaseOfficialVerify.fromJson(
-            json['official_verify'] as Map<String, dynamic>,
+            json['Official'] as Map<String, dynamic>,
           ),
     vip: json['vip'] == null
         ? null
