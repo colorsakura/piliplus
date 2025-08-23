@@ -56,10 +56,13 @@ class _EmotePanelState extends State<EmotePanel>
                       controller: _emotePanelController.tabController,
                       children: response!.map(
                         (e) {
-                          double size = e.emote!.first.meta!.size == 1
-                              ? 40
-                              : 60;
-                          bool isTextEmote = e.type == 4;
+                          final emote = e.emote;
+                          if (emote == null || emote.isEmpty) {
+                            return const SizedBox.shrink();
+                          }
+                          final flag = emote.first.meta?.size == 1;
+                          final size = flag ? 40.0 : 60.0;
+                          final isTextEmote = e.type == 4;
                           return GridView.builder(
                             padding: const EdgeInsets.only(
                               left: 12,
@@ -73,21 +76,21 @@ class _EmotePanelState extends State<EmotePanel>
                                   mainAxisSpacing: 8,
                                   mainAxisExtent: size,
                                 ),
-                            itemCount: e.emote!.length,
+                            itemCount: emote.length,
                             itemBuilder: (context, index) {
-                              final item = e.emote![index];
+                              final item = emote[index];
                               Widget child = Padding(
                                 padding: const EdgeInsets.all(6),
                                 child: isTextEmote
                                     ? Center(
                                         child: Text(
-                                          item.text!,
+                                          item.text ?? '',
                                           overflow: TextOverflow.clip,
                                           maxLines: 1,
                                         ),
                                       )
                                     : NetworkImgLayer(
-                                        src: item.url!,
+                                        src: item.url,
                                         width: size,
                                         height: size,
                                         type: ImageType.emote,
@@ -113,7 +116,7 @@ class _EmotePanelState extends State<EmotePanel>
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
                                         NetworkImgLayer(
-                                          src: item.url!,
+                                          src: item.url,
                                           width: 65,
                                           height: 65,
                                           type: ImageType.emote,
@@ -121,10 +124,11 @@ class _EmotePanelState extends State<EmotePanel>
                                         ),
                                         Text(
                                           item.meta?.alias ??
-                                              item.text!.substring(
+                                              item.text?.substring(
                                                 1,
                                                 item.text!.length - 1,
-                                              ),
+                                              ) ??
+                                              '',
                                           style: const TextStyle(fontSize: 12),
                                         ),
                                       ],
@@ -143,7 +147,7 @@ class _EmotePanelState extends State<EmotePanel>
                                     item,
                                     isTextEmote
                                         ? null
-                                        : e.emote!.first.meta!.size == 1
+                                        : flag
                                         ? 24
                                         : 42,
                                     null,
@@ -211,9 +215,7 @@ class _EmotePanelState extends State<EmotePanel>
                       ),
                     ],
                   ),
-                  SizedBox(
-                    height: MediaQuery.viewPaddingOf(context).bottom,
-                  ),
+                  SizedBox(height: MediaQuery.viewPaddingOf(context).bottom),
                 ],
               )
             : _errorWidget(),
