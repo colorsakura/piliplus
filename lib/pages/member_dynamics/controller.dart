@@ -60,7 +60,7 @@ class MemberDynamicsController
     }
   }
 
-  Future<void> onSetTop(bool isTop, Object dynamicId) async {
+  Future<void> onSetTop(bool isTop, dynamic dynamicId) async {
     var res = isTop
         ? await DynamicsHttp.rmTop(dynamicId: dynamicId)
         : await DynamicsHttp.setTop(dynamicId: dynamicId);

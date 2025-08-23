@@ -39,7 +39,7 @@ class VideoHttp {
   static bool enableFilter = zoneRegExp.pattern.isNotEmpty;
 
   // 首页推荐视频
-  static Future<LoadingState<List<RecVideoItemModel>>> rcmdVideoList({
+  static Future<LoadingState> rcmdVideoList({
     required int ps,
     required int freshIdx,
   }) async {
@@ -75,9 +75,7 @@ class VideoHttp {
   }
 
   // 添加额外的loginState变量模拟未登录状态
-  static Future<LoadingState<List<RecVideoItemAppModel>>> rcmdVideoListApp({
-    required int freshIdx,
-  }) async {
+  static Future<LoadingState> rcmdVideoListApp({required int freshIdx}) async {
     final params = {
       'build': 2001100,
       'c_locale': 'zh_CN',
@@ -193,8 +191,8 @@ class VideoHttp {
     String? bvid,
     required int cid,
     int? qn,
-    Object? epid,
-    Object? seasonId,
+    dynamic epid,
+    dynamic seasonId,
     required bool tryLook,
     required VideoType videoType,
   }) async {
@@ -282,7 +280,7 @@ class VideoHttp {
     }
   }
 
-  static Future videoRelation({required String bvid}) async {
+  static Future videoRelation({required dynamic bvid}) async {
     var res = await Request().get(
       Api.videoRelation,
       queryParameters: {
@@ -325,7 +323,7 @@ class VideoHttp {
   }
 
   // 获取点赞/投币/收藏状态 pgc
-  static Future pgcLikeCoinFav({required Object epId}) async {
+  static Future pgcLikeCoinFav({dynamic epId}) async {
     var res = await Request().get(
       Api.pgcLikeCoinFav,
       queryParameters: {'ep_id': epId},
@@ -362,10 +360,7 @@ class VideoHttp {
   }
 
   // 一键三连 pgc
-  static Future pgcTriple({
-    required Object epId,
-    Object? seasonId,
-  }) async {
+  static Future pgcTriple({dynamic epId, required dynamic seasonId}) async {
     var res = await Request().post(
       Api.pgcTriple,
       data: {
@@ -376,10 +371,7 @@ class VideoHttp {
         contentType: Headers.formUrlEncodedContentType,
         headers: {
           'origin': 'https://www.bilibili.com',
-          if (seasonId != null)
-            'referer': 'https://www.bilibili.com/bangumi/play/ss$seasonId',
-          if (seasonId == null)
-            'referer': 'https://www.bilibili.com/bangumi/play/ep$epId',
+          'referer': 'https://www.bilibili.com/bangumi/play/ss$seasonId',
           'user-agent': UaType.pc.ua,
         },
       ),
@@ -635,7 +627,7 @@ class VideoHttp {
   }
 
   static Future roomEntryAction({
-    required Object roomId,
+    roomId,
   }) async {
     await Request().post(
       Api.roomEntryAction,
@@ -650,14 +642,14 @@ class VideoHttp {
   }
 
   static Future historyReport({
-    required Object aid,
-    required Object type,
+    aid,
+    type,
   }) async {
     await Request().post(
       Api.historyReport,
       data: {
-        'aid': aid,
-        'type': type,
+        'aid': ?aid,
+        'type': ?type,
         'csrf': Accounts.heartbeat.csrf,
       },
       options: Options(contentType: Headers.formUrlEncodedContentType),
@@ -666,13 +658,13 @@ class VideoHttp {
 
   // 视频播放进度
   static Future heartBeat({
-    Object? aid,
-    Object? bvid,
-    required Object cid,
-    required Object progress,
-    Object? epid,
-    Object? seasonId,
-    Object? subType,
+    aid,
+    bvid,
+    cid,
+    progress,
+    epid,
+    seasonId,
+    subType,
     required VideoType videoType,
   }) async {
     final isPugv = videoType == VideoType.pugv;
@@ -694,8 +686,8 @@ class VideoHttp {
 
   static Future medialistHistory({
     required int desc,
-    required Object oid,
-    required Object upperMid,
+    required dynamic oid,
+    required dynamic upperMid,
   }) async {
     await Request().post(
       Api.mediaListHistory,
@@ -787,13 +779,12 @@ class VideoHttp {
   }
 
   // 查看视频同时在看人数
-  static Future onlineTotal({int? aid, String? bvid, required int cid}) async {
-    assert(aid != null || bvid != null);
+  static Future onlineTotal({int? aid, String? bvid, int? cid}) async {
     var res = await Request().get(
       Api.onlineTotal,
       queryParameters: {
-        'aid': ?aid,
-        'bvid': ?bvid,
+        'aid': aid,
+        'bvid': bvid,
         'cid': cid,
       },
     );
@@ -805,14 +796,14 @@ class VideoHttp {
   }
 
   static Future aiConclusion({
-    required String bvid,
-    required int cid,
+    String? bvid,
+    int? cid,
     int? upMid,
   }) async {
     final params = await WbiSign.makSign({
       'bvid': bvid,
       'cid': cid,
-      'up_mid': ?upMid,
+      'up_mid': upMid,
     });
     var res = await Request().get(Api.aiConclusion, queryParameters: params);
     if (res.data['code'] == 0 && res.data['data']['code'] == 0) {
@@ -912,7 +903,7 @@ class VideoHttp {
   }
 
   // pgc 排行
-  static Future<LoadingState<List<PgcRankItemModel>?>> pgcRankList({
+  static Future<LoadingState> pgcRankList({
     int day = 3,
     required int seasonType,
   }) async {
@@ -935,7 +926,7 @@ class VideoHttp {
   }
 
   // pgc season 排行
-  static Future<LoadingState<List<PgcRankItemModel>?>> pgcSeasonRankList({
+  static Future<LoadingState> pgcSeasonRankList({
     int day = 3,
     required int seasonType,
   }) async {
@@ -958,8 +949,8 @@ class VideoHttp {
   }
 
   static Future<LoadingState<VideoNoteData>> getVideoNoteList({
-    required Object oid,
-    Object? uperMid,
+    dynamic oid,
+    dynamic uperMid,
     required int page,
   }) async {
     var res = await Request().get(

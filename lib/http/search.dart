@@ -43,7 +43,7 @@ class SearchHttp {
   static Future<LoadingState<R>> searchByType<R>({
     required SearchType searchType,
     required String keyword,
-    required Object page,
+    required page,
     String? order,
     int? duration,
     int? tids,
@@ -53,11 +53,11 @@ class SearchHttp {
     int? pubBegin,
     int? pubEnd,
   }) async {
-    final params = {
+    var params = {
       'search_type': searchType.name,
       'keyword': keyword,
       'page': page,
-      if (order?.isNotEmpty == true) 'order': order!,
+      if (order?.isNotEmpty == true) 'order': order,
       'duration': ?duration,
       'tids': ?tids,
       'order_sort': ?orderSort,
@@ -107,7 +107,7 @@ class SearchHttp {
 
   static Future<LoadingState<SearchAllData>> searchAll({
     required String keyword,
-    required Object page,
+    required page,
     String? order,
     int? duration,
     int? tids,
@@ -117,10 +117,10 @@ class SearchHttp {
     int? pubBegin,
     int? pubEnd,
   }) async {
-    final params = {
+    var params = {
       'keyword': keyword,
       'page': page,
-      if (order?.isNotEmpty == true) 'order': order!,
+      if (order?.isNotEmpty == true) 'order': order,
       'duration': ?duration,
       'tids': ?tids,
       'order_sort': ?orderSort,
@@ -129,7 +129,7 @@ class SearchHttp {
       'pubtime_begin_s': ?pubBegin,
       'pubtime_end_s': ?pubEnd,
     };
-    final res = await Request().get(
+    var res = await Request().get(
       Api.searchAll,
       queryParameters: params,
     );
@@ -148,8 +148,7 @@ class SearchHttp {
     }
   }
 
-  static Future<int?> ab2c({Object? aid, Object? bvid, int? part}) async {
-    assert(aid != null || bvid != null);
+  static Future<int?> ab2c({dynamic aid, dynamic bvid, int? part}) async {
     var res = await Request().get(
       Api.ab2c,
       queryParameters: {
@@ -172,10 +171,9 @@ class SearchHttp {
   }
 
   static Future<LoadingState<PgcInfoModel>> pgcInfo({
-    Object? seasonId,
-    Object? epId,
+    dynamic seasonId,
+    dynamic epId,
   }) async {
-    assert(seasonId != null || epId != null);
     var res = await Request().get(
       Api.pgcInfo,
       queryParameters: {
@@ -191,10 +189,9 @@ class SearchHttp {
   }
 
   static Future<LoadingState<PgcInfoModel>> pugvInfo({
-    Object? seasonId,
-    Object? epId,
+    dynamic seasonId,
+    dynamic epId,
   }) async {
-    assert(seasonId != null || epId != null);
     var res = await Request().get(
       Api.pugvInfo,
       queryParameters: {
@@ -209,11 +206,11 @@ class SearchHttp {
     }
   }
 
-  static Future<LoadingState> episodeInfo({required Object epId}) async {
+  static Future<LoadingState> episodeInfo({dynamic epId}) async {
     var res = await Request().get(
       Api.episodeInfo,
       queryParameters: {
-        'ep_id': epId,
+        'ep_id': ?epId,
       },
     );
     if (res.data['code'] == 0) {

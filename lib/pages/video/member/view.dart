@@ -366,7 +366,7 @@ class _HorizontalMemberPageState extends State<HorizontalMemberPage>
   Widget _buildChildInfo({
     required ThemeData theme,
     required String title,
-    required Object num,
+    required dynamic num,
     required VoidCallback onTap,
   }) {
     return GestureDetector(

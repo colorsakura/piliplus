@@ -1,15 +1,9 @@
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/http/video.dart';
-import 'package:PiliPlus/models/model_rec_video_item.dart';
 import 'package:PiliPlus/pages/common/common_list_controller.dart';
 import 'package:PiliPlus/utils/storage_pref.dart';
 
-class RcmdController
-    extends
-        CommonListController<
-          List<BaseRecVideoItemModel>,
-          BaseRecVideoItemModel
-        > {
+class RcmdController extends CommonListController {
   late bool enableSaveLastData = Pref.enableSaveLastData;
   final bool appRcmd = Pref.appRcmd;
 
@@ -24,16 +18,16 @@ class RcmdController
   }
 
   @override
-  Future<LoadingState<List<BaseRecVideoItemModel>>> customGetData() {
+  Future<LoadingState> customGetData() {
     return appRcmd
         ? VideoHttp.rcmdVideoListApp(freshIdx: page)
         : VideoHttp.rcmdVideoList(freshIdx: page, ps: 20);
   }
 
   @override
-  void handleListResponse(List<BaseRecVideoItemModel> dataList) {
+  void handleListResponse(List dataList) {
     if (enableSaveLastData && page == 0 && loadingState.value.isSuccess) {
-      final currentList = loadingState.value.data;
+      List? currentList = loadingState.value.data;
       if (currentList?.isNotEmpty == true) {
         if (savedRcmdTip) {
           lastRefreshAt = dataList.length;

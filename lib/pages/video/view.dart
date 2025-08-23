@@ -2132,8 +2132,8 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
   }
 
   void onReversePlay({
-    required Object bvid,
-    required Object aid,
+    required dynamic bvid,
+    required dynamic aid,
     required bool isSeason,
   }) {
     if (isSeason && videoDetailController.isPlayAll) {

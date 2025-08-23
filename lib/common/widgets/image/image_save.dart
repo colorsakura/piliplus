@@ -10,7 +10,7 @@ import 'package:get/get.dart';
 void imageSaveDialog({
   required String? title,
   required String? cover,
-  Object? aid,
+  dynamic aid,
   String? bvid,
 }) {
   final double imgWidth = Get.mediaQuery.size.shortestSide - 8 * 2;

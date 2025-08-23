@@ -100,7 +100,7 @@ class Utils {
     }
   }
 
-  static String makeHeroTag(Object? v) {
+  static String makeHeroTag(v) {
     return v.toString() + random.nextInt(9999).toString();
   }
 

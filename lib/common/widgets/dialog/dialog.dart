@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 void showConfirmDialog({
   required BuildContext context,
   required String title,
-  Object? content,
+  dynamic content,
   required VoidCallback onConfirm,
 }) {
   showDialog(

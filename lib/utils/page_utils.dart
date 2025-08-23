@@ -294,11 +294,7 @@ class PageUtils {
     );
   }
 
-  static Future<void> pushDynFromId({
-    String? id,
-    Object? rid,
-    bool off = false,
-  }) async {
+  static Future<void> pushDynFromId({id, rid, bool off = false}) async {
     SmartDialog.showLoading();
     var res = await DynamicsHttp.dynamicDetail(
       id: id,
@@ -312,7 +308,7 @@ class PageUtils {
         toDupNamed(
           '/articlePage',
           parameters: {
-            'id': id!,
+            'id': id,
             'type': 'opus',
           },
           off: off,
@@ -784,7 +780,7 @@ class PageUtils {
 
   static EpisodeItem findEpisode(
     List<EpisodeItem> episodes, {
-    Object? epId,
+    dynamic epId,
     bool isPgc = true,
   }) {
     // epId episode -> progress episode -> first episode
@@ -799,8 +795,8 @@ class PageUtils {
   }
 
   static Future<void> viewPgc({
-    Object? seasonId,
-    Object? epId,
+    dynamic seasonId,
+    dynamic epId,
     String? progress,
   }) async {
     try {
@@ -888,8 +884,8 @@ class PageUtils {
   }
 
   static Future<void> viewPugv({
-    Object? seasonId,
-    Object? epId,
+    dynamic seasonId,
+    dynamic epId,
     int? aid,
   }) async {
     try {

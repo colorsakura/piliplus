@@ -54,11 +54,11 @@ class ReplyUtils {
     required int type,
     required int id,
     required String message,
-    required int root,
-    Object? parent,
-    Object? ctime,
+    dynamic root,
+    dynamic parent,
+    dynamic ctime,
     List? pictures,
-    Object? mid,
+    dynamic mid,
     bool isManual = false,
     required bool biliSendCommAntifraud,
     required sourceId,
@@ -144,6 +144,7 @@ class ReplyUtils {
         type: type,
         sort: ReplySortType.time.index,
         page: 1,
+        enableFilter: false,
         antiGoodsReply: false,
       );
 

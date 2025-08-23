@@ -15,7 +15,7 @@ class ZoneController extends CommonListController {
   }
 
   @override
-  Future<LoadingState<List?>> customGetData() {
+  Future<LoadingState> customGetData() {
     if (rid != null) {
       return VideoHttp.getRankVideoList(rid!);
     }

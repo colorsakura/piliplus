@@ -61,7 +61,7 @@ class ChatItem extends StatelessWidget {
     late final Color textColor = isOwner
         ? theme.colorScheme.onSecondaryContainer
         : theme.colorScheme.onSurfaceVariant;
-    late final Map<String, dynamic> content = jsonDecode(item.content);
+    late final dynamic content = jsonDecode(item.content);
 
     return isRevoke
         ? const SizedBox.shrink()
@@ -162,7 +162,7 @@ class ChatItem extends StatelessWidget {
   Widget messageContent({
     required BuildContext context,
     required ThemeData theme,
-    required Map<String, dynamic> content,
+    required dynamic content,
     required Color textColor,
   }) {
     try {
@@ -196,10 +196,7 @@ class ChatItem extends StatelessWidget {
     }
   }
 
-  Widget msgTypeCommonShareCard_14(
-    Map<String, dynamic> content,
-    Color textColor,
-  ) {
+  Widget msgTypeCommonShareCard_14(dynamic content, Color textColor) {
     if (content['source'] == '直播') {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -245,7 +242,7 @@ class ChatItem extends StatelessWidget {
     }
   }
 
-  Widget msgTypeArticleCard_12(Map<String, dynamic> content, Color textColor) {
+  Widget msgTypeArticleCard_12(dynamic content, Color textColor) {
     return GestureDetector(
       onTap: () => Get.toNamed(
         '/articlePage',
@@ -475,7 +472,7 @@ class ChatItem extends StatelessWidget {
     );
   }
 
-  Widget msgTypeShareV2_7(Map<String, dynamic> content, Color textColor) {
+  Widget msgTypeShareV2_7(dynamic content, Color textColor) {
     String? type;
     GestureTapCallback onTap;
     switch (content['source']) {
@@ -590,7 +587,7 @@ class ChatItem extends StatelessWidget {
     );
   }
 
-  Widget msgTypePic_2(Map<String, dynamic> content) {
+  Widget msgTypePic_2(content) {
     final url = content['url'];
     return GestureDetector(
       onTap: () => PageUtils.imageView(imgList: [SourceModel(url: url)]),
@@ -622,7 +619,7 @@ class ChatItem extends StatelessWidget {
 
   Widget msgTypeText_1(
     ThemeData theme, {
-    required Map<String, dynamic> content,
+    required dynamic content,
     required Color textColor,
   }) {
     final style = TextStyle(color: textColor, letterSpacing: 0.6, height: 1.5);
@@ -767,7 +764,7 @@ class ChatItem extends StatelessWidget {
     );
   }
 
-  Widget msgTypePictureCard_13(Map<String, dynamic> content) {
+  Widget msgTypePictureCard_13(dynamic content) {
     final url = content['jump_url'];
     return Center(
       child: ConstrainedBox(

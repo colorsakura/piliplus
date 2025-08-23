@@ -105,11 +105,14 @@ class RequestUtils {
 
   static Future<void> actionRelationMod({
     required BuildContext context,
-    required int mid,
+    required dynamic mid,
     required bool isFollow,
     required ValueChanged<int>? callback,
     Map? followStatus,
   }) async {
+    if (mid == null) {
+      return;
+    }
     feedBack();
     if (!isFollow) {
       var res = await VideoHttp.relationMod(
@@ -280,21 +283,23 @@ class RequestUtils {
   //   }
   // }
 
-  static Future<void> insertCreatedDyn(Object id) async {
+  static Future<void> insertCreatedDyn(dynamic id) async {
     try {
-      await Future.delayed(const Duration(milliseconds: 200));
-      var res = await DynamicsHttp.dynamicDetail(id: id);
-      if (res['status']) {
-        final ctr = Get.find<DynamicsTabController>(tag: 'all');
-        if (ctr.loadingState.value.isSuccess) {
-          List<DynamicItemModel>? list = ctr.loadingState.value.data;
-          if (list != null) {
-            list.insert(0, res['data']);
-            ctr.loadingState.refresh();
-            return;
+      if (id != null) {
+        await Future.delayed(const Duration(milliseconds: 200));
+        var res = await DynamicsHttp.dynamicDetail(id: id);
+        if (res['status']) {
+          final ctr = Get.find<DynamicsTabController>(tag: 'all');
+          if (ctr.loadingState.value.isSuccess) {
+            List<DynamicItemModel>? list = ctr.loadingState.value.data;
+            if (list != null) {
+              list.insert(0, res['data']);
+              ctr.loadingState.refresh();
+              return;
+            }
           }
+          ctr.loadingState.value = Success([res['data']]);
         }
-        ctr.loadingState.value = Success([res['data']]);
       }
     } catch (e) {
       if (kDebugMode) debugPrint('create dyn $e');
@@ -302,7 +307,7 @@ class RequestUtils {
   }
 
   static Future<void> checkCreatedDyn({
-    Object? id,
+    dynamic id,
     String? dynText,
     bool isManual = false,
   }) async {
@@ -381,8 +386,8 @@ class RequestUtils {
     required BuildContext context,
     required bool isCopy,
     required MultiSelectController<R, T> ctr,
-    required Object? mediaId,
-    required Object mid,
+    required dynamic mediaId,
+    required dynamic mid,
   }) {
     FavHttp.allFavFolders(mid).then((res) {
       if (context.mounted && res.dataOrNull?.list?.isNotEmpty == true) {
@@ -434,7 +439,7 @@ class RequestUtils {
                         isCopy: isCopy,
                         isFav: ctr is! LaterController,
                         srcMediaId: mediaId,
-                        tarMediaId: checkedId!,
+                        tarMediaId: checkedId,
                         resources: removeList
                             .map(
                               (item) => ctr is LaterController

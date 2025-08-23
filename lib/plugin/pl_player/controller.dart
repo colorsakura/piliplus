@@ -1430,12 +1430,12 @@ class PlPlayerController {
     int progress, {
     HeartBeatType type = HeartBeatType.playing,
     bool isManual = false,
-    Object? aid,
-    Object? bvid,
-    Object? cid,
-    Object? epid,
-    Object? seasonId,
-    Object? pgcType,
+    dynamic aid,
+    dynamic bvid,
+    dynamic cid,
+    dynamic epid,
+    dynamic seasonId,
+    dynamic pgcType,
     VideoType? videoType,
   }) async {
     if (isLive) {
@@ -1460,7 +1460,7 @@ class PlPlayerController {
       await VideoHttp.heartBeat(
         aid: aid ?? _aid,
         bvid: bvid ?? _bvid,
-        cid: cid ?? _cid!,
+        cid: cid ?? _cid,
         progress: isComplete ? -1 : progress,
         epid: epid ?? _epid,
         seasonId: seasonId ?? _seasonId,
@@ -1475,7 +1475,7 @@ class PlPlayerController {
       await VideoHttp.heartBeat(
         aid: aid ?? _aid,
         bvid: bvid ?? _bvid,
-        cid: cid ?? _cid!,
+        cid: cid ?? _cid,
         progress: progress,
         epid: epid ?? _epid,
         seasonId: seasonId ?? _seasonId,
@@ -1633,8 +1633,8 @@ class PlPlayerController {
         '/x/player/videoshot',
         queryParameters: {
           // 'aid': IdUtils.bv2av(_bvid),
-          'bvid': _bvid!,
-          'cid': _cid!,
+          'bvid': _bvid,
+          'cid': _cid,
           'index': 1,
         },
         options: Options(

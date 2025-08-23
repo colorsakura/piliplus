@@ -18,7 +18,7 @@ import 'package:PiliPlus/utils/app_sign.dart';
 import 'package:dio/dio.dart';
 
 class FavHttp {
-  static Future favFavFolder(Object mediaId) async {
+  static Future favFavFolder(mediaId) async {
     var res = await Request().post(
       Api.favFavFolder,
       data: {
@@ -34,7 +34,7 @@ class FavHttp {
     }
   }
 
-  static Future unfavFavFolder(Object mediaId) async {
+  static Future unfavFavFolder(mediaId) async {
     var res = await Request().post(
       Api.unfavFavFolder,
       data: {
@@ -165,7 +165,7 @@ class FavHttp {
     }
   }
 
-  static Future addFavPugv(Object seasonId) async {
+  static Future addFavPugv(seasonId) async {
     var res = await Request().post(
       Api.addFavPugv,
       data: {
@@ -181,7 +181,7 @@ class FavHttp {
     }
   }
 
-  static Future delFavPugv(Object seasonId) async {
+  static Future delFavPugv(seasonId) async {
     var res = await Request().post(
       Api.delFavPugv,
       data: {
@@ -215,7 +215,7 @@ class FavHttp {
     }
   }
 
-  static Future addFavTopic(Object topicId) async {
+  static Future addFavTopic(topicId) async {
     var res = await Request().post(
       Api.addFavTopic,
       data: {
@@ -231,7 +231,7 @@ class FavHttp {
     }
   }
 
-  static Future delFavTopic(Object topicId) async {
+  static Future delFavTopic(topicId) async {
     var res = await Request().post(
       Api.delFavTopic,
       data: {
@@ -247,7 +247,7 @@ class FavHttp {
     }
   }
 
-  static Future likeTopic(Object topicId, bool isLike) async {
+  static Future likeTopic(topicId, bool isLike) async {
     var res = await Request().post(
       Api.likeTopic,
       data: {
@@ -284,7 +284,7 @@ class FavHttp {
   }
 
   static Future addFavArticle({
-    required Object id,
+    required dynamic id,
   }) async {
     var res = await Request().post(
       Api.addFavArticle,
@@ -304,7 +304,7 @@ class FavHttp {
   }
 
   static Future delFavArticle({
-    required Object id,
+    required dynamic id,
   }) async {
     var res = await Request().post(
       Api.delFavArticle,
@@ -387,7 +387,7 @@ class FavHttp {
   }
 
   static Future<LoadingState<FavPgcData>> favPgc({
-    required Object mid,
+    required dynamic mid,
     required int type,
     required int pn,
     int? followStatus,
@@ -412,7 +412,7 @@ class FavHttp {
   static Future<LoadingState<FavFolderData>> userfavFolder({
     required int pn,
     required int ps,
-    required Object mid,
+    required dynamic mid,
   }) async {
     var res = await Request().get(
       Api.userFavFolder,
@@ -452,7 +452,7 @@ class FavHttp {
   }
 
   static Future sortFav({
-    required Object mediaId,
+    required dynamic mediaId,
     required String sort,
   }) async {
     Map<String, dynamic> data = {
@@ -476,7 +476,7 @@ class FavHttp {
   }
 
   static Future cleanFav({
-    required Object mediaId,
+    required dynamic mediaId,
   }) async {
     var res = await Request().post(
       Api.cleanFav,
@@ -519,7 +519,7 @@ class FavHttp {
 
   static Future addOrEditFolder({
     required bool isAdd,
-    Object? mediaId,
+    dynamic mediaId,
     required String title,
     required int privacy,
     required String cover,
@@ -547,7 +547,7 @@ class FavHttp {
   }
 
   static Future favFolderInfo({
-    required Object mediaId,
+    dynamic mediaId,
   }) async {
     var res = await Request().get(
       Api.favFolderInfo,
@@ -564,7 +564,7 @@ class FavHttp {
 
   static Future seasonFav({
     required bool isFav,
-    required Object seasonId,
+    required dynamic seasonId,
   }) async {
     var res = await Request().post(
       isFav ? Api.unfavSeason : Api.favSeason,
@@ -625,8 +625,8 @@ class FavHttp {
   }
 
   static Future communityAction({
-    required Object opusId,
-    required Object action,
+    required dynamic opusId,
+    required dynamic action,
   }) async {
     var res = await Request().post(
       Api.communityAction,
@@ -673,8 +673,8 @@ class FavHttp {
 
   // （取消）收藏
   static Future unfavAll({
-    required Object rid,
-    required Object type,
+    required rid,
+    required type,
   }) async {
     var res = await Request().post(
       Api.unfavAll,
@@ -695,9 +695,9 @@ class FavHttp {
   static Future<LoadingState> copyOrMoveFav({
     required bool isCopy,
     required bool isFav,
-    required Object? srcMediaId,
-    required Object tarMediaId,
-    mid,
+    required dynamic srcMediaId,
+    required dynamic tarMediaId,
+    dynamic mid,
     required String resources,
   }) async {
     var res = await Request().post(
@@ -709,7 +709,7 @@ class FavHttp {
           ? Api.copyToview
           : Api.moveToview,
       data: {
-        'src_media_id': srcMediaId,
+        'src_media_id': ?srcMediaId,
         'tar_media_id': tarMediaId,
         'mid': ?mid,
         'resources': resources,
@@ -739,9 +739,9 @@ class FavHttp {
 
   // 查看视频被收藏在哪个文件夹
   static Future<LoadingState<FavFolderData>> videoInFolder({
-    required Object mid,
-    required Object rid,
-    Object? type,
+    dynamic mid,
+    dynamic rid,
+    dynamic type,
   }) async {
     var res = await Request().get(
       Api.favFolder,
