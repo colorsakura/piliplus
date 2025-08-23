@@ -641,7 +641,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                   return PopupMenuItem<int>(
                     enabled: enabled,
                     height: 35,
-                    padding: const EdgeInsets.only(left: 20),
+                    padding: const EdgeInsets.only(left: 15, right: 10),
                     value: item.quality,
                     onTap: () async {
                       if (currentVideoQa.code == item.quality) {
@@ -675,7 +675,10 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                       item.newDesc ?? '',
                       style: enabled
                           ? const TextStyle(color: Colors.white, fontSize: 13)
-                          : null,
+                          : const TextStyle(
+                              color: Color(0x62FFFFFF),
+                              fontSize: 13,
+                            ),
                     ),
                   );
                 },

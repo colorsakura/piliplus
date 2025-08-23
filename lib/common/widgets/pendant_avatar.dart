@@ -147,9 +147,10 @@ class PendantAvatar extends StatelessWidget {
         semanticLabel: _badgeType.desc,
       ),
     };
+    final offset = isMemberAvatar ? 2.0 : 0.0;
     return Positioned(
-      right: isMemberAvatar ? 2 : 0,
-      bottom: isMemberAvatar ? 2 : 0,
+      right: offset,
+      bottom: offset,
       child: IgnorePointer(
         child: DecoratedBox(
           decoration: BoxDecoration(
