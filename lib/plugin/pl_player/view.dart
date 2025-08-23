@@ -616,6 +616,9 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
           final VideoQuality currentVideoQa =
               videoDetailCtr.currentVideoQa.value;
           final PlayUrlModel videoInfo = videoDetailCtr.data;
+          if (videoInfo.dash == null) {
+            return const SizedBox.shrink();
+          }
           final List<FormatItem> videoFormat = videoInfo.supportFormats!;
           final int totalQaSam = videoFormat.length;
           int userfulQaSam = 0;
