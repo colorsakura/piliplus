@@ -731,8 +731,8 @@ class ReplyItemGrpc extends StatelessWidget {
               tag: getTag?.call() ?? Get.arguments['heroTag'],
             );
             isValid =
-                ctr.data.timeLength! * 1000 <=
-                DurationUtil.parseDuration(matchStr);
+                DurationUtil.parseDuration(matchStr) * 1000 <=
+                ctr.data.timeLength!;
           } catch (e) {
             if (kDebugMode) debugPrint('failed to validate: $e');
           }
