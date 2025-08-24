@@ -673,6 +673,12 @@ class _InkResponseState extends State<_InkResponseStateWidget>
   bool _hovering = false;
   final Map<_HighlightType, InkHighlight?> _highlights =
       <_HighlightType, InkHighlight?>{};
+  late final Map<Type, Action<Intent>> _actionMap = <Type, Action<Intent>>{
+    ActivateIntent: CallbackAction<ActivateIntent>(onInvoke: activateOnIntent),
+    ButtonActivateIntent: CallbackAction<ButtonActivateIntent>(
+      onInvoke: activateOnIntent,
+    ),
+  };
   WidgetStatesController? internalStatesController;
 
   bool get highlightsExist => _highlights.values
@@ -1168,22 +1174,129 @@ class _InkResponseState extends State<_InkResponseStateWidget>
     updateHighlight(_HighlightType.hover, value: _hovering);
   }
 
+  bool get _canRequestFocus =>
+      switch (MediaQuery.maybeNavigationModeOf(context)) {
+        NavigationMode.traditional || null => enabled && widget.canRequestFocus,
+        NavigationMode.directional => true,
+      };
+
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTapDown: _primaryEnabled ? handleTapDown : null,
-      onTapUp: _primaryEnabled ? handleTapUp : null,
-      onTap: _primaryEnabled ? handleTap : null,
-      onTapCancel: _primaryEnabled ? handleTapCancel : null,
-      onDoubleTap: widget.onDoubleTap != null ? handleDoubleTap : null,
-      onLongPress: widget.onLongPress != null ? handleLongPress : null,
-      onSecondaryTapDown: _secondaryEnabled ? handleSecondaryTapDown : null,
-      onSecondaryTapUp: _secondaryEnabled ? handleSecondaryTapUp : null,
-      onSecondaryTap: _secondaryEnabled ? handleSecondaryTap : null,
-      onSecondaryTapCancel: _secondaryEnabled ? handleSecondaryTapCancel : null,
-      behavior: HitTestBehavior.opaque,
-      excludeFromSemantics: true,
-      child: widget.child,
+    assert(widget.debugCheckContext(context));
+
+    final ThemeData theme = Theme.of(context);
+    const Set<WidgetState> highlightableStates = <WidgetState>{
+      WidgetState.focused,
+      WidgetState.hovered,
+      WidgetState.pressed,
+    };
+    final Set<WidgetState> nonHighlightableStates = statesController.value
+        .difference(
+          highlightableStates,
+        );
+    // Each highlightable state will be resolved separately to get the corresponding color.
+    // For this resolution to be correct, the non-highlightable states should be preserved.
+    final Set<WidgetState> pressed = <WidgetState>{
+      ...nonHighlightableStates,
+      WidgetState.pressed,
+    };
+    final Set<WidgetState> focused = <WidgetState>{
+      ...nonHighlightableStates,
+      WidgetState.focused,
+    };
+    final Set<WidgetState> hovered = <WidgetState>{
+      ...nonHighlightableStates,
+      WidgetState.hovered,
+    };
+
+    Color getHighlightColorForType(_HighlightType type) {
+      return switch (type) {
+        // The pressed state triggers a ripple (ink splash), per the current
+        // Material Design spec. A separate highlight is no longer used.
+        // See https://material.io/design/interaction/states.html#pressed
+        _HighlightType.pressed =>
+          widget.overlayColor?.resolve(pressed) ??
+              widget.highlightColor ??
+              theme.highlightColor,
+        _HighlightType.focus =>
+          widget.overlayColor?.resolve(focused) ??
+              widget.focusColor ??
+              theme.focusColor,
+        _HighlightType.hover =>
+          widget.overlayColor?.resolve(hovered) ??
+              widget.hoverColor ??
+              theme.hoverColor,
+      };
+    }
+
+    for (final _HighlightType type in _highlights.keys) {
+      _highlights[type]?.color = getHighlightColorForType(type);
+    }
+
+    _currentSplash?.color =
+        widget.overlayColor?.resolve(statesController.value) ??
+        widget.splashColor ??
+        Theme.of(context).splashColor;
+
+    final MouseCursor effectiveMouseCursor =
+        WidgetStateProperty.resolveAs<MouseCursor>(
+          widget.mouseCursor ?? WidgetStateMouseCursor.clickable,
+          statesController.value,
+        );
+
+    return _ParentInkResponseProvider(
+      state: this,
+      child: Actions(
+        actions: _actionMap,
+        child: Focus(
+          focusNode: widget.focusNode,
+          canRequestFocus: _canRequestFocus,
+          onFocusChange: handleFocusUpdate,
+          autofocus: widget.autofocus,
+          child: MouseRegion(
+            cursor: effectiveMouseCursor,
+            onEnter: handleMouseEnter,
+            onExit: handleMouseExit,
+            child: DefaultSelectionStyle.merge(
+              mouseCursor: effectiveMouseCursor,
+              child: Semantics(
+                onTap: widget.excludeFromSemantics || widget.onTap == null
+                    ? null
+                    : simulateTap,
+                onLongPress:
+                    widget.excludeFromSemantics || widget.onLongPress == null
+                    ? null
+                    : simulateLongPress,
+                child: GestureDetector(
+                  onTapDown: _primaryEnabled ? handleTapDown : null,
+                  onTapUp: _primaryEnabled ? handleTapUp : null,
+                  onTap: _primaryEnabled ? handleTap : null,
+                  onTapCancel: _primaryEnabled ? handleTapCancel : null,
+                  onDoubleTap: widget.onDoubleTap != null
+                      ? handleDoubleTap
+                      : null,
+                  onLongPress: widget.onLongPress != null
+                      ? handleLongPress
+                      : null,
+                  onSecondaryTapDown: _secondaryEnabled
+                      ? handleSecondaryTapDown
+                      : null,
+                  onSecondaryTapUp: _secondaryEnabled
+                      ? handleSecondaryTapUp
+                      : null,
+                  onSecondaryTap: _secondaryEnabled ? handleSecondaryTap : null,
+                  onSecondaryTapCancel: _secondaryEnabled
+                      ? handleSecondaryTapCancel
+                      : null,
+                  behavior: HitTestBehavior.opaque,
+                  excludeFromSemantics: true,
+                  child: widget.child,
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
     );
   }
 }
