@@ -244,6 +244,8 @@ class LiveMessageStream {
             }
           }
         },
+        onDone: close,
+        onError: (_) => close(),
       );
       _channel?.sink.add(authPackage.marshal());
     } catch (e) {
@@ -276,6 +278,7 @@ class LiveMessageStream {
   Future<void> _heartBeat() async {
     if (!_active) {
       if (kDebugMode) logger.i("$logTag init heartBeat inactive $hashCode");
+      close();
       return;
     }
     if (kDebugMode) logger.i("$logTag 直播间信息流认证成功 $hashCode");
@@ -284,6 +287,7 @@ class LiveMessageStream {
       if (!_active) {
         if (kDebugMode) logger.i("$logTag heartBeat inactive $hashCode");
         timer.cancel();
+        close();
         return;
       }
       if (kDebugMode) logger.i("$logTag heartBeat $hashCode");
@@ -313,8 +317,11 @@ class LiveMessageStream {
     _active = false;
     if (kDebugMode) logger.i("$logTag close $hashCode");
     _timer?.cancel();
+    _timer = null;
     _eventListeners.clear();
     _socketSubscription?.cancel();
+    _socketSubscription = null;
     _channel?.sink.close();
+    _channel = null;
   }
 }
