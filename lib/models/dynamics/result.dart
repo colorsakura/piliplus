@@ -18,7 +18,19 @@ class DynamicsDataModel {
     final opus = moduleDynamic?.major?.opus;
     return (opus?.title ?? '') +
         (opus?.summary?.text ?? '') +
-        (moduleDynamic?.desc?.text ?? '');
+        (moduleDynamic?.desc?.text ?? '') +
+        _getArcTitle(moduleDynamic?.major);
+  }
+
+  static String _getArcTitle(DynamicMajorModel? major) {
+    final title = switch (major?.type) {
+      'MAJOR_TYPE_ARCHIVE' => major?.archive?.title,
+      'MAJOR_TYPE_UGC_SEASON' => major?.ugcSeason?.title,
+      'MAJOR_TYPE_PGC' => major?.pgc?.title,
+      'MAJOR_TYPE_COURSES' => major?.courses?.title,
+      _ => null,
+    };
+    return title ?? '';
   }
 
   static RegExp banWordForDyn = RegExp(
