@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:PiliPlus/http/init.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/global_data.dart';
+import 'package:PiliPlus/utils/storage_pref.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -17,6 +18,7 @@ import 'package:share_plus/share_plus.dart';
 class ImageUtil {
   static String get time =>
       DateFormat('yyyy-MM-dd_HH-mm-ss').format(DateTime.now());
+  static bool silentDownImg = Pref.silentDownImg;
 
   // 图片分享
   static Future<void> onShareImg(String url) async {
@@ -104,7 +106,7 @@ class ImageUtil {
       if (!await checkPermissionDependOnSdkInt(context)) {
         return false;
       }
-      SmartDialog.showLoading(msg: '正在下载');
+      if (!silentDownImg) SmartDialog.showLoading(msg: '正在下载');
 
       String tmpPath = (await getTemporaryDirectory()).path;
       late String imageName = "cover_${Utils.getFileName(url)}";
@@ -118,7 +120,7 @@ class ImageUtil {
       if (Platform.isIOS) {
         final res1 = await Request().downloadFile(url.http2https, imagePath);
         if (res1.statusCode != 200) throw '${res1.statusCode}';
-        SmartDialog.showLoading(msg: '正在保存');
+        if (!silentDownImg) SmartDialog.showLoading(msg: '正在保存');
         bool success = await LivePhotoMaker.create(
           coverImage: imagePath,
           imagePath: null,
@@ -126,33 +128,33 @@ class ImageUtil {
           width: width,
           height: height,
         );
-        SmartDialog.dismiss();
         if (success) {
           SmartDialog.showToast(' Live Photo 已保存 ');
         } else {
           SmartDialog.showToast('保存失败');
+          return false;
         }
       } else {
-        SmartDialog.showLoading(msg: '正在保存');
+        if (!silentDownImg) SmartDialog.showLoading(msg: '正在保存');
         final SaveResult result = await SaverGallery.saveFile(
           filePath: videoPath,
           fileName: videoName,
           androidRelativePath: "Pictures/PiliPlus",
           skipIfExists: false,
         );
-        SmartDialog.dismiss();
         if (result.isSuccess) {
           SmartDialog.showToast(' 已保存 ');
         } else {
           SmartDialog.showToast('保存失败，${result.errorMessage}');
+          return false;
         }
       }
-
       return true;
     } catch (err) {
-      SmartDialog.dismiss();
       SmartDialog.showToast(err.toString());
       return false;
+    } finally {
+      if (!silentDownImg) SmartDialog.dismiss(status: SmartStatus.loading);
     }
   }
 
@@ -161,12 +163,15 @@ class ImageUtil {
     List<String> imgList,
   ) async {
     if (!await checkPermissionDependOnSdkInt(context)) return false;
-    final cancelToken = CancelToken();
-    SmartDialog.showLoading(
-      msg: '正在下载原图',
-      clickMaskDismiss: true,
-      onDismiss: cancelToken.cancel,
-    );
+    CancelToken? cancelToken;
+    if (!silentDownImg) {
+      cancelToken = CancelToken();
+      SmartDialog.showLoading(
+        msg: '正在下载原图',
+        clickMaskDismiss: true,
+        onDismiss: cancelToken.cancel,
+      );
+    }
     try {
       final isAndroid = Platform.isAndroid;
       final tempPath = (await getTemporaryDirectory()).path;
@@ -209,7 +214,7 @@ class ImageUtil {
           }
         }
       }
-      if (cancelToken.isCancelled) {
+      if (cancelToken?.isCancelled == true) {
         SmartDialog.showToast('已取消下载');
         return false;
       } else {
@@ -217,14 +222,14 @@ class ImageUtil {
       }
       return true;
     } catch (e) {
-      if (cancelToken.isCancelled) {
+      if (cancelToken?.isCancelled == true) {
         SmartDialog.showToast('已取消下载');
       } else {
         SmartDialog.showToast(e.toString());
       }
       return false;
     } finally {
-      SmartDialog.dismiss(status: SmartStatus.loading);
+      if (!silentDownImg) SmartDialog.dismiss(status: SmartStatus.loading);
     }
   }
 

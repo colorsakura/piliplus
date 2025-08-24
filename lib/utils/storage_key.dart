@@ -132,7 +132,8 @@ class SettingBoxKey {
       dynamicDetailRatio = 'dynamicDetailRatio',
       directExitOnBack = 'directExitOnBack',
       quickFavId = 'quickFavId',
-      showFsScreenshotBtn = 'showFsScreenshotBtn';
+      showFsScreenshotBtn = 'showFsScreenshotBtn',
+      silentDownImg = 'silentDownImg';
 
   static const String subtitlePreferenceV2 = 'subtitlePreferenceV2',
       enableDragSubtitle = 'enableDragSubtitle',

@@ -26,6 +26,7 @@ import 'package:PiliPlus/utils/accounts.dart';
 import 'package:PiliPlus/utils/cache_manage.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/feed_back.dart';
+import 'package:PiliPlus/utils/image_util.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/storage_key.dart';
 import 'package:PiliPlus/utils/storage_pref.dart';
@@ -730,6 +731,15 @@ List<SettingsModel> get extraSettings => [
     setKey: SettingBoxKey.showPgcTimeline,
     defaultVal: true,
     needReboot: true,
+  ),
+  SettingsModel(
+    settingsType: SettingsType.sw1tch,
+    title: '静默下载图片',
+    subtitle: '不显示下载 Loading 弹窗',
+    leading: const Icon(Icons.download_for_offline_outlined),
+    setKey: SettingBoxKey.silentDownImg,
+    defaultVal: false,
+    onChanged: (value) => ImageUtil.silentDownImg = value,
   ),
   SettingsModel(
     settingsType: SettingsType.sw1tch,
