@@ -161,7 +161,7 @@ class LoginUtils {
     return 'XY${md5Str[2]}${md5Str[12]}${md5Str[22]}$md5Str';
   }
 
-  static final buvid = generateBuvid();
+  static final buvid = Pref.buvid;
 
   // static String getUUID() {
   //   return const Uuid().v4().replaceAll('-', '');
