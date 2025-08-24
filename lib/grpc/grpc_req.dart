@@ -162,6 +162,7 @@ class GrpcReq {
       }
     } else {
       try {
+        int? code;
         String msg = response.headers.value('Grpc-Status-Details-Bin') ?? '';
         if (msg.isNotEmpty) {
           while (msg.length % 4 != 0) {
@@ -170,6 +171,7 @@ class GrpcReq {
           final msgBytes = base64Decode(msg);
           try {
             final grpcMsg = Status.fromBuffer(msgBytes);
+            code = grpcMsg.details.firstOrNull?.status.code;
             // UNKNOWN : -400 : msg
             final errMsg = grpcMsg.details
                 .map((e) => e.status.message)
@@ -181,7 +183,7 @@ class GrpcReq {
             msg = utf8.decode(msgBytes, allowMalformed: true);
           }
         }
-        return Error(msg);
+        return Error(msg, code: code);
       } catch (e) {
         return Error(e.toString());
       }

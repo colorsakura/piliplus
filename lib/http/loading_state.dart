@@ -53,8 +53,9 @@ class Success<T> extends LoadingState<T> {
 }
 
 class Error extends LoadingState<Never> {
+  final int? code;
   final String? errMsg;
-  const Error(this.errMsg);
+  const Error(this.errMsg, {this.code});
 
   @override
   bool operator ==(Object other) {

@@ -131,8 +131,9 @@ abstract class ReplyController<R> extends CommonListController<R, ReplyInfo> {
     int? replyType,
   }) {
     if (loadingState.value case Error error) {
-      if (error.errMsg?.contains('关闭评论区') == true) {
-        SmartDialog.showToast(error.errMsg!);
+      final errMsg = error.errMsg;
+      if (errMsg != null && (error.code == 12061 || error.code == 12002)) {
+        SmartDialog.showToast(errMsg);
         return;
       }
     }
