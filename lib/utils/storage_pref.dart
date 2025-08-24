@@ -791,4 +791,7 @@ class Pref {
     }
     return null;
   }
+
+  static bool get showFsScreenshotBtn =>
+      _setting.get(SettingBoxKey.showFsScreenshotBtn, defaultValue: true);
 }

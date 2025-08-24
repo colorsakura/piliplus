@@ -326,6 +326,7 @@ class PlPlayerController {
   late final reverseFromFirst = Pref.reverseFromFirst;
   late final horizontalPreview = Pref.horizontalPreview;
   late final showDmChart = Pref.showDmChart;
+  late final showFsScreenshotBtn = Pref.showFsScreenshotBtn;
 
   late final bool autoExitFullscreen = Pref.autoExitFullscreen;
   late final bool autoPlayEnable = Pref.autoPlayEnable;

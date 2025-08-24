@@ -44,6 +44,13 @@ List<SettingsModel> get playSettings => [
   ),
   const SettingsModel(
     settingsType: SettingsType.sw1tch,
+    title: '全屏显示截图按钮',
+    leading: Icon(Icons.photo_camera_outlined),
+    setKey: SettingBoxKey.showFsScreenshotBtn,
+    defaultVal: true,
+  ),
+  const SettingsModel(
+    settingsType: SettingsType.sw1tch,
     title: '双击快退/快进',
     subtitle: '左侧双击快退/右侧双击快进，关闭则双击均为暂停/播放',
     leading: Icon(Icons.touch_app_outlined),

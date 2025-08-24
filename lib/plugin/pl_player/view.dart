@@ -1611,7 +1611,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
           ),
 
         // 截图
-        if (isFullScreen)
+        if (isFullScreen && plPlayerController.showFsScreenshotBtn)
           ViewSafeArea(
             left: false,
             child: Obx(
@@ -1656,6 +1656,8 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                                         shape: const RoundedRectangleBorder(),
                                         content: GestureDetector(
                                           onTap: () async {
+                                            Get.back();
+
                                             String name = DateTime.now()
                                                 .toString();
                                             final SaveResult result =
@@ -1668,7 +1670,6 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                                                 );
 
                                             if (result.isSuccess) {
-                                              Get.back();
                                               SmartDialog.showToast(
                                                 '$name.png已保存到相册/截图',
                                               );

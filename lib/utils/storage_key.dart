@@ -131,7 +131,8 @@ class SettingBoxKey {
       memberTab = 'memberTab',
       dynamicDetailRatio = 'dynamicDetailRatio',
       directExitOnBack = 'directExitOnBack',
-      quickFavId = 'quickFavId';
+      quickFavId = 'quickFavId',
+      showFsScreenshotBtn = 'showFsScreenshotBtn';
 
   static const String subtitlePreferenceV2 = 'subtitlePreferenceV2',
       enableDragSubtitle = 'enableDragSubtitle',
