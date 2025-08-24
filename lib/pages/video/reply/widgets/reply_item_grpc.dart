@@ -581,20 +581,7 @@ class ReplyItemGrpc extends StatelessWidget {
   ) {
     final Content content = replyItem.content;
     final List<InlineSpan> spanChildren = <InlineSpan>[];
-
-    if (content.richText.hasNote()) {
-      spanChildren.add(
-        TextSpan(
-          text: '[笔记] ',
-          style: TextStyle(
-            color: theme.colorScheme.primary,
-          ),
-          recognizer: TapGestureRecognizer()
-            ..onTap = () =>
-                PageUtils.handleWebview(content.richText.note.clickUrl),
-        ),
-      );
-    }
+    bool hasNote = false;
 
     final urlKeys = content.urls.keys;
     // 构建正则表达式
@@ -626,6 +613,9 @@ class ReplyItemGrpc extends StatelessWidget {
         return;
       }
       final isCv = url.clickReport.startsWith('{"cvid');
+      if (isCv) {
+        hasNote = true;
+      }
       final children = [
         if (!isCv && url.hasPrefixIcon())
           WidgetSpan(
@@ -823,6 +813,28 @@ class ReplyItemGrpc extends StatelessWidget {
           addUrl(patternStr, content.urls[patternStr]!);
         }
       }
+    }
+
+    if (!hasNote &&
+        (content.richText.hasNote() ||
+            replyItem.replyControl.bizScene == 'note')) {
+      final hasClickUrl = content.richText.note.hasClickUrl();
+      spanChildren.insert(
+        0,
+        TextSpan(
+          text: '[笔记] ',
+          style: TextStyle(
+            color: hasClickUrl
+                ? theme.colorScheme.primary
+                : theme.colorScheme.secondary,
+          ),
+          recognizer: hasClickUrl
+              ? (TapGestureRecognizer()
+                  ..onTap = () =>
+                      PageUtils.handleWebview(content.richText.note.clickUrl))
+              : null,
+        ),
+      );
     }
 
     return TextSpan(children: spanChildren);
