@@ -2272,6 +2272,7 @@ class HeaderControlState extends TripleState<HeaderControl> {
         if (showFSActionItem && isFullScreen)
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(
                 width: 42,

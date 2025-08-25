@@ -279,6 +279,7 @@ class _LivePageState extends CommonPageState<LivePage, LiveController>
   Widget _buildFollowBody(ThemeData theme, List<CardLiveItem> followList) {
     return SelfSizedHorizontalList(
       gapSize: 5,
+      padding: EdgeInsets.zero,
       childBuilder: (index) {
         final item = followList[index];
         return SizedBox(

@@ -85,28 +85,30 @@ class _MediaPageState extends CommonPageState<MinePage, MineController>
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: controller.list
           .map(
-            (e) => InkWell(
-              onTap: e.onTap,
-              borderRadius: StyleString.mdRadius,
-              child: ConstrainedBox(
-                constraints: const BoxConstraints(maxWidth: 80),
-                child: AspectRatio(
-                  aspectRatio: 1,
-                  child: Column(
-                    spacing: 6,
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        size: 22,
-                        e.icon,
-                        color: primary,
-                      ),
-                      Text(
-                        e.title,
-                        style: const TextStyle(fontSize: 13),
-                      ),
-                    ],
+            (e) => Flexible(
+              child: InkWell(
+                onTap: e.onTap,
+                borderRadius: StyleString.mdRadius,
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: 80),
+                  child: AspectRatio(
+                    aspectRatio: 1,
+                    child: Column(
+                      spacing: 6,
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          size: 22,
+                          e.icon,
+                          color: primary,
+                        ),
+                        Text(
+                          e.title,
+                          style: const TextStyle(fontSize: 13),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -378,27 +380,29 @@ class _MediaPageState extends CommonPageState<MinePage, MineController>
     required TextStyle? lebelStyle,
     required VoidCallback onTap,
   }) {
-    return InkWell(
-      onTap: onTap,
-      borderRadius: StyleString.mdRadius,
-      child: ConstrainedBox(
-        constraints: const BoxConstraints(maxWidth: 80),
-        child: AspectRatio(
-          aspectRatio: 1,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                count?.toString() ?? '-',
-                style: countStyle,
-              ),
-              const SizedBox(height: 4),
-              Text(
-                name,
-                style: lebelStyle,
-              ),
-            ],
+    return Flexible(
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: StyleString.mdRadius,
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 80),
+          child: AspectRatio(
+            aspectRatio: 1,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  count?.toString() ?? '-',
+                  style: countStyle,
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  name,
+                  style: lebelStyle,
+                ),
+              ],
+            ),
           ),
         ),
       ),

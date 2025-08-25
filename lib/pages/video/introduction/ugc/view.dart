@@ -507,6 +507,7 @@ class _UgcIntroPanelState extends TripleState<UgcIntroPanel>
     return SizedBox(
       height: 48,
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Obx(
             () => ActionItem(
