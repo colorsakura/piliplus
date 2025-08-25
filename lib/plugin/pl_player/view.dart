@@ -1378,6 +1378,8 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                   child:
                       widget.bottomControl ??
                       BottomControl(
+                        maxWidth: maxWidth,
+                        isFullScreen: isFullScreen,
                         controller: plPlayerController,
                         buildBottomControl: () =>
                             buildBottomControl(maxWidth > maxHeight),

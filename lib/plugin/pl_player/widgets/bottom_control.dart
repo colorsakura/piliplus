@@ -11,11 +11,15 @@ import 'package:get/get.dart';
 
 class BottomControl extends StatelessWidget {
   const BottomControl({
+    super.key,
+    required this.maxWidth,
+    required this.isFullScreen,
     required this.controller,
     required this.buildBottomControl,
-    super.key,
   });
 
+  final double maxWidth;
+  final bool isFullScreen;
   final PlPlayerController controller;
   final Widget Function() buildBottomControl;
 
@@ -33,130 +37,125 @@ class BottomControl extends StatelessWidget {
         children: [
           Padding(
             padding: const EdgeInsets.fromLTRB(10, 0, 10, 7),
-            child: LayoutBuilder(
-              builder: (context, constraints) {
-                final maxWidth = constraints.maxWidth;
-                return Obx(
-                  () => Stack(
-                    clipBehavior: Clip.none,
-                    alignment: Alignment.bottomCenter,
-                    children: [
-                      Obx(() {
-                        final int value =
-                            controller.sliderPositionSeconds.value;
-                        final int max =
-                            controller.durationSeconds.value.inSeconds;
-                        final int buffer = controller.bufferedSeconds.value;
-                        if (value > max || max <= 0) {
-                          return const SizedBox.shrink();
+            child: Obx(
+              () => Stack(
+                clipBehavior: Clip.none,
+                alignment: Alignment.bottomCenter,
+                children: [
+                  Obx(() {
+                    final int value = controller.sliderPositionSeconds.value;
+                    final int max = controller.durationSeconds.value.inSeconds;
+                    final int buffer = controller.bufferedSeconds.value;
+                    if (value > max || max <= 0) {
+                      return const SizedBox.shrink();
+                    }
+                    return ProgressBar(
+                      progress: Duration(seconds: value),
+                      buffered: Duration(seconds: buffer),
+                      total: Duration(seconds: max),
+                      progressBarColor: colorTheme,
+                      baseBarColor: Colors.white.withValues(alpha: 0.2),
+                      bufferedBarColor: colorTheme.withValues(alpha: 0.4),
+                      timeLabelLocation: TimeLabelLocation.none,
+                      thumbColor: colorTheme,
+                      barHeight: 3.5,
+                      thumbRadius: 7,
+                      onDragStart: (duration) {
+                        feedBack();
+                        controller.onChangedSliderStart(duration.timeStamp);
+                      },
+                      onDragUpdate: (duration) {
+                        if (controller.showSeekPreview) {
+                          controller.updatePreviewIndex(
+                            duration.timeStamp.inSeconds,
+                          );
                         }
-                        return ProgressBar(
-                          progress: Duration(seconds: value),
-                          buffered: Duration(seconds: buffer),
-                          total: Duration(seconds: max),
-                          progressBarColor: colorTheme,
-                          baseBarColor: Colors.white.withValues(alpha: 0.2),
-                          bufferedBarColor: colorTheme.withValues(alpha: 0.4),
-                          timeLabelLocation: TimeLabelLocation.none,
-                          thumbColor: colorTheme,
-                          barHeight: 3.5,
-                          thumbRadius: 7,
-                          onDragStart: (duration) {
-                            feedBack();
-                            controller.onChangedSliderStart(duration.timeStamp);
-                          },
-                          onDragUpdate: (duration) {
-                            if (controller.showSeekPreview) {
-                              controller.updatePreviewIndex(
-                                duration.timeStamp.inSeconds,
+                        double newProgress = duration.timeStamp.inSeconds / max;
+                        if ((newProgress - lastAnnouncedValue).abs() > 0.02) {
+                          accessibilityDebounce?.cancel();
+                          accessibilityDebounce = Timer(
+                            const Duration(milliseconds: 200),
+                            () {
+                              SemanticsService.announce(
+                                "${(newProgress * 100).round()}%",
+                                TextDirection.ltr,
                               );
-                            }
-                            double newProgress =
-                                duration.timeStamp.inSeconds / max;
-                            if ((newProgress - lastAnnouncedValue).abs() >
-                                0.02) {
-                              accessibilityDebounce?.cancel();
-                              accessibilityDebounce = Timer(
-                                const Duration(milliseconds: 200),
-                                () {
-                                  SemanticsService.announce(
-                                    "${(newProgress * 100).round()}%",
-                                    TextDirection.ltr,
-                                  );
-                                  lastAnnouncedValue = newProgress;
-                                },
-                              );
-                            }
-                            controller.onUpdatedSliderProgress(
-                              duration.timeStamp,
-                            );
-                          },
-                          onSeek: (duration) {
-                            if (controller.showSeekPreview) {
-                              controller.showPreview.value = false;
-                            }
-                            controller
-                              ..onChangedSliderEnd()
-                              ..onChangedSlider(duration.inSeconds.toDouble())
-                              ..seekTo(
-                                Duration(seconds: duration.inSeconds),
-                                isSeek: false,
-                              );
-                            SemanticsService.announce(
-                              "${(duration.inSeconds / max * 100).round()}%",
-                              TextDirection.ltr,
-                            );
-                          },
+                              lastAnnouncedValue = newProgress;
+                            },
+                          );
+                        }
+                        controller.onUpdatedSliderProgress(
+                          duration.timeStamp,
                         );
-                      }),
-                      if (controller.segmentList.isNotEmpty)
-                        Positioned(
-                          left: 0,
-                          right: 0,
-                          bottom: 5.25,
-                          child: IgnorePointer(
-                            child: RepaintBoundary(
-                              child: CustomPaint(
-                                key: const Key('segmentList'),
-                                size: const Size(double.infinity, 3.5),
-                                painter: SegmentProgressBar(
-                                  segmentColors: controller.segmentList,
-                                ),
-                              ),
+                      },
+                      onSeek: (duration) {
+                        if (controller.showSeekPreview) {
+                          controller.showPreview.value = false;
+                        }
+                        controller
+                          ..onChangedSliderEnd()
+                          ..onChangedSlider(duration.inSeconds.toDouble())
+                          ..seekTo(
+                            Duration(seconds: duration.inSeconds),
+                            isSeek: false,
+                          );
+                        SemanticsService.announce(
+                          "${(duration.inSeconds / max * 100).round()}%",
+                          TextDirection.ltr,
+                        );
+                      },
+                    );
+                  }),
+                  if (controller.segmentList.isNotEmpty)
+                    Positioned(
+                      left: 0,
+                      right: 0,
+                      bottom: 5.25,
+                      child: IgnorePointer(
+                        child: RepaintBoundary(
+                          child: CustomPaint(
+                            key: const Key('segmentList'),
+                            size: const Size(double.infinity, 3.5),
+                            painter: SegmentProgressBar(
+                              segmentColors: controller.segmentList,
                             ),
                           ),
                         ),
-                      if (controller.viewPointList.isNotEmpty &&
-                          controller.showVP.value) ...[
-                        Positioned(
-                          left: 0,
-                          right: 0,
-                          bottom: 5.25,
-                          child: IgnorePointer(
-                            child: RepaintBoundary(
-                              child: CustomPaint(
-                                key: const Key('viewPointList'),
-                                size: const Size(double.infinity, 3.5),
-                                painter: SegmentProgressBar(
-                                  segmentColors: controller.viewPointList,
-                                ),
-                              ),
+                      ),
+                    ),
+                  if (controller.viewPointList.isNotEmpty &&
+                      controller.showVP.value) ...[
+                    Positioned(
+                      left: 0,
+                      right: 0,
+                      bottom: 5.25,
+                      child: IgnorePointer(
+                        child: RepaintBoundary(
+                          child: CustomPaint(
+                            key: const Key('viewPointList'),
+                            size: const Size(double.infinity, 3.5),
+                            painter: SegmentProgressBar(
+                              segmentColors: controller.viewPointList,
                             ),
                           ),
                         ),
-                        buildViewPointWidget(
-                          controller,
-                          8.75,
-                          maxWidth,
-                        ),
-                      ],
-                      if (controller.dmTrend.isNotEmpty &&
-                          controller.showDmTreandChart.value)
-                        buildDmChart(theme, controller, 4.5),
-                    ],
-                  ),
-                );
-              },
+                      ),
+                    ),
+                    buildViewPointWidget(
+                      controller,
+                      8.75,
+                      maxWidth -
+                          40 -
+                          (isFullScreen
+                              ? MediaQuery.viewPaddingOf(context).horizontal
+                              : 0),
+                    ),
+                  ],
+                  if (controller.dmTrend.isNotEmpty &&
+                      controller.showDmTreandChart.value)
+                    buildDmChart(theme, controller, 4.5),
+                ],
+              ),
             ),
           ),
           buildBottomControl(),

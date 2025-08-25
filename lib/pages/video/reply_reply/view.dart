@@ -362,6 +362,7 @@ class _VideoReplyReplyPanelState
       upMid: _controller.upMid,
       showDialogue: () => _key.currentState?.showBottomSheet(
         backgroundColor: Colors.transparent,
+        constraints: const BoxConstraints(),
         (context) => VideoReplyReplyPanel(
           oid: replyItem.oid.toInt(),
           rpid: replyItem.root.toInt(),

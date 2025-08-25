@@ -87,50 +87,48 @@ class _SendDanmakuPanelState extends CommonTextPubPageState<SendDanmakuPanel> {
     super.dispose();
   }
 
-  Expanded get _buildColorPanel => Expanded(
+  Widget get _buildColorPanel => Expanded(
     child: Obx(
-      () => LayoutBuilder(
-        key: ValueKey(_color.value),
-        builder: (context, constraints) {
-          final int crossAxisCount = (constraints.maxWidth / 40).toInt();
-          final bool isCustomColor = !_colorList.contains(_color.value);
-          final int length = _colorList.length + (isCustomColor ? 1 : 0) + 1;
-          return GridView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            padding: EdgeInsets.zero,
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: crossAxisCount,
-              crossAxisSpacing: 4,
-              mainAxisSpacing: 4,
-            ),
-            itemCount: length,
-            itemBuilder: (context, index) {
-              if (index == length - 1) {
-                return GestureDetector(
-                  onTap: _showColorPicker,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: themeData.colorScheme.secondaryContainer,
-                      borderRadius: const BorderRadius.all(Radius.circular(8)),
-                    ),
-                    alignment: Alignment.center,
-                    margin: const EdgeInsets.all(2),
-                    child: Icon(
-                      size: 22,
-                      Icons.edit,
-                      color: themeData.colorScheme.onSecondaryContainer,
+      () {
+        final bool isCustomColor = !_colorList.contains(_color.value);
+        final int length = _colorList.length + (isCustomColor ? 1 : 0) + 1;
+        return GridView.builder(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          padding: EdgeInsets.zero,
+          gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+            maxCrossAxisExtent: 42,
+            crossAxisSpacing: 4,
+            mainAxisSpacing: 4,
+          ),
+          itemCount: length,
+          itemBuilder: (context, index) {
+            if (index == length - 1) {
+              return GestureDetector(
+                onTap: _showColorPicker,
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: themeData.colorScheme.secondaryContainer,
+                    borderRadius: const BorderRadius.all(
+                      Radius.circular(8),
                     ),
                   ),
-                );
-              } else if (index == length - 2 && isCustomColor) {
-                return _buildColorItem(_color.value);
-              }
-              return _buildColorItem(_colorList[index]);
-            },
-          );
-        },
-      ),
+                  alignment: Alignment.center,
+                  margin: const EdgeInsets.all(2),
+                  child: Icon(
+                    size: 22,
+                    Icons.edit,
+                    color: themeData.colorScheme.onSecondaryContainer,
+                  ),
+                ),
+              );
+            } else if (index == length - 2 && isCustomColor) {
+              return _buildColorItem(_color.value);
+            }
+            return _buildColorItem(_colorList[index]);
+          },
+        );
+      },
     ),
   );
 

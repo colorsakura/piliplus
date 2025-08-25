@@ -2028,6 +2028,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
       int rpid = replyItem.id.toInt();
       videoDetailController.childKey.currentState?.showBottomSheet(
         backgroundColor: Colors.transparent,
+        constraints: const BoxConstraints(),
         (context) => VideoReplyReplyPanel(
           id: id,
           oid: oid,
@@ -2046,6 +2047,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
   void showAiBottomSheet() {
     videoDetailController.childKey.currentState?.showBottomSheet(
       backgroundColor: Colors.transparent,
+      constraints: const BoxConstraints(),
       (context) =>
           AiConclusionPanel(item: ugcIntroController.aiConclusionResult!),
     );
@@ -2057,6 +2059,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
   ) {
     videoDetailController.childKey.currentState?.showBottomSheet(
       backgroundColor: Colors.transparent,
+      constraints: const BoxConstraints(),
       (context) => PgcIntroPanel(
         item: videoDetail,
         videoTags: videoTags,
@@ -2126,6 +2129,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
     } else {
       videoDetailController.childKey.currentState?.showBottomSheet(
         backgroundColor: Colors.transparent,
+        constraints: const BoxConstraints(),
         (context) => listSheetContent(),
       );
     }
@@ -2217,6 +2221,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
     } else {
       videoDetailController.childKey.currentState?.showBottomSheet(
         backgroundColor: Colors.transparent,
+        constraints: const BoxConstraints(),
         (context) => ViewPointsPage(
           videoDetailController: videoDetailController,
           plPlayerController: plPlayerController,
@@ -2241,6 +2246,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
   void onShowMemberPage(int? mid) {
     videoDetailController.childKey.currentState?.showBottomSheet(
       shape: const RoundedRectangleBorder(),
+      constraints: const BoxConstraints(),
       (context) {
         return HorizontalMemberPage(
           mid: mid,

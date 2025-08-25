@@ -414,6 +414,7 @@ class VideoDetailController extends GetxController
       } else {
         childKey.currentState?.showBottomSheet(
           backgroundColor: Colors.transparent,
+          constraints: const BoxConstraints(),
           (context) => panel(),
         );
       }
@@ -1381,6 +1382,7 @@ class VideoDetailController extends GetxController
     } else {
       childKey.currentState?.showBottomSheet(
         backgroundColor: Colors.transparent,
+        constraints: const BoxConstraints(),
         (context) => PostPanel(
           videoDetailController: this,
           plPlayerController: plPlayerController,
@@ -1689,6 +1691,7 @@ class VideoDetailController extends GetxController
     } else {
       childKey.currentState?.showBottomSheet(
         backgroundColor: Colors.transparent,
+        constraints: const BoxConstraints(),
         (context) => NoteListPage(
           oid: aid,
           heroTag: heroTag,

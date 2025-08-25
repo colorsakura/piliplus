@@ -297,6 +297,7 @@ class _SavePanelState extends State<SavePanel> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final padding = MediaQuery.viewPaddingOf(context);
+    final maxWidth = context.mediaQueryShortestSide;
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: Get.back,
@@ -312,17 +313,15 @@ class _SavePanelState extends State<SavePanel> {
             child: GestureDetector(
               onTap: () {},
               child: Container(
-                width: context.mediaQueryShortestSide,
-                margin: const EdgeInsets.symmetric(horizontal: 12),
+                width: maxWidth,
+                padding: const EdgeInsets.symmetric(horizontal: 12),
                 child: RepaintBoundary(
                   key: boundaryKey,
                   child: Container(
                     clipBehavior: Clip.hardEdge,
                     decoration: BoxDecoration(
                       color: theme.colorScheme.surface,
-                      borderRadius: const BorderRadius.all(
-                        Radius.circular(12),
-                      ),
+                      borderRadius: const BorderRadius.all(Radius.circular(12)),
                     ),
                     child: AnimatedSize(
                       curve: Curves.easeInOut,
@@ -343,13 +342,11 @@ class _SavePanelState extends State<SavePanel> {
                             )
                           else if (_item is DynamicItemModel)
                             IgnorePointer(
-                              child: LayoutBuilder(
-                                builder: (_, constrains) => DynamicPanel(
-                                  item: _item,
-                                  isDetail: true,
-                                  isSave: true,
-                                  maxWidth: constrains.maxWidth,
-                                ),
+                              child: DynamicPanel(
+                                item: _item,
+                                isDetail: true,
+                                isSave: true,
+                                maxWidth: maxWidth - 24,
                               ),
                             ),
                           if (cover?.isNotEmpty == true &&

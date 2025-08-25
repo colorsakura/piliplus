@@ -20,7 +20,6 @@ import 'package:PiliPlus/pages/article/widgets/opus_content.dart';
 import 'package:PiliPlus/pages/common/dyn/common_dyn_page.dart';
 import 'package:PiliPlus/pages/dynamics_repost/view.dart';
 import 'package:PiliPlus/pages/video/reply/widgets/reply_item_grpc.dart';
-import 'package:PiliPlus/utils/context_ext.dart';
 import 'package:PiliPlus/utils/date_util.dart';
 import 'package:PiliPlus/utils/feed_back.dart';
 import 'package:PiliPlus/utils/grid.dart';
@@ -70,19 +69,18 @@ class _ArticlePageState extends CommonDynPageState<ArticlePage> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final isPortrait = context.isPortrait;
+    final size = MediaQuery.sizeOf(context);
+    final maxWidth = size.width;
+    final isPortrait = size.height >= maxWidth;
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: _buildAppBar(isPortrait),
+      appBar: _buildAppBar(isPortrait, maxWidth),
       body: Padding(
-        padding: EdgeInsets.only(
-          left: padding.left,
-          right: padding.right,
-        ),
+        padding: EdgeInsets.only(left: padding.left, right: padding.right),
         child: Stack(
           clipBehavior: Clip.none,
           children: [
-            _buildPage(theme, isPortrait),
+            _buildPage(theme, isPortrait, maxWidth),
             _buildBottom(theme),
           ],
         ),
@@ -90,101 +88,89 @@ class _ArticlePageState extends CommonDynPageState<ArticlePage> {
     );
   }
 
-  Widget _buildPage(ThemeData theme, bool isPortrait) {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        double padding = max(
-          context.width / 2 - Grid.smallCardWidth,
-          0,
-        );
-
-        if (isPortrait) {
-          final maxWidth = constraints.maxWidth - 2 * padding - 24;
-          return Padding(
-            padding: EdgeInsets.symmetric(horizontal: padding),
-            child: CustomScrollView(
-              controller: controller.scrollController,
-              physics: const AlwaysScrollableScrollPhysics(),
-              slivers: [
-                _buildContent(theme, maxWidth),
-                SliverToBoxAdapter(
-                  child: Divider(
-                    thickness: 8,
-                    color: theme.dividerColor.withValues(
-                      alpha: 0.05,
-                    ),
-                  ),
-                ),
-                buildReplyHeader(theme),
-                Obx(
-                  () => _buildReplyList(
-                    theme,
-                    controller.loadingState.value,
-                  ),
-                ),
-              ],
+  Widget _buildPage(ThemeData theme, bool isPortrait, double maxWidth) {
+    double padding = max(maxWidth / 2 - Grid.smallCardWidth, 0);
+    if (isPortrait) {
+      return Padding(
+        padding: EdgeInsets.symmetric(horizontal: padding),
+        child: CustomScrollView(
+          controller: controller.scrollController,
+          physics: const AlwaysScrollableScrollPhysics(),
+          slivers: [
+            _buildContent(
+              theme,
+              maxWidth - this.padding.horizontal - 2 * padding - 24,
             ),
-          );
-        }
-
-        padding = padding / 4;
-        final flex = controller.ratio[0].toInt();
-        return Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Expanded(
-              flex: flex,
-              child: CustomScrollView(
-                controller: controller.scrollController,
-                physics: const AlwaysScrollableScrollPhysics(),
-                slivers: [
-                  SliverPadding(
-                    padding: EdgeInsets.only(
-                      left: padding,
-                      bottom: this.padding.bottom + 100,
-                    ),
-                    sliver: _buildContent(
-                      theme,
-                      constraints.maxWidth * flex - padding - 24,
-                    ),
-                  ),
-                ],
+            SliverToBoxAdapter(
+              child: Divider(
+                thickness: 8,
+                color: theme.dividerColor.withValues(alpha: 0.05),
               ),
             ),
-            VerticalDivider(
-              thickness: 8,
-              color: theme.dividerColor.withValues(alpha: 0.05),
-            ),
-            Expanded(
-              flex: controller.ratio[1].toInt(),
-              child: Scaffold(
-                key: scaffoldKey,
-                backgroundColor: Colors.transparent,
-                resizeToAvoidBottomInset: false,
-                body: refreshIndicator(
-                  onRefresh: controller.onRefresh,
-                  child: Padding(
-                    padding: EdgeInsets.only(right: padding),
-                    child: CustomScrollView(
-                      controller: controller.scrollController,
-                      physics: const AlwaysScrollableScrollPhysics(),
-                      slivers: [
-                        buildReplyHeader(theme),
-                        Obx(
-                          () => _buildReplyList(
-                            theme,
-                            controller.loadingState.value,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ),
+            buildReplyHeader(theme),
+            Obx(() => _buildReplyList(theme, controller.loadingState.value)),
           ],
-        );
-      },
+        ),
+      );
+    }
+
+    padding = padding / 4;
+    final flex = controller.ratio[0].toInt();
+    final flex1 = controller.ratio[1].toInt();
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Expanded(
+          flex: flex,
+          child: CustomScrollView(
+            controller: controller.scrollController,
+            physics: const AlwaysScrollableScrollPhysics(),
+            slivers: [
+              SliverPadding(
+                padding: EdgeInsets.only(
+                  left: padding,
+                  bottom: this.padding.bottom + 100,
+                ),
+                sliver: _buildContent(
+                  theme,
+                  (maxWidth - this.padding.horizontal) * flex / (flex + flex1) -
+                      padding -
+                      32,
+                ),
+              ),
+            ],
+          ),
+        ),
+        VerticalDivider(
+          thickness: 8,
+          color: theme.dividerColor.withValues(alpha: 0.05),
+        ),
+        Expanded(
+          flex: flex1,
+          child: Padding(
+            padding: EdgeInsets.only(right: padding),
+            child: Scaffold(
+              key: scaffoldKey,
+              backgroundColor: Colors.transparent,
+              resizeToAvoidBottomInset: false,
+              body: refreshIndicator(
+                onRefresh: controller.onRefresh,
+                child: CustomScrollView(
+                  controller: controller.scrollController,
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  slivers: [
+                    buildReplyHeader(theme),
+                    Obx(
+                      () =>
+                          _buildReplyList(theme, controller.loadingState.value),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 
@@ -484,7 +470,7 @@ class _ArticlePageState extends CommonDynPageState<ArticlePage> {
     };
   }
 
-  PreferredSizeWidget _buildAppBar(bool isPortrait) => AppBar(
+  PreferredSizeWidget _buildAppBar(bool isPortrait, double maxWidth) => AppBar(
     title: Obx(() {
       if (controller.isLoaded.value && controller.showTitle.value) {
         return Text(controller.summary.title ?? '');
@@ -505,7 +491,7 @@ class _ArticlePageState extends CommonDynPageState<ArticlePage> {
                   top: 56,
                   right: 16,
                 ),
-                width: context.width / 4,
+                width: maxWidth / 4,
                 height: 32,
                 child: Builder(
                   builder: (context) => Slider(
