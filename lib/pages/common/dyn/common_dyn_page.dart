@@ -163,26 +163,34 @@ abstract class CommonDynPageState<T extends CommonDynPage> extends State<T>
     EasyThrottle.throttle('replyReply', const Duration(milliseconds: 500), () {
       int oid = replyItem.oid.toInt();
       int rpid = replyItem.id.toInt();
-      Widget replyReplyPage({bool showBackBtn = true}) => Scaffold(
-        resizeToAvoidBottomInset: false,
-        appBar: AppBar(
-          toolbarHeight: showBackBtn ? null : 45,
-          title: const Text('评论详情'),
-          titleSpacing: showBackBtn ? null : 12,
-          automaticallyImplyLeading: showBackBtn,
-          actions: showBackBtn
-              ? null
-              : [
-                  IconButton(
-                    tooltip: '关闭',
-                    icon: const Icon(Icons.close, size: 20),
-                    onPressed: Get.back,
-                  ),
-                ],
-        ),
-        body: Padding(
-          padding: EdgeInsets.only(right: padding.right),
-          child: VideoReplyReplyPanel(
+      Widget replyReplyPage({bool showBackBtn = true}) => Padding(
+        padding: EdgeInsets.only(right: padding.right),
+        child: Scaffold(
+          resizeToAvoidBottomInset: false,
+          appBar: AppBar(
+            primary: showBackBtn,
+            toolbarHeight: showBackBtn ? null : 45,
+            title: const Text('评论详情'),
+            titleSpacing: showBackBtn ? null : 12,
+            automaticallyImplyLeading: showBackBtn,
+            actions: showBackBtn
+                ? null
+                : [
+                    IconButton(
+                      tooltip: '关闭',
+                      icon: const Icon(Icons.close, size: 20),
+                      onPressed: Get.back,
+                    ),
+                  ],
+            shape: Border(
+              bottom: BorderSide(
+                color: Theme.of(
+                  context,
+                ).colorScheme.outline.withValues(alpha: 0.1),
+              ),
+            ),
+          ),
+          body: VideoReplyReplyPanel(
             enableSlide: false,
             id: id,
             oid: oid,
@@ -205,11 +213,7 @@ abstract class CommonDynPageState<T extends CommonDynPage> extends State<T>
           controller.hideFab();
           scaffoldState.showBottomSheet(
             backgroundColor: Colors.transparent,
-            (context) => MediaQuery.removePadding(
-              context: context,
-              removeLeft: true,
-              child: replyReplyPage(showBackBtn: false),
-            ),
+            (context) => replyReplyPage(showBackBtn: false),
           );
         } else {
           Get.to(

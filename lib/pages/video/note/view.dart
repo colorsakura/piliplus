@@ -60,6 +60,7 @@ class _NoteListPageState extends CommonSlidePageState<NoteListPage> {
           SizedBox(
             height: 45,
             child: AppBar(
+              primary: false,
               automaticallyImplyLeading: false,
               titleSpacing: 16,
               toolbarHeight: 45,
@@ -68,10 +69,8 @@ class _NoteListPageState extends CommonSlidePageState<NoteListPage> {
                 final count = _controller.count.value;
                 return Text('笔记${count == -1 ? '' : '($count)'}');
               }),
-              bottom: PreferredSize(
-                preferredSize: const Size.fromHeight(1),
-                child: Divider(
-                  height: 1,
+              shape: Border(
+                bottom: BorderSide(
                   color: theme.colorScheme.outline.withValues(alpha: 0.1),
                 ),
               ),

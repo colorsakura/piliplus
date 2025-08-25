@@ -72,6 +72,7 @@ class _MediaListPanelState
       child: Column(
         children: [
           AppBar(
+            primary: false,
             toolbarHeight: 45,
             automaticallyImplyLeading: false,
             titleSpacing: 16,
@@ -95,10 +96,11 @@ class _MediaListPanelState
               ),
               const SizedBox(width: 14),
             ],
-          ),
-          Divider(
-            height: 1,
-            color: theme.colorScheme.outline.withValues(alpha: 0.1),
+            shape: Border(
+              bottom: BorderSide(
+                color: theme.colorScheme.outline.withValues(alpha: 0.1),
+              ),
+            ),
           ),
           Expanded(
             child: enableSlide ? slideList(theme) : buildList(theme),

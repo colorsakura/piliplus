@@ -64,11 +64,14 @@ class _PostPanelState extends CommonCollapseSlidePageState<PostPanel> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
+        primary: false,
+        toolbarHeight: 45,
         automaticallyImplyLeading: false,
         titleSpacing: 16,
         title: const Text('提交片段'),
         actions: [
           iconButton(
+            size: 32,
             context: context,
             tooltip: '添加片段',
             onPressed: () {
@@ -90,6 +93,7 @@ class _PostPanelState extends CommonCollapseSlidePageState<PostPanel> {
           ),
           const SizedBox(width: 10),
           iconButton(
+            size: 32,
             context: context,
             tooltip: '关闭',
             onPressed: Get.back,

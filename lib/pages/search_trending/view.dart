@@ -95,11 +95,9 @@ class _SearchTrendingPageState extends State<SearchTrendingPage> {
                           statusBarBrightness: Brightness.dark,
                           statusBarIconBrightness: Brightness.light,
                         ),
-                  bottom: scrollRatio == 1
-                      ? PreferredSize(
-                          preferredSize: const Size.fromHeight(1),
-                          child: Divider(
-                            height: 1,
+                  shape: scrollRatio == 1
+                      ? Border(
+                          bottom: BorderSide(
                             color: theme.colorScheme.outline.withValues(
                               alpha: 0.1,
                             ),

@@ -332,9 +332,10 @@ class UserInfoCard extends StatelessWidget {
       ),
       const SizedBox(height: 5),
       Row(
+        spacing: 10,
         mainAxisSize: MainAxisSize.min,
         children: [
-          if (!isOwner) ...[
+          if (!isOwner)
             IconButton.outlined(
               onPressed: () {
                 if (Accounts.main.isLogin) {
@@ -362,8 +363,6 @@ class UserInfoCard extends StatelessWidget {
                 visualDensity: VisualDensity.compact,
               ),
             ),
-            const SizedBox(width: 10),
-          ],
           Expanded(
             child: FilledButton.tonal(
               onPressed: onFollow,

@@ -101,13 +101,14 @@ class _VideoReplyReplyPanelState
 
   @override
   Widget buildPage(ThemeData theme) {
+    Widget child() => enableSlide ? slideList(theme) : buildList(theme);
     return Scaffold(
       key: _key,
       resizeToAvoidBottomInset: false,
-      body: Column(
-        children: [
-          widget.isVideoDetail
-              ? Container(
+      body: widget.isVideoDetail
+          ? Column(
+              children: [
+                Container(
                   height: 45,
                   decoration: BoxDecoration(
                     border: Border(
@@ -129,14 +130,11 @@ class _VideoReplyReplyPanelState
                       ),
                     ],
                   ),
-                )
-              : Divider(
-                  height: 1,
-                  color: theme.dividerColor.withValues(alpha: 0.1),
                 ),
-          Expanded(child: enableSlide ? slideList(theme) : buildList(theme)),
-        ],
-      ),
+                Expanded(child: child()),
+              ],
+            )
+          : child(),
     );
   }
 

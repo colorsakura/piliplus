@@ -45,6 +45,7 @@ class _ViewPointsPageState
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
+        primary: false,
         automaticallyImplyLeading: false,
         titleSpacing: 16,
         title: const Text('分段信息'),
@@ -82,11 +83,9 @@ class _ViewPointsPageState
           ),
           const SizedBox(width: 16),
         ],
-        bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(1),
-          child: Divider(
-            height: 1,
-            color: theme.dividerColor.withValues(alpha: 0.1),
+        shape: Border(
+          bottom: BorderSide(
+            color: theme.colorScheme.outline.withValues(alpha: 0.1),
           ),
         ),
       ),

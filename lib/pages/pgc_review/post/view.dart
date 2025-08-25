@@ -71,10 +71,8 @@ class _PgcReviewPostPanelState extends State<PgcReviewPostPanel> {
               ),
               const SizedBox(width: 12),
             ],
-            bottom: PreferredSize(
-              preferredSize: const Size.fromHeight(1),
-              child: Divider(
-                height: 1,
+            shape: Border(
+              bottom: BorderSide(
                 color: theme.colorScheme.outline.withValues(alpha: 0.1),
               ),
             ),
