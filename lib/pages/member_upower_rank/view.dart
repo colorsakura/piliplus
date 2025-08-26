@@ -75,6 +75,20 @@ class _UpowerRankPageState extends State<UpowerRankPage>
                     '$name 充电排行榜${_controller.memberTotal == 0 ? '' : '(${_controller.memberTotal})'}',
                   );
           }),
+          actions: [
+            TextButton(
+              onPressed: () => Get.toNamed(
+                '/webview',
+                parameters: {
+                  'url':
+                      'https://member.bilibili.com/mall/upower-pay?mid=$_upMid&oid=$_upMid',
+                },
+              ),
+              style: TextButton.styleFrom(visualDensity: VisualDensity.compact),
+              child: const Text('充电'),
+            ),
+            const SizedBox(width: 12),
+          ],
         ),
         body: Padding(
           padding: EdgeInsets.only(left: padding.left, right: padding.right),
