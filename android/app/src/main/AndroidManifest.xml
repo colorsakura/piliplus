@@ -109,6 +109,7 @@
                 <data android:host="uper" />
                 <data android:host="article"
                     android:pathPattern="/readlist" />
+                <data android:host="opus" />
                 <data android:host="advertise" android:path="/home" />
                 <data android:host="clip" />
                 <data android:host="search" android:pathPattern=".*" />

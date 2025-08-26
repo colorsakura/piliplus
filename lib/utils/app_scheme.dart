@@ -2,7 +2,10 @@ import 'dart:async';
 
 import 'package:PiliPlus/common/widgets/view_safe_area.dart';
 import 'package:PiliPlus/http/search.dart';
+import 'package:PiliPlus/models/common/fav_type.dart';
 import 'package:PiliPlus/models/common/video/source_type.dart';
+import 'package:PiliPlus/pages/live/view.dart';
+import 'package:PiliPlus/pages/rank/view.dart';
 import 'package:PiliPlus/pages/subscription_detail/view.dart';
 import 'package:PiliPlus/pages/video/reply_reply/view.dart';
 import 'package:PiliPlus/utils/extension.dart';
@@ -11,6 +14,7 @@ import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:PiliPlus/utils/url_utils.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:app_links/app_links.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
@@ -218,7 +222,7 @@ class PiliScheme {
               );
               return true;
             }
-            Get.toNamed('search');
+            Get.toNamed('/search');
             return true;
           case 'article':
             // bilibili://article/40679479?jump_opus=1&jump_opus_type=1&opus_type=article&h5awaken=random
@@ -468,6 +472,45 @@ class PiliScheme {
               return true;
             }
             return false;
+          case 'history':
+            Get.toNamed('/history');
+            return true;
+          case 'main':
+            if (path.startsWith('/favorite')) {
+              final tab = uri.queryParameters['tab'];
+              int index = 0;
+              if (tab != null) {
+                try {
+                  index = FavTabType.values.byName(tab).index;
+                } catch (e) {
+                  if (kDebugMode) print('favorite jump: $e');
+                }
+              }
+              Get.toNamed('/fav', arguments: index);
+              return true;
+            }
+            return false;
+          case 'livearea':
+            Get.to(
+              Scaffold(
+                resizeToAvoidBottomInset: false,
+                appBar: AppBar(title: const Text('直播')),
+                body: const ViewSafeArea(child: LivePage()),
+              ),
+            );
+            return true;
+          case 'rank':
+            Get.to(
+              Scaffold(
+                resizeToAvoidBottomInset: false,
+                appBar: AppBar(title: const Text('排行榜')),
+                body: const ViewSafeArea(child: RankPage()),
+              ),
+            );
+            return true;
+          case 'login':
+            Get.toNamed('/loginPage');
+            return true;
           default:
             if (!selfHandle) {
               // if (kDebugMode) debugPrint('$uri');
