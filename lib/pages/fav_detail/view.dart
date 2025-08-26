@@ -118,7 +118,7 @@ class _FavDetailPageState extends State<FavDetailPage> with GridMixin {
               ],
             )
           : null,
-      expandedHeight: kToolbarHeight + 130,
+      expandedHeight: kToolbarHeight + 127,
       pinned: true,
       title: enableMultiSelect
           ? null
@@ -343,9 +343,9 @@ class _FavDetailPageState extends State<FavDetailPage> with GridMixin {
       background: Padding(
         padding: EdgeInsets.only(
           top: kToolbarHeight + padding.top + 10,
-          left: 14 + padding.left,
-          right: 20,
-          bottom: 10,
+          left: 12 + padding.left,
+          right: 12,
+          bottom: 7,
         ),
         child: SizedBox(
           height: 110,

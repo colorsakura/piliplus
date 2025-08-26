@@ -47,10 +47,10 @@ class _MemberPageState extends State<MemberPage> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    final theme = Theme.of(context).colorScheme;
     final padding = MediaQuery.viewPaddingOf(context);
     return Material(
-      color: theme.colorScheme.surface,
+      color: theme.surface,
       child: Obx(
         () {
           if (_userController.loadingState.value.isSuccess) {
@@ -74,10 +74,16 @@ class _MemberPageState extends State<MemberPage> {
                       child: Column(
                         children: [
                           if ((_userController.tab2?.length ?? 0) > 1)
-                            TabBar(
-                              controller: _userController.tabController,
-                              tabs: _userController.tabs,
-                              onTap: _userController.onTapTab,
+                            SizedBox(
+                              height: 40,
+                              child: TabBar(
+                                controller: _userController.tabController,
+                                tabs: _userController.tabs,
+                                onTap: _userController.onTapTab,
+                                dividerColor: theme.outline.withValues(
+                                  alpha: 0.2,
+                                ),
+                              ),
                             ),
                           Expanded(child: _buildBody),
                         ],
@@ -94,7 +100,7 @@ class _MemberPageState extends State<MemberPage> {
     );
   }
 
-  List<Widget> _actions(ThemeData theme) => [
+  List<Widget> _actions(ColorScheme theme) => [
     IconButton(
       tooltip: '搜索',
       onPressed: () => Get.toNamed(
@@ -260,12 +266,12 @@ class _MemberPageState extends State<MemberPage> {
                   Icon(
                     Icons.error_outline,
                     size: 19,
-                    color: theme.colorScheme.error,
+                    color: theme.error,
                   ),
                   const SizedBox(width: 10),
                   Text(
                     '举报',
-                    style: TextStyle(color: theme.colorScheme.error),
+                    style: TextStyle(color: theme.error),
                   ),
                 ],
               ),
@@ -307,7 +313,7 @@ class _MemberPageState extends State<MemberPage> {
   );
 
   Widget _buildUserInfo(
-    ThemeData theme,
+    ColorScheme theme,
     LoadingState<SpaceData?> userState,
   ) {
     switch (userState) {
