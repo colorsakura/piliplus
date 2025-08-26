@@ -511,6 +511,21 @@ class PiliScheme {
           case 'login':
             Get.toNamed('/loginPage');
             return true;
+          case 'music':
+            if (path.startsWith('/playlist/')) {
+              final mediaId = uriDigitRegExp.firstMatch(path)?.group(1);
+              if (mediaId != null) {
+                Get.toNamed(
+                  '/favDetail',
+                  parameters: {
+                    'mediaId': mediaId,
+                    'heroTag': Utils.makeHeroTag(mediaId),
+                  },
+                );
+                return true;
+              }
+            }
+            return false;
           default:
             if (!selfHandle) {
               // if (kDebugMode) debugPrint('$uri');
