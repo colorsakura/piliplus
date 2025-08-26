@@ -31,6 +31,7 @@ abstract class CommonDynPageState<T extends CommonDynPage> extends State<T>
   dynamic get arguments;
 
   late EdgeInsets padding;
+  late bool isPortrait;
 
   @override
   void didChangeDependencies() {
@@ -127,7 +128,7 @@ abstract class CommonDynPageState<T extends CommonDynPage> extends State<T>
                       replyItem: response[index],
                       replyLevel: 1,
                       replyReply: (replyItem, id) =>
-                          replyReply(context, replyItem, id),
+                          replyReply(context, replyItem, id, theme),
                       onReply: (replyItem) => controller.onReply(
                         context,
                         replyItem: replyItem,
@@ -159,7 +160,12 @@ abstract class CommonDynPageState<T extends CommonDynPage> extends State<T>
     };
   }
 
-  void replyReply(BuildContext context, ReplyInfo replyItem, int? id) {
+  void replyReply(
+    BuildContext context,
+    ReplyInfo replyItem,
+    int? id,
+    ThemeData theme,
+  ) {
     EasyThrottle.throttle('replyReply', const Duration(milliseconds: 500), () {
       int oid = replyItem.oid.toInt();
       int rpid = replyItem.id.toInt();
@@ -182,9 +188,7 @@ abstract class CommonDynPageState<T extends CommonDynPage> extends State<T>
                 ],
           shape: Border(
             bottom: BorderSide(
-              color: Theme.of(
-                context,
-              ).colorScheme.outline.withValues(alpha: 0.1),
+              color: theme.colorScheme.outline.withValues(alpha: 0.1),
             ),
           ),
         ),
@@ -198,7 +202,7 @@ abstract class CommonDynPageState<T extends CommonDynPage> extends State<T>
           firstFloor: replyItem,
         ),
       );
-      if (this.context.isPortrait) {
+      if (isPortrait) {
         Get.to(
           replyReplyPage,
           routeName: 'dynamicDetail-Copy',

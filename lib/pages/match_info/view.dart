@@ -228,7 +228,7 @@ class _MatchInfoPageState extends CommonDynPageState<MatchInfoPage> {
                         replyItem: response[index],
                         replyLevel: 1,
                         replyReply: (replyItem, id) =>
-                            replyReply(context, replyItem, id),
+                            replyReply(context, replyItem, id, theme),
                         onReply: (replyItem) => controller.onReply(
                           context,
                           replyItem: replyItem,
@@ -258,14 +258,26 @@ class _MatchInfoPageState extends CommonDynPageState<MatchInfoPage> {
   }
 
   @override
-  void replyReply(BuildContext context, ReplyInfo replyItem, int? id) {
+  void replyReply(
+    BuildContext context,
+    ReplyInfo replyItem,
+    int? id,
+    ThemeData theme,
+  ) {
     EasyThrottle.throttle('replyReply', const Duration(milliseconds: 500), () {
       int oid = replyItem.oid.toInt();
       int rpid = replyItem.id.toInt();
       Get.to(
         Scaffold(
           resizeToAvoidBottomInset: false,
-          appBar: AppBar(title: const Text('评论详情')),
+          appBar: AppBar(
+            title: const Text('评论详情'),
+            shape: Border(
+              bottom: BorderSide(
+                color: theme.colorScheme.outline.withValues(alpha: 0.1),
+              ),
+            ),
+          ),
           body: ViewSafeArea(
             child: VideoReplyReplyPanel(
               enableSlide: false,

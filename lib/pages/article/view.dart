@@ -71,7 +71,7 @@ class _ArticlePageState extends CommonDynPageState<ArticlePage> {
     final theme = Theme.of(context);
     final size = MediaQuery.sizeOf(context);
     final maxWidth = size.width;
-    final isPortrait = size.height >= maxWidth;
+    isPortrait = size.height >= maxWidth;
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: _buildAppBar(isPortrait, maxWidth),
@@ -441,7 +441,7 @@ class _ArticlePageState extends CommonDynPageState<ArticlePage> {
                       replyItem: response[index],
                       replyLevel: 1,
                       replyReply: (replyItem, id) =>
-                          replyReply(context, replyItem, id),
+                          replyReply(context, replyItem, id, theme),
                       onReply: (replyItem) => controller.onReply(
                         context,
                         replyItem: replyItem,

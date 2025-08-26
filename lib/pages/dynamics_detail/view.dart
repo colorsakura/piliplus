@@ -55,7 +55,7 @@ class _DynamicDetailPageState extends CommonDynPageState<DynamicDetailPage> {
     final theme = Theme.of(context);
     final size = MediaQuery.sizeOf(context);
     final maxWidth = size.width;
-    final isPortrait = size.height >= maxWidth;
+    isPortrait = size.height >= maxWidth;
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: _buildAppBar(isPortrait, maxWidth),

@@ -41,7 +41,7 @@ class _RcmdPageState extends CommonPageState<RcmdPage, RcmdController>
             SliverPadding(
               padding: EdgeInsets.only(
                 top: StyleString.cardSpace,
-                bottom: MediaQuery.viewPaddingOf(context).bottom,
+                bottom: MediaQuery.viewPaddingOf(context).bottom + 100,
               ),
               sliver: Obx(() => _buildBody(controller.loadingState.value)),
             ),

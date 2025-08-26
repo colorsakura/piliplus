@@ -145,12 +145,10 @@ class _GroupPanelState extends State<GroupPanel> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              TextButton(
+              FilledButton.tonal(
                 onPressed: onSave,
-                style: TextButton.styleFrom(
-                  padding: const EdgeInsets.only(left: 30, right: 30),
-                  foregroundColor: theme.colorScheme.onPrimary,
-                  backgroundColor: theme.colorScheme.primary,
+                style: FilledButton.styleFrom(
+                  visualDensity: VisualDensity.compact,
                 ),
                 child: Obx(() => Text(showDefaultBtn.value ? '保存至默认分组' : '保存')),
               ),
