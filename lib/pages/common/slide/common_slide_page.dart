@@ -13,7 +13,7 @@ abstract class CommonSlidePageState<T extends CommonSlidePage> extends State<T>
     with TickerProviderStateMixin {
   Offset? downPos;
   bool? isSliding;
-
+  late double maxWidth;
   late bool _isRTL = false;
   late final bool enableSlide;
   AnimationController? _animController;
@@ -47,9 +47,14 @@ abstract class CommonSlidePageState<T extends CommonSlidePage> extends State<T>
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return enableSlide
-        ? SlideTransition(
-            position: _anim!,
-            child: buildPage(theme),
+        ? LayoutBuilder(
+            builder: (context, constraints) {
+              maxWidth = constraints.maxWidth;
+              return SlideTransition(
+                position: _anim!,
+                child: buildPage(theme),
+              );
+            },
           )
         : buildPage(theme);
   }
@@ -58,66 +63,61 @@ abstract class CommonSlidePageState<T extends CommonSlidePage> extends State<T>
 
   Widget buildList(ThemeData theme) => throw UnimplementedError();
 
-  Widget slideList(ThemeData theme) => LayoutBuilder(
-    builder: (_, constrains) {
-      final maxWidth = constrains.maxWidth;
-
-      void onDismiss([_]) {
-        if (isSliding == true) {
-          final dx = downPos!.dx;
-          if (_animController!.value * maxWidth +
-                  (_isRTL ? (maxWidth - dx) : dx) >=
-              100) {
-            Get.back();
-          } else {
-            _animController!.reverse();
-          }
-        }
-        downPos = null;
-        isSliding = null;
+  void onDismiss([_]) {
+    if (isSliding == true) {
+      final dx = downPos!.dx;
+      if (_animController!.value * maxWidth + (_isRTL ? (maxWidth - dx) : dx) >=
+          100) {
+        Get.back();
+      } else {
+        _animController!.reverse();
       }
+    }
+    downPos = null;
+    isSliding = null;
+  }
 
-      void onPan(PositionedGestureDetails details) {
-        final localPosition = details.localPosition;
-        if (isSliding == false) {
-          return;
-        } else if (isSliding == null) {
-          if (downPos != null) {
-            Offset cumulativeDelta = localPosition - downPos!;
-            if (cumulativeDelta.dx.abs() >= cumulativeDelta.dy.abs()) {
-              downPos = localPosition;
-              isSliding = true;
-            } else {
-              isSliding = false;
-            }
-          } else {
-            isSliding = false;
-          }
-        } else if (isSliding == true) {
-          _animController!.value =
-              (details.localPosition.dx - downPos!.dx).abs() / maxWidth;
+  void onPan(PositionedGestureDetails details) {
+    final localPosition = details.localPosition;
+    if (isSliding == false) {
+      return;
+    } else if (isSliding == null) {
+      if (downPos != null) {
+        Offset cumulativeDelta = localPosition - downPos!;
+        if (cumulativeDelta.dx.abs() >= cumulativeDelta.dy.abs()) {
+          downPos = localPosition;
+          isSliding = true;
+        } else {
+          isSliding = false;
         }
+      } else {
+        isSliding = false;
       }
+    } else if (isSliding == true) {
+      _animController!.value =
+          (details.localPosition.dx - downPos!.dx).abs() / maxWidth;
+    }
+  }
 
-      return GestureDetector(
-        onPanDown: (details) {
-          final dx = details.localPosition.dx;
-          const offset = 30;
-          final isLTR = dx <= offset;
-          final isRTL = dx >= maxWidth - offset;
-          if (isLTR || isRTL) {
-            _isRTL = isRTL;
-            downPos = details.localPosition;
-          } else {
-            isSliding = false;
-          }
-        },
-        onPanStart: onPan,
-        onPanUpdate: onPan,
-        onPanCancel: onDismiss,
-        onPanEnd: onDismiss,
-        child: buildList(theme),
-      );
-    },
+  void onPanDown(DragDownDetails details) {
+    final dx = details.localPosition.dx;
+    const offset = 30;
+    final isLTR = dx <= offset;
+    final isRTL = dx >= maxWidth - offset;
+    if (isLTR || isRTL) {
+      _isRTL = isRTL;
+      downPos = details.localPosition;
+    } else {
+      isSliding = false;
+    }
+  }
+
+  Widget slideList(ThemeData theme) => GestureDetector(
+    onPanDown: onPanDown,
+    onPanStart: onPan,
+    onPanUpdate: onPan,
+    onPanCancel: onDismiss,
+    onPanEnd: onDismiss,
+    child: buildList(theme),
   );
 }

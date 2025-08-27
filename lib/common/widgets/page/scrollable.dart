@@ -18,7 +18,6 @@ library;
 
 import 'dart:async';
 import 'dart:math' as math;
-import 'dart:math' show max;
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
@@ -782,6 +781,7 @@ class CustomScrollableState extends State<CustomScrollable>
   bool? _lastCanDrag;
   Axis? _lastAxisDirection;
 
+  late bool _isRTL = false;
   Offset? _downPos;
   bool? _isSliding;
 
@@ -893,7 +893,12 @@ class CustomScrollableState extends State<CustomScrollable>
   ScrollHoldController? _hold;
 
   void _handleDragDown(DragDownDetails details) {
-    if (details.localPosition.dx <= 30) {
+    final dx = details.localPosition.dx;
+    const offset = 30;
+    final isLTR = dx <= offset;
+    final isRTL = dx >= _maxWidth - offset;
+    if (isLTR || isRTL) {
+      _isRTL = isRTL;
       _downPos = details.localPosition;
       return;
     }
@@ -915,19 +920,22 @@ class CustomScrollableState extends State<CustomScrollable>
           _downPos = null;
           _isSliding = false;
         }
+      } else {
+        _downPos = null;
+        _isSliding = false;
       }
     } else if (_isSliding == true) {
-      if (localPosition.dx < 0) {
-        return;
-      }
       _animController.value =
-          max(0, (localPosition.dx - _downPos!.dx)) / _maxWidth;
+          (localPosition.dx - _downPos!.dx).abs() / _maxWidth;
     }
   }
 
   void _onDismiss() {
     if (_isSliding == true) {
-      if (_animController.value * _maxWidth + _downPos!.dx >= 100) {
+      final dx = _downPos!.dx;
+      if (_animController.value * _maxWidth +
+              (_isRTL ? (_maxWidth - dx) : dx) >=
+          100) {
         Get.back();
       } else {
         _animController.reverse();
@@ -1172,24 +1180,24 @@ class CustomScrollableState extends State<CustomScrollable>
       );
     }
 
-    return SlideTransition(
-      position: _anim,
-      child: Material(
-        color: widget.bgColor,
-        child: LayoutBuilder(
-          builder: (_, constrains) {
-            _maxWidth = constrains.maxWidth;
-            return widget.header != null
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        _maxWidth = constraints.maxWidth;
+        return SlideTransition(
+          position: _anim,
+          child: Material(
+            color: widget.bgColor,
+            child: widget.header != null
                 ? Column(
                     children: [
                       widget.header!,
                       Expanded(child: result),
                     ],
                   )
-                : result;
-          },
-        ),
-      ),
+                : result,
+          ),
+        );
+      },
     );
   }
 
