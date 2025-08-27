@@ -14,7 +14,7 @@ abstract class CommonSlidePageState<T extends CommonSlidePage> extends State<T>
   Offset? downPos;
   bool? isSliding;
 
-  late bool _isRTF = false;
+  late bool _isRTL = false;
   late final bool enableSlide;
   AnimationController? _animController;
   Animation<Offset>? _anim;
@@ -66,7 +66,7 @@ abstract class CommonSlidePageState<T extends CommonSlidePage> extends State<T>
         if (isSliding == true) {
           final dx = downPos!.dx;
           if (_animController!.value * maxWidth +
-                  (_isRTF ? (maxWidth - dx) : dx) >=
+                  (_isRTL ? (maxWidth - dx) : dx) >=
               100) {
             Get.back();
           } else {
@@ -104,9 +104,9 @@ abstract class CommonSlidePageState<T extends CommonSlidePage> extends State<T>
           final dx = details.localPosition.dx;
           const offset = 30;
           final isLTR = dx <= offset;
-          final isRTF = dx >= maxWidth - offset;
-          if (isLTR || isRTF) {
-            _isRTF = isRTF;
+          final isRTL = dx >= maxWidth - offset;
+          if (isLTR || isRTL) {
+            _isRTL = isRTL;
             downPos = details.localPosition;
           } else {
             isSliding = false;
