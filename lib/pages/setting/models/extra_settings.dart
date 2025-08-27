@@ -692,7 +692,7 @@ List<SettingsModel> get extraSettings => [
   ),
   SettingsModel(
     settingsType: SettingsType.sw1tch,
-    title: '侧滑关闭二级评论页面',
+    title: '侧滑关闭二级页面',
     leading: Transform.rotate(
       angle: pi * 1.5,
       child: const Icon(Icons.touch_app),

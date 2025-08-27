@@ -1,6 +1,5 @@
-import 'dart:math';
-
 import 'package:PiliPlus/utils/storage_pref.dart';
+import 'package:flutter/gestures.dart' show PositionedGestureDetails;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -15,6 +14,7 @@ abstract class CommonSlidePageState<T extends CommonSlidePage> extends State<T>
   Offset? downPos;
   bool? isSliding;
 
+  late bool _isRTF = false;
   late final bool enableSlide;
   AnimationController? _animController;
   Animation<Offset>? _anim;
@@ -62,9 +62,12 @@ abstract class CommonSlidePageState<T extends CommonSlidePage> extends State<T>
     builder: (_, constrains) {
       final maxWidth = constrains.maxWidth;
 
-      void onDismiss() {
+      void onDismiss([_]) {
         if (isSliding == true) {
-          if (_animController!.value * maxWidth + downPos!.dx >= 100) {
+          final dx = downPos!.dx;
+          if (_animController!.value * maxWidth +
+                  (_isRTF ? (maxWidth - dx) : dx) >=
+              100) {
             Get.back();
           } else {
             _animController!.reverse();
@@ -74,7 +77,8 @@ abstract class CommonSlidePageState<T extends CommonSlidePage> extends State<T>
         isSliding = null;
       }
 
-      void onPan(Offset localPosition) {
+      void onPan(PositionedGestureDetails details) {
+        final localPosition = details.localPosition;
         if (isSliding == false) {
           return;
         } else if (isSliding == null) {
@@ -86,34 +90,32 @@ abstract class CommonSlidePageState<T extends CommonSlidePage> extends State<T>
             } else {
               isSliding = false;
             }
+          } else {
+            isSliding = false;
           }
         } else if (isSliding == true) {
-          if (localPosition.dx < 0) {
-            return;
-          }
           _animController!.value =
-              max(0, (localPosition.dx - downPos!.dx)) / maxWidth;
+              (details.localPosition.dx - downPos!.dx).abs() / maxWidth;
         }
       }
 
       return GestureDetector(
         onPanDown: (details) {
-          if (details.localPosition.dx > 30) {
-            isSliding = false;
-          } else {
+          final dx = details.localPosition.dx;
+          const offset = 30;
+          final isLTR = dx <= offset;
+          final isRTF = dx >= maxWidth - offset;
+          if (isLTR || isRTF) {
+            _isRTF = isRTF;
             downPos = details.localPosition;
+          } else {
+            isSliding = false;
           }
         },
-        onPanStart: (details) {
-          onPan(details.localPosition);
-        },
-        onPanUpdate: (details) {
-          onPan(details.localPosition);
-        },
+        onPanStart: onPan,
+        onPanUpdate: onPan,
         onPanCancel: onDismiss,
-        onPanEnd: (_) {
-          onDismiss();
-        },
+        onPanEnd: onDismiss,
         child: buildList(theme),
       );
     },
