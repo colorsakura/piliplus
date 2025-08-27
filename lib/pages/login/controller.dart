@@ -500,9 +500,7 @@ class LoginPageController extends GetxController
           String geeGt = captureUri.queryParameters['gee_gt']!;
           String geeChallenge = captureUri.queryParameters['gee_challenge']!;
 
-          getCaptcha(geeGt, geeChallenge, () {
-            loginByPassword();
-          });
+          getCaptcha(geeGt, geeChallenge, loginByPassword);
           break;
         default:
           SmartDialog.showToast(res['msg']);
@@ -665,9 +663,7 @@ class LoginPageController extends GetxController
             return;
           }
 
-          getCaptcha(geeGt, geeChallenge, () {
-            sendSmsCode();
-          });
+          getCaptcha(geeGt, geeChallenge, sendSmsCode);
           break;
         default:
           SmartDialog.showToast(res['msg']);
@@ -706,8 +702,8 @@ class LoginPageController extends GetxController
     final selectAccount = Map.of(Accounts.accountMode);
     final options = {
       AnonymousAccount(): '0',
-      ...Accounts.account.toMap().cast<String, Account>().map(
-        (k, v) => MapEntry(v, k),
+      ...Accounts.account.toMap().map(
+        (k, v) => MapEntry(v, k as String),
       ),
     };
     return showDialog(

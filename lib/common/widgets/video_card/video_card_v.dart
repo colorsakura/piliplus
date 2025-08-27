@@ -190,6 +190,7 @@ class VideoCardV extends StatelessWidget {
                     videoItem.owner.name.toString(),
                     maxLines: 1,
                     overflow: TextOverflow.clip,
+                    semanticsLabel: 'UP：${videoItem.owner.name}',
                     style: TextStyle(
                       height: 1.5,
                       fontSize: theme.textTheme.labelMedium!.fontSize,
@@ -234,8 +235,8 @@ class VideoCardV extends StatelessWidget {
               ),
               text: DateUtil.dateFormat(
                 videoItem.pubdate,
-                shortFormat: shortFormat,
-                longFormat: longFormat,
+                short: shortFormat,
+                long: longFormat,
               ),
             ),
           ),
