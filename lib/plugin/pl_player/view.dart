@@ -1114,8 +1114,10 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
           () {
             final videoFit = plPlayerController.videoFit.value;
             return Video(
-              fill: widget.fill ?? Colors.black,
               key: key,
+              width: maxWidth,
+              height: maxHeight,
+              fill: widget.fill ?? Colors.black,
               alignment: widget.alignment ?? Alignment.center,
               controller: videoController,
               controls: NoVideoControls,
