@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
 import 'package:PiliPlus/common/widgets/loading_widget/loading_widget.dart';
-import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/common/widgets/text_field/text_field.dart';
 import 'package:PiliPlus/grpc/bilibili/im/type.pb.dart' show Msg;
 import 'package:PiliPlus/http/loading_state.dart';
@@ -136,12 +135,8 @@ class _WhisperDetailPageState
                   hidePanel();
                 },
                 behavior: HitTestBehavior.opaque,
-                child: refreshIndicator(
-                  onRefresh: _whisperDetailController.onRefresh,
-                  child: Obx(
-                    () =>
-                        _buildBody(_whisperDetailController.loadingState.value),
-                  ),
+                child: Obx(
+                  () => _buildBody(_whisperDetailController.loadingState.value),
                 ),
               ),
             ),
