@@ -5,6 +5,7 @@ import 'package:PiliPlus/common/widgets/interactiveviewer_gallery/interactivevie
 import 'package:PiliPlus/grpc/im.dart';
 import 'package:PiliPlus/http/dynamics.dart';
 import 'package:PiliPlus/http/search.dart';
+import 'package:PiliPlus/http/video.dart';
 import 'package:PiliPlus/models/common/image_preview_type.dart';
 import 'package:PiliPlus/models/common/video/video_type.dart';
 import 'package:PiliPlus/models/dynamics/result.dart';
@@ -418,14 +419,30 @@ class PageUtils {
     switch (item.type) {
       case 'DYNAMIC_TYPE_AV':
         final archive = item.modules.moduleDynamic!.major!.archive!;
+        // pgc
         if (archive.type == 2) {
-          String? redirectUrl = await UrlUtils.parseRedirectUrl(
-            archive.jumpUrl!.http2https,
-            false,
-          );
-          if (redirectUrl != null) {
-            viewPgcFromUri(redirectUrl);
-            return;
+          // jumpUrl
+          if (archive.jumpUrl case String jumpUrl) {
+            if (viewPgcFromUri(jumpUrl)) {
+              return;
+            }
+          }
+          // redirectUrl from intro
+          final res = await VideoHttp.videoIntro(bvid: archive.bvid!);
+          if (res.dataOrNull?.redirectUrl case String redirectUrl) {
+            if (viewPgcFromUri(redirectUrl)) {
+              return;
+            }
+          }
+          // redirectUrl from jumpUrl
+          if (await UrlUtils.parseRedirectUrl(
+                archive.jumpUrl.http2https,
+                false,
+              )
+              case String redirectUrl) {
+            if (viewPgcFromUri(redirectUrl)) {
+              return;
+            }
           }
         }
 
@@ -809,6 +826,23 @@ class PageUtils {
         final hasEpisode = episodes != null && episodes.isNotEmpty;
 
         EpisodeItem? episode;
+
+        void viewSection(EpisodeItem episode) {
+          toVideoPage(
+            videoType: VideoType.ugc,
+            bvid: episode.bvid!,
+            cid: episode.cid!,
+            seasonId: data.seasonId,
+            epId: episode.epId,
+            cover: episode.cover,
+            progress: progress == null ? null : int.tryParse(progress),
+            extraArguments: {
+              'pgcApi': true,
+              'pgcItem': data,
+            },
+          );
+        }
+
         if (epId != null) {
           epId = epId.toString();
           if (hasEpisode) {
@@ -827,21 +861,7 @@ class PageUtils {
                   for (var episode in episodes) {
                     if (episode.epId.toString() == epId) {
                       // view as ugc
-                      toVideoPage(
-                        videoType: VideoType.ugc,
-                        bvid: episode.bvid!,
-                        cid: episode.cid!,
-                        seasonId: data.seasonId,
-                        epId: episode.epId,
-                        cover: episode.cover,
-                        progress: progress == null
-                            ? null
-                            : int.tryParse(progress),
-                        extraArguments: {
-                          'pgcApi': true,
-                          'pgcItem': data,
-                        },
-                      );
+                      viewSection(episode);
                       return;
                     }
                   }
@@ -870,6 +890,12 @@ class PageUtils {
             },
           );
           return;
+        } else {
+          episode ??= data.section?.firstOrNull?.episodes?.firstOrNull;
+          if (episode != null) {
+            viewSection(episode);
+            return;
+          }
         }
 
         SmartDialog.showToast('资源加载失败');
