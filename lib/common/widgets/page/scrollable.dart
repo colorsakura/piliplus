@@ -925,8 +925,10 @@ class CustomScrollableState extends State<CustomScrollable>
         _isSliding = false;
       }
     } else if (_isSliding == true) {
+      final from = _downPos!.dx;
+      final to = localPosition.dx;
       _animController.value =
-          (localPosition.dx - _downPos!.dx).abs() / _maxWidth;
+          math.max(0, _isRTL ? from - to : to - from) / _maxWidth;
     }
   }
 

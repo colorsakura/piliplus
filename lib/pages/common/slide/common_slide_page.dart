@@ -1,3 +1,5 @@
+import 'dart:math' show max;
+
 import 'package:PiliPlus/utils/storage_pref.dart';
 import 'package:flutter/gestures.dart' show PositionedGestureDetails;
 import 'package:flutter/material.dart';
@@ -94,8 +96,10 @@ abstract class CommonSlidePageState<T extends CommonSlidePage> extends State<T>
         isSliding = false;
       }
     } else if (isSliding == true) {
+      final from = downPos!.dx;
+      final to = details.localPosition.dx;
       _animController!.value =
-          (details.localPosition.dx - downPos!.dx).abs() / maxWidth;
+          max(0, _isRTL ? from - to : to - from) / maxWidth;
     }
   }
 
