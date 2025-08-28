@@ -3,7 +3,10 @@ import 'dart:convert';
 import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/http/api.dart';
 import 'package:PiliPlus/http/init.dart';
+import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/login/model.dart';
+import 'package:PiliPlus/models_new/login_devices/data.dart';
+import 'package:PiliPlus/utils/accounts.dart';
 import 'package:PiliPlus/utils/accounts/account.dart';
 import 'package:PiliPlus/utils/app_sign.dart';
 import 'package:PiliPlus/utils/login_utils.dart';
@@ -498,5 +501,32 @@ class LoginHttp {
       ),
     );
     return {'status': res.data['code'] == 0, 'msg': res.data['message']};
+  }
+
+  static Future<LoadingState<LoginDevicesData>> loginDevices() async {
+    final account = Accounts.main;
+    final buvid = LoginUtils.buvid;
+    final params = {
+      'local_id': buvid,
+      'buvid': buvid,
+      'device_name': 'android',
+      'device_platform': 'android',
+      'csrf': account.csrf,
+      'mobi_app': 'android_hd',
+      'platform': 'android',
+      'access_key': account.accessKey,
+      'statistics': Constants.statistics,
+      'ts': DateTime.now().millisecondsSinceEpoch ~/ 1000,
+    };
+    AppSign.appSign(params);
+    var res = await Request().get(
+      Api.loginDevices,
+      queryParameters: params,
+    );
+    if (res.data['code'] == 0) {
+      return Success(LoginDevicesData.fromJson(res.data['data']));
+    } else {
+      return Error(res.data['message']);
+    }
   }
 }
