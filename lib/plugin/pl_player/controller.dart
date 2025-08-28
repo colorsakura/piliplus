@@ -327,6 +327,7 @@ class PlPlayerController {
   late final horizontalPreview = Pref.horizontalPreview;
   late final showDmChart = Pref.showDmChart;
   late final showFsScreenshotBtn = Pref.showFsScreenshotBtn;
+  late final showFsLockBtn = Pref.showFsLockBtn;
 
   late final bool autoExitFullscreen = Pref.autoExitFullscreen;
   late final bool autoPlayEnable = Pref.autoPlayEnable;

@@ -793,6 +793,9 @@ class Pref {
   static bool get showFsScreenshotBtn =>
       _setting.get(SettingBoxKey.showFsScreenshotBtn, defaultValue: true);
 
+  static bool get showFsLockBtn =>
+      _setting.get(SettingBoxKey.showFsLockBtn, defaultValue: true);
+
   static bool get silentDownImg =>
       _setting.get(SettingBoxKey.silentDownImg, defaultValue: false);
 

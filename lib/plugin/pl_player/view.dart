@@ -1571,7 +1571,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
           ),
 
         // 锁
-        if (!isLive && isFullScreen)
+        if (!isLive && isFullScreen && plPlayerController.showFsScreenshotBtn)
           ViewSafeArea(
             right: false,
             child: Align(

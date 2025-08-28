@@ -133,6 +133,7 @@ class SettingBoxKey {
       directExitOnBack = 'directExitOnBack',
       quickFavId = 'quickFavId',
       showFsScreenshotBtn = 'showFsScreenshotBtn',
+      showFsLockBtn = 'showFsLockBtn',
       silentDownImg = 'silentDownImg';
 
   static const String subtitlePreferenceV2 = 'subtitlePreferenceV2',

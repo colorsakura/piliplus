@@ -44,6 +44,13 @@ List<SettingsModel> get playSettings => [
   ),
   const SettingsModel(
     settingsType: SettingsType.sw1tch,
+    title: '全屏显示锁定按钮',
+    leading: Icon(Icons.lock_outline),
+    setKey: SettingBoxKey.showFsLockBtn,
+    defaultVal: true,
+  ),
+  const SettingsModel(
+    settingsType: SettingsType.sw1tch,
     title: '全屏显示截图按钮',
     leading: Icon(Icons.photo_camera_outlined),
     setKey: SettingBoxKey.showFsScreenshotBtn,
