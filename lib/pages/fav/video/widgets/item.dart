@@ -80,6 +80,8 @@ class FavVideoItem extends StatelessWidget {
           if (item.intro?.isNotEmpty == true)
             Text(
               item.intro!,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
               style: TextStyle(
                 fontSize: fontSize,
                 color: color,
