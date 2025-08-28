@@ -5,6 +5,7 @@ import 'package:PiliPlus/models/common/dynamic/dynamics_type.dart';
 import 'package:PiliPlus/models/dynamics/article_content_model.dart';
 import 'package:PiliPlus/models/model_avatar.dart';
 import 'package:PiliPlus/models_new/live/live_feed_index/watched_show.dart';
+import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/storage_pref.dart';
 
 class DynamicsDataModel {
@@ -162,6 +163,7 @@ class ItemModulesModel {
   List<ModuleTag>? moduleExtend; // opus的tag
   List<ArticleContentModel>? moduleContent;
   ModuleBlocked? moduleBlocked;
+  ModuleFold? moduleFold;
 
   // moduleBottom
 
@@ -178,6 +180,9 @@ class ItemModulesModel {
         : null;
     moduleTag = json['module_tag'] != null
         ? ModuleTag.fromJson(json['module_tag'])
+        : null;
+    moduleFold = json['module_fold'] != null
+        ? ModuleFold.fromJson(json['module_fold'])
         : null;
   }
 
@@ -230,6 +235,18 @@ class ItemModulesModel {
         // if (kDebugMode) debugPrint('unknown type: ${i}');
       }
     }
+  }
+}
+
+class ModuleFold {
+  List<String>? ids;
+  String? statement;
+  int? type;
+
+  ModuleFold.fromJson(Map<String, dynamic> json) {
+    ids = (json['ids'] as List?)?.fromCast();
+    statement = json['statement'];
+    type = json['type'];
   }
 }
 

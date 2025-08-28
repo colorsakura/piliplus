@@ -112,12 +112,14 @@ class _DynamicsTabPageState
                           if (index == response.length - 1) {
                             controller.onLoadMore();
                           }
+                          final item = response[index];
                           return DynamicPanel(
-                            item: response[index],
+                            item: item,
                             onRemove: (idStr) =>
                                 controller.onRemove(index, idStr),
                             onBlock: () => controller.onBlock(index),
                             maxWidth: maxWidth,
+                            onUnfold: () => controller.onUnfold(item, index),
                           );
                         },
                         childCount: response!.length,
@@ -135,6 +137,7 @@ class _DynamicsTabPageState
                               controller.onRemove(index, idStr),
                           onBlock: () => controller.onBlock(index),
                           maxWidth: maxWidth,
+                          onUnfold: () => controller.onUnfold(item, index),
                         );
                       },
                       itemCount: response!.length,

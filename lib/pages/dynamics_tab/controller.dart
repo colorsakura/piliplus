@@ -74,4 +74,17 @@ class DynamicsTabController
         ..refresh();
     }
   }
+
+  void onUnfold(DynamicItemModel item, int index) {
+    try {
+      final list = loadingState.value.data!;
+      final ids = item.modules.moduleFold!.ids!;
+      final flag = index + ids.length + 1;
+      for (int i = index + 1; i < flag; i++) {
+        list[i].visible = true;
+      }
+      item.modules.moduleFold = null;
+      loadingState.refresh();
+    } catch (_) {}
+  }
 }

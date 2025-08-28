@@ -20,6 +20,7 @@ class DynamicPanel extends StatelessWidget {
   final bool isSave;
   final Function(bool isTop, dynamic dynId)? onSetTop;
   final VoidCallback? onBlock;
+  final VoidCallback? onUnfold;
 
   const DynamicPanel({
     super.key,
@@ -31,10 +32,14 @@ class DynamicPanel extends StatelessWidget {
     this.isSave = false,
     this.onSetTop,
     this.onBlock,
+    this.onUnfold,
   });
 
   @override
   Widget build(BuildContext context) {
+    if (item.visible == false) {
+      return const SizedBox.shrink();
+    }
     final theme = Theme.of(context);
     final authorWidget = AuthorPanel(
       item: item,
@@ -98,8 +103,49 @@ class DynamicPanel extends StatelessWidget {
                 maxWidth: maxWidth,
               ),
             const SizedBox(height: 2),
-            if (!isDetail) ActionPanel(item: item),
-            if (isDetail && !isSave) const SizedBox(height: 12),
+            if (!isDetail) ...[
+              ActionPanel(item: item),
+              if (item.modules.moduleFold case ModuleFold moduleFold) ...[
+                Divider(
+                  height: 1,
+                  color: theme.dividerColor.withValues(alpha: 0.1),
+                ),
+                InkWell(
+                  onTap: onUnfold,
+                  child: Container(
+                    alignment: Alignment.center,
+                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    child: Text.rich(
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        height: 1,
+                        fontSize: 13,
+                        color: theme.colorScheme.outline,
+                      ),
+                      strutStyle: const StrutStyle(
+                        height: 1,
+                        leading: 0,
+                        fontSize: 13,
+                      ),
+                      TextSpan(
+                        children: [
+                          TextSpan(text: moduleFold.statement ?? '展开'),
+                          WidgetSpan(
+                            alignment: PlaceholderAlignment.middle,
+                            child: Icon(
+                              size: 19,
+                              Icons.keyboard_arrow_down,
+                              color: theme.colorScheme.outline,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ] else if (!isSave)
+              const SizedBox(height: 12),
           ],
         ),
       ),
