@@ -237,17 +237,7 @@ class _MusicDetailPageState extends CommonDynPageState<MusicDetailPage> {
       child: SlideTransition(
         position: controller.fabAnim,
         child: controller.showDynActionBar
-            ? Align(
-                alignment: Alignment.bottomRight,
-                child: Padding(
-                  padding: EdgeInsets.only(
-                    right: 14,
-                    bottom: padding.bottom + 14,
-                  ),
-                  child: replyButton,
-                ),
-              )
-            : Column(
+            ? Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
@@ -342,6 +332,16 @@ class _MusicDetailPageState extends CommonDynPageState<MusicDetailPage> {
                     ),
                   ),
                 ],
+              )
+            : Align(
+                alignment: Alignment.bottomRight,
+                child: Padding(
+                  padding: EdgeInsets.only(
+                    right: 14,
+                    bottom: padding.bottom + 14,
+                  ),
+                  child: replyButton,
+                ),
               ),
       ),
     );
