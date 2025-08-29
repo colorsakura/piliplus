@@ -1956,36 +1956,44 @@ class HeaderControlState extends TripleState<HeaderControl> {
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    LayoutBuilder(
-                      builder: (context, constraints) {
-                        return Obx(
-                          () {
-                            final videoDetail =
-                                introController.videoDetail.value;
-                            final String title;
-                            if (videoDetail.videos == 1) {
-                              title = videoDetail.title!;
-                            } else {
-                              title =
-                                  videoDetail.pages
-                                      ?.firstWhereOrNull(
-                                        (e) =>
-                                            e.cid == videoDetailCtr.cid.value,
-                                      )
-                                      ?.pagePart ??
-                                  videoDetail.title!;
-                            }
-                            return MarqueeText(
-                              title,
-                              maxWidth: constraints.maxWidth,
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 16,
-                              ),
-                            );
-                          },
-                        );
-                      },
+                    Padding(
+                      padding: isPortrait
+                          ? EdgeInsets.zero
+                          : const EdgeInsets.only(right: 10),
+                      child: LayoutBuilder(
+                        builder: (context, constraints) {
+                          return Obx(
+                            () {
+                              final videoDetail =
+                                  introController.videoDetail.value;
+                              final String title;
+                              if (videoDetail.videos == 1) {
+                                title = videoDetail.title!;
+                              } else {
+                                title =
+                                    videoDetail.pages
+                                        ?.firstWhereOrNull(
+                                          (e) =>
+                                              e.cid == videoDetailCtr.cid.value,
+                                        )
+                                        ?.pagePart ??
+                                    videoDetail.title!;
+                              }
+                              return MarqueeText(
+                                title,
+                                maxWidth: constraints.maxWidth,
+                                count: 3,
+                                bounce: false,
+                                spacing: 30,
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 16,
+                                ),
+                              );
+                            },
+                          );
+                        },
+                      ),
                     ),
                     if (introController.isShowOnlineTotal)
                       Obx(

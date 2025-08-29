@@ -5,12 +5,18 @@ class MarqueeText extends StatelessWidget {
   final double maxWidth;
   final String text;
   final TextStyle? style;
+  final int? count;
+  final bool bounce;
+  final double spacing;
 
   const MarqueeText(
     this.text, {
+    super.key,
     required this.maxWidth,
     this.style,
-    super.key,
+    this.count,
+    this.bounce = true,
+    this.spacing = 0,
   });
 
   @override
@@ -22,18 +28,21 @@ class MarqueeText extends StatelessWidget {
       ),
       textDirection: TextDirection.ltr,
       maxLines: 1,
-    )..layout(maxWidth: maxWidth);
+    )..layout();
+    final width = textPainter.width;
     final child = Text(
       text,
       style: style,
       maxLines: 1,
       textDirection: TextDirection.ltr,
     );
-    if (textPainter.didExceedMaxLines) {
+    if (width > maxWidth) {
       return SingleWidgetMarquee(
         child,
-        duration: const Duration(seconds: 5),
-        bounce: true,
+        duration: Duration(milliseconds: (width / 50 * 1000).round()),
+        bounce: bounce,
+        count: count,
+        spacing: spacing,
       );
     } else {
       return child;
@@ -46,6 +55,7 @@ class SingleWidgetMarquee extends StatefulWidget {
   final Duration? duration;
   final bool bounce;
   final double spacing;
+  final int? count;
 
   const SingleWidgetMarquee(
     this.child, {
@@ -53,6 +63,7 @@ class SingleWidgetMarquee extends StatefulWidget {
     this.duration,
     this.bounce = false,
     this.spacing = 0,
+    this.count,
   });
 
   @override
@@ -65,7 +76,7 @@ class _SingleWidgetMarqueeState extends State<SingleWidgetMarquee>
     vsync: this,
     duration: widget.duration,
     reverseDuration: widget.duration,
-  )..repeat(reverse: widget.bounce);
+  )..repeat(reverse: widget.bounce, count: widget.count);
 
   @override
   Widget build(BuildContext context) => widget.bounce
