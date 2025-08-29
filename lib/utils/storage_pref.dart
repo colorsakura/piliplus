@@ -106,7 +106,7 @@ class Pref {
     final list = _setting.get(SettingBoxKey.blockSettings) as List?;
     if (list == null) {
       return SegmentType.values
-          .map((i) => Pair(first: i, second: SkipType.values[i.index]))
+          .map((i) => Pair(first: i, second: SkipType.skipOnce))
           .toList();
     }
     return SegmentType.values
