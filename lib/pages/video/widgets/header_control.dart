@@ -1933,8 +1933,6 @@ class HeaderControlState extends TripleState<HeaderControl> {
                               return MarqueeText(
                                 title,
                                 maxWidth: constraints.maxWidth,
-                                count: 3,
-                                bounce: false,
                                 spacing: 30,
                                 style: const TextStyle(
                                   color: Colors.white,

@@ -14,12 +14,10 @@ import 'package:flutter/material.dart';
 
 class MusicVideoCardH extends StatelessWidget {
   final BgmRecommend videoItem;
-  final Animation<double> animation;
 
   const MusicVideoCardH({
     super.key,
     required this.videoItem,
-    required this.animation,
   });
 
   @override
@@ -117,7 +115,7 @@ class MusicVideoCardH extends StatelessWidget {
           ),
           const SizedBox(height: 3),
           BounceMarquee(
-            animation: animation,
+            velocity: 25,
             child: Row(
               spacing: 8,
               children: [

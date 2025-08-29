@@ -19,17 +19,11 @@ class MusicRecommandPage extends StatefulWidget {
 }
 
 class _MusicRecommandPageState extends State<MusicRecommandPage>
-    with GridMixin, SingleTickerProviderStateMixin {
+    with GridMixin {
   late final _controller = Get.put(
     MusicRecommendController(),
     tag: Utils.generateRandomString(8),
   );
-
-  late final _animation = AnimationController(
-    vsync: this,
-    duration: const Duration(seconds: 5),
-    reverseDuration: const Duration(seconds: 5),
-  )..repeat(reverse: true);
 
   @override
   Widget build(BuildContext context) {
@@ -68,10 +62,8 @@ class _MusicRecommandPageState extends State<MusicRecommandPage>
         response?.isNotEmpty == true
             ? SliverGrid.builder(
                 gridDelegate: gridDelegate,
-                itemBuilder: (context, index) => MusicVideoCardH(
-                  videoItem: response[index],
-                  animation: _animation,
-                ),
+                itemBuilder: (context, index) =>
+                    MusicVideoCardH(videoItem: response[index]),
                 itemCount: response!.length,
               )
             : HttpError(onReload: _controller.onReload),
@@ -119,11 +111,5 @@ class _MusicRecommandPageState extends State<MusicRecommandPage>
         ],
       ),
     );
-  }
-
-  @override
-  void dispose() {
-    _animation.dispose();
-    super.dispose();
   }
 }
