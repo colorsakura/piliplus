@@ -28,6 +28,7 @@ class LiveRoomChat extends StatelessWidget {
     late final nameColor = isPP
         ? Colors.white.withValues(alpha: 0.9)
         : Colors.white.withValues(alpha: 0.6);
+    late final devicePixelRatio = MediaQuery.devicePixelRatioOf(context);
     return Stack(
       children: [
         Obx(
@@ -69,7 +70,7 @@ class LiveRoomChat extends StatelessWidget {
                               }
                             },
                         ),
-                        _buildMsg(item),
+                        _buildMsg(devicePixelRatio, item),
                       ],
                     ),
                   ),
@@ -100,7 +101,7 @@ class LiveRoomChat extends StatelessWidget {
     );
   }
 
-  InlineSpan _buildMsg(DanmakuMsg obj) {
+  InlineSpan _buildMsg(double devicePixelRatio, DanmakuMsg obj) {
     final uemote = obj.uemote;
     if (uemote != null) {
       // "room_{{room_id}}_{{int}}" or "upower_[{{emote}}]"
@@ -108,8 +109,10 @@ class LiveRoomChat extends StatelessWidget {
         child: NetworkImgLayer(
           src: uemote.url,
           type: ImageType.emote,
-          width: uemote.width,
-          height: uemote.height,
+          width: uemote.width / devicePixelRatio,
+          height: uemote.height == null
+              ? null
+              : uemote.height! / devicePixelRatio,
           semanticsLabel: obj.text,
         ),
       );
