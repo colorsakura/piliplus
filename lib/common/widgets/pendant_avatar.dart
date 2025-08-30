@@ -22,13 +22,13 @@ class PendantAvatar extends StatelessWidget {
     required this.avatar,
     this.size = 80,
     double? badgeSize,
-    bool? isVip,
+    bool isVip = false,
     int? officialType,
     this.garbPendantImage,
     this.roomId,
     this.onTap,
   }) : _badgeType = officialType == null || officialType < 0
-           ? isVip == true
+           ? isVip
                  ? BadgeType.vip
                  : BadgeType.none
            : officialType == 0

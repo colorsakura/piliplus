@@ -1,7 +1,8 @@
+import 'package:PiliPlus/common/widgets/list_tile.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/storage_key.dart';
 import 'package:PiliPlus/utils/storage_pref.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide ListTile;
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 
@@ -9,9 +10,9 @@ class SetSwitchItem extends StatefulWidget {
   final String? title;
   final String? subtitle;
   final String? setKey;
-  final bool? defaultVal;
+  final bool defaultVal;
   final ValueChanged<bool>? onChanged;
-  final bool? needReboot;
+  final bool needReboot;
   final Widget? leading;
   final Function? onTap;
   final EdgeInsetsGeometry? contentPadding;
@@ -21,9 +22,9 @@ class SetSwitchItem extends StatefulWidget {
     this.title,
     this.subtitle,
     this.setKey,
-    this.defaultVal,
+    this.defaultVal = false,
     this.onChanged,
-    this.needReboot,
+    this.needReboot = false,
     this.leading,
     this.onTap,
     this.contentPadding,
@@ -44,7 +45,7 @@ class _SetSwitchItemState extends State<SetSwitchItem> {
     } else {
       val = GStorage.setting.get(
         widget.setKey,
-        defaultValue: widget.defaultVal ?? false,
+        defaultValue: widget.defaultVal,
       );
     }
   }
@@ -109,7 +110,7 @@ class _SetSwitchItemState extends State<SetSwitchItem> {
     }
 
     widget.onChanged?.call(val);
-    if (widget.needReboot == true) {
+    if (widget.needReboot) {
       SmartDialog.showToast('重启生效');
     }
     setState(() {});

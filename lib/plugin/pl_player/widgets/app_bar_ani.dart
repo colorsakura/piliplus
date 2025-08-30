@@ -20,7 +20,7 @@ class AppBarAni extends StatelessWidget {
     return SlideTransition(
       position:
           Tween<Offset>(
-            begin: isTop ? const Offset(0, -1) : const Offset(0, 1.1),
+            begin: isTop ? const Offset(0, -1) : const Offset(0, 1.2),
             end: Offset.zero,
           ).animate(
             CurvedAnimation(

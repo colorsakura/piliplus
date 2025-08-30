@@ -307,7 +307,6 @@ Widget module(
       return InkWell(
         onTap: () => PageUtils.handleWebview("https:${music['jump_url']}"),
         child: Container(
-          width: double.infinity,
           padding: const EdgeInsets.only(
             left: 12,
             top: 10,

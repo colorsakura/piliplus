@@ -90,6 +90,7 @@ class _ReplyPageState extends CommonRichTextPubPageState<ReplyPage> {
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               ...buildInputView(),
               buildImagePreview(),
@@ -111,13 +112,11 @@ class _ReplyPageState extends CommonRichTextPubPageState<ReplyPage> {
     return Obx(
       () {
         if (pathList.isNotEmpty) {
-          return Container(
+          return SizedBox(
             height: 85,
-            width: double.infinity,
-            padding: const EdgeInsets.only(bottom: 10),
             child: SingleChildScrollView(
               scrollDirection: Axis.horizontal,
-              padding: const EdgeInsets.symmetric(horizontal: 15),
+              padding: const EdgeInsets.fromLTRB(15, 0, 15, 10),
               child: Row(
                 spacing: 10,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -271,6 +270,7 @@ class _ReplyPageState extends CommonRichTextPubPageState<ReplyPage> {
     }) {
       return GestureDetector(
         onTap: onTap,
+        behavior: HitTestBehavior.opaque,
         child: Column(
           spacing: 5,
           mainAxisSize: MainAxisSize.min,

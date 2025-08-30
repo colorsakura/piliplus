@@ -44,17 +44,12 @@ class PageUtils {
     ValueChanged<int>? onDismissed,
     int? quality,
   }) {
-    final currentRoute = Get.currentRoute;
-    bool noneSet =
-        currentRoute.startsWith('/videoV') ||
-        currentRoute.startsWith('/member?');
     return Navigator.of(Get.context!).push(
       HeroDialogRoute(
         builder: (context) => InteractiveviewerGallery(
           sources: imgList,
           initIndex: initialPage,
           onDismissed: onDismissed,
-          setStatusBar: !noneSet,
           quality: quality ?? GlobalData().imgQuality,
         ),
       ),
@@ -562,13 +557,13 @@ class PageUtils {
       duration: const Duration(milliseconds: 200),
     )..forward();
     key.currentState?.showBottomSheet(
+      constraints: const BoxConstraints(),
       (context) {
         return FadeTransition(
           opacity: Tween<double>(begin: 0, end: 1).animate(ctr),
           child: InteractiveviewerGallery(
             sources: imgList.map((url) => SourceModel(url: url)).toList(),
             initIndex: index,
-            setStatusBar: false,
             onClose: (value) async {
               if (!value) {
                 try {

@@ -430,9 +430,9 @@ class _EpisodePanelState extends CommonCollapseSlidePageState<EpisodePanel> {
                           top: 6,
                           right: 6,
                           type: switch (episode.badge) {
-                            '会员' => PBadgeType.primary,
+                            '预告' => PBadgeType.gray,
                             '限免' => PBadgeType.free,
-                            _ => PBadgeType.gray,
+                            _ => PBadgeType.primary,
                           },
                         ),
                     ],

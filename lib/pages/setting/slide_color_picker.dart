@@ -8,12 +8,12 @@ class SlideColorPicker extends StatefulWidget {
     super.key,
     required this.color,
     required this.callback,
-    this.showResetBtn,
+    this.showResetBtn = false,
   });
 
   final Color color;
   final Function(Color? color) callback;
-  final bool? showResetBtn;
+  final bool showResetBtn;
 
   @override
   State<SlideColorPicker> createState() => _SlideColorPickerState();
@@ -158,7 +158,7 @@ class _SlideColorPickerState extends State<SlideColorPicker> {
           ),
           Row(
             children: [
-              if (widget.showResetBtn != false) ...[
+              if (widget.showResetBtn) ...[
                 const SizedBox(width: 16),
                 TextButton(
                   onPressed: () {

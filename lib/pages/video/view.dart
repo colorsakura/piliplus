@@ -467,10 +467,22 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
       this,
       ModalRoute.of(context)! as PageRoute,
     );
+
     final size = MediaQuery.sizeOf(context);
     maxWidth = size.width;
     maxHeight = size.height;
-    isPortrait = maxHeight >= maxWidth;
+
+    final shortestSide = size.shortestSide;
+    final minVideoHeight = shortestSide * 9 / 16;
+    final maxVideoHeight = max(size.longestSide * 0.65, shortestSide);
+    videoDetailController
+      ..isPortrait = isPortrait = maxHeight >= maxWidth
+      ..minVideoHeight = minVideoHeight
+      ..maxVideoHeight = maxVideoHeight
+      ..videoHeight = videoDetailController.isVertical.value
+          ? maxVideoHeight
+          : minVideoHeight;
+
     themeData = videoDetailController.plPlayerController.darkVideoPage
         ? MyApp.darkThemeData ?? Theme.of(context)
         : Theme.of(context);
@@ -1552,7 +1564,6 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
     );
 
     return Container(
-      width: double.infinity,
       height: 45,
       decoration: BoxDecoration(
         border: Border(
@@ -1965,7 +1976,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
               () => SeasonPanel(
                 key: ValueKey(introController.videoDetail.value),
                 heroTag: heroTag,
-                onTap: false,
+                canTap: false,
                 showEpisodes: showEpisodes,
                 ugcIntroController: ugcIntroController,
               ),
@@ -2073,7 +2084,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
       videoDetailController.showMediaListPanel(context);
       return;
     }
-    Widget listSheetContent([bool? enableSlide]) => EpisodePanel(
+    Widget listSheetContent({bool enableSlide = true}) => EpisodePanel(
       heroTag: heroTag,
       ugcIntroController: videoDetailController.isUgc
           ? ugcIntroController
@@ -2122,9 +2133,9 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
         child: videoDetailController.plPlayerController.darkVideoPage
             ? Theme(
                 data: themeData,
-                child: listSheetContent(false),
+                child: listSheetContent(enableSlide: false),
               )
-            : listSheetContent(false),
+            : listSheetContent(enableSlide: false),
       );
     } else {
       videoDetailController.childKey.currentState?.showBottomSheet(

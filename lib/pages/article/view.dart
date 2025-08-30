@@ -66,18 +66,15 @@ class _ArticlePageState extends CommonDynPageState<ArticlePage> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final size = MediaQuery.sizeOf(context);
-    final maxWidth = size.width;
-    isPortrait = size.height >= maxWidth;
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: _buildAppBar(isPortrait, maxWidth),
+      appBar: _buildAppBar(),
       body: Padding(
         padding: EdgeInsets.only(left: padding.left, right: padding.right),
         child: Stack(
           clipBehavior: Clip.none,
           children: [
-            _buildPage(theme, isPortrait, maxWidth),
+            _buildPage(theme),
             _buildBottom(theme),
           ],
         ),
@@ -85,7 +82,7 @@ class _ArticlePageState extends CommonDynPageState<ArticlePage> {
     );
   }
 
-  Widget _buildPage(ThemeData theme, bool isPortrait, double maxWidth) {
+  Widget _buildPage(ThemeData theme) {
     double padding = max(maxWidth / 2 - Grid.smallCardWidth, 0);
     if (isPortrait) {
       return Padding(
@@ -462,12 +459,12 @@ class _ArticlePageState extends CommonDynPageState<ArticlePage> {
             : HttpError(onReload: controller.onReload),
       Error(:var errMsg) => HttpError(
         errMsg: errMsg,
-        onReload: controller.onReload,
+        onReload: controller.isLoaded.value ? controller.onReload : null,
       ),
     };
   }
 
-  PreferredSizeWidget _buildAppBar(bool isPortrait, double maxWidth) => AppBar(
+  PreferredSizeWidget _buildAppBar() => AppBar(
     title: Obx(() {
       if (controller.isLoaded.value && controller.showTitle.value) {
         return Text(controller.summary.title ?? '');

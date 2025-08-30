@@ -198,21 +198,21 @@ class UgcIntroController extends CommonIntroController with ReloadMixin {
     if (result['status']) {
       UgcTriple data = result['data'];
       late final stat = videoDetail.value.stat!;
-      if (data.like != hasLike.value) {
+      if (data.like == true && !hasLike.value) {
         stat.like++;
         hasLike.value = true;
       }
-      if (data.coin != hasCoin) {
+      if (data.coin == true && !hasCoin) {
         stat.coin += 2;
         coinNum.value = 2;
         GlobalData().afterCoin(2);
       }
-      if (data.fav != hasFav.value) {
+      if (data.fav == true && !hasFav.value) {
         stat.favorite++;
         hasFav.value = true;
       }
       hasDislike.value = false;
-      if (data.coin != true) {
+      if (!hasCoin) {
         SmartDialog.showToast('投币失败');
       } else {
         SmartDialog.showToast('三连成功');
@@ -460,7 +460,10 @@ class UgcIntroController extends CommonIntroController with ReloadMixin {
   }
 
   // 修改分P或番剧分集
-  Future<void> onChangeEpisode(BaseEpisodeItem episode, {bool? isStein}) async {
+  Future<void> onChangeEpisode(
+    BaseEpisodeItem episode, {
+    bool isStein = false,
+  }) async {
     try {
       final String bvid = episode.bvid ?? this.bvid;
       final int aid = episode.aid ?? IdUtils.bv2av(bvid);
@@ -490,7 +493,7 @@ class UgcIntroController extends CommonIntroController with ReloadMixin {
         ..plPlayerController.pause()
         ..makeHeartBeat()
         ..updateMediaListHistory(aid)
-        ..onReset(isStein)
+        ..onReset(isStein: isStein)
         ..bvid = bvid
         ..aid = aid
         ..cid.value = cid

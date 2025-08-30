@@ -11,7 +11,6 @@ import 'package:PiliPlus/utils/utils.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_debounce/easy_throttle.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:media_kit/media_kit.dart';
 import 'package:media_kit_video/media_kit_video.dart';
@@ -48,7 +47,6 @@ class InteractiveviewerGallery extends StatefulWidget {
     this.minScale = 1.0,
     this.onPageChanged,
     this.onDismissed,
-    this.setStatusBar = true,
     this.onClose,
     required this.quality,
   });
@@ -56,8 +54,6 @@ class InteractiveviewerGallery extends StatefulWidget {
   final int quality;
 
   final ValueChanged<bool>? onClose;
-
-  final bool setStatusBar;
 
   /// The sources to show.
   final List<SourceModel> sources;
@@ -114,10 +110,6 @@ class _InteractiveviewerGalleryState extends State<InteractiveviewerGallery>
       duration: const Duration(milliseconds: 300),
     )..addListener(listener);
 
-    if (widget.setStatusBar) {
-      setStatusBar();
-    }
-
     var item = widget.sources[currentIndex.value];
     if (item.sourceType == SourceType.livePhoto) {
       _onPlay(item.liveUrl!);
@@ -128,18 +120,6 @@ class _InteractiveviewerGalleryState extends State<InteractiveviewerGallery>
     _transformationController!.value = _animation?.value ?? Matrix4.identity();
   }
 
-  SystemUiMode? mode;
-  Future<void> setStatusBar() async {
-    if (Platform.isIOS || Platform.isAndroid) {
-      SystemChrome.setEnabledSystemUIMode(
-        SystemUiMode.immersiveSticky,
-      );
-    }
-    if (Platform.isAndroid && (await Utils.sdkInt < 29)) {
-      mode = SystemUiMode.manual;
-    }
-  }
-
   @override
   void dispose() {
     widget.onClose?.call(true);
@@ -148,14 +128,6 @@ class _InteractiveviewerGalleryState extends State<InteractiveviewerGallery>
     _animationController
       ..removeListener(listener)
       ..dispose();
-    if (widget.setStatusBar) {
-      if (Platform.isIOS || Platform.isAndroid) {
-        SystemChrome.setEnabledSystemUIMode(
-          mode ?? SystemUiMode.edgeToEdge,
-          overlays: SystemUiOverlay.values,
-        );
-      }
-    }
     for (var item in widget.sources) {
       if (item.sourceType == SourceType.networkImage) {
         CachedNetworkImageProvider(_getActualUrl(item.url)).evict();

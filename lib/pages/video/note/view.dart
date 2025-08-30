@@ -97,6 +97,7 @@ class _NoteListPageState extends CommonSlidePageState<NoteListPage> {
     return refreshIndicator(
       onRefresh: _controller.onRefresh,
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Expanded(
             child: CustomScrollView(
@@ -119,7 +120,6 @@ class _NoteListPageState extends CommonSlidePageState<NoteListPage> {
               top: 6,
               bottom: MediaQuery.viewPaddingOf(context).bottom + 6,
             ),
-            width: double.infinity,
             decoration: BoxDecoration(
               color: theme.colorScheme.onInverseSurface,
               border: Border(

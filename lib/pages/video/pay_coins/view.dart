@@ -1,12 +1,13 @@
 import 'dart:async';
 import 'dart:math';
 
+import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/global_data.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/storage_key.dart';
 import 'package:PiliPlus/utils/storage_pref.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:get/get.dart' hide ContextExtensionss;
 import 'package:get/get_navigation/src/dialog/dialog_route.dart';
 
 class PayCoinsPage extends StatefulWidget {
@@ -208,7 +209,7 @@ class _PayCoinsPageState extends State<PayCoinsPage>
 
   @override
   Widget build(BuildContext context) {
-    bool isPortrait = context.isPortrait;
+    bool isPortrait = MediaQuery.sizeOf(context).isPortrait;
     return isPortrait
         ? _buildBody(isPortrait)
         : Row(

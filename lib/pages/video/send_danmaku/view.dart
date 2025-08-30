@@ -433,7 +433,6 @@ class _SendDanmakuPanelState extends CommonTextPubPageState<SendDanmakuPanel> {
         contentPadding: const EdgeInsets.symmetric(vertical: 16),
         title: const Text('Color Picker'),
         content: SlideColorPicker(
-          showResetBtn: false,
           color: _color.value,
           callback: (Color? color) {
             if (color != null) {

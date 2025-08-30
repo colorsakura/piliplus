@@ -525,7 +525,7 @@ class VideoHttp {
     int? root,
     int? parent,
     List? pictures,
-    bool? syncToDynamic,
+    bool syncToDynamic = false,
     Map<String, int>? atNameToMid,
   }) async {
     if (message == '') {
@@ -540,7 +540,7 @@ class VideoHttp {
       if (atNameToMid?.isNotEmpty == true)
         'at_name_to_mid': jsonEncode(atNameToMid), // {"name":uid}
       if (pictures != null) 'pictures': jsonEncode(pictures),
-      if (syncToDynamic == true) 'sync_to_dynamic': 1,
+      if (syncToDynamic) 'sync_to_dynamic': 1,
       'csrf': Accounts.main.csrf,
     };
     var res = await Request().post(

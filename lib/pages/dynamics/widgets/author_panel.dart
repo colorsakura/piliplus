@@ -48,7 +48,6 @@ class AuthorPanel extends StatelessWidget {
     Widget avatar = PendantAvatar(
       avatar: item.modules.moduleAuthor?.face,
       size: pendant.isNullOrEmpty ? 40 : 34,
-      isVip: null,
       officialType: null, // 已被注释
       garbPendantImage: pendant,
     );

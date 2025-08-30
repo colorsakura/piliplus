@@ -428,17 +428,16 @@ class PgcIntroController extends CommonIntroController {
     if (result['status']) {
       PgcTriple data = result['data'];
       late final stat = pgcItem.stat!;
-      if ((data.like == 1) != hasLike.value) {
+      if (data.like == 1 && !hasLike.value) {
         stat.like++;
         hasLike.value = true;
       }
-      final hasCoin = data.coin == 1;
-      if (this.hasCoin != hasCoin) {
+      if (data.coin == 1 && !hasCoin) {
         stat.coin += 2;
         coinNum.value = 2;
         GlobalData().afterCoin(2);
       }
-      if ((data.favorite == 1) != hasFav.value) {
+      if (data.favorite == 1 && !hasFav.value) {
         stat.favorite++;
         hasFav.value = true;
       }

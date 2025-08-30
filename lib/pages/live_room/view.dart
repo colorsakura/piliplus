@@ -177,7 +177,7 @@ class _LiveRoomPageState extends State<LiveRoomPage>
     final size = MediaQuery.sizeOf(context);
     maxWidth = size.width;
     maxHeight = size.height;
-    isPortrait = maxHeight >= maxWidth;
+    isPortrait = size.isPortrait;
     if (Platform.isAndroid) {
       return Floating().isPipMode
           ? videoPlayerPanel(

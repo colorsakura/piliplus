@@ -417,6 +417,7 @@ class _SponsorBlockPageState extends State<SponsorBlockPage> {
         ),
         content: SlideColorPicker(
           color: color,
+          showResetBtn: true,
           callback: (Color? color) {
             _blockColor[index] = color ?? item.first.color;
             setting.put(

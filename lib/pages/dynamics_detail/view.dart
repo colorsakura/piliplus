@@ -50,25 +50,22 @@ class _DynamicDetailPageState extends CommonDynPageState<DynamicDetailPage> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final size = MediaQuery.sizeOf(context);
-    final maxWidth = size.width;
-    isPortrait = size.height >= maxWidth;
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: _buildAppBar(isPortrait, maxWidth),
+      appBar: _buildAppBar(),
       body: Padding(
         padding: EdgeInsets.only(left: padding.left, right: padding.right),
         child: isPortrait
             ? refreshIndicator(
                 onRefresh: controller.onRefresh,
-                child: _buildBody(theme, isPortrait, maxWidth),
+                child: _buildBody(theme),
               )
-            : _buildBody(theme, isPortrait, maxWidth),
+            : _buildBody(theme),
       ),
     );
   }
 
-  PreferredSizeWidget _buildAppBar(bool isPortrait, double maxWidth) => AppBar(
+  PreferredSizeWidget _buildAppBar() => AppBar(
     title: Padding(
       padding: const EdgeInsets.only(right: 12),
       child: Obx(
@@ -96,7 +93,7 @@ class _DynamicDetailPageState extends CommonDynPageState<DynamicDetailPage> {
           ],
   );
 
-  Widget _buildBody(ThemeData theme, bool isPortrait, double maxWidth) {
+  Widget _buildBody(ThemeData theme) {
     double padding = max(maxWidth / 2 - Grid.smallCardWidth, 0);
     Widget child;
     if (isPortrait) {
@@ -112,6 +109,7 @@ class _DynamicDetailPageState extends CommonDynPageState<DynamicDetailPage> {
                 isDetail: true,
                 callback: imageCallback,
                 maxWidth: maxWidth - this.padding.horizontal - 2 * padding,
+                isDetailPortraitW: isPortrait,
               ),
             ),
             buildReplyHeader(theme),
@@ -145,6 +143,7 @@ class _DynamicDetailPageState extends CommonDynPageState<DynamicDetailPage> {
                           (maxWidth - this.padding.horizontal) *
                               (flex / (flex + flex1)) -
                           padding,
+                      isDetailPortraitW: isPortrait,
                     ),
                   ),
                 ),

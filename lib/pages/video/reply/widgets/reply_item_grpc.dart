@@ -116,6 +116,7 @@ class ReplyItemGrpc extends StatelessWidget {
 
   Widget _buildContent(BuildContext context, ThemeData theme) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         if (PendantAvatar.showDynDecorate &&
             replyItem.member.hasGarbCardImage())
@@ -152,10 +153,7 @@ class ReplyItemGrpc extends StatelessWidget {
                   ],
                 ),
               ),
-              SizedBox(
-                width: double.infinity,
-                child: _buildAuthorPanel(context, theme),
-              ),
+              _buildAuthorPanel(context, theme),
             ],
           )
         else
@@ -439,7 +437,7 @@ class ReplyItemGrpc extends StatelessWidget {
         clipBehavior: Clip.hardEdge,
         animationDuration: Duration.zero,
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             if (replies.isNotEmpty)
               ...List.generate(replies.length, (index) {
@@ -478,8 +476,7 @@ class ReplyItemGrpc extends StatelessWidget {
                       },
                     );
                   },
-                  child: Container(
-                    width: double.infinity,
+                  child: Padding(
                     padding: padding,
                     child: Text.rich(
                       style: TextStyle(
@@ -537,8 +534,7 @@ class ReplyItemGrpc extends StatelessWidget {
             if (extraRow)
               InkWell(
                 onTap: () => replyReply?.call(replyItem, null),
-                child: Container(
-                  width: double.infinity,
+                child: Padding(
                   padding: length == 1
                       ? const EdgeInsets.fromLTRB(8, 6, 8, 6)
                       : const EdgeInsets.fromLTRB(8, 5, 8, 8),

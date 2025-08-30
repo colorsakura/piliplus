@@ -110,8 +110,7 @@ class _PgcReviewPostPanelState extends State<PgcReviewPostPanel> {
             ),
           ),
         ),
-        SizedBox(
-          width: double.infinity,
+        Center(
           child: Obx(
             () {
               final score = _score.value;
@@ -124,7 +123,6 @@ class _PgcReviewPostPanelState extends State<PgcReviewPostPanel> {
                   5 => '佳作',
                   _ => '轻触评分',
                 },
-                textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 16,
                   color: score == 0

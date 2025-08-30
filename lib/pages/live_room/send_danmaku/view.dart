@@ -66,7 +66,7 @@ class _ReplyPageState extends CommonRichTextPubPageState<LiveSendDmPanel> {
             mainAxisSize: MainAxisSize.min,
             children: [
               ...buildInputView(theme),
-              buildPanelContainer(theme, Colors.transparent),
+              Flexible(child: buildPanelContainer(theme, Colors.transparent)),
             ],
           ),
         ),

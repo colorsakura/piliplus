@@ -21,7 +21,7 @@ abstract class CommonDynController extends ReplyController<MainListReply>
   late final horizontalPreview = Pref.horizontalPreview;
   late final List<double> ratio = Pref.dynamicDetailRatio;
 
-  final double offsetDy = 1;
+  final fabOffset = const Offset(0, 1);
 
   @override
   void onInit() {
@@ -31,7 +31,7 @@ abstract class CommonDynController extends ReplyController<MainListReply>
     );
     fabAnim =
         Tween<Offset>(
-          begin: Offset(0, offsetDy),
+          begin: fabOffset,
           end: Offset.zero,
         ).animate(
           CurvedAnimation(

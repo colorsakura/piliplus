@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:math';
 import 'dart:ui';
 
 import 'package:PiliPlus/common/widgets/pair.dart';
@@ -44,7 +43,6 @@ import 'package:PiliPlus/plugin/pl_player/models/data_source.dart';
 import 'package:PiliPlus/plugin/pl_player/models/heart_beat_type.dart';
 import 'package:PiliPlus/plugin/pl_player/models/play_status.dart';
 import 'package:PiliPlus/utils/accounts.dart';
-import 'package:PiliPlus/utils/context_ext.dart';
 import 'package:PiliPlus/utils/duration_util.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:PiliPlus/utils/storage.dart';
@@ -143,16 +141,15 @@ class VideoDetailController extends GetxController
     ..addListener(scrollListener);
   late bool isExpanding = false;
   late bool isCollapsing = false;
-  late final AnimationController animationController = AnimationController(
-    vsync: this,
-    duration: const Duration(milliseconds: 200),
-  );
-  late final double minVideoHeight = Get.mediaQuery.size.shortestSide * 9 / 16;
-  late final double maxVideoHeight = () {
-    final size = Get.mediaQuery.size;
-    return max(size.longestSide * 0.65, size.shortestSide);
-  }();
-  late double videoHeight = minVideoHeight;
+  AnimationController? _animationController;
+  AnimationController get animationController =>
+      _animationController ??= AnimationController(
+        vsync: this,
+        duration: const Duration(milliseconds: 200),
+      );
+  late double minVideoHeight;
+  late double maxVideoHeight;
+  late double videoHeight;
 
   void animToTop() {
     if (scrollKey.currentState?.outerController.hasClients == true) {
@@ -423,8 +420,9 @@ class VideoDetailController extends GetxController
     }
   }
 
+  bool isPortrait = true;
   bool get horizontalScreen => plPlayerController.horizontalScreen;
-  bool get showVideoSheet => !horizontalScreen && Get.context!.isLandscape;
+  bool get showVideoSheet => !horizontalScreen && !isPortrait;
 
   int? _lastPos;
   List<PostSegmentModel>? postList;
@@ -1147,12 +1145,15 @@ class VideoDetailController extends GetxController
 
   bool isQuerying = false;
   // 视频链接
-  Future<void> queryVideoUrl([Duration? defaultST]) async {
+  Future<void> queryVideoUrl({
+    Duration? defaultST,
+    bool fromReset = false,
+  }) async {
     if (isQuerying) {
       return;
     }
     isQuerying = true;
-    if (plPlayerController.enableSponsorBlock) {
+    if (plPlayerController.enableSponsorBlock && !fromReset) {
       _querySponsorBlock();
     }
     if (plPlayerController.cacheVideoQa == null) {
@@ -1590,11 +1591,11 @@ class VideoDetailController extends GetxController
     scrollCtr
       ..removeListener(scrollListener)
       ..dispose();
-    animationController.dispose();
+    _animationController?.dispose();
     super.onClose();
   }
 
-  void onReset([bool? isStein]) {
+  void onReset({bool isStein = false}) {
     playedTime = null;
     videoUrl = null;
     audioUrl = null;

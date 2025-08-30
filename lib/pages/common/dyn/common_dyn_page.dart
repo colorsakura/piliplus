@@ -3,13 +3,14 @@ import 'dart:math' show pi;
 import 'package:PiliPlus/common/skeleton/video_reply.dart';
 import 'package:PiliPlus/common/widgets/custom_sliver_persistent_header_delegate.dart';
 import 'package:PiliPlus/common/widgets/loading_widget/http_error.dart';
+import 'package:PiliPlus/common/widgets/view_safe_area.dart';
 import 'package:PiliPlus/grpc/bilibili/main/community/reply/v1.pb.dart'
     show ReplyInfo;
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/pages/common/dyn/common_dyn_controller.dart';
 import 'package:PiliPlus/pages/video/reply/widgets/reply_item_grpc.dart';
 import 'package:PiliPlus/pages/video/reply_reply/view.dart';
-import 'package:PiliPlus/utils/context_ext.dart';
+import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/feed_back.dart';
 import 'package:PiliPlus/utils/num_util.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
@@ -25,18 +26,21 @@ abstract class CommonDynPageState<T extends StatefulWidget> extends State<T>
 
   late final scaffoldKey = GlobalKey<ScaffoldState>();
 
-  bool get horizontalPreview =>
-      context.isLandscape && controller.horizontalPreview;
+  bool get horizontalPreview => !isPortrait && controller.horizontalPreview;
   Function(List<String> imgList, int index)? imageCallback;
 
   dynamic get arguments;
 
   late EdgeInsets padding;
   late bool isPortrait;
+  late double maxWidth;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+    final size = MediaQuery.sizeOf(context);
+    maxWidth = size.width;
+    isPortrait = size.isPortrait;
     imageCallback = horizontalPreview
         ? (imgList, index) {
             controller.hideFab();
@@ -193,14 +197,18 @@ abstract class CommonDynPageState<T extends StatefulWidget> extends State<T>
             ),
           ),
         ),
-        body: VideoReplyReplyPanel(
-          enableSlide: false,
-          id: id,
-          oid: oid,
-          rpid: rpid,
-          isVideoDetail: false,
-          replyType: controller.replyType,
-          firstFloor: replyItem,
+        body: ViewSafeArea(
+          left: showBackBtn,
+          right: showBackBtn,
+          child: VideoReplyReplyPanel(
+            enableSlide: false,
+            id: id,
+            oid: oid,
+            rpid: rpid,
+            isVideoDetail: false,
+            replyType: controller.replyType,
+            firstFloor: replyItem,
+          ),
         ),
       );
       if (isPortrait) {
@@ -252,14 +260,15 @@ abstract class CommonDynPageState<T extends StatefulWidget> extends State<T>
                   controller.ratio
                     ..[0] = value
                     ..[1] = 100 - value;
-                  GStorage.setting.put(
-                    SettingBoxKey.dynamicDetailRatio,
-                    controller.ratio,
-                  );
+
                   (context as Element).markNeedsBuild();
                   setState(() {});
                 }
               },
+              onChangeEnd: (_) => GStorage.setting.put(
+                SettingBoxKey.dynamicDetailRatio,
+                controller.ratio,
+              ),
             ),
           ),
         ),
@@ -274,12 +283,14 @@ abstract class CommonDynPageState<T extends StatefulWidget> extends State<T>
   Widget get replyButton => FloatingActionButton(
     heroTag: null,
     onPressed: () {
-      feedBack();
-      controller.onReply(
-        context,
-        oid: controller.oid,
-        replyType: controller.replyType,
-      );
+      try {
+        feedBack();
+        controller.onReply(
+          context,
+          oid: controller.oid,
+          replyType: controller.replyType,
+        );
+      } catch (_) {}
     },
     tooltip: '评论',
     child: const Icon(Icons.reply),

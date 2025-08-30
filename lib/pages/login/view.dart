@@ -2,13 +2,14 @@ import 'dart:ui';
 
 import 'package:PiliPlus/common/widgets/scroll_physics.dart';
 import 'package:PiliPlus/pages/login/controller.dart';
+import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/image_util.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
-import 'package:get/get.dart';
+import 'package:get/get.dart' hide ContextExtensionss;
 import 'package:pretty_qr_code/pretty_qr_code.dart';
 import 'package:saver_gallery/saver_gallery.dart';
 
@@ -506,92 +507,88 @@ class _LoginPageState extends State<LoginPage> {
     padding =
         MediaQuery.viewPaddingOf(context).copyWith(top: 0) +
         const EdgeInsets.only(bottom: 25);
-    return OrientationBuilder(
-      builder: (context, orientation) {
-        final isLandscape = orientation == Orientation.landscape;
-        return Scaffold(
-          appBar: AppBar(
-            leading: IconButton(
-              tooltip: '关闭',
-              icon: const Icon(Icons.close_outlined),
-              onPressed: Get.back,
-            ),
-            title: Row(
-              children: [
-                const Text('登录'),
-                if (isLandscape)
-                  Expanded(
-                    child: Align(
-                      alignment: Alignment.centerRight,
-                      child: TabBar(
-                        isScrollable: true,
-                        dividerHeight: 0,
-                        tabs: const [
-                          Tab(
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [Icon(Icons.password), Text(' 密码')],
-                            ),
-                          ),
-                          Tab(
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [Icon(Icons.sms_outlined), Text(' 短信')],
-                            ),
-                          ),
-                          Tab(
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [Icon(Icons.qr_code), Text(' 扫码')],
-                            ),
-                          ),
-                          Tab(
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Icon(Icons.cookie_outlined),
-                                Text(' Cookie'),
-                              ],
-                            ),
-                          ),
-                        ],
-                        controller: _loginPageCtr.tabController,
-                      ),
-                    ),
-                  ),
-              ],
-            ),
-            bottom: !isLandscape
-                ? TabBar(
+    final isLandscape = !MediaQuery.sizeOf(context).isPortrait;
+    return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+          tooltip: '关闭',
+          icon: const Icon(Icons.close_outlined),
+          onPressed: Get.back,
+        ),
+        title: Row(
+          children: [
+            const Text('登录'),
+            if (isLandscape)
+              Expanded(
+                child: Align(
+                  alignment: Alignment.centerRight,
+                  child: TabBar(
+                    isScrollable: true,
+                    dividerHeight: 0,
                     tabs: const [
-                      Tab(icon: Icon(Icons.password), text: '密码'),
-                      Tab(icon: Icon(Icons.sms_outlined), text: '短信'),
-                      Tab(icon: Icon(Icons.qr_code), text: '扫码'),
-                      Tab(icon: Icon(Icons.cookie_outlined), text: 'Cookie'),
+                      Tab(
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [Icon(Icons.password), Text(' 密码')],
+                        ),
+                      ),
+                      Tab(
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [Icon(Icons.sms_outlined), Text(' 短信')],
+                        ),
+                      ),
+                      Tab(
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [Icon(Icons.qr_code), Text(' 扫码')],
+                        ),
+                      ),
+                      Tab(
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(Icons.cookie_outlined),
+                            Text(' Cookie'),
+                          ],
+                        ),
+                      ),
                     ],
                     controller: _loginPageCtr.tabController,
-                  )
-                : null,
-          ),
-          body: NotificationListener<ScrollStartNotification>(
-            onNotification: (notification) {
-              if (notification.metrics.axis == Axis.horizontal) {
-                FocusScope.of(context).unfocus();
-              }
-              return false;
-            },
-            child: tabBarView(
-              controller: _loginPageCtr.tabController,
-              children: [
-                tabViewOuter(loginByPassword(theme)),
-                tabViewOuter(loginBySmS(theme)),
-                tabViewOuter(loginByQRCode(theme)),
-                tabViewOuter(loginByCookie(theme)),
-              ],
-            ),
-          ),
-        );
-      },
+                  ),
+                ),
+              ),
+          ],
+        ),
+        bottom: !isLandscape
+            ? TabBar(
+                tabs: const [
+                  Tab(icon: Icon(Icons.password), text: '密码'),
+                  Tab(icon: Icon(Icons.sms_outlined), text: '短信'),
+                  Tab(icon: Icon(Icons.qr_code), text: '扫码'),
+                  Tab(icon: Icon(Icons.cookie_outlined), text: 'Cookie'),
+                ],
+                controller: _loginPageCtr.tabController,
+              )
+            : null,
+      ),
+      body: NotificationListener<ScrollStartNotification>(
+        onNotification: (notification) {
+          if (notification.metrics.axis == Axis.horizontal) {
+            FocusScope.of(context).unfocus();
+          }
+          return false;
+        },
+        child: tabBarView(
+          controller: _loginPageCtr.tabController,
+          children: [
+            tabViewOuter(loginByPassword(theme)),
+            tabViewOuter(loginBySmS(theme)),
+            tabViewOuter(loginByQRCode(theme)),
+            tabViewOuter(loginByCookie(theme)),
+          ],
+        ),
+      ),
     );
   }
 

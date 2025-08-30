@@ -363,7 +363,6 @@ class _PostPanelState extends CommonCollapseSlidePageState<PostPanel> {
           clipBehavior: Clip.none,
           children: [
             Container(
-              width: double.infinity,
               margin: const EdgeInsets.symmetric(
                 horizontal: 16,
                 vertical: 5,
@@ -375,7 +374,7 @@ class _PostPanelState extends CommonCollapseSlidePageState<PostPanel> {
               ),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   if (item.actionType != ActionType.full) ...[
                     Wrap(

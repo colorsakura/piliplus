@@ -21,7 +21,7 @@ class VideoReplyPanel extends StatefulWidget {
     this.onViewImage,
     this.onDismissed,
     this.callback,
-    this.needController,
+    required this.needController,
   });
 
   final int replyLevel;
@@ -30,7 +30,7 @@ class VideoReplyPanel extends StatefulWidget {
   final VoidCallback? onViewImage;
   final ValueChanged<int>? onDismissed;
   final Function(List<String>, int)? callback;
-  final bool? needController;
+  final bool needController;
 
   @override
   State<VideoReplyPanel> createState() => _VideoReplyPanelState();
@@ -100,14 +100,14 @@ class _VideoReplyPanelState extends State<VideoReplyPanel>
         clipBehavior: Clip.none,
         children: [
           CustomScrollView(
-            controller: widget.needController == false
-                ? null
-                : _videoReplyController.scrollController,
-            physics: widget.needController == false
-                ? const AlwaysScrollableScrollPhysics(
+            controller: widget.needController
+                ? _videoReplyController.scrollController
+                : null,
+            physics: widget.needController
+                ? const AlwaysScrollableScrollPhysics()
+                : const AlwaysScrollableScrollPhysics(
                     parent: ClampingScrollPhysics(),
-                  )
-                : const AlwaysScrollableScrollPhysics(),
+                  ),
             key: const PageStorageKey<String>('评论'),
             slivers: <Widget>[
               SliverPersistentHeader(

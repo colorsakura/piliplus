@@ -53,7 +53,7 @@ class _MainAppState extends State<MainApp>
     _mainController
       ..checkUnreadDynamic()
       ..checkDefaultSearch(true)
-      ..checkUnread(context.isPortrait);
+      ..checkUnread(useBottomNav);
     super.didPopNext();
   }
 
@@ -69,7 +69,7 @@ class _MainAppState extends State<MainApp>
       _mainController
         ..checkUnreadDynamic()
         ..checkDefaultSearch(true)
-        ..checkUnread(context.isPortrait);
+        ..checkUnread(useBottomNav);
     }
   }
 
@@ -90,17 +90,20 @@ class _MainAppState extends State<MainApp>
     }
   }
 
+  late bool useBottomNav;
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final padding = MediaQuery.viewPaddingOf(context);
-    final bool isPortrait = context.isPortrait;
-    final useBottomNav = isPortrait && !_mainController.useSideBar;
+    useBottomNav =
+        !_mainController.useSideBar && MediaQuery.sizeOf(context).isPortrait;
     Widget? bottomNav = useBottomNav
         ? _mainController.navigationBars.length > 1
               ? _mainController.enableMYBar
                     ? Obx(
                         () => NavigationBar(
+                          maintainBottomViewPadding: true,
                           onDestinationSelected: _mainController.setIndex,
                           selectedIndex: _mainController.selectedIndex.value,
                           destinations: _mainController.navigationBars
@@ -167,7 +170,10 @@ class _MainAppState extends State<MainApp>
           resizeToAvoidBottomInset: false,
           appBar: AppBar(toolbarHeight: 0),
           body: Padding(
-            padding: EdgeInsets.only(right: padding.right),
+            padding: EdgeInsets.only(
+              left: useBottomNav ? padding.left : 0.0,
+              right: padding.right,
+            ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -261,7 +267,7 @@ class _MainAppState extends State<MainApp>
                 Expanded(
                   child: _mainController.mainTabBarView
                       ? CustomTabBarView(
-                          scrollDirection: isPortrait
+                          scrollDirection: useBottomNav
                               ? Axis.horizontal
                               : Axis.vertical,
                           physics: const NeverScrollableScrollPhysics(),

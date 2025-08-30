@@ -4,11 +4,13 @@ import 'dart:io';
 
 import 'package:PiliPlus/build_config.dart';
 import 'package:PiliPlus/common/widgets/dialog/dialog.dart';
+import 'package:PiliPlus/common/widgets/list_tile.dart';
 import 'package:PiliPlus/pages/mine/controller.dart';
 import 'package:PiliPlus/services/logger.dart';
 import 'package:PiliPlus/utils/accounts.dart';
 import 'package:PiliPlus/utils/accounts/account.dart';
 import 'package:PiliPlus/utils/cache_manage.dart';
+import 'package:PiliPlus/utils/context_ext.dart';
 import 'package:PiliPlus/utils/date_util.dart';
 import 'package:PiliPlus/utils/login_utils.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
@@ -17,10 +19,10 @@ import 'package:PiliPlus/utils/update.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:dio/dio.dart' show Headers;
 import 'package:document_file_save_plus/document_file_save_plus_platform_interface.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide ListTile;
 import 'package:flutter/services.dart' show Clipboard, ClipboardData;
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
-import 'package:get/get.dart';
+import 'package:get/get.dart' hide ContextExtensionss;
 import 'package:intl/intl.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -31,9 +33,9 @@ import 'package:re_highlight/styles/github.dart';
 import 'package:share_plus/share_plus.dart';
 
 class AboutPage extends StatefulWidget {
-  const AboutPage({super.key, this.showAppBar});
+  const AboutPage({super.key, this.showAppBar = true});
 
-  final bool? showAppBar;
+  final bool showAppBar;
 
   @override
   State<AboutPage> createState() => _AboutPageState();
@@ -72,14 +74,16 @@ class _AboutPageState extends State<AboutPage> {
     const style = TextStyle(fontSize: 15);
     final outline = theme.colorScheme.outline;
     final subTitleStyle = TextStyle(fontSize: 13, color: outline);
+    final showAppBar = widget.showAppBar;
+    final padding = MediaQuery.viewPaddingOf(context);
     return Scaffold(
-      appBar: widget.showAppBar == false
-          ? null
-          : AppBar(title: const Text('关于')),
+      appBar: showAppBar ? AppBar(title: const Text('关于')) : null,
       resizeToAvoidBottomInset: false,
       body: ListView(
         padding: EdgeInsets.only(
-          bottom: MediaQuery.viewPaddingOf(context).bottom + 100,
+          left: showAppBar ? padding.left : 0,
+          right: showAppBar ? padding.right : 0,
+          bottom: padding.bottom + 100,
         ),
         children: [
           GestureDetector(
@@ -201,23 +205,27 @@ Commit Hash: ${BuildConfig.commitHash}''',
             trailing: Icon(Icons.arrow_forward, size: 16, color: outline),
           ),
           ListTile(
-            onTap: () => showConfirmDialog(
-              context: context,
-              title: '提示',
-              content: '该操作将清除图片及网络请求缓存数据，确认清除？',
-              onConfirm: () async {
-                SmartDialog.showLoading(msg: '正在清除...');
-                try {
-                  await CacheManage.clearLibraryCache();
-                  SmartDialog.showToast('清除成功');
-                } catch (err) {
-                  SmartDialog.showToast(err.toString());
-                } finally {
-                  SmartDialog.dismiss();
-                }
-                getCacheSize();
-              },
-            ),
+            onTap: () {
+              if (cacheSize.value.isNotEmpty) {
+                showConfirmDialog(
+                  context: context,
+                  title: '提示',
+                  content: '该操作将清除图片及网络请求缓存数据，确认清除？',
+                  onConfirm: () async {
+                    SmartDialog.showLoading(msg: '正在清除...');
+                    try {
+                      await CacheManage.clearLibraryCache();
+                      SmartDialog.showToast('清除成功');
+                    } catch (err) {
+                      SmartDialog.showToast(err.toString());
+                    } finally {
+                      SmartDialog.dismiss();
+                    }
+                    getCacheSize();
+                  },
+                );
+              }
+            },
             leading: const Icon(Icons.delete_outline),
             title: const Text('清除缓存'),
             subtitle: Obx(

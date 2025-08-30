@@ -192,13 +192,16 @@ class LiveRoomChatPanel extends StatelessWidget {
     final uemote = obj.uemote;
     if (uemote != null) {
       // "room_{{room_id}}_{{int}}" or "upower_[{{emote}}]"
+      final isUpower = uemote.isUpower;
       return WidgetSpan(
         child: NetworkImgLayer(
           src: uemote.url,
           type: ImageType.emote,
-          width: uemote.width / devicePixelRatio,
+          width: isUpower ? uemote.width : uemote.width / devicePixelRatio,
           height: uemote.height == null
               ? null
+              : isUpower
+              ? uemote.height!
               : uemote.height! / devicePixelRatio,
           semanticsLabel: obj.text,
         ),

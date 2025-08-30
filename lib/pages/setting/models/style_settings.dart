@@ -449,7 +449,6 @@ List<SettingsModel> get styleSettings => [
           contentPadding: const EdgeInsets.symmetric(vertical: 16),
           title: const Text('Color Picker'),
           content: SlideColorPicker(
-            showResetBtn: false,
             color: reduceLuxColor ?? Colors.white,
             callback: (Color? color) {
               if (color != null && color != reduceLuxColor) {

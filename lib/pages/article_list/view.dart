@@ -101,7 +101,7 @@ class _ArticleListPageState extends State<ArticleListPage> with GridMixin {
     return SliverAppBar.medium(
       title: Text(item.name!),
       pinned: true,
-      expandedHeight: kToolbarHeight + 130,
+      expandedHeight: kToolbarHeight + 127,
       flexibleSpace: FlexibleSpaceBar(
         background: Container(
           height: 120,

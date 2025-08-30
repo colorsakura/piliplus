@@ -51,9 +51,9 @@ class _LivePageState extends CommonPageState<LivePage, LiveController>
           physics: const AlwaysScrollableScrollPhysics(),
           slivers: [
             SliverPadding(
-              padding: EdgeInsets.only(
+              padding: const EdgeInsets.only(
                 top: StyleString.cardSpace,
-                bottom: MediaQuery.viewPaddingOf(context).bottom + 100,
+                bottom: 100,
               ),
               sliver: SliverMainAxisGroup(
                 slivers: [

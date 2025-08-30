@@ -135,8 +135,12 @@ class _WhisperDetailPageState
                   hidePanel();
                 },
                 behavior: HitTestBehavior.opaque,
-                child: Obx(
-                  () => _buildBody(_whisperDetailController.loadingState.value),
+                child: Align(
+                  alignment: Alignment.topCenter,
+                  child: Obx(
+                    () =>
+                        _buildBody(_whisperDetailController.loadingState.value),
+                  ),
                 ),
               ),
             ),

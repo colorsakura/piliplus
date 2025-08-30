@@ -181,7 +181,7 @@ class _LogsPageState extends State<LogsPage> {
                 return Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
                     mainAxisSize: MainAxisSize.min,
                     spacing: 5,
                     children: [
@@ -222,8 +222,7 @@ class _LogsPageState extends State<LogsPage> {
                         ],
                       ),
                       Card(
-                        child: Container(
-                          width: double.infinity,
+                        child: Padding(
                           padding: const EdgeInsets.all(12.0),
                           child: SelectableText(log.body),
                         ),

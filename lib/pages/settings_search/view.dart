@@ -92,24 +92,19 @@ class _SettingsSearchPageState
       body: CustomScrollView(
         slivers: [
           ViewSliverSafeArea(
-            sliver: MediaQuery.removeViewPadding(
-              context: context,
-              removeLeft: true,
-              removeRight: true,
-              child: Obx(
-                () => _list.isEmpty
-                    ? const HttpError()
-                    : SliverWaterfallFlow(
-                        gridDelegate:
-                            SliverWaterfallFlowDelegateWithMaxCrossAxisExtent(
-                              maxCrossAxisExtent: Grid.smallCardWidth * 2,
-                            ),
-                        delegate: SliverChildBuilderDelegate(
-                          (_, index) => _list[index].widget,
-                          childCount: _list.length,
-                        ),
+            sliver: Obx(
+              () => _list.isEmpty
+                  ? const HttpError()
+                  : SliverWaterfallFlow(
+                      gridDelegate:
+                          SliverWaterfallFlowDelegateWithMaxCrossAxisExtent(
+                            maxCrossAxisExtent: Grid.smallCardWidth * 2,
+                          ),
+                      delegate: SliverChildBuilderDelegate(
+                        (_, index) => _list[index].widget,
+                        childCount: _list.length,
                       ),
-              ),
+                    ),
             ),
           ),
         ],

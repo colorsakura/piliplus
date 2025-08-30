@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'dart:math' show pow, min, sqrt;
+import 'dart:math' show pow, sqrt;
 
 import 'package:PiliPlus/common/widgets/pair.dart';
 import 'package:PiliPlus/http/constants.dart';
@@ -534,9 +534,8 @@ class Pref {
   static bool get optTabletNav =>
       _setting.get(SettingBoxKey.optTabletNav, defaultValue: true);
 
-  static bool get horizontalScreen {
-    return _setting.get(SettingBoxKey.horizontalScreen) ?? isTablet;
-  }
+  static bool get horizontalScreen =>
+      _setting.get(SettingBoxKey.horizontalScreen) ?? isTablet;
 
   static bool get isTablet {
     bool isTablet;
@@ -545,9 +544,9 @@ class Pref {
     } else {
       final view = WidgetsBinding.instance.platformDispatcher.views.first;
       final screenSize = view.physicalSize / view.devicePixelRatio;
-      final shortestSide = min(screenSize.width.abs(), screenSize.height.abs());
-      isTablet = shortestSide >= 600;
+      isTablet = screenSize.shortestSide >= 600;
     }
+    _setting.put(SettingBoxKey.horizontalScreen, isTablet);
     return isTablet;
   }
 

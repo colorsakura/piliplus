@@ -135,10 +135,7 @@ class _HotPageState extends CommonPageState<HotPage, HotController>
             ),
           ),
           SliverPadding(
-            padding: EdgeInsets.only(
-              top: 7,
-              bottom: MediaQuery.viewPaddingOf(context).bottom + 100,
-            ),
+            padding: const EdgeInsets.only(top: 7, bottom: 100),
             sliver: Obx(
               () => _buildBody(controller.loadingState.value),
             ),

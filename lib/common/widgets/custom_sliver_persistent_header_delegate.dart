@@ -6,14 +6,14 @@ class CustomSliverPersistentHeaderDelegate
     required this.child,
     required this.bgColor,
     double extent = 45,
-    this.needRebuild,
+    this.needRebuild = false,
   }) : _minExtent = extent,
        _maxExtent = extent;
   final double _minExtent;
   final double _maxExtent;
   final Widget child;
   final Color? bgColor;
-  final bool? needRebuild;
+  final bool needRebuild;
 
   @override
   Widget build(
@@ -26,15 +26,7 @@ class CustomSliverPersistentHeaderDelegate
     //overlapsContent：SliverPersistentHeader覆盖其他子组件返回true，否则返回false
     return bgColor != null
         ? DecoratedBox(
-            decoration: BoxDecoration(
-              color: bgColor,
-              boxShadow: [
-                BoxShadow(
-                  color: bgColor!,
-                  offset: const Offset(0, -2),
-                ),
-              ],
-            ),
+            decoration: BoxDecoration(color: bgColor),
             child: child,
           )
         : child;
@@ -51,6 +43,6 @@ class CustomSliverPersistentHeaderDelegate
   @override
   bool shouldRebuild(CustomSliverPersistentHeaderDelegate oldDelegate) {
     return oldDelegate.bgColor != bgColor ||
-        (needRebuild == true && oldDelegate.child != child);
+        (needRebuild && oldDelegate.child != child);
   }
 }

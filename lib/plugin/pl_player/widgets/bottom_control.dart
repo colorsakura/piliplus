@@ -124,7 +124,8 @@ class BottomControl extends StatelessWidget {
                       ),
                     ),
                   if (controller.viewPointList.isNotEmpty &&
-                      controller.showVP.value) ...[
+                      controller.showVP.value)
+                    // ...[
                     Positioned(
                       left: 0,
                       right: 0,
@@ -141,16 +142,16 @@ class BottomControl extends StatelessWidget {
                         ),
                       ),
                     ),
-                    buildViewPointWidget(
-                      controller,
-                      8.75,
-                      maxWidth -
-                          40 -
-                          (isFullScreen
-                              ? MediaQuery.viewPaddingOf(context).horizontal
-                              : 0),
-                    ),
-                  ],
+                  // buildViewPointWidget(
+                  //   controller,
+                  //   8.75,
+                  //   maxWidth -
+                  //       40 -
+                  //       (isFullScreen
+                  //           ? MediaQuery.viewPaddingOf(context).horizontal
+                  //           : 0),
+                  // ),
+                  // ],
                   if (controller.dmTrend.isNotEmpty &&
                       controller.showDmTreandChart.value)
                     buildDmChart(theme, controller, 4.5),

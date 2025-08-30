@@ -44,9 +44,13 @@ class UserInfoCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final isLight = colorScheme.brightness.isLight;
-    return context.isPortrait
-        ? _buildV(context, colorScheme, isLight)
-        : _buildH(colorScheme, isLight);
+    final isPortrait = context.width < 600;
+    return ViewSafeArea(
+      top: !isPortrait,
+      child: isPortrait
+          ? _buildV(context, colorScheme, isLight)
+          : _buildH(colorScheme, isLight),
+    );
   }
 
   Widget _countWidget({
@@ -527,38 +531,35 @@ class UserInfoCard extends StatelessWidget {
     children: [
       // _buildHeader(context),
       const SizedBox(height: 56),
-      ViewSafeArea(
-        top: true,
-        child: Row(
-          children: [
-            const SizedBox(width: 20),
-            Padding(
-              padding: EdgeInsets.only(
-                top: 10,
-                bottom: card.prInfo?.content?.isNotEmpty == true ? 0 : 10,
-              ),
-              child: _buildAvatar,
+      Row(
+        children: [
+          const SizedBox(width: 20),
+          Padding(
+            padding: EdgeInsets.only(
+              top: 10,
+              bottom: card.prInfo?.content?.isNotEmpty == true ? 0 : 10,
             ),
-            const SizedBox(width: 10),
-            Expanded(
-              flex: 5,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const SizedBox(height: 10),
-                  ..._buildLeft(colorScheme, isLight),
-                  const SizedBox(height: 5),
-                ],
-              ),
+            child: _buildAvatar,
+          ),
+          const SizedBox(width: 10),
+          Expanded(
+            flex: 5,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(height: 10),
+                ..._buildLeft(colorScheme, isLight),
+                const SizedBox(height: 5),
+              ],
             ),
-            Expanded(
-              flex: 3,
-              child: _buildRight(colorScheme),
-            ),
-            const SizedBox(width: 20),
-          ],
-        ),
+          ),
+          Expanded(
+            flex: 3,
+            child: _buildRight(colorScheme),
+          ),
+          const SizedBox(width: 20),
+        ],
       ),
       if (card.prInfo?.content?.isNotEmpty == true)
         buildPrInfo(colorScheme, isLight, card.prInfo!),

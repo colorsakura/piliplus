@@ -209,3 +209,7 @@ extension ThreeDotItemTypeExt on ThreeDotItemType {
     }
   }
 }
+
+extension SizeExt on Size {
+  bool get isPortrait => width < 600 || height >= width;
+}

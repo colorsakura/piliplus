@@ -688,7 +688,7 @@ class ChatItem extends StatelessWidget {
         ),
         padding: const EdgeInsets.all(12),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             SelectableText(
               content['title'],
@@ -728,10 +728,7 @@ class ChatItem extends StatelessWidget {
               GestureDetector(
                 behavior: HitTestBehavior.opaque,
                 onTap: () => PiliScheme.routePushFromUrl(content['jump_uri']),
-                child: SizedBox(
-                  width: double.infinity,
-                  child: Text(content['jump_text']),
-                ),
+                child: Text(content['jump_text']),
               ),
             ],
             if ((content['jump_text_2'] as String?)?.isNotEmpty == true &&
@@ -740,10 +737,7 @@ class ChatItem extends StatelessWidget {
               GestureDetector(
                 behavior: HitTestBehavior.opaque,
                 onTap: () => PiliScheme.routePushFromUrl(content['jump_uri_2']),
-                child: SizedBox(
-                  width: double.infinity,
-                  child: Text(content['jump_text_2']),
-                ),
+                child: Text(content['jump_text_2']),
               ),
             ],
             if ((content['jump_text_3'] as String?)?.isNotEmpty == true &&
@@ -752,10 +746,7 @@ class ChatItem extends StatelessWidget {
               GestureDetector(
                 behavior: HitTestBehavior.opaque,
                 onTap: () => PiliScheme.routePushFromUrl(content['jump_uri_3']),
-                child: SizedBox(
-                  width: double.infinity,
-                  child: Text(content['jump_text_3']),
-                ),
+                child: Text(content['jump_text_3']),
               ),
             ],
           ],

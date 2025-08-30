@@ -53,142 +53,145 @@ class _ColorSelectPageState extends State<ColorSelectPage> {
     TextStyle subTitleStyle = theme.textTheme.labelMedium!.copyWith(
       color: theme.colorScheme.outline,
     );
-    final size = Get.size;
+    final size = MediaQuery.sizeOf(context);
+    final padding = MediaQuery.viewPaddingOf(
+      context,
+    ).copyWith(top: 0, bottom: 0);
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(title: const Text('选择应用主题')),
-      body: SafeArea(
-        bottom: false,
-        child: ListView(
-          children: [
-            ListTile(
-              onTap: () async {
-                ThemeType? result = await showDialog(
-                  context: context,
-                  builder: (context) {
-                    return SelectDialog<ThemeType>(
-                      title: '主题模式',
-                      value: ctr.themeType.value,
-                      values: ThemeType.values.map((e) => (e, e.desc)).toList(),
-                    );
-                  },
-                );
-                if (result != null) {
-                  try {
-                    Get.find<MineController>().themeType.value = result;
-                  } catch (_) {}
-                  ctr.themeType.value = result;
-                  GStorage.setting.put(SettingBoxKey.themeMode, result.index);
-                  Get.changeThemeMode(result.toThemeMode);
-                }
-              },
-              leading: Container(
-                width: 40,
-                alignment: Alignment.center,
-                child: const Icon(Icons.flashlight_on_outlined),
-              ),
-              title: Text('主题模式', style: titleStyle),
-              subtitle: Obx(
-                () => Text(
-                  '当前模式：${ctr.themeType.value.desc}',
-                  style: subTitleStyle,
-                ),
+      body: ListView(
+        children: [
+          ListTile(
+            onTap: () async {
+              ThemeType? result = await showDialog(
+                context: context,
+                builder: (context) {
+                  return SelectDialog<ThemeType>(
+                    title: '主题模式',
+                    value: ctr.themeType.value,
+                    values: ThemeType.values.map((e) => (e, e.desc)).toList(),
+                  );
+                },
+              );
+              if (result != null) {
+                try {
+                  Get.find<MineController>().themeType.value = result;
+                } catch (_) {}
+                ctr.themeType.value = result;
+                GStorage.setting.put(SettingBoxKey.themeMode, result.index);
+                Get.changeThemeMode(result.toThemeMode);
+              }
+            },
+            leading: Container(
+              width: 40,
+              alignment: Alignment.center,
+              child: const Icon(Icons.flashlight_on_outlined),
+            ),
+            title: Text('主题模式', style: titleStyle),
+            subtitle: Obx(
+              () => Text(
+                '当前模式：${ctr.themeType.value.desc}',
+                style: subTitleStyle,
               ),
             ),
-            Obx(
-              () => ListTile(
-                enabled: ctr.type.value != 0,
-                title: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text('调色板风格'),
-                    PopupMenuButton(
-                      enabled: ctr.type.value != 0,
-                      initialValue: _dynamicSchemeVariant,
-                      onSelected: (item) {
-                        _dynamicSchemeVariant = item;
-                        GStorage.setting.put(
-                          SettingBoxKey.schemeVariant,
-                          item.index,
-                        );
-                        Get.forceAppUpdate();
-                      },
-                      itemBuilder: (context) => FlexSchemeVariant.values
-                          .map(
-                            (item) => PopupMenuItem<FlexSchemeVariant>(
-                              value: item,
-                              child: Text(item.variantName),
-                            ),
-                          )
-                          .toList(),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(
-                            _dynamicSchemeVariant.variantName,
-                            style: TextStyle(
-                              height: 1,
-                              fontSize: 13,
-                              color: ctr.type.value == 0
-                                  ? theme.colorScheme.outline.withValues(
-                                      alpha: 0.8,
-                                    )
-                                  : theme.colorScheme.secondary,
-                            ),
-                            strutStyle: const StrutStyle(leading: 0, height: 1),
+          ),
+          Obx(
+            () => ListTile(
+              enabled: ctr.type.value != 0,
+              title: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text('调色板风格'),
+                  PopupMenuButton(
+                    enabled: ctr.type.value != 0,
+                    initialValue: _dynamicSchemeVariant,
+                    onSelected: (item) {
+                      _dynamicSchemeVariant = item;
+                      GStorage.setting.put(
+                        SettingBoxKey.schemeVariant,
+                        item.index,
+                      );
+                      Get.forceAppUpdate();
+                    },
+                    itemBuilder: (context) => FlexSchemeVariant.values
+                        .map(
+                          (item) => PopupMenuItem<FlexSchemeVariant>(
+                            value: item,
+                            child: Text(item.variantName),
                           ),
-                          Icon(
-                            size: 20,
-                            Icons.keyboard_arrow_right,
+                        )
+                        .toList(),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          _dynamicSchemeVariant.variantName,
+                          style: TextStyle(
+                            height: 1,
+                            fontSize: 13,
                             color: ctr.type.value == 0
                                 ? theme.colorScheme.outline.withValues(
                                     alpha: 0.8,
                                   )
                                 : theme.colorScheme.secondary,
                           ),
-                        ],
-                      ),
+                          strutStyle: const StrutStyle(leading: 0, height: 1),
+                        ),
+                        Icon(
+                          size: 20,
+                          Icons.keyboard_arrow_right,
+                          color: ctr.type.value == 0
+                              ? theme.colorScheme.outline.withValues(
+                                  alpha: 0.8,
+                                )
+                              : theme.colorScheme.secondary,
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-                leading: Container(
-                  width: 40,
-                  alignment: Alignment.center,
-                  child: const Icon(Icons.palette_outlined),
-                ),
-                subtitle: Text(
-                  _dynamicSchemeVariant.description,
-                  style: const TextStyle(fontSize: 12),
-                ),
+                  ),
+                ],
+              ),
+              leading: Container(
+                width: 40,
+                alignment: Alignment.center,
+                child: const Icon(Icons.palette_outlined),
+              ),
+              subtitle: Text(
+                _dynamicSchemeVariant.description,
+                style: const TextStyle(fontSize: 12),
               ),
             ),
-            Obx(
-              () => RadioListTile(
-                value: 0,
-                title: const Text('动态取色'),
-                groupValue: ctr.type.value,
-                onChanged: (dynamic val) {
-                  ctr
-                    ..type.value = 0
-                    ..setting.put(SettingBoxKey.dynamicColor, true);
-                  Get.forceAppUpdate();
-                },
-              ),
+          ),
+          Obx(
+            () => RadioListTile(
+              value: 0,
+              title: const Text('动态取色'),
+              groupValue: ctr.type.value,
+              onChanged: (dynamic val) {
+                ctr
+                  ..type.value = 0
+                  ..setting.put(SettingBoxKey.dynamicColor, true);
+                Get.forceAppUpdate();
+              },
             ),
-            Obx(
-              () => RadioListTile(
-                value: 1,
-                title: const Text('指定颜色'),
-                groupValue: ctr.type.value,
-                onChanged: (dynamic val) {
-                  ctr
-                    ..type.value = 1
-                    ..setting.put(SettingBoxKey.dynamicColor, false);
-                  Get.forceAppUpdate();
-                },
-              ),
+          ),
+          Obx(
+            () => RadioListTile(
+              value: 1,
+              title: const Text('指定颜色'),
+              groupValue: ctr.type.value,
+              onChanged: (dynamic val) {
+                ctr
+                  ..type.value = 1
+                  ..setting.put(SettingBoxKey.dynamicColor, false);
+                Get.forceAppUpdate();
+              },
             ),
-            AnimatedSize(
+          ),
+          Padding(
+            padding: padding,
+            child: AnimatedSize(
               curve: Curves.easeInOut,
               alignment: Alignment.topCenter,
               duration: const Duration(milliseconds: 200),
@@ -239,8 +242,11 @@ class _ColorSelectPageState extends State<ColorSelectPage> {
                 ),
               ),
             ),
-            ...[
-              IgnorePointer(
+          ),
+          ...[
+            Padding(
+              padding: padding,
+              child: IgnorePointer(
                 child: Container(
                   height: size.height / 2,
                   width: size.width,
@@ -248,21 +254,21 @@ class _ColorSelectPageState extends State<ColorSelectPage> {
                   child: const HomePage(),
                 ),
               ),
-              IgnorePointer(
-                child: NavigationBar(
-                  destinations: NavigationBarType.values
-                      .map(
-                        (item) => NavigationDestination(
-                          icon: item.icon,
-                          label: item.label,
-                        ),
-                      )
-                      .toList(),
-                ),
+            ),
+            IgnorePointer(
+              child: NavigationBar(
+                destinations: NavigationBarType.values
+                    .map(
+                      (item) => NavigationDestination(
+                        icon: item.icon,
+                        label: item.label,
+                      ),
+                    )
+                    .toList(),
               ),
-            ],
+            ),
           ],
-        ),
+        ],
       ),
     );
   }

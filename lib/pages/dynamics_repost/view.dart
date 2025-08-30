@@ -27,7 +27,6 @@ class RepostPanel extends CommonRichTextPubPage {
     this.pic,
     this.title,
     this.uname,
-    this.isMax,
   });
 
   // video
@@ -36,7 +35,6 @@ class RepostPanel extends CommonRichTextPubPage {
   final String? pic;
   final String? title;
   final String? uname;
-  final bool? isMax;
 
   final DynamicItemModel? item;
   final String? dynIdStr;
@@ -47,8 +45,8 @@ class RepostPanel extends CommonRichTextPubPage {
 }
 
 class _RepostPanelState extends CommonRichTextPubPageState<RepostPanel> {
-  late bool _isMax = widget.isMax ?? false;
-  bool? _isExpanded;
+  late bool _isMax = false;
+  late bool _isExpanded = false;
 
   late final _key = GlobalKey();
 
@@ -117,7 +115,7 @@ class _RepostPanelState extends CommonRichTextPubPageState<RepostPanel> {
           )
         : page();
 
-    return _isExpanded == true
+    return _isExpanded
         ? child()
         : AnimatedSize(
             alignment: Alignment.topCenter,

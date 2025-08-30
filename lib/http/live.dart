@@ -166,7 +166,7 @@ class LiveHttp {
   static Future<LoadingState<LiveIndexData>> liveFeedIndex({
     required int pn,
     required bool isLogin,
-    bool? moduleSelect,
+    bool moduleSelect = false,
   }) async {
     final params = {
       'access_key': ?Accounts.main.accessKey,
@@ -182,7 +182,7 @@ class LiveHttp {
       'fnval': 912,
       'disable_rcmd': 0,
       'https_url_req': 1,
-      if (moduleSelect == true) 'module_select': 1,
+      if (moduleSelect) 'module_select': 1,
       'mobi_app': 'android',
       'network': 'wifi',
       'page': pn,

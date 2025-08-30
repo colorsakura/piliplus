@@ -1,3 +1,5 @@
+import 'dart:ui' show Offset;
+
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/http/match.dart';
 import 'package:PiliPlus/models_new/match/match_info/contest.dart';
@@ -17,7 +19,7 @@ class MatchInfoController extends CommonDynController {
       LoadingState<MatchContest?>.loading().obs;
 
   @override
-  double get offsetDy => 2;
+  Offset get fabOffset => const Offset(0, 2);
 
   @override
   void onInit() {

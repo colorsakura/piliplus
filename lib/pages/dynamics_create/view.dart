@@ -242,7 +242,6 @@ class _CreateDynPanelState extends CommonRichTextPubPageState<CreateDynPanel> {
 
   Widget _buildImageList(ThemeData theme) => SizedBox(
     height: 100,
-    width: double.infinity,
     child: SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -779,8 +778,8 @@ class _CreateDynPanelState extends CommonRichTextPubPageState<CreateDynPanel> {
           children: [
             GestureDetector(
               onTap: _onReserve,
+              behavior: HitTestBehavior.opaque,
               child: Container(
-                width: double.infinity,
                 decoration: BoxDecoration(
                   borderRadius: const BorderRadius.all(Radius.circular(8)),
                   color: theme.colorScheme.onInverseSurface,
@@ -789,7 +788,7 @@ class _CreateDynPanelState extends CommonRichTextPubPageState<CreateDynPanel> {
                 padding: const EdgeInsets.fromLTRB(12, 12, 30, 12),
                 child: Column(
                   spacing: 3,
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     Text('直播预约: ${reserveCard.title}'),
                     Text(

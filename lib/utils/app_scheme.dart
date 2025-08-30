@@ -481,7 +481,7 @@ class PiliScheme {
                 try {
                   index = FavTabType.values.byName(tab).index;
                 } catch (e) {
-                  if (kDebugMode) print('favorite jump: $e');
+                  if (kDebugMode) debugPrint('favorite jump: $e');
                 }
               }
               Get.toNamed('/fav', arguments: index);

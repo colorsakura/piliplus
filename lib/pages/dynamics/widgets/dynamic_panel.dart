@@ -7,7 +7,6 @@ import 'package:PiliPlus/pages/dynamics/widgets/author_panel.dart';
 import 'package:PiliPlus/pages/dynamics/widgets/blocked_item.dart';
 import 'package:PiliPlus/pages/dynamics/widgets/content_panel.dart';
 import 'package:PiliPlus/pages/dynamics/widgets/module_panel.dart';
-import 'package:PiliPlus/utils/context_ext.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:flutter/material.dart' hide InkWell;
 
@@ -21,6 +20,7 @@ class DynamicPanel extends StatelessWidget {
   final Function(bool isTop, dynamic dynId)? onSetTop;
   final VoidCallback? onBlock;
   final VoidCallback? onUnfold;
+  final bool isDetailPortraitW;
 
   const DynamicPanel({
     super.key,
@@ -33,6 +33,7 @@ class DynamicPanel extends StatelessWidget {
     this.onSetTop,
     this.onBlock,
     this.onUnfold,
+    this.isDetailPortraitW = true,
   });
 
   @override
@@ -150,7 +151,7 @@ class DynamicPanel extends StatelessWidget {
         ),
       ),
     );
-    if (isSave || (isDetail && context.isLandscape)) {
+    if (isSave || (isDetail && !isDetailPortraitW)) {
       return child;
     }
     return DecoratedBox(

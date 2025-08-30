@@ -203,10 +203,10 @@ class _PgcPageState extends CommonPageState<PgcPage, PgcController>
   List<Widget> _buildRcmd(ThemeData theme) => [
     _buildRcmdTitle(theme),
     SliverPadding(
-      padding: EdgeInsets.only(
+      padding: const EdgeInsets.only(
         left: StyleString.safeSpace,
         right: StyleString.safeSpace,
-        bottom: MediaQuery.viewPaddingOf(context).bottom + 100,
+        bottom: 100,
       ),
       sliver: Obx(
         () => _buildRcmdBody(controller.loadingState.value),

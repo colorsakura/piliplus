@@ -144,8 +144,6 @@ class ReplyUtils {
         type: type,
         sort: ReplySortType.time.index,
         page: 1,
-        enableFilter: false,
-        antiGoodsReply: false,
       );
 
       if (res is Error) {
@@ -168,8 +166,6 @@ class ReplyUtils {
             root: id,
             pageNum: 1,
             type: type,
-            filterBanWord: false,
-            antiGoodsReply: false,
           );
 
           if (res1 is Error) {
@@ -185,9 +181,7 @@ class ReplyUtils {
               root: id,
               pageNum: 1,
               type: type,
-              filterBanWord: false,
               isCheck: true,
-              antiGoodsReply: false,
             );
 
             if (res2 is Error) {
@@ -222,9 +216,7 @@ https://api.bilibili.com/x/v2/reply/reply?oid=$oid&pn=1&ps=20&root=$id&type=$typ
           root: root,
           pageNum: i,
           type: type,
-          filterBanWord: false,
           isCheck: true,
-          antiGoodsReply: false,
         );
         if (res3 is Error) {
           break;
@@ -251,9 +243,7 @@ https://api.bilibili.com/x/v2/reply/reply?oid=$oid&pn=1&ps=20&root=$id&type=$typ
           root: root,
           pageNum: i,
           type: type,
-          filterBanWord: false,
           isCheck: true,
-          antiGoodsReply: false,
         );
         if (res4 is Error) {
           break;

@@ -176,7 +176,8 @@ class HeaderControlState extends TripleState<HeaderControl> {
                   onTap: () {
                     Get.back();
                     videoDetailCtr.queryVideoUrl(
-                      videoDetailCtr.playedTime,
+                      defaultST: videoDetailCtr.playedTime,
+                      fromReset: true,
                     );
                   },
                   leading: const Icon(Icons.refresh_outlined, size: 20),
@@ -279,7 +280,8 @@ class HeaderControlState extends TripleState<HeaderControl> {
                       );
                       setState(() {});
                       videoDetailCtr.queryVideoUrl(
-                        videoDetailCtr.playedTime,
+                        defaultST: videoDetailCtr.playedTime,
+                        fromReset: true,
                       );
                     }
                   },
@@ -957,80 +959,59 @@ class HeaderControlState extends TripleState<HeaderControl> {
           thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 6.0),
         );
 
-        void updateStrokeWidth(double val, {bool isEnd = true}) {
+        void updateStrokeWidth(double val) {
           subtitleStrokeWidth = val;
           plPlayerController
             ..subtitleStrokeWidth = subtitleStrokeWidth
             ..updateSubtitleStyle();
-          if (isEnd) {
-            plPlayerController.putSubtitleSettings();
-          }
           setState(() {});
         }
 
-        void updateOpacity(double val, {bool isEnd = true}) {
+        void updateOpacity(double val) {
           subtitleBgOpaticy = val.toPrecision(2);
           plPlayerController
             ..subtitleBgOpaticy = subtitleBgOpaticy
             ..updateSubtitleStyle();
-          if (isEnd) {
-            plPlayerController.putSubtitleSettings();
-          }
           setState(() {});
         }
 
-        void updateBottomPadding(double val, {bool isEnd = true}) {
+        void updateBottomPadding(double val) {
           subtitlePaddingB = val.round();
           plPlayerController
             ..subtitlePaddingB = subtitlePaddingB
             ..updateSubtitleStyle();
-          if (isEnd) {
-            plPlayerController.putSubtitleSettings();
-          }
           setState(() {});
         }
 
-        void updateHorizontalPadding(double val, {bool isEnd = true}) {
+        void updateHorizontalPadding(double val) {
           subtitlePaddingH = val.round();
           plPlayerController
             ..subtitlePaddingH = subtitlePaddingH
             ..updateSubtitleStyle();
-          if (isEnd) {
-            plPlayerController.putSubtitleSettings();
-          }
           setState(() {});
         }
 
-        void updateFontScaleFS(double val, {bool isEnd = true}) {
+        void updateFontScaleFS(double val) {
           subtitleFontScaleFS = val;
           plPlayerController
             ..subtitleFontScaleFS = subtitleFontScaleFS
             ..updateSubtitleStyle();
-          if (isEnd) {
-            plPlayerController.putSubtitleSettings();
-          }
           setState(() {});
         }
 
-        void updateFontScale(double val, {bool isEnd = true}) {
+        void updateFontScale(double val) {
           subtitleFontScale = val;
           plPlayerController
             ..subtitleFontScale = subtitleFontScale
             ..updateSubtitleStyle();
-          if (isEnd) {
-            plPlayerController.putSubtitleSettings();
-          }
           setState(() {});
         }
 
-        void updateFontWeight(double val, {bool isEnd = true}) {
+        void updateFontWeight(double val) {
           subtitleFontWeight = val.toInt();
           plPlayerController
             ..subtitleFontWeight = subtitleFontWeight
             ..updateSubtitleStyle();
-          if (isEnd) {
-            plPlayerController.putSubtitleSettings();
-          }
           setState(() {});
         }
 
@@ -1075,8 +1056,9 @@ class HeaderControlState extends TripleState<HeaderControl> {
                         divisions: 20,
                         label:
                             '${(subtitleFontScale * 100).toStringAsFixed(1)}%',
-                        onChanged: (val) => updateFontScale(val, isEnd: false),
-                        onChangeEnd: updateFontScale,
+                        onChanged: updateFontScale,
+                        onChangeEnd: (_) =>
+                            plPlayerController.putSubtitleSettings(),
                       ),
                     ),
                   ),
@@ -1105,9 +1087,9 @@ class HeaderControlState extends TripleState<HeaderControl> {
                         divisions: 20,
                         label:
                             '${(subtitleFontScaleFS * 100).toStringAsFixed(1)}%',
-                        onChanged: (val) =>
-                            updateFontScaleFS(val, isEnd: false),
-                        onChangeEnd: updateFontScaleFS,
+                        onChanged: updateFontScaleFS,
+                        onChangeEnd: (_) =>
+                            plPlayerController.putSubtitleSettings,
                       ),
                     ),
                   ),
@@ -1133,8 +1115,9 @@ class HeaderControlState extends TripleState<HeaderControl> {
                         value: subtitleFontWeight.toDouble(),
                         divisions: 8,
                         label: '${subtitleFontWeight + 1}',
-                        onChanged: (val) => updateFontWeight(val, isEnd: false),
-                        onChangeEnd: updateFontWeight,
+                        onChanged: updateFontWeight,
+                        onChangeEnd: (_) =>
+                            plPlayerController.putSubtitleSettings(),
                       ),
                     ),
                   ),
@@ -1160,9 +1143,9 @@ class HeaderControlState extends TripleState<HeaderControl> {
                         value: subtitleStrokeWidth,
                         divisions: 10,
                         label: '$subtitleStrokeWidth',
-                        onChanged: (val) =>
-                            updateStrokeWidth(val, isEnd: false),
-                        onChangeEnd: updateStrokeWidth,
+                        onChanged: updateStrokeWidth,
+                        onChangeEnd: (_) =>
+                            plPlayerController.putSubtitleSettings(),
                       ),
                     ),
                   ),
@@ -1188,9 +1171,9 @@ class HeaderControlState extends TripleState<HeaderControl> {
                         value: subtitlePaddingH.toDouble(),
                         divisions: 100,
                         label: '$subtitlePaddingH',
-                        onChanged: (val) =>
-                            updateHorizontalPadding(val, isEnd: false),
-                        onChangeEnd: updateHorizontalPadding,
+                        onChanged: updateHorizontalPadding,
+                        onChangeEnd: (_) =>
+                            plPlayerController.putSubtitleSettings(),
                       ),
                     ),
                   ),
@@ -1216,9 +1199,9 @@ class HeaderControlState extends TripleState<HeaderControl> {
                         value: subtitlePaddingB.toDouble(),
                         divisions: 200,
                         label: '$subtitlePaddingB',
-                        onChanged: (val) =>
-                            updateBottomPadding(val, isEnd: false),
-                        onChangeEnd: updateBottomPadding,
+                        onChanged: updateBottomPadding,
+                        onChangeEnd: (_) =>
+                            plPlayerController.putSubtitleSettings(),
                       ),
                     ),
                   ),
@@ -1242,8 +1225,9 @@ class HeaderControlState extends TripleState<HeaderControl> {
                         min: 0,
                         max: 1,
                         value: subtitleBgOpaticy,
-                        onChanged: (val) => updateOpacity(val, isEnd: false),
-                        onChangeEnd: updateOpacity,
+                        onChanged: updateOpacity,
+                        onChangeEnd: (_) =>
+                            plPlayerController.putSubtitleSettings(),
                       ),
                     ),
                   ),
@@ -1315,13 +1299,8 @@ class HeaderControlState extends TripleState<HeaderControl> {
           thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 6.0),
         );
 
-        void updateLineHeight(double val, {bool isEnd = true}) {
+        void updateLineHeight(double val) {
           danmakuLineHeight = val.toPrecision(1);
-          if (isEnd) {
-            plPlayerController
-              ..danmakuLineHeight = danmakuLineHeight
-              ..putDanmakuSettings();
-          }
           setState(() {});
           try {
             danmakuController?.updateOption(
@@ -1332,13 +1311,8 @@ class HeaderControlState extends TripleState<HeaderControl> {
           } catch (_) {}
         }
 
-        void updateDuration(double val, {bool isEnd = true}) {
+        void updateDuration(double val) {
           danmakuDuration = val.toPrecision(1);
-          if (isEnd) {
-            plPlayerController
-              ..danmakuDuration = danmakuDuration
-              ..putDanmakuSettings();
-          }
           setState(() {});
           try {
             danmakuController?.updateOption(
@@ -1349,13 +1323,8 @@ class HeaderControlState extends TripleState<HeaderControl> {
           } catch (_) {}
         }
 
-        void updateStaticDuration(double val, {bool isEnd = true}) {
+        void updateStaticDuration(double val) {
           danmakuStaticDuration = val.toPrecision(1);
-          if (isEnd) {
-            plPlayerController
-              ..danmakuStaticDuration = danmakuStaticDuration
-              ..putDanmakuSettings();
-          }
           setState(() {});
           try {
             danmakuController?.updateOption(
@@ -1367,13 +1336,8 @@ class HeaderControlState extends TripleState<HeaderControl> {
           } catch (_) {}
         }
 
-        void updateFontSizeFS(double val, {bool isEnd = true}) {
+        void updateFontSizeFS(double val) {
           fontSizeFS = val;
-          if (isEnd) {
-            plPlayerController
-              ..danmakuFontScaleFS = fontSizeFS
-              ..putDanmakuSettings();
-          }
           setState(() {});
           if (isFullScreen) {
             try {
@@ -1386,13 +1350,8 @@ class HeaderControlState extends TripleState<HeaderControl> {
           }
         }
 
-        void updateFontSize(double val, {bool isEnd = true}) {
+        void updateFontSize(double val) {
           fontSize = val;
-          if (isEnd) {
-            plPlayerController
-              ..danmakuFontScale = fontSize
-              ..putDanmakuSettings();
-          }
           setState(() {});
           if (!isFullScreen) {
             try {
@@ -1405,13 +1364,8 @@ class HeaderControlState extends TripleState<HeaderControl> {
           }
         }
 
-        void updateStrokeWidth(double val, {bool isEnd = true}) {
+        void updateStrokeWidth(double val) {
           strokeWidth = val;
-          if (isEnd) {
-            plPlayerController
-              ..strokeWidth = val
-              ..putDanmakuSettings();
-          }
           setState(() {});
           try {
             danmakuController?.updateOption(
@@ -1420,13 +1374,8 @@ class HeaderControlState extends TripleState<HeaderControl> {
           } catch (_) {}
         }
 
-        void updateFontWeight(double val, {bool isEnd = true}) {
+        void updateFontWeight(double val) {
           fontWeight = val.toInt();
-          if (isEnd) {
-            plPlayerController
-              ..fontWeight = fontWeight
-              ..putDanmakuSettings();
-          }
           setState(() {});
           try {
             danmakuController?.updateOption(
@@ -1435,13 +1384,8 @@ class HeaderControlState extends TripleState<HeaderControl> {
           } catch (_) {}
         }
 
-        void updateOpacity(double val, {bool isEnd = true}) {
+        void updateOpacity(double val) {
           opacity = val;
-          if (isEnd) {
-            plPlayerController
-              ..danmakuOpacity = opacity
-              ..putDanmakuSettings();
-          }
           setState(() {});
           try {
             danmakuController?.updateOption(
@@ -1450,13 +1394,8 @@ class HeaderControlState extends TripleState<HeaderControl> {
           } catch (_) {}
         }
 
-        void updateShowArea(double val, {bool isEnd = true}) {
+        void updateShowArea(double val) {
           showArea = val.toPrecision(1);
-          if (isEnd) {
-            plPlayerController
-              ..showArea = showArea
-              ..putDanmakuSettings();
-          }
           setState(() {});
           try {
             danmakuController?.updateOption(
@@ -1465,13 +1404,8 @@ class HeaderControlState extends TripleState<HeaderControl> {
           } catch (_) {}
         }
 
-        void updateDanmakuWeight(double val, {bool isEnd = true}) {
+        void updateDanmakuWeight(double val) {
           danmakuWeight = val.toInt();
-          if (isEnd) {
-            plPlayerController
-              ..danmakuWeight = danmakuWeight
-              ..putDanmakuSettings();
-          }
           setState(() {});
         }
 
@@ -1528,9 +1462,10 @@ class HeaderControlState extends TripleState<HeaderControl> {
                         value: danmakuWeight.toDouble(),
                         divisions: 10,
                         label: '$danmakuWeight',
-                        onChanged: (val) =>
-                            updateDanmakuWeight(val, isEnd: false),
-                        onChangeEnd: updateDanmakuWeight,
+                        onChanged: updateDanmakuWeight,
+                        onChangeEnd: (_) => plPlayerController
+                          ..danmakuWeight = danmakuWeight
+                          ..putDanmakuSettings(),
                       ),
                     ),
                   ),
@@ -1610,8 +1545,10 @@ class HeaderControlState extends TripleState<HeaderControl> {
                         value: showArea,
                         divisions: 9,
                         label: '${showArea * 100}%',
-                        onChanged: (val) => updateShowArea(val, isEnd: false),
-                        onChangeEnd: updateShowArea,
+                        onChanged: updateShowArea,
+                        onChangeEnd: (_) => plPlayerController
+                          ..showArea = showArea
+                          ..putDanmakuSettings(),
                       ),
                     ),
                   ),
@@ -1637,8 +1574,10 @@ class HeaderControlState extends TripleState<HeaderControl> {
                         value: opacity,
                         divisions: 10,
                         label: '${opacity * 100}%',
-                        onChanged: (val) => updateOpacity(val, isEnd: false),
-                        onChangeEnd: updateOpacity,
+                        onChanged: updateOpacity,
+                        onChangeEnd: (_) => plPlayerController
+                          ..danmakuOpacity = opacity
+                          ..putDanmakuSettings(),
                       ),
                     ),
                   ),
@@ -1664,8 +1603,10 @@ class HeaderControlState extends TripleState<HeaderControl> {
                         value: fontWeight.toDouble(),
                         divisions: 8,
                         label: '${fontWeight + 1}',
-                        onChanged: (val) => updateFontWeight(val, isEnd: false),
-                        onChangeEnd: updateFontWeight,
+                        onChanged: updateFontWeight,
+                        onChangeEnd: (_) => plPlayerController
+                          ..fontWeight = fontWeight
+                          ..putDanmakuSettings(),
                       ),
                     ),
                   ),
@@ -1691,9 +1632,10 @@ class HeaderControlState extends TripleState<HeaderControl> {
                         value: strokeWidth,
                         divisions: 6,
                         label: '$strokeWidth',
-                        onChanged: (val) =>
-                            updateStrokeWidth(val, isEnd: false),
-                        onChangeEnd: updateStrokeWidth,
+                        onChanged: updateStrokeWidth,
+                        onChangeEnd: (_) => plPlayerController
+                          ..strokeWidth = strokeWidth
+                          ..putDanmakuSettings(),
                       ),
                     ),
                   ),
@@ -1719,8 +1661,10 @@ class HeaderControlState extends TripleState<HeaderControl> {
                         value: fontSize,
                         divisions: 20,
                         label: '${(fontSize * 100).toStringAsFixed(1)}%',
-                        onChanged: (val) => updateFontSize(val, isEnd: false),
-                        onChangeEnd: updateFontSize,
+                        onChanged: updateFontSize,
+                        onChangeEnd: (_) => plPlayerController
+                          ..danmakuFontScale = fontSize
+                          ..putDanmakuSettings(),
                       ),
                     ),
                   ),
@@ -1746,8 +1690,10 @@ class HeaderControlState extends TripleState<HeaderControl> {
                         value: fontSizeFS,
                         divisions: 20,
                         label: '${(fontSizeFS * 100).toStringAsFixed(1)}%',
-                        onChanged: (val) => updateFontSizeFS(val, isEnd: false),
-                        onChangeEnd: updateFontSizeFS,
+                        onChanged: updateFontSizeFS,
+                        onChangeEnd: (_) => plPlayerController
+                          ..danmakuFontScaleFS = fontSizeFS
+                          ..putDanmakuSettings(),
                       ),
                     ),
                   ),
@@ -1773,8 +1719,10 @@ class HeaderControlState extends TripleState<HeaderControl> {
                         value: danmakuDuration,
                         divisions: 49,
                         label: danmakuDuration.toString(),
-                        onChanged: (val) => updateDuration(val, isEnd: false),
-                        onChangeEnd: updateDuration,
+                        onChanged: updateDuration,
+                        onChangeEnd: (_) => plPlayerController
+                          ..danmakuDuration = danmakuDuration
+                          ..putDanmakuSettings(),
                       ),
                     ),
                   ),
@@ -1800,9 +1748,10 @@ class HeaderControlState extends TripleState<HeaderControl> {
                         value: danmakuStaticDuration,
                         divisions: 49,
                         label: danmakuStaticDuration.toString(),
-                        onChanged: (val) =>
-                            updateStaticDuration(val, isEnd: false),
-                        onChangeEnd: updateStaticDuration,
+                        onChanged: updateStaticDuration,
+                        onChangeEnd: (_) => plPlayerController
+                          ..danmakuStaticDuration = danmakuStaticDuration
+                          ..putDanmakuSettings(),
                       ),
                     ),
                   ),
@@ -1826,8 +1775,10 @@ class HeaderControlState extends TripleState<HeaderControl> {
                         min: 1.0,
                         max: 3.0,
                         value: danmakuLineHeight,
-                        onChanged: (val) => updateLineHeight(val, isEnd: false),
-                        onChangeEnd: updateLineHeight,
+                        onChanged: updateLineHeight,
+                        onChangeEnd: (_) => plPlayerController
+                          ..danmakuLineHeight = danmakuLineHeight
+                          ..putDanmakuSettings(),
                       ),
                     ),
                   ),
