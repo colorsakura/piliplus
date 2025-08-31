@@ -133,11 +133,13 @@ class PiliScheme {
                         IconButton(
                           tooltip: '前往原视频',
                           onPressed: () {
-                            String? enterUri = uri
-                                .toString()
-                                .split('?')
-                                .first; // to check
-                            routePush(Uri.parse(enterUri));
+                            routePush(
+                              Uri(
+                                scheme: uri.scheme,
+                                host: uri.host,
+                                path: uri.path,
+                              ),
+                            );
                           },
                           icon: const Icon(Icons.open_in_new),
                         ),

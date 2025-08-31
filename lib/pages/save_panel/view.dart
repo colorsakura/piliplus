@@ -68,7 +68,7 @@ class _SavePanelState extends State<SavePanel> {
   bool showBottom = true;
 
   // item
-  dynamic get _item => widget.item;
+  Object get _item => widget.item;
   late String viewType = '查看';
   late String itemType = '内容';
 
@@ -135,8 +135,6 @@ class _SavePanelState extends State<SavePanel> {
           late final rootId = hasRoot ? reply.root : reply.id;
           late final anchor = hasRoot ? 'anchor=${reply.id}&' : '';
           late final enterUri = parseDyn(dynItem);
-          viewType = '查看';
-          itemType = '评论';
           uri = switch (type) {
             1 || 11 || 12 =>
               'bilibili://comment/detail/$type/${dynItem.basic!.ridStr}/$rootId/?${anchor}enterUri=$enterUri',
@@ -331,19 +329,19 @@ class _SavePanelState extends State<SavePanel> {
                         mainAxisSize: MainAxisSize.min,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          if (_item is ReplyInfo)
+                          if (_item case ReplyInfo reply)
                             IgnorePointer(
                               child: ReplyItemGrpc(
-                                replyItem: _item,
+                                replyItem: reply,
                                 replyLevel: 0,
                                 needDivider: false,
                                 upMid: widget.upMid,
                               ),
                             )
-                          else if (_item is DynamicItemModel)
+                          else if (_item case DynamicItemModel dyn)
                             IgnorePointer(
                               child: DynamicPanel(
-                                item: _item,
+                                item: dyn,
                                 isDetail: true,
                                 isSave: true,
                                 maxWidth: maxWidth - 24,
@@ -423,9 +421,9 @@ class _SavePanelState extends State<SavePanel> {
                                                 mainAxisSize: MainAxisSize.min,
                                                 crossAxisAlignment:
                                                     CrossAxisAlignment.end,
+                                                spacing: 4,
                                                 children: [
-                                                  if (uname?.isNotEmpty ==
-                                                      true) ...[
+                                                  if (uname?.isNotEmpty == true)
                                                     Text(
                                                       '@$uname',
                                                       maxLines: 1,
@@ -437,8 +435,6 @@ class _SavePanelState extends State<SavePanel> {
                                                             .primary,
                                                       ),
                                                     ),
-                                                    const SizedBox(height: 4),
-                                                  ],
                                                   Text(
                                                     '识别二维码，$viewType$itemType',
                                                     textAlign: TextAlign.end,
@@ -448,7 +444,6 @@ class _SavePanelState extends State<SavePanel> {
                                                           .onSurfaceVariant,
                                                     ),
                                                   ),
-                                                  const SizedBox(height: 4),
                                                   Text(
                                                     DateUtil.longFormatDs
                                                         .format(
