@@ -283,7 +283,6 @@ class HeaderControlState extends TripleState<HeaderControl> {
                       SmartDialog.showToast(
                         '已设置为 ${CDNService.fromCode(result).desc}，正在重载视频',
                       );
-                      setState(() {});
                       videoDetailCtr.queryVideoUrl(
                         defaultST: videoDetailCtr.playedTime,
                         fromReset: true,
