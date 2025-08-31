@@ -14,6 +14,7 @@ import 'package:PiliPlus/main.dart';
 import 'package:PiliPlus/models/common/episode_panel_type.dart';
 import 'package:PiliPlus/models_new/pgc/pgc_info_model/result.dart';
 import 'package:PiliPlus/models_new/video/video_detail/page.dart';
+import 'package:PiliPlus/models_new/video/video_detail/ugc_season.dart';
 import 'package:PiliPlus/models_new/video/video_tag/data.dart';
 import 'package:PiliPlus/pages/common/common_intro_controller.dart';
 import 'package:PiliPlus/pages/danmaku/view.dart';
@@ -1954,11 +1955,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                       : pgcIntroController.onChangeEpisode,
                   showTitle: false,
                   isSupportReverse: videoDetailController.isUgc,
-                  onReverse: () => onReversePlay(
-                    bvid: videoDetailController.bvid,
-                    aid: videoDetailController.aid,
-                    isSeason: false,
-                  ),
+                  onReverse: () => onReversePlay(isSeason: false),
                 ),
               ),
             ),
@@ -2009,11 +2006,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                     : pgcIntroController.onChangeEpisode,
                 showTitle: false,
                 isSupportReverse: videoDetailController.isUgc,
-                onReverse: () => onReversePlay(
-                  bvid: videoDetailController.bvid,
-                  aid: videoDetailController.aid,
-                  isSeason: true,
-                ),
+                onReverse: () => onReversePlay(isSeason: true),
               ),
             ),
           ),
@@ -2078,7 +2071,15 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
     );
   }
 
-  void showEpisodes([int? index, season, episodes, bvid, aid, cid]) {
+  void showEpisodes([
+    int? index,
+    UgcSeason? season,
+    episodes,
+    String? bvid,
+    int? aid,
+    int? cid,
+  ]) {
+    assert((cid == null) == (bvid == null));
     final isFullScreen = this.isFullScreen;
     if (cid == null) {
       videoDetailController.showMediaListPanel(context);
@@ -2097,11 +2098,11 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
       cover: videoDetailController.cover.value,
       enableSlide: enableSlide,
       initialTabIndex: index ?? 0,
-      bvid: bvid,
+      bvid: bvid!,
       aid: aid,
       cid: cid,
       seasonId: season?.id,
-      list: season != null ? season.sections : [episodes],
+      list: season != null ? season.sections! : [episodes],
       isReversed: !videoDetailController.isUgc
           ? null
           : season != null
@@ -2119,11 +2120,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
       onClose: Get.back,
       onReverse: () {
         Get.back();
-        onReversePlay(
-          bvid: bvid,
-          aid: aid,
-          isSeason: season != null,
-        );
+        onReversePlay(isSeason: season != null);
       },
     );
     if (isFullScreen || videoDetailController.showVideoSheet) {
@@ -2146,11 +2143,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
     }
   }
 
-  void onReversePlay({
-    required dynamic bvid,
-    required dynamic aid,
-    required bool isSeason,
-  }) {
+  void onReversePlay({required bool isSeason}) {
     if (isSeason && videoDetailController.isPlayAll) {
       SmartDialog.showToast('当前为播放全部，合集不支持倒序');
       return;

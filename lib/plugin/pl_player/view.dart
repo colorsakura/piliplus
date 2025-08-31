@@ -13,6 +13,7 @@ import 'package:PiliPlus/models/common/video/video_quality.dart';
 import 'package:PiliPlus/models/video/play/url.dart';
 import 'package:PiliPlus/models_new/video/video_detail/episode.dart';
 import 'package:PiliPlus/models_new/video/video_detail/section.dart';
+import 'package:PiliPlus/models_new/video/video_detail/ugc_season.dart';
 import 'package:PiliPlus/models_new/video/video_shot/data.dart';
 import 'package:PiliPlus/pages/common/common_intro_controller.dart';
 import 'package:PiliPlus/pages/video/controller.dart';
@@ -83,7 +84,8 @@ class PLVideoPlayer extends StatefulWidget {
 
   final Widget? customWidget;
   final List<Widget>? customWidgets;
-  final Function? showEpisodes;
+  final void Function([int?, UgcSeason?, dynamic, String?, int?, int?])?
+  showEpisodes;
   final VoidCallback? showViewPoints;
   final Color? fill;
   final Alignment? alignment;

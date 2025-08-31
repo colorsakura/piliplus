@@ -257,7 +257,7 @@ class _EpisodePanelState extends CommonCollapseSlidePageState<EpisodePanel> {
     return _buildBody(theme, 0, _getCurrEpisodes);
   }
 
-  Widget _buildBody(ThemeData theme, int tabIndex, episodes) {
+  Widget _buildBody(ThemeData theme, int tabIndex, List episodes) {
     final isCurrTab = tabIndex == widget.initialTabIndex;
     return KeepAliveWrapper(
       builder: (context) => ScrollablePositionedList.separated(
@@ -269,7 +269,7 @@ class _EpisodePanelState extends CommonCollapseSlidePageState<EpisodePanel> {
         itemCount: episodes.length,
         physics: const AlwaysScrollableScrollPhysics(),
         itemBuilder: (BuildContext context, int itemIndex) {
-          final episode = episodes[itemIndex];
+          final ugc.BaseEpisodeItem episode = episodes[itemIndex];
           final isCurrItem = isCurrTab ? itemIndex == _currentItemIndex : false;
           Widget episodeItem = _buildEpisodeItem(
             theme: theme,
@@ -278,9 +278,9 @@ class _EpisodePanelState extends CommonCollapseSlidePageState<EpisodePanel> {
             length: episodes.length,
             isCurrentIndex: isCurrItem,
           );
-          if (widget.type == EpisodeType.season &&
+          if (episode is ugc.EpisodeItem &&
               widget.showTitle &&
-              episode.pages.length > 1) {
+              episode.pages!.length > 1) {
             return Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -296,7 +296,7 @@ class _EpisodePanelState extends CommonCollapseSlidePageState<EpisodePanel> {
                     cover: episode.arc?.pic,
                     heroTag: widget.heroTag,
                     ugcIntroController: widget.ugcIntroController!,
-                    bvid: IdUtils.av2bv(episode.aid),
+                    bvid: episode.bvid ?? IdUtils.av2bv(episode.aid!),
                   ),
                 ),
               ],
