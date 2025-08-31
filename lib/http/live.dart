@@ -168,7 +168,7 @@ class LiveHttp {
     bool? moduleSelect,
   }) async {
     final params = {
-      if (isLogin) 'access_key': Accounts.main.accessKey,
+      'access_key': ?Accounts.main.accessKey,
       'appkey': Constants.appKey,
       'channel': 'master',
       'actionKey': 'appkey',
@@ -250,7 +250,7 @@ class LiveHttp {
     String? sortType,
   }) async {
     final params = {
-      if (isLogin) 'access_key': Accounts.main.accessKey,
+      'access_key': ?Accounts.main.accessKey,
       'appkey': Constants.appKey,
       'actionKey': 'appkey',
       'channel': 'master',
@@ -316,7 +316,7 @@ class LiveHttp {
     required bool isLogin,
   }) async {
     final params = {
-      if (isLogin) 'access_key': Accounts.main.accessKey,
+      'access_key': ?Accounts.main.accessKey,
       'appkey': Constants.appKey,
       'actionKey': 'appkey',
       'build': 8430300,
@@ -355,7 +355,7 @@ class LiveHttp {
     required bool isLogin,
   }) async {
     final params = {
-      if (isLogin) 'access_key': Accounts.main.accessKey,
+      'access_key': ?Accounts.main.accessKey,
       'appkey': Constants.appKey,
       'actionKey': 'appkey',
       'build': 8430300,
@@ -435,7 +435,7 @@ class LiveHttp {
     required parentid,
   }) async {
     final params = {
-      if (isLogin) 'access_key': Accounts.main.accessKey,
+      'access_key': ?Accounts.main.accessKey,
       'appkey': Constants.appKey,
       'actionKey': 'appkey',
       'build': 8430300,
@@ -478,7 +478,7 @@ class LiveHttp {
     required LiveSearchType type,
   }) async {
     final params = {
-      if (isLogin) 'access_key': Accounts.main.accessKey,
+      'access_key': ?Accounts.main.accessKey,
       'appkey': Constants.appKey,
       'actionKey': 'appkey',
       'build': 8430300,

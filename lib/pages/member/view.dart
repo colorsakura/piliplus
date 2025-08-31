@@ -17,6 +17,7 @@ import 'package:PiliPlus/pages/member_dynamics/view.dart';
 import 'package:PiliPlus/pages/member_favorite/view.dart';
 import 'package:PiliPlus/pages/member_home/view.dart';
 import 'package:PiliPlus/pages/member_pgc/view.dart';
+import 'package:PiliPlus/pages/member_shop/view.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart';
 import 'package:flutter/material.dart';
@@ -316,6 +317,10 @@ class _MemberPageState extends State<MemberPage> {
           mid: _mid,
         ),
         'cheese' => MemberCheese(
+          heroTag: _heroTag,
+          mid: _mid,
+        ),
+        'shop' => MemberShop(
           heroTag: _heroTag,
           mid: _mid,
         ),

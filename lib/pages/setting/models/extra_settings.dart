@@ -923,6 +923,14 @@ List<SettingsModel> get extraSettings => [
   ),
   SettingsModel(
     settingsType: SettingsType.sw1tch,
+    title: '显示UP主页小店TAB',
+    leading: const Icon(Icons.shop_outlined),
+    setKey: SettingBoxKey.showMemberShop,
+    defaultVal: false,
+    onChanged: (value) => MemberTabType.showMemberShop = value,
+  ),
+  SettingsModel(
+    settingsType: SettingsType.sw1tch,
     onTap: () {
       String systemProxyHost = Pref.systemProxyHost;
       String systemProxyPort = Pref.systemProxyPort;

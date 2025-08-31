@@ -133,7 +133,8 @@ class SettingBoxKey {
       quickFavId = 'quickFavId',
       showFsScreenshotBtn = 'showFsScreenshotBtn',
       showFsLockBtn = 'showFsLockBtn',
-      silentDownImg = 'silentDownImg';
+      silentDownImg = 'silentDownImg',
+      showMemberShop = 'showMemberShop';
 
   static const String subtitlePreferenceV2 = 'subtitlePreferenceV2',
       enableDragSubtitle = 'enableDragSubtitle',

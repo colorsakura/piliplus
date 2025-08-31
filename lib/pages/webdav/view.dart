@@ -46,7 +46,7 @@ class _WebDavSettingPageState extends State<WebDavSettingPage> {
           top: 20,
           left: padding.left + 20,
           right: padding.right + 20,
-          bottom: padding.bottom + 90,
+          bottom: padding.bottom + 100,
         ),
         children: [
           TextField(

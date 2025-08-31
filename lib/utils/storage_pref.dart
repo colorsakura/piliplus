@@ -804,4 +804,7 @@ class Pref {
     }
     return buvid;
   }
+
+  static bool get showMemberShop =>
+      _setting.get(SettingBoxKey.showMemberShop, defaultValue: false);
 }

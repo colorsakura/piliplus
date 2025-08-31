@@ -23,8 +23,10 @@ import 'package:PiliPlus/models_new/space/space_audio/data.dart';
 import 'package:PiliPlus/models_new/space/space_cheese/data.dart';
 import 'package:PiliPlus/models_new/space/space_opus/data.dart';
 import 'package:PiliPlus/models_new/space/space_season_series/item.dart';
+import 'package:PiliPlus/models_new/space/space_shop/data.dart';
 import 'package:PiliPlus/models_new/upower_rank/data.dart';
 import 'package:PiliPlus/utils/accounts.dart';
+import 'package:PiliPlus/utils/app_sign.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:PiliPlus/utils/wbi_sign.dart';
 import 'package:dio/dio.dart';
@@ -775,6 +777,36 @@ class MemberHttp {
     );
     if (res.data['code'] == 0) {
       return Success(CoinLikeArcData.fromJson(res.data['data']));
+    } else {
+      return Error(res.data['message']);
+    }
+  }
+
+  static Future<LoadingState<SpaceShopData>> spaceShop({
+    required int mid,
+  }) async {
+    final params = {
+      'access_key': ?Accounts.main.accessKey,
+      'actionKey': 'appkey',
+      'build': 8430300,
+      'mVersion': 309,
+      'mallVersion': 8430300,
+      'statistics': Constants.statisticsApp,
+    };
+    AppSign.appSign(params);
+    var res = await Request().post(
+      Api.spaceShop,
+      queryParameters: params,
+      data: {
+        "from": "cps_productTab_$mid",
+        "searchAfter": 0,
+        "msource": "cps_productTab_$mid",
+        "pageSize": 8,
+        "upMid": mid.toString(),
+      },
+    );
+    if (res.data['code'] == 0) {
+      return Success(SpaceShopData.fromJson(res.data['data']));
     } else {
       return Error(res.data['message']);
     }
