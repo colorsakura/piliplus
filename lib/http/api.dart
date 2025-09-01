@@ -962,4 +962,7 @@ class Api {
 
   static const String spaceShop =
       '${HttpString.mallBaseUrl}/community-hub/small_shop/feed/tab/item';
+
+  static const String superChatMsg =
+      '${HttpString.liveBaseUrl}/av/v1/SuperChat/getMessageList';
 }

@@ -807,4 +807,7 @@ class Pref {
 
   static bool get showMemberShop =>
       _setting.get(SettingBoxKey.showMemberShop, defaultValue: false);
+
+  static bool get showSuperChat =>
+      _setting.get(SettingBoxKey.showSuperChat, defaultValue: true);
 }

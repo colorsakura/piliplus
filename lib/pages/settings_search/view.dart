@@ -1,6 +1,6 @@
 import 'package:PiliPlus/common/widgets/loading_widget/http_error.dart';
 import 'package:PiliPlus/common/widgets/view_sliver_safe_area.dart';
-import 'package:PiliPlus/pages/search/controller.dart' show SearchState;
+import 'package:PiliPlus/pages/search/controller.dart' show DebounceStreamState;
 import 'package:PiliPlus/pages/setting/models/extra_settings.dart';
 import 'package:PiliPlus/pages/setting/models/model.dart';
 import 'package:PiliPlus/pages/setting/models/play_settings.dart';
@@ -22,7 +22,8 @@ class SettingsSearchPage extends StatefulWidget {
   State<SettingsSearchPage> createState() => _SettingsSearchPageState();
 }
 
-class _SettingsSearchPageState extends SearchState<SettingsSearchPage> {
+class _SettingsSearchPageState
+    extends DebounceStreamState<SettingsSearchPage, String> {
   final _textEditingController = TextEditingController();
   final RxList<SettingsModel> _list = <SettingsModel>[].obs;
   late final _settings = [
@@ -91,19 +92,24 @@ class _SettingsSearchPageState extends SearchState<SettingsSearchPage> {
       body: CustomScrollView(
         slivers: [
           ViewSliverSafeArea(
-            sliver: Obx(
-              () => _list.isEmpty
-                  ? const HttpError()
-                  : SliverWaterfallFlow(
-                      gridDelegate:
-                          SliverWaterfallFlowDelegateWithMaxCrossAxisExtent(
-                            maxCrossAxisExtent: Grid.smallCardWidth * 2,
-                          ),
-                      delegate: SliverChildBuilderDelegate(
-                        (_, index) => _list[index].widget,
-                        childCount: _list.length,
+            sliver: MediaQuery.removeViewPadding(
+              context: context,
+              removeLeft: true,
+              removeRight: true,
+              child: Obx(
+                () => _list.isEmpty
+                    ? const HttpError()
+                    : SliverWaterfallFlow(
+                        gridDelegate:
+                            SliverWaterfallFlowDelegateWithMaxCrossAxisExtent(
+                              maxCrossAxisExtent: Grid.smallCardWidth * 2,
+                            ),
+                        delegate: SliverChildBuilderDelegate(
+                          (_, index) => _list[index].widget,
+                          childCount: _list.length,
+                        ),
                       ),
-                    ),
+              ),
             ),
           ),
         ],

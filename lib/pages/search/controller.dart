@@ -33,8 +33,8 @@ mixin DebounceStreamMixin<T> {
   }
 }
 
-abstract class SearchState<T extends StatefulWidget> extends State<T>
-    with DebounceStreamMixin<String> {
+abstract class DebounceStreamState<T extends StatefulWidget, S> extends State<T>
+    with DebounceStreamMixin<S> {
   @override
   void dispose() {
     subDispose();

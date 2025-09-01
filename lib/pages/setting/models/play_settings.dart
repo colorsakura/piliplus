@@ -131,6 +131,13 @@ List<SettingsModel> get playSettings => [
   ),
   const SettingsModel(
     settingsType: SettingsType.sw1tch,
+    title: '显示 SuperChat',
+    leading: Icon(Icons.live_tv),
+    setKey: SettingBoxKey.showSuperChat,
+    defaultVal: true,
+  ),
+  const SettingsModel(
+    settingsType: SettingsType.sw1tch,
     title: '竖屏扩大展示',
     subtitle: '小屏竖屏视频宽高比由16:9扩大至1:1（不支持收起）；横屏适配时，扩大至9:16',
     leading: Icon(Icons.expand_outlined),

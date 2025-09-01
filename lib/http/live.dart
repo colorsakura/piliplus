@@ -18,6 +18,7 @@ import 'package:PiliPlus/models_new/live/live_room_info_h5/data.dart';
 import 'package:PiliPlus/models_new/live/live_room_play_info/data.dart';
 import 'package:PiliPlus/models_new/live/live_search/data.dart';
 import 'package:PiliPlus/models_new/live/live_second_list/data.dart';
+import 'package:PiliPlus/models_new/live/live_superchat/data.dart';
 import 'package:PiliPlus/utils/accounts.dart';
 import 'package:PiliPlus/utils/app_sign.dart';
 import 'package:PiliPlus/utils/wbi_sign.dart';
@@ -640,6 +641,26 @@ class LiveHttp {
       return {'status': true};
     } else {
       return {'status': false, 'msg': res.data['message']};
+    }
+  }
+
+  static Future<LoadingState<SuperChatData>> superChatMsg(
+    dynamic roomId,
+  ) async {
+    var res = await Request().get(
+      Api.superChatMsg,
+      queryParameters: {
+        'room_id': roomId,
+      },
+    );
+    if (res.data['code'] == 0) {
+      try {
+        return Success(SuperChatData.fromJson(res.data['data']));
+      } catch (e) {
+        return Error(e.toString());
+      }
+    } else {
+      return Error(res.data['message']);
     }
   }
 }

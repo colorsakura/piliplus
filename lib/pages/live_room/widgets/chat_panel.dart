@@ -1,14 +1,16 @@
 import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
 import 'package:PiliPlus/models/common/image_type.dart';
 import 'package:PiliPlus/models_new/live/live_danmaku/danmaku_msg.dart';
+import 'package:PiliPlus/models_new/live/live_superchat/item.dart';
 import 'package:PiliPlus/pages/live_room/controller.dart';
+import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class LiveRoomChat extends StatelessWidget {
-  const LiveRoomChat({
+class LiveRoomChatPanel extends StatelessWidget {
+  const LiveRoomChatPanel({
     super.key,
     required this.roomId,
     required this.liveRoomController,
@@ -33,24 +35,23 @@ class LiveRoomChat extends StatelessWidget {
       children: [
         Obx(
           () => ListView.separated(
-            padding: EdgeInsets.zero,
+            padding: const EdgeInsets.symmetric(horizontal: 12),
             controller: liveRoomController.scrollController,
-            separatorBuilder: (context, index) => const SizedBox(height: 6),
+            separatorBuilder: (context, index) => const SizedBox(height: 8),
             itemCount: liveRoomController.messages.length,
             physics: const ClampingScrollPhysics(),
             itemBuilder: (context, index) {
               final item = liveRoomController.messages[index];
-              return Container(
+              return Align(
                 alignment: Alignment.centerLeft,
-                padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Container(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 10,
-                    vertical: 5,
+                    vertical: 4,
                   ),
                   decoration: BoxDecoration(
                     color: bg,
-                    borderRadius: const BorderRadius.all(Radius.circular(18)),
+                    borderRadius: const BorderRadius.all(Radius.circular(14)),
                   ),
                   child: Text.rich(
                     TextSpan(
@@ -61,14 +62,11 @@ class LiveRoomChat extends StatelessWidget {
                             color: nameColor,
                             fontSize: 14,
                           ),
-                          recognizer: TapGestureRecognizer()
-                            ..onTap = () {
-                              try {
-                                Get.toNamed('/member?mid=${item.uid}');
-                              } catch (err) {
-                                if (kDebugMode) debugPrint(err.toString());
-                              }
-                            },
+                          recognizer: item.uid == 0
+                              ? null
+                              : (TapGestureRecognizer()
+                                  ..onTap = () =>
+                                      Get.toNamed('/member?mid=${item.uid}')),
                         ),
                         _buildMsg(devicePixelRatio, item),
                       ],
@@ -79,12 +77,101 @@ class LiveRoomChat extends StatelessWidget {
             },
           ),
         ),
+        if (kDebugMode && liveRoomController.showSuperChat) ...[
+          Positioned(
+            top: 50,
+            right: 0,
+            child: TextButton(
+              onPressed: () {
+                liveRoomController.superChatMsg.insert(
+                  0,
+                  SuperChatItem.fromJson({
+                    "id": Utils.generateRandomString(8),
+                    "price": 66,
+                    "end_time":
+                        DateTime.now().millisecondsSinceEpoch ~/ 1000 + 5,
+                    "message": "message message message message message",
+                    "user_info": {
+                      "face": "",
+                      "uname": "UNAME",
+                    },
+                  }),
+                );
+              },
+              child: const Text('add superchat'),
+            ),
+          ),
+          Positioned(
+            right: 0,
+            top: 90,
+            child: TextButton(
+              onPressed: () {
+                if (liveRoomController.superChatMsg.isNotEmpty) {
+                  liveRoomController.superChatMsg.removeLast();
+                }
+              },
+              child: const Text('remove superchat'),
+            ),
+          ),
+        ],
+        if (liveRoomController.showSuperChat)
+          Positioned(
+            top: 12,
+            right: 12,
+            child: Obx(() {
+              final isEmpty = liveRoomController.superChatMsg.isEmpty;
+              return AnimatedOpacity(
+                opacity: isEmpty ? 0 : 1,
+                duration: const Duration(milliseconds: 120),
+                child: GestureDetector(
+                  onTap: isEmpty
+                      ? null
+                      : () => liveRoomController.pageController?.animateToPage(
+                          1,
+                          duration: const Duration(milliseconds: 200),
+                          curve: Curves.easeInOut,
+                        ),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: const BorderRadius.all(Radius.circular(8)),
+                      color: const Color(0x2FFFFFFF),
+                      border: Border.all(color: Colors.white24, width: 0.7),
+                    ),
+                    padding: const EdgeInsets.fromLTRB(10, 4, 4, 4),
+                    child: Text.rich(
+                      style: const TextStyle(color: Colors.white),
+                      strutStyle: const StrutStyle(height: 1, leading: 0),
+                      TextSpan(
+                        children: [
+                          TextSpan(
+                            text:
+                                'SC: ${liveRoomController.superChatMsg.length}',
+                          ),
+                          const WidgetSpan(
+                            alignment: PlaceholderAlignment.middle,
+                            child: Icon(
+                              size: 18,
+                              Icons.keyboard_arrow_right,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              );
+            }),
+          ),
         Obx(
           () => liveRoomController.disableAutoScroll.value
               ? Positioned(
                   right: 12,
                   bottom: 0,
                   child: ElevatedButton.icon(
+                    style: ElevatedButton.styleFrom(
+                      visualDensity: VisualDensity.comfortable,
+                    ),
                     icon: const Icon(
                       Icons.arrow_downward_rounded,
                       size: 20,
@@ -92,7 +179,7 @@ class LiveRoomChat extends StatelessWidget {
                     label: const Text('回到底部'),
                     onPressed: () => liveRoomController
                       ..disableAutoScroll.value = false
-                      ..scrollToBottom(),
+                      ..jumpToBottom(),
                   ),
                 )
               : const SizedBox.shrink(),

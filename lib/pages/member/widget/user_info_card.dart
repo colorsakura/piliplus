@@ -474,15 +474,13 @@ class UserInfoCard extends StatelessWidget {
     bool isLight,
     SpacePrInfo prInfo,
   ) {
-    final textColor = !isLight
-        ? Color(int.parse('FF${prInfo.textColorNight.substring(1)}', radix: 16))
-        : Color(int.parse('FF${prInfo.textColor.substring(1)}', radix: 16));
+    final textColor = Utils.parseColor(
+      isLight ? prInfo.textColor : prInfo.textColorNight,
+    );
     Widget child = Container(
       margin: const EdgeInsets.only(top: 8),
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-      color: !isLight
-          ? Color(int.parse('FF${prInfo.bgColorNight.substring(1)}', radix: 16))
-          : Color(int.parse('FF${prInfo.bgColor.substring(1)}', radix: 16)),
+      color: Utils.parseColor(isLight ? prInfo.bgColor : prInfo.bgColorNight),
       child: Row(
         children: [
           if (!isLight && prInfo.iconNight?.isNotEmpty == true) ...[

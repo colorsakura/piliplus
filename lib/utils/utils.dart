@@ -15,6 +15,9 @@ class Utils {
 
   static const channel = MethodChannel("PiliPlus");
 
+  static Color parseColor(String color) =>
+      Color(int.parse(color.replaceFirst('#', 'FF'), radix: 16));
+
   static int? _sdkInt;
 
   static Future<int> get sdkInt async {

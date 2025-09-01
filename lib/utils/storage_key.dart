@@ -23,7 +23,8 @@ class SettingBoxKey {
       enableAutoBrightness = 'enableAutoBrightness',
       enableAutoEnter = 'enableAutoEnter',
       enableAutoExit = 'enableAutoExit',
-      enableOnlineTotal = 'enableOnlineTotal';
+      enableOnlineTotal = 'enableOnlineTotal',
+      showSuperChat = 'showSuperChat';
 
   static const String enableVerticalExpand = 'enableVerticalExpand',
       feedBackEnable = 'feedBackEnable',
