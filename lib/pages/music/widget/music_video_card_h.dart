@@ -114,8 +114,9 @@ class MusicVideoCardH extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 3),
-          BounceMarquee(
+          NormalMarquee(
             velocity: 25,
+            spacing: 30,
             child: Row(
               spacing: 8,
               children: [

@@ -83,6 +83,9 @@ class HeaderControlState extends TripleState<HeaderControl> {
   Timer? clock;
   bool get isFullScreen => plPlayerController.isFullScreen.value;
   Box setting = GStorage.setting;
+  MarqueeController? marqueeController;
+  MarqueeController get _marqueeController =>
+      marqueeController ??= MarqueeController(autoStart: false);
 
   @override
   void initState() {
@@ -97,6 +100,8 @@ class HeaderControlState extends TripleState<HeaderControl> {
   @override
   void dispose() {
     clock?.cancel();
+    marqueeController?.dispose();
+    marqueeController = null;
     super.dispose();
   }
 
@@ -1911,35 +1916,30 @@ class HeaderControlState extends TripleState<HeaderControl> {
                       padding: isPortrait
                           ? EdgeInsets.zero
                           : const EdgeInsets.only(right: 10),
-                      child: LayoutBuilder(
-                        builder: (context, constraints) {
-                          return Obx(
-                            () {
-                              final videoDetail =
-                                  introController.videoDetail.value;
-                              final String title;
-                              if (videoDetail.videos == 1) {
-                                title = videoDetail.title!;
-                              } else {
-                                title =
-                                    videoDetail.pages
-                                        ?.firstWhereOrNull(
-                                          (e) =>
-                                              e.cid == videoDetailCtr.cid.value,
-                                        )
-                                        ?.pagePart ??
-                                    videoDetail.title!;
-                              }
-                              return MarqueeText(
-                                title,
-                                maxWidth: constraints.maxWidth,
-                                spacing: 30,
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 16,
-                                ),
-                              );
-                            },
+                      child: Obx(
+                        () {
+                          final videoDetail = introController.videoDetail.value;
+                          final String title;
+                          if (videoDetail.videos == 1) {
+                            title = videoDetail.title!;
+                          } else {
+                            title =
+                                videoDetail.pages
+                                    ?.firstWhereOrNull(
+                                      (e) => e.cid == videoDetailCtr.cid.value,
+                                    )
+                                    ?.pagePart ??
+                                videoDetail.title!;
+                          }
+                          return MarqueeText(
+                            title,
+                            spacing: 30,
+                            velocity: 30,
+                            controller: _marqueeController,
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                            ),
                           );
                         },
                       ),

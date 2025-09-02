@@ -80,8 +80,9 @@ class _MusicDetailPageState extends CommonDynPageState<MusicDetailPage> {
                       children: [
                         NetworkImgLayer(
                           src: info.data.mvCover,
-                          width: 40,
-                          height: 40,
+                          width: 36,
+                          height: 36,
+                          type: ImageType.avatar,
                         ),
                         Text(info.data.musicTitle!),
                       ],
@@ -456,7 +457,7 @@ class _MusicDetailPageState extends CommonDynPageState<MusicDetailPage> {
                           behavior: HitTestBehavior.opaque,
                           child: MarqueeText(
                             item.musicTitle!,
-                            maxWidth: maxWidth - 136, // 80 + 16 + 32 + 8
+                            spacing: 30,
                             style: textTheme.titleMedium,
                           ),
                         ),

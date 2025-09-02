@@ -3,47 +3,34 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/scheduler.dart';
 
 class MarqueeText extends StatelessWidget {
-  final double maxWidth;
   final String text;
   final TextStyle? style;
   final double spacing;
   final double velocity;
+  final MarqueeController? controller;
 
   const MarqueeText(
     this.text, {
     super.key,
-    required this.maxWidth,
     this.style,
     this.spacing = 0,
     this.velocity = 25,
+    this.controller,
   });
 
   @override
   Widget build(BuildContext context) {
-    final textPainter = TextPainter(
-      text: TextSpan(
-        text: text,
+    return NormalMarquee(
+      velocity: velocity,
+      spacing: spacing,
+      controller: controller,
+      child: Text(
+        text,
         style: style,
+        maxLines: 1,
+        textDirection: TextDirection.ltr,
       ),
-      textDirection: TextDirection.ltr,
-      maxLines: 1,
-    )..layout();
-    final width = textPainter.width;
-    final child = Text(
-      text,
-      style: style,
-      maxLines: 1,
-      textDirection: TextDirection.ltr,
     );
-    if (width > maxWidth) {
-      return NormalMarquee(
-        velocity: velocity,
-        spacing: spacing,
-        child: child,
-      );
-    } else {
-      return child;
-    }
   }
 }
 
@@ -52,6 +39,7 @@ abstract class Marquee extends SingleChildRenderObjectWidget {
   final Clip clipBehavior;
   final double spacing;
   final double velocity;
+  final MarqueeController? controller;
 
   const Marquee({
     super.key,
@@ -60,6 +48,7 @@ abstract class Marquee extends SingleChildRenderObjectWidget {
     this.direction = Axis.horizontal,
     this.clipBehavior = Clip.hardEdge,
     this.spacing = 0,
+    this.controller,
   });
 
   @override
@@ -83,6 +72,7 @@ class NormalMarquee extends Marquee {
     super.direction,
     super.clipBehavior,
     super.spacing,
+    super.controller,
   });
 
   @override
@@ -91,6 +81,7 @@ class NormalMarquee extends Marquee {
     velocity: velocity,
     clipBehavior: clipBehavior,
     spacing: spacing,
+    controller: controller,
   );
 }
 
@@ -120,12 +111,15 @@ abstract class MarqueeRender extends RenderBox
     required double velocity,
     required double spacing,
     required this.clipBehavior,
+    this.controller,
   }) : _spacing = spacing,
        _velocity = velocity,
        _direction = direction,
        assert(spacing.isFinite && !spacing.isNaN);
 
   Clip clipBehavior;
+
+  MarqueeController? controller;
 
   Axis _direction;
   Axis get direction => _direction;
@@ -140,7 +134,7 @@ abstract class MarqueeRender extends RenderBox
     if (_velocity == value) return;
     _velocity = value;
     _simulation = _simulation?.copyWith(initialValue: _delta, velocity: value);
-    ticker?.reset();
+    controller?.reset();
   }
 
   double _spacing;
@@ -155,7 +149,7 @@ abstract class MarqueeRender extends RenderBox
       addSize: value - _spacing,
     );
     _spacing = value;
-    ticker?.reset();
+    controller?.reset();
   }
 
   double _delta = 0;
@@ -167,26 +161,17 @@ abstract class MarqueeRender extends RenderBox
 
   @override
   void detach() {
-    ticker?.stop();
+    controller?.dispose();
     super.detach();
   }
 
   @override
-  void attach(PipelineOwner owner) {
-    super.attach(owner);
-    ticker?.start();
-  }
-
-  @override
   void dispose() {
-    ticker?.dispose();
-    ticker = null;
+    controller?.dispose();
     super.dispose();
   }
 
   late double _distance;
-
-  Ticker? ticker;
 
   _MarqueeSimulation? _simulation;
 
@@ -218,10 +203,11 @@ abstract class MarqueeRender extends RenderBox
 
     if (_distance > 0) {
       updateSize();
-      ticker ??= Ticker(_onTick)..start();
+      (controller ??= MarqueeController())
+        ..ticker ??= Ticker(_onTick)
+        ..initStart();
     } else {
-      ticker?.dispose();
-      ticker = null;
+      controller?.dispose();
     }
   }
 
@@ -292,6 +278,7 @@ class _NormalMarqueeRender extends MarqueeRender {
     required super.velocity,
     required super.clipBehavior,
     required super.spacing,
+    super.controller,
   });
 
   @override
@@ -393,5 +380,39 @@ extension on Ticker {
     this
       ..stop()
       ..start();
+  }
+}
+
+class MarqueeController {
+  MarqueeController({this.autoStart = true});
+  bool autoStart;
+
+  Ticker? ticker;
+
+  void initStart() {
+    if (autoStart) {
+      start();
+    }
+  }
+
+  void start() {
+    if (ticker != null) {
+      if (!ticker!.isTicking) {
+        ticker!.start();
+      }
+    }
+  }
+
+  void stop() {
+    ticker?.stop();
+  }
+
+  void reset() {
+    ticker?.reset();
+  }
+
+  void dispose() {
+    ticker?.dispose();
+    ticker = null;
   }
 }
