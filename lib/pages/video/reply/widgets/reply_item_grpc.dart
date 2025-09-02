@@ -3,7 +3,7 @@ import 'dart:math';
 import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/common/widgets/badge.dart';
 import 'package:PiliPlus/common/widgets/dialog/report.dart';
-import 'package:PiliPlus/common/widgets/image/image_view.dart';
+import 'package:PiliPlus/common/widgets/image/custom_grid_view.dart';
 import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
 import 'package:PiliPlus/common/widgets/pendant_avatar.dart';
 import 'package:PiliPlus/common/widgets/text/text.dart' as custom_text;
@@ -299,9 +299,9 @@ class ReplyItemGrpc extends StatelessWidget {
           Padding(
             padding: padding,
             child: LayoutBuilder(
-              builder: (context, constraints) => imageView(
-                constraints.maxWidth,
-                replyItem.content.pictures
+              builder: (context, constraints) => CustomGridView(
+                maxWidth: constraints.maxWidth,
+                picArr: replyItem.content.pictures
                     .map(
                       (item) => ImageModel(
                         width: item.imgWidth,

@@ -1,7 +1,8 @@
 import 'dart:io';
 import 'dart:math' show pi, max;
 
-import 'package:PiliPlus/common/widgets/image/image_view.dart';
+import 'package:PiliPlus/common/widgets/image/custom_grid_view.dart'
+    show ImageModel;
 import 'package:PiliPlus/common/widgets/pendant_avatar.dart';
 import 'package:PiliPlus/common/widgets/radio_widget.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
@@ -510,9 +511,7 @@ List<SettingsModel> get extraSettings => [
     leading: const Icon(Icons.image_outlined),
     setKey: SettingBoxKey.enableLivePhoto,
     defaultVal: true,
-    onChanged: (value) {
-      ImageModel.enableLivePhoto = value;
-    },
+    onChanged: (value) => ImageModel.enableLivePhoto = value,
   ),
   const SettingsModel(
     settingsType: SettingsType.sw1tch,

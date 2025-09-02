@@ -1,6 +1,6 @@
 // 内容
 import 'package:PiliPlus/common/widgets/custom_icon.dart';
-import 'package:PiliPlus/common/widgets/image/image_view.dart';
+import 'package:PiliPlus/common/widgets/image/custom_grid_view.dart';
 import 'package:PiliPlus/common/widgets/text/text.dart' as custom_text;
 import 'package:PiliPlus/models/dynamics/result.dart';
 import 'package:PiliPlus/pages/dynamics/widgets/rich_node_panel.dart';
@@ -80,9 +80,9 @@ Widget content(
                   maxLines: isSave ? null : 6,
                 ),
         if (item.modules.moduleDynamic?.major?.opus?.pics?.isNotEmpty == true)
-          imageView(
-            maxWidth,
-            item.modules.moduleDynamic!.major!.opus!.pics!
+          CustomGridView(
+            maxWidth: maxWidth,
+            picArr: item.modules.moduleDynamic!.major!.opus!.pics!
                 .map(
                   (item) => ImageModel(
                     width: item.width,
