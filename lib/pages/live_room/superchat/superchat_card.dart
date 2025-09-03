@@ -23,13 +23,13 @@ class SuperChatCard extends StatefulWidget {
 
 class _SuperChatCardState extends State<SuperChatCard> {
   Timer? _timer;
-  RxInt _remains = 0.obs;
+  RxInt? _remains;
 
   @override
   void initState() {
     super.initState();
     if (widget.item.expired) {
-      _onRemove();
+      _remove();
       return;
     }
     final now = DateTime.now().millisecondsSinceEpoch ~/ 1000;
@@ -38,8 +38,14 @@ class _SuperChatCardState extends State<SuperChatCard> {
       _remains = offset.obs;
       _timer = Timer.periodic(const Duration(seconds: 1), _callback);
     } else {
-      _onRemove();
+      _remove();
     }
+  }
+
+  void _remove() {
+    WidgetsBinding.instance.addPostFrameCallback(
+      (_) => Future.delayed(const Duration(seconds: 1), _onRemove),
+    );
   }
 
   void _onRemove() {
@@ -49,9 +55,9 @@ class _SuperChatCardState extends State<SuperChatCard> {
   }
 
   void _callback(_) {
-    final remains = _remains.value;
+    final remains = _remains!.value;
     if (remains > 0) {
-      _remains.value = remains - 1;
+      _remains!.value = remains - 1;
     } else {
       _cancelTimer();
       _onRemove();
@@ -120,12 +126,13 @@ class _SuperChatCardState extends State<SuperChatCard> {
                   ],
                 ),
               ),
-              Obx(
-                () => Text(
-                  _remains.toString(),
-                  style: const TextStyle(fontSize: 14, color: Colors.grey),
+              if (_remains != null)
+                Obx(
+                  () => Text(
+                    _remains.toString(),
+                    style: const TextStyle(fontSize: 14, color: Colors.grey),
+                  ),
                 ),
-              ),
             ],
           ),
         ),

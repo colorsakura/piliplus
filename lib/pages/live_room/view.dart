@@ -254,7 +254,7 @@ class _LiveRoomPageState extends State<LiveRoomPage>
                     "id": Utils.generateRandomString(8),
                     "price": 66,
                     "end_time":
-                        DateTime.now().millisecondsSinceEpoch ~/ 1000 + 5,
+                        DateTime.now().millisecondsSinceEpoch ~/ 1000 - 5,
                     "message": Utils.generateRandomString(55),
                     "user_info": {
                       "face": "",

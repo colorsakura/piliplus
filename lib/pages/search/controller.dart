@@ -69,7 +69,6 @@ class SSearchController extends GetxController
 
   // suggestion
   final bool searchSuggestion = Pref.searchSuggestion;
-
   late final RxList<SearchSuggestItem> searchSuggestList;
 
   // trending

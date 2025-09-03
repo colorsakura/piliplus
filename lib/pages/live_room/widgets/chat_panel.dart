@@ -89,7 +89,7 @@ class LiveRoomChatPanel extends StatelessWidget {
                     "id": Utils.generateRandomString(8),
                     "price": 66,
                     "end_time":
-                        DateTime.now().millisecondsSinceEpoch ~/ 1000 + 5,
+                        DateTime.now().millisecondsSinceEpoch ~/ 1000 - 5,
                     "message": "message message message message message",
                     "user_info": {
                       "face": "",

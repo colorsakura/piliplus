@@ -269,6 +269,10 @@ class _CustomGridViewDelegate extends MultiChildLayoutDelegate {
 
   @override
   bool shouldRelayout(_CustomGridViewDelegate oldDelegate) {
-    return space != oldDelegate.space || itemCount != oldDelegate.itemCount;
+    return space != oldDelegate.space ||
+        itemCount != oldDelegate.itemCount ||
+        column != oldDelegate.column ||
+        width != oldDelegate.width ||
+        height != oldDelegate.height;
   }
 }
