@@ -8,19 +8,26 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 Widget content(
-  ThemeData theme,
-  bool isSave,
-  BuildContext context,
-  DynamicItemModel item,
-  bool isDetail,
-  Function(List<String>, int)? callback, {
-  floor = 1,
+  BuildContext context, {
+  required int floor,
+  required ThemeData theme,
+  required DynamicItemModel item,
+  required bool isSave,
+  required bool isDetail,
   required double maxWidth,
+  Function(List<String>, int)? callback,
 }) {
   if (floor == 1) {
     maxWidth -= 24;
   }
-  TextSpan? richNodes = richNode(theme, item, context, maxWidth: maxWidth);
+  TextSpan? richNodes = richNode(
+    context,
+    theme: theme,
+    item: item,
+    maxWidth: maxWidth,
+  );
+  final moduleDynamic = item.modules.moduleDynamic;
+  final pics = moduleDynamic?.major?.opus?.pics;
   return Padding(
     padding: floor == 1
         ? const EdgeInsets.fromLTRB(12, 0, 12, 6)
@@ -28,13 +35,13 @@ Widget content(
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        if (item.modules.moduleDynamic?.topic != null)
+        if (moduleDynamic?.topic case final topic?)
           GestureDetector(
             onTap: () => Get.toNamed(
               '/dynTopic',
               parameters: {
-                'id': item.modules.moduleDynamic!.topic!.id!.toString(),
-                'name': item.modules.moduleDynamic!.topic!.name!,
+                'id': topic.id!.toString(),
+                'name': topic.name!,
               },
             ),
             child: Text.rich(
@@ -51,7 +58,7 @@ Widget content(
                       ),
                     ),
                   ),
-                  TextSpan(text: item.modules.moduleDynamic!.topic!.name),
+                  TextSpan(text: topic.name),
                 ],
               ),
               style: TextStyle(
@@ -79,10 +86,10 @@ Widget content(
                   richNodes,
                   maxLines: isSave ? null : 6,
                 ),
-        if (item.modules.moduleDynamic?.major?.opus?.pics?.isNotEmpty == true)
+        if (pics?.isNotEmpty == true)
           CustomGridView(
             maxWidth: maxWidth,
-            picArr: item.modules.moduleDynamic!.major!.opus!.pics!
+            picArr: pics!
                 .map(
                   (item) => ImageModel(
                     width: item.width,

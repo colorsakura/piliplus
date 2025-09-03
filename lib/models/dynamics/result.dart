@@ -64,7 +64,7 @@ class DynamicsDataModel {
           continue;
         }
         if (enableFilter) {
-          if (item.orig case DynamicItemModel orig) {
+          if (item.orig case final orig?) {
             if (banWordForDyn.hasMatch(_getMatchText(orig))) {
               continue;
             }

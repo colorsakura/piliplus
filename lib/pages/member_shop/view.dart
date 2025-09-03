@@ -105,11 +105,11 @@ class _MemberShopState extends State<MemberShop>
                   child: Center(
                     child: FilledButton.tonal(
                       onPressed: () {
-                        if (_controller.clickUrl case String clickUrl) {
+                        if (_controller.clickUrl case final clickUrl?) {
                           final url = Uri.parse(
                             clickUrl,
                           ).queryParameters['url'];
-                          if (url case String url) {
+                          if (url case final url?) {
                             Get.toNamed(
                               '/webview',
                               parameters: {'url': url},

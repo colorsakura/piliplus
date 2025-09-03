@@ -1,3 +1,4 @@
+import 'package:PiliPlus/common/widgets/dyn/ink_well.dart';
 import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
 import 'package:PiliPlus/models/common/dynamic/up_panel_position.dart';
 import 'package:PiliPlus/models/common/image_type.dart';
@@ -6,7 +7,7 @@ import 'package:PiliPlus/pages/dynamics/controller.dart';
 import 'package:PiliPlus/pages/live_follow/view.dart';
 import 'package:PiliPlus/utils/feed_back.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide InkWell;
 import 'package:get/get.dart';
 
 class UpPanel extends StatefulWidget {

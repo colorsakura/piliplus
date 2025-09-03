@@ -240,7 +240,7 @@ class OpusContent extends StatelessWidget {
                           if (item.word != null) {
                             return _getSpan(item.word);
                           }
-                          if (item.rich case Rich rich) {
+                          if (item.rich case final rich?) {
                             final hasUrl = rich.jumpUrl?.isNotEmpty == true;
                             return TextSpan(
                               text: '${hasUrl ? '\u{1F517}' : ''}${rich.text}',
@@ -633,6 +633,8 @@ Widget moduleBlockedItem(
   ModuleBlocked moduleBlocked,
   double maxWidth,
 ) {
+  late final isDarkMode = Get.isDarkMode;
+
   BoxDecoration? bgImg() {
     return moduleBlocked.bgImg == null
         ? null
@@ -641,7 +643,7 @@ Widget moduleBlockedItem(
               fit: BoxFit.fill,
               image: CachedNetworkImageProvider(
                 ImageUtil.thumbnailUrl(
-                  Get.isDarkMode
+                  isDarkMode
                       ? moduleBlocked.bgImg!.imgDark
                       : moduleBlocked.bgImg!.imgDay,
                 ),
@@ -655,9 +657,7 @@ Widget moduleBlockedItem(
       width: width,
       fit: BoxFit.contain,
       imageUrl: ImageUtil.thumbnailUrl(
-        Get.isDarkMode
-            ? moduleBlocked.icon!.imgDark
-            : moduleBlocked.icon!.imgDay,
+        isDarkMode ? moduleBlocked.icon!.imgDark : moduleBlocked.icon!.imgDay,
       ),
     );
   }
@@ -672,7 +672,7 @@ Widget moduleBlockedItem(
         padding: padding,
         tapTargetSize: MaterialTapTargetSize.shrinkWrap,
         visualDensity: visualDensity,
-        backgroundColor: Get.isDarkMode
+        backgroundColor: isDarkMode
             ? const Color(0xFF8F0030)
             : const Color(0xFFFF6699),
         foregroundColor: Colors.white,

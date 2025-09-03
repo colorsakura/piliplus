@@ -52,9 +52,9 @@ class RetryInterceptor extends Interceptor {
         case DioExceptionType.sendTimeout:
         case DioExceptionType.unknown:
           if ((err.requestOptions.extra['_rt'] ??= 0) < _count &&
-                  err.error
-                      is! TransportConnectionException // 网络中断, 此时请求可能已经被服务器所接收
-              ) {
+              err.error
+                  is! TransportConnectionException // 网络中断, 此时请求可能已经被服务器所接收
+                  ) {
             Future.delayed(
               Duration(
                 milliseconds: ++err.requestOptions.extra['_rt'] * _delay,

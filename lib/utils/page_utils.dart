@@ -417,14 +417,14 @@ class PageUtils {
         // pgc
         if (archive.type == 2) {
           // jumpUrl
-          if (archive.jumpUrl case String jumpUrl) {
+          if (archive.jumpUrl case final jumpUrl?) {
             if (viewPgcFromUri(jumpUrl)) {
               return;
             }
           }
           // redirectUrl from intro
           final res = await VideoHttp.videoIntro(bvid: archive.bvid!);
-          if (res.dataOrNull?.redirectUrl case String redirectUrl) {
+          if (res.dataOrNull?.redirectUrl case final redirectUrl?) {
             if (viewPgcFromUri(redirectUrl)) {
               return;
             }
@@ -434,7 +434,7 @@ class PageUtils {
                 archive.jumpUrl.http2https,
                 false,
               )
-              case String redirectUrl) {
+              case final redirectUrl?) {
             if (viewPgcFromUri(redirectUrl)) {
               return;
             }
@@ -479,6 +479,18 @@ class PageUtils {
         toLiveRoom(liveRcmd.roomId);
         break;
 
+      case 'DYNAMIC_TYPE_SUBSCRIPTION_NEW':
+        LivePlayInfo live = item
+            .modules
+            .moduleDynamic!
+            .major!
+            .subscriptionNew!
+            .liveRcmd!
+            .content!
+            .livePlayInfo!;
+        toLiveRoom(live.roomId);
+        break;
+
       /// 合集查看
       case 'DYNAMIC_TYPE_UGC_SEASON':
         DynamicArchiveModel ugcSeason =
@@ -508,7 +520,7 @@ class PageUtils {
 
       case 'DYNAMIC_TYPE_MEDIALIST':
         if (item.modules.moduleDynamic?.major?.medialist
-            case Medialist medialist) {
+            case final medialist?) {
           final String? url = medialist.jumpUrl;
           if (url != null) {
             if (url.contains('medialist/detail/ml')) {

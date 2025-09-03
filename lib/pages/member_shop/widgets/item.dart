@@ -2,7 +2,6 @@ import 'package:PiliPlus/common/widgets/badge.dart';
 import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
 import 'package:PiliPlus/models/common/badge_type.dart';
 import 'package:PiliPlus/models_new/space/space_shop/item.dart';
-import 'package:PiliPlus/models_new/space/space_shop/net_price.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -28,7 +27,7 @@ class MemberShopItem extends StatelessWidget {
       ),
       child: InkWell(
         onTap: () {
-          if (item.cardUrl case String cardUrl) {
+          if (item.cardUrl case final cardUrl?) {
             Get.toNamed('/webview', parameters: {'url': cardUrl});
           }
         },
@@ -69,7 +68,7 @@ class MemberShopItem extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      if (item.netPrice case NetPrice netPrice)
+                      if (item.netPrice case final netPrice?)
                         Text.rich(
                           style: TextStyle(color: colorScheme.vipColor),
                           TextSpan(
