@@ -77,6 +77,11 @@ class _LiveRoomPageState extends State<LiveRoomPage>
       this,
       ModalRoute.of(context)! as PageRoute,
     );
+    padding = MediaQuery.viewPaddingOf(context);
+    final size = MediaQuery.sizeOf(context);
+    maxWidth = size.width;
+    maxHeight = size.height;
+    isPortrait = size.isPortrait;
   }
 
   @override
@@ -173,11 +178,6 @@ class _LiveRoomPageState extends State<LiveRoomPage>
 
   @override
   Widget build(BuildContext context) {
-    padding = MediaQuery.viewPaddingOf(context);
-    final size = MediaQuery.sizeOf(context);
-    maxWidth = size.width;
-    maxHeight = size.height;
-    isPortrait = size.isPortrait;
     if (Platform.isAndroid) {
       return Floating().isPipMode
           ? videoPlayerPanel(
@@ -254,7 +254,7 @@ class _LiveRoomPageState extends State<LiveRoomPage>
                     "id": Utils.generateRandomString(8),
                     "price": 66,
                     "end_time":
-                        DateTime.now().millisecondsSinceEpoch ~/ 1000 - 5,
+                        DateTime.now().millisecondsSinceEpoch ~/ 1000 + 5,
                     "message": Utils.generateRandomString(55),
                     "user_info": {
                       "face": "",
@@ -733,11 +733,9 @@ class _LiveRoomPageState extends State<LiveRoomPage>
                   _liveRoomController.pageIndex.value = value,
               children: [
                 KeepAliveWrapper(builder: (context) => chat()),
-                KeepAliveWrapper(
-                  builder: (context) => SuperChatPanel(
-                    key: scKey,
-                    controller: _liveRoomController,
-                  ),
+                SuperChatPanel(
+                  key: scKey,
+                  controller: _liveRoomController,
                 ),
               ],
             )

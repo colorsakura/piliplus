@@ -16,14 +16,17 @@ class SuperChatPanel extends StatefulWidget {
   State<SuperChatPanel> createState() => _SuperChatPanelState();
 }
 
-class _SuperChatPanelState extends DebounceStreamState<SuperChatPanel, bool> {
+class _SuperChatPanelState extends DebounceStreamState<SuperChatPanel, bool>
+    with AutomaticKeepAliveClientMixin {
   @override
   Duration get duration => const Duration(milliseconds: 300);
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Obx(
       () => ListView.separated(
+        key: const PageStorageKey('live-sc'),
         padding: const EdgeInsets.symmetric(horizontal: 12),
         physics: const ClampingScrollPhysics(),
         itemCount: widget.controller.superChatMsg.length,
@@ -42,4 +45,7 @@ class _SuperChatPanelState extends DebounceStreamState<SuperChatPanel, bool> {
 
   @override
   void onValueChanged(value) => widget.controller.clearSC();
+
+  @override
+  bool get wantKeepAlive => true;
 }

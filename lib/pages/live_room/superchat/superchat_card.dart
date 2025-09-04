@@ -119,7 +119,6 @@ class _SuperChatCardState extends State<SuperChatCard> {
                     Text(
                       "￥${item.price}",
                       style: TextStyle(
-                        fontSize: 12,
                         color: Utils.parseColor(item.backgroundPriceColor),
                       ),
                     ),

@@ -254,7 +254,7 @@ class _CustomGridViewDelegate extends MultiChildLayoutDelegate {
 
   @override
   void performLayout(Size size) {
-    final constraints = BoxConstraints.loose(Size(width, height));
+    final constraints = BoxConstraints.expand(width: width, height: height);
     for (int i = 0; i < itemCount; i++) {
       layoutChild(i, constraints);
       positionChild(

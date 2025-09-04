@@ -63,6 +63,7 @@ class _VideoReplyPanelState extends State<VideoReplyPanel>
     } else {
       _videoReplyController.scrollController.removeListener(listener);
     }
+    bottom = MediaQuery.viewPaddingOf(context).bottom;
   }
 
   @override
@@ -92,7 +93,6 @@ class _VideoReplyPanelState extends State<VideoReplyPanel>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    bottom = MediaQuery.viewPaddingOf(context).bottom;
     final theme = Theme.of(context);
     return refreshIndicator(
       onRefresh: _videoReplyController.onRefresh,

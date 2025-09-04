@@ -35,6 +35,7 @@ class LiveRoomChatPanel extends StatelessWidget {
       children: [
         Obx(
           () => ListView.separated(
+            key: const PageStorageKey('live-chat'),
             padding: const EdgeInsets.symmetric(horizontal: 12),
             controller: liveRoomController.scrollController,
             separatorBuilder: (context, index) => const SizedBox(height: 8),
@@ -89,7 +90,7 @@ class LiveRoomChatPanel extends StatelessWidget {
                     "id": Utils.generateRandomString(8),
                     "price": 66,
                     "end_time":
-                        DateTime.now().millisecondsSinceEpoch ~/ 1000 - 5,
+                        DateTime.now().millisecondsSinceEpoch ~/ 1000 + 5,
                     "message": "message message message message message",
                     "user_info": {
                       "face": "",
@@ -145,7 +146,7 @@ class LiveRoomChatPanel extends StatelessWidget {
                         children: [
                           TextSpan(
                             text:
-                                'SC: ${liveRoomController.superChatMsg.length}',
+                                'SC(${liveRoomController.superChatMsg.length})',
                           ),
                           const WidgetSpan(
                             alignment: PlaceholderAlignment.middle,
