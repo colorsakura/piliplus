@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
+typedef PopupMenuItemSelected<T> = bool Function(T value);
+
 class PopupMenuText<T> extends StatefulWidget {
   final String title;
   final T initialValue;
@@ -25,8 +27,16 @@ class _PopupMenuTextState<T> extends State<PopupMenuText<T>> {
   late T select = widget.initialValue;
 
   @override
+  void didUpdateWidget(PopupMenuText<T> oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.initialValue != widget.initialValue) {
+      select = widget.initialValue;
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    final secondary = Theme.of(context).colorScheme.secondary;
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -35,10 +45,11 @@ class _PopupMenuTextState<T> extends State<PopupMenuText<T>> {
           initialValue: select,
           onSelected: (value) {
             if (value == select) return;
-            setState(() {
-              select = value;
-              widget.onSelected(value);
-            });
+            if (!widget.onSelected(value)) {
+              setState(() {
+                select = value;
+              });
+            }
           },
           itemBuilder: widget.itemBuilder,
           child: Row(
@@ -49,7 +60,7 @@ class _PopupMenuTextState<T> extends State<PopupMenuText<T>> {
                 style: TextStyle(
                   height: 1,
                   fontSize: 14,
-                  color: theme.colorScheme.secondary,
+                  color: secondary,
                 ),
                 strutStyle: const StrutStyle(
                   height: 1,
@@ -59,7 +70,7 @@ class _PopupMenuTextState<T> extends State<PopupMenuText<T>> {
               Icon(
                 MdiIcons.unfoldMoreHorizontal,
                 size: MediaQuery.textScalerOf(context).scale(14),
-                color: theme.colorScheme.secondary,
+                color: secondary,
               ),
             ],
           ),

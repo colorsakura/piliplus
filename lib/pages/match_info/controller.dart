@@ -1,5 +1,3 @@
-import 'dart:ui' show Offset;
-
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/http/match.dart';
 import 'package:PiliPlus/models_new/match/match_info/contest.dart';
@@ -17,9 +15,6 @@ class MatchInfoController extends CommonDynController {
 
   final Rx<LoadingState<MatchContest?>> infoState =
       LoadingState<MatchContest?>.loading().obs;
-
-  @override
-  Offset get fabOffset => const Offset(0, 2);
 
   @override
   void onInit() {

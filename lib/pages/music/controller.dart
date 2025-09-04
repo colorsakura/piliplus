@@ -21,7 +21,7 @@ class MusicDetailController extends CommonDynController {
   bool get showDynActionBar => Pref.showDynActionBar;
 
   String get shareUrl =>
-      'https://music.bilibili.com/h5/music-detail?music_id=${musicId}';
+      'https://music.bilibili.com/h5/music-detail?music_id=$musicId';
 
   @override
   void onInit() {

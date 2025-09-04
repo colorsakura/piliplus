@@ -1906,7 +1906,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                 PostPanel.segmentWidget(
                   theme,
                   item: model,
-                  currentPos: currentPos,
+                  currentPos: () => currentPos,
                   videoDuration: duration,
                 ),
                 PopupMenuText(
@@ -1916,6 +1916,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                     final video = videoCtr.findVideoByQa(value);
                     url = video.baseUrl;
                     qa = video.quality;
+                    return false;
                   },
                   itemBuilder: (context) => videoInfo.supportFormats!
                       .map(
@@ -1932,9 +1933,8 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                   title: 'webp预设',
                   initialValue: preset,
                   onSelected: (value) {
-                    if (preset == value) return;
                     preset = value;
-                    (context as Element).markNeedsBuild();
+                    return false;
                   },
                   itemBuilder: (context) => WebpPreset.values
                       .map((i) => PopupMenuItem(value: i, child: Text(i.name)))

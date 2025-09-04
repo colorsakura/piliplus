@@ -26,63 +26,81 @@ Future<void> autoWrapReportDialog(
           right: 16,
           bottom: 10,
         ),
-        content: Form(
-          key: key,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Flexible(
-                child: SingleChildScrollView(
-                  child: AnimatedSize(
-                    duration: const Duration(milliseconds: 200),
-                    child: Builder(
-                      builder: (context) => Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Padding(
-                            padding: EdgeInsets.only(
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Flexible(
+              child: SingleChildScrollView(
+                child: AnimatedSize(
+                  duration: const Duration(milliseconds: 200),
+                  child: Builder(
+                    builder: (context) => Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Padding(
+                          padding: EdgeInsets.only(
+                            left: 22,
+                            right: 22,
+                            bottom: 5,
+                          ),
+                          child: Text('请选择举报的理由：'),
+                        ),
+                        RadioGroup(
+                          onChanged: (value) {
+                            reasonType = value;
+                            (context as Element).markNeedsBuild();
+                          },
+                          groupValue: reasonType,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: options.entries.map((entry) {
+                              return WrapRadioOptionsGroup<int>(
+                                groupTitle: entry.key,
+                                options: entry.value,
+                              );
+                            }).toList(),
+                          ),
+                        ),
+                        if (reasonType == 0)
+                          Padding(
+                            padding: const EdgeInsets.only(
                               left: 22,
+                              top: 5,
                               right: 22,
-                              bottom: 5,
                             ),
-                            child: Text('请选择举报的理由：'),
+                            child: Form(
+                              key: key,
+                              child: TextFormField(
+                                autofocus: true,
+                                minLines: 2,
+                                maxLines: 4,
+                                initialValue: reasonDesc,
+                                decoration: const InputDecoration(
+                                  labelText: '为帮助审核人员更快处理，请补充问题类型和出现位置等详细信息',
+                                  border: OutlineInputBorder(),
+                                  contentPadding: EdgeInsets.all(10),
+                                ),
+                                onChanged: (value) => reasonDesc = value,
+                                validator: (value) =>
+                                    value.isNullOrEmpty ? '理由不能为空' : null,
+                              ),
+                            ),
                           ),
-                          RadioGroup(
-                            onChanged: (value) {
-                              reasonType = value;
-                              (context as Element).markNeedsBuild();
-                            },
-                            groupValue: reasonType,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: options.entries.map((entry) {
-                                return WrapRadioOptionsGroup<int>(
-                                  groupTitle: entry.key,
-                                  options: entry.value,
-                                );
-                              }).toList(),
-                            ),
-                          ),
-                          if (reasonType == 0)
-                            ReasonField(
-                              onChanged: (value) => reasonDesc = value,
-                            ),
-                        ],
-                      ),
+                      ],
                     ),
                   ),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(left: 14, top: 6),
-                child: CheckBoxText(
-                  text: '拉黑该用户',
-                  onChanged: (value) => banUid = value,
-                ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 14, top: 6),
+              child: CheckBoxText(
+                text: '拉黑该用户',
+                onChanged: (value) => banUid = value,
               ),
-            ],
-          ),
+            ),
+          ],
         ),
         actions: [
           TextButton(
@@ -119,46 +137,6 @@ Future<void> autoWrapReportDialog(
       );
     },
   );
-}
-
-class ReasonField extends StatefulWidget {
-  final ValueChanged<String> onChanged;
-  String? _validator(String? value) => value.isNullOrEmpty ? '理由不能为空' : null;
-
-  const ReasonField({super.key, required this.onChanged});
-
-  @override
-  State<ReasonField> createState() => _ReasonFieldState();
-}
-
-class _ReasonFieldState extends State<ReasonField> {
-  final _controller = TextEditingController();
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 22, top: 5, right: 22),
-      child: TextFormField(
-        controller: _controller,
-        autofocus: true,
-        minLines: 4,
-        maxLines: 4,
-        decoration: const InputDecoration(
-          labelText: '为帮助审核人员更快处理，请补充问题类型和出现位置等详细信息',
-          border: OutlineInputBorder(),
-          contentPadding: EdgeInsets.all(10),
-        ),
-        onChanged: widget.onChanged,
-        validator: widget._validator,
-      ),
-    );
-  }
 }
 
 class CheckBoxText extends StatefulWidget {

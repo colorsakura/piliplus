@@ -172,9 +172,7 @@ class _VotePanelState extends State<VotePanel> {
       CheckBoxText(
         text: '匿名',
         selected: anonymity,
-        onChanged: (val) {
-          anonymity = val;
-        },
+        onChanged: (val) => anonymity = val,
       ),
     ],
   );

@@ -57,7 +57,7 @@ class PostPanel extends CommonCollapseSlidePage {
   static Widget segmentWidget(
     ThemeData theme, {
     required PostSegmentModel item,
-    required double currentPos,
+    required double Function() currentPos, // get real-time pos
     required double videoDuration,
   }) {
     Widget segment(bool isFirst) => Builder(
@@ -81,7 +81,7 @@ class PostPanel extends CommonCollapseSlidePage {
                 updateSegment(
                   isFirst: isFirst,
                   item: item,
-                  value: currentPos,
+                  value: currentPos(),
                 );
                 (context as Element).markNeedsBuild();
               },
@@ -377,82 +377,105 @@ class _PostPanelState extends CommonCollapseSlidePageState<PostPanel> {
             color: theme.colorScheme.onInverseSurface,
             borderRadius: const BorderRadius.all(Radius.circular(12)),
           ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              if (item.actionType != ActionType.full)
-                PostPanel.segmentWidget(
-                  theme,
-                  item: item,
-                  currentPos: currentPos,
-                  videoDuration: videoDuration,
-                ),
-              Wrap(
-                runSpacing: 8,
-                spacing: 16,
-                children: [
-                  PopupMenuText(
-                    title: '分类',
-                    initialValue: item.category,
-                    onSelected: (e) {
-                      item.category = e;
-                      List<ActionType> constraintList = e.toActionType;
-                      if (!constraintList.contains(item.actionType)) {
-                        item.actionType = constraintList.first;
-                      }
-                      switch (e) {
-                        case SegmentType.poi_highlight:
-                          PostPanel.updateSegment(
-                            isFirst: false,
-                            item: item,
-                            value: item.segment.first,
-                          );
-                          break;
-                        case SegmentType.exclusive_access:
+          child: Builder(
+            builder: (context) => Column(
+              spacing: 8,
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                if (item.actionType != ActionType.full)
+                  PostPanel.segmentWidget(
+                    theme,
+                    item: item,
+                    currentPos: () => currentPos,
+                    videoDuration: videoDuration,
+                  ),
+                Wrap(
+                  runSpacing: 8,
+                  spacing: 16,
+                  children: [
+                    PopupMenuText(
+                      title: '分类',
+                      initialValue: item.category,
+                      onSelected: (e) {
+                        bool flag = false;
+                        if (item.category == SegmentType.exclusive_access ||
+                            item.category == SegmentType.poi_highlight) {
+                          flag = true;
+                        }
+                        item.category = e;
+                        List<ActionType> constraintList = e.toActionType;
+                        if (!constraintList.contains(item.actionType)) {
+                          item.actionType = constraintList.first;
+                          flag = true;
+                        }
+                        switch (e) {
+                          case SegmentType.poi_highlight:
+                            PostPanel.updateSegment(
+                              isFirst: false,
+                              item: item,
+                              value: item.segment.first,
+                            );
+                            break;
+                          case SegmentType.exclusive_access:
+                            PostPanel.updateSegment(
+                              isFirst: true,
+                              item: item,
+                              value: 0,
+                            );
+                            break;
+                          default:
+                        }
+                        if (flag) {
+                          (context as Element).markNeedsBuild();
+                        }
+                        return flag;
+                      },
+                      itemBuilder: (context) => SegmentType.values
+                          .map(
+                            (e) =>
+                                PopupMenuItem(value: e, child: Text(e.title)),
+                          )
+                          .toList(),
+                      getSelectTitle: (category) => category.title,
+                    ),
+                    PopupMenuText(
+                      title: '行为类别',
+                      initialValue: item.actionType,
+                      onSelected: (e) {
+                        bool flag = false;
+                        if (item.actionType == ActionType.full) {
+                          flag = true;
+                        }
+                        item.actionType = e;
+                        if (e == ActionType.full) {
+                          flag = true;
                           PostPanel.updateSegment(
                             isFirst: true,
                             item: item,
                             value: 0,
                           );
-                          break;
-                        default:
-                      }
-                    },
-                    itemBuilder: (context) => SegmentType.values
-                        .map(
-                          (e) => PopupMenuItem(value: e, child: Text(e.title)),
-                        )
-                        .toList(),
-                    getSelectTitle: (category) => category.title,
-                  ),
-                  PopupMenuText(
-                    title: '行为类别',
-                    initialValue: item.actionType,
-                    onSelected: (e) {
-                      item.actionType = e;
-                      if (e == ActionType.full) {
-                        PostPanel.updateSegment(
-                          isFirst: true,
-                          item: item,
-                          value: 0,
-                        );
-                      }
-                    },
-                    itemBuilder: (context) => ActionType.values
-                        .map(
-                          (e) => PopupMenuItem(
-                            enabled: item.category.toActionType.contains(e),
-                            value: e,
-                            child: Text(e.title),
-                          ),
-                        )
-                        .toList(),
-                    getSelectTitle: (i) => i.title,
-                  ),
-                ],
-              ),
-            ],
+                        }
+                        if (flag) {
+                          (context as Element).markNeedsBuild();
+                        }
+                        return flag;
+                      },
+                      itemBuilder: (context) => ActionType.values
+                          .map(
+                            (e) => PopupMenuItem(
+                              enabled: item.category.toActionType.contains(e),
+                              value: e,
+                              child: Text(e.title),
+                            ),
+                          )
+                          .toList(),
+                      getSelectTitle: (i) => i.title,
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
         Positioned(
@@ -492,7 +515,9 @@ class _PostPanelState extends CommonCollapseSlidePageState<PostPanel> {
                   await Future.delayed(Duration(milliseconds: delay));
                 }
                 videoCtr.seek(
-                  Duration(milliseconds: (item.segment.second * 1000).round()),
+                  Duration(
+                    milliseconds: (item.segment.second * 1000).round(),
+                  ),
                 );
               }
             },

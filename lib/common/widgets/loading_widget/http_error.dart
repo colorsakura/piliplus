@@ -19,7 +19,7 @@ class HttpError extends StatelessWidget {
   Widget build(BuildContext context) {
     return isSliver
         ? SliverToBoxAdapter(child: content(context))
-        : content(context);
+        : SizedBox(width: double.infinity, child: content(context));
   }
 
   Widget content(BuildContext context) {
