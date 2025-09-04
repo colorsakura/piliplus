@@ -124,7 +124,8 @@ class ThemeUtils {
   }
 
   static ThemeData darkenTheme(ThemeData themeData) {
-    Color color = themeData.colorScheme.surfaceContainerHighest.darken(0.7);
+    final colorScheme = themeData.colorScheme;
+    final color = colorScheme.surfaceContainerHighest.darken(0.7);
     return themeData.copyWith(
       scaffoldBackgroundColor: Colors.black,
       appBarTheme: themeData.appBarTheme.copyWith(
@@ -148,33 +149,27 @@ class ThemeUtils {
       navigationRailTheme: themeData.navigationRailTheme.copyWith(
         backgroundColor: Colors.black,
       ),
-      colorScheme: themeData.colorScheme.copyWith(
-        primary: themeData.colorScheme.primary.darken(0.1),
-        onPrimary: themeData.colorScheme.onPrimary.darken(0.1),
-        primaryContainer: themeData.colorScheme.primaryContainer.darken(0.1),
-        onPrimaryContainer: themeData.colorScheme.onPrimaryContainer.darken(
-          0.1,
-        ),
-        inversePrimary: themeData.colorScheme.inversePrimary.darken(0.1),
-        secondary: themeData.colorScheme.secondary.darken(0.1),
-        onSecondary: themeData.colorScheme.onSecondary.darken(0.1),
-        secondaryContainer: themeData.colorScheme.secondaryContainer.darken(
-          0.1,
-        ),
-        onSecondaryContainer: themeData.colorScheme.onSecondaryContainer.darken(
-          0.1,
-        ),
-        error: themeData.colorScheme.error.darken(0.1),
+      colorScheme: colorScheme.copyWith(
+        primary: colorScheme.primary.darken(0.1),
+        onPrimary: colorScheme.onPrimary.darken(0.1),
+        primaryContainer: colorScheme.primaryContainer.darken(0.1),
+        onPrimaryContainer: colorScheme.onPrimaryContainer.darken(0.1),
+        inversePrimary: colorScheme.inversePrimary.darken(0.1),
+        secondary: colorScheme.secondary.darken(0.1),
+        onSecondary: colorScheme.onSecondary.darken(0.1),
+        secondaryContainer: colorScheme.secondaryContainer.darken(0.1),
+        onSecondaryContainer: colorScheme.onSecondaryContainer.darken(0.1),
+        error: colorScheme.error.darken(0.1),
         surface: Colors.black,
-        onSurface: themeData.colorScheme.onSurface.darken(0.15),
-        surfaceTint: themeData.colorScheme.surfaceTint.darken(),
-        inverseSurface: themeData.colorScheme.inverseSurface.darken(),
-        onInverseSurface: themeData.colorScheme.onInverseSurface.darken(),
-        surfaceContainer: themeData.colorScheme.surfaceContainer.darken(),
-        surfaceContainerHigh: themeData.colorScheme.surfaceContainerHigh
-            .darken(),
-        surfaceContainerHighest: themeData.colorScheme.surfaceContainerHighest
-            .darken(0.4),
+        onSurface: colorScheme.onSurface.darken(0.15),
+        surfaceTint: colorScheme.surfaceTint.darken(),
+        inverseSurface: colorScheme.inverseSurface.darken(),
+        onInverseSurface: colorScheme.onInverseSurface.darken(),
+        surfaceContainer: colorScheme.surfaceContainer.darken(),
+        surfaceContainerHigh: colorScheme.surfaceContainerHigh.darken(),
+        surfaceContainerHighest: colorScheme.surfaceContainerHighest.darken(
+          0.4,
+        ),
       ),
     );
   }
