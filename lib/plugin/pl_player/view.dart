@@ -4,10 +4,15 @@ import 'dart:math';
 import 'dart:ui' as ui;
 
 import 'package:PiliPlus/common/constants.dart';
+import 'package:PiliPlus/common/widgets/loading_widget.dart';
+import 'package:PiliPlus/common/widgets/pair.dart';
 import 'package:PiliPlus/common/widgets/progress_bar/audio_video_progress_bar.dart';
 import 'package:PiliPlus/common/widgets/progress_bar/segment_progress_bar.dart';
 import 'package:PiliPlus/common/widgets/view_safe_area.dart';
 import 'package:PiliPlus/http/init.dart';
+import 'package:PiliPlus/models/common/sponsor_block/action_type.dart';
+import 'package:PiliPlus/models/common/sponsor_block/post_segment_model.dart';
+import 'package:PiliPlus/models/common/sponsor_block/segment_type.dart';
 import 'package:PiliPlus/models/common/super_resolution_type.dart';
 import 'package:PiliPlus/models/common/video/video_quality.dart';
 import 'package:PiliPlus/models/video/play/url.dart';
@@ -18,6 +23,7 @@ import 'package:PiliPlus/models_new/video/video_shot/data.dart';
 import 'package:PiliPlus/pages/common/common_intro_controller.dart';
 import 'package:PiliPlus/pages/video/controller.dart';
 import 'package:PiliPlus/pages/video/introduction/pgc/controller.dart';
+import 'package:PiliPlus/pages/video/post_panel/view.dart';
 import 'package:PiliPlus/plugin/pl_player/controller.dart';
 import 'package:PiliPlus/plugin/pl_player/models/bottom_control_type.dart';
 import 'package:PiliPlus/plugin/pl_player/models/bottom_progress_behavior.dart';
@@ -31,11 +37,14 @@ import 'package:PiliPlus/plugin/pl_player/widgets/backward_seek.dart';
 import 'package:PiliPlus/plugin/pl_player/widgets/bottom_control.dart';
 import 'package:PiliPlus/plugin/pl_player/widgets/common_btn.dart';
 import 'package:PiliPlus/plugin/pl_player/widgets/forward_seek.dart';
+import 'package:PiliPlus/plugin/pl_player/widgets/mpv_convert_webp.dart';
 import 'package:PiliPlus/plugin/pl_player/widgets/play_pause_btn.dart';
 import 'package:PiliPlus/utils/duration_util.dart';
+import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/id_utils.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/storage_key.dart';
+import 'package:PiliPlus/utils/utils.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:easy_debounce/easy_throttle.dart';
@@ -44,7 +53,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
-import 'package:flutter_volume_controller/flutter_volume_controller.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart' hide ContextExtensionss;
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -52,6 +60,7 @@ import 'package:media_kit/media_kit.dart';
 import 'package:media_kit_video/media_kit_video.dart';
 import 'package:saver_gallery/saver_gallery.dart';
 import 'package:screen_brightness/screen_brightness.dart';
+import 'package:volume_controller/volume_controller.dart';
 
 class PLVideoPlayer extends StatefulWidget {
   const PLVideoPlayer({
@@ -203,12 +212,12 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
     videoController = plPlayerController.videoController!;
     Future.microtask(() async {
       try {
-        FlutterVolumeController.updateShowSystemUI(true);
-        _volumeValue.value = (await FlutterVolumeController.getVolume())!;
-        FlutterVolumeController.addListener((double value) {
+        final volumeCtr = VolumeController.instance..showSystemUI = true;
+        _volumeValue.value = await volumeCtr.getVolume();
+        volumeCtr.addListener((double value) {
           if (mounted && !_volumeInterceptEventStream.value) {
             _volumeValue.value = value;
-            if (Platform.isIOS && !FlutterVolumeController.showSystemUI) {
+            if (Platform.isIOS && !volumeCtr.showSystemUI) {
               _volumeIndicator.value = true;
               _volumeTimer?.cancel();
               _volumeTimer = Timer(const Duration(milliseconds: 800), () {
@@ -239,9 +248,9 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
 
   Future<void> setVolume(double value) async {
     try {
-      FlutterVolumeController.updateShowSystemUI(false);
-      await FlutterVolumeController.setVolume(value);
+      await (VolumeController.instance..showSystemUI = false).setVolume(value);
     } catch (_) {}
+
     _volumeValue.value = value;
     _volumeIndicator.value = true;
     _volumeInterceptEventStream.value = true;
@@ -273,7 +282,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
     _listener?.cancel();
     _controlsListener?.cancel();
     animationController.dispose();
-    FlutterVolumeController.removeListener();
+    VolumeController.instance.removeListener();
     transformationController.dispose();
     super.dispose();
   }
@@ -403,6 +412,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
       /// 超分辨率
       BottomControlType.superResolution => Obx(
         () => PopupMenuButton<SuperResolutionType>(
+          tooltip: '超分辨率',
           requestFocus: false,
           initialValue: plPlayerController.superResolutionType.value,
           color: Colors.black.withValues(alpha: 0.8),
@@ -511,6 +521,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
       /// 画面比例
       BottomControlType.fit => Obx(
         () => PopupMenuButton<VideoFitType>(
+          tooltip: '画面比例',
           requestFocus: false,
           initialValue: plPlayerController.videoFit.value,
           color: Colors.black.withValues(alpha: 0.8),
@@ -545,6 +556,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
         () => widget.videoDetailController?.subtitles.isEmpty == true
             ? const SizedBox.shrink()
             : PopupMenuButton<int>(
+                tooltip: '选择字幕',
                 requestFocus: false,
                 initialValue: widget
                     .videoDetailController!
@@ -597,6 +609,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
       /// 播放速度
       BottomControlType.speed => Obx(
         () => PopupMenuButton<double>(
+          tooltip: '倍速',
           requestFocus: false,
           initialValue: plPlayerController.playbackSpeed,
           color: Colors.black.withValues(alpha: 0.8),
@@ -650,6 +663,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
             }
           }
           return PopupMenuButton<int>(
+            tooltip: '画质',
             requestFocus: false,
             initialValue: currentVideoQa.code,
             color: Colors.black.withValues(alpha: 0.8),
@@ -1655,6 +1669,10 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                           size: 20,
                           color: Colors.white,
                         ),
+                        onLongPress:
+                            (Platform.isAndroid || kDebugMode) && !isLive
+                            ? screenshotWebp
+                            : null,
                         onTap: () {
                           SmartDialog.showToast('截图中');
                           plPlayerController.videoPlayerController
@@ -1855,6 +1873,155 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                 : const SizedBox.shrink(),
           ),
       ],
+    );
+  }
+
+  Future<void> screenshotWebp() async {
+    final videoCtr = widget.videoDetailController!;
+    final videoInfo = widget.videoDetailController!.data;
+    final ids = videoInfo.dash!.video!.map((i) => i.id!).toSet();
+    final video = videoCtr.findVideoByQa(ids.reduce((p, n) => p < n ? p : n));
+
+    VideoQuality qa = video.quality;
+    String? url = video.baseUrl;
+    if (url == null) return;
+
+    final ctr = plPlayerController;
+    final theme = Theme.of(context);
+    final currentPos = ctr.position.value.inMilliseconds / 1000.0;
+    final duration = ctr.durationSeconds.value.inMilliseconds / 1000.0;
+    final segment = Pair(first: currentPos, second: currentPos + 10.0);
+    final model = PostSegmentModel(
+      segment: segment,
+      category: SegmentType.sponsor,
+      actionType: ActionType.skip,
+    );
+    final isPlay = ctr.playerStatus.playing;
+    if (isPlay) ctr.pause();
+
+    WebpPreset preset = WebpPreset.def;
+
+    final success =
+        await Get.dialog<bool>(
+          AlertDialog(
+            title: const Text('动态截图'),
+            content: Column(
+              spacing: 12,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                PostPanel.segmentWidget(
+                  theme,
+                  item: model,
+                  currentPos: currentPos,
+                  videoDuration: duration,
+                ),
+                Builder(
+                  builder: (context) => PopupMenuButton(
+                    initialValue: qa.code,
+                    onSelected: (value) {
+                      if (value == qa.code) return;
+                      final video = videoCtr.findVideoByQa(value);
+                      url = video.baseUrl;
+                      qa = video.quality;
+                      (context as Element).markNeedsBuild();
+                    },
+                    itemBuilder: (_) => videoInfo.supportFormats!
+                        .map(
+                          (i) => PopupMenuItem<int>(
+                            enabled: ids.contains(i.quality),
+                            value: i.quality,
+                            child: Text(i.newDesc ?? ''),
+                          ),
+                        )
+                        .toList(),
+                    child: Text('转码画质：${qa.shortDesc}'),
+                  ),
+                ),
+                Builder(
+                  builder: (context) => PopupMenuButton(
+                    initialValue: preset,
+                    onSelected: (value) {
+                      if (preset == value) return;
+                      preset = value;
+                      (context as Element).markNeedsBuild();
+                    },
+                    itemBuilder: (_) => WebpPreset.values
+                        .map(
+                          (i) => PopupMenuItem(value: i, child: Text(i.name)),
+                        )
+                        .toList(),
+                    child: Text('webp预设：${preset.name}（${preset.desc}）'),
+                  ),
+                ),
+                Text(
+                  '*转码使用软解，速度可能慢于播放，请不要选择过长的时间段或过高画质',
+                  style: theme.textTheme.bodySmall,
+                ),
+              ],
+            ),
+            actions: [
+              TextButton(
+                onPressed: Get.back,
+                child: Text(
+                  '取消',
+                  style: TextStyle(
+                    color: theme.colorScheme.outline,
+                  ),
+                ),
+              ),
+              TextButton(
+                onPressed: () {
+                  if (segment.first < segment.second) {
+                    Get.back(result: true);
+                  }
+                },
+                child: const Text('确定'),
+              ),
+            ],
+          ),
+        ) ??
+        false;
+    if (!success) return;
+
+    final progress = 0.0.obs;
+    final name =
+        '${ctr.cid}-${segment.first.toStringAsFixed(3)}_${segment.second.toStringAsFixed(3)}.webp';
+    final file = '${await Utils.temporaryDirectory}/$name';
+
+    final mpv = MpvConvertWebp(
+      url!,
+      file,
+      segment.first,
+      segment.second,
+      progress: progress,
+      preset: preset,
+    );
+    final future = mpv.convert().whenComplete(
+      () => SmartDialog.dismiss(status: SmartStatus.loading),
+    );
+
+    SmartDialog.showLoading(
+      backType: SmartBackType.normal,
+      builder: (_) => LoadingWidget(progress: progress, msg: '正在保存，可能需要较长时间'),
+      onDismiss: () async {
+        if (progress.value < 1.0) {
+          mpv.dispose();
+        }
+        if (await future) {
+          await SaverGallery.saveFile(
+            filePath: file,
+            fileName: name,
+            androidRelativePath: 'Pictures/Screenshots',
+            skipIfExists: false,
+          );
+          SmartDialog.showToast('$name已保存到相册/截图');
+        } else {
+          SmartDialog.showToast('转码出现错误或已取消');
+        }
+        progress.close();
+        File(file).delSync();
+        if (isPlay) ctr.play();
+      },
     );
   }
 }

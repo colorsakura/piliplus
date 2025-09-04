@@ -11,6 +11,7 @@ import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/http/ua_type.dart';
 import 'package:PiliPlus/http/video.dart';
 import 'package:PiliPlus/models/common/account_type.dart';
+import 'package:PiliPlus/models/common/audio_normalization.dart';
 import 'package:PiliPlus/models/common/sponsor_block/skip_type.dart';
 import 'package:PiliPlus/models/common/super_resolution_type.dart';
 import 'package:PiliPlus/models/common/video/video_type.dart';
@@ -43,7 +44,6 @@ import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
-import 'package:flutter_volume_controller/flutter_volume_controller.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:media_kit/media_kit.dart';
@@ -52,6 +52,7 @@ import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
 import 'package:screen_brightness/screen_brightness.dart';
 import 'package:universal_platform/universal_platform.dart';
+import 'package:volume_controller/volume_controller.dart';
 
 class PlPlayerController {
   Player? _videoPlayerController;
@@ -717,7 +718,16 @@ class PlPlayerController {
       if (isAnim) {
         setShader(superResolutionType.value, pp);
       }
-      await pp.setProperty("af", "scaletempo2=max-speed=8");
+      String audioNormalization = Pref.audioNormalization;
+      audioNormalization = switch (audioNormalization) {
+        '0' => '',
+        '1' => ',${AudioNormalization.dynaudnorm.param}',
+        _ => ',$audioNormalization',
+      };
+      await pp.setProperty(
+        "af",
+        "scaletempo2=max-speed=8$audioNormalization",
+      );
       if (Platform.isAndroid) {
         await pp.setProperty("volume-max", "100");
         String ao = Pref.useOpenSLES
@@ -943,7 +953,12 @@ class PlPlayerController {
           isLive,
         );
       }),
+      if (kDebugMode)
+        videoPlayerController!.stream.log.listen(((PlayerLog log) {
+          debugPrint(log.toString());
+        })),
       videoPlayerController!.stream.error.listen((String event) {
+        debugPrint('MPV Exception: $event');
         if (isLive) {
           if (event.startsWith('tcp: ffurl_read returned ') ||
               event.startsWith("Failed to open https://") ||
@@ -982,16 +997,13 @@ class PlPlayerController {
           );
         } else if (event.startsWith('Could not open codec')) {
           SmartDialog.showToast('无法加载解码器, $event，可能会切换至软解');
-        } else {
-          if (!onlyPlayAudio.value) {
-            if (event.startsWith("Failed to open .") ||
-                event.startsWith("Cannot open") ||
-                event.startsWith("Can not open")) {
-              return;
-            }
-            SmartDialog.showToast('视频加载错误, $event');
-            if (kDebugMode) debugPrint('视频加载错误, $event');
+        } else if (!onlyPlayAudio.value) {
+          if (event.startsWith("Failed to open .") ||
+              event.startsWith("Cannot open") ||
+              event.startsWith("Can not open")) {
+            return;
           }
+          SmartDialog.showToast('视频加载错误, $event');
         }
       }),
       // videoPlayerController!.stream.volume.listen((event) {
@@ -1200,7 +1212,7 @@ class PlPlayerController {
   Future<void> getCurrentVolume() async {
     // mac try...catch
     try {
-      _currentVolume.value = (await FlutterVolumeController.getVolume())!;
+      _currentVolume.value = await VolumeController.instance.getVolume();
     } catch (_) {}
   }
 
@@ -1219,8 +1231,9 @@ class PlPlayerController {
     volume.value = volumeNew;
 
     try {
-      FlutterVolumeController.updateShowSystemUI(false);
-      await FlutterVolumeController.setVolume(volumeNew);
+      await (VolumeController.instance..showSystemUI = false).setVolume(
+        volumeNew,
+      );
     } catch (err) {
       if (kDebugMode) debugPrint(err.toString());
     }

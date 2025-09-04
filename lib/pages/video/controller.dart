@@ -56,12 +56,12 @@ import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart';
 import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
-import 'package:flutter_volume_controller/flutter_volume_controller.dart';
 import 'package:get/get.dart' hide ContextExtensionss;
 import 'package:get/get_navigation/src/dialog/dialog_route.dart';
 import 'package:hive/hive.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:media_kit/media_kit.dart';
+import 'package:volume_controller/volume_controller.dart';
 
 class VideoDetailController extends GetxController
     with GetTickerProviderStateMixin {
@@ -993,6 +993,33 @@ class VideoDetailController extends GetxController
     }
   }
 
+  VideoItem findVideoByQa(int qa) {
+    /// 根据currentVideoQa和currentDecodeFormats 重新设置videoUrl
+    final videoList = data.dash!.video!.where((i) => i.id == qa).toList();
+
+    final currentDecodeFormats = this.currentDecodeFormats.code;
+    final defaultDecodeFormats = VideoDecodeFormatType.fromString(
+      cacheDecode,
+    ).code;
+    final secondDecodeFormats = VideoDecodeFormatType.fromString(
+      cacheSecondDecode,
+    ).code;
+
+    VideoItem? video;
+    for (var i in videoList) {
+      final codec = i.codecs!;
+      if (codec.startsWith(currentDecodeFormats)) {
+        video = i;
+        break;
+      } else if (codec.startsWith(defaultDecodeFormats)) {
+        video = i;
+      } else if (video == null && codec.startsWith(secondDecodeFormats)) {
+        video = i;
+      }
+    }
+    return video ?? videoList.first;
+  }
+
   /// 更新画质、音质
   void updatePlayer() {
     autoPlay.value = true;
@@ -1001,76 +1028,17 @@ class VideoDetailController extends GetxController
     plPlayerController.isBuffering.value = false;
     plPlayerController.buffered.value = Duration.zero;
 
-    /// 根据currentVideoQa和currentDecodeFormats 重新设置videoUrl
-    List<VideoItem> videoList = data.dash!.video!
-        .where((i) => i.id == currentVideoQa.value.code)
-        .toList();
-
-    final List<String> supportDecodeFormats = videoList
-        .map((e) => e.codecs!)
-        .toList();
-    VideoDecodeFormatType defaultDecodeFormats =
-        VideoDecodeFormatTypeExt.fromString(cacheDecode)!;
-    VideoDecodeFormatType secondDecodeFormats =
-        VideoDecodeFormatTypeExt.fromString(cacheSecondDecode)!;
-    try {
-      // 当前视频没有对应格式返回第一个
-      int flag = 0;
-      for (var i in supportDecodeFormats) {
-        if (i.startsWith(currentDecodeFormats.code)) {
-          flag = 1;
-          break;
-        } else if (i.startsWith(defaultDecodeFormats.code)) {
-          flag = 2;
-        } else if (i.startsWith(secondDecodeFormats.code)) {
-          if (flag == 0) {
-            flag = 4;
-          }
-        }
-      }
-      if (flag == 1) {
-        //currentDecodeFormats
-        firstVideo = videoList.firstWhere(
-          (i) => i.codecs!.startsWith(currentDecodeFormats.code),
-          orElse: () => videoList.first,
-        );
-      } else {
-        if (currentVideoQa.value == VideoQuality.dolbyVision) {
-          currentDecodeFormats = VideoDecodeFormatTypeExt.fromString(
-            videoList.first.codecs!,
-          )!;
-          firstVideo = videoList.first;
-        } else if (flag == 2) {
-          //defaultDecodeFormats
-          currentDecodeFormats = defaultDecodeFormats;
-          firstVideo = videoList.firstWhere(
-            (i) => i.codecs!.startsWith(defaultDecodeFormats.code),
-            orElse: () => videoList.first,
-          );
-        } else if (flag == 4) {
-          //secondDecodeFormats
-          currentDecodeFormats = secondDecodeFormats;
-          firstVideo = videoList.firstWhere(
-            (i) => i.codecs!.startsWith(secondDecodeFormats.code),
-            orElse: () => videoList.first,
-          );
-        } else if (flag == 0) {
-          currentDecodeFormats = VideoDecodeFormatTypeExt.fromString(
-            supportDecodeFormats.first,
-          )!;
-          firstVideo = videoList.first;
-        }
-      }
-    } catch (err) {
-      SmartDialog.showToast('DecodeFormats error: $err');
+    final video = findVideoByQa(currentVideoQa.value.code);
+    if (firstVideo.codecs != video.codecs) {
+      currentDecodeFormats = VideoDecodeFormatType.fromString(video.codecs!);
     }
-
-    videoUrl = firstVideo.baseUrl!;
+    firstVideo = video;
+    videoUrl = video.baseUrl!;
 
     /// 根据currentAudioQa 重新设置audioUrl
     if (currentAudioQa != null) {
-      final AudioItem firstAudio = data.dash!.audio!.firstWhere(
-        (AudioItem i) => i.id == currentAudioQa!.code,
+      final firstAudio = data.dash!.audio!.firstWhere(
+        (i) => i.id == currentAudioQa!.code,
         orElse: () => data.dash!.audio!.first,
       );
       audioUrl = firstAudio.baseUrl ?? '';
@@ -1204,7 +1172,7 @@ class VideoDetailController extends GetxController
           quality: VideoQuality.fromCode(data.quality!),
         );
         setVideoHeight();
-        currentDecodeFormats = VideoDecodeFormatTypeExt.fromString('avc1')!;
+        currentDecodeFormats = VideoDecodeFormatType.fromString('avc1');
         currentVideoQa = Rx(VideoQuality.fromCode(data.quality!));
         if (autoPlay.value || plPlayerController.preInitPlayer) {
           await playerInit();
@@ -1256,9 +1224,9 @@ class VideoDetailController extends GetxController
           )
           .codecs!;
       // 默认从设置中取AV1
-      currentDecodeFormats = VideoDecodeFormatTypeExt.fromString(cacheDecode)!;
+      currentDecodeFormats = VideoDecodeFormatType.fromString(cacheDecode);
       VideoDecodeFormatType secondDecodeFormats =
-          VideoDecodeFormatTypeExt.fromString(cacheSecondDecode)!;
+          VideoDecodeFormatType.fromString(cacheSecondDecode);
       // 当前视频没有对应格式返回第一个
       int flag = 0;
       for (var i in supportDecodeFormats) {
@@ -1272,9 +1240,9 @@ class VideoDetailController extends GetxController
       if (flag == 2) {
         currentDecodeFormats = secondDecodeFormats;
       } else if (flag == 0) {
-        currentDecodeFormats = VideoDecodeFormatTypeExt.fromString(
+        currentDecodeFormats = VideoDecodeFormatType.fromString(
           supportDecodeFormats.first,
-        )!;
+        );
       }
 
       /// 取出符合当前解码格式的videoItem
@@ -1539,7 +1507,7 @@ class VideoDetailController extends GetxController
           if (idx == 0) {
             if (preference == SubtitlePrefType.on ||
                 (preference == SubtitlePrefType.auto &&
-                    (await FlutterVolumeController.getVolume() ?? 0) <= 0)) {
+                    await VolumeController.instance.getVolume() <= 0)) {
               idx = 1;
             }
           }

@@ -54,7 +54,7 @@ class ActionItem extends StatelessWidget {
               animation: animation!,
               builder: (context, child) => CustomPaint(
                 size: const Size.square(28),
-                painter: _ArcPainter(
+                painter: ArcPainter(
                   color: primary,
                   sweepAngle: animation!.value,
                 ),
@@ -110,13 +110,15 @@ class ActionItem extends StatelessWidget {
   }
 }
 
-class _ArcPainter extends CustomPainter {
-  const _ArcPainter({
+class ArcPainter extends CustomPainter {
+  const ArcPainter({
     required this.color,
     required this.sweepAngle,
+    this.strokeWidth = 2,
   });
   final Color color;
   final double sweepAngle;
+  final double strokeWidth;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -126,7 +128,7 @@ class _ArcPainter extends CustomPainter {
 
     final paint = Paint()
       ..color = color
-      ..strokeWidth = 2
+      ..strokeWidth = strokeWidth
       ..style = PaintingStyle.stroke;
 
     final rect = Rect.fromCircle(
@@ -140,7 +142,7 @@ class _ArcPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(covariant _ArcPainter oldDelegate) {
+  bool shouldRepaint(covariant ArcPainter oldDelegate) {
     return sweepAngle != oldDelegate.sweepAngle || color != oldDelegate.color;
   }
 }
