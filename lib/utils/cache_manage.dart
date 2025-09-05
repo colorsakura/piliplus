@@ -112,13 +112,13 @@ abstract class CacheManage {
 
   static Future<void> autoClearCache() async {
     if (Pref.autoClearCache) {
-      await CacheManage.clearLibraryCache();
+      await clearLibraryCache();
     } else {
       final maxCacheSize = Pref.maxCacheSize;
       if (maxCacheSize != 0) {
         final currCache = await loadApplicationCache();
         if (currCache >= maxCacheSize) {
-          await CacheManage.clearLibraryCache();
+          await clearLibraryCache();
         }
       }
     }

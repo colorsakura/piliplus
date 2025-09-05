@@ -39,14 +39,15 @@ class _FansPageState extends State<FansPage> {
   void initState() {
     super.initState();
     AccountService accountService = Get.find<AccountService>();
-    mid =
-        widget.mid ??
-        (Get.parameters['mid'] != null
-            ? int.parse(Get.parameters['mid']!)
-            : accountService.mid);
-    isOwner = mid == accountService.mid;
+    late final mid = Get.parameters['mid'];
+    this.mid =
+        widget.mid ?? (mid != null ? int.parse(mid) : accountService.mid);
+    isOwner = this.mid == accountService.mid;
     name = Get.parameters['name'] ?? accountService.name.value;
-    _fansController = Get.put(FansController(mid), tag: Utils.makeHeroTag(mid));
+    _fansController = Get.put(
+      FansController(this.mid),
+      tag: Utils.makeHeroTag(this.mid),
+    );
   }
 
   @override

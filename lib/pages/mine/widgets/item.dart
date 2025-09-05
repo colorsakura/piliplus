@@ -36,11 +36,7 @@ class FavFolderItem extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SizedBox(height: 12),
-            Container(
-              width: 180,
-              height: 110,
-              margin: const EdgeInsets.only(bottom: 8),
+            DecoratedBox(
               decoration: BoxDecoration(
                 borderRadius: const BorderRadius.all(Radius.circular(12)),
                 boxShadow: [
@@ -58,11 +54,12 @@ class FavFolderItem extends StatelessWidget {
                 tag: heroTag,
                 child: NetworkImgLayer(
                   src: item.cover,
-                  width: 176,
+                  width: 180,
                   height: 110,
                 ),
               ),
             ),
+            const SizedBox(height: 8),
             Text(
               ' ${item.title}',
               overflow: TextOverflow.fade,

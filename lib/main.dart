@@ -51,9 +51,7 @@ void main() async {
     else
       SystemChrome.setPreferredOrientations(
         //支持竖屏
-        [
-          DeviceOrientation.portraitUp,
-        ],
+        [DeviceOrientation.portraitUp],
       ),
     setupServiceLocator(),
   ]);

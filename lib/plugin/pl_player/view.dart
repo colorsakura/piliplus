@@ -1603,8 +1603,8 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
               child: FractionalTranslation(
                 translation: const Offset(1, -0.4),
                 child: Obx(
-                  () => Visibility(
-                    visible: plPlayerController.showControls.value,
+                  () => Offstage(
+                    offstage: !plPlayerController.showControls.value,
                     child: DecoratedBox(
                       decoration: const BoxDecoration(
                         color: Color(0x45000000),
@@ -1647,8 +1647,8 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                 alignment: Alignment.centerRight,
                 child: FractionalTranslation(
                   translation: const Offset(-1, -0.4),
-                  child: Visibility(
-                    visible: plPlayerController.showControls.value,
+                  child: Offstage(
+                    offstage: !plPlayerController.showControls.value,
                     child: DecoratedBox(
                       decoration: const BoxDecoration(
                         color: Color(0x45000000),

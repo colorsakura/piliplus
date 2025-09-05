@@ -140,6 +140,7 @@ class _PagesPanelState extends State<PagesPanel> {
             scrollDirection: Axis.horizontal,
             itemCount: pages.length,
             itemExtent: 150,
+            padding: EdgeInsets.zero,
             itemBuilder: (BuildContext context, int i) {
               bool isCurrentIndex = pageIndex == i;
               final item = pages[i];

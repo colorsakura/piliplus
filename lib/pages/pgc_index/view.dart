@@ -120,14 +120,12 @@ class _PgcIndexPageState extends State<PgcIndexPage>
               : data.filter![index].values;
           return item?.isNotEmpty == true
               ? Padding(
-                  padding: EdgeInsets.only(
-                    top: index == 0 ? 0 : 10,
-                  ),
+                  padding: index == 0
+                      ? EdgeInsets.zero
+                      : const EdgeInsets.only(top: 10),
                   child: SelfSizedHorizontalList(
                     gapSize: 12,
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 12,
-                    ),
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
                     childBuilder: (childIndex) {
                       final e = item[childIndex];
                       return Obx(

@@ -972,17 +972,13 @@ class VideoDetailController extends GetxController
         },
         transitionDuration: const Duration(milliseconds: 500),
         transitionBuilder: (context, animation, secondaryAnimation, child) {
-          const begin = Offset(0.0, 1.0);
-          const end = Offset.zero;
-          const curve = Curves.linear;
-
-          var tween = Tween(
-            begin: begin,
-            end: end,
-          ).chain(CurveTween(curve: curve));
-
           return SlideTransition(
-            position: animation.drive(tween),
+            position: animation.drive(
+              Tween(
+                begin: const Offset(0.0, 1.0),
+                end: Offset.zero,
+              ).chain(CurveTween(curve: Curves.linear)),
+            ),
             child: child,
           );
         },
