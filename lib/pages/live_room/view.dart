@@ -754,10 +754,7 @@ class _LiveRoomPageState extends State<LiveRoomPage>
       ),
       height: 70 + padding.bottom,
       decoration: const BoxDecoration(
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(20),
-          topRight: Radius.circular(20),
-        ),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
         border: Border(top: BorderSide(color: Color(0x1AFFFFFF))),
         color: Color(0x1AFFFFFF),
       ),
@@ -904,9 +901,8 @@ class _LiveRoomPageState extends State<LiveRoomPage>
                 ),
                 child: const DecoratedBox(
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(20),
-                      topRight: Radius.circular(20),
+                    borderRadius: BorderRadius.vertical(
+                      top: Radius.circular(20),
                     ),
                     border: Border(
                       top: BorderSide(color: Colors.white38),

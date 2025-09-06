@@ -100,12 +100,19 @@ class ChatItem extends StatelessWidget {
                               color: isOwner
                                   ? theme.colorScheme.secondaryContainer
                                   : theme.colorScheme.onInverseSurface,
-                              borderRadius: BorderRadius.only(
-                                topLeft: const Radius.circular(16),
-                                topRight: const Radius.circular(16),
-                                bottomLeft: Radius.circular(isOwner ? 16 : 6),
-                                bottomRight: Radius.circular(isOwner ? 6 : 16),
-                              ),
+                              borderRadius: isOwner
+                                  ? const BorderRadius.only(
+                                      topLeft: Radius.circular(16),
+                                      topRight: Radius.circular(16),
+                                      bottomLeft: Radius.circular(16),
+                                      bottomRight: Radius.circular(6),
+                                    )
+                                  : const BorderRadius.only(
+                                      topLeft: Radius.circular(16),
+                                      topRight: Radius.circular(16),
+                                      bottomLeft: Radius.circular(6),
+                                      bottomRight: Radius.circular(16),
+                                    ),
                             ),
                             padding: EdgeInsets.only(
                               top: 8,

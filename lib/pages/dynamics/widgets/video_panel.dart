@@ -86,9 +86,8 @@ Widget videoSeasonWidget(
                         Colors.black54,
                       ],
                     ),
-                    borderRadius: BorderRadius.only(
-                      bottomLeft: StyleString.imgRadius,
-                      bottomRight: StyleString.imgRadius,
+                    borderRadius: BorderRadius.vertical(
+                      bottom: StyleString.imgRadius,
                     ),
                   ),
                   child: DefaultTextStyle.merge(

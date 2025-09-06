@@ -87,9 +87,8 @@ Widget livePanelSub(
                         Colors.black45,
                       ],
                     ),
-                    borderRadius: BorderRadius.only(
-                      bottomLeft: StyleString.imgRadius,
-                      bottomRight: StyleString.imgRadius,
+                    borderRadius: BorderRadius.vertical(
+                      bottom: StyleString.imgRadius,
                     ),
                   ),
                   child: Text(

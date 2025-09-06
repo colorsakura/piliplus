@@ -85,10 +85,7 @@ class _SuperChatCardState extends State<SuperChatCard> {
       children: [
         Container(
           decoration: BoxDecoration(
-            borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(8),
-              topRight: Radius.circular(8),
-            ),
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(8)),
             color: Utils.parseColor(item.backgroundColor),
             border: Border(top: border, left: border, right: border),
           ),
@@ -137,9 +134,8 @@ class _SuperChatCardState extends State<SuperChatCard> {
         ),
         Container(
           decoration: BoxDecoration(
-            borderRadius: const BorderRadius.only(
-              bottomLeft: Radius.circular(8),
-              bottomRight: Radius.circular(8),
+            borderRadius: const BorderRadius.vertical(
+              bottom: Radius.circular(8),
             ),
             color: bottomColor,
           ),
