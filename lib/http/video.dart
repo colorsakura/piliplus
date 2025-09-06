@@ -34,7 +34,6 @@ import 'package:flutter/foundation.dart';
 
 /// view层根据 status 判断渲染逻辑
 class VideoHttp {
-  // static bool enableRcmdDynamic = Pref.enableRcmdDynamic;
   static RegExp zoneRegExp = RegExp(Pref.banWordForZone, caseSensitive: false);
   static bool enableFilter = zoneRegExp.pattern.isNotEmpty;
 
@@ -133,7 +132,6 @@ class VideoHttp {
         if (i['card_goto'] != 'ad_av' &&
             i['card_goto'] != 'ad_web_s' &&
             i['ad_info'] == null &&
-            // (!enableRcmdDynamic ? i['card_goto'] != 'picture' : true) &&
             (i['args'] != null &&
                 !GlobalData().blackMids.contains(i['args']['up_id']))) {
           if (enableFilter &&

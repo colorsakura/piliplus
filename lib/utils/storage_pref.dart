@@ -653,9 +653,6 @@ abstract class Pref {
   static bool get enableHttp2 =>
       _setting.get(SettingBoxKey.enableHttp2, defaultValue: false);
 
-  static bool get enableRcmdDynamic =>
-      _setting.get(SettingBoxKey.enableRcmdDynamic, defaultValue: true);
-
   static int get replySortType =>
       _setting.get(SettingBoxKey.replySortType, defaultValue: 1);
 

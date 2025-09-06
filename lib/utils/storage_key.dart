@@ -41,7 +41,6 @@ class SettingBoxKey {
       fullScreenGestureReverse = 'fullScreenGestureReverse',
       enableBackgroundPlay = 'enableBackgroundPlay',
       continuePlayInBackground = 'continuePlayInBackground',
-      enableRcmdDynamic = 'enableRcmdDynamic',
       appRcmd = 'appRcmd',
       enableSaveLastData = 'enableSaveLastData',
       minDurationForRcmd = 'minDurationForRcmd',
