@@ -185,6 +185,7 @@ class _LiveRoomPageState extends State<LiveRoomPage>
               width: maxWidth,
               height: maxHeight,
               isPipMode: true,
+              needDm: !plPlayerController.pipNoDanmaku,
             )
           : childWhenDisabled;
     } else {
