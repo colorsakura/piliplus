@@ -1483,7 +1483,7 @@ class DynamicLive2Model {
     descSecond = json['desc_second'];
     id = json['id'];
     jumpUrl = json['jump_url'];
-    liveState = json['liv_state'];
+    liveState = json['live_state'];
     reserveType = json['reserve_type'];
     title = json['title'];
   }
