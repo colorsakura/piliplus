@@ -31,6 +31,7 @@ import 'package:PiliPlus/pages/video/related/controller.dart';
 import 'package:PiliPlus/pages/video/reply/controller.dart';
 import 'package:PiliPlus/plugin/pl_player/models/play_repeat.dart';
 import 'package:PiliPlus/services/service_locator.dart';
+import 'package:PiliPlus/utils/accounts.dart';
 import 'package:PiliPlus/utils/context_ext.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/feed_back.dart';
@@ -744,6 +745,10 @@ class UgcIntroController extends CommonIntroController with ReloadMixin {
 
   // ai总结
   Future aiConclusion() async {
+    if (!Accounts.heartbeat.isLogin) {
+      SmartDialog.showToast("账号未登录");
+      return;
+    }
     SmartDialog.showLoading(msg: '正在获取AI总结');
     final res = await VideoHttp.aiConclusion(
       bvid: bvid,

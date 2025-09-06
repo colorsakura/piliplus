@@ -890,30 +890,28 @@ class _UgcIntroPanelState extends TripleState<UgcIntroPanel>
   );
 
   Widget get _aiBtn => Positioned(
-    right: 10,
-    top: 0,
-    bottom: 0,
+    right: 8,
     child: Center(
-      child: Semantics(
-        label: 'AI总结',
-        child: GestureDetector(
-          onTap: () async {
-            if (introController.aiConclusionResult == null) {
-              await introController.aiConclusion();
-            }
-            if (introController.aiConclusionResult == null) {
-              return;
-            }
-            if (introController.aiConclusionResult!.summary?.isNotEmpty ==
-                    true ||
-                introController.aiConclusionResult!.outline?.isNotEmpty ==
-                    true) {
+      child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: () async {
+          if (introController.aiConclusionResult == null) {
+            await introController.aiConclusion();
+          }
+          if (introController.aiConclusionResult case final res?) {
+            if (res.summary?.isNotEmpty == true ||
+                res.outline?.isNotEmpty == true) {
               widget.showAiBottomSheet();
             } else {
               SmartDialog.showToast("当前视频不支持AI视频总结");
             }
-          },
-          child: Image.asset('assets/images/ai.png', height: 22),
+          }
+        },
+        child: Image.asset(
+          semanticLabel: 'AI总结',
+          'assets/images/ai.png',
+          height: 18,
+          width: 18,
         ),
       ),
     ),
