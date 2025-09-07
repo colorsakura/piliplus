@@ -277,6 +277,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
 
   @override
   void dispose() {
+    _focusNode.dispose();
     _listener?.cancel();
     _controlsListener?.cancel();
     animationController.dispose();
@@ -1133,10 +1134,10 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
         case LogicalKeyboardKey.keyF:
           plPlayerController.triggerFullScreen(status: !isFullScreen);
           break;
-        case LogicalKeyboardKey.arrowLeft:
+        case LogicalKeyboardKey.arrowLeft when (!plPlayerController.isLive):
           onDoubleTapSeekBackward();
           break;
-        case LogicalKeyboardKey.arrowRight:
+        case LogicalKeyboardKey.arrowRight when (!plPlayerController.isLive):
           onDoubleTapSeekForward();
           break;
         case LogicalKeyboardKey.escape:
