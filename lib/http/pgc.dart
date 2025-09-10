@@ -75,7 +75,7 @@ class PgcHttp {
     }
   }
 
-  static Future<LoadingState<List<Result>?>> pgcTimeline({
+  static Future<LoadingState<List<TimelineResult>?>> pgcTimeline({
     int types = 1, // 1：`番剧`<br />3：`电影`<br />4：`国创` |
     required int before,
     required int after,

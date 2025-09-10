@@ -77,7 +77,7 @@ class _PgcPageState extends CommonPageState<PgcPage, PgcController>
 
   Widget _buildTimeline(
     ThemeData theme,
-    LoadingState<List<Result>?> loadingState,
+    LoadingState<List<TimelineResult>?> loadingState,
   ) => switch (loadingState) {
     Loading() => loadingWidget,
     Success(:var response) =>
