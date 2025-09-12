@@ -10,6 +10,7 @@ import 'package:PiliPlus/utils/accounts/account.dart';
 import 'package:PiliPlus/utils/app_sign.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/storage_pref.dart';
+import 'package:PiliPlus/utils/utils.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart' show kDebugMode;
@@ -312,13 +313,19 @@ class AccountManager extends Interceptor {
       case DioExceptionType.sendTimeout:
         return '发送请求超时，请检查网络设置';
       case DioExceptionType.unknown:
-        final String res =
-            (await Connectivity().checkConnectivity()).first.title;
-        return '$res网络异常 ${error.error}';
+        String desc;
+        try {
+          desc = Utils.isMobile
+              ? (await Connectivity().checkConnectivity()).first.desc
+              : '';
+        } catch (_) {
+          desc = '';
+        }
+        return '$desc网络异常 ${error.error}';
     }
   }
 }
 
 extension _ConnectivityResultExt on ConnectivityResult {
-  String get title => const ['蓝牙', 'Wi-Fi', '局域', '流量', '无', '代理', '其他'][index];
+  String get desc => const ['蓝牙', 'Wi-Fi', '局域', '流量', '无', '代理', '其他'][index];
 }

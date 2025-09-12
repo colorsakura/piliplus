@@ -15,6 +15,7 @@ import 'package:PiliPlus/pages/live_room/superchat/superchat_panel.dart';
 import 'package:PiliPlus/pages/live_room/widgets/bottom_control.dart';
 import 'package:PiliPlus/pages/live_room/widgets/chat_panel.dart';
 import 'package:PiliPlus/pages/live_room/widgets/header_control.dart';
+import 'package:PiliPlus/pages/video/widgets/focus.dart';
 import 'package:PiliPlus/plugin/pl_player/controller.dart';
 import 'package:PiliPlus/plugin/pl_player/models/play_status.dart';
 import 'package:PiliPlus/plugin/pl_player/utils/fullscreen.dart';
@@ -189,9 +190,9 @@ class _LiveRoomPageState extends State<LiveRoomPage>
               isPipMode: true,
               needDm: !plPlayerController.pipNoDanmaku,
             )
-          : childWhenDisabled;
+          : focus(childWhenDisabled);
     } else {
-      return childWhenDisabled;
+      return focus(childWhenDisabled);
     }
   }
 

@@ -551,6 +551,7 @@ class _SavePanelState extends State<SavePanel> {
                   bottom: 25 + padding.bottom,
                 ),
                 child: Row(
+                  spacing: 40,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     iconButton(
@@ -562,7 +563,6 @@ class _SavePanelState extends State<SavePanel> {
                       bgColor: theme.colorScheme.onInverseSurface,
                       iconColor: theme.colorScheme.onSurfaceVariant,
                     ),
-                    const SizedBox(width: 40),
                     iconButton(
                       size: 42,
                       tooltip: showBottom ? '隐藏' : '显示',
@@ -574,15 +574,14 @@ class _SavePanelState extends State<SavePanel> {
                         showBottom = !showBottom;
                       }),
                     ),
-                    const SizedBox(width: 40),
-                    iconButton(
-                      size: 42,
-                      tooltip: '分享',
-                      context: context,
-                      icon: Icons.share,
-                      onPressed: () => _onSaveOrSharePic(true),
-                    ),
-                    const SizedBox(width: 40),
+                    if (Utils.isMobile)
+                      iconButton(
+                        size: 42,
+                        tooltip: '分享',
+                        context: context,
+                        icon: Icons.share,
+                        onPressed: () => _onSaveOrSharePic(true),
+                      ),
                     iconButton(
                       size: 42,
                       tooltip: '保存',

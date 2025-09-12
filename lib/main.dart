@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:PiliPlus/build_config.dart';
+import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/common/widgets/custom_toast.dart';
 import 'package:PiliPlus/http/init.dart';
 import 'package:PiliPlus/models/common/theme/theme_color_type.dart';
@@ -57,7 +58,9 @@ void main() async {
   Request();
   Request.setCookie();
   RequestUtils.syncHistoryStatus();
-  PiliScheme.init();
+  if (Utils.isMobile) {
+    PiliScheme.init();
+  }
 
   SmartDialog.config.toast = SmartConfigToast(
     displayType: SmartToastType.onlyRefresh,
@@ -83,7 +86,7 @@ void main() async {
       titleBarStyle: Platform.isMacOS
           ? TitleBarStyle.hidden
           : TitleBarStyle.normal,
-      title: 'PiliPlus',
+      title: Constants.appName,
     );
     windowManager.waitUntilReadyToShow(windowOptions, () async {
       await windowManager.show();
@@ -194,8 +197,7 @@ class MyApp extends StatelessWidget {
         // 图片缓存
         // PaintingBinding.instance.imageCache.maximumSizeBytes = 1000 << 20;
         return GetMaterialApp(
-          // showSemanticsDebugger: true,
-          title: 'PiliPlus',
+          title: Constants.appName,
           theme: ThemeUtils.getThemeData(
             colorScheme: lightColorScheme,
             isDynamic: lightDynamic != null && isDynamicColor,

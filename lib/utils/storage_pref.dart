@@ -809,4 +809,7 @@ abstract class Pref {
 
   static bool get showSuperChat =>
       _setting.get(SettingBoxKey.showSuperChat, defaultValue: true);
+
+  static bool get minimizeOnExit =>
+      _setting.get(SettingBoxKey.minimizeOnExit, defaultValue: true);
 }

@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 
+import 'package:PiliPlus/common/constants.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -14,12 +16,23 @@ import 'package:share_plus/share_plus.dart';
 class Utils {
   static final Random random = Random();
 
-  static const channel = MethodChannel("PiliPlus");
+  static const channel = MethodChannel(Constants.appName);
 
   static final bool isMobile = Platform.isAndroid || Platform.isIOS;
 
   static final bool isDesktop =
       Platform.isWindows || Platform.isMacOS || Platform.isLinux;
+
+  static Future<bool> get isWiFi async {
+    try {
+      return Utils.isMobile &&
+          (await Connectivity().checkConnectivity()).contains(
+            ConnectivityResult.wifi,
+          );
+    } catch (_) {
+      return true;
+    }
+  }
 
   static Color parseColor(String color) =>
       Color(int.parse(color.replaceFirst('#', 'FF'), radix: 16));
@@ -59,6 +72,10 @@ class Utils {
   }
 
   static Future<void> shareText(String text) async {
+    if (Utils.isDesktop) {
+      copyText(text);
+      return;
+    }
     try {
       await SharePlus.instance.share(
         ShareParams(

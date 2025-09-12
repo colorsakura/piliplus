@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
 import 'package:PiliPlus/common/widgets/tabs.dart';
 import 'package:PiliPlus/models/common/dynamic/dynamic_badge_mode.dart';
@@ -18,6 +19,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart' hide ContextExtensionss;
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:tray_manager/tray_manager.dart';
+import 'package:window_manager/window_manager.dart';
 
 class MainApp extends StatefulWidget {
   const MainApp({super.key});
@@ -27,13 +30,20 @@ class MainApp extends StatefulWidget {
 }
 
 class _MainAppState extends State<MainApp>
-    with RouteAware, WidgetsBindingObserver {
+    with RouteAware, WidgetsBindingObserver, WindowListener, TrayListener {
   final MainController _mainController = Get.put(MainController());
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+    if (Utils.isDesktop) {
+      windowManager
+        ..addListener(this)
+        ..setPreventClose(true);
+      trayManager.addListener(this);
+      _handleTray();
+    }
   }
 
   @override
@@ -75,11 +85,67 @@ class _MainAppState extends State<MainApp>
 
   @override
   void dispose() {
+    if (Utils.isDesktop) {
+      trayManager.removeListener(this);
+      windowManager.removeListener(this);
+    }
     PageUtils.routeObserver.unsubscribe(this);
     WidgetsBinding.instance.removeObserver(this);
-    GStorage.close();
     PiliScheme.listener?.cancel();
+    GStorage.close();
     super.dispose();
+  }
+
+  @override
+  void onWindowClose() {
+    if (_mainController.minimizeOnExit) {
+      windowManager.hide();
+    } else {
+      exit(0);
+    }
+  }
+
+  @override
+  Future<void> onTrayIconMouseDown() async {
+    if (await windowManager.isVisible()) {
+      windowManager.hide();
+    } else {
+      windowManager.show();
+    }
+  }
+
+  @override
+  Future<void> onTrayIconRightMouseDown() async {
+    // ignore: deprecated_member_use
+    trayManager.popUpContextMenu(bringAppToFront: true);
+  }
+
+  @override
+  void onTrayMenuItemClick(MenuItem menuItem) {
+    switch (menuItem.key) {
+      case 'show':
+        windowManager.show();
+      case 'exit':
+        exit(0);
+    }
+  }
+
+  Future<void> _handleTray() async {
+    if (Platform.isWindows) {
+      await trayManager.setIcon('assets/images/logo/app_icon.ico');
+    }
+    if (!Platform.isLinux) {
+      await trayManager.setToolTip(Constants.appName);
+    }
+
+    Menu trayMenu = Menu(
+      items: [
+        MenuItem(key: 'show', label: '显示窗口'),
+        MenuItem.separator(),
+        MenuItem(key: 'exit', label: '退出 ${Constants.appName}'),
+      ],
+    );
+    await trayManager.setContextMenu(trayMenu);
   }
 
   void onBack() {

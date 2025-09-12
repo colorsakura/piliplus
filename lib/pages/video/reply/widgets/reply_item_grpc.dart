@@ -278,7 +278,7 @@ class ReplyItemGrpc extends StatelessWidget {
               children: [
                 if (replyItem.replyControl.isUpTop) ...[
                   const WidgetSpan(
-                    alignment: PlaceholderAlignment.top,
+                    alignment: PlaceholderAlignment.middle,
                     child: PBadge(
                       text: 'TOP',
                       size: PBadgeSize.small,

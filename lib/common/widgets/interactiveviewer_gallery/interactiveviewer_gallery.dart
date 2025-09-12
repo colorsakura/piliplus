@@ -1,7 +1,5 @@
 import 'dart:io';
 
-import 'package:PiliPlus/common/widgets/interactiveviewer_gallery/interactive_viewer.dart'
-    as custom;
 import 'package:PiliPlus/common/widgets/interactiveviewer_gallery/interactive_viewer_boundary.dart';
 import 'package:PiliPlus/models/common/image_preview_type.dart';
 import 'package:PiliPlus/utils/extension.dart';
@@ -81,7 +79,7 @@ class InteractiveviewerGallery extends StatefulWidget {
 class _InteractiveviewerGalleryState extends State<InteractiveviewerGallery>
     with SingleTickerProviderStateMixin {
   PageController? _pageController;
-  custom.TransformationController? _transformationController;
+  TransformationController? _transformationController;
 
   /// The controller to animate the transformation value of the
   /// [InteractiveViewer] when it should reset.
@@ -104,7 +102,7 @@ class _InteractiveviewerGalleryState extends State<InteractiveviewerGallery>
 
     _pageController = PageController(initialPage: widget.initIndex);
 
-    _transformationController = custom.TransformationController();
+    _transformationController = TransformationController();
 
     _animationController = AnimationController(
       vsync: this,
@@ -351,10 +349,11 @@ class _InteractiveviewerGalleryState extends State<InteractiveviewerGallery>
                       itemBuilder: (context) {
                         final item = widget.sources[currentIndex.value];
                         return [
-                          PopupMenuItem(
-                            onTap: () => ImageUtils.onShareImg(item.url),
-                            child: const Text("分享图片"),
-                          ),
+                          if (Utils.isMobile)
+                            PopupMenuItem(
+                              onTap: () => ImageUtils.onShareImg(item.url),
+                              child: const Text("分享图片"),
+                            ),
                           PopupMenuItem(
                             onTap: () => Utils.copyText(item.url),
                             child: const Text("复制链接"),
@@ -500,14 +499,15 @@ class _InteractiveviewerGalleryState extends State<InteractiveviewerGallery>
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              ListTile(
-                onTap: () {
-                  Get.back();
-                  ImageUtils.onShareImg(item.url);
-                },
-                dense: true,
-                title: const Text('分享', style: TextStyle(fontSize: 14)),
-              ),
+              if (Utils.isMobile)
+                ListTile(
+                  onTap: () {
+                    Get.back();
+                    ImageUtils.onShareImg(item.url);
+                  },
+                  dense: true,
+                  title: const Text('分享', style: TextStyle(fontSize: 14)),
+                ),
               ListTile(
                 onTap: () {
                   Get.back();

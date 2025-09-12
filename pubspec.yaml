@@ -65,7 +65,10 @@ dependencies:
   # 设备信息
   device_info_plus: ^11.2.0
   # 权限
-  permission_handler: ^12.0.0+1
+  # permission_handler: ^12.0.0+1
+  permission_handler_apple: ^9.4.7
+  permission_handler_android: ^13.0.1
+  permission_handler_platform_interface: ^4.3.0
   # 分享
   share_plus: ^12.0.0
   # cookie 管理
@@ -208,6 +211,7 @@ dependencies:
   web_socket_channel: ^3.0.3
   image: ^4.5.4
   window_manager: ^0.5.1
+  tray_manager: ^0.5.1
   file_picker: ^10.3.3
 
   vector_math: any

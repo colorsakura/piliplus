@@ -208,6 +208,7 @@ class PlPlayerController {
   /// 音量控制条
   RxDouble get volume => _currentVolume;
   Stream<double> get onVolumeChanged => _currentVolume.stream;
+  late bool isMuted = false;
 
   /// 亮度控制条
   RxDouble get brightness => _currentBrightness;
@@ -335,8 +336,8 @@ class PlPlayerController {
 
   late final bool tempPlayerConf = Pref.tempPlayerConf;
 
-  int? cacheVideoQa;
-  late int cacheAudioQa;
+  late int? cacheVideoQa = Utils.isMobile ? null : Pref.defaultVideoQa;
+  late int cacheAudioQa = Pref.defaultAudioQa;
   bool enableHeart = true;
 
   late final bool enableHA = Pref.enableHA;
@@ -1207,6 +1208,9 @@ class PlPlayerController {
   }
 
   Future<void> setVolume(double volume) async {
+    if (this.volume.value == volume) {
+      return;
+    }
     this.volume.value = volume;
     try {
       if (Utils.isDesktop) {

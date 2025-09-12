@@ -30,6 +30,7 @@ import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/storage_key.dart';
 import 'package:PiliPlus/utils/storage_pref.dart';
 import 'package:PiliPlus/utils/update.dart';
+import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -38,6 +39,19 @@ import 'package:get/get.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 List<SettingsModel> get extraSettings => [
+  if (Utils.isDesktop)
+    SettingsModel(
+      settingsType: SettingsType.sw1tch,
+      title: '退出时最小化',
+      leading: const Icon(Icons.exit_to_app),
+      setKey: SettingBoxKey.minimizeOnExit,
+      defaultVal: true,
+      onChanged: (value) {
+        try {
+          Get.find<MainController>().minimizeOnExit = value;
+        } catch (_) {}
+      },
+    ),
   SettingsModel(
     settingsType: SettingsType.sw1tch,
     title: '空降助手',

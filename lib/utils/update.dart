@@ -1,6 +1,7 @@
 import 'dart:io' show Platform;
 
 import 'package:PiliPlus/build_config.dart';
+import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/http/api.dart';
 import 'package:PiliPlus/http/init.dart';
 import 'package:PiliPlus/http/ua_type.dart';
@@ -61,7 +62,7 @@ class Update {
                       Text('${res.data[0]['body']}'),
                       TextButton(
                         onPressed: () => PageUtils.launchURL(
-                          'https://github.com/bggRGjQaUbCoE/PiliPlus/commits/main',
+                          '${Constants.sourceCodeUrl}/commits/main',
                         ),
                         child: Text(
                           "点此查看完整更新(即commit)内容",
@@ -134,9 +135,7 @@ class Update {
         download('ios');
       }
     } catch (_) {
-      PageUtils.launchURL(
-        'https://github.com/bggRGjQaUbCoE/PiliPlus/releases/latest',
-      );
+      PageUtils.launchURL('${Constants.sourceCodeUrl}/releases/latest');
     }
   }
 }

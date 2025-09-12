@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/common/widgets/scroll_physics.dart';
 import 'package:PiliPlus/pages/login/controller.dart';
 import 'package:PiliPlus/utils/extension.dart';
@@ -24,6 +25,7 @@ class _LoginPageState extends State<LoginPage> {
   // 二维码生成时间
   bool showPassword = false;
   GlobalKey globalKey = GlobalKey();
+  final isMobile = Utils.isMobile;
 
   Widget loginByQRCode(ThemeData theme) {
     return Column(
@@ -61,7 +63,8 @@ class _LoginPageState extends State<LoginPage> {
                 );
                 Uint8List pngBytes = byteData!.buffer.asUint8List();
                 SmartDialog.dismiss();
-                String picName = "PiliPlus_loginQRCode_${ImageUtils.time}";
+                String picName =
+                    "${Constants.appName}_loginQRCode_${ImageUtils.time}";
                 ImageUtils.saveByteImg(bytes: pngBytes, fileName: picName);
               },
               icon: const Icon(Icons.save),
@@ -188,6 +191,7 @@ class _LoginPageState extends State<LoginPage> {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
           child: TextField(
+            enabled: isMobile,
             controller: _loginPageCtr.usernameTextController,
             inputFormatters: [FilteringTextInputFormatter.deny(RegExp(r"\s"))],
             decoration: InputDecoration(
@@ -205,6 +209,7 @@ class _LoginPageState extends State<LoginPage> {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
           child: TextField(
+            enabled: isMobile,
             obscureText: !showPassword,
             keyboardType: TextInputType.visiblePassword,
             inputFormatters: [FilteringTextInputFormatter.deny(RegExp(r"\s"))],
@@ -226,11 +231,9 @@ class _LoginPageState extends State<LoginPage> {
             const SizedBox(width: 10),
             Checkbox(
               value: showPassword,
-              onChanged: (value) {
-                setState(() {
-                  showPassword = value!;
-                });
-              },
+              onChanged: isMobile
+                  ? (value) => setState(() => showPassword = value!)
+                  : null,
             ),
             const Text('显示密码'),
             const Spacer(),
@@ -309,7 +312,7 @@ class _LoginPageState extends State<LoginPage> {
           ],
         ),
         OutlinedButton.icon(
-          onPressed: _loginPageCtr.loginByPassword,
+          onPressed: isMobile ? _loginPageCtr.loginByPassword : null,
           icon: const Icon(Icons.login),
           label: const Text('登录'),
         ),
@@ -351,6 +354,7 @@ class _LoginPageState extends State<LoginPage> {
                 Builder(
                   builder: (context) {
                     return PopupMenuButton<Map<String, dynamic>>(
+                      enabled: isMobile,
                       padding: EdgeInsets.zero,
                       tooltip:
                           '选择国际冠码，'
@@ -402,6 +406,7 @@ class _LoginPageState extends State<LoginPage> {
                 const SizedBox(width: 6),
                 Expanded(
                   child: TextField(
+                    enabled: isMobile,
                     controller: _loginPageCtr.telTextController,
                     keyboardType: TextInputType.number,
                     inputFormatters: <TextInputFormatter>[
@@ -433,6 +438,7 @@ class _LoginPageState extends State<LoginPage> {
               children: [
                 Expanded(
                   child: TextField(
+                    enabled: isMobile,
                     controller: _loginPageCtr.smsCodeTextController,
                     decoration: const InputDecoration(
                       prefixIcon: Icon(Icons.sms_outlined),
@@ -447,9 +453,11 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 Obx(
                   () => TextButton.icon(
-                    onPressed: _loginPageCtr.smsSendCooldown > 0
-                        ? null
-                        : _loginPageCtr.sendSmsCode,
+                    onPressed: isMobile
+                        ? (_loginPageCtr.smsSendCooldown > 0
+                              ? null
+                              : _loginPageCtr.sendSmsCode)
+                        : null,
                     icon: const Icon(Icons.send),
                     label: Text(
                       _loginPageCtr.smsSendCooldown > 0
@@ -464,7 +472,7 @@ class _LoginPageState extends State<LoginPage> {
         ),
         const SizedBox(height: 20),
         OutlinedButton.icon(
-          onPressed: _loginPageCtr.loginBySmsCode,
+          onPressed: isMobile ? _loginPageCtr.loginBySmsCode : null,
           icon: const Icon(Icons.login),
           label: const Text('登录'),
         ),

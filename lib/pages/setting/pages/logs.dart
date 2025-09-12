@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/common/widgets/loading_widget/loading_widget.dart';
 import 'package:PiliPlus/services/logger.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
@@ -57,7 +58,7 @@ class _LogsPageState extends State<LogsPage> {
       return item
           .replaceAll(
             '============================== CATCHER 2 LOG ==============================',
-            'PiliPlus错误日志\n********************',
+            '${Constants.appName}错误日志\n********************',
           )
           .replaceAll('DEVICE INFO', '设备信息')
           .replaceAll('APP INFO', '应用信息')
@@ -133,9 +134,7 @@ class _LogsPageState extends State<LogsPage> {
                   copyLogs();
                   break;
                 case 'feedback':
-                  PageUtils.launchURL(
-                    'https://github.com/bggRGjQaUbCoE/PiliPlus/issues',
-                  );
+                  PageUtils.launchURL('${Constants.sourceCodeUrl}/issues');
                   break;
                 case 'clear':
                   clearLogsHandle();

@@ -34,7 +34,6 @@ import 'package:PiliPlus/utils/storage_key.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:PiliPlus/utils/video_utils.dart';
 import 'package:canvas_danmaku/canvas_danmaku.dart';
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:floating/floating.dart';
@@ -678,18 +677,12 @@ class HeaderControlState extends TripleState<HeaderControl> {
 
                       // update
                       if (!plPlayerController.tempPlayerConf) {
-                        final res = await Connectivity().checkConnectivity();
-                        if (res.contains(ConnectivityResult.wifi)) {
-                          setting.put(
-                            SettingBoxKey.defaultVideoQa,
-                            quality,
-                          );
-                        } else {
-                          setting.put(
-                            SettingBoxKey.defaultVideoQaCellular,
-                            quality,
-                          );
-                        }
+                        setting.put(
+                          await Utils.isWiFi
+                              ? SettingBoxKey.defaultVideoQa
+                              : SettingBoxKey.defaultVideoQaCellular,
+                          quality,
+                        );
                       }
                     },
                     // 可能包含会员解锁画质
@@ -755,18 +748,12 @@ class HeaderControlState extends TripleState<HeaderControl> {
 
                       // update
                       if (!plPlayerController.tempPlayerConf) {
-                        final res = await Connectivity().checkConnectivity();
-                        if (res.contains(ConnectivityResult.wifi)) {
-                          setting.put(
-                            SettingBoxKey.defaultAudioQa,
-                            quality,
-                          );
-                        } else {
-                          setting.put(
-                            SettingBoxKey.defaultAudioQaCellular,
-                            quality,
-                          );
-                        }
+                        setting.put(
+                          await Utils.isWiFi
+                              ? SettingBoxKey.defaultAudioQa
+                              : SettingBoxKey.defaultAudioQaCellular,
+                          quality,
+                        );
                       }
                     },
                     contentPadding: const EdgeInsets.only(left: 20, right: 20),

@@ -384,7 +384,7 @@ class UserInfoCard extends StatelessWidget {
                   children: [
                     if (relation != 0 && relation != 128) ...[
                       WidgetSpan(
-                        alignment: PlaceholderAlignment.top,
+                        alignment: PlaceholderAlignment.middle,
                         child: Icon(
                           Icons.sort,
                           size: 16,

@@ -143,7 +143,6 @@ class _FansPageState extends State<FansPage> {
           ),
           child: Row(
             spacing: 10,
-            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               NetworkImgLayer(
                 width: 45,
@@ -152,19 +151,20 @@ class _FansPageState extends State<FansPage> {
                 src: item.face,
               ),
               Column(
-                spacing: 4,
+                spacing: 3,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     item.uname!,
                     style: const TextStyle(fontSize: 14),
                   ),
-                  Text(
-                    item.sign ?? '',
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(fontSize: 13, color: theme.outline),
-                  ),
+                  if (item.sign != null)
+                    Text(
+                      item.sign!,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(fontSize: 13, color: theme.outline),
+                    ),
                 ],
               ),
             ],

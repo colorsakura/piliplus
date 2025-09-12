@@ -13,6 +13,9 @@ class StyleString {
 }
 
 class Constants {
+  static const appName = 'PiliPlus';
+  static const sourceCodeUrl = 'https://github.com/bggRGjQaUbCoE/PiliPlus';
+
   // 27eb53fc9058f8c3  移动端 Android
   // 4409e2ce8ffd12b8  HD版
   static const String appKey = 'dfca71928277209b';

@@ -1,9 +1,11 @@
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/http/init.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/global_data.dart';
+import 'package:PiliPlus/utils/permission_handler.dart';
 import 'package:PiliPlus/utils/storage_pref.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:dio/dio.dart';
@@ -12,7 +14,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:intl/intl.dart' show DateFormat;
 import 'package:live_photo_maker/live_photo_maker.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:saver_gallery/saver_gallery.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -106,7 +107,7 @@ class ImageUtils {
     required int height,
   }) async {
     try {
-      if (!await checkPermissionDependOnSdkInt(context)) {
+      if (Utils.isMobile && !await checkPermissionDependOnSdkInt(context)) {
         return false;
       }
       if (!silentDownImg) SmartDialog.showLoading(msg: '正在下载');
@@ -165,7 +166,9 @@ class ImageUtils {
     BuildContext context,
     List<String> imgList,
   ) async {
-    if (!await checkPermissionDependOnSdkInt(context)) return false;
+    if (Utils.isMobile && !await checkPermissionDependOnSdkInt(context)) {
+      return false;
+    }
     CancelToken? cancelToken;
     if (!silentDownImg) {
       cancelToken = CancelToken();
@@ -193,7 +196,7 @@ class ImageUtils {
             await SaverGallery.saveFile(
               filePath: filePath,
               fileName: name,
-              androidRelativePath: "Pictures/PiliPlus",
+              androidRelativePath: "Pictures/${Constants.appName}",
               skipIfExists: false,
             ).whenComplete(File(filePath).tryDel);
           }
@@ -271,7 +274,7 @@ class ImageUtils {
       result = await SaverGallery.saveImage(
         bytes,
         fileName: fileName,
-        androidRelativePath: "Pictures/PiliPlus",
+        androidRelativePath: "Pictures/${Constants.appName}",
         skipIfExists: false,
       );
       SmartDialog.dismiss();
@@ -313,7 +316,7 @@ class ImageUtils {
       result = await SaverGallery.saveFile(
         filePath: filePath,
         fileName: fileName,
-        androidRelativePath: "Pictures/PiliPlus",
+        androidRelativePath: "Pictures/${Constants.appName}",
         skipIfExists: false,
       ).whenComplete(file.tryDel);
     } else {

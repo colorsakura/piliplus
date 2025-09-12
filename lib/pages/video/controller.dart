@@ -49,7 +49,6 @@ import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/storage_pref.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:PiliPlus/utils/video_utils.dart';
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart' show Options;
 import 'package:easy_debounce/easy_throttle.dart';
 import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart';
@@ -1129,15 +1128,14 @@ class VideoDetailController extends GetxController
       _querySponsorBlock();
     }
     if (plPlayerController.cacheVideoQa == null) {
-      await Connectivity().checkConnectivity().then((res) {
-        plPlayerController
-          ..cacheVideoQa = res.contains(ConnectivityResult.wifi)
-              ? Pref.defaultVideoQa
-              : Pref.defaultVideoQaCellular
-          ..cacheAudioQa = res.contains(ConnectivityResult.wifi)
-              ? Pref.defaultAudioQa
-              : Pref.defaultAudioQaCellular;
-      });
+      final isWiFi = await Utils.isWiFi;
+      plPlayerController
+        ..cacheVideoQa = isWiFi
+            ? Pref.defaultVideoQa
+            : Pref.defaultVideoQaCellular
+        ..cacheAudioQa = isWiFi
+            ? Pref.defaultAudioQa
+            : Pref.defaultAudioQaCellular;
     }
 
     var result = await VideoHttp.videoUrl(

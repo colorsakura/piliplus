@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/common/widgets/pair.dart';
 import 'package:PiliPlus/utils/context_ext.dart';
 import 'package:PiliPlus/utils/storage.dart';
@@ -26,7 +27,7 @@ class WebDav {
     if (!_webdavDirectory.endsWith('/')) {
       _webdavDirectory += '/';
     }
-    _webdavDirectory += 'PiliPlus';
+    _webdavDirectory += Constants.appName;
 
     try {
       _client = null;

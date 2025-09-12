@@ -29,7 +29,7 @@ class LoginPageController extends GetxController
 
   late TabController tabController;
 
-  final Gt3FlutterPlugin captcha = Gt3FlutterPlugin();
+  late final Gt3FlutterPlugin captcha = Gt3FlutterPlugin();
 
   CaptchaDataModel captchaData = CaptchaDataModel();
   RxInt qrCodeLeftTime = 180.obs;

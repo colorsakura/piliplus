@@ -21,9 +21,9 @@ import 'package:PiliPlus/utils/accounts.dart';
 import 'package:PiliPlus/utils/danmaku_utils.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/storage_pref.dart';
+import 'package:PiliPlus/utils/utils.dart';
 import 'package:PiliPlus/utils/video_utils.dart';
 import 'package:canvas_danmaku/canvas_danmaku.dart';
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:easy_debounce/easy_throttle.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -74,7 +74,7 @@ class LiveRoomController extends GetxController {
   late final RxInt pageIndex = 0.obs;
   PageController? pageController;
 
-  int? currentQn;
+  int? currentQn = Utils.isMobile ? null : Pref.liveQuality;
   RxString currentQnDesc = ''.obs;
   final RxBool isPortrait = false.obs;
   late List<({int code, String desc})> acceptQnList = [];
@@ -126,13 +126,9 @@ class LiveRoomController extends GetxController {
   }
 
   Future<void> queryLiveUrl() async {
-    if (currentQn == null) {
-      await Connectivity().checkConnectivity().then((res) {
-        currentQn = res.contains(ConnectivityResult.wifi)
-            ? Pref.liveQuality
-            : Pref.liveQualityCellular;
-      });
-    }
+    currentQn ??= await Utils.isWiFi
+        ? Pref.liveQuality
+        : Pref.liveQualityCellular;
     var res = await LiveHttp.liveRoomInfo(
       roomId: roomId,
       qn: currentQn,

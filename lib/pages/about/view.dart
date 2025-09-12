@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:PiliPlus/build_config.dart';
+import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/common/widgets/dialog/dialog.dart';
 import 'package:PiliPlus/common/widgets/list_tile.dart';
 import 'package:PiliPlus/pages/mine/controller.dart';
@@ -40,8 +41,6 @@ class AboutPage extends StatefulWidget {
 }
 
 class _AboutPageState extends State<AboutPage> {
-  final String _sourceCodeUrl = 'https://github.com/bggRGjQaUbCoE/PiliPlus';
-
   RxString currentVersion = ''.obs;
   RxString cacheSize = ''.obs;
 
@@ -124,7 +123,7 @@ class _AboutPageState extends State<AboutPage> {
           ),
           ListTile(
             title: Text(
-              'PiliPlus',
+              Constants.appName,
               textAlign: TextAlign.center,
               style: theme.textTheme.titleMedium!.copyWith(height: 2),
             ),
@@ -165,7 +164,7 @@ Commit Hash: ${BuildConfig.commitHash}''',
             ),
             leading: const Icon(Icons.info_outline),
             onTap: () => PageUtils.launchURL(
-              'https://github.com/bggRGjQaUbCoE/PiliPlus/commit/${BuildConfig.commitHash}',
+              '${Constants.sourceCodeUrl}/commit/${BuildConfig.commitHash}',
             ),
             onLongPress: () => Utils.copyText(BuildConfig.commitHash),
           ),
@@ -175,10 +174,10 @@ Commit Hash: ${BuildConfig.commitHash}''',
             color: theme.colorScheme.outlineVariant,
           ),
           ListTile(
-            onTap: () => PageUtils.launchURL(_sourceCodeUrl),
+            onTap: () => PageUtils.launchURL(Constants.sourceCodeUrl),
             leading: const Icon(Icons.code),
             title: const Text('Source Code'),
-            subtitle: Text(_sourceCodeUrl, style: subTitleStyle),
+            subtitle: Text(Constants.sourceCodeUrl, style: subTitleStyle),
           ),
           if (Platform.isAndroid)
             ListTile(
@@ -192,7 +191,8 @@ Commit Hash: ${BuildConfig.commitHash}''',
               ),
             ),
           ListTile(
-            onTap: () => PageUtils.launchURL('$_sourceCodeUrl/issues'),
+            onTap: () =>
+                PageUtils.launchURL('${Constants.sourceCodeUrl}/issues'),
             leading: const Icon(Icons.feedback_outlined),
             title: const Text('问题反馈'),
             trailing: Icon(

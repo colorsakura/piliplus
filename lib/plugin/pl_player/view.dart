@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'dart:io';
-import 'dart:math';
+import 'dart:math' as math;
 import 'dart:ui' as ui;
 
 import 'package:PiliPlus/common/constants.dart';
@@ -46,7 +46,6 @@ import 'package:PiliPlus/utils/image_utils.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/storage_key.dart';
 import 'package:PiliPlus/utils/utils.dart';
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:easy_debounce/easy_throttle.dart';
 import 'package:fl_chart/fl_chart.dart';
@@ -247,9 +246,6 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
   }
 
   Future<void> setVolume(double value) async {
-    if (plPlayerController.volume.value == value) {
-      return;
-    }
     plPlayerController.setVolume(value);
     _volumeIndicator.value = true;
     _volumeInterceptEventStream.value = true;
@@ -454,7 +450,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                 width: widgetWidth,
                 height: 30,
                 icon: Transform.rotate(
-                  angle: pi / 2,
+                  angle: math.pi / 2,
                   child: const Icon(
                     MdiIcons.viewHeadline,
                     semanticLabel: '分段信息',
@@ -696,18 +692,12 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
 
                       // update
                       if (!plPlayerController.tempPlayerConf) {
-                        final res = await Connectivity().checkConnectivity();
-                        if (res.contains(ConnectivityResult.wifi)) {
-                          GStorage.setting.put(
-                            SettingBoxKey.defaultVideoQa,
-                            quality,
-                          );
-                        } else {
-                          GStorage.setting.put(
-                            SettingBoxKey.defaultVideoQaCellular,
-                            quality,
-                          );
-                        }
+                        GStorage.setting.put(
+                          await Utils.isWiFi
+                              ? SettingBoxKey.defaultVideoQa
+                              : SettingBoxKey.defaultVideoQaCellular,
+                          quality,
+                        );
                       }
                     },
                     child: Text(
@@ -1143,15 +1133,19 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
         case LogicalKeyboardKey.space:
           onDoubleTapCenter();
           break;
+
         case LogicalKeyboardKey.keyF:
           plPlayerController.triggerFullScreen(status: !isFullScreen);
           break;
+
         case LogicalKeyboardKey.arrowLeft when (!plPlayerController.isLive):
           onDoubleTapSeekBackward();
           break;
+
         case LogicalKeyboardKey.arrowRight when (!plPlayerController.isLive):
           onDoubleTapSeekForward();
           break;
+
         case LogicalKeyboardKey.escape:
           if (isFullScreen) {
             plPlayerController.triggerFullScreen(status: false);
@@ -1159,12 +1153,70 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
             Get.back();
           }
           break;
+
         case LogicalKeyboardKey.keyD:
           final newVal = !plPlayerController.enableShowDanmaku.value;
           plPlayerController.enableShowDanmaku.value = newVal;
           if (!plPlayerController.tempPlayerConf) {
             GStorage.setting.put(SettingBoxKey.enableShowDanmaku, newVal);
           }
+          break;
+
+        case LogicalKeyboardKey.arrowUp:
+          final volume = math.min(
+            1.0,
+            plPlayerController.volume.value + 0.1,
+          );
+          setVolume(volume);
+          break;
+
+        case LogicalKeyboardKey.arrowDown:
+          final volume = math.max(
+            0.0,
+            plPlayerController.volume.value - 0.1,
+          );
+          setVolume(volume);
+          break;
+
+        case LogicalKeyboardKey.keyM:
+          final isMuted = !plPlayerController.isMuted;
+          plPlayerController.videoPlayerController!.setVolume(
+            isMuted ? 0 : plPlayerController.volume.value * 100,
+          );
+          plPlayerController.isMuted = isMuted;
+          SmartDialog.showToast('${isMuted ? '' : '取消'}静音');
+          break;
+
+        case LogicalKeyboardKey.keyQ when (!plPlayerController.isLive):
+          introController.actionLikeVideo();
+          break;
+
+        case LogicalKeyboardKey.keyW when (!plPlayerController.isLive):
+          introController.actionCoinVideo();
+          break;
+
+        case LogicalKeyboardKey.keyE when (!plPlayerController.isLive):
+          introController.actionFavVideo(isQuick: true);
+          break;
+
+        case LogicalKeyboardKey.keyR when (!plPlayerController.isLive):
+          introController.viewLater();
+          break;
+
+        case LogicalKeyboardKey.bracketLeft when (!plPlayerController.isLive):
+          if (!introController.prevPlay()) {
+            SmartDialog.showToast('已经是第一集了');
+          }
+          break;
+
+        case LogicalKeyboardKey.bracketRight when (!plPlayerController.isLive):
+          if (!introController.nextPlay()) {
+            SmartDialog.showToast('已经是最后一集了');
+          }
+          break;
+
+        case LogicalKeyboardKey.enter when (!plPlayerController.isLive):
+          widget.videoDetailController?.showShootDanmakuSheet();
           break;
       }
     }
@@ -2136,7 +2188,7 @@ Widget buildSeekPreviewWidget(
         double height = 27 * scale;
         final compatHeight = maxHeight - 140;
         if (compatHeight > 50) {
-          height = min(height, compatHeight);
+          height = math.min(height, compatHeight);
         }
 
         final int imgXLen = data.imgXLen;

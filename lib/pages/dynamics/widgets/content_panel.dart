@@ -48,7 +48,7 @@ Widget content(
               TextSpan(
                 children: [
                   WidgetSpan(
-                    alignment: PlaceholderAlignment.bottom,
+                    alignment: PlaceholderAlignment.middle,
                     child: Padding(
                       padding: const EdgeInsets.only(right: 4),
                       child: Icon(

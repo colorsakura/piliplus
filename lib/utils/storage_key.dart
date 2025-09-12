@@ -135,7 +135,8 @@ class SettingBoxKey {
       showFsScreenshotBtn = 'showFsScreenshotBtn',
       showFsLockBtn = 'showFsLockBtn',
       silentDownImg = 'silentDownImg',
-      showMemberShop = 'showMemberShop';
+      showMemberShop = 'showMemberShop',
+      minimizeOnExit = 'minimizeOnExit';
 
   static const String subtitlePreferenceV2 = 'subtitlePreferenceV2',
       enableDragSubtitle = 'enableDragSubtitle',

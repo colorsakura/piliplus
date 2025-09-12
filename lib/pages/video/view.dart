@@ -35,6 +35,7 @@ import 'package:PiliPlus/pages/video/reply/controller.dart';
 import 'package:PiliPlus/pages/video/reply/view.dart';
 import 'package:PiliPlus/pages/video/reply_reply/view.dart';
 import 'package:PiliPlus/pages/video/view_point/view.dart';
+import 'package:PiliPlus/pages/video/widgets/focus.dart';
 import 'package:PiliPlus/pages/video/widgets/header_control.dart';
 import 'package:PiliPlus/plugin/pl_player/controller.dart';
 import 'package:PiliPlus/plugin/pl_player/models/fullscreen_mode.dart';
@@ -59,8 +60,7 @@ import 'package:floating/floating.dart';
 import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter/services.dart'
-    show SystemUiOverlayStyle, KeyDownEvent, LogicalKeyboardKey;
+import 'package:flutter/services.dart' show SystemUiOverlayStyle;
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart' hide ContextExtensionss;
@@ -1506,19 +1506,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
     } else {
       child = autoChoose(childWhenDisabledAlmostSquare);
     }
-    child = Focus(
-      onKeyEvent: (node, event) {
-        if (event is KeyDownEvent &&
-            (event.logicalKey == LogicalKeyboardKey.arrowLeft ||
-                event.logicalKey == LogicalKeyboardKey.arrowRight ||
-                event.logicalKey == LogicalKeyboardKey.arrowUp ||
-                event.logicalKey == LogicalKeyboardKey.arrowDown)) {
-          return KeyEventResult.handled;
-        }
-        return KeyEventResult.ignored;
-      },
-      child: child,
-    );
+    child = focus(child);
     return videoDetailController.plPlayerController.darkVideoPage
         ? Theme(data: themeData, child: child)
         : child;

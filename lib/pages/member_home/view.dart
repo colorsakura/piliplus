@@ -369,7 +369,7 @@ class _MemberHomeState extends State<MemberHome>
                       style: TextStyle(color: color),
                     ),
                     WidgetSpan(
-                      alignment: PlaceholderAlignment.top,
+                      alignment: PlaceholderAlignment.middle,
                       child: Icon(
                         Icons.arrow_forward_ios,
                         size: 14,

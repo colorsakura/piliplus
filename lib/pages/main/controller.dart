@@ -58,6 +58,7 @@ class MainController extends GetxController
   late final optTabletNav = Pref.optTabletNav;
 
   late bool directExitOnBack = Pref.directExitOnBack;
+  late bool minimizeOnExit = Pref.minimizeOnExit;
 
   static const _period = 5 * 60 * 1000;
   late int _lastSelectTime = 0;
