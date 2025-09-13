@@ -431,7 +431,11 @@ class UgcIntroController extends CommonIntroController with ReloadMixin {
       SmartDialog.showToast('账号未登录');
       return;
     }
-    int? mid = videoDetail.value.owner?.mid;
+    final videoDetail = this.videoDetail.value;
+    if (videoDetail.staff?.isNotEmpty == true) {
+      return;
+    }
+    int? mid = videoDetail.owner?.mid;
     if (mid == null) {
       return;
     }

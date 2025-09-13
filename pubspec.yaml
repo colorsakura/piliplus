@@ -213,6 +213,10 @@ dependencies:
   window_manager: ^0.5.1
   tray_manager: ^0.5.1
   file_picker: ^10.3.3
+  super_sliver_list:
+    git:
+      url: https://github.com/bggRGjQaUbCoE/super_sliver_list.git
+      ref: mod
 
   vector_math: any
   fixnum: any

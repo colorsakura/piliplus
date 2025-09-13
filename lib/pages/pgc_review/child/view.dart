@@ -83,11 +83,13 @@ class _PgcReviewChildPageState extends State<PgcReviewChildPage>
     );
     return switch (loadingState) {
       Loading() => SliverToBoxAdapter(
-        child: ListView.builder(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          itemBuilder: (context, index) => const VideoReplySkeleton(),
-          itemCount: 8,
+        child: IgnorePointer(
+          child: ListView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemBuilder: (context, index) => const VideoReplySkeleton(),
+            itemCount: 8,
+          ),
         ),
       ),
       Success(:var response) =>

@@ -1,3 +1,5 @@
+import 'dart:io' show Platform;
+
 import 'package:flutter/material.dart';
 
 class CustomSliverPersistentHeaderDelegate
@@ -26,7 +28,17 @@ class CustomSliverPersistentHeaderDelegate
     //overlapsContent：SliverPersistentHeader覆盖其他子组件返回true，否则返回false
     return bgColor != null
         ? DecoratedBox(
-            decoration: BoxDecoration(color: bgColor),
+            decoration: BoxDecoration(
+              color: bgColor,
+              boxShadow: Platform.isIOS
+                  ? null
+                  : [
+                      BoxShadow(
+                        color: bgColor!,
+                        offset: const Offset(0, -1),
+                      ),
+                    ],
+            ),
             child: child,
           )
         : child;

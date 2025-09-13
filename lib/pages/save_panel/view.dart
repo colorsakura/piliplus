@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 import 'dart:ui';
 
+import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/common/widgets/button/icon_button.dart';
 import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
 import 'package:PiliPlus/grpc/bilibili/main/community/reply/v1.pb.dart'
@@ -271,7 +272,7 @@ class _SavePanelState extends State<SavePanel> {
   }
 
   Future<void> _onSaveOrSharePic([bool isShare = false]) async {
-    if (!isShare) {
+    if (!isShare && Utils.isMobile) {
       if (mounted && !await ImageUtils.checkPermissionDependOnSdkInt(context)) {
         return;
       }
@@ -285,7 +286,7 @@ class _SavePanelState extends State<SavePanel> {
       ByteData? byteData = await image.toByteData(format: ImageByteFormat.png);
       Uint8List pngBytes = byteData!.buffer.asUint8List();
       String picName =
-          "plpl_reply_${DateFormat('yyyyMMddHHmmss').format(DateTime.now())}";
+          "${Constants.appName}_${DateFormat('yyyyMMddHHmmss').format(DateTime.now())}";
       if (isShare) {
         Get.back();
         SmartDialog.dismiss();

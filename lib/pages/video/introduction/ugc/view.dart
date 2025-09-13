@@ -171,27 +171,13 @@ class _UgcIntroPanelState extends TripleState<UgcIntroPanel>
                   const SizedBox(height: 8),
                   if (isLoading)
                     _buildVideoTitle(theme, videoDetail)
+                  else if (isHorizontal && Utils.isDesktop)
+                    _buildTitle(theme, videoDetail, isExpand: true)
                   else
                     ExpandablePanel(
                       controller: introController.expandableCtr,
-                      collapsed: GestureDetector(
-                        onLongPress: () {
-                          Feedback.forLongPress(context);
-                          Utils.copyText(videoDetail.title ?? '');
-                        },
-                        child: _buildVideoTitle(theme, videoDetail),
-                      ),
-                      expanded: GestureDetector(
-                        onLongPress: () {
-                          Feedback.forLongPress(context);
-                          Utils.copyText(videoDetail.title ?? '');
-                        },
-                        child: _buildVideoTitle(
-                          theme,
-                          videoDetail,
-                          isExpand: true,
-                        ),
-                      ),
+                      collapsed: _buildTitle(theme, videoDetail),
+                      expanded: _buildTitle(theme, videoDetail, isExpand: true),
                       theme: expandTheme,
                     ),
                   const SizedBox(height: 8),
@@ -228,48 +214,19 @@ class _UgcIntroPanelState extends TripleState<UgcIntroPanel>
                       ),
                     ),
                   ],
-                  ExpandablePanel(
-                    controller: introController.expandableCtr,
-                    collapsed: const SizedBox.shrink(),
-                    expanded: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const SizedBox(height: 8),
-                        GestureDetector(
-                          onTap: () => Utils.copyText('${videoDetail.bvid}'),
-                          child: Text(
-                            videoDetail.bvid ?? '',
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: theme.colorScheme.secondary,
-                            ),
-                          ),
-                        ),
-                        if (videoDetail.descV2?.isNotEmpty == true) ...[
-                          const SizedBox(height: 8),
-                          SelectableText.rich(
-                            style: const TextStyle(
-                              height: 1.4,
-                            ),
-                            TextSpan(
-                              children: [
-                                buildContent(theme, videoDetail),
-                              ],
-                            ),
-                          ),
-                        ],
-                        Obx(() {
-                          final videoTags = introController.videoTags.value;
-                          if (videoTags.isNullOrEmpty) {
-                            return const SizedBox.shrink();
-                          }
-                          return _buildTags(videoTags!);
-                        }),
-                      ],
+                  if (isHorizontal && Utils.isDesktop)
+                    ..._infos(theme, videoDetail)
+                  else
+                    ExpandablePanel(
+                      controller: introController.expandableCtr,
+                      collapsed: const SizedBox.shrink(),
+                      expanded: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: _infos(theme, videoDetail),
+                      ),
+                      theme: expandTheme,
                     ),
-                    theme: expandTheme,
-                  ),
                   Obx(
                     () => introController.status.value
                         ? const SizedBox.shrink()
@@ -338,6 +295,54 @@ class _UgcIntroPanelState extends TripleState<UgcIntroPanel>
       ),
     );
   }
+
+  Widget _buildTitle(
+    ThemeData theme,
+    VideoDetailData videoDetail, {
+    bool isExpand = false,
+  }) => GestureDetector(
+    onLongPress: () {
+      Feedback.forLongPress(context);
+      Utils.copyText(videoDetail.title ?? '');
+    },
+    child: _buildVideoTitle(
+      theme,
+      videoDetail,
+      isExpand: isExpand,
+    ),
+  );
+
+  List<Widget> _infos(ThemeData theme, VideoDetailData videoDetail) => [
+    const SizedBox(height: 8),
+    GestureDetector(
+      onTap: () => Utils.copyText('${videoDetail.bvid}'),
+      child: Text(
+        videoDetail.bvid ?? '',
+        style: TextStyle(
+          fontSize: 14,
+          color: theme.colorScheme.secondary,
+        ),
+      ),
+    ),
+    if (videoDetail.descV2?.isNotEmpty == true) ...[
+      const SizedBox(height: 8),
+      SelectableText.rich(
+        style: const TextStyle(height: 1.4),
+        TextSpan(
+          children: [
+            buildContent(theme, videoDetail),
+          ],
+        ),
+      ),
+    ],
+    Obx(() {
+      final videoTags = introController.videoTags.value;
+      if (videoTags.isNullOrEmpty) {
+        return const SizedBox.shrink();
+      }
+      return _buildTags(videoTags!);
+    }),
+  ];
 
   WidgetSpan _labelWidget(String text, Color bgColor, Color textColor) {
     return WidgetSpan(

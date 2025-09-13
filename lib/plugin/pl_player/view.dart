@@ -23,6 +23,7 @@ import 'package:PiliPlus/models_new/video/video_shot/data.dart';
 import 'package:PiliPlus/pages/common/common_intro_controller.dart';
 import 'package:PiliPlus/pages/video/controller.dart';
 import 'package:PiliPlus/pages/video/introduction/pgc/controller.dart';
+import 'package:PiliPlus/pages/video/introduction/ugc/controller.dart';
 import 'package:PiliPlus/pages/video/post_panel/popup_menu_text.dart';
 import 'package:PiliPlus/pages/video/post_panel/view.dart';
 import 'package:PiliPlus/plugin/pl_player/controller.dart';
@@ -1201,6 +1202,12 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
 
         case LogicalKeyboardKey.keyR when (!plPlayerController.isLive):
           introController.viewLater();
+          break;
+
+        case LogicalKeyboardKey.keyG when (!plPlayerController.isLive):
+          if (introController case UgcIntroController ugcCtr) {
+            ugcCtr.actionRelationMod(context);
+          }
           break;
 
         case LogicalKeyboardKey.bracketLeft when (!plPlayerController.isLive):

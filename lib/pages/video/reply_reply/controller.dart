@@ -11,7 +11,7 @@ import 'package:fixnum/fixnum.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_navigation/src/dialog/dialog_route.dart';
-import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
+import 'package:super_sliver_list/super_sliver_list.dart';
 
 class VideoReplyReplyController extends ReplyController
     with GetSingleTickerProviderStateMixin {
@@ -26,19 +26,19 @@ class VideoReplyReplyController extends ReplyController
   });
   final int? dialog;
   final bool isDialogue;
-  final itemScrollCtr = ItemScrollController();
-  bool hasRoot = false;
   int? id;
   // 视频aid 请求时使用的oid
   int oid;
   // rpid 请求楼中楼回复
   int rpid;
-  int replyType; // = ReplyType.video;
+  int replyType;
 
-  ReplyInfo? firstFloor;
+  bool hasRoot = false;
+  late final Rx<ReplyInfo?> firstFloor = Rx<ReplyInfo?>(null);
 
   int? index;
-  AnimationController? controller;
+  AnimationController? animController;
+  final listController = ListController();
 
   late final horizontalPreview = Pref.horizontalPreview;
 
@@ -69,27 +69,28 @@ class VideoReplyReplyController extends ReplyController
     // reply2Reply // isDialogue.not
     if (data is DetailListReply) {
       count.value = data.root.count.toInt();
-      if (isRefresh && firstFloor == null) {
-        firstFloor = data.root;
+      if (isRefresh && !hasRoot) {
+        firstFloor.value ??= data.root;
       }
       if (id != null) {
         final id64 = Int64(id!);
         final index = data.root.replies.indexWhere((item) => item.id == id64);
         if (index != -1) {
           this.index = index;
-          controller = AnimationController(
+          animController = AnimationController(
             duration: const Duration(milliseconds: 300),
             vsync: this,
           );
           WidgetsBinding.instance.addPostFrameCallback((_) async {
             try {
-              itemScrollCtr.jumpTo(
-                index: hasRoot ? index + 3 : index + 1,
+              listController.jumpToItem(
+                index: index,
+                scrollController: scrollController,
                 alignment: 0.25,
               );
               await Future.delayed(
                 const Duration(milliseconds: 800),
-                controller?.forward,
+                animController?.forward,
               );
               this.index = null;
             } catch (_) {}
@@ -200,7 +201,8 @@ class VideoReplyReplyController extends ReplyController
 
   @override
   void onClose() {
-    controller?.dispose();
+    animController?.dispose();
+    listController.dispose();
     super.dispose();
   }
 }

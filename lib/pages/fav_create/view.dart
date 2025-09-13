@@ -1,4 +1,4 @@
-import 'package:PiliPlus/common/widgets/loading_widget/http_error.dart';
+import 'package:PiliPlus/common/widgets/loading_widget/loading_widget.dart';
 import 'package:PiliPlus/http/fav.dart';
 import 'package:PiliPlus/http/msg.dart';
 import 'package:PiliPlus/models_new/fav/fav_folder/list.dart';
@@ -101,17 +101,7 @@ class _CreateFavPageState extends State<CreateFavPage> {
           ? _titleController.text.isNotEmpty
                 ? _buildBody(theme)
                 : _errMsg?.isNotEmpty == true
-                ? Center(
-                    child: CustomScrollView(
-                      shrinkWrap: true,
-                      slivers: [
-                        HttpError(
-                          errMsg: _errMsg,
-                          onReload: _getFolderInfo,
-                        ),
-                      ],
-                    ),
-                  )
+                ? scrollErrorWidget(errMsg: _errMsg, onReload: _getFolderInfo)
                 : const Center(child: CircularProgressIndicator())
           : _buildBody(theme),
     );

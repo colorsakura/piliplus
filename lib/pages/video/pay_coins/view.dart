@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math' as math;
 
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/global_data.dart';
@@ -221,15 +222,17 @@ class _PayCoinsPageState extends State<PayCoinsPage>
 
   @override
   Widget build(BuildContext context) {
-    bool isPortrait = MediaQuery.sizeOf(context).isPortrait;
+    final size = MediaQuery.sizeOf(context);
+    final isPortrait = size.isPortrait;
     return isPortrait
         ? _buildBody(isPortrait)
-        : Row(
-            children: [
-              const Spacer(),
-              Expanded(flex: 3, child: _buildBody(isPortrait)),
-              const Spacer(),
-            ],
+        : Center(
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                maxWidth: math.min(525, size.width * 0.6),
+              ),
+              child: _buildBody(isPortrait),
+            ),
           );
   }
 

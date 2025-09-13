@@ -846,7 +846,9 @@ class _InteractiveViewerState extends State<InteractiveViewer>
         _currentRotation = desiredRotation;
 
       case _GestureType.pan:
-        assert(_referenceFocalPoint != null);
+        if (_referenceFocalPoint == null) {
+          return;
+        }
         // details may have a change in scale here when scaleEnabled is false.
         // In an effort to keep the behavior similar whether or not scaleEnabled
         // is true, these gestures are thrown away.

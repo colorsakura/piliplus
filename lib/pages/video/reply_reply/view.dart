@@ -1,5 +1,6 @@
 import 'package:PiliPlus/common/skeleton/video_reply.dart';
-import 'package:PiliPlus/common/widgets/loading_widget/loading_widget.dart';
+import 'package:PiliPlus/common/widgets/custom_sliver_persistent_header_delegate.dart';
+import 'package:PiliPlus/common/widgets/loading_widget/http_error.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/grpc/bilibili/main/community/reply/v1.pb.dart'
     show ReplyInfo, Mode;
@@ -13,7 +14,7 @@ import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart' hide ContextExtensionss;
-import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
+import 'package:super_sliver_list/super_sliver_list.dart';
 
 class VideoReplyReplyPanel extends CommonSlidePage {
   const VideoReplyReplyPanel({
@@ -48,14 +49,10 @@ class VideoReplyReplyPanel extends CommonSlidePage {
 class _VideoReplyReplyPanelState
     extends CommonSlidePageState<VideoReplyReplyPanel> {
   late VideoReplyReplyController _controller;
-  late final itemPositionsListener = ItemPositionsListener.create();
   late final _key = GlobalKey<ScaffoldState>();
-  late final _listKey = GlobalKey();
   late final _tag = Utils.makeHeroTag(
     '${widget.rpid}${widget.dialog}${widget.isDialogue}',
   );
-
-  ReplyInfo? get firstFloor => widget.firstFloor ?? _controller.firstFloor;
 
   bool get _horizontalPreview =>
       _controller.horizontalPreview && context.isLandscape;
@@ -138,163 +135,138 @@ class _VideoReplyReplyPanelState
     );
   }
 
+  ReplyInfo? get firstFloor =>
+      widget.firstFloor ?? _controller.firstFloor.value;
+
   @override
   Widget buildList(ThemeData theme) {
     return refreshIndicator(
       onRefresh: _controller.onRefresh,
-      child: Obx(
-        () => Stack(
-          clipBehavior: Clip.none,
-          children: [
-            ScrollablePositionedList.builder(
-              key: _listKey,
-              itemPositionsListener: itemPositionsListener,
-              itemCount: _itemCount(_controller.loadingState.value),
-              itemScrollController: _controller.itemScrollCtr,
-              physics: const AlwaysScrollableScrollPhysics(),
-              itemBuilder: (context, index) {
-                if (widget.isDialogue) {
-                  return _buildBody(
-                    theme,
-                    _controller.loadingState.value,
-                    index,
-                  );
-                } else if (firstFloor != null) {
-                  if (index == 0) {
-                    return ReplyItemGrpc(
-                      replyItem: firstFloor!,
-                      replyLevel: 2,
-                      needDivider: false,
-                      onReply: (replyItem) => _controller.onReply(
-                        context,
-                        replyItem: replyItem,
-                        index: -1,
-                      ),
-                      upMid: _controller.upMid,
-                      onViewImage: widget.onViewImage,
-                      onDismissed: widget.onDismissed,
-                      callback: _imageCallback,
-                      onCheckReply: (item) =>
-                          _controller.onCheckReply(item, isManual: true),
-                    );
-                  } else if (index == 1) {
-                    return Divider(
-                      height: 20,
-                      color: theme.dividerColor.withValues(alpha: 0.1),
-                      thickness: 6,
-                    );
-                  } else if (index == 2) {
-                    return _sortWidget(theme);
-                  } else {
-                    return _buildBody(
-                      theme,
-                      _controller.loadingState.value,
-                      index - 3,
-                    );
-                  }
-                } else {
-                  if (index == 0) {
-                    return _sortWidget(theme);
-                  } else {
-                    return _buildBody(
-                      theme,
-                      _controller.loadingState.value,
-                      index - 1,
-                    );
-                  }
+      child: CustomScrollView(
+        controller: _controller.scrollController,
+        slivers: [
+          if (!widget.isDialogue) ...[
+            if (widget.firstFloor case final firstFloor?)
+              _header(theme, firstFloor)
+            else
+              Obx(() {
+                final firstFloor = _controller.firstFloor.value;
+                if (firstFloor == null) {
+                  return const SliverToBoxAdapter();
                 }
-              },
-            ),
-            if (!widget.isDialogue && _controller.loadingState.value.isSuccess)
-              _header(theme),
+                return _header(theme, firstFloor);
+              }),
+            _sortWidget(theme),
           ],
+          Obx(() => _buildBody(theme, _controller.loadingState.value)),
+        ],
+      ),
+    );
+  }
+
+  Widget _header(ThemeData theme, ReplyInfo firstFloor) {
+    return SliverMainAxisGroup(
+      slivers: [
+        SliverToBoxAdapter(
+          child: ReplyItemGrpc(
+            replyItem: firstFloor,
+            replyLevel: 2,
+            needDivider: false,
+            onReply: (replyItem) => _controller.onReply(
+              context,
+              replyItem: replyItem,
+              index: -1,
+            ),
+            upMid: _controller.upMid,
+            onViewImage: widget.onViewImage,
+            onDismissed: widget.onDismissed,
+            callback: _imageCallback,
+            onCheckReply: (item) =>
+                _controller.onCheckReply(item, isManual: true),
+          ),
+        ),
+        SliverToBoxAdapter(
+          child: Divider(
+            height: 20,
+            color: theme.dividerColor.withValues(alpha: 0.1),
+            thickness: 6,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _sortWidget(ThemeData theme) {
+    return SliverPersistentHeader(
+      pinned: true,
+      delegate: CustomSliverPersistentHeaderDelegate(
+        extent: 40,
+        bgColor: theme.colorScheme.surface,
+        child: Container(
+          height: 40,
+          padding: const EdgeInsets.fromLTRB(12, 0, 6, 0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Obx(
+                () {
+                  final count = _controller.count.value;
+                  return count != -1
+                      ? Text(
+                          '相关回复共${NumUtils.numFormat(count)}条',
+                          style: const TextStyle(fontSize: 13),
+                        )
+                      : const SizedBox.shrink();
+                },
+              ),
+              SizedBox(
+                height: 35,
+                child: TextButton.icon(
+                  onPressed: _controller.queryBySort,
+                  icon: Icon(
+                    Icons.sort,
+                    size: 16,
+                    color: theme.colorScheme.secondary,
+                  ),
+                  label: Obx(
+                    () => Text(
+                      _controller.mode.value == Mode.MAIN_LIST_HOT
+                          ? '按热度'
+                          : '按时间',
+                      style: TextStyle(
+                        fontSize: 13,
+                        color: theme.colorScheme.secondary,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
 
-  Widget _header(ThemeData theme) => firstFloor == null
-      ? _sortWidget(theme)
-      : ValueListenableBuilder<Iterable<ItemPosition>>(
-          valueListenable: itemPositionsListener.itemPositions,
-          builder: (context, positions, child) {
-            int min = -1;
-            if (positions.isNotEmpty) {
-              min = positions
-                  .where(
-                    (ItemPosition position) => position.itemTrailingEdge > 0,
-                  )
-                  .reduce(
-                    (ItemPosition min, ItemPosition position) =>
-                        position.itemTrailingEdge < min.itemTrailingEdge
-                        ? position
-                        : min,
-                  )
-                  .index;
-            }
-            return min >= 2 ? _sortWidget(theme) : const SizedBox.shrink();
-          },
-        );
-
-  Widget _sortWidget(ThemeData theme) => Container(
-    height: 40,
-    color: theme.colorScheme.surface,
-    padding: const EdgeInsets.fromLTRB(12, 0, 6, 0),
-    child: Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Obx(
-          () {
-            final count = _controller.count.value;
-            return count != -1
-                ? Text(
-                    '相关回复共${NumUtils.numFormat(count)}条',
-                    style: const TextStyle(fontSize: 13),
-                  )
-                : const SizedBox.shrink();
-          },
-        ),
-        SizedBox(
-          height: 35,
-          child: TextButton.icon(
-            onPressed: _controller.queryBySort,
-            icon: Icon(
-              Icons.sort,
-              size: 16,
-              color: theme.colorScheme.secondary,
-            ),
-            label: Obx(
-              () => Text(
-                _controller.mode.value == Mode.MAIN_LIST_HOT ? '按热度' : '按时间',
-                style: TextStyle(
-                  fontSize: 13,
-                  color: theme.colorScheme.secondary,
-                ),
-              ),
-            ),
-          ),
-        ),
-      ],
-    ),
-  );
-
   Widget _buildBody(
     ThemeData theme,
     LoadingState<List<ReplyInfo>?> loadingState,
-    int index,
   ) {
     return switch (loadingState) {
-      Loading() => IgnorePointer(
-        child: ListView.builder(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          itemBuilder: (context, index) => const VideoReplySkeleton(),
-          itemCount: 8,
+      Loading() => SliverToBoxAdapter(
+        child: IgnorePointer(
+          child: ListView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemBuilder: (context, index) => const VideoReplySkeleton(),
+            itemCount: 8,
+          ),
         ),
       ),
-      Success(:var response) => Builder(
-        builder: (context) {
-          if (index == response!.length) {
+      Success(:var response) => SuperSliverList.builder(
+        listController: _controller.listController,
+        itemBuilder: (context, index) {
+          if (index == response.length) {
             _controller.onLoadMore();
             return Container(
               height: 125,
@@ -311,30 +283,30 @@ class _VideoReplyReplyPanelState
                 ),
               ),
             );
-          } else {
-            final child = _replyItem(response[index], index);
-            if (_controller.index != null && _controller.index == index) {
-              colorAnimation ??= ColorTween(
-                begin: theme.colorScheme.onInverseSurface,
-                end: theme.colorScheme.surface,
-              ).animate(_controller.controller!);
-              return AnimatedBuilder(
-                animation: colorAnimation!,
-                builder: (context, _) {
-                  return ColoredBox(
-                    color:
-                        colorAnimation!.value ??
-                        theme.colorScheme.onInverseSurface,
-                    child: child,
-                  );
-                },
-              );
-            }
-            return child;
           }
+          final child = _replyItem(response[index], index);
+          if (_controller.index == index) {
+            colorAnimation ??= ColorTween(
+              begin: theme.colorScheme.onInverseSurface,
+              end: theme.colorScheme.surface,
+            ).animate(_controller.animController!);
+            return AnimatedBuilder(
+              animation: colorAnimation!,
+              builder: (context, _) {
+                return ColoredBox(
+                  color:
+                      colorAnimation!.value ??
+                      theme.colorScheme.onInverseSurface,
+                  child: child,
+                );
+              },
+            );
+          }
+          return child;
         },
+        itemCount: response!.length + 1,
       ),
-      Error(:var errMsg) => errorWidget(
+      Error(:var errMsg) => HttpError(
         errMsg: errMsg,
         onReload: _controller.onReload,
       ),
@@ -366,16 +338,5 @@ class _VideoReplyReplyPanelState
       callback: _imageCallback,
       onCheckReply: (item) => _controller.onCheckReply(item, isManual: true),
     );
-  }
-
-  int _itemCount(LoadingState<List<ReplyInfo>?> loadingState) {
-    if (widget.isDialogue) {
-      return (loadingState.dataOrNull?.length ?? 0) + 1;
-    }
-    int itemCount = 0;
-    if (firstFloor != null) {
-      itemCount = 2;
-    }
-    return (loadingState.dataOrNull?.length ?? 0) + itemCount + 2;
   }
 }
