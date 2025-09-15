@@ -8,6 +8,7 @@ import 'package:PiliPlus/models/common/video/video_decode_type.dart';
 import 'package:PiliPlus/models/common/video/video_quality.dart';
 import 'package:PiliPlus/pages/setting/models/model.dart';
 import 'package:PiliPlus/pages/setting/widgets/select_dialog.dart';
+import 'package:PiliPlus/plugin/pl_player/models/hwdec_type.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/storage_key.dart';
 import 'package:PiliPlus/utils/storage_pref.dart';
@@ -343,19 +344,15 @@ List<SettingsModel> get videoSettings => [
     leading: const Icon(Icons.memory_outlined),
     getSubtitle: () => '当前：${Pref.hardwareDecoding}（此项即mpv的--hwdec）',
     onTap: (setState) async {
-      String? result = await showDialog(
+      final result = await showDialog<String>(
         context: Get.context!,
         builder: (context) {
           return SelectDialog<String>(
             title: '硬解模式',
             value: Pref.hardwareDecoding,
-            values: const [
-              'auto',
-              'auto-copy',
-              'auto-safe',
-              'no',
-              'yes',
-            ].map((e) => (e, e)).toList(),
+            values: HwDecType.values
+                .map((e) => (e.hwdec, '${e.hwdec}\n${e.desc}'))
+                .toList(),
           );
         },
       );
