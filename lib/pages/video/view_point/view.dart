@@ -2,14 +2,14 @@ import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/common/widgets/button/icon_button.dart';
 import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
 import 'package:PiliPlus/common/widgets/progress_bar/segment_progress_bar.dart';
-import 'package:PiliPlus/pages/common/slide/common_collapse_slide_page.dart';
+import 'package:PiliPlus/pages/common/slide/common_slide_page.dart';
 import 'package:PiliPlus/pages/video/controller.dart';
 import 'package:PiliPlus/plugin/pl_player/controller.dart';
 import 'package:PiliPlus/utils/duration_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class ViewPointsPage extends CommonCollapseSlidePage {
+class ViewPointsPage extends CommonSlidePage {
   const ViewPointsPage({
     super.key,
     super.enableSlide,
@@ -24,21 +24,13 @@ class ViewPointsPage extends CommonCollapseSlidePage {
   State<ViewPointsPage> createState() => _ViewPointsPageState();
 }
 
-class _ViewPointsPageState
-    extends CommonCollapseSlidePageState<ViewPointsPage> {
+class _ViewPointsPageState extends State<ViewPointsPage>
+    with SingleTickerProviderStateMixin, CommonSlideMixin {
   VideoDetailController get videoDetailController =>
       widget.videoDetailController;
   PlPlayerController? get plPlayerController => widget.plPlayerController;
 
   int currentIndex = -1;
-
-  final _controller = ScrollController();
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
 
   @override
   Widget buildPage(ThemeData theme) {
@@ -93,10 +85,18 @@ class _ViewPointsPageState
     );
   }
 
+  late Key _key;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _key = ValueKey(PrimaryScrollController.of(context).hashCode);
+  }
+
   @override
   Widget buildList(ThemeData theme) {
     return ListView.builder(
-      controller: _controller,
+      key: _key,
       physics: const AlwaysScrollableScrollPhysics(),
       padding: EdgeInsets.only(
         top: 7,

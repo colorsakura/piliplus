@@ -10,7 +10,7 @@ import 'package:PiliPlus/models/common/sponsor_block/action_type.dart';
 import 'package:PiliPlus/models/common/sponsor_block/post_segment_model.dart';
 import 'package:PiliPlus/models/common/sponsor_block/segment_type.dart';
 import 'package:PiliPlus/models_new/sponsor_block/segment_item.dart';
-import 'package:PiliPlus/pages/common/slide/common_collapse_slide_page.dart';
+import 'package:PiliPlus/pages/common/slide/common_slide_page.dart';
 import 'package:PiliPlus/pages/video/controller.dart';
 import 'package:PiliPlus/pages/video/post_panel/popup_menu_text.dart';
 import 'package:PiliPlus/plugin/pl_player/controller.dart';
@@ -24,7 +24,7 @@ import 'package:flutter/services.dart' show FilteringTextInputFormatter;
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart' hide Response;
 
-class PostPanel extends CommonCollapseSlidePage {
+class PostPanel extends CommonSlidePage {
   const PostPanel({
     super.key,
     super.enableSlide,
@@ -179,7 +179,8 @@ class PostPanel extends CommonCollapseSlidePage {
   }
 }
 
-class _PostPanelState extends CommonCollapseSlidePageState<PostPanel> {
+class _PostPanelState extends State<PostPanel>
+    with SingleTickerProviderStateMixin, CommonSlideMixin {
   late final VideoDetailController videoDetailController =
       widget.videoDetailController;
   late final PlPlayerController plPlayerController = widget.plPlayerController;
@@ -190,14 +191,6 @@ class _PostPanelState extends CommonCollapseSlidePageState<PostPanel> {
 
   double get currentPos =>
       plPlayerController.position.value.inMilliseconds / 1000;
-
-  final _controller = ScrollController();
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
 
   @override
   Widget buildPage(ThemeData theme) {
@@ -246,6 +239,14 @@ class _PostPanelState extends CommonCollapseSlidePageState<PostPanel> {
     );
   }
 
+  late Key _key;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _key = ValueKey(PrimaryScrollController.of(context).hashCode);
+  }
+
   @override
   Widget buildList(ThemeData theme) {
     if (list.isNullOrEmpty) {
@@ -256,7 +257,7 @@ class _PostPanelState extends CommonCollapseSlidePageState<PostPanel> {
       clipBehavior: Clip.none,
       children: [
         ListView.builder(
-          controller: _controller,
+          key: _key,
           physics: const AlwaysScrollableScrollPhysics(),
           padding: EdgeInsets.only(bottom: 88 + bottom),
           itemCount: list.length,

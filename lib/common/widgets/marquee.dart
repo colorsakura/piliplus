@@ -142,7 +142,9 @@ abstract class MarqueeRender extends RenderBox
       if (value._ticker != null) {
         value._ticker!.absorbTicker(_ticker._ticker!);
       } else {
-        value.createTicker(_onTick);
+        value
+          ..createTicker(_onTick)
+          ..initStart();
       }
     }
     _ticker.cancel();
@@ -223,7 +225,9 @@ abstract class MarqueeRender extends RenderBox
 
     if (_distance > 0) {
       updateSize();
-      _ticker.createTicker(_onTick);
+      _ticker
+        ..createTicker(_onTick)
+        ..initStart();
     } else {
       _ticker.cancel();
     }
@@ -394,13 +398,29 @@ class _MarqueeSimulation extends Simulation {
   );
 }
 
-class ContextSingleTicker {
+class ContextSingleTicker implements TickerProvider {
   Ticker? _ticker;
   BuildContext context;
+  final bool autoStart;
 
-  ContextSingleTicker(this.context);
+  ContextSingleTicker(this.context, {this.autoStart = true});
 
-  void createTicker(TickerCallback onTick) {
+  void initStart() {
+    if (autoStart) {
+      _ticker?.start();
+    }
+  }
+
+  void startIfNeeded() {
+    if (_ticker case final ticker?) {
+      if (!ticker.isActive) {
+        ticker.start();
+      }
+    }
+  }
+
+  @override
+  Ticker createTicker(TickerCallback onTick) {
     assert(() {
       if (_ticker == null) {
         return true;
@@ -422,10 +442,11 @@ class ContextSingleTicker {
     _ticker = Ticker(
       onTick,
       debugLabel: kDebugMode ? 'created by ${describeIdentity(this)}' : null,
-    )..start();
+    );
     _tickerModeNotifier = TickerMode.getNotifier(context)
       ..addListener(updateTicker);
     updateTicker(); // Sets _ticker.mute correctly.
+    return _ticker!;
   }
 
   void reset() {

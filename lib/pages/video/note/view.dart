@@ -36,13 +36,12 @@ class NoteListPage extends CommonSlidePage {
   State<NoteListPage> createState() => _NoteListPageState();
 }
 
-class _NoteListPageState extends CommonSlidePageState<NoteListPage> {
+class _NoteListPageState extends State<NoteListPage>
+    with SingleTickerProviderStateMixin, CommonSlideMixin {
   late final _controller = Get.put(
     NoteListPageCtr(oid: widget.oid, upperMid: widget.upperMid),
     tag: widget.heroTag,
   );
-
-  final _key = GlobalKey<ScaffoldState>();
 
   @override
   void dispose() {
@@ -54,7 +53,6 @@ class _NoteListPageState extends CommonSlidePageState<NoteListPage> {
   Widget buildPage(ThemeData theme) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      key: _key,
       body: Column(
         children: [
           SizedBox(
@@ -92,6 +90,14 @@ class _NoteListPageState extends CommonSlidePageState<NoteListPage> {
     );
   }
 
+  late Key _key;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _key = ValueKey(PrimaryScrollController.of(context).hashCode);
+  }
+
   @override
   Widget buildList(ThemeData theme) {
     return refreshIndicator(
@@ -101,7 +107,7 @@ class _NoteListPageState extends CommonSlidePageState<NoteListPage> {
         children: [
           Expanded(
             child: CustomScrollView(
-              controller: _controller.scrollController,
+              key: _key,
               physics: const AlwaysScrollableScrollPhysics(),
               slivers: [
                 SliverPadding(
@@ -129,30 +135,32 @@ class _NoteListPageState extends CommonSlidePageState<NoteListPage> {
                 ),
               ),
             ),
-            child: FilledButton.tonal(
-              style: FilledButton.styleFrom(
-                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                padding: EdgeInsets.zero,
-                shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(6)),
-                ),
-              ),
-              onPressed: () {
-                if (!Accounts.main.isLogin) {
-                  SmartDialog.showToast('账号未登录');
-                  return;
-                }
-                _key.currentState?.showBottomSheet(
-                  constraints: const BoxConstraints(),
-                  (context) => WebviewPage(
-                    oid: widget.oid,
-                    title: widget.title,
-                    url:
-                        'https://www.bilibili.com/h5/note-app?oid=${widget.oid}&pagefrom=ugcvideo&is_stein_gate=${widget.isStein ? 1 : 0}',
+            child: Builder(
+              builder: (context) => FilledButton.tonal(
+                style: FilledButton.styleFrom(
+                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  padding: EdgeInsets.zero,
+                  shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(6)),
                   ),
-                );
-              },
-              child: const Text('开始记笔记'),
+                ),
+                onPressed: () {
+                  if (!Accounts.main.isLogin) {
+                    SmartDialog.showToast('账号未登录');
+                    return;
+                  }
+                  Scaffold.of(context).showBottomSheet(
+                    constraints: const BoxConstraints(),
+                    (context) => WebviewPage(
+                      oid: widget.oid,
+                      title: widget.title,
+                      url:
+                          'https://www.bilibili.com/h5/note-app?oid=${widget.oid}&pagefrom=ugcvideo&is_stein_gate=${widget.isStein ? 1 : 0}',
+                    ),
+                  );
+                },
+                child: const Text('开始记笔记'),
+              ),
             ),
           ),
         ],
@@ -169,15 +177,10 @@ class _NoteListPageState extends CommonSlidePageState<NoteListPage> {
       color: theme.colorScheme.outline.withValues(alpha: 0.1),
     );
     return switch (loadingState) {
-      Loading() => SliverToBoxAdapter(
-        child: IgnorePointer(
-          child: ListView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemBuilder: (context, index) => const VideoReplySkeleton(),
-            itemCount: 8,
-          ),
-        ),
+      Loading() => SliverPrototypeExtentList.builder(
+        prototypeItem: const VideoReplySkeleton(),
+        itemBuilder: (_, _) => const VideoReplySkeleton(),
+        itemCount: 8,
       ),
       Success(:var response) =>
         response?.isNotEmpty == true

@@ -2,13 +2,16 @@ import 'package:PiliPlus/common/skeleton/video_reply.dart';
 import 'package:PiliPlus/common/widgets/custom_sliver_persistent_header_delegate.dart';
 import 'package:PiliPlus/common/widgets/loading_widget/http_error.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
+import 'package:PiliPlus/common/widgets/scaffold/bottom_sheet.dart';
 import 'package:PiliPlus/grpc/bilibili/main/community/reply/v1.pb.dart'
     show ReplyInfo;
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/pages/video/reply/controller.dart';
 import 'package:PiliPlus/pages/video/reply/widgets/reply_item_grpc.dart';
+import 'package:PiliPlus/pages/video/reply_reply/view.dart';
 import 'package:PiliPlus/utils/feed_back.dart';
-import 'package:flutter/material.dart';
+import 'package:easy_debounce/easy_throttle.dart';
+import 'package:flutter/material.dart' hide showBottomSheet;
 import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 
@@ -17,20 +20,16 @@ class VideoReplyPanel extends StatefulWidget {
     super.key,
     this.replyLevel = 1,
     required this.heroTag,
-    required this.replyReply,
     this.onViewImage,
     this.onDismissed,
-    this.callback,
-    required this.needController,
+    required this.isNested,
   });
 
   final int replyLevel;
   final String heroTag;
-  final Function(ReplyInfo replyItem, int? rpid) replyReply;
   final VoidCallback? onViewImage;
   final ValueChanged<int>? onDismissed;
-  final Function(List<String>, int)? callback;
-  final bool needController;
+  final bool isNested;
 
   @override
   State<VideoReplyPanel> createState() => _VideoReplyPanelState();
@@ -58,17 +57,17 @@ class _VideoReplyPanelState extends State<VideoReplyPanel>
   void didChangeDependencies() {
     super.didChangeDependencies();
     _videoReplyController.showFab();
-    if (widget.needController != false) {
-      _videoReplyController.scrollController.addListener(listener);
-    } else {
+    if (widget.isNested) {
       _videoReplyController.scrollController.removeListener(listener);
+    } else {
+      _videoReplyController.scrollController.addListener(listener);
     }
     bottom = MediaQuery.viewPaddingOf(context).bottom;
   }
 
   @override
   void dispose() {
-    if (widget.needController != false) {
+    if (!widget.isNested) {
       _videoReplyController.scrollController.removeListener(listener);
     }
     super.dispose();
@@ -100,14 +99,14 @@ class _VideoReplyPanelState extends State<VideoReplyPanel>
         clipBehavior: Clip.none,
         children: [
           CustomScrollView(
-            controller: widget.needController
-                ? _videoReplyController.scrollController
-                : null,
-            physics: widget.needController
-                ? const AlwaysScrollableScrollPhysics()
-                : const AlwaysScrollableScrollPhysics(
+            controller: widget.isNested
+                ? null
+                : _videoReplyController.scrollController,
+            physics: widget.isNested
+                ? const AlwaysScrollableScrollPhysics(
                     parent: ClampingScrollPhysics(),
-                  ),
+                  )
+                : const AlwaysScrollableScrollPhysics(),
             key: const PageStorageKey<String>('评论'),
             slivers: <Widget>[
               SliverPersistentHeader(
@@ -186,14 +185,17 @@ class _VideoReplyPanelState extends State<VideoReplyPanel>
     );
   }
 
-  Widget _buildBody(ThemeData theme, LoadingState loadingState) {
+  Widget _buildBody(
+    ThemeData theme,
+    LoadingState<List<ReplyInfo>?> loadingState,
+  ) {
     return switch (loadingState) {
       Loading() => SliverList.builder(
         itemBuilder: (context, index) => const VideoReplySkeleton(),
         itemCount: 5,
       ),
       Success(:var response) =>
-        response?.isNotEmpty == true
+        response != null && response.isNotEmpty
             ? SliverList.builder(
                 itemBuilder: (context, index) {
                   if (index == response.length) {
@@ -215,7 +217,7 @@ class _VideoReplyPanelState extends State<VideoReplyPanel>
                     return ReplyItemGrpc(
                       replyItem: response[index],
                       replyLevel: widget.replyLevel,
-                      replyReply: widget.replyReply,
+                      replyReply: replyReply,
                       onReply: (replyItem) => _videoReplyController.onReply(
                         context,
                         replyItem: replyItem,
@@ -226,7 +228,6 @@ class _VideoReplyPanelState extends State<VideoReplyPanel>
                       getTag: () => heroTag,
                       onViewImage: widget.onViewImage,
                       onDismissed: widget.onDismissed,
-                      callback: widget.callback,
                       onCheckReply: (item) => _videoReplyController
                           .onCheckReply(item, isManual: true),
                       onToggleTop: (item) => _videoReplyController.onToggleTop(
@@ -249,5 +250,29 @@ class _VideoReplyPanelState extends State<VideoReplyPanel>
         onReload: _videoReplyController.onReload,
       ),
     };
+  }
+
+  // 展示二级回复
+  void replyReply(ReplyInfo replyItem, int? id) {
+    EasyThrottle.throttle('replyReply', const Duration(milliseconds: 500), () {
+      int oid = replyItem.oid.toInt();
+      int rpid = replyItem.id.toInt();
+      showBottomSheet(
+        context: context,
+        backgroundColor: Colors.transparent,
+        constraints: const BoxConstraints(),
+        builder: (context) => VideoReplyReplyPanel(
+          id: id,
+          oid: oid,
+          rpid: rpid,
+          firstFloor: replyItem,
+          replyType: _videoReplyController.videoType.replyType,
+          isVideoDetail: true,
+          onViewImage: widget.onViewImage,
+          onDismissed: widget.onDismissed,
+          isNested: widget.isNested,
+        ),
+      );
+    });
   }
 }

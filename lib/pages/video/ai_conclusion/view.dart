@@ -1,12 +1,12 @@
 import 'package:PiliPlus/models_new/video/video_ai_conclusion/model_result.dart';
-import 'package:PiliPlus/pages/common/slide/common_collapse_slide_page.dart';
+import 'package:PiliPlus/pages/common/slide/common_slide_page.dart';
 import 'package:PiliPlus/pages/video/controller.dart';
 import 'package:PiliPlus/utils/duration_utils.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class AiConclusionPanel extends CommonCollapseSlidePage {
+class AiConclusionPanel extends CommonSlidePage {
   final AiConclusionResult item;
 
   const AiConclusionPanel({
@@ -18,15 +18,8 @@ class AiConclusionPanel extends CommonCollapseSlidePage {
   State<AiConclusionPanel> createState() => _AiDetailState();
 }
 
-class _AiDetailState extends CommonCollapseSlidePageState<AiConclusionPanel> {
-  final _controller = ScrollController();
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
+class _AiDetailState extends State<AiConclusionPanel>
+    with SingleTickerProviderStateMixin, CommonSlideMixin {
   @override
   Widget buildPage(ThemeData theme) {
     return Material(
@@ -58,10 +51,18 @@ class _AiDetailState extends CommonCollapseSlidePageState<AiConclusionPanel> {
     );
   }
 
+  late Key _key;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _key = ValueKey(PrimaryScrollController.of(context).hashCode);
+  }
+
   @override
   Widget buildList(ThemeData theme) {
     return CustomScrollView(
-      controller: _controller,
+      key: _key,
       physics: const AlwaysScrollableScrollPhysics(),
       slivers: [
         if (widget.item.summary?.isNotEmpty == true) ...[

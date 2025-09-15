@@ -3,6 +3,7 @@ import 'dart:ui';
 
 import 'package:PiliPlus/common/widgets/pair.dart';
 import 'package:PiliPlus/common/widgets/progress_bar/segment_progress_bar.dart';
+import 'package:PiliPlus/common/widgets/scaffold/scaffold.dart';
 import 'package:PiliPlus/http/constants.dart';
 import 'package:PiliPlus/http/fav.dart';
 import 'package:PiliPlus/http/init.dart';
@@ -53,7 +54,7 @@ import 'package:dio/dio.dart' show Options;
 import 'package:easy_debounce/easy_throttle.dart';
 import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart';
 import 'package:flutter/foundation.dart' show kDebugMode;
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Scaffold, ScaffoldState;
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_volume_controller/flutter_volume_controller.dart';
 import 'package:get/get.dart' hide ContextExtensionss;
@@ -102,7 +103,6 @@ class VideoDetailController extends GetxController
   // 是否开始自动播放 存在多p的情况下，第二p需要为true
   final RxBool autoPlay = true.obs;
 
-  final scaffoldKey = GlobalKey<ScaffoldState>();
   final childKey = GlobalKey<ScaffoldState>();
 
   PlPlayerController plPlayerController = PlPlayerController.getInstance()
@@ -154,9 +154,10 @@ class VideoDetailController extends GetxController
   late double videoHeight;
 
   void animToTop() {
-    if (scrollKey.currentState?.outerController.hasClients == true) {
-      scrollKey.currentState!.outerController.animateTo(
-        scrollKey.currentState!.outerController.offset,
+    final outerController = scrollKey.currentState!.outerController;
+    if (outerController.hasClients) {
+      outerController.animateTo(
+        outerController.offset,
         duration: const Duration(milliseconds: 500),
         curve: Curves.easeInOut,
       );
@@ -361,7 +362,7 @@ class VideoDetailController extends GetxController
           } catch (_) {}
         },
         panelTitle: watchLaterTitle,
-        getBvId: () => bvid,
+        bvid: bvid,
         count: args['count'],
         loadMoreMedia: getMediaList,
         desc: _mediaDesc,
@@ -1508,8 +1509,8 @@ class VideoDetailController extends GetxController
           idx = subtitles.indexWhere((i) => !i.lan!.startsWith('ai')) + 1;
           if (idx == 0) {
             if (preference == SubtitlePrefType.on ||
-                (preference == SubtitlePrefType.auto &&
-                    Utils.isMobile &&
+                (Utils.isMobile &&
+                    preference == SubtitlePrefType.auto &&
                     (await FlutterVolumeController.getVolume() ?? 0) <= 0)) {
               idx = 1;
             }

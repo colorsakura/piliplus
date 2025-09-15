@@ -2,17 +2,18 @@ import 'package:PiliPlus/common/skeleton/video_reply.dart';
 import 'package:PiliPlus/common/widgets/custom_sliver_persistent_header_delegate.dart';
 import 'package:PiliPlus/common/widgets/loading_widget/http_error.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
+import 'package:PiliPlus/common/widgets/scaffold/scaffold.dart';
 import 'package:PiliPlus/grpc/bilibili/main/community/reply/v1.pb.dart'
     show ReplyInfo, Mode;
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/pages/common/slide/common_slide_page.dart';
 import 'package:PiliPlus/pages/video/reply/widgets/reply_item_grpc.dart';
 import 'package:PiliPlus/pages/video/reply_reply/controller.dart';
-import 'package:PiliPlus/utils/context_ext.dart';
 import 'package:PiliPlus/utils/num_utils.dart';
-import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:PiliPlus/utils/utils.dart';
-import 'package:flutter/material.dart';
+import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart';
+import 'package:flutter/material.dart' hide Scaffold, ScaffoldState;
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart' hide ContextExtensionss;
 import 'package:super_sliver_list/super_sliver_list.dart';
 
@@ -27,9 +28,9 @@ class VideoReplyReplyPanel extends CommonSlidePage {
     this.firstFloor,
     required this.isVideoDetail,
     required this.replyType,
-    this.isDialogue = false,
     this.onViewImage,
     this.onDismissed,
+    this.isNested = false,
   });
   final int? id;
   final int oid;
@@ -38,27 +39,32 @@ class VideoReplyReplyPanel extends CommonSlidePage {
   final ReplyInfo? firstFloor;
   final bool isVideoDetail;
   final int replyType;
-  final bool isDialogue;
   final VoidCallback? onViewImage;
   final ValueChanged<int>? onDismissed;
+  final bool isNested;
 
   @override
   State<VideoReplyReplyPanel> createState() => _VideoReplyReplyPanelState();
 }
 
-class _VideoReplyReplyPanelState
-    extends CommonSlidePageState<VideoReplyReplyPanel> {
+class _VideoReplyReplyPanelState extends State<VideoReplyReplyPanel>
+    with SingleTickerProviderStateMixin, CommonSlideMixin {
   late VideoReplyReplyController _controller;
-  late final _key = GlobalKey<ScaffoldState>();
-  late final _tag = Utils.makeHeroTag(
-    '${widget.rpid}${widget.dialog}${widget.isDialogue}',
-  );
-
-  bool get _horizontalPreview =>
-      _controller.horizontalPreview && context.isLandscape;
-  Function(List<String> imgList, int index)? _imageCallback;
-
+  late final _tag = Utils.makeHeroTag('${widget.rpid}${widget.dialog}');
   Animation<Color?>? colorAnimation;
+
+  late final bool isDialogue = widget.dialog != null;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final controller = PrimaryScrollController.of(context);
+    _controller
+      ..didChangeDependencies(context)
+      ..nestedController = controller is ExtendedNestedScrollController
+          ? controller
+          : null;
+  }
 
   @override
   void initState() {
@@ -71,7 +77,6 @@ class _VideoReplyReplyPanelState
         rpid: widget.rpid,
         dialog: widget.dialog,
         replyType: widget.replyType,
-        isDialogue: widget.isDialogue,
       ),
       tag: _tag,
     );
@@ -84,23 +89,9 @@ class _VideoReplyReplyPanelState
   }
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    _imageCallback = _horizontalPreview
-        ? (imgList, index) => PageUtils.onHorizontalPreview(
-            _key,
-            this,
-            imgList,
-            index,
-          )
-        : null;
-  }
-
-  @override
   Widget buildPage(ThemeData theme) {
     Widget child() => enableSlide ? slideList(theme) : buildList(theme);
     return Scaffold(
-      key: _key,
       resizeToAvoidBottomInset: false,
       body: widget.isVideoDetail
           ? Column(
@@ -119,7 +110,7 @@ class _VideoReplyReplyPanelState
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
-                      Text(widget.isDialogue ? '对话列表' : '评论详情'),
+                      Text(isDialogue ? '对话列表' : '评论详情'),
                       IconButton(
                         tooltip: '关闭',
                         icon: const Icon(Icons.close, size: 20),
@@ -138,14 +129,23 @@ class _VideoReplyReplyPanelState
   ReplyInfo? get firstFloor =>
       widget.firstFloor ?? _controller.firstFloor.value;
 
+  ScrollController get scrollController =>
+      _controller.nestedController ?? _controller.scrollController;
+
   @override
   Widget buildList(ThemeData theme) {
     return refreshIndicator(
       onRefresh: _controller.onRefresh,
       child: CustomScrollView(
-        controller: _controller.scrollController,
+        key: ValueKey(scrollController.hashCode),
+        controller: scrollController,
+        physics: widget.isNested
+            ? const AlwaysScrollableScrollPhysics(
+                parent: ClampingScrollPhysics(),
+              )
+            : const AlwaysScrollableScrollPhysics(),
         slivers: [
-          if (!widget.isDialogue) ...[
+          if (!isDialogue) ...[
             if (widget.firstFloor case final firstFloor?)
               _header(theme, firstFloor)
             else
@@ -180,7 +180,6 @@ class _VideoReplyReplyPanelState
             upMid: _controller.upMid,
             onViewImage: widget.onViewImage,
             onDismissed: widget.onDismissed,
-            callback: _imageCallback,
             onCheckReply: (item) =>
                 _controller.onCheckReply(item, isManual: true),
           ),
@@ -252,18 +251,14 @@ class _VideoReplyReplyPanelState
     ThemeData theme,
     LoadingState<List<ReplyInfo>?> loadingState,
   ) {
+    final jumpIndex = _controller.index.value;
     return switch (loadingState) {
-      Loading() => SliverToBoxAdapter(
-        child: IgnorePointer(
-          child: ListView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemBuilder: (context, index) => const VideoReplySkeleton(),
-            itemCount: 8,
-          ),
-        ),
+      Loading() => SliverPrototypeExtentList.builder(
+        prototypeItem: const VideoReplySkeleton(),
+        itemBuilder: (_, _) => const VideoReplySkeleton(),
+        itemCount: 8,
       ),
-      Success(:var response) => SuperSliverList.builder(
+      Success(:var response!) => SuperSliverList.builder(
         listController: _controller.listController,
         itemBuilder: (context, index) {
           if (index == response.length) {
@@ -284,19 +279,23 @@ class _VideoReplyReplyPanelState
               ),
             );
           }
-          final child = _replyItem(response[index], index);
-          if (_controller.index == index) {
-            colorAnimation ??= ColorTween(
-              begin: theme.colorScheme.onInverseSurface,
-              end: theme.colorScheme.surface,
-            ).animate(_controller.animController!);
+          final child = _replyItem(context, response[index], index);
+          if (jumpIndex == index) {
             return AnimatedBuilder(
-              animation: colorAnimation!,
-              builder: (context, _) {
+              animation: colorAnimation ??=
+                  ColorTween(
+                    begin: theme.colorScheme.onInverseSurface,
+                    end: theme.colorScheme.surface,
+                  ).animate(
+                    CurvedAnimation(
+                      parent: _controller.animController,
+                      curve: const Interval(0.8, 1.0), // 前0.8s不变, 后0.2s开始动画
+                    ),
+                  ),
+              child: child,
+              builder: (context, child) {
                 return ColoredBox(
-                  color:
-                      colorAnimation!.value ??
-                      theme.colorScheme.onInverseSurface,
+                  color: colorAnimation!.value!,
                   child: child,
                 );
               },
@@ -304,7 +303,7 @@ class _VideoReplyReplyPanelState
           }
           return child;
         },
-        itemCount: response!.length + 1,
+        itemCount: response.length + 1,
       ),
       Error(:var errMsg) => HttpError(
         errMsg: errMsg,
@@ -313,15 +312,15 @@ class _VideoReplyReplyPanelState
     };
   }
 
-  Widget _replyItem(ReplyInfo replyItem, int index) {
+  Widget _replyItem(BuildContext context, ReplyInfo replyItem, int index) {
     return ReplyItemGrpc(
       replyItem: replyItem,
-      replyLevel: widget.isDialogue ? 3 : 2,
+      replyLevel: isDialogue ? 3 : 2,
       onReply: (replyItem) =>
-          _controller.onReply(context, replyItem: replyItem, index: index),
+          _controller.onReply(this.context, replyItem: replyItem, index: index),
       onDelete: (item, subIndex) => _controller.onRemove(index, item, null),
       upMid: _controller.upMid,
-      showDialogue: () => _key.currentState?.showBottomSheet(
+      showDialogue: () => Scaffold.of(context).showBottomSheet(
         backgroundColor: Colors.transparent,
         constraints: const BoxConstraints(),
         (context) => VideoReplyReplyPanel(
@@ -330,12 +329,16 @@ class _VideoReplyReplyPanelState
           dialog: replyItem.dialog.toInt(),
           replyType: widget.replyType,
           isVideoDetail: true,
-          isDialogue: true,
+          isNested: widget.isNested,
         ),
       ),
+      jumpToDialogue: () {
+        if (!_controller.setIndexById(replyItem.parent)) {
+          SmartDialog.showToast('评论可能已被删除');
+        }
+      },
       onViewImage: widget.onViewImage,
       onDismissed: widget.onDismissed,
-      callback: _imageCallback,
       onCheckReply: (item) => _controller.onCheckReply(item, isManual: true),
     );
   }
