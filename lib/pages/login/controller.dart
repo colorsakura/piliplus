@@ -10,6 +10,7 @@ import 'package:PiliPlus/models/common/account_type.dart';
 import 'package:PiliPlus/models/login/model.dart';
 import 'package:PiliPlus/utils/accounts.dart';
 import 'package:PiliPlus/utils/accounts/account.dart';
+import 'package:PiliPlus/utils/utils.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/material.dart';
@@ -25,23 +26,23 @@ class LoginPageController extends GetxController
   final TextEditingController smsCodeTextController = TextEditingController();
   final TextEditingController cookieTextController = TextEditingController();
 
-  RxMap<String, dynamic> codeInfo = RxMap<String, dynamic>({});
+  late final RxMap<String, dynamic> codeInfo = RxMap<String, dynamic>({});
 
-  late TabController tabController;
+  late final TabController tabController;
 
   late final Gt3FlutterPlugin captcha = Gt3FlutterPlugin();
 
-  CaptchaDataModel captchaData = CaptchaDataModel();
-  RxInt qrCodeLeftTime = 180.obs;
-  RxString statusQRCode = ''.obs;
+  late final CaptchaDataModel captchaData = CaptchaDataModel();
+  late final RxInt qrCodeLeftTime = 180.obs;
+  late final RxString statusQRCode = ''.obs;
 
   late final List<Map<String, dynamic>> internationalDialingPrefix =
       Constants.internationalDialingPrefix;
   late Map<String, dynamic> selectedCountryCodeId =
       internationalDialingPrefix.first;
-  String captchaKey = '';
-  RxInt smsSendCooldown = 0.obs;
-  int smsSendTimestamp = 0;
+  late String captchaKey = '';
+  late final RxInt smsSendCooldown = 0.obs;
+  late int smsSendTimestamp = 0;
 
   // 定时器
   Timer? qrCodeTimer;
@@ -79,7 +80,7 @@ class LoginPageController extends GetxController
           if (qrCodeLeftTime <= 0) {
             t.cancel();
             statusQRCode.value = '二维码已过期，请刷新';
-            qrCodeLeftTime = 0.obs;
+            qrCodeLeftTime.value = 0;
             return;
           }
 
@@ -94,7 +95,7 @@ class LoginPageController extends GetxController
               Get.back();
             } else if (value['code'] == 86038) {
               t.cancel();
-              qrCodeLeftTime = 0.obs;
+              qrCodeLeftTime.value = 0;
             } else {
               statusQRCode.value = value['msg'];
             }
@@ -290,6 +291,9 @@ class LoginPageController extends GetxController
       }
       if (data['status'] == 2) {
         SmartDialog.showToast(data['message']);
+        if (!Utils.isMobile) {
+          return;
+        }
         // return;
         //{"code":0,"message":"0","ttl":1,"data":{"status":2,"message":"本次登录环境存在风险, 需使用手机号进行验证或绑定","url":"https://passport.bilibili.com/h5-app/passport/risk/verify?tmp_token=9e785433940891dfa78f033fb7928181&request_id=e5a6d6480df04097870be56c6e60f7ef&source=risk","token_info":null,"cookie_info":null,"sso":null,"is_new":false,"is_tourist":false}}
         String url = data['url']!;
@@ -313,6 +317,7 @@ class LoginPageController extends GetxController
           SmartDialog.showToast("当前账号未支持手机号验证，请尝试其它登录方式");
           return;
         }
+
         TextEditingController textFieldController = TextEditingController();
         String captchaKey = '';
         Get.dialog(
@@ -474,7 +479,7 @@ class LoginPageController extends GetxController
               ),
             ],
           ),
-        );
+        ).whenComplete(textFieldController.dispose);
 
         return;
       }
@@ -493,7 +498,7 @@ class LoginPageController extends GetxController
         case 0:
           // login success
           break;
-        case -105:
+        case -105 when (Utils.isMobile):
           String captureUrl = res['data']['url'];
           Uri captureUri = Uri.parse(captureUrl);
           captchaData.token = captureUri.queryParameters['recaptcha_token']!;

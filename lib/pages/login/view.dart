@@ -191,7 +191,6 @@ class _LoginPageState extends State<LoginPage> {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
           child: TextField(
-            enabled: isMobile,
             controller: _loginPageCtr.usernameTextController,
             inputFormatters: [FilteringTextInputFormatter.deny(RegExp(r"\s"))],
             decoration: InputDecoration(
@@ -209,7 +208,6 @@ class _LoginPageState extends State<LoginPage> {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
           child: TextField(
-            enabled: isMobile,
             obscureText: !showPassword,
             keyboardType: TextInputType.visiblePassword,
             inputFormatters: [FilteringTextInputFormatter.deny(RegExp(r"\s"))],
@@ -231,9 +229,7 @@ class _LoginPageState extends State<LoginPage> {
             const SizedBox(width: 10),
             Checkbox(
               value: showPassword,
-              onChanged: isMobile
-                  ? (value) => setState(() => showPassword = value!)
-                  : null,
+              onChanged: (value) => setState(() => showPassword = value!),
             ),
             const Text('显示密码'),
             const Spacer(),
@@ -312,7 +308,7 @@ class _LoginPageState extends State<LoginPage> {
           ],
         ),
         OutlinedButton.icon(
-          onPressed: isMobile ? _loginPageCtr.loginByPassword : null,
+          onPressed: _loginPageCtr.loginByPassword,
           icon: const Icon(Icons.login),
           label: const Text('登录'),
         ),
