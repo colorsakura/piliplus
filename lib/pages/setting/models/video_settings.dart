@@ -7,6 +7,7 @@ import 'package:PiliPlus/models/common/video/live_quality.dart';
 import 'package:PiliPlus/models/common/video/video_decode_type.dart';
 import 'package:PiliPlus/models/common/video/video_quality.dart';
 import 'package:PiliPlus/pages/setting/models/model.dart';
+import 'package:PiliPlus/pages/setting/widgets/multi_select_dialog.dart';
 import 'package:PiliPlus/pages/setting/widgets/select_dialog.dart';
 import 'package:PiliPlus/plugin/pl_player/models/hwdec_type.dart';
 import 'package:PiliPlus/utils/storage.dart';
@@ -344,20 +345,23 @@ List<SettingsModel> get videoSettings => [
     leading: const Icon(Icons.memory_outlined),
     getSubtitle: () => '当前：${Pref.hardwareDecoding}（此项即mpv的--hwdec）',
     onTap: (setState) async {
-      final result = await showDialog<String>(
+      final result = await showDialog<Set<String>>(
         context: Get.context!,
         builder: (context) {
-          return SelectDialog<String>(
+          return MultiSelectDialog<String>(
             title: '硬解模式',
-            value: Pref.hardwareDecoding,
-            values: HwDecType.values
-                .map((e) => (e.hwdec, '${e.hwdec}\n${e.desc}'))
-                .toList(),
+            initValues: Pref.hardwareDecoding.split(','),
+            values: {
+              for (var e in HwDecType.values) e.hwdec: '${e.hwdec}\n${e.desc}',
+            },
           );
         },
       );
-      if (result != null) {
-        await GStorage.setting.put(SettingBoxKey.hardwareDecoding, result);
+      if (result != null && result.isNotEmpty) {
+        await GStorage.setting.put(
+          SettingBoxKey.hardwareDecoding,
+          result.join(','),
+        );
         setState();
       }
     },
