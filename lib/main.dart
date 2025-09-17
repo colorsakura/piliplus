@@ -84,22 +84,25 @@ void main() async {
     );
   } else if (Utils.isDesktop) {
     await windowManager.ensureInitialized();
-    final windowSize = Pref.windowSize;
-    final windowPosition = Pref.windowPosition;
-    final hasPos = windowPosition != null;
-    WindowOptions windowOptions = WindowOptions(
-      minimumSize: const Size(400, 720),
-      size: Size(windowSize[0], windowSize[1]),
-      center: !hasPos,
+
+    WindowOptions windowOptions = const WindowOptions(
+      minimumSize: Size(400, 720),
       skipTaskbar: false,
       titleBarStyle: TitleBarStyle.normal,
       title: Constants.appName,
     );
     windowManager.waitUntilReadyToShow(windowOptions, () async {
-      if (hasPos) {
-        await windowManager.setPosition(
-          Offset(windowPosition[0], windowPosition[1]),
-        );
+      final windowSize = Pref.windowSize;
+      final windowOffset = await Utils.windowOffset;
+      final bounds = Rect.fromLTWH(
+        windowOffset.left,
+        windowOffset.top,
+        windowSize[0],
+        windowSize[1],
+      );
+      await windowManager.setBounds(bounds);
+      if (Pref.isWindowMaximized) {
+        await windowManager.maximize();
       }
       await windowManager.show();
       await windowManager.focus();

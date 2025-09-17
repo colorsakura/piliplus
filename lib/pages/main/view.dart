@@ -33,6 +33,7 @@ class MainApp extends StatefulWidget {
 class _MainAppState extends State<MainApp>
     with RouteAware, WidgetsBindingObserver, WindowListener, TrayListener {
   final MainController _mainController = Get.put(MainController());
+  late final _setting = GStorage.setting;
 
   @override
   void initState() {
@@ -98,29 +99,32 @@ class _MainAppState extends State<MainApp>
   }
 
   @override
-  void onWindowMoved() {
-    updateWindowOffset();
+  void onWindowMaximize() {
+    _setting.put(SettingBoxKey.isWindowMaximized, true);
   }
 
   @override
-  void onWindowResized() {
-    updateWindowSize();
-    updateWindowOffset();
+  void onWindowUnmaximize() {
+    _setting.put(SettingBoxKey.isWindowMaximized, false);
   }
 
-  Future<void> updateWindowOffset() async {
+  @override
+  Future<void> onWindowMoved() async {
     if (!await windowManager.isMaximized()) {
       final Offset offset = await windowManager.getPosition();
-      GStorage.setting.put(SettingBoxKey.windowPosition, [
+      _setting.put(SettingBoxKey.windowPosition, [
         offset.dx,
         offset.dy,
       ]);
     }
   }
 
-  Future<void> updateWindowSize() async {
-    final Size size = await windowManager.getSize();
-    GStorage.setting.put(SettingBoxKey.windowSize, [size.width, size.height]);
+  @override
+  Future<void> onWindowResized() async {
+    final Rect bounds = await windowManager.getBounds();
+    _setting
+      ..put(SettingBoxKey.windowSize, [bounds.width, bounds.height])
+      ..put(SettingBoxKey.windowPosition, [bounds.left, bounds.top]);
   }
 
   @override

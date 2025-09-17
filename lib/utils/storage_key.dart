@@ -135,10 +135,12 @@ abstract class SettingBoxKey {
       showFsScreenshotBtn = 'showFsScreenshotBtn',
       showFsLockBtn = 'showFsLockBtn',
       silentDownImg = 'silentDownImg',
-      showMemberShop = 'showMemberShop',
-      minimizeOnExit = 'minimizeOnExit',
+      showMemberShop = 'showMemberShop';
+
+  static const String minimizeOnExit = 'minimizeOnExit',
       windowSize = 'windowSize',
-      windowPosition = 'windowPosition';
+      windowPosition = 'windowPosition',
+      isWindowMaximized = 'isWindowMaximized';
 
   static const String subtitlePreferenceV2 = 'subtitlePreferenceV2',
       enableDragSubtitle = 'enableDragSubtitle',

@@ -823,4 +823,7 @@ abstract class Pref {
 
   static List<double>? get windowPosition =>
       _setting.get(SettingBoxKey.windowPosition);
+
+  static bool get isWindowMaximized =>
+      _setting.get(SettingBoxKey.isWindowMaximized, defaultValue: false);
 }
