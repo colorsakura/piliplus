@@ -14,6 +14,7 @@ import 'package:PiliPlus/utils/context_ext.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:PiliPlus/utils/storage.dart';
+import 'package:PiliPlus/utils/storage_key.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -94,6 +95,32 @@ class _MainAppState extends State<MainApp>
     PiliScheme.listener?.cancel();
     GStorage.close();
     super.dispose();
+  }
+
+  @override
+  void onWindowMoved() {
+    updateWindowOffset();
+  }
+
+  @override
+  void onWindowResized() {
+    updateWindowSize();
+    updateWindowOffset();
+  }
+
+  Future<void> updateWindowOffset() async {
+    if (!await windowManager.isMaximized()) {
+      final Offset offset = await windowManager.getPosition();
+      GStorage.setting.put(SettingBoxKey.windowPosition, [
+        offset.dx,
+        offset.dy,
+      ]);
+    }
+  }
+
+  Future<void> updateWindowSize() async {
+    final Size size = await windowManager.getSize();
+    GStorage.setting.put(SettingBoxKey.windowSize, [size.width, size.height]);
   }
 
   @override

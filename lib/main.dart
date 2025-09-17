@@ -35,7 +35,13 @@ import 'package:window_manager/window_manager.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   MediaKit.ensureInitialized();
-  await GStorage.init();
+  try {
+    await GStorage.init();
+  } catch (e) {
+    await Utils.copyText(e.toString());
+    if (kDebugMode) debugPrint('GStorage init error: $e');
+    exit(0);
+  }
   Get.lazyPut(AccountService.new);
   HttpOverrides.global = _CustomHttpOverrides();
 
@@ -78,15 +84,23 @@ void main() async {
     );
   } else if (Utils.isDesktop) {
     await windowManager.ensureInitialized();
-    WindowOptions windowOptions = const WindowOptions(
-      minimumSize: Size(400, 720),
-      size: Size(1180, 720),
-      center: true,
+    final windowSize = Pref.windowSize;
+    final windowPosition = Pref.windowPosition;
+    final hasPos = windowPosition != null;
+    WindowOptions windowOptions = WindowOptions(
+      minimumSize: const Size(400, 720),
+      size: Size(windowSize[0], windowSize[1]),
+      center: !hasPos,
       skipTaskbar: false,
       titleBarStyle: TitleBarStyle.normal,
       title: Constants.appName,
     );
     windowManager.waitUntilReadyToShow(windowOptions, () async {
+      if (hasPos) {
+        await windowManager.setPosition(
+          Offset(windowPosition[0], windowPosition[1]),
+        );
+      }
       await windowManager.show();
       await windowManager.focus();
     });

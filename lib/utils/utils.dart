@@ -115,15 +115,15 @@ abstract class Utils {
     );
   }
 
-  static void copyText(
+  static Future<void> copyText(
     String text, {
     bool needToast = true,
     String? toastText,
   }) {
-    Clipboard.setData(ClipboardData(text: text));
     if (needToast) {
       SmartDialog.showToast(toastText ?? '已复制');
     }
+    return Clipboard.setData(ClipboardData(text: text));
   }
 
   static String makeHeroTag(v) {

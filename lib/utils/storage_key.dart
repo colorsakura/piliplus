@@ -136,7 +136,9 @@ abstract class SettingBoxKey {
       showFsLockBtn = 'showFsLockBtn',
       silentDownImg = 'silentDownImg',
       showMemberShop = 'showMemberShop',
-      minimizeOnExit = 'minimizeOnExit';
+      minimizeOnExit = 'minimizeOnExit',
+      windowSize = 'windowSize',
+      windowPosition = 'windowPosition';
 
   static const String subtitlePreferenceV2 = 'subtitlePreferenceV2',
       enableDragSubtitle = 'enableDragSubtitle',
