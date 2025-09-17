@@ -117,7 +117,7 @@ abstract class LoginUtils {
     GrpcReq.updateHeaders(null);
 
     await Future.wait([
-      web.CookieManager().deleteAllCookies(),
+      if (!Platform.isWindows) web.CookieManager().deleteAllCookies(),
       GStorage.userInfo.delete('userInfoCache'),
     ]);
 

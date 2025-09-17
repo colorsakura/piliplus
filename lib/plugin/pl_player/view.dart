@@ -1009,107 +1009,6 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
     _gestureType = null;
   }
 
-  void onVerticalDragStart(DragStartDetails details) {
-    if (plPlayerController.controlsLock.value) return;
-    if (details.localPosition.dy < 40) return;
-    if (details.localPosition.dx < 40) return;
-    if (details.localPosition.dx > maxWidth - 40) return;
-    if (details.localPosition.dy > maxHeight - 40) return;
-    _initialFocalPoint = details.localPosition;
-    _gestureType = null;
-  }
-
-  void onVerticalDragUpdate(DragUpdateDetails details) {
-    if (plPlayerController.controlsLock.value) return;
-    if (!plPlayerController.enableSlideVolumeBrightness &&
-        !plPlayerController.enableSlideFS) {
-      return;
-    }
-    final double tapPosition = details.localPosition.dx;
-    final double sectionWidth = maxWidth / 3;
-    late GestureType gestureType;
-    if (tapPosition < sectionWidth) {
-      if (Utils.isDesktop || !plPlayerController.enableSlideVolumeBrightness) {
-        return;
-      }
-      // 左边区域
-      gestureType = GestureType.left;
-    } else if (tapPosition < sectionWidth * 2) {
-      if (!plPlayerController.enableSlideFS) {
-        return;
-      }
-      // 全屏
-      gestureType = GestureType.center;
-    } else {
-      if (!plPlayerController.enableSlideVolumeBrightness) {
-        return;
-      }
-      // 右边区域
-      gestureType = GestureType.right;
-    }
-
-    if (_gestureType != null && _gestureType != gestureType) {
-      return;
-    }
-    _gestureType = gestureType;
-
-    if (_gestureType == GestureType.left) {
-      // 左边区域 👈
-      final double level = maxHeight * 3;
-      final double brightness =
-          _brightnessValue.value - details.delta.dy / level;
-      final double result = brightness.clamp(0.0, 1.0);
-      setBrightness(result);
-    } else if (_gestureType == GestureType.center) {
-      // 全屏
-      const double threshold = 2.5; // 滑动阈值
-      double cumulativeDy = details.localPosition.dy - _initialFocalPoint.dy;
-
-      void fullScreenTrigger(bool status) {
-        plPlayerController.triggerFullScreen(status: status);
-      }
-
-      if (cumulativeDy > threshold) {
-        _gestureType = GestureType.center_down;
-        if (isFullScreen ^ plPlayerController.fullScreenGestureReverse) {
-          fullScreenTrigger(
-            plPlayerController.fullScreenGestureReverse,
-          );
-        }
-        // if (kDebugMode) debugPrint('center_down:$cumulativeDy');
-      } else if (cumulativeDy < -threshold) {
-        _gestureType = GestureType.center_up;
-        if (!isFullScreen ^ plPlayerController.fullScreenGestureReverse) {
-          fullScreenTrigger(
-            !plPlayerController.fullScreenGestureReverse,
-          );
-        }
-        // if (kDebugMode)   debugPrint('center_up:$cumulativeDy');
-      }
-    } else if (_gestureType == GestureType.right) {
-      // 右边区域
-      final double level = maxHeight * 0.5;
-      EasyThrottle.throttle(
-        'setVolume',
-        const Duration(milliseconds: 20),
-        () {
-          final double volume = clampDouble(
-            plPlayerController.volume.value - details.delta.dy / level,
-            0.0,
-            1.0,
-          );
-          setVolume(volume);
-        },
-      );
-    }
-  }
-
-  void onVerticalDragEnd(DragEndDetails details) {
-    interacting = false;
-    _initialFocalPoint = Offset.zero;
-    _gestureType = null;
-  }
-
   void onDoubleTapDown(TapDownDetails details) {
     if (plPlayerController.controlsLock.value) {
       return;
@@ -1283,9 +1182,6 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
               onInteractionEnd: _onInteractionEnd,
               flipX: plPlayerController.flipX.value,
               flipY: plPlayerController.flipY.value,
-              onVerticalDragStart: onVerticalDragStart,
-              onVerticalDragUpdate: onVerticalDragUpdate,
-              onVerticalDragEnd: onVerticalDragEnd,
               onTap: () => plPlayerController.controls =
                   !plPlayerController.showControls.value,
               onDoubleTapDown: onDoubleTapDown,

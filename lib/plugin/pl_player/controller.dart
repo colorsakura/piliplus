@@ -374,16 +374,29 @@ class PlPlayerController {
 
   late final Rx<SubtitleViewConfiguration> subtitleConfig = _getSubConfig.obs;
 
-  SubtitleViewConfiguration get _getSubConfig => SubtitleViewConfiguration(
-    style: subTitleStyle,
-    padding: EdgeInsets.only(
-      left: subtitlePaddingH.toDouble(),
-      right: subtitlePaddingH.toDouble(),
-      bottom: subtitlePaddingB.toDouble(),
-    ),
-    textScaleFactor: 1,
-    strokeWidth: subtitleBgOpaticy == 0 ? subtitleStrokeWidth : null,
-  );
+  SubtitleViewConfiguration get _getSubConfig {
+    final subTitleStyle = this.subTitleStyle;
+    return SubtitleViewConfiguration(
+      style: subTitleStyle,
+      strokeStyle: subtitleBgOpaticy == 0
+          ? subTitleStyle.copyWith(
+              color: null,
+              background: null,
+              backgroundColor: null,
+              foreground: Paint()
+                ..color = Colors.black
+                ..style = PaintingStyle.stroke
+                ..strokeWidth = subtitleStrokeWidth,
+            )
+          : null,
+      padding: EdgeInsets.only(
+        left: subtitlePaddingH.toDouble(),
+        right: subtitlePaddingH.toDouble(),
+        bottom: subtitlePaddingB.toDouble(),
+      ),
+      textScaleFactor: 1,
+    );
+  }
 
   void updateSubtitleStyle() {
     subtitleConfig.value = _getSubConfig;

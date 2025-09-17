@@ -110,21 +110,17 @@ class _MainAppState extends State<MainApp>
 
   @override
   Future<void> onWindowMoved() async {
-    if (!await windowManager.isMaximized()) {
-      final Offset offset = await windowManager.getPosition();
-      _setting.put(SettingBoxKey.windowPosition, [
-        offset.dx,
-        offset.dy,
-      ]);
-    }
+    final Offset offset = await windowManager.getPosition();
+    _setting.put(SettingBoxKey.windowPosition, [offset.dx, offset.dy]);
   }
 
   @override
   Future<void> onWindowResized() async {
     final Rect bounds = await windowManager.getBounds();
-    _setting
-      ..put(SettingBoxKey.windowSize, [bounds.width, bounds.height])
-      ..put(SettingBoxKey.windowPosition, [bounds.left, bounds.top]);
+    _setting.putAll({
+      SettingBoxKey.windowSize: [bounds.width, bounds.height],
+      SettingBoxKey.windowPosition: [bounds.left, bounds.top],
+    });
   }
 
   @override

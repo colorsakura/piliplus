@@ -1622,9 +1622,9 @@ class HeaderControlState extends TripleState<HeaderControl> {
                       data: sliderTheme,
                       child: Slider(
                         min: 0,
-                        max: 3,
+                        max: 5,
                         value: strokeWidth,
-                        divisions: 6,
+                        divisions: 10,
                         label: '$strokeWidth',
                         onChanged: updateStrokeWidth,
                         onChangeEnd: (_) => plPlayerController
