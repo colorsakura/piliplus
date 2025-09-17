@@ -216,7 +216,6 @@ Widget addWidget(
             ),
           );
         }
-        return const SizedBox.shrink();
 
       case 'ADDITIONAL_TYPE_UPOWER_LOTTERY':
         final content = additional.upowerLottery!;
@@ -397,7 +396,6 @@ Widget addWidget(
             }).toList(),
           );
         }
-        return const SizedBox.shrink();
 
       case 'ADDITIONAL_TYPE_VOTE':
         final vote = additional.vote!;

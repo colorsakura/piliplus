@@ -31,7 +31,7 @@ abstract class LoginUtils {
       return null;
     }
     final cookies = (account ?? Accounts.main).cookieJar.toList();
-    final webManager = web.CookieManager();
+    final webManager = web.CookieManager.instance();
     return Future.wait(
       cookies.map(
         (cookie) => webManager.setCookie(
@@ -117,7 +117,7 @@ abstract class LoginUtils {
     GrpcReq.updateHeaders(null);
 
     await Future.wait([
-      if (!Platform.isWindows) web.CookieManager().deleteAllCookies(),
+      if (!Platform.isWindows) web.CookieManager.instance().deleteAllCookies(),
       GStorage.userInfo.delete('userInfoCache'),
     ]);
 
