@@ -19,12 +19,14 @@ class PlayerFocus extends StatelessWidget {
     required this.plPlayerController,
     this.introController,
     required this.onSendDanmaku,
+    this.canPlay,
   });
 
   final Widget child;
   final PlPlayerController plPlayerController;
   final CommonIntroController? introController;
   final VoidCallback onSendDanmaku;
+  final bool Function()? canPlay;
 
   static bool _shouldHandled(KeyEvent event) {
     return event.logicalKey == LogicalKeyboardKey.tab ||
@@ -57,8 +59,10 @@ class PlayerFocus extends StatelessWidget {
     if (event is KeyDownEvent) {
       switch (key) {
         case LogicalKeyboardKey.space:
-          if (hasPlayer) {
-            plPlayerController.onDoubleTapCenter();
+          if (plPlayerController.isLive || canPlay!()) {
+            if (hasPlayer) {
+              plPlayerController.onDoubleTapCenter();
+            }
           }
           return true;
 

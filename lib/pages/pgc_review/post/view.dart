@@ -94,12 +94,12 @@ class _PgcReviewPostPanelState extends State<PgcReviewPostPanel> {
                     return Obx(
                       () => index <= _score.value - 1
                           ? const Icon(
-                              CustomIcon.star_favorite_solid,
+                              CustomIcons.star_favorite_solid,
                               size: 50,
                               color: Color(0xFFFFAD35),
                             )
                           : const Icon(
-                              CustomIcon.star_favorite_line,
+                              CustomIcons.star_favorite_line,
                               size: 50,
                               color: Colors.grey,
                             ),

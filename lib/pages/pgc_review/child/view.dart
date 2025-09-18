@@ -254,13 +254,13 @@ class _PgcReviewChildPageState extends State<PgcReviewChildPage>
                               (index) {
                                 if (index <= item.score - 1) {
                                   return const Icon(
-                                    CustomIcon.star_favorite_solid,
+                                    CustomIcons.star_favorite_solid,
                                     size: 13,
                                     color: Color(0xFFFFAD35),
                                   );
                                 }
                                 return const Icon(
-                                  CustomIcon.star_favorite_line,
+                                  CustomIcons.star_favorite_line,
                                   size: 14,
                                   color: Colors.grey,
                                 );

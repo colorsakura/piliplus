@@ -100,36 +100,39 @@ class ReplyUtils {
     }
     void showReplyCheckResult(String message, {bool isBan = false}) {
       Get.dialog(
+        barrierDismissible: isManual,
         AlertDialog(
           title: const Text('评论检查结果'),
           content: SelectableText(message),
-          actions: isBan
-              ? [
-                  TextButton(
-                    onPressed: () {
-                      Get.back();
-                      String? uri;
-                      switch (type) {
-                        case 1:
-                          uri = IdUtils.av2bv(oid);
-                        case 17:
-                          uri = 'https://www.bilibili.com/opus/$oid';
-                      }
-                      if (uri != null) {
-                        Utils.copyText(uri);
-                      }
-                      Get.toNamed(
-                        '/webview',
-                        parameters: {
-                          'url':
-                              'https://www.bilibili.com/h5/comment/appeal?native.theme=2&night=${Get.isDarkMode ? 1 : 0}',
-                        },
-                      );
-                    },
-                    child: const Text('申诉'),
-                  ),
-                ]
-              : null,
+          actions: [
+            TextButton(
+              onPressed: () {
+                Get.back();
+                String? uri;
+                switch (type) {
+                  case 1:
+                    uri = IdUtils.av2bv(oid);
+                  case 17:
+                    uri = 'https://www.bilibili.com/opus/$oid';
+                }
+                if (uri != null) {
+                  Utils.copyText(uri);
+                }
+                Get.toNamed(
+                  '/webview',
+                  parameters: {
+                    'url':
+                        'https://www.bilibili.com/h5/comment/appeal?native.theme=2&night=${Get.isDarkMode ? 1 : 0}',
+                  },
+                );
+              },
+              child: const Text('申诉'),
+            ),
+            TextButton(
+              onPressed: Get.back,
+              child: const Text('关闭'),
+            ),
+          ],
         ),
       );
     }

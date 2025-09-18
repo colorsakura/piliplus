@@ -100,7 +100,7 @@ class HeaderControlState extends TripleState<HeaderControl> {
 
   @override
   void dispose() {
-    clock?.cancel();
+    cancelClock();
     super.dispose();
   }
 
@@ -416,7 +416,7 @@ class HeaderControlState extends TripleState<HeaderControl> {
                     Get.back();
                     showSetDanmaku();
                   },
-                  leading: const Icon(CustomIcon.dm_settings, size: 20),
+                  leading: const Icon(CustomIcons.dm_settings, size: 20),
                   title: const Text('弹幕设置', style: titleStyle),
                 ),
                 ListTile(
@@ -780,7 +780,7 @@ class HeaderControlState extends TripleState<HeaderControl> {
                             Icons.done,
                             color: theme.colorScheme.primary,
                           )
-                        : const SizedBox.shrink(),
+                        : null,
                   ),
                 ],
               ],
@@ -857,7 +857,7 @@ class HeaderControlState extends TripleState<HeaderControl> {
                                   Icons.done,
                                   color: theme.colorScheme.primary,
                                 )
-                              : const SizedBox.shrink(),
+                              : null,
                         ),
                       ],
                     ],
@@ -1819,7 +1819,7 @@ class HeaderControlState extends TripleState<HeaderControl> {
                             Icons.done,
                             color: theme.colorScheme.primary,
                           )
-                        : const SizedBox.shrink(),
+                        : null,
                   ),
                 ],
               ],
@@ -1835,376 +1835,369 @@ class HeaderControlState extends TripleState<HeaderControl> {
   void startClock() {
     clock ??= Timer.periodic(const Duration(seconds: 1), (Timer t) {
       if (!mounted) {
-        clock?.cancel();
+        cancelClock();
         return;
       }
       now.value = _format.format(DateTime.now());
     });
   }
 
-  Widget _buildHeader(bool showFSActionItem) => AppBar(
-    elevation: 0,
-    scrolledUnderElevation: 0,
-    backgroundColor: Colors.transparent,
-    foregroundColor: Colors.white,
-    primary: false,
-    automaticallyImplyLeading: false,
-    toolbarHeight: showFSActionItem && isFullScreen ? 112 : null,
-    flexibleSpace: Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        const SizedBox(height: 11),
-        Row(
-          children: [
-            SizedBox(
-              width: 42,
-              height: 34,
-              child: IconButton(
-                tooltip: '返回',
-                icon: const Icon(
-                  FontAwesomeIcons.arrowLeft,
-                  size: 15,
-                  color: Colors.white,
-                ),
-                onPressed: () {
-                  if (isFullScreen) {
-                    plPlayerController.triggerFullScreen(status: false);
-                  } else if (!horizontalScreen && !isPortrait) {
-                    verticalScreenForTwoSeconds();
-                  } else {
-                    Get.back();
-                  }
-                },
-              ),
-            ),
-            if (!isFullScreen || !isPortrait)
+  void cancelClock() {
+    clock?.cancel();
+    clock = null;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final showFSActionItem =
+        plPlayerController.showFSActionItem && isFullScreen;
+    return AppBar(
+      elevation: 0,
+      scrolledUnderElevation: 0,
+      backgroundColor: Colors.transparent,
+      foregroundColor: Colors.white,
+      primary: false,
+      automaticallyImplyLeading: false,
+      toolbarHeight: showFSActionItem ? 112 : null,
+      flexibleSpace: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const SizedBox(height: 11),
+          Row(
+            children: [
               SizedBox(
                 width: 42,
                 height: 34,
                 child: IconButton(
-                  tooltip: '返回主页',
+                  tooltip: '返回',
                   icon: const Icon(
-                    FontAwesomeIcons.house,
+                    FontAwesomeIcons.arrowLeft,
                     size: 15,
                     color: Colors.white,
                   ),
                   onPressed: () {
-                    videoDetailCtr.plPlayerController.backToHome = true;
-                    Get.until((route) => route.isFirst);
+                    if (isFullScreen) {
+                      plPlayerController.triggerFullScreen(status: false);
+                    } else if (!horizontalScreen && !isPortrait) {
+                      verticalScreenForTwoSeconds();
+                    } else {
+                      Get.back();
+                    }
                   },
                 ),
               ),
-            if ((introController.videoDetail.value.title != null) &&
-                (isFullScreen || (!horizontalScreen && !isPortrait)))
-              Expanded(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: isPortrait
-                          ? EdgeInsets.zero
-                          : const EdgeInsets.only(right: 10),
-                      child: Obx(
-                        () {
-                          final videoDetail = introController.videoDetail.value;
-                          final String title;
-                          if (videoDetail.videos == 1) {
-                            title = videoDetail.title!;
-                          } else {
-                            title =
-                                videoDetail.pages
-                                    ?.firstWhereOrNull(
-                                      (e) => e.cid == videoDetailCtr.cid.value,
-                                    )
-                                    ?.pagePart ??
-                                videoDetail.title!;
-                          }
-                          return MarqueeText(
-                            title,
-                            spacing: 30,
-                            velocity: 30,
+              if (!isFullScreen || !isPortrait)
+                SizedBox(
+                  width: 42,
+                  height: 34,
+                  child: IconButton(
+                    tooltip: '返回主页',
+                    icon: const Icon(
+                      FontAwesomeIcons.house,
+                      size: 15,
+                      color: Colors.white,
+                    ),
+                    onPressed: () {
+                      videoDetailCtr.plPlayerController.backToHome = true;
+                      Get.until((route) => route.isFirst);
+                    },
+                  ),
+                ),
+              if ((introController.videoDetail.value.title != null) &&
+                  (isFullScreen || (!horizontalScreen && !isPortrait)))
+                Expanded(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: isPortrait
+                            ? EdgeInsets.zero
+                            : const EdgeInsets.only(right: 10),
+                        child: Obx(
+                          () {
+                            final videoDetail =
+                                introController.videoDetail.value;
+                            final String title;
+                            if (videoDetail.videos == 1) {
+                              title = videoDetail.title!;
+                            } else {
+                              title =
+                                  videoDetail.pages
+                                      ?.firstWhereOrNull(
+                                        (e) =>
+                                            e.cid == videoDetailCtr.cid.value,
+                                      )
+                                      ?.pagePart ??
+                                  videoDetail.title!;
+                            }
+                            return MarqueeText(
+                              title,
+                              spacing: 30,
+                              velocity: 30,
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 16,
+                              ),
+                              provider: provider,
+                            );
+                          },
+                        ),
+                      ),
+                      if (introController.isShowOnlineTotal)
+                        Obx(
+                          () => Text(
+                            '${introController.total.value}人正在看',
                             style: const TextStyle(
                               color: Colors.white,
-                              fontSize: 16,
+                              fontSize: 11,
                             ),
-                            provider: provider,
-                          );
-                        },
-                      ),
-                    ),
-                    if (introController.isShowOnlineTotal)
-                      Obx(
-                        () => Text(
-                          '${introController.total.value}人正在看',
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 11,
                           ),
                         ),
-                      ),
-                  ],
-                ),
-              )
-            else
-              const Spacer(),
-            // show current datetime
-            Obx(
-              () {
-                if ((isFullScreen || !horizontalScreen) && !isPortrait) {
-                  startClock();
-                  return Text(
-                    now.value,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 13,
-                    ),
-                  );
-                }
-                clock?.cancel();
-                clock = null;
-                return const SizedBox.shrink();
-              },
-            ),
-            if (plPlayerController.enableSponsorBlock == true)
-              SizedBox(
-                width: 42,
-                height: 34,
-                child: IconButton(
-                  tooltip: '提交片段',
-                  style: const ButtonStyle(
-                    padding: WidgetStatePropertyAll(EdgeInsets.zero),
-                  ),
-                  onPressed: () => videoDetailCtr.onBlock(context),
-                  icon: const Stack(
-                    clipBehavior: Clip.none,
-                    alignment: Alignment.center,
-                    children: [
-                      Icon(
-                        Icons.shield_outlined,
-                        size: 19,
-                        color: Colors.white,
-                      ),
-                      Icon(
-                        Icons.play_arrow_rounded,
-                        size: 13,
-                        color: Colors.white,
-                      ),
                     ],
                   ),
-                ),
-              ),
-            Obx(
-              () => videoDetailCtr.segmentList.isNotEmpty
-                  ? SizedBox(
-                      width: 42,
-                      height: 34,
-                      child: IconButton(
-                        tooltip: '片段信息',
-                        style: const ButtonStyle(
-                          padding: WidgetStatePropertyAll(EdgeInsets.zero),
-                        ),
-                        onPressed: () => videoDetailCtr.showSBDetail(context),
-                        icon: const Icon(
-                          MdiIcons.advertisements,
-                          size: 19,
-                          color: Colors.white,
-                        ),
-                      ),
-                    )
-                  : const SizedBox.shrink(),
-            ),
-            SizedBox(
-              width: 42,
-              height: 34,
-              child: IconButton(
-                tooltip: '发弹幕',
-                style: const ButtonStyle(
-                  padding: WidgetStatePropertyAll(EdgeInsets.zero),
-                ),
-                onPressed: videoDetailCtr.showShootDanmakuSheet,
-                icon: const Icon(
-                  Icons.comment_outlined,
-                  size: 19,
-                  color: Colors.white,
-                ),
-              ),
-            ),
-            SizedBox(
-              width: 42,
-              height: 34,
-              child: Obx(
+                )
+              else
+                const Spacer(),
+              // show current datetime
+              Obx(
                 () {
-                  final enableShowDanmaku =
-                      plPlayerController.enableShowDanmaku.value;
-                  return IconButton(
-                    tooltip: "${enableShowDanmaku ? '关闭' : '开启'}弹幕",
+                  if ((isFullScreen || !horizontalScreen) && !isPortrait) {
+                    startClock();
+                    return Text(
+                      now.value,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 13,
+                      ),
+                    );
+                  }
+                  cancelClock();
+                  return const SizedBox.shrink();
+                },
+              ),
+              if (plPlayerController.enableSponsorBlock == true)
+                SizedBox(
+                  width: 42,
+                  height: 34,
+                  child: IconButton(
+                    tooltip: '提交片段',
                     style: const ButtonStyle(
                       padding: WidgetStatePropertyAll(EdgeInsets.zero),
                     ),
-                    onPressed: () {
-                      final newVal = !enableShowDanmaku;
-                      plPlayerController.enableShowDanmaku.value = newVal;
-                      if (!plPlayerController.tempPlayerConf) {
-                        setting.put(SettingBoxKey.enableShowDanmaku, newVal);
-                      }
-                    },
-                    icon: Icon(
-                      enableShowDanmaku
-                          ? Icons.subtitles_outlined
-                          : Icons.subtitles_off_outlined,
-                      size: 19,
-                      color: Colors.white,
+                    onPressed: () => videoDetailCtr.onBlock(context),
+                    icon: const Stack(
+                      clipBehavior: Clip.none,
+                      alignment: Alignment.center,
+                      children: [
+                        Icon(
+                          Icons.shield_outlined,
+                          size: 19,
+                          color: Colors.white,
+                        ),
+                        Icon(
+                          Icons.play_arrow_rounded,
+                          size: 13,
+                          color: Colors.white,
+                        ),
+                      ],
                     ),
-                  );
-                },
+                  ),
+                ),
+              Obx(
+                () => videoDetailCtr.segmentList.isNotEmpty
+                    ? SizedBox(
+                        width: 42,
+                        height: 34,
+                        child: IconButton(
+                          tooltip: '片段信息',
+                          style: const ButtonStyle(
+                            padding: WidgetStatePropertyAll(EdgeInsets.zero),
+                          ),
+                          onPressed: () => videoDetailCtr.showSBDetail(context),
+                          icon: const Icon(
+                            MdiIcons.advertisements,
+                            size: 19,
+                            color: Colors.white,
+                          ),
+                        ),
+                      )
+                    : const SizedBox.shrink(),
               ),
-            ),
-            if (Platform.isAndroid)
               SizedBox(
                 width: 42,
                 height: 34,
                 child: IconButton(
-                  tooltip: '画中画',
+                  tooltip: '发弹幕',
                   style: const ButtonStyle(
                     padding: WidgetStatePropertyAll(EdgeInsets.zero),
                   ),
-                  onPressed: () async {
-                    bool canUsePiP = await Floating().isPipAvailable;
-                    plPlayerController.hiddenControls(false);
-                    if (canUsePiP) {
-                      if (!videoPlayerServiceHandler!.enableBackgroundPlay &&
-                          mounted) {
-                        final theme = Theme.of(context);
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Column(
-                              children: [
-                                const Row(
-                                  children: [
-                                    Icon(
-                                      Icons.check,
-                                      color: Colors.green,
-                                    ),
-                                    SizedBox(width: 10),
-                                    Text(
-                                      '画中画',
-                                      style: TextStyle(
-                                        fontSize: 15,
-                                        height: 1.5,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(height: 10),
-                                const Text(
-                                  '建议开启【后台音频服务】\n'
-                                  '避免画中画没有暂停按钮',
-                                  style: TextStyle(fontSize: 12.5, height: 1.5),
-                                ),
-                                Row(
-                                  children: [
-                                    TextButton(
-                                      style: ButtonStyle(
-                                        foregroundColor: WidgetStatePropertyAll(
-                                          theme.snackBarTheme.actionTextColor,
-                                        ),
-                                      ),
-                                      onPressed: () {
-                                        plPlayerController.setBackgroundPlay(
-                                          true,
-                                        );
-                                        SmartDialog.showToast("请重新载入本页面刷新");
-                                      },
-                                      child: const Text('启用后台音频服务'),
-                                    ),
-                                    const SizedBox(width: 10),
-                                    TextButton(
-                                      style: ButtonStyle(
-                                        foregroundColor: WidgetStatePropertyAll(
-                                          theme.snackBarTheme.actionTextColor,
-                                        ),
-                                      ),
-                                      onPressed: () {},
-                                      child: const Text('不启用'),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                            duration: const Duration(seconds: 2),
-                            showCloseIcon: true,
-                          ),
-                        );
-                        await Future.delayed(const Duration(seconds: 3));
-                      }
-                      if (!context.mounted) return;
-                      PageUtils.enterPip(
-                        width: widget.videoDetailCtr.firstVideo.width,
-                        height: widget.videoDetailCtr.firstVideo.height,
-                      );
-                    }
-                  },
+                  onPressed: videoDetailCtr.showShootDanmakuSheet,
                   icon: const Icon(
-                    Icons.picture_in_picture_outlined,
+                    Icons.comment_outlined,
                     size: 19,
                     color: Colors.white,
                   ),
                 ),
               ),
-            SizedBox(
-              width: 42,
-              height: 34,
-              child: IconButton(
-                tooltip: "更多设置",
-                style: const ButtonStyle(
-                  padding: WidgetStatePropertyAll(EdgeInsets.zero),
-                ),
-                onPressed: showSettingSheet,
-                icon: const Icon(
-                  Icons.more_vert_outlined,
-                  size: 19,
-                  color: Colors.white,
-                ),
-              ),
-            ),
-          ],
-        ),
-        if (showFSActionItem && isFullScreen)
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
               SizedBox(
                 width: 42,
                 height: 34,
                 child: Obx(
-                  () => ActionItem(
-                    expand: false,
+                  () {
+                    final enableShowDanmaku =
+                        plPlayerController.enableShowDanmaku.value;
+                    return IconButton(
+                      tooltip: "${enableShowDanmaku ? '关闭' : '开启'}弹幕",
+                      style: const ButtonStyle(
+                        padding: WidgetStatePropertyAll(EdgeInsets.zero),
+                      ),
+                      onPressed: () {
+                        final newVal = !enableShowDanmaku;
+                        plPlayerController.enableShowDanmaku.value = newVal;
+                        if (!plPlayerController.tempPlayerConf) {
+                          setting.put(SettingBoxKey.enableShowDanmaku, newVal);
+                        }
+                      },
+                      icon: enableShowDanmaku
+                          ? const Icon(
+                              size: 20,
+                              CustomIcons.dm_on,
+                              color: Colors.white,
+                            )
+                          : const Icon(
+                              size: 20,
+                              CustomIcons.dm_off,
+                              color: Colors.white,
+                            ),
+                    );
+                  },
+                ),
+              ),
+              if (Platform.isAndroid)
+                SizedBox(
+                  width: 42,
+                  height: 34,
+                  child: IconButton(
+                    tooltip: '画中画',
+                    style: const ButtonStyle(
+                      padding: WidgetStatePropertyAll(EdgeInsets.zero),
+                    ),
+                    onPressed: () async {
+                      bool canUsePiP = await Floating().isPipAvailable;
+                      plPlayerController.hiddenControls(false);
+                      if (canUsePiP) {
+                        if (context.mounted &&
+                            !videoPlayerServiceHandler!.enableBackgroundPlay) {
+                          final theme = Theme.of(context);
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Column(
+                                children: [
+                                  const Row(
+                                    children: [
+                                      Icon(
+                                        Icons.check,
+                                        color: Colors.green,
+                                      ),
+                                      SizedBox(width: 10),
+                                      Text(
+                                        '画中画',
+                                        style: TextStyle(
+                                          fontSize: 15,
+                                          height: 1.5,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 10),
+                                  const Text(
+                                    '建议开启【后台音频服务】\n'
+                                    '避免画中画没有暂停按钮',
+                                    style: TextStyle(
+                                      fontSize: 12.5,
+                                      height: 1.5,
+                                    ),
+                                  ),
+                                  Row(
+                                    children: [
+                                      TextButton(
+                                        style: ButtonStyle(
+                                          foregroundColor:
+                                              WidgetStatePropertyAll(
+                                                theme
+                                                    .snackBarTheme
+                                                    .actionTextColor,
+                                              ),
+                                        ),
+                                        onPressed: () {
+                                          plPlayerController.setBackgroundPlay(
+                                            true,
+                                          );
+                                          SmartDialog.showToast("请重新载入本页面刷新");
+                                        },
+                                        child: const Text('启用后台音频服务'),
+                                      ),
+                                      const SizedBox(width: 10),
+                                      TextButton(
+                                        style: ButtonStyle(
+                                          foregroundColor:
+                                              WidgetStatePropertyAll(
+                                                theme
+                                                    .snackBarTheme
+                                                    .actionTextColor,
+                                              ),
+                                        ),
+                                        onPressed: () {},
+                                        child: const Text('不启用'),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                              duration: const Duration(seconds: 2),
+                              showCloseIcon: true,
+                            ),
+                          );
+                          await Future.delayed(const Duration(seconds: 3));
+                        }
+                        if (!context.mounted) return;
+                        PageUtils.enterPip(
+                          width: widget.videoDetailCtr.firstVideo.width,
+                          height: widget.videoDetailCtr.firstVideo.height,
+                        );
+                      }
+                    },
                     icon: const Icon(
-                      FontAwesomeIcons.thumbsUp,
+                      Icons.picture_in_picture_outlined,
+                      size: 19,
                       color: Colors.white,
                     ),
-                    selectIcon: const Icon(
-                      FontAwesomeIcons.solidThumbsUp,
-                    ),
-                    selectStatus: introController.hasLike.value,
-                    semanticsLabel: '点赞',
-                    animation: tripleAnimation,
-                    onStartTriple: () {
-                      plPlayerController.tripling = true;
-                      onStartTriple();
-                    },
-                    onCancelTriple: ([bool isTap = false]) {
-                      plPlayerController
-                        ..tripling = false
-                        ..hideTaskControls();
-                      onCancelTriple(isTap);
-                    },
+                  ),
+                ),
+              SizedBox(
+                width: 42,
+                height: 34,
+                child: IconButton(
+                  tooltip: "更多设置",
+                  style: const ButtonStyle(
+                    padding: WidgetStatePropertyAll(EdgeInsets.zero),
+                  ),
+                  onPressed: showSettingSheet,
+                  icon: const Icon(
+                    Icons.more_vert_outlined,
+                    size: 19,
+                    color: Colors.white,
                   ),
                 ),
               ),
-              if (introController case UgcIntroController ugc)
+            ],
+          ),
+          if (showFSActionItem)
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
                 SizedBox(
                   width: 42,
                   height: 34,
@@ -2212,82 +2205,106 @@ class HeaderControlState extends TripleState<HeaderControl> {
                     () => ActionItem(
                       expand: false,
                       icon: const Icon(
-                        FontAwesomeIcons.thumbsDown,
+                        FontAwesomeIcons.thumbsUp,
                         color: Colors.white,
                       ),
                       selectIcon: const Icon(
-                        FontAwesomeIcons.solidThumbsDown,
+                        FontAwesomeIcons.solidThumbsUp,
                       ),
-                      onTap: () => ugc.handleAction(ugc.actionDislikeVideo),
-                      selectStatus: ugc.hasDislike.value,
-                      semanticsLabel: '点踩',
+                      selectStatus: introController.hasLike.value,
+                      semanticsLabel: '点赞',
+                      animation: tripleAnimation,
+                      onStartTriple: () {
+                        plPlayerController.tripling = true;
+                        onStartTriple();
+                      },
+                      onCancelTriple: ([bool isTap = false]) {
+                        plPlayerController
+                          ..tripling = false
+                          ..hideTaskControls();
+                        onCancelTriple(isTap);
+                      },
                     ),
                   ),
                 ),
-              SizedBox(
-                width: 42,
-                height: 34,
-                child: Obx(
-                  () => ActionItem(
+                if (introController case UgcIntroController ugc)
+                  SizedBox(
+                    width: 42,
+                    height: 34,
+                    child: Obx(
+                      () => ActionItem(
+                        expand: false,
+                        icon: const Icon(
+                          FontAwesomeIcons.thumbsDown,
+                          color: Colors.white,
+                        ),
+                        selectIcon: const Icon(
+                          FontAwesomeIcons.solidThumbsDown,
+                        ),
+                        onTap: () => ugc.handleAction(ugc.actionDislikeVideo),
+                        selectStatus: ugc.hasDislike.value,
+                        semanticsLabel: '点踩',
+                      ),
+                    ),
+                  ),
+                SizedBox(
+                  width: 42,
+                  height: 34,
+                  child: Obx(
+                    () => ActionItem(
+                      expand: false,
+                      animation: tripleAnimation,
+                      icon: const Icon(
+                        FontAwesomeIcons.b,
+                        color: Colors.white,
+                      ),
+                      selectIcon: const Icon(FontAwesomeIcons.b),
+                      onTap: introController.actionCoinVideo,
+                      selectStatus: introController.hasCoin,
+                      semanticsLabel: '投币',
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: 42,
+                  height: 34,
+                  child: Obx(
+                    () => ActionItem(
+                      expand: false,
+                      animation: tripleAnimation,
+                      icon: const Icon(
+                        FontAwesomeIcons.star,
+                        color: Colors.white,
+                      ),
+                      selectIcon: const Icon(FontAwesomeIcons.solidStar),
+                      onTap: () => introController.showFavBottomSheet(context),
+                      onLongPress: () => introController.showFavBottomSheet(
+                        context,
+                        isLongPress: true,
+                      ),
+                      selectStatus: introController.hasFav.value,
+                      semanticsLabel: '收藏',
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: 42,
+                  height: 34,
+                  child: ActionItem(
                     expand: false,
-                    animation: tripleAnimation,
                     icon: const Icon(
-                      FontAwesomeIcons.b,
+                      FontAwesomeIcons.shareFromSquare,
                       color: Colors.white,
                     ),
-                    selectIcon: const Icon(FontAwesomeIcons.b),
-                    onTap: introController.actionCoinVideo,
-                    selectStatus: introController.hasCoin,
-                    semanticsLabel: '投币',
+                    onTap: () => introController.actionShareVideo(context),
+                    semanticsLabel: '分享',
                   ),
                 ),
-              ),
-              SizedBox(
-                width: 42,
-                height: 34,
-                child: Obx(
-                  () => ActionItem(
-                    expand: false,
-                    animation: tripleAnimation,
-                    icon: const Icon(
-                      FontAwesomeIcons.star,
-                      color: Colors.white,
-                    ),
-                    selectIcon: const Icon(FontAwesomeIcons.solidStar),
-                    onTap: () => introController.showFavBottomSheet(context),
-                    onLongPress: () => introController.showFavBottomSheet(
-                      context,
-                      isLongPress: true,
-                    ),
-                    selectStatus: introController.hasFav.value,
-                    semanticsLabel: '收藏',
-                  ),
-                ),
-              ),
-              SizedBox(
-                width: 42,
-                height: 34,
-                child: ActionItem(
-                  expand: false,
-                  icon: const Icon(
-                    FontAwesomeIcons.shareFromSquare,
-                    color: Colors.white,
-                  ),
-                  onTap: () => introController.actionShareVideo(context),
-                  semanticsLabel: '分享',
-                ),
-              ),
-            ],
-          ),
-      ],
-    ),
-  );
-
-  @override
-  Widget build(BuildContext context) {
-    return plPlayerController.showFSActionItem
-        ? Obx(() => _buildHeader(true))
-        : _buildHeader(false);
+              ],
+            ),
+        ],
+      ),
+    );
   }
 }
 

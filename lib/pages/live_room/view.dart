@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:ui';
 
 import 'package:PiliPlus/common/widgets/button/icon_button.dart';
+import 'package:PiliPlus/common/widgets/custom_icon.dart';
 import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
 import 'package:PiliPlus/common/widgets/keep_alive_wrapper.dart';
 import 'package:PiliPlus/common/widgets/scroll_physics.dart';
@@ -798,12 +799,12 @@ class _LiveRoomPageState extends State<LiveRoomPage>
                         icon: enableShowLiveDanmaku
                             ? const Icon(
                                 size: 22,
-                                Icons.subtitles_outlined,
+                                CustomIcons.dm_on,
                                 color: Color(0xFFEEEEEE),
                               )
                             : const Icon(
                                 size: 22,
-                                Icons.subtitles_off_outlined,
+                                CustomIcons.dm_off,
                                 color: Color(0xFFEEEEEE),
                               ),
                       ),

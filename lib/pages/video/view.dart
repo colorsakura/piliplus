@@ -1490,6 +1490,13 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
           ? ugcIntroController
           : pgcIntroController,
       onSendDanmaku: videoDetailController.showShootDanmakuSheet,
+      canPlay: () {
+        if (videoDetailController.autoPlay.value) {
+          return true;
+        }
+        handlePlay();
+        return false;
+      },
       child: child,
     );
     return videoDetailController.plPlayerController.darkVideoPage
@@ -1627,8 +1634,8 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                           icon: Icon(
                             size: 22,
                             enableShowDanmaku
-                                ? CustomIcon.dm_on
-                                : CustomIcon.dm_off,
+                                ? CustomIcons.dm_on
+                                : CustomIcons.dm_off,
                             color: enableShowDanmaku
                                 ? themeData.colorScheme.secondary
                                 : themeData.colorScheme.outline,

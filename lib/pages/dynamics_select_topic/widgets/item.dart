@@ -28,7 +28,7 @@ class DynTopicItem extends StatelessWidget {
                 child: Padding(
                   padding: EdgeInsets.only(right: 5),
                   child: Icon(
-                    CustomIcon.topic_tag,
+                    CustomIcons.topic_tag,
                     size: 18,
                   ),
                 ),

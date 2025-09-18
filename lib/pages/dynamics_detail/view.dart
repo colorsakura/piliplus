@@ -293,7 +293,7 @@ class _DynamicDetailPageState extends CommonDynPageState<DynamicDetailPage> {
                       ),
                       Expanded(
                         child: textIconButton(
-                          icon: CustomIcon.share_node,
+                          icon: CustomIcons.share_node,
                           text: '分享',
                           stat: null,
                           onPressed: () => Utils.shareText(

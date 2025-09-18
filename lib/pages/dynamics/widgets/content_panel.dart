@@ -52,7 +52,7 @@ Widget content(
                       padding: const EdgeInsets.only(right: 4),
                       child: Icon(
                         size: 18,
-                        CustomIcon.topic_tag,
+                        CustomIcons.topic_tag,
                         color: theme.colorScheme.primary,
                       ),
                     ),

@@ -286,7 +286,7 @@ class _MusicDetailPageState extends CommonDynPageState<MusicDetailPage> {
                         // ),
                         Expanded(
                           child: textIconButton(
-                            icon: CustomIcon.share_node,
+                            icon: CustomIcons.share_node,
                             text: '分享',
                             onPressed: () =>
                                 Utils.shareText(controller.shareUrl),

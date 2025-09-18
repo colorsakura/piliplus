@@ -682,7 +682,7 @@ class _ArticlePageState extends CommonDynPageState<ArticlePage> {
                       Expanded(
                         child: textIconButton(
                           text: '分享',
-                          icon: CustomIcon.share_node,
+                          icon: CustomIcons.share_node,
                           stat: null,
                           onPressed: () => Utils.shareText(controller.url),
                         ),

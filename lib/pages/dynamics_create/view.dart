@@ -147,7 +147,7 @@ class _CreateDynPanelState extends CommonRichTextPubPageState<CreateDynPanel> {
                                   child: Padding(
                                     padding: const EdgeInsets.only(right: 5),
                                     child: Icon(
-                                      CustomIcon.topic_tag,
+                                      CustomIcons.topic_tag,
                                       size: 18,
                                       color: hasTopic
                                           ? null
@@ -604,7 +604,7 @@ class _CreateDynPanelState extends CommonRichTextPubPageState<CreateDynPanel> {
         children: [
           item(
             onTap: _onReserve,
-            icon: Icon(CustomIcon.live_reserve, size: 28, color: color),
+            icon: Icon(CustomIcons.live_reserve, size: 28, color: color),
             title: '直播预约',
           ),
         ],

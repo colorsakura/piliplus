@@ -58,7 +58,7 @@ class _DynTopicPageState extends State<DynTopicPage> with DynMixin {
             SmartDialog.showToast('账号未登录');
           }
         },
-        icon: const Icon(CustomIcon.topic_tag, size: 20),
+        icon: const Icon(CustomIcons.topic_tag, size: 20),
         label: const Text('参与话题'),
       ),
       body: refreshIndicator(

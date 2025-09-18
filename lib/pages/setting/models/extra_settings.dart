@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:math' show pi, max;
 
+import 'package:PiliPlus/common/widgets/custom_icon.dart';
 import 'package:PiliPlus/common/widgets/image/custom_grid_view.dart'
     show CustomGridView, ImageModel;
 import 'package:PiliPlus/common/widgets/pendant_avatar.dart';
@@ -243,7 +244,7 @@ List<SettingsModel> get extraSettings => [
     title: '弹幕行高',
     subtitle: '默认1.6',
     setKey: SettingBoxKey.danmakuLineHeight,
-    leading: const Icon(Icons.subtitles_outlined),
+    leading: const Icon(CustomIcons.dm_settings),
     getTrailing: () => Text(
       Pref.danmakuLineHeight.toString(),
       style: Get.theme.textTheme.titleSmall,

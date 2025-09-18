@@ -1,3 +1,4 @@
+import 'package:PiliPlus/common/widgets/custom_icon.dart';
 import 'package:PiliPlus/pages/live_room/controller.dart';
 import 'package:PiliPlus/plugin/pl_player/controller.dart';
 import 'package:PiliPlus/plugin/pl_player/models/video_fit_type.dart';
@@ -76,12 +77,12 @@ class BottomControl extends StatelessWidget {
                 icon: enableShowLiveDanmaku
                     ? const Icon(
                         size: 18,
-                        Icons.subtitles_outlined,
+                        CustomIcons.dm_on,
                         color: Colors.white,
                       )
                     : const Icon(
                         size: 18,
-                        Icons.subtitles_off_outlined,
+                        CustomIcons.dm_off,
                         color: Colors.white,
                       ),
                 onTap: () {
