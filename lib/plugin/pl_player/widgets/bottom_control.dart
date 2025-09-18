@@ -5,6 +5,7 @@ import 'package:PiliPlus/common/widgets/progress_bar/segment_progress_bar.dart';
 import 'package:PiliPlus/plugin/pl_player/controller.dart';
 import 'package:PiliPlus/plugin/pl_player/view.dart';
 import 'package:PiliPlus/utils/feed_back.dart';
+import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
@@ -124,8 +125,7 @@ class BottomControl extends StatelessWidget {
                       ),
                     ),
                   if (controller.viewPointList.isNotEmpty &&
-                      controller.showVP.value)
-                    // ...[
+                      controller.showVP.value) ...[
                     Positioned(
                       left: 0,
                       right: 0,
@@ -142,16 +142,9 @@ class BottomControl extends StatelessWidget {
                         ),
                       ),
                     ),
-                  // buildViewPointWidget(
-                  //   controller,
-                  //   8.75,
-                  //   maxWidth -
-                  //       40 -
-                  //       (isFullScreen
-                  //           ? MediaQuery.viewPaddingOf(context).horizontal
-                  //           : 0),
-                  // ),
-                  // ],
+                    if (!Utils.isMobile)
+                      buildViewPointWidget(controller, 8.75, maxWidth - 40),
+                  ],
                   if (controller.dmTrend.isNotEmpty &&
                       controller.showDmTreandChart.value)
                     buildDmChart(theme, controller, 4.5),

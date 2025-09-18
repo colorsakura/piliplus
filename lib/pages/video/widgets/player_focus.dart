@@ -26,7 +26,7 @@ class PlayerFocus extends StatelessWidget {
   final CommonIntroController? introController;
   final VoidCallback onSendDanmaku;
 
-  static bool _showHandled(KeyEvent event) {
+  static bool _shouldHandled(KeyEvent event) {
     return event.logicalKey == LogicalKeyboardKey.tab ||
         event.logicalKey == LogicalKeyboardKey.arrowLeft ||
         event.logicalKey == LogicalKeyboardKey.arrowRight ||
@@ -40,7 +40,7 @@ class PlayerFocus extends StatelessWidget {
       autofocus: true,
       onKeyEvent: (node, event) {
         final handled = _handleKey(event);
-        if (handled || _showHandled(event)) {
+        if (handled || _shouldHandled(event)) {
           return KeyEventResult.handled;
         }
         return KeyEventResult.ignored;
