@@ -9,13 +9,12 @@ import 'package:PiliPlus/models/common/image_type.dart';
 import 'package:PiliPlus/models_new/live/live_room_info_h5/data.dart';
 import 'package:PiliPlus/models_new/live/live_superchat/item.dart';
 import 'package:PiliPlus/pages/live_room/controller.dart';
-import 'package:PiliPlus/pages/live_room/send_danmaku/view.dart';
 import 'package:PiliPlus/pages/live_room/superchat/superchat_card.dart';
 import 'package:PiliPlus/pages/live_room/superchat/superchat_panel.dart';
 import 'package:PiliPlus/pages/live_room/widgets/bottom_control.dart';
 import 'package:PiliPlus/pages/live_room/widgets/chat_panel.dart';
 import 'package:PiliPlus/pages/live_room/widgets/header_control.dart';
-import 'package:PiliPlus/pages/video/widgets/focus.dart';
+import 'package:PiliPlus/pages/video/widgets/player_focus.dart';
 import 'package:PiliPlus/plugin/pl_player/controller.dart';
 import 'package:PiliPlus/plugin/pl_player/models/play_status.dart';
 import 'package:PiliPlus/plugin/pl_player/utils/fullscreen.dart';
@@ -182,18 +181,21 @@ class _LiveRoomPageState extends State<LiveRoomPage>
   @override
   Widget build(BuildContext context) {
     if (Platform.isAndroid) {
-      return Floating().isPipMode
-          ? videoPlayerPanel(
-              isFullScreen,
-              width: maxWidth,
-              height: maxHeight,
-              isPipMode: true,
-              needDm: !plPlayerController.pipNoDanmaku,
-            )
-          : focus(childWhenDisabled);
-    } else {
-      return focus(childWhenDisabled);
+      if (Floating().isPipMode) {
+        return videoPlayerPanel(
+          isFullScreen,
+          width: maxWidth,
+          height: maxHeight,
+          isPipMode: true,
+          needDm: !plPlayerController.pipNoDanmaku,
+        );
+      }
     }
+    return PlayerFocus(
+      plPlayerController: plPlayerController,
+      onSendDanmaku: _liveRoomController.onSendDanmaku,
+      child: childWhenDisabled,
+    );
   }
 
   Widget videoPlayerPanel(
@@ -223,7 +225,7 @@ class _LiveRoomPageState extends State<LiveRoomPage>
             title: roomInfoH5?.roomInfo?.title,
             upName: roomInfoH5?.anchorInfo?.baseInfo?.uname,
             plPlayerController: plPlayerController,
-            onSendDanmaku: onSendDanmaku,
+            onSendDanmaku: _liveRoomController.onSendDanmaku,
             onPlayAudio: _liveRoomController.queryLiveUrl,
           ),
           bottomControl: BottomControl(
@@ -762,7 +764,7 @@ class _LiveRoomPageState extends State<LiveRoomPage>
         color: Color(0x1AFFFFFF),
       ),
       child: GestureDetector(
-        onTap: onSendDanmaku,
+        onTap: _liveRoomController.onSendDanmaku,
         behavior: HitTestBehavior.opaque,
         child: Padding(
           padding: const EdgeInsets.only(top: 5, bottom: 10),
@@ -876,7 +878,7 @@ class _LiveRoomPageState extends State<LiveRoomPage>
                   height: 34,
                   child: IconButton(
                     style: IconButton.styleFrom(padding: EdgeInsets.zero),
-                    onPressed: () => onSendDanmaku(true),
+                    onPressed: () => _liveRoomController.onSendDanmaku(true),
                     icon: const Icon(
                       size: 22,
                       color: Color(0xFFEEEEEE),
@@ -947,46 +949,6 @@ class _LiveRoomPageState extends State<LiveRoomPage>
         }
         return Colors.transparent;
       });
-
-  void onSendDanmaku([bool fromEmote = false]) {
-    if (!_liveRoomController.isLogin) {
-      SmartDialog.showToast('账号未登录');
-      return;
-    }
-    Get.generalDialog(
-      barrierLabel: '',
-      barrierDismissible: true,
-      pageBuilder: (context, animation, secondaryAnimation) {
-        return LiveSendDmPanel(
-          fromEmote: fromEmote,
-          liveRoomController: _liveRoomController,
-          items: _liveRoomController.savedDanmaku,
-          onSave: (msg) {
-            if (msg.isEmpty) {
-              _liveRoomController
-                ..savedDanmaku?.clear()
-                ..savedDanmaku = null;
-            } else {
-              _liveRoomController.savedDanmaku = msg.toList();
-            }
-          },
-        );
-      },
-      transitionDuration: fromEmote
-          ? const Duration(milliseconds: 400)
-          : const Duration(milliseconds: 500),
-      transitionBuilder: (context, animation, secondaryAnimation, child) {
-        var tween = Tween(
-          begin: const Offset(0.0, 1.0),
-          end: Offset.zero,
-        ).chain(CurveTween(curve: Curves.linear));
-        return SlideTransition(
-          position: animation.drive(tween),
-          child: child,
-        );
-      },
-    );
-  }
 }
 
 class _BorderClipper extends CustomClipper<Rect> {

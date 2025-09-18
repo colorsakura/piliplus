@@ -23,14 +23,12 @@ import 'package:PiliPlus/models_new/video/video_shot/data.dart';
 import 'package:PiliPlus/pages/common/common_intro_controller.dart';
 import 'package:PiliPlus/pages/video/controller.dart';
 import 'package:PiliPlus/pages/video/introduction/pgc/controller.dart';
-import 'package:PiliPlus/pages/video/introduction/ugc/controller.dart';
 import 'package:PiliPlus/pages/video/post_panel/popup_menu_text.dart';
 import 'package:PiliPlus/pages/video/post_panel/view.dart';
 import 'package:PiliPlus/plugin/pl_player/controller.dart';
 import 'package:PiliPlus/plugin/pl_player/models/bottom_control_type.dart';
 import 'package:PiliPlus/plugin/pl_player/models/bottom_progress_behavior.dart';
 import 'package:PiliPlus/plugin/pl_player/models/double_tap_type.dart';
-import 'package:PiliPlus/plugin/pl_player/models/duration.dart';
 import 'package:PiliPlus/plugin/pl_player/models/fullscreen_mode.dart';
 import 'package:PiliPlus/plugin/pl_player/models/gesture_type.dart';
 import 'package:PiliPlus/plugin/pl_player/models/video_fit_type.dart';
@@ -59,7 +57,6 @@ import 'package:flutter_volume_controller/flutter_volume_controller.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart' hide ContextExtensionss;
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:media_kit/media_kit.dart';
 import 'package:media_kit_video/media_kit_video.dart';
 import 'package:screen_brightness_platform_interface/screen_brightness_platform_interface.dart';
 
@@ -111,22 +108,12 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
   late VideoController videoController;
   late final CommonIntroController introController = widget.introController!;
 
-  final GlobalKey _keyboardKey = GlobalKey();
   final GlobalKey _playerKey = GlobalKey();
   final GlobalKey<VideoState> key = GlobalKey<VideoState>();
-
-  final RxBool _mountSeekBackwardButton = false.obs;
-  final RxBool _mountSeekForwardButton = false.obs;
 
   final RxDouble _brightnessValue = 0.0.obs;
   final RxBool _brightnessIndicator = false.obs;
   Timer? _brightnessTimer;
-
-  final RxBool _volumeIndicator = false.obs;
-  Timer? _volumeTimer;
-
-  // final RxDouble _distance = 0.0.obs;
-  final RxBool _volumeInterceptEventStream = false.obs;
 
   late FullScreenMode mode;
 
@@ -144,45 +131,6 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
   // 阅读器限制
   // Timer? _accessibilityDebounce;
   // double _lastAnnouncedValue = -1;
-  final FocusNode _focusNode = FocusNode();
-
-  void onDoubleTapSeekBackward() {
-    _mountSeekBackwardButton.value = true;
-  }
-
-  void onDoubleTapSeekForward() {
-    _mountSeekForwardButton.value = true;
-  }
-
-  // 双击播放、暂停
-  Future<void> onDoubleTapCenter() async {
-    if (plPlayerController.videoPlayerController!.state.completed) {
-      await plPlayerController.videoPlayerController!.seek(Duration.zero);
-      plPlayerController.videoPlayerController!.play();
-    } else {
-      plPlayerController.videoPlayerController!.playOrPause();
-    }
-  }
-
-  void doubleTapFuc(DoubleTapType type) {
-    if (!plPlayerController.enableQuickDouble) {
-      onDoubleTapCenter();
-      return;
-    }
-    switch (type) {
-      case DoubleTapType.left:
-        // 双击左边区域 👈
-        onDoubleTapSeekBackward();
-        break;
-      case DoubleTapType.center:
-        onDoubleTapCenter();
-        break;
-      case DoubleTapType.right:
-        // 双击右边区域 👈
-        onDoubleTapSeekForward();
-        break;
-    }
-  }
 
   StreamSubscription? _listener;
   StreamSubscription? _controlsListener;
@@ -217,16 +165,18 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
           plPlayerController.volume.value =
               (await FlutterVolumeController.getVolume())!;
           FlutterVolumeController.addListener((double value) {
-            if (mounted && !_volumeInterceptEventStream.value) {
+            if (mounted &&
+                !plPlayerController.volumeInterceptEventStream.value) {
               plPlayerController.volume.value = value;
               if (Platform.isIOS && !FlutterVolumeController.showSystemUI) {
-                _volumeIndicator.value = true;
-                _volumeTimer?.cancel();
-                _volumeTimer = Timer(const Duration(milliseconds: 800), () {
-                  if (mounted) {
-                    _volumeIndicator.value = false;
-                  }
-                });
+                plPlayerController
+                  ..volumeIndicator.value = true
+                  ..volumeTimer?.cancel()
+                  ..volumeTimer = Timer(const Duration(milliseconds: 800), () {
+                    if (mounted) {
+                      plPlayerController.volumeIndicator.value = false;
+                    }
+                  });
               }
             }
           });
@@ -250,19 +200,6 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
     }
   }
 
-  Future<void> setVolume(double value) async {
-    plPlayerController.setVolume(value);
-    _volumeIndicator.value = true;
-    _volumeInterceptEventStream.value = true;
-    _volumeTimer?.cancel();
-    _volumeTimer = Timer(const Duration(milliseconds: 200), () {
-      if (mounted) {
-        _volumeIndicator.value = false;
-        _volumeInterceptEventStream.value = false;
-      }
-    });
-  }
-
   Future<void> setBrightness(double value) async {
     try {
       await ScreenBrightnessPlatform.instance.setApplicationScreenBrightness(
@@ -281,7 +218,6 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
 
   @override
   void dispose() {
-    _focusNode.dispose();
     _listener?.cancel();
     _controlsListener?.cancel();
     animationController.dispose();
@@ -981,7 +917,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
             0.0,
             1.0,
           );
-          setVolume(volume);
+          plPlayerController.setVolume(volume);
         },
       );
     }
@@ -1014,7 +950,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
       return;
     }
     if (plPlayerController.isLive) {
-      doubleTapFuc(DoubleTapType.center);
+      plPlayerController.doubleTapFuc(DoubleTapType.center);
       return;
     }
     final double tapPosition = details.localPosition.dx;
@@ -1027,114 +963,10 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
     } else {
       type = DoubleTapType.right;
     }
-    doubleTapFuc(type);
+    plPlayerController.doubleTapFuc(type);
   }
 
-  void _handleKey(KeyEvent event) {
-    if (event is KeyDownEvent) {
-      final key = event.logicalKey;
-      switch (key) {
-        case LogicalKeyboardKey.space:
-          onDoubleTapCenter();
-          return;
-
-        case LogicalKeyboardKey.keyF:
-          plPlayerController.triggerFullScreen(status: !isFullScreen);
-          return;
-
-        case LogicalKeyboardKey.escape:
-          if (isFullScreen) {
-            plPlayerController.triggerFullScreen(status: false);
-          } else {
-            Get.back();
-          }
-          return;
-
-        case LogicalKeyboardKey.keyD:
-          final newVal = !plPlayerController.enableShowDanmaku.value;
-          plPlayerController.enableShowDanmaku.value = newVal;
-          if (!plPlayerController.tempPlayerConf) {
-            GStorage.setting.put(SettingBoxKey.enableShowDanmaku, newVal);
-          }
-          return;
-
-        case LogicalKeyboardKey.arrowUp:
-          final volume = math.min(
-            1.0,
-            plPlayerController.volume.value + 0.1,
-          );
-          setVolume(volume);
-          return;
-
-        case LogicalKeyboardKey.arrowDown:
-          final volume = math.max(
-            0.0,
-            plPlayerController.volume.value - 0.1,
-          );
-          setVolume(volume);
-          return;
-
-        case LogicalKeyboardKey.keyM:
-          final isMuted = !plPlayerController.isMuted;
-          plPlayerController.videoPlayerController!.setVolume(
-            isMuted ? 0 : plPlayerController.volume.value * 100,
-          );
-          plPlayerController.isMuted = isMuted;
-          SmartDialog.showToast('${isMuted ? '' : '取消'}静音');
-          return;
-      }
-
-      if (!plPlayerController.isLive) {
-        switch (key) {
-          case LogicalKeyboardKey.arrowLeft:
-            onDoubleTapSeekBackward();
-            return;
-
-          case LogicalKeyboardKey.arrowRight:
-            onDoubleTapSeekForward();
-            return;
-
-          case LogicalKeyboardKey.keyQ:
-            introController.actionLikeVideo();
-            return;
-
-          case LogicalKeyboardKey.keyW:
-            introController.actionCoinVideo();
-            return;
-
-          case LogicalKeyboardKey.keyE:
-            introController.actionFavVideo(isQuick: true);
-            return;
-
-          case LogicalKeyboardKey.keyR:
-            introController.viewLater();
-            return;
-
-          case LogicalKeyboardKey.keyG:
-            if (introController case UgcIntroController ugcCtr) {
-              ugcCtr.actionRelationMod(context);
-            }
-            return;
-
-          case LogicalKeyboardKey.bracketLeft:
-            if (!introController.prevPlay()) {
-              SmartDialog.showToast('已经是第一集了');
-            }
-            return;
-
-          case LogicalKeyboardKey.bracketRight:
-            if (!introController.nextPlay()) {
-              SmartDialog.showToast('已经是最后一集了');
-            }
-            return;
-
-          case LogicalKeyboardKey.enter:
-            widget.videoDetailController?.showShootDanmakuSheet();
-            return;
-        }
-      }
-    }
-  }
+  final isMobile = Utils.isMobile;
 
   @override
   Widget build(BuildContext context) {
@@ -1149,7 +981,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
     final isFullScreen = this.isFullScreen;
     final isLive = plPlayerController.isLive;
 
-    Widget buildContent() => Stack(
+    final child = Stack(
       fit: StackFit.passthrough,
       key: _playerKey,
       children: <Widget>[
@@ -1182,9 +1014,15 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
               onInteractionEnd: _onInteractionEnd,
               flipX: plPlayerController.flipX.value,
               flipY: plPlayerController.flipY.value,
-              onTap: () => plPlayerController.controls =
-                  !plPlayerController.showControls.value,
-              onDoubleTapDown: onDoubleTapDown,
+              onTap: isMobile
+                  ? () => plPlayerController.controls =
+                        !plPlayerController.showControls.value
+                  : plPlayerController.onDoubleTapCenter,
+              onDoubleTapDown: isMobile
+                  ? onDoubleTapDown
+                  : (_) => plPlayerController.triggerFullScreen(
+                      status: !isFullScreen,
+                    ),
               onLongPressStart: isLive
                   ? null
                   : (_) => plPlayerController.setLongPressStatus(true),
@@ -1315,7 +1153,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                 final volume = plPlayerController.volume.value;
                 return AnimatedOpacity(
                   curve: Curves.easeInOut,
-                  opacity: _volumeIndicator.value ? 1.0 : 0.0,
+                  opacity: plPlayerController.volumeIndicator.value ? 1.0 : 0.0,
                   duration: const Duration(milliseconds: 150),
                   child: Container(
                     padding: const EdgeInsets.symmetric(
@@ -1795,13 +1633,16 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
 
         /// 点击 快进/快退
         if (!isLive)
-          Obx(
-            () =>
-                _mountSeekBackwardButton.value || _mountSeekForwardButton.value
+          Obx(() {
+            final mountSeekBackwardButton =
+                plPlayerController.mountSeekBackwardButton.value;
+            final mountSeekForwardButton =
+                plPlayerController.mountSeekForwardButton.value;
+            return mountSeekBackwardButton || mountSeekForwardButton
                 ? Positioned.fill(
                     child: Row(
                       children: [
-                        if (_mountSeekBackwardButton.value)
+                        if (mountSeekBackwardButton)
                           Expanded(
                             child: TweenAnimationBuilder<double>(
                               tween: Tween<double>(begin: 0.0, end: 1.0),
@@ -1814,25 +1655,15 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                                 duration:
                                     plPlayerController.fastForBackwardDuration,
                                 onSubmitted: (Duration value) {
-                                  _mountSeekBackwardButton.value = false;
-                                  final Player player = widget
-                                      .plPlayerController
-                                      .videoPlayerController!;
-                                  Duration result =
-                                      player.state.position - value;
-                                  result = result.clamp(
-                                    Duration.zero,
-                                    player.state.duration,
-                                  );
                                   plPlayerController
-                                    ..seekTo(result, isSeek: false)
-                                    ..play();
+                                    ..mountSeekBackwardButton.value = false
+                                    ..onBackward(value);
                                 },
                               ),
                             ),
                           ),
                         const Spacer(flex: 2),
-                        if (_mountSeekForwardButton.value)
+                        if (mountSeekForwardButton)
                           Expanded(
                             child: TweenAnimationBuilder<double>(
                               tween: Tween<double>(begin: 0.0, end: 1.0),
@@ -1845,19 +1676,9 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                                 duration:
                                     plPlayerController.fastForBackwardDuration,
                                 onSubmitted: (Duration value) {
-                                  _mountSeekForwardButton.value = false;
-                                  final Player player = widget
-                                      .plPlayerController
-                                      .videoPlayerController!;
-                                  Duration result =
-                                      player.state.position + value;
-                                  result = result.clamp(
-                                    Duration.zero,
-                                    player.state.duration,
-                                  );
                                   plPlayerController
-                                    ..seekTo(result, isSeek: false)
-                                    ..play();
+                                    ..mountSeekForwardButton.value = false
+                                    ..onForward(value);
                                 },
                               ),
                             ),
@@ -1865,18 +1686,25 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                       ],
                     ),
                   )
-                : const SizedBox.shrink(),
-          ),
+                : const SizedBox.shrink();
+          }),
       ],
     );
-
-    return KeyboardListener(
-      key: _keyboardKey,
-      focusNode: _focusNode,
-      autofocus: true,
-      onKeyEvent: _handleKey,
-      child: buildContent(),
-    );
+    if (!isMobile) {
+      return MouseRegion(
+        onEnter: (event) {
+          plPlayerController.controls = true;
+        },
+        onHover: (event) {
+          plPlayerController.controls = true;
+        },
+        onExit: (event) {
+          plPlayerController.controls = false;
+        },
+        child: child,
+      );
+    }
+    return child;
   }
 
   late final segment = Pair(

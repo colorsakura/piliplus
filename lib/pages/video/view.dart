@@ -34,8 +34,8 @@ import 'package:PiliPlus/pages/video/related/view.dart';
 import 'package:PiliPlus/pages/video/reply/controller.dart';
 import 'package:PiliPlus/pages/video/reply/view.dart';
 import 'package:PiliPlus/pages/video/view_point/view.dart';
-import 'package:PiliPlus/pages/video/widgets/focus.dart';
 import 'package:PiliPlus/pages/video/widgets/header_control.dart';
+import 'package:PiliPlus/pages/video/widgets/player_focus.dart';
 import 'package:PiliPlus/plugin/pl_player/controller.dart';
 import 'package:PiliPlus/plugin/pl_player/models/fullscreen_mode.dart';
 import 'package:PiliPlus/plugin/pl_player/models/play_repeat.dart';
@@ -1484,7 +1484,14 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
     } else {
       child = autoChoose(childWhenDisabledAlmostSquare);
     }
-    child = focus(child);
+    child = PlayerFocus(
+      plPlayerController: videoDetailController.plPlayerController,
+      introController: videoDetailController.isUgc
+          ? ugcIntroController
+          : pgcIntroController,
+      onSendDanmaku: videoDetailController.showShootDanmakuSheet,
+      child: child,
+    );
     return videoDetailController.plPlayerController.darkVideoPage
         ? Theme(data: themeData, child: child)
         : child;

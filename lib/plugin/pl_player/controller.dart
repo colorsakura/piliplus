@@ -21,6 +21,8 @@ import 'package:PiliPlus/pages/mine/controller.dart';
 import 'package:PiliPlus/plugin/pl_player/models/bottom_progress_behavior.dart';
 import 'package:PiliPlus/plugin/pl_player/models/data_source.dart';
 import 'package:PiliPlus/plugin/pl_player/models/data_status.dart';
+import 'package:PiliPlus/plugin/pl_player/models/double_tap_type.dart';
+import 'package:PiliPlus/plugin/pl_player/models/duration.dart';
 import 'package:PiliPlus/plugin/pl_player/models/fullscreen_mode.dart';
 import 'package:PiliPlus/plugin/pl_player/models/heart_beat_type.dart';
 import 'package:PiliPlus/plugin/pl_player/models/play_repeat.dart';
@@ -286,7 +288,9 @@ class PlPlayerController {
   late double danmakuStaticDuration = Pref.danmakuStaticDuration;
   late List<double> speedList = Pref.speedList;
   late bool enableAutoLongPressSpeed = Pref.enableAutoLongPressSpeed;
-  late bool enableLongShowControl = Pref.enableLongShowControl;
+  late final showControlDuration = Pref.enableLongShowControl
+      ? const Duration(seconds: 30)
+      : const Duration(seconds: 3);
   late double subtitleFontScale = Pref.subtitleFontScale;
   late double subtitleFontScaleFS = Pref.subtitleFontScaleFS;
   late double danmakuLineHeight = Pref.danmakuLineHeight;
@@ -316,7 +320,9 @@ class PlPlayerController {
   late final enableSlideVolumeBrightness = Pref.enableSlideVolumeBrightness;
   late final enableSlideFS = Pref.enableSlideFS;
   late final enableDragSubtitle = Pref.enableDragSubtitle;
-  late final fastForBackwardDuration = Pref.fastForBackwardDuration;
+  late final fastForBackwardDuration = Duration(
+    seconds: Pref.fastForBackwardDuration,
+  );
 
   late final horizontalSeasonPanel = Pref.horizontalSeasonPanel;
   late final preInitPlayer = Pref.preInitPlayer;
@@ -577,7 +583,7 @@ class PlPlayerController {
       if (showSeekPreview) {
         _clearPreview();
       }
-
+      cancelLongPressTimer();
       if (_videoPlayerController != null &&
           _videoPlayerController!.state.playing) {
         await pause(notify: false);
@@ -1179,8 +1185,7 @@ class PlPlayerController {
   /// 隐藏控制条
   void hideTaskControls() {
     _timer?.cancel();
-    Duration waitingTime = Duration(seconds: enableLongShowControl ? 30 : 3);
-    _timer = Timer(waitingTime, () {
+    _timer = Timer(showControlDuration, () {
       if (!isSliderMoving.value && !tripling) {
         controls = false;
       }
@@ -1220,21 +1225,31 @@ class PlPlayerController {
     hideTaskControls();
   }
 
+  final RxBool volumeIndicator = false.obs;
+  Timer? volumeTimer;
+  final RxBool volumeInterceptEventStream = false.obs;
+
   Future<void> setVolume(double volume) async {
-    if (this.volume.value == volume) {
-      return;
-    }
-    this.volume.value = volume;
-    try {
-      if (Utils.isDesktop) {
-        _videoPlayerController!.setVolume(volume * 100);
-      } else {
-        FlutterVolumeController.updateShowSystemUI(false);
-        await FlutterVolumeController.setVolume(volume);
+    if (this.volume.value != volume) {
+      this.volume.value = volume;
+      try {
+        if (Utils.isDesktop) {
+          _videoPlayerController!.setVolume(volume * 100);
+        } else {
+          FlutterVolumeController.updateShowSystemUI(false);
+          await FlutterVolumeController.setVolume(volume);
+        }
+      } catch (err) {
+        if (kDebugMode) debugPrint(err.toString());
       }
-    } catch (err) {
-      if (kDebugMode) debugPrint(err.toString());
     }
+    volumeIndicator.value = true;
+    volumeInterceptEventStream.value = true;
+    volumeTimer?.cancel();
+    volumeTimer = Timer(const Duration(milliseconds: 200), () {
+      volumeIndicator.value = false;
+      volumeInterceptEventStream.value = false;
+    });
   }
 
   void volumeUpdated() {
@@ -1300,6 +1315,12 @@ class PlPlayerController {
     showControls.value = val;
   }
 
+  Timer? longPressTimer;
+  void cancelLongPressTimer() {
+    longPressTimer?.cancel();
+    longPressTimer = null;
+  }
+
   /// 设置长按倍速状态 live模式下禁用
   Future<void> setLongPressStatus(bool val) async {
     if (isLive) {
@@ -1323,6 +1344,62 @@ class PlPlayerController {
       // if (kDebugMode) debugPrint('$playbackSpeed');
       _longPressStatus.value = val;
       await setPlaybackSpeed(lastPlaybackSpeed);
+    }
+  }
+
+  // 双击播放、暂停
+  Future<void> onDoubleTapCenter() async {
+    if (videoPlayerController!.state.completed) {
+      await videoPlayerController!.seek(Duration.zero);
+      videoPlayerController!.play();
+    } else {
+      videoPlayerController!.playOrPause();
+    }
+  }
+
+  final RxBool mountSeekBackwardButton = false.obs;
+  final RxBool mountSeekForwardButton = false.obs;
+
+  void onDoubleTapSeekBackward() {
+    mountSeekBackwardButton.value = true;
+  }
+
+  void onDoubleTapSeekForward() {
+    mountSeekForwardButton.value = true;
+  }
+
+  void onForward(Duration duration) {
+    onForwardBackward(_position.value + duration);
+  }
+
+  void onBackward(Duration duration) {
+    onForwardBackward(_position.value - duration);
+  }
+
+  void onForwardBackward(Duration duration) {
+    seekTo(
+      duration.clamp(Duration.zero, videoPlayerController!.state.duration),
+      isSeek: false,
+    ).whenComplete(play);
+  }
+
+  void doubleTapFuc(DoubleTapType type) {
+    if (!enableQuickDouble) {
+      onDoubleTapCenter();
+      return;
+    }
+    switch (type) {
+      case DoubleTapType.left:
+        // 双击左边区域 👈
+        onDoubleTapSeekBackward();
+        break;
+      case DoubleTapType.center:
+        onDoubleTapCenter();
+        break;
+      case DoubleTapType.right:
+        // 双击右边区域 👈
+        onDoubleTapSeekForward();
+        break;
     }
   }
 
@@ -1503,6 +1580,7 @@ class PlPlayerController {
 
   Future<void> dispose() async {
     // 每次减1，最后销毁
+    cancelLongPressTimer();
     if (_playerCount > 1) {
       _playerCount -= 1;
       _heartDuration = 0;
