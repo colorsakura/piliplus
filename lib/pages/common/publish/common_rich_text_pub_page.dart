@@ -148,18 +148,17 @@ abstract class CommonRichTextPubPageState<T extends CommonRichTextPubPage>
   }
 
   Future<void> onCropImage(int index) async {
-    final theme = Theme.of(context);
+    late final colorScheme = ColorScheme.of(context);
     CroppedFile? croppedFile = await ImageCropper().cropImage(
       sourcePath: pathList[index],
       uiSettings: [
         AndroidUiSettings(
           toolbarTitle: '裁剪',
-          toolbarColor: theme.colorScheme.secondaryContainer,
-          toolbarWidgetColor: theme.colorScheme.onSecondaryContainer,
+          toolbarColor: colorScheme.secondaryContainer,
+          toolbarWidgetColor: colorScheme.onSecondaryContainer,
+          statusBarLight: colorScheme.brightness.isLight,
         ),
-        IOSUiSettings(
-          title: '裁剪',
-        ),
+        IOSUiSettings(title: '裁剪'),
       ],
     );
     if (croppedFile != null) {

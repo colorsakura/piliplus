@@ -2,6 +2,7 @@ import 'package:PiliPlus/common/widgets/loading_widget/loading_widget.dart';
 import 'package:PiliPlus/http/fav.dart';
 import 'package:PiliPlus/http/msg.dart';
 import 'package:PiliPlus/models_new/fav/fav_folder/list.dart';
+import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/fav_utils.dart';
 import 'package:PiliPlus/utils/image_utils.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -121,21 +122,18 @@ class _CreateFavPageState extends State<CreateFavPage> {
               toolbarTitle: '裁剪',
               toolbarColor: theme.colorScheme.secondaryContainer,
               toolbarWidgetColor: theme.colorScheme.onSecondaryContainer,
-              aspectRatioPresets: [
-                CropAspectRatioPreset.ratio16x9,
-              ],
+              statusBarLight: theme.colorScheme.brightness.isLight,
+              aspectRatioPresets: [CropAspectRatioPreset.ratio16x9],
               lockAspectRatio: true,
               hideBottomControls: true,
               initAspectRatio: CropAspectRatioPreset.ratio16x9,
             ),
             IOSUiSettings(
               title: '裁剪',
-              aspectRatioPresets: [
-                CropAspectRatioPreset.ratio16x9,
-              ],
-              aspectRatioLockEnabled: false,
-              resetAspectRatioEnabled: false,
-              aspectRatioPickerButtonHidden: true,
+              // aspectRatioPresets: [CropAspectRatioPreset.ratio16x9],
+              // aspectRatioLockEnabled: false,
+              // resetAspectRatioEnabled: false,
+              // aspectRatioPickerButtonHidden: true,
             ),
           ],
         );

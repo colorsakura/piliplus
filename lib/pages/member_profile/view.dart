@@ -495,9 +495,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
               toolbarTitle: '裁剪',
               toolbarColor: theme.colorScheme.secondaryContainer,
               toolbarWidgetColor: theme.colorScheme.onSecondaryContainer,
-              aspectRatioPresets: [
-                CropAspectRatioPresetCustom(),
-              ],
+              statusBarLight: theme.colorScheme.brightness.isLight,
+              aspectRatioPresets: [CropAspectRatioPresetCustom()],
               lockAspectRatio: true,
               hideBottomControls: true,
               cropStyle: CropStyle.circle,
@@ -505,9 +504,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
             ),
             IOSUiSettings(
               title: '裁剪',
-              aspectRatioPresets: [
-                CropAspectRatioPresetCustom(),
-              ],
+              aspectRatioPresets: [CropAspectRatioPresetCustom()],
               cropStyle: CropStyle.circle,
               aspectRatioLockEnabled: true,
               resetAspectRatioEnabled: false,
