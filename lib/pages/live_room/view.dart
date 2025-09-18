@@ -181,22 +181,23 @@ class _LiveRoomPageState extends State<LiveRoomPage>
 
   @override
   Widget build(BuildContext context) {
-    if (Platform.isAndroid) {
-      if (Floating().isPipMode) {
-        return videoPlayerPanel(
-          isFullScreen,
-          width: maxWidth,
-          height: maxHeight,
-          isPipMode: true,
-          needDm: !plPlayerController.pipNoDanmaku,
-        );
-      }
+    if (Platform.isAndroid && Floating().isPipMode) {
+      return videoPlayerPanel(
+        isFullScreen,
+        width: maxWidth,
+        height: maxHeight,
+        isPipMode: true,
+        needDm: !plPlayerController.pipNoDanmaku,
+      );
     }
-    return PlayerFocus(
-      plPlayerController: plPlayerController,
-      onSendDanmaku: _liveRoomController.onSendDanmaku,
-      child: childWhenDisabled,
-    );
+    if (plPlayerController.keyboardControl) {
+      return PlayerFocus(
+        plPlayerController: plPlayerController,
+        onSendDanmaku: _liveRoomController.onSendDanmaku,
+        child: childWhenDisabled,
+      );
+    }
+    return childWhenDisabled;
   }
 
   Widget videoPlayerPanel(

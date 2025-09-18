@@ -24,7 +24,8 @@ abstract class SettingBoxKey {
       enableAutoEnter = 'enableAutoEnter',
       enableAutoExit = 'enableAutoExit',
       enableOnlineTotal = 'enableOnlineTotal',
-      showSuperChat = 'showSuperChat';
+      showSuperChat = 'showSuperChat',
+      keyboardControl = 'keyboardControl';
 
   static const String enableVerticalExpand = 'enableVerticalExpand',
       feedBackEnable = 'feedBackEnable',

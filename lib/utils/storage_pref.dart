@@ -829,4 +829,7 @@ abstract class Pref {
 
   static bool get isWindowMaximized =>
       _setting.get(SettingBoxKey.isWindowMaximized, defaultValue: false);
+
+  static bool get keyboardControl =>
+      _setting.get(SettingBoxKey.keyboardControl, defaultValue: true);
 }

@@ -1484,21 +1484,23 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
     } else {
       child = autoChoose(childWhenDisabledAlmostSquare);
     }
-    child = PlayerFocus(
-      plPlayerController: videoDetailController.plPlayerController,
-      introController: videoDetailController.isUgc
-          ? ugcIntroController
-          : pgcIntroController,
-      onSendDanmaku: videoDetailController.showShootDanmakuSheet,
-      canPlay: () {
-        if (videoDetailController.autoPlay.value) {
-          return true;
-        }
-        handlePlay();
-        return false;
-      },
-      child: child,
-    );
+    if (videoDetailController.plPlayerController.keyboardControl) {
+      child = PlayerFocus(
+        plPlayerController: videoDetailController.plPlayerController,
+        introController: videoDetailController.isUgc
+            ? ugcIntroController
+            : pgcIntroController,
+        onSendDanmaku: videoDetailController.showShootDanmakuSheet,
+        canPlay: () {
+          if (videoDetailController.autoPlay.value) {
+            return true;
+          }
+          handlePlay();
+          return false;
+        },
+        child: child,
+      );
+    }
     return videoDetailController.plPlayerController.darkVideoPage
         ? Theme(data: themeData, child: child)
         : child;

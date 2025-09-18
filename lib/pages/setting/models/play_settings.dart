@@ -132,6 +132,13 @@ List<SettingsModel> get playSettings => [
   ),
   const SettingsModel(
     settingsType: SettingsType.sw1tch,
+    title: '启用键盘控制',
+    leading: Icon(Icons.keyboard_alt_outlined),
+    setKey: SettingBoxKey.keyboardControl,
+    defaultVal: true,
+  ),
+  const SettingsModel(
+    settingsType: SettingsType.sw1tch,
     title: '显示 SuperChat',
     leading: Icon(Icons.live_tv),
     setKey: SettingBoxKey.showSuperChat,

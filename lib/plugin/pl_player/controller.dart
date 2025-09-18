@@ -335,6 +335,7 @@ class PlPlayerController {
   late final showDmChart = Pref.showDmChart;
   late final showFsScreenshotBtn = Pref.showFsScreenshotBtn;
   late final showFsLockBtn = Pref.showFsLockBtn;
+  late final keyboardControl = Pref.keyboardControl;
 
   late final bool autoExitFullscreen = Pref.autoExitFullscreen;
   late final bool autoPlayEnable = Pref.autoPlayEnable;
