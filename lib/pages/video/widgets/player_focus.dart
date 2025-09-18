@@ -75,10 +75,18 @@ class PlayerFocus extends StatelessWidget {
           return true;
 
         case LogicalKeyboardKey.keyD:
-          final newVal = !plPlayerController.enableShowDanmaku.value;
-          plPlayerController.enableShowDanmaku.value = newVal;
-          if (!plPlayerController.tempPlayerConf) {
-            GStorage.setting.put(SettingBoxKey.enableShowDanmaku, newVal);
+          if (plPlayerController.isLive) {
+            final newVal = !plPlayerController.enableShowLiveDanmaku.value;
+            plPlayerController.enableShowLiveDanmaku.value = newVal;
+            if (!plPlayerController.tempPlayerConf) {
+              GStorage.setting.put(SettingBoxKey.enableShowLiveDanmaku, newVal);
+            }
+          } else {
+            final newVal = !plPlayerController.enableShowDanmaku.value;
+            plPlayerController.enableShowDanmaku.value = newVal;
+            if (!plPlayerController.tempPlayerConf) {
+              GStorage.setting.put(SettingBoxKey.enableShowDanmaku, newVal);
+            }
           }
           return true;
 

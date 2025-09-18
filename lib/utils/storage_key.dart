@@ -167,6 +167,7 @@ abstract class SettingBoxKey {
       blockTrack = 'blockTrack';
 
   static const String enableShowDanmaku = 'enableShowDanmaku',
+      enableShowLiveDanmaku = 'enableShowLiveDanmaku',
       pipNoDanmaku = 'pipNoDanmaku',
       showVipDanmaku = 'showVipDanmaku',
       showSpecialDanmaku = 'showSpecialDanmaku',

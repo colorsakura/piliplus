@@ -775,8 +775,8 @@ class _LiveRoomPageState extends State<LiveRoomPage>
               children: [
                 Obx(
                   () {
-                    final enableShowDanmaku =
-                        plPlayerController.enableShowDanmaku.value;
+                    final enableShowLiveDanmaku =
+                        plPlayerController.enableShowLiveDanmaku.value;
                     return SizedBox(
                       width: 34,
                       height: 34,
@@ -785,16 +785,17 @@ class _LiveRoomPageState extends State<LiveRoomPage>
                           padding: EdgeInsets.zero,
                         ),
                         onPressed: () {
-                          final newVal = !enableShowDanmaku;
-                          plPlayerController.enableShowDanmaku.value = newVal;
+                          final newVal = !enableShowLiveDanmaku;
+                          plPlayerController.enableShowLiveDanmaku.value =
+                              newVal;
                           if (!plPlayerController.tempPlayerConf) {
                             GStorage.setting.put(
-                              SettingBoxKey.enableShowDanmaku,
+                              SettingBoxKey.enableShowLiveDanmaku,
                               newVal,
                             );
                           }
                         },
-                        icon: enableShowDanmaku
+                        icon: enableShowLiveDanmaku
                             ? const Icon(
                                 size: 22,
                                 Icons.subtitles_outlined,
@@ -1019,7 +1020,7 @@ class _LiveDanmakuState extends State<LiveDanmaku> {
     return Obx(
       () {
         return AnimatedOpacity(
-          opacity: plPlayerController.enableShowDanmaku.value ? 1 : 0,
+          opacity: plPlayerController.enableShowLiveDanmaku.value ? 1 : 0,
           duration: const Duration(milliseconds: 100),
           child: DanmakuScreen(
             createdController: (DanmakuController e) {

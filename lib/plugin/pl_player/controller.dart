@@ -254,7 +254,8 @@ class PlPlayerController {
   bool get isLive => _isLive;
 
   /// 弹幕开关
-  RxBool enableShowDanmaku = Pref.enableShowDanmaku.obs;
+  late final RxBool enableShowDanmaku = Pref.enableShowDanmaku.obs;
+  late final RxBool enableShowLiveDanmaku = Pref.enableShowLiveDanmaku.obs;
 
   late final bool autoPiP = Pref.autoPiP;
 

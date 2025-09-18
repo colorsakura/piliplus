@@ -70,10 +70,10 @@ class BottomControl extends StatelessWidget {
           const SizedBox(width: 3),
           Obx(
             () {
-              final enableShowDanmaku =
-                  plPlayerController.enableShowDanmaku.value;
+              final enableShowLiveDanmaku =
+                  plPlayerController.enableShowLiveDanmaku.value;
               return ComBtn(
-                icon: enableShowDanmaku
+                icon: enableShowLiveDanmaku
                     ? const Icon(
                         size: 18,
                         Icons.subtitles_outlined,
@@ -85,11 +85,11 @@ class BottomControl extends StatelessWidget {
                         color: Colors.white,
                       ),
                 onTap: () {
-                  final newVal = !enableShowDanmaku;
-                  plPlayerController.enableShowDanmaku.value = newVal;
+                  final newVal = !enableShowLiveDanmaku;
+                  plPlayerController.enableShowLiveDanmaku.value = newVal;
                   if (!plPlayerController.tempPlayerConf) {
                     GStorage.setting.put(
-                      SettingBoxKey.enableShowDanmaku,
+                      SettingBoxKey.enableShowLiveDanmaku,
                       newVal,
                     );
                   }
