@@ -1429,11 +1429,12 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                           ),
                         ),
                       ),
-                      buildViewPointWidget(
-                        plPlayerController,
-                        4.25,
-                        maxWidth,
-                      ),
+                      if (isMobile)
+                        buildViewPointWidget(
+                          plPlayerController,
+                          4.25,
+                          maxWidth,
+                        ),
                     ],
                     if (plPlayerController.dmTrend.isNotEmpty &&
                         plPlayerController.showDmTreandChart.value)
@@ -1691,17 +1692,22 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
       ],
     );
     if (!isMobile) {
-      return MouseRegion(
-        onEnter: (event) {
-          plPlayerController.controls = true;
-        },
-        onHover: (event) {
-          plPlayerController.controls = true;
-        },
-        onExit: (event) {
-          plPlayerController.controls = false;
-        },
-        child: child,
+      return Obx(
+        () => MouseRegion(
+          cursor: !plPlayerController.showControls.value && isFullScreen
+              ? SystemMouseCursors.none
+              : MouseCursor.defer,
+          onEnter: (event) {
+            plPlayerController.controls = true;
+          },
+          onHover: (event) {
+            plPlayerController.controls = true;
+          },
+          onExit: (event) {
+            plPlayerController.controls = false;
+          },
+          child: child,
+        ),
       );
     }
     return child;
