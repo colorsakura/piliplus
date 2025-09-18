@@ -3,6 +3,7 @@ import 'package:PiliPlus/main.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/storage_pref.dart';
 import 'package:flex_seed_scheme/flex_seed_scheme.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 abstract class ThemeUtils {
@@ -110,6 +111,9 @@ abstract class ThemeUtils {
           color: Colors.grey[700]!.withValues(alpha: 0.9),
           borderRadius: const BorderRadius.all(Radius.circular(4)),
         ),
+      ),
+      cupertinoOverrideTheme: CupertinoThemeData(
+        selectionHandleColor: colorScheme.primary,
       ),
     );
     if (isDark) {
