@@ -5,6 +5,7 @@ import 'package:PiliPlus/common/widgets/pair.dart';
 import 'package:PiliPlus/utils/context_ext.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/storage_pref.dart';
+import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart' hide ContextExtensionss;
 import 'package:webdav_client/webdav_client.dart' as webdav;
@@ -52,9 +53,12 @@ class WebDav {
   }
 
   String _getFileName() {
-    return Get.context!.isTablet
-        ? 'piliplus_settings_pad.json'
-        : 'piliplus_settings_phone.json';
+    final type = Utils.isDesktop
+        ? 'desktop'
+        : Get.context!.isTablet
+        ? 'pad'
+        : 'phone';
+    return 'piliplus_settings_$type.json';
   }
 
   Future<void> backup() async {
