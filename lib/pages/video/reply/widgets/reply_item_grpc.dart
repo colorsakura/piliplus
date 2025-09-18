@@ -71,7 +71,7 @@ class ReplyItemGrpc extends StatelessWidget {
   final VoidCallback? jumpToDialogue;
 
   static final _voteRegExp = RegExp(r"^\{vote:\d+?\}$");
-  static final _timeRegExp = RegExp(r'^\b(?:\d+[:：])?\d+[:：]\d+\b$');
+  static final _timeRegExp = RegExp(r'^(?:\d+[:：])?\d+[:：]\d+$');
   static bool enableWordRe = Pref.enableWordRe;
   static int? replyLengthLimit = Pref.replyLengthLimit;
 
@@ -608,8 +608,8 @@ class ReplyItemGrpc extends StatelessWidget {
     ];
     String patternStr = [
       ...specialTokens.map(RegExp.escape),
-      r'(\b(?:\d+[:：])?\d+[:：]\d+\b)',
-      r'(\{vote:\d+?\})',
+      r'(?:\d+[:：])?\d+[:：]\d+',
+      r'\{vote:\d+?\}',
       Constants.urlRegex.pattern,
     ].join('|');
     final RegExp pattern = RegExp(patternStr);
