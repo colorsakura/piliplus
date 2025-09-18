@@ -282,8 +282,8 @@ class PlPlayerController {
   late double danmakuOpacity = Pref.danmakuOpacity;
   late double danmakuFontScale = Pref.danmakuFontScale;
   late double danmakuFontScaleFS = Pref.danmakuFontScaleFS;
-  late double strokeWidth = Pref.strokeWidth;
-  late int fontWeight = Pref.fontWeight;
+  late double danmakuStrokeWidth = Pref.strokeWidth;
+  late int danmakuFontWeight = Pref.fontWeight;
   late bool massiveMode = Pref.danmakuMassiveMode;
   late double danmakuDuration = Pref.danmakuDuration;
   late double danmakuStaticDuration = Pref.danmakuStaticDuration;
@@ -1562,8 +1562,8 @@ class PlPlayerController {
       SettingBoxKey.danmakuFontScaleFS: danmakuFontScaleFS,
       SettingBoxKey.danmakuDuration: danmakuDuration,
       SettingBoxKey.danmakuStaticDuration: danmakuStaticDuration,
-      SettingBoxKey.strokeWidth: strokeWidth,
-      SettingBoxKey.fontWeight: fontWeight,
+      SettingBoxKey.strokeWidth: danmakuStrokeWidth,
+      SettingBoxKey.fontWeight: danmakuFontWeight,
       SettingBoxKey.danmakuLineHeight: danmakuLineHeight,
     });
   }

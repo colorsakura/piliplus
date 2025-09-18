@@ -1031,7 +1031,12 @@ class HeaderControlState extends TripleState<HeaderControl> {
                       Text(
                         '字体大小 ${(subtitleFontScale * 100).toStringAsFixed(1)}%',
                       ),
-                      resetBtn(theme, '100.0%', () => updateFontScale(1.0)),
+                      resetBtn(
+                        theme,
+                        '100.0%',
+                        () => updateFontScale(1.0),
+                        isDanmaku: false,
+                      ),
                     ],
                   ),
                   Padding(
@@ -1062,7 +1067,12 @@ class HeaderControlState extends TripleState<HeaderControl> {
                       Text(
                         '全屏字体大小 ${(subtitleFontScaleFS * 100).toStringAsFixed(1)}%',
                       ),
-                      resetBtn(theme, '150.0%', () => updateFontScaleFS(1.5)),
+                      resetBtn(
+                        theme,
+                        '150.0%',
+                        () => updateFontScaleFS(1.5),
+                        isDanmaku: false,
+                      ),
                     ],
                   ),
                   Padding(
@@ -1091,7 +1101,12 @@ class HeaderControlState extends TripleState<HeaderControl> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text('字体粗细 ${subtitleFontWeight + 1}（可能无法精确调节）'),
-                      resetBtn(theme, 6, () => updateFontWeight(5)),
+                      resetBtn(
+                        theme,
+                        6,
+                        () => updateFontWeight(5),
+                        isDanmaku: false,
+                      ),
                     ],
                   ),
                   Padding(
@@ -1119,7 +1134,12 @@ class HeaderControlState extends TripleState<HeaderControl> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text('描边粗细 $subtitleStrokeWidth'),
-                      resetBtn(theme, 2.0, () => updateStrokeWidth(2.0)),
+                      resetBtn(
+                        theme,
+                        2.0,
+                        () => updateStrokeWidth(2.0),
+                        isDanmaku: false,
+                      ),
                     ],
                   ),
                   Padding(
@@ -1147,7 +1167,12 @@ class HeaderControlState extends TripleState<HeaderControl> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text('左右边距 $subtitlePaddingH'),
-                      resetBtn(theme, 24, () => updateHorizontalPadding(24)),
+                      resetBtn(
+                        theme,
+                        24,
+                        () => updateHorizontalPadding(24),
+                        isDanmaku: false,
+                      ),
                     ],
                   ),
                   Padding(
@@ -1175,7 +1200,12 @@ class HeaderControlState extends TripleState<HeaderControl> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text('底部边距 $subtitlePaddingB'),
-                      resetBtn(theme, 24, () => updateBottomPadding(24)),
+                      resetBtn(
+                        theme,
+                        24,
+                        () => updateBottomPadding(24),
+                        isDanmaku: false,
+                      ),
                     ],
                   ),
                   Padding(
@@ -1203,7 +1233,12 @@ class HeaderControlState extends TripleState<HeaderControl> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text('背景不透明度 ${(subtitleBgOpaticy * 100).toInt()}%'),
-                      resetBtn(theme, '67%', () => updateOpacity(0.67)),
+                      resetBtn(
+                        theme,
+                        '67%',
+                        () => updateOpacity(0.67),
+                        isDanmaku: false,
+                      ),
                     ],
                   ),
                   Padding(
@@ -1234,12 +1269,24 @@ class HeaderControlState extends TripleState<HeaderControl> {
     );
   }
 
-  Widget resetBtn(ThemeData theme, Object def, VoidCallback onPressed) {
+  Widget resetBtn(
+    ThemeData theme,
+    Object def,
+    VoidCallback onPressed, {
+    bool isDanmaku = true,
+  }) {
     return iconButton(
       context: context,
       tooltip: '默认值: $def',
       icon: Icons.refresh,
-      onPressed: onPressed,
+      onPressed: () {
+        onPressed();
+        if (isDanmaku) {
+          plPlayerController.putDanmakuSettings();
+        } else {
+          plPlayerController.putSubtitleSettings();
+        }
+      },
       bgColor: Colors.transparent,
       iconColor: theme.colorScheme.outline,
       size: 24,
@@ -1262,19 +1309,19 @@ class HeaderControlState extends TripleState<HeaderControl> {
     // 显示区域
     double showArea = plPlayerController.showArea;
     // 不透明度
-    double opacity = plPlayerController.danmakuOpacity;
+    double danmakuOpacity = plPlayerController.danmakuOpacity;
     // 字体大小
-    double fontSize = plPlayerController.danmakuFontScale;
+    double danmakuFontScale = plPlayerController.danmakuFontScale;
     // 全屏字体大小
-    double fontSizeFS = plPlayerController.danmakuFontScaleFS;
+    double danmakuFontScaleFS = plPlayerController.danmakuFontScaleFS;
     double danmakuLineHeight = plPlayerController.danmakuLineHeight;
     // 弹幕速度
     double danmakuDuration = plPlayerController.danmakuDuration;
     double danmakuStaticDuration = plPlayerController.danmakuStaticDuration;
     // 弹幕描边
-    double strokeWidth = plPlayerController.strokeWidth;
+    double danmakuStrokeWidth = plPlayerController.danmakuStrokeWidth;
     // 字体粗细
-    int fontWeight = plPlayerController.fontWeight;
+    int danmakuFontWeight = plPlayerController.danmakuFontWeight;
     bool massiveMode = plPlayerController.massiveMode;
 
     final DanmakuController? danmakuController =
@@ -1294,7 +1341,8 @@ class HeaderControlState extends TripleState<HeaderControl> {
         );
 
         void updateLineHeight(double val) {
-          danmakuLineHeight = val.toPrecision(1);
+          plPlayerController.danmakuLineHeight = danmakuLineHeight = val
+              .toPrecision(1);
           setState(() {});
           try {
             danmakuController?.updateOption(
@@ -1306,7 +1354,8 @@ class HeaderControlState extends TripleState<HeaderControl> {
         }
 
         void updateDuration(double val) {
-          danmakuDuration = val.toPrecision(1);
+          plPlayerController.danmakuDuration = danmakuDuration = val
+              .toPrecision(1);
           setState(() {});
           try {
             danmakuController?.updateOption(
@@ -1318,7 +1367,8 @@ class HeaderControlState extends TripleState<HeaderControl> {
         }
 
         void updateStaticDuration(double val) {
-          danmakuStaticDuration = val.toPrecision(1);
+          plPlayerController.danmakuStaticDuration = danmakuStaticDuration = val
+              .toPrecision(1);
           setState(() {});
           try {
             danmakuController?.updateOption(
@@ -1331,13 +1381,13 @@ class HeaderControlState extends TripleState<HeaderControl> {
         }
 
         void updateFontSizeFS(double val) {
-          fontSizeFS = val;
+          plPlayerController.danmakuFontScaleFS = danmakuFontScaleFS = val;
           setState(() {});
           if (isFullScreen) {
             try {
               danmakuController?.updateOption(
                 danmakuController.option.copyWith(
-                  fontSize: (15 * fontSizeFS).toDouble(),
+                  fontSize: (15 * danmakuFontScaleFS).toDouble(),
                 ),
               );
             } catch (_) {}
@@ -1345,13 +1395,13 @@ class HeaderControlState extends TripleState<HeaderControl> {
         }
 
         void updateFontSize(double val) {
-          fontSize = val;
+          plPlayerController.danmakuFontScale = danmakuFontScale = val;
           setState(() {});
           if (!isFullScreen) {
             try {
               danmakuController?.updateOption(
                 danmakuController.option.copyWith(
-                  fontSize: (15 * fontSize).toDouble(),
+                  fontSize: (15 * danmakuFontScale).toDouble(),
                 ),
               );
             } catch (_) {}
@@ -1359,37 +1409,40 @@ class HeaderControlState extends TripleState<HeaderControl> {
         }
 
         void updateStrokeWidth(double val) {
-          strokeWidth = val;
+          plPlayerController.danmakuStrokeWidth = danmakuStrokeWidth = val;
           setState(() {});
           try {
             danmakuController?.updateOption(
-              danmakuController.option.copyWith(strokeWidth: val),
+              danmakuController.option.copyWith(
+                strokeWidth: danmakuStrokeWidth,
+              ),
             );
           } catch (_) {}
         }
 
         void updateFontWeight(double val) {
-          fontWeight = val.toInt();
+          plPlayerController.danmakuFontWeight = danmakuFontWeight = val
+              .toInt();
           setState(() {});
           try {
             danmakuController?.updateOption(
-              danmakuController.option.copyWith(fontWeight: fontWeight),
+              danmakuController.option.copyWith(fontWeight: danmakuFontWeight),
             );
           } catch (_) {}
         }
 
         void updateOpacity(double val) {
-          opacity = val;
+          plPlayerController.danmakuOpacity = danmakuOpacity = val;
           setState(() {});
           try {
             danmakuController?.updateOption(
-              danmakuController.option.copyWith(opacity: val),
+              danmakuController.option.copyWith(opacity: danmakuOpacity),
             );
           } catch (_) {}
         }
 
         void updateShowArea(double val) {
-          showArea = val.toPrecision(1);
+          plPlayerController.showArea = showArea = val.toPrecision(1);
           setState(() {});
           try {
             danmakuController?.updateOption(
@@ -1399,7 +1452,7 @@ class HeaderControlState extends TripleState<HeaderControl> {
         }
 
         void updateDanmakuWeight(double val) {
-          danmakuWeight = val.toInt();
+          plPlayerController.danmakuWeight = danmakuWeight = val.toInt();
           setState(() {});
         }
 
@@ -1457,9 +1510,8 @@ class HeaderControlState extends TripleState<HeaderControl> {
                         divisions: 10,
                         label: '$danmakuWeight',
                         onChanged: updateDanmakuWeight,
-                        onChangeEnd: (_) => plPlayerController
-                          ..danmakuWeight = danmakuWeight
-                          ..putDanmakuSettings(),
+                        onChangeEnd: (_) =>
+                            plPlayerController.putDanmakuSettings(),
                       ),
                     ),
                   ),
@@ -1540,16 +1592,15 @@ class HeaderControlState extends TripleState<HeaderControl> {
                         divisions: 9,
                         label: '${showArea * 100}%',
                         onChanged: updateShowArea,
-                        onChangeEnd: (_) => plPlayerController
-                          ..showArea = showArea
-                          ..putDanmakuSettings(),
+                        onChangeEnd: (_) =>
+                            plPlayerController.putDanmakuSettings(),
                       ),
                     ),
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('不透明度 ${opacity * 100}%'),
+                      Text('不透明度 ${danmakuOpacity * 100}%'),
                       resetBtn(theme, '100.0%', () => updateOpacity(1.0)),
                     ],
                   ),
@@ -1565,20 +1616,19 @@ class HeaderControlState extends TripleState<HeaderControl> {
                       child: Slider(
                         min: 0,
                         max: 1,
-                        value: opacity,
+                        value: danmakuOpacity,
                         divisions: 10,
-                        label: '${opacity * 100}%',
+                        label: '${danmakuOpacity * 100}%',
                         onChanged: updateOpacity,
-                        onChangeEnd: (_) => plPlayerController
-                          ..danmakuOpacity = opacity
-                          ..putDanmakuSettings(),
+                        onChangeEnd: (_) =>
+                            plPlayerController.putDanmakuSettings(),
                       ),
                     ),
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('字体粗细 ${fontWeight + 1}（可能无法精确调节）'),
+                      Text('字体粗细 ${danmakuFontWeight + 1}（可能无法精确调节）'),
                       resetBtn(theme, 6, () => updateFontWeight(5)),
                     ],
                   ),
@@ -1594,20 +1644,19 @@ class HeaderControlState extends TripleState<HeaderControl> {
                       child: Slider(
                         min: 0,
                         max: 8,
-                        value: fontWeight.toDouble(),
+                        value: danmakuFontWeight.toDouble(),
                         divisions: 8,
-                        label: '${fontWeight + 1}',
+                        label: '${danmakuFontWeight + 1}',
                         onChanged: updateFontWeight,
-                        onChangeEnd: (_) => plPlayerController
-                          ..fontWeight = fontWeight
-                          ..putDanmakuSettings(),
+                        onChangeEnd: (_) =>
+                            plPlayerController.putDanmakuSettings(),
                       ),
                     ),
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('描边粗细 $strokeWidth'),
+                      Text('描边粗细 $danmakuStrokeWidth'),
                       resetBtn(theme, 1.5, () => updateStrokeWidth(1.5)),
                     ],
                   ),
@@ -1623,20 +1672,21 @@ class HeaderControlState extends TripleState<HeaderControl> {
                       child: Slider(
                         min: 0,
                         max: 5,
-                        value: strokeWidth,
+                        value: danmakuStrokeWidth,
                         divisions: 10,
-                        label: '$strokeWidth',
+                        label: '$danmakuStrokeWidth',
                         onChanged: updateStrokeWidth,
-                        onChangeEnd: (_) => plPlayerController
-                          ..strokeWidth = strokeWidth
-                          ..putDanmakuSettings(),
+                        onChangeEnd: (_) =>
+                            plPlayerController.putDanmakuSettings(),
                       ),
                     ),
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('字体大小 ${(fontSize * 100).toStringAsFixed(1)}%'),
+                      Text(
+                        '字体大小 ${(danmakuFontScale * 100).toStringAsFixed(1)}%',
+                      ),
                       resetBtn(theme, '100.0%', () => updateFontSize(1.0)),
                     ],
                   ),
@@ -1652,20 +1702,22 @@ class HeaderControlState extends TripleState<HeaderControl> {
                       child: Slider(
                         min: 0.5,
                         max: 2.5,
-                        value: fontSize,
+                        value: danmakuFontScale,
                         divisions: 20,
-                        label: '${(fontSize * 100).toStringAsFixed(1)}%',
+                        label:
+                            '${(danmakuFontScale * 100).toStringAsFixed(1)}%',
                         onChanged: updateFontSize,
-                        onChangeEnd: (_) => plPlayerController
-                          ..danmakuFontScale = fontSize
-                          ..putDanmakuSettings(),
+                        onChangeEnd: (_) =>
+                            plPlayerController.putDanmakuSettings(),
                       ),
                     ),
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('全屏字体大小 ${(fontSizeFS * 100).toStringAsFixed(1)}%'),
+                      Text(
+                        '全屏字体大小 ${(danmakuFontScaleFS * 100).toStringAsFixed(1)}%',
+                      ),
                       resetBtn(theme, '120.0%', () => updateFontSizeFS(1.2)),
                     ],
                   ),
@@ -1681,13 +1733,13 @@ class HeaderControlState extends TripleState<HeaderControl> {
                       child: Slider(
                         min: 0.5,
                         max: 2.5,
-                        value: fontSizeFS,
+                        value: danmakuFontScaleFS,
                         divisions: 20,
-                        label: '${(fontSizeFS * 100).toStringAsFixed(1)}%',
+                        label:
+                            '${(danmakuFontScaleFS * 100).toStringAsFixed(1)}%',
                         onChanged: updateFontSizeFS,
-                        onChangeEnd: (_) => plPlayerController
-                          ..danmakuFontScaleFS = fontSizeFS
-                          ..putDanmakuSettings(),
+                        onChangeEnd: (_) =>
+                            plPlayerController.putDanmakuSettings(),
                       ),
                     ),
                   ),
@@ -1714,9 +1766,8 @@ class HeaderControlState extends TripleState<HeaderControl> {
                         divisions: 49,
                         label: danmakuDuration.toString(),
                         onChanged: updateDuration,
-                        onChangeEnd: (_) => plPlayerController
-                          ..danmakuDuration = danmakuDuration
-                          ..putDanmakuSettings(),
+                        onChangeEnd: (_) =>
+                            plPlayerController.putDanmakuSettings(),
                       ),
                     ),
                   ),
@@ -1743,9 +1794,8 @@ class HeaderControlState extends TripleState<HeaderControl> {
                         divisions: 49,
                         label: danmakuStaticDuration.toString(),
                         onChanged: updateStaticDuration,
-                        onChangeEnd: (_) => plPlayerController
-                          ..danmakuStaticDuration = danmakuStaticDuration
-                          ..putDanmakuSettings(),
+                        onChangeEnd: (_) =>
+                            plPlayerController.putDanmakuSettings(),
                       ),
                     ),
                   ),
@@ -1770,9 +1820,8 @@ class HeaderControlState extends TripleState<HeaderControl> {
                         max: 3.0,
                         value: danmakuLineHeight,
                         onChanged: updateLineHeight,
-                        onChangeEnd: (_) => plPlayerController
-                          ..danmakuLineHeight = danmakuLineHeight
-                          ..putDanmakuSettings(),
+                        onChangeEnd: (_) =>
+                            plPlayerController.putDanmakuSettings(),
                       ),
                     ),
                   ),

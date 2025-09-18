@@ -1031,7 +1031,7 @@ class _LiveDanmakuState extends State<LiveDanmaku> {
             },
             option: DanmakuOption(
               fontSize: _fontSize,
-              fontWeight: plPlayerController.fontWeight,
+              fontWeight: plPlayerController.danmakuFontWeight,
               area: plPlayerController.showArea,
               opacity: plPlayerController.danmakuOpacity,
               hideTop: plPlayerController.blockTypes.contains(5),
@@ -1043,7 +1043,7 @@ class _LiveDanmakuState extends State<LiveDanmaku> {
               staticDuration:
                   plPlayerController.danmakuStaticDuration /
                   plPlayerController.playbackSpeed,
-              strokeWidth: plPlayerController.strokeWidth,
+              strokeWidth: plPlayerController.danmakuStrokeWidth,
               lineHeight: plPlayerController.danmakuLineHeight,
             ),
           ),

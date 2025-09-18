@@ -159,7 +159,7 @@ class _PlDanmakuState extends State<PlDanmaku> {
           },
           option: DanmakuOption(
             fontSize: _fontSize,
-            fontWeight: playerController.fontWeight,
+            fontWeight: playerController.danmakuFontWeight,
             area: playerController.showArea,
             opacity: playerController.danmakuOpacity,
             hideTop: playerController.blockTypes.contains(5),
@@ -171,7 +171,7 @@ class _PlDanmakuState extends State<PlDanmaku> {
             staticDuration:
                 playerController.danmakuStaticDuration /
                 playerController.playbackSpeed,
-            strokeWidth: playerController.strokeWidth,
+            strokeWidth: playerController.danmakuStrokeWidth,
             lineHeight: playerController.danmakuLineHeight,
           ),
         ),
