@@ -74,7 +74,7 @@ class EpisodePanel extends CommonSlidePage {
   final int initialTabIndex;
   final bool? isSupportReverse;
   final bool? isReversed;
-  final ValueChanged<ugc.BaseEpisodeItem> onChangeEpisode;
+  final Future<bool> Function(ugc.BaseEpisodeItem) onChangeEpisode;
   final VoidCallback? onReverse;
   final VoidCallback? onClose;
 
@@ -432,19 +432,23 @@ class _EpisodePanelState extends State<EpisodePanel>
               }
               SmartDialog.showToast('切换到：$title');
               widget.onClose?.call();
-              if (!showTitle) {
-                _currentItemIndex = index;
-              }
-              widget.onChangeEpisode(episode);
-              if (widget.type == EpisodeType.season) {
-                try {
-                  Get.find<VideoDetailController>(
-                    tag: widget.ugcIntroController!.heroTag,
-                  ).seasonCid = episode.cid;
-                } catch (_) {
-                  if (kDebugMode) rethrow;
+
+              widget.onChangeEpisode(episode).then((res) {
+                if (res) {
+                  if (!showTitle) {
+                    _currentItemIndex = index;
+                  }
+                  if (widget.type == EpisodeType.season) {
+                    try {
+                      Get.find<VideoDetailController>(
+                        tag: widget.ugcIntroController!.heroTag,
+                      ).seasonCid = episode.cid;
+                    } catch (_) {
+                      if (kDebugMode) rethrow;
+                    }
+                  }
                 }
-              }
+              });
             },
             onLongPress: () {
               if (cover?.isNotEmpty == true) {

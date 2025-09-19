@@ -15,6 +15,7 @@ import 'package:PiliPlus/pages/video/introduction/ugc/controller.dart';
 import 'package:PiliPlus/pages/video/introduction/ugc/widgets/action_item.dart';
 import 'package:PiliPlus/pages/video/introduction/ugc/widgets/page.dart';
 import 'package:PiliPlus/pages/video/introduction/ugc/widgets/season.dart';
+import 'package:PiliPlus/pages/video/introduction/ugc/widgets/selectable_text.dart';
 import 'package:PiliPlus/pages/video/introduction/ugc/widgets/triple_state.dart';
 import 'package:PiliPlus/utils/app_scheme.dart';
 import 'package:PiliPlus/utils/date_utils.dart';
@@ -327,13 +328,9 @@ class _UgcIntroPanelState extends TripleState<UgcIntroPanel> {
     ),
     if (videoDetail.descV2?.isNotEmpty == true) ...[
       const SizedBox(height: 8),
-      SelectableText.rich(
+      selectableRichText(
         style: const TextStyle(height: 1.4),
-        TextSpan(
-          children: [
-            buildContent(theme, videoDetail),
-          ],
-        ),
+        buildContent(theme, videoDetail),
       ),
     ],
     Obx(() {
@@ -601,7 +598,7 @@ class _UgcIntroPanelState extends TripleState<UgcIntroPanel> {
     caseSensitive: false,
   );
 
-  InlineSpan buildContent(ThemeData theme, VideoDetailData content) {
+  TextSpan buildContent(ThemeData theme, VideoDetailData content) {
     if (content.descV2.isNullOrEmpty) {
       return const TextSpan();
     }

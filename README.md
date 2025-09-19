@@ -22,22 +22,18 @@
 <br/>
 </div>
 
-## 开发环境
-
-```bash
-[✓] Flutter (Channel stable, 3.24.0, on Microsoft Windows [版本 10.0.19045.4046], locale zh-CN)
-[✓] Android toolchain - develop for Android devices (Android SDK version 34.0.0)
-[✓] Xcode - develop for iOS and macOS (Xcode 15.1)
-[✓] Chrome - develop for the web
-[✓] Android Studio (version 2022.3)
-[✓] VS Code (version 1.85.1)
-[✓] Connected device (3 available)
-[✓] Network resources
-
-```
 
 <br/>
 
+## 适配平台
+
+- [x] Android
+- [x] iOS
+- [x] Pad
+- [x] Windows
+
+
+<br/>
 
 ## refactor
 
@@ -135,11 +131,6 @@
 <br/>
 
 ## 功能
-
-目前着重移动端(Android、iOS)和Pad端，暂时没有适配桌面端、手表端等
-
-<br/>
-
 
 - [x] 推荐视频列表(app端)
 - [x] 最热视频列表

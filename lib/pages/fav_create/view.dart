@@ -259,57 +259,58 @@ class _CreateFavPageState extends State<CreateFavPage> {
         ],
         ListTile(
           tileColor: theme.colorScheme.onInverseSurface,
-          leading: Text.rich(
-            style: const TextStyle(
-              height: 1,
-              fontSize: 14,
-            ),
-            TextSpan(
-              children: [
-                TextSpan(
-                  text: '*',
-                  style: TextStyle(
-                    fontSize: 14,
-                    height: 1,
-                    color: theme.colorScheme.error,
+          title: Row(
+            children: [
+              SizedBox(
+                width: 55,
+                child: Text.rich(
+                  TextSpan(
+                    children: [
+                      TextSpan(
+                        text: '*',
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: theme.colorScheme.error,
+                        ),
+                      ),
+                      const TextSpan(
+                        text: '名称',
+                        style: TextStyle(fontSize: 14),
+                      ),
+                    ],
                   ),
                 ),
-                const TextSpan(
-                  text: '名称',
+              ),
+              Expanded(
+                child: TextField(
+                  autofocus: true,
+                  readOnly: _attr != null && FavUtils.isDefaultFav(_attr!),
+                  controller: _titleController,
                   style: TextStyle(
-                    height: 1,
                     fontSize: 14,
+                    color: _attr != null && FavUtils.isDefaultFav(_attr!)
+                        ? theme.colorScheme.outline
+                        : null,
+                  ),
+                  inputFormatters: [
+                    LengthLimitingTextInputFormatter(20),
+                  ],
+                  decoration: InputDecoration(
+                    isDense: true,
+                    hintText: '名称',
+                    hintStyle: TextStyle(
+                      fontSize: 14,
+                      color: theme.colorScheme.outline,
+                    ),
+                    border: const OutlineInputBorder(
+                      borderSide: BorderSide.none,
+                      gapPadding: 0,
+                    ),
+                    contentPadding: EdgeInsets.zero,
                   ),
                 ),
-              ],
-            ),
-          ),
-          title: TextField(
-            autofocus: true,
-            readOnly: _attr != null && FavUtils.isDefaultFav(_attr!),
-            controller: _titleController,
-            style: TextStyle(
-              fontSize: 14,
-              color: _attr != null && FavUtils.isDefaultFav(_attr!)
-                  ? theme.colorScheme.outline
-                  : null,
-            ),
-            inputFormatters: [
-              LengthLimitingTextInputFormatter(20),
+              ),
             ],
-            decoration: InputDecoration(
-              isDense: true,
-              hintText: '名称',
-              hintStyle: TextStyle(
-                fontSize: 14,
-                color: theme.colorScheme.outline,
-              ),
-              border: const OutlineInputBorder(
-                borderSide: BorderSide.none,
-                gapPadding: 0,
-              ),
-              contentPadding: EdgeInsets.zero,
-            ),
           ),
         ),
         const SizedBox(height: 16),
@@ -319,24 +320,16 @@ class _CreateFavPageState extends State<CreateFavPage> {
             title: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text.rich(
-                  TextSpan(
-                    children: [
-                      TextSpan(
-                        text: '简介',
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: theme.colorScheme.onSurfaceVariant,
-                        ),
-                      ),
-                      const TextSpan(
-                        text: '*',
-                        style: TextStyle(color: Colors.transparent),
-                      ),
-                    ],
+                SizedBox(
+                  width: 55,
+                  child: Text(
+                    '简介',
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: theme.colorScheme.onSurfaceVariant,
+                    ),
                   ),
                 ),
-                const SizedBox(width: 16),
                 Expanded(
                   child: TextField(
                     minLines: 6,

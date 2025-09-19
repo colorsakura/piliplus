@@ -9,6 +9,7 @@ import 'package:PiliPlus/models_new/video/video_tag/data.dart';
 import 'package:PiliPlus/pages/common/slide/common_slide_page.dart';
 import 'package:PiliPlus/pages/pgc_review/view.dart';
 import 'package:PiliPlus/pages/search/widgets/search_text.dart';
+import 'package:PiliPlus/pages/video/introduction/ugc/widgets/selectable_text.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart' hide TabBarView;
@@ -108,7 +109,7 @@ class _IntroDetailState extends State<PgcIntroPanel>
         bottom: MediaQuery.viewPaddingOf(context).bottom + 100,
       ),
       children: [
-        SelectableText(
+        selectableText(
           widget.item.title!,
           style: const TextStyle(fontSize: 16),
         ),
@@ -152,7 +153,7 @@ class _IntroDetailState extends State<PgcIntroPanel>
             style: theme.textTheme.titleMedium,
           ),
           const SizedBox(height: 4),
-          SelectableText(
+          selectableText(
             widget.item.evaluate!,
             style: textStyle,
           ),

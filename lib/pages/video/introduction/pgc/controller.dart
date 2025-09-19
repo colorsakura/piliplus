@@ -277,7 +277,7 @@ class PgcIntroController extends CommonIntroController {
   }
 
   // 修改分P或番剧分集
-  Future<void> onChangeEpisode(BaseEpisodeItem episode) async {
+  Future<bool> onChangeEpisode(BaseEpisodeItem episode) async {
     try {
       final int epId = episode.epId ?? episode.id!;
       final String bvid = episode.bvid ?? this.bvid;
@@ -285,7 +285,7 @@ class PgcIntroController extends CommonIntroController {
       final int? cid =
           episode.cid ?? await SearchHttp.ab2c(aid: aid, bvid: bvid);
       if (cid == null) {
-        return;
+        return false;
       }
       final String? cover = episode.cover;
 
@@ -323,8 +323,10 @@ class PgcIntroController extends CommonIntroController {
       this.cid.value = cid;
       queryOnlineTotal();
       queryVideoIntro(episode as EpisodeItem);
+      return true;
     } catch (e) {
       if (kDebugMode) debugPrint('pgc onChangeEpisode: $e');
+      return false;
     }
   }
 

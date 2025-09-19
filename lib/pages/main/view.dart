@@ -51,8 +51,12 @@ class _MainAppState extends State<MainApp>
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+    final brightness = Theme.brightnessOf(context);
     NetworkImgLayer.reduce =
-        NetworkImgLayer.reduceLuxColor != null && context.isDarkMode;
+        NetworkImgLayer.reduceLuxColor != null && brightness.isDark;
+    if (Utils.isDesktop) {
+      windowManager.setBrightness(brightness);
+    }
     PageUtils.routeObserver.subscribe(
       this,
       ModalRoute.of(context) as PageRoute,
@@ -160,6 +164,8 @@ class _MainAppState extends State<MainApp>
   Future<void> _handleTray() async {
     if (Platform.isWindows) {
       await trayManager.setIcon('assets/images/logo/app_icon.ico');
+    } else {
+      await trayManager.setIcon('assets/images/logo/logo_large.png');
     }
     if (!Platform.isLinux) {
       await trayManager.setToolTip(Constants.appName);
