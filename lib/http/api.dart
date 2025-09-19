@@ -965,4 +965,11 @@ class Api {
 
   static const String superChatMsg =
       '${HttpString.liveBaseUrl}/av/v1/SuperChat/getMessageList';
+
+  static const String popularSeriesOne = '/x/web-interface/popular/series/one';
+
+  static const String popularSeriesList =
+      '/x/web-interface/popular/series/list';
+
+  static const String popularPrecious = '/x/web-interface/popular/precious';
 }

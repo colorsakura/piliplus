@@ -14,6 +14,9 @@ import 'package:PiliPlus/models/model_rec_video_item.dart';
 import 'package:PiliPlus/models/pgc_lcf.dart';
 import 'package:PiliPlus/models/video/play/url.dart';
 import 'package:PiliPlus/models_new/pgc/pgc_rank/pgc_rank_item_model.dart';
+import 'package:PiliPlus/models_new/popular/popular_precious/data.dart';
+import 'package:PiliPlus/models_new/popular/popular_series_list/list.dart';
+import 'package:PiliPlus/models_new/popular/popular_series_one/data.dart';
 import 'package:PiliPlus/models_new/triple/pgc_triple.dart';
 import 'package:PiliPlus/models_new/triple/ugc_triple.dart';
 import 'package:PiliPlus/models_new/video/video_ai_conclusion/data.dart';
@@ -967,6 +970,62 @@ class VideoHttp {
     );
     if (res.data['code'] == 0) {
       return Success(VideoNoteData.fromJson(res.data['data']));
+    } else {
+      return Error(res.data['message']);
+    }
+  }
+
+  static Future<LoadingState<List<PopularSeriesListItem>?>>
+  popularSeriesList() async {
+    var res = await Request().get(
+      Api.popularSeriesList,
+      queryParameters: await WbiSign.makSign({
+        'web_location': 333.934,
+      }),
+    );
+    if (res.data['code'] == 0) {
+      return Success(
+        (res.data['data']?['list'] as List<dynamic>?)
+            ?.map(
+              (e) => PopularSeriesListItem.fromJson(e as Map<String, dynamic>),
+            )
+            .toList(),
+      );
+    } else {
+      return Error(res.data['message']);
+    }
+  }
+
+  static Future<LoadingState<PopularSeriesOneData>> popularSeriesOne({
+    required int number,
+  }) async {
+    var res = await Request().get(
+      Api.popularSeriesOne,
+      queryParameters: await WbiSign.makSign({
+        'number': number,
+        'web_location': 333.934,
+      }),
+    );
+    if (res.data['code'] == 0) {
+      return Success(PopularSeriesOneData.fromJson(res.data['data']));
+    } else {
+      return Error(res.data['message']);
+    }
+  }
+
+  static Future<LoadingState<PopularPreciousData>> popularPrecious({
+    required int page,
+  }) async {
+    var res = await Request().get(
+      Api.popularPrecious,
+      queryParameters: await WbiSign.makSign({
+        'page_size': 100,
+        'page': page,
+        'web_location': 333.934,
+      }),
+    );
+    if (res.data['code'] == 0) {
+      return Success(PopularPreciousData.fromJson(res.data['data']));
     } else {
       return Error(res.data['message']);
     }

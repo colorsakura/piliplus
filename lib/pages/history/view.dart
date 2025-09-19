@@ -264,6 +264,7 @@ class _HistoryPageState extends State<HistoryPage>
                   TextSpan(
                     children: [
                       WidgetSpan(
+                        alignment: PlaceholderAlignment.middle,
                         child: Icon(
                           Icons.info_outline,
                           size: 18,
