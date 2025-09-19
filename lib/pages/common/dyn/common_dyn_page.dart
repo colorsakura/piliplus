@@ -211,30 +211,8 @@ abstract class CommonDynPageState<T extends StatefulWidget> extends State<T>
     EasyThrottle.throttle('replyReply', const Duration(milliseconds: 500), () {
       int oid = replyItem.oid.toInt();
       int rpid = replyItem.id.toInt();
-      Widget replyReplyPage({bool showBackBtn = true}) => Scaffold(
-        resizeToAvoidBottomInset: false,
-        appBar: AppBar(
-          primary: showBackBtn,
-          toolbarHeight: showBackBtn ? null : 45,
-          title: const Text('评论详情'),
-          titleSpacing: showBackBtn ? null : 12,
-          automaticallyImplyLeading: showBackBtn,
-          actions: showBackBtn
-              ? null
-              : [
-                  IconButton(
-                    tooltip: '关闭',
-                    icon: const Icon(Icons.close, size: 20),
-                    onPressed: Get.back,
-                  ),
-                ],
-          shape: Border(
-            bottom: BorderSide(
-              color: theme.colorScheme.outline.withValues(alpha: 0.1),
-            ),
-          ),
-        ),
-        body: ViewSafeArea(
+      Widget replyReplyPage({bool showBackBtn = true}) {
+        final child = ViewSafeArea(
           left: showBackBtn,
           right: showBackBtn,
           child: VideoReplyReplyPanel(
@@ -242,12 +220,28 @@ abstract class CommonDynPageState<T extends StatefulWidget> extends State<T>
             id: id,
             oid: oid,
             rpid: rpid,
-            isVideoDetail: false,
+            isVideoDetail: !showBackBtn,
             replyType: controller.replyType,
             firstFloor: replyItem,
           ),
-        ),
-      );
+        );
+        if (showBackBtn) {
+          return Scaffold(
+            resizeToAvoidBottomInset: false,
+            appBar: AppBar(
+              title: const Text('评论详情'),
+              shape: Border(
+                bottom: BorderSide(
+                  color: theme.colorScheme.outline.withValues(alpha: 0.1),
+                ),
+              ),
+            ),
+            body: child,
+          );
+        }
+        return child;
+      }
+
       if (isPortrait) {
         Get.to(
           replyReplyPage,

@@ -8,7 +8,7 @@ import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/storage_key.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart'
-    show KeyDownEvent, KeyRepeatEvent, KeyUpEvent, LogicalKeyboardKey;
+    show KeyDownEvent, KeyUpEvent, LogicalKeyboardKey;
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 
@@ -177,7 +177,7 @@ class PlayerFocus extends StatelessWidget {
 
     if (key == LogicalKeyboardKey.arrowRight) {
       if (!plPlayerController.isLive && hasPlayer) {
-        if (event is KeyRepeatEvent) {
+        if (event is KeyDownEvent) {
           if (!plPlayerController.longPressStatus.value) {
             plPlayerController.longPressTimer ??= Timer(
               const Duration(milliseconds: 200),

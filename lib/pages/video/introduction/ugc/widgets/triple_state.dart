@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math' show pi;
 
 import 'package:PiliPlus/pages/common/common_intro_controller.dart';
+import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -40,8 +41,12 @@ abstract class TripleState<T extends StatefulWidget> extends State<T>
     super.dispose();
   }
 
+  static final _duration = Utils.isMobile
+      ? const Duration(milliseconds: 200)
+      : const Duration(milliseconds: 230);
+
   void onStartTriple() {
-    _timer ??= Timer(const Duration(milliseconds: 200), () {
+    _timer ??= Timer(_duration, () {
       HapticFeedback.lightImpact();
       if (introController.hasTriple) {
         SmartDialog.showToast('已完成三连');
