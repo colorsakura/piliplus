@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:PiliPlus/common/widgets/progress_bar/audio_video_progress_bar.dart';
 import 'package:PiliPlus/common/widgets/progress_bar/segment_progress_bar.dart';
+import 'package:PiliPlus/pages/video/controller.dart';
 import 'package:PiliPlus/plugin/pl_player/controller.dart';
 import 'package:PiliPlus/plugin/pl_player/view.dart';
 import 'package:PiliPlus/utils/feed_back.dart';
@@ -17,12 +18,14 @@ class BottomControl extends StatelessWidget {
     required this.isFullScreen,
     required this.controller,
     required this.buildBottomControl,
+    required this.videoDetailController,
   });
 
   final double maxWidth;
   final bool isFullScreen;
   final PlPlayerController controller;
   final Widget Function() buildBottomControl;
+  final VideoDetailController videoDetailController;
 
   @override
   Widget build(BuildContext context) {
@@ -107,7 +110,8 @@ class BottomControl extends StatelessWidget {
                       },
                     );
                   }),
-                  if (controller.segmentList.isNotEmpty)
+                  if (controller.enableSponsorBlock &&
+                      videoDetailController.segmentProgressList.isNotEmpty)
                     Positioned(
                       left: 0,
                       right: 0,
@@ -118,14 +122,16 @@ class BottomControl extends StatelessWidget {
                             key: const Key('segmentList'),
                             size: const Size(double.infinity, 3.5),
                             painter: SegmentProgressBar(
-                              segmentColors: controller.segmentList,
+                              segmentColors:
+                                  videoDetailController.segmentProgressList,
                             ),
                           ),
                         ),
                       ),
                     ),
-                  if (controller.viewPointList.isNotEmpty &&
-                      controller.showVP.value) ...[
+                  if (controller.showViewPoints &&
+                      videoDetailController.viewPointList.isNotEmpty &&
+                      videoDetailController.showVP.value) ...[
                     Positioned(
                       left: 0,
                       right: 0,
@@ -136,18 +142,26 @@ class BottomControl extends StatelessWidget {
                             key: const Key('viewPointList'),
                             size: const Size(double.infinity, 3.5),
                             painter: SegmentProgressBar(
-                              segmentColors: controller.viewPointList,
+                              segmentColors:
+                                  videoDetailController.viewPointList,
                             ),
                           ),
                         ),
                       ),
                     ),
                     if (!Utils.isMobile)
-                      buildViewPointWidget(controller, 8.75, maxWidth - 40),
+                      buildViewPointWidget(
+                        videoDetailController,
+                        controller,
+                        8.75,
+                        maxWidth - 40,
+                      ),
                   ],
-                  if (controller.dmTrend.isNotEmpty &&
-                      controller.showDmTreandChart.value)
-                    buildDmChart(theme, controller, 4.5),
+                  if (controller.showDmChart &&
+                      videoDetailController.showDmTreandChart.value)
+                    if (videoDetailController.dmTrend.value?.dataOrNull
+                        case final list?)
+                      buildDmChart(theme, list, videoDetailController, 4.5),
                 ],
               ),
             ),

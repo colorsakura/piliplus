@@ -2054,7 +2054,7 @@ class HeaderControlState extends TripleState<HeaderControl> {
                   ),
                 ),
               Obx(
-                () => videoDetailCtr.segmentList.isNotEmpty
+                () => videoDetailCtr.segmentProgressList.isNotEmpty
                     ? SizedBox(
                         width: 42,
                         height: 34,

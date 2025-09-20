@@ -107,6 +107,8 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
   late AnimationController animationController;
   late VideoController videoController;
   late final CommonIntroController introController = widget.introController!;
+  late final VideoDetailController videoDetailController =
+      widget.videoDetailController!;
 
   final GlobalKey _playerKey = GlobalKey();
   final GlobalKey<VideoState> key = GlobalKey<VideoState>();
@@ -229,12 +231,15 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
   }
 
   // 动态构建底部控制条
-  Widget buildBottomControl(bool isLandscape) {
+  Widget buildBottomControl(
+    VideoDetailController videoDetailController,
+    bool isLandscape,
+  ) {
     final videoDetail = introController.videoDetail.value;
     final isSeason = videoDetail.ugcSeason != null;
     final isPart = videoDetail.pages != null && videoDetail.pages!.length > 1;
-    final isPgc = !widget.videoDetailController!.isUgc;
-    final isPlayAll = widget.videoDetailController?.isPlayAll == true;
+    final isPgc = !videoDetailController.isUgc;
+    final isPlayAll = videoDetailController.isPlayAll;
     final anySeason = isSeason || isPart || isPgc || isPlayAll;
     final isFullScreen = this.isFullScreen;
     final double widgetWidth = isLandscape && isFullScreen ? 42 : 35;
@@ -318,36 +323,40 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
 
       /// 高能进度条
       BottomControlType.dmChart => Obx(
-        () => plPlayerController.dmTrend.isEmpty
-            ? const SizedBox.shrink()
-            : ComBtn(
-                width: widgetWidth,
-                height: 30,
-                icon: plPlayerController.showDmTreandChart.value
-                    ? const Icon(
-                        Icons.show_chart,
-                        size: 22,
-                        color: Colors.white,
-                      )
-                    : const Stack(
-                        clipBehavior: Clip.none,
-                        alignment: Alignment.center,
-                        children: [
-                          Icon(
-                            Icons.show_chart,
-                            size: 22,
-                            color: Colors.white,
-                          ),
-                          Icon(
-                            Icons.hide_source,
-                            size: 22,
-                            color: Colors.white,
-                          ),
-                        ],
-                      ),
-                onTap: () => plPlayerController.showDmTreandChart.value =
-                    !plPlayerController.showDmTreandChart.value,
-              ),
+        () {
+          final list = videoDetailController.dmTrend.value?.dataOrNull;
+          if (list != null && list.isNotEmpty) {
+            return ComBtn(
+              width: widgetWidth,
+              height: 30,
+              icon: videoDetailController.showDmTreandChart.value
+                  ? const Icon(
+                      Icons.show_chart,
+                      size: 22,
+                      color: Colors.white,
+                    )
+                  : const Stack(
+                      clipBehavior: Clip.none,
+                      alignment: Alignment.center,
+                      children: [
+                        Icon(
+                          Icons.show_chart,
+                          size: 22,
+                          color: Colors.white,
+                        ),
+                        Icon(
+                          Icons.hide_source,
+                          size: 22,
+                          color: Colors.white,
+                        ),
+                      ],
+                    ),
+              onTap: () => videoDetailController.showDmTreandChart.value =
+                  !videoDetailController.showDmTreandChart.value,
+            );
+          }
+          return const SizedBox.shrink();
+        },
       ),
 
       /// 超分辨率
@@ -385,7 +394,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
 
       /// 分段信息
       BottomControlType.viewPoints => Obx(
-        () => plPlayerController.viewPointList.isEmpty
+        () => videoDetailController.viewPointList.isEmpty
             ? const SizedBox.shrink()
             : ComBtn(
                 width: widgetWidth,
@@ -402,8 +411,8 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                 onTap: widget.showViewPoints,
                 onLongPress: () {
                   Feedback.forLongPress(context);
-                  plPlayerController.showVP.value =
-                      !plPlayerController.showVP.value;
+                  videoDetailController.showVP.value =
+                      !videoDetailController.showVP.value;
                 },
               ),
       ),
@@ -453,7 +462,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
             bvid,
             IdUtils.bv2av(bvid),
             isSeason && isPart
-                ? widget.videoDetailController?.seasonCid ?? currentCid
+                ? videoDetailController.seasonCid ?? currentCid
                 : currentCid,
           );
         },
@@ -494,32 +503,32 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
 
       /// 字幕
       BottomControlType.subtitle => Obx(
-        () => widget.videoDetailController?.subtitles.isEmpty == true
+        () => videoDetailController.subtitles.isEmpty == true
             ? const SizedBox.shrink()
             : PopupMenuButton<int>(
                 tooltip: '选择字幕',
                 requestFocus: false,
-                initialValue: widget
-                    .videoDetailController!
-                    .vttSubtitlesIndex
-                    .value
-                    .clamp(0, widget.videoDetailController!.subtitles.length),
+                initialValue: videoDetailController.vttSubtitlesIndex.value
+                    .clamp(
+                      0,
+                      videoDetailController.subtitles.length,
+                    ),
                 color: Colors.black.withValues(alpha: 0.8),
                 itemBuilder: (context) {
                   return [
                     PopupMenuItem<int>(
                       value: 0,
-                      onTap: () => widget.videoDetailController!.setSubtitle(0),
+                      onTap: () => videoDetailController.setSubtitle(0),
                       child: const Text(
                         "关闭字幕",
                         style: TextStyle(color: Colors.white),
                       ),
                     ),
-                    ...widget.videoDetailController!.subtitles.indexed.map((e) {
+                    ...videoDetailController.subtitles.indexed.map((e) {
                       return PopupMenuItem<int>(
                         value: e.$1 + 1,
                         onTap: () =>
-                            widget.videoDetailController!.setSubtitle(e.$1 + 1),
+                            videoDetailController.setSubtitle(e.$1 + 1),
                         child: Text(
                           "${e.$2.lanDoc}",
                           style: const TextStyle(color: Colors.white),
@@ -531,8 +540,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                 child: SizedBox(
                   width: widgetWidth,
                   height: 30,
-                  child:
-                      widget.videoDetailController!.vttSubtitlesIndex.value == 0
+                  child: videoDetailController.vttSubtitlesIndex.value == 0
                       ? const Icon(
                           Icons.closed_caption_off_outlined,
                           size: 22,
@@ -584,10 +592,9 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
 
       BottomControlType.qa => Obx(
         () {
-          final videoDetailCtr = widget.videoDetailController!;
           final VideoQuality currentVideoQa =
-              videoDetailCtr.currentVideoQa.value;
-          final PlayUrlModel videoInfo = videoDetailCtr.data;
+              videoDetailController.currentVideoQa.value;
+          final PlayUrlModel videoInfo = videoDetailController.data;
           if (videoInfo.dash == null) {
             return const SizedBox.shrink();
           }
@@ -625,7 +632,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                       }
                       final int quality = item.quality!;
                       final newQa = VideoQuality.fromCode(quality);
-                      videoDetailCtr
+                      videoDetailController
                         ..currentVideoQa.value = newQa
                         ..updatePlayer();
 
@@ -697,9 +704,9 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
     ];
 
     List<BottomControlType> userSpecifyItemRight = [
-      BottomControlType.dmChart,
+      if (plPlayerController.showDmChart) BottomControlType.dmChart,
       if (plPlayerController.isAnim) BottomControlType.superResolution,
-      BottomControlType.viewPoints,
+      if (plPlayerController.showViewPoints) BottomControlType.viewPoints,
       if (anySeason) BottomControlType.episode,
       if (isFullScreen) BottomControlType.fit,
       BottomControlType.subtitle,
@@ -1264,8 +1271,11 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                         maxWidth: maxWidth,
                         isFullScreen: isFullScreen,
                         controller: plPlayerController,
-                        buildBottomControl: () =>
-                            buildBottomControl(maxWidth > maxHeight),
+                        videoDetailController: videoDetailController,
+                        buildBottomControl: () => buildBottomControl(
+                          videoDetailController,
+                          maxWidth > maxHeight,
+                        ),
                       ),
                 ),
               ],
@@ -1394,7 +1404,8 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                         );
                       }),
                     ),
-                    if (plPlayerController.segmentList.isNotEmpty)
+                    if (plPlayerController.enableSponsorBlock &&
+                        videoDetailController.segmentProgressList.isNotEmpty)
                       Positioned(
                         left: 0,
                         right: 0,
@@ -1405,14 +1416,16 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                               key: const Key('segmentList'),
                               size: const Size(double.infinity, 3.5),
                               painter: SegmentProgressBar(
-                                segmentColors: plPlayerController.segmentList,
+                                segmentColors:
+                                    videoDetailController.segmentProgressList,
                               ),
                             ),
                           ),
                         ),
                       ),
-                    if (plPlayerController.viewPointList.isNotEmpty &&
-                        plPlayerController.showVP.value) ...[
+                    if (plPlayerController.showViewPoints &&
+                        videoDetailController.viewPointList.isNotEmpty &&
+                        videoDetailController.showVP.value) ...[
                       Positioned(
                         left: 0,
                         right: 0,
@@ -1423,7 +1436,8 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                               key: const Key('viewPointList'),
                               size: const Size(double.infinity, 3.5),
                               painter: SegmentProgressBar(
-                                segmentColors: plPlayerController.viewPointList,
+                                segmentColors:
+                                    videoDetailController.viewPointList,
                               ),
                             ),
                           ),
@@ -1431,14 +1445,17 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                       ),
                       if (isMobile)
                         buildViewPointWidget(
+                          videoDetailController,
                           plPlayerController,
                           4.25,
                           maxWidth,
                         ),
                     ],
-                    if (plPlayerController.dmTrend.isNotEmpty &&
-                        plPlayerController.showDmTreandChart.value)
-                      buildDmChart(theme, plPlayerController),
+                    if (plPlayerController.showDmChart &&
+                        videoDetailController.showDmTreandChart.value)
+                      if (videoDetailController.dmTrend.value?.dataOrNull
+                          case final list?)
+                        buildDmChart(theme, list, videoDetailController),
                   ],
                 );
               },
@@ -1719,10 +1736,11 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
   );
 
   Future<void> screenshotWebp() async {
-    final videoCtr = widget.videoDetailController!;
-    final videoInfo = videoCtr.data;
+    final videoInfo = videoDetailController.data;
     final ids = videoInfo.dash!.video!.map((i) => i.id!).toSet();
-    final video = videoCtr.findVideoByQa(ids.reduce((p, n) => p < n ? p : n));
+    final video = videoDetailController.findVideoByQa(
+      ids.reduce((p, n) => p < n ? p : n),
+    );
 
     VideoQuality qa = video.quality;
     String? url = video.baseUrl;
@@ -1760,7 +1778,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                   title: '选择画质',
                   initialValue: qa.code,
                   onSelected: (value) {
-                    final video = videoCtr.findVideoByQa(value);
+                    final video = videoDetailController.findVideoByQa(value);
                     url = video.baseUrl;
                     qa = video.quality;
                     return false;
@@ -1859,7 +1877,8 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
 
 Widget buildDmChart(
   ThemeData theme,
-  PlPlayerController plPlayerController, [
+  List<double> dmTrend,
+  VideoDetailController videoDetailController, [
   double offset = 0,
 ]) {
   final color = theme.colorScheme.primary;
@@ -1868,8 +1887,8 @@ Widget buildDmChart(
       height: 12,
       margin: EdgeInsets.only(
         bottom:
-            plPlayerController.viewPointList.isNotEmpty &&
-                plPlayerController.showVP.value
+            videoDetailController.viewPointList.isNotEmpty &&
+                videoDetailController.showVP.value
             ? 20.25 + offset
             : 4.25 + offset,
       ),
@@ -1880,18 +1899,16 @@ Widget buildDmChart(
           gridData: const FlGridData(show: false),
           borderData: FlBorderData(show: false),
           minX: 0,
-          maxX: (plPlayerController.dmTrend.length - 1).toDouble(),
+          maxX: (dmTrend.length - 1).toDouble(),
           minY: 0,
-          maxY: plPlayerController.dmTrend
-              .reduce((a, b) => a > b ? a : b)
-              .toDouble(),
+          maxY: dmTrend.reduce((a, b) => a > b ? a : b).toDouble(),
           lineBarsData: [
             LineChartBarData(
               spots: List.generate(
-                plPlayerController.dmTrend.length,
+                dmTrend.length,
                 (index) => FlSpot(
                   index.toDouble(),
-                  plPlayerController.dmTrend[index],
+                  dmTrend[index],
                 ),
               ),
               isCurved: true,
@@ -2172,6 +2189,7 @@ class _CroppedImagePainter extends CustomPainter {
 }
 
 Widget buildViewPointWidget(
+  VideoDetailController videoDetailController,
   PlPlayerController plPlayerController,
   double offset,
   double maxWidth,
@@ -2184,7 +2202,7 @@ Widget buildViewPointWidget(
       onPointerDown: (event) {
         try {
           double seg = event.localPosition.dx / maxWidth;
-          Segment item = plPlayerController.viewPointList
+          Segment item = videoDetailController.viewPointList
               .where((item) => item.start >= seg)
               .reduce((a, b) => a.start < b.start ? a : b);
           if (item.from != null) {

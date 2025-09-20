@@ -59,10 +59,9 @@ class _ViewPointsPageState extends State<ViewPointsPage>
                   }
                   return null;
                 }),
-                value: videoDetailController.plPlayerController.showVP.value,
-                onChanged: (value) {
-                  videoDetailController.plPlayerController.showVP.value = value;
-                },
+                value: videoDetailController.showVP.value,
+                onChanged: (value) =>
+                    videoDetailController.showVP.value = value,
               ),
             ),
           ),

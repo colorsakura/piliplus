@@ -430,10 +430,9 @@ class VideoDetailController extends GetxController
   bool get showVideoSheet => !horizontalScreen && !isPortrait;
 
   int? _lastPos;
-  List<PostSegmentModel> postList = [];
-  RxList<SegmentModel> segmentList = <SegmentModel>[].obs;
-  List<Segment> viewPointList = <Segment>[];
-  List<Segment>? segmentProgressList;
+  late final List<PostSegmentModel> postList = [];
+  late final List<SegmentModel> segmentList = <SegmentModel>[];
+  late final RxList<Segment> segmentProgressList = <Segment>[].obs;
 
   Color _getColor(SegmentType segment) =>
       plPlayerController.blockColor[segment.index];
@@ -678,7 +677,7 @@ class VideoDetailController extends GetxController
     positionSubscription?.cancel();
     videoLabel.value = '';
     segmentList.clear();
-    segmentProgressList = null;
+    segmentProgressList.clear();
     final result = await Request().get(
       '$blockServer/api/skipSegments',
       queryParameters: {
@@ -774,7 +773,7 @@ class VideoDetailController extends GetxController
         );
 
         // _segmentProgressList
-        (segmentProgressList ??= <Segment>[]).addAll(
+        segmentProgressList.addAll(
           segmentList.map((e) {
             double start = (e.segment.first / duration).clamp(0.0, 1.0);
             double end = (e.segment.second / duration).clamp(0.0, 1.0);
@@ -785,7 +784,6 @@ class VideoDetailController extends GetxController
         if (positionSubscription == null &&
             (autoPlay.value || plPlayerController.preInitPlayer)) {
           initSkip();
-          plPlayerController.segmentList.value = segmentProgressList!;
         }
       } catch (e) {
         if (kDebugMode) debugPrint('failed to parse sponsorblock: $e');
@@ -1072,10 +1070,6 @@ class VideoDetailController extends GetxController
           'referer': HttpString.baseUrl,
         },
       ),
-      segmentList: segmentProgressList,
-      viewPointList: viewPointList,
-      showVP: showVP,
-      dmTrend: dmTrend,
       seekTo: seekToTime ?? defaultST ?? playedTime,
       duration:
           duration ??
@@ -1101,13 +1095,15 @@ class VideoDetailController extends GetxController
       height: firstVideo.height,
     );
 
-    initSkip();
-
-    if (vttSubtitlesIndex.value == -1) {
-      _getSubtitle();
+    if (plPlayerController.enableSponsorBlock) {
+      initSkip();
     }
 
-    if (plPlayerController.showDmChart && dmTrend == null) {
+    if (vttSubtitlesIndex.value == -1) {
+      _queryPlayInfo();
+    }
+
+    if (plPlayerController.showDmChart && dmTrend.value == null) {
       _getDmTrend();
     }
 
@@ -1365,13 +1361,8 @@ class VideoDetailController extends GetxController
   RxList<Subtitle> subtitles = RxList<Subtitle>();
   late final Map<int, String> _vttSubtitles = {};
   late final RxInt vttSubtitlesIndex = (-1).obs;
-  late bool showVP = true;
-
-  void _getSubtitle() {
-    _vttSubtitles.clear();
-    viewPointList.clear();
-    _queryPlayInfo();
-  }
+  late final RxBool showVP = true.obs;
+  late final RxList<Segment> viewPointList = <Segment>[].obs;
 
   // 设定字幕轨道
   Future<void> setSubtitle(int index) async {
@@ -1439,6 +1430,10 @@ class VideoDetailController extends GetxController
   late bool continuePlayingPart = Pref.continuePlayingPart;
 
   Future<void> _queryPlayInfo() async {
+    _vttSubtitles.clear();
+    if (plPlayerController.showViewPoints) {
+      viewPointList.clear();
+    }
     var res = await VideoHttp.playInfo(bvid: bvid, cid: cid.value);
     if (res['status']) {
       PlayInfoData playInfo = res['data'];
@@ -1475,9 +1470,10 @@ class VideoDetailController extends GetxController
         } catch (_) {}
       }
 
-      if (playInfo.viewPoints?.isNotEmpty == true && Pref.showViewPoints) {
+      if (plPlayerController.showViewPoints &&
+          playInfo.viewPoints?.isNotEmpty == true) {
         try {
-          viewPointList = playInfo.viewPoints!.map((item) {
+          viewPointList.value = playInfo.viewPoints!.map((item) {
             double start = (item.to! / (data.timeLength! / 1000)).clamp(
               0.0,
               1.0,
@@ -1492,10 +1488,6 @@ class VideoDetailController extends GetxController
               item.to,
             );
           }).toList();
-          if (plPlayerController.viewPointList.isEmpty) {
-            plPlayerController.viewPointList.value = viewPointList;
-            plPlayerController.showVP.value = showVP = true;
-          }
         } catch (_) {}
       }
 
@@ -1576,8 +1568,12 @@ class VideoDetailController extends GetxController
       scrollRatio.refresh();
     }
 
+    // dm trend
+    if (plPlayerController.showDmChart) {
+      dmTrend.value = null;
+    }
+
     // danmaku
-    dmTrend = null;
     savedDanmaku = null;
 
     // subtitle
@@ -1586,7 +1582,9 @@ class VideoDetailController extends GetxController
     _vttSubtitles.clear();
 
     // view point
-    viewPointList.clear();
+    if (plPlayerController.showViewPoints) {
+      viewPointList.clear();
+    }
 
     // sponsor block
     if (plPlayerController.enableSponsorBlock) {
@@ -1594,7 +1592,7 @@ class VideoDetailController extends GetxController
       positionSubscription = null;
       videoLabel.value = '';
       segmentList.clear();
-      segmentProgressList = null;
+      segmentProgressList.clear();
     }
 
     // interactive video
@@ -1605,10 +1603,12 @@ class VideoDetailController extends GetxController
     showSteinEdgeInfo.value = false;
   }
 
-  List<double>? dmTrend;
+  late final Rx<LoadingState<List<double>>?> dmTrend =
+      Rx<LoadingState<List<double>>?>(null);
+  late final RxBool showDmTreandChart = true.obs;
 
   Future<void> _getDmTrend() async {
-    dmTrend = null;
+    dmTrend.value = LoadingState<List<double>>.loading();
     try {
       var res = await Request().get(
         'https://bvc.bilivideo.com/pbp/data',
@@ -1617,16 +1617,15 @@ class VideoDetailController extends GetxController
           'cid': cid.value,
         },
       );
-
       PbpData data = PbpData.fromJson(res.data);
       int stepSec = data.stepSec ?? 0;
       if (stepSec != 0 && data.events?.eDefault?.isNotEmpty == true) {
-        dmTrend = data.events?.eDefault;
-        if (plPlayerController.dmTrend.isEmpty) {
-          plPlayerController.dmTrend.value = dmTrend!;
-        }
+        dmTrend.value = Success(data.events!.eDefault!);
+        return;
       }
+      dmTrend.value = const Error(null);
     } catch (e) {
+      dmTrend.value = const Error(null);
       if (kDebugMode) debugPrint('_getDmTrend: $e');
     }
   }

@@ -5,7 +5,6 @@ import 'dart:math' show max;
 import 'dart:ui' as ui;
 
 import 'package:PiliPlus/common/constants.dart';
-import 'package:PiliPlus/common/widgets/progress_bar/segment_progress_bar.dart';
 import 'package:PiliPlus/http/init.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/http/ua_type.dart';
@@ -143,10 +142,6 @@ class PlPlayerController {
   Timer? _timer;
   Timer? _timerForSeek;
   Timer? _timerForShowingVolume;
-
-  final RxList<Segment> viewPointList = <Segment>[].obs;
-  final RxBool showVP = true.obs;
-  final RxList<Segment> segmentList = <Segment>[].obs;
 
   Box setting = GStorage.setting;
 
@@ -333,6 +328,7 @@ class PlPlayerController {
   late final reverseFromFirst = Pref.reverseFromFirst;
   late final horizontalPreview = Pref.horizontalPreview;
   late final showDmChart = Pref.showDmChart;
+  late final showViewPoints = Pref.showViewPoints;
   late final showFsScreenshotBtn = Pref.showFsScreenshotBtn;
   late final showFsLockBtn = Pref.showFsLockBtn;
   late final keyboardControl = Pref.keyboardControl;
@@ -531,10 +527,6 @@ class PlPlayerController {
   Future<void> setDataSource(
     DataSource dataSource, {
     bool isLive = false,
-    List<Segment>? segmentList,
-    List<Segment>? viewPointList,
-    bool? showVP,
-    List<double>? dmTrend,
     bool autoplay = true,
     // 默认不循环
     PlaylistMode looping = PlaylistMode.none,
@@ -563,10 +555,6 @@ class PlPlayerController {
       this.width = width;
       this.height = height;
       this.dataSource = dataSource;
-      this.segmentList.value = segmentList ?? <Segment>[];
-      this.viewPointList.value = viewPointList ?? <Segment>[];
-      this.showVP.value = showVP ?? true;
-      this.dmTrend.value = dmTrend ?? <double>[];
       _autoPlay = autoplay;
       _looping = looping;
       // 初始化视频倍速
@@ -1720,7 +1708,4 @@ class PlPlayerController {
       if (kDebugMode) debugPrint('getVideoShot: $e');
     }
   }
-
-  late final RxList<double> dmTrend = <double>[].obs;
-  late final RxBool showDmTreandChart = true.obs;
 }
