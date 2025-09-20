@@ -247,13 +247,15 @@ class VideoDetailController extends GetxController
     imageStatus = false;
   }
 
+  final isLoginVideo = Accounts.get(AccountType.video).isLogin;
+
   @override
   void onInit() {
     super.onInit();
     args = Get.arguments;
     videoType = args['videoType'];
     if (videoType == VideoType.pgc) {
-      if (!Accounts.get(AccountType.video).isLogin) {
+      if (!isLoginVideo) {
         _actualVideoType = VideoType.ugc;
       }
     } else if (args['pgcApi'] == true) {
@@ -1112,6 +1114,17 @@ class VideoDetailController extends GetxController
 
   bool isQuerying = false;
 
+  final Rx<List<LanguageItem>?> languages = Rx<List<LanguageItem>?>(null);
+  final Rx<String?> currLang = Rx(null);
+  void setLanguage(String language) {
+    if (!isLoginVideo) {
+      SmartDialog.showToast('账号未登录');
+      return;
+    }
+    currLang.value = language;
+    queryVideoUrl(defaultST: playedTime);
+  }
+
   // 视频链接
   Future<void> queryVideoUrl({
     Duration? defaultST,
@@ -1142,10 +1155,14 @@ class VideoDetailController extends GetxController
       seasonId: seasonId,
       tryLook: plPlayerController.tryLook,
       videoType: _actualVideoType ?? videoType,
+      language: currLang.value,
     );
 
     if (result.isSuccess) {
       data = result.data;
+
+      languages.value = data.language?.items;
+      currLang.value = data.curLanguage;
 
       if (data.acceptDesc?.contains('试看') == true) {
         SmartDialog.showToast(
@@ -1563,6 +1580,10 @@ class VideoDetailController extends GetxController
     playedTime = null;
     videoUrl = null;
     audioUrl = null;
+
+    // language
+    languages.value = null;
+    currLang.value = null;
 
     if (scrollRatio.value != 0) {
       scrollRatio.refresh();

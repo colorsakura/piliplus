@@ -6,6 +6,7 @@ class ComBtn extends StatelessWidget {
   final VoidCallback? onLongPress;
   final double width;
   final double height;
+  final String? tooltip;
 
   const ComBtn({
     super.key,
@@ -14,11 +15,12 @@ class ComBtn extends StatelessWidget {
     this.onLongPress,
     this.width = 34,
     this.height = 34,
+    this.tooltip,
   });
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
+    final child = SizedBox(
       width: width,
       height: height,
       child: GestureDetector(
@@ -28,5 +30,9 @@ class ComBtn extends StatelessWidget {
         child: icon,
       ),
     );
+    if (tooltip != null) {
+      return Tooltip(message: tooltip, child: child);
+    }
+    return child;
   }
 }

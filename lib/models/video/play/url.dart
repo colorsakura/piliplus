@@ -39,6 +39,8 @@ class PlayUrlModel {
   List<FormatItem>? supportFormats;
   int? lastPlayTime;
   int? lastPlayCid;
+  String? curLanguage;
+  Language? language;
 
   PlayUrlModel.fromJson(Map<String, dynamic> json) {
     from = json['from'];
@@ -62,6 +64,51 @@ class PlayUrlModel {
         .toList();
     lastPlayTime = json['last_play_time'];
     lastPlayCid = json['last_play_cid'];
+    curLanguage = json['cur_language'];
+    language = json['language'] == null
+        ? null
+        : Language.fromJson(json['language']);
+  }
+}
+
+class Language {
+  Language({
+    this.support,
+    this.items,
+  });
+
+  bool? support;
+  List<LanguageItem>? items;
+
+  Language.fromJson(Map<String, dynamic> json) {
+    support = json['support'];
+    items = (json['items'] as List?)
+        ?.map((e) => LanguageItem.fromJson(e))
+        .toList();
+  }
+}
+
+class LanguageItem {
+  LanguageItem({
+    this.lang,
+    this.title,
+    this.subtitleLang,
+    this.videoDetext,
+    this.videoMouthShapeChange,
+  });
+
+  String? lang;
+  String? title;
+  String? subtitleLang;
+  bool? videoDetext;
+  bool? videoMouthShapeChange;
+
+  LanguageItem.fromJson(Map<String, dynamic> json) {
+    lang = json['lang'];
+    title = json['title'];
+    subtitleLang = json['subtitle_lang'];
+    videoDetext = json['video_detext'];
+    videoMouthShapeChange = json['video_mouth_shape_change'];
   }
 }
 

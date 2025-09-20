@@ -256,9 +256,9 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
       BottomControlType.pre => ComBtn(
         width: widgetWidth,
         height: 30,
+        tooltip: '上一集',
         icon: const Icon(
           Icons.skip_previous,
-          semanticLabel: '上一集',
           size: 22,
           color: Colors.white,
         ),
@@ -273,9 +273,9 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
       BottomControlType.next => ComBtn(
         width: widgetWidth,
         height: 30,
+        tooltip: '下一集',
         icon: const Icon(
           Icons.skip_next,
-          semanticLabel: '下一集',
           size: 22,
           color: Colors.white,
         ),
@@ -329,6 +329,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
             return ComBtn(
               width: widgetWidth,
               height: 30,
+              tooltip: '高能进度条',
               icon: videoDetailController.showDmTreandChart.value
                   ? const Icon(
                       Icons.show_chart,
@@ -399,11 +400,11 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
             : ComBtn(
                 width: widgetWidth,
                 height: 30,
+                tooltip: '分段信息',
                 icon: Transform.rotate(
                   angle: math.pi / 2,
                   child: const Icon(
                     MdiIcons.viewHeadline,
-                    semanticLabel: '分段信息',
                     size: 22,
                     color: Colors.white,
                   ),
@@ -421,9 +422,9 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
       BottomControlType.episode => ComBtn(
         width: widgetWidth,
         height: 30,
+        tooltip: '选集',
         icon: const Icon(
           Icons.list,
-          semanticLabel: '选集',
           size: 22,
           color: Colors.white,
         ),
@@ -501,12 +502,58 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
         ),
       ),
 
+      BottomControlType.aiTranslate => Obx(
+        () {
+          final list = videoDetailController.languages.value;
+          if (list != null && list.isNotEmpty) {
+            return PopupMenuButton<String>(
+              tooltip: '原声翻译',
+              requestFocus: false,
+              initialValue: videoDetailController.currLang.value,
+              color: Colors.black.withValues(alpha: 0.8),
+              itemBuilder: (context) {
+                return [
+                  PopupMenuItem<String>(
+                    value: '',
+                    onTap: () => videoDetailController.setLanguage(''),
+                    child: const Text(
+                      "关闭翻译",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                  ...list.map((e) {
+                    return PopupMenuItem<String>(
+                      value: e.lang,
+                      onTap: () => videoDetailController.setLanguage(e.lang!),
+                      child: Text(
+                        e.title!,
+                        style: const TextStyle(color: Colors.white),
+                      ),
+                    );
+                  }),
+                ];
+              },
+              child: SizedBox(
+                width: widgetWidth,
+                height: 30,
+                child: const Icon(
+                  Icons.translate,
+                  size: 18,
+                  color: Colors.white,
+                ),
+              ),
+            );
+          }
+          return const SizedBox.shrink();
+        },
+      ),
+
       /// 字幕
       BottomControlType.subtitle => Obx(
         () => videoDetailController.subtitles.isEmpty == true
             ? const SizedBox.shrink()
             : PopupMenuButton<int>(
-                tooltip: '选择字幕',
+                tooltip: '字幕',
                 requestFocus: false,
                 initialValue: videoDetailController.vttSubtitlesIndex.value
                     .clamp(
@@ -676,16 +723,15 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
       BottomControlType.fullscreen => ComBtn(
         width: widgetWidth,
         height: 30,
+        tooltip: isFullScreen ? '退出全屏' : '全屏',
         icon: isFullScreen
             ? const Icon(
                 Icons.fullscreen_exit,
-                semanticLabel: '退出全屏',
                 size: 24,
                 color: Colors.white,
               )
             : const Icon(
                 Icons.fullscreen,
-                semanticLabel: '全屏',
                 size: 24,
                 color: Colors.white,
               ),
@@ -709,6 +755,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
       if (plPlayerController.showViewPoints) BottomControlType.viewPoints,
       if (anySeason) BottomControlType.episode,
       if (isFullScreen) BottomControlType.fit,
+      BottomControlType.aiTranslate,
       BottomControlType.subtitle,
       BottomControlType.speed,
       if (isFullScreen) BottomControlType.qa,
@@ -1251,6 +1298,8 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
 
         // 头部、底部控制条
         Positioned.fill(
+          top: -1,
+          bottom: -1,
           child: ClipRect(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -1489,16 +1538,15 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                         final controlsLock =
                             plPlayerController.controlsLock.value;
                         return ComBtn(
+                          tooltip: controlsLock ? '解锁' : '锁定',
                           icon: controlsLock
                               ? const Icon(
                                   FontAwesomeIcons.lock,
-                                  semanticLabel: '解锁',
                                   size: 15,
                                   color: Colors.white,
                                 )
                               : const Icon(
                                   FontAwesomeIcons.lockOpen,
-                                  semanticLabel: '锁定',
                                   size: 15,
                                   color: Colors.white,
                                 ),
@@ -1530,9 +1578,9 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                         borderRadius: BorderRadius.all(Radius.circular(8)),
                       ),
                       child: ComBtn(
+                        tooltip: '截图',
                         icon: const Icon(
                           Icons.photo_camera,
-                          semanticLabel: '截图',
                           size: 20,
                           color: Colors.white,
                         ),

@@ -29,6 +29,7 @@ class BottomControl extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isFullScreen = plPlayerController.isFullScreen.value;
     return AppBar(
       backgroundColor: Colors.transparent,
       foregroundColor: Colors.white,
@@ -40,6 +41,7 @@ class BottomControl extends StatelessWidget {
           PlayOrPauseButton(plPlayerController: plPlayerController),
           ComBtn(
             height: 30,
+            tooltip: '刷新',
             icon: const Icon(
               Icons.refresh,
               size: 18,
@@ -50,6 +52,7 @@ class BottomControl extends StatelessWidget {
           const Spacer(),
           ComBtn(
             height: 30,
+            tooltip: '屏蔽',
             icon: const Icon(
               size: 18,
               Icons.block,
@@ -74,6 +77,7 @@ class BottomControl extends StatelessWidget {
               final enableShowLiveDanmaku =
                   plPlayerController.enableShowLiveDanmaku.value;
               return ComBtn(
+                tooltip: "${enableShowLiveDanmaku ? '关闭' : '开启'}弹幕",
                 icon: enableShowLiveDanmaku
                     ? const Icon(
                         size: 18,
@@ -100,6 +104,7 @@ class BottomControl extends StatelessWidget {
           ),
           Obx(
             () => PopupMenuButton<VideoFitType>(
+              tooltip: '画面比例',
               initialValue: plPlayerController.videoFit.value,
               color: Colors.black.withValues(alpha: 0.8),
               itemBuilder: (context) {
@@ -132,6 +137,7 @@ class BottomControl extends StatelessWidget {
           ),
           Obx(
             () => PopupMenuButton<int>(
+              tooltip: '画质',
               padding: EdgeInsets.zero,
               initialValue: liveRoomCtr.currentQn,
               color: Colors.black.withValues(alpha: 0.8),
@@ -165,22 +171,20 @@ class BottomControl extends StatelessWidget {
           ),
           ComBtn(
             height: 30,
-            icon: plPlayerController.isFullScreen.value
+            tooltip: isFullScreen ? '退出全屏' : '全屏',
+            icon: isFullScreen
                 ? const Icon(
                     Icons.fullscreen_exit,
-                    semanticLabel: '退出全屏',
                     size: 24,
                     color: Colors.white,
                   )
                 : const Icon(
                     Icons.fullscreen,
-                    semanticLabel: '全屏',
                     size: 24,
                     color: Colors.white,
                   ),
-            onTap: () => plPlayerController.triggerFullScreen(
-              status: !plPlayerController.isFullScreen.value,
-            ),
+            onTap: () =>
+                plPlayerController.triggerFullScreen(status: !isFullScreen),
           ),
         ],
       ),

@@ -43,6 +43,7 @@
 
 ## feat
 
+- [x] AI 原声翻译
 - [x] SuperChat
 - [x] 播放课堂视频
 - [x] 发起投票

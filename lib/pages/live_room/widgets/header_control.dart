@@ -72,11 +72,13 @@ class LiveHeaderControl extends StatelessWidget {
         children: [
           if (isFullScreen)
             ComBtn(
+              tooltip: '返回',
               icon: const Icon(FontAwesomeIcons.arrowLeft, size: 15),
               onTap: () => plPlayerController.triggerFullScreen(status: false),
             ),
           child,
           ComBtn(
+            tooltip: '发弹幕',
             icon: const Icon(
               size: 18,
               Icons.comment_outlined,
@@ -88,6 +90,7 @@ class LiveHeaderControl extends StatelessWidget {
             () {
               final onlyPlayAudio = plPlayerController.onlyPlayAudio.value;
               return ComBtn(
+                tooltip: '仅播放音频',
                 onTap: () {
                   plPlayerController.onlyPlayAudio.value = !onlyPlayAudio;
                   onPlayAudio();
@@ -108,6 +111,7 @@ class LiveHeaderControl extends StatelessWidget {
           ),
           if (Platform.isAndroid)
             ComBtn(
+              tooltip: '画中画',
               onTap: () async {
                 try {
                   var floating = Floating();
@@ -130,6 +134,7 @@ class LiveHeaderControl extends StatelessWidget {
               ),
             ),
           ComBtn(
+            tooltip: '定时关闭',
             onTap: () => PageUtils.scheduleExit(
               context,
               plPlayerController.isFullScreen.value,

@@ -196,6 +196,7 @@ class VideoHttp {
     dynamic seasonId,
     required bool tryLook,
     required VideoType videoType,
+    String? language,
   }) async {
     final params = await WbiSign.makSign({
       'avid': ?avid,
@@ -214,6 +215,7 @@ class VideoHttp {
       'web_location': 1315873,
       // 免登录查看1080p
       if (tryLook) 'try_look': 1,
+      'cur_language': ?language,
     });
 
     try {
