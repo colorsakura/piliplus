@@ -1937,7 +1937,8 @@ class HeaderControlState extends TripleState<HeaderControl> {
                   },
                 ),
               ),
-              if (!isFullScreen || !isPortrait)
+              if (!plPlayerController.isDesktopPip &&
+                  (!isFullScreen || !isPortrait))
                 SizedBox(
                   width: 42,
                   height: 34,

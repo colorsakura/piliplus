@@ -279,8 +279,9 @@ class PlPlayerController {
     windowManager.setTitleBarStyle(TitleBarStyle.hidden);
 
     late final Size size;
-    final width = this.width ?? 16;
-    final height = this.height ?? 9;
+    final state = videoController!.player.state;
+    final width = state.width ?? this.width ?? 16;
+    final height = state.height ?? this.height ?? 9;
     if (height > width) {
       size = Size(400.0, 400.0 * height / width);
     } else {
