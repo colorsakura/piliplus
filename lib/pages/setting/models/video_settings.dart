@@ -44,14 +44,6 @@ List<SettingsModel> get videoSettings => [
       alignment: Alignment.centerRight,
       scale: 0.8,
       child: Switch(
-        thumbIcon: WidgetStateProperty.resolveWith<Icon?>((
-          Set<WidgetState> states,
-        ) {
-          if (states.isNotEmpty && states.first == WidgetState.selected) {
-            return const Icon(Icons.lock_outline_rounded);
-          }
-          return null;
-        }),
         value: true,
         onChanged: (_) {},
       ),

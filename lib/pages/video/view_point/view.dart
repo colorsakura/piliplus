@@ -52,13 +52,6 @@ class _ViewPointsPageState extends State<ViewPointsPage>
               alignment: Alignment.centerLeft,
               scale: 0.8,
               child: Switch(
-                thumbIcon: WidgetStateProperty.resolveWith<Icon?>((states) {
-                  if (states.isNotEmpty &&
-                      states.first == WidgetState.selected) {
-                    return const Icon(Icons.done);
-                  }
-                  return null;
-                }),
                 value: videoDetailController.showVP.value,
                 onChanged: (value) =>
                     videoDetailController.showVP.value = value,

@@ -115,6 +115,14 @@ abstract class ThemeUtils {
       cupertinoOverrideTheme: CupertinoThemeData(
         selectionHandleColor: colorScheme.primary,
       ),
+      switchTheme: const SwitchThemeData(
+        thumbIcon: WidgetStateProperty<Icon?>.fromMap(
+          <WidgetStatesConstraint, Icon?>{
+            WidgetState.selected: Icon(Icons.done),
+            WidgetState.any: null,
+          },
+        ),
+      ),
     );
     if (isDark) {
       if (Pref.isPureBlackTheme) {
