@@ -1456,15 +1456,6 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
           ),
   );
 
-  Widget autoChoose(Widget childWhenDisabled) {
-    if (Platform.isAndroid) {
-      return Floating().isPipMode
-          ? plPlayer(width: maxWidth, height: maxHeight, isPipMode: true)
-          : childWhenDisabled;
-    }
-    return childWhenDisabled;
-  }
-
   late ThemeData themeData;
   late bool isPortrait;
   late double maxWidth;
@@ -1473,14 +1464,16 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
   @override
   Widget build(BuildContext context) {
     Widget child;
-    if (!videoDetailController.horizontalScreen) {
-      child = autoChoose(childWhenDisabled);
+    if (videoDetailController.plPlayerController.isPipMode) {
+      child = plPlayer(width: maxWidth, height: maxHeight, isPipMode: true);
+    } else if (!videoDetailController.horizontalScreen) {
+      child = childWhenDisabled;
     } else if (maxWidth > maxHeight * 1.25) {
-      child = autoChoose(childWhenDisabledLandscape);
+      child = childWhenDisabledLandscape;
     } else if (maxWidth * (9 / 16) < (2 / 5) * maxHeight) {
-      child = autoChoose(childWhenDisabled);
+      child = childWhenDisabled;
     } else {
-      child = autoChoose(childWhenDisabledAlmostSquare);
+      child = childWhenDisabledAlmostSquare;
     }
     if (videoDetailController.plPlayerController.keyboardControl) {
       child = PlayerFocus(

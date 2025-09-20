@@ -1925,7 +1925,9 @@ class HeaderControlState extends TripleState<HeaderControl> {
                     color: Colors.white,
                   ),
                   onPressed: () {
-                    if (isFullScreen) {
+                    if (plPlayerController.isDesktopPip) {
+                      plPlayerController.exitDesktopPip();
+                    } else if (isFullScreen) {
                       plPlayerController.triggerFullScreen(status: false);
                     } else if (!horizontalScreen && !isPortrait) {
                       verticalScreenForTwoSeconds();
@@ -2123,7 +2125,7 @@ class HeaderControlState extends TripleState<HeaderControl> {
                   },
                 ),
               ),
-              if (Platform.isAndroid)
+              if (Platform.isAndroid || Utils.isDesktop)
                 SizedBox(
                   width: 42,
                   height: 34,
@@ -2133,6 +2135,10 @@ class HeaderControlState extends TripleState<HeaderControl> {
                       padding: WidgetStatePropertyAll(EdgeInsets.zero),
                     ),
                     onPressed: () async {
+                      if (Utils.isDesktop) {
+                        plPlayerController.toggleDesktopPip();
+                        return;
+                      }
                       bool canUsePiP = await Floating().isPipAvailable;
                       plPlayerController.hiddenControls(false);
                       if (canUsePiP) {

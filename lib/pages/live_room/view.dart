@@ -29,7 +29,6 @@ import 'package:PiliPlus/utils/storage_key.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:canvas_danmaku/canvas_danmaku.dart';
-import 'package:floating/floating.dart';
 import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show SystemUiOverlayStyle;
@@ -181,23 +180,26 @@ class _LiveRoomPageState extends State<LiveRoomPage>
 
   @override
   Widget build(BuildContext context) {
-    if (Platform.isAndroid && Floating().isPipMode) {
-      return videoPlayerPanel(
+    Widget child;
+    if (plPlayerController.isPipMode) {
+      child = videoPlayerPanel(
         isFullScreen,
         width: maxWidth,
         height: maxHeight,
         isPipMode: true,
         needDm: !plPlayerController.pipNoDanmaku,
       );
+    } else {
+      child = childWhenDisabled;
     }
     if (plPlayerController.keyboardControl) {
-      return PlayerFocus(
+      child = PlayerFocus(
         plPlayerController: plPlayerController,
         onSendDanmaku: _liveRoomController.onSendDanmaku,
-        child: childWhenDisabled,
+        child: child,
       );
     }
-    return childWhenDisabled;
+    return child;
   }
 
   Widget videoPlayerPanel(

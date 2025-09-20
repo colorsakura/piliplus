@@ -41,6 +41,7 @@ import 'package:canvas_danmaku/canvas_danmaku.dart';
 import 'package:crclib/catalog.dart';
 import 'package:dio/dio.dart' show Options;
 import 'package:easy_debounce/easy_throttle.dart';
+import 'package:floating/floating.dart';
 import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -53,6 +54,7 @@ import 'package:media_kit_video/media_kit_video.dart';
 import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
 import 'package:universal_platform/universal_platform.dart';
+import 'package:window_manager/window_manager.dart';
 
 class PlPlayerController {
   Player? _videoPlayerController;
@@ -253,6 +255,51 @@ class PlPlayerController {
   late final RxBool enableShowLiveDanmaku = Pref.enableShowLiveDanmaku.obs;
 
   late final bool autoPiP = Pref.autoPiP;
+  bool get isPipMode =>
+      (Platform.isAndroid && Floating().isPipMode) ||
+      (Utils.isDesktop && isDesktopPip);
+  late bool isDesktopPip = false;
+  late Rect _lastWindowBounds;
+
+  void exitDesktopPip() {
+    isDesktopPip = false;
+
+    windowManager
+      ..setTitleBarStyle(TitleBarStyle.normal)
+      ..setMinimumSize(const Size(400, 700))
+      ..setBounds(_lastWindowBounds)
+      ..setAlwaysOnTop(false);
+  }
+
+  Future<void> enterDesktopPip() async {
+    isDesktopPip = true;
+
+    _lastWindowBounds = await windowManager.getBounds();
+
+    windowManager.setTitleBarStyle(TitleBarStyle.hidden);
+
+    late final Size size;
+    final width = this.width ?? 16;
+    final height = this.height ?? 9;
+    if (height > width) {
+      size = Size(400.0, 400.0 * height / width);
+    } else {
+      size = Size(280.0 * width / height, 280.0);
+    }
+
+    await windowManager.setMinimumSize(size);
+    windowManager
+      ..setSize(size)
+      ..setAlwaysOnTop(true);
+  }
+
+  void toggleDesktopPip() {
+    if (isDesktopPip) {
+      exitDesktopPip();
+    } else {
+      enterDesktopPip();
+    }
+  }
 
   void enterPip() {
     if (Get.currentRoute.startsWith('/video')) {

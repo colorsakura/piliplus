@@ -429,7 +429,8 @@ class VideoDetailController extends GetxController
 
   bool get horizontalScreen => plPlayerController.horizontalScreen;
 
-  bool get showVideoSheet => !horizontalScreen && !isPortrait;
+  bool get showVideoSheet =>
+      (!horizontalScreen && !isPortrait) || plPlayerController.isDesktopPip;
 
   int? _lastPos;
   late final List<PostSegmentModel> postList = [];

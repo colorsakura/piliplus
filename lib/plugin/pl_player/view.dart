@@ -59,6 +59,7 @@ import 'package:get/get.dart' hide ContextExtensionss;
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:media_kit_video/media_kit_video.dart';
 import 'package:screen_brightness_platform_interface/screen_brightness_platform_interface.dart';
+import 'package:window_manager/window_manager.dart';
 
 class PLVideoPlayer extends StatefulWidget {
   const PLVideoPlayer({
@@ -749,16 +750,17 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
       ],
     ];
 
+    final flag = isFullScreen || plPlayerController.isDesktopPip;
     List<BottomControlType> userSpecifyItemRight = [
       if (plPlayerController.showDmChart) BottomControlType.dmChart,
       if (plPlayerController.isAnim) BottomControlType.superResolution,
       if (plPlayerController.showViewPoints) BottomControlType.viewPoints,
       if (anySeason) BottomControlType.episode,
-      if (isFullScreen) BottomControlType.fit,
+      if (flag) BottomControlType.fit,
       BottomControlType.aiTranslate,
       BottomControlType.subtitle,
       BottomControlType.speed,
-      if (isFullScreen) BottomControlType.qa,
+      if (flag) BottomControlType.qa,
       BottomControlType.fullscreen,
     ];
 
@@ -1308,7 +1310,13 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                   isTop: true,
                   controller: animationController,
                   isFullScreen: isFullScreen,
-                  child: widget.headerControl,
+                  child: plPlayerController.isDesktopPip
+                      ? GestureDetector(
+                          behavior: HitTestBehavior.translucent,
+                          onPanStart: (_) => windowManager.startDragging(),
+                          child: widget.headerControl,
+                        )
+                      : widget.headerControl,
                 ),
                 AppBarAni(
                   isTop: false,
