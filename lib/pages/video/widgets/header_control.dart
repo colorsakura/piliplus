@@ -1916,8 +1916,10 @@ class HeaderControlState extends State<HeaderControl> {
 
   @override
   Widget build(BuildContext context) {
+    final isFullScreen = this.isFullScreen;
     final showFSActionItem =
-        plPlayerController.showFSActionItem && isFullScreen;
+        plPlayerController.showFSActionItem &&
+        (isFullScreen || plPlayerController.isDesktopPip);
     return AppBar(
       elevation: 0,
       scrolledUnderElevation: 0,
@@ -1973,8 +1975,10 @@ class HeaderControlState extends State<HeaderControl> {
                     },
                   ),
                 ),
-              if ((introController.videoDetail.value.title != null) &&
-                  (isFullScreen || (!horizontalScreen && !isPortrait)))
+              if (introController.videoDetail.value.title != null &&
+                  (isFullScreen ||
+                      (!horizontalScreen && !isPortrait) ||
+                      plPlayerController.isDesktopPip))
                 Expanded(
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
@@ -2032,7 +2036,7 @@ class HeaderControlState extends State<HeaderControl> {
               // show current datetime
               Obx(
                 () {
-                  if ((isFullScreen || !horizontalScreen) && !isPortrait) {
+                  if ((this.isFullScreen || !horizontalScreen) && !isPortrait) {
                     startClock();
                     return Text(
                       now.value,

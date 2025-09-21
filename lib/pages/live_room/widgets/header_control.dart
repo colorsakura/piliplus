@@ -124,9 +124,7 @@ class LiveHeaderControl extends StatelessWidget {
                     plPlayerController.hiddenControls(false);
                     floating.enable(
                       plPlayerController.isVertical
-                          ? const EnableManual(
-                              aspectRatio: Rational.vertical(),
-                            )
+                          ? const EnableManual(aspectRatio: Rational.vertical())
                           : const EnableManual(),
                     );
                   }
@@ -140,11 +138,7 @@ class LiveHeaderControl extends StatelessWidget {
             ),
           ComBtn(
             tooltip: '定时关闭',
-            onTap: () => PageUtils.scheduleExit(
-              context,
-              plPlayerController.isFullScreen.value,
-              true,
-            ),
+            onTap: () => PageUtils.scheduleExit(context, isFullScreen, true),
             icon: const Icon(
               size: 18,
               Icons.schedule,
