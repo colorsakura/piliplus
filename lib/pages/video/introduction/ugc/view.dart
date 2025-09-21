@@ -16,7 +16,6 @@ import 'package:PiliPlus/pages/video/introduction/ugc/widgets/action_item.dart';
 import 'package:PiliPlus/pages/video/introduction/ugc/widgets/page.dart';
 import 'package:PiliPlus/pages/video/introduction/ugc/widgets/season.dart';
 import 'package:PiliPlus/pages/video/introduction/ugc/widgets/selectable_text.dart';
-import 'package:PiliPlus/pages/video/introduction/ugc/widgets/triple_state.dart';
 import 'package:PiliPlus/utils/app_scheme.dart';
 import 'package:PiliPlus/utils/date_utils.dart';
 import 'package:PiliPlus/utils/extension.dart';
@@ -55,8 +54,7 @@ class UgcIntroPanel extends StatefulWidget {
   State<UgcIntroPanel> createState() => _UgcIntroPanelState();
 }
 
-class _UgcIntroPanelState extends TripleState<UgcIntroPanel> {
-  @override
+class _UgcIntroPanelState extends State<UgcIntroPanel> {
   late final UgcIntroController introController;
   late final VideoDetailController videoDetailCtr =
       Get.find<VideoDetailController>(tag: widget.heroTag);
@@ -514,7 +512,7 @@ class _UgcIntroPanelState extends TripleState<UgcIntroPanel> {
         children: [
           Obx(
             () => ActionItem(
-              animation: tripleAnimation,
+              animation: introController.tripleAnimation,
               icon: const Icon(FontAwesomeIcons.thumbsUp),
               selectIcon: const Icon(FontAwesomeIcons.solidThumbsUp),
               selectStatus: introController.hasLike.value,
@@ -522,8 +520,8 @@ class _UgcIntroPanelState extends TripleState<UgcIntroPanel> {
               text: !isLoading
                   ? NumUtils.numFormat(videoDetail.stat!.like)
                   : null,
-              onStartTriple: onStartTriple,
-              onCancelTriple: onCancelTriple,
+              onStartTriple: introController.onStartTriple,
+              onCancelTriple: introController.onCancelTriple,
             ),
           ),
           Obx(
@@ -540,7 +538,7 @@ class _UgcIntroPanelState extends TripleState<UgcIntroPanel> {
           ),
           Obx(
             () => ActionItem(
-              animation: tripleAnimation,
+              animation: introController.tripleAnimation,
               icon: const Icon(FontAwesomeIcons.b),
               selectIcon: const Icon(FontAwesomeIcons.b),
               onTap: introController.actionCoinVideo,
@@ -553,7 +551,7 @@ class _UgcIntroPanelState extends TripleState<UgcIntroPanel> {
           ),
           Obx(
             () => ActionItem(
-              animation: tripleAnimation,
+              animation: introController.tripleAnimation,
               icon: const Icon(FontAwesomeIcons.star),
               selectIcon: const Icon(FontAwesomeIcons.solidStar),
               onTap: () => introController.showFavBottomSheet(context),

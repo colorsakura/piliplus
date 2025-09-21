@@ -14,7 +14,6 @@ import 'package:PiliPlus/pages/video/controller.dart';
 import 'package:PiliPlus/pages/video/introduction/pgc/controller.dart';
 import 'package:PiliPlus/pages/video/introduction/pgc/widgets/pgc_panel.dart';
 import 'package:PiliPlus/pages/video/introduction/ugc/widgets/action_item.dart';
-import 'package:PiliPlus/pages/video/introduction/ugc/widgets/triple_state.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/num_utils.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
@@ -44,8 +43,7 @@ class PgcIntroPage extends StatefulWidget {
   State<PgcIntroPage> createState() => _PgcIntroPageState();
 }
 
-class _PgcIntroPageState extends TripleState<PgcIntroPage> {
-  @override
+class _PgcIntroPageState extends State<PgcIntroPage> {
   late final PgcIntroController introController;
   late final VideoDetailController videoDetailCtr;
 
@@ -412,19 +410,19 @@ class _PgcIntroPageState extends TripleState<PgcIntroPage> {
         children: [
           Obx(
             () => ActionItem(
-              animation: tripleAnimation,
+              animation: introController.tripleAnimation,
               icon: const Icon(FontAwesomeIcons.thumbsUp),
               selectIcon: const Icon(FontAwesomeIcons.solidThumbsUp),
               selectStatus: introController.hasLike.value,
               semanticsLabel: '点赞',
               text: NumUtils.numFormat(item.stat!.like),
-              onStartTriple: onStartTriple,
-              onCancelTriple: onCancelTriple,
+              onStartTriple: introController.onStartTriple,
+              onCancelTriple: introController.onCancelTriple,
             ),
           ),
           Obx(
             () => ActionItem(
-              animation: tripleAnimation,
+              animation: introController.tripleAnimation,
               icon: const Icon(FontAwesomeIcons.b),
               selectIcon: const Icon(FontAwesomeIcons.b),
               onTap: introController.actionCoinVideo,
@@ -435,7 +433,7 @@ class _PgcIntroPageState extends TripleState<PgcIntroPage> {
           ),
           Obx(
             () => ActionItem(
-              animation: tripleAnimation,
+              animation: introController.tripleAnimation,
               icon: const Icon(FontAwesomeIcons.star),
               selectIcon: const Icon(FontAwesomeIcons.solidStar),
               onTap: () => introController.showFavBottomSheet(context),

@@ -20,7 +20,6 @@ import 'package:PiliPlus/pages/video/introduction/pgc/controller.dart';
 import 'package:PiliPlus/pages/video/introduction/ugc/controller.dart';
 import 'package:PiliPlus/pages/video/introduction/ugc/widgets/action_item.dart';
 import 'package:PiliPlus/pages/video/introduction/ugc/widgets/menu_row.dart';
-import 'package:PiliPlus/pages/video/introduction/ugc/widgets/triple_state.dart';
 import 'package:PiliPlus/plugin/pl_player/controller.dart';
 import 'package:PiliPlus/plugin/pl_player/models/play_repeat.dart';
 import 'package:PiliPlus/plugin/pl_player/utils/fullscreen.dart';
@@ -64,7 +63,7 @@ class HeaderControl extends StatefulWidget {
   State<HeaderControl> createState() => HeaderControlState();
 }
 
-class HeaderControlState extends TripleState<HeaderControl> {
+class HeaderControlState extends State<HeaderControl> {
   late final PlPlayerController plPlayerController = widget.controller;
   late final VideoDetailController videoDetailCtr = widget.videoDetailCtr;
   late final PlayUrlModel videoInfo = videoDetailCtr.data;
@@ -74,7 +73,6 @@ class HeaderControlState extends TripleState<HeaderControl> {
   String get heroTag => widget.heroTag;
   late final UgcIntroController ugcIntroController;
   late final PgcIntroController pgcIntroController;
-  @override
   late CommonIntroController introController = videoDetailCtr.isUgc
       ? ugcIntroController
       : pgcIntroController;
@@ -2289,16 +2287,16 @@ class HeaderControlState extends TripleState<HeaderControl> {
                       ),
                       selectStatus: introController.hasLike.value,
                       semanticsLabel: '点赞',
-                      animation: tripleAnimation,
+                      animation: introController.tripleAnimation,
                       onStartTriple: () {
                         plPlayerController.tripling = true;
-                        onStartTriple();
+                        introController.onStartTriple();
                       },
-                      onCancelTriple: ([bool isTap = false]) {
+                      onCancelTriple: ([bool isTapUp = false]) {
                         plPlayerController
                           ..tripling = false
                           ..hideTaskControls();
-                        onCancelTriple(isTap);
+                        introController.onCancelTriple(isTapUp);
                       },
                     ),
                   ),
@@ -2329,7 +2327,7 @@ class HeaderControlState extends TripleState<HeaderControl> {
                   child: Obx(
                     () => ActionItem(
                       expand: false,
-                      animation: tripleAnimation,
+                      animation: introController.tripleAnimation,
                       icon: const Icon(
                         FontAwesomeIcons.b,
                         color: Colors.white,
@@ -2347,7 +2345,7 @@ class HeaderControlState extends TripleState<HeaderControl> {
                   child: Obx(
                     () => ActionItem(
                       expand: false,
-                      animation: tripleAnimation,
+                      animation: introController.tripleAnimation,
                       icon: const Icon(
                         FontAwesomeIcons.star,
                         color: Colors.white,

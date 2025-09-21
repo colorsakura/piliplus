@@ -55,8 +55,81 @@ class PlayerFocus extends StatelessWidget {
   bool get isFullScreen => plPlayerController.isFullScreen.value;
   bool get hasPlayer => plPlayerController.videoPlayerController != null;
 
+  void _setVolume({required bool isIncrease}) {
+    final volume = isIncrease
+        ? math.min(1.0, plPlayerController.volume.value + 0.1)
+        : math.max(0.0, plPlayerController.volume.value - 0.1);
+    plPlayerController.setVolume(volume);
+  }
+
+  void _updateVolume(KeyEvent event, {required bool isIncrease}) {
+    if (event is KeyDownEvent) {
+      if (hasPlayer) {
+        plPlayerController
+          ..cancelLongPressTimer()
+          ..longPressTimer ??= Timer.periodic(
+            const Duration(milliseconds: 200),
+            (_) => _setVolume(isIncrease: isIncrease),
+          );
+      }
+    } else if (event is KeyUpEvent) {
+      if (plPlayerController.longPressTimer?.tick == 0 && hasPlayer) {
+        _setVolume(isIncrease: isIncrease);
+      }
+      plPlayerController.cancelLongPressTimer();
+    }
+  }
+
   bool _handleKey(KeyEvent event) {
     final key = event.logicalKey;
+
+    final isKeyQ = key == LogicalKeyboardKey.keyQ;
+    if (isKeyQ || key == LogicalKeyboardKey.keyR) {
+      if (!plPlayerController.isLive) {
+        if (event is KeyDownEvent) {
+          introController!.onStartTriple();
+        } else if (event is KeyUpEvent) {
+          introController!.onCancelTriple(isKeyQ);
+        }
+      }
+      return true;
+    }
+
+    final isArrowUp = key == LogicalKeyboardKey.arrowUp;
+    if (isArrowUp || key == LogicalKeyboardKey.arrowDown) {
+      _updateVolume(event, isIncrease: isArrowUp);
+      return true;
+    }
+
+    if (key == LogicalKeyboardKey.arrowRight) {
+      if (!plPlayerController.isLive) {
+        if (event is KeyDownEvent) {
+          if (hasPlayer && !plPlayerController.longPressStatus.value) {
+            plPlayerController
+              ..cancelLongPressTimer()
+              ..longPressTimer ??= Timer(
+                const Duration(milliseconds: 200),
+                () => plPlayerController
+                  ..cancelLongPressTimer()
+                  ..setLongPressStatus(true),
+              );
+          }
+        } else if (event is KeyUpEvent) {
+          plPlayerController.cancelLongPressTimer();
+          if (hasPlayer) {
+            if (plPlayerController.longPressStatus.value) {
+              plPlayerController.setLongPressStatus(false);
+            } else {
+              plPlayerController.onForward(
+                plPlayerController.fastForBackwardDuration,
+              );
+            }
+          }
+        }
+      }
+      return true;
+    }
+
     if (event is KeyDownEvent) {
       switch (key) {
         case LogicalKeyboardKey.space:
@@ -101,20 +174,6 @@ class PlayerFocus extends StatelessWidget {
           plPlayerController.toggleDesktopPip();
           return true;
 
-        case LogicalKeyboardKey.arrowUp:
-          if (hasPlayer) {
-            final volume = math.min(1.0, plPlayerController.volume.value + 0.1);
-            plPlayerController.setVolume(volume);
-          }
-          return true;
-
-        case LogicalKeyboardKey.arrowDown:
-          if (hasPlayer) {
-            final volume = math.max(0.0, plPlayerController.volume.value - 0.1);
-            plPlayerController.setVolume(volume);
-          }
-          return true;
-
         case LogicalKeyboardKey.keyM:
           if (hasPlayer) {
             final isMuted = !plPlayerController.isMuted;
@@ -141,10 +200,6 @@ class PlayerFocus extends StatelessWidget {
             }
             return true;
 
-          case LogicalKeyboardKey.keyQ:
-            introController?.actionLikeVideo();
-            return true;
-
           case LogicalKeyboardKey.keyW:
             introController?.actionCoinVideo();
             return true;
@@ -153,7 +208,7 @@ class PlayerFocus extends StatelessWidget {
             introController?.actionFavVideo(isQuick: true);
             return true;
 
-          case LogicalKeyboardKey.keyR:
+          case LogicalKeyboardKey.keyT || LogicalKeyboardKey.keyV:
             introController?.viewLater();
             return true;
 
@@ -180,29 +235,6 @@ class PlayerFocus extends StatelessWidget {
             return true;
         }
       }
-    }
-
-    if (key == LogicalKeyboardKey.arrowRight) {
-      if (!plPlayerController.isLive && hasPlayer) {
-        if (event is KeyDownEvent) {
-          if (!plPlayerController.longPressStatus.value) {
-            plPlayerController.longPressTimer ??= Timer(
-              const Duration(milliseconds: 200),
-              () => plPlayerController.setLongPressStatus(true),
-            );
-          }
-        } else if (event is KeyUpEvent) {
-          plPlayerController.cancelLongPressTimer();
-          if (plPlayerController.longPressStatus.value) {
-            plPlayerController.setLongPressStatus(false);
-          } else {
-            plPlayerController.onForward(
-              plPlayerController.fastForBackwardDuration,
-            );
-          }
-        }
-      }
-      return true;
     }
 
     return false;
