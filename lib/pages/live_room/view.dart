@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:math';
 import 'dart:ui';
 
 import 'package:PiliPlus/common/widgets/button/icon_button.dart';
@@ -211,45 +212,48 @@ class _LiveRoomPageState extends State<LiveRoomPage>
     Alignment? alignment,
     bool needDm = true,
   }) {
-    if (!isFullScreen) {
+    if (!isFullScreen && !plPlayerController.isDesktopPip) {
       _liveRoomController.fsSC.value = null;
     }
     _liveRoomController.isFullScreen = isFullScreen;
-    Widget player = Obx(() {
-      if (_liveRoomController.isLoaded.value) {
-        final roomInfoH5 = _liveRoomController.roomInfoH5.value;
-        return PLVideoPlayer(
-          key: playerKey,
-          maxWidth: width,
-          maxHeight: height,
-          fill: fill,
-          alignment: alignment,
-          plPlayerController: plPlayerController,
-          headerControl: LiveHeaderControl(
-            title: roomInfoH5?.roomInfo?.title,
-            upName: roomInfoH5?.anchorInfo?.baseInfo?.uname,
+    Widget player = Obx(
+      key: playerKey,
+      () {
+        if (_liveRoomController.isLoaded.value) {
+          final roomInfoH5 = _liveRoomController.roomInfoH5.value;
+          return PLVideoPlayer(
+            maxWidth: width,
+            maxHeight: height,
+            fill: fill,
+            alignment: alignment,
             plPlayerController: plPlayerController,
-            onSendDanmaku: _liveRoomController.onSendDanmaku,
-            onPlayAudio: _liveRoomController.queryLiveUrl,
-          ),
-          bottomControl: BottomControl(
-            plPlayerController: plPlayerController,
-            liveRoomCtr: _liveRoomController,
-            onRefresh: _liveRoomController.queryLiveUrl,
-          ),
-          danmuWidget: !needDm
-              ? null
-              : LiveDanmaku(
-                  liveRoomController: _liveRoomController,
-                  plPlayerController: plPlayerController,
-                  isFullScreen: isFullScreen,
-                  isPipMode: isPipMode,
-                ),
-        );
-      }
-      return const SizedBox.shrink();
-    });
-    if (isFullScreen && _liveRoomController.showSuperChat) {
+            headerControl: LiveHeaderControl(
+              title: roomInfoH5?.roomInfo?.title,
+              upName: roomInfoH5?.anchorInfo?.baseInfo?.uname,
+              plPlayerController: plPlayerController,
+              onSendDanmaku: _liveRoomController.onSendDanmaku,
+              onPlayAudio: _liveRoomController.queryLiveUrl,
+            ),
+            bottomControl: BottomControl(
+              plPlayerController: plPlayerController,
+              liveRoomCtr: _liveRoomController,
+              onRefresh: _liveRoomController.queryLiveUrl,
+            ),
+            danmuWidget: !needDm
+                ? null
+                : LiveDanmaku(
+                    liveRoomController: _liveRoomController,
+                    plPlayerController: plPlayerController,
+                    isFullScreen: isFullScreen,
+                    isPipMode: isPipMode,
+                  ),
+          );
+        }
+        return const SizedBox.shrink();
+      },
+    );
+    if (_liveRoomController.showSuperChat &&
+        (isFullScreen || plPlayerController.isDesktopPip)) {
       player = Stack(
         clipBehavior: Clip.none,
         children: [
@@ -421,6 +425,7 @@ class _LiveRoomPageState extends State<LiveRoomPage>
     final isFullScreen = this.isFullScreen;
     final height = maxWidth * 9 / 16;
     final videoHeight = isFullScreen ? maxHeight : height;
+    final bottomHeight = maxHeight - padding.top - height - kToolbarHeight;
     return Column(
       children: [
         Offstage(
@@ -440,7 +445,7 @@ class _LiveRoomPageState extends State<LiveRoomPage>
           offstage: isFullScreen,
           child: SizedBox(
             width: maxWidth,
-            height: maxHeight - padding.top - height - kToolbarHeight,
+            height: max(0, bottomHeight),
             child: _buildBottomWidget,
           ),
         ),

@@ -378,7 +378,7 @@ class LiveRoomController extends GetxController {
                 case 'SUPER_CHAT_MESSAGE' when (showSuperChat):
                   final item = SuperChatItem.fromJson(obj['data']);
                   superChatMsg.insert(0, item);
-                  if (isFullScreen) {
+                  if (isFullScreen || plPlayerController.isDesktopPip) {
                     fsSC.value = item;
                   }
                   break;

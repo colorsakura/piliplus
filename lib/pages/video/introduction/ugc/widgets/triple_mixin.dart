@@ -47,7 +47,7 @@ mixin TripleMixin on GetxController, TickerProvider {
 
   static final _duration = Utils.isMobile
       ? const Duration(milliseconds: 200)
-      : const Duration(milliseconds: 230);
+      : const Duration(milliseconds: 255);
 
   void onStartTriple() {
     _timer ??= Timer(_duration, () {

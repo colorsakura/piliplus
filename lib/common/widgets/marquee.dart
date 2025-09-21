@@ -225,9 +225,7 @@ abstract class MarqueeRender extends RenderBox
 
     if (_distance > 0) {
       updateSize();
-      _ticker
-        ..createTicker(_onTick)
-        ..initStart();
+      _ticker.initIfNeeded(_onTick);
     } else {
       _ticker.cancel();
     }
@@ -416,6 +414,13 @@ class ContextSingleTicker implements TickerProvider {
       if (!ticker.isActive) {
         ticker.start();
       }
+    }
+  }
+
+  void initIfNeeded(TickerCallback onTick) {
+    if (_ticker == null) {
+      createTicker(onTick);
+      initStart();
     }
   }
 

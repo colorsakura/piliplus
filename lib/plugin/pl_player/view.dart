@@ -829,6 +829,17 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
       if (cumulativeDelta.distance < 1) return;
       if (cumulativeDelta.dx.abs() > 3 * cumulativeDelta.dy.abs()) {
         _gestureType = GestureType.horizontal;
+        if (Utils.isMobile) {
+          late final isFullScreen = this.isFullScreen;
+          final progressType = plPlayerController.progressType;
+          if (progressType == BtmProgressBehavior.alwaysHide ||
+              (isFullScreen &&
+                  progressType == BtmProgressBehavior.onlyHideFullScreen) ||
+              (!isFullScreen &&
+                  progressType == BtmProgressBehavior.onlyShowFullScreen)) {
+            plPlayerController.controls = true;
+          }
+        }
       } else if (cumulativeDelta.dy.abs() > 3 * cumulativeDelta.dx.abs()) {
         if (!plPlayerController.enableSlideVolumeBrightness &&
             !plPlayerController.enableSlideFS) {
@@ -1023,6 +1034,20 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
     plPlayerController.doubleTapFuc(type);
   }
 
+  void onTapDesktop() {
+    if (plPlayerController.controlsLock.value) {
+      return;
+    }
+    plPlayerController.onDoubleTapCenter();
+  }
+
+  void onDoubleTapDesktop([_]) {
+    if (plPlayerController.controlsLock.value) {
+      return;
+    }
+    plPlayerController.triggerFullScreen(status: !isFullScreen);
+  }
+
   final isMobile = Utils.isMobile;
 
   @override
@@ -1074,12 +1099,8 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
               onTap: isMobile
                   ? () => plPlayerController.controls =
                         !plPlayerController.showControls.value
-                  : plPlayerController.onDoubleTapCenter,
-              onDoubleTapDown: isMobile
-                  ? onDoubleTapDown
-                  : (_) => plPlayerController.triggerFullScreen(
-                      status: !isFullScreen,
-                    ),
+                  : onTapDesktop,
+              onDoubleTapDown: isMobile ? onDoubleTapDown : onDoubleTapDesktop,
               onLongPressStart: isLive
                   ? null
                   : (_) => plPlayerController.setLongPressStatus(true),
@@ -1528,7 +1549,9 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
           ),
 
         // 锁
-        if (!isLive && isFullScreen && plPlayerController.showFsLockBtn)
+        if (!isLive &&
+            plPlayerController.showFsLockBtn &&
+            (isFullScreen || plPlayerController.isDesktopPip))
           ViewSafeArea(
             right: false,
             child: Align(
@@ -1597,52 +1620,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                             (Platform.isAndroid || kDebugMode) && !isLive
                             ? screenshotWebp
                             : null,
-                        onTap: () {
-                          SmartDialog.showToast('截图中');
-                          plPlayerController.videoPlayerController
-                              ?.screenshot(format: 'image/png')
-                              .then((value) {
-                                if (value != null && context.mounted) {
-                                  SmartDialog.showToast('点击弹窗保存截图');
-                                  showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) {
-                                      return AlertDialog(
-                                        // title: const Text('点击保存'),
-                                        titlePadding: EdgeInsets.zero,
-                                        contentPadding: const EdgeInsets.all(
-                                          8,
-                                        ),
-                                        insetPadding: EdgeInsets.only(
-                                          left: maxWidth / 2,
-                                        ),
-                                        //移除圆角
-                                        shape: const RoundedRectangleBorder(),
-                                        content: GestureDetector(
-                                          onTap: () {
-                                            Get.back();
-                                            ImageUtils.saveByteImg(
-                                              bytes: value,
-                                              fileName:
-                                                  'screenshot_${ImageUtils.time}',
-                                            );
-                                          },
-                                          child: ConstrainedBox(
-                                            constraints: BoxConstraints(
-                                              maxWidth: maxWidth / 3,
-                                              maxHeight: maxHeight / 3,
-                                            ),
-                                            child: Image.memory(value),
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                  );
-                                } else {
-                                  SmartDialog.showToast('截图失败');
-                                }
-                              });
-                        },
+                        onTap: plPlayerController.takeScreenshot,
                       ),
                     ),
                   ),

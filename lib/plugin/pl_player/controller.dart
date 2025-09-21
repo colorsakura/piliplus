@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-import 'dart:math' show max;
+import 'dart:math' show max, min;
 import 'dart:ui' as ui;
 
 import 'package:PiliPlus/common/constants.dart';
@@ -32,6 +32,7 @@ import 'package:PiliPlus/services/service_locator.dart';
 import 'package:PiliPlus/utils/accounts.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/feed_back.dart';
+import 'package:PiliPlus/utils/image_utils.dart';
 import 'package:PiliPlus/utils/page_utils.dart' show PageUtils;
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/storage_key.dart';
@@ -1445,7 +1446,10 @@ class PlPlayerController {
   void onLockControl(bool val) {
     feedBack();
     _controlsLock.value = val;
-    showControls.value = !val;
+    if (!val && _showControls.value) {
+      _showControls.refresh();
+    }
+    controls = !val;
   }
 
   void toggleFullScreen(bool val) {
@@ -1755,5 +1759,50 @@ class PlPlayerController {
       videoShot = const Error(null);
       if (kDebugMode) debugPrint('getVideoShot: $e');
     }
+  }
+
+  void takeScreenshot() {
+    SmartDialog.showToast('截图中');
+    videoPlayerController?.screenshot(format: 'image/png').then((value) {
+      if (value != null) {
+        SmartDialog.showToast('点击弹窗保存截图');
+        Get.dialog(
+          GestureDetector(
+            onTap: () {
+              Get.back();
+              ImageUtils.saveByteImg(
+                bytes: value,
+                fileName: 'screenshot_${ImageUtils.time}',
+              );
+            },
+            child: Align(
+              alignment: Alignment.centerRight,
+              child: Padding(
+                padding: const EdgeInsets.only(right: 12),
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(
+                    maxWidth: min(Get.width / 3, 350),
+                  ),
+                  child: DecoratedBox(
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        width: 5,
+                        color: Get.theme.colorScheme.surface,
+                      ),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(5),
+                      child: Image.memory(value),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        );
+      } else {
+        SmartDialog.showToast('截图失败');
+      }
+    });
   }
 }

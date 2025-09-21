@@ -9,7 +9,7 @@ import 'package:PiliPlus/utils/storage_key.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart'
-    show KeyDownEvent, KeyUpEvent, LogicalKeyboardKey;
+    show KeyDownEvent, KeyUpEvent, LogicalKeyboardKey, HardwareKeyboard;
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 
@@ -131,6 +131,18 @@ class PlayerFocus extends StatelessWidget {
     }
 
     if (event is KeyDownEvent) {
+      final isDigit1 = key == LogicalKeyboardKey.digit1;
+      if (isDigit1 || key == LogicalKeyboardKey.digit2) {
+        if (HardwareKeyboard.instance.isShiftPressed && hasPlayer) {
+          final speed = isDigit1 ? 1.0 : 2.0;
+          if (speed != plPlayerController.playbackSpeed) {
+            plPlayerController.setPlaybackSpeed(speed);
+            SmartDialog.showToast('${speed}x播放');
+          }
+        }
+        return true;
+      }
+
       switch (key) {
         case LogicalKeyboardKey.space:
           if (plPlayerController.isLive || canPlay!()) {
@@ -170,8 +182,10 @@ class PlayerFocus extends StatelessWidget {
           }
           return true;
 
-        case LogicalKeyboardKey.keyP when (Utils.isDesktop && hasPlayer):
-          plPlayerController.toggleDesktopPip();
+        case LogicalKeyboardKey.keyP:
+          if (Utils.isDesktop && hasPlayer) {
+            plPlayerController.toggleDesktopPip();
+          }
           return true;
 
         case LogicalKeyboardKey.keyM:
@@ -182,6 +196,12 @@ class PlayerFocus extends StatelessWidget {
             );
             plPlayerController.isMuted = isMuted;
             SmartDialog.showToast('${isMuted ? '' : '取消'}静音');
+          }
+          return true;
+
+        case LogicalKeyboardKey.keyS:
+          if (hasPlayer && isFullScreen) {
+            plPlayerController.takeScreenshot();
           }
           return true;
 
@@ -215,6 +235,14 @@ class PlayerFocus extends StatelessWidget {
           case LogicalKeyboardKey.keyG:
             if (introController case UgcIntroController ugcCtr) {
               ugcCtr.actionRelationMod(Get.context!);
+            }
+            return true;
+
+          case LogicalKeyboardKey.keyL:
+            if (isFullScreen || plPlayerController.isDesktopPip) {
+              plPlayerController.onLockControl(
+                !plPlayerController.controlsLock.value,
+              );
             }
             return true;
 
