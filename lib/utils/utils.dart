@@ -79,12 +79,7 @@ abstract class Utils {
   static Future<Rect?> get sharePositionOrigin async {
     if (await isIpad) {
       final size = Get.size;
-      return Rect.fromLTWH(
-        0,
-        0,
-        size.width,
-        size.height / 2,
-      );
+      return Rect.fromLTWH(0, 0, size.width, size.height / 2);
     }
     return null;
   }
@@ -96,10 +91,7 @@ abstract class Utils {
     }
     try {
       await SharePlus.instance.share(
-        ShareParams(
-          text: text,
-          sharePositionOrigin: await sharePositionOrigin,
-        ),
+        ShareParams(text: text, sharePositionOrigin: await sharePositionOrigin),
       );
     } catch (e) {
       SmartDialog.showToast(e.toString());

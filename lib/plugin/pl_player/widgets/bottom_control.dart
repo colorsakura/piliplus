@@ -53,7 +53,7 @@ class BottomControl extends StatelessWidget {
                     if (value > max || max <= 0) {
                       return const SizedBox.shrink();
                     }
-                    return ProgressBar(
+                    final child = ProgressBar(
                       progress: Duration(seconds: value),
                       buffered: Duration(seconds: buffer),
                       total: Duration(seconds: max),
@@ -109,6 +109,13 @@ class BottomControl extends StatelessWidget {
                         );
                       },
                     );
+                    if (Utils.isDesktop) {
+                      return MouseRegion(
+                        cursor: SystemMouseCursors.click,
+                        child: child,
+                      );
+                    }
+                    return child;
                   }),
                   if (controller.enableSponsorBlock &&
                       videoDetailController.segmentProgressList.isNotEmpty)
