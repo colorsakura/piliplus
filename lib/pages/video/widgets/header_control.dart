@@ -1977,8 +1977,8 @@ class HeaderControlState extends State<HeaderControl> {
                 ),
               if (introController.videoDetail.value.title != null &&
                   (isFullScreen ||
-                      (!horizontalScreen && !isPortrait) ||
-                      plPlayerController.isDesktopPip))
+                      ((!horizontalScreen || plPlayerController.isDesktopPip) &&
+                          !isPortrait)))
                 Expanded(
                   child: Column(
                     mainAxisSize: MainAxisSize.min,

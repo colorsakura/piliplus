@@ -127,7 +127,9 @@ class _CreateReservePageState extends State<CreateReservePage> {
                     padding: const EdgeInsets.symmetric(vertical: 4),
                     child: Obx(
                       () => Text(
-                        DateFormatUtils.longFormatD.format(_controller.date.value),
+                        DateFormatUtils.longFormatD.format(
+                          _controller.date.value,
+                        ),
                       ),
                     ),
                   ),

@@ -672,8 +672,10 @@ class _LiveRoomPageState extends State<LiveRoomPage>
   }
 
   Widget get _buildBodyH {
-    final videoWidth =
+    double videoWidth =
         clampDouble(maxHeight / maxWidth * 1.08, 0.56, 0.7) * maxWidth;
+    final rigthWidth = min(400.0, maxWidth - videoWidth - padding.horizontal);
+    videoWidth = maxWidth - rigthWidth;
     final videoHeight = maxHeight - padding.top;
     return Obx(
       () {
@@ -707,7 +709,7 @@ class _LiveRoomPageState extends State<LiveRoomPage>
                     Offstage(
                       offstage: isFullScreen,
                       child: SizedBox(
-                        width: maxWidth - videoWidth - padding.horizontal,
+                        width: rigthWidth,
                         height: videoHeight,
                         child: _buildBottomWidget,
                       ),

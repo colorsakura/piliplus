@@ -172,7 +172,8 @@ class _ArticleListPageState extends State<ArticleListPage> with GridMixin {
                     TextSpan(
                       children: [
                         TextSpan(
-                          text: '${DateFormatUtils.dateFormat(item.updateTime)}更新',
+                          text:
+                              '${DateFormatUtils.dateFormat(item.updateTime)}更新',
                         ),
                         divider,
                         TextSpan(text: '文集号: ${item.id}'),

@@ -244,7 +244,9 @@ class _CreateVotePageState extends State<CreateVotePage> {
                   padding: const EdgeInsets.symmetric(vertical: 4),
                   child: Obx(
                     () => Text(
-                      DateFormatUtils.longFormatD.format(_controller.endtime.value),
+                      DateFormatUtils.longFormatD.format(
+                        _controller.endtime.value,
+                      ),
                     ),
                   ),
                 ),
