@@ -51,6 +51,7 @@ class AccountManager extends Interceptor {
       Api.getSeasonDetailApi,
       Api.liveRoomDmToken,
       Api.liveRoomDmPrefetch,
+      Api.superChatMsg,
       Api.searchByType,
       Api.dynSearch,
       Api.searchArchive,
@@ -68,6 +69,18 @@ class AccountManager extends Interceptor {
       Api.liveList,
       Api.searchTrending,
       Api.searchRecommend,
+      Api.getRankApi,
+      Api.pgcRank,
+      Api.pgcSeasonRank,
+      Api.pgcIndexResult,
+      Api.popularSeriesOne,
+      Api.popularSeriesList,
+      Api.popularPrecious,
+      Api.liveAreaList,
+      Api.liveFeedIndex,
+      Api.liveSecondList,
+      Api.liveRoomAreaList,
+      Api.liveSearch,
     },
     // progress
     AccountType.video: {
@@ -118,7 +131,7 @@ class AccountManager extends Interceptor {
 
     late final Account account = options.extra['account'] ?? _findAccount(path);
 
-    if (_skipCookie(path) || account is NoAccount) return handler.next(options);
+    if (account is NoAccount || _skipCookie(path)) return handler.next(options);
 
     if (!account.isLogin && path == Api.heartBeat) {
       return handler.reject(
