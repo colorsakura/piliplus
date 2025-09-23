@@ -1320,7 +1320,7 @@ class HeaderControlState extends State<HeaderControl> {
     // 显示区域
     double showArea = plPlayerController.showArea;
     // 不透明度
-    double danmakuOpacity = plPlayerController.danmakuOpacity;
+    double danmakuOpacity = plPlayerController.danmakuOpacity.value;
     // 字体大小
     double danmakuFontScale = plPlayerController.danmakuFontScale;
     // 全屏字体大小
@@ -1443,13 +1443,8 @@ class HeaderControlState extends State<HeaderControl> {
         }
 
         void updateOpacity(double val) {
-          plPlayerController.danmakuOpacity = danmakuOpacity = val;
+          plPlayerController.danmakuOpacity.value = danmakuOpacity = val;
           setState(() {});
-          try {
-            danmakuController?.updateOption(
-              danmakuController.option.copyWith(opacity: danmakuOpacity),
-            );
-          } catch (_) {}
         }
 
         void updateShowArea(double val) {

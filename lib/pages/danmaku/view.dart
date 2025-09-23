@@ -126,9 +126,7 @@ class _PlDanmakuState extends State<PlDanmaku> {
               type: DmUtils.getPosition(e.mode),
               isColorful:
                   playerController.showVipDanmaku &&
-                      e.colorful == DmColorfulType.VipGradualColor
-                  ? true
-                  : null,
+                  e.colorful == DmColorfulType.VipGradualColor,
               count: e.hasCount() ? e.count : null,
               selfSend: e.isSelf,
             ),
@@ -151,7 +149,9 @@ class _PlDanmakuState extends State<PlDanmaku> {
   Widget build(BuildContext context) {
     return Obx(
       () => AnimatedOpacity(
-        opacity: playerController.enableShowDanmaku.value ? 1 : 0,
+        opacity: playerController.enableShowDanmaku.value
+            ? playerController.danmakuOpacity.value
+            : 0,
         duration: const Duration(milliseconds: 100),
         child: DanmakuScreen(
           createdController: (DanmakuController e) {
@@ -161,7 +161,6 @@ class _PlDanmakuState extends State<PlDanmaku> {
             fontSize: _fontSize,
             fontWeight: playerController.danmakuFontWeight,
             area: playerController.showArea,
-            opacity: playerController.danmakuOpacity,
             hideTop: playerController.blockTypes.contains(5),
             hideScroll: playerController.blockTypes.contains(2),
             hideBottom: playerController.blockTypes.contains(4),

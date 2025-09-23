@@ -1031,7 +1031,9 @@ class _LiveDanmakuState extends State<LiveDanmaku> {
     return Obx(
       () {
         return AnimatedOpacity(
-          opacity: plPlayerController.enableShowLiveDanmaku.value ? 1 : 0,
+          opacity: plPlayerController.enableShowLiveDanmaku.value
+              ? plPlayerController.danmakuOpacity.value
+              : 0,
           duration: const Duration(milliseconds: 100),
           child: DanmakuScreen(
             createdController: (DanmakuController e) {
@@ -1042,7 +1044,6 @@ class _LiveDanmakuState extends State<LiveDanmaku> {
               fontSize: _fontSize,
               fontWeight: plPlayerController.danmakuFontWeight,
               area: plPlayerController.showArea,
-              opacity: plPlayerController.danmakuOpacity,
               hideTop: plPlayerController.blockTypes.contains(5),
               hideScroll: plPlayerController.blockTypes.contains(2),
               hideBottom: plPlayerController.blockTypes.contains(4),

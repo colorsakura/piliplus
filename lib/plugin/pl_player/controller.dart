@@ -323,7 +323,7 @@ class PlPlayerController {
   // 弹幕相关配置
   late Set<int> blockTypes = Pref.danmakuBlockType;
   late double showArea = Pref.danmakuShowArea;
-  late double danmakuOpacity = Pref.danmakuOpacity;
+  late RxDouble danmakuOpacity = Pref.danmakuOpacity.obs;
   late double danmakuFontScale = Pref.danmakuFontScale;
   late double danmakuFontScaleFS = Pref.danmakuFontScaleFS;
   late double danmakuStrokeWidth = Pref.strokeWidth;
@@ -1597,7 +1597,7 @@ class PlPlayerController {
       SettingBoxKey.danmakuWeight: danmakuWeight,
       SettingBoxKey.danmakuBlockType: blockTypes.toList(),
       SettingBoxKey.danmakuShowArea: showArea,
-      SettingBoxKey.danmakuOpacity: danmakuOpacity,
+      SettingBoxKey.danmakuOpacity: danmakuOpacity.value,
       SettingBoxKey.danmakuFontScale: danmakuFontScale,
       SettingBoxKey.danmakuFontScaleFS: danmakuFontScaleFS,
       SettingBoxKey.danmakuDuration: danmakuDuration,
