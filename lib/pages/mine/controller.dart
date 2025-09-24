@@ -146,7 +146,7 @@ class MineController
   Future<LoadingState<FavFolderData>> customGetData() {
     return FavHttp.userfavFolder(
       pn: 1,
-      ps: 5,
+      ps: 20,
       mid: accountService.mid,
     );
   }

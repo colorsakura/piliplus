@@ -485,12 +485,12 @@ class _MediaPageState extends CommonPageState<MinePage, MineController>
           return SizedBox(
             height: 200,
             child: ListView.separated(
-              padding: const EdgeInsets.only(left: 20, top: 12),
+              padding: const EdgeInsets.only(left: 20, top: 12, right: 20),
               itemCount: response.list.length + (flag ? 1 : 0),
               itemBuilder: (context, index) {
                 if (flag && index == favFolderList.length) {
                   return Padding(
-                    padding: const EdgeInsets.only(right: 14, bottom: 35),
+                    padding: const EdgeInsets.only(bottom: 35),
                     child: Center(
                       child: IconButton(
                         tooltip: '查看更多',
