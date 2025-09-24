@@ -106,6 +106,7 @@ class MemberVideoCtr
     }
     firstAid = data.item?.firstOrNull?.param;
     lastAid = data.item?.lastOrNull?.param;
+    isLoadPrevious = false;
     loadingState.value = Success(data.item);
     return true;
   }

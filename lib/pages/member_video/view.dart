@@ -9,6 +9,8 @@ import 'package:PiliPlus/pages/member/controller.dart';
 import 'package:PiliPlus/pages/member_video/controller.dart';
 import 'package:PiliPlus/pages/member_video/widgets/video_card_h_member_video.dart';
 import 'package:PiliPlus/utils/grid.dart';
+import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
@@ -55,6 +57,23 @@ class _MemberVideoState extends State<MemberVideo>
         '${widget.heroTag}${widget.type.name}${widget.seasonId}${widget.seriesId}',
   );
 
+  int? _index;
+  late ExtendedNestedScrollController _scrollController;
+
+  void _jumpToIndex(int index) {
+    final scrollOffset = gridDelegate.layoutCache!
+        .getGeometryForChildIndex(index)
+        .scrollOffset;
+    try {
+      _scrollController.nestedPositions
+          .elementAt(_index!)
+          .localJumpTo(scrollOffset);
+    } catch (e) {
+      _scrollController.jumpTo(scrollOffset);
+      if (kDebugMode) debugPrint('jump error: $e');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -64,18 +83,12 @@ class _MemberVideoState extends State<MemberVideo>
       onRefresh: () async {
         final count = _controller.loadingState.value.dataOrNull?.length;
         await _controller.onRefresh();
-        if (_controller.isLoadPrevious) {
-          if (mounted) {
-            final newCount = _controller.loadingState.value.dataOrNull?.length;
-            if (count != null && newCount != null && newCount > count) {
-              SchedulerBinding.instance.addPostFrameCallback((_) {
-                PrimaryScrollController.of(this.context).jumpTo(
-                  gridDelegate.layoutCache!
-                      .getGeometryForChildIndex(newCount - count)
-                      .scrollOffset,
-                );
-              });
-            }
+        if (_controller.isLocating.value && mounted) {
+          final newCount = _controller.loadingState.value.dataOrNull?.length;
+          if (count != null && newCount != null && newCount > count) {
+            SchedulerBinding.instance.addPostFrameCallback((_) {
+              _jumpToIndex(newCount - count);
+            });
           }
         }
       },
@@ -93,6 +106,12 @@ class _MemberVideoState extends State<MemberVideo>
     );
     if (widget.type == ContributeType.video &&
         _controller.fromViewAid?.isNotEmpty == true) {
+      if (_index == null) {
+        _scrollController =
+            PrimaryScrollController.of(this.context)
+                as ExtendedNestedScrollController;
+        _index = _scrollController.nestedPositions.length;
+      }
       return Stack(
         clipBehavior: Clip.none,
         children: [
@@ -118,11 +137,7 @@ class _MemberVideoState extends State<MemberVideo>
                             ..loadingState.value = LoadingState.loading()
                             ..queryData();
                         } else {
-                          PrimaryScrollController.of(context).jumpTo(
-                            gridDelegate.layoutCache!
-                                .getGeometryForChildIndex(locatedIndex)
-                                .scrollOffset,
-                          );
+                          _jumpToIndex(locatedIndex);
                         }
                       },
                       label: const Text('定位至上次观看'),
