@@ -45,9 +45,13 @@ class VideoCardHMemberVideo extends StatelessWidget {
             onTap:
                 onTap ??
                 () async {
-                  if (videoItem.isPgc == true &&
-                      videoItem.uri?.isNotEmpty == true) {
-                    if (PageUtils.viewPgcFromUri(videoItem.uri!)) {
+                  final isPgc = videoItem.isPgc == true;
+                  final isPugv = videoItem.isPugv == true;
+                  if ((isPgc || isPugv) && videoItem.uri?.isNotEmpty == true) {
+                    if (PageUtils.viewPgcFromUri(
+                      videoItem.uri!,
+                      isPgc: isPgc,
+                    )) {
                       return;
                     }
                   }

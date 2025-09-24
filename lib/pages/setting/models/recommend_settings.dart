@@ -27,7 +27,9 @@ List<SettingsModel> get recommendSettings => [
     defaultVal: false,
     onChanged: (value) {
       try {
-        Get.find<RcmdController>().enableSaveLastData = value;
+        Get.find<RcmdController>()
+          ..enableSaveLastData = value
+          ..lastRefreshAt = null;
       } catch (e) {
         if (kDebugMode) debugPrint('$e');
       }
@@ -42,10 +44,9 @@ List<SettingsModel> get recommendSettings => [
     defaultVal: true,
     onChanged: (value) {
       try {
-        RcmdController ctr = Get.find<RcmdController>()..savedRcmdTip = value;
-        if (!value) {
-          ctr.lastRefreshAt = null;
-        }
+        Get.find<RcmdController>()
+          ..savedRcmdTip = value
+          ..lastRefreshAt = null;
       } catch (e) {
         if (kDebugMode) debugPrint('$e');
       }
