@@ -359,7 +359,9 @@ class LiveRoomController extends GetxController {
                     plPlayerController.danmakuController?.addDanmaku(
                       DanmakuContentItem(
                         extra['content'],
-                        color: DmUtils.decimalToColor(extra['color']),
+                        color: plPlayerController.blockColorful
+                            ? Colors.white
+                            : DmUtils.decimalToColor(extra['color']),
                         type: DmUtils.getPosition(extra['mode']),
                         selfSend: extra['send_from_me'] ?? false,
                       ),

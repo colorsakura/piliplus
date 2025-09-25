@@ -120,7 +120,7 @@ class _PlDanmakuState extends State<PlDanmaku> {
           _controller!.addDanmaku(
             DanmakuContentItem(
               e.content,
-              color: playerController.blockTypes.contains(6)
+              color: playerController.blockColorful
                   ? Colors.white
                   : DmUtils.decimalToColor(e.color),
               type: DmUtils.getPosition(e.mode),

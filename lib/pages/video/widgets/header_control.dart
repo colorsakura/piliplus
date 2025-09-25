@@ -1537,6 +1537,7 @@ class HeaderControlState extends State<HeaderControl> {
                               }
                               plPlayerController
                                 ..blockTypes = blockTypes
+                                ..blockColorful = blockTypes.contains(6)
                                 ..putDanmakuSettings();
                               setState(() {});
                               try {

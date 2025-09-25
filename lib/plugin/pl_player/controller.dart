@@ -322,6 +322,7 @@ class PlPlayerController {
       .toRadixString(16);
   // 弹幕相关配置
   late Set<int> blockTypes = Pref.danmakuBlockType;
+  late bool blockColorful = blockTypes.contains(6);
   late double showArea = Pref.danmakuShowArea;
   late RxDouble danmakuOpacity = Pref.danmakuOpacity.obs;
   late double danmakuFontScale = Pref.danmakuFontScale;
