@@ -112,7 +112,7 @@ abstract class Update {
   }
 
   // 下载适用于当前系统的安装包
-  static Future<void> onDownload(data) async {
+  static Future<void> onDownload(Map data) async {
     SmartDialog.dismiss();
     try {
       void download(plat) {
@@ -120,9 +120,10 @@ abstract class Update {
           for (dynamic i in data['assets']) {
             if (i['name'].contains(plat)) {
               PageUtils.launchURL(i['browser_download_url']);
-              break;
+              return;
             }
           }
+          throw UnsupportedError('platform not found: $plat');
         }
       }
 
@@ -131,10 +132,17 @@ abstract class Update {
         AndroidDeviceInfo androidInfo = await DeviceInfoPlugin().androidInfo;
         // [arm64-v8a]
         download(androidInfo.supportedAbis.first);
-      } else {
+      } else if (Platform.isIOS) {
         download('ios');
+      } else if (Platform.isWindows) {
+        download('windows');
+      } else {
+        throw UnsupportedError(
+          'unsupported platform: ${Platform.operatingSystem}',
+        );
       }
-    } catch (_) {
+    } catch (e) {
+      if (kDebugMode) debugPrint('download error: $e');
       PageUtils.launchURL('${Constants.sourceCodeUrl}/releases/latest');
     }
   }
