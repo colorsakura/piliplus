@@ -8,7 +8,9 @@ import 'package:path_provider/path_provider.dart';
 
 abstract class CacheManage {
   // 获取缓存目录
-  static Future<int> loadApplicationCache() async {
+  static Future<int> loadApplicationCache([
+    final num maxSize = double.infinity,
+  ]) async {
     /// clear all of image in memory
     // clearMemoryImageCache();
     /// get ImageCache
@@ -20,55 +22,39 @@ abstract class CacheManage {
     if (Utils.isDesktop) {
       final dir = Directory('${tempDirectory.path}/libCachedImageData');
       if (dir.existsSync()) {
-        return await getTotalSizeOfFilesInDir(dir);
+        return await getTotalSizeOfFilesInDir(dir, maxSize);
       } else {
         return 0;
       }
     }
-    // get_storage directory
-    Directory docDirectory = await getApplicationDocumentsDirectory();
 
-    int cacheSize = 0;
     // 获取缓存大小
     if (tempDirectory.existsSync()) {
-      cacheSize += await getTotalSizeOfFilesInDir(tempDirectory);
+      return await getTotalSizeOfFilesInDir(tempDirectory, maxSize);
     }
 
-    /// 获取缓存大小 dioCache
-    if (docDirectory.existsSync()) {
-      String dioCacheFileName =
-          '${docDirectory.path}${Platform.pathSeparator}DioCache.db';
-      var dioCacheFile = File(dioCacheFileName);
-      if (dioCacheFile.existsSync()) {
-        cacheSize += await getTotalSizeOfFilesInDir(dioCacheFile);
-      }
-    }
-
-    return cacheSize;
+    return 0;
   }
 
-  // 循环计算文件的大小（递归）
+  // 循环计算文件的大小
   static Future<int> getTotalSizeOfFilesInDir(
-    final FileSystemEntity file,
-  ) async {
-    if (file is File) {
-      int length = await file.length();
-      return int.parse(length.toString());
-    }
-    if (file is Directory) {
-      final List<FileSystemEntity> children = file.listSync();
-      int total = 0;
-      for (final FileSystemEntity child in children) {
-        total += await getTotalSizeOfFilesInDir(child);
+    final Directory file, [
+    final num maxSize = double.infinity,
+  ]) async {
+    final children = file.list(recursive: true);
+    int total = 0;
+    await for (final child in children) {
+      if (child is File) {
+        total += await child.length();
+        if (total >= maxSize) break;
       }
-      return total;
     }
-    return 0;
+    return total;
   }
 
   // 缓存大小格式转换
   static String formatSize(num value) {
-    List<String> unitArr = const ['B', 'K', 'M', 'G', 'T', 'P'];
+    const unitArr = ['B', 'K', 'M', 'G', 'T', 'P'];
     int index = 0;
     while (value >= 1024) {
       index++;
@@ -76,19 +62,6 @@ abstract class CacheManage {
     }
     String size = value.toStringAsFixed(2);
     return size + unitArr.getOrElse(index, orElse: () => '');
-  }
-
-  /// 清除 Documents 目录下的 DioCache.db
-  static Future<void> clearApplicationCache() async {
-    Directory directory = await getApplicationDocumentsDirectory();
-    if (directory.existsSync()) {
-      String dioCacheFileName =
-          '${directory.path}${Platform.pathSeparator}DioCache.db';
-      var dioCacheFile = File(dioCacheFileName);
-      if (dioCacheFile.existsSync()) {
-        dioCacheFile.delete();
-      }
-    }
   }
 
   // 清除 Library/Caches 目录及文件缓存
@@ -103,24 +76,11 @@ abstract class CacheManage {
     }
     if (tempDirectory.existsSync()) {
       // await appDocDir.delete(recursive: true);
-      final List<FileSystemEntity> children = tempDirectory.listSync(
-        recursive: false,
-      );
-      for (final FileSystemEntity file in children) {
+      final children = tempDirectory.list(recursive: false);
+      await for (final file in children) {
         await file.delete(recursive: true);
       }
     }
-  }
-
-  /// 递归方式删除目录及文件
-  static Future<void> deleteDirectory(FileSystemEntity file) async {
-    if (file is Directory) {
-      final List<FileSystemEntity> children = file.listSync();
-      for (final FileSystemEntity child in children) {
-        await deleteDirectory(child);
-      }
-    }
-    await file.delete();
   }
 
   static Future<void> autoClearCache() async {
@@ -129,7 +89,7 @@ abstract class CacheManage {
     } else {
       final maxCacheSize = Pref.maxCacheSize;
       if (maxCacheSize != 0) {
-        final currCache = await loadApplicationCache();
+        final currCache = await loadApplicationCache(maxCacheSize);
         if (currCache >= maxCacheSize) {
           await clearLibraryCache();
         }

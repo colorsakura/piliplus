@@ -30,10 +30,16 @@ class _SuperChatPanelState extends DebounceStreamState<SuperChatPanel, bool>
         padding: const EdgeInsets.symmetric(horizontal: 12),
         physics: const ClampingScrollPhysics(),
         itemCount: widget.controller.superChatMsg.length,
+        findChildIndexCallback: (key) {
+          final index = widget.controller.superChatMsg.indexWhere(
+            (i) => i.id == (key as ValueKey<int>).value,
+          );
+          return index == -1 ? null : index;
+        },
         itemBuilder: (context, index) {
           final item = widget.controller.superChatMsg[index];
           return SuperChatCard(
-            key: Key(item.id.toString()),
+            key: ValueKey(item.id),
             item: item,
             onRemove: () => ctr?.add(true),
           );

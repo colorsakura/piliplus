@@ -45,9 +45,10 @@ void main() async {
   Get.lazyPut(AccountService.new);
   HttpOverrides.global = _CustomHttpOverrides();
 
-  await Future.wait([
-    CacheManage.autoClearCache(),
-    if (Utils.isMobile) ...[
+  CacheManage.autoClearCache();
+
+  if (Utils.isMobile) {
+    await Future.wait([
       SystemChrome.setPreferredOrientations(
         [
           DeviceOrientation.portraitUp,
@@ -58,8 +59,8 @@ void main() async {
         ],
       ),
       setupServiceLocator(),
-    ],
-  ]);
+    ]);
+  }
 
   Request();
   Request.setCookie();
@@ -92,18 +93,8 @@ void main() async {
       title: Constants.appName,
     );
     windowManager.waitUntilReadyToShow(windowOptions, () async {
-      final windowSize = Pref.windowSize;
-      final windowOffset = await Utils.windowOffset;
-      final bounds = Rect.fromLTWH(
-        windowOffset.left,
-        windowOffset.top,
-        windowSize[0],
-        windowSize[1],
-      );
-      await windowManager.setBounds(bounds);
-      if (Pref.isWindowMaximized) {
-        await windowManager.maximize();
-      }
+      await windowManager.setBounds(await Utils.windowOffset & Pref.windowSize);
+      if (Pref.isWindowMaximized) await windowManager.maximize();
       await windowManager.show();
       await windowManager.focus();
     });
@@ -171,7 +162,9 @@ class MyApp extends StatelessWidget {
       late List<DisplayMode> modes;
       FlutterDisplayMode.supported.then((value) {
         modes = value;
-        var storageDisplay = GStorage.setting.get(SettingBoxKey.displayMode);
+        final String? storageDisplay = GStorage.setting.get(
+          SettingBoxKey.displayMode,
+        );
         DisplayMode? displayMode;
         if (storageDisplay != null) {
           displayMode = modes.firstWhereOrNull(

@@ -241,7 +241,7 @@ class LiveRoomController extends GetxController {
 
   Future<void> getSuperChatMsg() async {
     final res = await LiveHttp.superChatMsg(roomId);
-    if (res.dataOrNull?.list case List<SuperChatItem> list) {
+    if (res.dataOrNull?.list case final list?) {
       superChatMsg.addAll(list);
     }
   }
@@ -377,7 +377,7 @@ class LiveRoomController extends GetxController {
                     }
                   }
                   break;
-                case 'SUPER_CHAT_MESSAGE' when (showSuperChat):
+                case 'SUPER_CHAT_MESSAGE' when showSuperChat:
                   final item = SuperChatItem.fromJson(obj['data']);
                   superChatMsg.insert(0, item);
                   if (isFullScreen || plPlayerController.isDesktopPip) {
@@ -385,10 +385,8 @@ class LiveRoomController extends GetxController {
                   }
                   break;
               }
-            } catch (e) {
-              if (kDebugMode) {
-                debugPrint('$e,,$obj');
-              }
+            } catch (_) {
+              if (kDebugMode) rethrow;
             }
           })
           ..init();
