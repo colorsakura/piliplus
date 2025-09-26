@@ -34,7 +34,6 @@ class _MainAppState extends State<MainApp>
     with RouteAware, WidgetsBindingObserver, WindowListener, TrayListener {
   final MainController _mainController = Get.put(MainController());
   late final _setting = GStorage.setting;
-  static const MethodChannel _channel = MethodChannel('window_control');
 
   @override
   void initState() {
@@ -139,7 +138,7 @@ class _MainAppState extends State<MainApp>
 
   void _onClose() {
     if (Platform.isWindows) {
-      _channel.invokeMethod('closeWindow');
+      const MethodChannel('window_control').invokeMethod('closeWindow');
     } else {
       exit(0);
     }
