@@ -244,7 +244,9 @@ class MyApp extends StatelessWidget {
             FlutterSmartDialog.observer,
             PageUtils.routeObserver,
           ],
-          scrollBehavior: const ScrollBehavior().copyWith(scrollbars: false),
+          scrollBehavior: const MaterialScrollBehavior().copyWith(
+            scrollbars: false,
+          ),
         );
       }),
     );
