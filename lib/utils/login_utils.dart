@@ -123,7 +123,10 @@ abstract class LoginUtils {
     GrpcReq.updateHeaders(null);
 
     await Future.wait([
-      if (!Platform.isLinux) web.CookieManager.instance().deleteAllCookies(),
+      if (!Platform.isLinux)
+        web.CookieManager.instance(
+          webViewEnvironment: webViewEnvironment,
+        ).deleteAllCookies(),
       GStorage.userInfo.delete('userInfoCache'),
     ]);
 
