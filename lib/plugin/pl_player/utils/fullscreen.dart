@@ -8,14 +8,14 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
 //横屏
-Future<void> landScape() async {
+Future<void> landscape({bool inAppFullScreen = false}) async {
   dynamic document;
   try {
     if (kIsWeb) {
       await document.documentElement?.requestFullscreen();
     } else if (Utils.isMobile) {
       await AutoOrientation.landscapeAutoMode(forceSensor: true);
-    } else if (Utils.isDesktop && Pref.nativeFullscreen) {
+    } else if (Utils.isDesktop && !inAppFullScreen) {
       await const MethodChannel(
         'com.alexmercerind/media_kit_video',
       ).invokeMethod(
@@ -76,7 +76,7 @@ Future<void> hideStatusBar() async {
 bool _showStatusBar = true;
 
 //退出全屏显示
-Future<void> showStatusBar() async {
+Future<void> showStatusBar({bool inAppFullScreen = false}) async {
   if (_showStatusBar) {
     return;
   }
@@ -94,7 +94,7 @@ Future<void> showStatusBar() async {
         mode,
         overlays: SystemUiOverlay.values,
       );
-    } else if (Utils.isDesktop && Pref.nativeFullscreen) {
+    } else if (Utils.isDesktop && !inAppFullScreen) {
       await const MethodChannel(
         'com.alexmercerind/media_kit_video',
       ).invokeMethod(

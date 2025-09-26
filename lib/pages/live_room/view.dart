@@ -161,7 +161,7 @@ class _LiveRoomPageState extends State<LiveRoomPage>
         if (isFullScreen && Platform.isIOS) {
           WidgetsBinding.instance.addPostFrameCallback((_) {
             if (!_liveRoomController.isPortrait.value) {
-              landScape();
+              landscape();
             }
           });
         }
