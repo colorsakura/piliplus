@@ -1499,7 +1499,7 @@ class PlPlayerController {
         await landscape(inAppFullScreen: inAppFullScreen);
       }
     } else if (isFullScreen.value && !status) {
-      showStatusBar(inAppFullScreen: inAppFullScreen);
+      showStatusBar();
       toggleFullScreen(false);
       if (mode == FullScreenMode.none) {
         fsProcessing = false;

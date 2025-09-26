@@ -497,7 +497,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 toolbarTitle: '裁剪',
                 toolbarColor: theme.colorScheme.secondaryContainer,
                 toolbarWidgetColor: theme.colorScheme.onSecondaryContainer,
-                statusBarLight: theme.colorScheme.brightness.isLight,
+                statusBarLight: theme.colorScheme.isLight,
                 aspectRatioPresets: [CropAspectRatioPresetCustom()],
                 lockAspectRatio: true,
                 hideBottomControls: true,

@@ -68,7 +68,7 @@ class PlayerFocus extends StatelessWidget {
         plPlayerController
           ..cancelLongPressTimer()
           ..longPressTimer ??= Timer.periodic(
-            const Duration(milliseconds: 200),
+            const Duration(milliseconds: 150),
             (_) => _setVolume(isIncrease: isIncrease),
           );
       }
@@ -137,8 +137,8 @@ class PlayerFocus extends StatelessWidget {
           final speed = isDigit1 ? 1.0 : 2.0;
           if (speed != plPlayerController.playbackSpeed) {
             plPlayerController.setPlaybackSpeed(speed);
-            SmartDialog.showToast('${speed}x播放');
           }
+          SmartDialog.showToast('${speed}x播放');
         }
         return true;
       }

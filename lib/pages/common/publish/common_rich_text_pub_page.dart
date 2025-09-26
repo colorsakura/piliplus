@@ -156,7 +156,7 @@ abstract class CommonRichTextPubPageState<T extends CommonRichTextPubPage>
           toolbarTitle: '裁剪',
           toolbarColor: colorScheme.secondaryContainer,
           toolbarWidgetColor: colorScheme.onSecondaryContainer,
-          statusBarLight: colorScheme.brightness.isLight,
+          statusBarLight: colorScheme.isLight,
         ),
         IOSUiSettings(title: '裁剪'),
       ],
