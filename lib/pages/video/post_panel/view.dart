@@ -17,6 +17,7 @@ import 'package:PiliPlus/utils/duration_utils.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/storage_pref.dart';
 import 'package:dio/dio.dart';
+import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart';
 import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show FilteringTextInputFormatter;
@@ -239,11 +240,14 @@ class _PostPanelState extends State<PostPanel>
   }
 
   late Key _key;
+  late bool _isNested;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _key = ValueKey(PrimaryScrollController.of(context).hashCode);
+    final controller = PrimaryScrollController.of(context);
+    _isNested = controller is ExtendedNestedScrollController;
+    _key = ValueKey(controller.hashCode);
   }
 
   @override
@@ -252,18 +256,25 @@ class _PostPanelState extends State<PostPanel>
       return errorWidget();
     }
     final bottom = MediaQuery.viewPaddingOf(context).bottom;
+    Widget child = ListView.builder(
+      key: _key,
+      physics: const AlwaysScrollableScrollPhysics(),
+      padding: EdgeInsets.only(bottom: 88 + bottom),
+      itemCount: list.length,
+      itemBuilder: (context, index) {
+        return _buildItem(theme, index, list[index]);
+      },
+    );
+    if (_isNested) {
+      child = ExtendedVisibilityDetector(
+        uniqueKey: const Key('post-panel'),
+        child: child,
+      );
+    }
     return Stack(
       clipBehavior: Clip.none,
       children: [
-        ListView.builder(
-          key: _key,
-          physics: const AlwaysScrollableScrollPhysics(),
-          padding: EdgeInsets.only(bottom: 88 + bottom),
-          itemCount: list.length,
-          itemBuilder: (context, index) {
-            return _buildItem(theme, index, list[index]);
-          },
-        ),
+        child,
         Positioned(
           right: 16,
           bottom: 16 + bottom,

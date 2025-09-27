@@ -3,6 +3,7 @@ import 'package:PiliPlus/pages/common/slide/common_slide_page.dart';
 import 'package:PiliPlus/pages/video/controller.dart';
 import 'package:PiliPlus/pages/video/introduction/ugc/widgets/selectable_text.dart';
 import 'package:PiliPlus/utils/duration_utils.dart';
+import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -53,16 +54,19 @@ class _AiDetailState extends State<AiConclusionPanel>
   }
 
   late Key _key;
+  late bool _isNested;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _key = ValueKey(PrimaryScrollController.of(context).hashCode);
+    final controller = PrimaryScrollController.of(context);
+    _isNested = controller is ExtendedNestedScrollController;
+    _key = ValueKey(controller.hashCode);
   }
 
   @override
   Widget buildList(ThemeData theme) {
-    return CustomScrollView(
+    final child = CustomScrollView(
       key: _key,
       physics: const AlwaysScrollableScrollPhysics(),
       slivers: [
@@ -158,5 +162,12 @@ class _AiDetailState extends State<AiConclusionPanel>
           ),
       ],
     );
+    if (_isNested) {
+      return ExtendedVisibilityDetector(
+        uniqueKey: const Key('ai-conclusion'),
+        child: child,
+      );
+    }
+    return child;
   }
 }

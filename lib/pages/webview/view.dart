@@ -30,8 +30,7 @@ class WebviewPage extends StatefulWidget {
 
 class _WebviewPageState extends State<WebviewPage> {
   late final String _url = widget.url ?? Get.parameters['url'] ?? '';
-  late final UaType uaType =
-      widget.uaType ?? UaType.values.byName(Get.parameters['uaType'] ?? 'mob');
+  late final UaType uaType;
   final RxString title = ''.obs;
   final RxDouble progress = 1.0.obs;
   bool _inApp = false;
@@ -47,6 +46,10 @@ class _WebviewPageState extends State<WebviewPage> {
   @override
   void initState() {
     super.initState();
+    late final uaType = Get.parameters['uaType'];
+    this.uaType =
+        widget.uaType ??
+        (uaType != null ? UaType.values.byName(uaType) : UaType.platformUA);
     if (Get.arguments case Map map) {
       _inApp = map['inApp'] ?? false;
       _off = map['off'] ?? false;

@@ -133,7 +133,7 @@ class _VideoReplyReplyPanelState extends State<VideoReplyReplyPanel>
 
   @override
   Widget buildList(ThemeData theme) {
-    return refreshIndicator(
+    final child = refreshIndicator(
       onRefresh: _controller.onRefresh,
       child: CustomScrollView(
         key: ValueKey(scrollController.hashCode),
@@ -161,6 +161,13 @@ class _VideoReplyReplyPanelState extends State<VideoReplyReplyPanel>
         ],
       ),
     );
+    if (widget.isNested) {
+      return ExtendedVisibilityDetector(
+        uniqueKey: Key(_tag),
+        child: child,
+      );
+    }
+    return child;
   }
 
   Widget _header(ThemeData theme, ReplyInfo firstFloor) {
