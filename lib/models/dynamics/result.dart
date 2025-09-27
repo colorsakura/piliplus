@@ -13,6 +13,7 @@ class DynamicsDataModel {
   List<DynamicItemModel>? items;
   String? offset;
   int? total;
+  bool? loadNext;
 
   static String _getMatchText(DynamicItemModel item) {
     final moduleDynamic = item.modules.moduleDynamic;
@@ -78,6 +79,10 @@ class DynamicsDataModel {
           continue;
         }
         items!.add(item);
+      }
+      // filtered all
+      if (items!.isEmpty) {
+        loadNext = true;
       }
     }
 

@@ -50,6 +50,14 @@ class DynamicsHttp {
           type: type,
           tempBannedList: tempBannedList,
         );
+        if (data.loadNext == true) {
+          return followDynamic(
+            type: type,
+            offset: data.offset,
+            mid: mid,
+            tempBannedList: tempBannedList,
+          );
+        }
         return Success(data);
       } catch (err) {
         return Error(err.toString());

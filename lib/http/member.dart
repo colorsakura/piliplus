@@ -418,6 +418,9 @@ class MemberHttp {
     if (res.data['code'] == 0) {
       try {
         DynamicsDataModel data = DynamicsDataModel.fromJson(res.data['data']);
+        if (data.loadNext == true) {
+          return memberDynamic(offset: data.offset, mid: mid);
+        }
         return Success(data);
       } catch (err) {
         return Error(err.toString());
@@ -427,37 +430,6 @@ class MemberHttp {
         -352: '风控校验失败，请检查登录状态',
       };
       return Error(errMap[res.data['code']] ?? res.data['message']);
-    }
-  }
-
-  // 搜索用户动态
-  static Future memberDynamicSearch({
-    required int pn,
-    required dynamic mid,
-    required dynamic offset,
-    required String keyword,
-  }) async {
-    var res = await Request().get(
-      Api.dynSearch,
-      queryParameters: {
-        'host_mid': mid,
-        'page': pn,
-        'offset': offset,
-        'keyword': keyword,
-        'features': 'itemOpusStyle,listOnlyfans',
-        'web_location': 333.1387,
-      },
-    );
-    if (res.data['code'] == 0) {
-      return {
-        'status': true,
-        'data': DynamicsDataModel.fromJson(res.data['data']),
-      };
-    } else {
-      return {
-        'status': false,
-        'msg': res.data['message'],
-      };
     }
   }
 
