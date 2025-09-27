@@ -18,7 +18,7 @@ void main() async {
     'HEAD',
   ])).stdout.toString().trim();
 
-  if (Platform.isAndroid) {
+  if (Platform.isLinux) {
     versionName += '-${commitHash.substring(0, 9)}';
   }
 
