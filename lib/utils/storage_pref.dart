@@ -832,4 +832,7 @@ abstract class Pref {
 
   static bool get keyboardControl =>
       _setting.get(SettingBoxKey.keyboardControl, defaultValue: true);
+
+  static bool get pauseOnMinimize =>
+      _setting.get(SettingBoxKey.pauseOnMinimize, defaultValue: false);
 }

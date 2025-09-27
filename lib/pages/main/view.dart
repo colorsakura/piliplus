@@ -9,6 +9,8 @@ import 'package:PiliPlus/models/common/nav_bar_config.dart';
 import 'package:PiliPlus/pages/home/view.dart';
 import 'package:PiliPlus/pages/main/controller.dart';
 import 'package:PiliPlus/pages/mine/controller.dart';
+import 'package:PiliPlus/plugin/pl_player/controller.dart';
+import 'package:PiliPlus/plugin/pl_player/models/play_status.dart';
 import 'package:PiliPlus/utils/app_scheme.dart';
 import 'package:PiliPlus/utils/context_ext.dart';
 import 'package:PiliPlus/utils/extension.dart';
@@ -131,6 +133,7 @@ class _MainAppState extends State<MainApp>
   void onWindowClose() {
     if (_mainController.minimizeOnExit) {
       windowManager.hide();
+      _onHideWindow();
     } else {
       _onClose();
     }
@@ -145,10 +148,39 @@ class _MainAppState extends State<MainApp>
   }
 
   @override
+  void onWindowMinimize() {
+    _onHideWindow();
+  }
+
+  @override
+  void onWindowRestore() {
+    _onShowWindow();
+  }
+
+  void _onHideWindow() {
+    if (_mainController.pauseOnMinimize) {
+      _mainController.isPlaying =
+          PlPlayerController.instance?.playerStatus.status.value ==
+          PlayerStatus.playing;
+      PlPlayerController.pauseIfExists();
+    }
+  }
+
+  void _onShowWindow() {
+    if (_mainController.pauseOnMinimize) {
+      if (_mainController.isPlaying) {
+        PlPlayerController.playIfExists();
+      }
+    }
+  }
+
+  @override
   Future<void> onTrayIconMouseDown() async {
     if (await windowManager.isVisible()) {
+      _onHideWindow();
       windowManager.hide();
     } else {
+      _onShowWindow();
       windowManager.show();
     }
   }
