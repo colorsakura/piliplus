@@ -25,7 +25,6 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart' hide ContextExtensionss;
 import 'package:intl/intl.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:package_info_plus/package_info_plus.dart';
 import 'package:re_highlight/languages/json.dart';
 import 'package:re_highlight/re_highlight.dart';
 import 'package:re_highlight/styles/github-dark.dart';
@@ -41,7 +40,8 @@ class AboutPage extends StatefulWidget {
 }
 
 class _AboutPageState extends State<AboutPage> {
-  RxString currentVersion = ''.obs;
+  final currentVersion =
+      '${BuildConfig.versionName}+${BuildConfig.versionCode}';
   RxString cacheSize = ''.obs;
 
   late int _pressCount = 0;
@@ -50,12 +50,10 @@ class _AboutPageState extends State<AboutPage> {
   void initState() {
     super.initState();
     getCacheSize();
-    getCurrentApp();
   }
 
   @override
   void dispose() {
-    currentVersion.close();
     cacheSize.close();
     super.dispose();
   }
@@ -64,12 +62,6 @@ class _AboutPageState extends State<AboutPage> {
     cacheSize.value = CacheManage.formatSize(
       await CacheManage.loadApplicationCache(),
     );
-  }
-
-  Future<void> getCurrentApp() async {
-    var currentInfo = await PackageInfo.fromPlatform();
-    String buildNumber = currentInfo.buildNumber;
-    currentVersion.value = "${currentInfo.version}+$buildNumber";
   }
 
   @override
@@ -143,16 +135,14 @@ class _AboutPageState extends State<AboutPage> {
               ],
             ),
           ),
-          Obx(
-            () => ListTile(
-              onTap: () => Update.checkUpdate(false),
-              onLongPress: () => Utils.copyText(currentVersion.value),
-              title: const Text('当前版本'),
-              leading: const Icon(Icons.commit_outlined),
-              trailing: Text(
-                currentVersion.value,
-                style: subTitleStyle,
-              ),
+          ListTile(
+            onTap: () => Update.checkUpdate(false),
+            onLongPress: () => Utils.copyText(currentVersion),
+            title: const Text('当前版本'),
+            leading: const Icon(Icons.commit_outlined),
+            trailing: Text(
+              currentVersion,
+              style: subTitleStyle,
             ),
           ),
           ListTile(

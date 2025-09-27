@@ -2,18 +2,18 @@ name: Build for iOS
 
 on:
   pull_request:
-        types:
-          - opened
-          - synchronize
-          - reopened
-          - ready_for_review
-        paths-ignore:
-          - '**.md'
+    types:
+      - opened
+      - synchronize
+      - reopened
+      - ready_for_review
+    paths-ignore:
+      - "**.md"
   workflow_dispatch:
     inputs:
       branch:
         required: false
-        default: 'main'
+        default: "main"
 
 jobs:
   build-macos-app:
@@ -31,11 +31,6 @@ jobs:
         with:
           channel: stable
           flutter-version-file: pubspec.yaml
-
-      - name: 更新版本号
-        run: |
-          version_name=$(yq e '.version' pubspec.yaml | cut -d "+" -f 1)
-          sed -i '' "s/version: .*/version: $version_name+$(git rev-list --count HEAD)/" pubspec.yaml
 
       - name: Build iOS
         run: |
