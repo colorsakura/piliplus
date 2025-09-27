@@ -10,6 +10,7 @@ import 'package:PiliPlus/pages/video/reply/widgets/reply_item_grpc.dart';
 import 'package:PiliPlus/pages/video/reply_reply/view.dart';
 import 'package:PiliPlus/utils/feed_back.dart';
 import 'package:easy_debounce/easy_throttle.dart';
+import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
@@ -92,7 +93,7 @@ class _VideoReplyPanelState extends State<VideoReplyPanel>
   Widget build(BuildContext context) {
     super.build(context);
     final theme = Theme.of(context);
-    return refreshIndicator(
+    final child = refreshIndicator(
       onRefresh: _videoReplyController.onRefresh,
       child: Stack(
         clipBehavior: Clip.none,
@@ -182,6 +183,13 @@ class _VideoReplyPanelState extends State<VideoReplyPanel>
         ],
       ),
     );
+    if (widget.isNested) {
+      return ExtendedVisibilityDetector(
+        uniqueKey: const Key('reply-list'),
+        child: child,
+      );
+    }
+    return child;
   }
 
   Widget _buildBody(
