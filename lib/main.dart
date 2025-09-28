@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:PiliPlus/build_config.dart';
 import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/common/widgets/custom_toast.dart';
+import 'package:PiliPlus/common/widgets/mouse_back.dart';
 import 'package:PiliPlus/http/init.dart';
 import 'package:PiliPlus/models/common/theme/theme_color_type.dart';
 import 'package:PiliPlus/router/app_pages.dart';
@@ -248,12 +249,19 @@ class MyApp extends StatelessWidget {
             toastBuilder: (String msg) => CustomToast(msg: msg),
             loadingBuilder: (msg) => LoadingWidget(msg: msg),
             builder: (context, child) {
-              return MediaQuery(
+              child = MediaQuery(
                 data: MediaQuery.of(context).copyWith(
                   textScaler: TextScaler.linear(Pref.defaultTextScale),
                 ),
                 child: child!,
               );
+              if (Utils.isDesktop) {
+                return MouseBackDetector(
+                  onTapDown: Get.back,
+                  child: child,
+                );
+              }
+              return child;
             },
           ),
           navigatorObservers: [
