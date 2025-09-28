@@ -480,28 +480,32 @@ class ReplyItemGrpc extends StatelessWidget {
                     padding = const EdgeInsets.fromLTRB(8, 4, 8, 4);
                   }
                 }
+                void showMore() => showModalBottomSheet(
+                  context: context,
+                  useSafeArea: true,
+                  isScrollControlled: true,
+                  constraints: BoxConstraints(
+                    maxWidth: min(640, context.mediaQueryShortestSide),
+                  ),
+                  builder: (context) {
+                    return morePanel(
+                      context: context,
+                      item: childReply,
+                      onDelete: () => onDelete?.call(replyItem, index),
+                      isSubReply: true,
+                    );
+                  },
+                );
                 return InkWell(
                   onTap: () =>
                       replyReply?.call(replyItem, childReply.id.toInt()),
-                  onLongPress: () {
-                    feedBack();
-                    showModalBottomSheet(
-                      context: context,
-                      useSafeArea: true,
-                      isScrollControlled: true,
-                      constraints: BoxConstraints(
-                        maxWidth: min(640, context.mediaQueryShortestSide),
-                      ),
-                      builder: (context) {
-                        return morePanel(
-                          context: context,
-                          item: childReply,
-                          onDelete: () => onDelete?.call(replyItem, index),
-                          isSubReply: true,
-                        );
-                      },
-                    );
-                  },
+                  onLongPress: Utils.isMobile
+                      ? () {
+                          feedBack();
+                          showMore();
+                        }
+                      : null,
+                  onSecondaryTap: Utils.isMobile ? null : showMore,
                   child: Padding(
                     padding: padding,
                     child: Text.rich(
