@@ -6,6 +6,7 @@ import 'package:PiliPlus/common/widgets/custom_toast.dart';
 import 'package:PiliPlus/common/widgets/mouse_back.dart';
 import 'package:PiliPlus/http/init.dart';
 import 'package:PiliPlus/models/common/theme/theme_color_type.dart';
+import 'package:PiliPlus/plugin/pl_player/controller.dart';
 import 'package:PiliPlus/router/app_pages.dart';
 import 'package:PiliPlus/services/account_service.dart';
 import 'package:PiliPlus/services/logger.dart';
@@ -261,9 +262,23 @@ class MyApp extends StatelessWidget {
                   onTapDown: () {
                     if (SmartDialog.checkExist()) {
                       SmartDialog.dismiss();
-                    } else {
-                      Get.back();
+                      return;
                     }
+
+                    final plCtr = PlPlayerController.instance;
+                    if (plCtr != null) {
+                      if (plCtr.isFullScreen.value == true) {
+                        plCtr.triggerFullScreen(status: false);
+                        return;
+                      }
+
+                      if (plCtr.isDesktopPip) {
+                        plCtr.exitDesktopPip();
+                        return;
+                      }
+                    }
+
+                    Get.back();
                   },
                   child: child,
                 );
