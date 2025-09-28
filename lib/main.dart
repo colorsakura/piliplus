@@ -258,7 +258,13 @@ class MyApp extends StatelessWidget {
               );
               if (Utils.isDesktop) {
                 return MouseBackDetector(
-                  onTapDown: Get.back,
+                  onTapDown: () {
+                    if (SmartDialog.checkExist()) {
+                      SmartDialog.dismiss();
+                    } else {
+                      Get.back();
+                    }
+                  },
                   child: child,
                 );
               }
