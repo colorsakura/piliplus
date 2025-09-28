@@ -173,7 +173,13 @@ class _UgcIntroPanelState extends State<UgcIntroPanel> {
                   if (isLoading)
                     _buildVideoTitle(theme, videoDetail)
                   else if (isHorizontal && Utils.isDesktop)
-                    _buildTitle(theme, videoDetail, isExpand: true)
+                    SelectionArea(
+                      child: _buildVideoTitle(
+                        theme,
+                        videoDetail,
+                        isExpand: true,
+                      ),
+                    )
                   else
                     ExpandablePanel(
                       controller: introController.expandableCtr,
