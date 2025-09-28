@@ -29,6 +29,7 @@ import 'package:PiliPlus/utils/global_data.dart';
 import 'package:PiliPlus/utils/login_utils.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/storage_key.dart';
+import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart' hide ContextExtensionss;
 import 'package:hive/hive.dart';
@@ -269,8 +270,10 @@ abstract class Pref {
   static double get refreshDragPercentage =>
       _setting.get(SettingBoxKey.refreshDragPercentage, defaultValue: 0.25);
 
-  static double get refreshDisplacement =>
-      _setting.get(SettingBoxKey.refreshDisplacement, defaultValue: 20.0);
+  static double get refreshDisplacement => _setting.get(
+    SettingBoxKey.refreshDisplacement,
+    defaultValue: Utils.isMobile ? 20.0 : 40.0,
+  );
 
   static String get blockUserID {
     String blockUserID = _setting.get(
