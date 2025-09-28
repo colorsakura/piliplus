@@ -654,6 +654,10 @@ class UgcIntroController extends CommonIntroController with ReloadMixin {
           videoDetailCtr.plPlayerController.playRepeat;
 
       if (episodes.isEmpty) {
+        if (playRepeat == PlayRepeat.listCycle) {
+          videoDetailCtr.plPlayerController.play(repeat: true);
+          return true;
+        }
         if (playRepeat == PlayRepeat.autoPlayRelated &&
             videoDetailCtr.plPlayerController.showRelatedVideo) {
           return playRelated();
