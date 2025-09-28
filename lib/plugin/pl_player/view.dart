@@ -49,6 +49,7 @@ import 'package:dio/dio.dart';
 import 'package:easy_debounce/easy_throttle.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
@@ -1095,8 +1096,10 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
               aspectRatio: videoFit.aspectRatio,
               dmWidget: widget.danmuWidget,
               transformationController: transformationController,
-              scaleEnabled: !plPlayerController.controlsLock.value,
-              enableShrinkVideoSize: plPlayerController.enableShrinkVideoSize,
+              scaleEnabled:
+                  !Utils.isDesktop && !plPlayerController.controlsLock.value,
+              enableShrinkVideoSize:
+                  !Utils.isDesktop && plPlayerController.enableShrinkVideoSize,
               onInteractionStart: _onInteractionStart,
               onInteractionUpdate: _onInteractionUpdate,
               onInteractionEnd: _onInteractionEnd,
@@ -1750,21 +1753,28 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
       ],
     );
     if (!isMobile) {
-      return Obx(
-        () => MouseRegion(
-          cursor: !plPlayerController.showControls.value && isFullScreen
-              ? SystemMouseCursors.none
-              : MouseCursor.defer,
-          onEnter: (event) {
-            plPlayerController.controls = true;
-          },
-          onHover: (event) {
-            plPlayerController.controls = true;
-          },
-          onExit: (event) {
-            plPlayerController.controls = false;
-          },
-          child: child,
+      return Listener(
+        onPointerSignal: (event) {
+          if (event is PointerScrollEvent) {
+            final offset = -event.scrollDelta.dy / 4000;
+            final volume = clampDouble(
+              plPlayerController.volume.value + offset,
+              0.0,
+              1.0,
+            );
+            plPlayerController.setVolume(volume);
+          }
+        },
+        child: Obx(
+          () => MouseRegion(
+            cursor: !plPlayerController.showControls.value && isFullScreen
+                ? SystemMouseCursors.none
+                : MouseCursor.defer,
+            onEnter: (_) => plPlayerController.controls = true,
+            onHover: (_) => plPlayerController.controls = true,
+            onExit: (_) => plPlayerController.controls = false,
+            child: child,
+          ),
         ),
       );
     }
