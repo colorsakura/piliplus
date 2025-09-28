@@ -837,7 +837,7 @@ class PlPlayerController {
     player.setPlaylistMode(looping);
 
     final Map<String, String>? filters;
-    if (kDebugMode || Platform.isAndroid) {
+    if (Platform.isAndroid) {
       String audioNormalization = '';
       audioNormalization = AudioNormalization.getParamFromConfig(
         Pref.audioNormalization,
