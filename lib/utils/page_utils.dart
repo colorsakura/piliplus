@@ -2,7 +2,6 @@ import 'dart:math';
 
 import 'package:PiliPlus/common/widgets/interactiveviewer_gallery/hero_dialog_route.dart';
 import 'package:PiliPlus/common/widgets/interactiveviewer_gallery/interactiveviewer_gallery.dart';
-import 'package:PiliPlus/common/widgets/marquee.dart';
 import 'package:PiliPlus/grpc/im.dart';
 import 'package:PiliPlus/http/dynamics.dart';
 import 'package:PiliPlus/http/search.dart';
@@ -588,24 +587,6 @@ abstract class PageUtils {
       backgroundColor: Colors.transparent,
       sheetAnimationStyle: const AnimationStyle(duration: Duration.zero),
     );
-  }
-
-  static void onHorizontalPreview(
-    BuildContext context,
-    List<SourceModel> imgList,
-    int index,
-  ) {
-    final scaffoldState = Scaffold.maybeOf(context);
-    if (scaffoldState != null) {
-      onHorizontalPreviewState(
-        scaffoldState,
-        ContextSingleTicker(scaffoldState.context),
-        imgList,
-        index,
-      );
-    } else {
-      imageView(imgList: imgList, initialPage: index);
-    }
   }
 
   static void inAppWebview(
