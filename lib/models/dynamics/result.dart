@@ -82,7 +82,7 @@ class DynamicsDataModel {
       }
       // filtered all
       if (items!.isEmpty) {
-        loadNext = true;
+        loadNext = hasMore;
       }
     }
 
