@@ -24,6 +24,7 @@ import 'package:catcher_2/catcher_2.dart';
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flex_seed_scheme/flex_seed_scheme.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart' show PointerDeviceKind;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_displaymode/flutter_displaymode.dart';
@@ -270,6 +271,14 @@ class MyApp extends StatelessWidget {
           ],
           scrollBehavior: const MaterialScrollBehavior().copyWith(
             scrollbars: false,
+            dragDevices: {
+              PointerDeviceKind.touch,
+              PointerDeviceKind.stylus,
+              PointerDeviceKind.invertedStylus,
+              PointerDeviceKind.trackpad,
+              PointerDeviceKind.unknown,
+              if (Utils.isDesktop) PointerDeviceKind.mouse,
+            },
           ),
         );
       }),
