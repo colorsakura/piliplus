@@ -5,6 +5,7 @@ import 'package:PiliPlus/pages/dynamics/widgets/action_panel.dart';
 import 'package:PiliPlus/pages/dynamics/widgets/author_panel.dart';
 import 'package:PiliPlus/pages/dynamics/widgets/dyn_content.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
+import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart' hide InkWell;
 
 class DynamicPanel extends StatelessWidget {
@@ -45,6 +46,9 @@ class DynamicPanel extends StatelessWidget {
       onSetTop: onSetTop,
       onBlock: onBlock,
     );
+
+    void showMore() => _imageSaveDialog(context, authorWidget.morePanel);
+
     final child = Material(
       type: MaterialType.transparency,
       child: InkWell(
@@ -62,7 +66,8 @@ class DynamicPanel extends StatelessWidget {
                 }.contains(item.type)
             ? null
             : () => PageUtils.pushDynDetail(item),
-        onLongPress: () => _imageSaveDialog(context, authorWidget.morePanel),
+        onLongPress: Utils.isMobile ? showMore : null,
+        onSecondaryTap: Utils.isMobile ? null : showMore,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,

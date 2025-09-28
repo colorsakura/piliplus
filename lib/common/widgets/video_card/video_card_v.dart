@@ -67,6 +67,11 @@ class VideoCardV extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    void onLongPress() => imageSaveDialog(
+      title: videoItem.title,
+      cover: videoItem.cover,
+      bvid: videoItem.bvid,
+    );
     return Stack(
       clipBehavior: Clip.none,
       children: [
@@ -74,11 +79,8 @@ class VideoCardV extends StatelessWidget {
           clipBehavior: Clip.hardEdge,
           child: InkWell(
             onTap: () => onPushDetail(Utils.makeHeroTag(videoItem.aid)),
-            onLongPress: () => imageSaveDialog(
-              title: videoItem.title,
-              cover: videoItem.cover,
-              bvid: videoItem.bvid,
-            ),
+            onLongPress: Utils.isMobile ? onLongPress : null,
+            onSecondaryTap: Utils.isMobile ? null : onLongPress,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [

@@ -16,6 +16,7 @@ import 'package:PiliPlus/utils/duration_utils.dart';
 import 'package:PiliPlus/utils/id_utils.dart';
 import 'package:PiliPlus/utils/image_utils.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
+import 'package:PiliPlus/utils/utils.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -83,12 +84,13 @@ class ChatItem extends StatelessWidget {
                       textColor: textColor,
                     )
                   : GestureDetector(
-                      onLongPress: onLongPress == null
-                          ? null
-                          : () {
+                      onLongPress: onLongPress != null && Utils.isMobile
+                          ? () {
                               Feedback.forLongPress(context);
                               onLongPress!();
-                            },
+                            }
+                          : null,
+                      onSecondaryTap: !Utils.isMobile ? onLongPress : null,
                       child: Row(
                         mainAxisAlignment: isOwner
                             ? MainAxisAlignment.end

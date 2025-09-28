@@ -78,6 +78,25 @@ class ReplyItemGrpc extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
+
+    final isMobile = Utils.isMobile;
+    void showMore() => showModalBottomSheet(
+      context: context,
+      useSafeArea: true,
+      isScrollControlled: true,
+      constraints: BoxConstraints(
+        maxWidth: min(640, context.mediaQueryShortestSide),
+      ),
+      builder: (context) {
+        return morePanel(
+          context: context,
+          item: replyItem,
+          onDelete: () => onDelete?.call(replyItem, null),
+          isSubReply: false,
+        );
+      },
+    );
+
     return Material(
       type: MaterialType.transparency,
       child: InkWell(
@@ -85,25 +104,13 @@ class ReplyItemGrpc extends StatelessWidget {
           feedBack();
           replyReply?.call(replyItem, null);
         },
-        onLongPress: () {
-          feedBack();
-          showModalBottomSheet(
-            context: context,
-            useSafeArea: true,
-            isScrollControlled: true,
-            constraints: BoxConstraints(
-              maxWidth: min(640, context.mediaQueryShortestSide),
-            ),
-            builder: (context) {
-              return morePanel(
-                context: context,
-                item: replyItem,
-                onDelete: () => onDelete?.call(replyItem, null),
-                isSubReply: false,
-              );
-            },
-          );
-        },
+        onLongPress: isMobile
+            ? () {
+                feedBack();
+                showMore();
+              }
+            : null,
+        onSecondaryTap: isMobile ? null : showMore,
         child: _buildContent(context, theme),
       ),
     );

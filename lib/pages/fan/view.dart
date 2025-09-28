@@ -111,6 +111,14 @@ class _FansPageState extends State<FansPage> {
   }
 
   Widget _buildItem(ColorScheme theme, int index, FansItemModel item) {
+    final isSelect = widget.onSelect != null;
+    void onRemove() => showConfirmDialog(
+      context: context,
+      title: '确定移除 ${item.uname} ？',
+      onConfirm: () => _fansController.onRemoveFan(index, item.mid!),
+    );
+
+    final flag = !isSelect && isOwner;
     return SizedBox(
       height: 66,
       child: InkWell(
@@ -127,15 +135,8 @@ class _FansPageState extends State<FansPage> {
           }
           Get.toNamed('/member?mid=${item.mid}');
         },
-        onLongPress: widget.onSelect != null
-            ? null
-            : isOwner
-            ? () => showConfirmDialog(
-                context: context,
-                title: '确定移除 ${item.uname} ？',
-                onConfirm: () => _fansController.onRemoveFan(index, item.mid!),
-              )
-            : null,
+        onLongPress: flag && Utils.isMobile ? onRemove : null,
+        onSecondaryTap: flag && !Utils.isMobile ? onRemove : null,
         child: Padding(
           padding: const EdgeInsets.symmetric(
             horizontal: 12,

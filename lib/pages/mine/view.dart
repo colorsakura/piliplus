@@ -223,10 +223,15 @@ class _MediaPageState extends CommonPageState<MinePage, MineController>
           GestureDetector(
             behavior: HitTestBehavior.opaque,
             onTap: controller.onLogin,
-            onLongPress: () {
-              Feedback.forLongPress(context);
-              controller.onLogin(true);
-            },
+            onLongPress: Utils.isMobile
+                ? () {
+                    Feedback.forLongPress(context);
+                    controller.onLogin(true);
+                  }
+                : null,
+            onSecondaryTap: Utils.isMobile
+                ? null
+                : () => controller.onLogin(true),
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [

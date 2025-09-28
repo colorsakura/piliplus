@@ -270,6 +270,7 @@ class _InteractiveviewerGalleryState extends State<InteractiveviewerGallery>
             itemCount: widget.sources.length,
             itemBuilder: (BuildContext context, int index) {
               final item = widget.sources[index];
+              final isFileImg = item.sourceType == SourceType.fileImage;
               return GestureDetector(
                 behavior: HitTestBehavior.opaque,
                 onTap: () => EasyThrottle.throttle(
@@ -285,9 +286,12 @@ class _InteractiveviewerGalleryState extends State<InteractiveviewerGallery>
                   const Duration(milliseconds: 555),
                   onDoubleTap,
                 ),
-                onLongPress: item.sourceType == SourceType.fileImage
-                    ? null
-                    : () => onLongPress(item),
+                onLongPress: !isFileImg && Utils.isMobile
+                    ? () => onLongPress(item)
+                    : null,
+                onSecondaryTap: !isFileImg && !Utils.isMobile
+                    ? () => onLongPress(item)
+                    : null,
                 child: widget.itemBuilder != null
                     ? widget.itemBuilder!(
                         context,

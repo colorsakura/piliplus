@@ -411,11 +411,17 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                   ),
                 ),
                 onTap: widget.showViewPoints,
-                onLongPress: () {
-                  Feedback.forLongPress(context);
-                  videoDetailController.showVP.value =
-                      !videoDetailController.showVP.value;
-                },
+                onLongPress: Utils.isMobile
+                    ? () {
+                        Feedback.forLongPress(context);
+                        videoDetailController.showVP.value =
+                            !videoDetailController.showVP.value;
+                      }
+                    : null,
+                onSecondaryTap: Utils.isMobile
+                    ? null
+                    : () => videoDetailController.showVP.value =
+                          !videoDetailController.showVP.value,
               ),
       ),
 
