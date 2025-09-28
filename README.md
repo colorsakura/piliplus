@@ -43,6 +43,8 @@
 
 ## feat
 
+- [x] Win/Mac 支持极验、短信登录 by [@My-Responsitories](https://github.com/My-Responsitories)
+- [x] 视频截取 GIF by [@My-Responsitories](https://github.com/My-Responsitories)
 - [x] AI 原声翻译
 - [x] SuperChat
 - [x] 播放课堂视频
