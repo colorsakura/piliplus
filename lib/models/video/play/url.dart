@@ -37,6 +37,7 @@ class PlayUrlModel {
   Dash? dash;
   List<Durl>? durl;
   List<FormatItem>? supportFormats;
+  Volume? volume;
   int? lastPlayTime;
   int? lastPlayCid;
   String? curLanguage;
@@ -62,6 +63,7 @@ class PlayUrlModel {
     supportFormats = (json['support_formats'] as List?)
         ?.map<FormatItem>((e) => FormatItem.fromJson(e))
         .toList();
+    volume = json['volume'] == null ? null : Volume.fromJson(json['volume']);
     lastPlayTime = json['last_play_time'];
     lastPlayCid = json['last_play_cid'];
     curLanguage = json['cur_language'];
@@ -303,4 +305,49 @@ class FormatItem {
     displayDesc = json['display_desc'];
     codecs = (json['codecs'] as List?)?.fromCast<String>();
   }
+}
+
+class Volume {
+  Volume({
+    required this.measuredI,
+    required this.measuredLra,
+    required this.measuredTp,
+    required this.measuredThreshold,
+    required this.targetOffset,
+    required this.targetI,
+    required this.targetTp,
+    // required this.multiSceneArgs,
+  });
+
+  final num measuredI;
+  final num measuredLra;
+  final num measuredTp;
+  final num measuredThreshold;
+  final num targetOffset;
+  final num targetI;
+  final num targetTp;
+  // final MultiSceneArgs? multiSceneArgs;
+
+  factory Volume.fromJson(Map<String, dynamic> json) {
+    return Volume(
+      measuredI: json["measured_i"] ?? 0,
+      measuredLra: json["measured_lra"] ?? 0,
+      measuredTp: json["measured_tp"] ?? 0,
+      measuredThreshold: json["measured_threshold"] ?? 0,
+      targetOffset: json["target_offset"] ?? 0,
+      targetI: json["target_i"] ?? 0,
+      targetTp: json["target_tp"] ?? 0,
+      // multiSceneArgs: json["multi_scene_args"] == null ? null : MultiSceneArgs.fromJson(json["multi_scene_args"]),
+    );
+  }
+
+  @override
+  String toString() =>
+      'measured_I=$measuredI:measured_LRA=$measuredLra:measured_TP=$measuredTp:measured_thresh=$measuredThreshold';
+
+  bool get isNotEmpty =>
+      measuredI != 0 ||
+      measuredLra != 0 ||
+      measuredTp != 0 ||
+      measuredThreshold != 0;
 }
