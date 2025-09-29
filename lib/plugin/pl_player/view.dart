@@ -1020,7 +1020,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
     _gestureType = null;
   }
 
-  void onDoubleTapDown(TapDownDetails details) {
+  void onDoubleTapDownMobile(TapDownDetails details) {
     if (plPlayerController.controlsLock.value) {
       return;
     }
@@ -1048,11 +1048,33 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
     plPlayerController.onDoubleTapCenter();
   }
 
-  void onDoubleTapDesktop([_]) {
+  void onDoubleTapDesktop() {
     if (plPlayerController.controlsLock.value) {
       return;
     }
     plPlayerController.triggerFullScreen(status: !isFullScreen);
+  }
+
+  void onTap(PointerDeviceKind? kind) {
+    switch (kind) {
+      case ui.PointerDeviceKind.mouse:
+        onTapDesktop();
+        break;
+      default:
+        plPlayerController.controls = !plPlayerController.showControls.value;
+        break;
+    }
+  }
+
+  void onDoubleTapDown(TapDownDetails details) {
+    switch (details.kind) {
+      case ui.PointerDeviceKind.mouse:
+        onDoubleTapDesktop();
+        break;
+      default:
+        onDoubleTapDownMobile(details);
+        break;
+    }
   }
 
   final isMobile = Utils.isMobile;
@@ -1105,11 +1127,8 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
               onInteractionEnd: _onInteractionEnd,
               flipX: plPlayerController.flipX.value,
               flipY: plPlayerController.flipY.value,
-              onTap: isMobile
-                  ? () => plPlayerController.controls =
-                        !plPlayerController.showControls.value
-                  : onTapDesktop,
-              onDoubleTapDown: isMobile ? onDoubleTapDown : onDoubleTapDesktop,
+              onTap: onTap,
+              onDoubleTapDown: onDoubleTapDown,
               onLongPressStart: isLive
                   ? null
                   : (_) => plPlayerController.setLongPressStatus(true),
