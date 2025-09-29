@@ -105,10 +105,12 @@ void main() async {
   } else if (Utils.isDesktop) {
     await windowManager.ensureInitialized();
 
-    WindowOptions windowOptions = const WindowOptions(
-      minimumSize: Size(400, 720),
+    WindowOptions windowOptions = WindowOptions(
+      minimumSize: const Size(400, 720),
       skipTaskbar: false,
-      titleBarStyle: TitleBarStyle.normal,
+      titleBarStyle: Pref.showWindowTitleBar
+          ? TitleBarStyle.normal
+          : TitleBarStyle.hidden,
       title: Constants.appName,
     );
     windowManager.waitUntilReadyToShow(windowOptions, () async {
