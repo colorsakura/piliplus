@@ -106,9 +106,14 @@ class Request {
       persistentConnection: true,
     );
 
-    final bool enableSystemProxy = Pref.enableSystemProxy;
-    final String systemProxyHost = Pref.systemProxyHost;
-    final String systemProxyPort = Pref.systemProxyPort;
+    bool enableSystemProxy = Pref.enableSystemProxy;
+    late final String systemProxyHost;
+    late final int? systemProxyPort;
+    if (enableSystemProxy) {
+      systemProxyHost = Pref.systemProxyHost;
+      systemProxyPort = int.tryParse(Pref.systemProxyPort);
+      enableSystemProxy = systemProxyPort != null && systemProxyHost.isNotEmpty;
+    }
 
     final http11Adapter = IOHttpClientAdapter(
       createHttpClient: () {
@@ -131,7 +136,7 @@ class Request {
       proxy = Uri(
         scheme: 'http',
         host: systemProxyHost,
-        port: int.parse(systemProxyPort),
+        port: systemProxyPort,
       );
     }
 
