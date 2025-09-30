@@ -123,7 +123,6 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
 
   late final RxBool showRestoreScaleBtn = false.obs;
 
-  Offset _initialFocalPoint = Offset.zero;
   GestureType? _gestureType;
 
   //播放器放缩
@@ -810,7 +809,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
     if (details.pointerCount == 2) {
       interacting = true;
     }
-    _initialFocalPoint = details.localFocalPoint;
+    plPlayerController.initialFocalPoint = details.localFocalPoint;
     // if (kDebugMode) {
     //   debugPrint("_initialFocalPoint$_initialFocalPoint");
     // }
@@ -819,8 +818,11 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
 
   void _onInteractionUpdate(ScaleUpdateDetails details) {
     showRestoreScaleBtn.value = transformationController.value.row0.x != 1.0;
-    if (interacting || _initialFocalPoint == Offset.zero) return;
-    Offset cumulativeDelta = details.localFocalPoint - _initialFocalPoint;
+    if (interacting || plPlayerController.initialFocalPoint == Offset.zero) {
+      return;
+    }
+    Offset cumulativeDelta =
+        details.localFocalPoint - plPlayerController.initialFocalPoint;
     if (details.pointerCount == 2 && cumulativeDelta.distance < 1.5) {
       interacting = true;
       _gestureType = null;
@@ -955,7 +957,8 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
     } else if (_gestureType == GestureType.center) {
       // 全屏
       const double threshold = 2.5; // 滑动阈值
-      double cumulativeDy = details.localFocalPoint.dy - _initialFocalPoint.dy;
+      double cumulativeDy =
+          details.localFocalPoint.dy - plPlayerController.initialFocalPoint.dy;
 
       void fullScreenTrigger(bool status) {
         plPlayerController.triggerFullScreen(status: status);
@@ -1014,7 +1017,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
       plPlayerController.onChangedSliderEnd();
     }
     interacting = false;
-    _initialFocalPoint = Offset.zero;
+    plPlayerController.initialFocalPoint = Offset.zero;
     _gestureType = null;
   }
 

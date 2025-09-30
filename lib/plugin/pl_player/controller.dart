@@ -262,14 +262,16 @@ class PlPlayerController {
   late bool isDesktopPip = false;
   late Rect _lastWindowBounds;
 
-  void exitDesktopPip() {
-    isDesktopPip = false;
+  Offset initialFocalPoint = Offset.zero;
 
-    windowManager
-      ..setTitleBarStyle(TitleBarStyle.normal)
-      ..setMinimumSize(const Size(400, 700))
-      ..setBounds(_lastWindowBounds)
-      ..setAlwaysOnTop(false);
+  Future<void> exitDesktopPip() async {
+    isDesktopPip = false;
+    await Future.wait([
+      windowManager.setTitleBarStyle(TitleBarStyle.normal),
+      windowManager.setMinimumSize(const Size(400, 700)),
+      windowManager.setBounds(_lastWindowBounds),
+      windowManager.setAlwaysOnTop(false),
+    ]);
   }
 
   Future<void> enterDesktopPip() async {

@@ -279,10 +279,12 @@ class MyApp extends StatelessWidget {
                         return;
                       }
 
-                      // if (plCtr.isDesktopPip) {
-                      //   plCtr.exitDesktopPip();
-                      //   return;
-                      // }
+                      if (plCtr.isDesktopPip) {
+                        plCtr.exitDesktopPip().whenComplete(
+                          () => plCtr.initialFocalPoint = Offset.zero,
+                        );
+                        return;
+                      }
                     }
 
                     Get.back();
