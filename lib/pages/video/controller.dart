@@ -843,6 +843,11 @@ class VideoDetailController extends GetxController
     });
   }
 
+  void cancelSkipTimer() {
+    skipTimer?.cancel();
+    skipTimer = null;
+  }
+
   void onRemoveItem(int index, item) {
     EasyThrottle.throttle(
       'onRemoveItem',
@@ -851,8 +856,7 @@ class VideoDetailController extends GetxController
         try {
           listData.removeAt(index);
           if (listData.isEmpty) {
-            skipTimer?.cancel();
-            skipTimer = null;
+            cancelSkipTimer();
           }
           listKey.currentState?.removeItem(
             index,
@@ -1688,5 +1692,20 @@ class VideoDetailController extends GetxController
         ),
       );
     }
+  }
+
+  bool onSkipSegment() {
+    try {
+      if (plPlayerController.enableSponsorBlock) {
+        if (listData.lastOrNull case SegmentModel item) {
+          onSkip(item);
+          onRemoveItem(listData.indexOf(item), item);
+          return true;
+        }
+      }
+    } catch (_) {
+      if (kDebugMode) rethrow;
+    }
+    return false;
   }
 }

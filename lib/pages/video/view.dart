@@ -323,8 +323,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
       ..removePositionListener(positionListener);
 
     videoDetailController
-      ..skipTimer?.cancel()
-      ..skipTimer = null
+      ..cancelSkipTimer()
       ..positionSubscription?.cancel()
       ..cid.close()
       ..animController?.removeListener(animListener);
@@ -1492,6 +1491,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
           handlePlay();
           return false;
         },
+        onSkipSegment: videoDetailController.onSkipSegment,
         child: child,
       );
     }
@@ -1722,13 +1722,16 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
           //       videoDetailController.onAddItem(
           //         SegmentModel(
           //           UUID: '',
-          //           segmentType: SegmentType.sponsor,
+          //           segmentType:
+          //               SegmentType.values[Utils.random.nextInt(
+          //                 SegmentType.values.length,
+          //               )],
           //           segment: Pair(first: 0, second: 0),
           //           skipType: SkipType.alwaysSkip,
           //         ),
           //       );
           //     },
-          //     child: Text('skip'),
+          //     child: const Text('skip'),
           //   ),
           // ),
           // Positioned(
@@ -1738,7 +1741,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
           //     onPressed: () {
           //       videoDetailController.onAddItem(2);
           //     },
-          //     child: Text('index'),
+          //     child: const Text('index'),
           //   ),
           // ),
           Obx(

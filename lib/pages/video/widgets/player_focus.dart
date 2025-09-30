@@ -21,6 +21,7 @@ class PlayerFocus extends StatelessWidget {
     this.introController,
     required this.onSendDanmaku,
     this.canPlay,
+    this.onSkipSegment,
   });
 
   final Widget child;
@@ -28,6 +29,7 @@ class PlayerFocus extends StatelessWidget {
   final CommonIntroController? introController;
   final VoidCallback onSendDanmaku;
   final bool Function()? canPlay;
+  final bool Function()? onSkipSegment;
 
   static bool _shouldHandle(LogicalKeyboardKey logicalKey) {
     return logicalKey == LogicalKeyboardKey.tab ||
@@ -209,6 +211,9 @@ class PlayerFocus extends StatelessWidget {
           return true;
 
         case LogicalKeyboardKey.enter:
+          if (onSkipSegment?.call() ?? false) {
+            return true;
+          }
           onSendDanmaku();
           return true;
       }
