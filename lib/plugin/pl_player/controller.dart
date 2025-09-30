@@ -304,8 +304,12 @@ class PlPlayerController {
   }
 
   void enterPip() {
-    if (Get.currentRoute.startsWith('/video')) {
-      PageUtils.enterPip(width: width, height: height);
+    if (videoController != null) {
+      final state = videoController!.player.state;
+      PageUtils.enterPip(
+        width: state.width ?? width,
+        height: state.height ?? height,
+      );
     }
   }
 
@@ -547,7 +551,8 @@ class PlPlayerController {
     if (Platform.isAndroid && autoPiP) {
       Utils.channel.setMethodCallHandler((call) async {
         if (call.method == 'onUserLeaveHint') {
-          if (playerStatus.status.value == PlayerStatus.playing) {
+          if (playerStatus.status.value == PlayerStatus.playing &&
+              Get.currentRoute.startsWith('/video')) {
             enterPip();
           }
         }

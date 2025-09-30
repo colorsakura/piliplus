@@ -267,6 +267,11 @@ class MyApp extends StatelessWidget {
                       return;
                     }
 
+                    if (Get.isDialogOpen ?? Get.isBottomSheetOpen ?? false) {
+                      Get.back();
+                      return;
+                    }
+
                     final plCtr = PlPlayerController.instance;
                     if (plCtr != null) {
                       if (plCtr.isFullScreen.value == true) {
@@ -274,10 +279,10 @@ class MyApp extends StatelessWidget {
                         return;
                       }
 
-                      if (plCtr.isDesktopPip) {
-                        plCtr.exitDesktopPip();
-                        return;
-                      }
+                      // if (plCtr.isDesktopPip) {
+                      //   plCtr.exitDesktopPip();
+                      //   return;
+                      // }
                     }
 
                     Get.back();
