@@ -8,4 +8,6 @@ class LaterBaseController extends GetxController {
   RxMap<LaterViewType, int> counts = {
     for (final item in LaterViewType.values) item: -1,
   }.obs;
+
+  late final RxBool isPlayAll = true.obs;
 }

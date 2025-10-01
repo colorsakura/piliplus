@@ -73,10 +73,26 @@ class _LaterPageState extends State<LaterPage>
             appBar: _buildAppbar(enableMultiSelect),
             floatingActionButton: Obx(
               () => currCtr().loadingState.value.isSuccess
-                  ? FloatingActionButton.extended(
-                      onPressed: currCtr().toViewPlayAll,
-                      label: const Text('播放全部'),
-                      icon: const Icon(Icons.playlist_play),
+                  ? AnimatedSlide(
+                      offset: _baseCtr.isPlayAll.value
+                          ? Offset.zero
+                          : const Offset(0.75, 0),
+                      duration: const Duration(milliseconds: 120),
+                      child: GestureDetector(
+                        onHorizontalDragUpdate: (details) =>
+                            _baseCtr.isPlayAll.value = details.delta.dx < 0,
+                        child: FloatingActionButton.extended(
+                          onPressed: () {
+                            if (_baseCtr.isPlayAll.value) {
+                              currCtr().toViewPlayAll();
+                            } else {
+                              _baseCtr.isPlayAll.value = true;
+                            }
+                          },
+                          label: const Text('播放全部'),
+                          icon: const Icon(Icons.playlist_play),
+                        ),
+                      ),
                     )
                   : const SizedBox.shrink(),
             ),

@@ -60,10 +60,27 @@ class _FavDetailPageState extends State<FavDetailPage> with GridMixin {
             resizeToAvoidBottomInset: false,
             floatingActionButton: Obx(
               () => _favDetailController.folderInfo.value.mediaCount > 0
-                  ? FloatingActionButton.extended(
-                      onPressed: _favDetailController.toViewPlayAll,
-                      label: const Text('播放全部'),
-                      icon: const Icon(Icons.playlist_play),
+                  ? AnimatedSlide(
+                      offset: _favDetailController.isPlayAll.value
+                          ? Offset.zero
+                          : const Offset(0.75, 0),
+                      duration: const Duration(milliseconds: 120),
+                      child: GestureDetector(
+                        onHorizontalDragUpdate: (details) =>
+                            _favDetailController.isPlayAll.value =
+                                details.delta.dx < 0,
+                        child: FloatingActionButton.extended(
+                          onPressed: () {
+                            if (_favDetailController.isPlayAll.value) {
+                              _favDetailController.toViewPlayAll();
+                            } else {
+                              _favDetailController.isPlayAll.value = true;
+                            }
+                          },
+                          label: const Text('播放全部'),
+                          icon: const Icon(Icons.playlist_play),
+                        ),
+                      ),
                     )
                   : const SizedBox.shrink(),
             ),
