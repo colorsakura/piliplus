@@ -11,7 +11,7 @@ enum VideoPubTimeType {
 enum VideoDurationType {
   all('全部时长'),
   tenMins('0-10分钟'),
-  halfHour('0-30分钟'),
+  halfHour('10-30分钟'),
   hour('30-60分钟'),
   hourPlus('60分钟+');
 
