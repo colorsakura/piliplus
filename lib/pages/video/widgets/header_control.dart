@@ -1966,7 +1966,9 @@ class HeaderControlState extends State<HeaderControl> {
                       color: Colors.white,
                     ),
                     onPressed: () {
-                      videoDetailCtr.plPlayerController.backToHome = true;
+                      videoDetailCtr.plPlayerController
+                        ..isCloseAll = true
+                        ..dispose();
                       Get.until((route) => route.isFirst);
                     },
                   ),

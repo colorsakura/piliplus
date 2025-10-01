@@ -124,7 +124,6 @@ class PlPlayerController {
   final RxBool _isSliderMoving = false.obs;
   PlaylistMode _looping = PlaylistMode.none;
   bool _autoPlay = false;
-  final bool _listenersInitialized = false;
 
   // 记录历史记录
   int? _aid;
@@ -504,8 +503,6 @@ class PlPlayerController {
     _playCallBack = playCallBack;
   }
 
-  bool? backToHome;
-
   static Function? _playCallBack;
 
   static void playIfExists({bool repeat = false, bool hideControls = true}) {
@@ -660,9 +657,7 @@ class PlPlayerController {
       dataStatus.status.value = DataStatus.loaded;
 
       // listen the video player events
-      if (!_listenersInitialized) {
-        startListeners();
-      }
+      startListeners();
       await _initializePlayer();
     } catch (err, stackTrace) {
       dataStatus.status.value = DataStatus.error;
@@ -1136,10 +1131,10 @@ class PlPlayerController {
   }
 
   /// 移除事件监听
-  void removeListeners() {
-    for (final s in subscriptions) {
-      s.cancel();
-    }
+  Future<void> removeListeners() async {
+    _statusListeners.clear();
+    _positionListeners.clear();
+    await Future.wait(subscriptions.map((e) => e.cancel()));
   }
 
   /// 跳转至指定位置
@@ -1672,10 +1667,11 @@ class PlPlayerController {
     });
   }
 
+  bool isCloseAll = false;
   Future<void> dispose() async {
     // 每次减1，最后销毁
     cancelLongPressTimer();
-    if (_playerCount > 1) {
+    if (!isCloseAll && _playerCount > 1) {
       _playerCount -= 1;
       _heartDuration = 0;
       if (!Get.previousRoute.startsWith('/video')) {
@@ -1687,36 +1683,27 @@ class PlPlayerController {
     _playerCount = 0;
     _clearPreview();
     Utils.channel.setMethodCallHandler(null);
-    pause();
-    try {
-      _timer?.cancel();
-      _timerForSeek?.cancel();
-      _timerForShowingVolume?.cancel();
-      // _position.close();
-      _playerEventSubs?.cancel();
-      // _sliderPosition.close();
-      // _sliderTempPosition.close();
-      // _isSliderMoving.close();
-      // _duration.close();
-      // _buffered.close();
-      // _showControls.close();
-      // _controlsLock.close();
+    _timer?.cancel();
+    _timerForSeek?.cancel();
+    _timerForShowingVolume?.cancel();
+    // _position.close();
+    _playerEventSubs?.cancel();
+    // _sliderPosition.close();
+    // _sliderTempPosition.close();
+    // _isSliderMoving.close();
+    // _duration.close();
+    // _buffered.close();
+    // _showControls.close();
+    // _controlsLock.close();
 
-      // playerStatus.status.close();
-      // dataStatus.status.close();
+    // playerStatus.status.close();
+    // dataStatus.status.close();
 
-      if (_videoPlayerController != null) {
-        var pp = _videoPlayerController!.platform!;
-        await pp.setProperty('audio-files', '');
-        removeListeners();
-        await _videoPlayerController!.dispose();
-        _videoPlayerController = null;
-      }
-      _instance = null;
-      videoPlayerServiceHandler?.clear();
-    } catch (err) {
-      if (kDebugMode) debugPrint(err.toString());
-    }
+    await removeListeners();
+    _videoPlayerController?.dispose();
+    _videoPlayerController = null;
+    _instance = null;
+    videoPlayerServiceHandler?.clear();
   }
 
   static void updatePlayCount() {

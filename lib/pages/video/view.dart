@@ -358,14 +358,14 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
       AutoOrientation.portraitUpMode();
     }
     shutdownTimerService.handleWaitingFinished();
-    if (videoDetailController.plPlayerController.backToHome != true) {
+    if (!videoDetailController.plPlayerController.isCloseAll) {
       videoPlayerServiceHandler?.onVideoDetailDispose(heroTag);
-    }
-    if (plPlayerController != null) {
-      videoDetailController.makeHeartBeat();
-      plPlayerController!.dispose();
-    } else {
-      PlPlayerController.updatePlayCount();
+      if (plPlayerController != null) {
+        videoDetailController.makeHeartBeat();
+        plPlayerController!.dispose();
+      } else {
+        PlPlayerController.updatePlayCount();
+      }
     }
     PageUtils.routeObserver.unsubscribe(this);
     WidgetsBinding.instance.removeObserver(this);
@@ -716,9 +716,9 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                                               ),
                                               onPressed: () {
                                                 videoDetailController
-                                                        .plPlayerController
-                                                        .backToHome =
-                                                    true;
+                                                    .plPlayerController
+                                                  ..isCloseAll = true
+                                                  ..dispose();
                                                 Get.until(
                                                   (route) => route.isFirst,
                                                 );
@@ -1328,8 +1328,9 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                         ],
                       ),
                       onPressed: () {
-                        videoDetailController.plPlayerController.backToHome =
-                            true;
+                        videoDetailController.plPlayerController
+                          ..isCloseAll = true
+                          ..dispose();
                         Get.until((route) => route.isFirst);
                       },
                     ),
