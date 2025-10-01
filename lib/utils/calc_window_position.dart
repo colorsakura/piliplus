@@ -1,9 +1,8 @@
 import 'package:PiliPlus/utils/storage_pref.dart';
 import 'package:flutter/material.dart';
 import 'package:screen_retriever/screen_retriever.dart';
-import 'package:window_manager/window_manager.dart';
 
-Future<Offset> get calcWindowPosition async {
+Future<Offset> calcWindowPosition(Size windowSize) async {
   Display primaryDisplay = await screenRetriever.getPrimaryDisplay();
   List<Display> allDisplays = await screenRetriever.getAllDisplays();
   Offset cursorScreenPoint = await screenRetriever.getCursorScreenPoint();
@@ -46,7 +45,6 @@ Future<Offset> get calcWindowPosition async {
     } catch (_) {}
   }
 
-  final windowSize = await windowManager.getSize();
   return Offset(
     visibleStartX + (visibleWidth / 2) - (windowSize.width / 2),
     visibleStartY + ((visibleHeight / 2) - (windowSize.height / 2)),

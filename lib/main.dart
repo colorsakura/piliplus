@@ -115,7 +115,10 @@ void main() async {
       title: Constants.appName,
     );
     windowManager.waitUntilReadyToShow(windowOptions, () async {
-      await windowManager.setBounds(await calcWindowPosition & Pref.windowSize);
+      final windowSize = Pref.windowSize;
+      await windowManager.setBounds(
+        await calcWindowPosition(windowSize) & windowSize,
+      );
       if (Pref.isWindowMaximized) await windowManager.maximize();
       await windowManager.show();
       await windowManager.focus();
