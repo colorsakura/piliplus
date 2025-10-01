@@ -1145,8 +1145,8 @@ packages:
     description:
       path: media_kit
       ref: "version_1.2.5"
-      resolved-ref: "4d68e69281b44f2c8e3c444cca3d8d8dc6dcff88"
-      url: "https://github.com/My-Responsitories/media-kit.git"
+      resolved-ref: "43aee19d9b2b0e33e0c9dd922b36ca6ace56de29"
+      url: "https://github.com/bggRGjQaUbCoE/media-kit.git"
     source: git
     version: "1.1.11"
   media_kit_libs_android_video:
@@ -1192,13 +1192,14 @@ packages:
     source: git
     version: "1.0.5"
   media_kit_libs_windows_video:
-    dependency: transitive
+    dependency: "direct overridden"
     description:
-      name: media_kit_libs_windows_video
-      sha256: dff76da2778729ab650229e6b4ec6ec111eb5151431002cbd7ea304ff1f112ab
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.0.11"
+      path: "libs/windows/media_kit_libs_windows_video"
+      ref: "version_1.2.5"
+      resolved-ref: "43aee19d9b2b0e33e0c9dd922b36ca6ace56de29"
+      url: "https://github.com/bggRGjQaUbCoE/media-kit.git"
+    source: git
+    version: "1.0.10"
   media_kit_native_event_loop:
     dependency: "direct overridden"
     description:

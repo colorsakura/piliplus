@@ -117,8 +117,18 @@ class MpvConvertWebp {
     }
   }
 
-  void _command(List<String> args) =>
-      NativePlayer.statiCommand(args, _mpv, _ctx);
+  void _command(List<String> args) {
+    final pointers = args.map((e) => e.toNativeUtf8()).toList();
+    final arr = calloc<Pointer<Uint8>>(128);
+    for (int i = 0; i < args.length; i++) {
+      arr[i] = pointers[i];
+    }
+
+    _mpv.mpv_command(_ctx, arr.cast());
+
+    calloc.free(arr);
+    pointers.forEach(calloc.free);
+  }
 
   void _observeProperty(String property) {
     final name = property.toNativeUtf8();
