@@ -1132,8 +1132,6 @@ class PlPlayerController {
 
   /// 移除事件监听
   Future<void> removeListeners() async {
-    _statusListeners.clear();
-    _positionListeners.clear();
     await Future.wait(subscriptions.map((e) => e.cancel()));
   }
 
