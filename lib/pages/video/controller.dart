@@ -1487,7 +1487,7 @@ class VideoDetailController extends GetxController
       }
 
       if (plPlayerController.showViewPoints &&
-          playInfo.viewPoints?.isNotEmpty == true) {
+          playInfo.viewPoints?.firstOrNull?.type == 2) {
         try {
           viewPointList.value = playInfo.viewPoints!.map((item) {
             double start = (item.to! / (data.timeLength! / 1000)).clamp(
