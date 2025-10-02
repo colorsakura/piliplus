@@ -1781,6 +1781,12 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
     );
     if (!isMobile) {
       return Listener(
+        behavior: HitTestBehavior.translucent,
+        onPointerDown: (event) {
+          if (event.buttons == kMiddleMouseButton) {
+            plPlayerController.triggerFullScreen(status: !isFullScreen);
+          }
+        },
         onPointerSignal: (event) {
           if (event is PointerScrollEvent) {
             final offset = -event.scrollDelta.dy / 4000;
